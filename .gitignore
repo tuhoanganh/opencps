@@ -27,4 +27,4 @@ shared/
 source-formatter.properties
 tools/
 webs/
-
+.ivy/
