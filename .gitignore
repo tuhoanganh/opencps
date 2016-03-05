@@ -28,3 +28,5 @@ source-formatter.properties
 tools/
 webs/
 .ivy/
+portlets/convention-portlet/
+portlets/opencps-sample-portlet/.tern-project
