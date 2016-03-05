@@ -30,3 +30,16 @@ webs/
 .ivy/
 portlets/convention-portlet/
 portlets/opencps-sample-portlet/.tern-project
+ext/build-common-ext.xml
+ext/create.bat
+ext/create.sh
+hooks/build-common-hook.xml
+hooks/create.bat
+hooks/create.sh
+layouttpl/
+portlets/build-common-alloy-portlet.xml
+portlets/build-common-portlet.xml
+portlets/create.bat
+portlets/create.sh
+themes/
+
