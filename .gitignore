@@ -42,7 +42,6 @@ portlets/build-common-portlet.xml
 portlets/create.bat
 portlets/create.sh
 themes/
-.project
 portlets/opencps-portlet/.tern-project
 portlets/opencps-sample-portlet/docroot/WEB-INF/classes/
 portlets/opencps-sample-portlet/docroot/WEB-INF/service/
@@ -55,5 +54,18 @@ portlets/opencps-sample-portlet/docroot/WEB-INF/src/org/opencps/sample/staff/ser
 portlets/opencps-sample-portlet/docroot/WEB-INF/src/org/opencps/sample/staff/service/http/
 portlets/opencps-sample-portlet/docroot/WEB-INF/src/org/opencps/sample/staff/service/persistence/
 portlets/opencps-sample-portlet/.classpath
-portlets/opencps-sample-portlet/.settings/*
+portlets/opencps-sample-portlet/.settings/
 portlets/opencps-sample-portlet/.classpath
+portlets/opencps-portlet/.classpath
+portlets/opencps-portlet/.settings/org.eclipse.wst.common.component
+portlets/opencps-portlet/docroot/WEB-INF/classes/
+portlets/opencps-portlet/docroot/WEB-INF/service/
+portlets/opencps-portlet/docroot/WEB-INF/sql/
+portlets/opencps-portlet/docroot/css/.sass-cache/
+portlets/opencps-sample-portlet/docroot/css/.sass-cache/
+.project
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/datamgt/model/
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/datamgt/service/base/
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/datamgt/service/http/
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/datamgt/service/persistence/
+
