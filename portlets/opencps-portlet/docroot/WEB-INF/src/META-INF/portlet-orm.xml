@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd">
+	<persistence-unit-metadata>
+		<xml-mapping-metadata-complete/>
+		<persistence-unit-defaults>
+			<access>PROPERTY</access>
+		</persistence-unit-defaults>
+	</persistence-unit-metadata>
+	<mapped-superclass class="org.opencps.datamgt.model.impl.DictCollectionModelImpl">
+		<id-class class="org.opencps.datamgt.service.persistence.DictCollectionPK" />
+		<attributes>
+			<id name="dictCollectionId" />
+			<id name="collectionId" />
+			<basic name="groupId" />
+			<basic name="companyId" />
+			<basic name="userId" />
+			<basic name="userName" />
+			<basic name="createDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="modifiedDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="collectionCode" />
+			<basic name="collectionName" />
+			<basic name="description" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="org.opencps.datamgt.model.impl.DictItemModelImpl">
+		<attributes>
+			<id name="id">
+				<column name="ID_" />
+			</id>
+			<basic name="groupId" />
+			<basic name="companyId" />
+			<basic name="userId" />
+			<basic name="userName" />
+			<basic name="createDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="modifiedDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="collectionCode" />
+			<basic name="itemCode" />
+			<basic name="itemName" />
+			<basic name="node_1" />
+			<basic name="node_2" />
+			<basic name="node_3" />
+			<basic name="node_4" />
+			<basic name="node_5" />
+			<basic name="dataLevel" />
+			<basic name="validatedFrom">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="validatedTo">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="issueStatus" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="org.opencps.datamgt.model.impl.DictVersionModelImpl">
+		<attributes>
+			<id name="dictCollectionId" />
+			<basic name="groupId" />
+			<basic name="companyId" />
+			<basic name="userId" />
+			<basic name="userName" />
+			<basic name="createDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="modifiedDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="version" />
+			<basic name="description" />
+			<basic name="validatedFrom">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="validatedTo">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="issueStatus" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
+	<entity class="org.opencps.datamgt.model.impl.DictCollectionImpl" name="DictCollection">
+		<table name="opencps_dictcollection" />
+		<attributes />
+	</entity>
+	<entity class="org.opencps.datamgt.model.impl.DictItemImpl" name="DictItem">
+		<table name="opencps_dictitem" />
+		<attributes />
+	</entity>
+	<entity class="org.opencps.datamgt.model.impl.DictVersionImpl" name="DictVersion">
+		<table name="opencps_dictversion" />
+		<attributes />
+	</entity>
+</entity-mappings>

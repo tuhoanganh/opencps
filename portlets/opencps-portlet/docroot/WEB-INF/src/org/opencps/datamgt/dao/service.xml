@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+<service-builder package-path="org.opencps.datamgt">
+	<author>khoavd</author>
+	<namespace>datamgt</namespace>
+
+	<entity name="DictCollection" local-service="true" remote-service="true" 
+		data-source="opencpsdatasource"	table="opencps_dictcollection">
+		
+		<column name="dictCollectionId" type="long" primary="true" />
+
+		<!-- Group instance -->
+
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<column name="collectionId" type="long" primary="true"/>
+		<column name="collectionCode" type="String"/>
+		<column name="collectionName" type="String"/>
+		<column name="description" type="String"/>
+	</entity>
+
+	<entity name="DictVersion" local-service="true" remote-service="true" 
+		data-source="opencpsdatasource"	table="opencps_dictversion">
+
+		<column name="dictCollectionId" type="long" primary="true" />
+
+		<!-- Group instance -->
+
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<column name="version" type="String"/>
+		<column name="description" type="String"/>
+		<column name="validatedFrom" type="Date"/>
+		<column name="validatedTo" type="Date"/>
+		<column name="issueStatus" type="int"/>
+	</entity>
+
+	<entity name="DictItem" local-service="true" remote-service="true" 
+		data-source="opencpsdatasource"	table="opencps_dictitem">
+		
+		<column name="id" type="long" primary="true" />
+
+		<!-- Group instance -->
+
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<column name="collectionCode" type="String"/>
+		<column name="itemCode" type="String"/>
+		<column name="itemName" type="String"/>
+		<column name="node_1" type="String"/>
+		<column name="node_2" type="String"/>
+		<column name="node_3" type="String"/>
+		<column name="node_4" type="String"/>
+		<column name="node_5" type="String"/>
+		<column name="dataLevel" type="int"/>
+		<column name="validatedFrom" type="Date"/>
+		<column name="validatedTo" type="Date"/>
+		<column name="issueStatus" type="int"/>
+	</entity>
+
+	<exceptions>
+		<exception>EmptyDictCollectionName</exception>
+		<exception>EmptyDictItemName</exception>
+		<exception>DuplicateCollection</exception>
+		<exception>DuplicateVersion</exception>
+		<exception>DuplicateItem</exception>
+		<exception>OutOfLengthCollectionName</exception>
+		<exception>OutOfLengthItemName</exception>
+		<exception>OutOfLengthCollectionDescription</exception>
+		<exception>OutOfLengthVesionDescription</exception>
+		<exception>OutOfLengthItemDescription</exception>
+	</exceptions>
+</service-builder>

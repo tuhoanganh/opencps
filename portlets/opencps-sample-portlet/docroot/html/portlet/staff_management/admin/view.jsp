@@ -33,16 +33,16 @@
 	
 	String portletURLString = portletURL.toString();
 	
-	/* DepartmentSearch searchContainer = new DepartmentSearch(renderRequest, portletURL);
+	DepartmentSearch searchContainer = new DepartmentSearch(renderRequest, portletURL);
 	
 	List<String> headerNames = searchContainer.getHeaderNames();
 
-	headerNames.add(StringPool.BLANK); */
+	headerNames.add(StringPool.BLANK);
 %>
 
 <liferay-ui:search-container
 	delta="20"
-	searchContainer="<%=new DepartmentSearch(renderRequest, portletURL) %>"  
+	searchContainer="<%= new DepartmentSearch(renderRequest, portletURL) %>"  
 	iteratorURL="<%=portletURL %>"
 	headerNames="<%=searchContainer.getHeaderNames() %>"
 	orderByComparator="<%=searchContainer.getOrderByComparator() %>"
