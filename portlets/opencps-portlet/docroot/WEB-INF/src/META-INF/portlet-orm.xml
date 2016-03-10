@@ -8,14 +8,11 @@
 		</persistence-unit-defaults>
 	</persistence-unit-metadata>
 	<mapped-superclass class="org.opencps.datamgt.model.impl.DictCollectionModelImpl">
-		<id-class class="org.opencps.datamgt.service.persistence.DictCollectionPK" />
 		<attributes>
 			<id name="dictCollectionId" />
-			<id name="collectionId" />
-			<basic name="groupId" />
 			<basic name="companyId" />
+			<basic name="groupId" />
 			<basic name="userId" />
-			<basic name="userName" />
 			<basic name="createDate">
 				<temporal>TIMESTAMP</temporal>
 			</basic>
@@ -25,6 +22,8 @@
 			<basic name="collectionCode" />
 			<basic name="collectionName" />
 			<basic name="description" />
+			<transient name="collectionNameCurrentLanguageId" />
+			<transient name="collectionNameMap" />
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
@@ -33,35 +32,25 @@
 	</mapped-superclass>
 	<mapped-superclass class="org.opencps.datamgt.model.impl.DictItemModelImpl">
 		<attributes>
-			<id name="id">
-				<column name="ID_" />
-			</id>
-			<basic name="groupId" />
+			<id name="dictItemId" />
 			<basic name="companyId" />
+			<basic name="groupId" />
 			<basic name="userId" />
-			<basic name="userName" />
 			<basic name="createDate">
 				<temporal>TIMESTAMP</temporal>
 			</basic>
 			<basic name="modifiedDate">
 				<temporal>TIMESTAMP</temporal>
 			</basic>
-			<basic name="collectionCode" />
+			<basic name="dictCollectionId" />
 			<basic name="itemCode" />
 			<basic name="itemName" />
-			<basic name="node_1" />
-			<basic name="node_2" />
-			<basic name="node_3" />
-			<basic name="node_4" />
-			<basic name="node_5" />
-			<basic name="dataLevel" />
-			<basic name="validatedFrom">
-				<temporal>TIMESTAMP</temporal>
-			</basic>
-			<basic name="validatedTo">
-				<temporal>TIMESTAMP</temporal>
-			</basic>
+			<basic name="parentItemId" />
+			<basic name="treeIndex" />
 			<basic name="issueStatus" />
+			<basic name="dictVersionId" />
+			<transient name="itemNameCurrentLanguageId" />
+			<transient name="itemNameMap" />
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
@@ -70,17 +59,17 @@
 	</mapped-superclass>
 	<mapped-superclass class="org.opencps.datamgt.model.impl.DictVersionModelImpl">
 		<attributes>
-			<id name="dictCollectionId" />
-			<basic name="groupId" />
+			<id name="dictVersionId" />
 			<basic name="companyId" />
+			<basic name="groupId" />
 			<basic name="userId" />
-			<basic name="userName" />
 			<basic name="createDate">
 				<temporal>TIMESTAMP</temporal>
 			</basic>
 			<basic name="modifiedDate">
 				<temporal>TIMESTAMP</temporal>
 			</basic>
+			<basic name="dictCollectionId" />
 			<basic name="version" />
 			<basic name="description" />
 			<basic name="validatedFrom">
