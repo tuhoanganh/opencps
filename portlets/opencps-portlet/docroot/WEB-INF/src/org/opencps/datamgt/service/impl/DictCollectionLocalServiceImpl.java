@@ -80,11 +80,12 @@ public class DictCollectionLocalServiceImpl extends
 				.increment(DictCollection.class.getName());
 		DictCollection dictCollection = dictCollectionPersistence
 				.create(dictCollectionId);
+		Date curDate = new Date();
 		dictCollection.setCompanyId(serviceContext.getCompanyId());
 		dictCollection.setGroupId(serviceContext.getScopeGroupId());
 		dictCollection.setUserId(userId);
-		dictCollection.setCreateDate(new Date());
-		dictCollection.setModifiedDate(new Date());
+		dictCollection.setCreateDate(curDate);
+		dictCollection.setModifiedDate(curDate);
 		dictCollection.setCollectionCode(collectionCode);
 		dictCollection.setCollectionNameMap(collectionNameMap);
 		dictCollection.setDescription(description);
@@ -110,7 +111,7 @@ public class DictCollectionLocalServiceImpl extends
 				.findByDictCollectionId(dictCollectionId);
 		List<DictItem> lstDictItem = dictItemPersistence
 				.findByDictCollectionId(dictCollectionId);
-		if (lstDictItem.size() == 0 || lstDicVersion.size() == 0) {
+		if (lstDictItem.isEmpty() || lstDicVersion.isEmpty()) {
 			dictCollectionPersistence.remove(dictCollectionId);
 		}
 
@@ -145,11 +146,12 @@ public class DictCollectionLocalServiceImpl extends
 			throws NoSuchDictCollectionException, SystemException {
 		DictCollection dictCollection = dictCollectionPersistence
 				.findByPrimaryKey(dictCollectionId);
+		Date curDate = new Date();
 		dictCollection.setCompanyId(serviceContext.getCompanyId());
 		dictCollection.setGroupId(serviceContext.getScopeGroupId());
 		dictCollection.setUserId(userId);
-		dictCollection.setCreateDate(new Date());
-		dictCollection.setModifiedDate(new Date());
+		dictCollection.setCreateDate(curDate);
+		dictCollection.setModifiedDate(curDate);
 		dictCollection.setCollectionCode(collectionCode);
 		dictCollection.setCollectionName(collectionName);
 		dictCollection.setDescription(description);

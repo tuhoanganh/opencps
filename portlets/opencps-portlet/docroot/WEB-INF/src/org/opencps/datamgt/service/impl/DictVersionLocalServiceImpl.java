@@ -80,11 +80,12 @@ public class DictVersionLocalServiceImpl extends
 		long dictVersionId = CounterLocalServiceUtil
 				.increment(DictVersion.class.getName());
 		DictVersion dictVersion = dictVersionPersistence.create(dictVersionId);
+		Date curDate = new Date();
 		dictVersion.setCompanyId(serviceContext.getCompanyId());
 		dictVersion.setGroupId(serviceContext.getScopeGroupId());
 		dictVersion.setUserId(userId);
-		dictVersion.setCreateDate(new Date());
-		dictVersion.setModifiedDate(new Date());
+		dictVersion.setCreateDate(curDate);
+		dictVersion.setModifiedDate(curDate);
 		dictVersion.setDictCollectionId(dictCollection.getDictCollectionId());
 		dictVersion.setVersion(version);
 		dictVersion.setDescription(description);
@@ -144,11 +145,12 @@ public class DictVersionLocalServiceImpl extends
 			throws NoSuchDictVersionException, SystemException {
 		DictVersion dictVersion = dictVersionPersistence
 				.findByPrimaryKey(dictVersionId);
+		Date curDate = new Date();
 		dictVersion.setCompanyId(serviceContext.getCompanyId());
 		dictVersion.setGroupId(serviceContext.getScopeGroupId());
 		dictVersion.setUserId(userId);
-		dictVersion.setCreateDate(new Date());
-		dictVersion.setModifiedDate(new Date());
+		dictVersion.setCreateDate(curDate);
+		dictVersion.setModifiedDate(curDate);
 		dictVersion.setDictCollectionId(dictCollection.getDictCollectionId());
 		dictVersion.setVersion(version);
 		dictVersion.setDescription(description);
@@ -200,18 +202,15 @@ public class DictVersionLocalServiceImpl extends
 			for (DictItem dictItem : lstDictItem) {
 				dictItem.setIssueStatus(1);
 				dictItemPersistence.update(dictItem);
-				dictVersion.setIssueStatus(1);
-				return dictVersionPersistence.update(dictVersion);
 			}
 		} else if (dictVersion.getIssueStatus() == 2) {
 			for (DictItem dictItem : lstDictItem) {
 				dictItem.setIssueStatus(1);
 				dictItemPersistence.update(dictItem);
-				dictVersion.setIssueStatus(1);
-				return dictVersionPersistence.update(dictVersion);
 			}
 		}
-		return null;
+		dictVersion.setIssueStatus(1);
+		return dictVersionPersistence.update(dictVersion);
 	}
 
 	/**
