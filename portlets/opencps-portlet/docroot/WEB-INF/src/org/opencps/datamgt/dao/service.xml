@@ -40,7 +40,7 @@
 			<finder-column name="groupId" />
 		</finder>
 		
-		<finder name="Gr_C" return-type="DictCollection">
+		<finder name="G_C" return-type="DictCollection">
 			<finder-column name="groupId"></finder-column>
 			<finder-column name="collectionCode"></finder-column>
 		</finder>
