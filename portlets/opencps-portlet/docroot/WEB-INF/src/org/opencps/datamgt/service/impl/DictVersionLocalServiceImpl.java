@@ -20,7 +20,6 @@ package org.opencps.datamgt.service.impl;
 import java.util.Date;
 import java.util.List;
 
-import org.opencps.datamgt.NoSuchDictCollectionException;
 import org.opencps.datamgt.NoSuchDictVersionException;
 import org.opencps.datamgt.model.DictCollection;
 import org.opencps.datamgt.model.DictItem;
@@ -35,17 +34,22 @@ import com.liferay.portal.service.ServiceContext;
  * The implementation of the dict version local service.
  *
  * <p>
- * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link org.opencps.datamgt.service.DictVersionLocalService} interface.
+ * All custom service methods should be put in this class. Whenever methods are
+ * added, rerun ServiceBuilder to copy their definitions into the
+ * {@link org.opencps.datamgt.service.DictVersionLocalService} interface.
  *
  * <p>
- * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
+ * This is a local service. Methods of this service will not have security
+ * checks based on the propagated JAAS credentials because this service can only
+ * be accessed from within the same VM.
  * </p>
  *
  * @author khoavd
  * @see org.opencps.datamgt.service.base.DictVersionLocalServiceBaseImpl
  * @see org.opencps.datamgt.service.DictVersionLocalServiceUtil
  */
-public class DictVersionLocalServiceImpl extends DictVersionLocalServiceBaseImpl {
+public class DictVersionLocalServiceImpl extends
+		DictVersionLocalServiceBaseImpl {
 	/**
 	 * <p>
 	 * Add DictVersion
@@ -59,24 +63,19 @@ public class DictVersionLocalServiceImpl extends DictVersionLocalServiceBaseImpl
 	 *            là thuộc tính phiên bản của DictVersion
 	 * @param serviceContext
 	 *            Có thể lấy ra các userId, GroupId, CompanyId
-	 * @param createDate
-	 * 			  Ngày tạo
-	 * @param modifiedDate
-	 * 			  Ngày sửa
 	 * @param validatedFrom
-	 * 			  Ngày phê bắt đầu phê duyệt
+	 *            Ngày phê bắt đầu phê duyệt
 	 * @param validatedTo
-	 * 			  Ngày kết thúc phê duyệt
+	 *            Ngày kết thúc phê duyệt
 	 * @param description
-	 * 			  Mô tả
+	 *            Mô tả
 	 * @return trả về đối tượng DictVersion
 	 * @throws SystemException
 	 *             Nếu ngoại lệ hệ thống xảy ra
 	 */
 	public DictVersion addDictVersion(long userId,
 			DictCollection dictCollection, String version, String description,
-			Date createDate, Date modifiedDate, Date validatedFrom,
-			Date validatedTo, ServiceContext serviceContext)
+			Date validatedFrom, Date validatedTo, ServiceContext serviceContext)
 			throws SystemException {
 		long dictVersionId = CounterLocalServiceUtil
 				.increment(DictVersion.class.getName());
@@ -84,8 +83,8 @@ public class DictVersionLocalServiceImpl extends DictVersionLocalServiceBaseImpl
 		dictVersion.setCompanyId(serviceContext.getCompanyId());
 		dictVersion.setGroupId(serviceContext.getScopeGroupId());
 		dictVersion.setUserId(userId);
-		dictVersion.setCreateDate(createDate);
-		dictVersion.setModifiedDate(modifiedDate);
+		dictVersion.setCreateDate(new Date());
+		dictVersion.setModifiedDate(new Date());
 		dictVersion.setDictCollectionId(dictCollection.getDictCollectionId());
 		dictVersion.setVersion(version);
 		dictVersion.setDescription(description);
@@ -94,7 +93,7 @@ public class DictVersionLocalServiceImpl extends DictVersionLocalServiceBaseImpl
 		dictVersion.setIssueStatus(0);
 		return dictVersionPersistence.update(dictVersion);
 	}
-	
+
 	/**
 	 * <p>
 	 * Delete DictVersion
@@ -107,16 +106,18 @@ public class DictVersionLocalServiceImpl extends DictVersionLocalServiceBaseImpl
 	 * @throws NoSuchDictVersionException
 	 *             Khi xảy ra lỗi không tìm thấy DictVersion
 	 */
-	public void removeDictVersion(long dictVersionId) throws NoSuchDictVersionException, SystemException {
+	public void removeDictVersion(long dictVersionId)
+			throws NoSuchDictVersionException, SystemException {
 		dictVersionPersistence.remove(dictVersionId);
 	}
-	
+
 	/**
 	 * <p>
 	 * Update DictVersion
 	 * </p>
-	 * @param dictVersionId 
-	 * 			  là id của DictVersion
+	 * 
+	 * @param dictVersionId
+	 *            là id của DictVersion
 	 * @param userId
 	 *            là id của người đăng nhập
 	 * @param dictCollection
@@ -125,32 +126,29 @@ public class DictVersionLocalServiceImpl extends DictVersionLocalServiceBaseImpl
 	 *            là thuộc tính phiên bản của DictVersion
 	 * @param serviceContext
 	 *            Có thể lấy ra các userId, GroupId, CompanyId
-	 * @param createDate
-	 * 			  Ngày tạo
-	 * @param modifiedDate
-	 * 			  Ngày sửa
 	 * @param validatedFrom
-	 * 			  Ngày phê bắt đầu phê duyệt
+	 *            Ngày phê bắt đầu phê duyệt
 	 * @param validatedTo
-	 * 			  Ngày kết thúc phê duyệt
+	 *            Ngày kết thúc phê duyệt
 	 * @param description
-	 * 			  Mô tả
+	 *            Mô tả
 	 * @return trả về đối tượng DictVersion
 	 * @throws SystemException
 	 *             Nếu ngoại lệ hệ thống xảy ra
-	 *  @throws NoSuchDictVersionException
+	 * @throws NoSuchDictVersionException
 	 *             Khi xảy ra lỗi không tìm thấy DictVersion
 	 */
-	public DictVersion updateDictVersion(long dictVersionId,long userId,
+	public DictVersion updateDictVersion(long dictVersionId, long userId,
 			DictCollection dictCollection, String version, String description,
-			Date createDate, Date modifiedDate, Date validatedFrom,
-			Date validatedTo, ServiceContext serviceContext) throws NoSuchDictVersionException, SystemException {
-		DictVersion dictVersion = dictVersionPersistence.findByPrimaryKey(dictVersionId);
+			Date validatedFrom, Date validatedTo, ServiceContext serviceContext)
+			throws NoSuchDictVersionException, SystemException {
+		DictVersion dictVersion = dictVersionPersistence
+				.findByPrimaryKey(dictVersionId);
 		dictVersion.setCompanyId(serviceContext.getCompanyId());
 		dictVersion.setGroupId(serviceContext.getScopeGroupId());
 		dictVersion.setUserId(userId);
-		dictVersion.setCreateDate(createDate);
-		dictVersion.setModifiedDate(modifiedDate);
+		dictVersion.setCreateDate(new Date());
+		dictVersion.setModifiedDate(new Date());
 		dictVersion.setDictCollectionId(dictCollection.getDictCollectionId());
 		dictVersion.setVersion(version);
 		dictVersion.setDescription(description);
@@ -158,7 +156,7 @@ public class DictVersionLocalServiceImpl extends DictVersionLocalServiceBaseImpl
 		dictVersion.setValidatedTo(validatedTo);
 		return dictVersionPersistence.update(dictVersion);
 	}
-	
+
 	/**
 	 * <p>
 	 * Get DictVersion
@@ -172,10 +170,11 @@ public class DictVersionLocalServiceImpl extends DictVersionLocalServiceBaseImpl
 	 * @throws NoSuchDictVersionException
 	 *             Khi xảy ra lỗi không tìm thấy DictVersion
 	 */
-	public DictVersion getDictVersion(long dictVersionId) throws NoSuchDictVersionException, SystemException {
+	public DictVersion getDictVersion(long dictVersionId)
+			throws NoSuchDictVersionException, SystemException {
 		return dictVersionPersistence.findByPrimaryKey(dictVersionId);
 	}
-	
+
 	/**
 	 * <p>
 	 * Get DictVersion
@@ -185,32 +184,36 @@ public class DictVersionLocalServiceImpl extends DictVersionLocalServiceBaseImpl
 	 *            là DictVersion
 	 * @return đối tượng DictVersions
 	 * @throws SystemException
-	 *             Nếu ngoại lệ hệ thống xảy ra
-	 *             Chuyển trạng thái version từ drafting sang inuse, khi đó phiên bản đang sử dụng sẽ tự động được chuyển thành hết hạn
+	 *             Nếu ngoại lệ hệ thống xảy ra Chuyển trạng thái version từ
+	 *             drafting sang inuse, khi đó phiên bản đang sử dụng sẽ tự động
+	 *             được chuyển thành hết hạn
 	 * @throws NoSuchDictVersionException
 	 *             Khi xảy ra lỗi không tìm thấy DictVersion
 	 */
-	public DictVersion makeDictVersionInUse(int dictVersionId) throws NoSuchDictVersionException, SystemException {
-		DictVersion dictVersion = dictVersionPersistence.findByPrimaryKey(dictVersionId);
-		List<DictItem> lstDictItem = dictItemPersistence.findByDictVersionId(dictVersion.getDictCollectionId());
-		if(dictVersion.getIssueStatus() == 0) {
-			for(DictItem dictItem : lstDictItem) {
+	public DictVersion makeDictVersionInUse(int dictVersionId)
+			throws NoSuchDictVersionException, SystemException {
+		DictVersion dictVersion = dictVersionPersistence
+				.findByPrimaryKey(dictVersionId);
+		List<DictItem> lstDictItem = dictItemPersistence
+				.findByDictVersionId(dictVersion.getDictCollectionId());
+		if (dictVersion.getIssueStatus() == 0) {
+			for (DictItem dictItem : lstDictItem) {
 				dictItem.setIssueStatus(1);
 				dictItemPersistence.update(dictItem);
 				dictVersion.setIssueStatus(1);
 				return dictVersionPersistence.update(dictVersion);
 			}
 		} else if (dictVersion.getIssueStatus() == 2) {
-			for(DictItem dictItem : lstDictItem) {
+			for (DictItem dictItem : lstDictItem) {
 				dictItem.setIssueStatus(1);
 				dictItemPersistence.update(dictItem);
 				dictVersion.setIssueStatus(1);
 				return dictVersionPersistence.update(dictVersion);
 			}
-		} 
+		}
 		return null;
 	}
-	
+
 	/**
 	 * <p>
 	 * Get DictVersion
@@ -224,50 +227,57 @@ public class DictVersionLocalServiceImpl extends DictVersionLocalServiceBaseImpl
 	 * @throws NoSuchDictVersionException
 	 *             Khi xảy ra lỗi không tìm thấy DictVersion
 	 */
-	public List<DictVersion> getDictVersions(int dictCollectionId) throws SystemException {
+	public List<DictVersion> getDictVersions(int dictCollectionId)
+			throws SystemException {
 		return dictVersionPersistence.findByDictCollectionId(dictCollectionId);
 	}
-	
+
 	/**
 	 * <p>
 	 * Get DictVersion
 	 * </p>
 	 * 
-	 * @param dictCollection 
+	 * @param dictCollection
 	 *            là đối tượng dictCollection đã được xác định
-	 * @return Lấy version đang sử dụng của một collection, mỗi collection chỉ có tối đa 1 version đang sử dụng
+	 * @return Lấy version đang sử dụng của một collection, mỗi collection chỉ
+	 *         có tối đa 1 version đang sử dụng
 	 * @throws SystemException
 	 *             Nếu ngoại lệ hệ thống xảy ra
 	 * @throws NoSuchDictVersionException
 	 *             Khi xảy ra lỗi không tìm thấy DictVersion
 	 */
-	public DictVersion getDictVersionInUse(DictCollection dictCollection) throws SystemException {
-		List<DictVersion> lstDictVersion = dictVersionPersistence.findByDictCollectionId(dictCollection.getDictCollectionId());
-		for(DictVersion dictVersion : lstDictVersion) {
-			if(dictVersion.getIssueStatus() == 1) {
+	public DictVersion getDictVersionInUse(DictCollection dictCollection)
+			throws SystemException {
+		List<DictVersion> lstDictVersion = dictVersionPersistence
+				.findByDictCollectionId(dictCollection.getDictCollectionId());
+		for (DictVersion dictVersion : lstDictVersion) {
+			if (dictVersion.getIssueStatus() == 1) {
 				return dictVersion;
 			}
 		}
 		return null;
 	}
-	
+
 	/**
 	 * <p>
 	 * Get DictVersion
 	 * </p>
 	 * 
-	 * @param dictCollection 
+	 * @param dictCollection
 	 *            là đối tượng dictCollection đã được xác định
-	 * @return Lấy version đang biên tập của một collection, mỗi collection chỉ có tối đa 1 version đang biên tập
+	 * @return Lấy version đang biên tập của một collection, mỗi collection chỉ
+	 *         có tối đa 1 version đang biên tập
 	 * @throws SystemException
 	 *             Nếu ngoại lệ hệ thống xảy ra
 	 * @throws NoSuchDictVersionException
 	 *             Khi xảy ra lỗi không tìm thấy DictVersion
 	 */
-	DictVersion getDictVersionDrafting(DictCollection dictCollection) throws SystemException {
-		List<DictVersion> lstDictVersion = dictVersionPersistence.findByDictCollectionId(dictCollection.getDictCollectionId());
-		for(DictVersion dictVersion : lstDictVersion) {
-			if(dictVersion.getIssueStatus() == 0) {
+	DictVersion getDictVersionDrafting(DictCollection dictCollection)
+			throws SystemException {
+		List<DictVersion> lstDictVersion = dictVersionPersistence
+				.findByDictCollectionId(dictCollection.getDictCollectionId());
+		for (DictVersion dictVersion : lstDictVersion) {
+			if (dictVersion.getIssueStatus() == 0) {
 				return dictVersion;
 			}
 		}

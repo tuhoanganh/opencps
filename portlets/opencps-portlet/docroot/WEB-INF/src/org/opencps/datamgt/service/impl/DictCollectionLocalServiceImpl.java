@@ -66,10 +66,6 @@ public class DictCollectionLocalServiceImpl extends
 	 *            là thuộc tính tên của DictCollection
 	 * @param serviceContext
 	 *            Có thể lấy ra các userId, GroupId, CompanyId
-	 * @param createDate
-	 *            Ngày tạo
-	 * @param modifiedDate
-	 *            Ngày sửa
 	 * @param description
 	 *            Mô tả
 	 * @return trả về đối tượng DictCollection
@@ -78,9 +74,8 @@ public class DictCollectionLocalServiceImpl extends
 	 */
 
 	public DictCollection addDictCollection(long userId, String collectionCode,
-			Map<Locale, String> collectionNameMap, Date createDate,
-			Date modifiedDate, String description, ServiceContext serviceContext)
-			throws SystemException {
+			Map<Locale, String> collectionNameMap, String description,
+			ServiceContext serviceContext) throws SystemException {
 		long dictCollectionId = CounterLocalServiceUtil
 				.increment(DictCollection.class.getName());
 		DictCollection dictCollection = dictCollectionPersistence
@@ -88,8 +83,8 @@ public class DictCollectionLocalServiceImpl extends
 		dictCollection.setCompanyId(serviceContext.getCompanyId());
 		dictCollection.setGroupId(serviceContext.getScopeGroupId());
 		dictCollection.setUserId(userId);
-		dictCollection.setCreateDate(createDate);
-		dictCollection.setModifiedDate(modifiedDate);
+		dictCollection.setCreateDate(new Date());
+		dictCollection.setModifiedDate(new Date());
 		dictCollection.setCollectionCode(collectionCode);
 		dictCollection.setCollectionNameMap(collectionNameMap);
 		dictCollection.setDescription(description);
@@ -115,7 +110,7 @@ public class DictCollectionLocalServiceImpl extends
 				.findByDictCollectionId(dictCollectionId);
 		List<DictItem> lstDictItem = dictItemPersistence
 				.findByDictCollectionId(dictCollectionId);
-		if (lstDictItem.size() == 0 && lstDicVersion.size() == 0) {
+		if (lstDictItem.size() == 0 || lstDicVersion.size() == 0) {
 			dictCollectionPersistence.remove(dictCollectionId);
 		}
 
@@ -136,10 +131,6 @@ public class DictCollectionLocalServiceImpl extends
 	 *            là thuộc tính tên của DictCollection
 	 * @param serviceContext
 	 *            Có thể lấy ra các userId, GroupId, CompanyId
-	 * @param createDate
-	 *            Ngày tạo
-	 * @param modifiedDate
-	 *            Ngày sửa
 	 * @param description
 	 *            Mô tả
 	 * @return trả về đối tượng DictCollection
@@ -150,16 +141,15 @@ public class DictCollectionLocalServiceImpl extends
 	 */
 	public DictCollection updateDictCollection(long dictCollectionId,
 			long userId, String collectionCode, String collectionName,
-			Date createDate, Date modifiedDate, String description,
-			ServiceContext serviceContext)
+			String description, ServiceContext serviceContext)
 			throws NoSuchDictCollectionException, SystemException {
 		DictCollection dictCollection = dictCollectionPersistence
 				.findByPrimaryKey(dictCollectionId);
 		dictCollection.setCompanyId(serviceContext.getCompanyId());
 		dictCollection.setGroupId(serviceContext.getScopeGroupId());
 		dictCollection.setUserId(userId);
-		dictCollection.setCreateDate(createDate);
-		dictCollection.setModifiedDate(modifiedDate);
+		dictCollection.setCreateDate(new Date());
+		dictCollection.setModifiedDate(new Date());
 		dictCollection.setCollectionCode(collectionCode);
 		dictCollection.setCollectionName(collectionName);
 		dictCollection.setDescription(description);
