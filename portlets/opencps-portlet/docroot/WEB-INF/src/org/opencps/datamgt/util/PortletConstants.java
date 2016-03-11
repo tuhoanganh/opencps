@@ -17,6 +17,10 @@
 
 package org.opencps.datamgt.util;
 
+/**
+ * @author trungnt
+ *
+ */
 public class PortletConstants {
 	public static final int DRAFTING = 0;
 	public static final int INUSE = 1;
