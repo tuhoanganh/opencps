@@ -19,9 +19,13 @@ package org.opencps.datamgt.service.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import org.opencps.datamgt.NoSuchDictCollectionException;
 import org.opencps.datamgt.model.DictCollection;
+import org.opencps.datamgt.model.DictItem;
+import org.opencps.datamgt.model.DictVersion;
 import org.opencps.datamgt.service.base.DictCollectionLocalServiceBaseImpl;
 
 import com.liferay.counter.service.CounterLocalServiceUtil;
@@ -32,19 +36,23 @@ import com.liferay.portal.service.ServiceContext;
  * The implementation of the dict collection local service.
  *
  * <p>
- * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link org.opencps.datamgt.service.DictCollectionLocalService} interface.
+ * All custom service methods should be put in this class. Whenever methods are
+ * added, rerun ServiceBuilder to copy their definitions into the
+ * {@link org.opencps.datamgt.service.DictCollectionLocalService} interface.
  *
  * <p>
- * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
+ * This is a local service. Methods of this service will not have security
+ * checks based on the propagated JAAS credentials because this service can only
+ * be accessed from within the same VM.
  * </p>
  *
  * @author khoavd
  * @see org.opencps.datamgt.service.base.DictCollectionLocalServiceBaseImpl
  * @see org.opencps.datamgt.service.DictCollectionLocalServiceUtil
  */
-public class DictCollectionLocalServiceImpl
-	extends DictCollectionLocalServiceBaseImpl {
-	
+public class DictCollectionLocalServiceImpl extends
+		DictCollectionLocalServiceBaseImpl {
+
 	/**
 	 * <p>
 	 * Add DictCollection
@@ -59,30 +67,35 @@ public class DictCollectionLocalServiceImpl
 	 * @param serviceContext
 	 *            Có thể lấy ra các userId, GroupId, CompanyId
 	 * @param createDate
-	 * 			  Ngày tạo
+	 *            Ngày tạo
 	 * @param modifiedDate
-	 * 			  Ngày sửa
+	 *            Ngày sửa
 	 * @param description
-	 * 			  Mô tả
+	 *            Mô tả
 	 * @return trả về đối tượng DictCollection
 	 * @throws SystemException
 	 *             Nếu ngoại lệ hệ thống xảy ra
 	 */
 
-	public DictCollection addDictCollection(long userId, String collectionCode, String collectionName,Date createDate,Date modifiedDate, String description, ServiceContext serviceContext) throws SystemException {
-		long dictCollectionId = CounterLocalServiceUtil.increment(DictCollection.class.getName());
-		DictCollection dictCollection = dictCollectionPersistence.create(dictCollectionId);
+	public DictCollection addDictCollection(long userId, String collectionCode,
+			Map<Locale, String> collectionNameMap, Date createDate,
+			Date modifiedDate, String description, ServiceContext serviceContext)
+			throws SystemException {
+		long dictCollectionId = CounterLocalServiceUtil
+				.increment(DictCollection.class.getName());
+		DictCollection dictCollection = dictCollectionPersistence
+				.create(dictCollectionId);
 		dictCollection.setCompanyId(serviceContext.getCompanyId());
 		dictCollection.setGroupId(serviceContext.getScopeGroupId());
 		dictCollection.setUserId(userId);
 		dictCollection.setCreateDate(createDate);
 		dictCollection.setModifiedDate(modifiedDate);
 		dictCollection.setCollectionCode(collectionCode);
-		dictCollection.setCollectionName(collectionName);
+		dictCollection.setCollectionNameMap(collectionNameMap);
 		dictCollection.setDescription(description);
-		return dictCollectionPersistence.update(dictCollection);		
+		return dictCollectionPersistence.update(dictCollection);
 	}
-	
+
 	/**
 	 * <p>
 	 * Delete DictCollection
@@ -96,14 +109,23 @@ public class DictCollectionLocalServiceImpl
 	 *             Khi xảy ra lỗi không tìm thấy DictCollection
 	 */
 
-	public void deleteCollection(long dictCollectionId) throws NoSuchDictCollectionException, SystemException {
-		dictCollectionPersistence.remove(dictCollectionId);
+	public void deleteCollection(long dictCollectionId)
+			throws NoSuchDictCollectionException, SystemException {
+		List<DictVersion> lstDicVersion = dictVersionPersistence
+				.findByDictCollectionId(dictCollectionId);
+		List<DictItem> lstDictItem = dictItemPersistence
+				.findByDictCollectionId(dictCollectionId);
+		if (lstDictItem.size() == 0 && lstDicVersion.size() == 0) {
+			dictCollectionPersistence.remove(dictCollectionId);
+		}
+
 	}
-	
+
 	/**
 	 * <p>
 	 * Update DictCollection
 	 * </p>
+	 * 
 	 * @param dictCollectionId
 	 *            là id của DictCollection
 	 * @param userId
@@ -115,19 +137,24 @@ public class DictCollectionLocalServiceImpl
 	 * @param serviceContext
 	 *            Có thể lấy ra các userId, GroupId, CompanyId
 	 * @param createDate
-	 * 			  Ngày tạo
+	 *            Ngày tạo
 	 * @param modifiedDate
-	 * 			  Ngày sửa
+	 *            Ngày sửa
 	 * @param description
-	 * 			  Mô tả
+	 *            Mô tả
 	 * @return trả về đối tượng DictCollection
 	 * @throws SystemException
 	 *             Nếu ngoại lệ hệ thống xảy ra
 	 * @throws NoSuchDictCollectionException
 	 *             Khi xảy ra lỗi không tìm thấy DictCollection
 	 */
-	public DictCollection updateDictCollection(long dictCollectionId,long userId, String collectionCode, String collectionName,Date createDate,Date modifiedDate, String description, ServiceContext serviceContext) throws NoSuchDictCollectionException, SystemException {
-		DictCollection dictCollection = dictCollectionPersistence.findByPrimaryKey(dictCollectionId);
+	public DictCollection updateDictCollection(long dictCollectionId,
+			long userId, String collectionCode, String collectionName,
+			Date createDate, Date modifiedDate, String description,
+			ServiceContext serviceContext)
+			throws NoSuchDictCollectionException, SystemException {
+		DictCollection dictCollection = dictCollectionPersistence
+				.findByPrimaryKey(dictCollectionId);
 		dictCollection.setCompanyId(serviceContext.getCompanyId());
 		dictCollection.setGroupId(serviceContext.getScopeGroupId());
 		dictCollection.setUserId(userId);
@@ -138,7 +165,7 @@ public class DictCollectionLocalServiceImpl
 		dictCollection.setDescription(description);
 		return dictCollectionPersistence.update(dictCollection);
 	}
-	
+
 	/**
 	 * <p>
 	 * Get DictCollection
@@ -152,10 +179,11 @@ public class DictCollectionLocalServiceImpl
 	 * @throws NoSuchDictCollectionException
 	 *             Khi xảy ra lỗi không tìm thấy DictCollection
 	 */
-	public DictCollection getDictCollection(long dictCollectionId) throws NoSuchDictCollectionException, SystemException {
+	public DictCollection getDictCollection(long dictCollectionId)
+			throws NoSuchDictCollectionException, SystemException {
 		return dictCollectionPersistence.findByPrimaryKey(dictCollectionId);
 	}
-	
+
 	/**
 	 * <p>
 	 * Get DictCollection
@@ -163,23 +191,24 @@ public class DictCollectionLocalServiceImpl
 	 * 
 	 * @param groupId
 	 *            là mã UserGroup của người đăng nhập
-	 * @param collectionCode 
-	 *            là mã của DictCollection  
+	 * @param collectionCode
+	 *            là mã của DictCollection
 	 * @return trả về đối tượng DictCollection theo dictCollectionId
 	 * @throws SystemException
 	 *             Nếu ngoại lệ hệ thống xảy ra
 	 * @throws NoSuchDictCollectionException
 	 *             Khi xảy ra lỗi không tìm thấy DictCollection
 	 */
-	public DictCollection getDictCollection(long groupId, String collectionCode) throws NoSuchDictCollectionException, SystemException {
+	public DictCollection getDictCollection(long groupId, String collectionCode)
+			throws NoSuchDictCollectionException, SystemException {
 		return dictCollectionPersistence.findByG_C(groupId, collectionCode);
 	}
-	
 
 	/**
 	 * <p>
 	 * Get DictCollection
 	 * </p>
+	 * 
 	 * @return trả về tập hợp các đối tượng DictCollection
 	 * @throws SystemException
 	 *             Nếu ngoại lệ hệ thống xảy ra
@@ -187,9 +216,8 @@ public class DictCollectionLocalServiceImpl
 	 *             Nếu ngoại lệ hệ thống xảy ra
 	 */
 	public List<DictCollection> getDictCollections() throws SystemException {
-		return dictCollectionPersistence.findAll();	
+		return dictCollectionPersistence.findAll();
 	}
-	
 
 	/**
 	 * <p>
@@ -202,7 +230,8 @@ public class DictCollectionLocalServiceImpl
 	 * @throws SystemException
 	 *             Nếu ngoại lệ hệ thống xảy ra
 	 */
-	public List<DictCollection> getDictCollections(long groupId) throws SystemException {
-		return dictCollectionPersistence.findByGroupId(groupId);		
+	public List<DictCollection> getDictCollections(long groupId)
+			throws SystemException {
+		return dictCollectionPersistence.findByGroupId(groupId);
 	}
 }
