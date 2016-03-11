@@ -25,6 +25,7 @@ import org.opencps.datamgt.model.DictCollection;
 import org.opencps.datamgt.model.DictItem;
 import org.opencps.datamgt.model.DictVersion;
 import org.opencps.datamgt.service.base.DictVersionLocalServiceBaseImpl;
+import org.opencps.datamgt.util.PortletConstants;
 
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -91,7 +92,7 @@ public class DictVersionLocalServiceImpl extends
 		dictVersion.setDescription(description);
 		dictVersion.setValidatedFrom(validatedFrom);
 		dictVersion.setValidatedTo(validatedTo);
-		dictVersion.setIssueStatus(0);
+		dictVersion.setIssueStatus(PortletConstants.DRAFTING);
 		return dictVersionPersistence.update(dictVersion);
 	}
 
@@ -198,18 +199,13 @@ public class DictVersionLocalServiceImpl extends
 				.findByPrimaryKey(dictVersionId);
 		List<DictItem> lstDictItem = dictItemPersistence
 				.findByDictVersionId(dictVersion.getDictCollectionId());
-		if (dictVersion.getIssueStatus() == 0) {
+		if (dictVersion.getIssueStatus() != PortletConstants.INUSE) {
 			for (DictItem dictItem : lstDictItem) {
-				dictItem.setIssueStatus(1);
+				dictItem.setIssueStatus(PortletConstants.INUSE);
 				dictItemPersistence.update(dictItem);
 			}
-		} else if (dictVersion.getIssueStatus() == 2) {
-			for (DictItem dictItem : lstDictItem) {
-				dictItem.setIssueStatus(1);
-				dictItemPersistence.update(dictItem);
-			}
-		}
-		dictVersion.setIssueStatus(1);
+		} 
+		dictVersion.setIssueStatus(PortletConstants.INUSE);
 		return dictVersionPersistence.update(dictVersion);
 	}
 
@@ -250,7 +246,7 @@ public class DictVersionLocalServiceImpl extends
 		List<DictVersion> lstDictVersion = dictVersionPersistence
 				.findByDictCollectionId(dictCollection.getDictCollectionId());
 		for (DictVersion dictVersion : lstDictVersion) {
-			if (dictVersion.getIssueStatus() == 1) {
+			if (dictVersion.getIssueStatus() == PortletConstants.INUSE) {
 				return dictVersion;
 			}
 		}
@@ -276,7 +272,7 @@ public class DictVersionLocalServiceImpl extends
 		List<DictVersion> lstDictVersion = dictVersionPersistence
 				.findByDictCollectionId(dictCollection.getDictCollectionId());
 		for (DictVersion dictVersion : lstDictVersion) {
-			if (dictVersion.getIssueStatus() == 0) {
+			if (dictVersion.getIssueStatus() == PortletConstants.DRAFTING) {
 				return dictVersion;
 			}
 		}
