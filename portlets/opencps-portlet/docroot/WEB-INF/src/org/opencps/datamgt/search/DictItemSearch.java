@@ -25,7 +25,7 @@ import java.util.Map;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
 
-import org.opencps.datamgt.model.DictCollection;
+import org.opencps.datamgt.model.DictItem;
 import org.opencps.datamgt.util.PortletDataMgtUtil;
 import org.opencps.util.DateTimeUtil;
 
@@ -40,7 +40,7 @@ import com.liferay.portal.kernel.util.StringPool;
  * @author trungnt
  *
  */
-public class DictCollectionSearch extends SearchContainer<DictCollection> {
+public class DictItemSearch extends SearchContainer<DictItem> {
 	static List<String> headerNames = new ArrayList<String>();
 	static Map<String, String> orderableHeaders = new HashMap<String, String>();
 	static {
@@ -48,39 +48,43 @@ public class DictCollectionSearch extends SearchContainer<DictCollection> {
 		headerNames.add("code");
 		headerNames.add("name");
 		headerNames.add("description");
+		headerNames.add("tree-index");
 		headerNames.add("create-date");
 		headerNames.add("modified-date");
+		headerNames.add("version");
 		headerNames.add("author");
+		headerNames.add("inuse");
 		headerNames.add(StringPool.BLANK);
 
-		orderableHeaders.put("name", DictCollectionDisplayTerms.COLLECTION_NAME);
-		orderableHeaders.put("code", DictCollectionDisplayTerms.COLLECTION_CODE);
-		orderableHeaders.put("create-date", DictCollectionDisplayTerms.CREATE_DATE);
-		orderableHeaders.put("modified-date", DictCollectionDisplayTerms.MODIFIED_DATE);
-		orderableHeaders.put("author", DictCollectionDisplayTerms.USER_ID);
+		orderableHeaders.put("name", DictItemDisplayTerms.ITEM_NAME);
+		orderableHeaders.put("code", DictItemDisplayTerms.ITEM_CODE);
+		orderableHeaders.put("create-date", DictItemDisplayTerms.CREATE_DATE);
+		orderableHeaders.put("modified-date", DictItemDisplayTerms.MODIFIED_DATE);
+		orderableHeaders.put("author", DictItemDisplayTerms.USER_ID);
 	}
-	public static final String EMPTY_RESULTS_MESSAGE = "no-entries-were-found";
 
-	public DictCollectionSearch(PortletRequest portletRequest, int delta, PortletURL iteratorURL) {
+	public DictItemSearch(PortletRequest portletRequest, int delta, PortletURL iteratorURL) {
 
-		super(portletRequest, new DictCollectionDisplayTerms(portletRequest),
-				new DictCollectionSearchTerms(portletRequest), DEFAULT_CUR_PARAM, DEFAULT_DELTA, iteratorURL,
-				headerNames, EMPTY_RESULTS_MESSAGE);
+		super(portletRequest, new DictItemDisplayTerms(portletRequest), new DictCollectionSearchTerms(portletRequest),
+				DEFAULT_CUR_PARAM, delta, iteratorURL, headerNames, null);
 
-		DictCollectionDisplayTerms displayTerms = (DictCollectionDisplayTerms) getDisplayTerms();
+		// PortletConfig portletConfig = (PortletConfig)
+		// portletRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
+
+		DictItemDisplayTerms displayTerms = (DictItemDisplayTerms) getDisplayTerms();
 		// DictCollectionSearchTerms searchTerms = (DictCollectionSearchTerms)
 		// getSearchTerms();
 
-		iteratorURL.setParameter(DictCollectionDisplayTerms.COLLECTION_NAME, displayTerms.getCollectionName());
-		iteratorURL.setParameter(DictCollectionDisplayTerms.DESCRIPTION, displayTerms.getDescription());
+		iteratorURL.setParameter(DictItemDisplayTerms.ITEM_NAME, displayTerms.getItemName());
+		iteratorURL.setParameter(DictItemDisplayTerms.DESCRIPTION, displayTerms.getDescription());
 
-		iteratorURL.setParameter(DictCollectionDisplayTerms.COLLECTION_CODE, displayTerms.getCollectionCode());
-		iteratorURL.setParameter(DictCollectionDisplayTerms.GROUP_ID, String.valueOf(displayTerms.getGroupId()));
-		iteratorURL.setParameter(DictCollectionDisplayTerms.CREATE_DATE,
+		iteratorURL.setParameter(DictItemDisplayTerms.ITEM_CODE, displayTerms.getItemCode());
+		iteratorURL.setParameter(DictItemDisplayTerms.GROUP_ID, String.valueOf(displayTerms.getGroupId()));
+		iteratorURL.setParameter(DictItemDisplayTerms.CREATE_DATE,
 				DateTimeUtil.convertDateToString(displayTerms.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT));
-		iteratorURL.setParameter(DictCollectionDisplayTerms.CREATE_DATE,
+		iteratorURL.setParameter(DictItemDisplayTerms.CREATE_DATE,
 				DateTimeUtil.convertDateToString(displayTerms.getModifiedDate(), DateTimeUtil._VN_DATE_TIME_FORMAT));
-		iteratorURL.setParameter(DictCollectionDisplayTerms.USER_ID, String.valueOf(displayTerms.getUserId()));
+		iteratorURL.setParameter(DictItemDisplayTerms.USER_ID, String.valueOf(displayTerms.getUserId()));
 
 		try {
 
@@ -99,11 +103,11 @@ public class DictCollectionSearch extends SearchContainer<DictCollection> {
 		}
 	}
 
-	public DictCollectionSearch(PortletRequest portletRequest, PortletURL iteratorURL) {
+	public DictItemSearch(PortletRequest portletRequest, PortletURL iteratorURL) {
 
 		this(portletRequest, DEFAULT_DELTA, iteratorURL);
 	}
 
-	private static Log _log = LogFactoryUtil.getLog(DictCollectionSearch.class);
+	private static Log _log = LogFactoryUtil.getLog(DictItemSearch.class);
 
 }
