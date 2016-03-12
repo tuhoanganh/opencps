@@ -51,7 +51,7 @@ public class DictCollectionSearch extends SearchContainer<DictCollection> {
 		headerNames.add("create-date");
 		headerNames.add("modified-date");
 		headerNames.add("author");
-		headerNames.add(StringPool.BLANK);
+		headerNames.add("action");
 
 		orderableHeaders.put("name", DictCollectionDisplayTerms.COLLECTION_NAME);
 		orderableHeaders.put("code", DictCollectionDisplayTerms.COLLECTION_CODE);

@@ -29,6 +29,7 @@ import org.opencps.datamgt.util.PortletConstants;
 
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.service.ServiceContext;
 
 /**
@@ -176,6 +177,15 @@ public class DictVersionLocalServiceImpl extends
 	public DictVersion getDictVersion(long dictVersionId)
 			throws NoSuchDictVersionException, SystemException {
 		return dictVersionPersistence.findByPrimaryKey(dictVersionId);
+	}
+	
+	public List<DictVersion> getDictVersion(int start, int end, OrderByComparator odc)
+			throws NoSuchDictVersionException, SystemException {
+		return dictVersionPersistence.findAll(start, end, odc);
+	}
+	
+	public int countAll() throws SystemException {
+		return dictVersionPersistence.countAll();
 	}
 
 	/**
