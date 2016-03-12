@@ -80,8 +80,6 @@ public class DictCollectionDisplayTerms extends DisplayTerms {
 		return themeDisplay.getScopeGroupId();
 	}
 
-	protected String collectionCode;
-
 	public String getCollectionCode() {
 		return collectionCode;
 	}
@@ -141,7 +139,8 @@ public class DictCollectionDisplayTerms extends DisplayTerms {
 	public long getGroupId() {
 		return groupId;
 	}
-
+	
+	protected String collectionCode;
 	protected String collectionName;
 	protected Date createDate;
 	protected String description;
