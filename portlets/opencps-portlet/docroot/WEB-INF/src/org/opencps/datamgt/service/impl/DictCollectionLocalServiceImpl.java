@@ -50,8 +50,7 @@ import com.liferay.portal.service.ServiceContext;
  * @see org.opencps.datamgt.service.base.DictCollectionLocalServiceBaseImpl
  * @see org.opencps.datamgt.service.DictCollectionLocalServiceUtil
  */
-public class DictCollectionLocalServiceImpl extends
-		DictCollectionLocalServiceBaseImpl {
+public class DictCollectionLocalServiceImpl extends DictCollectionLocalServiceBaseImpl {
 
 	/**
 	 * <p>
@@ -73,13 +72,10 @@ public class DictCollectionLocalServiceImpl extends
 	 *             Nếu ngoại lệ hệ thống xảy ra
 	 */
 
-	public DictCollection addDictCollection(long userId, String collectionCode,
-			Map<Locale, String> collectionNameMap, String description,
-			ServiceContext serviceContext) throws SystemException {
-		long dictCollectionId = CounterLocalServiceUtil
-				.increment(DictCollection.class.getName());
-		DictCollection dictCollection = dictCollectionPersistence
-				.create(dictCollectionId);
+	public DictCollection addDictCollection(long userId, String collectionCode, Map<Locale, String> collectionNameMap,
+			String description, ServiceContext serviceContext) throws SystemException {
+		long dictCollectionId = CounterLocalServiceUtil.increment(DictCollection.class.getName());
+		DictCollection dictCollection = dictCollectionPersistence.create(dictCollectionId);
 		Date curDate = new Date();
 		dictCollection.setCompanyId(serviceContext.getCompanyId());
 		dictCollection.setGroupId(serviceContext.getScopeGroupId());
@@ -94,7 +90,8 @@ public class DictCollectionLocalServiceImpl extends
 
 	/**
 	 * <p>
-	 * Delete DictCollection
+	 * Xoa ban ghi DictCollection. Kiem tra truong hop neu ton tai ban ghi lien
+	 * quan trong bang DictVersion va DictItem thi khong xoa
 	 * </p>
 	 * 
 	 * @param dictCollectionId
@@ -105,13 +102,10 @@ public class DictCollectionLocalServiceImpl extends
 	 *             Khi xảy ra lỗi không tìm thấy DictCollection
 	 */
 
-	public void deleteCollection(long dictCollectionId)
-			throws NoSuchDictCollectionException, SystemException {
-		List<DictVersion> lstDicVersion = dictVersionPersistence
-				.findByDictCollectionId(dictCollectionId);
-		List<DictItem> lstDictItem = dictItemPersistence
-				.findByDictCollectionId(dictCollectionId);
-		if (lstDictItem.isEmpty() || lstDicVersion.isEmpty()) {
+	public void deleteCollection(long dictCollectionId) throws NoSuchDictCollectionException, SystemException {
+		List<DictVersion> lstDicVersion = dictVersionPersistence.findByDictCollectionId(dictCollectionId);
+		List<DictItem> lstDictItem = dictItemPersistence.findByDictCollectionId(dictCollectionId);
+		if (lstDictItem.isEmpty() && lstDicVersion.isEmpty()) {
 			dictCollectionPersistence.remove(dictCollectionId);
 		}
 
@@ -119,7 +113,7 @@ public class DictCollectionLocalServiceImpl extends
 
 	/**
 	 * <p>
-	 * Update DictCollection
+	 * Cap nhat DictCollection
 	 * </p>
 	 * 
 	 * @param dictCollectionId
@@ -140,12 +134,10 @@ public class DictCollectionLocalServiceImpl extends
 	 * @throws NoSuchDictCollectionException
 	 *             Khi xảy ra lỗi không tìm thấy DictCollection
 	 */
-	public DictCollection updateDictCollection(long dictCollectionId,
-			long userId, String collectionCode, String collectionName,
-			String description, ServiceContext serviceContext)
+	public DictCollection updateDictCollection(long dictCollectionId, long userId, String collectionCode,
+			String collectionName, String description, ServiceContext serviceContext)
 			throws NoSuchDictCollectionException, SystemException {
-		DictCollection dictCollection = dictCollectionPersistence
-				.findByPrimaryKey(dictCollectionId);
+		DictCollection dictCollection = dictCollectionPersistence.findByPrimaryKey(dictCollectionId);
 		Date curDate = new Date();
 		dictCollection.setCompanyId(serviceContext.getCompanyId());
 		dictCollection.setGroupId(serviceContext.getScopeGroupId());
@@ -160,7 +152,7 @@ public class DictCollectionLocalServiceImpl extends
 
 	/**
 	 * <p>
-	 * Get DictCollection
+	 * Lay mot doi tuong DictCollection
 	 * </p>
 	 * 
 	 * @param dictCollectionId
@@ -198,7 +190,7 @@ public class DictCollectionLocalServiceImpl extends
 
 	/**
 	 * <p>
-	 * Get DictCollection
+	 * Lay tat ca doi tuong DictCollection trong CSDL
 	 * </p>
 	 * 
 	 * @return trả về tập hợp các đối tượng DictCollection
@@ -213,7 +205,7 @@ public class DictCollectionLocalServiceImpl extends
 
 	/**
 	 * <p>
-	 * Get DictCollection
+	 * Lay tat doi tuong DictCollection
 	 * </p>
 	 * 
 	 * @param groupId
@@ -222,8 +214,7 @@ public class DictCollectionLocalServiceImpl extends
 	 * @throws SystemException
 	 *             Nếu ngoại lệ hệ thống xảy ra
 	 */
-	public List<DictCollection> getDictCollections(long groupId)
-			throws SystemException {
+	public List<DictCollection> getDictCollections(long groupId) throws SystemException {
 		return dictCollectionPersistence.findByGroupId(groupId);
 	}
 }

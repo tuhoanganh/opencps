@@ -111,7 +111,7 @@
 		</order>
 
 		<!-- Finder methods -->
-		<finder name="CollectionId_ItemCode" return-type="DictItem"
+		<finder name="C_C_I" return-type="DictItem"
 			where="issueStatus = 1">
 			<finder-column name="dictCollectionId" />
 			<finder-column name="itemCode" />
@@ -128,6 +128,13 @@
 		<finder name="TreeIndex" return-type="Collection">
 			<finder-column name="treeIndex" comparator="LIKE" />
 		</finder>
+        <finder name="D_I" return-type="Collection" where="issueStatus = 1">
+            <finder-column name="dictCollectionId"></finder-column>
+        </finder>
+        <finder name="C_N" return-type="Collection">
+            <finder-column name="dictCollectionId"></finder-column>
+            <finder-column name="itemName" comparator="LIKE"></finder-column>
+        </finder>
 
 	</entity>
 
