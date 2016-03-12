@@ -5,7 +5,7 @@
 	<namespace>datamgt</namespace>
 
 	<entity name="DictCollection" local-service="true"
-		remote-service="true" data-source="opencpsdatasource" table="opencps_dictcollection">
+		remote-service="true" table="opencps_dictcollection">
 
 		<!-- PK fields -->
 
@@ -48,7 +48,7 @@
 	</entity>
 
 	<entity name="DictVersion" local-service="true" remote-service="true"
-		data-source="opencpsdatasource" table="opencps_dictversion">
+		table="opencps_dictversion">
 
 		<!-- PK fields -->
 
@@ -81,7 +81,7 @@
 	</entity>
 
 	<entity name="DictItem" local-service="true" remote-service="true"
-		data-source="opencpsdatasource" table="opencps_dictitem">
+		table="opencps_dictitem">
 
 		<!-- PK fields -->
 
