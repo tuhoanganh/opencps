@@ -27,10 +27,11 @@ import org.opencps.datamgt.NoSuchDictVersionException;
 import org.opencps.datamgt.model.DictItem;
 import org.opencps.datamgt.model.DictVersion;
 import org.opencps.datamgt.service.base.DictItemLocalServiceBaseImpl;
-import org.opencps.datamgt.util.PortletConstants;
+import org.opencps.util.PortletConstants;
 
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.service.ServiceContext;
 
@@ -180,6 +181,14 @@ public class DictItemLocalServiceImpl extends DictItemLocalServiceBaseImpl {
 		return dictItemPersistence.update(dictItem);
 	}
 
+	public int countByDictCollectionId(long dictCollectionId) throws SystemException {
+		return dictItemPersistence.countByDictCollectionId(dictCollectionId);
+	}
+
+	public int countByDictCollectionId(long dictCollectionId, String[] itemNames) throws SystemException {
+		return dictItemPersistence.countByC_N(dictCollectionId, itemNames);
+	}
+
 	/**
 	 * <p>
 	 * Phuong thu xoa DictItem theo dictItemId. Neu DictItem co cap con thi
@@ -241,8 +250,18 @@ public class DictItemLocalServiceImpl extends DictItemLocalServiceBaseImpl {
 		return dictItemPersistence.findByC_N(dictCollectionId, itemName);
 	}
 
+	public List<DictItem> getDictItems(long dictCollectionId, String[] itemNames, int start, int end,
+			OrderByComparator obc) throws SystemException {
+		return dictItemPersistence.findByC_N(dictCollectionId, itemNames, start, end, obc);
+	}
+
 	public List<DictItem> getDictItemsByDictCollectionId(long dictCollectionId) throws SystemException {
 		return dictItemPersistence.findByDictCollectionId(dictCollectionId);
+	}
+
+	public List<DictItem> getDictItemsByDictCollectionId(long dictCollectionId, int start, int end,
+			OrderByComparator obc) throws SystemException {
+		return dictItemPersistence.findByDictCollectionId(dictCollectionId, start, end, obc);
 	}
 
 	public List<DictItem> getDictItemsByDictVersionId(long dictVersionId) throws SystemException {
@@ -254,10 +273,35 @@ public class DictItemLocalServiceImpl extends DictItemLocalServiceBaseImpl {
 		return dictItemPersistence.findByD_I(dictCollectionId);
 	}
 
+	public DictItem updateDictItem(long dictItemId, long dictCollectionId, long dictVersionId, String itemCode,
+			Map<Locale, String> itemNameMap, long parentItemId, ServiceContext serviceContext)
+			throws NoSuchDictItemException, SystemException, NoSuchDictVersionException {
+
+		DictItem dictItem = dictItemPersistence.findByPrimaryKey(dictItemId);
+
+		Date now = new Date();
+
+		String treeIndex = getTreeIndex(dictItemId, parentItemId);
+
+		dictItem.setCompanyId(serviceContext.getCompanyId());
+		dictItem.setCreateDate(now);
+		dictItem.setDictCollectionId(dictCollectionId);
+		dictItem.setGroupId(serviceContext.getScopeGroupId());
+		dictItem.setIssueStatus(dictVersionId > 0 ? PortletConstants.DRAFTING : PortletConstants.INUSE);
+		dictItem.setItemCode(itemCode);
+		dictItem.setItemNameMap(itemNameMap);
+		dictItem.setModifiedDate(now);
+		dictItem.setParentItemId(parentItemId);
+		dictItem.setTreeIndex(treeIndex);
+		dictItem.setUserId(serviceContext.getUserId());
+		dictItem.setDictVersionId(dictVersionId);
+		return dictItemPersistence.update(dictItem);
+	}
+
 	protected String getTreeIndex(long dictItemId, long dictParentItemId)
 			throws NoSuchDictItemException, SystemException {
 		if (dictParentItemId == 0) {
-			return String.valueOf(dictParentItemId);
+			return String.valueOf(dictItemId);
 		} else if (dictParentItemId > 0) {
 			DictItem parentItem = dictItemPersistence.findByPrimaryKey(dictParentItemId);
 			return parentItem.getTreeIndex() + StringPool.PERIOD + dictItemId;

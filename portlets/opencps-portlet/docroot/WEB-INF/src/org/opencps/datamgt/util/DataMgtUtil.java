@@ -28,7 +28,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
  * @author trungnt
  *
  */
-public class PortletDataMgtUtil {
+public class DataMgtUtil {
 	public static OrderByComparator getDictCollectionOrderByComparator(String orderByCol, String orderByType) {
 
 		boolean orderByAsc = false;
@@ -53,4 +53,8 @@ public class PortletDataMgtUtil {
 
 		return orderByComparator;
 	}
+	
+	public static final String TOP_TABS_DICTITEM = "dict-item";
+	public static final String TOP_TABS_DICTCOLLECTION = "dict-collection";
+	public static final String TOP_TABS_DICTVERSION = "dict-version";
 }

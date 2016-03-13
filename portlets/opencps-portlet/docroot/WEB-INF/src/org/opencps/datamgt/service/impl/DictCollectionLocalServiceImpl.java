@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.persistence.OrderBy;
-
 import org.opencps.datamgt.NoSuchDictCollectionException;
 import org.opencps.datamgt.model.DictCollection;
 import org.opencps.datamgt.model.DictItem;
@@ -53,8 +51,7 @@ import com.liferay.portal.service.ServiceContext;
  * @see org.opencps.datamgt.service.base.DictCollectionLocalServiceBaseImpl
  * @see org.opencps.datamgt.service.DictCollectionLocalServiceUtil
  */
-public class DictCollectionLocalServiceImpl extends
-		DictCollectionLocalServiceBaseImpl {
+public class DictCollectionLocalServiceImpl extends DictCollectionLocalServiceBaseImpl {
 
 	/**
 	 * <p>
@@ -76,13 +73,10 @@ public class DictCollectionLocalServiceImpl extends
 	 *             Nếu ngoại lệ hệ thống xảy ra
 	 */
 
-	public DictCollection addDictCollection(long userId, String collectionCode,
-			Map<Locale, String> collectionNameMap, String description,
-			ServiceContext serviceContext) throws SystemException {
-		long dictCollectionId = CounterLocalServiceUtil
-				.increment(DictCollection.class.getName());
-		DictCollection dictCollection = dictCollectionPersistence
-				.create(dictCollectionId);
+	public DictCollection addDictCollection(long userId, String collectionCode, Map<Locale, String> collectionNameMap,
+			String description, ServiceContext serviceContext) throws SystemException {
+		long dictCollectionId = CounterLocalServiceUtil.increment(DictCollection.class.getName());
+		DictCollection dictCollection = dictCollectionPersistence.create(dictCollectionId);
 		Date curDate = new Date();
 		dictCollection.setCompanyId(serviceContext.getCompanyId());
 		dictCollection.setGroupId(serviceContext.getScopeGroupId());
@@ -109,12 +103,9 @@ public class DictCollectionLocalServiceImpl extends
 	 *             Khi xảy ra lỗi không tìm thấy DictCollection
 	 */
 
-	public void deleteCollection(long dictCollectionId)
-			throws NoSuchDictCollectionException, SystemException {
-		List<DictVersion> lstDicVersion = dictVersionPersistence
-				.findByDictCollectionId(dictCollectionId);
-		List<DictItem> lstDictItem = dictItemPersistence
-				.findByDictCollectionId(dictCollectionId);
+	public void deleteCollection(long dictCollectionId) throws NoSuchDictCollectionException, SystemException {
+		List<DictVersion> lstDicVersion = dictVersionPersistence.findByDictCollectionId(dictCollectionId);
+		List<DictItem> lstDictItem = dictItemPersistence.findByDictCollectionId(dictCollectionId);
 		if (lstDictItem.isEmpty() && lstDicVersion.isEmpty()) {
 			dictCollectionPersistence.remove(dictCollectionId);
 		}
@@ -123,6 +114,10 @@ public class DictCollectionLocalServiceImpl extends
 
 	public int countAll() throws SystemException {
 		return dictCollectionPersistence.countAll();
+	}
+
+	public int countDictCollection(long groupId, String[] collectionNames) throws SystemException {
+		return dictCollectionPersistence.countByG_N(groupId, collectionNames);
 	}
 
 	/**
@@ -148,13 +143,10 @@ public class DictCollectionLocalServiceImpl extends
 	 * @throws NoSuchDictCollectionException
 	 *             Khi xảy ra lỗi không tìm thấy DictCollection
 	 */
-	public DictCollection updateDictCollection(long dictCollectionId,
-			long userId, String collectionCode,
-			Map<Locale, String> collectionNameMap, String description,
-			ServiceContext serviceContext)
+	public DictCollection updateDictCollection(long dictCollectionId, long userId, String collectionCode,
+			Map<Locale, String> collectionNameMap, String description, ServiceContext serviceContext)
 			throws NoSuchDictCollectionException, SystemException {
-		DictCollection dictCollection = dictCollectionPersistence
-				.findByPrimaryKey(dictCollectionId);
+		DictCollection dictCollection = dictCollectionPersistence.findByPrimaryKey(dictCollectionId);
 		Date curDate = new Date();
 		dictCollection.setCompanyId(serviceContext.getCompanyId());
 		dictCollection.setGroupId(serviceContext.getScopeGroupId());
@@ -220,9 +212,13 @@ public class DictCollectionLocalServiceImpl extends
 		return dictCollectionPersistence.findAll();
 	}
 
-	public List<DictCollection> getDictCollections(int start, int end,
-			OrderByComparator odc) throws SystemException {
+	public List<DictCollection> getDictCollections(int start, int end, OrderByComparator odc) throws SystemException {
 		return dictCollectionPersistence.findAll(start, end, odc);
+	}
+
+	public List<DictCollection> getDictCollections(long groupId, String[] collectionNames, int start, int end,
+			OrderByComparator odc) throws SystemException {
+		return dictCollectionPersistence.findByG_N(groupId, collectionNames, start, end, odc);
 	}
 
 	/**
@@ -236,8 +232,7 @@ public class DictCollectionLocalServiceImpl extends
 	 * @throws SystemException
 	 *             Nếu ngoại lệ hệ thống xảy ra
 	 */
-	public List<DictCollection> getDictCollections(long groupId)
-			throws SystemException {
+	public List<DictCollection> getDictCollections(long groupId) throws SystemException {
 		return dictCollectionPersistence.findByGroupId(groupId);
 	}
 }

@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -18,37 +17,37 @@
  */
 %>
 <%@page import="org.opencps.util.WebKeys"%>
-<%@page import="org.opencps.datamgt.model.DictCollection"%>
+<%@page import="org.opencps.datamgt.model.DictItem"%>
 <%@page import="com.liferay.portal.kernel.dao.search.ResultRow"%>
 <%@page import="com.liferay.portal.kernel.dao.search.SearchContainer"%>
-<%@page import="org.opencps.datamgt.permissions.DictCollectionPermission"%>
+<%@page import="org.opencps.datamgt.permissions.DictItemPermission"%>
 <%@page import="org.opencps.util.ActionKeys"%>
-<%@page import="org.opencps.datamgt.search.DictCollectionDisplayTerms"%>
+<%@page import="org.opencps.datamgt.search.DictItemDisplayTerms"%>
 <%@ include file="../init.jsp"%>
 
  
 <%
 	ResultRow row = (ResultRow)request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
-	DictCollection dictCollection = (DictCollection) row.getObject();
+	DictItem dictItem = (DictItem) row.getObject();
 %> 
 
 			
  <liferay-ui:icon-menu>
- 	<c:if test="<%=DictCollectionPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_DICTCOLLECTION) %>">
- 		<portlet:renderURL var="updateDictCollectionURL">
-			<portlet:param name="mvcPath" value="/html/portlets/data_management/admin/edit_dictcollection.jsp"/>
-			<portlet:param name="<%=DictCollectionDisplayTerms.DICTCOLLECTION_ID %>" value="<%=String.valueOf(dictCollection.getDictCollectionId()) %>"/>
+ 	<c:if test="<%=DictItemPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_DICTITEM) %>">
+ 		<portlet:renderURL var="updateDictItemURL">
+			<portlet:param name="mvcPath" value="/html/portlets/data_management/admin/edit_dictitem.jsp"/>
+			<portlet:param name="<%=DictItemDisplayTerms.DICTITEM_ID %>" value="<%=String.valueOf(dictItem.getDictItemId()) %>"/>
 			<portlet:param name="backURL" value="<%=currentURL %>"/>
 		</portlet:renderURL> 
- 		<liferay-ui:icon image="edit" message="edit" url="<%=updateDictCollectionURL.toString() %>" /> 
+ 		<liferay-ui:icon image="edit" message="edit" url="<%=updateDictItemURL.toString() %>" /> 
  	</c:if>
  	
- 	<c:if test="<%=DictCollectionPermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE) %>">
- 		<portlet:actionURL var="deleteDictCollectionURL" name="deleteDictCollection" >
-			<portlet:param name="<%=DictCollectionDisplayTerms.DICTCOLLECTION_ID %>" value="<%=String.valueOf(dictCollection.getDictCollectionId()) %>"/>
+ 	<c:if test="<%=DictItemPermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE) %>">
+ 		<portlet:actionURL var="deleteDictItemURL" name="deleteDictItem" >
+			<portlet:param name="<%=DictItemDisplayTerms.DICTITEM_ID %>" value="<%=String.valueOf(dictItem.getDictItemId()) %>"/>
 			<portlet:param name="redirectURL" value="<%=currentURL %>"/>
 		</portlet:actionURL> 
-		<liferay-ui:icon-delete image="delete" confirmation="are-you-sure-delete-entry" message="delete"  url="<%=deleteDictCollectionURL.toString() %>" />
+		<liferay-ui:icon-delete image="delete" confirmation="are-you-sure-delete-entry" message="delete"  url="<%=deleteDictItemURL.toString() %>" />
  	</c:if>
 	  
 </liferay-ui:icon-menu> 

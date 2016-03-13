@@ -44,6 +44,10 @@
 			<finder-column name="groupId"></finder-column>
 			<finder-column name="collectionCode"></finder-column>
 		</finder>
+        <finder name="G_N" return-type="Collection">
+            <finder-column name="groupId"></finder-column>
+            <finder-column name="collectionName" comparator="LIKE" arrayable-operator="OR"></finder-column>
+        </finder>
 
 	</entity>
 
@@ -133,7 +137,7 @@
         </finder>
         <finder name="C_N" return-type="Collection">
             <finder-column name="dictCollectionId"></finder-column>
-            <finder-column name="itemName" comparator="LIKE"></finder-column>
+            <finder-column name="itemName" comparator="LIKE" arrayable-operator="OR"></finder-column>
         </finder>
 
 	</entity>
@@ -149,6 +153,10 @@
 		<exception>OutOfLengthCollectionDescription</exception>
 		<exception>OutOfLengthVesionDescription</exception>
 		<exception>OutOfLengthItemDescription</exception>
+        <exception>OutOfLengthCollectionCode</exception>
+        <exception>OutOfLengthItemCode</exception>
+        <exception>EmptyCollectionCode</exception>
+        <exception>EmptyItemCode</exception>
 	</exceptions>
 
 </service-builder>

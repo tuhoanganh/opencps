@@ -26,7 +26,7 @@ import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
 
 import org.opencps.datamgt.model.DictItem;
-import org.opencps.datamgt.util.PortletDataMgtUtil;
+import org.opencps.datamgt.util.DataMgtUtil;
 import org.opencps.util.DateTimeUtil;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
@@ -47,7 +47,6 @@ public class DictItemSearch extends SearchContainer<DictItem> {
 		headerNames.add("id");
 		headerNames.add("code");
 		headerNames.add("name");
-		headerNames.add("description");
 		headerNames.add("tree-index");
 		headerNames.add("create-date");
 		headerNames.add("modified-date");
@@ -63,20 +62,19 @@ public class DictItemSearch extends SearchContainer<DictItem> {
 		orderableHeaders.put("author", DictItemDisplayTerms.USER_ID);
 	}
 
+	public static final String EMPTY_RESULTS_MESSAGE = "no-dict-item-were-found";
+	
 	public DictItemSearch(PortletRequest portletRequest, int delta, PortletURL iteratorURL) {
 
-		super(portletRequest, new DictItemDisplayTerms(portletRequest), new DictCollectionSearchTerms(portletRequest),
-				DEFAULT_CUR_PARAM, delta, iteratorURL, headerNames, null);
+		super(portletRequest, new DictItemDisplayTerms(portletRequest), new DictItemSearchTerms(portletRequest),
+				DEFAULT_CUR_PARAM, delta, iteratorURL, headerNames, EMPTY_RESULTS_MESSAGE);
 
 		// PortletConfig portletConfig = (PortletConfig)
 		// portletRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
 
 		DictItemDisplayTerms displayTerms = (DictItemDisplayTerms) getDisplayTerms();
-		// DictCollectionSearchTerms searchTerms = (DictCollectionSearchTerms)
-		// getSearchTerms();
 
 		iteratorURL.setParameter(DictItemDisplayTerms.ITEM_NAME, displayTerms.getItemName());
-		iteratorURL.setParameter(DictItemDisplayTerms.DESCRIPTION, displayTerms.getDescription());
 
 		iteratorURL.setParameter(DictItemDisplayTerms.ITEM_CODE, displayTerms.getItemCode());
 		iteratorURL.setParameter(DictItemDisplayTerms.GROUP_ID, String.valueOf(displayTerms.getGroupId()));
@@ -91,7 +89,7 @@ public class DictItemSearch extends SearchContainer<DictItem> {
 			String orderByCol = ParamUtil.getString(portletRequest, "orderByCol");
 			String orderByType = ParamUtil.getString(portletRequest, "orderByType");
 
-			OrderByComparator orderByComparator = PortletDataMgtUtil.getDictCollectionOrderByComparator(orderByCol,
+			OrderByComparator orderByComparator = DataMgtUtil.getDictCollectionOrderByComparator(orderByCol,
 					orderByType);
 
 			setOrderableHeaders(orderableHeaders);

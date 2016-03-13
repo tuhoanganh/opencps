@@ -15,14 +15,16 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>
 */
 
-package org.opencps.datamgt.util;
+package org.opencps.util;
 
-public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
-	public static final String DATA_MANAGEMENT_ADMIN_PORTLET = "DATA_MANAGEMENT_ADMIN_PORTLET";
-	
-	public static final String DICT_COLLECTION_ENTRY = "DICT_COLLECTION_ENTRY";
-	
-	public static final String DICT_VERSION_ENTRY = "DICT_VERSION_ENTRY";
-	
-	public static final String DICT_ITEM_ENTRY = "DICT_ITEM_ENTRY";
+/**
+ * @author trungnt
+ *
+ */
+public class ActionKeys extends com.liferay.portal.security.permission.ActionKeys {
+
+	public static final String ADD_DICTITEM = "ADD_DICTITEM";
+	public static final String ADD_DICTCOLLECTION = "ADD_DICTCOLLECTION";
+	public static final String ADD_DICTVERSION = "ADD_DICTVERSION";
+
 }

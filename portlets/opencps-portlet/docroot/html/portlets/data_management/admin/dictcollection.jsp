@@ -1,11 +1,4 @@
-<%@page import="com.liferay.portal.kernel.dao.search.SearchEntry"%>
-<%@page import="org.opencps.datamgt.search.DictCollectionSearch"%>
-<%@page import="com.liferay.portal.kernel.util.ListUtil"%>
-<%@page import="javax.swing.plaf.ListUI"%>
-<%@page import="org.opencps.datamgt.service.DictCollectionLocalServiceUtil"%>
-<%@page import="org.opencps.datamgt.model.DictCollection"%>
-<%@page import="java.util.List"%>
-<%@page import="javax.portlet.PortletURL"%>
+<%@page import="org.opencps.datamgt.util.DataMgtUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -25,65 +18,107 @@
  */
 %>
 
+<%@page import="com.liferay.portal.kernel.dao.search.SearchEntry"%>
+<%@page import="org.opencps.datamgt.search.DictCollectionSearch"%>
+<%@page import="com.liferay.portal.kernel.util.ListUtil"%>
+<%@page import="javax.swing.plaf.ListUI"%>
+<%@page import="org.opencps.datamgt.service.DictCollectionLocalServiceUtil"%>
+<%@page import="org.opencps.datamgt.model.DictCollection"%>
+<%@page import="java.util.List"%>
+<%@page import="javax.portlet.PortletURL"%>
+<%@page import="com.liferay.portal.kernel.dao.search.SearchContainer"%>
+<%@page import="org.opencps.datamgt.search.DictCollectionDisplayTerms"%>
+<%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
+<%@page import="com.liferay.portal.kernel.log.Log"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="com.liferay.portal.service.UserLocalServiceUtil"%>
+<%@page import="com.liferay.portal.model.User"%>
+<%@page import="org.opencps.util.DateTimeUtil"%>
+<%@page import="com.liferay.util.dao.orm.CustomSQLUtil"%>
+<%@page import="org.opencps.datamgt.search.DictCollectionSearchTerms"%>
 <%@ include file="../init.jsp"%>
 
+<liferay-util:include page="/html/portlets/data_management/admin/toptabs.jsp" servletContext="<%=application %>" />
+<liferay-util:include page="/html/portlets/data_management/admin/toolbar.jsp" servletContext="<%=application %>" />
 <%
-	String dictCollName = ParamUtil.getString(request, "dictCollNameReq");
-	String dictCollCode = ParamUtil.getString(request, "dictCollCodeReq");
-	String dictCollDes = ParamUtil.getString(request, "dictCollDesReq");
-	
 	PortletURL iteratorURL = renderResponse.createRenderURL();
-	iteratorURL.setParameter("mvcPath", "/html/portlets/data_management/admin/view.jsp");
-	/* iteratorURL.setParameter("dictCollNameReq", dictCollName);
-	iteratorURL.setParameter("dictCollCodeReq", dictCollCode);
-	iteratorURL.setParameter("dictCollDesReq", dictCollDes); */
+	iteratorURL.setParameter("mvcPath", "/html/portlets/data_management/admin/dictcollection.jsp");
+	iteratorURL.setParameter("tabs1", DataMgtUtil.TOP_TABS_DICTCOLLECTION);
+	
+	List<DictCollection> dictCollections = new ArrayList<DictCollection>();
+	int totalCount = 0;
 	
 %>
 
+<liferay-ui:search-container searchContainer="<%= new DictCollectionSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
 
-<liferay-ui:search-container emptyResultsMessage="No data found"  iteratorURL="<%=iteratorURL %>" 
-searchContainer="<%= new DictCollectionSearch(renderRequest,5, iteratorURL) %>">
 	<liferay-ui:search-container-results>
 		<%
-			List<DictCollection> lstCollection = DictCollectionLocalServiceUtil.getDictCollections(searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-			total = DictCollectionLocalServiceUtil.countAll();
-			results = lstCollection;
+			DictCollectionSearchTerms searchTerms = (DictCollectionSearchTerms)searchContainer.getSearchTerms();
+			
+			String[] collectionNames = null;
+			
+			if(Validator.isNotNull(searchTerms.getKeywords())){
+				collectionNames = CustomSQLUtil.keywords(searchTerms.getKeywords());
+			}
+			
+			try{
+				%>
+					<%@include file="/html/portlets/data_management/admin/dictcollection_search_results.jspf" %>
+				<%
+			}catch(Exception e){
+				_log.error(e);
+			}
+		
+			total = totalCount;
+			results = dictCollections;
 			pageContext.setAttribute("results", results);
 			pageContext.setAttribute("total", total);
 		%>
 	</liferay-ui:search-container-results>	
-		<liferay-ui:search-container-row className="org.opencps.datamgt.model.DictCollection" 
-		modelVar="dictCollection" keyProperty="dictCollectionId">
-			
+		<liferay-ui:search-container-row 
+			className="org.opencps.datamgt.model.DictCollection" 
+			modelVar="dictCollection" 
+			keyProperty="dictCollectionId"
+		>
 			<%
-		
-			row.addText(String.valueOf(dictCollection.getDictCollectionId()), "");
-			row.addText(dictCollection.getCollectionCode(), "");
-			row.addText(dictCollection.getCollectionName(), "");
-			row.addText(dictCollection.getDescription(), "");
-			row.addText(String.valueOf(dictCollection.getCreateDate()), "");
-			row.addText(dictCollection.getCollectionName(), "");
-			row.addText(String.valueOf(dictCollection.getUserId()), "");
+				PortletURL editURL = renderResponse.createRenderURL();
+				editURL.setParameter("mvcPath", "/html/portlets/data_management/admin/edit_dictcollection.jsp");
+				editURL.setParameter(DictCollectionDisplayTerms.DICTCOLLECTION_ID, String.valueOf(dictCollection.getDictCollectionId()));
+				editURL.setParameter("backURL", currentURL);
+				
+				//id column
+				row.addText(String.valueOf(dictCollection.getDictCollectionId()), editURL);
 			
-			row.addJSP("right",SearchEntry.DEFAULT_VALIGN,"/html/portlets/data_management/admin/dictcollection_actions.jsp", config.getServletContext(), request, response);
-			%>
-			<%-- <liferay-ui:search-container-column-text
-			 value="<%=dictCollection.getCollectionName() %>" 
-			 name="name1" orderable="<%=true %>"/>
-			<liferay-ui:search-container-column-text name="Collection Code" value="<%=dictCollection.getCollectionCode() %>" />
-			<liferay-ui:search-container-column-text name="Collection Description" value="<%=dictCollection.getDescription()%>" />
-			<liferay-ui:search-container-column-text name="Collection UserID" value="<%=String.valueOf(dictCollection.getUserId())%>" />
-			<liferay-ui:search-container-column-text name="Collection GroupID" value="<%=String.valueOf(dictCollection.getGroupId())%>" />
-			<liferay-ui:search-container-column-text name="Collection CompanyID" value="<%=String.valueOf(dictCollection.getCompanyId())%>" />
-			<liferay-ui:search-container-column-text name="Collection Create Date" value="<%=dictCollection.getCreateDate().toString()%>" />
-			<liferay-ui:search-container-column-text name="Collection Modified Date" value="<%=dictCollection.getModifiedDate().toString()%>" />
-	
-			<liferay-ui:search-container-column-jsp  name ="Action" path="/html/portlets/data_management/admin/dictcollection_actions.jsp"></liferay-ui:search-container-column-jsp>
- --%>			
-		
+				row.addText(dictCollection.getCollectionCode(), editURL);
+				row.addText(dictCollection.getCollectionName(locale), editURL);
+				row.addText(dictCollection.getDescription(), editURL);
+				row.addText(DateTimeUtil.convertDateToString(dictCollection.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT), editURL);
+				row.addText(DateTimeUtil.convertDateToString(dictCollection.getModifiedDate(), DateTimeUtil._VN_DATE_TIME_FORMAT), editURL);
+				
+				//author column
+				
+				String authorName = StringPool.BLANK;
+				try{
+					User author = UserLocalServiceUtil.getUser(dictCollection.getUserId());
+					authorName = author.getFullName();
+				}catch(Exception e){
+					_log.error(e);
+				}
+				
+				row.addText(authorName, editURL);
+				
+				//action column
+				row.addJSP("center",SearchEntry.DEFAULT_VALIGN,"/html/portlets/data_management/admin/dictcollection_actions.jsp", config.getServletContext(), request, response);
+			%>	
 		</liferay-ui:search-container-row> 
 	
 	<liferay-ui:search-iterator/>
 </liferay-ui:search-container>
 
+
+
+<%!
+	private Log _log = LogFactoryUtil.getLog("html.portlets.data_management.admin.dictcollection.jsp");
+%>
 

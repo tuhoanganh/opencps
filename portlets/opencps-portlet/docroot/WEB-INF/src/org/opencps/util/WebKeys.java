@@ -15,14 +15,14 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>
 */
 
-package org.opencps.datamgt.util;
+package org.opencps.util;
 
-/**
- * @author trungnt
- *
- */
-public class PortletConstants {
-	public static final int DRAFTING = 0;
-	public static final int INUSE = 1;
-	public static final int EXPIRED = 2;
+public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
+	public static final String DATA_MANAGEMENT_ADMIN_PORTLET = "1_WAR_opencpsportlet";
+	
+	public static final String DICT_COLLECTION_ENTRY = "DICT_COLLECTION_ENTRY";
+	
+	public static final String DICT_VERSION_ENTRY = "DICT_VERSION_ENTRY";
+	
+	public static final String DICT_ITEM_ENTRY = "DICT_ITEM_ENTRY";
 }

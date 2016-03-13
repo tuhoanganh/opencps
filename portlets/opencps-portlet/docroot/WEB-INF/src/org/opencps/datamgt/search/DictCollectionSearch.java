@@ -26,7 +26,7 @@ import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
 
 import org.opencps.datamgt.model.DictCollection;
-import org.opencps.datamgt.util.PortletDataMgtUtil;
+import org.opencps.datamgt.util.DataMgtUtil;
 import org.opencps.util.DateTimeUtil;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
@@ -34,7 +34,6 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.StringPool;
 
 /**
  * @author trungnt
@@ -59,12 +58,12 @@ public class DictCollectionSearch extends SearchContainer<DictCollection> {
 		orderableHeaders.put("modified-date", DictCollectionDisplayTerms.MODIFIED_DATE);
 		orderableHeaders.put("author", DictCollectionDisplayTerms.USER_ID);
 	}
-	public static final String EMPTY_RESULTS_MESSAGE = "no-entries-were-found";
+	public static final String EMPTY_RESULTS_MESSAGE = "no-dict-collection-were-found";
 
 	public DictCollectionSearch(PortletRequest portletRequest, int delta, PortletURL iteratorURL) {
 
 		super(portletRequest, new DictCollectionDisplayTerms(portletRequest),
-				new DictCollectionSearchTerms(portletRequest), DEFAULT_CUR_PARAM, DEFAULT_DELTA, iteratorURL,
+				new DictCollectionSearchTerms(portletRequest), DEFAULT_CUR_PARAM, delta, iteratorURL,
 				headerNames, EMPTY_RESULTS_MESSAGE);
 
 		DictCollectionDisplayTerms displayTerms = (DictCollectionDisplayTerms) getDisplayTerms();
@@ -87,7 +86,7 @@ public class DictCollectionSearch extends SearchContainer<DictCollection> {
 			String orderByCol = ParamUtil.getString(portletRequest, "orderByCol");
 			String orderByType = ParamUtil.getString(portletRequest, "orderByType");
 
-			OrderByComparator orderByComparator = PortletDataMgtUtil.getDictCollectionOrderByComparator(orderByCol,
+			OrderByComparator orderByComparator = DataMgtUtil.getDictCollectionOrderByComparator(orderByCol,
 					orderByType);
 
 			setOrderableHeaders(orderableHeaders);

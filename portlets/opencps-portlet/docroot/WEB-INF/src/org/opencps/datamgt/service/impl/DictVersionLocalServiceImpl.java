@@ -25,7 +25,7 @@ import org.opencps.datamgt.model.DictCollection;
 import org.opencps.datamgt.model.DictItem;
 import org.opencps.datamgt.model.DictVersion;
 import org.opencps.datamgt.service.base.DictVersionLocalServiceBaseImpl;
-import org.opencps.datamgt.util.PortletConstants;
+import org.opencps.util.PortletConstants;
 
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.SystemException;

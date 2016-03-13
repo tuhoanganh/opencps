@@ -31,7 +31,7 @@
 		<permissions>
 			<supports>
 				<action-key>VIEW</action-key>
-				<action-key>ADD</action-key>
+				<action-key>ADD_DICTCOLLECTION</action-key>
 				<action-key>UPDATE</action-key>
 				<action-key>DELETE</action-key>
 				<action-key>PERMISSIONS</action-key>				
@@ -43,7 +43,7 @@
 				<action-key>VIEW</action-key>
 			</guest-defaults>
 			<guest-unsupported>
-				<action-key>ADD</action-key>
+				<action-key>ADD_DICTCOLLECTION</action-key>
 				<action-key>UPDATE</action-key>
 				<action-key>DELETE</action-key>
 				<action-key>PERMISSIONS</action-key>
@@ -59,7 +59,7 @@
 		<permissions>
 			<supports>
 				<action-key>VIEW</action-key>
-				<action-key>ADD</action-key>
+				<action-key>ADD_DICTITEM</action-key>
 				<action-key>UPDATE</action-key>
 				<action-key>DELETE</action-key>
 				<action-key>PERMISSIONS</action-key>				
@@ -71,7 +71,7 @@
 				<action-key>VIEW</action-key>
 			</guest-defaults>
 			<guest-unsupported>
-				<action-key>ADD</action-key>
+				<action-key>ADD_DICTITEM</action-key>
 				<action-key>UPDATE</action-key>
 				<action-key>DELETE</action-key>
 				<action-key>PERMISSIONS</action-key>
@@ -87,7 +87,7 @@
 		<permissions>
 			<supports>
 				<action-key>VIEW</action-key>
-				<action-key>ADD</action-key>
+				<action-key>ADD_DICTVERSION</action-key>
 				<action-key>UPDATE</action-key>
 				<action-key>DELETE</action-key>
 				<action-key>PERMISSIONS</action-key>				
@@ -99,7 +99,7 @@
 				<action-key>VIEW</action-key>
 			</guest-defaults>
 			<guest-unsupported>
-				<action-key>ADD</action-key>
+				<action-key>ADD_DICTVERSION</action-key>
 				<action-key>UPDATE</action-key>
 				<action-key>DELETE</action-key>
 				<action-key>PERMISSIONS</action-key>
