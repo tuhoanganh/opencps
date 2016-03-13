@@ -18,5 +18,5 @@
 %>
 
 <%@ include file="../init.jsp"%>
-
+<liferay-util:include page="/html/portlets/data_management/admin/edit_dictcollection.jsp" servletContext="<%=application %>" />
 <liferay-util:include page="/html/portlets/data_management/admin/dictcollection.jsp" servletContext="<%=application %>" />

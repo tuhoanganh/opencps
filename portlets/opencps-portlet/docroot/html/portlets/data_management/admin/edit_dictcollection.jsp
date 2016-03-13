@@ -1,3 +1,7 @@
+<%@page import="org.opencps.datamgt.search.DictCollectionDisplayTerms"%>
+<%@page import="org.opencps.datamgt.model.impl.DictCollectionImpl"%>
+<%@page import="org.opencps.datamgt.util.WebKeys"%>
+<%@page import="org.opencps.datamgt.model.DictCollection"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -18,3 +22,33 @@
 %>
 
 <%@ include file="../init.jsp"%>
+
+<portlet:actionURL var="addDictCollectionURL" name="addDictCollection" ></portlet:actionURL>
+
+<%
+	DictCollection dictCollection = (DictCollection)request.getAttribute(WebKeys.DICT_COLLECTION_ENTRY);
+	long collectionId = dictCollection != null ? dictCollection.getDictCollectionId() : 0L;
+%>
+
+<aui:form action="<%=addDictCollectionURL.toString() %>" method="post" name="addColl">
+	
+	<aui:model-context bean="<%=dictCollection %>" model="<%=DictCollection.class %>" />
+	
+	<aui:fieldset>
+		<aui:input name="<%=DictCollectionDisplayTerms.COLLECTION_NAME %>" value='<%=(dictCollection != null) ? dictCollection.getCollectionName() : ""%>'>
+			<aui:validator name=""></aui:validator>
+		</aui:input>
+	
+		<aui:input name="<%=DictCollectionDisplayTerms.COLLECTION_CODE %>" type="text" value='<%=(dictCollection != null) ? dictCollection.getCollectionCode() : "" %>'>
+			<aui:validator name=""></aui:validator>
+		</aui:input>
+		
+		<aui:input name="<%=DictCollectionDisplayTerms.DESCRIPTION %>" type="textarea" value='<%=(dictCollection != null) ? dictCollection.getDescription() : ""%>'></aui:input>
+		<aui:input name="<%=DictCollectionDisplayTerms.DICTCOLLECTION_ID %>" type="hidden"></aui:input>
+	</aui:fieldset>
+	<aui:fieldset>
+		<%-- <aui:button type="cancel" value="Limpiar" onclick="this.form.reset()" /> --%>
+		<aui:button type="reset" value="clear"/>
+		<aui:button type="submit" name="submit" value="submit"/> 
+	</aui:fieldset>	
+</aui:form>
