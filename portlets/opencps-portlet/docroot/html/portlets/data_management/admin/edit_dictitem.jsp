@@ -1,7 +1,3 @@
-<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
-<%@page import="javax.portlet.PortletRequest"%>
-<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
-<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -37,7 +33,10 @@
 <%@page import="java.util.List"%>
 <%@page import="org.opencps.datamgt.search.DictItemDisplayTerms"%>
 <%@page import="org.opencps.datamgt.model.DictItem"%>
-
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
+<%@page import="javax.portlet.PortletRequest"%>
+<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
+<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
 <%@ include file="../init.jsp"%>
 
 <portlet:actionURL var="updateDictItemURL" name="updateDictItem" />
@@ -83,8 +82,8 @@
 			
 			<aui:model-context bean="<%=dictItem %>" model="<%=DictItem.class %>" />
 			<aui:input name="<%=DictItemDisplayTerms.DICTITEM_ID %>" type="hidden"/>
-			<aui:input name="redirectURL" type="hidden" value="<%=currentURL %>"/>
-			
+			<aui:input name="redirectURL" type="hidden" value="<%=backURL %>"/>
+			<aui:input name="returnURL" type="hidden" value="<%=currentURL %>"/>
 			<aui:fieldset>
 			
 				<aui:input name="<%=DictItemDisplayTerms.ITEM_NAME %>" cssClass="input80" label="item-name">
@@ -95,7 +94,7 @@
 				
 				<aui:input name="<%=DictItemDisplayTerms.ITEM_CODE%>" type="text" cssClass="input20">
 					<aui:validator name="required"/>
-					<aui:validator name="maxLength">100</aui:validator>
+					<aui:validator name="maxLength">100</aui:validator> 
 				</aui:input>
 				
 				<aui:select name="<%=DictItemDisplayTerms.DICTCOLLECTION_ID %>" label="dict-collection">
