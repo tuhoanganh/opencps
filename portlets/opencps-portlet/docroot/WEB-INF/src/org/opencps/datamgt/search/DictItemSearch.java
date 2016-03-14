@@ -63,7 +63,7 @@ public class DictItemSearch extends SearchContainer<DictItem> {
 	}
 
 	public static final String EMPTY_RESULTS_MESSAGE = "no-dict-item-were-found";
-	
+
 	public DictItemSearch(PortletRequest portletRequest, int delta, PortletURL iteratorURL) {
 
 		super(portletRequest, new DictItemDisplayTerms(portletRequest), new DictItemSearchTerms(portletRequest),
@@ -80,7 +80,7 @@ public class DictItemSearch extends SearchContainer<DictItem> {
 		iteratorURL.setParameter(DictItemDisplayTerms.GROUP_ID, String.valueOf(displayTerms.getGroupId()));
 		iteratorURL.setParameter(DictItemDisplayTerms.CREATE_DATE,
 				DateTimeUtil.convertDateToString(displayTerms.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT));
-		iteratorURL.setParameter(DictItemDisplayTerms.CREATE_DATE,
+		iteratorURL.setParameter(DictItemDisplayTerms.MODIFIED_DATE,
 				DateTimeUtil.convertDateToString(displayTerms.getModifiedDate(), DateTimeUtil._VN_DATE_TIME_FORMAT));
 		iteratorURL.setParameter(DictItemDisplayTerms.USER_ID, String.valueOf(displayTerms.getUserId()));
 
@@ -89,8 +89,7 @@ public class DictItemSearch extends SearchContainer<DictItem> {
 			String orderByCol = ParamUtil.getString(portletRequest, "orderByCol");
 			String orderByType = ParamUtil.getString(portletRequest, "orderByType");
 
-			OrderByComparator orderByComparator = DataMgtUtil.getDictCollectionOrderByComparator(orderByCol,
-					orderByType);
+			OrderByComparator orderByComparator = DataMgtUtil.getDictItemOrderByComparator(orderByCol, orderByType);
 
 			setOrderableHeaders(orderableHeaders);
 			setOrderByCol(orderByCol);
