@@ -72,23 +72,23 @@ public class DataMgtUtil {
 	}
 
 	public static OrderByComparator getDictVersionOrderByComparator(
-		String orderByCol, String orderByType) {
+			String orderByCol, String orderByType) {
 		boolean orderByAsc = false;
 		if (orderByType.endsWith("asc")) {
 			orderByAsc = true;
 		}
-		
+
 		OrderByComparator orderByComparator = null;
-		
-		if(orderByCol.equals(DictVersionDisplayTerms.CREATE_DATE)) {
+
+		if (orderByCol.equals(DictVersionDisplayTerms.CREATE_DATE)) {
 			orderByComparator = new DictVersionCreateDateComparator();
-		} else if (orderByCol.equals(DictVersionDisplayTerms.MODIFIED_DATE)){
+		} else if (orderByCol.equals(DictVersionDisplayTerms.MODIFIED_DATE)) {
 			orderByComparator = new DictVersionModifiedDateComparator();
-		} else if (orderByCol.equals(DictVersionDisplayTerms.VALIDATED_FROM)){
+		} else if (orderByCol.equals(DictVersionDisplayTerms.VALIDATED_FROM)) {
 			orderByComparator = new DictVersionValidatedFromComparator();
-		} else if (orderByCol.equals(DictVersionDisplayTerms.VALIDATED_TO)){
+		} else if (orderByCol.equals(DictVersionDisplayTerms.VALIDATED_TO)) {
 			orderByComparator = new DictVersionValidatedToComparator();
-		} else if (orderByCol.equals(DictVersionDisplayTerms.VERSION)){
+		} else if (orderByCol.equals(DictVersionDisplayTerms.VERSION)) {
 			orderByComparator = new DictVersionVersionComparator();
 		}
 		return orderByComparator;
