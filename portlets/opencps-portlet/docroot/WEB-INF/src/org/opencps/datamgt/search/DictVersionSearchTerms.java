@@ -27,6 +27,10 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplay;
 
+/**
+ * @author Dunglt
+ */
+
 public class DictVersionSearchTerms extends DictVersionDisplayTerms{
 
 	public DictVersionSearchTerms(PortletRequest portletRequest) {

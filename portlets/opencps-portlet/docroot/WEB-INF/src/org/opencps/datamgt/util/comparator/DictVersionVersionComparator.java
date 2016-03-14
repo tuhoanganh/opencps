@@ -22,7 +22,9 @@ import org.opencps.datamgt.model.DictVersion;
 import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringUtil;
-
+/**
+ * @author Dunglt
+ */
 public class DictVersionVersionComparator extends OrderByComparator{
 
 	public static final String ORDER_BY_ASC = "Version ASC";

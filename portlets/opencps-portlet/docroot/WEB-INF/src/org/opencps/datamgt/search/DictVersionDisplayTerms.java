@@ -28,6 +28,10 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplay;
 
+/**
+ * @author Dunglt
+ */
+
 public class DictVersionDisplayTerms extends DisplayTerms{
 	
 	public static final String CREATE_DATE = "createDate";

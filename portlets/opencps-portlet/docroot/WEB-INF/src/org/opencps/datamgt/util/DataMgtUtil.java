@@ -37,9 +37,9 @@ import org.opencps.datamgt.util.comparator.DictVersionVersionComparator;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
 /**
- * @author trungnt
- *
+ * @author Dunglt
  */
+
 public class DataMgtUtil {
 	public static OrderByComparator getDictCollectionOrderByComparator(
 			String orderByCol, String orderByType) {
