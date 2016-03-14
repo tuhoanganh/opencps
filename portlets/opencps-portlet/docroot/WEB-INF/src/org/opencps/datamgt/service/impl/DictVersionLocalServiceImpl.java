@@ -109,7 +109,7 @@ public class DictVersionLocalServiceImpl extends
 	 * @throws NoSuchDictVersionException
 	 *             Khi xảy ra lỗi không tìm thấy DictVersion
 	 */
-	public void removeDictVersion(long dictVersionId)
+	public void deleteDictVersionByDictVersionId(long dictVersionId)
 			throws NoSuchDictVersionException, SystemException {
 		dictVersionPersistence.remove(dictVersionId);
 	}
