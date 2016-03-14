@@ -80,7 +80,7 @@ public class DictItemSearch extends SearchContainer<DictItem> {
 		iteratorURL.setParameter(DictItemDisplayTerms.GROUP_ID, String.valueOf(displayTerms.getGroupId()));
 		iteratorURL.setParameter(DictItemDisplayTerms.CREATE_DATE,
 				DateTimeUtil.convertDateToString(displayTerms.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT));
-		iteratorURL.setParameter(DictItemDisplayTerms.CREATE_DATE,
+		iteratorURL.setParameter(DictItemDisplayTerms.MODIFIED_DATE,
 				DateTimeUtil.convertDateToString(displayTerms.getModifiedDate(), DateTimeUtil._VN_DATE_TIME_FORMAT));
 		iteratorURL.setParameter(DictItemDisplayTerms.USER_ID, String.valueOf(displayTerms.getUserId()));
 

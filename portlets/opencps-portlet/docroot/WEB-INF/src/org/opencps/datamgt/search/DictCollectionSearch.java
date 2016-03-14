@@ -77,7 +77,7 @@ public class DictCollectionSearch extends SearchContainer<DictCollection> {
 		iteratorURL.setParameter(DictCollectionDisplayTerms.GROUP_ID, String.valueOf(displayTerms.getGroupId()));
 		iteratorURL.setParameter(DictCollectionDisplayTerms.CREATE_DATE,
 				DateTimeUtil.convertDateToString(displayTerms.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT));
-		iteratorURL.setParameter(DictCollectionDisplayTerms.CREATE_DATE,
+		iteratorURL.setParameter(DictCollectionDisplayTerms.MODIFIED_DATE,
 				DateTimeUtil.convertDateToString(displayTerms.getModifiedDate(), DateTimeUtil._VN_DATE_TIME_FORMAT));
 		iteratorURL.setParameter(DictCollectionDisplayTerms.USER_ID, String.valueOf(displayTerms.getUserId()));
 
