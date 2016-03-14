@@ -63,7 +63,7 @@ public class DictItemSearch extends SearchContainer<DictItem> {
 	}
 
 	public static final String EMPTY_RESULTS_MESSAGE = "no-dict-item-were-found";
-	
+
 	public DictItemSearch(PortletRequest portletRequest, int delta, PortletURL iteratorURL) {
 
 		super(portletRequest, new DictItemDisplayTerms(portletRequest), new DictItemSearchTerms(portletRequest),
@@ -89,8 +89,7 @@ public class DictItemSearch extends SearchContainer<DictItem> {
 			String orderByCol = ParamUtil.getString(portletRequest, "orderByCol");
 			String orderByType = ParamUtil.getString(portletRequest, "orderByType");
 
-			OrderByComparator orderByComparator = DataMgtUtil.getDictCollectionOrderByComparator(orderByCol,
-					orderByType);
+			OrderByComparator orderByComparator = DataMgtUtil.getDictItemOrderByComparator(orderByCol, orderByType);
 
 			setOrderableHeaders(orderableHeaders);
 			setOrderByCol(orderByCol);

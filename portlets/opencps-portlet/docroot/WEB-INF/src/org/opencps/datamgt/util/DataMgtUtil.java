@@ -17,10 +17,16 @@
 
 package org.opencps.datamgt.util;
 
+import org.opencps.datamgt.search.DictCollectionDisplayTerms;
+import org.opencps.datamgt.search.DictItemDisplayTerms;
 import org.opencps.datamgt.util.comparator.DictCollectionCodeComparator;
 import org.opencps.datamgt.util.comparator.DictCollectionCreateDateComparator;
 import org.opencps.datamgt.util.comparator.DictCollectionModifiedDateComparator;
 import org.opencps.datamgt.util.comparator.DictCollectionNameComparator;
+import org.opencps.datamgt.util.comparator.DictItemCodeComparator;
+import org.opencps.datamgt.util.comparator.DictItemCreateDateComparator;
+import org.opencps.datamgt.util.comparator.DictItemModifiedDateComparator;
+import org.opencps.datamgt.util.comparator.DictItemNameComparator;
 
 import com.liferay.portal.kernel.util.OrderByComparator;
 
@@ -39,21 +45,46 @@ public class DataMgtUtil {
 
 		OrderByComparator orderByComparator = null;
 
-		if (orderByCol.equals("create-date")) {
+		if (orderByCol.equals(DictCollectionDisplayTerms.CREATE_DATE)) {
 			orderByComparator = new DictCollectionCreateDateComparator(orderByAsc);
-		} else if (orderByCol.equals("modified-date")) {
+		} else if (orderByCol.equals(DictCollectionDisplayTerms.MODIFIED_DATE)) {
 			orderByComparator = new DictCollectionModifiedDateComparator(orderByAsc);
-		} else if (orderByCol.equals("name")) {
+		} else if (orderByCol.equals(DictCollectionDisplayTerms.COLLECTION_NAME)) {
 			orderByComparator = new DictCollectionNameComparator(orderByAsc);
-		} else if (orderByCol.equals("code")) {
+		} else if (orderByCol.equals(DictCollectionDisplayTerms.COLLECTION_CODE)) {
 			orderByComparator = new DictCollectionCodeComparator(orderByAsc);
-		} else if (orderByCol.equals("author")) {
+		} else if (orderByCol.equals(DictCollectionDisplayTerms.USER_ID)) {
 
 		}
 
 		return orderByComparator;
 	}
-	
+
+	public static OrderByComparator getDictItemOrderByComparator(String orderByCol, String orderByType) {
+
+		boolean orderByAsc = false;
+
+		if (orderByType.equals("asc")) {
+			orderByAsc = true;
+		}
+
+		OrderByComparator orderByComparator = null;
+
+		if (orderByCol.equals(DictItemDisplayTerms.CREATE_DATE)) {
+			orderByComparator = new DictItemCreateDateComparator(orderByAsc);
+		} else if (orderByCol.equals(DictItemDisplayTerms.MODIFIED_DATE)) {
+			orderByComparator = new DictItemModifiedDateComparator(orderByAsc);
+		} else if (orderByCol.equals(DictItemDisplayTerms.ITEM_NAME)) {
+			orderByComparator = new DictItemNameComparator(orderByAsc);
+		} else if (orderByCol.equals(DictItemDisplayTerms.ITEM_CODE)) {
+			orderByComparator = new DictItemCodeComparator(orderByAsc);
+		} else if (orderByCol.equals(DictItemDisplayTerms.USER_ID)) {
+
+		}
+
+		return orderByComparator;
+	}
+
 	public static final String TOP_TABS_DICTITEM = "dict-item";
 	public static final String TOP_TABS_DICTCOLLECTION = "dict-collection";
 	public static final String TOP_TABS_DICTVERSION = "dict-version";
