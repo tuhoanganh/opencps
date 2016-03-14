@@ -54,6 +54,9 @@ public class DataMgtUtil {
 		return orderByComparator;
 	}
 	
+	public static OrderByComparator getDictVersionOrderByComparator(String orderByCol, String orderByType) {
+		return null;
+	}
 	public static final String TOP_TABS_DICTITEM = "dict-item";
 	public static final String TOP_TABS_DICTCOLLECTION = "dict-collection";
 	public static final String TOP_TABS_DICTVERSION = "dict-version";
