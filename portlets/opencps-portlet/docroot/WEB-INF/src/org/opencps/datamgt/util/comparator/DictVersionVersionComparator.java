@@ -27,11 +27,11 @@ import com.liferay.portal.kernel.util.StringUtil;
  */
 public class DictVersionVersionComparator extends OrderByComparator{
 
-	public static final String ORDER_BY_ASC = "Version ASC";
+	public static final String ORDER_BY_ASC = "version ASC";
 	
-	public static final String ORDER_BY_DESC = "Version DESC";
+	public static final String ORDER_BY_DESC = "version DESC";
 
-	public static final String[] ORDER_BY_FIELDS = { "Version" };
+	public static final String[] ORDER_BY_FIELDS = { "version" };
 	
 	public DictVersionVersionComparator() {
 		this(false);
