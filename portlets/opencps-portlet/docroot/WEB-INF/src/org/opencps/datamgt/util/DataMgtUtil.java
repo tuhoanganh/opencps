@@ -91,7 +91,7 @@ public class DataMgtUtil {
 		} else if (orderByCol.equals(DictVersionDisplayTerms.VERSION)){
 			orderByComparator = new DictVersionVersionComparator();
 		}
-		return null;
+		return orderByComparator;
 	}
 
 	public static OrderByComparator getDictItemOrderByComparator(
