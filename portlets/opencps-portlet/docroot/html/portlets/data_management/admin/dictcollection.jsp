@@ -1,4 +1,3 @@
-<%@page import="org.opencps.datamgt.util.DataMgtUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -36,6 +35,7 @@
 <%@page import="org.opencps.util.DateTimeUtil"%>
 <%@page import="com.liferay.util.dao.orm.CustomSQLUtil"%>
 <%@page import="org.opencps.datamgt.search.DictCollectionSearchTerms"%>
+<%@page import="org.opencps.datamgt.util.DataMgtUtil"%>
 <%@ include file="../init.jsp"%>
 
 <liferay-util:include page="/html/portlets/data_management/admin/toptabs.jsp" servletContext="<%=application %>" />
@@ -115,8 +115,6 @@
 	
 	<liferay-ui:search-iterator/>
 </liferay-ui:search-container>
-
-
 
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.data_management.admin.dictcollection.jsp");
