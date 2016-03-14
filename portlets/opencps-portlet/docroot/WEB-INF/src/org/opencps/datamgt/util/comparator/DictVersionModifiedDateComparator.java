@@ -46,5 +46,15 @@ public class DictVersionModifiedDateComparator extends OrderByComparator {
 		return _ascending ? compareValue : -compareValue;
 	}
 
+	@Override
+	public String[] getOrderByFields() {
+		return ORDER_BY_FIELDS;
+	}
+
+	@Override
+	public boolean isAscending() {
+		return _ascending;
+	}
+
 	private boolean _ascending;
 }
