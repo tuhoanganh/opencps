@@ -242,38 +242,45 @@ public class DictVersionLocalServiceImpl extends
 			throws NoSuchDictVersionException, SystemException {
 		DictVersion dictVersion = dictVersionPersistence
 				.findByPrimaryKey(dictVersionId);
-		List<DictItem> lstDictItem = dictItemPersistence
-				.findByDictVersionId(dictVersion.getDictCollectionId());
-		List<DictVersion> lstDictVersion = dictVersionPersistence
-				.findByDictCollectionId(dictVersion.getDictCollectionId());
+
 		if (dictVersion.getIssueStatus() == PortletConstants.DRAFTING) {
+			boolean checkSuccess = false;
+			boolean checkInUseExisted = true;
+			int count = 0;
+
+			List<DictItem> lstDictItem = dictItemPersistence
+					.findByDictVersionId(dictVersion.getDictCollectionId());
+			List<DictVersion> lstDictVersion = dictVersionPersistence
+					.findByDictCollectionId(dictVersion.getDictCollectionId());
+
 			for (DictItem dictItem : lstDictItem) {
 				dictItem.setIssueStatus(PortletConstants.INUSE);
 				dictItemPersistence.update(dictItem);
 			}
-		}
 
-		boolean checkSuccess = false;
-		boolean checkInUseExisted = true;
-		int count = 0;
-		for (DictVersion dictVers : lstDictVersion) {
-			if (dictVers.getIssueStatus() == PortletConstants.INUSE) {
-				dictVers.setIssueStatus(PortletConstants.EXPIRED);
-				dictVersionPersistence.update(dictVers);
-				checkSuccess = true;
+			for (DictVersion dictVers : lstDictVersion) {
+				if (dictVers.getIssueStatus() == PortletConstants.INUSE) {
+					dictVers.setIssueStatus(PortletConstants.EXPIRED);
+					dictVersionPersistence.update(dictVers);
+					checkSuccess = true;
+				} else {
+					count++;
+				}
+			}
+			
+			if (count == lstDictVersion.size()) {
+				checkInUseExisted = false;
+			}
+			
+			if (checkSuccess == true || checkInUseExisted == false) {
+				dictVersion.setIssueStatus(PortletConstants.INUSE);
+				return dictVersionPersistence.update(dictVersion);
 			} else {
-				count++;
+				return null;
 			}
 		}
-		if (count == lstDictVersion.size()) {
-			checkInUseExisted = false;
-		}
-		if (checkSuccess == true || checkInUseExisted == false) {
-			dictVersion.setIssueStatus(PortletConstants.INUSE);
-			return dictVersionPersistence.update(dictVersion);
-		} else {
-			return null;
-		}
+
+		return null;
 
 	}
 
