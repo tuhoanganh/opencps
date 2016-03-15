@@ -270,11 +270,11 @@ public class DictVersionLocalServiceImpl extends
 				}
 
 				dictVersion.setIssueStatus(PortletConstants.INUSE);
-				return dictVersionPersistence.update(dictVersion);
+				dictVersion = dictVersionPersistence.update(dictVersion);
 			}
 		}
 
-		return null;
+		return dictVersion;
 
 	}
 
