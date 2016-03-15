@@ -20,6 +20,7 @@ package org.opencps.datamgt.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.opencps.datamgt.ExistDraftException;
 import org.opencps.datamgt.NoSuchDictVersionException;
 import org.opencps.datamgt.model.DictCollection;
 import org.opencps.datamgt.model.DictItem;
@@ -74,27 +75,60 @@ public class DictVersionLocalServiceImpl extends
 	 * @return trả về đối tượng DictVersion
 	 * @throws SystemException
 	 *             Nếu ngoại lệ hệ thống xảy ra
+	 * @throws ExistDraftException
 	 */
 	public DictVersion addDictVersion(long userId,
 			DictCollection dictCollection, String version, String description,
 			Date validatedFrom, Date validatedTo, ServiceContext serviceContext)
-			throws SystemException {
+			throws SystemException, ExistDraftException {
 		long dictVersionId = CounterLocalServiceUtil
 				.increment(DictVersion.class.getName());
 		DictVersion dictVersion = dictVersionPersistence.create(dictVersionId);
 		Date curDate = new Date();
-		dictVersion.setCompanyId(serviceContext.getCompanyId());
-		dictVersion.setGroupId(serviceContext.getScopeGroupId());
-		dictVersion.setUserId(userId);
-		dictVersion.setCreateDate(curDate);
-		dictVersion.setModifiedDate(curDate);
-		dictVersion.setDictCollectionId(dictCollection.getDictCollectionId());
-		dictVersion.setVersion(version);
-		dictVersion.setDescription(description);
-		dictVersion.setValidatedFrom(validatedFrom);
-		dictVersion.setValidatedTo(validatedTo);
-		dictVersion.setIssueStatus(PortletConstants.DRAFTING);
-		return dictVersionPersistence.update(dictVersion);
+
+		List<DictVersion> lstDictVersion = dictVersionPersistence
+				.findByDictCollectionId(dictCollection.getDictCollectionId());
+
+		if (lstDictVersion.isEmpty()) {
+			dictVersion.setCompanyId(serviceContext.getCompanyId());
+			dictVersion.setGroupId(serviceContext.getScopeGroupId());
+			dictVersion.setUserId(userId);
+			dictVersion.setCreateDate(curDate);
+			dictVersion.setModifiedDate(curDate);
+			dictVersion.setDictCollectionId(dictCollection
+					.getDictCollectionId());
+			dictVersion.setVersion(version);
+			dictVersion.setDescription(description);
+			dictVersion.setValidatedFrom(validatedFrom);
+			dictVersion.setValidatedTo(validatedTo);
+			dictVersion.setIssueStatus(PortletConstants.DRAFTING);
+			return dictVersionPersistence.update(dictVersion);
+		} else {
+			boolean isExistedDraft = false;
+			for (DictVersion dicVersionItem : lstDictVersion) {
+				if (dicVersionItem.getIssueStatus() == PortletConstants.DRAFTING) {
+					isExistedDraft = true;
+				}
+			}
+			if (isExistedDraft == true) {
+				throw new ExistDraftException();
+			} else {
+				dictVersion.setCompanyId(serviceContext.getCompanyId());
+				dictVersion.setGroupId(serviceContext.getScopeGroupId());
+				dictVersion.setUserId(userId);
+				dictVersion.setCreateDate(curDate);
+				dictVersion.setModifiedDate(curDate);
+				dictVersion.setDictCollectionId(dictCollection
+						.getDictCollectionId());
+				dictVersion.setVersion(version);
+				dictVersion.setDescription(description);
+				dictVersion.setValidatedFrom(validatedFrom);
+				dictVersion.setValidatedTo(validatedTo);
+				dictVersion.setIssueStatus(PortletConstants.DRAFTING);
+				return dictVersionPersistence.update(dictVersion);
+			}
+		}
+
 	}
 
 	/**
@@ -109,7 +143,7 @@ public class DictVersionLocalServiceImpl extends
 	 * @throws NoSuchDictVersionException
 	 *             Khi xảy ra lỗi không tìm thấy DictVersion
 	 */
-	public void removeDictVersion(long dictVersionId)
+	public void deleteDictVersionByDictVersionId(long dictVersionId)
 			throws NoSuchDictVersionException, SystemException {
 		dictVersionPersistence.remove(dictVersionId);
 	}
@@ -178,12 +212,13 @@ public class DictVersionLocalServiceImpl extends
 			throws NoSuchDictVersionException, SystemException {
 		return dictVersionPersistence.findByPrimaryKey(dictVersionId);
 	}
-	
-	public List<DictVersion> getDictVersion(int start, int end, OrderByComparator odc)
-			throws NoSuchDictVersionException, SystemException {
+
+	public List<DictVersion> getDictVersion(int start, int end,
+			OrderByComparator odc) throws NoSuchDictVersionException,
+			SystemException {
 		return dictVersionPersistence.findAll(start, end, odc);
 	}
-	
+
 	public int countAll() throws SystemException {
 		return dictVersionPersistence.countAll();
 	}
@@ -207,16 +242,40 @@ public class DictVersionLocalServiceImpl extends
 			throws NoSuchDictVersionException, SystemException {
 		DictVersion dictVersion = dictVersionPersistence
 				.findByPrimaryKey(dictVersionId);
-		List<DictItem> lstDictItem = dictItemPersistence
-				.findByDictVersionId(dictVersion.getDictCollectionId());
-		if (dictVersion.getIssueStatus() != PortletConstants.INUSE) {
+
+		if (dictVersion.getIssueStatus() == PortletConstants.DRAFTING) {
+
+			List<DictItem> lstDictItem = dictItemPersistence
+					.findByDictVersionId(dictVersion.getDictCollectionId());
+			List<DictVersion> lstDictVersion = dictVersionPersistence
+					.findByDictCollectionId(dictVersion.getDictCollectionId());
+
 			for (DictItem dictItem : lstDictItem) {
 				dictItem.setIssueStatus(PortletConstants.INUSE);
 				dictItemPersistence.update(dictItem);
 			}
-		} 
-		dictVersion.setIssueStatus(PortletConstants.INUSE);
-		return dictVersionPersistence.update(dictVersion);
+
+			for (DictVersion version : lstDictVersion) {
+
+				if (version.getIssueStatus() == PortletConstants.INUSE) {
+					List<DictItem> dictItems = dictItemPersistence
+							.findByDictVersionId(version.getDictVersionId());
+					for (DictItem dictItem : dictItems) {
+						dictItem.setIssueStatus(PortletConstants.EXPIRED);
+					}
+
+					version.setIssueStatus(PortletConstants.EXPIRED);
+					dictVersionPersistence.update(version);
+
+				}
+
+				dictVersion.setIssueStatus(PortletConstants.INUSE);
+				dictVersion = dictVersionPersistence.update(dictVersion);
+			}
+		}
+
+		return dictVersion;
+
 	}
 
 	/**

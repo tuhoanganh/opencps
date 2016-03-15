@@ -3,7 +3,6 @@
         <wb-resource deploy-path="/" source-path="/docroot" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/docroot/WEB-INF/src"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/docroot/WEB-INF/service"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/docroot/WEB-INF/util-taglib"/>
         <property name="context-root" value="opencps-portlet"/>
         <property name="java-output-path" value="/opencps-portlet/docroot/WEB-INF/classes"/>
     </wb-module>
