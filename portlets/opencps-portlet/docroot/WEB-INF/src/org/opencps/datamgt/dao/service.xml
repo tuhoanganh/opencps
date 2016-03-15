@@ -157,6 +157,7 @@
         <exception>OutOfLengthItemCode</exception>
         <exception>EmptyCollectionCode</exception>
         <exception>EmptyItemCode</exception>
+        <exception>ExistDraft</exception>
 	</exceptions>
 
 </service-builder>
