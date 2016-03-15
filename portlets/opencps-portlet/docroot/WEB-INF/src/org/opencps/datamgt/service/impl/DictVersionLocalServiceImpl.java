@@ -104,13 +104,13 @@ public class DictVersionLocalServiceImpl extends
 			dictVersion.setIssueStatus(PortletConstants.DRAFTING);
 			return dictVersionPersistence.update(dictVersion);
 		} else {
-			boolean check = false;
+			boolean isExistedDraft = false;
 			for (DictVersion dicVersionItem : lstDictVersion) {
 				if (dicVersionItem.getIssueStatus() == PortletConstants.DRAFTING) {
-					check = true;
+					isExistedDraft = true;
 				}
 			}
-			if (check == true) {
+			if (isExistedDraft == true) {
 				throw new ExistDraftException();
 			} else {
 				dictVersion.setCompanyId(serviceContext.getCompanyId());
@@ -127,7 +127,6 @@ public class DictVersionLocalServiceImpl extends
 				dictVersion.setIssueStatus(PortletConstants.DRAFTING);
 				return dictVersionPersistence.update(dictVersion);
 			}
-
 		}
 
 	}
@@ -253,14 +252,22 @@ public class DictVersionLocalServiceImpl extends
 				dictItemPersistence.update(dictItem);
 			}
 		}
+		
+		boolean checkSuccess = false;
 		for(DictVersion dictVers : lstDictVersion) {
 			if(dictVers.getIssueStatus() == PortletConstants.INUSE) {
 				dictVers.setIssueStatus(PortletConstants.EXPIRED);
 				dictVersionPersistence.update(dictVers);
+				checkSuccess = true;
 			}
 		}
-		dictVersion.setIssueStatus(PortletConstants.INUSE);
-		return dictVersionPersistence.update(dictVersion);
+		if(checkSuccess == true) {
+			dictVersion.setIssueStatus(PortletConstants.INUSE);
+			return dictVersionPersistence.update(dictVersion);
+		} else {
+			return null;
+		}
+		
 	}
 
 	/**
