@@ -252,22 +252,29 @@ public class DictVersionLocalServiceImpl extends
 				dictItemPersistence.update(dictItem);
 			}
 		}
-		
+
 		boolean checkSuccess = false;
-		for(DictVersion dictVers : lstDictVersion) {
-			if(dictVers.getIssueStatus() == PortletConstants.INUSE) {
+		boolean checkInUseExisted = true;
+		int count = 0;
+		for (DictVersion dictVers : lstDictVersion) {
+			if (dictVers.getIssueStatus() == PortletConstants.INUSE) {
 				dictVers.setIssueStatus(PortletConstants.EXPIRED);
 				dictVersionPersistence.update(dictVers);
 				checkSuccess = true;
+			} else {
+				count++;
 			}
 		}
-		if(checkSuccess == true) {
+		if (count == lstDictVersion.size()) {
+			checkInUseExisted = false;
+		}
+		if (checkSuccess == true || checkInUseExisted == false) {
 			dictVersion.setIssueStatus(PortletConstants.INUSE);
 			return dictVersionPersistence.update(dictVersion);
 		} else {
 			return null;
 		}
-		
+
 	}
 
 	/**
