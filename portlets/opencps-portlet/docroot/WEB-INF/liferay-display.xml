@@ -4,8 +4,6 @@
 <display>
 	<category name="org.opencps.backend">
 		<portlet id="1" />
-	</category>
-	<category name="org.opencps.frontend">
-		<portlet id="99"></portlet>
+		<portlet id="2"/>
 	</category>
 </display>
