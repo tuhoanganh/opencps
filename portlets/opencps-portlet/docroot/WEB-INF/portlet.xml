@@ -43,6 +43,46 @@
 		</security-role-ref>
 	</portlet>
 	<portlet>
+	<portlet-name>2</portlet-name>
+		<display-name>User Management Admin</display-name>
+		<portlet-class>
+			org.opencps.usermgt.portlet.UserMamagementPortlet.UserMgtAdminPortlet		</portlet-class>
+		<init-param>
+			<name>view-template</name>
+			<value>/html/portlets/data_management/admin/dictitems.jsp</value>
+		</init-param>
+		<init-param>
+			<name>template-path</name>
+			<value>/html/portlets/data_management/admin/</value>
+		</init-param>
+		<init-param>
+			<name>config-template</name>
+			<value>/html/portlets/data_management/admin/configuration.jsp</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+		</supports>
+		<resource-bundle>content.Language_1</resource-bundle>
+		<portlet-info>
+			<title>Data Management</title>
+			<short-title>Data Management</short-title>
+			<keywords>Data Management</keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>power-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+	</portlet>
+	<portlet>
 		<portlet-name>99</portlet-name>
 		<display-name>Sample API</display-name>
 		<portlet-class>
