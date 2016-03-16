@@ -70,7 +70,7 @@
 		<field name="modifiedDate" type="Date" />
 		<field name="workingUnitId" type="long" />
 		<field name="employeeNo" type="String" />
-		<field name="fullName" type="String" >
+		<field name="fullName" type="String">
 			<hint name="max-length">255</hint>
 		</field>
 		<field name="gender" type="int" />
@@ -88,10 +88,10 @@
 		<field name="userId" type="long" />
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
-		<field name="title" type="String" >
+		<field name="title" type="String">
 			<hint name="max-length">255</hint>
 		</field>
-		<field name="description" type="String" >
+		<field name="description" type="String">
 			<hint-collection name="TEXTAREA" />
 		</field>
 		<field name="workingUnitId" type="long" />
@@ -106,7 +106,7 @@
 		<field name="userId" type="long" />
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
-		<field name="name" type="String" >
+		<field name="name" type="String">
 			<hint name="max-length">255</hint>
 		</field>
 		<field name="enName" type="String">
