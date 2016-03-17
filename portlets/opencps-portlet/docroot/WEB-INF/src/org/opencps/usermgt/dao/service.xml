@@ -38,7 +38,7 @@
 		<column name="mappingOrganisationId" type="long" />
 		
 		<column name="entries" type="Collection" entity="JobPos" 
-			mapping-table="WorkingUnit_JobPos" />
+			mapping-table="opencps_workingunit_jobpos" />
 		
 		<!-- Order -->
 		<order by="asc">
@@ -51,15 +51,11 @@
 			<finder-column name="isEmployer" />
 		</finder>
 		
-		<finder name="GroupId" return-type="Collection">
+		<finder name="G_E_P" return-type="Collection">
 			<finder-column name="groupId" />
+			<finder-column name="isEmployer" />
+			<finder-column name="parentWorkingUnitId" />
 		</finder>
-
-		<finder name="G_N" return-type="Collection">
-			<finder-column name="groupId"/>
-			<finder-column name="name" comparator="LIKE" arrayable-operator="OR"/>
-		</finder>
-
 	</entity>
 
 	<entity name="JobPos" local-service="true" remote-service="true"
@@ -88,10 +84,10 @@
 
 		<!-- Relationships -->
 		<column name="entries" type="Collection" entity="Employee" 
-			mapping-table="Employee_JobPos" />
+			mapping-table="opencps_employee_jobpos" />
 
 		<column name="entries" type="Collection" entity="WorkingUnit" 
-			mapping-table="WorkingUnit_JobPos" />
+			mapping-table="opencps_workingunit_jobpos" />
 
 		<!-- Order -->
 
@@ -137,7 +133,7 @@
 		<column name="mainJobPosId" type="long" />
 
 		<column name="entries" type="Collection" entity="JobPos" 
-			mapping-table="Employee_JobPos" />
+			mapping-table="opencps_employee_jobpos" />
 
 		<!-- Order -->
 		<order by="asc">
