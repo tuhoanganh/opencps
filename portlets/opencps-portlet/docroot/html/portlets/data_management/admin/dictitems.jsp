@@ -156,8 +156,6 @@
 	<liferay-ui:search-iterator/>
 </liferay-ui:search-container>
 
-
-
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.data_management.admin.dictitem.jsp");
 %>

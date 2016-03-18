@@ -24,14 +24,20 @@ import com.liferay.util.portlet.PortletProps;
  * @author trungnt
  */
 public class PortletPropsValues {
+
 	public static final int DATAMGT_DICTCOLLECTION_CODE_LENGHT = GetterUtil
-			.getInteger(PortletProps.get(PortletPropsKeys.DATAMGT_DICTCOLLECTION_CODE_LENGHT), 100);
+		.getInteger(PortletProps
+			.get(PortletPropsKeys.DATAMGT_DICTCOLLECTION_CODE_LENGHT), 100);
 	public static final int DATAMGT_DICTCOLLECTION_NAME_LENGHT = GetterUtil
-			.getInteger(PortletProps.get(PortletPropsKeys.DATAMGT_DICTCOLLECTION_NAME_LENGHT), 255);
+		.getInteger(PortletProps
+			.get(PortletPropsKeys.DATAMGT_DICTCOLLECTION_NAME_LENGHT), 255);
 	public static final int DATAMGT_DICTITEM_CODE_LENGHT = GetterUtil
-			.getInteger(PortletProps.get(PortletPropsKeys.DATAMGT_DICTITEM_CODE_LENGHT), 100);
+		.getInteger(PortletProps
+			.get(PortletPropsKeys.DATAMGT_DICTITEM_CODE_LENGHT), 100);
 	public static final int DATAMGT_DICTITEM_NAME_LENGHT = GetterUtil
-			.getInteger(PortletProps.get(PortletPropsKeys.DATAMGT_DICTITEM_NAME_LENGHT), 255);
+		.getInteger(PortletProps
+			.get(PortletPropsKeys.DATAMGT_DICTITEM_NAME_LENGHT), 255);
 	public static final String[] DATAMGT_MASTERDATA_CODE = GetterUtil
-			.getStringValues(PortletProps.get(PortletPropsKeys.DATAMGT_MASTERDATA_CODE), new String[0]);
+		.getStringValues(PortletProps
+			.get(PortletPropsKeys.DATAMGT_MASTERDATA_CODE), new String[0]);
 }

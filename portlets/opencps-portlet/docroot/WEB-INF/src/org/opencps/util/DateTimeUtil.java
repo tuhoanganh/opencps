@@ -28,29 +28,42 @@ import com.liferay.portal.kernel.util.Validator;
 
 /**
  * @author trungnt
- *
  */
 public class DateTimeUtil {
 
 	public static String convertDateToString(Date date, String pattern) {
-		DateFormat dateFormat = DateFormatFactoryUtil.getSimpleDateFormat(pattern);
-		if (date == null || Validator.isNull(pattern)) {
+
+		DateFormat dateFormat = DateFormatFactoryUtil
+			.getSimpleDateFormat(pattern);
+		if (date == null || Validator
+			.isNull(pattern)) {
 			return StringPool.BLANK;
 		}
-		dateFormat.setTimeZone(TimeZoneUtil.getDefault());
+		dateFormat
+			.setTimeZone(TimeZoneUtil
+				.getDefault());
 
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(date);
+		Calendar calendar = Calendar
+			.getInstance();
+		calendar
+			.setTime(date);
 
-		return dateFormat.format(calendar.getTime());
+		return dateFormat
+			.format(calendar
+				.getTime());
 	}
 
 	public static DateFormat getDateTimeFormat(String pattern) {
-		DateFormat dateFormat = DateFormatFactoryUtil.getSimpleDateFormat(pattern);
-		if (Validator.isNotNull(pattern)) {
+
+		DateFormat dateFormat = DateFormatFactoryUtil
+			.getSimpleDateFormat(pattern);
+		if (Validator
+			.isNotNull(pattern)) {
 			pattern = _VN_DATE_TIME_FORMAT;
 		}
-		dateFormat.setTimeZone(TimeZoneUtil.getDefault());
+		dateFormat
+			.setTimeZone(TimeZoneUtil
+				.getDefault());
 
 		return dateFormat;
 	}

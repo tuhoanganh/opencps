@@ -19,11 +19,12 @@ package org.opencps.util;
 
 /**
  * @author trungnt
- *
  */
 public class MessageKeys {
+
 	public static final String DATAMGT_ADD_SUCESS = "datamgt.add.sucess";
-	public static final String DATAMGT_SYSTEM_EXCEPTION_OCCURRED = "datamgt.system.exception.occurred";
+	public static final String DATAMGT_SYSTEM_EXCEPTION_OCCURRED =
+		"datamgt.system.exception.occurred";
 	public static final String DATAMGT_UPDATE_SUCESS = "datamgt.update.sucess";
 
 }
