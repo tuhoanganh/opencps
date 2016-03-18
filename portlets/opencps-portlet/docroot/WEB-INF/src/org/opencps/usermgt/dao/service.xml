@@ -27,7 +27,7 @@
 		<column name="managerWorkingUnitId" type="long"/>
 		<column name="parentWorkingUnitId" type="long" />
 		<column name="sibling" type="int"/>
-		<column name="treeIndex" type="double" />
+		<column name="treeIndex" type="String" />
 		<column name="address" type="String" />
 		<column name="cityCode" type="String" />
 		<column name="districtCode" type="String" />
