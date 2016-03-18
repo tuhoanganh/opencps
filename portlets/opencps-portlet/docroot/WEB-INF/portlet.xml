@@ -86,6 +86,80 @@
 	
 	<portlet>	
 		<portlet-name>3</portlet-name>
+		<display-name>User Management</display-name>
+		<portlet-class>
+			org.opencps.usermgt.portlet.UserMgtEditProfilePortlet	
+		</portlet-class>
+		<init-param>
+			<name>view-template</name>
+			<value>/html/portlets/usermgt/edit_info/info.jsp</value>
+		</init-param>
+		<init-param>
+			<name>template-path</name>
+			<value>/html/portlets/usermgt/edit_info/</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+		</supports>
+		<resource-bundle>content.Language_3</resource-bundle>
+		<portlet-info>
+			<title>User Management</title>
+			<short-title>User Management</short-title>
+			<keywords>User Management</keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>power-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+	</portlet>
+	<portlet>	
+		<portlet-name>5</portlet-name>
+		<display-name>Account Register</display-name>
+		<portlet-class>
+			org.opencps.accountmgt.portlet.AccountRegPortlet	
+		</portlet-class>
+		<init-param>
+			<name>view-template</name>
+			<value>/html/portlets/accountmgt/acount_reg/register.jsp</value>
+		</init-param>
+		<init-param>
+			<name>template-path</name>
+			<value>/html/portlets/accountmgt/acount_reg/</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+		</supports>
+		<resource-bundle>content.Language_5</resource-bundle>
+		<portlet-info>
+			<title>Account Register</title>
+			<short-title>Account Register</short-title>
+			<keywords>Account Register</keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>power-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+	</portlet>
+	<portlet>	
+		<portlet-name>7</portlet-name>
 		<display-name>Account Management</display-name>
 		<portlet-class>
 			org.opencps.usermgt.portlet.UserMgtEditProfilePortlet	
