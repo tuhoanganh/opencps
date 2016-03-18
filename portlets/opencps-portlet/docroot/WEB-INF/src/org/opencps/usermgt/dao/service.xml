@@ -24,8 +24,10 @@
 		<column name="name" type="String" />
 		<column name="enName" type="String" />
 		<column name="govAgencyCode" type="String"/>
+		<column name="managerWorkingUnitId" type="long"/>
 		<column name="parentWorkingUnitId" type="long" />
-		<column name="treeIndex" type="String" />
+		<column name="sibling" type="int"/>
+		<column name="treeIndex" type="double" />
 		<column name="address" type="String" />
 		<column name="cityCode" type="String" />
 		<column name="districtCode" type="String" />
@@ -63,7 +65,7 @@
 
 		<!-- PK fields -->
 
-		<column name="jobposId" type="long" primary="true" />
+		<column name="jobPosId" type="long" primary="true" />
 
 		<!-- Audit fields -->
 
@@ -131,6 +133,7 @@
 		<column name="email" type="String" />
 		<column name="workingStatus" type="int" />
 		<column name="mainJobPosId" type="long" />
+		<column name="mappingUserId" type="long" />
 
 		<column name="entries" type="Collection" entity="JobPos" 
 			mapping-table="opencps_employee_jobpos" />
