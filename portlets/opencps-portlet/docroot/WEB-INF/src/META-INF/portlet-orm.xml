@@ -172,6 +172,82 @@
 			<transient name="userUuid" />
 		</attributes>
 	</mapped-superclass>
+	<mapped-superclass class="org.opencps.accountmgt.model.impl.BusinessModelImpl">
+		<attributes>
+			<id name="businessId" />
+			<basic name="companyId" />
+			<basic name="groupId" />
+			<basic name="userId" />
+			<basic name="createDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="modifiedDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="uuid">
+				<column name="UUID_" />
+			</basic>
+			<basic name="name" />
+			<basic name="enName" />
+			<basic name="shortName" />
+			<basic name="businessType" />
+			<basic name="businessDomains" />
+			<basic name="address" />
+			<basic name="cityCode" />
+			<basic name="districtCode" />
+			<basic name="wardCode" />
+			<basic name="telNo" />
+			<basic name="email" />
+			<basic name="representativeName" />
+			<basic name="representativeRole" />
+			<basic name="attachFile" />
+			<basic name="mappingOrganizationId" />
+			<basic name="mappingUserId" />
+			<basic name="confirmStatus" />
+			<transient name="mappingUserUuid" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="org.opencps.accountmgt.model.impl.CitizenModelImpl">
+		<attributes>
+			<id name="citizenId" />
+			<basic name="companyId" />
+			<basic name="groupId" />
+			<basic name="userId" />
+			<basic name="createDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="modifiedDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="uuid">
+				<column name="UUID_" />
+			</basic>
+			<basic name="fullName" />
+			<basic name="personalId" />
+			<basic name="gender" />
+			<basic name="birthdate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="address" />
+			<basic name="cityCode" />
+			<basic name="districtCode" />
+			<basic name="wardCode" />
+			<basic name="telNo" />
+			<basic name="email" />
+			<basic name="attachFile" />
+			<basic name="mappingUserId" />
+			<basic name="confirmStatus" />
+			<transient name="mappingUserUuid" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
 	<entity class="org.opencps.datamgt.model.impl.DictCollectionImpl" name="DictCollection">
 		<table name="opencps_dictcollection" />
 		<attributes />
@@ -194,6 +270,14 @@
 	</entity>
 	<entity class="org.opencps.usermgt.model.impl.WorkingUnitImpl" name="WorkingUnit">
 		<table name="opencps_workingunit" />
+		<attributes />
+	</entity>
+	<entity class="org.opencps.accountmgt.model.impl.BusinessImpl" name="Business">
+		<table name="opencps_acc_business" />
+		<attributes />
+	</entity>
+	<entity class="org.opencps.accountmgt.model.impl.CitizenImpl" name="Citizen">
+		<table name="opencps_acc_citizen" />
 		<attributes />
 	</entity>
 </entity-mappings>

@@ -19,4 +19,10 @@
 	<bean id="org.opencps.usermgt.service.WorkingUnitLocalService" class="org.opencps.usermgt.service.impl.WorkingUnitLocalServiceImpl" />
 	<bean id="org.opencps.usermgt.service.WorkingUnitService" class="org.opencps.usermgt.service.impl.WorkingUnitServiceImpl" />
 	<bean id="org.opencps.usermgt.service.persistence.WorkingUnitPersistence" class="org.opencps.usermgt.service.persistence.WorkingUnitPersistenceImpl" parent="basePersistence" />
+	<bean id="org.opencps.accountmgt.service.BusinessLocalService" class="org.opencps.accountmgt.service.impl.BusinessLocalServiceImpl" />
+	<bean id="org.opencps.accountmgt.service.BusinessService" class="org.opencps.accountmgt.service.impl.BusinessServiceImpl" />
+	<bean id="org.opencps.accountmgt.service.persistence.BusinessPersistence" class="org.opencps.accountmgt.service.persistence.BusinessPersistenceImpl" parent="basePersistence" />
+	<bean id="org.opencps.accountmgt.service.CitizenLocalService" class="org.opencps.accountmgt.service.impl.CitizenLocalServiceImpl" />
+	<bean id="org.opencps.accountmgt.service.CitizenService" class="org.opencps.accountmgt.service.impl.CitizenServiceImpl" />
+	<bean id="org.opencps.accountmgt.service.persistence.CitizenPersistence" class="org.opencps.accountmgt.service.persistence.CitizenPersistenceImpl" parent="basePersistence" />
 </beans>

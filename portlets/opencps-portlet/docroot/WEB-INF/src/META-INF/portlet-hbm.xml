@@ -8,6 +8,8 @@
 	<import class="org.opencps.usermgt.model.Employee" />
 	<import class="org.opencps.usermgt.model.JobPos" />
 	<import class="org.opencps.usermgt.model.WorkingUnit" />
+	<import class="org.opencps.accountmgt.model.Business" />
+	<import class="org.opencps.accountmgt.model.Citizen" />
 	<class name="org.opencps.datamgt.model.impl.DictCollectionImpl" table="opencps_dictcollection">
 		<cache usage="read-write" />
 		<id name="dictCollectionId" type="long">
@@ -120,5 +122,59 @@
 		<property name="website" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="isEmployer" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
 		<property name="mappingOrganisationId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+	</class>
+	<class name="org.opencps.accountmgt.model.impl.BusinessImpl" table="opencps_acc_business">
+		<cache usage="read-write" />
+		<id name="businessId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="createDate" type="org.hibernate.type.TimestampType" />
+		<property name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property name="uuid" type="com.liferay.portal.dao.orm.hibernate.StringType" column="uuid_" />
+		<property name="name" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="enName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="shortName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="businessType" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="businessDomains" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="address" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="cityCode" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="districtCode" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="wardCode" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="telNo" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="email" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="representativeName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="representativeRole" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="attachFile" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="mappingOrganizationId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="mappingUserId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="confirmStatus" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+	</class>
+	<class name="org.opencps.accountmgt.model.impl.CitizenImpl" table="opencps_acc_citizen">
+		<cache usage="read-write" />
+		<id name="citizenId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="createDate" type="org.hibernate.type.TimestampType" />
+		<property name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property name="uuid" type="com.liferay.portal.dao.orm.hibernate.StringType" column="uuid_" />
+		<property name="fullName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="personalId" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="gender" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="birthdate" type="org.hibernate.type.TimestampType" />
+		<property name="address" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="cityCode" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="districtCode" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="wardCode" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="telNo" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="email" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="attachFile" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="mappingUserId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="confirmStatus" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
 	</class>
 </hibernate-mapping>

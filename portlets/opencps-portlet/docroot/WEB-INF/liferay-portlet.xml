@@ -31,6 +31,24 @@
 		</footer-portlet-javascript>
 		<css-class-wrapper>3-opencps-usermgt-portlet</css-class-wrapper>
 	</portlet>
+	<portlet>
+		<portlet-name>5</portlet-name>
+		<icon>/icon.png</icon>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>5-opencps-accountmgt-portlet</css-class-wrapper>
+	</portlet>
+	<portlet>
+		<portlet-name>7</portlet-name>
+		<icon>/icon.png</icon>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>7-opencps-accountmgt-portlet</css-class-wrapper>
+	</portlet>
 	<role-mapper>
 		<role-name>administrator</role-name>
 		<role-link>Administrator</role-link>

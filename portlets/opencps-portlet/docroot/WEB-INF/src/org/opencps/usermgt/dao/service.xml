@@ -155,7 +155,7 @@
 			<finder-column name="mainJobPosId" />
 		</finder>
 		
-		<reference entity="User" package-path="com.liferay.portal" />
+		<reference entity="User" package-path="com.liferay.portal"/>
 	</entity>
 
 	<exceptions>

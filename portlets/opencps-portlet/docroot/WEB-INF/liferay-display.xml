@@ -9,6 +9,11 @@
 	<category name="org.opencps.backoffice">
 		<portlet id="2" />
 		<portlet id="3"/>
+		<portlet id="7"/>
+	</category>
+
+	<category name="org.opencps.fontoffice">
+		<portlet id="5" />
 	</category>
 	
 </display>

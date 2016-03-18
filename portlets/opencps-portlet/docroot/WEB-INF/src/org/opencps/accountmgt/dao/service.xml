@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+<service-builder package-path="org.opencps.accountmgt">
+	<author>khoavd</author>
+	<namespace>accountmgt</namespace>
+
+	<entity name="Citizen" local-service="true"
+		remote-service="true" table="opencps_acc_citizen">
+
+		<!-- PK fields -->
+
+		<column name="citizenId" type="long" primary="true" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="uuid" type="String" />
+		<column name="fullName" type="String" />
+		<column name="personalId" type="String"/>
+		<column name="gender" type="int"/>
+		<column name="birthdate" type="Date" />
+		<column name="address" type="String"/>
+		<column name="cityCode" type="String" />
+		<column name="districtCode" type="String" />
+		<column name="wardCode" type="String" />
+		<column name="telNo" type="String" />
+		<column name="email" type="String" />
+		<column name="attachFile" type="long" />
+		<column name="mappingUserId" type="long" />
+		<column name="confirmStatus" type="int" />
+
+	
+		<!-- Order -->
+		<order by="desc">
+			<order-column name="createDate" />
+		</order>
+
+		<!-- Finder methods -->
+		<finder name="GroupId" return-type="Collection">
+			<finder-column name="groupId" />
+		</finder>
+		
+		<finder name="G_S" return-type="Collection">
+			<finder-column name="groupId" />
+			<finder-column name="confirmStatus" />
+		</finder>
+		
+		<finder name="G_S_C" return-type="Collection">
+			<finder-column name="groupId" />
+			<finder-column name="confirmStatus" />
+			<finder-column name="cityCode" />
+		</finder>
+		
+		<finder name="G_S_D" return-type="Collection">
+			<finder-column name="groupId" />
+			<finder-column name="confirmStatus" />
+			<finder-column name="districtCode" />
+		</finder>
+		
+		<finder name="G_S_W" return-type="Collection">
+			<finder-column name="groupId" />
+			<finder-column name="confirmStatus" />
+			<finder-column name="wardCode" />
+		</finder>
+		
+		<reference entity="User" package-path="com.liferay.portal" />
+		
+	</entity>
+
+	<entity name="Business" local-service="true" remote-service="true"
+		table="opencps_acc_business">
+
+		<!-- PK fields -->
+
+		<column name="businessId" type="long" primary="true" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="uuid" type="String" />
+		<column name="name" type="String" />
+		<column name="enName" type="String" />
+		<column name="shortName" type="String" />
+		<column name="businessType" type="String" />
+		<column name="businessDomains" type="String" />
+		<column name="address" type="String" />
+		<column name="cityCode" type="String" />
+		<column name="districtCode" type="String" />
+		<column name="wardCode" type="String" />
+		<column name="telNo" type="String" />
+		<column name="email" type="String" />
+		<column name="representativeName" type="String" />
+		<column name="representativeRole" type="String" />
+		<column name="attachFile" type="long" />
+		<column name="mappingOrganizationId" type="long" />
+		<column name="mappingUserId" type="long" />
+		<column name="confirmStatus" type="int" />
+		
+		<!-- Order -->
+		<order by="desc">
+			<order-column name="createDate" />
+		</order>
+
+		<!-- Finder methods -->
+		<finder name="GroupId" return-type="Collection">
+			<finder-column name="groupId" />
+		</finder>
+		
+		<finder name="G_S" return-type="Collection">
+			<finder-column name="groupId" />
+			<finder-column name="confirmStatus" />
+		</finder>
+
+		<finder name="G_S_C" return-type="Collection">
+			<finder-column name="groupId" />
+			<finder-column name="confirmStatus" />
+			<finder-column name="cityCode" />
+		</finder>
+
+		<finder name="G_S_D" return-type="Collection">
+			<finder-column name="groupId" />
+			<finder-column name="confirmStatus" />
+			<finder-column name="districtCode"/>
+		</finder>
+
+		<finder name="G_T" return-type="Collection">
+			<finder-column name="groupId" />
+			<finder-column name="businessType" />
+		</finder>
+		
+		<finder name="G_D" return-type="Collection">
+			<finder-column name="groupId" />
+			<finder-column name="businessDomains" />
+		</finder>
+		
+		<reference entity="User" package-path="com.liferay.portal" />
+	</entity>
+
+	<exceptions>
+		<exception>EmptyCitizenName</exception>
+		<exception>EmptyBusinessName</exception>
+		<exception>OutOfLengthCitizenName</exception>
+		<exception>OutOfLengthBusinessName</exception>
+		<exception>OutOfLengthBusinessEnName</exception>
+		<exception>OutOfLengthBusinessShortName</exception>
+	</exceptions>
+</service-builder>

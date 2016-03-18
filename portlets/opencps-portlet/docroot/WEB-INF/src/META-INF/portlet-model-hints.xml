@@ -126,4 +126,52 @@
 		<field name="isEmployer" type="boolean" />
 		<field name="mappingOrganisationId" type="long" />
 	</model>
+	<model name="org.opencps.accountmgt.model.Business">
+		<field name="businessId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="uuid" type="String" />
+		<field name="name" type="String" />
+		<field name="enName" type="String" />
+		<field name="shortName" type="String" />
+		<field name="businessType" type="String" />
+		<field name="businessDomains" type="String" />
+		<field name="address" type="String" />
+		<field name="cityCode" type="String" />
+		<field name="districtCode" type="String" />
+		<field name="wardCode" type="String" />
+		<field name="telNo" type="String" />
+		<field name="email" type="String" />
+		<field name="representativeName" type="String" />
+		<field name="representativeRole" type="String" />
+		<field name="attachFile" type="long" />
+		<field name="mappingOrganizationId" type="long" />
+		<field name="mappingUserId" type="long" />
+		<field name="confirmStatus" type="int" />
+	</model>
+	<model name="org.opencps.accountmgt.model.Citizen">
+		<field name="citizenId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="uuid" type="String" />
+		<field name="fullName" type="String" />
+		<field name="personalId" type="String" />
+		<field name="gender" type="int" />
+		<field name="birthdate" type="Date" />
+		<field name="address" type="String" />
+		<field name="cityCode" type="String" />
+		<field name="districtCode" type="String" />
+		<field name="wardCode" type="String" />
+		<field name="telNo" type="String" />
+		<field name="email" type="String" />
+		<field name="attachFile" type="long" />
+		<field name="mappingUserId" type="long" />
+		<field name="confirmStatus" type="int" />
+	</model>
 </model-hints>
