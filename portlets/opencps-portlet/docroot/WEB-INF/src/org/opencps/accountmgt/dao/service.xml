@@ -150,6 +150,49 @@
 		<reference entity="User" package-path="com.liferay.portal" />
 	</entity>
 
+	<entity name="BusinessAccount" local-service="true" remote-service="true"
+		table="opencps_acc_business_account">
+
+		<!-- PK fields -->
+
+		<column name="businessAccountId" type="long" primary="true" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="businessId" type="long" />
+		<column name="fullName" type="String" />
+		<column name="workingRole" type="String" />
+		<column name="telNo" type="String" />
+		<column name="email" type="String" />
+		<column name="mappingUserId" type="long" />
+		<column name="hasPermissions" type="String" />
+		
+		<!-- Order -->
+		<order by="asc">
+			<order-column name="fullName" />
+		</order>
+
+		<!-- Finder methods -->
+		<finder name="GroupId" return-type="Collection">
+			<finder-column name="groupId" />
+		</finder>
+		
+		<finder name="GroupBusiness" return-type="Collection">
+			<finder-column name="groupId" />
+			<finder-column name="businessId" />
+		</finder>
+
+		<reference entity="User" package-path="com.liferay.portal" />
+	</entity>
+
 	<exceptions>
 		<exception>EmptyCitizenName</exception>
 		<exception>EmptyBusinessName</exception>
