@@ -158,6 +158,75 @@
 		<reference entity="User" package-path="com.liferay.portal"/>
 	</entity>
 
+	<entity name="SendMailStatus" local-service="true" remote-service="true"
+		table="opencps_sendmail_status">
+
+		<!-- PK fields -->
+
+		<column name="emailStatusId" type="long" primary="true" />
+
+		<!-- Audit fields -->
+		<column name="groupId" type="long" />
+
+
+		<!-- Other fields -->
+		<column name="classPK" type="long" />
+		<column name="receiveDate" type="Date" />
+		<column name="sendDate" type="Date" />
+		<column name="moduleId" type="int"/>
+		<column name="email" type="String"/>
+		<column name="description" type="String"/>
+		<column name="statusCode" type="int"/>
+
+		<!-- Order -->
+		<order by="asc">
+			<order-column name="receiveDate" />
+		</order>
+
+		<!-- Finder methods -->
+		<finder name="GroupId" return-type="Collection">
+			<finder-column name="groupId" />
+		</finder>
+		
+		<finder name="G_E" return-type="Collection" where="statusCode = 0">
+			<finder-column name="groupId" />
+			<finder-column name="email" />
+		</finder>
+		
+		<finder name="G_E_NOT_SENT" return-type="Collection" where="statusCode = 0">
+			<finder-column name="groupId" />
+			<finder-column name="email" />
+		</finder>
+		
+		<finder name="G_E_SENT_OK" return-type="Collection" where="statusCode = 1">
+			<finder-column name="groupId" />
+			<finder-column name="email" />
+		</finder>
+
+		<finder name="G_E_SENT_FAIL" return-type="Collection" where="statusCode = 2">
+			<finder-column name="groupId" />
+			<finder-column name="email" />
+		</finder>
+
+		<finder name="G_E_C_NOT_SENT" return-type="Collection" where="statusCode = 0">
+			<finder-column name="groupId" />
+			<finder-column name="email" />
+			<finder-column name="classPK" />
+		</finder>
+		
+		<finder name="G_E_C_SENT_OK" return-type="Collection" where="statusCode = 1">
+			<finder-column name="groupId" />
+			<finder-column name="email" />
+			<finder-column name="classPK" />
+		</finder>
+
+		<finder name="G_E_C_SENT_FAIL" return-type="Collection" where="statusCode = 2">
+			<finder-column name="groupId" />
+			<finder-column name="email" />
+			<finder-column name="classPK" />
+		</finder>
+	</entity>
+
 	<exceptions>
 		<exception>EmptyWorkingUnitName</exception>
 		<exception>EmptyJobPosTitle</exception>
