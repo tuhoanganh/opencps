@@ -34,7 +34,7 @@
 		<column name="email" type="String" />
 		<column name="attachFile" type="long" />
 		<column name="mappingUserId" type="long" />
-		<column name="confirmStatus" type="int" />
+		<column name="accountStatus" type="int" />
 
 	
 		<!-- Order -->
@@ -49,24 +49,24 @@
 		
 		<finder name="G_S" return-type="Collection">
 			<finder-column name="groupId" />
-			<finder-column name="confirmStatus" />
+			<finder-column name="accountStatus" />
 		</finder>
 		
 		<finder name="G_S_C" return-type="Collection">
 			<finder-column name="groupId" />
-			<finder-column name="confirmStatus" />
+			<finder-column name="accountStatus" />
 			<finder-column name="cityCode" />
 		</finder>
 		
 		<finder name="G_S_D" return-type="Collection">
 			<finder-column name="groupId" />
-			<finder-column name="confirmStatus" />
+			<finder-column name="accountStatus" />
 			<finder-column name="districtCode" />
 		</finder>
 		
 		<finder name="G_S_W" return-type="Collection">
 			<finder-column name="groupId" />
-			<finder-column name="confirmStatus" />
+			<finder-column name="accountStatus" />
 			<finder-column name="wardCode" />
 		</finder>
 		
@@ -96,7 +96,6 @@
 		<column name="enName" type="String" />
 		<column name="shortName" type="String" />
 		<column name="businessType" type="String" />
-		<column name="businessDomains" type="String" />
 		<column name="address" type="String" />
 		<column name="cityCode" type="String" />
 		<column name="districtCode" type="String" />
@@ -108,7 +107,7 @@
 		<column name="attachFile" type="long" />
 		<column name="mappingOrganizationId" type="long" />
 		<column name="mappingUserId" type="long" />
-		<column name="confirmStatus" type="int" />
+		<column name="accountStatus" type="int" />
 		
 		<!-- Order -->
 		<order by="desc">
@@ -122,18 +121,18 @@
 		
 		<finder name="G_S" return-type="Collection">
 			<finder-column name="groupId" />
-			<finder-column name="confirmStatus" />
+			<finder-column name="accountStatus" />
 		</finder>
 
 		<finder name="G_S_C" return-type="Collection">
 			<finder-column name="groupId" />
-			<finder-column name="confirmStatus" />
+			<finder-column name="accountStatus" />
 			<finder-column name="cityCode" />
 		</finder>
 
 		<finder name="G_S_D" return-type="Collection">
 			<finder-column name="groupId" />
-			<finder-column name="confirmStatus" />
+			<finder-column name="accountStatus" />
 			<finder-column name="districtCode"/>
 		</finder>
 
@@ -142,12 +141,26 @@
 			<finder-column name="businessType" />
 		</finder>
 		
-		<finder name="G_D" return-type="Collection">
-			<finder-column name="groupId" />
-			<finder-column name="businessDomains" />
+		<reference package-path="com.liferay.portal" entity="Organization" />
+		<reference package-path="com.liferay.portal" entity="User" />
+	</entity>
+
+	<entity name="BusinessDomain" local-service="true" remote-service="true"
+		table="opencps_acc_businessdomain">
+
+		<!-- PK fields -->
+
+		<column name="businessId" type="long" primary="true" />
+		<column name="businessDomain" type="String" primary="true" />
+
+		<!-- Finder methods -->
+		<finder name="BusinessId" return-type="Collection">
+			<finder-column name="businessId" />
 		</finder>
 		
-		<reference entity="User" package-path="com.liferay.portal" />
+		<finder name="BusinessDomain" return-type="Collection">
+			<finder-column name="businessDomain" />
+		</finder>
 	</entity>
 
 	<entity name="BusinessAccount" local-service="true" remote-service="true"
@@ -174,6 +187,7 @@
 		<column name="email" type="String" />
 		<column name="mappingUserId" type="long" />
 		<column name="hasPermissions" type="String" />
+		<column name="accountStatus" type="int" />
 		
 		<!-- Order -->
 		<order by="asc">
