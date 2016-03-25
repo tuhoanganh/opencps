@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,5 +16,114 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
+<%@page import="org.opencps.usermgt.search.EmployeeDisplayTerm"%>
+<%@page import="org.opencps.usermgt.util.UserMgtUtil"%>
+<%@page import="javax.portlet.PortletURL"%>
+<%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
+<%@page import="com.liferay.portal.kernel.log.Log"%>
+<%@page import="org.opencps.usermgt.service.WorkingUnitLocalServiceUtil"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.opencps.usermgt.model.WorkingUnit"%>
+<%@page import="java.util.List"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@ include file="../init.jsp"%>
+
+<%
+	String tabs1 = ParamUtil.getString(request, "tabs1", UserMgtUtil.TOP_TABS_WORKINGUNIT);
+	PortletURL searchURL = renderResponse.createRenderURL();
+	
+	long workingUnitId = ParamUtil.getLong(request, EmployeeDisplayTerm.WORKING_UNIT_ID, 0L);
+	
+	List<WorkingUnit> workingUnits = new ArrayList<WorkingUnit>();
+	
+	try{
+		workingUnits = WorkingUnitLocalServiceUtil.getWorkingUnits(scopeGroupId, 0);
+		
+	}catch(Exception e){
+		_log.error(e);
+	}
+	
+	request.setAttribute(EmployeeDisplayTerm.WORKING_UNIT_ID, workingUnitId);
+%>
+
+<c:choose>
+	<c:when test="<%= tabs1.equals(UserMgtUtil.TOP_TABS_WORKINGUNIT)%>">
+		<portlet:renderURL var="editWorkingUnitURL">
+			<portlet:param name="mvcPath" value='<%= templatePath + "edit_workingunit.jsp" %>'/>
+		</portlet:renderURL>
+		
+		<aui:button name="add-workingunit" value="add-workingunit" href="<%= editWorkingUnitURL%>"/>
+	</c:when>
+	
+	<c:when test="<%= tabs1.equals(UserMgtUtil.TOP_TABS_EMPLOYEE)%>">
+		<%
+			searchURL.setParameter("mvcPath", templatePath + "employees.jsp");
+			searchURL.setParameter("tabs1", UserMgtUtil.TOP_TABS_EMPLOYEE);
+		%>
+		<portlet:renderURL var="editEmployeeURL">
+			<portlet:param name="mvcPath" value='<%= templatePath + "edit_employee.jsp" %>'/>
+			<portlet:param name="backURL" value="<%=currentURL %>"/>
+		</portlet:renderURL>
+		
+		<aui:row>
+			<aui:form action="<%= searchURL %>" method="post" name="fm">
+				<aui:row>
+					<aui:col width="30">
+						<aui:input 
+							id="keywords1" 
+							name="keywords" 
+							label=""
+							placeholder='<%= LanguageUtil.get(locale, "full-name") %>' 
+							type="text"
+						/>
+					</aui:col>
+					
+					<aui:col width="30">
+						<%
+							searchURL.setParameter(EmployeeDisplayTerm.WORKING_UNIT_ID, String.valueOf(workingUnitId));
+						%>
+						<aui:select name="<%=EmployeeDisplayTerm.WORKING_UNIT_ID %>" label="">
+							<aui:option value="0"></aui:option>
+							<%
+								if(workingUnits != null){
+									for(WorkingUnit workingUnit : workingUnits){
+										%>
+											<aui:option value="<%=workingUnit.getWorkingunitId() %>" selected="<%=workingUnitId == workingUnit.getWorkingunitId()%>">
+												<%=workingUnit.getName() %>
+											</aui:option>
+										<%
+									}
+								}
+							%>
+						</aui:select> 
+					</aui:col>
+					
+					<aui:col width="30">
+						<aui:input 
+							name="search" 
+							type="submit" value="search" 
+							label="" 
+							cssClass="opencps usermgt toolbar search-btn"
+						/>
+					</aui:col>
+				</aui:row>
+			</aui:form>
+		</aui:row>
+		
+		<aui:row>
+			<aui:col width="100">
+				<aui:button name="add-employee" value="add-employee" href="<%=editEmployeeURL %>"/>
+				<div class="bottom-horizontal-line"></div>
+			</aui:col>
+		</aui:row>
+		
+	</c:when>
+	
+	<c:otherwise>
+		<div class="portlet-msg-portlet"><liferay-ui:message key="no-found-resource"/></div>
+	</c:otherwise>
+</c:choose>
+
+<%!
+	private Log _log = LogFactoryUtil.getLog("html.portlets.usermgt.admin.toolbar.jsp");
+%>
