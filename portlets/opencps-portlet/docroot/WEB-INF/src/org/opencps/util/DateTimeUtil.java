@@ -18,9 +18,12 @@
 package org.opencps.util;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.TimeZoneUtil;
@@ -34,41 +37,94 @@ public class DateTimeUtil {
 	public static String convertDateToString(Date date, String pattern) {
 
 		DateFormat dateFormat = DateFormatFactoryUtil
-			.getSimpleDateFormat(pattern);
-		if (date == null || Validator
-			.isNull(pattern)) {
+				.getSimpleDateFormat(pattern);
+		if (date == null || Validator.isNull(pattern)) {
 			return StringPool.BLANK;
 		}
-		dateFormat
-			.setTimeZone(TimeZoneUtil
-				.getDefault());
+		dateFormat.setTimeZone(TimeZoneUtil.getDefault());
 
-		Calendar calendar = Calendar
-			.getInstance();
-		calendar
-			.setTime(date);
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
 
-		return dateFormat
-			.format(calendar
-				.getTime());
+		return dateFormat.format(calendar.getTime());
 	}
 
 	public static DateFormat getDateTimeFormat(String pattern) {
 
 		DateFormat dateFormat = DateFormatFactoryUtil
-			.getSimpleDateFormat(pattern);
-		if (Validator
-			.isNotNull(pattern)) {
+				.getSimpleDateFormat(pattern);
+		if (Validator.isNotNull(pattern)) {
 			pattern = _VN_DATE_TIME_FORMAT;
 		}
-		dateFormat
-			.setTimeZone(TimeZoneUtil
-				.getDefault());
+		dateFormat.setTimeZone(TimeZoneUtil.getDefault());
 
 		return dateFormat;
+	}
+
+	public int getDayFromDate(Date date) {
+
+		int day = 1;
+
+		if (date != null) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(date);
+			day = calendar.get(Calendar.DAY_OF_MONTH);
+
+			calendar.setTime(date);
+			day = calendar.get(Calendar.DAY_OF_MONTH);
+		}
+
+		return day;
+	}
+
+	public int getMonthFromDate(Date date) {
+
+		int month = 1;
+
+		if (date != null) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(date);
+			month = calendar.get(Calendar.MONTH);
+
+			calendar.setTime(date);
+			month = calendar.get(Calendar.MONTH);
+		}
+
+		return month;
+	}
+
+	public int getYearFromDate(Date date) {
+
+		int year = 1990;
+		if (date != null) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(date);
+			year = calendar.get(Calendar.YEAR);
+
+			calendar.setTime(date);
+			year = calendar.get(Calendar.YEAR);
+		}
+
+		return year;
+	}
+
+	public static Date convertStringToDate(String strDate) {
+		DateFormat df = getDateTimeFormat(_VN_DATE_FORMAT);
+		Date date = null;
+		try {
+			date = df.parse(strDate);
+
+		} catch (ParseException e) {
+			_log.error(e);
+		}
+		return date;
 	}
 
 	public static final String _TIMESTAMP = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
 	public static final String _VN_DATE_TIME_FORMAT = "dd/MM/yyyy HH:mm:ss";
+
+	public static final String _VN_DATE_FORMAT = "dd/MM/yyyy";
+
+	private static Log _log = LogFactoryUtil.getLog(DateTimeUtil.class);
 }
