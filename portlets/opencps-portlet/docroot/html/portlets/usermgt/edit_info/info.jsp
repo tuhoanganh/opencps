@@ -17,4 +17,7 @@
  */
 %>
 <%@ include file="../init.jsp"%>
-UserMgt Admin.
+
+<liferay-util:include page="/html/portlets/usermgt/edit_info/workingunits.jsp" servletContext="<%=application %>" />
+<%-- <liferay-util:include page="/html/portlets/usermgt/edit_info/edit_workingunit.jsp" servletContext="<%=application %>" /> --%>
+ 
