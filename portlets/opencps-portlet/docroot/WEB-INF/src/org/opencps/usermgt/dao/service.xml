@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
-<service-builder package-path="org.opencps.usermgt">
+<service-builder package-path="org.opencps.usermgt" auto-namespace-tables="false">
 	<author>khoavd</author>
 	<namespace>usermgt</namespace>
 
@@ -43,14 +43,20 @@
 			mapping-table="opencps_workingunit_jobpos" />
 		
 		<!-- Order -->
-		<order by="asc">
-			<order-column name="name" />
+		
+		<order>
+			<order-column name="name" order-by="asc" />
 		</order>
-
+		
 		<!-- Finder methods -->
 		<finder name="G_E" return-type="Collection">
 			<finder-column name="groupId" />
 			<finder-column name="isEmployer" />
+		</finder>
+		
+		<finder return-type="Collection" name="G_P">
+			<finder-column name="groupId" />
+			<finder-column name="parentWorkingUnitId" />
 		</finder>
 		
 		<finder name="G_E_P" return-type="Collection">
@@ -58,6 +64,9 @@
 			<finder-column name="isEmployer" />
 			<finder-column name="parentWorkingUnitId" />
 		</finder>
+        <finder name="GroupId" return-type="Collection">
+            <finder-column name="groupId"></finder-column>
+        </finder>
 	</entity>
 
 	<entity name="JobPos" local-service="true" remote-service="true"
@@ -104,7 +113,12 @@
 			<finder-column name="workingUnitId" />
 			<finder-column name="directWorkingUnitId" />
 		</finder>
+		
+		<finder return-type="Collection" name="WorkingUnitId">
+			<finder-column name="workingUnitId"></finder-column>
+		</finder>
 	</entity>
+
 
 	<entity name="Employee" local-service="true" remote-service="true"
 		table="opencps_employee">
@@ -146,7 +160,7 @@
 		<!-- Finder methods -->
 		<finder name="G_W" return-type="Collection">
 			<finder-column name="groupId" />
-			<finder-column name="mainJobPosId" />
+			<finder-column name="workingUnitId" />
 		</finder>
 		
 		<finder name="G_W_MJP" return-type="Collection">
@@ -155,76 +169,31 @@
 			<finder-column name="mainJobPosId" />
 		</finder>
 		
-		<reference entity="User" package-path="com.liferay.portal"/>
-	</entity>
-
-	<entity name="SendMailStatus" local-service="true" remote-service="true"
-		table="opencps_sendmail_status">
-
-		<!-- PK fields -->
-
-		<column name="emailStatusId" type="long" primary="true" />
-
-		<!-- Audit fields -->
-		<column name="groupId" type="long" />
-
-
-		<!-- Other fields -->
-		<column name="classPK" type="long" />
-		<column name="receiveDate" type="Date" />
-		<column name="sendDate" type="Date" />
-		<column name="moduleId" type="int"/>
-		<column name="email" type="String"/>
-		<column name="description" type="String"/>
-		<column name="statusCode" type="int"/>
-
-		<!-- Order -->
-		<order by="asc">
-			<order-column name="receiveDate" />
-		</order>
-
-		<!-- Finder methods -->
-		<finder name="GroupId" return-type="Collection">
-			<finder-column name="groupId" />
+		<finder return-type="Collection" name="WorkingUnitId">
+			<finder-column name="workingUnitId"></finder-column>
 		</finder>
+        <finder name="G_N_W" return-type="Collection">
+            <finder-column name="groupId"></finder-column>
+            <finder-column name="fullName" comparator="LIKE" arrayable-operator="OR"></finder-column>
+            <finder-column name="workingUnitId"></finder-column>
+        </finder>
+        <finder name="G_N" return-type="Collection">
+            <finder-column name="groupId"></finder-column>
+            <finder-column name="fullName" comparator="LIKE" arrayable-operator="OR"></finder-column>
+        </finder>
+        <finder name="GroupId" return-type="Collection">
+            <finder-column name="groupId"></finder-column>
+        </finder>
+        <finder name="G_E" return-type="Employess">
+            <finder-column name="groupId"></finder-column>
+            <finder-column name="email"></finder-column>
+        </finder>
+        <finder name="G_ENO" return-type="Employee">
+            <finder-column name="groupId"></finder-column>
+            <finder-column name="employeeNo"></finder-column>
+        </finder>
 		
-		<finder name="G_E" return-type="Collection" where="statusCode = 0">
-			<finder-column name="groupId" />
-			<finder-column name="email" />
-		</finder>
-		
-		<finder name="G_E_NOT_SENT" return-type="Collection" where="statusCode = 0">
-			<finder-column name="groupId" />
-			<finder-column name="email" />
-		</finder>
-		
-		<finder name="G_E_SENT_OK" return-type="Collection" where="statusCode = 1">
-			<finder-column name="groupId" />
-			<finder-column name="email" />
-		</finder>
-
-		<finder name="G_E_SENT_FAIL" return-type="Collection" where="statusCode = 2">
-			<finder-column name="groupId" />
-			<finder-column name="email" />
-		</finder>
-
-		<finder name="G_E_C_NOT_SENT" return-type="Collection" where="statusCode = 0">
-			<finder-column name="groupId" />
-			<finder-column name="email" />
-			<finder-column name="classPK" />
-		</finder>
-		
-		<finder name="G_E_C_SENT_OK" return-type="Collection" where="statusCode = 1">
-			<finder-column name="groupId" />
-			<finder-column name="email" />
-			<finder-column name="classPK" />
-		</finder>
-
-		<finder name="G_E_C_SENT_FAIL" return-type="Collection" where="statusCode = 2">
-			<finder-column name="groupId" />
-			<finder-column name="email" />
-			<finder-column name="classPK" />
-		</finder>
+		<reference entity="User" package-path="com.liferay.portal" />
 	</entity>
 
 	<exceptions>
@@ -238,5 +207,12 @@
 		<exception>OutOfLengthJobTitle</exception>
 		<exception>OutOfLengthFullName</exception>
 		<exception>OutOfLengthDescription</exception>
+        <exception>OutOfLengthEmployNo</exception>
+        <exception>DuplicateEmployeeEmail</exception>
+        <exception>DuplicateEmployeeNo</exception>
+        <exception>EmptyEmployeeEmail</exception>
+        <exception>EmptyEmployeeNo</exception>
+        <exception>EmptyEmployeeName</exception>
+        <exception>OutOfLengthEmployeeEmail</exception>
 	</exceptions>
 </service-builder>
