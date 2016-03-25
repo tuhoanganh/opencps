@@ -55,6 +55,7 @@
 	iteratorURL.setParameter("tabs1", DataMgtUtil.TOP_TABS_DICTITEM);
 	
 	List<DictItem> dictItems = new ArrayList<DictItem>();
+	
 	int totalCount = 0;
 	
 %>
