@@ -140,7 +140,7 @@
 		<supports>
 			<mime-type>text/html</mime-type>
 		</supports>
-		<resource-bundle>content.Language_3</resource-bundle>
+		<resource-bundle>content.Language_4</resource-bundle>
 		<portlet-info>
 			<title>User Profie</title>
 			<short-title>User Profie</short-title>
