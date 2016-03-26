@@ -121,6 +121,46 @@
 			<role-name>user</role-name>
 		</security-role-ref>
 	</portlet>
+
+	<portlet>	
+		<portlet-name>4</portlet-name>
+		<display-name>User Contact</display-name>
+		<portlet-class>
+			org.opencps.usermgt.portlet.UserContactPortlet	
+		</portlet-class>
+		<init-param>
+			<name>view-template</name>
+			<value>/html/portlets/usermgt/usercontact/contact.jsp</value>
+		</init-param>
+		<init-param>
+			<name>template-path</name>
+			<value>/html/portlets/usermgt/usercontact/</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+		</supports>
+		<resource-bundle>content.Language_3</resource-bundle>
+		<portlet-info>
+			<title>User Profie</title>
+			<short-title>User Profie</short-title>
+			<keywords>User Profie</keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>power-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+	</portlet>
+	
+
 	
 	<portlet>
 		<portlet-name>5</portlet-name>
@@ -238,17 +278,17 @@
 	
 	<portlet>	
 		<portlet-name>9</portlet-name>
-		<display-name>Admin Administrative Procedures</display-name>
+		<display-name>Service Management</display-name>
 		<portlet-class>
-			org.opencps.admtproce.portlet.AdminProcedurePortlet
+			org.opencps.servicemgt.portlet.ServiceMgtPortlet
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/portlets/admtproce/adminprocedure/adminproce.jsp</value>
+			<value>/html/portlets/servicemgt/servicemgt/service.jsp</value>
 		</init-param>
 		<init-param>
 			<name>template-path</name>
-			<value>/html/portlets/admtproce/adminprocedure/</value>
+			<value>/html/portlets/servicemgt/admin/</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
@@ -256,9 +296,9 @@
 		</supports>
 		<resource-bundle>content.Language_9</resource-bundle>
 		<portlet-info>
-			<title>Admin Administrative Procedures</title>
-			<short-title>Admin Administrative Procedures</short-title>
-			<keywords>Admin Administrative Procedures</keywords>
+			<title>Service Management</title>
+			<short-title>Service Management</short-title>
+			<keywords>Service Management</keywords>
 		</portlet-info>
 		<security-role-ref>
 			<role-name>administrator</role-name>
@@ -276,17 +316,17 @@
 
 	<portlet>	
 		<portlet-name>10</portlet-name>
-		<display-name>Procedures</display-name>
+		<display-name>Service Public</display-name>
 		<portlet-class>
-			org.opencps.admtproce.portlet.AdminProcedurePortlet
+			org.opencps.servicemgt.portlet.ServicePublicPortlet
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/portlets/admtproce/procedure/procedure.jsp</value>
+			<value>/html/portlets/servicemgt/public/viewservice.jsp</value>
 		</init-param>
 		<init-param>
 			<name>template-path</name>
-			<value>/html/portlets/admtproce/procedure/</value>
+			<value>/html/portlets/servicemgt/public/</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
@@ -294,9 +334,9 @@
 		</supports>
 		<resource-bundle>content.Language_10</resource-bundle>
 		<portlet-info>
-			<title>Procedures</title>
-			<short-title>Procedures</short-title>
-			<keywords>Procedures</keywords>
+			<title>Service Public</title>
+			<short-title>Service Public</short-title>
+			<keywords>Service Public</keywords>
 		</portlet-info>
 		<security-role-ref>
 			<role-name>administrator</role-name>
