@@ -25,9 +25,20 @@ public class MessageKeys {
 	public static final String DATAMGT_ADD_SUCESS = "datamgt.add.sucess";
 	public static final String DATAMGT_SYSTEM_EXCEPTION_OCCURRED = "datamgt.system.exception.occurred";
 	public static final String DATAMGT_UPDATE_SUCESS = "datamgt.update.sucess";
-	public static final String WORKINGUNIT_UPDATE_SUCESS = "workingunit.update.success";
+	public static final String USERMGT_JOBPOS_DELETE_ERROR = "usermgt.jobpos.delete.error";
+	public static final String USERMGT_JOBPOS_DELETE_SUCCESS = "usermgt.jobpos.delete.success";
+	public static final String USERMGT_JOBPOS_UPDATE_ERROR = "usermgt.jobpos.update.error";
+	public static final String USERMGT_JOBPOS_UPDATE_SUCESS = "usermgt.jobpos.update.success";
 	public static final String USERMGT_ADD_SUCCESS = "usermgt.add.sucess";
+	public static final String USERMGT_EMPLOYEE_DELETE_ERROR = "usermgt.employee.delete.error";
+	public static final String USERMGT_EMPLOYEE_DELETE_SUCCESS = "usermgt.employee.delete.sucess";
 	public static final String USERMGT_SYSTEM_EXCEPTION_OCCURRED = "usermgt.system.exception.occurred";
 	public static final String USERMGT_UPDATE_SUCCESS = "usermgt.update.sucess";
+	public static final String USERMGT_WORKINGUNIT_DELETE_ERROR = "usermgt.workingunit.delete.error";
+	public static final String USERMGT_WORKINGUNIT_DELETE_ERROR_EXIST = "usermgt.workingunit.delete.error.exist";
+	public static final String USERMGT_WORKINGUNIT_DELETE_SUCCESS = "usermgt.workingunit.delete.success";
+
+	public static final String USERMGT_WORKINGUNIT_UPDATE_ERROR = "usermgt.workingunit.update.error";
+	public static final String USERMGT_WORKINGUNIT_UPDATE_SUCESS = "usermgt.workingunit.update.success";
 
 }

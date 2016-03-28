@@ -119,6 +119,14 @@ public class DateTimeUtil {
 		}
 		return date;
 	}
+	
+	public static Date getDate(int day, int month, int year) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.DAY_OF_MONTH, day);
+		calendar.set(Calendar.MONTH, month);
+		calendar.set(Calendar.YEAR, year);
+		return calendar.getTime();
+	}
 
 	public static final String _TIMESTAMP = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 

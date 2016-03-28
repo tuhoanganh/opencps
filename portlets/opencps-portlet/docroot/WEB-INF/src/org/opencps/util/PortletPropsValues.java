@@ -105,4 +105,42 @@ public class PortletPropsValues {
 	public static final int USERMGT_EMPLOYEE_MOBILE_LENGTH = GetterUtil
 			.getInteger(PortletProps
 					.get(PortletPropsKeys.USERMGT_EMPLOYEE_MOBILE_LENGTH));
+	// working unit
+	
+	public static final int USERMGT_WORKINGUNIT_NAME_LENGTH = GetterUtil
+					.getInteger(PortletProps
+							.get(PortletPropsKeys.USERMGT_WORKINGUNIT_NAME_LENGTH));
+	
+	public static final int USERMGT_WORKINGUNIT_ADRESS_LENGTH = GetterUtil
+					.getInteger(PortletProps
+							.get(PortletPropsKeys.USERMGT_WORKINGUNIT_ADRESS_LENGTH));
+
+	public static final int USERMGT_WORKINGUNIT_FAXNO_LENGTH = GetterUtil
+					.getInteger(PortletProps
+							.get(PortletPropsKeys.USERMGT_WORKINGUNIT_FAXNO_LENGTH));
+
+	public static final int USERMGT_WORKINGUNIT_EMAIL_LENGTH = GetterUtil
+					.getInteger(PortletProps
+							.get(PortletPropsKeys.USERMGT_WORKINGUNIT_EMAIL_LENGTH));
+	
+	public static final int USERMGT_WORKINGUNIT_WEBSITE_LENGTH = GetterUtil
+					.getInteger(PortletProps
+							.get(PortletPropsKeys.USERMGT_WORKINGUNIT_WEBSITE_LENGTH));
+	
+	public static final int USERMGT_WORKINGUNIT_ENNAME_LENGTH = GetterUtil
+					.getInteger(PortletProps
+							.get(PortletPropsKeys.USERMGT_WORKINGUNIT_ENNAME_LENGTH));
+	
+	//resource action
+	
+	public static final String USERMGT_WORKINGUNIT_RESOURCE = GetterUtil
+					.getString(PortletProps
+						.get(PortletPropsKeys.USERMGT_WORKINGUNIT_RESOURCE));
+	public static final String USERMGT_JOBPOS_RESOURCE = GetterUtil
+					.getString(PortletProps
+						.get(PortletPropsKeys.USERMGT_JOBPOS_RESOURCE));
+	public static final String USERMGT_EMPLOYEE_RESOURCE = GetterUtil
+					.getString(PortletProps
+						.get(PortletPropsKeys.USERMGT_EMPLOYEE_RESOURCE));
+	
 }
