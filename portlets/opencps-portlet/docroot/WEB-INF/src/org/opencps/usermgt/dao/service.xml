@@ -49,6 +49,13 @@
 		</order>
 		
 		<!-- Finder methods -->
+		<finder return-type="WorkingUnit" name="Email">
+			<finder-column name="email"></finder-column>
+		</finder>
+		<finder return-type="WorkingUnit" name="G_G">
+			<finder-column name="groupId" />
+			<finder-column name="govAgencyCode" />
+		</finder>
 		<finder name="G_E" return-type="Collection">
 			<finder-column name="groupId" />
 			<finder-column name="isEmployer" />
@@ -158,6 +165,10 @@
 		</order>
 
 		<!-- Finder methods -->
+		<finder return-type="Collection" name="MainJobPosId">
+			<finder-column name="mainJobPosId" />
+		</finder>
+		
 		<finder name="G_W" return-type="Collection">
 			<finder-column name="groupId" />
 			<finder-column name="workingUnitId" />
@@ -172,6 +183,7 @@
 		<finder return-type="Collection" name="WorkingUnitId">
 			<finder-column name="workingUnitId"></finder-column>
 		</finder>
+       
         <finder name="G_N_W" return-type="Collection">
             <finder-column name="groupId"></finder-column>
             <finder-column name="fullName" comparator="LIKE" arrayable-operator="OR"></finder-column>
@@ -192,6 +204,10 @@
             <finder-column name="groupId"></finder-column>
             <finder-column name="employeeNo"></finder-column>
         </finder>
+        <finder name="G_U" return-type="Employee">
+            <finder-column name="groupId"></finder-column>
+            <finder-column name="mappingUserId"></finder-column>
+        </finder>
 		
 		<reference entity="User" package-path="com.liferay.portal" />
 	</entity>
@@ -201,9 +217,11 @@
 		<exception>EmptyJobPosTitle</exception>
 		<exception>DuplicatEgovAgencyCode</exception>
 		<exception>DuplicateWorkingUnit</exception>
+		<exception>DuplicatWorkingUnitEmail</exception>
 		<exception>DuplicateJobPos</exception>
 		<exception>OutOfLengthUnitName</exception>
 		<exception>OutOfLengthUnitEnName</exception>
+		<exception>OutOfLengthUnitEmail</exception>
 		<exception>OutOfLengthJobTitle</exception>
 		<exception>OutOfLengthFullName</exception>
 		<exception>OutOfLengthDescription</exception>
@@ -214,5 +232,8 @@
         <exception>EmptyEmployeeNo</exception>
         <exception>EmptyEmployeeName</exception>
         <exception>OutOfLengthEmployeeEmail</exception>
+        <exception>OutOfScope</exception>
+        <exception>OutOfLengthMobile</exception>
+        <exception>OutOfLengthTelNo</exception>
 	</exceptions>
 </service-builder>
