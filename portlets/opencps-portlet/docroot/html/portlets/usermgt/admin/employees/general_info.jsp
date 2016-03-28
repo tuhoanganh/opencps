@@ -23,11 +23,23 @@
 <%@page import="org.opencps.usermgt.search.EmployeeDisplayTerm"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.usermgt.model.Employee"%>
+<%@page import="org.opencps.usermgt.DuplicateEmployeeEmailException"%>
+<%@page import="org.opencps.usermgt.OutOfLengthFullNameException"%>
+<%@page import="org.opencps.usermgt.EmptyEmployeeNameException"%>
+<%@page import="org.opencps.usermgt.EmptyEmployeeNoException"%>
+<%@page import="org.opencps.usermgt.EmptyEmployeeEmailException"%>
+<%@page import="org.opencps.usermgt.OutOfLengthEmployeeEmailException"%>
+<%@page import="org.opencps.usermgt.OutOfLengthTelNoException"%>
+<%@page import="org.opencps.usermgt.OutOfLengthMobileException"%>
 <%@ include file="../../init.jsp"%>
-
-
 <%
 	Employee employee = (Employee)request.getAttribute(WebKeys.EMPLOYEE_ENTRY);
+
+	boolean userViewProfile = GetterUtil.getBoolean((Boolean)request.getAttribute(WebKeys.USERMGT_VIEW_PROFILE), false);
+
+	if(employee == null){
+		employee = (Employee)request.getAttribute(WebKeys.TURN_BACK_EMPLOYEE_ENTRY);
+	}
 
 	Date defaultBirthDate = employee != null && employee.getBirthdate() != null ? 
 			employee.getBirthdate() : DateTimeUtil.convertStringToDate("01/01/1970");
@@ -35,11 +47,41 @@
 %>
 
 <aui:model-context bean="<%=employee%>" model="<%=Employee.class%>" />
+<liferay-ui:error-marker key="errorSection" value="general_info" />
+
+<liferay-ui:error exception="<%= EmptyEmployeeEmailException.class %>" 
+	message="<%=EmptyEmployeeEmailException.class.getName() %>" 
+/>
+<liferay-ui:error exception="<%= OutOfLengthEmployeeEmailException.class %>" 
+	message="<%=OutOfLengthEmployeeEmailException.class.getName() %>"
+/>
+<liferay-ui:error exception="<%= EmptyEmployeeNoException.class %>" 
+	message="<%=EmptyEmployeeNoException.class.getName() %>" 
+/>
+<liferay-ui:error exception="<%= EmptyEmployeeNameException.class %>" 
+	message="<%=EmptyEmployeeNameException.class.getName() %>" 
+/>
+<liferay-ui:error exception="<%= OutOfLengthFullNameException.class %>" 
+	message="<%=OutOfLengthFullNameException.class.getName() %>" 
+/>
+
+<liferay-ui:error exception="<%= DuplicateEmployeeEmailException.class %>" 
+	message="<%=DuplicateEmployeeEmailException.class.getName() %>" 
+/>
+
+<liferay-ui:error exception="<%= OutOfLengthMobileException.class %>" 
+	message="<%=OutOfLengthMobileException.class.getName() %>" 
+/>
+
+<liferay-ui:error exception="<%= OutOfLengthTelNoException.class %>" 
+	message="<%=OutOfLengthTelNoException.class.getName() %>" 
+/>
 
 <aui:row>
 	<aui:col width="50">
 		<aui:input 
-			name="<%=EmployeeDisplayTerm.EMPLOYEE_NO %>" 
+			name='<%=EmployeeDisplayTerm.EMPLOYEE_NO %>'
+			disabled='<%=userViewProfile ? true : false %>'
 		>
 			<aui:validator name="required"/>
 			<aui:validator name="maxLength">

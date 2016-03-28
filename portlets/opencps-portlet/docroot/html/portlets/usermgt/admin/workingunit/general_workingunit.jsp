@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -33,16 +34,22 @@
 
 	long workingUnitId = workingUnit != null ? workingUnit.getWorkingunitId() : 0L;
 	
+	boolean isEmployer = true; 
+	
 	List<WorkingUnit> workingUnits = new ArrayList<WorkingUnit>();
+	
+	if (workingUnitId > 0) {
+		isEmployer = workingUnit.getIsEmployer();
+	}
 	
 	try {
 		workingUnits = WorkingUnitLocalServiceUtil.getWorkingUnits(scopeGroupId);
 	}catch(Exception e) {
 		_log.error(e);
 		
-	}	
-	
+	}
 %>
+
 <aui:model-context bean="<%=workingUnit%>" model="<%=WorkingUnit.class%>" />
 
 <aui:row>
@@ -52,7 +59,7 @@
 		<%
 			for(WorkingUnit unit : workingUnits) {
 				%>
-					<aui:option value="<%=unit.getWorkingunitId() %>">
+					<aui:option value="<%=unit.getWorkingunitId() %>" >
 						<%=unit.getName() %>
 					</aui:option>
 				<%
@@ -64,25 +71,47 @@
 	
 	<aui:input name="<%=WorkingUnitDisplayTerms.WORKINGUNIT_NAME%>">
 		<aui:validator name="required" />
+		<aui:validator name="maxLength">255</aui:validator>
 	</aui:input>
 	
-	<aui:input name="<%=WorkingUnitDisplayTerms.WORKINGUNIT_ENNAME%>" />
+	<aui:input name="<%=WorkingUnitDisplayTerms.WORKINGUNIT_ENNAME%>" >
+		<aui:validator name="maxLength">255</aui:validator>
+	</aui:input>
 	
-	<aui:input 
-		name="<%=WorkingUnitDisplayTerms.WORKINGUNIT_ISEMPLOYER%>" 
-		type="checkbox"
-		checked="true"
-	/>
+	<div id = '<portlet:namespace />showOrHidebyIsEmployeeRequest'>
 		
-	<div id="<portlet:namespace/>workingUnitGovAgencyCodeContainer">
-		<aui:input name="<%=WorkingUnitDisplayTerms.WORKINGUNIT_GOVAGENCYCODE%>"/>
+		<aui:input 
+			name="<%=WorkingUnitDisplayTerms.WORKINGUNIT_ISEMPLOYER%>" 
+			type="checkbox"
+			checked="<%=isEmployer%>"
+		/>
+		
+		<div id="<portlet:namespace/>workingUnitGovAgencyCodeContainer">
+			<aui:input name="<%=WorkingUnitDisplayTerms.WORKINGUNIT_GOVAGENCYCODE%>"/>
+		</div>
 	</div>
 	
 </aui:row>
 
 <aui:script> 
+	
 	AUI().ready(function(A){
+	
 		var isEmployerCheckBox = A.one('#<portlet:namespace/>isEmployerCheckbox');
+		
+		var parentWorkingUnitValue = A.one('#<portlet:namespace/>parentWorkingUnitId')
+		
+		
+		
+		var workingUnitGovAgencyCodeContainerGlobal = 
+			A.one('#<portlet:namespace/>workingUnitGovAgencyCodeContainer');
+		
+		if(isEmployerCheckBox.val() == 'false') {
+			workingUnitGovAgencyCodeContainerGlobal.hide();
+			workingUnitGovAgencyCodeContainerGlobal.clearData();
+		} else {
+			workingUnitGovAgencyCodeContainerGlobal.show();
+		}
 		
 		if(isEmployerCheckBox){
 			
@@ -100,6 +129,7 @@
 			});
 		}
 	});
+	
 </aui:script>
 
 <%!

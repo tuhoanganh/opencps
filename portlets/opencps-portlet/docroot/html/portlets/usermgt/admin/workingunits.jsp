@@ -1,3 +1,5 @@
+
+<%@page import="org.opencps.util.PortletConstants"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -29,6 +31,8 @@
 <%@page import="java.util.List"%>
 <%@page import="javax.portlet.PortletURL"%>
 <%@ include file="../init.jsp"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
+<%@page import="org.opencps.util.MessageKeys"%>
 
 <liferay-util:include page="/html/portlets/usermgt/admin/toptabs.jsp" servletContext="<%=application %>" />
 
@@ -42,6 +46,23 @@
 	int totalCount = 0;
 %>
 
+<liferay-ui:success 
+	key="<%=MessageKeys.USERMGT_WORKINGUNIT_UPDATE_SUCESS %>" 
+	message="<%=LanguageUtil.get(pageContext, 
+		MessageKeys.USERMGT_WORKINGUNIT_UPDATE_SUCESS) %>"
+/>
+
+<liferay-ui:success 
+	key="<%=MessageKeys.USERMGT_WORKINGUNIT_DELETE_SUCCESS %>" 
+	message="<%=LanguageUtil.get(pageContext, 
+		MessageKeys.USERMGT_WORKINGUNIT_DELETE_SUCCESS) %>"
+/>
+
+<liferay-ui:success 
+	key="<%=MessageKeys.USERMGT_WORKINGUNIT_DELETE_ERROR %>" 
+	message="<%=LanguageUtil.get(pageContext, 
+		MessageKeys.USERMGT_WORKINGUNIT_DELETE_ERROR) %>"
+/>
 
 <liferay-ui:search-container searchContainer="<%= new WorkingUnitSearch(
 	renderRequest ,SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
@@ -59,6 +80,14 @@
 		<%
 			row.addText(workingUnit.getName());
 			row.addText(workingUnit.getGovAgencyCode());
+			String isEmployer = "<i class=\"opencps-icon employees\"></i>";
+			
+			if(workingUnit.getIsEmployer() == false) {
+				isEmployer = "<i class=\"opencps-icon not-employee\"></i>";
+			}
+			
+			row.addText(isEmployer);
+			
 			row.addJSP("center", SearchEntry.DEFAULT_VALIGN,  templatePath + "workingunit_action.jsp", config.getServletContext(), request, response);
 		%>
 	</liferay-ui:search-container-row>

@@ -21,20 +21,22 @@
 <%@page import="org.opencps.usermgt.service.WorkingUnitLocalServiceUtil"%>
 <%@page import="org.opencps.usermgt.model.WorkingUnit"%>
 <%@page import="java.util.List"%>
+<%@page import="org.opencps.usermgt.util.UserMgtUtil"%>
 
 <%@ include file="../../init.jsp"%>
 <%
 	long workingUnitId = ParamUtil.getLong(request, EmployeeDisplayTerm.WORKING_UNIT_ID, 0L);
-	List<WorkingUnit> workingUnits = WorkingUnitLocalServiceUtil.getWorkingUnits(scopeGroupId, workingUnitId);
+	List<WorkingUnit> workingUnits = UserMgtUtil.getWorkingUnitsForEmployess(scopeGroupId, workingUnitId);
 %>
 
 <aui:col width="50">
 	<aui:select 
 		name='<%=EmployeeDisplayTerm.WORKING_UNIT_ID + 0 %>' 
-		label="" 
+		label='<%=StringPool.BLANK %>' 
 		onChange='<%=renderResponse.getNamespace() + "getJobPosByWorkingUnitId(this)" %>'
+		showEmptyOption='<%=true %>'
 	>
-		<aui:option value=""><liferay-ui:message key="select-working-unit"/></aui:option>
+		
 		<%
 			if(workingUnits != null){
 				for(WorkingUnit workingUnit : workingUnits){
@@ -48,7 +50,10 @@
 </aui:col>
 
 <aui:col width="50">
-	<aui:select name='<%=EmployeeDisplayTerm.JOBPOS_ID + 0 %>' label="">
-		<aui:option value=""><liferay-ui:message key="select-jobpos"/></aui:option>
+	<aui:select 
+		name='<%=EmployeeDisplayTerm.JOBPOS_ID + 0 %>' 
+		label='<%=StringPool.BLANK %>' 
+		showEmptyOption='<%=true %>'
+	>
 	</aui:select>
 </aui:col>

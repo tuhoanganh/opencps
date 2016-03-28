@@ -1,3 +1,4 @@
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -26,8 +27,11 @@
 <%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
 <%@page import="org.opencps.usermgt.search.JobPosDisplayTerms"%>
+<%@page import="org.opencps.util.MessageKeys"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 
 <%
+	String redirectURL = ParamUtil.getString(request, "redirectURL");
 	long jobPosId = ParamUtil.getLong(request, JobPosDisplayTerms.ID_JOBPOS);
 	JobPos jobPos = null;
 	try {
@@ -37,7 +41,20 @@
 	}
 %>
 
-<portlet:actionURL var="editJobPosURL" name="editJobPos"/>
+<liferay-ui:header
+	backURL="<%= redirectURL %>"
+	title='<%= (jobPos == null) ? "add-jobpos" : "update-jobpos" %>'
+/>
+
+<liferay-ui:error 
+	key="<%=MessageKeys.USERMGT_JOBPOS_UPDATE_ERROR %>" 
+	message="<%=LanguageUtil.get(pageContext, 
+		MessageKeys.USERMGT_JOBPOS_UPDATE_ERROR) %>"
+/>
+<portlet:actionURL var="editJobPosURL" name="updateJobPos">
+	<portlet:param name="redirectURL" value="<%=redirectURL %>"/>
+	<portlet:param name="returnURL" value="<%=currentURL %>"/>
+</portlet:actionURL>
 
 <aui:form action="<%=editJobPosURL.toString() %>" method="post" 
 	 name="fm">

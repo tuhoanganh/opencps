@@ -1,3 +1,5 @@
+
+<%@page import="org.opencps.usermgt.service.JobPosLocalServiceUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -19,15 +21,52 @@
 <%@ include file="../init.jsp"%>
 <%@page import="org.opencps.usermgt.util.UserMgtUtil"%>
 <%@page import="org.opencps.usermgt.search.JobPosDisplayTerms"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
+<%@page import="org.opencps.util.MessageKeys"%>
+<%@page import="com.liferay.portal.kernel.log.Log"%>
+<%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
+<%@page import="org.opencps.usermgt.model.JobPos"%>
+<%@page import="com.liferay.portal.kernel.exception.SystemException"%>
+
 <%
 	long workingUnitId = ParamUtil.getLong(request, "workingUnitId");
 	long jobPosId = ParamUtil.getLong(request, JobPosDisplayTerms.ID_JOBPOS);
-	String backURL = ParamUtil.getString(request, "backURL");
+	
+	JobPos jobPos = null;
+	
+	try {
+		jobPos = JobPosLocalServiceUtil.fetchJobPos(jobPosId);
+	} catch(Exception e) {
+		_log.error(e);
+	}
+	
+	String redirectURL = ParamUtil.getString(request, "redirectURL");
+	String returnURL = currentURL;
 	String [] jobPosSections = {"general_jobpos","role_jobpos"};
 	String [][] categorySections = {jobPosSections};
 %>
 
-<portlet:actionURL var="updateJobPosURL" name="updateJobPos"/>
+<liferay-ui:header
+	backURL="<%= redirectURL %>"
+	title='<%= (jobPos == null) ? "add-jobpos" : "update-jobpos" %>'
+/>
+
+<liferay-ui:error 
+	key="<%=MessageKeys.USERMGT_JOBPOS_UPDATE_ERROR %>"
+	message="<%=LanguageUtil.get(pageContext, 
+		MessageKeys.USERMGT_JOBPOS_UPDATE_ERROR) %>"
+/>
+
+<liferay-ui:success 
+	key="<%=MessageKeys.USERMGT_JOBPOS_UPDATE_SUCESS %>"
+	message="<%=LanguageUtil.get(pageContext, 
+		MessageKeys.USERMGT_JOBPOS_UPDATE_SUCESS) %>"
+/>
+<portlet:actionURL var="updateJobPosURL" name="updateJobPoses">
+	<portlet:param name="workingUnitId" value="<%=String.valueOf(workingUnitId) %>"/>
+	<portlet:param name="redirectURL" value="<%=redirectURL %>"/>
+	<portlet:param name="returnURL" value="<%=returnURL %>"/>
+</portlet:actionURL>
 
 <liferay-util:buffer var="htmlTop">
 
@@ -41,7 +80,7 @@
 	method="post" 
 	action="<%=updateJobPosURL.toString() %>">
 	<liferay-ui:form-navigator 
-		backURL="<%= backURL %>"
+		backURL="<%= redirectURL %>"
 		categoryNames= "<%= UserMgtUtil._JOBPOS_CATEGORY_NAMES %>"	
 		categorySections="<%=categorySections %>" 
 		htmlBottom="<%= htmlBot %>"
@@ -51,5 +90,9 @@
 	</liferay-ui:form-navigator>
 	<aui:input name="<%=JobPosDisplayTerms.ID_JOBPOS %>" 
 		type="hidden" />
+		
 </aui:form>
 
+<%! 
+	Log _log = LogFactoryUtil.getLog("html.portlets.usermgt.admin.edit_jobpos.jsp");
+%>

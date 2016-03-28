@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.security.auth.AuthException"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -20,10 +21,12 @@
 <%@page import="org.opencps.usermgt.search.EmployeeDisplayTerm"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="com.liferay.portal.model.User"%>
-<%@page import="com.liferay.portal.DuplicateUserEmailAddressException"%>
-<%@page import="com.liferay.portal.UserPasswordException"%>
+<%@page import="com.liferay.portal.model.UserConstants"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
+<%@page import="com.liferay.portlet.usersadmin.util.UsersAdminUtil"%>
+<%@page import="com.liferay.portal.util.PortletKeys"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
-<%@page import="com.liferay.portal.DuplicateUserScreenNameException"%>
+<%@page import="com.liferay.portal.UserPasswordException"%>
 <%@ include file="../../init.jsp"%>
 
 <%
@@ -31,16 +34,11 @@
 	String accountEmail = (String)request.getAttribute(WebKeys.TURN_BACK_ACCOUNT_EMAIL);
 	String screenName = (String)request.getAttribute(WebKeys.TURN_BACK_SCREEN_NAME);
 %>
+
 <aui:model-context bean="<%=mappingUser%>" model="<%=User.class%>" />
-<liferay-ui:error-marker key="errorSection" value="account_info" />
 
-<liferay-ui:error exception="<%= DuplicateUserEmailAddressException.class %>" 
-	message="<%=DuplicateUserEmailAddressException.class.getName() %>" 
-/>
+<liferay-ui:error-marker key="errorSection" value="edit_profile" />
 
-<liferay-ui:error exception="<%= DuplicateUserScreenNameException.class %>" 
-	message="<%=DuplicateUserScreenNameException.class.getName() %>" 
-/>
 <liferay-ui:error exception="<%= UserPasswordException.class %>">
 	<%
 		UserPasswordException upe = (UserPasswordException)errorException;
@@ -57,18 +55,7 @@
 </c:if>
 </liferay-ui:error>
 
-<aui:row>
-	<aui:col width="100">
-		<aui:input 
-			name="isMappingUser" 
-			type="checkbox" 
-			inlineField="<%= true %>" 
-			inlineLabel="right" 
-			disabled="<%=mappingUser != null ? true : false %>"
-			value="<%=mappingUser != null ? true : false %>"
-		/>
-	</aui:col>
-</aui:row>
+<liferay-ui:error exception="<%= AuthException.class %>" message="<%=AuthException.class.getName() %>"/>
 
 <div id="<portlet:namespace/>accountInfo">
 	<aui:row>
@@ -81,20 +68,49 @@
 				type="text"
 			>
 			</aui:input>
-		</aui:col>
-		
-		<aui:col width="50">
+			
 			<aui:input 
 				name="<%= EmployeeDisplayTerm.USER_EMAIL%>"
 				disabled="<%=mappingUser != null ? true : false  %>"
 				type="text"
 			>
-				<%-- <aui:validator name="required"/> --%>
 				<aui:validator name="email"/>
 				<aui:validator name="maxLength">
 					<%= PortletPropsValues.USERMGT_EMPLOYEE_EMAIL_LENGTH %>
 				</aui:validator>
 			</aui:input>
+		</aui:col>
+		
+		<aui:col width="50">
+			<c:choose>
+				<c:when test='<%= UsersAdminUtil.hasUpdateFieldPermission(permissionChecker, user, mappingUser, "portrait") %>'>
+					<liferay-portlet:renderURL var="editUserPortraitURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>" 
+						portletName="<%=PortletKeys.MY_ACCOUNT %>" plid="20175">
+						<liferay-portlet:param name="struts_action" value="/my_account/edit_user_portrait" />
+						<liferay-portlet:param name="redirect" value="<%= currentURL %>" />
+						<liferay-portlet:param name="p_u_i_d" value="<%= String.valueOf(mappingUser.getUserId()) %>" />
+						<liferay-portlet:param name="portrait_id" value="<%= String.valueOf(mappingUser.getPortraitId()) %>" />
+					</liferay-portlet:renderURL>
+
+					<liferay-ui:logo-selector
+						currentLogoURL="<%= mappingUser.getPortraitURL(themeDisplay) %>"
+						defaultLogoURL="<%= UserConstants.getPortraitURL(themeDisplay.getPathImage(), mappingUser.isMale(), 0) %>"
+						editLogoURL="<%= editUserPortraitURL %>"
+						imageId="<%= mappingUser.getPortraitId() %>"
+						logoDisplaySelector=".user-logo"
+					/>
+				</c:when>
+				<c:otherwise>
+					<img alt="<liferay-ui:message key="portrait" />" src="<%= mappingUser.getPortraitURL(themeDisplay) %>" />
+				</c:otherwise>
+			</c:choose>
+		</aui:col>
+	</aui:row>
+	
+	<aui:row>
+		<aui:col width="100">
+			<aui:input name="changePassWord" type="checkbox"/>
+			<aui:input name="<%= EmployeeDisplayTerm.OLD_PASS_WORD%>" type="password"></aui:input>
 		</aui:col>
 	</aui:row>
 	

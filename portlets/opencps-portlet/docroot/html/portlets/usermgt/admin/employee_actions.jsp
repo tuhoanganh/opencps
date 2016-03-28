@@ -23,6 +23,7 @@
 <%@page import="org.opencps.usermgt.search.EmployeeDisplayTerm"%>
 <%@page import="org.opencps.usermgt.permissions.EmployeePermission"%>
 <%@page import="org.opencps.usermgt.model.Employee"%>
+<%@page import="org.opencps.util.PortletConstants"%>
 <%@ include file="../init.jsp"%>
 
  
@@ -39,10 +40,32 @@
 			<portlet:param name="<%=EmployeeDisplayTerm.EMPLOYEE_ID %>" value="<%=String.valueOf(employee.getEmployeeId()) %>"/>
 			<portlet:param name="backURL" value="<%=currentURL %>"/>
 		</portlet:renderURL> 
+		
  		<liferay-ui:icon image="edit" message="edit" url="<%=updateEmployeeURL.toString() %>" /> 
  	</c:if>
  	
- 	<c:if test="<%=EmployeePermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE) %>">
+ 	<c:if test="<%=EmployeePermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) 
+ 		&& employee.getWorkingStatus() == PortletConstants.WORKING_STATUS_DEACTIVATE%>">
+ 		<portlet:actionURL var="updateEmployeeWorkingStatusURL" name="updateEmployeeWorkingStatus">
+			<portlet:param name="<%=EmployeeDisplayTerm.EMPLOYEE_ID %>" value="<%=String.valueOf(employee.getEmployeeId()) %>"/>
+			<portlet:param name="<%=EmployeeDisplayTerm.WORKING_STATUS %>" value="<%=String.valueOf(employee.getWorkingStatus()) %>"/>
+			<portlet:param name="redirectURL" value="<%=currentURL %>"/>
+		</portlet:actionURL> 
+		<liferay-ui:icon image="activate" url="<%= updateEmployeeWorkingStatusURL %>"/>
+ 	</c:if>
+ 	
+ 	<c:if test="<%=EmployeePermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) 
+ 		&& employee.getWorkingStatus() == PortletConstants.WORKING_STATUS_ACTIVATE%>">
+ 		<portlet:actionURL var="updateEmployeeWorkingStatusURL" name="updateEmployeeWorkingStatus">
+			<portlet:param name="<%=EmployeeDisplayTerm.EMPLOYEE_ID %>" value="<%=String.valueOf(employee.getEmployeeId()) %>"/>
+			<portlet:param name="<%=EmployeeDisplayTerm.WORKING_STATUS %>" value="<%=String.valueOf(employee.getWorkingStatus()) %>"/>
+			<portlet:param name="redirectURL" value="<%=currentURL %>"/>
+		</portlet:actionURL> 
+		<liferay-ui:icon-deactivate url="<%=updateEmployeeWorkingStatusURL.toString() %>"/>
+ 	</c:if>
+ 	
+ 	<c:if test="<%=EmployeePermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE)
+ 		&& employee.getWorkingStatus() == PortletConstants.WORKING_STATUS_DEACTIVATE%>">
  		<portlet:actionURL var="deleteEmployeeURL" name="deleteEmployee" >
 			<portlet:param name="<%=EmployeeDisplayTerm.EMPLOYEE_ID %>" value="<%=String.valueOf(employee.getEmployeeId()) %>"/>
 			<portlet:param name="redirectURL" value="<%=currentURL %>"/>

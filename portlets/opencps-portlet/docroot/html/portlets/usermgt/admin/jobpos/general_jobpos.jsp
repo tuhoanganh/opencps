@@ -39,9 +39,6 @@
 	rowIndexes = new int[]{0};
 %>
 
-<portlet:actionURL var="addJobPosURL" name="jobPosAdd" />
-
-<aui:form action="<%=addJobPosURL.toString()%>" method="POST">
 	<aui:row>
 		<div id="member-fields">
 
@@ -53,19 +50,21 @@
 						<aui:row>
 							<aui:col width="50">
 								<aui:input type="text" 
-								name='<%=JobPosDisplayTerms.TITLE_JOBPOS + rowIndex %>' 
-								label="Title">
+									name='<%=JobPosDisplayTerms.TITLE_JOBPOS + rowIndex %>' 
+									label="title"
+								>
 									<aui:validator name="required"></aui:validator>
 								</aui:input>
-								<aui:input type="hidden" 
-									name='<%=JobPosDisplayTerms.ID_JOBPOS + rowIndex %>' />
-								<aui:input name='<%="workingUnitId" + rowIndex %>' 
-									value="<%=String.valueOf(workingUnitId) %>"
-									type="hidden" />
+								
+								<aui:input
+									name='<%=JobPosDisplayTerms.ID_JOBPOS + rowIndex %>'
+									type="hidden" 
+								/>
+								
 							</aui:col>
 							<aui:col width="50">
 								<aui:select name='<%=JobPosDisplayTerms.LEADER_JOBPOS + rowIndex%>'
-									label="Leader">
+									label="leader">
 									<%
 										for(int j = 0 ; j < PortletPropsValues.USERMGT_JOBPOS_LEADER.length; j++){
 											%>
@@ -88,8 +87,6 @@
 		</div>
 
 	</aui:row>
-
-</aui:form>
 
 <aui:script>
 	AUI().use('liferay-auto-fields', function(A) {

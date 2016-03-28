@@ -29,11 +29,19 @@ long workingUnitId = workingUnit != null ? workingUnit.getWorkingunitId() : 0L;
 
 <aui:model-context bean="<%=workingUnit%>" model="<%=WorkingUnit.class%>" />
 <aui:row>
-	<aui:input name="<%=WorkingUnitDisplayTerms.WORKINGUNIT_ADDRESS%>"></aui:input>
+	<aui:input name="<%=WorkingUnitDisplayTerms.WORKINGUNIT_ADDRESS%>">
+		<aui:validator name="required" />
+		<aui:validator name="maxLength">500</aui:validator>		
+	</aui:input>
 	
-	<datamgt:ddr depthLevel="3" 
+	<datamgt:ddr 
+		cssClass="input100"
+		depthLevel="3" 
 		dictCollectionCode="ADMINISTRATIVE_REGION"
-		itemNames="cityCode,wardCode,districtCode">
+		itemNames="cityCode,districtCode,wardCode"
+		itemsEmptyOption="true,true,true"	
+	>
+		
 	</datamgt:ddr>
 	
 	<aui:row>
@@ -45,7 +53,7 @@ long workingUnitId = workingUnit != null ? workingUnit.getWorkingunitId() : 0L;
 		</aui:col>
 		<aui:col width="50">
 			<aui:input name="<%=WorkingUnitDisplayTerms.WORKINGUNIT_FAXNO%>" >
-				<aui:validator name="minLength">10</aui:validator>
+				<aui:validator name="minLength">5</aui:validator>
 				<aui:validator name="number"></aui:validator>
 			</aui:input>
 		</aui:col>
@@ -55,12 +63,14 @@ long workingUnitId = workingUnit != null ? workingUnit.getWorkingunitId() : 0L;
 		<aui:col width="50">
 			<aui:input name="<%=WorkingUnitDisplayTerms.WORKINGUNIT_EMAIL%>" >
 				<aui:validator name="email"/>
-				<aui:validator name="required"></aui:validator>
+				<aui:validator name="required" />
+				<aui:validator name="maxLength">255</aui:validator>
 			</aui:input>
 		</aui:col>
 		<aui:col width="50">
 			<aui:input name="<%=WorkingUnitDisplayTerms.WORKINGUNIT_WEBSITE%>" >
 				<aui:validator name="url"/>
+				<aui:validator name="maxLength">1000</aui:validator>
 			</aui:input>
 		</aui:col>
 	</aui:row>

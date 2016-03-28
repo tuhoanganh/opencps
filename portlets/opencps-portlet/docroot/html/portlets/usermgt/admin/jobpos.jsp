@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>. 
  */
 %>
-<%@ include file="../init.jsp"%>
+
 <%@page import="java.util.ArrayList"%>
 <%@page import="org.opencps.usermgt.model.JobPos"%>
 <%@page import="java.util.List"%>
@@ -27,6 +27,13 @@
 <%@page import="org.opencps.usermgt.service.JobPosLocalServiceUtil"%>
 <%@page import="org.opencps.usermgt.search.JobPosSearchTerms"%>
 <%@page import="org.opencps.usermgt.search.JobPosSearch"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
+<%@page import="org.opencps.util.MessageKeys"%>
+<%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="org.opencps.util.ActionKeys"%>
+<%@page import="org.opencps.usermgt.permissions.JobPosPermission"%>
+<%@ include file="../init.jsp"%>
+
 <%
 	long workingUnitId = ParamUtil.getLong(request, "workingUnitId");
 	PortletURL iteratorURL = renderResponse.createRenderURL();
@@ -35,43 +42,58 @@
 	int totalCount = 0;
 %>
 
-<liferay-ui:error key="DELETE_JOBPOS_ERROR" message="DELETE JOBPOS ERROR" />
+<liferay-ui:error 
+	key="<%=MessageKeys.USERMGT_JOBPOS_DELETE_ERROR %>" 
+	message="<%=LanguageUtil.get(pageContext, 
+		MessageKeys.USERMGT_JOBPOS_DELETE_ERROR) %>"
+/>
+
+<liferay-ui:success 
+	key="<%=MessageKeys.USERMGT_JOBPOS_DELETE_SUCCESS %>"
+	message="<%=LanguageUtil.get(pageContext, 
+		MessageKeys.USERMGT_JOBPOS_DELETE_SUCCESS) %>"
+/>
+
+<liferay-ui:success 
+	key="<%=MessageKeys.USERMGT_JOBPOS_UPDATE_SUCESS %>"
+	message="<%=LanguageUtil.get(pageContext, 
+		MessageKeys.USERMGT_JOBPOS_UPDATE_SUCESS) %>"
+/>
+
 <portlet:renderURL var="updateJobPosURL">
 	<portlet:param name="mvcPath" value='<%=templatePath + "edit_jobpos.jsp" %>'/>
 	<portlet:param name="workingUnitId" value="<%=String.valueOf(workingUnitId) %>"/>
+	<portlet:param name="redirectURL" value="<%=currentURL %>"/>
 </portlet:renderURL>
 
-<liferay-ui:icon iconCssClass="icon-plus-sign" label="update-jobpos" 
-	url="<%=updateJobPosURL.toString() %>"/>
+<c:if test="<%=JobPosPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_JOBPOS	) %>">
+	<aui:button 
+	name="add-jobpos"
+	value="add-jobpos"
+	onClick ="<%=updateJobPosURL.toString() %>"	
+/>
+</c:if>
 
-<liferay-ui:search-container searchContainer="<%= 
-	new JobPosSearch(renderRequest ,SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
-	<%
 		
-	%>
-		
+
+<liferay-ui:search-container searchContainer="<%= new JobPosSearch(renderRequest ,SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
+	
 	<liferay-ui:search-container-results>
 		<%@include file="/html/portlets/usermgt/admin/jobpos_search_results.jspf"%>
 	</liferay-ui:search-container-results>
+	
 	<liferay-ui:search-container-row 
 		className="org.opencps.usermgt.model.JobPos" 
 		modelVar="jobPosSearch" 
 		keyProperty="jobPosId"
 	>
 		<%
-			String leaderName = "";
-			if(jobPosSearch.getLeader() == 0) {
-				leaderName = PortletPropsValues.USERMGT_JOBPOS_NOMAL;;
-			} else if (jobPosSearch.getLeader() == 1) {
-				leaderName = PortletPropsValues.USERMGT_JOBPOS_BOSS ;
-			} else if (jobPosSearch.getLeader() == 2) {
-				leaderName =  PortletPropsValues.USERMGT_JOBPOS_DEPUTY;
-			}
+			String leaderName = PortletUtil.getLeaderLabel(jobPosSearch.getLeader(), locale);
+		
 			row.addText(jobPosSearch.getTitle());
 			row.addText(leaderName);
 			row.addJSP("center", SearchEntry.DEFAULT_VALIGN,  templatePath +
-				"jobpos_action.jsp", config.getServletContext(),
-				request, response);
+				"jobpos_action.jsp", config.getServletContext(), request, response);
 		%>
 	</liferay-ui:search-container-row>
 	<liferay-ui:search-iterator/>

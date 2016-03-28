@@ -26,6 +26,10 @@
 <%@page import="org.opencps.usermgt.model.WorkingUnit"%>
 <%@page import="java.util.List"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
+<%@page import="org.opencps.usermgt.permissions.WorkingUnitPermission"%>
+<%@page import="com.liferay.portal.service.permission.PortletPermissionUtil"%>
+<%@page import="org.opencps.util.ActionKeys"%>
+
 <%@ include file="../init.jsp"%>
 
 <%
@@ -50,9 +54,13 @@
 	<c:when test="<%= tabs1.equals(UserMgtUtil.TOP_TABS_WORKINGUNIT)%>">
 		<portlet:renderURL var="editWorkingUnitURL">
 			<portlet:param name="mvcPath" value='<%= templatePath + "edit_workingunit.jsp" %>'/>
+			<portlet:param name="redirectURL" value="<%=currentURL %>"/>
 		</portlet:renderURL>
+		<c:if test="<%=WorkingUnitPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_WORKINGUNIT) %>">
+			<aui:button name="add-workingunit" value="add-workingunit" href="<%= editWorkingUnitURL%>"/>
+		</c:if>
 		
-		<aui:button name="add-workingunit" value="add-workingunit" href="<%= editWorkingUnitURL%>"/>
+		
 	</c:when>
 	
 	<c:when test="<%= tabs1.equals(UserMgtUtil.TOP_TABS_EMPLOYEE)%>">
@@ -72,7 +80,7 @@
 						<aui:input 
 							id="keywords1" 
 							name="keywords" 
-							label=""
+							label="<%=StringPool.BLANK %>"
 							placeholder='<%= LanguageUtil.get(locale, "full-name") %>' 
 							type="text"
 						/>
@@ -82,7 +90,7 @@
 						<%
 							searchURL.setParameter(EmployeeDisplayTerm.WORKING_UNIT_ID, String.valueOf(workingUnitId));
 						%>
-						<aui:select name="<%=EmployeeDisplayTerm.WORKING_UNIT_ID %>" label="">
+						<aui:select name="<%=EmployeeDisplayTerm.WORKING_UNIT_ID %>" label="<%=StringPool.BLANK %>">
 							<aui:option value="0"></aui:option>
 							<%
 								if(workingUnits != null){
@@ -102,7 +110,7 @@
 						<aui:input 
 							name="search" 
 							type="submit" value="search" 
-							label="" 
+							label="<%=StringPool.BLANK %>" 
 							cssClass="opencps usermgt toolbar search-btn"
 						/>
 					</aui:col>

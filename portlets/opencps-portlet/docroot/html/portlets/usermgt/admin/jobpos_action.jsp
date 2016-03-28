@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,11 +16,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-<%@ include file="../init.jsp"%>
+
 <%@page import="org.opencps.usermgt.model.JobPos"%>
 <%@page import="com.liferay.portal.kernel.dao.search.ResultRow"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.usermgt.search.JobPosDisplayTerms"%>
+<%@page import="org.opencps.util.ActionKeys"%>
+<%@page import="org.opencps.usermgt.permissions.JobPosPermission"%>
+<%@ include file="../init.jsp"%>
+
 <%
 	long workingUnitId = ParamUtil.getLong(request, "workingUnitId");
 	ResultRow row =
@@ -37,19 +40,22 @@
 			value="<%=String.valueOf(jobPos.getJobPosId())%>" />
 		<portlet:param name="workingUnitId" 
 			value="<%=String.valueOf(workingUnitId) %>"/>
-		<portlet:param name="backURL" value="<%=currentURL%>" />
+		<portlet:param name="redirectURL" value="<%=currentURL%>" />
 	</portlet:renderURL>
-
-	<liferay-ui:icon image="edit" message="edit"
+	<c:if test="<%=JobPosPermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) %>">
+		<liferay-ui:icon image="edit" message="edit"
 		url="<%=updateJobPos.toString()%>" />
+	</c:if>
 
 	<portlet:actionURL var="deleteJobPosURL" name="deleteJobPos">
 		<portlet:param name="<%=JobPosDisplayTerms.ID_JOBPOS%>"
 			value="<%=String.valueOf(jobPos.getJobPosId())%>" />
 		<portlet:param name="redirectURL" value="<%=currentURL%>" />
 	</portlet:actionURL>
-
-	<liferay-ui:icon image="delete" message="delete"
+	
+	<c:if test="<%=JobPosPermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE) %>">
+		<liferay-ui:icon image="delete" message="delete"
 		url="<%=deleteJobPosURL.toString()%>" />
+	</c:if>
 
 </liferay-ui:icon-menu>
