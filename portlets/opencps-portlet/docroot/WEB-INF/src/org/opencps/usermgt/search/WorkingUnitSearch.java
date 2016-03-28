@@ -24,7 +24,6 @@ import java.util.Map;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
 
-import org.opencps.datamgt.util.DataMgtUtil;
 import org.opencps.usermgt.model.WorkingUnit;
 import org.opencps.usermgt.util.UserMgtUtil;
 import org.opencps.util.DateTimeUtil;
@@ -42,6 +41,7 @@ public class WorkingUnitSearch extends SearchContainer<WorkingUnit> {
 	static {
 		headerNames.add("name");
 		headerNames.add("govagencycode");
+		headerNames.add("isEmployer");
 		headerNames.add("action");
 
 		orderableHeaders.put("name", WorkingUnitDisplayTerms.WORKINGUNIT_NAME);

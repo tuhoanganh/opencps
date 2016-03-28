@@ -39,24 +39,25 @@ public class EmployeeDisplayTerm extends DisplayTerms {
 	public static final String BIRTH_DATE_DAY = "birthDateDay";
 	public static final String BIRTH_DATE_MONTH = "birthDateMonth";
 	public static final String BIRTH_DATE_YEAR = "birthDateYear";
+	public static final String COMPANY_ID = "companyId";
 	public static final String CREATE_DATE = "createDate";
 	public static final String EMAIL = "email";
-	public static final String USER_EMAIL = "emailAddress";
 	public static final String EMPLOYEE_ID = "employeeId";
 	public static final String EMPLOYEE_NO = "employeeNo";
 	public static final String FULL_NAME = "fullName";
 	public static final String GENDER = "gender";
 	public static final String GROUP_ID = "groupId";
-	public static final String COMPANY_ID = "companyId";
+	public static final String IS_CHANGE_PASS_WORD = "changePassWord";
 	public static final String JOBPOS_ID = "jobPosId";
 	public static final String MAIN_JOBPOS_ID = "mainJobPosId";
 	public static final String MOBILE = "mobile";
 	public static final String MODIFIED_DATE = "modifiedDate";
+	public static final String OLD_PASS_WORD = "oldPassWord";
 	public static final String PASS_WORD = "passWord";
 	public static final String RE_PASS_WORD = "rePassWord";
 	public static final String SCREEN_NAME = "screenName";
 	public static final String TEL_NO = "telNo";
-
+	public static final String USER_EMAIL = "emailAddress";
 	public static final String USER_ID = "userId";
 	public static final String WORKING_STATUS = "workingStatus";
 	public static final String WORKING_UNIT_ID = "workingUnitId";
@@ -94,18 +95,45 @@ public class EmployeeDisplayTerm extends DisplayTerms {
 		groupId = setGroupId(portletRequest);
 	}
 
+	protected Date birthDate;
+
+	protected Date createDate;
+
+	protected String email;
+
+	protected long employeeId;
+
+	protected String employeeNo;
+
+	protected String fullName;
+
+	protected int gender;
+
+	protected long groupId;
+
+	protected long mainJobPosId;
+
+	protected String mobile;
+
+	protected Date modifiedDate;
+
+	protected String telNo;
+
+	protected long userId;
+
+	protected int workingStatus;
+
+	protected long workingUnitId;
+
 	public Date getBirthDate() {
 		return birthDate;
 	}
-
 	public Date getCreateDate() {
 		return createDate;
 	}
-
 	public String getEmail() {
 		return email;
 	}
-
 	public long getEmployeeId() {
 		return employeeId;
 	}
@@ -113,45 +141,37 @@ public class EmployeeDisplayTerm extends DisplayTerms {
 	public String getEmployeeNo() {
 		return employeeNo;
 	}
-
 	public String getFullName() {
 		return fullName;
 	}
-
 	public int getGender() {
 		return gender;
 	}
-
 	public long getGroupId() {
 		return groupId;
 	}
-
 	public long getMainJobPosId() {
 		return mainJobPosId;
 	}
-
 	public String getMobile() {
 		return mobile;
 	}
-
 	public Date getModifiedDate() {
 		return modifiedDate;
 	}
-
 	public String getTelNo() {
 		return telNo;
 	}
-
 	public long getUserId() {
 		return userId;
 	}
-
 	public int getWorkingStatus() {
 		return workingStatus;
 	}
 	public long getWorkingUnitId() {
 		return workingUnitId;
 	}
+
 	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
 	}
@@ -164,7 +184,6 @@ public class EmployeeDisplayTerm extends DisplayTerms {
 	public void setEmployeeId(long employeeId) {
 		this.employeeId = employeeId;
 	}
-
 	public void setEmployeeNo(String employeeNo) {
 		this.employeeNo = employeeNo;
 	}
@@ -202,28 +221,12 @@ public class EmployeeDisplayTerm extends DisplayTerms {
 	public void setUserId(long userId) {
 		this.userId = userId;
 	}
+
 	public void setWorkingStatus(int workingStatus) {
 		this.workingStatus = workingStatus;
 	}
+
 	public void setWorkingUnitId(long workingUnitId) {
 		this.workingUnitId = workingUnitId;
 	}
-
-	protected Date birthDate;
-	protected Date createDate;
-	protected String email;
-	protected long employeeId;
-	protected String employeeNo;
-	protected String fullName;
-	protected int gender;
-	protected long groupId;
-	protected long mainJobPosId;
-	protected String mobile;
-	protected Date modifiedDate;
-	protected String telNo;
-	protected long userId;
-
-	protected int workingStatus;
-
-	protected long workingUnitId;
 }
