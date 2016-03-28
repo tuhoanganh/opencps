@@ -26,7 +26,7 @@ public class JobPosTitleComparator extends OrderByComparator{
 	
 	public static final String ORDER_BY_ASC = "opencps_jobpos.title ASC";
 	public static final String ORDER_BY_DESC =
-		"opencps__jobpos.title DESC";
+		"opencps_jobpos.title DESC";
 	public static final String[] ORDER_BY_FIELDS = {
 		"title"
 	};

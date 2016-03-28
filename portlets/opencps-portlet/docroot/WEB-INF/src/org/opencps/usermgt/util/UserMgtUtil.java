@@ -17,13 +17,20 @@
 
 package org.opencps.usermgt.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.opencps.usermgt.model.WorkingUnit;
 import org.opencps.usermgt.search.EmployeeDisplayTerm;
 import org.opencps.usermgt.search.JobPosDisplayTerms;
+import org.opencps.usermgt.search.ResourceActionDisplayTerms;
 import org.opencps.usermgt.search.WorkingUnitDisplayTerms;
+import org.opencps.usermgt.service.WorkingUnitLocalServiceUtil;
 import org.opencps.usermgt.util.comparator.EmployeeNameComparator;
 import org.opencps.usermgt.util.comparator.EmployeeWorkingStatusComparator;
 import org.opencps.usermgt.util.comparator.JobPosLeaderComparator;
 import org.opencps.usermgt.util.comparator.JobPosTitleComparator;
+import org.opencps.usermgt.util.comparator.ResourceActionActionIdComparator;
 import org.opencps.usermgt.util.comparator.WorkingUnitAdressComporator;
 import org.opencps.usermgt.util.comparator.WorkingUnitEmailComparator;
 import org.opencps.usermgt.util.comparator.WorkingUnitGovagencyCodeComparator;
@@ -31,12 +38,15 @@ import org.opencps.usermgt.util.comparator.WorkingUnitNameComparator;
 import org.opencps.usermgt.util.comparator.WorkingUnitSiblingComparator;
 import org.opencps.usermgt.util.comparator.WorkingUnitTelNoComparator;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
 /**
  * @author trungnt
  */
 public class UserMgtUtil {
+
 	public static final String TOP_TABS_EMPLOYEE = "employee";
 	public static final String TOP_TABS_WORKINGUNIT = "working-unit";
 	public static final String[] _EMPLOYESS_CATEGORY_NAMES = {
@@ -48,7 +58,7 @@ public class UserMgtUtil {
 	public static final String[] _JOBPOS_CATEGORY_NAMES = {
 		"jobpos-info"
 	};
-	
+
 	public static OrderByComparator getWorkingUnitOrderByComparator(
 		String orderByCol, String orderByType) {
 
@@ -72,36 +82,38 @@ public class UserMgtUtil {
 			orderByComparator = new WorkingUnitEmailComparator(orderByAsc);
 		}
 		else if (orderByCol.equals(WorkingUnitDisplayTerms.WORKINGUNIT_GOVAGENCYCODE)) {
-			orderByComparator = new WorkingUnitGovagencyCodeComparator(orderByAsc);
-		} else if ((orderByCol.equals(WorkingUnitDisplayTerms.WORKINGUNIT_SIBLING))) {
+			orderByComparator =
+				new WorkingUnitGovagencyCodeComparator(orderByAsc);
+		}
+		else if ((orderByCol.equals(WorkingUnitDisplayTerms.WORKINGUNIT_SIBLING))) {
 			orderByComparator = new WorkingUnitSiblingComparator(orderByAsc);
 		}
-			
 
 		return orderByComparator;
 	}
-	
+
 	public static OrderByComparator getJobPosOrderByComparator(
 		String orderByCol, String orderByType) {
-		
+
 		boolean orderByAsc = false;
 
 		if (orderByType.equals("asc")) {
 			orderByAsc = true;
 		}
 		OrderByComparator orderByComparator = null;
-		
-		if(orderByCol.equals(JobPosDisplayTerms.TITLE_JOBPOS)) {
+
+		if (orderByCol.equals(JobPosDisplayTerms.TITLE_JOBPOS)) {
 			orderByComparator = new JobPosTitleComparator(orderByAsc);
-		} else if(orderByCol.equals(JobPosDisplayTerms.LEADER_JOBPOS)) {
+		}
+		else if (orderByCol.equals(JobPosDisplayTerms.LEADER_JOBPOS)) {
 			orderByComparator = new JobPosLeaderComparator(orderByAsc);
 		}
-		
+
 		return orderByComparator;
 	}
 
 	public static OrderByComparator getEmployeeOrderByComparator(
-			String orderByCol, String orderByType) {
+		String orderByCol, String orderByType) {
 
 		boolean orderByAsc = false;
 
@@ -112,7 +124,8 @@ public class UserMgtUtil {
 
 		if (orderByCol.equals(EmployeeDisplayTerm.FULL_NAME)) {
 			orderByComparator = new EmployeeNameComparator(orderByAsc);
-		} else if (orderByCol.equals(EmployeeDisplayTerm.WORKING_STATUS)) {
+		}
+		else if (orderByCol.equals(EmployeeDisplayTerm.WORKING_STATUS)) {
 			orderByComparator = new EmployeeWorkingStatusComparator(orderByAsc);
 		}
 		else if (orderByCol.equals(WorkingUnitDisplayTerms.WORKINGUNIT_GOVAGENCYCODE)) {
@@ -122,4 +135,49 @@ public class UserMgtUtil {
 
 		return orderByComparator;
 	}
+	
+	public static OrderByComparator getResourceOrderByComparator(
+		String orderByCol, String orderByType) {
+
+		boolean orderByAsc = false;
+
+		if (orderByType.equals("asc")) {
+			orderByAsc = true;
+		}
+		OrderByComparator orderByComparator = null;
+		
+		if (orderByCol.equals(ResourceActionDisplayTerms.RESOURCE_ACTION_NAME)) {
+			orderByComparator = new ResourceActionActionIdComparator(orderByAsc);
+		}
+		
+		return orderByComparator;
+	}
+
+	public static List<WorkingUnit> getWorkingUnitsForEmployess(
+		long groupId, long workingUnitId) {
+
+		List<WorkingUnit> workingUnits = new ArrayList<WorkingUnit>();
+		if (workingUnitId > 0) {
+			try {
+				WorkingUnit workingUnitRoot =
+					WorkingUnitLocalServiceUtil.getWorkingUnit(workingUnitId);
+				workingUnits.add(workingUnitRoot);
+				List<WorkingUnit> childWorkingUnits =
+					WorkingUnitLocalServiceUtil.getWorkingUnits(
+						groupId, workingUnitId);
+				workingUnits.addAll(childWorkingUnits);
+			}
+			catch (Exception e) {
+				_log.warn(e);
+			}
+		}
+
+		return workingUnits;
+
+	}
+
+
+
+	private static Log _log =
+		LogFactoryUtil.getLog(UserMgtUtil.class.getName());
 }
