@@ -59,8 +59,6 @@
 		<c:if test="<%=WorkingUnitPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_WORKINGUNIT) %>">
 			<aui:button name="add-workingunit" value="add-workingunit" href="<%= editWorkingUnitURL%>"/>
 		</c:if>
-		
-		
 	</c:when>
 	
 	<c:when test="<%= tabs1.equals(UserMgtUtil.TOP_TABS_EMPLOYEE)%>">
