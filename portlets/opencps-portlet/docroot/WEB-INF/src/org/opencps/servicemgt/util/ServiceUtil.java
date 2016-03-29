@@ -24,7 +24,9 @@ package org.opencps.servicemgt.util;
  */
 public class ServiceUtil {
 	public static final String TOP_TABS_SERVICE = "service";
-	public static final String TOP_TABS_DOCUMENT = "service-document";
-	public static final String TOP_TABS_CATEGORY = "service-category";
-	public static final String TOP_TABS_LEVEL = "service-level";
+	public static final String TOP_TABS_TEMPLATE = "service-template";
+	public static final String TOP_TABS_ADMINISTRATION = "service-administration";
+	public static final String TOP_TABS_DOMAIN = "service-domain";
+	
+	public static final String [] SERVICE_CATEGORY_NAMES = {"service-info"};
 }
