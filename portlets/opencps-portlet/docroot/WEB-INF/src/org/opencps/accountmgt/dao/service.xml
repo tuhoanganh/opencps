@@ -151,7 +151,7 @@
 		<!-- PK fields -->
 
 		<column name="businessId" type="long" primary="true" />
-		<column name="businessDomain" type="String" primary="true" />
+		<column name="businessDomainId" type="String" primary="true" />
 
 		<!-- Finder methods -->
 		<finder name="BusinessId" return-type="Collection">
@@ -159,7 +159,7 @@
 		</finder>
 		
 		<finder name="BusinessDomain" return-type="Collection">
-			<finder-column name="businessDomain" />
+			<finder-column name="businessDomainId" />
 		</finder>
 	</entity>
 
