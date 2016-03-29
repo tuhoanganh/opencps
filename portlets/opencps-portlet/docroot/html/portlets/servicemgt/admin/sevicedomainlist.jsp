@@ -16,4 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
-Admin cap tthc
+<%@ include file="/init.jsp" %>
+
+<liferay-util:include page="/html/portlets/servicemgt/admin/toptabs.jsp" servletContext="<%=application %>" />
+
+Admin danh muc

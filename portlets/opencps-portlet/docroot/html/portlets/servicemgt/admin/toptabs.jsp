@@ -1,4 +1,3 @@
-<%@page import="org.opencps.servicemgt.util.ServiceUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -24,9 +23,9 @@
 <%
 
 	String[] names = new String[]{ServiceUtil.TOP_TABS_SERVICE, 
-		ServiceUtil.TOP_TABS_DOCUMENT, ServiceUtil.TOP_TABS_CATEGORY,
-		ServiceUtil.TOP_TABS_LEVEL};
-
+		ServiceUtil.TOP_TABS_TEMPLATE, ServiceUtil.TOP_TABS_DOMAIN,
+		ServiceUtil.TOP_TABS_ADMINISTRATION};
+	System.out.print(names);
 	String value = 
 		ParamUtil.getString(request, "tabs1", ServiceUtil.TOP_TABS_SERVICE);
 
@@ -44,31 +43,32 @@
 	if (PortletPermissionUtil.contains(permissionChecker, plid, portletDisplay.getId(), 
 		ActionKeys.VIEW) && 
 					DocumentPermission.contains(permissionChecker, scopeGroupId, ActionKeys.VIEW)) {
-				PortletURL viewServiceURL = renderResponse.createRenderURL();
-				viewServiceURL.setParameter("mvcPath", templatePath + "templatefilelist.jsp");
-				viewServiceURL.setParameter("tabs1", ServiceUtil.TOP_TABS_DOCUMENT);
-				urls.add(viewServiceURL.toString());
+				PortletURL viewTemplareURL = renderResponse.createRenderURL();
+				viewTemplareURL.setParameter("mvcPath", templatePath + "servicetemplatefilelist.jsp");
+				viewTemplareURL.setParameter("tabs1", ServiceUtil.TOP_TABS_TEMPLATE);
+				urls.add(viewTemplareURL.toString());
 	}
 
 	if (PortletPermissionUtil.contains(permissionChecker, plid, portletDisplay.getId(), 
 		ActionKeys.VIEW) && 
 					CategoryPermission.contains(permissionChecker, scopeGroupId, ActionKeys.VIEW)) {
-				PortletURL viewServiceURL = renderResponse.createRenderURL();
-				viewServiceURL.setParameter("mvcPath", templatePath + "categorylist.jsp");
-				viewServiceURL.setParameter("tabs1", ServiceUtil.TOP_TABS_CATEGORY);
-				urls.add(viewServiceURL.toString());
+				PortletURL viewCategoryURL = renderResponse.createRenderURL();
+				viewCategoryURL.setParameter("mvcPath", templatePath + "sevicedomainlist.jsp");
+				viewCategoryURL.setParameter("tabs1", ServiceUtil.TOP_TABS_DOMAIN);
+				urls.add(viewCategoryURL.toString());
 	}
 
 	if (PortletPermissionUtil.contains(permissionChecker, plid, portletDisplay.getId(), 
 		ActionKeys.VIEW) && 
 					LevelPermission.contains(permissionChecker, scopeGroupId, ActionKeys.VIEW)) {
-				PortletURL viewServiceURL = renderResponse.createRenderURL();
-				viewServiceURL.setParameter("mvcPath", templatePath + "levellist.jsp");
-				viewServiceURL.setParameter("tabs1", ServiceUtil.TOP_TABS_LEVEL);
-				urls.add(viewServiceURL.toString());
+				PortletURL viewLevelURL = renderResponse.createRenderURL();
+				viewLevelURL.setParameter("mvcPath", templatePath + "serviceadministrationlist.jsp");
+				viewLevelURL.setParameter("tabs1", ServiceUtil.TOP_TABS_ADMINISTRATION);
+				urls.add(viewLevelURL.toString());
 	}
 	
 %>
+
 <liferay-ui:tabs
 	names="<%= StringUtil.merge(names) %>"
 	param="tabs1"

@@ -16,4 +16,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
-Admin danh mucj
+
+<%@ include file="/init.jsp" %>
+
+<liferay-util:include page="/html/portlets/servicemgt/admin/toptabs.jsp" servletContext="<%=application %>" />
+
+Admin bieu mau TTHC
