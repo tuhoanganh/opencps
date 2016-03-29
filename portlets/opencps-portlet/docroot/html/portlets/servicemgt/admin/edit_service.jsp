@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,4 +18,53 @@
  */
 %>
 
-Edit service.
+<%@ include file="../init.jsp" %>
+
+<%
+	String redirectURL = ParamUtil.getString(request, "redirectURL");
+
+	ServiceInfo servieInfo = (ServiceInfo) request.getAttribute(WebKeys.SERVICE_ENTRY);
+	
+	String backURL = ParamUtil.getString(request, "backURL");
+	
+	String[] serviceSections = new String[]{"general_info", "detail_info", "template_info"};
+	
+	String[][] categorySections = {serviceSections};
+%>
+
+<liferay-ui:header
+	backURL="<%= backURL %>"
+	title='<%= (Validator.isNull(servieInfo)) ? "add-service" : "update-service" %>'
+/>
+
+<portlet:actionURL name="updateService" var="updateServiceURL"/>
+
+<liferay-util:buffer var="htmlTop">
+	<c:if test="<%= servieInfo != null %>">
+		<liferay-ui:icon iconCssClass="icon-home" />
+	</c:if> 
+</liferay-util:buffer>
+
+<liferay-util:buffer var="htmlBottom"/>
+
+<aui:form name="fm" action="<%=updateServiceURL %>" method="post">
+
+	<aui:model-context bean="<%=servieInfo %>" model="<%= ServiceInfo.class %>" />
+	
+	<aui:input name="redirectURL" type="hidden" value="<%= backURL%>"/>
+	<aui:input name="returnURL" type="hidden" value="<%= currentURL%>"/>
+	
+	<aui:input name="<%= ServiceDisplyTerms.GROUP_ID %>" type="hidden" value="<%= scopeGroupId%>"/>
+	<aui:input name="<%= ServiceDisplyTerms.COMPANY_ID %>" type="hidden" value="<%= company.getCompanyId()%>"/>
+
+	<liferay-ui:form-navigator
+		backURL="<%= backURL %>"
+		categoryNames="<%= ServiceUtil.SERVICE_CATEGORY_NAMES %>"
+		categorySections="<%= categorySections %>"
+		htmlBottom="<%= htmlBottom %>"
+		htmlTop="<%= htmlTop %>"
+		jspPath='<%= templatePath + "employees/" %>'
+	/>
+</aui:form>
+
+

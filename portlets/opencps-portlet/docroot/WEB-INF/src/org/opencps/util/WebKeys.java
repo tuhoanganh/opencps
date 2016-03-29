@@ -52,5 +52,7 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String TURN_BACK_JOBPOS_INDEXES = "TURN_BACK_JOBPOS_INDEXES";
 	
 	public static final String USERMGT_VIEW_PROFILE = "USERMGT_VIEW_PROFILE";
+	
+	public static final String SERVICE_ENTRY = "SERVICE_ENTRY";
 
 }

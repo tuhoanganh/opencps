@@ -1,3 +1,6 @@
+<%@page import="org.opencps.servicemgt.permissions.ServiceAdministrationPermission"%>
+<%@page import="org.opencps.servicemgt.permissions.ServiceDomainPermission"%>
+<%@page import="org.opencps.servicemgt.permissions.ServiceTemplatePermission"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -42,7 +45,7 @@
 	
 	if (PortletPermissionUtil.contains(permissionChecker, plid, portletDisplay.getId(), 
 		ActionKeys.VIEW) && 
-					DocumentPermission.contains(permissionChecker, scopeGroupId, ActionKeys.VIEW)) {
+					ServiceTemplatePermission.contains(permissionChecker, scopeGroupId, ActionKeys.VIEW)) {
 				PortletURL viewTemplareURL = renderResponse.createRenderURL();
 				viewTemplareURL.setParameter("mvcPath", templatePath + "servicetemplatefilelist.jsp");
 				viewTemplareURL.setParameter("tabs1", ServiceUtil.TOP_TABS_TEMPLATE);
@@ -51,7 +54,7 @@
 
 	if (PortletPermissionUtil.contains(permissionChecker, plid, portletDisplay.getId(), 
 		ActionKeys.VIEW) && 
-					CategoryPermission.contains(permissionChecker, scopeGroupId, ActionKeys.VIEW)) {
+					ServiceDomainPermission.contains(permissionChecker, scopeGroupId, ActionKeys.VIEW)) {
 				PortletURL viewCategoryURL = renderResponse.createRenderURL();
 				viewCategoryURL.setParameter("mvcPath", templatePath + "sevicedomainlist.jsp");
 				viewCategoryURL.setParameter("tabs1", ServiceUtil.TOP_TABS_DOMAIN);
@@ -60,7 +63,7 @@
 
 	if (PortletPermissionUtil.contains(permissionChecker, plid, portletDisplay.getId(), 
 		ActionKeys.VIEW) && 
-					LevelPermission.contains(permissionChecker, scopeGroupId, ActionKeys.VIEW)) {
+					ServiceAdministrationPermission.contains(permissionChecker, scopeGroupId, ActionKeys.VIEW)) {
 				PortletURL viewLevelURL = renderResponse.createRenderURL();
 				viewLevelURL.setParameter("mvcPath", templatePath + "serviceadministrationlist.jsp");
 				viewLevelURL.setParameter("tabs1", ServiceUtil.TOP_TABS_ADMINISTRATION);
@@ -77,3 +80,6 @@
 	url2="<%=urls != null && urls.size() > 2 ? urls.get(2): StringPool.BLANK %>"
 	url3="<%=urls != null && urls.size() > 3 ? urls.get(3): StringPool.BLANK %>"
 />
+
+<liferay-util:include page='<%= templatePath + "toolbar.jsp" %>' servletContext="<%= application %>" />
+
