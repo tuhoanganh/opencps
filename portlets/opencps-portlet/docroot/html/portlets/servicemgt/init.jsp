@@ -22,11 +22,11 @@
 <%@page import="com.liferay.portal.service.permission.PortletPermissionUtil"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
-<%@page import="org.opencps.servicemgt.permissions.LevelPermission"%>
-<%@page import="org.opencps.servicemgt.permissions.CategoryPermission"%>
-<%@page import="org.opencps.servicemgt.permissions.DocumentPermission"%>
 <%@page import="org.opencps.servicemgt.permissions.ServicePermission"%>
 <%@page import="org.opencps.servicemgt.util.ServiceUtil"%>
 <%@page import="org.opencps.usermgt.util.UserMgtUtil"%>
-
+<%@page import="org.opencps.servicemgt.util.ServiceUtil"%>
+<%@page import="org.opencps.servicemgt.search.ServiceDisplyTerms"%>
+<%@page import="org.opencps.util.WebKeys"%>
+<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
 
