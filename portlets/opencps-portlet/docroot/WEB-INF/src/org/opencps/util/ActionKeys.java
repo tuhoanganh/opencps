@@ -31,5 +31,9 @@ public class ActionKeys extends com.liferay.portal.security.permission.ActionKey
 	public static final String ADD_WORKINGUNIT = "ADD_WORKINGUNIT";
 	public static final String ADD_EMPLOYEE = "ADD_EMPLOYEE";
 	public static final String ADD_JOBPOS = "ADD_JOBPOS";
+	
+	public static final String ADD_SERVICE = "ADD_SERVICE";
+	
+	public static final String ADD_DOCUMENT = "ADD_TEMPLATE";
 
 }
