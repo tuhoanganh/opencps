@@ -58,10 +58,11 @@
 					if(!isHorizontal){
 						%>
 							<aui:row>
-								<aui:col id='<%="col_" + i %>' cssclass="<%=cssClass + i %>" width="<%=colWidth %>">
+								<aui:col id='<%="col_" + i %>' cssClass='<%=cssClass + "_" + i %>' width="<%=colWidth %>">
 									<aui:select 
 										name='<%=elementName %>' 
 										onchange='<%=themeDisplay.getPortletDisplay().getNamespace() + "renderChildItems(this," + i + ",true)" %>'
+										cssClass='<%=cssClass %>'
 									>
 										<%
 											if(!itemEmptyOption){
@@ -76,10 +77,11 @@
 						<%
 					}else{
 						%>
-							<aui:col id='<%="col_" + i %>' cssclass="<%=cssClass + i %>" width="<%=colWidth %>">
+							<aui:col id='<%="col_" + i %>' cssClass='<%=cssClass + "_" + i %>' width="<%=colWidth %>">
 							<aui:select 
 								name='<%=elementName %>' 
 								onchange='<%=themeDisplay.getPortletDisplay().getNamespace() + "renderChildItems(this," + i + ",true)" %>'
+								cssClass='<%=cssClass %>'
 							>
 								<%
 									if(!itemEmptyOption){

@@ -1,4 +1,3 @@
-<%@page import="com.liferay.portal.security.auth.AuthException"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -27,6 +26,11 @@
 <%@page import="com.liferay.portal.util.PortletKeys"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="com.liferay.portal.UserPasswordException"%>
+<%@page import="com.liferay.portal.security.auth.AuthException"%>
+<%@page import="com.liferay.portal.service.GroupLocalServiceUtil"%>
+<%@page import="com.liferay.portal.model.Group"%>
+<%@page import="com.liferay.portal.service.LayoutLocalServiceUtil"%>
+<%@page import="com.liferay.portal.model.Layout"%>
 <%@ include file="../../init.jsp"%>
 
 <%
@@ -84,8 +88,14 @@
 		<aui:col width="50">
 			<c:choose>
 				<c:when test='<%= UsersAdminUtil.hasUpdateFieldPermission(permissionChecker, user, mappingUser, "portrait") %>'>
+					
+					<%
+						Group group = GroupLocalServiceUtil.getFriendlyURLGroup(company.getCompanyId(), "/control_panel");
+						Layout ctrLayout = LayoutLocalServiceUtil.getFriendlyURLLayout(group.getGroupId(), true, "/manage");
+					%>
+					
 					<liferay-portlet:renderURL var="editUserPortraitURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>" 
-						portletName="<%=PortletKeys.MY_ACCOUNT %>" plid="20175">
+						portletName="<%=PortletKeys.MY_ACCOUNT %>" plid="<%=ctrLayout != null ? ctrLayout.getPlid() : layout.getPlid() %>">
 						<liferay-portlet:param name="struts_action" value="/my_account/edit_user_portrait" />
 						<liferay-portlet:param name="redirect" value="<%= currentURL %>" />
 						<liferay-portlet:param name="p_u_i_d" value="<%= String.valueOf(mappingUser.getUserId()) %>" />
