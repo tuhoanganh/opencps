@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -25,6 +26,10 @@
 	ServiceInfo servieInfo = (ServiceInfo) request.getAttribute(WebKeys.SERVICE_ENTRY);
 	
 	String backURL = ParamUtil.getString(request, "backURL");
+	
+	String[] serviceSections = new String[]{"general_info", "detail_info", "template_info"};
+	
+	String[][] categorySections = {serviceSections};
 %>
 
 <liferay-ui:header
@@ -33,6 +38,14 @@
 />
 
 <portlet:actionURL name="updateService" var="updateServiceURL"/>
+
+<liferay-util:buffer var="htmlTop">
+	<c:if test="<%= servieInfo != null %>">
+		<liferay-ui:icon iconCssClass="icon-home" />
+	</c:if> 
+</liferay-util:buffer>
+
+<liferay-util:buffer var="htmlBottom"/>
 
 <aui:form name="fm" action="<%=updateServiceURL %>" method="post">
 
@@ -46,7 +59,7 @@
 
 	<liferay-ui:form-navigator
 		backURL="<%= backURL %>"
-		categoryNames="<%= UserMgtUtil._EMPLOYESS_CATEGORY_NAMES %>"
+		categoryNames="<%= ServiceUtil.SERVICE_CATEGORY_NAMES %>"
 		categorySections="<%= categorySections %>"
 		htmlBottom="<%= htmlBottom %>"
 		htmlTop="<%= htmlTop %>"
