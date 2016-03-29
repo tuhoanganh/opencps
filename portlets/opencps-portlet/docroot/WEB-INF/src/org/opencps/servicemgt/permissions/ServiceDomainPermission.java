@@ -14,7 +14,6 @@
 package org.opencps.servicemgt.permissions;
 
 import org.opencps.datamgt.model.DictItem;
-import org.opencps.usermgt.model.WorkingUnit;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -24,7 +23,7 @@ import com.liferay.portal.security.permission.PermissionChecker;
 /**
  * @author khoavd
  */
-public class CategoryPermission {
+public class ServiceDomainPermission {
 
 	public static void check(
 	    PermissionChecker permissionChecker, long threadId, String actionId)
@@ -36,8 +35,7 @@ public class CategoryPermission {
 	}
 
 	public static void check(
-	    PermissionChecker permissionChecker, DictItem dictItem,
-	    String actionId)
+	    PermissionChecker permissionChecker, DictItem dictItem, String actionId)
 	    throws PortalException, SystemException {
 
 		if (!contains(permissionChecker, dictItem, actionId)) {
@@ -46,13 +44,12 @@ public class CategoryPermission {
 	}
 
 	public static boolean contains(
-	    PermissionChecker permissionChecker, DictItem dictItem,
-	    String actionId)
+	    PermissionChecker permissionChecker, DictItem dictItem, String actionId)
 	    throws PortalException, SystemException {
 
 		return permissionChecker.hasPermission(
-			dictItem.getGroupId(), DictItem.class.getName(),
-			dictItem.getPrimaryKey(), actionId);
+		    dictItem.getGroupId(), DictItem.class.getName(),
+		    dictItem.getPrimaryKey(), actionId);
 	}
 
 	public static boolean contains(
