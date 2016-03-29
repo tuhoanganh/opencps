@@ -17,4 +17,41 @@
  */
 %>
 
-Edit service.
+<%@ include file="../init.jsp" %>
+
+<%
+	String redirectURL = ParamUtil.getString(request, "redirectURL");
+
+	ServiceInfo servieInfo = (ServiceInfo) request.getAttribute(WebKeys.SERVICE_ENTRY);
+	
+	String backURL = ParamUtil.getString(request, "backURL");
+%>
+
+<liferay-ui:header
+	backURL="<%= backURL %>"
+	title='<%= (Validator.isNull(servieInfo)) ? "add-service" : "update-service" %>'
+/>
+
+<portlet:actionURL name="updateService" var="updateServiceURL"/>
+
+<aui:form name="fm" action="<%=updateServiceURL %>" method="post">
+
+	<aui:model-context bean="<%=servieInfo %>" model="<%= ServiceInfo.class %>" />
+	
+	<aui:input name="redirectURL" type="hidden" value="<%= backURL%>"/>
+	<aui:input name="returnURL" type="hidden" value="<%= currentURL%>"/>
+	
+	<aui:input name="<%= ServiceDisplyTerms.GROUP_ID %>" type="hidden" value="<%= scopeGroupId%>"/>
+	<aui:input name="<%= ServiceDisplyTerms.COMPANY_ID %>" type="hidden" value="<%= company.getCompanyId()%>"/>
+
+	<liferay-ui:form-navigator
+		backURL="<%= backURL %>"
+		categoryNames="<%= UserMgtUtil._EMPLOYESS_CATEGORY_NAMES %>"
+		categorySections="<%= categorySections %>"
+		htmlBottom="<%= htmlBottom %>"
+		htmlTop="<%= htmlTop %>"
+		jspPath='<%= templatePath + "employees/" %>'
+	/>
+</aui:form>
+
+
