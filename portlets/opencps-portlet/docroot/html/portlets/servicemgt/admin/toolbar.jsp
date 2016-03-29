@@ -21,7 +21,7 @@
 <%@ include file="../init.jsp"%>
 
 <%
-	String tabs1 = ParamUtil.getString(request, "tabs1", UserMgtUtil.TOP_TABS_WORKINGUNIT);
+	String tabs1 = ParamUtil.getString(request, "tabs1", ServiceUtil.TOP_TABS_SERVICE);
 	PortletURL searchURL = renderResponse.createRenderURL();
 %>
 
@@ -39,15 +39,15 @@
 		
 	</c:when>
 	
-	<c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_DOCUMENT) %>">
+	<c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_TEMPLATE) %>">
 	
 	</c:when>
 	
-	<c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_CATEGORY) %>">
+	<c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_DOMAIN) %>">
 	
 	</c:when>
 	
-	<c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_LEVEL) %>">
+	<c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_SERVICE) %>">
 	
 	</c:when>
 	
