@@ -245,7 +245,7 @@
 		<id-class class="org.opencps.accountmgt.service.persistence.BusinessDomainPK" />
 		<attributes>
 			<id name="businessId" />
-			<id name="businessDomains" />
+			<id name="businessDomainId" />
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
@@ -282,6 +282,85 @@
 			<basic name="mappingUserId" />
 			<basic name="accountStatus" />
 			<transient name="mappingUserUuid" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="org.opencps.servicemgt.model.impl.ServiceFileTemplateModelImpl">
+		<id-class class="org.opencps.servicemgt.service.persistence.ServiceFileTemplatePK" />
+		<attributes>
+			<id name="serviceinfoId" />
+			<id name="templatefileId" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="org.opencps.servicemgt.model.impl.ServiceInfoModelImpl">
+		<attributes>
+			<id name="serviceinfoId" />
+			<basic name="companyId" />
+			<basic name="groupId" />
+			<basic name="userId" />
+			<basic name="createDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="modifiedDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="serviceNo" />
+			<basic name="serviceName" />
+			<basic name="shortName" />
+			<basic name="serviceProcess" />
+			<basic name="serviceMethod" />
+			<basic name="serviceDossier" />
+			<basic name="serviceCondition" />
+			<basic name="serviceDuration" />
+			<basic name="serviceActors" />
+			<basic name="serviceResults" />
+			<basic name="serviceRecords" />
+			<basic name="serviceFee" />
+			<basic name="serviceInstructions" />
+			<basic name="administrationCode" />
+			<basic name="administrationIndex" />
+			<basic name="domainCode" />
+			<basic name="domainIndex" />
+			<basic name="activeStatus" />
+			<basic name="hasTemplateFiles" />
+			<basic name="onlineUrl" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="serviceConditionCurrentLanguageId" />
+			<transient name="serviceConditionMap" />
+			<transient name="serviceInstructionsCurrentLanguageId" />
+			<transient name="serviceInstructionsMap" />
+			<transient name="serviceNameCurrentLanguageId" />
+			<transient name="serviceNameMap" />
+			<transient name="serviceProcessCurrentLanguageId" />
+			<transient name="serviceProcessMap" />
+			<transient name="serviceResultsCurrentLanguageId" />
+			<transient name="serviceResultsMap" />
+			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="org.opencps.servicemgt.model.impl.TemplateFileModelImpl">
+		<attributes>
+			<id name="templatefileId" />
+			<basic name="companyId" />
+			<basic name="groupId" />
+			<basic name="userId" />
+			<basic name="createDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="modifiedDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="fileName" />
+			<basic name="fileNo" />
+			<basic name="fileEntryId" />
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
@@ -326,6 +405,18 @@
 	</entity>
 	<entity class="org.opencps.accountmgt.model.impl.CitizenImpl" name="Citizen">
 		<table name="opencps_acc_citizen" />
+		<attributes />
+	</entity>
+	<entity class="org.opencps.servicemgt.model.impl.ServiceFileTemplateImpl" name="ServiceFileTemplate">
+		<table name="opencps_dictitem" />
+		<attributes />
+	</entity>
+	<entity class="org.opencps.servicemgt.model.impl.ServiceInfoImpl" name="ServiceInfo">
+		<table name="opencps_serviceinfo" />
+		<attributes />
+	</entity>
+	<entity class="org.opencps.servicemgt.model.impl.TemplateFileImpl" name="TemplateFile">
+		<table name="opencps_templatefile" />
 		<attributes />
 	</entity>
 </entity-mappings>

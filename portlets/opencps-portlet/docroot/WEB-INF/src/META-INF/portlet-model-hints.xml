@@ -187,7 +187,7 @@
 	</model>
 	<model name="org.opencps.accountmgt.model.BusinessDomain">
 		<field name="businessId" type="long" />
-		<field name="businessDomains" type="String" />
+		<field name="businessDomainId" type="String" />
 	</model>
 	<model name="org.opencps.accountmgt.model.Citizen">
 		<field name="citizenId" type="long" />
@@ -212,5 +212,48 @@
 		<field name="attachFile" type="long" />
 		<field name="mappingUserId" type="long" />
 		<field name="accountStatus" type="int" />
+	</model>
+	<model name="org.opencps.servicemgt.model.ServiceFileTemplate">
+		<field name="serviceinfoId" type="long" />
+		<field name="templatefileId" type="long" />
+	</model>
+	<model name="org.opencps.servicemgt.model.ServiceInfo">
+		<field name="serviceinfoId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="serviceNo" type="String" />
+		<field name="serviceName" type="String" localized="true" />
+		<field name="shortName" type="String" />
+		<field name="serviceProcess" type="String" localized="true" />
+		<field name="serviceMethod" type="String" />
+		<field name="serviceDossier" type="String" />
+		<field name="serviceCondition" type="String" localized="true" />
+		<field name="serviceDuration" type="String" />
+		<field name="serviceActors" type="String" />
+		<field name="serviceResults" type="String" localized="true" />
+		<field name="serviceRecords" type="String" />
+		<field name="serviceFee" type="String" />
+		<field name="serviceInstructions" type="String" localized="true" />
+		<field name="administrationCode" type="String" />
+		<field name="administrationIndex" type="String" />
+		<field name="domainCode" type="String" />
+		<field name="domainIndex" type="String" />
+		<field name="activeStatus" type="int" />
+		<field name="hasTemplateFiles" type="int" />
+		<field name="onlineUrl" type="String" />
+	</model>
+	<model name="org.opencps.servicemgt.model.TemplateFile">
+		<field name="templatefileId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="fileName" type="long" />
+		<field name="fileNo" type="String" />
+		<field name="fileEntryId" type="String" />
 	</model>
 </model-hints>
