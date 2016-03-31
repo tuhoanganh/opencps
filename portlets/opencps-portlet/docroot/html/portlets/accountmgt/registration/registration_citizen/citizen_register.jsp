@@ -150,7 +150,7 @@
 		</aui:input>
 	</aui:row>
 	<aui:row>
-		<aui:input name="submit" type="submit" value="resgister"></aui:input>
+		<aui:input name="submit" type="submit" value="resgister" disabled="true"></aui:input>
 	</aui:row>
 	
 </aui:form>
@@ -158,7 +158,13 @@
 <aui:script>
 
 AUI().ready(function(A) {
-	
+	var checkbox = A.one('<portlet:namespace />checkbox');
+	if(checkbox) {
+		var buttonSubmit = A.one('<portlet:namespace />submit');
+		if(checkbox.val() == 'true') {
+			buttonSubmit.setAttribute('disabled', 'false');
+		}
+	}
 });
 
 </aui:script>
