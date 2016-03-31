@@ -23,6 +23,7 @@ import org.opencps.datamgt.service.base.DictCollectionServiceBaseImpl;
 
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.jsonwebservice.JSONWebService;
+import com.liferay.portal.security.ac.AccessControlled;
 
 /**
  * The implementation of the dict collection remote service. <p> All custom
@@ -59,6 +60,7 @@ public class DictCollectionServiceImpl extends DictCollectionServiceBaseImpl {
 	 *             Khi xảy ra lỗi không tìm thấy DictCollection
 	 */
 	@JSONWebService(value = "get-dictcollection-by-gc")
+	@AccessControlled(guestAccessEnabled = true)
 	public DictCollection getDictCollection(long groupId, String collectionCode)
 		throws NoSuchDictCollectionException, SystemException {
 
