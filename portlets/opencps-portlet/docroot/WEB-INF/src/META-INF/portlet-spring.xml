@@ -32,4 +32,13 @@
 	<bean id="org.opencps.accountmgt.service.CitizenLocalService" class="org.opencps.accountmgt.service.impl.CitizenLocalServiceImpl" />
 	<bean id="org.opencps.accountmgt.service.CitizenService" class="org.opencps.accountmgt.service.impl.CitizenServiceImpl" />
 	<bean id="org.opencps.accountmgt.service.persistence.CitizenPersistence" class="org.opencps.accountmgt.service.persistence.CitizenPersistenceImpl" parent="basePersistence" />
+	<bean id="org.opencps.servicemgt.service.ServiceFileTemplateLocalService" class="org.opencps.servicemgt.service.impl.ServiceFileTemplateLocalServiceImpl" />
+	<bean id="org.opencps.servicemgt.service.ServiceFileTemplateService" class="org.opencps.servicemgt.service.impl.ServiceFileTemplateServiceImpl" />
+	<bean id="org.opencps.servicemgt.service.persistence.ServiceFileTemplatePersistence" class="org.opencps.servicemgt.service.persistence.ServiceFileTemplatePersistenceImpl" parent="basePersistence" />
+	<bean id="org.opencps.servicemgt.service.ServiceInfoLocalService" class="org.opencps.servicemgt.service.impl.ServiceInfoLocalServiceImpl" />
+	<bean id="org.opencps.servicemgt.service.ServiceInfoService" class="org.opencps.servicemgt.service.impl.ServiceInfoServiceImpl" />
+	<bean id="org.opencps.servicemgt.service.persistence.ServiceInfoPersistence" class="org.opencps.servicemgt.service.persistence.ServiceInfoPersistenceImpl" parent="basePersistence" />
+	<bean id="org.opencps.servicemgt.service.TemplateFileLocalService" class="org.opencps.servicemgt.service.impl.TemplateFileLocalServiceImpl" />
+	<bean id="org.opencps.servicemgt.service.TemplateFileService" class="org.opencps.servicemgt.service.impl.TemplateFileServiceImpl" />
+	<bean id="org.opencps.servicemgt.service.persistence.TemplateFilePersistence" class="org.opencps.servicemgt.service.persistence.TemplateFilePersistenceImpl" parent="basePersistence" />
 </beans>
