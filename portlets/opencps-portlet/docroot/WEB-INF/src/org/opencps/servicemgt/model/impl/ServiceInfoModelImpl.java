@@ -1,30 +1,31 @@
-/**
- * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+
+/*******************************************************************************
+ * OpenCPS is the open source Core Public Services software
+ * Copyright (C) 2016-present OpenCPS community
  *
- * This library is free software; you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation; either version 2.1 of the License, or (at your option)
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * any later version.
  *
- * This library is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- */
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *******************************************************************************/
+
 
 package org.opencps.servicemgt.model.impl;
 
-import com.liferay.portal.LocaleException;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSON;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.LocaleUtil;
-import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
@@ -45,10 +46,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * The base model implementation for the ServiceInfo service. Represents a row in the &quot;opencps_serviceinfo&quot; database table, with each column mapped to a property of this class.
@@ -100,7 +98,7 @@ public class ServiceInfoModelImpl extends BaseModelImpl<ServiceInfo>
 			{ "hasTemplateFiles", Types.INTEGER },
 			{ "onlineUrl", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table opencps_serviceinfo (serviceinfoId LONG not null primary key,companyId LONG,groupId LONG,userId LONG,createDate DATE null,modifiedDate DATE null,serviceNo VARCHAR(75) null,serviceName STRING null,shortName VARCHAR(75) null,serviceProcess STRING null,serviceMethod VARCHAR(75) null,serviceDossier VARCHAR(75) null,serviceCondition STRING null,serviceDuration VARCHAR(75) null,serviceActors VARCHAR(75) null,serviceResults STRING null,serviceRecords VARCHAR(75) null,serviceFee VARCHAR(75) null,serviceInstructions STRING null,administrationCode VARCHAR(75) null,administrationIndex VARCHAR(75) null,domainCode VARCHAR(75) null,domainIndex VARCHAR(75) null,activeStatus INTEGER,hasTemplateFiles INTEGER,onlineUrl VARCHAR(75) null)";
+	public static final String TABLE_SQL_CREATE = "create table opencps_serviceinfo (serviceinfoId LONG not null primary key,companyId LONG,groupId LONG,userId LONG,createDate DATE null,modifiedDate DATE null,serviceNo VARCHAR(75) null,serviceName VARCHAR(75) null,shortName VARCHAR(75) null,serviceProcess VARCHAR(75) null,serviceMethod VARCHAR(75) null,serviceDossier VARCHAR(75) null,serviceCondition VARCHAR(75) null,serviceDuration VARCHAR(75) null,serviceActors VARCHAR(75) null,serviceResults VARCHAR(75) null,serviceRecords VARCHAR(75) null,serviceFee VARCHAR(75) null,serviceInstructions VARCHAR(75) null,administrationCode VARCHAR(75) null,administrationIndex VARCHAR(75) null,domainCode VARCHAR(75) null,domainIndex VARCHAR(75) null,activeStatus INTEGER,hasTemplateFiles INTEGER,onlineUrl VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table opencps_serviceinfo";
 	public static final String ORDER_BY_JPQL = " ORDER BY serviceInfo.serviceName ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY opencps_serviceinfo.serviceName ASC";
@@ -532,97 +530,10 @@ public class ServiceInfoModelImpl extends BaseModelImpl<ServiceInfo>
 	}
 
 	@Override
-	public String getServiceName(Locale locale) {
-		String languageId = LocaleUtil.toLanguageId(locale);
-
-		return getServiceName(languageId);
-	}
-
-	@Override
-	public String getServiceName(Locale locale, boolean useDefault) {
-		String languageId = LocaleUtil.toLanguageId(locale);
-
-		return getServiceName(languageId, useDefault);
-	}
-
-	@Override
-	public String getServiceName(String languageId) {
-		return LocalizationUtil.getLocalization(getServiceName(), languageId);
-	}
-
-	@Override
-	public String getServiceName(String languageId, boolean useDefault) {
-		return LocalizationUtil.getLocalization(getServiceName(), languageId,
-			useDefault);
-	}
-
-	@Override
-	public String getServiceNameCurrentLanguageId() {
-		return _serviceNameCurrentLanguageId;
-	}
-
-	@JSON
-	@Override
-	public String getServiceNameCurrentValue() {
-		Locale locale = getLocale(_serviceNameCurrentLanguageId);
-
-		return getServiceName(locale);
-	}
-
-	@Override
-	public Map<Locale, String> getServiceNameMap() {
-		return LocalizationUtil.getLocalizationMap(getServiceName());
-	}
-
-	@Override
 	public void setServiceName(String serviceName) {
 		_columnBitmask = -1L;
 
 		_serviceName = serviceName;
-	}
-
-	@Override
-	public void setServiceName(String serviceName, Locale locale) {
-		setServiceName(serviceName, locale, LocaleUtil.getDefault());
-	}
-
-	@Override
-	public void setServiceName(String serviceName, Locale locale,
-		Locale defaultLocale) {
-		String languageId = LocaleUtil.toLanguageId(locale);
-		String defaultLanguageId = LocaleUtil.toLanguageId(defaultLocale);
-
-		if (Validator.isNotNull(serviceName)) {
-			setServiceName(LocalizationUtil.updateLocalization(
-					getServiceName(), "ServiceName", serviceName, languageId,
-					defaultLanguageId));
-		}
-		else {
-			setServiceName(LocalizationUtil.removeLocalization(
-					getServiceName(), "ServiceName", languageId));
-		}
-	}
-
-	@Override
-	public void setServiceNameCurrentLanguageId(String languageId) {
-		_serviceNameCurrentLanguageId = languageId;
-	}
-
-	@Override
-	public void setServiceNameMap(Map<Locale, String> serviceNameMap) {
-		setServiceNameMap(serviceNameMap, LocaleUtil.getDefault());
-	}
-
-	@Override
-	public void setServiceNameMap(Map<Locale, String> serviceNameMap,
-		Locale defaultLocale) {
-		if (serviceNameMap == null) {
-			return;
-		}
-
-		setServiceName(LocalizationUtil.updateLocalization(serviceNameMap,
-				getServiceName(), "ServiceName",
-				LocaleUtil.toLanguageId(defaultLocale)));
 	}
 
 	@JSON
@@ -653,95 +564,8 @@ public class ServiceInfoModelImpl extends BaseModelImpl<ServiceInfo>
 	}
 
 	@Override
-	public String getServiceProcess(Locale locale) {
-		String languageId = LocaleUtil.toLanguageId(locale);
-
-		return getServiceProcess(languageId);
-	}
-
-	@Override
-	public String getServiceProcess(Locale locale, boolean useDefault) {
-		String languageId = LocaleUtil.toLanguageId(locale);
-
-		return getServiceProcess(languageId, useDefault);
-	}
-
-	@Override
-	public String getServiceProcess(String languageId) {
-		return LocalizationUtil.getLocalization(getServiceProcess(), languageId);
-	}
-
-	@Override
-	public String getServiceProcess(String languageId, boolean useDefault) {
-		return LocalizationUtil.getLocalization(getServiceProcess(),
-			languageId, useDefault);
-	}
-
-	@Override
-	public String getServiceProcessCurrentLanguageId() {
-		return _serviceProcessCurrentLanguageId;
-	}
-
-	@JSON
-	@Override
-	public String getServiceProcessCurrentValue() {
-		Locale locale = getLocale(_serviceProcessCurrentLanguageId);
-
-		return getServiceProcess(locale);
-	}
-
-	@Override
-	public Map<Locale, String> getServiceProcessMap() {
-		return LocalizationUtil.getLocalizationMap(getServiceProcess());
-	}
-
-	@Override
 	public void setServiceProcess(String serviceProcess) {
 		_serviceProcess = serviceProcess;
-	}
-
-	@Override
-	public void setServiceProcess(String serviceProcess, Locale locale) {
-		setServiceProcess(serviceProcess, locale, LocaleUtil.getDefault());
-	}
-
-	@Override
-	public void setServiceProcess(String serviceProcess, Locale locale,
-		Locale defaultLocale) {
-		String languageId = LocaleUtil.toLanguageId(locale);
-		String defaultLanguageId = LocaleUtil.toLanguageId(defaultLocale);
-
-		if (Validator.isNotNull(serviceProcess)) {
-			setServiceProcess(LocalizationUtil.updateLocalization(
-					getServiceProcess(), "ServiceProcess", serviceProcess,
-					languageId, defaultLanguageId));
-		}
-		else {
-			setServiceProcess(LocalizationUtil.removeLocalization(
-					getServiceProcess(), "ServiceProcess", languageId));
-		}
-	}
-
-	@Override
-	public void setServiceProcessCurrentLanguageId(String languageId) {
-		_serviceProcessCurrentLanguageId = languageId;
-	}
-
-	@Override
-	public void setServiceProcessMap(Map<Locale, String> serviceProcessMap) {
-		setServiceProcessMap(serviceProcessMap, LocaleUtil.getDefault());
-	}
-
-	@Override
-	public void setServiceProcessMap(Map<Locale, String> serviceProcessMap,
-		Locale defaultLocale) {
-		if (serviceProcessMap == null) {
-			return;
-		}
-
-		setServiceProcess(LocalizationUtil.updateLocalization(
-				serviceProcessMap, getServiceProcess(), "ServiceProcess",
-				LocaleUtil.toLanguageId(defaultLocale)));
 	}
 
 	@JSON
@@ -788,96 +612,8 @@ public class ServiceInfoModelImpl extends BaseModelImpl<ServiceInfo>
 	}
 
 	@Override
-	public String getServiceCondition(Locale locale) {
-		String languageId = LocaleUtil.toLanguageId(locale);
-
-		return getServiceCondition(languageId);
-	}
-
-	@Override
-	public String getServiceCondition(Locale locale, boolean useDefault) {
-		String languageId = LocaleUtil.toLanguageId(locale);
-
-		return getServiceCondition(languageId, useDefault);
-	}
-
-	@Override
-	public String getServiceCondition(String languageId) {
-		return LocalizationUtil.getLocalization(getServiceCondition(),
-			languageId);
-	}
-
-	@Override
-	public String getServiceCondition(String languageId, boolean useDefault) {
-		return LocalizationUtil.getLocalization(getServiceCondition(),
-			languageId, useDefault);
-	}
-
-	@Override
-	public String getServiceConditionCurrentLanguageId() {
-		return _serviceConditionCurrentLanguageId;
-	}
-
-	@JSON
-	@Override
-	public String getServiceConditionCurrentValue() {
-		Locale locale = getLocale(_serviceConditionCurrentLanguageId);
-
-		return getServiceCondition(locale);
-	}
-
-	@Override
-	public Map<Locale, String> getServiceConditionMap() {
-		return LocalizationUtil.getLocalizationMap(getServiceCondition());
-	}
-
-	@Override
 	public void setServiceCondition(String serviceCondition) {
 		_serviceCondition = serviceCondition;
-	}
-
-	@Override
-	public void setServiceCondition(String serviceCondition, Locale locale) {
-		setServiceCondition(serviceCondition, locale, LocaleUtil.getDefault());
-	}
-
-	@Override
-	public void setServiceCondition(String serviceCondition, Locale locale,
-		Locale defaultLocale) {
-		String languageId = LocaleUtil.toLanguageId(locale);
-		String defaultLanguageId = LocaleUtil.toLanguageId(defaultLocale);
-
-		if (Validator.isNotNull(serviceCondition)) {
-			setServiceCondition(LocalizationUtil.updateLocalization(
-					getServiceCondition(), "ServiceCondition",
-					serviceCondition, languageId, defaultLanguageId));
-		}
-		else {
-			setServiceCondition(LocalizationUtil.removeLocalization(
-					getServiceCondition(), "ServiceCondition", languageId));
-		}
-	}
-
-	@Override
-	public void setServiceConditionCurrentLanguageId(String languageId) {
-		_serviceConditionCurrentLanguageId = languageId;
-	}
-
-	@Override
-	public void setServiceConditionMap(Map<Locale, String> serviceConditionMap) {
-		setServiceConditionMap(serviceConditionMap, LocaleUtil.getDefault());
-	}
-
-	@Override
-	public void setServiceConditionMap(
-		Map<Locale, String> serviceConditionMap, Locale defaultLocale) {
-		if (serviceConditionMap == null) {
-			return;
-		}
-
-		setServiceCondition(LocalizationUtil.updateLocalization(
-				serviceConditionMap, getServiceCondition(), "ServiceCondition",
-				LocaleUtil.toLanguageId(defaultLocale)));
 	}
 
 	@JSON
@@ -924,95 +660,8 @@ public class ServiceInfoModelImpl extends BaseModelImpl<ServiceInfo>
 	}
 
 	@Override
-	public String getServiceResults(Locale locale) {
-		String languageId = LocaleUtil.toLanguageId(locale);
-
-		return getServiceResults(languageId);
-	}
-
-	@Override
-	public String getServiceResults(Locale locale, boolean useDefault) {
-		String languageId = LocaleUtil.toLanguageId(locale);
-
-		return getServiceResults(languageId, useDefault);
-	}
-
-	@Override
-	public String getServiceResults(String languageId) {
-		return LocalizationUtil.getLocalization(getServiceResults(), languageId);
-	}
-
-	@Override
-	public String getServiceResults(String languageId, boolean useDefault) {
-		return LocalizationUtil.getLocalization(getServiceResults(),
-			languageId, useDefault);
-	}
-
-	@Override
-	public String getServiceResultsCurrentLanguageId() {
-		return _serviceResultsCurrentLanguageId;
-	}
-
-	@JSON
-	@Override
-	public String getServiceResultsCurrentValue() {
-		Locale locale = getLocale(_serviceResultsCurrentLanguageId);
-
-		return getServiceResults(locale);
-	}
-
-	@Override
-	public Map<Locale, String> getServiceResultsMap() {
-		return LocalizationUtil.getLocalizationMap(getServiceResults());
-	}
-
-	@Override
 	public void setServiceResults(String serviceResults) {
 		_serviceResults = serviceResults;
-	}
-
-	@Override
-	public void setServiceResults(String serviceResults, Locale locale) {
-		setServiceResults(serviceResults, locale, LocaleUtil.getDefault());
-	}
-
-	@Override
-	public void setServiceResults(String serviceResults, Locale locale,
-		Locale defaultLocale) {
-		String languageId = LocaleUtil.toLanguageId(locale);
-		String defaultLanguageId = LocaleUtil.toLanguageId(defaultLocale);
-
-		if (Validator.isNotNull(serviceResults)) {
-			setServiceResults(LocalizationUtil.updateLocalization(
-					getServiceResults(), "ServiceResults", serviceResults,
-					languageId, defaultLanguageId));
-		}
-		else {
-			setServiceResults(LocalizationUtil.removeLocalization(
-					getServiceResults(), "ServiceResults", languageId));
-		}
-	}
-
-	@Override
-	public void setServiceResultsCurrentLanguageId(String languageId) {
-		_serviceResultsCurrentLanguageId = languageId;
-	}
-
-	@Override
-	public void setServiceResultsMap(Map<Locale, String> serviceResultsMap) {
-		setServiceResultsMap(serviceResultsMap, LocaleUtil.getDefault());
-	}
-
-	@Override
-	public void setServiceResultsMap(Map<Locale, String> serviceResultsMap,
-		Locale defaultLocale) {
-		if (serviceResultsMap == null) {
-			return;
-		}
-
-		setServiceResults(LocalizationUtil.updateLocalization(
-				serviceResultsMap, getServiceResults(), "ServiceResults",
-				LocaleUtil.toLanguageId(defaultLocale)));
 	}
 
 	@JSON
@@ -1059,99 +708,8 @@ public class ServiceInfoModelImpl extends BaseModelImpl<ServiceInfo>
 	}
 
 	@Override
-	public String getServiceInstructions(Locale locale) {
-		String languageId = LocaleUtil.toLanguageId(locale);
-
-		return getServiceInstructions(languageId);
-	}
-
-	@Override
-	public String getServiceInstructions(Locale locale, boolean useDefault) {
-		String languageId = LocaleUtil.toLanguageId(locale);
-
-		return getServiceInstructions(languageId, useDefault);
-	}
-
-	@Override
-	public String getServiceInstructions(String languageId) {
-		return LocalizationUtil.getLocalization(getServiceInstructions(),
-			languageId);
-	}
-
-	@Override
-	public String getServiceInstructions(String languageId, boolean useDefault) {
-		return LocalizationUtil.getLocalization(getServiceInstructions(),
-			languageId, useDefault);
-	}
-
-	@Override
-	public String getServiceInstructionsCurrentLanguageId() {
-		return _serviceInstructionsCurrentLanguageId;
-	}
-
-	@JSON
-	@Override
-	public String getServiceInstructionsCurrentValue() {
-		Locale locale = getLocale(_serviceInstructionsCurrentLanguageId);
-
-		return getServiceInstructions(locale);
-	}
-
-	@Override
-	public Map<Locale, String> getServiceInstructionsMap() {
-		return LocalizationUtil.getLocalizationMap(getServiceInstructions());
-	}
-
-	@Override
 	public void setServiceInstructions(String serviceInstructions) {
 		_serviceInstructions = serviceInstructions;
-	}
-
-	@Override
-	public void setServiceInstructions(String serviceInstructions, Locale locale) {
-		setServiceInstructions(serviceInstructions, locale,
-			LocaleUtil.getDefault());
-	}
-
-	@Override
-	public void setServiceInstructions(String serviceInstructions,
-		Locale locale, Locale defaultLocale) {
-		String languageId = LocaleUtil.toLanguageId(locale);
-		String defaultLanguageId = LocaleUtil.toLanguageId(defaultLocale);
-
-		if (Validator.isNotNull(serviceInstructions)) {
-			setServiceInstructions(LocalizationUtil.updateLocalization(
-					getServiceInstructions(), "ServiceInstructions",
-					serviceInstructions, languageId, defaultLanguageId));
-		}
-		else {
-			setServiceInstructions(LocalizationUtil.removeLocalization(
-					getServiceInstructions(), "ServiceInstructions", languageId));
-		}
-	}
-
-	@Override
-	public void setServiceInstructionsCurrentLanguageId(String languageId) {
-		_serviceInstructionsCurrentLanguageId = languageId;
-	}
-
-	@Override
-	public void setServiceInstructionsMap(
-		Map<Locale, String> serviceInstructionsMap) {
-		setServiceInstructionsMap(serviceInstructionsMap,
-			LocaleUtil.getDefault());
-	}
-
-	@Override
-	public void setServiceInstructionsMap(
-		Map<Locale, String> serviceInstructionsMap, Locale defaultLocale) {
-		if (serviceInstructionsMap == null) {
-			return;
-		}
-
-		setServiceInstructions(LocalizationUtil.updateLocalization(
-				serviceInstructionsMap, getServiceInstructions(),
-				"ServiceInstructions", LocaleUtil.toLanguageId(defaultLocale)));
 	}
 
 	@JSON
@@ -1303,149 +861,6 @@ public class ServiceInfoModelImpl extends BaseModelImpl<ServiceInfo>
 		ExpandoBridge expandoBridge = getExpandoBridge();
 
 		expandoBridge.setAttributes(serviceContext);
-	}
-
-	@Override
-	public String[] getAvailableLanguageIds() {
-		Set<String> availableLanguageIds = new TreeSet<String>();
-
-		Map<Locale, String> serviceNameMap = getServiceNameMap();
-
-		for (Map.Entry<Locale, String> entry : serviceNameMap.entrySet()) {
-			Locale locale = entry.getKey();
-			String value = entry.getValue();
-
-			if (Validator.isNotNull(value)) {
-				availableLanguageIds.add(LocaleUtil.toLanguageId(locale));
-			}
-		}
-
-		Map<Locale, String> serviceProcessMap = getServiceProcessMap();
-
-		for (Map.Entry<Locale, String> entry : serviceProcessMap.entrySet()) {
-			Locale locale = entry.getKey();
-			String value = entry.getValue();
-
-			if (Validator.isNotNull(value)) {
-				availableLanguageIds.add(LocaleUtil.toLanguageId(locale));
-			}
-		}
-
-		Map<Locale, String> serviceConditionMap = getServiceConditionMap();
-
-		for (Map.Entry<Locale, String> entry : serviceConditionMap.entrySet()) {
-			Locale locale = entry.getKey();
-			String value = entry.getValue();
-
-			if (Validator.isNotNull(value)) {
-				availableLanguageIds.add(LocaleUtil.toLanguageId(locale));
-			}
-		}
-
-		Map<Locale, String> serviceResultsMap = getServiceResultsMap();
-
-		for (Map.Entry<Locale, String> entry : serviceResultsMap.entrySet()) {
-			Locale locale = entry.getKey();
-			String value = entry.getValue();
-
-			if (Validator.isNotNull(value)) {
-				availableLanguageIds.add(LocaleUtil.toLanguageId(locale));
-			}
-		}
-
-		Map<Locale, String> serviceInstructionsMap = getServiceInstructionsMap();
-
-		for (Map.Entry<Locale, String> entry : serviceInstructionsMap.entrySet()) {
-			Locale locale = entry.getKey();
-			String value = entry.getValue();
-
-			if (Validator.isNotNull(value)) {
-				availableLanguageIds.add(LocaleUtil.toLanguageId(locale));
-			}
-		}
-
-		return availableLanguageIds.toArray(new String[availableLanguageIds.size()]);
-	}
-
-	@Override
-	public String getDefaultLanguageId() {
-		String xml = getServiceName();
-
-		if (xml == null) {
-			return StringPool.BLANK;
-		}
-
-		Locale defaultLocale = LocaleUtil.getDefault();
-
-		return LocalizationUtil.getDefaultLanguageId(xml, defaultLocale);
-	}
-
-	@Override
-	public void prepareLocalizedFieldsForImport() throws LocaleException {
-		prepareLocalizedFieldsForImport(null);
-	}
-
-	@Override
-	@SuppressWarnings("unused")
-	public void prepareLocalizedFieldsForImport(Locale defaultImportLocale)
-		throws LocaleException {
-		Locale defaultLocale = LocaleUtil.getDefault();
-
-		String modelDefaultLanguageId = getDefaultLanguageId();
-
-		String serviceName = getServiceName(defaultLocale);
-
-		if (Validator.isNull(serviceName)) {
-			setServiceName(getServiceName(modelDefaultLanguageId), defaultLocale);
-		}
-		else {
-			setServiceName(getServiceName(defaultLocale), defaultLocale,
-				defaultLocale);
-		}
-
-		String serviceProcess = getServiceProcess(defaultLocale);
-
-		if (Validator.isNull(serviceProcess)) {
-			setServiceProcess(getServiceProcess(modelDefaultLanguageId),
-				defaultLocale);
-		}
-		else {
-			setServiceProcess(getServiceProcess(defaultLocale), defaultLocale,
-				defaultLocale);
-		}
-
-		String serviceCondition = getServiceCondition(defaultLocale);
-
-		if (Validator.isNull(serviceCondition)) {
-			setServiceCondition(getServiceCondition(modelDefaultLanguageId),
-				defaultLocale);
-		}
-		else {
-			setServiceCondition(getServiceCondition(defaultLocale),
-				defaultLocale, defaultLocale);
-		}
-
-		String serviceResults = getServiceResults(defaultLocale);
-
-		if (Validator.isNull(serviceResults)) {
-			setServiceResults(getServiceResults(modelDefaultLanguageId),
-				defaultLocale);
-		}
-		else {
-			setServiceResults(getServiceResults(defaultLocale), defaultLocale,
-				defaultLocale);
-		}
-
-		String serviceInstructions = getServiceInstructions(defaultLocale);
-
-		if (Validator.isNull(serviceInstructions)) {
-			setServiceInstructions(getServiceInstructions(
-					modelDefaultLanguageId), defaultLocale);
-		}
-		else {
-			setServiceInstructions(getServiceInstructions(defaultLocale),
-				defaultLocale, defaultLocale);
-		}
 	}
 
 	@Override
@@ -1930,22 +1345,17 @@ public class ServiceInfoModelImpl extends BaseModelImpl<ServiceInfo>
 	private Date _modifiedDate;
 	private String _serviceNo;
 	private String _serviceName;
-	private String _serviceNameCurrentLanguageId;
 	private String _shortName;
 	private String _serviceProcess;
-	private String _serviceProcessCurrentLanguageId;
 	private String _serviceMethod;
 	private String _serviceDossier;
 	private String _serviceCondition;
-	private String _serviceConditionCurrentLanguageId;
 	private String _serviceDuration;
 	private String _serviceActors;
 	private String _serviceResults;
-	private String _serviceResultsCurrentLanguageId;
 	private String _serviceRecords;
 	private String _serviceFee;
 	private String _serviceInstructions;
-	private String _serviceInstructionsCurrentLanguageId;
 	private String _administrationCode;
 	private String _originalAdministrationCode;
 	private String _administrationIndex;
