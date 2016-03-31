@@ -195,6 +195,7 @@
 			<basic name="enName" />
 			<basic name="shortName" />
 			<basic name="businessType" />
+			<basic name="idNumber" />
 			<basic name="address" />
 			<basic name="cityCode" />
 			<basic name="districtCode" />

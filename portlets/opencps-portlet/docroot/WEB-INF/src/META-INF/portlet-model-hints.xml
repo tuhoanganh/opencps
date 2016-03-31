@@ -152,6 +152,7 @@
 			<hint name="display-width">255</hint>
 		</field>
 		<field name="businessType" type="String" />
+		<field name="idNumber" type="String" />
 		<field name="address" type="String">
 			<hint name="display-width">255</hint>
 		</field>
