@@ -334,6 +334,16 @@
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
+			<transient name="serviceConditionCurrentLanguageId" />
+			<transient name="serviceConditionMap" />
+			<transient name="serviceInstructionsCurrentLanguageId" />
+			<transient name="serviceInstructionsMap" />
+			<transient name="serviceNameCurrentLanguageId" />
+			<transient name="serviceNameMap" />
+			<transient name="serviceProcessCurrentLanguageId" />
+			<transient name="serviceProcessMap" />
+			<transient name="serviceResultsCurrentLanguageId" />
+			<transient name="serviceResultsMap" />
 			<transient name="userUuid" />
 		</attributes>
 	</mapped-superclass>
