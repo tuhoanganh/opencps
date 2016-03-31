@@ -73,3 +73,4 @@ portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/usermgt/model/
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/usermgt/service/base/
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/usermgt/service/http/
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/usermgt/service/persistence
+portlets/opencps-portlet/.classpath
