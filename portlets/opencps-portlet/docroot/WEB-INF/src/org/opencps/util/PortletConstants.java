@@ -28,4 +28,9 @@ public class PortletConstants {
 
 	public static final int WORKING_STATUS_ACTIVATE = 1;
 	public static final int WORKING_STATUS_DEACTIVATE = 0;
+	
+	public static final int ACCOUNT_STATUS_REGISTERED = 0;
+	public static final int ACCOUNT_STATUS_CONFIRMED = 1;
+	public static final int ACCOUNT_STATUS_APPROVED = 2;
+	public static final int ACCOUNT_STATUS_LOCKED = 3;
 }
