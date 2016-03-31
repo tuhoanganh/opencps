@@ -146,6 +146,7 @@
 		<property name="enName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="shortName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="businessType" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="idNumber" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="address" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="cityCode" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="districtCode" type="com.liferay.portal.dao.orm.hibernate.StringType" />
