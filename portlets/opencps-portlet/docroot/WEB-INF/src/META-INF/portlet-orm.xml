@@ -195,6 +195,7 @@
 			<basic name="enName" />
 			<basic name="shortName" />
 			<basic name="businessType" />
+			<basic name="idNumber" />
 			<basic name="address" />
 			<basic name="cityCode" />
 			<basic name="districtCode" />
@@ -333,7 +334,6 @@
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
-<<<<<<< HEAD
 			<transient name="serviceConditionCurrentLanguageId" />
 			<transient name="serviceConditionMap" />
 			<transient name="serviceInstructionsCurrentLanguageId" />
@@ -344,8 +344,6 @@
 			<transient name="serviceProcessMap" />
 			<transient name="serviceResultsCurrentLanguageId" />
 			<transient name="serviceResultsMap" />
-=======
->>>>>>> FETCH_HEAD
 			<transient name="userUuid" />
 		</attributes>
 	</mapped-superclass>

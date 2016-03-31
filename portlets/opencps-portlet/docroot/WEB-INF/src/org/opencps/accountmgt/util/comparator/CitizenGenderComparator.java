@@ -21,7 +21,7 @@ import org.opencps.accountmgt.model.Citizen;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
 
-public class CizitenGenderComparator extends OrderByComparator{
+public class CitizenGenderComparator extends OrderByComparator{
 	public static final String ORDER_BY_ASC =
 					"opencps_acc_citizen.gender ASC";
 
@@ -31,11 +31,11 @@ public class CizitenGenderComparator extends OrderByComparator{
 	public static final String[] ORDER_BY_FIELDS = {
 					"gender"
 				};
-	public CizitenGenderComparator() {
+	public CitizenGenderComparator() {
 		this(false);
 	}
 	
-	public CizitenGenderComparator(boolean ascending) {
+	public CitizenGenderComparator(boolean ascending) {
 		_ascending = ascending;
 	}
 

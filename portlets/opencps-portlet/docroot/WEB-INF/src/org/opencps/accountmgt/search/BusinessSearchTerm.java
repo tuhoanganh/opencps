@@ -33,6 +33,7 @@ public class BusinessSearchTerm extends BusinessDisplayTerms{
 
 		super(request);
 		
+		idNumber = ParamUtil.getString(request, BUSINESS_IDNUMBER);
 		businessType = ParamUtil.getString(request, BUSINESS_BUSINESSTYPE);
 		shortName = ParamUtil.getString(request, BUSINESS_SHORTNAME);
 		enName = ParamUtil.getString(request, BUSINESS_ENNAME);
@@ -78,6 +79,17 @@ public class BusinessSearchTerm extends BusinessDisplayTerms{
 
 		return themeDisplay.getScopeGroupId();
 	}
+	
+	public String getIdNumber() {
+	    
+    	return idNumber;
+    }
+
+	
+    public void setIdNumber(String idNumber) {
+    
+    	this.idNumber = idNumber;
+    }
 	
 	public String getBusinessType() {
 	
@@ -288,7 +300,7 @@ public class BusinessSearchTerm extends BusinessDisplayTerms{
 	
 		this.accountStatus = accountStatus;
 	}
-
+	protected String idNumber;
 	protected String businessType;
 	protected String shortName;
 	protected String enName;

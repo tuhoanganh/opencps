@@ -30,6 +30,7 @@ import com.liferay.portal.theme.ThemeDisplay;
 
 public class BusinessDisplayTerms extends DisplayTerms{
 	
+	public static final String BUSINESS_IDNUMBER = "idNumber";
 	public static final String BUSINESS_BUSINESSTYPE = "businessType";
 	public static final String BUSINESS_SHORTNAME = "shortName";
 	public static final String BUSINESS_ENNAME = "enName";
@@ -60,6 +61,7 @@ public class BusinessDisplayTerms extends DisplayTerms{
 	public BusinessDisplayTerms(PortletRequest request) {
 
 		super(request);
+		idNumber = ParamUtil.getString(request, BUSINESS_IDNUMBER);
 		businessType = ParamUtil.getString(request, BUSINESS_BUSINESSTYPE);
 		shortName = ParamUtil.getString(request, BUSINESS_SHORTNAME);
 		enName = ParamUtil.getString(request, BUSINESS_ENNAME);
@@ -105,7 +107,18 @@ public class BusinessDisplayTerms extends DisplayTerms{
 			(ThemeDisplay) portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
 		return themeDisplay.getScopeGroupId();
-	}
+	}	
+	
+    public String getIdNumber() {
+    
+    	return idNumber;
+    }
+
+	
+    public void setIdNumber(String idNumber) {
+    
+    	this.idNumber = idNumber;
+    }
 
 	public String getBusinessType() {
 	
@@ -316,6 +329,7 @@ public class BusinessDisplayTerms extends DisplayTerms{
 	
 		this.mappingOrganizationId = mappingOrganizationId;
 	}
+	protected String idNumber;
 	protected String businessType;
 	protected String shortName;
 	protected String enName;
