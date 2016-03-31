@@ -78,4 +78,7 @@ portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/servicemgt/model/
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/servicemgt/service/base/
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/servicemgt/service/http/
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/servicemgt/service/persistence/
-
+hooks/opencps-hook/.classpath
+hooks/opencps-hook/.gitignore
+hooks/opencps-hook/.settings/
+opencps/
