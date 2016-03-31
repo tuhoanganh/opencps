@@ -16,4 +16,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
-Add citizen
+<%@ include file="../init.jsp"%>
+registering account
+<%-- <liferay-util:include 
+	page="/html/portlets/accountmgt/registration/registration_citizen/citizen_register.jsp" 
+	servletContext="<%=application %>" 
+/> --%>
