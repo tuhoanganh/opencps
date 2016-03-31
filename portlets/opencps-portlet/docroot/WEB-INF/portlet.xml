@@ -284,7 +284,7 @@
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/portlets/servicemgt/servicemgt/serviceinfolist.jsp</value>
+			<value>/html/portlets/servicemgt/admin/serviceinfolist.jsp</value>
 		</init-param>
 		<init-param>
 			<name>template-path</name>
