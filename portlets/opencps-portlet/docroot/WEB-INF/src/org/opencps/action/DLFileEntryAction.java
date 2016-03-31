@@ -15,22 +15,33 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>
 */
 
-package org.opencps.util;
+package org.opencps.action;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.opencps.util.WebKeys;
+
+import com.liferay.portal.theme.ThemeDisplay;
 
 /**
  * @author trungnt
+ *
  */
-public class PortletConstants {
+public class DLFileEntryAction extends Action {
+	@Override
+	public ActionForward execute(ActionMapping actionMapping,
+			ActionForm actionForm, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
 
-	public static final int DRAFTING = 0;
-	public static final int INUSE = 1;
-	public static final int EXPIRED = 2;
+		ThemeDisplay themeDisplay = (ThemeDisplay) request
+				.getAttribute(WebKeys.THEME_DISPLAY);
 
-	public static final int WORKING_STATUS_ACTIVATE = 1;
-	public static final int WORKING_STATUS_DEACTIVATE = 0;
-	
-	public static final int ACCOUNT_STATUS_REGISTERED = 0;
-	public static final int ACCOUNT_STATUS_CONFIRMED = 1;
-	public static final int ACCOUNT_STATUS_APPROVED = 2;
-	public static final int ACCOUNT_STATUS_LOCKED = 3;
+		
+		return null;
+	}
 }

@@ -115,5 +115,5 @@ public class CitizenSearch extends SearchContainer<Citizen>{
 	}
 	
 	private static Log _log = LogFactoryUtil
-					.getLog(DictCollectionSearch.class);
+					.getLog(CitizenSearch.class);
 }

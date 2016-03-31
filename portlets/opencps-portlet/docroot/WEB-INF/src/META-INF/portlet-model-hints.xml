@@ -225,6 +225,7 @@
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
 		<field name="serviceNo" type="String" />
+<<<<<<< HEAD
 		<field name="serviceName" type="String" localized="true" />
 		<field name="shortName" type="String" />
 		<field name="serviceProcess" type="String" localized="true" />
@@ -237,6 +238,20 @@
 		<field name="serviceRecords" type="String" />
 		<field name="serviceFee" type="String" />
 		<field name="serviceInstructions" type="String" localized="true" />
+=======
+		<field name="serviceName" type="String" />
+		<field name="shortName" type="String" />
+		<field name="serviceProcess" type="String" />
+		<field name="serviceMethod" type="String" />
+		<field name="serviceDossier" type="String" />
+		<field name="serviceCondition" type="String" />
+		<field name="serviceDuration" type="String" />
+		<field name="serviceActors" type="String" />
+		<field name="serviceResults" type="String" />
+		<field name="serviceRecords" type="String" />
+		<field name="serviceFee" type="String" />
+		<field name="serviceInstructions" type="String" />
+>>>>>>> FETCH_HEAD
 		<field name="administrationCode" type="String" />
 		<field name="administrationIndex" type="String" />
 		<field name="domainCode" type="String" />

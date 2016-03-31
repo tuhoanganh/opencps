@@ -45,11 +45,10 @@
 	</c:if> 
 </liferay-util:buffer>
 
-<liferay-util:buffer var="htmlBottom"/>
 
 <aui:form name="fm" action="<%=updateServiceURL %>" method="post">
 
-	<aui:model-context bean="<%=servieInfo %>" model="<%= ServiceInfo.class %>" />
+	<aui:model-context bean="<%= servieInfo %>" model="<%= ServiceInfo.class %>" />
 	
 	<aui:input name="redirectURL" type="hidden" value="<%= backURL%>"/>
 	<aui:input name="returnURL" type="hidden" value="<%= currentURL%>"/>
@@ -61,9 +60,8 @@
 		backURL="<%= backURL %>"
 		categoryNames="<%= ServiceUtil.SERVICE_CATEGORY_NAMES %>"
 		categorySections="<%= categorySections %>"
-		htmlBottom="<%= htmlBottom %>"
 		htmlTop="<%= htmlTop %>"
-		jspPath='<%= templatePath + "employees/" %>'
+		jspPath='<%= templatePath + "service/" %>'
 	/>
 </aui:form>
 

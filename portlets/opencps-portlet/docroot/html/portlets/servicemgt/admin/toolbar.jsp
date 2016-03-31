@@ -32,6 +32,7 @@
 		<portlet:renderURL var="editServiceURL">
 			<portlet:param name="mvcPath" value='<%= templatePath + "edit_service.jsp" %>'/>
 			<portlet:param name="redirectURL" value="<%=currentURL %>"/>
+			<portlet:param name="backURL" value="<%=currentURL %>"/>
 		</portlet:renderURL>
 		<c:if test="<%=ServicePermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_SERVICE) %>">
 			<aui:button name="add-service" value="add-service" href="<%= editServiceURL%>"/>

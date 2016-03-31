@@ -27,47 +27,47 @@ import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplay;
 
 
-public class BussinessSearchTerm extends BussinessDisplayTerms{
+public class BusinessSearchTerm extends BusinessDisplayTerms{
 
-	public BussinessSearchTerm(PortletRequest request) {
+	public BusinessSearchTerm(PortletRequest request) {
 
 		super(request);
 		
-		businessType = ParamUtil.getString(request, BUSSINESS_BUSINESSTYPE);
-		shortName = ParamUtil.getString(request, BUSSINESS_SHORTNAME);
-		enName = ParamUtil.getString(request, BUSSINESS_ENNAME);
-		name = ParamUtil.getString(request, BUSSINESS_NAME);
-		telNo = ParamUtil.getString(request, BUSSINESS_TELNO);
-		email = ParamUtil.getString(request, BUSSINESS_EMAIL);
+		businessType = ParamUtil.getString(request, BUSINESS_BUSINESSTYPE);
+		shortName = ParamUtil.getString(request, BUSINESS_SHORTNAME);
+		enName = ParamUtil.getString(request, BUSINESS_ENNAME);
+		name = ParamUtil.getString(request, BUSINESS_NAME);
+		telNo = ParamUtil.getString(request, BUSINESS_TELNO);
+		email = ParamUtil.getString(request, BUSINESS_EMAIL);
 		representativeName = ParamUtil.getString(request,
-			BUSSINESS_REPRESENTATIVENAME);
+			BUSINESS_REPRESENTATIVENAME);
 		representativeRole = ParamUtil.getString(request,
-			BUSSINESS_REPRESENTATIVEROLE);
-		address = ParamUtil.getString(request, BUSSINESS_ADDRESS);
-		cityCode = ParamUtil.getString(request, BUSSINESS_CITYCODE);
-		districtCode = ParamUtil.getString(request, BUSSINESS_DISTRICTCODE);
-		wardCode = ParamUtil.getString(request, BUSSINESS_WARDCODE);
-		uuid = ParamUtil.getString(request, BUSSINESS_UUID);
+			BUSINESS_REPRESENTATIVEROLE);
+		address = ParamUtil.getString(request, BUSINESS_ADDRESS);
+		cityCode = ParamUtil.getString(request, BUSINESS_CITYCODE);
+		districtCode = ParamUtil.getString(request, BUSINESS_DISTRICTCODE);
+		wardCode = ParamUtil.getString(request, BUSINESS_WARDCODE);
+		uuid = ParamUtil.getString(request, BUSINESS_UUID);
 		
-		createdDate = ParamUtil.getDate(request, BUSSINESS_CREATEDDATE , 
+		createdDate = ParamUtil.getDate(request, BUSINESS_CREATEDDATE , 
 			DateTimeUtil.getDateTimeFormat(DateTimeUtil._VN_DATE_TIME_FORMAT));
-		modifiedDate = ParamUtil.getDate(request, BUSSINESS_MODIFIEDDATE , 
+		modifiedDate = ParamUtil.getDate(request, BUSINESS_MODIFIEDDATE , 
 			DateTimeUtil.getDateTimeFormat(DateTimeUtil._VN_DATE_TIME_FORMAT));
 		
-		businessId = ParamUtil.getLong(request, BUSSINESS_BUSINESSID);
-		userId = ParamUtil.getLong(request, BUSSINESS_USERID);
+		businessId = ParamUtil.getLong(request, BUSINESS_BUSINESSID);
+		userId = ParamUtil.getLong(request, BUSINESS_USERID);
 		groupId = setGroupId(request);
-		attachFile = ParamUtil.getLong(request, BUSSINESS_ATTACHFILE);
-		mappingUserId = ParamUtil.getLong(request, BUSSINESS_MAPPINGUSERID);
+		attachFile = ParamUtil.getLong(request, BUSINESS_ATTACHFILE);
+		mappingUserId = ParamUtil.getLong(request, BUSINESS_MAPPINGUSERID);
 		mappingOrganizationId = ParamUtil.getLong(request,
-			BUSSINESS_MAPPINGORGANIZATIONID);
+			BUSINESS_MAPPINGORGANIZATIONID);
 		
-		accountStatus = ParamUtil.getInteger(request, BUSSINESS_ACCOUNTSTATUS);
+		accountStatus = ParamUtil.getInteger(request, BUSINESS_ACCOUNTSTATUS);
 	}
 	
 	public long setGroupId(PortletRequest portletRequest) {
 
-		groupId = ParamUtil.getLong(portletRequest, BUSSINESS_GROUPID);
+		groupId = ParamUtil.getLong(portletRequest, BUSINESS_GROUPID);
 
 		if (groupId != 0) {
 			return groupId;
@@ -79,24 +79,84 @@ public class BussinessSearchTerm extends BussinessDisplayTerms{
 		return themeDisplay.getScopeGroupId();
 	}
 	
-	public String getFullName() {
+	public String getBusinessType() {
 	
-		return fullName;
+		return businessType;
 	}
 	
-	public void setFullName(String fullName) {
+	public void setBusinessType(String businessType) {
 	
-		this.fullName = fullName;
+		this.businessType = businessType;
 	}
 	
-	public String getPersonalId() {
+	public String getShortName() {
 	
-		return personalId;
+		return shortName;
 	}
 	
-	public void setPersonalId(String personalId) {
+	public void setShortName(String shortName) {
 	
-		this.personalId = personalId;
+		this.shortName = shortName;
+	}
+	
+	public String getEnName() {
+	
+		return enName;
+	}
+	
+	public void setEnName(String enName) {
+	
+		this.enName = enName;
+	}
+	
+	public String getName() {
+	
+		return name;
+	}
+	
+	public void setName(String name) {
+	
+		this.name = name;
+	}
+	
+	public String getTelNo() {
+	
+		return telNo;
+	}
+	
+	public void setTelNo(String telNo) {
+	
+		this.telNo = telNo;
+	}
+	
+	public String getEmail() {
+	
+		return email;
+	}
+	
+	public void setEmail(String email) {
+	
+		this.email = email;
+	}
+	
+	public String getRepresentativeName() {
+	
+		return representativeName;
+	}
+	
+	public void setRepresentativeName(String representativeName) {
+	
+		this.representativeName = representativeName;
+	}
+	
+	public String getRepresentativeRole() {
+	
+		return representativeRole;
+	}
+	
+	public void setRepresentativeRole(String representativeRole) {
+	
+		this.representativeRole = representativeRole;
 	}
 	
 	public String getAddress() {
@@ -139,26 +199,6 @@ public class BussinessSearchTerm extends BussinessDisplayTerms{
 		this.wardCode = wardCode;
 	}
 	
-	public String getTelNo() {
-	
-		return telNo;
-	}
-	
-	public void setTelNo(String telNo) {
-	
-		this.telNo = telNo;
-	}
-	
-	public String getEmail() {
-	
-		return email;
-	}
-	
-	public void setEmail(String email) {
-	
-		this.email = email;
-	}
-	
 	public String getUuid() {
 	
 		return uuid;
@@ -189,14 +229,24 @@ public class BussinessSearchTerm extends BussinessDisplayTerms{
 		this.modifiedDate = modifiedDate;
 	}
 	
-	public Date getBirthDate() {
+	public long getBusinessId() {
 	
-		return birthDate;
+		return businessId;
 	}
 	
-	public void setBirthDate(Date birthDate) {
+	public void setBusinessId(long businessId) {
 	
-		this.birthDate = birthDate;
+		this.businessId = businessId;
+	}
+	
+	public long getUserId() {
+	
+		return userId;
+	}
+	
+	public void setUserId(long userId) {
+	
+		this.userId = userId;
 	}
 	
 	public long getAttachFile() {
@@ -219,14 +269,14 @@ public class BussinessSearchTerm extends BussinessDisplayTerms{
 		this.mappingUserId = mappingUserId;
 	}
 	
-	public long getUserId() {
+	public long getMappingOrganizationId() {
 	
-		return userId;
+		return mappingOrganizationId;
 	}
 	
-	public void setUserId(long userId) {
+	public void setMappingOrganizationId(long mappingOrganizationId) {
 	
-		this.userId = userId;
+		this.mappingOrganizationId = mappingOrganizationId;
 	}
 	
 	public int getAccountStatus() {
@@ -238,34 +288,27 @@ public class BussinessSearchTerm extends BussinessDisplayTerms{
 	
 		this.accountStatus = accountStatus;
 	}
-	
-	public int getGender() {
-	
-		return gender;
-	}
-	
-	public void setGender(int gender) {
-	
-		this.gender = gender;
-	}
 
-	protected String fullName;
-	protected String personalId;
+	protected String businessType;
+	protected String shortName;
+	protected String enName;
+	protected String name;
+	protected String telNo;
+	protected String email;
+	protected String representativeName;
+	protected String representativeRole;
 	protected String address;
 	protected String cityCode;
 	protected String districtCode;
 	protected String wardCode;
-	protected String telNo;
-	protected String email;
 	protected String uuid;
 	protected Date createdDate;
 	protected Date modifiedDate;
-	protected Date birthDate;
-	protected long attachFile;
-	protected long mappingUserId;
+	protected long businessId;
 	protected long userId;
 	protected long groupId;
-	protected int accountStatus; 
-	protected int gender;
-
+	protected long attachFile;
+	protected long mappingUserId;
+	protected long mappingOrganizationId;
+	protected int accountStatus;
 }

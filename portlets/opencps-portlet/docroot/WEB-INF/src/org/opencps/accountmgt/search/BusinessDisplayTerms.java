@@ -28,74 +28,74 @@ import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplay;
 
 
-public class BussinessDisplayTerms extends DisplayTerms{
+public class BusinessDisplayTerms extends DisplayTerms{
 	
-	public static final String BUSSINESS_BUSINESSTYPE = "businessType";
-	public static final String BUSSINESS_SHORTNAME = "shortName";
-	public static final String BUSSINESS_ENNAME = "enName";
-	public static final String BUSSINESS_NAME = "name"; 
-	public static final String BUSSINESS_TELNO = "telNo"; 
-	public static final String BUSSINESS_EMAIL = "email";
-	public static final String BUSSINESS_REPRESENTATIVENAME = 
+	public static final String BUSINESS_BUSINESSTYPE = "businessType";
+	public static final String BUSINESS_SHORTNAME = "shortName";
+	public static final String BUSINESS_ENNAME = "enName";
+	public static final String BUSINESS_NAME = "name"; 
+	public static final String BUSINESS_TELNO = "telNo"; 
+	public static final String BUSINESS_EMAIL = "email";
+	public static final String BUSINESS_REPRESENTATIVENAME = 
 					"representativeName";
-	public static final String BUSSINESS_REPRESENTATIVEROLE = 
+	public static final String BUSINESS_REPRESENTATIVEROLE = 
 					"representativeRole";
-	public static final String BUSSINESS_ADDRESS = "address";
-	public static final String BUSSINESS_CITYCODE = "cityCode";
-	public static final String BUSSINESS_DISTRICTCODE = "districtCode";
-	public static final String BUSSINESS_WARDCODE = "wardCode";
-	public static final String BUSSINESS_UUID = "uuid";
-	public static final String BUSSINESS_CREATEDDATE = "createdDate";
-	public static final String BUSSINESS_MODIFIEDDATE ="modifiedDate";
-	public static final String BUSSINESS_BUSINESSID = "businessId";
-	public static final String BUSSINESS_USERID = "userId";
-	public static final String BUSSINESS_GROUPID = "groupId";
-	public static final String BUSSINESS_ATTACHFILE = "attachFile";
-	public static final String BUSSINESS_MAPPINGUSERID = "mappingUserId";
-	public static final String BUSSINESS_ACCOUNTSTATUS = "accountStatus";
-	public static final String BUSSINESS_MAPPINGORGANIZATIONID = 
+	public static final String BUSINESS_ADDRESS = "address";
+	public static final String BUSINESS_CITYCODE = "cityCode";
+	public static final String BUSINESS_DISTRICTCODE = "districtCode";
+	public static final String BUSINESS_WARDCODE = "wardCode";
+	public static final String BUSINESS_UUID = "uuid";
+	public static final String BUSINESS_CREATEDDATE = "createdDate";
+	public static final String BUSINESS_MODIFIEDDATE ="modifiedDate";
+	public static final String BUSINESS_BUSINESSID = "businessId";
+	public static final String BUSINESS_USERID = "userId";
+	public static final String BUSINESS_GROUPID = "groupId";
+	public static final String BUSINESS_ATTACHFILE = "attachFile";
+	public static final String BUSINESS_MAPPINGUSERID = "mappingUserId";
+	public static final String BUSINESS_ACCOUNTSTATUS = "accountStatus";
+	public static final String BUSINESS_MAPPINGORGANIZATIONID = 
 					"mappingOrganizationId";
 	
 	
-	public BussinessDisplayTerms(PortletRequest request) {
+	public BusinessDisplayTerms(PortletRequest request) {
 
 		super(request);
-		businessType = ParamUtil.getString(request, BUSSINESS_BUSINESSTYPE);
-		shortName = ParamUtil.getString(request, BUSSINESS_SHORTNAME);
-		enName = ParamUtil.getString(request, BUSSINESS_ENNAME);
-		name = ParamUtil.getString(request, BUSSINESS_NAME);
-		telNo = ParamUtil.getString(request, BUSSINESS_TELNO);
-		email = ParamUtil.getString(request, BUSSINESS_EMAIL);
+		businessType = ParamUtil.getString(request, BUSINESS_BUSINESSTYPE);
+		shortName = ParamUtil.getString(request, BUSINESS_SHORTNAME);
+		enName = ParamUtil.getString(request, BUSINESS_ENNAME);
+		name = ParamUtil.getString(request, BUSINESS_NAME);
+		telNo = ParamUtil.getString(request, BUSINESS_TELNO);
+		email = ParamUtil.getString(request, BUSINESS_EMAIL);
 		representativeName = ParamUtil.getString(request,
-			BUSSINESS_REPRESENTATIVENAME);
+			BUSINESS_REPRESENTATIVENAME);
 		representativeRole = ParamUtil.getString(request,
-			BUSSINESS_REPRESENTATIVEROLE);
-		address = ParamUtil.getString(request, BUSSINESS_ADDRESS);
-		cityCode = ParamUtil.getString(request, BUSSINESS_CITYCODE);
-		districtCode = ParamUtil.getString(request, BUSSINESS_DISTRICTCODE);
-		wardCode = ParamUtil.getString(request, BUSSINESS_WARDCODE);
-		uuid = ParamUtil.getString(request, BUSSINESS_UUID);
+			BUSINESS_REPRESENTATIVEROLE);
+		address = ParamUtil.getString(request, BUSINESS_ADDRESS);
+		cityCode = ParamUtil.getString(request, BUSINESS_CITYCODE);
+		districtCode = ParamUtil.getString(request, BUSINESS_DISTRICTCODE);
+		wardCode = ParamUtil.getString(request, BUSINESS_WARDCODE);
+		uuid = ParamUtil.getString(request, BUSINESS_UUID);
 		
-		createdDate = ParamUtil.getDate(request, BUSSINESS_CREATEDDATE , 
+		createdDate = ParamUtil.getDate(request, BUSINESS_CREATEDDATE , 
 			DateTimeUtil.getDateTimeFormat(DateTimeUtil._VN_DATE_TIME_FORMAT));
-		modifiedDate = ParamUtil.getDate(request, BUSSINESS_MODIFIEDDATE , 
+		modifiedDate = ParamUtil.getDate(request, BUSINESS_MODIFIEDDATE , 
 			DateTimeUtil.getDateTimeFormat(DateTimeUtil._VN_DATE_TIME_FORMAT));
 		
-		businessId = ParamUtil.getLong(request, BUSSINESS_BUSINESSID);
-		userId = ParamUtil.getLong(request, BUSSINESS_USERID);
+		businessId = ParamUtil.getLong(request, BUSINESS_BUSINESSID);
+		userId = ParamUtil.getLong(request, BUSINESS_USERID);
 		groupId = setGroupId(request);
-		attachFile = ParamUtil.getLong(request, BUSSINESS_ATTACHFILE);
-		mappingUserId = ParamUtil.getLong(request, BUSSINESS_MAPPINGUSERID);
+		attachFile = ParamUtil.getLong(request, BUSINESS_ATTACHFILE);
+		mappingUserId = ParamUtil.getLong(request, BUSINESS_MAPPINGUSERID);
 		mappingOrganizationId = ParamUtil.getLong(request,
-			BUSSINESS_MAPPINGORGANIZATIONID);
+			BUSINESS_MAPPINGORGANIZATIONID);
 		
-		accountStatus = ParamUtil.getInteger(request, BUSSINESS_ACCOUNTSTATUS);
+		accountStatus = ParamUtil.getInteger(request, BUSINESS_ACCOUNTSTATUS);
 		
 	}
 	
 	public long setGroupId(PortletRequest portletRequest) {
 
-		groupId = ParamUtil.getLong(portletRequest, BUSSINESS_GROUPID);
+		groupId = ParamUtil.getLong(portletRequest, BUSINESS_GROUPID);
 
 		if (groupId != 0) {
 			return groupId;
