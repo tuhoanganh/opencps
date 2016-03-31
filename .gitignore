@@ -82,3 +82,4 @@ hooks/opencps-hook/.classpath
 hooks/opencps-hook/.gitignore
 hooks/opencps-hook/.settings/
 opencps/
+hooks/opencps-hook/docroot/WEB-INF/classes/
