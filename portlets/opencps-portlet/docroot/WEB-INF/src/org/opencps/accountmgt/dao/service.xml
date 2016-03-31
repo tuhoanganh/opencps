@@ -96,6 +96,7 @@
 		<column name="enName" type="String" />
 		<column name="shortName" type="String" />
 		<column name="businessType" type="String" />
+		<column name="idNumber" type="String"/>
 		<column name="address" type="String" />
 		<column name="cityCode" type="String" />
 		<column name="districtCode" type="String" />
