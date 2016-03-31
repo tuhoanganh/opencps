@@ -16,4 +16,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
-Add citizen
+
+<%@ include file="/init.jsp" %>
+<h1>Hello World</h1>
