@@ -17,6 +17,7 @@
  */
 %>
 <%@ include file="/init.jsp" %>
+<h1>Hello world</h1>
 <liferay-util:include 
 	page="/html/portlets/accountmgt/registration/registration_citizen/citizen_register.jsp" 
 	servletContext="<%=application %>" 
