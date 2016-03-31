@@ -95,3 +95,4 @@ portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/servicemgt/service/pers
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/servicemgt/service/persistence/TemplateFilePersistenceImpl.java
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/servicemgt/service/base/
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/servicemgt/service/impl/
+portlets/opencps-portlet/docroot/WEB-INF/src/META-INF/
