@@ -55,7 +55,49 @@ public class ServiceDisplyTerms extends DisplayTerms {
 	public ServiceDisplyTerms(PortletRequest request) {
 
 		super(request);
-		// TODO Auto-generated constructor stub
+
+		serviceNo = ParamUtil.getString(request, SERVICE_NO);
+
+		serviceName = ParamUtil.getString(request, SERVICE_NAME);
+
+		shortName = ParamUtil.getString(request, SERVICE_SHORTNAME);
+
+		serviceProcess = ParamUtil.getString(request, SERVICE_PROCESS);
+
+		serviceMethod = ParamUtil.getString(request, SERVICE_METHOD);
+
+		serviceDossier = ParamUtil.getString(request, SERVICE_DOSSIER);
+
+		serviceCondition = ParamUtil.getString(request, SERVICE_CONDITION);
+
+		serviceDuration = ParamUtil.getString(request, SERVICE_DURATION);
+
+		serviceActors = ParamUtil.getString(request, SERVICE_ACTORS);
+
+		serviceResults = ParamUtil.getString(request, SERVICE_RESULTS);
+
+		serviceRecords = ParamUtil.getString(request, SERVICE_RECORDS);
+
+		serviceFee = ParamUtil.getString(request, SERVICE_FEE);
+
+		serviceInstructions =
+		    ParamUtil.getString(request, SERVICE_INSTRUCTIONS);
+
+		administrationCode =
+		    ParamUtil.getString(request, SERVICE_ADMINISTRATION);
+
+		administrationIndex =
+		    ParamUtil.getString(request, SERVICE_ADMINISTRATIONINDEX);
+		
+		domainCode = ParamUtil.getString(request, SERVICE_DOMAINCODE);
+		
+		domainIndex = ParamUtil.getString(request, SERVICE_DOMAININDEX);
+		
+		activeStatus = ParamUtil.getInteger(request, SERVICE_ACTIVESTATUS);
+		
+		onlineUrl = ParamUtil.getString(request, SERVICE_ONLINEURL);
+		
+		groupId = setGroupId(request);
 	}
 
 	/**

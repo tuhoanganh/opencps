@@ -18,6 +18,7 @@
  */
 %>
 <%@page import="com.liferay.portal.kernel.util.StringUtil"%>
+<%@ taglib uri="http://liferay.com/tld/aui" prefix="aui"%>
 <%@ include file="/html/taglib/taglib-init.jsp" %>
 
 <%
@@ -30,7 +31,7 @@
 	String renderMode = (String)request.getAttribute("opencps-datamgt:ddr:renderMode");
 	String name = (String)request.getAttribute("opencps-datamgt:ddr:name");
 	String cssClass = (String)request.getAttribute("opencps-datamgt:ddr:cssClass");
-	String displayStyle = (String)request.getAttribute("opencps-datamgt:ddr:displayStyle");
+	String displayStyle = GetterUtil.getString((String)request.getAttribute("opencps-datamgt:ddr:displayStyle"), "horizontal");
 %>
 
 <%!
