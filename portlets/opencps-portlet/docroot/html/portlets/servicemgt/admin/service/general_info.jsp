@@ -1,3 +1,5 @@
+<%@page import="org.opencps.util.WebKeys"%>
+<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,5 +19,73 @@
  */
 %>
 
-Thong tin chung
+<%@ include file="../../init.jsp" %>
 
+<%
+	ServiceInfo serviceInfo = (ServiceInfo) request.getAttribute(WebKeys.SERVICE_ENTRY);
+%>
+
+<aui:model-context bean="<%= serviceInfo %>" model="<%= ServiceInfo.class %>"/>
+
+<aui:row>
+	<aui:col width="100">
+		<aui:input name="<%= ServiceDisplyTerms.SERVICE_NAME %>" ></aui:input>
+	</aui:col>
+</aui:row>
+
+<aui:row>
+	<aui:col width="50">
+		<aui:input name="<%= ServiceDisplyTerms.SERVICE_NO %>"></aui:input>
+	</aui:col>
+	<aui:col width="50">
+		<aui:input name="<%= ServiceDisplyTerms.SERVICE_SHORTNAME %>"></aui:input>
+	</aui:col>
+</aui:row>
+
+<aui:row>
+	<aui:col>
+		<datamgt:ddr 
+		cssClass="input100"
+		depthLevel="1" 
+		dictCollectionCode="SERVICE_DOMAIN"
+		itemNames="serviceDomain"
+		itemsEmptyOption="true"	
+		>
+		</datamgt:ddr>
+	</aui:col>
+</aui:row>
+
+<aui:row>
+	<aui:col>
+		<datamgt:ddr 
+		cssClass="input100"
+		depthLevel="1" 
+		dictCollectionCode="SERVICE_ADMINISTRATION"
+		itemNames="serviceAdministrator"
+		itemsEmptyOption="true"	
+		>
+		</datamgt:ddr>
+	</aui:col>
+</aui:row>
+
+<aui:row>
+	<aui:col width="100">
+		<aui:input name="<%= ServiceDisplyTerms.SERVICE_ONLINEURL %>"></aui:input>
+	</aui:col>
+</aui:row>
+
+<aui:row>
+	<aui:col width="100">
+		<aui:select name="<%= ServiceDisplyTerms.SERVICE_ACTIVESTATUS %>" showEmptyOption="true">
+			<aui:option value="0">
+				<liferay-ui:message key="service-private"/>
+			</aui:option>
+			<aui:option value="1">
+				<liferay-ui:message key="service-public"/>
+			</aui:option>
+			<aui:option value="2">
+				<liferay-ui:message key="service-outdate"/>
+			</aui:option>
+		</aui:select>
+	</aui:col>
+</aui:row>
