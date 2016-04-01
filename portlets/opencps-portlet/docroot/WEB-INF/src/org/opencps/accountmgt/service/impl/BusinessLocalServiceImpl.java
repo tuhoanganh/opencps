@@ -72,7 +72,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 	    String wardCode, String telNo, String email, String representativeName,
 	    String representativeRole, String[] businessDomainCodes,
 	    int birthDateDay, int birthDateMonth, int birthDateYear,
-	    long repositoryId, long folderId, String sourceFileName,
+	    long repositoryId, String sourceFileName,
 	    String contentType, String title, InputStream inputStream, long size,
 	    ServiceContext serviceContext)
 	    throws SystemException, PortalException {
@@ -132,6 +132,8 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		password1 = PwdGenerator
 		    .getPassword();
 		password2 = password1;
+		
+		long folderId = 0;
 
 		User mappingUser = userService
 		    .addUserWithWorkflow(serviceContext

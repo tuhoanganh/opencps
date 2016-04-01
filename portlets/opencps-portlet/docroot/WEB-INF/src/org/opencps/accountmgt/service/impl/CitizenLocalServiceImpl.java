@@ -81,7 +81,7 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 	    String fullName, String personalId, int gender, int birthDateDay,
 	    int birthDateMonth, int birthDateYear, String address, String cityCode,
 	    String districtCode, String wardCode, String email, String telNo,
-	    long repositoryId, long folderId, String sourceFileName,
+	    long repositoryId, String sourceFileName,
 	    String contentType, String title, InputStream inputStream, long size,
 	    ServiceContext serviceContext)
 	    throws SystemException, PortalException {
@@ -129,6 +129,8 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 			        .getUserGroupId()
 			};
 		}
+		
+		long folderId = 0;
 
 		try {
 			userGroup = UserGroupLocalServiceUtil
