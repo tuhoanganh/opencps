@@ -33,7 +33,6 @@ public class BusinessNameComparator extends OrderByComparator{
 					"name"
 				};
 	
-	
 	public BusinessNameComparator() {
 
 		this(false);

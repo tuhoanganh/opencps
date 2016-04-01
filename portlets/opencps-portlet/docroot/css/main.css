@@ -16,6 +16,15 @@
 	width : 100% !important;
 }
 
+.inputstandart{
+	width: 400px;
+}
+
+.scrollfield{
+	overflow:scroll; 
+	height:200px; 
+	width:400px;
+}
 
 .ocps-editor {
 	margin-bottom: 10px;

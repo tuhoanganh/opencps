@@ -38,7 +38,9 @@
 		PortletUtil.SplitDate spd = new PortletUtil.SplitDate(defaultBirthDate);
 %>
 <portlet:actionURL var="updateCitizenURL" name="updateCitizen">
-	<portlet:param name="<%=CitizenDisplayTerms.CITIZEN_ID %>" value="<%=citizenID %>"/>
+	<portlet:param 
+		name="<%=CitizenDisplayTerms.CITIZEN_ID %>" 
+		value="<%=String.valueOf(citizenID) %>"/>
 </portlet:actionURL>
 
 <aui:form 
@@ -51,14 +53,16 @@
 	<aui:row>
 		
 		<aui:col width="50">
-			<aui:input name="<%=CitizenDisplayTerms.CITIZEN_ID %>" />
+			<aui:input name="<%=CitizenDisplayTerms.CITIZEN_FULLNAME %>" >
 			<aui:validator name="required" />
 			<aui:validator name="maxLength">255</aui:validator>
+			</aui:input>
 		</aui:col>
 		
 		<aui:col width="50">
-			<aui:input name="<%=CitizenDisplayTerms.CITIZEN_PERSONALID %>" />
+			<aui:input name="<%=CitizenDisplayTerms.CITIZEN_PERSONALID %>" >
 			<aui:validator name="required" />
+			</aui:input>
 		</aui:col>
 		
 	</aui:row>
@@ -141,7 +145,7 @@
 	
 	<aui:row>
 		<aui:input 
-			name="confirm"
+			name="citizenConfirm"
 			type="checkbox" 
 			label="<%=LanguageUtil.get(pageContext, 
 						MessageKeys.ACCOUNTMGT_CONFIRM_KEY) %>"
@@ -150,7 +154,7 @@
 		</aui:input>
 	</aui:row>
 	<aui:row>
-		<aui:input name="submit" type="submit" value="resgister" disabled="true"></aui:input>
+		<aui:button name="citizenSubmit" type="submit" disabled="true" />
 	</aui:row>
 	
 </aui:form>
@@ -158,13 +162,27 @@
 <aui:script>
 
 AUI().ready(function(A) {
-	var checkbox = A.one('<portlet:namespace />checkbox');
-	if(checkbox) {
-		var buttonSubmit = A.one('<portlet:namespace />submit');
-		if(checkbox.val() == 'true') {
-			buttonSubmit.setAttribute('disabled', 'false');
-		}
+
+	var checkboxConFirm = A.one('#<portlet:namespace />citizenConfirmCheckbox');
+	
+	if(checkboxConFirm) {
+		var buttonSubmit = A.one('#<portlet:namespace />citizenSubmit');
+		checkboxConFirm.on('click',function() {
+			
+			var checkboxConFirmInput = A.one('#<portlet:namespace />citizenConfirm');
+			
+			if(checkboxConFirmInput.val() == 'true') {
+				
+				if(buttonSubmit) {
+					alert(buttonSubmit.val() + " alert(buttonSubmit.val())");
+					
+				}
+ 				
+				
+			}
+		});
 	}
+	
 });
 
 </aui:script>
