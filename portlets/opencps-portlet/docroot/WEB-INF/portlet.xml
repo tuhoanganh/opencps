@@ -160,8 +160,6 @@
 		</security-role-ref>
 	</portlet>
 	
-
-	
 	<portlet>
 		<portlet-name>5</portlet-name>
 		<display-name>Account Registration</display-name>
