@@ -23,46 +23,15 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
 public class AccountRegPortlet extends MVCPortlet {
 
 	@Override
-<<<<<<< HEAD
-	public void render(RenderRequest renderRequest,
-			RenderResponse renderResponse) throws PortletException, IOException {
-		long citizenId = ParamUtil.getLong(
-			renderRequest, CitizenDisplayTerms.CITIZEN_ID);
-		
-		long businessId = ParamUtil.getLong(renderRequest, 
-			BusinessDisplayTerms.BUSINESS_BUSINESSID);
-		
-		try {
-	        if(citizenId > 0) {
-	        	Citizen citizen = CitizenLocalServiceUtil
-	        					.fetchCitizen(citizenId);
-	        	renderRequest.setAttribute(WebKeys.CITIZEN_ENTRY, citizen);
-	        }
-	        
-	        if(businessId > 0) {
-	        	Business business = BusinessLocalServiceUtil
-	        					.fetchBusiness(businessId);
-	        	renderRequest.setAttribute(WebKeys.BUSINESS_ENTRY, business);
-	        }
-        }
-		
-		
-        catch (Exception e) {
-	        _log.error(e);
-        }
-		
-		super.render(renderRequest, renderResponse);
-	}
-	
-	
-	
-=======
 	public void render(
 	    RenderRequest renderRequest, RenderResponse renderResponse)
 	    throws PortletException, IOException {
 
 		long citizenId = ParamUtil
 		    .getLong(renderRequest, CitizenDisplayTerms.CITIZEN_ID);
+
+		long businessId = ParamUtil
+		    .getLong(renderRequest, BusinessDisplayTerms.BUSINESS_BUSINESSID);
 
 		try {
 			if (citizenId > 0) {
@@ -71,7 +40,15 @@ public class AccountRegPortlet extends MVCPortlet {
 				renderRequest
 				    .setAttribute(WebKeys.CITIZEN_ENTRY, citizen);
 			}
+
+			if (businessId > 0) {
+				Business business = BusinessLocalServiceUtil
+				    .fetchBusiness(businessId);
+				renderRequest
+				    .setAttribute(WebKeys.BUSINESS_ENTRY, business);
+			}
 		}
+
 		catch (Exception e) {
 			_log
 			    .error(e);
@@ -80,7 +57,6 @@ public class AccountRegPortlet extends MVCPortlet {
 		super.render(renderRequest, renderResponse);
 	}
 
->>>>>>> FETCH_HEAD
 	private Log _log = LogFactoryUtil
 	    .getLog(AccountRegPortlet.class
 	        .getName());
