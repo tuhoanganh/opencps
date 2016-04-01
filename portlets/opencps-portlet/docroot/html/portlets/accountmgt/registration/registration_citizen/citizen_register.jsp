@@ -47,6 +47,7 @@
 	action="<%=updateCitizenURL.toString() %>"
 	name="fm"	
 	method="post"
+	enctype="multipart/form-data"
 >
 	<aui:model-context bean="<%=citizen%>" model="<%=Citizen.class%>" />
 
@@ -154,7 +155,7 @@
 		</aui:input>
 	</aui:row>
 	<aui:row>
-		<aui:button name="citizenSubmit" type="submit" disabled="true" />
+		<aui:button name="citizenSubmit" type="submit" />
 	</aui:row>
 	
 </aui:form>

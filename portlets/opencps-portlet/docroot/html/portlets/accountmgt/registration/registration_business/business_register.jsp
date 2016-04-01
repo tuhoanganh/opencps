@@ -1,3 +1,4 @@
+<%@page import="org.opencps.datamgt.search.DictCollectionDisplayTerms"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -48,7 +49,7 @@
 							.getDictItemsByDictCollectionId(dictCollection.getDictCollectionId());
 		}
 	} catch(Exception e) {
-		_log.error(e);
+		_log.error("catch");
 	}
 	
 	
@@ -59,10 +60,18 @@
 		name="<%=BusinessDisplayTerms.BUSINESS_BUSINESSID %>" 
 		value="<%=String.valueOf(businessId) %>"
 	/>
+	
+	<portlet:param 
+		name="dictCollectionId" 
+		value="<%=String.valueOf(dictCollection.getDictCollectionId()) %>"/>
 </portlet:actionURL>
 
-<aui:form action="<%=updateBusinessURL.toString() %>" method="post" name="fm">
-
+<aui:form 
+		action="<%=updateBusinessURL.toString() %>" 
+		method="post" name="fm" 
+	 	enctype="multipart/form-data"
+>
+	<aui:model-context bean="<%=business%>" model="<%=Business.class%>" />
 	<aui:row>
 		<aui:col width="50">
 			<aui:input name="<%=BusinessDisplayTerms.BUSINESS_NAME %>" >
@@ -146,6 +155,7 @@
 		<aui:col width="50">
 			<aui:input name="<%=BusinessDisplayTerms.BUSINESS_EMAIL %>">
 				<aui:validator name="required" />
+				<aui:validator name="email" />
 				<aui:validator name="maxLength">255</aui:validator>
 			</aui:input>
 		</aui:col>
@@ -175,7 +185,7 @@
 	</aui:row>
 	
 	<aui:row>
-			<aui:input type="file" name="<%=BusinessDisplayTerms.BUSINESS_ATTACHFILE %>" />
+			<aui:input type="file" name="attachFile" />
 	</aui:row>
 	
 	<aui:row>
