@@ -152,7 +152,7 @@
 		<!-- PK fields -->
 
 		<column name="businessId" type="long" primary="true" />
-		<column name="businessDomainId" type="String" primary="true" />
+		<column name="businessDomainId" type="String" primary="false" />
 
 		<!-- Finder methods -->
 		<finder name="BusinessId" return-type="Collection">

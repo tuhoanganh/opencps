@@ -252,6 +252,15 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 		    .update(citizen);
 	}
 
+	public Citizen updateCitizen(
+	    long citizenId, String address, String cityCode, String districtCode,
+	    String wardCode, String telNo, String newPassword,
+	    String reTypePassword) {
+
+		return null;
+
+	}
+
 	public void sendEmailAddressVerification(
 	    User user, String emailAddress, ServiceContext serviceContext)
 	    throws PortalException, SystemException {

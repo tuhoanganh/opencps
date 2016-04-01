@@ -114,7 +114,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 			    .addUserGroup(serviceContext
 			        .getUserId(), serviceContext
 			            .getCompanyId(),
-			        PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN,
+			        PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS,
 			        StringPool.BLANK, serviceContext);
 
 			userGroupIds = new long[] {

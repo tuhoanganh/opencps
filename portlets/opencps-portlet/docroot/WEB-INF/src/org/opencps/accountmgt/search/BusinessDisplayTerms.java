@@ -46,6 +46,12 @@ public class BusinessDisplayTerms extends DisplayTerms{
 	public static final String BUSINESS_CITYCODE = "cityCode";
 	public static final String BUSINESS_DISTRICTCODE = "districtCode";
 	public static final String BUSINESS_WARDCODE = "wardCode";
+	
+	public static final String BUSINESS_CITY_ID = "cityId";
+	public static final String BUSINESS_DISTRICT_ID = "districtId";
+	public static final String BUSINESS_WARD_ID = "wardId";
+	
+	
 	public static final String BUSINESS_UUID = "uuid";
 	public static final String BUSINESS_CREATEDDATE = "createdDate";
 	public static final String BUSINESS_MODIFIEDDATE ="modifiedDate";

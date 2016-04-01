@@ -1,4 +1,3 @@
-<%@page import="org.opencps.datamgt.search.DictCollectionDisplayTerms"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -31,6 +30,7 @@
 <%@page import="org.opencps.util.PortletPropsValues"%>
 <%@page import="org.opencps.datamgt.service.DictCollectionLocalServiceUtil"%>
 <%@page import="org.opencps.datamgt.model.DictCollection"%>
+
 <%@ include file="../../init.jsp" %>
 
 <%
@@ -49,9 +49,8 @@
 							.getDictItemsByDictCollectionId(dictCollection.getDictCollectionId());
 		}
 	} catch(Exception e) {
-		_log.error("catch");
+		_log.error(e);
 	}
-	
 	
 %>
 
@@ -63,13 +62,14 @@
 	
 	<portlet:param 
 		name="dictCollectionId" 
-		value="<%=String.valueOf(dictCollection.getDictCollectionId()) %>"/>
+		value="<%=String.valueOf(dictCollection != null ? dictCollection.getDictCollectionId() : 0) %>"
+	/>
 </portlet:actionURL>
 
 <aui:form 
-		action="<%=updateBusinessURL.toString() %>" 
-		method="post" name="fm" 
-	 	enctype="multipart/form-data"
+	action="<%=updateBusinessURL.toString() %>" 
+	method="post" name="fm" 
+ 	enctype="multipart/form-data"
 >
 	<aui:model-context bean="<%=business%>" model="<%=Business.class%>" />
 	<aui:row>
@@ -104,14 +104,12 @@
 	</aui:row>
 	
 	<aui:row>
-		<datamgt:ddr 
-				cssClass="input100"
-				depthLevel="1" 
-				dictCollectionCode="BUSINESS_TYPE"
-				itemNames="businessType"
-				itemsEmptyOption="true"	
-			>	
-			</datamgt:ddr>
+		<datamgt:ddr
+			depthLevel="1" 
+			dictCollectionCode="BUSINESS_TYPE"
+			itemNames="businessType"
+			itemsEmptyOption="true"	
+		/>	
 	</aui:row>
 	<aui:row cssClass="scrollfield">
 		<c:if test="<%=dictItems.size() > 0 %>">
@@ -124,8 +122,8 @@
 							value="<%=dictItem.getItemCode() %>"
 							type="checkbox" 
 							multiple="true"
-						>		
-						</aui:input>
+						/>		
+						
 					<%
 				}
 			%>
@@ -141,14 +139,13 @@
 	</aui:row>
 	
 	<aui:row>
-			<datamgt:ddr 
-				cssClass="input100"
-				depthLevel="3" 
-				dictCollectionCode="ADMINISTRATIVE_REGION"
-				itemNames="cityCode,districtCode,wardCode"
-				itemsEmptyOption="true,true,true"	
-			>	
-			</datamgt:ddr>
+		<datamgt:ddr 
+			cssClass="input100"
+			depthLevel="3" 
+			dictCollectionCode="ADMINISTRATIVE_REGION"
+			itemNames="cityId,districtId,wardId"
+			itemsEmptyOption="true,true,true"	
+		/>
 	</aui:row>
 	
 	<aui:row>
@@ -185,7 +182,7 @@
 	</aui:row>
 	
 	<aui:row>
-			<aui:input type="file" name="attachFile" />
+		<aui:input type="file" name="attachFile" />
 	</aui:row>
 	
 	<aui:row>
@@ -195,10 +192,10 @@
 			label="<%=LanguageUtil.get(pageContext, 
 						MessageKeys.ACCOUNTMGT_CONFIRM_KEY) %>"
 			checked="false"
-		>
+		/>
 		
-		</aui:input>
 	</aui:row>
+	
 	<aui:row>
 		<aui:button name="businessSubmit" type="submit" />
 	</aui:row>
@@ -228,6 +225,5 @@ AUI().ready(function(A) {
 </aui:script>
 
 <%!
-	private Log _log = LogFactoryUtil
-	.getLog(".html.portlets.accountmgt.registration.registration_business.business_register.jsp");
+	private Log _log = LogFactoryUtil.getLog(".html.portlets.accountmgt.registration.registration_business.business_register.jsp");
 %>

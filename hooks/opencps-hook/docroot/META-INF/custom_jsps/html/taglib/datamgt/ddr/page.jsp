@@ -20,7 +20,10 @@
 <%@ include file="init.jsp"%>
 
 <%
+	String randomNamespace = StringPool.UNDERLINE + PortalUtil.generateRandomKey(request, "datamgt-ddr-taglib");
+
 	boolean isHorizontal = true;
+	
 	if(depthLevel > 0){
 		
 		int colWidth = 100;
@@ -58,7 +61,7 @@
 					if(!isHorizontal){
 						%>
 							<aui:row>
-								<aui:col id='<%="col_" + i %>' cssClass='<%=cssClass + "_" + i %>' width="<%=colWidth %>">
+								<aui:col id='<%="col_" + randomNamespace + i %>' cssClass='<%=cssClass + "_" + i %>' width="<%=colWidth %>">
 									<aui:select 
 										name='<%=elementName %>' 
 										onchange='<%=themeDisplay.getPortletDisplay().getNamespace() + "renderChildItems(this," + i + ",true)" %>'
@@ -77,10 +80,10 @@
 						<%
 					}else{
 						%>
-							<aui:col id='<%="col_" + i %>' cssClass='<%=cssClass + "_" + i %>' width="<%=colWidth %>">
+							<aui:col id='<%="col_" + randomNamespace + i %>' cssClass='<%=cssClass + "_" + i %>' width="<%=colWidth %>">
 							<aui:select 
 								name='<%=elementName %>' 
-								onchange='<%=themeDisplay.getPortletDisplay().getNamespace() + "renderChildItems(this," + i + ",true)" %>'
+								onchange='<%=themeDisplay.getPortletDisplay().getNamespace() + randomNamespace + "renderChildItems(this," + i + ",true)" %>'
 								cssClass='<%=cssClass %>'
 							>
 								<%
@@ -102,14 +105,9 @@
 	}
 %>
 
-<portlet:renderURL var="selectBoxRenderURL" windowState="<%=LiferayWindowState.EXCLUSIVE.toString() %>">
-	<portlet:param name="mvcPath" value="/html/taglib/datamgt/ddr/selectbox_render.jsp"/>
-</portlet:renderURL>
 
 <aui:script>
 
-	var selectBoxRenderURL = '<%=selectBoxRenderURL.toString()%>';
-	
 	var localeCode = '<%=themeDisplay.getLanguageId() %>';
 	
 	var depthLevel = parseInt('<%=depthLevel %>');
@@ -126,7 +124,7 @@
 	
 	AUI().ready('aui-base','liferay-portlet-url','aui-io', function(A){
 	
-		rootDictItemsContainer = A.one('#<portlet:namespace/>col_1');
+		rootDictItemsContainer = A.one('#<portlet:namespace/>col_<%=randomNamespace %>1');
 		
 		var dictCollectionCode = '<%=dictCollectionCode %>';
 		
@@ -147,7 +145,7 @@
 					if(obj){
 						var dictCollectionId = obj.dictCollectionId;
 						
-						<portlet:namespace/>renderRootDataItemsByCollection(dictCollectionId);
+						<portlet:namespace/><%=randomNamespace %>renderRootDataItemsByCollection(dictCollectionId);
 					}
 					
 				}
@@ -161,8 +159,8 @@
 		});*/
 	});
 	
-	Liferay.provide(window, '<portlet:namespace/>renderRootDataItemsByCollection', function(dictCollectionId) {
-	
+	Liferay.provide(window, '<portlet:namespace/><%=randomNamespace %>renderRootDataItemsByCollection', function(dictCollectionId) {
+		var A = AUI();
 		if(dictCollectionId){			
 		
 			Liferay.Service(
@@ -173,15 +171,17 @@
 			    parentItemId: 0
 			  },
 			  function(objs) {
-			    <portlet:namespace/>renderDataItems(objs, rootDictItemsContainer, 1, false);
+			    <portlet:namespace/><%=randomNamespace %>renderDataItems(objs, A.one('#<portlet:namespace/>col_<%=randomNamespace %>1'), 1, false);
 			  }
 			);
 		}
 	});
 	
-	Liferay.provide(window, '<portlet:namespace/>renderDataItems', function(objs, boundingBox, level, clearChild) {
+	Liferay.provide(window, '<portlet:namespace/><%=randomNamespace %>renderDataItems', function(objs, boundingBox, level, clearChild) {
 		
 		var labelName = boundingBox.one('label').text().trim();
+		
+		console.log(boundingBox);
 		
 		var itemName = '';
 		
@@ -247,11 +247,11 @@
 		
 		if(parseInt(selectedItem) > 0 && clearChild == false){
 			
-			<portlet:namespace/>renderChildItems(boundingBox.one('select'), level, clearChild);
+			<portlet:namespace/><%=randomNamespace %>renderChildItems(boundingBox.one('select'), level, clearChild);
 		}
 	});
 	
-	Liferay.provide(window, '<portlet:namespace/>renderChildItems', function(evt, parentLevel, clearChild) {
+	Liferay.provide(window, '<portlet:namespace/><%=randomNamespace %>renderChildItems', function(evt, parentLevel, clearChild) {
 	
 		var A = AUI();
 		
@@ -266,7 +266,7 @@
 		var boundingBox = null;
 		
 		if(level <= depthLevel){
-			boundingBox = A.one('#<portlet:namespace/>col_' + level);
+			boundingBox = A.one('#<portlet:namespace/>col_<%=randomNamespace %>' + level);
 			
 			if(parentItemId != 0){
 				Liferay.Service(
@@ -276,10 +276,10 @@
 				  },
 				  function(objs) {
 					  if(objs.length > 0){
-					  	 <portlet:namespace/>renderDataItems(objs, boundingBox, level, clearChild);
+					  	 <portlet:namespace/><%=randomNamespace %>renderDataItems(objs, boundingBox, level, clearChild);
 					  }else{
 					  	for(var childLevel = level; childLevel <= depthLevel; childLevel++){
-							var childBoundingBox = A.one('#<portlet:namespace/>col_' + childLevel);
+							var childBoundingBox = A.one('#<portlet:namespace/>col_<%=randomNamespace %>' + childLevel);
 							
 							if(childBoundingBox){
 								childBoundingBox.one('select').empty();
@@ -290,7 +290,7 @@
 			}else{
 				
 				for(var childLevel = level; childLevel <= depthLevel; childLevel++){
-					var childBoundingBox = A.one('#<portlet:namespace/>col_' + childLevel);
+					var childBoundingBox = A.one('#<portlet:namespace/>col_<%=randomNamespace %>' + childLevel);
 					
 					if(childBoundingBox){
 						childBoundingBox.one('select').empty();
