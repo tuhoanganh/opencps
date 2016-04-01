@@ -80,6 +80,7 @@ public class AccountRegPortlet extends MVCPortlet {
 	    throws FileNotFoundException {
 
 		_log.info("go here");
+		
 		long dictCollectionId =
 		    ParamUtil.getLong(actionRequest, "dictCollectionId");
 		long businessId =
@@ -125,16 +126,20 @@ public class AccountRegPortlet extends MVCPortlet {
 		    ParamUtil.getString(
 		        actionRequest, BusinessDisplayTerms.BUSINESS_REPRESENTATIVEROLE);
 
-		String[] domain =
+		String [] domain =
 		    ParamUtil.getParameterValues(
-		        actionRequest, BusinessDisplayTerms.BUSINESS_DOMAIN);
+		        actionRequest, "businessDomains", null);
+		
+		for(int i = 0; i < domain.length ; i++) {
+			_log.info(" domain " + domain[i].toString() + " == ");
+		}
 
 		UploadPortletRequest uploadPortletRequest =
 		    PortalUtil.getUploadPortletRequest(actionRequest);
 
 		String mimeType = uploadPortletRequest.getContentType();
 		_log.info("== mimeType " + mimeType + "  telNo" + telNo + " domain " +
-						domain[0].toString());
+		    domain.length);
 
 		File attachFile = (File) uploadPortletRequest.getFile("attachFile");
 
@@ -144,63 +149,113 @@ public class AccountRegPortlet extends MVCPortlet {
 		PortletUtil.SplitDate spd = new PortletUtil.SplitDate(defaultBirthDate);
 
 		ServiceContext serviceContext;
-        try {
-	      
-	        if (businessId == 0) {
-	        	_log.info("====update");
+		try {
+
+			if (businessId == 0) {
+				_log.info("====update");
 				try {
-					  serviceContext = ServiceContextFactory.getInstance(actionRequest);
-					  BusinessLocalServiceUtil.addBusiness(
-	                    name, enName, shortName, type, idNumber, address, cityCode,
-	                    districtCode, wardCode,
-	                    getNameOfDataItem(dictCollectionId, cityCode),
-	                    getNameOfDataItem(dictCollectionId, districtCode),
-	                    getNameOfDataItem(dictCollectionId, wardCode), telNo, email,
-	                    representativeName, representativeRole, domain,
-	                    spd.getDayOfMoth(), spd.getMonth(), spd.getYear(), 
-	                    serviceContext.getScopeGroupId(), attachFile.getName(), 
-	                    mimeType, StringPool.BLANK, inputStream, attachFile.getTotalSpace(),
-	                    serviceContext);
-                }
-                catch (NoSuchDictItemException e) {
-	                // TODO Auto-generated catch block
-	                e.printStackTrace();
-                }
-                catch (PortalException e) {
-	                // TODO Auto-generated catch block
-	                e.printStackTrace();
-                }
+					serviceContext =
+					    ServiceContextFactory.getInstance(actionRequest);
+					BusinessLocalServiceUtil.addBusiness(
+					    name, enName, shortName, type, idNumber, address,
+					    cityCode, districtCode, wardCode,
+					    getNameOfDataItem(dictCollectionId, cityCode),
+					    getNameOfDataItem(dictCollectionId, districtCode),
+					    getNameOfDataItem(dictCollectionId, wardCode), telNo,
+					    email, representativeName, representativeRole, domain,
+					    spd.getDayOfMoth(), spd.getMonth(), spd.getYear(),
+					    serviceContext.getScopeGroupId(), attachFile.getName(),
+					    mimeType, StringPool.BLANK, inputStream,
+					    attachFile.getTotalSpace(), serviceContext);
+				}
+				catch (NoSuchDictItemException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				catch (PortalException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
 			}
 			else {
 				/* BusinessLocalServiceUtil.updateBusiness(business); */
 			}
-        }
-        catch (SystemException e) {
-	        // TODO Auto-generated catch block
-	        e.printStackTrace();
-        }
-		
+		}
+		catch (SystemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
 	public void updateCitizen(
-	    ActionRequest actionRequest, ActionResponse actionResponse) {
-
-		long citizenID =
+	    ActionRequest actionRequest, ActionResponse actionResponse)
+	    throws PortalException, SystemException, FileNotFoundException {
+		
+		long dictCollectionId = ParamUtil.getLong(
+			actionRequest, "dictCollectionId");
+		long citizenId =
 		    ParamUtil.getLong(actionRequest, CitizenDisplayTerms.CITIZEN_ID);
 		String fullName =
 		    ParamUtil.getString(
 		        actionRequest, CitizenDisplayTerms.CITIZEN_FULLNAME);
-		String personID =
+		String personId =
 		    ParamUtil.getString(
 		        actionRequest, CitizenDisplayTerms.CITIZEN_PERSONALID);
+		String adress =
+		    ParamUtil.getString(
+		        actionRequest, CitizenDisplayTerms.CITIZEN_ADDRESS);
+		String cityCode =
+		    ParamUtil.getString(
+		        actionRequest, CitizenDisplayTerms.CITIZEN_CITYCODE);
+		String districtCode =
+		    ParamUtil.getString(
+		        actionRequest, CitizenDisplayTerms.CITIZEN_DISTRICTCODE);
+		String wardCode =
+		    ParamUtil.getString(
+		        actionRequest, CitizenDisplayTerms.CITIZEN_WARDCODE);
+		String email =
+		    ParamUtil.getString(
+		        actionRequest, CitizenDisplayTerms.CITIZEN_EMAIL);
+		String telNo =
+		    ParamUtil.getString(
+		        actionRequest, CitizenDisplayTerms.CITIZEN_TELNO);
 		int birthDateDay =
 		    ParamUtil.getInteger(
 		        actionRequest, CitizenDisplayTerms.BIRTH_DATE_DAY);
 		int birthDateMonth =
 		    ParamUtil.getInteger(
 		        actionRequest, CitizenDisplayTerms.BIRTH_DATE_MONTH);
+		int birthDateYear =
+		    ParamUtil.getInteger(
+		        actionRequest, CitizenDisplayTerms.BIRTH_DATE_YEAR);
+		int gender =
+		    ParamUtil.getInteger(
+		        actionRequest, CitizenDisplayTerms.CITIZEN_GENDER);
+		UploadPortletRequest uploadPortletRequest =
+		    PortalUtil.getUploadPortletRequest(actionRequest);
+
+		String mimeType = uploadPortletRequest.getContentType();
+		File attachFile = (File) uploadPortletRequest.getFile("attachFile");
+
+		InputStream inputStream = new FileInputStream(attachFile);
+		ServiceContext serviceContext =
+		    ServiceContextFactory.getInstance(actionRequest);
+		if (citizenId == 0) {
+			CitizenLocalServiceUtil.addCitizen(
+			    fullName, personId, gender, birthDateDay, birthDateMonth,
+			    birthDateYear, adress, cityCode, districtCode, wardCode, 
+			    getNameOfDataItem(dictCollectionId, cityCode),
+			    getNameOfDataItem(dictCollectionId, districtCode),
+			    getNameOfDataItem(dictCollectionId, wardCode), email, telNo, 
+			    serviceContext.getScopeGroupId(), attachFile.getName(), mimeType, 
+			    StringPool.BLANK, inputStream,attachFile.getTotalSpace(),
+			    serviceContext);
+		}
+		else {
+			/*CitizenLocalServiceUtil.updateCitizen(citizen)*/
+		}
 	}
 
 	private String getNameOfDataItem(long dictCollectionId, String itemCode)
