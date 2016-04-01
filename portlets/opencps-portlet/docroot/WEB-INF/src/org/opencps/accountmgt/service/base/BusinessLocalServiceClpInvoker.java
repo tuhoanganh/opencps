@@ -1,16 +1,21 @@
-/**
- * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+
+/*******************************************************************************
+ * OpenCPS is the open source Core Public Services software
+ * Copyright (C) 2016-present OpenCPS community
  *
- * This library is free software; you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation; either version 2.1 of the License, or (at your option)
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * any later version.
  *
- * This library is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- */
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *******************************************************************************/
+
 
 package org.opencps.accountmgt.service.base;
 
@@ -113,6 +118,19 @@ public class BusinessLocalServiceClpInvoker {
 		_methodName59 = "setBeanIdentifier";
 
 		_methodParameterTypes59 = new String[] { "java.lang.String" };
+
+		_methodName64 = "addBusiness";
+
+		_methodParameterTypes64 = new String[] {
+				"java.lang.String", "java.lang.String", "java.lang.String",
+				"java.lang.String", "java.lang.String", "java.lang.String",
+				"java.lang.String", "java.lang.String", "java.lang.String",
+				"java.lang.String", "java.lang.String", "java.lang.String",
+				"java.lang.String", "java.lang.String[][]", "int", "int", "int",
+				"long", "long", "java.lang.String", "java.lang.String",
+				"java.lang.String", "java.io.InputStream", "long",
+				"com.liferay.portal.service.ServiceContext"
+			};
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -216,6 +234,31 @@ public class BusinessLocalServiceClpInvoker {
 			return null;
 		}
 
+		if (_methodName64.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes64, parameterTypes)) {
+			return BusinessLocalServiceUtil.addBusiness((java.lang.String)arguments[0],
+				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
+				(java.lang.String)arguments[3], (java.lang.String)arguments[4],
+				(java.lang.String)arguments[5], (java.lang.String)arguments[6],
+				(java.lang.String)arguments[7], (java.lang.String)arguments[8],
+				(java.lang.String)arguments[9],
+				(java.lang.String)arguments[10],
+				(java.lang.String)arguments[11],
+				(java.lang.String)arguments[12],
+				(java.lang.String[])arguments[13],
+				((Integer)arguments[14]).intValue(),
+				((Integer)arguments[15]).intValue(),
+				((Integer)arguments[16]).intValue(),
+				((Long)arguments[17]).longValue(),
+				((Long)arguments[18]).longValue(),
+				(java.lang.String)arguments[19],
+				(java.lang.String)arguments[20],
+				(java.lang.String)arguments[21],
+				(java.io.InputStream)arguments[22],
+				((Long)arguments[23]).longValue(),
+				(com.liferay.portal.service.ServiceContext)arguments[24]);
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -255,4 +298,6 @@ public class BusinessLocalServiceClpInvoker {
 	private String[] _methodParameterTypes58;
 	private String _methodName59;
 	private String[] _methodParameterTypes59;
+	private String _methodName64;
+	private String[] _methodParameterTypes64;
 }
