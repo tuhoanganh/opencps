@@ -20,12 +20,14 @@ import org.opencps.accountmgt.search.BusinessDisplayTerms;
 import org.opencps.accountmgt.search.CitizenDisplayTerms;
 import org.opencps.accountmgt.service.BusinessLocalServiceUtil;
 import org.opencps.accountmgt.service.CitizenLocalServiceUtil;
+import org.opencps.datamgt.NoSuchDictItemException;
 import org.opencps.datamgt.model.DictItem;
 import org.opencps.datamgt.service.DictItemLocalServiceUtil;
 import org.opencps.util.DateTimeUtil;
 import org.opencps.util.PortletUtil;
 import org.opencps.util.WebKeys;
 
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
@@ -78,62 +80,6 @@ public class AccountRegPortlet extends MVCPortlet {
 
 	    throws FileNotFoundException {
 
-<<<<<<< HEAD
-		_log.info("go here");
-		
-		long dictCollectionId =
-		    ParamUtil.getLong(actionRequest, "dictCollectionId");
-		long businessId =
-		    ParamUtil.getLong(
-		        actionRequest, BusinessDisplayTerms.BUSINESS_BUSINESSID);
-		String name =
-		    ParamUtil.getString(
-		        actionRequest, BusinessDisplayTerms.BUSINESS_NAME);
-		String enName =
-		    ParamUtil.getString(
-		        actionRequest, BusinessDisplayTerms.BUSINESS_ENNAME);
-		String idNumber =
-		    ParamUtil.getString(
-		        actionRequest, BusinessDisplayTerms.BUSINESS_IDNUMBER);
-		String shortName =
-		    ParamUtil.getString(
-		        actionRequest, BusinessDisplayTerms.BUSINESS_SHORTNAME);
-		String type =
-		    ParamUtil.getString(
-		        actionRequest, BusinessDisplayTerms.BUSINESS_BUSINESSTYPE);
-		String address =
-		    ParamUtil.getString(
-		        actionRequest, BusinessDisplayTerms.BUSINESS_ADDRESS);
-		String cityCode =
-		    ParamUtil.getString(
-		        actionRequest, BusinessDisplayTerms.BUSINESS_CITYCODE);
-		String districtCode =
-		    ParamUtil.getString(
-		        actionRequest, BusinessDisplayTerms.BUSINESS_DISTRICTCODE);
-		String wardCode =
-		    ParamUtil.getString(
-		        actionRequest, BusinessDisplayTerms.BUSINESS_WARDCODE);
-		String email =
-		    ParamUtil.getString(
-		        actionRequest, BusinessDisplayTerms.BUSINESS_EMAIL);
-		String telNo =
-		    ParamUtil.getString(
-		        actionRequest, BusinessDisplayTerms.BUSINESS_TELNO);
-		String representativeName =
-		    ParamUtil.getString(
-		        actionRequest, BusinessDisplayTerms.BUSINESS_REPRESENTATIVENAME);
-		String representativeRole =
-		    ParamUtil.getString(
-		        actionRequest, BusinessDisplayTerms.BUSINESS_REPRESENTATIVEROLE);
-
-		String [] domain =
-		    ParamUtil.getParameterValues(
-		        actionRequest, "businessDomains", null);
-		
-		for(int i = 0; i < domain.length ; i++) {
-			_log.info(" domain " + domain[i].toString() + " == ");
-		}
-=======
 		_log
 		    .info("go here");
 		long dictCollectionId = ParamUtil
@@ -175,24 +121,14 @@ public class AccountRegPortlet extends MVCPortlet {
 		String[] domain = ParamUtil
 		    .getParameterValues(
 		        actionRequest, BusinessDisplayTerms.BUSINESS_DOMAIN);
->>>>>>> FETCH_HEAD
 
 		UploadPortletRequest uploadPortletRequest = PortalUtil
 		    .getUploadPortletRequest(actionRequest);
 
-<<<<<<< HEAD
 		String mimeType = uploadPortletRequest.getContentType();
 		_log.info("== mimeType " + mimeType + "  telNo" + telNo + " domain " +
 		    domain.length);
-=======
-		String mimeType = uploadPortletRequest
-		    .getContentType();
-		_log
-		    .info(
-		        "== mimeType " + mimeType + "  telNo" + telNo + " domain " +
-		            domain[0]
-		                .toString());
->>>>>>> FETCH_HEAD
+
 
 		File attachFile = (File) uploadPortletRequest
 		    .getFile("attachFile");
@@ -204,33 +140,6 @@ public class AccountRegPortlet extends MVCPortlet {
 		PortletUtil.SplitDate spd = new PortletUtil.SplitDate(defaultBirthDate);
 
 		ServiceContext serviceContext;
-		try {
-
-			if (businessId == 0) {
-				_log.info("====update");
-				try {
-					serviceContext =
-					    ServiceContextFactory.getInstance(actionRequest);
-					BusinessLocalServiceUtil.addBusiness(
-					    name, enName, shortName, type, idNumber, address,
-					    cityCode, districtCode, wardCode,
-					    getNameOfDataItem(dictCollectionId, cityCode),
-					    getNameOfDataItem(dictCollectionId, districtCode),
-					    getNameOfDataItem(dictCollectionId, wardCode), telNo,
-					    email, representativeName, representativeRole, domain,
-					    spd.getDayOfMoth(), spd.getMonth(), spd.getYear(),
-					    serviceContext.getScopeGroupId(), attachFile.getName(),
-					    mimeType, StringPool.BLANK, inputStream,
-					    attachFile.getTotalSpace(), serviceContext);
-				}
-				catch (NoSuchDictItemException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				catch (PortalException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 
 		DictItem city = null;
 
@@ -286,23 +195,18 @@ public class AccountRegPortlet extends MVCPortlet {
 				/* BusinessLocalServiceUtil.updateBusiness(business); */
 			}
 		}
-<<<<<<< HEAD
-		catch (SystemException e) {
+
+		catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-=======
-		catch (Exception e) {
-			_log
-			    .equals(e);
->>>>>>> FETCH_HEAD
+
 		}
 
 	}
 
 	public void updateCitizen(
-<<<<<<< HEAD
 	    ActionRequest actionRequest, ActionResponse actionResponse)
-	    throws PortalException, SystemException, FileNotFoundException {
+	    throws SystemException, FileNotFoundException, NoSuchDictItemException, com.liferay.portal.kernel.exception.PortalException {
 		
 		long dictCollectionId = ParamUtil.getLong(
 			actionRequest, "dictCollectionId");
@@ -376,21 +280,6 @@ public class AccountRegPortlet extends MVCPortlet {
 		    DictItemLocalServiceUtil.getDictItemInuseByItemCode(
 		        dictCollectionId, itemCode);
 		return dictItem != null ? dictItem.getItemName() : StringPool.BLANK;
-
-=======
-	    ActionRequest actionRequest, ActionResponse actionResponse) {
-
-		long citizenID = ParamUtil
-		    .getLong(actionRequest, CitizenDisplayTerms.CITIZEN_ID);
-		String fullName = ParamUtil
-		    .getString(actionRequest, CitizenDisplayTerms.CITIZEN_FULLNAME);
-		String personID = ParamUtil
-		    .getString(actionRequest, CitizenDisplayTerms.CITIZEN_PERSONALID);
-		int birthDateDay = ParamUtil
-		    .getInteger(actionRequest, CitizenDisplayTerms.BIRTH_DATE_DAY);
-		int birthDateMonth = ParamUtil
-		    .getInteger(actionRequest, CitizenDisplayTerms.BIRTH_DATE_MONTH);
->>>>>>> FETCH_HEAD
 	}
 
 	private Log _log = LogFactoryUtil
