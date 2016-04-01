@@ -77,7 +77,7 @@ public class AccountRegPortlet extends MVCPortlet {
 	public void updateBusiness(
 	    ActionRequest actionRequest, ActionResponse actionResponse)
 
-	    throws FileNotFoundException, PortalException, SystemException {
+	    throws FileNotFoundException {
 
 		_log.info("go here");
 		long dictCollectionId =
@@ -133,7 +133,8 @@ public class AccountRegPortlet extends MVCPortlet {
 		    PortalUtil.getUploadPortletRequest(actionRequest);
 
 		String mimeType = uploadPortletRequest.getContentType();
-		_log.info("== mimeType " + mimeType + "  telNo" + telNo);
+		_log.info("== mimeType " + mimeType + "  telNo" + telNo + " domain " +
+						domain[0].toString());
 
 		File attachFile = (File) uploadPortletRequest.getFile("attachFile");
 
@@ -142,25 +143,44 @@ public class AccountRegPortlet extends MVCPortlet {
 		Date defaultBirthDate = DateTimeUtil.convertStringToDate("01/01/1970");
 		PortletUtil.SplitDate spd = new PortletUtil.SplitDate(defaultBirthDate);
 
-		ServiceContext serviceContext =
-		    ServiceContextFactory.getInstance(actionRequest);
-		if (businessId > 0) {
-			BusinessLocalServiceUtil.addBusiness(
-			    name, enName, shortName, type, idNumber, address, cityCode,
-			    districtCode, wardCode,
-			    getNameOfDataItem(dictCollectionId, cityCode),
-			    getNameOfDataItem(dictCollectionId, districtCode),
-			    getNameOfDataItem(dictCollectionId, wardCode), telNo, email,
-			    representativeName, representativeRole, domain,
-			    spd.getDayOfMoth(), spd.getMonth(), spd.getYear(), 
-			    serviceContext.getScopeGroupId(), attachFile.getName(), 
-			    mimeType, StringPool.BLANK, inputStream, attachFile.getTotalSpace(),
-			    serviceContext);
+		ServiceContext serviceContext;
+        try {
+	      
+	        if (businessId == 0) {
+	        	_log.info("====update");
+				try {
+					  serviceContext = ServiceContextFactory.getInstance(actionRequest);
+					  BusinessLocalServiceUtil.addBusiness(
+	                    name, enName, shortName, type, idNumber, address, cityCode,
+	                    districtCode, wardCode,
+	                    getNameOfDataItem(dictCollectionId, cityCode),
+	                    getNameOfDataItem(dictCollectionId, districtCode),
+	                    getNameOfDataItem(dictCollectionId, wardCode), telNo, email,
+	                    representativeName, representativeRole, domain,
+	                    spd.getDayOfMoth(), spd.getMonth(), spd.getYear(), 
+	                    serviceContext.getScopeGroupId(), attachFile.getName(), 
+	                    mimeType, StringPool.BLANK, inputStream, attachFile.getTotalSpace(),
+	                    serviceContext);
+                }
+                catch (NoSuchDictItemException e) {
+	                // TODO Auto-generated catch block
+	                e.printStackTrace();
+                }
+                catch (PortalException e) {
+	                // TODO Auto-generated catch block
+	                e.printStackTrace();
+                }
 
-		}
-		else {
-			/* BusinessLocalServiceUtil.updateBusiness(business); */
-		}
+			}
+			else {
+				/* BusinessLocalServiceUtil.updateBusiness(business); */
+			}
+        }
+        catch (SystemException e) {
+	        // TODO Auto-generated catch block
+	        e.printStackTrace();
+        }
+		
 
 	}
 

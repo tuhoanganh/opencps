@@ -121,7 +121,7 @@
 					%>
 						<aui:input 
 							name="<%=BusinessDisplayTerms.BUSINESS_DOMAIN %>"
-							value="<%=dictItem.getItemName() %>"
+							value="<%=dictItem.getItemCode() %>"
 							type="checkbox" 
 							multiple="true"
 						>		
