@@ -16,16 +16,40 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
+<%@page import="com.liferay.portal.kernel.log.Log"%>
+<%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
+<%@page import="org.opencps.datamgt.model.DictItem"%>
 <%@page import="org.opencps.util.MessageKeys"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="org.opencps.accountmgt.search.BusinessDisplayTerms"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.accountmgt.model.Business"%>
+<%@page import="java.util.List"%>
+<%@page import="org.opencps.util.PortletPropsValues"%>
+<%@page import="org.opencps.datamgt.service.DictCollectionLocalServiceUtil"%>
+<%@page import="org.opencps.datamgt.model.DictCollection"%>
 <%@ include file="../../init.jsp" %>
 
 <%
 	Business business = (Business) request.getAttribute(WebKeys.BUSINESS_ENTRY);
 	long businessId = business!=null ? business.getBusinessId() : 0L;
+	
+	List<DictItem> dictItems = new ArrayList<DictItem>();
+	DictCollection dictCollection = null;
+	
+	try {
+		dictCollection = DictCollectionLocalServiceUtil
+						.getDictCollection(scopeGroupId, 
+							PortletPropsValues.BUSINESS_DOMAIN);
+		if(dictCollection!=null) {
+			dictItems = DictItemLocalServiceUtil
+							.getDictItemsByDictCollectionId(dictCollection.getDictCollectionId());
+		}
+	} catch(Exception e) {
+		_log.error(e);
+	}
 	
 	
 %>
@@ -49,7 +73,7 @@
 		
 		<aui:col width="50">
 			<aui:input name="<%=BusinessDisplayTerms.BUSINESS_IDNUMBER %>">
-				<aui:input name="required" />
+				<aui:validator name="required" />
 				<aui:validator name="maxLength">100</aui:validator>
 			</aui:input>
 		</aui:col>
@@ -71,70 +95,33 @@
 	</aui:row>
 	
 	<aui:row>
-		<aui:select 
-			name="<%=BusinessDisplayTerms.BUSINESS_BUSINESSTYPE %>">
-			<aui:option value="<%=0 %>">?????</aui:option>
-		</aui:select>
+		<datamgt:ddr 
+				cssClass="input100"
+				depthLevel="1" 
+				dictCollectionCode="BUSINESS_TYPE"
+				itemNames="businessType"
+				itemsEmptyOption="true"	
+			>	
+			</datamgt:ddr>
 	</aui:row>
 	<aui:row cssClass="scrollfield">
-			<aui:input 
-			name="test1"
-			type="checkbox" 
-			label="<%=LanguageUtil.get(pageContext, 
-						MessageKeys.ACCOUNTMGT_CONFIRM_KEY) %>"
-			>
-			</aui:input>
-			
-			<aui:input 
-			name="test2"
-			type="checkbox" 
-			label="<%=LanguageUtil.get(pageContext, 
-						MessageKeys.ACCOUNTMGT_CONFIRM_KEY) %>"
-			>
-			</aui:input>
-			
-			<aui:input 
-			name="test3"
-			type="checkbox" 
-			label="<%=LanguageUtil.get(pageContext, 
-						MessageKeys.ACCOUNTMGT_CONFIRM_KEY) %>"
-			>
-			</aui:input>
-			<aui:input 
-			name="test4"
-			type="checkbox" 
-			label="<%=LanguageUtil.get(pageContext, 
-						MessageKeys.ACCOUNTMGT_CONFIRM_KEY) %>"
-			>
-			</aui:input>
-			<aui:input 
-			name="test5"
-			type="checkbox" 
-			label="<%=LanguageUtil.get(pageContext, 
-						MessageKeys.ACCOUNTMGT_CONFIRM_KEY) %>"
-			>
-			</aui:input>
-			<aui:input 
-			name="test6"
-			type="checkbox" 
-			label="<%=LanguageUtil.get(pageContext, 
-						MessageKeys.ACCOUNTMGT_CONFIRM_KEY) %>"
-			>
-			</aui:input>
-			<aui:input 
-			name="test7"
-			type="checkbox" 
-			label="<%=LanguageUtil.get(pageContext, 
-						MessageKeys.ACCOUNTMGT_CONFIRM_KEY) %>"
-			>
-			</aui:input>
-			<aui:input 
-			name="test8"
-			type="checkbox" 
-			label="<%=LanguageUtil.get(pageContext, 
-						MessageKeys.ACCOUNTMGT_CONFIRM_KEY) %>"
-			>
-			</aui:input>
+		<c:if test="<%=dictItems.size() > 0 %>">
+			<%
+				for(DictItem dictItem : dictItems) {
+					
+					%>
+						<aui:input 
+							name="<%=BusinessDisplayTerms.BUSINESS_DOMAIN %>"
+							value="<%=dictItem.getItemName() %>"
+							type="checkbox" 
+							multiple="true"
+						>		
+						</aui:input>
+					<%
+				}
+			%>
+				
+		</c:if>
 	</aui:row>
 	
 	<aui:row>
@@ -203,7 +190,7 @@
 		</aui:input>
 	</aui:row>
 	<aui:row>
-		<aui:button name="businessSubmit" type="submit"  disabled="true" />
+		<aui:button name="businessSubmit" type="submit" />
 	</aui:row>
 
 </aui:form>
@@ -229,3 +216,8 @@ AUI().ready(function(A) {
 });
 
 </aui:script>
+
+<%!
+	private Log _log = LogFactoryUtil
+	.getLog(".html.portlets.accountmgt.registration.registration_business.business_register.jsp");
+%>

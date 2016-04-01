@@ -143,4 +143,8 @@ public class PortletPropsValues {
 					.getString(PortletProps
 						.get(PortletPropsKeys.USERMGT_EMPLOYEE_RESOURCE));
 	
+	//master data
+	public static final String BUSINESS_DOMAIN = GetterUtil
+					.getString(PortletProps
+						.get(PortletPropsKeys.BUSINESS_DOMAIN));
 }
