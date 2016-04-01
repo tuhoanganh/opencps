@@ -21,6 +21,9 @@ import org.opencps.accountmgt.model.Business;
 import org.opencps.accountmgt.model.BusinessDomain;
 import org.opencps.accountmgt.model.impl.BusinessDomainImpl;
 import org.opencps.accountmgt.service.base.BusinessLocalServiceBaseImpl;
+import org.opencps.datamgt.model.DictItem;
+import org.opencps.datamgt.service.DictItemLocalServiceUtil;
+import org.opencps.util.DLFolderUtil;
 import org.opencps.util.PortletConstants;
 import org.opencps.util.PortletPropsValues;
 import org.opencps.util.PortletUtil;
@@ -42,6 +45,7 @@ import com.liferay.portal.model.Website;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserGroupLocalServiceUtil;
 import com.liferay.portlet.announcements.model.AnnouncementsDelivery;
+import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
 import com.liferay.util.PwdGenerator;
 
@@ -69,11 +73,12 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 	public Business addBusiness(
 	    String fullName, String enName, String shortName, String businessType,
 	    String idNumber, String address, String cityCode, String districtCode,
-	    String wardCode, String telNo, String email, String representativeName,
+	    String wardCode, String cityName, String districtName, String wardName,
+	    String telNo, String email, String representativeName,
 	    String representativeRole, String[] businessDomainCodes,
 	    int birthDateDay, int birthDateMonth, int birthDateYear,
-	    long repositoryId, String sourceFileName,
-	    String contentType, String title, InputStream inputStream, long size,
+	    long repositoryId, String sourceFileName, String contentType,
+	    String title, InputStream inputStream, long size,
 	    ServiceContext serviceContext)
 	    throws SystemException, PortalException {
 
@@ -132,8 +137,6 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		password1 = PwdGenerator
 		    .getPassword();
 		password2 = password1;
-		
-		long folderId = 0;
 
 		User mappingUser = userService
 		    .addUserWithWorkflow(serviceContext
@@ -160,20 +163,43 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		    .updateStatus(mappingUser
 		        .getUserId(), status);
 
+		String[] folderNames = new String[] {
+		    PortletConstants.DestinationRoot.BUSINESS
+		        .toString(),
+		    cityName, districtName, wardName, String
+		        .valueOf(mappingUser
+		            .getUserId())
+		};
+
+		String destination = PortletUtil
+		    .getDestinationFolder(folderNames);
+		
+		serviceContext
+		    .setAddGroupPermissions(true);
+		serviceContext
+		    .setAddGuestPermissions(true);
+
+		DLFolder dlFolder = DLFolderUtil
+		    .getTargetFolder(mappingUser
+		        .getUserId(), serviceContext
+		            .getScopeGroupId(),
+		        repositoryId, false, 0, destination, StringPool.BLANK, false,
+		        serviceContext);
+
 		FileEntry fileEntry = DLAppServiceUtil
-		    .addFileEntry(
-		        repositoryId, folderId, sourceFileName, contentType, title,
+		    .addFileEntry(repositoryId, dlFolder
+		        .getFolderId(), sourceFileName, contentType, title,
 		        StringPool.BLANK, StringPool.BLANK, inputStream, size,
 		        serviceContext);
 
-		/*Organization org = OrganizationLocalServiceUtil
-		    .addOrganization(
-		        userId, 0,
-		        fullName + StringPool.OPEN_PARENTHESIS + idNumber +
-		            StringPool.CLOSE_PARENTHESIS,
-		        OrganizationConstants.TYPE_REGULAR_ORGANIZATION, 0, 0,
-		        ListTypeConstants.ORGANIZATION_STATUS_DEFAULT, enName, true,
-		        serviceContext);*/
+		/*
+		 * Organization org = OrganizationLocalServiceUtil .addOrganization(
+		 * userId, 0, fullName + StringPool.OPEN_PARENTHESIS + idNumber +
+		 * StringPool.CLOSE_PARENTHESIS,
+		 * OrganizationConstants.TYPE_REGULAR_ORGANIZATION, 0, 0,
+		 * ListTypeConstants.ORGANIZATION_STATUS_DEFAULT, enName, true,
+		 * serviceContext);
+		 */
 
 		business
 		    .setAccountStatus(PortletConstants.ACCOUNT_STATUS_REGISTERED);

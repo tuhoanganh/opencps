@@ -19,6 +19,7 @@ import java.util.Date;
 
 import org.opencps.accountmgt.model.Citizen;
 import org.opencps.accountmgt.service.base.CitizenLocalServiceBaseImpl;
+import org.opencps.util.DLFolderUtil;
 import org.opencps.util.DateTimeUtil;
 import org.opencps.util.PortletConstants;
 import org.opencps.util.PortletPropsValues;
@@ -53,6 +54,7 @@ import com.liferay.portal.service.TicketLocalServiceUtil;
 import com.liferay.portal.service.UserGroupLocalServiceUtil;
 import com.liferay.portal.util.SubscriptionSender;
 import com.liferay.portlet.announcements.model.AnnouncementsDelivery;
+import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
 import com.liferay.util.PwdGenerator;
 
@@ -80,9 +82,10 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 	public Citizen addCitizen(
 	    String fullName, String personalId, int gender, int birthDateDay,
 	    int birthDateMonth, int birthDateYear, String address, String cityCode,
-	    String districtCode, String wardCode, String email, String telNo,
-	    long repositoryId, String sourceFileName,
-	    String contentType, String title, InputStream inputStream, long size,
+	    String districtCode, String wardCode, String cityName,
+	    String districtName, String wardName, String email, String telNo,
+	    long repositoryId, String sourceFileName, String contentType,
+	    String title, InputStream inputStream, long size,
 	    ServiceContext serviceContext)
 	    throws SystemException, PortalException {
 
@@ -129,8 +132,6 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 			        .getUserGroupId()
 			};
 		}
-		
-		long folderId = 0;
 
 		try {
 			userGroup = UserGroupLocalServiceUtil
@@ -173,9 +174,32 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 		    .updateStatus(mappingUser
 		        .getUserId(), status);
 
+		String[] folderNames = new String[] {
+		    PortletConstants.DestinationRoot.BUSINESS
+		        .toString(),
+		    cityName, districtName, wardName, String
+		        .valueOf(mappingUser
+		            .getUserId())
+		};
+
+		String destination = PortletUtil
+		    .getDestinationFolder(folderNames);
+
+		serviceContext
+		    .setAddGroupPermissions(true);
+		serviceContext
+		    .setAddGuestPermissions(true);
+
+		DLFolder dlFolder = DLFolderUtil
+		    .getTargetFolder(mappingUser
+		        .getUserId(), serviceContext
+		            .getScopeGroupId(),
+		        repositoryId, false, 0, destination, StringPool.BLANK, false,
+		        serviceContext);
+
 		FileEntry fileEntry = DLAppServiceUtil
-		    .addFileEntry(
-		        repositoryId, folderId, sourceFileName, contentType, title,
+		    .addFileEntry(repositoryId, dlFolder
+		        .getFolderId(), sourceFileName, contentType, title,
 		        StringPool.BLANK, StringPool.BLANK, inputStream, size,
 		        serviceContext);
 
