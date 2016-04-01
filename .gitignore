@@ -98,3 +98,10 @@ portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/servicemgt/service/impl
 portlets/opencps-portlet/docroot/WEB-INF/src/META-INF/
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/accountmgt/model/
 
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/usermgt/model/impl/
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/usermgt/service/base/
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/usermgt/service/http/
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/usermgt/service/persistence/EmployeePersistenceImpl.java
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/usermgt/service/persistence/JobPosPersistenceImpl.java
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/usermgt/service/persistence/WorkingUnitPersistenceImpl.java
+
