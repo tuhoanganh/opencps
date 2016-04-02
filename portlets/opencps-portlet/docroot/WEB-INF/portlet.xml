@@ -206,7 +206,7 @@
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/portlets/accountmgt/profile/profile.jsp</value>
+			<value>/html/portlets/accountmgt/profile/citizenprofile.jsp</value>
 		</init-param>
 		<init-param>
 			<name>template-path</name>

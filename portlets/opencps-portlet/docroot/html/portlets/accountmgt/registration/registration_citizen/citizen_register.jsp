@@ -1,6 +1,4 @@
 
-<%@page import="org.opencps.datamgt.service.DictCollectionLocalServiceUtil"%>
-<%@page import="org.opencps.datamgt.model.DictCollection"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -28,6 +26,8 @@
 <%@page import="org.opencps.accountmgt.model.Citizen"%>
 <%@page import="org.opencps.util.MessageKeys"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
+<%@page import="org.opencps.datamgt.service.DictCollectionLocalServiceUtil"%>
+<%@page import="org.opencps.datamgt.model.DictCollection"%>
 <%@ include file="../../init.jsp" %>
 
 <%
@@ -133,8 +133,7 @@
 			dictCollectionCode="ADMINISTRATIVE_REGION"
 			itemNames="cityId,districtId,wardId"
 			itemsEmptyOption="true,true,true"	
-		>	
-		</datamgt:ddr>
+		/>	
 	</aui:row>
 	
 	<aui:row>
@@ -149,7 +148,6 @@
 		<aui:col width="50">
 			<aui:input name="<%=CitizenDisplayTerms.CITIZEN_TELNO %>">
 				<aui:validator name="required" />
-				<aui:validator name="minLength">10</aui:validator>
 			</aui:input>
 		</aui:col>
 	</aui:row>
