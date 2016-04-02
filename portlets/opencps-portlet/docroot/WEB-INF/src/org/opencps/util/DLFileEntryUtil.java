@@ -15,8 +15,11 @@ package org.opencps.util;
 
 import java.io.InputStream;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
 
 /**
@@ -38,9 +41,41 @@ public class DLFileEntryUtil {
 			        description, changeLog, inputStream, size, serviceContext);
 		}
 		catch (Exception e) {
-			// TODO: handle exception
+			_log
+			    .error(e);
 		}
 
 		return fileEntry;
 	}
+
+	public static FileEntry addFileEntryToTargetFolder(
+	    long userId, long groupId, boolean mountPoint, long parentFolderId,
+	    boolean hidden, String destination, long repositoryId,
+	    String sourceFileName, String contentType, String title,
+	    String description, String changeLog, InputStream inputStream,
+	    long size, ServiceContext serviceContext) {
+
+		FileEntry fileEntry = null;
+
+		try {
+			DLFolder dlFolder = DLFolderUtil
+			    .getTargetFolder(
+			        userId, groupId, repositoryId, mountPoint, parentFolderId,
+			        destination, description, hidden, serviceContext);
+			fileEntry = DLAppServiceUtil
+			    .addFileEntry(repositoryId, dlFolder
+			        .getFolderId(), sourceFileName, contentType, title,
+			        description, changeLog, inputStream, size, serviceContext);
+		}
+		catch (Exception e) {
+			_log
+			    .error(e);
+		}
+
+		return fileEntry;
+	}
+
+	private static Log _log = LogFactoryUtil
+	    .getLog(DLFileEntryUtil.class
+	        .getName());
 }

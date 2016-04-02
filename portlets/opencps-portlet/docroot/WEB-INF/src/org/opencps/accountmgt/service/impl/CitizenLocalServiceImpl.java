@@ -16,6 +16,7 @@ package org.opencps.accountmgt.service.impl;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.opencps.accountmgt.model.Citizen;
 import org.opencps.accountmgt.service.base.CitizenLocalServiceBaseImpl;
@@ -43,15 +44,22 @@ import com.liferay.portal.model.EmailAddress;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.Phone;
+import com.liferay.portal.model.Role;
 import com.liferay.portal.model.Ticket;
 import com.liferay.portal.model.TicketConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.model.Website;
+import com.liferay.portal.security.auth.PrincipalThreadLocal;
+import com.liferay.portal.security.permission.PermissionChecker;
+import com.liferay.portal.security.permission.PermissionCheckerFactoryUtil;
+import com.liferay.portal.security.permission.PermissionThreadLocal;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
+import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.TicketLocalServiceUtil;
 import com.liferay.portal.service.UserGroupLocalServiceUtil;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.util.SubscriptionSender;
 import com.liferay.portlet.announcements.model.AnnouncementsDelivery;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
@@ -84,9 +92,8 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 	    int birthDateMonth, int birthDateYear, String address, String cityCode,
 	    String districtCode, String wardCode, String cityName,
 	    String districtName, String wardName, String email, String telNo,
-	    long repositoryId, String sourceFileName, String contentType,
-	    String title, InputStream inputStream, long size,
-	    ServiceContext serviceContext)
+	    long repositoryId, String sourceFileName, String mimeType, String title,
+	    InputStream inputStream, long size, ServiceContext serviceContext)
 	    throws SystemException, PortalException {
 
 		long citizenId = CounterLocalServiceUtil
@@ -120,10 +127,14 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 		UserGroup userGroup = null;
 		try {
 			userGroup = UserGroupLocalServiceUtil
-							.getUserGroup(serviceContext.getCompanyId(),
-					PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN);
-		} catch (Exception e) {
-			_log.warn(e.getMessage());
+			    .getUserGroup(serviceContext
+			        .getCompanyId(),
+			        PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN);
+		}
+		catch (Exception e) {
+			_log
+			    .warn(e
+			        .getMessage());
 		}
 		if (userGroup == null) {
 			userGroup = UserGroupLocalServiceUtil
@@ -154,6 +165,29 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 		    .getPassword();
 		password2 = password1;
 
+		Role adminRole = RoleLocalServiceUtil
+		    .getRole(serviceContext
+		        .getCompanyId(), "Administrator");
+		List<User> adminUsers = UserLocalServiceUtil
+		    .getRoleUsers(adminRole
+		        .getRoleId());
+
+		PrincipalThreadLocal
+		    .setName(adminUsers
+		        .get(0).getUserId());
+		PermissionChecker permissionChecker;
+		try {
+			permissionChecker = PermissionCheckerFactoryUtil
+			    .create(adminUsers
+			        .get(0));
+			PermissionThreadLocal
+			    .setPermissionChecker(permissionChecker);
+		}
+		catch (Exception e) {
+			_log
+			    .error(e);
+		}
+
 		User mappingUser = userService
 		    .addUserWithWorkflow(serviceContext
 		        .getCompanyId(), autoPassword, password1, password2,
@@ -176,12 +210,12 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 
 		int status = WorkflowConstants.STATUS_INACTIVE;
 
-		userService
+		mappingUser = userService
 		    .updateStatus(mappingUser
 		        .getUserId(), status);
 
 		String[] folderNames = new String[] {
-		    PortletConstants.DestinationRoot.BUSINESS
+		    PortletConstants.DestinationRoot.CITIZEN
 		        .toString(),
 		    cityName, districtName, wardName, String
 		        .valueOf(mappingUser
@@ -196,26 +230,30 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 		serviceContext
 		    .setAddGuestPermissions(true);
 
-		DLFolder dlFolder = DLFolderUtil
-		    .getTargetFolder(mappingUser
-		        .getUserId(), serviceContext
-		            .getScopeGroupId(),
-		        repositoryId, false, 0, destination, StringPool.BLANK, false,
-		        serviceContext);
+		FileEntry fileEntry = null;
+		if (size > 0 && inputStream != null) {
+			// Create person folder
+			DLFolder dlFolder = DLFolderUtil
+			    .getTargetFolder(mappingUser
+			        .getUserId(), serviceContext
+			            .getScopeGroupId(),
+			        repositoryId, false, 0, destination, StringPool.BLANK,
+			        false, serviceContext);
 
-		FileEntry fileEntry = DLAppServiceUtil
-		    .addFileEntry(repositoryId, dlFolder
-		        .getFolderId(), sourceFileName, contentType, title,
-		        StringPool.BLANK, StringPool.BLANK, inputStream, size,
-		        serviceContext);
+			fileEntry = DLAppServiceUtil
+			    .addFileEntry(repositoryId, dlFolder
+			        .getFolderId(), sourceFileName, mimeType, title,
+			        StringPool.BLANK, StringPool.BLANK, inputStream, size,
+			        serviceContext);
+		}
 
 		citizen
 		    .setAccountStatus(PortletConstants.ACCOUNT_STATUS_REGISTERED);
 		citizen
 		    .setAddress(address);
 		citizen
-		    .setAttachFile(fileEntry
-		        .getFileEntryId());
+		    .setAttachFile(fileEntry != null ? fileEntry
+		        .getFileEntryId() : 0);
 		citizen
 		    .setBirthdate(birthDate);
 		citizen

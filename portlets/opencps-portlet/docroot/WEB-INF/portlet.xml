@@ -168,7 +168,7 @@
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/portlets/accountmgt/registration/citizenregistration.jsp</value>
+			<value>/html/portlets/accountmgt/registration/registration.jsp</value>
 		</init-param>
 		<init-param>
 			<name>template-path</name>

@@ -97,7 +97,7 @@
 		<!-- PK fields -->
 
 		<column name="serviceinfoId" type="long" primary="true" />
-		<column name="templatefileId" type="long" primary="true" />
+		<column name="templatefileId" type="long" primary="false" />
 
 
 		<!-- Finder methods -->

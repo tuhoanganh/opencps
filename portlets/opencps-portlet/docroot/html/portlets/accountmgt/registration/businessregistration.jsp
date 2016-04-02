@@ -18,46 +18,53 @@
  */
 %>
 <%@page import="org.opencps.util.WebKeys"%>
-<%@page import="org.opencps.accountmgt.model.Citizen"%>
-<%@page import="org.opencps.accountmgt.search.CitizenDisplayTerms"%>
 <%@page import="org.opencps.util.MessageKeys"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
-
+<%@page import="org.opencps.accountmgt.search.BusinessDisplayTerms"%>
+<%@page import="org.opencps.accountmgt.model.Business"%>
 <%@ include file="../init.jsp" %>
 
 <%
-	Citizen citizen = (Citizen) request.getAttribute(WebKeys.CITIZEN_ENTRY);
-	long citizenID = citizen != null ? citizen.getCitizenId() : 0L;
+	Business business = (Business) request.getAttribute(WebKeys.BUSINESS_ENTRY);
+	long businessId = business!=null ? business.getBusinessId() : 0L;
+	
 %>
 
 
-<portlet:actionURL var="updateCitizenURL" name="updateCitizen">
+<portlet:actionURL var="updateBusinessURL" name="updateBusiness">
 	<portlet:param 
-		name="<%=CitizenDisplayTerms.CITIZEN_ID %>" 
-		value="<%=String.valueOf(citizenID) %>"
+		name="<%=BusinessDisplayTerms.BUSINESS_BUSINESSID %>" 
+		value="<%=String.valueOf(businessId) %>"
 	/>	
 </portlet:actionURL>
 
 <aui:form 
-	action="<%=updateCitizenURL.toString() %>"
+	action="<%=updateBusinessURL.toString() %>"
 	name="fm"	
 	method="post"
 	enctype="multipart/form-data"
 >
 	<liferay-util:include 
-		page="/html/portlets/accountmgt/registration/citizen/general_info.jsp" 
+		page="/html/portlets/accountmgt/registration/business/general_info.jsp" 
+		servletContext="<%=application %>" 
+	/> 
+	
+	<liferay-util:include 
+		page="/html/portlets/accountmgt/registration/business/contact.jsp" 
 		servletContext="<%=application %>" 
 	/> 
 	<aui:row>
 		<aui:input 
-			name="citizenConfirm"
+			name="businessConfirm"
 			type="checkbox" 
 			label="<%=LanguageUtil.get(pageContext, 
 						MessageKeys.ACCOUNTMGT_CONFIRM_KEY) %>"
+			checked="false"
 		/>
 	</aui:row>
+	
 	<aui:row>
-		<aui:button name="citizenSubmit" type="submit" />
+		<aui:button name="businessSubmit" type="submit" />
 	</aui:row>
 </aui:form>
 
@@ -65,20 +72,16 @@
 
 AUI().ready(function(A) {
 
-	var checkboxConFirm = A.one('#<portlet:namespace />citizenConfirmCheckbox');
+	var businessConfirmCheckbox = A.one('#<portlet:namespace />businessConfirmCheckbox');
 	
-	if(checkboxConFirm) {
-		var buttonSubmit = A.one('#<portlet:namespace />citizenSubmit');
-		checkboxConFirm.on('click',function() {
-			
-			var checkboxConFirmInput = A.one('#<portlet:namespace />citizenConfirm');
-			
-			if(checkboxConFirmInput.val() == 'true') {
+	if(businessConfirmCheckbox) {
+		var buttonSubmit = A.one('#<portlet:namespace />businessSubmit');
+		businessConfirmCheckbox.on('click',function() {
+			businessConfirmCheckboxInput = A.one('#<portlet:namespace />businessConfirm');
+			if(businessConfirmCheckboxInput.val() == 'true') {
+				alert(businessConfirmCheckboxInput.val());
+				buttonSubmit.attr('disabled', false);
 				
-				if(buttonSubmit) {
-					alert(buttonSubmit.val() + " alert(buttonSubmit.val())");
-					
-				}
 			}
 		});
 	}
