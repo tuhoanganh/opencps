@@ -48,6 +48,11 @@
 		page="/html/portlets/accountmgt/registration/business/general_info.jsp" 
 		servletContext="<%=application %>" 
 	/> 
+	
+	<liferay-util:include 
+		page="/html/portlets/accountmgt/registration/business/contact.jsp" 
+		servletContext="<%=application %>" 
+	/> 
 	<aui:row>
 		<aui:input 
 			name="businessConfirm"

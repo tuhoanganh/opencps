@@ -116,59 +116,6 @@
 	</aui:row>
 </c:if>
 
-<aui:row>
-	<aui:input name="<%=BusinessDisplayTerms.BUSINESS_ADDRESS %>">
-		<aui:validator name="required" />
-		<aui:validator name="maxLength">500</aui:validator>
-	</aui:input>
-</aui:row>
-
-<aui:row>
-	<datamgt:ddr 
-		cssClass="input100"
-		depthLevel="3" 
-		dictCollectionCode="ADMINISTRATIVE_REGION"
-		itemNames="cityId,districtId,wardId"
-		itemsEmptyOption="true,true,true"	
-	/>
-</aui:row>
-
-<aui:row>
-	<aui:col width="50">
-		<aui:input name="<%=BusinessDisplayTerms.BUSINESS_EMAIL %>">
-			<aui:validator name="required" />
-			<aui:validator name="email" />
-			<aui:validator name="maxLength">255</aui:validator>
-		</aui:input>
-	</aui:col>
-	
-	<aui:col width="50">
-		<aui:input name="<%=BusinessDisplayTerms.BUSINESS_TELNO %>">
-			<aui:validator name="required" />
-			<aui:validator name="maxLength">20</aui:validator>
-		</aui:input>
-	</aui:col>
-</aui:row>
-
-<aui:row>
-	<aui:col width="50">
-		<aui:input name="<%=BusinessDisplayTerms.BUSINESS_REPRESENTATIVENAME %>">
-			<aui:validator name="required" />
-			<aui:validator name="maxLength">255</aui:validator>
-		</aui:input>
-	</aui:col> 
-	
-	<aui:col width="50">
-		<aui:input name="<%=BusinessDisplayTerms.BUSINESS_REPRESENTATIVEROLE %>">
-			<aui:validator name="required" />
-			<aui:validator name="maxLength">100</aui:validator>
-		</aui:input>
-	</aui:col>
-</aui:row>
-
-<aui:row>
-	<aui:input type="file" name="attachFile" />
-</aui:row>
 
 
 <%!
