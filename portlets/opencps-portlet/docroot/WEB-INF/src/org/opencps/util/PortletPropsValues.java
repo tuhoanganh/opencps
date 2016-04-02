@@ -52,6 +52,10 @@ public class PortletPropsValues {
 			.getStringValues(
 					PortletProps.get(PortletPropsKeys.DATAMGT_MASTERDATA_CODE),
 					new String[0]);
+	
+	public static final String DATAMGT_MASTERDATA_BUSINESS_DOMAIN = GetterUtil
+					.getString(PortletProps
+						.get(PortletPropsKeys.DATAMGT_MASTERDATA_BUSINESS_DOMAIN));
 
 	// User Management
 	public static final int[] USERMGT_JOBPOS_LEADER = GetterUtil
@@ -143,8 +147,5 @@ public class PortletPropsValues {
 					.getString(PortletProps
 						.get(PortletPropsKeys.USERMGT_EMPLOYEE_RESOURCE));
 	
-	//master data
-	public static final String BUSINESS_DOMAIN = GetterUtil
-					.getString(PortletProps
-						.get(PortletPropsKeys.BUSINESS_DOMAIN));
+
 }
