@@ -21,8 +21,6 @@ import org.opencps.accountmgt.model.Business;
 import org.opencps.accountmgt.model.BusinessDomain;
 import org.opencps.accountmgt.model.impl.BusinessDomainImpl;
 import org.opencps.accountmgt.service.base.BusinessLocalServiceBaseImpl;
-import org.opencps.datamgt.model.DictItem;
-import org.opencps.datamgt.service.DictItemLocalServiceUtil;
 import org.opencps.util.DLFolderUtil;
 import org.opencps.util.PortletConstants;
 import org.opencps.util.PortletPropsValues;
@@ -110,10 +108,14 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		UserGroup userGroup = null;
 		try {
 			userGroup = UserGroupLocalServiceUtil
-							.getUserGroup(serviceContext.getCompanyId(),
-					PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS);
-		} catch (Exception e) {
-			_log.warn(e.getMessage());
+			    .getUserGroup(serviceContext
+			        .getCompanyId(),
+			        PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS);
+		}
+		catch (Exception e) {
+			_log
+			    .warn(e
+			        .getMessage());
 		}
 		if (userGroup == null) {
 			userGroup = UserGroupLocalServiceUtil
@@ -137,7 +139,8 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		}
 		catch (Exception e) {
 			_log
-			    .warn(e);
+			    .warn(e
+			        .getMessage());
 		}
 
 		password1 = PwdGenerator
@@ -165,7 +168,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 
 		int status = WorkflowConstants.STATUS_INACTIVE;
 
-		userService
+		mappingUser = userService
 		    .updateStatus(mappingUser
 		        .getUserId(), status);
 
@@ -179,24 +182,26 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 
 		String destination = PortletUtil
 		    .getDestinationFolder(folderNames);
-		
+
 		serviceContext
 		    .setAddGroupPermissions(true);
 		serviceContext
 		    .setAddGuestPermissions(true);
+		FileEntry fileEntry = null;
+		if (size > 0 && inputStream != null) {
+			DLFolder dlFolder = DLFolderUtil
+			    .getTargetFolder(mappingUser
+			        .getUserId(), serviceContext
+			            .getScopeGroupId(),
+			        repositoryId, false, 0, destination, StringPool.BLANK,
+			        false, serviceContext);
 
-		DLFolder dlFolder = DLFolderUtil
-		    .getTargetFolder(mappingUser
-		        .getUserId(), serviceContext
-		            .getScopeGroupId(),
-		        repositoryId, false, 0, destination, StringPool.BLANK, false,
-		        serviceContext);
-
-		FileEntry fileEntry = DLAppServiceUtil
-		    .addFileEntry(repositoryId, dlFolder
-		        .getFolderId(), sourceFileName, contentType, title,
-		        StringPool.BLANK, StringPool.BLANK, inputStream, size,
-		        serviceContext);
+			fileEntry = DLAppServiceUtil
+			    .addFileEntry(repositoryId, dlFolder
+			        .getFolderId(), sourceFileName, contentType, title,
+			        StringPool.BLANK, StringPool.BLANK, inputStream, size,
+			        serviceContext);
+		}
 
 		/*
 		 * Organization org = OrganizationLocalServiceUtil .addOrganization(
@@ -212,8 +217,8 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		business
 		    .setAddress(address);
 		business
-		    .setAttachFile(fileEntry
-		        .getFileEntryId());
+		    .setAttachFile(fileEntry != null ? fileEntry
+		        .getFileEntryId() : 0);
 		business
 		    .setBusinessType(businessType);
 		business
