@@ -39,6 +39,7 @@ public class PortletPropsKeys {
 
 	// Data Management Master Data
 	public static final String DATAMGT_MASTERDATA_CODE = "opencps.datamgt.masterdata.code";
+	public static final String DATAMGT_MASTERDATA_BUSINESS_DOMAIN= "opencps.datamgt.masterdata.business.domain";
 
 	// User Management
 	public static final String USERMGT_JOBPOS_LEADER = "opencps.usermgt.jobpos.leader";
@@ -69,9 +70,6 @@ public class PortletPropsKeys {
 	public static final String USERMGT_EMPLOYEE_MOBILE_LENGTH = "opencps.usermgt.employee.mobile.length";
 	
 	public static final String USERMGT_GENDER_VALUES2 = "opencps.usermgt.gender.values";
-	
-	//Master data
-	public static final String BUSINESS_DOMAIN= "opencps.datamgt.masterdata.business.domain"; 
 	
 
 }
