@@ -1,4 +1,6 @@
 
+<%@page import="org.opencps.datamgt.service.DictCollectionLocalServiceUtil"%>
+<%@page import="org.opencps.datamgt.model.DictCollection"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -36,11 +38,19 @@
 	Date defaultBirthDate = citizen != null && citizen.getBirthdate() != null ? 
 		citizen.getBirthdate() : DateTimeUtil.convertStringToDate("01/01/1970");
 		PortletUtil.SplitDate spd = new PortletUtil.SplitDate(defaultBirthDate);
+	DictCollection dictCollection = null;
+	try {
+		dictCollection = DictCollectionLocalServiceUtil
+						.getDictCollection(scopeGroupId, "ADMINISTRATIVE_REGION");
+	} catch(Exception e) {
+		
+	}
 %>
 <portlet:actionURL var="updateCitizenURL" name="updateCitizen">
 	<portlet:param 
 		name="<%=CitizenDisplayTerms.CITIZEN_ID %>" 
-		value="<%=String.valueOf(citizenID) %>"/>
+		value="<%=String.valueOf(citizenID) %>"/>	
+	
 </portlet:actionURL>
 
 <aui:form 
@@ -121,7 +131,7 @@
 			cssClass="input100"
 			depthLevel="3" 
 			dictCollectionCode="ADMINISTRATIVE_REGION"
-			itemNames="cityCode,districtCode,wardCode"
+			itemNames="cityId,districtId,wardId"
 			itemsEmptyOption="true,true,true"	
 		>	
 		</datamgt:ddr>
@@ -131,12 +141,16 @@
 		<aui:col width="50">
 			<aui:input name="<%=CitizenDisplayTerms.CITIZEN_EMAIL %>">
 				<aui:validator name="required" />
+				<aui:validator name="email" />
 				<aui:validator name="maxLength">255</aui:validator>	
 			</aui:input>
 		</aui:col>
 		
 		<aui:col width="50">
-			<aui:input name=""></aui:input>
+			<aui:input name="<%=CitizenDisplayTerms.CITIZEN_TELNO %>">
+				<aui:validator name="required" />
+				<aui:validator name="minLength">10</aui:validator>
+			</aui:input>
 		</aui:col>
 	</aui:row>
 	

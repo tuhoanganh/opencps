@@ -118,7 +118,13 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 		String screenName = null;
 
 		UserGroup userGroup = null;
-
+		try {
+			userGroup = UserGroupLocalServiceUtil
+							.getUserGroup(serviceContext.getCompanyId(),
+					PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN);
+		} catch (Exception e) {
+			_log.warn(e.getMessage());
+		}
 		if (userGroup == null) {
 			userGroup = UserGroupLocalServiceUtil
 			    .addUserGroup(serviceContext
