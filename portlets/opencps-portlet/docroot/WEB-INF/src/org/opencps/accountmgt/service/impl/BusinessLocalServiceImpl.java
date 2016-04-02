@@ -108,7 +108,13 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		String screenName = null;
 
 		UserGroup userGroup = null;
-
+		try {
+			userGroup = UserGroupLocalServiceUtil
+							.getUserGroup(serviceContext.getCompanyId(),
+					PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS);
+		} catch (Exception e) {
+			_log.warn(e.getMessage());
+		}
 		if (userGroup == null) {
 			userGroup = UserGroupLocalServiceUtil
 			    .addUserGroup(serviceContext

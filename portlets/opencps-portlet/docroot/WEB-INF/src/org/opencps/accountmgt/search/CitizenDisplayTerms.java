@@ -30,6 +30,9 @@ import com.liferay.portal.theme.ThemeDisplay;
 
 public class CitizenDisplayTerms extends DisplayTerms{
 	
+	public static final String CITIZEN_WARD_ID = "wardId";
+	public static final String CITIZEN_DISTRICT_ID = "districtId";
+	public static final String CITIZEN_CITY_ID = "cityId";
 	public static final String BIRTH_DATE_DAY = "birthDateDay";
 	public static final String BIRTH_DATE_MONTH = "birthDateMonth";
 	public static final String BIRTH_DATE_YEAR = "birthDateYear";

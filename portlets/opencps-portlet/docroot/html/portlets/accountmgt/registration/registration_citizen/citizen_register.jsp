@@ -49,11 +49,7 @@
 <portlet:actionURL var="updateCitizenURL" name="updateCitizen">
 	<portlet:param 
 		name="<%=CitizenDisplayTerms.CITIZEN_ID %>" 
-		value="<%=String.valueOf(citizenID) %>"/>
-	<portlet:param 
-		name="<dictCollectionId" 
-		value="<%=dictCollection!=null ? 
-			String.valueOf(dictCollection.getDictCollectionId()) : 0L  %>"/>	
+		value="<%=String.valueOf(citizenID) %>"/>	
 	
 </portlet:actionURL>
 
@@ -135,7 +131,7 @@
 			cssClass="input100"
 			depthLevel="3" 
 			dictCollectionCode="ADMINISTRATIVE_REGION"
-			itemNames="cityCode,districtCode,wardCode"
+			itemNames="cityId,districtId,wardId"
 			itemsEmptyOption="true,true,true"	
 		>	
 		</datamgt:ddr>

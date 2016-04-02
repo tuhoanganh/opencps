@@ -16,13 +16,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
-<%@ include file="/init.jsp" %>
-<%--  <liferay-util:include 
+<%@ include file="/init.jsp" %> <liferay-util:include 
 	page="/html/portlets/accountmgt/registration/registration_citizen/citizen_register.jsp" 
 	servletContext="<%=application %>" 
 /> 
- --%>
-<liferay-util:include 
+
+<%-- <liferay-util:include 
 	page="/html/portlets/accountmgt/registration/registration_business/business_register.jsp" 
 	servletContext="<%=application %>" 
-/>
+/> --%>
