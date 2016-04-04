@@ -55,6 +55,10 @@ public class UserMgtUtil {
 	public static final String[] _WORKING_UNIT_CATEGORY_NAMES = {
 		"workingunit-info"
 	};
+	
+	public static final String[] _CITIZEN_CATEGORY_NAMES = {
+		"citizen-info"
+	};
 	public static final String[] _JOBPOS_CATEGORY_NAMES = {
 		"jobpos-info"
 	};

@@ -57,7 +57,7 @@ public class AccountRegPortlet extends MVCPortlet {
 
 		long citizenId = ParamUtil
 		    .getLong(renderRequest, CitizenDisplayTerms.CITIZEN_ID);
-
+		
 		long businessId = ParamUtil
 		    .getLong(renderRequest, BusinessDisplayTerms.BUSINESS_BUSINESSID);
 

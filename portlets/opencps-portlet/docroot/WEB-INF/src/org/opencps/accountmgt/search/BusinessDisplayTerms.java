@@ -30,6 +30,9 @@ import com.liferay.portal.theme.ThemeDisplay;
 
 public class BusinessDisplayTerms extends DisplayTerms{
 	
+	public static final String CURRENT_PASSWORD = "currentPass";
+	public static final String NEW_PASSWORD = "newPass";
+	public static final String RE_PASSWORD = "rePass";
 	public static final String BUSINESS_DOMAIN = "businessDomains";
 	public static final String BUSINESS_IDNUMBER = "idNumber";
 	public static final String BUSINESS_BUSINESSTYPE = "businessType";
