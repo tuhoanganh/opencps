@@ -70,6 +70,10 @@
 			<finder-column name="wardCode" />
 		</finder>
 		
+		<finder return-type="Citizen" name="Email">
+			<finder-column name="email"></finder-column>
+		</finder>
+		
 		<reference entity="User" package-path="com.liferay.portal" />
 		
 	</entity>
@@ -142,6 +146,10 @@
 			<finder-column name="businessType" />
 		</finder>
 		
+		<finder return-type="Business" name="Email">
+			<finder-column name="email"></finder-column>
+		</finder>
+		
 		<reference package-path="com.liferay.portal" entity="Organization" />
 		<reference package-path="com.liferay.portal" entity="User" />
 	</entity>
@@ -209,11 +217,18 @@
 	</entity>
 
 	<exceptions>
-		<exception>EmptyCitizenName</exception>
-		<exception>EmptyBusinessName</exception>
+		<exception>DuplicateCitizenEmail</exception>
 		<exception>OutOfLengthCitizenName</exception>
+		<exception>OutOfLengthCitizenAddress</exception>
+		<exception>OutOfLengthCitizenEmail</exception>
+		
+		<exception>DuplicateBusinessEmail</exception>
+		<exception>OutOfLengthBusinessEmail</exception>
 		<exception>OutOfLengthBusinessName</exception>
 		<exception>OutOfLengthBusinessEnName</exception>
+		<exception>OutOfLengthBusinessEmail</exception>
 		<exception>OutOfLengthBusinessShortName</exception>
+		<exception>OutOfLengthBusinessRepresentativeName</exception>
+		<exception>OutOfLengthBusinessRepresentativeRole</exception>
 	</exceptions>
 </service-builder>

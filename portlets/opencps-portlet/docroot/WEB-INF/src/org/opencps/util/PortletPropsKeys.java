@@ -37,6 +37,22 @@ public class PortletPropsKeys {
 	public static final String USERMGT_WORKINGUNIT_EMAIL_LENGTH = "opencps.usermgt.workingunit.email.lengths";
 	public static final String USERMGT_WORKINGUNIT_WEBSITE_LENGTH = "opencps.usermgt.workingunit.website.lengths";
 
+	//citizen validate
+	public static final String ACCOUNTMGT_CITIZEN_NAME_LENGTH = "opencps.accountmgt.citizen.name.lengths";
+	public static final String ACCOUNTMGT_CITIZEN_EMAIL_LENGTH = "opencps.accountmgt.citizen.email.lengths";
+	public static final String ACCOUNTMGT_CITIZEN_ADDRESS_LENGTH = "opencps.accountmgt.citizen.address.lengths=500";
+	
+	//business validate
+	public static final String ACCOUNTMGT_BUSINESS_NAME_LENGTH = "opencps.accountmgt.business.name.lengths";
+	public static final String ACCOUNTMGT_BUSINESS_ENNAME_LENGTH = "opencps.accountmgt.business.enname.lengths";
+	public static final String ACCOUNTMGT_BUSINESS_EMAIL_LENGTH = "opencps.accountmgt.business.email.lengths";
+	public static final String ACCOUNTMGT_BUSINESS_ADDRESS_LENGTH = "opencps.accountmgt.business.address.lengths";
+	public static final String ACCOUNTMGT_BUSINESS_SHORTNAME_LENGTH = "opencps.accountmgt.business.shortname.lengths";
+	public static final String ACCOUNTMGT_BUSINESS_REPRESENTATIVENAME_LENGTH = "opencps.accountmgt.business.representativename.lengths";
+	public static final String ACCOUNTMGT_BUSINESS_REPRESENTATIVEROLE_LENGTH = "opencps.accountmgt.business.representativerole.lengths";
+	
+	
+	
 	// Data Management Master Data
 	public static final String DATAMGT_MASTERDATA_CODE = "opencps.datamgt.masterdata.code";
 	public static final String DATAMGT_MASTERDATA_BUSINESS_DOMAIN= "opencps.datamgt.masterdata.business.domain";

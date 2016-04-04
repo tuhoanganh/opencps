@@ -30,6 +30,9 @@ import com.liferay.portal.theme.ThemeDisplay;
 
 public class CitizenDisplayTerms extends DisplayTerms{
 	
+	public static final String CURRENT_PASSWORD = "curPass";
+	public static final String NEW_PASSWORD = "newPass";
+	public static final String RE_PASSWORD = "rePass";
 	public static final String CITIZEN_WARD_ID = "wardId";
 	public static final String CITIZEN_DISTRICT_ID = "districtId";
 	public static final String CITIZEN_CITY_ID = "cityId";
