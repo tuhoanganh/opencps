@@ -45,6 +45,7 @@ import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
+
 public class AccountRegPortlet extends MVCPortlet {
 
 	@Override
