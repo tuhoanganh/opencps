@@ -69,6 +69,9 @@
 			<finder-column name="accountStatus" />
 			<finder-column name="wardCode" />
 		</finder>
+        <finder name="MappingUserId" return-type="Citizen">
+            <finder-column name="mappingUserId"></finder-column>
+        </finder>
 		
 		<reference entity="User" package-path="com.liferay.portal" />
 		

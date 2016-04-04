@@ -18,8 +18,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.opencps.accountmgt.NoSuchCitizenException;
 import org.opencps.accountmgt.model.Citizen;
 import org.opencps.accountmgt.service.base.CitizenLocalServiceBaseImpl;
+import org.opencps.util.DLFileEntryUtil;
 import org.opencps.util.DLFolderUtil;
 import org.opencps.util.DateTimeUtil;
 import org.opencps.util.PortletConstants;
@@ -40,6 +42,7 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Address;
+import com.liferay.portal.model.Contact;
 import com.liferay.portal.model.EmailAddress;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
@@ -54,6 +57,7 @@ import com.liferay.portal.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionCheckerFactoryUtil;
 import com.liferay.portal.security.permission.PermissionThreadLocal;
+import com.liferay.portal.service.ContactLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
@@ -64,6 +68,7 @@ import com.liferay.portal.util.SubscriptionSender;
 import com.liferay.portlet.announcements.model.AnnouncementsDelivery;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
+import com.liferay.portlet.documentlibrary.service.DLFolderLocalServiceUtil;
 import com.liferay.util.PwdGenerator;
 
 /**
@@ -231,6 +236,7 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 		    .setAddGuestPermissions(true);
 
 		FileEntry fileEntry = null;
+
 		if (size > 0 && inputStream != null) {
 			// Create person folder
 			DLFolder dlFolder = DLFolderUtil
@@ -298,11 +304,127 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 
 	public Citizen updateCitizen(
 	    long citizenId, String address, String cityCode, String districtCode,
-	    String wardCode, String telNo, String newPassword,
-	    String reTypePassword) {
+	    String wardCode, String cityName, String districtName, String wardName,
+	    String telNo, boolean isChangePassWord, String newPassword,
+	    String reTypePassword, long repositoryId, ServiceContext serviceContext)
+	    throws SystemException, PortalException {
 
-		return null;
+		Citizen citizen = citizenPersistence
+		    .findByPrimaryKey(citizenId);
 
+		User mappingUser = userLocalService
+		    .getUser(citizen
+		        .getMappingUserId());
+
+		Date now = new Date();
+
+		if (mappingUser != null) {
+			// Reset password
+			if (isChangePassWord) {
+				mappingUser = userLocalService
+				    .updatePassword(mappingUser
+				        .getUserId(), newPassword, reTypePassword, false);
+			}
+
+			if ((cityCode != citizen
+			    .getCityCode() || districtCode != citizen
+			        .getDistrictCode() ||
+			    wardCode != citizen
+			        .getWardCode()) &&
+			    citizen
+			        .getAttachFile() > 0) {
+				// Move image folder
+
+				String[] newFolderNames = new String[] {
+				    PortletConstants.DestinationRoot.CITIZEN
+				        .toString(),
+				    cityName, districtName, wardName
+				};
+
+				String destination = PortletUtil
+				    .getDestinationFolder(newFolderNames);
+
+				DLFolder parentFolder = DLFolderUtil
+				    .getTargetFolder(mappingUser
+				        .getUserId(), serviceContext
+				            .getScopeGroupId(),
+				        repositoryId, false, 0, destination, StringPool.BLANK,
+				        false, serviceContext);
+
+				FileEntry fileEntry = DLAppServiceUtil
+				    .getFileEntry(citizen
+				        .getAttachFile());
+
+				DLFolderLocalServiceUtil
+				    .moveFolder(mappingUser
+				        .getUserId(), fileEntry
+				            .getFolderId(),
+				        parentFolder
+				            .getFolderId(),
+				        serviceContext);
+			}
+		}
+
+		citizen
+		    .setAddress(address);
+
+		citizen
+		    .setCityCode(cityCode);
+
+		citizen
+		    .setDistrictCode(districtCode);
+
+		citizen
+		    .setModifiedDate(now);
+
+		citizen
+		    .setTelNo(telNo);
+		citizen
+		    .setUserId(mappingUser
+		        .getUserId());
+		citizen
+		    .setWardCode(wardCode);
+
+		return citizenPersistence
+		    .update(citizen);
+
+	}
+
+	public Citizen getCitizen(long mappingUserId)
+	    throws NoSuchCitizenException, SystemException {
+
+		return citizenPersistence
+		    .findByMappingUserId(mappingUserId);
+	}
+
+	public Citizen updateStatus(long citizenId, long userId, int accountStatus)
+	    throws SystemException, PortalException {
+
+		Citizen citizen = citizenPersistence
+		    .findByPrimaryKey(citizenId);
+
+		int userStatus = WorkflowConstants.STATUS_INACTIVE;
+
+		if (accountStatus == PortletConstants.ACCOUNT_STATUS_APPROVED) {
+			userStatus = WorkflowConstants.STATUS_APPROVED;
+		}
+
+		if (citizen
+		    .getMappingUserId() > 0) {
+			userLocalService
+			    .updateStatus(citizen
+			        .getMappingUserId(), userStatus);
+		}
+
+		citizen
+		    .setUserId(userId);
+		citizen
+		    .setModifiedDate(new Date());
+		citizen
+		    .setAccountStatus(accountStatus);
+
+		return citizenPersistence
+		    .update(citizen);
 	}
 
 	public void sendEmailAddressVerification(
