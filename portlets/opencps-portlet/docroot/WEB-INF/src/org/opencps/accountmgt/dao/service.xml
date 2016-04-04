@@ -152,6 +152,9 @@
 		<finder return-type="Business" name="Email">
 			<finder-column name="email"></finder-column>
 		</finder>
+        <finder name="MappingUserId" return-type="Business">
+            <finder-column name="mappingUserId"></finder-column>
+        </finder>
 		
 		<reference package-path="com.liferay.portal" entity="Organization" />
 		<reference package-path="com.liferay.portal" entity="User" />

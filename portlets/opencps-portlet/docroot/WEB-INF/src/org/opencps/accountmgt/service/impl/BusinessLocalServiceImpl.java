@@ -284,11 +284,20 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		return business;
 	}
 
-	public Business getBusiness(String email) throws
-	NoSuchBusinessException, SystemException {
-		return businessPersistence.findByEmail(email);
+	public Business getBusiness(long mappingUserId)
+	    throws SystemException, NoSuchBusinessException {
+
+		return businessPersistence
+		    .findByMappingUserId(mappingUserId);
 	}
-	
+
+	public Business getBusiness(String email)
+	    throws NoSuchBusinessException, SystemException {
+
+		return businessPersistence
+		    .findByEmail(email);
+	}
+
 	private Log _log = LogFactoryUtil
 	    .getLog(BusinessLocalServiceImpl.class
 	        .getName());
