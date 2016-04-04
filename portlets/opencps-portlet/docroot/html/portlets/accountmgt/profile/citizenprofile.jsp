@@ -34,19 +34,18 @@
 <%@ include file="/init.jsp" %>
 
 <%
-	String [] citizenProfileSections = {"general_citizen_profile", "edit_password_citizen"};
+	String [] citizenProfileSections = {"general_info.jsp", "edit_password_citizen"};
 	String [][] categorySections = {citizenProfileSections};
 	ServiceContext serviceContext = null;
 	Citizen citizen = null;
 	User userLogin = null;
 	PasswordPolicy passwordPolicy = null;
 	long citizenId = 0;
+	long userId = themeDisplay.getUserId();
 	try {
-		serviceContext = ServiceContextFactory.getInstance(request);
-		/* citizen = CitizenLocalServiceUtil.getCitizenByMapingUserId(serviceContext.getUserId()); */
-		userLogin = UserLocalServiceUtil.getUser(serviceContext.getUserId());
 		
-		citizenId = citizen.getCitizenId();
+		userLogin = UserLocalServiceUtil.getUser(userId);
+		citizen = CitizenLocalServiceUtil.getCitizen(userId); 		
 		if(userLogin != null) {
 			passwordPolicy = PasswordPolicyLocalServiceUtil
 							.getDefaultPasswordPolicy(company.getCompanyId());
@@ -94,7 +93,7 @@
 			<div class="alert alert-block"><liferay-ui:message key="this-user-account-has-been-locked-due-to-excessive-failed-login-attempts" /></div>
 
 			<%
-			String taglibOnClick = renderResponse.getNamespace() + "saveUser('unlock');";
+				String taglibOnClick = renderResponse.getNamespace() + "saveUser('unlock');";
 			%>
 
 			<aui:button onClick="<%= taglibOnClick %>" value="unlock" />
@@ -110,7 +109,7 @@
 		categorySections="<%=categorySections %>" 
 		htmlBottom="<%= htmlBott %>"
 		htmlTop="<%= htmlTop %>"
-		jspPath='<%=templatePath + "citizen_front_office_profile/" %>'
+		jspPath="/html/portlets/accountmgt/registration/citizen"
 		>	
 	</liferay-ui:form-navigator>
 	<aui:input 

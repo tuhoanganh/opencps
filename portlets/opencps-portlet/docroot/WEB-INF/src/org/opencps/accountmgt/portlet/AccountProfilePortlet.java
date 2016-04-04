@@ -97,24 +97,29 @@ public class AccountProfilePortlet extends MVCPortlet {
 		        actionRequest, EmployeeDisplayTerm.BIRTH_DATE_YEAR);
 		Date birthDate = DateTimeUtil
 					    .getDate(birthDateDay, birthDateMonth, birthDateYear);
-		if (mappingUserId > 0) {
-			Citizen citizen =
-			    CitizenLocalServiceUtil.getCitizenByMapUserId(mappingUserId);
-				User user = UserLocalServiceUtil.getUser(mappingUserId);
-			if(curPass != null) {
-				if(newPass!=null && rePass!=null) {
-					if(newPass.equals(rePass)) {
-						citizen.setAddress(address);
-						citizen.setBirthdate(birthDate);
-						citizen.setTelNo(telNo);
-						
-						user.setPassword(newPass);
-						UserLocalServiceUtil.updateUser(user);
-						CitizenLocalServiceUtil.updateCitizen(citizen);
+		try {
+			if (mappingUserId > 0) {
+				Citizen citizen =
+				    CitizenLocalServiceUtil.getCitizen(mappingUserId);
+					User user = UserLocalServiceUtil.getUser(mappingUserId);
+				if(curPass != null) {
+					if(newPass!=null && rePass!=null) {
+						if(newPass.equals(rePass)) {
+							citizen.setAddress(address);
+							citizen.setBirthdate(birthDate);
+							citizen.setTelNo(telNo);
+							
+							user.setPassword(newPass);
+							UserLocalServiceUtil.updateUser(user);
+							CitizenLocalServiceUtil.updateCitizen(citizen);
+						}
 					}
 				}
 			}
-		}
+        }
+        catch (Exception e) {
+	        // TODO: handle exception
+        }
 	}
 	
 	private Log _log = LogFactoryUtil.getLog(AccountProfilePortlet.class.getName());
