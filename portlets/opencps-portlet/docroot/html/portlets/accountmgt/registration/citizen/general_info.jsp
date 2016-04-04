@@ -54,20 +54,40 @@
 
 <aui:model-context bean="<%=citizen%>" model="<%=Citizen.class%>" />
 
-<aui:row>
-	<aui:col width="50">
-		<aui:input name="<%=CitizenDisplayTerms.CITIZEN_FULLNAME %>">
-		<aui:validator name="required" />
-		<aui:validator name="maxLength">255</aui:validator>
-		</aui:input>
-	</aui:col>
-	
-	<aui:col width="50">
-		<aui:input name="<%=CitizenDisplayTerms.CITIZEN_PERSONALID %>">
-		<aui:validator name="required" />
-		</aui:input>
-	</aui:col>
-</aui:row>
+<c:choose>
+	<c:when test="<%=citizenIdFromProfile!=0 %>">
+		<aui:row>
+			<aui:col width="50">
+				<aui:input name="<%=CitizenDisplayTerms.CITIZEN_FULLNAME %>" disabled="true">
+				<aui:validator name="required" />
+				<aui:validator name="maxLength">255</aui:validator>
+				</aui:input>
+			</aui:col>
+			
+			<aui:col width="50">
+				<aui:input name="<%=CitizenDisplayTerms.CITIZEN_PERSONALID %>" disabled="true">
+				<aui:validator name="required" />
+				</aui:input>
+			</aui:col>
+		</aui:row>
+	</c:when>
+	<c:otherwise>
+		<aui:row>
+			<aui:col width="50">
+				<aui:input name="<%=CitizenDisplayTerms.CITIZEN_FULLNAME %>">
+				<aui:validator name="required" />
+				<aui:validator name="maxLength">255</aui:validator>
+				</aui:input>
+			</aui:col>
+			
+			<aui:col width="50">
+				<aui:input name="<%=CitizenDisplayTerms.CITIZEN_PERSONALID %>">
+				<aui:validator name="required" />
+				</aui:input>
+			</aui:col>
+		</aui:row>
+	</c:otherwise>
+</c:choose>
 
 <c:choose>
 	<c:when test="<%=citizenIdFromProfile != 0 %>">
@@ -172,7 +192,7 @@
 	<c:choose>
 		<c:when test="<%=citizenIdFromProfile!=0 %>">
 			<aui:col width="50">
-				<aui:input name="<%=CitizenDisplayTerms.CITIZEN_EMAIL %>" disabled="true">
+				<aui:input name= "<%=CitizenDisplayTerms.CITIZEN_EMAIL %>" disabled="true">
 					<aui:validator name="required" />
 					<aui:validator name="email" />
 					<aui:validator name="maxLength">255</aui:validator>	
@@ -209,5 +229,4 @@
 
 
 </c:if>
-
 
