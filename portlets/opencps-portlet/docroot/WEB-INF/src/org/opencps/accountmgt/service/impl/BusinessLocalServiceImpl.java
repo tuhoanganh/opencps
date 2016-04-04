@@ -46,6 +46,7 @@ import com.liferay.portal.service.UserGroupLocalServiceUtil;
 import com.liferay.portlet.announcements.model.AnnouncementsDelivery;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
+import com.liferay.portlet.documentlibrary.service.DLFolderLocalServiceUtil;
 import com.liferay.util.PwdGenerator;
 
 /**
@@ -282,6 +283,170 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		}
 
 		return business;
+	}
+
+	public Business updateBusiness(
+	    long businessId, String fullName, String enName, String shortName,
+	    String businessType, String idNumber, String address, String cityCode,
+	    String districtCode, String wardCode, String cityName,
+	    String districtName, String wardName, String telNo,
+	    String representativeName, String representativeRole,
+	    String[] businessDomainCodes, boolean isChangePassword, String password,
+	    String rePassword, long repositoryId, ServiceContext serviceContext)
+	    throws SystemException, PortalException {
+
+		Business business = businessPersistence
+		    .findByPrimaryKey(businessId);
+
+		User mappingUser = userLocalService
+		    .getUser(business
+		        .getMappingUserId());
+
+		Date now = new Date();
+
+		if (mappingUser != null) {
+			// Reset password
+			if (isChangePassword) {
+				mappingUser = userLocalService
+				    .updatePassword(mappingUser
+				        .getUserId(), password, rePassword, false);
+			}
+
+			if ((cityCode != business
+			    .getCityCode() || districtCode != business
+			        .getDistrictCode() ||
+			    wardCode != business
+			        .getWardCode()) &&
+			    business
+			        .getAttachFile() > 0) {
+				// Move image folder
+
+				String[] newFolderNames = new String[] {
+				    PortletConstants.DestinationRoot.BUSINESS
+				        .toString(),
+				    cityName, districtName, wardName
+				};
+
+				String destination = PortletUtil
+				    .getDestinationFolder(newFolderNames);
+
+				DLFolder parentFolder = DLFolderUtil
+				    .getTargetFolder(mappingUser
+				        .getUserId(), serviceContext
+				            .getScopeGroupId(),
+				        repositoryId, false, 0, destination, StringPool.BLANK,
+				        false, serviceContext);
+
+				FileEntry fileEntry = DLAppServiceUtil
+				    .getFileEntry(business
+				        .getAttachFile());
+
+				DLFolderLocalServiceUtil
+				    .moveFolder(mappingUser
+				        .getUserId(), fileEntry
+				            .getFolderId(),
+				        parentFolder
+				            .getFolderId(),
+				        serviceContext);
+			}
+		}
+
+		business
+		    .setAddress(address);
+
+		business
+		    .setBusinessType(businessType);
+		business
+		    .setCityCode(cityCode);
+		business
+		    .setCompanyId(serviceContext
+		        .getCompanyId());
+		business
+		    .setCreateDate(now);
+		business
+		    .setDistrictCode(districtCode);
+
+		business
+		    .setEnName(enName);
+		business
+		    .setGroupId(serviceContext
+		        .getScopeGroupId());
+		business
+		    .setIdNumber(idNumber);
+		/*
+		 * business .setMappingOrganizationId(mappingOrganizationId);
+		 */
+		business
+		    .setMappingUserId(mappingUser
+		        .getUserId());
+		business
+		    .setModifiedDate(now);
+
+		business
+		    .setRepresentativeName(representativeName);
+		business
+		    .setRepresentativeRole(representativeRole);
+		business
+		    .setShortName(shortName);
+		business
+		    .setTelNo(telNo);
+		business
+		    .setUserId(mappingUser
+		        .getUserId());
+		business
+		    .setUuid(serviceContext
+		        .getUuid());
+		business
+		    .setWardCode(wardCode);
+
+		business = businessPersistence
+		    .update(business);
+
+		if (businessDomainCodes != null && businessDomainCodes.length > 0) {
+			for (int b = 0; b < businessDomainCodes.length; b++) {
+				BusinessDomain domain = new BusinessDomainImpl();
+				domain
+				    .setBusinessId(businessId);
+				domain
+				    .setBusinessDomainId(businessDomainCodes[b]);
+				businessDomainPersistence
+				    .update(domain);
+			}
+		}
+
+		return business;
+
+	}
+
+	public Business updateStatus(
+	    long businessId, long userId, int accountStatus)
+	    throws SystemException, PortalException {
+
+		Business business = businessPersistence
+		    .findByPrimaryKey(businessId);
+
+		int userStatus = WorkflowConstants.STATUS_INACTIVE;
+
+		if (accountStatus == PortletConstants.ACCOUNT_STATUS_APPROVED) {
+			userStatus = WorkflowConstants.STATUS_APPROVED;
+		}
+
+		if (business
+		    .getMappingUserId() > 0) {
+			userLocalService
+			    .updateStatus(business
+			        .getMappingUserId(), userStatus);
+		}
+
+		business
+		    .setUserId(userId);
+		business
+		    .setModifiedDate(new Date());
+		business
+		    .setAccountStatus(accountStatus);
+
+		return businessPersistence
+		    .update(business);
 	}
 
 	public Business getBusiness(long mappingUserId)
