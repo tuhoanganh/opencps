@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.opencps.accountmgt.NoSuchBusinessException;
 import org.opencps.accountmgt.model.Business;
 import org.opencps.accountmgt.model.BusinessDomain;
 import org.opencps.accountmgt.model.impl.BusinessDomainImpl;
@@ -283,6 +284,11 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		return business;
 	}
 
+	public Business getBusiness(String email) throws
+	NoSuchBusinessException, SystemException {
+		return businessPersistence.findByEmail(email);
+	}
+	
 	private Log _log = LogFactoryUtil
 	    .getLog(BusinessLocalServiceImpl.class
 	        .getName());

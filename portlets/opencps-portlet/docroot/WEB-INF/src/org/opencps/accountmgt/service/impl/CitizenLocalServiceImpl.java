@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.opencps.accountmgt.NoSuchCitizenException;
 import org.opencps.accountmgt.model.Citizen;
 import org.opencps.accountmgt.service.base.CitizenLocalServiceBaseImpl;
 import org.opencps.util.DLFolderUtil;
@@ -491,6 +492,11 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 
 		subscriptionSender
 		    .flushNotificationsAsync();
+	}
+	
+	public Citizen getCitizen(String email) throws 
+	NoSuchCitizenException, SystemException {
+		return citizenPersistence.findByEmail(email);
 	}
 
 	private Log _log = LogFactoryUtil

@@ -11,6 +11,13 @@ import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.opencps.accountmgt.OutOfLengthBusinessEmailException;
+import org.opencps.accountmgt.OutOfLengthBusinessEnNameException;
+import org.opencps.accountmgt.OutOfLengthBusinessNameException;
+import org.opencps.accountmgt.OutOfLengthBusinessRepresentativeNameException;
+import org.opencps.accountmgt.OutOfLengthBusinessRepresentativeRoleException;
+import org.opencps.accountmgt.OutOfLengthBusinessShortNameException;
+import org.opencps.accountmgt.OutOfLengthCitizenNameException;
 import org.opencps.accountmgt.model.Business;
 import org.opencps.accountmgt.model.Citizen;
 import org.opencps.accountmgt.search.BusinessDisplayTerms;
@@ -19,12 +26,17 @@ import org.opencps.accountmgt.service.BusinessLocalServiceUtil;
 import org.opencps.accountmgt.service.CitizenLocalServiceUtil;
 import org.opencps.datamgt.model.DictItem;
 import org.opencps.datamgt.service.DictItemLocalServiceUtil;
+import org.opencps.servicemgt.DuplicateBusinessEmailException;
+import org.opencps.servicemgt.DuplicateCitizenEmailException;
+import org.opencps.servicemgt.OutOfLengthCitizenAddressException;
+import org.opencps.servicemgt.OutOfLengthCitizenEmailException;
 import org.opencps.util.DateTimeUtil;
 import org.opencps.util.PortletUtil;
 import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -159,6 +171,8 @@ public class AccountRegPortlet extends MVCPortlet {
 		InputStream inputStream = null;
 
 		try {
+			ValidateBusiness(businessId, email, sourceFileName, enName,
+				shortName, address, representativeName, representativeRole);
 			ServiceContext serviceContext = ServiceContextFactory
 			    .getInstance(uploadPortletRequest);
 
@@ -209,8 +223,23 @@ public class AccountRegPortlet extends MVCPortlet {
 		}
 
 		catch (Exception e) {
-			_log
-			    .error(e);
+			if(e instanceof DuplicateBusinessEmailException) {
+				SessionErrors.add(actionRequest, DuplicateBusinessEmailException.class);
+			} else if(e instanceof OutOfLengthBusinessEmailException) {
+				SessionErrors.add(actionRequest, OutOfLengthBusinessEmailException.class);
+			} else if(e instanceof OutOfLengthBusinessNameException) {
+				SessionErrors.add(actionRequest, OutOfLengthBusinessNameException.class);
+			} else if (e instanceof OutOfLengthBusinessEnNameException) {
+				SessionErrors.add(actionRequest, OutOfLengthBusinessEnNameException.class);
+			} else if(e instanceof OutOfLengthBusinessShortNameException) {
+				SessionErrors.add(actionRequest, OutOfLengthBusinessShortNameException.class);
+			} else if(e instanceof OutOfLengthBusinessRepresentativeNameException) {
+				SessionErrors.add(actionRequest, OutOfLengthBusinessRepresentativeNameException.class);
+			} else if(e instanceof OutOfLengthBusinessRepresentativeRoleException) {
+				SessionErrors.add(actionRequest, OutOfLengthBusinessRepresentativeRoleException.class);
+			} else if(e instanceof OutOfLengthCitizenAddressException) {
+				SessionErrors.add(actionRequest, OutOfLengthCitizenAddressException.class);
+			}
 
 		}
 		finally {
@@ -288,6 +317,10 @@ public class AccountRegPortlet extends MVCPortlet {
 		InputStream inputStream = null;
 
 		try {
+			
+			ValidateCitizen
+			(citizenId, fullName, personId, adress, email, telNo, size, contentType);
+			
 			ServiceContext serviceContext = ServiceContextFactory
 			    .getInstance(actionRequest);
 
@@ -336,8 +369,19 @@ public class AccountRegPortlet extends MVCPortlet {
 
 		}
 		catch (Exception e) {
-			_log
-			    .error(e);
+			    if(e instanceof OutOfLengthCitizenAddressException) {
+			    	SessionErrors.add(actionRequest, 
+			    		OutOfLengthCitizenAddressException.class);
+			    } else if(e instanceof OutOfLengthCitizenEmailException) {
+			    	SessionErrors.add(actionRequest, 
+			    		OutOfLengthCitizenEmailException.class);
+			    } else if(e instanceof OutOfLengthCitizenNameException) {
+			    	SessionErrors.add(actionRequest, 
+			    		OutOfLengthCitizenNameException.class);
+			    } else if(e instanceof DuplicateCitizenEmailException) {
+			    	SessionErrors.add(actionRequest, 
+			    		DuplicateCitizenEmailException.class);
+			    }
 		}
 		finally {
 
@@ -346,8 +390,84 @@ public class AccountRegPortlet extends MVCPortlet {
 
 	protected void ValidateCitizen(
 	    long citizenId, String fullName, String personalId, String address,
-	    String email, String telNo, long size, String mimeType) {
+	    String email, String telNo, long size, String mimeType) throws 
+	    OutOfLengthCitizenAddressException, 
+	    OutOfLengthCitizenNameException, 
+	    OutOfLengthCitizenEmailException, DuplicateCitizenEmailException {
+		
+		Citizen citizen = null;
+		
+		
+		
+		try {
+			citizen = CitizenLocalServiceUtil.getCitizen(email);	
+        }
+        catch (Exception e) {
+	       _log.error(e);
+        }
+		if(citizenId == 0 && citizen != null) {
+			throw new DuplicateCitizenEmailException();
+		} 
+		if(citizenId > 0 && citizen.getCitizenId() != citizenId) {
+			throw new DuplicateCitizenEmailException();
+		}
+		
+		if(fullName.length() > 255) {
+			throw new OutOfLengthCitizenNameException();
+		} else if(address.length() > 500) {
+			throw new OutOfLengthCitizenAddressException();
+		} else if(email.length() > 255) {
+			throw new OutOfLengthCitizenEmailException();
+		}
 
+	}
+	
+	protected void ValidateBusiness(long businessId, String email,
+		String name, String enName, String shortName, 
+		String address, String representativeName, String representativeRole) 
+						throws DuplicateBusinessEmailException, 
+						OutOfLengthBusinessEmailException,
+						OutOfLengthBusinessNameException,
+						OutOfLengthBusinessEnNameException,
+						OutOfLengthCitizenAddressException, 
+						OutOfLengthBusinessRepresentativeNameException,
+						OutOfLengthBusinessRepresentativeRoleException,
+						OutOfLengthBusinessShortNameException {
+		
+		Business business = null;
+		
+		try {
+			business = BusinessLocalServiceUtil.getBusiness(email);
+        }
+        catch (Exception e) {
+	        _log.error(e);
+        }
+		
+		if(businessId == 0 && business !=null) {
+			throw new DuplicateBusinessEmailException();
+		} 
+		
+		if(businessId != 0 && business!=null 
+						&& business.getBusinessId() != businessId) {
+			throw new DuplicateBusinessEmailException();
+		} 
+		if(email.length() > 255) {
+			throw new OutOfLengthBusinessEmailException();
+		} else if(name.length() > 255) {
+			throw new OutOfLengthBusinessNameException();
+		} else if(enName.length() > 255) {
+			throw new OutOfLengthBusinessEnNameException();
+		} else if(address.length() > 500) {
+			throw new OutOfLengthCitizenAddressException();
+		} else if(representativeName.length() > 75) {
+			throw new OutOfLengthBusinessRepresentativeNameException();
+		} else if(representativeRole.length() > 75) {
+			throw new OutOfLengthBusinessRepresentativeRoleException();
+		} else if(shortName.length() > 75) {
+			throw new OutOfLengthBusinessShortNameException();
+		} 
+ 		
+		
 	}
 
 	private Log _log = LogFactoryUtil

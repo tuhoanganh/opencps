@@ -31,6 +31,42 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
 
 public class AccountProfilePortlet extends MVCPortlet {
 
+	@Override
+	public void render(
+	    RenderRequest renderRequest, RenderResponse renderResponse)
+	    throws PortletException, IOException {
+
+		long citizenId = ParamUtil
+		    .getLong(renderRequest, CitizenDisplayTerms.CITIZEN_ID);
+
+		long businessId = ParamUtil
+		    .getLong(renderRequest, BusinessDisplayTerms.BUSINESS_BUSINESSID);
+
+		try {
+			if (citizenId > 0) {
+				Citizen citizen = CitizenLocalServiceUtil
+				    .fetchCitizen(citizenId);
+				renderRequest
+				    .setAttribute(WebKeys.CITIZEN_PROFILE_ENTRY, citizen);
+			}
+
+			if (businessId > 0) {
+				Business business = BusinessLocalServiceUtil
+				    .fetchBusiness(businessId);
+				renderRequest
+				    .setAttribute(WebKeys.BUSINESS_PROFILE_ENTRY, business);
+			}
+		}
+
+		catch (Exception e) {
+			_log
+			    .error(e);
+		}
+
+		super.render(renderRequest, renderResponse);
+	}
+
+	
 	public void updateCitizenProfile(
 	    ActionRequest actionRequest, ActionResponse actionResponse) {
 

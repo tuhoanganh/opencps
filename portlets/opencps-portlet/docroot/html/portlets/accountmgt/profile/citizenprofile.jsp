@@ -40,10 +40,13 @@
 	Citizen citizen = null;
 	User userLogin = null;
 	PasswordPolicy passwordPolicy = null;
+	long citizenId = 0;
 	try {
 		serviceContext = ServiceContextFactory.getInstance(request);
 		/* citizen = CitizenLocalServiceUtil.getCitizenByMapingUserId(serviceContext.getUserId()); */
 		userLogin = UserLocalServiceUtil.getUser(serviceContext.getUserId());
+		
+		citizenId = citizen.getCitizenId();
 		if(userLogin != null) {
 			passwordPolicy = PasswordPolicyLocalServiceUtil
 							.getDefaultPasswordPolicy(company.getCompanyId());
