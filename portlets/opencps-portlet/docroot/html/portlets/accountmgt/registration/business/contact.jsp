@@ -1,3 +1,4 @@
+<%@page import="org.opencps.accountmgt.service.BusinessLocalServiceUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -36,11 +37,16 @@
 <%
 	Business business = (Business) request.getAttribute(WebKeys.BUSINESS_ENTRY);
 	long businessId = business!=null ? business.getBusinessId() : 0L;
+	Long userId = (Long) request.getAttribute(WebKeys.MAPPING_USERID);
+	
+	Business businessFromProFile = null;
+					
 	
 	List<DictItem> dictItems = new ArrayList<DictItem>();
 	DictCollection dictCollection = null;
 	
 	try {
+		businessFromProFile = BusinessLocalServiceUtil.getBusiness(userId);
 		dictCollection = DictCollectionLocalServiceUtil
 						.getDictCollection(scopeGroupId, 
 							PortletPropsValues.DATAMGT_MASTERDATA_BUSINESS_DOMAIN);
@@ -54,7 +60,7 @@
 	
 %>
 
-<aui:model-context bean="<%=business%>" model="<%=Business.class%>" />
+<aui:model-context bean="<%=businessFromProFile%>" model="<%=Business.class%>" />
 
 <aui:row>
 	<aui:input name="<%=BusinessDisplayTerms.BUSINESS_ADDRESS %>">
@@ -75,7 +81,10 @@
 
 <aui:row>
 	<aui:col width="50">
-		<aui:input name="<%=BusinessDisplayTerms.BUSINESS_EMAIL %>">
+		<aui:input 
+			name="<%=BusinessDisplayTerms.BUSINESS_EMAIL %>"
+			disabled="<%=userId!=null ? true : false %>"
+		>
 			<aui:validator name="required" />
 			<aui:validator name="email" />
 			<aui:validator name="maxLength">255</aui:validator>
@@ -106,9 +115,12 @@
 	</aui:col>
 </aui:row>
 
-<aui:row>
-	<aui:input type="file" name="attachFile" />
-</aui:row>
+<c:if test="<%=userId==null %>">
+	<aui:row>
+		<aui:input type="file" name="attachFile" />
+	</aui:row>
+</c:if>
+
 
 
 

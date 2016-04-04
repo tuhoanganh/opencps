@@ -57,7 +57,7 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	
 	public static final String CITIZEN_ENTRY = "CITIZEN_ENTRY";
 	
-	public static final String CITIZEN_PROFILE_ENTRY = "CITIZEN_PROFILE_ENTRY";
+	public static final String MAPPING_USERID = "MAPPING_USERID";
 	
 	public static final String BUSINESS_ENTRY = "BUSINESS_ENTRY";
 	

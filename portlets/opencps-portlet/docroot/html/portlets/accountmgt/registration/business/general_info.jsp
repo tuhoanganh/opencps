@@ -1,3 +1,4 @@
+<%@page import="org.opencps.accountmgt.service.BusinessLocalServiceUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -39,8 +40,12 @@
 	
 	List<DictItem> dictItems = new ArrayList<DictItem>();
 	DictCollection dictCollection = null;
+	Long userId = (Long) request.getAttribute(WebKeys.MAPPING_USERID);
+	Business businessFromProFile = null;
 	
 	try {
+		
+		businessFromProFile = BusinessLocalServiceUtil.getBusiness(userId);
 		dictCollection = DictCollectionLocalServiceUtil
 						.getDictCollection(scopeGroupId, 
 							PortletPropsValues.DATAMGT_MASTERDATA_BUSINESS_DOMAIN);
@@ -54,7 +59,7 @@
 	
 %>
 
-<aui:model-context bean="<%=business%>" model="<%=Business.class%>" />
+<aui:model-context bean="<%=businessFromProFile%>" model="<%=Business.class%>" />
 
 <aui:row>
 	<aui:col width="50">

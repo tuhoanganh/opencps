@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -31,21 +30,82 @@
 <%@page import="com.liferay.portal.service.PasswordPolicyLocalServiceUtil"%>
 <%@page import="com.liferay.portal.model.PasswordPolicy"%>
 <%@page import="com.liferay.portal.UserLockoutException"%>
+<%@page import="org.opencps.accountmgt.search.BusinessDisplayTerms"%>
+<%@page import="org.opencps.accountmgt.service.BusinessLocalServiceUtil"%>
+<%@page import="org.opencps.accountmgt.model.Business"%>
+<%@page import="javax.portlet.PortletURL"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page import="com.liferay.portal.service.UserGroupLocalServiceUtil"%>
+<%@page import="com.liferay.portal.model.UserGroup"%>
+<%@page import="org.omg.PortableInterceptor.USER_EXCEPTION"%>
+<%@page import="org.opencps.util.WebKeys"%>
 <%@ include file="/init.jsp" %>
 
 <%
-	String [] citizenProfileSections = {"general_info.jsp", "edit_password_citizen"};
-	String [][] categorySections = {citizenProfileSections};
-	ServiceContext serviceContext = null;
+
+	Long userId = (Long) request.getAttribute(WebKeys.MAPPING_USERID);
+	
+	List<UserGroup> userGroups = new ArrayList<UserGroup>();
+	String accountType = "";
+	String [] ProfileSections = null;
+	String path = "";
+	String [][] categorySections = null;
 	Citizen citizen = null;
+	Business business = null;
 	User userLogin = null;
 	PasswordPolicy passwordPolicy = null;
 	long citizenId = 0;
-	long userId = themeDisplay.getUserId();
+	long businessId = 0;
+	
 	try {
 		
 		userLogin = UserLocalServiceUtil.getUser(userId);
-		citizen = CitizenLocalServiceUtil.getCitizen(userId); 		
+		userGroups = userLogin.getUserGroups();
+		if (!userGroups.isEmpty()) {
+			for(UserGroup userGroup : userGroups) {
+				if(userGroup.getName().equals("CITIZEN") 
+								|| userGroup.getName().equals("BUSINESS")) {
+					accountType =  userGroup.getName() ;
+					break;
+				}
+				
+			}
+		} else {
+			_log.info("empty");
+		}
+		
+		if(accountType.equals("CITIZEN")) {
+			citizen = CitizenLocalServiceUtil.getCitizen(userId);
+		
+			ProfileSections = new String[2];
+			ProfileSections[0] = "general_info";
+			ProfileSections[1] = "edit_password_citizen";
+			
+			path = "/html/portlets/accountmgt/registration/citizen/";
+		
+		} else if(accountType.equals("BUSINESS")) {
+			business = BusinessLocalServiceUtil.getBusiness(userId);
+			
+			ProfileSections = new String[3];
+			ProfileSections[0] = "contact";
+			ProfileSections[1] = "general_info";
+			ProfileSections[2] = "edit_password_citizen";
+			
+			path = "/html/portlets/accountmgt/registration/business/";
+			
+		} else {
+			citizen = CitizenLocalServiceUtil.getCitizen(userId);
+			ProfileSections = new String[2];
+			ProfileSections[0] = "general_info";
+			ProfileSections[1] = "edit_password_citizen";
+			
+			path = "/html/portlets/accountmgt/registration/citizen/";
+		}
+		
+		String [][] categorySectionss = {ProfileSections};
+		categorySections = categorySectionss; 
+		
 		if(userLogin != null) {
 			passwordPolicy = PasswordPolicyLocalServiceUtil
 							.getDefaultPasswordPolicy(company.getCompanyId());
@@ -53,12 +113,25 @@
 			passwordPolicy = userLogin.getPasswordPolicy();
 		}
 		
+		if(citizen != null  ) {
+			citizenId = citizen.getCitizenId();
+			
+		} else if(business != null) {
+			businessId = business.getBusinessId();
+		}
 		
 	} catch(Exception e) {
 		_log.error(e);
 	}
+	_log.info("accountType " + accountType);
+	
 %>
+
 <portlet:actionURL var="updateCitizenProfileURL" name="updateCitizenProfile" >
+	<portlet:param name="returnURL" value="<%=currentURL %>"/>
+</portlet:actionURL>
+
+<portlet:actionURL var="updateBusinessProfileURL" name="updateBusinessProfile" >
 	<portlet:param name="returnURL" value="<%=currentURL %>"/>
 </portlet:actionURL>
 
@@ -102,21 +175,35 @@
 </liferay-util:buffer>
 <aui:form name="fm" 
 	method="post" 
-	action="<%=updateCitizenProfileURL.toString() %>">
+	action='<%=accountType.equals("CITIZEN") ? updateCitizenProfileURL.toString() : updateBusinessProfileURL.toString() %>'>
 	<liferay-ui:form-navigator 
 		backURL="<%= currentURL %>"
-		categoryNames= "<%= UserMgtUtil._WORKING_UNIT_CATEGORY_NAMES %>"	
+		categoryNames= "<%= UserMgtUtil._CITIZEN_CATEGORY_NAMES %>"	
 		categorySections="<%=categorySections %>" 
 		htmlBottom="<%= htmlBott %>"
 		htmlTop="<%= htmlTop %>"
-		jspPath="/html/portlets/accountmgt/registration/citizen"
+		jspPath="<%=path%>"
 		>	
 	</liferay-ui:form-navigator>
-	<aui:input 
-		name="<%=CitizenDisplayTerms.CITIZEN_MAPPINGUSERID %>" 
-		value="<%=String.valueOf(userLogin != null ? userLogin.getUserId() : 0) %>"
-		type="hidden"
-	></aui:input>
+	
+	<c:choose>
+		<c:when test="<%=citizenId > 0 %>">
+			<aui:input 
+				name="<%=CitizenDisplayTerms.CITIZEN_ID %>" 
+				value="<%=String.valueOf(citizen != null ? citizen.getCitizenId() : 0) %>"
+				type="hidden"
+			/>
+		</c:when>
+		<c:otherwise>
+			<aui:input 
+				name="<%=BusinessDisplayTerms.BUSINESS_BUSINESSID %>" 
+				value="<%=String.valueOf(business != null ? business.getBusinessId() : 0) %>"
+				type="hidden"
+			/>
+		</c:otherwise>
+	</c:choose>
+	
+	
 </aui:form>
 
 <%!
