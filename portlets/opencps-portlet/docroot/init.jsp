@@ -26,6 +26,7 @@
 <%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui"%>
 <%@ taglib uri="http://liferay.com/tld/util" prefix="liferay-util"%>
 <%@ taglib uri="http://opencps.org/datamgt" prefix="datamgt"%>
+<%@ taglib uri="http://opencps.org/dl-upload" prefix="dl-upload"%>
 
 <%@page import="com.liferay.portal.kernel.util.StringUtil"%>
 <%@page import="com.liferay.portlet.PortletPreferencesFactoryUtil"%>
