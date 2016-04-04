@@ -614,6 +614,11 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 		subscriptionSender
 		    .flushNotificationsAsync();
 	}
+	
+	public Citizen getCitizen(String email) throws 
+	NoSuchCitizenException, SystemException {
+		return citizenPersistence.findByEmail(email);
+	}
 
 	private Log _log = LogFactoryUtil
 	    .getLog(CitizenLocalServiceImpl.class

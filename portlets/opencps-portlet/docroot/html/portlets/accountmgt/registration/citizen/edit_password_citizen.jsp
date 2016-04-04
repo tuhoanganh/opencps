@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,23 +16,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-<%@page import="org.opencps.util.WebKeys"%>
-<%@page import="org.opencps.accountmgt.model.Citizen"%>
-<%@page import="org.opencps.util.PortletUtil"%>
-<%@page import="org.opencps.util.DateTimeUtil"%>
-<%@page import="java.util.Date"%>
-<%@page import="org.opencps.util.PortletPropsValues"%>
+<%@ include file="/init.jsp" %> 
 <%@page import="org.opencps.accountmgt.search.CitizenDisplayTerms"%>
-<%@ include file="../init.jsp" %>
 
-<%
-
-	Citizen citizen = (Citizen) request.getAttribute(WebKeys.CITIZEN_ENTRY);
-	long citizenID = citizen != null ? citizen.getCitizenId() : 0L;
-	
-	Date defaultBirthDate = citizen != null && citizen.getBirthdate() != null ? 
-		citizen.getBirthdate() : DateTimeUtil.convertStringToDate("01/01/1970");
-		PortletUtil.SplitDate spd = new PortletUtil.SplitDate(defaultBirthDate);
-	
-%>
-
+<aui:input type="password" name="<%=CitizenDisplayTerms.CURRENT_PASSWORD %>" />
+<aui:input type="password" name="<%=CitizenDisplayTerms.NEW_PASSWORD %>" />
+<aui:input type="password" name="<%=CitizenDisplayTerms.RE_PASSWORD %>" />
