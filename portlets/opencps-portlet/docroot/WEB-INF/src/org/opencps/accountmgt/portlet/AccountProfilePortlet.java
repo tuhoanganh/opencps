@@ -2,7 +2,6 @@
 package org.opencps.accountmgt.portlet;
 
 import java.io.IOException;
-import java.util.Date;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -19,7 +18,6 @@ import org.opencps.accountmgt.service.CitizenLocalServiceUtil;
 import org.opencps.datamgt.model.DictItem;
 import org.opencps.datamgt.service.DictItemLocalServiceUtil;
 import org.opencps.usermgt.search.EmployeeDisplayTerm;
-import org.opencps.util.DateTimeUtil;
 import org.opencps.util.WebKeys;
 
 import com.liferay.portal.UserPasswordException;
@@ -27,10 +25,8 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
-import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
@@ -110,6 +106,11 @@ public class AccountProfilePortlet extends MVCPortlet {
 		long wardId =
 		    ParamUtil.getLong(
 		        actionRequest, CitizenDisplayTerms.CITIZEN_WARD_ID);
+		
+		_log.info("citizenId " + citizenId + " curPass " + curPass
+			+" newPass " + newPass + " districtId " + districtId +  " wardId " + wardId + 
+			" cityId " + cityId + " address " + address);
+		
 		DictItem city = null;
 
 		DictItem district = null;
@@ -142,6 +143,8 @@ public class AccountProfilePortlet extends MVCPortlet {
 		catch (Exception e) {
 			if (e instanceof UserPasswordException) {
 				SessionErrors.add(actionRequest, UserPasswordException.class);
+			} else {
+				_log.info(e);
 			}
 		}
 	}
@@ -204,6 +207,11 @@ public class AccountProfilePortlet extends MVCPortlet {
 		String rePass =
 		    ParamUtil.getString(actionRequest, BusinessDisplayTerms.RE_PASSWORD);
 		boolean isChangePassWord = curPass != null ? true : false;
+		
+		_log.info("businessId " + businessId + " email " + email + " curPass " + curPass
+			+" newPass " + newPass + " districtId " + districtId +  " wardId " + wardId + 
+			" cityId " + cityId + " address " + address);
+		
 		DictItem city = null;
 
 		DictItem district = null;
@@ -220,6 +228,8 @@ public class AccountProfilePortlet extends MVCPortlet {
 			    ServiceContextFactory.getInstance(actionRequest);
 
 			if (businessId > 0) {
+				_log.info("district.getItemName(serviceContext.getLocale(), true) " + 
+								district.getItemName(serviceContext.getLocale(), true));
 				BusinessLocalServiceUtil.updateBusiness(
 				    businessId, name, enName, shortName, type, idNumber,
 				    address, city.getItemCode(), district.getItemCode(),
@@ -230,12 +240,16 @@ public class AccountProfilePortlet extends MVCPortlet {
 				    representativeName, representativeRole, domain,
 				    isChangePassWord, curPass, rePass,
 				    serviceContext.getUserId(), serviceContext);
+				
+				
 			}
 
 		}
 		catch (Exception e) {
 			if (e instanceof UserPasswordException) {
 				SessionErrors.add(actionRequest, UserPasswordException.class);
+			} else {
+				_log.info(e);
 			}
 		}
 	}

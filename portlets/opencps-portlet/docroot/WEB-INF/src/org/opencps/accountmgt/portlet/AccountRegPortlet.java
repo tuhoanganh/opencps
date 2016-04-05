@@ -240,6 +240,8 @@ public class AccountRegPortlet extends MVCPortlet {
 				SessionErrors.add(actionRequest, OutOfLengthBusinessRepresentativeRoleException.class);
 			} else if(e instanceof OutOfLengthCitizenAddressException) {
 				SessionErrors.add(actionRequest, OutOfLengthCitizenAddressException.class);
+			} else {
+				_log.error(e);
 			}
 
 		}
@@ -382,10 +384,12 @@ public class AccountRegPortlet extends MVCPortlet {
 			    } else if(e instanceof DuplicateCitizenEmailException) {
 			    	SessionErrors.add(actionRequest, 
 			    		DuplicateCitizenEmailException.class);
+			    } else {
+			    	_log.error(e);
 			    }
 		}
 		finally {
-
+			
 		}
 	}
 

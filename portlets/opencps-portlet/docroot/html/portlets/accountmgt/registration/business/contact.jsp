@@ -46,7 +46,10 @@
 	DictCollection dictCollection = null;
 	
 	try {
-		businessFromProFile = BusinessLocalServiceUtil.getBusiness(userId);
+		if(userId != null) {
+			businessFromProFile = BusinessLocalServiceUtil.getBusiness(userId);
+		}
+		
 		dictCollection = DictCollectionLocalServiceUtil
 						.getDictCollection(scopeGroupId, 
 							PortletPropsValues.DATAMGT_MASTERDATA_BUSINESS_DOMAIN);
@@ -70,13 +73,15 @@
 </aui:row>
 
 <aui:row>
-	<datamgt:ddr 
-		cssClass="input100"
-		depthLevel="3" 
-		dictCollectionCode="ADMINISTRATIVE_REGION"
-		itemNames="cityId,districtId,wardId"
-		itemsEmptyOption="true,true,true"	
-	/>
+	<aui:col width="100">
+		<datamgt:ddr 
+			cssClass="input100"
+			depthLevel="3" 
+			dictCollectionCode="ADMINISTRATIVE_REGION"
+			itemNames="cityId,districtId,wardId"
+			itemsEmptyOption="true,true,true"	
+		/>	
+	</aui:col>
 </aui:row>
 
 <aui:row>

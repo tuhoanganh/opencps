@@ -88,8 +88,8 @@
 			business = BusinessLocalServiceUtil.getBusiness(userId);
 			
 			ProfileSections = new String[3];
-			ProfileSections[0] = "contact";
-			ProfileSections[1] = "general_info";
+			ProfileSections[0] = "general_info";
+			ProfileSections[1] = "contact";
 			ProfileSections[2] = "edit_password_citizen";
 			
 			path = "/html/portlets/accountmgt/registration/business/";

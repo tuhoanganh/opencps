@@ -51,7 +51,9 @@
 		dictCollection = DictCollectionLocalServiceUtil
 						.getDictCollection(scopeGroupId, "ADMINISTRATIVE_REGION");
 		
-		citizenFromProfile = CitizenLocalServiceUtil.getCitizen(userId);
+		if(userId != null) {
+			citizenFromProfile = CitizenLocalServiceUtil.getCitizen(userId);
+		}
 	} catch(Exception e) {
 		
 	}

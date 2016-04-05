@@ -45,7 +45,9 @@
 	
 	try {
 		
-		businessFromProFile = BusinessLocalServiceUtil.getBusiness(userId);
+		if(userId != null) {
+			businessFromProFile = BusinessLocalServiceUtil.getBusiness(userId);
+		}
 		dictCollection = DictCollectionLocalServiceUtil
 						.getDictCollection(scopeGroupId, 
 							PortletPropsValues.DATAMGT_MASTERDATA_BUSINESS_DOMAIN);
@@ -95,7 +97,7 @@
 <aui:row>
 	<datamgt:ddr
 		depthLevel="1" 
-		dictCollectionCode="BUSINESS_TYPE"
+		dictCollectionCode="BUSINESS_DOMAIN"
 		itemNames="businessType"
 		itemsEmptyOption="true"	
 	/>	
