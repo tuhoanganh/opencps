@@ -31,6 +31,12 @@ import org.opencps.accountmgt.service.CitizenLocalServiceUtil;
 import org.opencps.datamgt.model.DictItem;
 import org.opencps.datamgt.service.DictItemLocalServiceUtil;
 import org.opencps.util.DateTimeUtil;
+<<<<<<< HEAD
+=======
+import org.opencps.util.MessageBusUtil;
+import org.opencps.util.MessageKeys;
+import org.opencps.util.PortletPropsValues;
+>>>>>>> FETCH_HEAD
 import org.opencps.util.PortletUtil;
 import org.opencps.util.WebKeys;
 
@@ -57,7 +63,7 @@ public class AccountRegPortlet extends MVCPortlet {
 
 		long citizenId = ParamUtil
 		    .getLong(renderRequest, CitizenDisplayTerms.CITIZEN_ID);
-		
+
 		long businessId = ParamUtil
 		    .getLong(renderRequest, BusinessDisplayTerms.BUSINESS_BUSINESSID);
 
@@ -194,7 +200,7 @@ public class AccountRegPortlet extends MVCPortlet {
 
 			if (businessId == 0) {
 
-				BusinessLocalServiceUtil
+				Business business = BusinessLocalServiceUtil
 				    .addBusiness(
 				        name, enName, shortName, type, idNumber, address, city
 				            .getItemCode(),
@@ -220,6 +226,17 @@ public class AccountRegPortlet extends MVCPortlet {
 				            .getYear(),
 				        repositoryId, sourceFileName, contentType, title,
 				        inputStream, size, serviceContext);
+				
+				if (business != null) {
+					User mappingUser = UserLocalServiceUtil
+					    .getUser(business
+					        .getMappingUserId());
+					MessageBusUtil
+					    .sendEmailAddressVerification(business
+					        .getUuid(), mappingUser, email,
+					        PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN,
+					        serviceContext);
+				}
 			}
 			else {
 
@@ -246,6 +263,14 @@ public class AccountRegPortlet extends MVCPortlet {
 			} else {
 				_log.error(e);
 			}
+			else {
+				SessionErrors
+				    .add(
+				        uploadPortletRequest,
+				        MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED);
+			}
+			_log
+			    .error(e);
 
 		}
 		finally {
@@ -375,8 +400,10 @@ public class AccountRegPortlet extends MVCPortlet {
 					    .getUser(citizen
 					        .getMappingUserId());
 					MessageBusUtil
-					    .sendEmailAddressVerification(
-					        mappingUser, email, serviceContext);
+					    .sendEmailAddressVerification(citizen
+					        .getUuid(), mappingUser, email,
+					        PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN,
+					        serviceContext);
 				}
 
 			}
@@ -386,6 +413,7 @@ public class AccountRegPortlet extends MVCPortlet {
 
 		}
 		catch (Exception e) {
+<<<<<<< HEAD
 			    if(e instanceof OutOfLengthCitizenAddressException) {
 			    	SessionErrors.add(actionRequest, 
 			    		OutOfLengthCitizenAddressException.class);
@@ -401,6 +429,34 @@ public class AccountRegPortlet extends MVCPortlet {
 			    } else {
 			    	_log.error(e);
 			    }
+=======
+			if (e instanceof OutOfLengthCitizenAddressException) {
+				SessionErrors
+				    .add(
+				        actionRequest,
+				        OutOfLengthCitizenAddressException.class);
+			}
+			else if (e instanceof OutOfLengthCitizenEmailException) {
+				SessionErrors
+				    .add(actionRequest, OutOfLengthCitizenEmailException.class);
+			}
+			else if (e instanceof OutOfLengthCitizenNameException) {
+				SessionErrors
+				    .add(actionRequest, OutOfLengthCitizenNameException.class);
+			}
+			else if (e instanceof DuplicateCitizenEmailException) {
+				SessionErrors
+				    .add(actionRequest, DuplicateCitizenEmailException.class);
+			}
+			else {
+				SessionErrors
+				    .add(
+				        uploadPortletRequest,
+				        MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED);
+			}
+			_log
+			    .error(e);
+>>>>>>> FETCH_HEAD
 		}
 		finally {
 			
@@ -464,8 +520,7 @@ public class AccountRegPortlet extends MVCPortlet {
 			    .getBusiness(email);
 		}
 		catch (Exception e) {
-			_log
-			    .error(e);
+			// Nothing todo
 		}
 
 		if (businessId == 0 && business != null) {

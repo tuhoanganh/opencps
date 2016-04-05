@@ -15,30 +15,18 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>
 */
 
-package org.opencps.action;
+package org.opencps.struts.plugin;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-
-import org.opencps.util.WebKeys;
-
-import com.liferay.portal.theme.ThemeDisplay;
+import org.apache.struts.config.ModuleConfig;
+import org.apache.struts.tiles.TilesPlugin;
 
 /**
  * @author trungnt
  *
  */
-public class DLFileEntryAction  {
-	
-/*	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-
-		ThemeDisplay themeDisplay = (ThemeDisplay) request
-				.getAttribute(WebKeys.THEME_DISPLAY);
-
-		
-		return null;
-	}*/
+public class PortletTilesPlugin extends TilesPlugin{
+	@Override
+	protected void initRequestProcessorClass(ModuleConfig moduleConfig) {
+	}
 }
+

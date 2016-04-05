@@ -40,6 +40,7 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Address;
 import com.liferay.portal.model.EmailAddress;
@@ -147,23 +148,14 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 			        PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN,
 			        StringPool.BLANK, serviceContext);
 
+		}
+
+		if (userGroup != null) {
 			userGroupIds = new long[] {
 			    userGroup
 			        .getUserGroupId()
 			};
 		}
-
-		try {
-			userGroup = UserGroupLocalServiceUtil
-			    .getUserGroup(serviceContext
-			        .getCompanyId(),
-			        PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN);
-		}
-		catch (Exception e) {
-			_log
-			    .warn(e);
-		}
-
 		password1 = PwdGenerator
 		    .getPassword();
 		password2 = password1;
@@ -292,12 +284,34 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 		        .getUserId());
 		citizen
 		    .setWardCode(wardCode);
+
 		citizen
-		    .setUuid(serviceContext
-		        .getUuid());
+		    .setUuid(PortalUUIDUtil
+		        .generate());
 
 		return citizenPersistence
 		    .update(citizen);
+	}
+
+	public Citizen getCitizen(long mappingUserId)
+	    throws NoSuchCitizenException, SystemException {
+
+		return citizenPersistence
+		    .findByMappingUserId(mappingUserId);
+	}
+
+	public Citizen getCitizen(String email)
+	    throws NoSuchCitizenException, SystemException {
+
+		return citizenPersistence
+		    .findByEmail(email);
+	}
+
+	public Citizen getCitizenByUUID(String uuid)
+	    throws NoSuchCitizenException, SystemException {
+
+		return citizenPersistence
+		    .findByUUID(uuid);
 	}
 
 	public Citizen updateCitizen(
@@ -388,13 +402,6 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 
 	}
 
-	public Citizen getCitizen(long mappingUserId)
-	    throws NoSuchCitizenException, SystemException {
-
-		return citizenPersistence
-		    .findByMappingUserId(mappingUserId);
-	}
-
 	public Citizen updateStatus(long citizenId, long userId, int accountStatus)
 	    throws SystemException, PortalException {
 
@@ -424,6 +431,7 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 		return citizenPersistence
 		    .update(citizen);
 	}
+
 
 	public void sendEmailAddressVerification(
 	    User user, String emailAddress, ServiceContext serviceContext)
@@ -613,11 +621,6 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 		    .flushNotificationsAsync();
 	}
 	
-	public Citizen getCitizen(String email) throws 
-	NoSuchCitizenException, SystemException {
-		return citizenPersistence.findByEmail(email);
-	}
-	
 	public List<Citizen> getCitizens(int start, int end, OrderByComparator odc)
 					throws SystemException {
 		return citizenPersistence.findAll(start, end, odc);
@@ -642,7 +645,9 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 		return citizenPersistence.countAll();
 	}
 
+
 	private Log _log = LogFactoryUtil
 	    .getLog(CitizenLocalServiceImpl.class
 	        .getName());
+
 }
