@@ -39,10 +39,9 @@ public class AccountMgtPortlet extends MVCPortlet {
 		long businessId =
 		    ParamUtil.getLong(
 		        renderRequest, BusinessDisplayTerms.BUSINESS_BUSINESSID);
-		boolean isEditProfileFromAdmin = true;
 
 		try {
-			renderRequest.setAttribute(WebKeys.PROFILE_FROM_ADMIN, isEditProfileFromAdmin);
+			
 			
 			if (citizenId > 0) {
 				Citizen citizen =
@@ -56,6 +55,8 @@ public class AccountMgtPortlet extends MVCPortlet {
 				renderRequest.setAttribute(
 				    WebKeys.BUSINESS_ENTRY, business);
 			}
+			
+			renderRequest.setAttribute(WebKeys.ACCOUNTMGT_ADMIN_PROFILE, true);
 		}
 
 		catch (Exception e) {

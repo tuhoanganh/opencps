@@ -1,4 +1,4 @@
-<%@page import="org.opencps.accountmgt.service.BusinessLocalServiceUtil"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -31,7 +31,7 @@
 <%@page import="org.opencps.util.PortletPropsValues"%>
 <%@page import="org.opencps.datamgt.service.DictCollectionLocalServiceUtil"%>
 <%@page import="org.opencps.datamgt.model.DictCollection"%>
-
+<%@page import="org.opencps.accountmgt.service.BusinessLocalServiceUtil"%>
 <%@ include file="../../init.jsp" %>
 
 <%
@@ -40,14 +40,13 @@
 	
 	List<DictItem> dictItems = new ArrayList<DictItem>();
 	DictCollection dictCollection = null;
-	Long userId = (Long) request.getAttribute(WebKeys.MAPPING_USERID);
-	Business businessFromProFile = null;
+	
+	boolean isViewProfile = GetterUtil.get( (Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_VIEW_PROFILE), false);
+	
+	boolean isAdminViewProfile = GetterUtil.get((Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_ADMIN_PROFILE), false);
+	
 	
 	try {
-		
-		if(userId != null) {
-			businessFromProFile = BusinessLocalServiceUtil.getBusiness(userId);
-		}
 		dictCollection = DictCollectionLocalServiceUtil
 						.getDictCollection(scopeGroupId, 
 							PortletPropsValues.DATAMGT_MASTERDATA_BUSINESS_DOMAIN);
@@ -61,7 +60,11 @@
 	
 %>
 
-<aui:model-context bean="<%=businessFromProFile%>" model="<%=Business.class%>" />
+<aui:model-context bean="<%=business%>" model="<%=Business.class%>" />
+
+<c:if test="<%=isAdminViewProfile %>">
+	<aui:input name="<%=BusinessDisplayTerms.BUSINESS_ACCOUNTSTATUS%>" disabled="true" />
+</c:if>
 
 <aui:row>
 	<aui:col width="50">

@@ -1,4 +1,4 @@
-<%@page import="org.opencps.accountmgt.service.BusinessLocalServiceUtil"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -31,24 +31,22 @@
 <%@page import="org.opencps.util.PortletPropsValues"%>
 <%@page import="org.opencps.datamgt.service.DictCollectionLocalServiceUtil"%>
 <%@page import="org.opencps.datamgt.model.DictCollection"%>
-
+<%@page import="org.opencps.accountmgt.service.BusinessLocalServiceUtil"%>
 <%@ include file="../../init.jsp" %>
 
 <%
 	Business business = (Business) request.getAttribute(WebKeys.BUSINESS_ENTRY);
 	long businessId = business!=null ? business.getBusinessId() : 0L;
-	Long userId = (Long) request.getAttribute(WebKeys.MAPPING_USERID);
+
+	boolean isViewProfile = GetterUtil.get( (Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_VIEW_PROFILE), false);
 	
-	Business businessFromProFile = null;
+	boolean isAdminViewProfile = GetterUtil.get((Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_ADMIN_PROFILE), false);
 					
 	
 	List<DictItem> dictItems = new ArrayList<DictItem>();
 	DictCollection dictCollection = null;
 	
 	try {
-		if(userId != null) {
-			businessFromProFile = BusinessLocalServiceUtil.getBusiness(userId);
-		}
 		
 		dictCollection = DictCollectionLocalServiceUtil
 						.getDictCollection(scopeGroupId, 
@@ -63,7 +61,7 @@
 	
 %>
 
-<aui:model-context bean="<%=businessFromProFile%>" model="<%=Business.class%>" />
+<aui:model-context bean="<%=business%>" model="<%=Business.class%>" />
 
 <aui:row>
 	<aui:input name="<%=BusinessDisplayTerms.BUSINESS_ADDRESS %>">
@@ -88,7 +86,7 @@
 	<aui:col width="50">
 		<aui:input 
 			name="<%=BusinessDisplayTerms.BUSINESS_EMAIL %>"
-			disabled="<%=userId!=null ? true : false %>"
+			disabled="<%=isViewProfile || isAdminViewProfile %>"
 		>
 			<aui:validator name="required" />
 			<aui:validator name="email" />
@@ -120,7 +118,7 @@
 	</aui:col>
 </aui:row>
 
-<c:if test="<%=userId==null %>">
+<c:if test="<%=isViewProfile %>">
 	<aui:row>
 		<aui:input type="file" name="attachFile" />
 	</aui:row>

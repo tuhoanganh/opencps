@@ -36,7 +36,7 @@
 	if(citizenId > 0 ) {
 		ProfileSections = new String[2];
 		ProfileSections[0] = "general_info";
-		ProfileSections[1] = "edit_password_citizen";
+		ProfileSections[1] = "edit_password";
 		
 		path = "/html/portlets/accountmgt/registration/citizen/";
 	} else if(businessId > 0) {
@@ -44,7 +44,7 @@
 		ProfileSections = new String[3];
 		ProfileSections[0] = "general_info";
 		ProfileSections[1] = "contact";
-		ProfileSections[2] = "edit_password_citizen";
+		ProfileSections[2] = "edit_password";
 		
 		path = "/html/portlets/accountmgt/registration/business/";
 	}
@@ -71,9 +71,13 @@
 
 </liferay-util:buffer>
 
-<aui:form name="fm" 
+<aui:form 
+	name="fm" 
 	method="post" 
-	action='<%= citizenId > 0 ? updateCitizenProfileURL.toString() : updateBusinessProfileURL.toString() %>'>
+	action='<%= citizenId > 0 ? updateCitizenProfileURL.toString() : updateBusinessProfileURL.toString() %>'
+	enctype="multipart/form-data"	
+>
+	
 	<liferay-ui:form-navigator 
 		backURL="<%= currentURL %>"
 		categoryNames= "<%= UserMgtUtil._PROFILE_CATEGORY_NAMES %>"	

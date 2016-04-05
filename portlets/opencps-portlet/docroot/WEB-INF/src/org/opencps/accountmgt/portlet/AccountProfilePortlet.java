@@ -2,6 +2,8 @@
 package org.opencps.accountmgt.portlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -18,6 +20,7 @@ import org.opencps.accountmgt.service.CitizenLocalServiceUtil;
 import org.opencps.datamgt.model.DictItem;
 import org.opencps.datamgt.service.DictItemLocalServiceUtil;
 import org.opencps.usermgt.search.EmployeeDisplayTerm;
+import org.opencps.util.PortletPropsValues;
 import org.opencps.util.WebKeys;
 
 import com.liferay.portal.UserPasswordException;
@@ -25,8 +28,12 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.User;
+import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
@@ -39,36 +46,49 @@ public class AccountProfilePortlet extends MVCPortlet {
 
 		ThemeDisplay themeDisplay =
 		    (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		String accountType = StringPool.BLANK;
 
-		long mappingUserId = themeDisplay.getUserId();
+		if (themeDisplay.isSignedIn()) {
+			List<UserGroup> userGroups = new ArrayList<UserGroup>();
 
-		boolean isEditProfileFromUser = true;
+			try {
 
-		try {
+				User user = themeDisplay.getUser();
+				userGroups = user.getUserGroups();
 
-			renderRequest.setAttribute(
-			    WebKeys.PROFILE_FROM_ADMIN, isEditProfileFromUser);
+				if (!userGroups.isEmpty()) {
+					for (UserGroup userGroup : userGroups) {
+						if (userGroup.getName().equals(
+						    PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN) ||
+						    userGroup.getName().equals(
+						        PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS)) {
+							accountType = userGroup.getName();
+							break;
+						}
 
-			if (mappingUserId > 0) {
+					}
+				}
+
+				renderRequest.setAttribute(WebKeys.ACCOUNT_TYPE, accountType);
+
+				if (accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN)) {
+					Citizen citizen =
+					    CitizenLocalServiceUtil.getCitizen(user.getUserId());
+					renderRequest.setAttribute(WebKeys.CITIZEN_ENTRY, citizen);
+				}
+				else if (accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS)) {
+
+					Business business =
+					    BusinessLocalServiceUtil.getBusiness(user.getUserId());
+					renderRequest.setAttribute(WebKeys.BUSINESS_ENTRY, business);
+				}
+
 				renderRequest.setAttribute(
-				    WebKeys.MAPPING_USERID, mappingUserId);
+				    WebKeys.ACCOUNTMGT_VIEW_PROFILE, true);
 			}
-
-			if (mappingUserId > 0) {
-				Citizen citizen =
-				    CitizenLocalServiceUtil.getCitizen(mappingUserId);
-				renderRequest.setAttribute(WebKeys.CITIZEN_ENTRY, citizen);
-
-				Business business =
-				    BusinessLocalServiceUtil.fetchBusiness(mappingUserId);
-				renderRequest.setAttribute(
-				    WebKeys.BUSINESS_PROFILE_ENTRY, business);
+			catch (Exception e) {
+				_log.error(e);
 			}
-
-		}
-
-		catch (Exception e) {
-			_log.error(e);
 		}
 
 		super.render(renderRequest, renderResponse);
@@ -101,10 +121,6 @@ public class AccountProfilePortlet extends MVCPortlet {
 		long wardId =
 		    ParamUtil.getLong(
 		        actionRequest, CitizenDisplayTerms.CITIZEN_WARD_ID);
-
-		_log.info("citizenId " + citizenId + " curPass " + curPass +
-		    " newPass " + newPass + " districtId " + districtId + " wardId " +
-		    wardId + " cityId " + cityId + " address " + address);
 
 		DictItem city = null;
 
@@ -204,10 +220,6 @@ public class AccountProfilePortlet extends MVCPortlet {
 		    ParamUtil.getString(actionRequest, BusinessDisplayTerms.RE_PASSWORD);
 		boolean isChangePassWord = curPass != null ? true : false;
 
-		_log.info("businessId " + businessId + " email " + email + " curPass " +
-		    curPass + " newPass " + newPass + " districtId " + districtId +
-		    " wardId " + wardId + " cityId " + cityId + " address " + address);
-
 		DictItem city = null;
 
 		DictItem district = null;
@@ -224,8 +236,7 @@ public class AccountProfilePortlet extends MVCPortlet {
 			    ServiceContextFactory.getInstance(actionRequest);
 
 			if (businessId > 0) {
-				_log.info("district.getItemName(serviceContext.getLocale(), true) " +
-				    district.getItemName(serviceContext.getLocale(), true));
+				district.getItemName(serviceContext.getLocale(), true);
 				BusinessLocalServiceUtil.updateBusiness(
 				    businessId, name, enName, shortName, type, idNumber,
 				    address, city.getItemCode(), district.getItemCode(),
