@@ -244,7 +244,7 @@
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/portlets/accountmgt/admin/account.jsp</value>
+			<value>/html/portlets/accountmgt/admin/citizenlist.jsp</value>
 		</init-param>
 		<init-param>
 			<name>template-path</name>

@@ -80,6 +80,16 @@
             <finder-column name="uuid"></finder-column>
         </finder>
 		
+		<finder return-type="Collection" name="G_N">
+			<finder-column name="groupId"></finder-column>
+			<finder-column name="fullName" comparator="LIKE" />
+		</finder>
+		
+		<finder return-type="Collection" name="G_N_S">
+			<finder-column name="groupId"></finder-column>
+			<finder-column name="fullName" comparator="LIKE" />
+			<finder-column name="accountStatus"/>
+		</finder>
 		<reference entity="User" package-path="com.liferay.portal" />
 		
 	</entity>

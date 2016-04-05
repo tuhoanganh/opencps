@@ -1,3 +1,5 @@
+<%@page import="com.liferay.portal.kernel.management.jmx.GetAttributesAction"%>
+<%@page import="org.opencps.util.PortletPropsValues"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -42,169 +44,146 @@
 <%@page import="org.opencps.util.WebKeys"%>
 <%@ include file="/init.jsp" %>
 
-<%
 
-	Long userId = (Long) request.getAttribute(WebKeys.MAPPING_USERID);
-	
-	List<UserGroup> userGroups = new ArrayList<UserGroup>();
-	String accountType = "";
-	String [] ProfileSections = null;
-	String path = "";
-	String [][] categorySections = null;
-	Citizen citizen = null;
-	Business business = null;
-	User userLogin = null;
-	PasswordPolicy passwordPolicy = null;
-	long citizenId = 0;
-	long businessId = 0;
-	
-	try {
+
+<c:choose>
+	<c:when test="<%=themeDisplay.isSignedIn() %>">
+		<portlet:actionURL var="updateCitizenProfileURL" name="updateCitizenProfile" >
+			<portlet:param name="returnURL" value="<%=currentURL %>"/>
+		</portlet:actionURL>
 		
-		userLogin = UserLocalServiceUtil.getUser(userId);
-		userGroups = userLogin.getUserGroups();
-		if (!userGroups.isEmpty()) {
-			for(UserGroup userGroup : userGroups) {
-				if(userGroup.getName().equals("CITIZEN") 
-								|| userGroup.getName().equals("BUSINESS")) {
-					accountType =  userGroup.getName() ;
-					break;
+		<portlet:actionURL var="updateBusinessProfileURL" name="updateBusinessProfile" >
+			<portlet:param name="returnURL" value="<%=currentURL %>"/>
+		</portlet:actionURL>
+		<%
+			String accountType = GetterUtil.getString((String) request.getAttribute(WebKeys.ACCOUNT_TYPE), StringPool.BLANK);
+			String path = StringPool.BLANK;
+			
+			String [] profileSections = null;
+				
+		%>
+		<aui:form name="fm" 
+			method="post" 
+			action='<%=accountType.equals("CITIZEN") ? updateCitizenProfileURL.toString() : updateBusinessProfileURL.toString() %>'>
+		
+		<liferay-util:buffer var="htmlTop">
+			<div class="user-info">
+				<div class="float-container">
+					<img alt="<%= HtmlUtil.escape(user.getFullName()) %>" class="user-logo" src="<%= user.getPortraitURL(themeDisplay) %>" />
+	
+					<span class="user-name"><%= HtmlUtil.escape(user.getFullName()) %></span>
+				</div>
+			</div>
+		</liferay-util:buffer>
+		
+		<liferay-util:buffer var="htmlBott">
+	
+			<%
+				boolean lockedOut = false;
+				PasswordPolicy passwordPolicy = null;
+				passwordPolicy = PasswordPolicyLocalServiceUtil
+								.getDefaultPasswordPolicy(company.getCompanyId());
+				
+				if ((passwordPolicy != null)) {
+					try {
+						UserLocalServiceUtil.checkLockout(user);
+					}
+					catch (UserLockoutException ule) {
+						lockedOut = true;
+					}
 				}
 				
-			}
-		} else {
-			_log.info("empty");
-		}
-		
-		if(accountType.equals("CITIZEN")) {
-			citizen = CitizenLocalServiceUtil.getCitizen(userId);
-		
-			ProfileSections = new String[2];
-			ProfileSections[0] = "general_info";
-			ProfileSections[1] = "edit_password_citizen";
+				/* if(citizen != null  ) {
+					citizenId = citizen.getCitizenId();
+					
+				} else if(business != null) {
+					businessId = business.getBusinessId();
+				}
+				 */
 			
-			path = "/html/portlets/accountmgt/registration/citizen/";
-		
-		} else if(accountType.equals("BUSINESS")) {
-			business = BusinessLocalServiceUtil.getBusiness(userId);
-			
-			ProfileSections = new String[3];
-			ProfileSections[0] = "contact";
-			ProfileSections[1] = "general_info";
-			ProfileSections[2] = "edit_password_citizen";
-			
-			path = "/html/portlets/accountmgt/registration/business/";
-			
-		} else {
-			citizen = CitizenLocalServiceUtil.getCitizen(userId);
-			ProfileSections = new String[2];
-			ProfileSections[0] = "general_info";
-			ProfileSections[1] = "edit_password_citizen";
-			
-			path = "/html/portlets/accountmgt/registration/citizen/";
-		}
-		
-		String [][] categorySectionss = {ProfileSections};
-		categorySections = categorySectionss; 
-		
-		if(userLogin != null) {
-			passwordPolicy = PasswordPolicyLocalServiceUtil
-							.getDefaultPasswordPolicy(company.getCompanyId());
-		} else {
-			passwordPolicy = userLogin.getPasswordPolicy();
-		}
-		
-		if(citizen != null  ) {
-			citizenId = citizen.getCitizenId();
-			
-		} else if(business != null) {
-			businessId = business.getBusinessId();
-		}
-		
-	} catch(Exception e) {
-		_log.error(e);
-	}
-	_log.info("accountType " + accountType);
-	
-%>
-
-<portlet:actionURL var="updateCitizenProfileURL" name="updateCitizenProfile" >
-	<portlet:param name="returnURL" value="<%=currentURL %>"/>
-</portlet:actionURL>
-
-<portlet:actionURL var="updateBusinessProfileURL" name="updateBusinessProfile" >
-	<portlet:param name="returnURL" value="<%=currentURL %>"/>
-</portlet:actionURL>
-
-<liferay-util:buffer var="htmlTop">
-	<c:if test="<%= userLogin != null %>">
-		<div class="user-info">
-			<div class="float-container">
-				<img alt="<%= HtmlUtil.escape(userLogin.getFullName()) %>" class="user-logo" src="<%= userLogin.getPortraitURL(themeDisplay) %>" />
-
-				<span class="user-name"><%= HtmlUtil.escape(userLogin.getFullName()) %></span>
-			</div>
-		</div>
-	</c:if> 
-</liferay-util:buffer>
-<liferay-util:buffer var="htmlBott">
-
-	<%
-	boolean lockedOut = false;
-
-	if ((userLogin != null) && (passwordPolicy != null)) {
-		try {
-			UserLocalServiceUtil.checkLockout(userLogin);
-		}
-		catch (UserLockoutException ule) {
-			lockedOut = true;
-		}
-	}
-	%>
-
-	<c:if test="<%= lockedOut %>">
-		<aui:button-row>
-			<div class="alert alert-block"><liferay-ui:message key="this-user-account-has-been-locked-due-to-excessive-failed-login-attempts" /></div>
-
-			<%
-				String taglibOnClick = renderResponse.getNamespace() + "saveUser('unlock');";
 			%>
+	
+			<c:if test="<%= lockedOut %>">
+				<aui:button-row>
+					<div class="alert alert-block"><liferay-ui:message key="this-user-account-has-been-locked-due-to-excessive-failed-login-attempts" /></div>
+		
+					<%
+						String taglibOnClick = renderResponse.getNamespace() + "saveUser('unlock');";
+					%>
+		
+					<aui:button onClick="<%= taglibOnClick %>" value="unlock" />
+				</aui:button-row>
+			</c:if>
+		</liferay-util:buffer>
+		
+		<c:choose>
+			<c:when test="<%=accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS) %>">
+				<%
+					profileSections = new String[3];
+					profileSections[0] = "general_info";
+					profileSections[1] = "contact";
+					profileSections[2] = "edit_password";
+						
+					path = "/html/portlets/accountmgt/registration/business/";
+					String [][] categorySections = {profileSections};
+					
+					Business business = (Business) request.getAttribute(WebKeys.BUSINESS_ENTRY);
+				%>
+				
+				<aui:input 
+					name="<%=BusinessDisplayTerms.BUSINESS_BUSINESSID %>" 
+					value="<%=String.valueOf(business != null ? business.getBusinessId() : 0) %>"
+					type="hidden"
+				/>
+				
+				<liferay-ui:form-navigator 
+					backURL="<%= currentURL %>"
+					categoryNames= "<%= UserMgtUtil._CITIZEN_CATEGORY_NAMES %>"	
+					categorySections="<%=categorySections %>" 
+					htmlBottom="<%= htmlBott %>"
+					htmlTop="<%= htmlTop %>"
+					jspPath="<%=path%>"
+					>	
+				</liferay-ui:form-navigator>
+			</c:when>
+			<c:when test="<%=accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN) %>">
+				<%
+					profileSections = new String[2];
+					profileSections[0] = "general_info";
+					profileSections[1] = "edit_password";
+					path = "/html/portlets/accountmgt/registration/citizen/";
+					String [][] categorySections = {profileSections};
+					Citizen citizen = (Citizen) request.getAttribute(WebKeys.CITIZEN_ENTRY);
+				%>
+				<aui:input 
+					name="<%=CitizenDisplayTerms.CITIZEN_ID %>" 
+					value="<%=String.valueOf(citizen != null ? citizen.getCitizenId() : 0) %>"
+					type="hidden"
+				/>
+				
+				<liferay-ui:form-navigator 
+					backURL="<%= currentURL %>"
+					categoryNames= "<%= UserMgtUtil._CITIZEN_CATEGORY_NAMES %>"	
+					categorySections="<%=categorySections %>" 
+					htmlBottom="<%= htmlBott %>"
+					htmlTop="<%= htmlTop %>"
+					jspPath="<%=path%>"
+					>	
+				</liferay-ui:form-navigator>
+			</c:when>
 
-			<aui:button onClick="<%= taglibOnClick %>" value="unlock" />
-		</aui:button-row>
-	</c:if>
-</liferay-util:buffer>
-<aui:form name="fm" 
-	method="post" 
-	action='<%=accountType.equals("CITIZEN") ? updateCitizenProfileURL.toString() : updateBusinessProfileURL.toString() %>'>
-	<liferay-ui:form-navigator 
-		backURL="<%= currentURL %>"
-		categoryNames= "<%= UserMgtUtil._CITIZEN_CATEGORY_NAMES %>"	
-		categorySections="<%=categorySections %>" 
-		htmlBottom="<%= htmlBott %>"
-		htmlTop="<%= htmlTop %>"
-		jspPath="<%=path%>"
-		>	
-	</liferay-ui:form-navigator>
+			<c:otherwise>
+				<div class="portlet-msg-alert"><liferay-ui:message key="do-not-permission"/></div>
+			</c:otherwise>
+		</c:choose>
+		</aui:form>
+	</c:when> 
 	
-	<c:choose>
-		<c:when test="<%=citizenId > 0 %>">
-			<aui:input 
-				name="<%=CitizenDisplayTerms.CITIZEN_ID %>" 
-				value="<%=String.valueOf(citizen != null ? citizen.getCitizenId() : 0) %>"
-				type="hidden"
-			/>
-		</c:when>
-		<c:otherwise>
-			<aui:input 
-				name="<%=BusinessDisplayTerms.BUSINESS_BUSINESSID %>" 
-				value="<%=String.valueOf(business != null ? business.getBusinessId() : 0) %>"
-				type="hidden"
-			/>
-		</c:otherwise>
-	</c:choose>
-	
-	
-</aui:form>
+	<c:otherwise>
+		<div class="portlet-msg-alert"><liferay-ui:message key="please-sign-in-to-view-profile"/></div>
+	</c:otherwise>
+</c:choose>
+
 
 <%!
 	private Log _log = LogFactoryUtil.getLog(".html.portlets.accountmgt.citizenprofile.jsp");

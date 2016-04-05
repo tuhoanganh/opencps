@@ -1,6 +1,4 @@
-<%@page import="org.opencps.accountmgt.service.CitizenLocalServiceUtil"%>
-<%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
-<%@page import="com.liferay.portal.kernel.log.Log"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -30,15 +28,21 @@
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="org.opencps.datamgt.service.DictCollectionLocalServiceUtil"%>
 <%@page import="org.opencps.datamgt.model.DictCollection"%>
+<%@page import="org.opencps.accountmgt.service.CitizenLocalServiceUtil"%>
+<%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
+<%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@ include file="../../init.jsp" %>
 
 <%
 
 	Citizen citizen = (Citizen) request.getAttribute(WebKeys.CITIZEN_ENTRY);
 	DictCollection dictCollection = null;
+	
 	long citizenID = citizen != null ? citizen.getCitizenId() : 0L;
 	
-	Long userId = (Long) request.getAttribute(WebKeys.MAPPING_USERID);
+	boolean isViewProfile = GetterUtil.get( (Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_VIEW_PROFILE), false);
+	
+	boolean isAdminViewProfile = GetterUtil.get((Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_ADMIN_PROFILE), false);
 	
 	Citizen citizenFromProfile = null;
 	
@@ -51,19 +55,22 @@
 		dictCollection = DictCollectionLocalServiceUtil
 						.getDictCollection(scopeGroupId, "ADMINISTRATIVE_REGION");
 		
-		citizenFromProfile = CitizenLocalServiceUtil.getCitizen(userId);
 	} catch(Exception e) {
 		
 	}
 %>
 
-<aui:model-context bean="<%=citizenFromProfile%>" model="<%=Citizen.class%>" />
+<aui:model-context bean="<%=citizen %>" model="<%=Citizen.class%>" />
+
+<c:if test="<%=isAdminViewProfile %>">
+	<aui:input name="<%=CitizenDisplayTerms.CITIZEN_ACCOUNTSTATUS%>" disabled="true" />
+</c:if>
 
 <aui:row>
 	<aui:col width="50">
 		<aui:input 
 			name="<%=CitizenDisplayTerms.CITIZEN_FULLNAME %>" 
-			disabled="<%=userId!=null ? true : false %>"
+			disabled="<%=isViewProfile %>"
 		>
 		<aui:validator name="required" />
 		<aui:validator name="maxLength">255</aui:validator>
@@ -73,7 +80,7 @@
 	<aui:col width="50">
 		<aui:input 
 			name="<%=CitizenDisplayTerms.CITIZEN_PERSONALID %>"
-			disabled="<%=userId!=null ? true : false %>"
+			disabled="<%=isViewProfile %>"
 		>
 		<aui:validator name="required" />
 		</aui:input>
@@ -88,7 +95,7 @@
 		<liferay-ui:input-date 
 			dayParam="<%=CitizenDisplayTerms.BIRTH_DATE_DAY %>"
 			dayValue="<%= spd.getDayOfMoth() %>"
-			disabled="<%=userId!=null ? true : false %>"
+			disabled="<%=isViewProfile%>"
 			monthParam="<%=CitizenDisplayTerms.BIRTH_DATE_MONTH %>"
 			monthValue="<%= spd.getMonth() %>"
 			name="<%=CitizenDisplayTerms.CITIZEN_BIRTHDATE %>"
@@ -102,7 +109,7 @@
 	<aui:col width="50">
 		<aui:select 
 			name="<%=CitizenDisplayTerms.CITIZEN_GENDER %>"
-			disabled="<%=userId!=null ? true : false %>"
+			disabled="<%=isViewProfile %>"
 		>
 			<%
 				if(PortletPropsValues.USERMGT_GENDER_VALUES != null && 
@@ -151,7 +158,7 @@
 	<aui:col width="50">
 		<aui:input 
 			name="<%=CitizenDisplayTerms.CITIZEN_EMAIL %>"
-			disabled="<%=userId!=null ? true : false %>"
+			disabled="<%=isViewProfile ||  isAdminViewProfile%>"
 		>
 			<aui:validator name="required" />
 			<aui:validator name="email" />
@@ -167,7 +174,7 @@
 	</aui:col>
 </aui:row>
 
-<c:if test="<%=userId==null %>">
+<c:if test="<%=isViewProfile %>">
 	<aui:row>
 		<aui:col width="100">
 		<aui:input type="file" name="<%=CitizenDisplayTerms.CITIZEN_ATTACHFILE %>" />
