@@ -36,15 +36,17 @@ import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
-
 
 public class AccountRegPortlet extends MVCPortlet {
 
@@ -172,8 +174,9 @@ public class AccountRegPortlet extends MVCPortlet {
 		InputStream inputStream = null;
 
 		try {
-			ValidateBusiness(businessId, email, sourceFileName, enName,
-				shortName, address, representativeName, representativeRole);
+			ValidateBusiness(
+			    businessId, email, sourceFileName, enName, shortName, address,
+			    representativeName, representativeRole);
 			ServiceContext serviceContext = ServiceContextFactory
 			    .getInstance(uploadPortletRequest);
 
@@ -320,10 +323,11 @@ public class AccountRegPortlet extends MVCPortlet {
 		InputStream inputStream = null;
 
 		try {
-			
-			ValidateCitizen
-			(citizenId, fullName, personId, adress, email, telNo, size, contentType);
-			
+
+			ValidateCitizen(
+			    citizenId, fullName, personId, adress, email, telNo, size,
+			    contentType);
+
 			ServiceContext serviceContext = ServiceContextFactory
 			    .getInstance(actionRequest);
 
@@ -343,7 +347,7 @@ public class AccountRegPortlet extends MVCPortlet {
 			    .getDictItem(wardId);
 
 			if (citizenId == 0) {
-				CitizenLocalServiceUtil
+				Citizen citizen = CitizenLocalServiceUtil
 				    .addCitizen(
 				        fullName, personId, gender, birthDateDay,
 				        birthDateMonth, birthDateYear, adress, city
@@ -365,6 +369,16 @@ public class AccountRegPortlet extends MVCPortlet {
 
 				        telNo, repositoryId, sourceFileName, contentType, title,
 				        inputStream, size, serviceContext);
+
+				if (citizen != null) {
+					User mappingUser = UserLocalServiceUtil
+					    .getUser(citizen
+					        .getMappingUserId());
+					MessageBusUtil
+					    .sendEmailAddressVerification(
+					        mappingUser, email, serviceContext);
+				}
+
 			}
 			else {
 
@@ -395,84 +409,102 @@ public class AccountRegPortlet extends MVCPortlet {
 
 	protected void ValidateCitizen(
 	    long citizenId, String fullName, String personalId, String address,
-	    String email, String telNo, long size, String mimeType) throws 
-	    OutOfLengthCitizenAddressException, 
-	    OutOfLengthCitizenNameException, 
-	    OutOfLengthCitizenEmailException, DuplicateCitizenEmailException {
-		
+	    String email, String telNo, long size, String mimeType)
+	    throws OutOfLengthCitizenAddressException,
+	    OutOfLengthCitizenNameException, OutOfLengthCitizenEmailException,
+	    DuplicateCitizenEmailException {
+
 		Citizen citizen = null;
-		
-		
-		
+
 		try {
-			citizen = CitizenLocalServiceUtil.getCitizen(email);	
-        }
-        catch (Exception e) {
-	       _log.error(e);
-        }
-		if(citizenId == 0 && citizen != null) {
-			throw new DuplicateCitizenEmailException();
-		} 
-		if(citizenId > 0 && citizen.getCitizenId() != citizenId) {
+			citizen = CitizenLocalServiceUtil
+			    .getCitizen(email);
+		}
+		catch (Exception e) {
+			// Nothing todo
+		}
+		if (citizenId == 0 && citizen != null) {
 			throw new DuplicateCitizenEmailException();
 		}
-		
-		if(fullName.length() > 255) {
+		if (citizenId > 0 && citizen
+		    .getCitizenId() != citizenId) {
+			throw new DuplicateCitizenEmailException();
+		}
+
+		if (fullName
+		    .length() > 255) {
 			throw new OutOfLengthCitizenNameException();
-		} else if(address.length() > 500) {
+		}
+		else if (address
+		    .length() > 500) {
 			throw new OutOfLengthCitizenAddressException();
-		} else if(email.length() > 255) {
+		}
+		else if (email
+		    .length() > 255) {
 			throw new OutOfLengthCitizenEmailException();
 		}
 
 	}
-	
-	protected void ValidateBusiness(long businessId, String email,
-		String name, String enName, String shortName, 
-		String address, String representativeName, String representativeRole) 
-						throws DuplicateBusinessEmailException, 
-						OutOfLengthBusinessEmailException,
-						OutOfLengthBusinessNameException,
-						OutOfLengthBusinessEnNameException,
-						OutOfLengthCitizenAddressException, 
-						OutOfLengthBusinessRepresentativeNameException,
-						OutOfLengthBusinessRepresentativeRoleException,
-						OutOfLengthBusinessShortNameException {
-		
+
+	protected void ValidateBusiness(
+	    long businessId, String email, String name, String enName,
+	    String shortName, String address, String representativeName,
+	    String representativeRole)
+	    throws DuplicateBusinessEmailException,
+	    OutOfLengthBusinessEmailException, OutOfLengthBusinessNameException,
+	    OutOfLengthBusinessEnNameException, OutOfLengthCitizenAddressException,
+	    OutOfLengthBusinessRepresentativeNameException,
+	    OutOfLengthBusinessRepresentativeRoleException,
+	    OutOfLengthBusinessShortNameException {
+
 		Business business = null;
-		
+
 		try {
-			business = BusinessLocalServiceUtil.getBusiness(email);
-        }
-        catch (Exception e) {
-	        _log.error(e);
-        }
-		
-		if(businessId == 0 && business !=null) {
+			business = BusinessLocalServiceUtil
+			    .getBusiness(email);
+		}
+		catch (Exception e) {
+			_log
+			    .error(e);
+		}
+
+		if (businessId == 0 && business != null) {
 			throw new DuplicateBusinessEmailException();
-		} 
-		
-		if(businessId != 0 && business!=null 
-						&& business.getBusinessId() != businessId) {
+		}
+
+		if (businessId != 0 && business != null && business
+		    .getBusinessId() != businessId) {
 			throw new DuplicateBusinessEmailException();
-		} 
-		if(email.length() > 255) {
+		}
+		if (email
+		    .length() > 255) {
 			throw new OutOfLengthBusinessEmailException();
-		} else if(name.length() > 255) {
+		}
+		else if (name
+		    .length() > 255) {
 			throw new OutOfLengthBusinessNameException();
-		} else if(enName.length() > 255) {
+		}
+		else if (enName
+		    .length() > 255) {
 			throw new OutOfLengthBusinessEnNameException();
-		} else if(address.length() > 500) {
+		}
+		else if (address
+		    .length() > 500) {
 			throw new OutOfLengthCitizenAddressException();
-		} else if(representativeName.length() > 75) {
+		}
+		else if (representativeName
+		    .length() > 75) {
 			throw new OutOfLengthBusinessRepresentativeNameException();
-		} else if(representativeRole.length() > 75) {
+		}
+		else if (representativeRole
+		    .length() > 75) {
 			throw new OutOfLengthBusinessRepresentativeRoleException();
-		} else if(shortName.length() > 75) {
+		}
+		else if (shortName
+		    .length() > 75) {
 			throw new OutOfLengthBusinessShortNameException();
-		} 
- 		
-		
+		}
+
 	}
 
 	private Log _log = LogFactoryUtil
