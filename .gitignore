@@ -19,7 +19,7 @@ ivy-settings-publisher.xml
 ivy-settings.xml
 ivy.xml
 ivy.xml.MD5
-lib/
+
 misc/
 modules/
 osgi/
