@@ -41,8 +41,7 @@ public class AccountMgtPortlet extends MVCPortlet {
 		        renderRequest, BusinessDisplayTerms.BUSINESS_BUSINESSID);
 
 		try {
-			
-			
+
 			if (citizenId > 0) {
 				Citizen citizen =
 				    CitizenLocalServiceUtil.fetchCitizen(citizenId);
@@ -52,10 +51,9 @@ public class AccountMgtPortlet extends MVCPortlet {
 			if (businessId > 0) {
 				Business business =
 				    BusinessLocalServiceUtil.fetchBusiness(businessId);
-				renderRequest.setAttribute(
-				    WebKeys.BUSINESS_ENTRY, business);
+				renderRequest.setAttribute(WebKeys.BUSINESS_ENTRY, business);
 			}
-			
+
 			renderRequest.setAttribute(WebKeys.ACCOUNTMGT_ADMIN_PROFILE, true);
 		}
 
@@ -66,7 +64,7 @@ public class AccountMgtPortlet extends MVCPortlet {
 		super.render(renderRequest, renderResponse);
 	}
 
-	public void changeAccountStatusURL(
+	public void changeAccountStatusCitizen(
 	    ActionRequest actionRequest, ActionResponse actionResponse) {
 
 		int accountStatus =
@@ -79,6 +77,7 @@ public class AccountMgtPortlet extends MVCPortlet {
 		try {
 			ServiceContext serviceContext =
 			    ServiceContextFactory.getInstance(actionRequest);
+
 			citizen = CitizenLocalServiceUtil.fetchCitizen(citizenId);
 			if (citizen != null) {
 				if (accountStatus == 0) {
@@ -108,6 +107,49 @@ public class AccountMgtPortlet extends MVCPortlet {
 		}
 	}
 
+	public void changeAccountStatusBusiness(
+	    ActionRequest actionRequest, ActionResponse actionResponse) {
+
+		int accountStatus =
+		    ParamUtil.getInteger(
+		        actionRequest, BusinessDisplayTerms.BUSINESS_ACCOUNTSTATUS);
+		long businessId =
+		    ParamUtil.getLong(actionRequest, BusinessDisplayTerms.BUSINESS_BUSINESSID);
+
+		Business business = null;
+		try {
+			ServiceContext serviceContext =
+			    ServiceContextFactory.getInstance(actionRequest);
+
+			business = BusinessLocalServiceUtil.fetchBusiness(businessId);
+			if (business != null) {
+				if (accountStatus == 0) {
+					BusinessLocalServiceUtil.deleteBusiness(business);
+				}
+				else if (accountStatus == 1) {
+					BusinessLocalServiceUtil.updateStatus(
+						businessId, serviceContext.getUserId(), 2);
+				}
+				else if (accountStatus == 2) {
+					BusinessLocalServiceUtil.updateStatus(
+						businessId, serviceContext.getUserId(), 3);
+				}
+				else if (accountStatus == 3) {
+					BusinessLocalServiceUtil.updateStatus(
+						businessId, serviceContext.getUserId(), 2);
+				}
+				else {
+					SessionErrors.add(
+					    actionRequest, MessageKeys.NO_ACCOUNT_STATUS_FOUND);
+				}
+			}
+		}
+		catch (Exception e) {
+			// SessionErrors.add(actionRequest,
+			// MessageKeys.NO_ACCOUNT_STATUS_FOUND);
+		}
+	}
+
 	public void searchCitizen(
 	    ActionRequest actionRequest, ActionResponse actionResponse) {
 
@@ -122,6 +164,23 @@ public class AccountMgtPortlet extends MVCPortlet {
 		    CitizenDisplayTerms.CITIZEN_FULLNAME, fullName);
 		actionResponse.setRenderParameter(
 		    CitizenDisplayTerms.CITIZEN_ACCOUNTSTATUS,
+		    String.valueOf(accountStatus));
+	}
+
+	public void searchBusiness(
+	    ActionRequest actionRequest, ActionResponse actionResponse) {
+
+		String fullName =
+		    ParamUtil.getString(
+		        actionRequest, BusinessDisplayTerms.BUSINESS_NAME);
+		int accountStatus =
+		    ParamUtil.getInteger(
+		        actionRequest, BusinessDisplayTerms.BUSINESS_ACCOUNTSTATUS);
+
+		actionResponse.setRenderParameter(
+		    BusinessDisplayTerms.BUSINESS_NAME, fullName);
+		actionResponse.setRenderParameter(
+		    BusinessDisplayTerms.BUSINESS_ACCOUNTSTATUS,
 		    String.valueOf(accountStatus));
 	}
 

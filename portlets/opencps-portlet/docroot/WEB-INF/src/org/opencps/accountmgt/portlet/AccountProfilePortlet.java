@@ -33,7 +33,6 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
-import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
@@ -128,7 +127,7 @@ public class AccountProfilePortlet extends MVCPortlet {
 
 		DictItem ward = null;
 
-		boolean isChangePassWord = curPass != null ? true : false;
+		boolean isChangePassWord = curPass.equals(StringPool.BLANK) ? true : false;
 
 		try {
 			ServiceContext serviceContext =
@@ -218,7 +217,7 @@ public class AccountProfilePortlet extends MVCPortlet {
 		        actionRequest, BusinessDisplayTerms.NEW_PASSWORD);
 		String rePass =
 		    ParamUtil.getString(actionRequest, BusinessDisplayTerms.RE_PASSWORD);
-		boolean isChangePassWord = curPass != null ? true : false;
+		boolean isChangePassWord = curPass.equals(StringPool.BLANK)  ? true : false;
 
 		DictItem city = null;
 

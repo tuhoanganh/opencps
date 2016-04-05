@@ -31,18 +31,16 @@ import org.opencps.accountmgt.service.CitizenLocalServiceUtil;
 import org.opencps.datamgt.model.DictItem;
 import org.opencps.datamgt.service.DictItemLocalServiceUtil;
 import org.opencps.util.DateTimeUtil;
-<<<<<<< HEAD
-=======
+
 import org.opencps.util.MessageBusUtil;
 import org.opencps.util.MessageKeys;
 import org.opencps.util.PortletPropsValues;
->>>>>>> FETCH_HEAD
+
 import org.opencps.util.PortletUtil;
 import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
@@ -260,9 +258,7 @@ public class AccountRegPortlet extends MVCPortlet {
 				SessionErrors.add(actionRequest, OutOfLengthBusinessRepresentativeRoleException.class);
 			} else if(e instanceof OutOfLengthCitizenAddressException) {
 				SessionErrors.add(actionRequest, OutOfLengthCitizenAddressException.class);
-			} else {
-				_log.error(e);
-			}
+			} 
 			else {
 				SessionErrors
 				    .add(
@@ -413,23 +409,6 @@ public class AccountRegPortlet extends MVCPortlet {
 
 		}
 		catch (Exception e) {
-<<<<<<< HEAD
-			    if(e instanceof OutOfLengthCitizenAddressException) {
-			    	SessionErrors.add(actionRequest, 
-			    		OutOfLengthCitizenAddressException.class);
-			    } else if(e instanceof OutOfLengthCitizenEmailException) {
-			    	SessionErrors.add(actionRequest, 
-			    		OutOfLengthCitizenEmailException.class);
-			    } else if(e instanceof OutOfLengthCitizenNameException) {
-			    	SessionErrors.add(actionRequest, 
-			    		OutOfLengthCitizenNameException.class);
-			    } else if(e instanceof DuplicateCitizenEmailException) {
-			    	SessionErrors.add(actionRequest, 
-			    		DuplicateCitizenEmailException.class);
-			    } else {
-			    	_log.error(e);
-			    }
-=======
 			if (e instanceof OutOfLengthCitizenAddressException) {
 				SessionErrors
 				    .add(
@@ -456,7 +435,7 @@ public class AccountRegPortlet extends MVCPortlet {
 			}
 			_log
 			    .error(e);
->>>>>>> FETCH_HEAD
+
 		}
 		finally {
 			

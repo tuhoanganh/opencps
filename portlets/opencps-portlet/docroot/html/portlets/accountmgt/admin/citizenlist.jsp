@@ -53,6 +53,8 @@
 	
 %>
 
+<liferay-util:include page="/html/portlets/accountmgt/admin/toptabs.jsp" servletContext="<%=application %>" />
+
 <portlet:actionURL var="searchCitizenURL" name="searchCitizen" />
 
 <aui:form action="<%=searchCitizenURL.toString() %>" method="post" name="fm">

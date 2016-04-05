@@ -87,5 +87,8 @@ public class AccountMgtUtil {
 	}
 	
 	
+	public static final String TOP_TABS_CITIZEN = "citizen";
+	public static final String TOP_TABS_BUSINESS = "business";
+	
 	
 }
