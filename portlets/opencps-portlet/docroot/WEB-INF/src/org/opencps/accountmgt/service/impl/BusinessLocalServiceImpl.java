@@ -16,6 +16,7 @@ package org.opencps.accountmgt.service.impl;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.opencps.accountmgt.NoSuchBusinessException;
 import org.opencps.accountmgt.model.Business;
@@ -34,15 +35,27 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Address;
 import com.liferay.portal.model.EmailAddress;
+import com.liferay.portal.model.ListTypeConstants;
+import com.liferay.portal.model.Organization;
+import com.liferay.portal.model.OrganizationConstants;
 import com.liferay.portal.model.Phone;
+import com.liferay.portal.model.Role;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.model.Website;
+import com.liferay.portal.security.auth.PrincipalThreadLocal;
+import com.liferay.portal.security.permission.PermissionChecker;
+import com.liferay.portal.security.permission.PermissionCheckerFactoryUtil;
+import com.liferay.portal.security.permission.PermissionThreadLocal;
+import com.liferay.portal.service.OrganizationLocalServiceUtil;
+import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserGroupLocalServiceUtil;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portlet.announcements.model.AnnouncementsDelivery;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
@@ -119,6 +132,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 			    .warn(e
 			        .getMessage());
 		}
+
 		if (userGroup == null) {
 			userGroup = UserGroupLocalServiceUtil
 			    .addUserGroup(serviceContext
@@ -127,27 +141,41 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 			        PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS,
 			        StringPool.BLANK, serviceContext);
 
+		}
+
+		if (userGroup != null) {
 			userGroupIds = new long[] {
 			    userGroup
 			        .getUserGroupId()
 			};
 		}
 
-		try {
-			userGroup = UserGroupLocalServiceUtil
-			    .getUserGroup(serviceContext
-			        .getCompanyId(),
-			        PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS);
-		}
-		catch (Exception e) {
-			_log
-			    .warn(e
-			        .getMessage());
-		}
-
 		password1 = PwdGenerator
 		    .getPassword();
 		password2 = password1;
+
+		Role adminRole = RoleLocalServiceUtil
+		    .getRole(serviceContext
+		        .getCompanyId(), "Administrator");
+		List<User> adminUsers = UserLocalServiceUtil
+		    .getRoleUsers(adminRole
+		        .getRoleId());
+
+		PrincipalThreadLocal
+		    .setName(adminUsers
+		        .get(0).getUserId());
+		PermissionChecker permissionChecker;
+		try {
+			permissionChecker = PermissionCheckerFactoryUtil
+			    .create(adminUsers
+			        .get(0));
+			PermissionThreadLocal
+			    .setPermissionChecker(permissionChecker);
+		}
+		catch (Exception e) {
+			_log
+			    .error(e);
+		}
 
 		User mappingUser = userService
 		    .addUserWithWorkflow(serviceContext
@@ -170,6 +198,24 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 
 		int status = WorkflowConstants.STATUS_INACTIVE;
 
+		Organization org = OrganizationLocalServiceUtil
+		    .addOrganization(mappingUser
+		        .getUserId(),
+		        0,
+		        fullName + StringPool.OPEN_PARENTHESIS + idNumber +
+		            StringPool.CLOSE_PARENTHESIS,
+		        OrganizationConstants.TYPE_REGULAR_ORGANIZATION, 0, 0,
+		        ListTypeConstants.ORGANIZATION_STATUS_DEFAULT, enName, true,
+		        serviceContext);
+
+
+		userService
+		    .addOrganizationUsers(org
+		        .getOrganizationId(), new long[] {
+		            mappingUser
+		                .getUserId()
+		});
+
 		mappingUser = userService
 		    .updateStatus(mappingUser
 		        .getUserId(), status);
@@ -189,7 +235,9 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		    .setAddGroupPermissions(true);
 		serviceContext
 		    .setAddGuestPermissions(true);
+
 		FileEntry fileEntry = null;
+
 		if (size > 0 && inputStream != null) {
 			DLFolder dlFolder = DLFolderUtil
 			    .getTargetFolder(mappingUser
@@ -204,15 +252,6 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 			        StringPool.BLANK, StringPool.BLANK, inputStream, size,
 			        serviceContext);
 		}
-
-		/*
-		 * Organization org = OrganizationLocalServiceUtil .addOrganization(
-		 * userId, 0, fullName + StringPool.OPEN_PARENTHESIS + idNumber +
-		 * StringPool.CLOSE_PARENTHESIS,
-		 * OrganizationConstants.TYPE_REGULAR_ORGANIZATION, 0, 0,
-		 * ListTypeConstants.ORGANIZATION_STATUS_DEFAULT, enName, true,
-		 * serviceContext);
-		 */
 
 		business
 		    .setAccountStatus(PortletConstants.ACCOUNT_STATUS_REGISTERED);
@@ -261,9 +300,10 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		business
 		    .setUserId(mappingUser
 		        .getUserId());
+
 		business
-		    .setUuid(serviceContext
-		        .getUuid());
+		    .setUuid(PortalUUIDUtil
+		        .generate());
 		business
 		    .setWardCode(wardCode);
 
@@ -283,6 +323,27 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		}
 
 		return business;
+	}
+
+	public Business getBusiness(long mappingUserId)
+	    throws SystemException, NoSuchBusinessException {
+
+		return businessPersistence
+		    .findByMappingUserId(mappingUserId);
+	}
+
+	public Business getBusiness(String email)
+	    throws NoSuchBusinessException, SystemException {
+
+		return businessPersistence
+		    .findByEmail(email);
+	}
+
+	public Business getBusinessByUUID(String uuid)
+	    throws SystemException, NoSuchBusinessException {
+
+		return businessPersistence
+		    .findByUUID(uuid);
 	}
 
 	public Business updateBusiness(
@@ -447,20 +508,6 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 
 		return businessPersistence
 		    .update(business);
-	}
-
-	public Business getBusiness(long mappingUserId)
-	    throws SystemException, NoSuchBusinessException {
-
-		return businessPersistence
-		    .findByMappingUserId(mappingUserId);
-	}
-
-	public Business getBusiness(String email)
-	    throws NoSuchBusinessException, SystemException {
-
-		return businessPersistence
-		    .findByEmail(email);
 	}
 
 	private Log _log = LogFactoryUtil

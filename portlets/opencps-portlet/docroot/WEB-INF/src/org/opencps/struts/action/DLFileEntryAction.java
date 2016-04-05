@@ -15,12 +15,15 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>
 */
 
-package org.opencps.action;
+package org.opencps.struts.action;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
 import org.opencps.util.WebKeys;
 
 import com.liferay.portal.theme.ThemeDisplay;
@@ -29,9 +32,9 @@ import com.liferay.portal.theme.ThemeDisplay;
  * @author trungnt
  *
  */
-public class DLFileEntryAction  {
-	
-/*	public ActionForward execute(ActionMapping actionMapping,
+public class DLFileEntryAction extends Action{
+	@Override
+	public ActionForward execute(ActionMapping actionMapping,
 			ActionForm actionForm, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
@@ -40,5 +43,5 @@ public class DLFileEntryAction  {
 
 		
 		return null;
-	}*/
+	}
 }

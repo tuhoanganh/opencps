@@ -32,6 +32,8 @@ import org.opencps.datamgt.model.DictItem;
 import org.opencps.datamgt.service.DictItemLocalServiceUtil;
 import org.opencps.util.DateTimeUtil;
 import org.opencps.util.MessageBusUtil;
+import org.opencps.util.MessageKeys;
+import org.opencps.util.PortletPropsValues;
 import org.opencps.util.PortletUtil;
 import org.opencps.util.WebKeys;
 
@@ -57,7 +59,7 @@ public class AccountRegPortlet extends MVCPortlet {
 
 		long citizenId = ParamUtil
 		    .getLong(renderRequest, CitizenDisplayTerms.CITIZEN_ID);
-		
+
 		long businessId = ParamUtil
 		    .getLong(renderRequest, BusinessDisplayTerms.BUSINESS_BUSINESSID);
 
@@ -194,7 +196,7 @@ public class AccountRegPortlet extends MVCPortlet {
 
 			if (businessId == 0) {
 
-				BusinessLocalServiceUtil
+				Business business = BusinessLocalServiceUtil
 				    .addBusiness(
 				        name, enName, shortName, type, idNumber, address, city
 				            .getItemCode(),
@@ -220,6 +222,17 @@ public class AccountRegPortlet extends MVCPortlet {
 				            .getYear(),
 				        repositoryId, sourceFileName, contentType, title,
 				        inputStream, size, serviceContext);
+				
+				if (business != null) {
+					User mappingUser = UserLocalServiceUtil
+					    .getUser(business
+					        .getMappingUserId());
+					MessageBusUtil
+					    .sendEmailAddressVerification(business
+					        .getUuid(), mappingUser, email,
+					        PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN,
+					        serviceContext);
+				}
 			}
 			else {
 
@@ -270,6 +283,14 @@ public class AccountRegPortlet extends MVCPortlet {
 				        actionRequest,
 				        OutOfLengthCitizenAddressException.class);
 			}
+			else {
+				SessionErrors
+				    .add(
+				        uploadPortletRequest,
+				        MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED);
+			}
+			_log
+			    .error(e);
 
 		}
 		finally {
@@ -399,8 +420,10 @@ public class AccountRegPortlet extends MVCPortlet {
 					    .getUser(citizen
 					        .getMappingUserId());
 					MessageBusUtil
-					    .sendEmailAddressVerification(
-					        mappingUser, email, serviceContext);
+					    .sendEmailAddressVerification(citizen
+					        .getUuid(), mappingUser, email,
+					        PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN,
+					        serviceContext);
 				}
 
 			}
@@ -427,10 +450,15 @@ public class AccountRegPortlet extends MVCPortlet {
 			else if (e instanceof DuplicateCitizenEmailException) {
 				SessionErrors
 				    .add(actionRequest, DuplicateCitizenEmailException.class);
-			}else{
-				
 			}
-			_log.error(e);	
+			else {
+				SessionErrors
+				    .add(
+				        uploadPortletRequest,
+				        MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED);
+			}
+			_log
+			    .error(e);
 		}
 		finally {
 
@@ -494,8 +522,7 @@ public class AccountRegPortlet extends MVCPortlet {
 			    .getBusiness(email);
 		}
 		catch (Exception e) {
-			_log
-			    .error(e);
+			// Nothing todo
 		}
 
 		if (businessId == 0 && business != null) {
