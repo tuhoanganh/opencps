@@ -47,9 +47,9 @@
 	Long userId = (Long) request.getAttribute(WebKeys.MAPPING_USERID);
 	
 	List<UserGroup> userGroups = new ArrayList<UserGroup>();
-	String accountType = "";
+	String accountType = StringPool.BLANK;
 	String [] ProfileSections = null;
-	String path = "";
+	String path = StringPool.BLANK;
 	String [][] categorySections = null;
 	Citizen citizen = null;
 	Business business = null;

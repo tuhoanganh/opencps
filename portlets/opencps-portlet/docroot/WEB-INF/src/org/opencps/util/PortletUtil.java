@@ -30,14 +30,14 @@ public class PortletUtil {
 	public static class SplitName {
 
 		public SplitName(String fullName) {
+
 			_firstName = StringPool.BLANK;
 			_lastName = StringPool.BLANK;
 			_midName = StringPool.BLANK;
 
-			if (Validator
-			    .isNotNull(fullName)) {
-				String[] splitNames = StringUtil
-				    .split(fullName, StringPool.SPACE);
+			if (Validator.isNotNull(fullName)) {
+				String[] splitNames =
+				    StringUtil.split(fullName, StringPool.SPACE);
 				if (splitNames != null && splitNames.length > 0) {
 					_lastName = splitNames[0];
 
@@ -48,12 +48,9 @@ public class PortletUtil {
 							_midName += splitNames[i] + StringPool.SPACE;
 						}
 					}
-					this
-					    .setLastName(_lastName);
-					this
-					    .setFirstName(_firstName);
-					this
-					    .setMidName(_midName);
+					this.setLastName(_lastName);
+					this.setFirstName(_firstName);
+					this.setMidName(_midName);
 				}
 			}
 		}
@@ -96,32 +93,21 @@ public class PortletUtil {
 	public static class SplitDate {
 
 		public SplitDate(Date date) {
-			if (date != null) {
-				Calendar calendar = Calendar
-				    .getInstance();
-				calendar
-				    .setTime(date);
 
-				_miniSecond = calendar
-				    .get(Calendar.MILLISECOND);
-				_second = calendar
-				    .get(Calendar.SECOND);
-				_minute = calendar
-				    .get(Calendar.MINUTE);
-				_hour = calendar
-				    .get(Calendar.HOUR);
-				_dayOfMoth = calendar
-				    .get(Calendar.DAY_OF_MONTH);
-				_dayOfYear = calendar
-				    .get(Calendar.DAY_OF_YEAR);
-				_weekOfMonth = calendar
-				    .get(Calendar.WEEK_OF_MONTH);
-				_weekOfYear = calendar
-				    .get(Calendar.WEEK_OF_YEAR);
-				_month = calendar
-				    .get(Calendar.MONTH);
-				_year = calendar
-				    .get(Calendar.YEAR);
+			if (date != null) {
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(date);
+
+				_miniSecond = calendar.get(Calendar.MILLISECOND);
+				_second = calendar.get(Calendar.SECOND);
+				_minute = calendar.get(Calendar.MINUTE);
+				_hour = calendar.get(Calendar.HOUR);
+				_dayOfMoth = calendar.get(Calendar.DAY_OF_MONTH);
+				_dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
+				_weekOfMonth = calendar.get(Calendar.WEEK_OF_MONTH);
+				_weekOfYear = calendar.get(Calendar.WEEK_OF_YEAR);
+				_month = calendar.get(Calendar.MONTH);
+				_year = calendar.get(Calendar.YEAR);
 			}
 		}
 
@@ -253,20 +239,93 @@ public class PortletUtil {
 
 		switch (value) {
 		case 0:
-			genderLabel = LanguageUtil
-			    .get(locale, "female");
+			genderLabel = LanguageUtil.get(locale, "female");
 			break;
 		case 1:
-			genderLabel = LanguageUtil
-			    .get(locale, "male");
+			genderLabel = LanguageUtil.get(locale, "male");
 			break;
 		default:
-			genderLabel = LanguageUtil
-			    .get(locale, "male");
+			genderLabel = LanguageUtil.get(locale, "male");
 			break;
 		}
 
 		return genderLabel;
+	}
+
+	public static String getAccountStatus(int value, Locale locale) {
+
+		String accountStatus = StringPool.BLANK;
+
+		switch (value) {
+		case 0:
+			accountStatus = LanguageUtil.get(locale, "registered");
+			break;
+		case 1:
+			accountStatus = LanguageUtil.get(locale, "confirmed");
+			break;
+		case 2:
+			accountStatus = LanguageUtil.get(locale, "approved");
+			break;
+		case 3:
+			accountStatus = LanguageUtil.get(locale, "locked");
+			break;
+		default:
+			accountStatus = LanguageUtil.get(locale, "");
+			break;
+
+		}
+
+		return accountStatus;
+	}
+
+	public static int changeAccountStatus(int value) {
+
+		int changeAccountStatus = 0;
+
+		switch (value) {
+		case 0:
+			changeAccountStatus = 4; // huy
+			break;
+		case 1:
+			changeAccountStatus = 2; // xac nhan;
+			break;
+		case 2:
+			changeAccountStatus = 3; // khoa
+			break;
+		case 3:
+			changeAccountStatus = 1; // mo lai;
+			break;
+		default:
+			changeAccountStatus = 0;
+			break;
+		}
+
+		return changeAccountStatus;
+	}
+
+	public static String getAccountActionName(int value, Locale locale) {
+
+		String accountActionName = StringPool.BLANK;
+
+		switch (value) {
+		case 1:
+			accountActionName = LanguageUtil.get(locale, "unlock");
+			break;
+		case 2:
+			accountActionName = LanguageUtil.get(locale, "approve");
+			break;
+		case 3:
+			accountActionName = LanguageUtil.get(locale, "lock");
+			break;
+		case 4:
+			accountActionName = LanguageUtil.get(locale, "cancel");
+			break;
+		default:
+			accountActionName = LanguageUtil.get(locale, "");
+			break;
+		}
+
+		return accountActionName;
 	}
 
 	public static String getLeaderLabel(int value, Locale locale) {
@@ -275,20 +334,16 @@ public class PortletUtil {
 
 		switch (value) {
 		case 0:
-			leaderLabel = LanguageUtil
-			    .get(locale, "normal");
+			leaderLabel = LanguageUtil.get(locale, "normal");
 			break;
 		case 1:
-			leaderLabel = LanguageUtil
-			    .get(locale, "leader");
+			leaderLabel = LanguageUtil.get(locale, "leader");
 			break;
 		case 2:
-			leaderLabel = LanguageUtil
-			    .get(locale, "deputy");
+			leaderLabel = LanguageUtil.get(locale, "deputy");
 			break;
 		default:
-			leaderLabel = LanguageUtil
-			    .get(locale, "normal");
+			leaderLabel = LanguageUtil.get(locale, "normal");
 			break;
 		}
 
@@ -297,7 +352,6 @@ public class PortletUtil {
 
 	public static String getDestinationFolder(String[] folderNames) {
 
-		return StringUtil
-		    .merge(folderNames, StringPool.FORWARD_SLASH);
+		return StringUtil.merge(folderNames, StringPool.FORWARD_SLASH);
 	}
 }

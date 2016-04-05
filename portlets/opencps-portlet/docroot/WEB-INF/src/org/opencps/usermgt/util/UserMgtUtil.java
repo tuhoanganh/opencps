@@ -59,6 +59,10 @@ public class UserMgtUtil {
 	public static final String[] _CITIZEN_CATEGORY_NAMES = {
 		"citizen-info"
 	};
+	
+	public static final String[] _PROFILE_CATEGORY_NAMES = {
+		"profile-info"
+	};
 	public static final String[] _JOBPOS_CATEGORY_NAMES = {
 		"jobpos-info"
 	};

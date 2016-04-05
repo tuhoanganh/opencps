@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
@@ -615,6 +616,30 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 	public Citizen getCitizen(String email) throws 
 	NoSuchCitizenException, SystemException {
 		return citizenPersistence.findByEmail(email);
+	}
+	
+	public List<Citizen> getCitizens(int start, int end, OrderByComparator odc)
+					throws SystemException {
+		return citizenPersistence.findAll(start, end, odc);
+	}
+	
+	public List<Citizen> getCitizens(long groupId, int accountStatus)
+					throws SystemException {
+		return citizenPersistence.findByG_S(groupId, accountStatus);
+	}
+	
+	public List<Citizen> getCitizens(long groupId, String fullName , int accountStatus)
+					throws SystemException {
+		return citizenPersistence.findByG_N_S(groupId, fullName, accountStatus);
+	}
+	
+	public List<Citizen> getCitizens(long groupId, String fullName)
+					throws SystemException {
+		return citizenPersistence.findByG_N(groupId, fullName);
+	}
+	
+	public int countAll() throws SystemException {
+		return citizenPersistence.countAll();
 	}
 
 	private Log _log = LogFactoryUtil

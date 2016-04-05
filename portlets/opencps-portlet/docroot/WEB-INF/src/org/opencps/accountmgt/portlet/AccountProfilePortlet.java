@@ -37,39 +37,34 @@ public class AccountProfilePortlet extends MVCPortlet {
 	    RenderRequest renderRequest, RenderResponse renderResponse)
 	    throws PortletException, IOException {
 
-		long citizenId =
-		    ParamUtil.getLong(renderRequest, CitizenDisplayTerms.CITIZEN_ID);
-
 		ThemeDisplay themeDisplay =
 		    (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
 		long mappingUserId = themeDisplay.getUserId();
 
-		_log.info("=========== themeDisplay " + themeDisplay.getUserId());
-
-		long businessId =
-		    ParamUtil.getLong(
-		        renderRequest, BusinessDisplayTerms.BUSINESS_BUSINESSID);
+		boolean isEditProfileFromUser = true;
 
 		try {
+
+			renderRequest.setAttribute(
+			    WebKeys.PROFILE_FROM_ADMIN, isEditProfileFromUser);
 
 			if (mappingUserId > 0) {
 				renderRequest.setAttribute(
 				    WebKeys.MAPPING_USERID, mappingUserId);
 			}
 
-			if (citizenId > 0) {
+			if (mappingUserId > 0) {
 				Citizen citizen =
-				    CitizenLocalServiceUtil.fetchCitizen(citizenId);
+				    CitizenLocalServiceUtil.getCitizen(mappingUserId);
 				renderRequest.setAttribute(WebKeys.CITIZEN_ENTRY, citizen);
-			}
 
-			if (businessId > 0) {
 				Business business =
-				    BusinessLocalServiceUtil.fetchBusiness(businessId);
+				    BusinessLocalServiceUtil.fetchBusiness(mappingUserId);
 				renderRequest.setAttribute(
 				    WebKeys.BUSINESS_PROFILE_ENTRY, business);
 			}
+
 		}
 
 		catch (Exception e) {
@@ -106,11 +101,11 @@ public class AccountProfilePortlet extends MVCPortlet {
 		long wardId =
 		    ParamUtil.getLong(
 		        actionRequest, CitizenDisplayTerms.CITIZEN_WARD_ID);
-		
-		_log.info("citizenId " + citizenId + " curPass " + curPass
-			+" newPass " + newPass + " districtId " + districtId +  " wardId " + wardId + 
-			" cityId " + cityId + " address " + address);
-		
+
+		_log.info("citizenId " + citizenId + " curPass " + curPass +
+		    " newPass " + newPass + " districtId " + districtId + " wardId " +
+		    wardId + " cityId " + cityId + " address " + address);
+
 		DictItem city = null;
 
 		DictItem district = null;
@@ -143,7 +138,8 @@ public class AccountProfilePortlet extends MVCPortlet {
 		catch (Exception e) {
 			if (e instanceof UserPasswordException) {
 				SessionErrors.add(actionRequest, UserPasswordException.class);
-			} else {
+			}
+			else {
 				_log.info(e);
 			}
 		}
@@ -207,11 +203,11 @@ public class AccountProfilePortlet extends MVCPortlet {
 		String rePass =
 		    ParamUtil.getString(actionRequest, BusinessDisplayTerms.RE_PASSWORD);
 		boolean isChangePassWord = curPass != null ? true : false;
-		
-		_log.info("businessId " + businessId + " email " + email + " curPass " + curPass
-			+" newPass " + newPass + " districtId " + districtId +  " wardId " + wardId + 
-			" cityId " + cityId + " address " + address);
-		
+
+		_log.info("businessId " + businessId + " email " + email + " curPass " +
+		    curPass + " newPass " + newPass + " districtId " + districtId +
+		    " wardId " + wardId + " cityId " + cityId + " address " + address);
+
 		DictItem city = null;
 
 		DictItem district = null;
@@ -228,8 +224,8 @@ public class AccountProfilePortlet extends MVCPortlet {
 			    ServiceContextFactory.getInstance(actionRequest);
 
 			if (businessId > 0) {
-				_log.info("district.getItemName(serviceContext.getLocale(), true) " + 
-								district.getItemName(serviceContext.getLocale(), true));
+				_log.info("district.getItemName(serviceContext.getLocale(), true) " +
+				    district.getItemName(serviceContext.getLocale(), true));
 				BusinessLocalServiceUtil.updateBusiness(
 				    businessId, name, enName, shortName, type, idNumber,
 				    address, city.getItemCode(), district.getItemCode(),
@@ -240,15 +236,15 @@ public class AccountProfilePortlet extends MVCPortlet {
 				    representativeName, representativeRole, domain,
 				    isChangePassWord, curPass, rePass,
 				    serviceContext.getUserId(), serviceContext);
-				
-				
+
 			}
 
 		}
 		catch (Exception e) {
 			if (e instanceof UserPasswordException) {
 				SessionErrors.add(actionRequest, UserPasswordException.class);
-			} else {
+			}
+			else {
 				_log.info(e);
 			}
 		}
