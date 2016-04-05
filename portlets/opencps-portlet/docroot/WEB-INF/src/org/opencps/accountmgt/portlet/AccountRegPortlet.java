@@ -224,7 +224,7 @@ public class AccountRegPortlet extends MVCPortlet {
 				            .getYear(),
 				        repositoryId, sourceFileName, contentType, title,
 				        inputStream, size, serviceContext);
-				
+
 				if (business != null) {
 					User mappingUser = UserLocalServiceUtil
 					    .getUser(business
@@ -242,23 +242,50 @@ public class AccountRegPortlet extends MVCPortlet {
 		}
 
 		catch (Exception e) {
-			if(e instanceof DuplicateBusinessEmailException) {
-				SessionErrors.add(actionRequest, DuplicateBusinessEmailException.class);
-			} else if(e instanceof OutOfLengthBusinessEmailException) {
-				SessionErrors.add(actionRequest, OutOfLengthBusinessEmailException.class);
-			} else if(e instanceof OutOfLengthBusinessNameException) {
-				SessionErrors.add(actionRequest, OutOfLengthBusinessNameException.class);
-			} else if (e instanceof OutOfLengthBusinessEnNameException) {
-				SessionErrors.add(actionRequest, OutOfLengthBusinessEnNameException.class);
-			} else if(e instanceof OutOfLengthBusinessShortNameException) {
-				SessionErrors.add(actionRequest, OutOfLengthBusinessShortNameException.class);
-			} else if(e instanceof OutOfLengthBusinessRepresentativeNameException) {
-				SessionErrors.add(actionRequest, OutOfLengthBusinessRepresentativeNameException.class);
-			} else if(e instanceof OutOfLengthBusinessRepresentativeRoleException) {
-				SessionErrors.add(actionRequest, OutOfLengthBusinessRepresentativeRoleException.class);
-			} else if(e instanceof OutOfLengthCitizenAddressException) {
-				SessionErrors.add(actionRequest, OutOfLengthCitizenAddressException.class);
-			} 
+
+			if (e instanceof DuplicateBusinessEmailException) {
+				SessionErrors
+				    .add(actionRequest, DuplicateBusinessEmailException.class);
+			}
+			else if (e instanceof OutOfLengthBusinessEmailException) {
+				SessionErrors
+				    .add(
+				        actionRequest, OutOfLengthBusinessEmailException.class);
+			}
+			else if (e instanceof OutOfLengthBusinessNameException) {
+				SessionErrors
+				    .add(actionRequest, OutOfLengthBusinessNameException.class);
+			}
+			else if (e instanceof OutOfLengthBusinessEnNameException) {
+				SessionErrors
+				    .add(
+				        actionRequest,
+				        OutOfLengthBusinessEnNameException.class);
+			}
+			else if (e instanceof OutOfLengthBusinessShortNameException) {
+				SessionErrors
+				    .add(
+				        actionRequest,
+				        OutOfLengthBusinessShortNameException.class);
+			}
+			else if (e instanceof OutOfLengthBusinessRepresentativeNameException) {
+				SessionErrors
+				    .add(
+				        actionRequest,
+				        OutOfLengthBusinessRepresentativeNameException.class);
+			}
+			else if (e instanceof OutOfLengthBusinessRepresentativeRoleException) {
+				SessionErrors
+				    .add(
+				        actionRequest,
+				        OutOfLengthBusinessRepresentativeRoleException.class);
+			}
+			else if (e instanceof OutOfLengthCitizenAddressException) {
+				SessionErrors
+				    .add(
+				        actionRequest,
+				        OutOfLengthCitizenAddressException.class);
+			}
 			else {
 				SessionErrors
 				    .add(
@@ -438,7 +465,7 @@ public class AccountRegPortlet extends MVCPortlet {
 
 		}
 		finally {
-			
+
 		}
 	}
 
