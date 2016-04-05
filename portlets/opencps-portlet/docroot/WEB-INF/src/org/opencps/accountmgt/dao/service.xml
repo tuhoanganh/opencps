@@ -76,6 +76,9 @@
 		<finder return-type="Citizen" name="Email">
 			<finder-column name="email"></finder-column>
 		</finder>
+        <finder name="UUID" return-type="Citizen">
+            <finder-column name="uuid"></finder-column>
+        </finder>
 		
 		<reference entity="User" package-path="com.liferay.portal" />
 		
@@ -154,6 +157,9 @@
 		</finder>
         <finder name="MappingUserId" return-type="Business">
             <finder-column name="mappingUserId"></finder-column>
+        </finder>
+        <finder name="UUID" return-type="Business">
+            <finder-column name="uuid"></finder-column>
         </finder>
 		
 		<reference package-path="com.liferay.portal" entity="Organization" />
