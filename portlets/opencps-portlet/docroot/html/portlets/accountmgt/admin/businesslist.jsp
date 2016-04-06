@@ -1,4 +1,5 @@
 
+<%@page import="com.liferay.portal.kernel.upgrade.RenameUpgradePortletPreferences"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,6 +18,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+
+<%@page import="org.opencps.accountmgt.util.AccountMgtUtil"%>
 <%@page import="org.opencps.util.PortletUtil"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
@@ -32,6 +35,8 @@
 <%@page import="org.opencps.accountmgt.search.BusinessSearch"%>
 <%@ include file="../init.jsp" %>
 
+
+<liferay-util:include page="/html/portlets/accountmgt/admin/toptabs.jsp" servletContext="<%=application %>" />
 <%
 	Business business = (	Business) request.getAttribute(WebKeys.BUSINESS_ENTRY);
 	long businessId = business != null ? business.getBusinessId() : 0L;
@@ -41,19 +46,23 @@
 	
 	int [] accoutStatusArr = {0,1,2,3}; 
 	
+	PortletURL searchURL = renderResponse.createRenderURL();
+	searchURL.setParameter("tabs1", AccountMgtUtil.TOP_TABS_BUSINESS);
+	searchURL.setParameter("mvcPath", "/html/portlets/accountmgt/admin/businesslist.jsp");
+	
 	PortletURL iteratorURL = renderResponse.createRenderURL();
-	iteratorURL.setParameter("mvcPath", templatePath + "citizenlist.jsp");
+	iteratorURL.setParameter("mvcPath", "/html/portlets/accountmgt/admin/businesslist.jsp");
 	iteratorURL.setParameter(BusinessDisplayTerms.BUSINESS_NAME, fullName);
 	iteratorURL.setParameter(BusinessDisplayTerms.BUSINESS_ACCOUNTSTATUS, String.valueOf(accountStatus));
+	
+	
+	
 	List<Business> citizens = new ArrayList<Business>();
 	int totalCount = 0;
 	
 %>
 
-
-<portlet:actionURL var="searchBusinessURL" name="searchBusiness" />
-
-<aui:form action="<%=searchBusinessURL.toString() %>" method="post" name="fm">
+<aui:form action="<%=searchURL.toString() %>" method="post" name="fm">
 	<aui:row>
 		<aui:col width="30">
 			<aui:input name="<%=BusinessDisplayTerms.BUSINESS_NAME %>" label="<%=StringPool.BLANK %>"/>

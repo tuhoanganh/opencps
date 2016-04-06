@@ -469,7 +469,7 @@ public class AccountRegPortlet extends MVCPortlet {
 		}
 	}
 
-	protected void ValidateCitizen(
+	protected static void ValidateCitizen(
 	    long citizenId, String fullName, String personalId, String address,
 	    String email, String telNo, long size, String mimeType)
 	    throws OutOfLengthCitizenAddressException,
@@ -508,7 +508,7 @@ public class AccountRegPortlet extends MVCPortlet {
 
 	}
 
-	protected void ValidateBusiness(
+	protected static void ValidateBusiness(
 	    long businessId, String email, String name, String enName,
 	    String shortName, String address, String representativeName,
 	    String representativeRole)

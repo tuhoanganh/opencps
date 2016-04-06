@@ -30,7 +30,11 @@
 <%@page import="org.opencps.accountmgt.model.Citizen"%>
 <%@page import="com.liferay.portal.kernel.dao.search.SearchEntry"%>
 <%@page import="org.opencps.accountmgt.search.CitizenDisplayTerms"%>
+<%@page import="org.opencps.accountmgt.util.AccountMgtUtil"%>
 <%@ include file="../init.jsp" %>
+
+
+<liferay-util:include page="/html/portlets/accountmgt/admin/toptabs.jsp" servletContext="<%=application %>" />
 
 <%
 	Citizen citizen = (Citizen) request.getAttribute(WebKeys.CITIZEN_ENTRY);
@@ -40,6 +44,10 @@
 	int accountStatus = ParamUtil.getInteger(request, CitizenDisplayTerms.CITIZEN_ACCOUNTSTATUS);
 	
 	int [] accoutStatusArr = {0,1,2,3}; 
+	
+	PortletURL searchURL = renderResponse.createRenderURL();
+	searchURL.setParameter("tabs1", AccountMgtUtil.TOP_TABS_CITIZEN);
+	searchURL.setParameter("mvcPath", "/html/portlets/accountmgt/admin/citizenlist.jsp");
 	
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "citizenlist.jsp");
@@ -52,12 +60,7 @@
 	
 	
 %>
-
-<liferay-util:include page="/html/portlets/accountmgt/admin/toptabs.jsp" servletContext="<%=application %>" />
-
-<portlet:actionURL var="searchCitizenURL" name="searchCitizen" />
-
-<aui:form action="<%=searchCitizenURL.toString() %>" method="post" name="fm">
+<aui:form action="<%=searchURL.toString() %>" method="post" name="fm">
 	<aui:row>
 		<aui:col width="30">
 			<aui:input name="<%=CitizenDisplayTerms.CITIZEN_FULLNAME %>" label="<%=StringPool.BLANK %>"/>

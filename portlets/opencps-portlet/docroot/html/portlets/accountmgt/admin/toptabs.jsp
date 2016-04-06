@@ -33,7 +33,7 @@
 	String[] names = new String[]{AccountMgtUtil.TOP_TABS_CITIZEN, AccountMgtUtil.TOP_TABS_BUSINESS};
 
 	String value = ParamUtil.getString(request, "tabs1", AccountMgtUtil.TOP_TABS_CITIZEN);
-
+	
 	List<String> urls = new ArrayList<String>();
 	
 	if (PortletPermissionUtil.contains(permissionChecker, plid, portletDisplay.getId(), ActionKeys.VIEW) && 

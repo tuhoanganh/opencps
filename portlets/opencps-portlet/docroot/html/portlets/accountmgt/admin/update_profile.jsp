@@ -22,7 +22,68 @@
 <%@page import="org.opencps.accountmgt.model.Citizen"%>
 <%@page import="org.opencps.accountmgt.search.BusinessDisplayTerms"%>
 <%@page import="org.opencps.accountmgt.search.CitizenDisplayTerms"%>
+
+<%@page import="org.opencps.util.MessageKeys"%>
+<%@page import="org.opencps.accountmgt.OutOfLengthBusinessNameException"%>
+<%@page import="org.opencps.accountmgt.OutOfLengthBusinessRepresentativeRoleException"%>
+<%@page import="org.opencps.accountmgt.OutOfLengthBusinessShortNameException"%>
+<%@page import="org.opencps.accountmgt.OutOfLengthBusinessRepresentativeNameException"%>
+<%@page import="org.opencps.accountmgt.OutOfLengthBusinessEnNameException"%>
+<%@page import="org.opencps.accountmgt.OutOfLengthCitizenNameException"%>
+<%@page import="org.opencps.accountmgt.OutOfLengthCitizenAddressException"%>
+<%@page import="com.liferay.portal.UserPasswordException"%>
 <%@ include file="../init.jsp" %>
+
+
+<liferay-ui:error 
+	exception="<%= UserPasswordException.class %>" 
+	message="<%= UserPasswordException.class.getName() %>" 
+/>
+
+<liferay-ui:error 
+	exception="<%= OutOfLengthCitizenAddressException.class %>" 
+	message="<%= OutOfLengthCitizenAddressException.class.getName() %>" 
+/>
+
+<liferay-ui:error 
+	exception="<%= OutOfLengthCitizenNameException.class %>" 
+	message="<%= OutOfLengthCitizenNameException.class.getName() %>" 
+/>
+
+<liferay-ui:error 
+	exception="<%= OutOfLengthBusinessNameException.class %>" 
+	message="<%= OutOfLengthBusinessNameException.class.getName() %>" 
+/>
+
+<liferay-ui:error 
+	exception="<%= OutOfLengthBusinessEnNameException.class %>" 
+	message="<%= OutOfLengthBusinessEnNameException.class.getName() %>" 
+/>
+
+<liferay-ui:error 
+	exception="<%= OutOfLengthBusinessEnNameException.class %>" 
+	message="<%= OutOfLengthBusinessShortNameException.class.getName() %>" 
+/>
+
+<liferay-ui:error 
+	exception="<%= OutOfLengthBusinessEnNameException.class %>" 
+	message="<%= OutOfLengthBusinessEnNameException.class.getName() %>" 
+/><liferay-ui:error 
+	exception="<%= OutOfLengthBusinessShortNameException.class %>" 
+	message="<%= OutOfLengthBusinessShortNameException.class.getName() %>" 
+/><liferay-ui:error 
+	exception="<%= OutOfLengthBusinessRepresentativeNameException.class %>" 
+	message="<%= OutOfLengthBusinessRepresentativeNameException.class.getName() %>" 
+/><liferay-ui:error 
+	exception="<%= OutOfLengthBusinessRepresentativeRoleException.class %>" 
+	message="<%= OutOfLengthBusinessRepresentativeRoleException.class.getName() %>" 
+/>
+
+<liferay-ui:error 
+	key="<%=MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED %>" 
+	message="system.exception.occured" 
+/>
+
 
 <%
 	long citizenId = ParamUtil.getLong(request, CitizenDisplayTerms.CITIZEN_ID);
