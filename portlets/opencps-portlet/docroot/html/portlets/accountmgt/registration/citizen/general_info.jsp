@@ -1,4 +1,7 @@
-
+<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.opencps.datamgt.model.DictItem"%>
+<%@page import="java.util.List"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -30,7 +33,10 @@
 <%@page import="org.opencps.datamgt.model.DictCollection"%>
 <%@page import="org.opencps.accountmgt.service.CitizenLocalServiceUtil"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
+<%@page import="com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil"%>
+<%@page import="com.liferay.portlet.documentlibrary.model.DLFileEntry"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
+
 <%@ include file="../../init.jsp" %>
 
 <%
@@ -38,23 +44,49 @@
 	Citizen citizen = (Citizen) request.getAttribute(WebKeys.CITIZEN_ENTRY);
 	DictCollection dictCollection = null;
 	
+	DictItem dictItemCity = null;
+	DictItem dictItemDistrict = null;
+	DictItem dictItemWard = null;
+	
 	long citizenID = citizen != null ? citizen.getCitizenId() : 0L;
 	
 	boolean isViewProfile = GetterUtil.get( (Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_VIEW_PROFILE), false);
 	
 	boolean isAdminViewProfile = GetterUtil.get((Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_ADMIN_PROFILE), false);
 	
-	Citizen citizenFromProfile = null;
+	StringBuilder getAddress = new StringBuilder();
 	
+	Citizen citizenFromProfile = null;
+	DLFileEntry dlFileEntry = null;
+	String url = StringPool.BLANK;
 	Date defaultBirthDate = citizen != null && citizen.getBirthdate() != null ? 
 		citizen.getBirthdate() : DateTimeUtil.convertStringToDate("01/01/1970");
 		
 	PortletUtil.SplitDate spd = new PortletUtil.SplitDate(defaultBirthDate);
-	
 	try {
 		dictCollection = DictCollectionLocalServiceUtil
 						.getDictCollection(scopeGroupId, "ADMINISTRATIVE_REGION");
+		if(dictCollection != null) {
+			long dictCollectionId = dictCollection.getDictCollectionId();
+			dictItemCity = DictItemLocalServiceUtil.getDictItemInuseByItemCode(dictCollectionId, citizen.getCityCode());
+			dictItemDistrict = DictItemLocalServiceUtil.getDictItemInuseByItemCode(dictCollectionId, citizen.getDistrictCode());
+			dictItemWard = DictItemLocalServiceUtil.getDictItemInuseByItemCode(dictCollectionId, citizen.getWardCode());
+			
+			if(dictItemCity != null && dictItemDistrict!= null && dictItemWard!=null) {
+				getAddress.append(dictItemCity.getDictItemId()+ ",");
+				getAddress.append(dictItemWard.getDictItemId()+ ",");
+				getAddress.append(dictItemDistrict.getDictItemId());
+			
+				_log.info(getAddress);
+			}
+		}
 		
+		
+		dlFileEntry = DLFileEntryLocalServiceUtil.getDLFileEntry(citizen.getAttachFile());
+		
+		if(dlFileEntry != null) {
+			 url = themeDisplay.getPortalURL()+"/c/document_library/get_file?uuid="+dlFileEntry.getUuid()+"&groupId="+themeDisplay.getScopeGroupId() ;
+		}
 	} catch(Exception e) {
 		
 	}
@@ -150,6 +182,7 @@
 			dictCollectionCode="ADMINISTRATIVE_REGION"
 			itemNames="cityId,districtId,wardId"
 			itemsEmptyOption="true,true,true"	
+			selectedItems="<%=getAddress.toString() %>"
 		/>	
 	</aui:col>
 </aui:row>

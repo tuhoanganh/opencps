@@ -38,7 +38,7 @@
 
 <liferay-util:include page="/html/portlets/accountmgt/admin/toptabs.jsp" servletContext="<%=application %>" />
 <%
-	Business business = (	Business) request.getAttribute(WebKeys.BUSINESS_ENTRY);
+	Business business = (Business) request.getAttribute(WebKeys.BUSINESS_ENTRY);
 	long businessId = business != null ? business.getBusinessId() : 0L;
 	
 	String fullName = ParamUtil.getString(request, BusinessDisplayTerms.BUSINESS_NAME);
@@ -55,12 +55,15 @@
 	iteratorURL.setParameter(BusinessDisplayTerms.BUSINESS_NAME, fullName);
 	iteratorURL.setParameter(BusinessDisplayTerms.BUSINESS_ACCOUNTSTATUS, String.valueOf(accountStatus));
 	
-	
-	
-	List<Business> citizens = new ArrayList<Business>();
+	List<Business> businesses = new ArrayList<Business>();
 	int totalCount = 0;
 	
 %>
+
+<aui:row>
+	<aui:col width="20">
+	</aui:col>
+</aui:row>
 
 <aui:form action="<%=searchURL.toString() %>" method="post" name="fm">
 	<aui:row>
@@ -97,18 +100,18 @@
 			BusinessSearchTerm searchTerms = (BusinessSearchTerm) searchContainer.getSearchTerms();
 			
 			if(!fullName.equals(StringPool.BLANK)) {
-				citizens = BusinessLocalServiceUtil.getBusinesses(themeDisplay.getScopeGroupId(), fullName);
+				businesses = BusinessLocalServiceUtil.getBusinesses(themeDisplay.getScopeGroupId(), fullName);
 			} else if(accountStatus!=0) {
-				citizens = BusinessLocalServiceUtil.getBusinesses(themeDisplay.getScopeGroupId(), accountStatus);
+				businesses = BusinessLocalServiceUtil.getBusinesses(themeDisplay.getScopeGroupId(), accountStatus);
 			} else if(!fullName.equals(StringPool.BLANK) && accountStatus!=0)  {
-				citizens = BusinessLocalServiceUtil.getBusinesses(themeDisplay.getScopeGroupId(), fullName, accountStatus);
+				businesses = BusinessLocalServiceUtil.getBusinesses(themeDisplay.getScopeGroupId(), fullName, accountStatus);
 			} else {
-				citizens = BusinessLocalServiceUtil.getBusinesses(searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
+				businesses = BusinessLocalServiceUtil.getBusinesses(searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
 			}
 			
 			totalCount = BusinessLocalServiceUtil.countAll();
 			total = totalCount;
-			results = citizens;
+			results = businesses;
 			pageContext.setAttribute("results", results);
 			pageContext.setAttribute("total", total);
 		%>
