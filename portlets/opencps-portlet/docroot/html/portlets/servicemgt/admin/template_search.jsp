@@ -1,3 +1,4 @@
+<%@page import="org.opencps.servicemgt.search.TemplateSearchTerms"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,8 +18,23 @@
  */
 %>
 
-<%@ include file="/init.jsp" %>
+<%@ include file="../init.jsp" %>
 
-<liferay-util:include page="/html/portlets/servicemgt/admin/toptabs.jsp" servletContext="<%=application %>" />
+<%
+	TemplateFileSearch searchContainerTemplate = (TemplateFileSearch)request.getAttribute("liferay-ui:search:searchContainer");
 
-<liferay-ui:message key="under-constuctor"/>
+	TemplateSearchTerms searchTerms = (TemplateSearchTerms) searchContainerTemplate.getSearchTerms();
+%>
+
+<liferay-ui:search-toggle
+	buttonLabel="search"
+	displayTerms="<%= searchTerms %>"
+	id="toggle_id_template_search"
+	autoFocus="<%= true %>"
+>
+
+	<aui:fieldset>
+		<aui:input name="<%= searchTerms.getKeywords() %>" size="20" value="<%= searchTerms.getKeywords() %>" />
+	</aui:fieldset>
+	
+</liferay-ui:search-toggle>

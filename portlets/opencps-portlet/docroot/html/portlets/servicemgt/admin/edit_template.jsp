@@ -1,4 +1,3 @@
-<%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -23,51 +22,58 @@
 <%
 	String redirectURL = ParamUtil.getString(request, "redirectURL");
 
-	ServiceInfo servieInfo = (ServiceInfo) request.getAttribute(WebKeys.SERVICE_ENTRY);
+	TemplateFile templateFile = (TemplateFile) request.getAttribute(WebKeys.SERVICE_TEMPLATE_ENTRY);
 	
 	String backURL = ParamUtil.getString(request, "backURL");
 	
-	String[] serviceSections = new String[]{"general_info", "detail_info", "template_info"};
+	String[] templateSections = new String[] {};
 	
-	String[][] categorySections = {serviceSections};
+	if (Validator.isNotNull(templateFile)) {
+		templateSections = new String[]{"template_info", "add_to_service"};
+	} else {
+		templateSections = new String[]{"template_info"};
+	}
 	
-	System.out.println(themeDisplay.getLanguageId());
+	
+	String[][] categorySections = {templateSections};
 %>
 
 <liferay-ui:header
 	backURL="<%= backURL %>"
-	title='<%= (Validator.isNull(servieInfo)) ? "add-service" : "update-service" %>'
+	title='<%= (Validator.isNull(templateFile)) ? "add-tempalte" : "update-tempalte" %>'
 />
 
-<portlet:actionURL name="updateService" var="updateServiceURL"/>
+<portlet:actionURL name="updateTempalteFile" var="updateTempalteFileURL"/>
 
 <liferay-util:buffer var="htmlTop">
-	<c:if test="<%= servieInfo != null %>">
-		<liferay-ui:icon cssClass="icon-home"/> <%= servieInfo.getServiceName() %>
-	</c:if> 
+	<c:if test="<%= templateFile != null %>">
+		<liferay-ui:icon iconCssClass="icon-home"/> 
+		<liferay-ui:message key="<%= templateFile.getFileName() %>"/>
+	</c:if>
 </liferay-util:buffer>
 
 
-<aui:form name="fm" action="<%=updateServiceURL %>" method="post">
+<aui:form name="fm" action="<%=updateTempalteFileURL %>" method="post"
+		enctype="multipart/form-data">
 
-	<aui:model-context bean="<%= servieInfo %>" model="<%= ServiceInfo.class %>" />
+	<aui:model-context bean="<%= templateFile %>" model="<%= ServiceInfo.class %>" />
 	
-	<aui:input name="redirectURL" type="hidden" value="<%= backURL%>"/>
-	<aui:input name="returnURL" type="hidden" value="<%= currentURL%>"/>
+	<aui:input name="redirectURL" type="hidden" value="<%= redirectURL %>"/>
+	<aui:input name="returnURL" type="hidden" value="<%= currentURL %>"/>
 	
+	<aui:input name="<%= Constants.CMD %>" type="hidden" 
+		value="<%= Constants.ADD %>"/>
 	<aui:input name="<%= ServiceDisplayTerms.GROUP_ID %>" type="hidden" 
 		value="<%= scopeGroupId%>"/>
 	<aui:input name="<%= ServiceDisplayTerms.COMPANY_ID %>" type="hidden" 
 		value="<%= company.getCompanyId()%>"/>
-	<aui:input name="<%= ServiceDisplayTerms.SERVICE_ID %>" type="hidden" 
-		value="<%= Validator.isNotNull(servieInfo) ? servieInfo.getServiceinfoId() : StringPool.BLANK %>"/>
 
 	<liferay-ui:form-navigator
 		backURL="<%= backURL %>"
-		categoryNames="<%= ServiceUtil.SERVICE_CATEGORY_NAMES %>"
+		categoryNames="<%= ServiceUtil.SERVICE_TEMPLATE_NAMES %>"
 		categorySections="<%= categorySections %>"
 		htmlTop="<%= htmlTop %>"
-		jspPath='<%= templatePath + "service/" %>'
+		jspPath='<%= templatePath + "template/" %>'
 	/>
 </aui:form>
 

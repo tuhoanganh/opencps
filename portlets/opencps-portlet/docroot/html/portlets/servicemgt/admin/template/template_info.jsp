@@ -1,3 +1,4 @@
+<%@page import="org.opencps.servicemgt.model.TemplateFile"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -16,9 +17,30 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
+<%@ include file="../../init.jsp" %>
 
-<%@ include file="/init.jsp" %>
+<%
+	TemplateFile templateFile = (TemplateFile) request.getAttribute(WebKeys.SERVICE_TEMPLATE_ENTRY);
+%>
 
-<liferay-util:include page="/html/portlets/servicemgt/admin/toptabs.jsp" servletContext="<%=application %>" />
+<aui:model-context bean="<%= templateFile %>" model="<%= TemplateFile.class %>"/>
 
-<liferay-ui:message key="under-constuctor"/>
+<aui:row>
+	<aui:col width="50">
+		<aui:input name="fileNo"></aui:input>
+	</aui:col>
+</aui:row>
+
+<aui:row>
+	<aui:col width="50">
+		<aui:input name="fileName"></aui:input>
+	</aui:col>
+</aui:row>
+
+<aui:row>
+	<aui:col width="50">
+		<aui:input name="uploadedFile" type="file"/>
+	</aui:col>
+</aui:row>
+
+

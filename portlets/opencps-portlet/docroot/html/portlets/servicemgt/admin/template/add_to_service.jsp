@@ -17,8 +17,6 @@
  */
 %>
 
-<%@ include file="/init.jsp" %>
-
-<liferay-util:include page="/html/portlets/servicemgt/admin/toptabs.jsp" servletContext="<%=application %>" />
+<%@ include file="../../init.jsp" %>
 
 <liferay-ui:message key="under-constuctor"/>
