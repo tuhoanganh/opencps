@@ -303,31 +303,6 @@ public class PortletUtil {
 		return changeAccountStatus;
 	}
 
-	public static String getAccountActionName(int value, Locale locale) {
-
-		String accountActionName = StringPool.BLANK;
-
-		switch (value) {
-		case 1:
-			accountActionName = LanguageUtil.get(locale, "unlock");
-			break;
-		case 2:
-			accountActionName = LanguageUtil.get(locale, "approve");
-			break;
-		case 3:
-			accountActionName = LanguageUtil.get(locale, "lock");
-			break;
-		case 4:
-			accountActionName = LanguageUtil.get(locale, "cancel");
-			break;
-		default:
-			accountActionName = LanguageUtil.get(locale, "");
-			break;
-		}
-
-		return accountActionName;
-	}
-
 	public static String getLeaderLabel(int value, Locale locale) {
 
 		String leaderLabel = StringPool.BLANK;

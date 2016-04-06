@@ -32,6 +32,8 @@
 <%@page import="org.opencps.accountmgt.search.BusinessSearchTerm"%>
 <%@page import="com.liferay.portal.kernel.dao.search.SearchContainer"%>
 <%@page import="org.opencps.accountmgt.search.BusinessSearch"%>
+<%@page import="com.liferay.portal.kernel.upgrade.RenameUpgradePortletPreferences"%>
+
 <%@ include file="../init.jsp" %>
 
 
@@ -176,7 +178,7 @@
 			row.addText(businesS.getBusinessType());
 			row.addText(businesS.getEmail());
 			row.addText(accoutStatus);
-			row.addJSP("center", SearchEntry.DEFAULT_VALIGN,  "/html/portlets/accountmgt/admin/business_action.jsp", config.getServletContext(), request, response);
+			row.addJSP("center", SearchEntry.DEFAULT_VALIGN,  "/html/portlets/accountmgt/admin/business_actions.jsp", config.getServletContext(), request, response);
 			
 		%>
 		

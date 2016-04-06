@@ -181,7 +181,7 @@
 			row.addText(DateTimeUtil.convertDateToString(citiZen.getBirthdate(), DateTimeUtil._VN_DATE_FORMAT));
 			row.addText(citiZen.getEmail());
 			row.addText(accoutStatus);
-			row.addJSP("center", SearchEntry.DEFAULT_VALIGN,  "/html/portlets/accountmgt/admin/citizen_action.jsp", config.getServletContext(), request, response);
+			row.addJSP("center", SearchEntry.DEFAULT_VALIGN,  "/html/portlets/accountmgt/admin/citizen_actions.jsp", config.getServletContext(), request, response);
 			
 		%>
 		
