@@ -106,6 +106,8 @@
 	Liferay.provide(window, '<portlet:namespace />registerAccount', function() {
 		A = AUI();
 		var register = A.one('#<portlet:namespace />register');
+		var termsOfUse = A.one('#<portlet:namespace />termsOfUse');
+		
 		if(termsOfUse.val() == 'true'){
 			submitForm(document.<portlet:namespace />fm);
 		}else{

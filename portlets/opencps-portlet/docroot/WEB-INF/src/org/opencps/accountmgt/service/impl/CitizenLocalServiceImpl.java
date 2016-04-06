@@ -35,22 +35,14 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
-import com.liferay.portal.kernel.util.PrefsPropsUtil;
-import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Address;
 import com.liferay.portal.model.Contact;
 import com.liferay.portal.model.EmailAddress;
-import com.liferay.portal.model.Group;
-import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.Phone;
 import com.liferay.portal.model.Role;
-import com.liferay.portal.model.Ticket;
-import com.liferay.portal.model.TicketConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.model.Website;
@@ -59,13 +51,10 @@ import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionCheckerFactoryUtil;
 import com.liferay.portal.security.permission.PermissionThreadLocal;
 import com.liferay.portal.service.ContactLocalServiceUtil;
-import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
-import com.liferay.portal.service.TicketLocalServiceUtil;
 import com.liferay.portal.service.UserGroupLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
-import com.liferay.portal.util.SubscriptionSender;
 import com.liferay.portlet.announcements.model.AnnouncementsDelivery;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
@@ -293,6 +282,40 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 
 		return citizenPersistence
 		    .update(citizen);
+	}
+
+	public void deleteCitizenByCitizenId(long citizenId)
+	    throws SystemException, PortalException {
+
+		Citizen citizen = citizenPersistence
+		    .findByPrimaryKey(citizenId);
+
+		long fileEntryId = citizen
+		    .getAttachFile();
+
+		long mappingUserId = citizen
+		    .getMappingUserId();
+
+		if (mappingUserId > 0) {
+			userLocalService
+			    .deleteUser(mappingUserId);
+		}
+
+		if (fileEntryId > 0) {
+			FileEntry fileEntry = DLAppServiceUtil
+			    .getFileEntry(fileEntryId);
+			long folderId = fileEntry
+			    .getFolderId();
+
+			DLAppServiceUtil
+			    .deleteFileEntry(fileEntryId);
+			DLFolderLocalServiceUtil
+			    .deleteFolder(folderId);
+		}
+
+		citizenPersistence
+		    .remove(citizenId);
+
 	}
 
 	public Citizen getCitizen(long mappingUserId)

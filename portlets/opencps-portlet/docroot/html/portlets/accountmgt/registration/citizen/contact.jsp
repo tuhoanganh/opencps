@@ -133,7 +133,7 @@
 	</aui:col>
 </aui:row>
 
-<c:if test="<%=isViewProfile %>">
+<c:if test="<%= !isViewProfile && !isAdminViewProfile %>">
 	<aui:row>
 		<aui:col width="100">
 		<aui:input type="file" name="<%=CitizenDisplayTerms.CITIZEN_ATTACHFILE %>" />

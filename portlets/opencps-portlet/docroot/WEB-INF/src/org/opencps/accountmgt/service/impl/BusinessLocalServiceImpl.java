@@ -330,6 +330,47 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		return business;
 	}
 
+	public void deleteBusinessByBusinessId(long businessId)
+	    throws SystemException, PortalException {
+
+		Business business = businessPersistence
+		    .findByPrimaryKey(businessId);
+
+		long fileEntryId = business
+		    .getAttachFile();
+
+		long mappingUserId = business
+		    .getMappingUserId();
+
+		long mappingOrgId = business
+		    .getMappingOrganizationId();
+
+		if (mappingUserId > 0) {
+			userLocalService
+			    .deleteUser(mappingUserId);
+		}
+
+		if (fileEntryId > 0) {
+			FileEntry fileEntry = DLAppServiceUtil
+			    .getFileEntry(fileEntryId);
+			long folderId = fileEntry
+			    .getFolderId();
+
+			DLAppServiceUtil
+			    .deleteFileEntry(fileEntryId);
+			DLFolderLocalServiceUtil
+			    .deleteFolder(folderId);
+		}
+
+		if (mappingOrgId > 0) {
+			organizationLocalService
+			    .deleteOrganization(mappingOrgId);
+		}
+
+		// Ham chua kiem tra ca dieu kien lien quan nhu tai khoan phu...
+
+	}
+
 	public Business getBusiness(long mappingUserId)
 	    throws SystemException, NoSuchBusinessException {
 
