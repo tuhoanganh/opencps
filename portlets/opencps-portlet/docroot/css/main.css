@@ -16,8 +16,24 @@
 	width : 100% !important;
 }
 
+.input30_1 select {
+	width: 150px !important;
+}
+
 
 .ocps-editor {
 	margin-bottom: 10px;
 	height: 50px;
+}
+
+.cke_contents {
+	height: 150px !important;
+}
+
+.opcps-rows {
+	margin-bottom: 15px;
+}
+
+.txtarea-medium {
+	width : 95% !important;
 }
