@@ -11,6 +11,13 @@ import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.opencps.accountmgt.OutOfLengthBusinessEnNameException;
+import org.opencps.accountmgt.OutOfLengthBusinessNameException;
+import org.opencps.accountmgt.OutOfLengthBusinessRepresentativeNameException;
+import org.opencps.accountmgt.OutOfLengthBusinessRepresentativeRoleException;
+import org.opencps.accountmgt.OutOfLengthBusinessShortNameException;
+import org.opencps.accountmgt.OutOfLengthCitizenAddressException;
+import org.opencps.accountmgt.OutOfLengthCitizenNameException;
 import org.opencps.accountmgt.model.Business;
 import org.opencps.accountmgt.model.Citizen;
 import org.opencps.accountmgt.search.BusinessDisplayTerms;
@@ -20,6 +27,7 @@ import org.opencps.accountmgt.service.CitizenLocalServiceUtil;
 import org.opencps.datamgt.model.DictItem;
 import org.opencps.datamgt.service.DictItemLocalServiceUtil;
 import org.opencps.usermgt.search.EmployeeDisplayTerm;
+import org.opencps.util.MessageKeys;
 import org.opencps.util.PortletPropsValues;
 import org.opencps.util.WebKeys;
 
@@ -29,6 +37,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.service.ServiceContext;
@@ -94,11 +103,11 @@ public class AccountProfilePortlet extends MVCPortlet {
 	}
 
 	public void updateCitizenProfile(
-	    ActionRequest actionRequest, ActionResponse actionResponse) {
+	    ActionRequest actionRequest, ActionResponse actionResponse) throws IOException {
 
 		long citizenId =
 		    ParamUtil.getLong(actionRequest, CitizenDisplayTerms.CITIZEN_ID);
-
+		String returnURL = ParamUtil.getString(actionRequest, "returnURL");
 		String address =
 		    ParamUtil.getString(
 		        actionRequest, CitizenDisplayTerms.CITIZEN_ADDRESS);
@@ -127,7 +136,11 @@ public class AccountProfilePortlet extends MVCPortlet {
 
 		DictItem ward = null;
 
-		boolean isChangePassWord = curPass.equals(StringPool.BLANK) ? true : false;
+		boolean isChangePassWord = false;
+		if (Validator.isNotNull(curPass) && Validator.isNotNull(newPass) &&
+		    Validator.isNotNull(rePass)) {
+			isChangePassWord = true;
+		}
 
 		try {
 			ServiceContext serviceContext =
@@ -154,14 +167,29 @@ public class AccountProfilePortlet extends MVCPortlet {
 			if (e instanceof UserPasswordException) {
 				SessionErrors.add(actionRequest, UserPasswordException.class);
 			}
+			else if (e instanceof OutOfLengthCitizenAddressException) {
+				SessionErrors.add(
+				    actionRequest, OutOfLengthCitizenAddressException.class);
+			}
+			else if (e instanceof OutOfLengthCitizenNameException) {
+				SessionErrors.add(
+				    actionRequest, OutOfLengthCitizenNameException.class);
+			}
 			else {
-				_log.info(e);
+				SessionErrors.add(
+				    actionRequest,
+				    MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED);
+			}
+
+			if (Validator.isNotNull(returnURL)) {
+				actionResponse.sendRedirect(returnURL);
 			}
 		}
 	}
 
 	public void updateBusinessProfile(
-	    ActionRequest actionRequest, ActionResponse actionResponse) {
+	    ActionRequest actionRequest, ActionResponse actionResponse)
+	    throws IOException {
 
 		long businessId =
 		    ParamUtil.getLong(
@@ -176,6 +204,8 @@ public class AccountProfilePortlet extends MVCPortlet {
 		long wardId =
 		    ParamUtil.getLong(
 		        actionRequest, BusinessDisplayTerms.BUSINESS_WARD_ID);
+		String returnURL = ParamUtil.getString(actionRequest, "returnURL");
+
 		String name =
 		    ParamUtil.getString(
 		        actionRequest, BusinessDisplayTerms.BUSINESS_NAME);
@@ -194,9 +224,6 @@ public class AccountProfilePortlet extends MVCPortlet {
 		String address =
 		    ParamUtil.getString(
 		        actionRequest, BusinessDisplayTerms.BUSINESS_ADDRESS);
-		String email =
-		    ParamUtil.getString(
-		        actionRequest, BusinessDisplayTerms.BUSINESS_EMAIL);
 		String telNo =
 		    ParamUtil.getString(
 		        actionRequest, BusinessDisplayTerms.BUSINESS_TELNO);
@@ -217,7 +244,11 @@ public class AccountProfilePortlet extends MVCPortlet {
 		        actionRequest, BusinessDisplayTerms.NEW_PASSWORD);
 		String rePass =
 		    ParamUtil.getString(actionRequest, BusinessDisplayTerms.RE_PASSWORD);
-		boolean isChangePassWord = curPass.equals(StringPool.BLANK)  ? true : false;
+		boolean isChangePassWord = false;
+		if (Validator.isNotNull(curPass) && Validator.isNotNull(newPass) &&
+		    Validator.isNotNull(rePass)) {
+			isChangePassWord = true;
+		}
 
 		DictItem city = null;
 
@@ -254,8 +285,36 @@ public class AccountProfilePortlet extends MVCPortlet {
 			if (e instanceof UserPasswordException) {
 				SessionErrors.add(actionRequest, UserPasswordException.class);
 			}
+			else if (e instanceof OutOfLengthBusinessNameException) {
+				SessionErrors.add(
+				    actionRequest, OutOfLengthBusinessNameException.class);
+			}
+			else if (e instanceof OutOfLengthBusinessEnNameException) {
+				SessionErrors.add(
+				    actionRequest, OutOfLengthBusinessEnNameException.class);
+			}
+			else if (e instanceof OutOfLengthBusinessShortNameException) {
+				SessionErrors.add(
+				    actionRequest, OutOfLengthBusinessShortNameException.class);
+			}
+			else if (e instanceof OutOfLengthBusinessRepresentativeNameException) {
+				SessionErrors.add(
+				    actionRequest,
+				    OutOfLengthBusinessRepresentativeNameException.class);
+			}
+			else if (e instanceof OutOfLengthBusinessRepresentativeRoleException) {
+				SessionErrors.add(
+				    actionRequest,
+				    OutOfLengthBusinessRepresentativeRoleException.class);
+			}
 			else {
-				_log.info(e);
+				SessionErrors.add(
+				    actionRequest,
+				    MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED);
+			}
+
+			if (Validator.isNotNull(returnURL)) {
+				actionResponse.sendRedirect(returnURL);
 			}
 		}
 	}

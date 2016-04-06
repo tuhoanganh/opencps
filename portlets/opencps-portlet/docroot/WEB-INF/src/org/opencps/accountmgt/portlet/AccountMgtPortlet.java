@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.util.bridges.mvc.MVCPortlet;
@@ -120,11 +121,12 @@ public class AccountMgtPortlet extends MVCPortlet {
 	}
 
 	public void updateCitizenProfile(
-	    ActionRequest actionRequest, ActionResponse actionResponse) {
+	    ActionRequest actionRequest, ActionResponse actionResponse)
+	    throws IOException {
 
 		long citizenId =
 		    ParamUtil.getLong(actionRequest, CitizenDisplayTerms.CITIZEN_ID);
-
+		String returnURL = ParamUtil.getString(actionRequest, "returnURL");
 		String address =
 		    ParamUtil.getString(
 		        actionRequest, CitizenDisplayTerms.CITIZEN_ADDRESS);
@@ -153,8 +155,12 @@ public class AccountMgtPortlet extends MVCPortlet {
 
 		DictItem ward = null;
 
-		boolean isChangePassWord =
-		    curPass.equals(StringPool.BLANK) ? true : false;
+		boolean isChangePassWord = false;
+	    if(Validator.isNotNull(curPass) 
+	    && Validator.isNotNull(newPass) 
+	    && Validator.isNotNull(rePass)) {
+	    	isChangePassWord = true;
+	    }
 
 		try {
 			AccountRegPortlet.ValidateCitizen(
@@ -199,11 +205,16 @@ public class AccountMgtPortlet extends MVCPortlet {
 				    actionRequest,
 				    MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED);
 			}
+
+			if (Validator.isNotNull(returnURL)) {
+				actionResponse.sendRedirect(returnURL);
+			}
 		}
 	}
 
 	public void updateBusinessProfile(
-	    ActionRequest actionRequest, ActionResponse actionResponse) {
+	    ActionRequest actionRequest, ActionResponse actionResponse)
+	    throws IOException {
 
 		long businessId =
 		    ParamUtil.getLong(
@@ -218,6 +229,8 @@ public class AccountMgtPortlet extends MVCPortlet {
 		long wardId =
 		    ParamUtil.getLong(
 		        actionRequest, BusinessDisplayTerms.BUSINESS_WARD_ID);
+
+		String returnURL = ParamUtil.getString(actionRequest, "returnURL");
 		String name =
 		    ParamUtil.getString(
 		        actionRequest, BusinessDisplayTerms.BUSINESS_NAME);
@@ -259,8 +272,12 @@ public class AccountMgtPortlet extends MVCPortlet {
 		        actionRequest, BusinessDisplayTerms.NEW_PASSWORD);
 		String rePass =
 		    ParamUtil.getString(actionRequest, BusinessDisplayTerms.RE_PASSWORD);
-		boolean isChangePassWord =
-		    curPass.equals(StringPool.BLANK) ? true : false;
+		boolean isChangePassWord = false;
+		    if(Validator.isNotNull(curPass) 
+		    && Validator.isNotNull(newPass) 
+		    && Validator.isNotNull(rePass)) {
+		    	isChangePassWord = true;
+		    }
 
 		DictItem city = null;
 
@@ -328,6 +345,10 @@ public class AccountMgtPortlet extends MVCPortlet {
 				SessionErrors.add(
 				    actionRequest,
 				    MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED);
+			}
+
+			if (Validator.isNotNull(returnURL)) {
+				actionResponse.sendRedirect(returnURL);
 			}
 
 		}
