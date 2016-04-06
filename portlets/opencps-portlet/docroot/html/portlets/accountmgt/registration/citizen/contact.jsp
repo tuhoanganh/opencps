@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -21,6 +20,7 @@
 <%@page import="org.opencps.accountmgt.search.CitizenDisplayTerms"%>
 <%@page import="org.opencps.util.PortletUtil"%>
 <%@page import="java.util.Date"%>
+<%@page import="com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil"%>
 <%@page import="org.opencps.util.DateTimeUtil"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.accountmgt.model.Citizen"%>
@@ -31,6 +31,9 @@
 <%@page import="org.opencps.accountmgt.service.CitizenLocalServiceUtil"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
+<%@page import="com.liferay.portlet.documentlibrary.model.DLFileEntry"%>
+<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
+<%@page import="org.opencps.datamgt.model.DictItem"%>
 <%@ include file="../../init.jsp" %>
 
 <%
@@ -39,15 +42,42 @@
 
 	DictCollection dictCollection = null;
 	
+	DictItem dictItemCity = null;
+	DictItem dictItemDistrict = null;
+	DictItem dictItemWard = null;
+	
+	StringBuilder getAddress = new StringBuilder();
+	String url = StringPool.BLANK;
+	
 	long citizenID = citizen != null ? citizen.getCitizenId() : 0L;
 	
 	boolean isViewProfile = GetterUtil.get( (Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_VIEW_PROFILE), false);
 	
 	boolean isAdminViewProfile = GetterUtil.get((Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_ADMIN_PROFILE), false);
+	DLFileEntry dlFileEntry = null;
 	
 	try {
 		dictCollection = DictCollectionLocalServiceUtil
 						.getDictCollection(scopeGroupId, "ADMINISTRATIVE_REGION");
+		
+		if(dictCollection != null) {
+			long dictCollectionId = dictCollection.getDictCollectionId();
+			dictItemCity = DictItemLocalServiceUtil.getDictItemInuseByItemCode(dictCollectionId, citizen.getCityCode());
+			dictItemDistrict = DictItemLocalServiceUtil.getDictItemInuseByItemCode(dictCollectionId, citizen.getDistrictCode());
+			dictItemWard = DictItemLocalServiceUtil.getDictItemInuseByItemCode(dictCollectionId, citizen.getWardCode());
+			
+			if(dictItemCity != null && dictItemDistrict!= null && dictItemWard!=null) {
+				getAddress.append(dictItemCity.getDictItemId()+ ",");
+				getAddress.append(dictItemWard.getDictItemId()+ ",");
+				getAddress.append(dictItemDistrict.getDictItemId());
+			}
+		}
+		
+		dlFileEntry = DLFileEntryLocalServiceUtil.getDLFileEntry(citizen.getAttachFile());
+		
+		if(dlFileEntry != null) {
+			 url = themeDisplay.getPortalURL()+"/c/document_library/get_file?uuid="+dlFileEntry.getUuid()+"&groupId="+themeDisplay.getScopeGroupId() ;
+		}
 		
 	} catch(Exception e) {
 		
@@ -78,6 +108,7 @@
 			dictCollectionCode="ADMINISTRATIVE_REGION"
 			itemNames="cityId,districtId,wardId"
 			itemsEmptyOption="true,true,true"	
+			selectedItems="<%=getAddress.toString() %>"
 		/>	
 	</aui:col>
 </aui:row>
@@ -110,6 +141,7 @@
 	</aui:row>
 </c:if>
 
+<a href="<%=url%>"><liferay-ui:message key="url.file.entry"></liferay-ui:message></a>
 
 <%!
 	private Log _log = LogFactoryUtil.getLog(".html.portlets.accountmgt.registration/citizen.contact_info.jsp");

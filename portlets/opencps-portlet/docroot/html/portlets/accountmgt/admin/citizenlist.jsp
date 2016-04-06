@@ -44,7 +44,34 @@
 	int accountStatus = ParamUtil.getInteger(request, CitizenDisplayTerms.CITIZEN_ACCOUNTSTATUS);
 	
 	int [] accoutStatusArr = {0,1,2,3}; 
+	int countRegistered = 0;
+	int countConfirmed = 0;
+	int countApproved = 0;
+	int countLocked = 0;
 	
+	List<Citizen> citizenRegistered = null;
+	List<Citizen> citizenConfirmed = null;
+	List<Citizen> citizenApproved = null;
+	List<Citizen> citizenLocked = null;
+	
+	try {
+		citizenRegistered = CitizenLocalServiceUtil.getCitizens(scopeGroupId, 0);
+		citizenConfirmed = CitizenLocalServiceUtil.getCitizens(scopeGroupId, 1);
+		citizenApproved = CitizenLocalServiceUtil.getCitizens(scopeGroupId, 2);
+		citizenLocked = CitizenLocalServiceUtil.getCitizens(scopeGroupId, 3);
+		
+		if(citizenRegistered != null) {
+			countRegistered = citizenRegistered.size();
+		} else if(citizenConfirmed!=null) {
+			countConfirmed = citizenConfirmed.size();
+		} else if(citizenApproved != null) {
+			countApproved = citizenApproved.size();
+		} else if(citizenLocked!=null) {
+			countLocked = citizenLocked.size(); 
+		}
+	} catch(Exception e) {
+		
+	}
 	PortletURL searchURL = renderResponse.createRenderURL();
 	searchURL.setParameter("tabs1", AccountMgtUtil.TOP_TABS_CITIZEN);
 	searchURL.setParameter("mvcPath", "/html/portlets/accountmgt/admin/citizenlist.jsp");
@@ -60,6 +87,27 @@
 	
 	
 %>
+
+<aui:row>
+	<aui:col width="20">
+		<liferay-ui:message key="account.status.total" />  : <%=countLocked +
+			countConfirmed + countRegistered + countApproved
+		%>
+	</aui:col>
+	<aui:col width="20">
+		<liferay-ui:message key="account.status.registered" />  : <%=countRegistered %>
+	</aui:col>
+	<aui:col width="20">
+		<liferay-ui:message key="account.status.confirmed" />  : <%=countConfirmed %>
+	</aui:col>
+	<aui:col width="20">
+		<liferay-ui:message key="account.status.approved" />  : <%=countApproved %>
+	</aui:col>
+	<aui:col width="20">
+		<liferay-ui:message key="account.status.locked" />  : <%=countLocked %>
+	</aui:col>
+	
+</aui:row>
 <aui:form action="<%=searchURL.toString() %>" method="post" name="fm">
 	<aui:row>
 		<aui:col width="30">

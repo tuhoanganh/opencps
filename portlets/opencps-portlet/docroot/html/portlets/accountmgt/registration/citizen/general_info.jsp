@@ -20,6 +20,10 @@
 <%@page import="org.opencps.util.PortletPropsValues"%>
 <%@page import="org.opencps.accountmgt.search.CitizenDisplayTerms"%>
 <%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.opencps.datamgt.model.DictItem"%>
+<%@page import="java.util.List"%>
 <%@page import="java.util.Date"%>
 <%@page import="org.opencps.util.DateTimeUtil"%>
 <%@page import="org.opencps.util.WebKeys"%>
@@ -30,18 +34,25 @@
 <%@page import="org.opencps.datamgt.model.DictCollection"%>
 <%@page import="org.opencps.accountmgt.service.CitizenLocalServiceUtil"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
+<%@page import="com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil"%>
+<%@page import="com.liferay.portlet.documentlibrary.model.DLFileEntry"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
+
 <%@ include file="../../init.jsp" %>
 
 <%
 
-	Citizen citizen = (Citizen) request.getAttribute(WebKeys.CITIZEN_ENTRY);
+	Citizen citizen = (Citizen) request.getAttribute(WebKeys.CITIZEN_ENTRY);	
 
+	DictCollection dictCollection = null;
+	
 	long citizenID = citizen != null ? citizen.getCitizenId() : 0L;
 	
 	boolean isViewProfile = GetterUtil.get( (Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_VIEW_PROFILE), false);
 	
 	boolean isAdminViewProfile = GetterUtil.get((Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_ADMIN_PROFILE), false);
+	
+	Citizen citizenFromProfile = null;
 	
 	Date defaultBirthDate = citizen != null && citizen.getBirthdate() != null ? 
 		citizen.getBirthdate() : DateTimeUtil.convertStringToDate("01/01/1970");
@@ -50,12 +61,23 @@
 	
 %>
 
-
-
 <aui:model-context bean="<%=citizen %>" model="<%=Citizen.class%>" />
 
 <c:if test="<%=isAdminViewProfile %>">
-	<aui:input name="<%=CitizenDisplayTerms.CITIZEN_ACCOUNTSTATUS%>" disabled="true" />
+	<aui:row>
+		<aui:col width="50">
+			<aui:input 
+				type="text"
+				name="<%=CitizenDisplayTerms.CITIZEN_CREATEDDATE %>" 
+				value="<%=DateTimeUtil.convertDateToString(citizen.getCreateDate(), DateTimeUtil._VN_DATE_FORMAT) %>"
+				disabled="<%=isAdminViewProfile %>"
+			/>
+		</aui:col>
+		<aui:col width="50">
+			<aui:input name="<%=CitizenDisplayTerms.CITIZEN_ACCOUNTSTATUS%>" disabled="<%=isAdminViewProfile %>" />
+		</aui:col>
+		
+	</aui:row>
 </c:if>
 
 <aui:row>
@@ -121,6 +143,7 @@
 		</aui:select>
 	</aui:col>
 </aui:row>
+
 
 <%!
 	private Log _log = LogFactoryUtil.getLog(".html.portlets.accountmgt.registration/citizen.general_info.jsp");
