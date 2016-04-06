@@ -54,12 +54,13 @@
 			<portlet:actionURL var="updateStatusURL" name="updateStatus">
 				<portlet:param name="<%=CitizenDisplayTerms.CITIZEN_ACCOUNTSTATUS %>" value="<%=String.valueOf(PortletConstants.ACCOUNT_STATUS_APPROVED) %>"/>
 				<portlet:param name="<%=CitizenDisplayTerms.CITIZEN_ID %>" value="<%=String.valueOf(citizen.getCitizenId()) %>"/>
+				<portlet:param name="curAccountStatus" value="<%=String.valueOf(citizen.getAccountStatus()) %>"/>
 				<portlet:param name="redirectURL" value="<%=currentURL %>"/>
 			</portlet:actionURL>
 	
 			<liferay-ui:icon
-			 	image="approval" 
-			 	message="approval"
+			 	image="publish" 
+			 	message="approve"
 				url="<%= updateStatusURL.toString()%>" 
 			/>
 		</c:if>
@@ -73,9 +74,8 @@
 				<portlet:param name="redirectURL" value="<%=currentURL %>"/>
 			</portlet:actionURL>
 	
-			<liferay-ui:icon
-			 	image="deactivate" 
-			 	message="deactivate"
+			<liferay-ui:icon-deactivate
+			 	label="deactivate"
 				url="<%= updateStatusURL.toString()%>" 
 			/>
 		</c:if>
@@ -107,9 +107,9 @@
 				<portlet:param name="redirectURL" value="<%=currentURL %>"/>
 			</portlet:actionURL>
 			
-			<liferay-ui:icon
-			 	image="remove" 
-			 	message="remove"
+			<liferay-ui:icon-delete
+			 	confirmation="are-you-sure-remove-this-account"
+			 	message="delete"
 				url="<%=deleteCitizenURL.toString()%>" 
 			/>
 		</c:if>
