@@ -2,4 +2,5 @@
 
 <custom-sql>
 	<sql file="custom-sql/usermgt.xml" />
+	<sql file="custom-sql/servicemgt.xml" />
 </custom-sql>
