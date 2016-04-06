@@ -26,9 +26,24 @@
 
 <%
 	Business business = (Business) request.getAttribute(WebKeys.BUSINESS_ENTRY);
+
 	long businessId = business!=null ? business.getBusinessId() : 0L;
-	
 %>
+
+<portlet:renderURL var="switcherCitizenRegisterURL">
+	<portlet:param name="mvcPath" value='<%= templatePath + "citizenregistration.jsp" %>'/>
+</portlet:renderURL>
+
+<div class="opencps accountmgt fm-registration header">
+	<div class="register-label">
+		<liferay-ui:message key="register-business"/>
+	</div>
+	<div class="switcher-btn">
+		<aui:button name="citizen" value="citizen" type="button" href="<%=switcherCitizenRegisterURL.toString() %>"/>
+	</div>
+</div>
+
+<div class="bottom-horizontal-line"></div>
 
 
 <portlet:actionURL var="updateBusinessURL" name="updateBusiness">
@@ -43,6 +58,7 @@
 	name="fm"	
 	method="post"
 	enctype="multipart/form-data"
+	onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "registerAccount();" %>'
 >
 	<liferay-util:include 
 		page="/html/portlets/accountmgt/registration/business/general_info.jsp" 
@@ -55,37 +71,47 @@
 	/> 
 	<aui:row>
 		<aui:input 
-			name="businessConfirm"
+			name="termsOfUse"
 			type="checkbox" 
-			label="<%=LanguageUtil.get(pageContext, 
-						MessageKeys.ACCOUNTMGT_CONFIRM_KEY) %>"
-			checked="false"
+			label="terms-of-use"
 		/>
 	</aui:row>
 	
 	<aui:row>
-		<aui:button name="businessSubmit" type="submit" />
+		<aui:button name="register" type="submit" value="register" disabled="true"/>
+		<aui:button name="back" type="button" value="back" onClick="window.history.back();"/>
 	</aui:row>
 </aui:form>
 
 <aui:script>
-
-AUI().ready(function(A) {
-
-	var businessConfirmCheckbox = A.one('#<portlet:namespace />businessConfirmCheckbox');
-	
-	if(businessConfirmCheckbox) {
-		var buttonSubmit = A.one('#<portlet:namespace />businessSubmit');
-		businessConfirmCheckbox.on('click',function() {
-			businessConfirmCheckboxInput = A.one('#<portlet:namespace />businessConfirm');
-			if(businessConfirmCheckboxInput.val() == 'true') {
-				alert(businessConfirmCheckboxInput.val());
-				buttonSubmit.attr('disabled', false);
+	AUI().ready(function(A) {
+		var termsOfUseCheckbox = A.one('#<portlet:namespace />termsOfUseCheckbox');
+		if(termsOfUseCheckbox) {
+			termsOfUseCheckbox.on('click',function() {
 				
-			}
-		});
-	}
-	
-});
+				var termsOfUse = A.one('#<portlet:namespace />termsOfUse');
+				
+				var register = A.one('#<portlet:namespace />register');
+				
+				if(termsOfUse.val() == 'true'){
+					register.removeClass('disabled');
+					register.removeAttribute('disabled');
+				}else{
+					register.addClass('disabled');
+					register.setAttribute('disabled' , 'true');
+				}
+			});
+		}
+	});
 
+	Liferay.provide(window, '<portlet:namespace />registerAccount', function() {
+		A = AUI();
+		var register = A.one('#<portlet:namespace />register');
+		if(termsOfUse.val() == 'true'){
+			submitForm(document.<portlet:namespace />fm);
+		}else{
+			return;
+		}
+	});
+	
 </aui:script>

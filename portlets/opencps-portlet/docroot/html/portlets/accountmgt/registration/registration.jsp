@@ -21,14 +21,30 @@
 
 <%@ include file="../init.jsp" %>
 
-<portlet:renderURL var="registerCitizenURL">
-	<portlet:param name="mvcPath" value='<%=templatePath + "citizenregistration.jsp" %>'/>
-</portlet:renderURL>
+<%
+	HttpServletRequest originalServletRequest = PortalUtil.getOriginalServletRequest(request);
+	String type = GetterUtil.getString(originalServletRequest.getParameter("type"), "citizen");
+%>
 
-<portlet:renderURL var="registerBusinessURL">
-	<portlet:param name="mvcPath" value='<%=templatePath + "businessregistration.jsp" %>'/>
-</portlet:renderURL>
+<c:choose>
+	<c:when test='<%=type.equals("citizen") %>'>
+		<liferay-util:include 
+			page="/html/portlets/accountmgt/registration/citizenregistration.jsp" 
+			servletContext="<%=application %>" 
+		/> 
+	</c:when>
+	
+	<c:when test='<%=type.equals("business") %>'>
+		<liferay-util:include 
+			page="/html/portlets/accountmgt/registration/businessregistration.jsp" 
+			servletContext="<%=application %>" 
+		/> 
+	</c:when>
+	<c:otherwise>
+		<liferay-util:include 
+			page="/html/portlets/accountmgt/registration/citizenregistration.jsp" 
+			servletContext="<%=application %>" 
+		/> 
+	</c:otherwise>
+</c:choose>
 
-<div class="portlet-msg-info">
-	Click here to register <a href="<%= registerCitizenURL%>">Citizen</a> or <a href="<%= registerBusinessURL%>">Business</a>
-</div>

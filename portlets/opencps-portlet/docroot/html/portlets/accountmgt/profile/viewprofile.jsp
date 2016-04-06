@@ -151,14 +151,6 @@
 					}
 				}
 				
-				/* if(citizen != null  ) {
-					citizenId = citizen.getCitizenId();
-					
-				} else if(business != null) {
-					businessId = business.getBusinessId();
-				}
-				 */
-			
 			%>
 	
 			<c:if test="<%= lockedOut %>">
@@ -180,9 +172,10 @@
 					profileSections = new String[3];
 					profileSections[0] = "general_info";
 					profileSections[1] = "contact";
-					profileSections[2] = "edit_password";
+					profileSections[2] = "password";
 						
 					path = "/html/portlets/accountmgt/registration/business/";
+					
 					String [][] categorySections = {profileSections};
 					
 					Business business = (Business) request.getAttribute(WebKeys.BUSINESS_ENTRY);
@@ -206,9 +199,10 @@
 			</c:when>
 			<c:when test="<%=accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN) %>">
 				<%
-					profileSections = new String[2];
+					profileSections = new String[3];
 					profileSections[0] = "general_info";
-					profileSections[1] = "edit_password";
+					profileSections[1] = "contact";
+					profileSections[2] = "password";
 					path = "/html/portlets/accountmgt/registration/citizen/";
 					String [][] categorySections = {profileSections};
 					Citizen citizen = (Citizen) request.getAttribute(WebKeys.CITIZEN_ENTRY);

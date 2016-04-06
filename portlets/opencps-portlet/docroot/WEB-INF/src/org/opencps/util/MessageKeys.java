@@ -41,7 +41,6 @@ public class MessageKeys {
 	public static final String USERMGT_WORKINGUNIT_UPDATE_ERROR = "usermgt.workingunit.update.error";
 	public static final String USERMGT_WORKINGUNIT_UPDATE_SUCESS = "usermgt.workingunit.update.success";
 	
-	public static final String ACCOUNTMGT_CONFIRM_KEY = "accountmgt.comfirm";
 	public static final String NO_ACCOUNT_STATUS_FOUND = "no.account.status.found";
 
 }

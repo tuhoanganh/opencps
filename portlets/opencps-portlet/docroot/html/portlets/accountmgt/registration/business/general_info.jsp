@@ -36,9 +36,11 @@
 
 <%
 	Business business = (Business) request.getAttribute(WebKeys.BUSINESS_ENTRY);
+
 	long businessId = business!=null ? business.getBusinessId() : 0L;
 	
 	List<DictItem> dictItems = new ArrayList<DictItem>();
+	
 	DictCollection dictCollection = null;
 	
 	boolean isViewProfile = GetterUtil.get( (Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_VIEW_PROFILE), false);

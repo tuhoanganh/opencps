@@ -36,29 +36,21 @@
 <%
 
 	Citizen citizen = (Citizen) request.getAttribute(WebKeys.CITIZEN_ENTRY);
-	DictCollection dictCollection = null;
-	
+
 	long citizenID = citizen != null ? citizen.getCitizenId() : 0L;
 	
 	boolean isViewProfile = GetterUtil.get( (Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_VIEW_PROFILE), false);
 	
 	boolean isAdminViewProfile = GetterUtil.get((Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_ADMIN_PROFILE), false);
 	
-	Citizen citizenFromProfile = null;
-	
 	Date defaultBirthDate = citizen != null && citizen.getBirthdate() != null ? 
 		citizen.getBirthdate() : DateTimeUtil.convertStringToDate("01/01/1970");
 		
 	PortletUtil.SplitDate spd = new PortletUtil.SplitDate(defaultBirthDate);
 	
-	try {
-		dictCollection = DictCollectionLocalServiceUtil
-						.getDictCollection(scopeGroupId, "ADMINISTRATIVE_REGION");
-		
-	} catch(Exception e) {
-		
-	}
 %>
+
+
 
 <aui:model-context bean="<%=citizen %>" model="<%=Citizen.class%>" />
 
@@ -129,59 +121,6 @@
 		</aui:select>
 	</aui:col>
 </aui:row>
-
-<aui:row>
-	<aui:col width="100">
-		<aui:input 
-			name="<%=CitizenDisplayTerms.CITIZEN_ADDRESS %>" 
-			cssClass="input100"
-		>
-			<aui:validator name="required" />
-			<aui:validator name="maxLength">255</aui:validator>
-		</aui:input>
-	</aui:col>
-</aui:row>
-
-<aui:row>
-	<aui:col width="100">
-		<datamgt:ddr 
-			cssClass="input100"
-			depthLevel="3" 
-			dictCollectionCode="ADMINISTRATIVE_REGION"
-			itemNames="cityId,districtId,wardId"
-			itemsEmptyOption="true,true,true"	
-		/>	
-	</aui:col>
-</aui:row>
-
-<aui:row>
-	<aui:col width="50">
-		<aui:input 
-			name="<%=CitizenDisplayTerms.CITIZEN_EMAIL %>"
-			disabled="<%=isViewProfile ||  isAdminViewProfile%>"
-		>
-			<aui:validator name="required" />
-			<aui:validator name="email" />
-			<aui:validator name="maxLength">255</aui:validator>	
-		</aui:input>
-	</aui:col>
-	
-	<aui:col width="50">
-		<aui:input name="<%=CitizenDisplayTerms.CITIZEN_TELNO %>">
-			<aui:validator name="required" />
-			<aui:validator name="minLength">10</aui:validator>
-		</aui:input>
-	</aui:col>
-</aui:row>
-
-<c:if test="<%=isViewProfile %>">
-	<aui:row>
-		<aui:col width="100">
-		<aui:input type="file" name="<%=CitizenDisplayTerms.CITIZEN_ATTACHFILE %>" />
-		</aui:col>
-	</aui:row>
-</c:if>
-
 
 <%!
 	private Log _log = LogFactoryUtil.getLog(".html.portlets.accountmgt.registration/citizen.general_info.jsp");

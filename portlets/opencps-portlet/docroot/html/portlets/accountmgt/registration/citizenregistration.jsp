@@ -30,6 +30,21 @@
 	long citizenID = citizen != null ? citizen.getCitizenId() : 0L;
 %>
 
+<portlet:renderURL var="switcherBusinessRegisterURL">
+	<portlet:param name="mvcPath" value='<%= templatePath + "businessregistration.jsp" %>'/>
+</portlet:renderURL>
+
+<div class="opencps accountmgt fm-registration header">
+	<div class="register-label">
+		<liferay-ui:message key="register-citizen"/>
+	</div>
+	<div class="switcher-btn">
+		<aui:button name="business" value="business" type="button" href="<%=switcherBusinessRegisterURL.toString() %>"/>
+	</div>
+</div>
+
+<div class="bottom-horizontal-line"></div>
+
 
 <portlet:actionURL var="updateCitizenURL" name="updateCitizen">
 	<portlet:param 
@@ -43,46 +58,60 @@
 	name="fm"	
 	method="post"
 	enctype="multipart/form-data"
+	onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "registerAccount();" %>'
 >
 	<liferay-util:include 
 		page="/html/portlets/accountmgt/registration/citizen/general_info.jsp" 
 		servletContext="<%=application %>" 
 	/> 
+	
+	<liferay-util:include 
+		page="/html/portlets/accountmgt/registration/citizen/contact.jsp" 
+		servletContext="<%=application %>" 
+	/> 
 	<aui:row>
 		<aui:input 
-			name="citizenConfirm"
+			name="termsOfUse"
 			type="checkbox" 
-			label="<%=LanguageUtil.get(pageContext, 
-						MessageKeys.ACCOUNTMGT_CONFIRM_KEY) %>"
+			label="terms-of-use"
 		/>
 	</aui:row>
 	<aui:row>
-		<aui:button name="citizenSubmit" type="submit" />
+		<aui:button name="register" type="submit" value="register" disabled="true"/>
+		<aui:button name="back" type="button" value="back" onClick="window.history.back();"/>
 	</aui:row>
 </aui:form>
 
 <aui:script>
-
-AUI().ready(function(A) {
-
-	var checkboxConFirm = A.one('#<portlet:namespace />citizenConfirmCheckbox');
-	
-	if(checkboxConFirm) {
-		var buttonSubmit = A.one('#<portlet:namespace />citizenSubmit');
-		checkboxConFirm.on('click',function() {
-			
-			var checkboxConFirmInput = A.one('#<portlet:namespace />citizenConfirm');
-			
-			if(checkboxConFirmInput.val() == 'true') {
+	AUI().ready(function(A) {
+		var termsOfUseCheckbox = A.one('#<portlet:namespace />termsOfUseCheckbox');
+		if(termsOfUseCheckbox) {
+			termsOfUseCheckbox.on('click',function() {
 				
-				if(buttonSubmit) {
-					alert(buttonSubmit.val() + " alert(buttonSubmit.val())");
-					
+				var termsOfUse = A.one('#<portlet:namespace />termsOfUse');
+				
+				var register = A.one('#<portlet:namespace />register');
+				
+				if(termsOfUse.val() == 'true'){
+					register.removeClass('disabled');
+					register.removeAttribute('disabled');
+				}else{
+					register.addClass('disabled');
+					register.setAttribute('disabled' , 'true');
 				}
-			}
-		});
-	}
-	
-});
+			});
+		}
+	});
 
+	Liferay.provide(window, '<portlet:namespace />registerAccount', function() {
+		A = AUI();
+		var register = A.one('#<portlet:namespace />register');
+		if(termsOfUse.val() == 'true'){
+			submitForm(document.<portlet:namespace />fm);
+		}else{
+			return;
+		}
+	});
+	
 </aui:script>
+

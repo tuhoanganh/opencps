@@ -109,69 +109,44 @@
 			<liferay-ui:error exception="<%= UserLockoutException.class %>" message="this-account-has-been-locked" />
 			<liferay-ui:error exception="<%= UserPasswordException.class %>" message="authentication-failed" />
 			<liferay-ui:error exception="<%= UserScreenNameException.class %>" message="authentication-failed" />
-			
-			<aui:row>
-				<aui:col width="50">
-					<aui:fieldset>
-		
-						<%
-						String loginLabel = null;
-		
-						if (authType.equals(CompanyConstants.AUTH_TYPE_EA)) {
-							loginLabel = "email-address";
-						}
-						else if (authType.equals(CompanyConstants.AUTH_TYPE_SN)) {
-							loginLabel = "screen-name";
-						}
-						else if (authType.equals(CompanyConstants.AUTH_TYPE_ID)) {
-							loginLabel = "id";
-						}
-						%>
-		
-						<aui:input autoFocus="<%= windowState.equals(LiferayWindowState.EXCLUSIVE) || windowState.equals(WindowState.MAXIMIZED) %>" cssClass="clearable" label="<%= loginLabel %>" name="login" showRequiredLabel="<%= false %>" type="text" value="<%= login %>">
-							<aui:validator name="required" />
-						</aui:input>
-		
-						<aui:input name="password" showRequiredLabel="<%= false %>" type="password" value="<%= password %>">
-							<aui:validator name="required" />
-						</aui:input>
-		
-						<span id="<portlet:namespace />passwordCapsLockSpan" style="display: none;"><liferay-ui:message key="caps-lock-is-on" /></span>
-		
-						<c:if test="<%= company.isAutoLogin() && !PropsValues.SESSION_DISABLED %>">
-							<aui:input checked="<%= rememberMe %>" name="rememberMe" type="checkbox" />
-						</c:if>
-					</aui:fieldset>
-					
-					<%
-						//Adding by trungnt
-					%>
-					<aui:fieldset>
-						<liferay-util:buffer var="navigation">
-							<liferay-ui:icon-list>
-								<liferay-util:include page='<%= "/html/portlet/login/navigation/forgot_password.jsp" %>' portletId="<%= portletDisplay.getRootPortletId() %>" />
-							</liferay-ui:icon-list>
-						</liferay-util:buffer>
-						<div>
-							<%= navigation %>
-						</div>
-					</aui:fieldset>
-					<aui:button-row>
-						<aui:button type="submit" value="sign-in" />
-					</aui:button-row>
-				</aui:col>
-				
-				<aui:col width="50">
-					<a href="/register?type=citizen"><liferay-ui:message key="register-citizen"/></a><br>
-					<a href="/register?type=business"><liferay-ui:message key="register-business"/></a>
-				</aui:col>
-			</aui:row>
+
+			<aui:fieldset>
+
+				<%
+				String loginLabel = null;
+
+				if (authType.equals(CompanyConstants.AUTH_TYPE_EA)) {
+					loginLabel = "email-address";
+				}
+				else if (authType.equals(CompanyConstants.AUTH_TYPE_SN)) {
+					loginLabel = "screen-name";
+				}
+				else if (authType.equals(CompanyConstants.AUTH_TYPE_ID)) {
+					loginLabel = "id";
+				}
+				%>
+
+				<aui:input autoFocus="<%= windowState.equals(LiferayWindowState.EXCLUSIVE) || windowState.equals(WindowState.MAXIMIZED) %>" cssClass="clearable" label="<%= loginLabel %>" name="login" showRequiredLabel="<%= false %>" type="text" value="<%= login %>">
+					<aui:validator name="required" />
+				</aui:input>
+
+				<aui:input name="password" showRequiredLabel="<%= false %>" type="password" value="<%= password %>">
+					<aui:validator name="required" />
+				</aui:input>
+
+				<span id="<portlet:namespace />passwordCapsLockSpan" style="display: none;"><liferay-ui:message key="caps-lock-is-on" /></span>
+
+				<c:if test="<%= company.isAutoLogin() && !PropsValues.SESSION_DISABLED %>">
+					<aui:input checked="<%= rememberMe %>" name="rememberMe" type="checkbox" />
+				</c:if>
+			</aui:fieldset>
+
+			<aui:button-row>
+				<aui:button type="submit" value="sign-in" />
+			</aui:button-row>
 		</aui:form>
 
-		<%
-			//Comment by trungnt
-		%>
-		<!-- <liferay-util:include page="/html/portlet/login/navigation.jsp" /> -->
+		<liferay-util:include page="/html/portlet/login/navigation.jsp" />
 
 		<aui:script use="aui-base">
 			var form = A.one(document.<portlet:namespace />fm);
