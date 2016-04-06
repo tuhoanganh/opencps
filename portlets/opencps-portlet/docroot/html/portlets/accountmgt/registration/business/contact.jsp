@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -18,6 +17,7 @@
  */
 %>
 <%@page import="java.util.ArrayList"%>
+<%@page import="com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil"%>
 <%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
@@ -32,6 +32,7 @@
 <%@page import="org.opencps.datamgt.service.DictCollectionLocalServiceUtil"%>
 <%@page import="org.opencps.datamgt.model.DictCollection"%>
 <%@page import="org.opencps.accountmgt.service.BusinessLocalServiceUtil"%>
+<%@page import="com.liferay.portlet.documentlibrary.model.DLFileEntry"%>
 <%@ include file="../../init.jsp" %>
 
 <%
@@ -41,10 +42,19 @@
 	boolean isViewProfile = GetterUtil.get( (Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_VIEW_PROFILE), false);
 	
 	boolean isAdminViewProfile = GetterUtil.get((Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_ADMIN_PROFILE), false);
-					
+	
+	DictItem dictItemCity = null;
+	DictItem dictItemDistrict = null;
+	DictItem dictItemWard = null;
+	
+	StringBuilder getAddress = new StringBuilder();
+	String url = StringPool.BLANK;
+	
+	DLFileEntry dlFileEntry = null;
 	
 	List<DictItem> dictItems = new ArrayList<DictItem>();
 	DictCollection dictCollection = null;
+	DictCollection dictCollectionAddress = null;
 	
 	try {
 		
@@ -54,6 +64,26 @@
 		if(dictCollection!=null) {
 			dictItems = DictItemLocalServiceUtil
 							.getDictItemsByDictCollectionId(dictCollection.getDictCollectionId());
+		}
+		
+		dictCollectionAddress = DictCollectionLocalServiceUtil
+						.getDictCollection(scopeGroupId, "ADMINISTRATIVE_REGION");
+		
+		if(dictCollectionAddress != null) {
+			long dictCollectionId = dictCollectionAddress.getDictCollectionId();
+			dictItemCity = DictItemLocalServiceUtil.getDictItemInuseByItemCode(dictCollectionId, business.getCityCode());
+			dictItemDistrict = DictItemLocalServiceUtil.getDictItemInuseByItemCode(dictCollectionId, business.getDistrictCode());
+			dictItemWard = DictItemLocalServiceUtil.getDictItemInuseByItemCode(dictCollectionId, business.getWardCode());
+			
+			if(dictItemCity != null && dictItemDistrict!= null && dictItemWard!=null) {
+				getAddress.append(dictItemCity.getDictItemId()+ ",");
+				getAddress.append(dictItemWard.getDictItemId()+ ",");
+				getAddress.append(dictItemDistrict.getDictItemId());
+			}
+		}
+		dlFileEntry = DLFileEntryLocalServiceUtil.getDLFileEntry(business.getAttachFile());
+		if(dlFileEntry != null) {
+			 url = themeDisplay.getPortalURL()+"/c/document_library/get_file?uuid="+dlFileEntry.getUuid()+"&groupId="+themeDisplay.getScopeGroupId() ;
 		}
 	} catch(Exception e) {
 		_log.error(e);
@@ -78,6 +108,7 @@
 			dictCollectionCode="ADMINISTRATIVE_REGION"
 			itemNames="cityId,districtId,wardId"
 			itemsEmptyOption="true,true,true"	
+			selectedItems="<%=getAddress.toString() %>"
 		/>	
 	</aui:col>
 </aui:row>
@@ -124,8 +155,7 @@
 	</aui:row>
 </c:if>
 
-
-
+<a href="<%=url%>"><liferay-ui:message key="url.file.entry"></liferay-ui:message></a>
 
 <%!
 	private Log _log = LogFactoryUtil.getLog(".html.portlets.accountmgt.registration.registration_business.business_register.jsp");

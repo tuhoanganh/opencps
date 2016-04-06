@@ -43,6 +43,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Address;
+import com.liferay.portal.model.Contact;
 import com.liferay.portal.model.EmailAddress;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
@@ -57,6 +58,7 @@ import com.liferay.portal.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionCheckerFactoryUtil;
 import com.liferay.portal.security.permission.PermissionThreadLocal;
+import com.liferay.portal.service.ContactLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
@@ -402,6 +404,137 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 
 	}
 
+	public Citizen updateCitizen(
+	    long citizenId, String fullName, String personalId, int gender,
+	    int birthDateDay, int birthDateMonth, int birthDateYear, String address,
+	    String cityCode, String districtCode, String wardCode, String cityName,
+	    String districtName, String wardName, String telNo, long repositoryId,
+	    ServiceContext serviceContext)
+	    throws SystemException, PortalException {
+
+		Citizen citizen = citizenPersistence
+		    .findByPrimaryKey(citizenId);
+
+		User mappingUser = userLocalService
+		    .getUser(citizen
+		        .getMappingUserId());
+
+		Date now = new Date();
+
+		Date birthDate = DateTimeUtil
+		    .getDate(birthDateDay, birthDateMonth, birthDateYear);
+
+		if (mappingUser != null) {
+
+			if ((cityCode != citizen
+			    .getCityCode() || districtCode != citizen
+			        .getDistrictCode() ||
+			    wardCode != citizen
+			        .getWardCode()) &&
+			    citizen
+			        .getAttachFile() > 0) {
+				// Move image folder
+
+				String[] newFolderNames = new String[] {
+				    PortletConstants.DestinationRoot.CITIZEN
+				        .toString(),
+				    cityName, districtName, wardName
+				};
+
+				String destination = PortletUtil
+				    .getDestinationFolder(newFolderNames);
+
+				DLFolder parentFolder = DLFolderUtil
+				    .getTargetFolder(mappingUser
+				        .getUserId(), serviceContext
+				            .getScopeGroupId(),
+				        repositoryId, false, 0, destination, StringPool.BLANK,
+				        false, serviceContext);
+
+				FileEntry fileEntry = DLAppServiceUtil
+				    .getFileEntry(citizen
+				        .getAttachFile());
+
+				DLFolderLocalServiceUtil
+				    .moveFolder(mappingUser
+				        .getUserId(), fileEntry
+				            .getFolderId(),
+				        parentFolder
+				            .getFolderId(),
+				        serviceContext);
+			}
+
+			// Change user name
+			if (!fullName
+			    .equals(citizen
+			        .getFullName())) {
+
+				PortletUtil.SplitName spn = PortletUtil
+				    .splitName(fullName);
+
+				mappingUser
+				    .setFirstName(spn
+				        .getFirstName());
+				mappingUser
+				    .setLastName(spn
+				        .getLastName());
+				mappingUser
+				    .setMiddleName(spn
+				        .getMidName());
+			}
+
+			mappingUser = userLocalService
+			    .updateUser(mappingUser);
+
+			// update birth date
+			Contact contact = ContactLocalServiceUtil
+			    .getContact(mappingUser
+			        .getContactId());
+
+			if (contact != null) {
+				contact
+				    .setBirthday(birthDate);
+				contact = ContactLocalServiceUtil
+				    .updateContact(contact);
+			}
+		}
+
+		citizen
+		    .setAddress(address);
+
+		citizen
+		    .setBirthdate(birthDate);
+		citizen
+		    .setCityCode(cityCode);
+
+		citizen
+		    .setDistrictCode(districtCode);
+
+		citizen
+		    .setFullName(fullName);
+		citizen
+		    .setGender(gender);
+		citizen
+		    .setGroupId(serviceContext
+		        .getScopeGroupId());
+
+		citizen
+		    .setModifiedDate(now);
+		citizen
+		    .setPersonalId(personalId);
+		citizen
+		    .setTelNo(telNo);
+		citizen
+		    .setUserId(serviceContext
+		        .getUserId());
+		citizen
+		    .setWardCode(wardCode);
+
+		return citizenPersistence
+		    .update(citizen);
+
+	}
+
 	public Citizen updateStatus(long citizenId, long userId, int accountStatus)
 	    throws SystemException, PortalException {
 
@@ -432,219 +565,41 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 		    .update(citizen);
 	}
 
-
-	public void sendEmailAddressVerification(
-	    User user, String emailAddress, ServiceContext serviceContext)
-	    throws PortalException, SystemException {
-
-		if (user
-		    .isEmailAddressVerified() && StringUtil
-		        .equalsIgnoreCase(emailAddress, user
-		            .getEmailAddress())) {
-
-			return;
-		}
-
-		Ticket ticket = TicketLocalServiceUtil
-		    .addDistinctTicket(user
-		        .getCompanyId(), User.class
-		            .getName(),
-		        user
-		            .getUserId(),
-		        TicketConstants.TYPE_EMAIL_ADDRESS, emailAddress, null,
-		        serviceContext);
-
-		String verifyEmailAddressURL = serviceContext
-		    .getPortalURL() + serviceContext
-		        .getPathMain() +
-		    "/portal/verify_email_address?ticketKey=" + ticket
-		        .getKey();
-
-		long plid = serviceContext
-		    .getPlid();
-
-		if (plid > 0) {
-			Layout layout = LayoutLocalServiceUtil
-			    .fetchLayout(plid);
-
-			if (layout != null) {
-				Group group = layout
-				    .getGroup();
-
-				if (!layout
-				    .isPrivateLayout() && !group
-				        .isUser()) {
-					verifyEmailAddressURL += "&p_l_id=" + serviceContext
-					    .getPlid();
-				}
-			}
-		}
-
-		String fromName = PrefsPropsUtil
-		    .getString(user
-		        .getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
-		String fromAddress = PrefsPropsUtil
-		    .getString(user
-		        .getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
-
-		String toName = user
-		    .getFullName();
-		String toAddress = emailAddress;
-
-		String subject = PrefsPropsUtil
-		    .getContent(user
-		        .getCompanyId(), PropsKeys.ADMIN_EMAIL_VERIFICATION_SUBJECT);
-
-		String body = PrefsPropsUtil
-		    .getContent(user
-		        .getCompanyId(), PropsKeys.ADMIN_EMAIL_VERIFICATION_BODY);
-
-		SubscriptionSender subscriptionSender = new SubscriptionSender();
-
-		subscriptionSender
-		    .setBody(body);
-		subscriptionSender
-		    .setCompanyId(user
-		        .getCompanyId());
-		subscriptionSender
-		    .setContextAttributes("[$EMAIL_VERIFICATION_CODE$]", ticket
-		        .getKey(), "[$EMAIL_VERIFICATION_URL$]", verifyEmailAddressURL,
-		        "[$REMOTE_ADDRESS$]", serviceContext
-		            .getRemoteAddr(),
-		        "[$REMOTE_HOST$]", serviceContext
-		            .getRemoteHost(),
-		        "[$USER_ID$]", user
-		            .getUserId(),
-		        "[$USER_SCREENNAME$]", user
-		            .getScreenName());
-		subscriptionSender
-		    .setFrom(fromAddress, fromName);
-		subscriptionSender
-		    .setHtmlFormat(true);
-		subscriptionSender
-		    .setMailId("user", user
-		        .getUserId(), System
-		            .currentTimeMillis(),
-		        PwdGenerator
-		            .getPassword());
-		subscriptionSender
-		    .setServiceContext(serviceContext);
-		subscriptionSender
-		    .setSubject(subject);
-		subscriptionSender
-		    .setUserId(user
-		        .getUserId());
-
-		subscriptionSender
-		    .addRuntimeSubscribers(toAddress, toName);
-
-		subscriptionSender
-		    .flushNotificationsAsync();
-	}
-
-	protected void sendEmail(
-	    User user, String password, ServiceContext serviceContext)
+	public List<Citizen> getCitizens(int start, int end, OrderByComparator odc)
 	    throws SystemException {
 
-		if (!PrefsPropsUtil
-		    .getBoolean(user
-		        .getCompanyId(), PropsKeys.ADMIN_EMAIL_USER_ADDED_ENABLED)) {
-
-			return;
-		}
-
-		String fromName = PrefsPropsUtil
-		    .getString(user
-		        .getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
-		String fromAddress = PrefsPropsUtil
-		    .getString(user
-		        .getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
-
-		String toName = user
-		    .getFullName();
-		String toAddress = user
-		    .getEmailAddress();
-
-		String subject = PrefsPropsUtil
-		    .getContent(user
-		        .getCompanyId(), PropsKeys.ADMIN_EMAIL_USER_ADDED_SUBJECT);
-
-		String body = null;
-
-		if (Validator
-		    .isNotNull(password)) {
-			body = PrefsPropsUtil
-			    .getContent(user
-			        .getCompanyId(), PropsKeys.ADMIN_EMAIL_USER_ADDED_BODY);
-		}
-		else {
-			body = PrefsPropsUtil
-			    .getContent(user
-			        .getCompanyId(),
-			        PropsKeys.ADMIN_EMAIL_USER_ADDED_NO_PASSWORD_BODY);
-		}
-
-		SubscriptionSender subscriptionSender = new SubscriptionSender();
-
-		subscriptionSender
-		    .setBody(body);
-		subscriptionSender
-		    .setCompanyId(user
-		        .getCompanyId());
-		subscriptionSender
-		    .setContextAttributes("[$USER_ID$]", user
-		        .getUserId(), "[$USER_PASSWORD$]", password,
-		        "[$USER_SCREENNAME$]", user
-		            .getScreenName());
-		subscriptionSender
-		    .setFrom(fromAddress, fromName);
-		subscriptionSender
-		    .setHtmlFormat(true);
-		subscriptionSender
-		    .setMailId("user", user
-		        .getUserId(), System
-		            .currentTimeMillis(),
-		        PwdGenerator
-		            .getPassword());
-		subscriptionSender
-		    .setServiceContext(serviceContext);
-		subscriptionSender
-		    .setSubject(subject);
-		subscriptionSender
-		    .setUserId(user
-		        .getUserId());
-
-		subscriptionSender
-		    .addRuntimeSubscribers(toAddress, toName);
-
-		subscriptionSender
-		    .flushNotificationsAsync();
+		return citizenPersistence
+		    .findAll(start, end, odc);
 	}
-	
-	public List<Citizen> getCitizens(int start, int end, OrderByComparator odc)
-					throws SystemException {
-		return citizenPersistence.findAll(start, end, odc);
-	}
-	
+
 	public List<Citizen> getCitizens(long groupId, int accountStatus)
-					throws SystemException {
-		return citizenPersistence.findByG_S(groupId, accountStatus);
-	}
-	
-	public List<Citizen> getCitizens(long groupId, String fullName , int accountStatus)
-					throws SystemException {
-		return citizenPersistence.findByG_N_S(groupId, fullName, accountStatus);
-	}
-	
-	public List<Citizen> getCitizens(long groupId, String fullName)
-					throws SystemException {
-		return citizenPersistence.findByG_N(groupId, fullName);
-	}
-	
-	public int countAll() throws SystemException {
-		return citizenPersistence.countAll();
+	    throws SystemException {
+
+		return citizenPersistence
+		    .findByG_S(groupId, accountStatus);
 	}
 
+	public List<Citizen> getCitizens(
+	    long groupId, String fullName, int accountStatus)
+	    throws SystemException {
+
+		return citizenPersistence
+		    .findByG_N_S(groupId, fullName, accountStatus);
+	}
+
+	public List<Citizen> getCitizens(long groupId, String fullName)
+	    throws SystemException {
+
+		return citizenPersistence
+		    .findByG_N(groupId, fullName);
+	}
+
+	public int countAll()
+	    throws SystemException {
+
+		return citizenPersistence
+		    .countAll();
+	}
 
 	private Log _log = LogFactoryUtil
 	    .getLog(CitizenLocalServiceImpl.class

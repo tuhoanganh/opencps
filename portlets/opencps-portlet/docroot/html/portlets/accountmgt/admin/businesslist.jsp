@@ -1,5 +1,4 @@
 
-<%@page import="com.liferay.portal.kernel.upgrade.RenameUpgradePortletPreferences"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -18,7 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
+<%@page import="com.liferay.portal.kernel.upgrade.RenameUpgradePortletPreferences"%>
 <%@page import="org.opencps.accountmgt.util.AccountMgtUtil"%>
 <%@page import="org.opencps.util.PortletUtil"%>
 <%@page import="java.util.ArrayList"%>
@@ -44,7 +43,37 @@
 	String fullName = ParamUtil.getString(request, BusinessDisplayTerms.BUSINESS_NAME);
 	int accountStatus = ParamUtil.getInteger(request, BusinessDisplayTerms.BUSINESS_ACCOUNTSTATUS);
 	
+	int countRegistered = 0;
+	int countConfirmed = 0;
+	int countApproved = 0;
+	int countLocked = 0;
+	
 	int [] accoutStatusArr = {0,1,2,3}; 
+	
+	List<Business> businessRegistered = null;
+	List<Business> businessConfirmed = null;
+	List<Business> businessApproved = null;
+	List<Business> businessLocked = null;
+	
+	try {
+		businessRegistered = BusinessLocalServiceUtil.getBusinesses(scopeGroupId, 0);
+		businessConfirmed = BusinessLocalServiceUtil.getBusinesses(scopeGroupId, 1);
+		businessApproved = BusinessLocalServiceUtil.getBusinesses(scopeGroupId, 2);
+		businessLocked = BusinessLocalServiceUtil.getBusinesses(scopeGroupId, 3);
+		
+		if(businessRegistered != null) {
+			countRegistered = businessRegistered.size();
+		} else if(businessConfirmed!=null) {
+			countConfirmed = businessConfirmed.size();
+		} else if(businessApproved != null) {
+			countApproved = businessApproved.size();
+		} else if(businessLocked!=null) {
+			countLocked = businessLocked.size(); 
+		}
+	} catch(Exception e) {
+		
+	}
+					
 	
 	PortletURL searchURL = renderResponse.createRenderURL();
 	searchURL.setParameter("tabs1", AccountMgtUtil.TOP_TABS_BUSINESS);
@@ -62,7 +91,23 @@
 
 <aui:row>
 	<aui:col width="20">
+		<liferay-ui:message key="account.status.total" />  : <%=countLocked +
+			countConfirmed + countRegistered + countApproved
+		%>
 	</aui:col>
+	<aui:col width="20">
+		<liferay-ui:message key="account.status.registered" />  : <%=countRegistered %>
+	</aui:col>
+	<aui:col width="20">
+		<liferay-ui:message key="account.status.confirmed" />  : <%=countConfirmed %>
+	</aui:col>
+	<aui:col width="20">
+		<liferay-ui:message key="account.status.approved" />  : <%=countApproved %>
+	</aui:col>
+	<aui:col width="20">
+		<liferay-ui:message key="account.status.locked" />  : <%=countLocked %>
+	</aui:col>
+	
 </aui:row>
 
 <aui:form action="<%=searchURL.toString() %>" method="post" name="fm">

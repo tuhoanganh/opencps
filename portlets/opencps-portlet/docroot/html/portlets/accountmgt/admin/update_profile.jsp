@@ -68,13 +68,16 @@
 <liferay-ui:error 
 	exception="<%= OutOfLengthBusinessEnNameException.class %>" 
 	message="<%= OutOfLengthBusinessEnNameException.class.getName() %>" 
-/><liferay-ui:error 
+/>
+<liferay-ui:error 
 	exception="<%= OutOfLengthBusinessShortNameException.class %>" 
 	message="<%= OutOfLengthBusinessShortNameException.class.getName() %>" 
-/><liferay-ui:error 
+/>
+<liferay-ui:error 
 	exception="<%= OutOfLengthBusinessRepresentativeNameException.class %>" 
 	message="<%= OutOfLengthBusinessRepresentativeNameException.class.getName() %>" 
-/><liferay-ui:error 
+/>
+<liferay-ui:error 
 	exception="<%= OutOfLengthBusinessRepresentativeRoleException.class %>" 
 	message="<%= OutOfLengthBusinessRepresentativeRoleException.class.getName() %>" 
 />
@@ -97,15 +100,14 @@
 	if(citizenId > 0 ) {
 		ProfileSections = new String[2];
 		ProfileSections[0] = "general_info";
-		ProfileSections[1] = "edit_password";
+		ProfileSections[1] = "contact";
 		
 		path = "/html/portlets/accountmgt/registration/citizen/";
 	} else if(businessId > 0) {
 		
-		ProfileSections = new String[3];
+		ProfileSections = new String[2];
 		ProfileSections[0] = "general_info";
 		ProfileSections[1] = "contact";
-		ProfileSections[2] = "edit_password";
 		
 		path = "/html/portlets/accountmgt/registration/business/";
 	}
@@ -165,7 +167,5 @@
 			/>
 		</c:otherwise>
 	</c:choose>
-	
-	
 </aui:form>
 

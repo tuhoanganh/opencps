@@ -116,7 +116,7 @@
 	
 	var strItemEmptyOption = '<%=StringUtil.merge(itemsEmptyOption) %>';
 	
-	var selectItems = strSelectItems.split(",");
+	var selectItems<%=randomInstance %> = strSelectItems.split(",");
 	
 	var itemsEmptyOption = strItemEmptyOption.split(",");
 	
@@ -212,12 +212,19 @@
 		  	
 		  	var localeItemNames = xmlDoc.getElementsByTagName("ItemName");
 		  	
+		  	var isDefaultLanguage = true;
+		  	
 		  	for(var n = 0; n < localeItemNames.length; n ++){
 		  		var node = localeItemNames[n];
 		  		var nodeAttr = node.getAttribute('language-id');
 		  		if(nodeAttr === localeCode){
-		  			itemName = nodeAttr.nodeValue;
+		  			isDefaultLanguage = false;
+		  			itemName = node.childNodes[0].nodeValue;
 		  			break;
+		  		}
+		  		
+		  		if(isDefaultLanguage){
+		  			itemName = localeItemNames[0].childNodes[0].nodeValue;
 		  		}
 		  	}
 			
@@ -225,10 +232,10 @@
 			
 			var itemEmptyOption = false;
 			
-			if(selectItems.length >= parseInt(level)){
-				selectedItem = selectItems[parseInt(level) - 1];
+			if(selectItems<%=randomInstance %>.length >= parseInt(level)){
+				selectedItem = selectItems<%=randomInstance %>[parseInt(level) - 1];
 			}
-			
+		
 			if(parseInt(opt.dictItemId) == selectedItem && clearChild == false){
 				opts += '<option value="' + opt.dictItemId + '" selected="selected">' + itemName + '</option>'
 			}else{

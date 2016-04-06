@@ -17,6 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+<%@page import="org.opencps.util.DateTimeUtil"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
@@ -36,9 +37,11 @@
 
 <%
 	Business business = (Business) request.getAttribute(WebKeys.BUSINESS_ENTRY);
+
 	long businessId = business!=null ? business.getBusinessId() : 0L;
 	
 	List<DictItem> dictItems = new ArrayList<DictItem>();
+	
 	DictCollection dictCollection = null;
 	
 	boolean isViewProfile = GetterUtil.get( (Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_VIEW_PROFILE), false);
@@ -63,7 +66,20 @@
 <aui:model-context bean="<%=business%>" model="<%=Business.class%>" />
 
 <c:if test="<%=isAdminViewProfile %>">
-	<aui:input name="<%=BusinessDisplayTerms.BUSINESS_ACCOUNTSTATUS%>" disabled="true" />
+	<aui:row>
+		<aui:col width="50">
+			<aui:input 
+				type="text"
+				name="<%=BusinessDisplayTerms.BUSINESS_CREATEDDATE %>" 
+				value="<%=DateTimeUtil.convertDateToString(business.getCreateDate(), DateTimeUtil._VN_DATE_FORMAT) %>"
+				disabled="<%=isAdminViewProfile %>"
+			/>
+		</aui:col>
+		<aui:col width="50">
+			<aui:input name="<%=BusinessDisplayTerms.BUSINESS_ACCOUNTSTATUS%>"  disabled="<%=isAdminViewProfile %>" />
+		</aui:col>
+		
+	</aui:row>
 </c:if>
 
 <aui:row>
@@ -125,8 +141,6 @@
 		</div>
 	</aui:row>
 </c:if>
-
-
 
 <%!
 	private Log _log = LogFactoryUtil.getLog(".html.portlets.accountmgt.registration.registration_business.business_register.jsp");

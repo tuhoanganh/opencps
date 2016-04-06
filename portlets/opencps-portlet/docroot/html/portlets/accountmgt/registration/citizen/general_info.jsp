@@ -1,7 +1,4 @@
-<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="org.opencps.datamgt.model.DictItem"%>
-<%@page import="java.util.List"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -23,6 +20,10 @@
 <%@page import="org.opencps.util.PortletPropsValues"%>
 <%@page import="org.opencps.accountmgt.search.CitizenDisplayTerms"%>
 <%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.opencps.datamgt.model.DictItem"%>
+<%@page import="java.util.List"%>
 <%@page import="java.util.Date"%>
 <%@page import="org.opencps.util.DateTimeUtil"%>
 <%@page import="org.opencps.util.WebKeys"%>
@@ -41,12 +42,9 @@
 
 <%
 
-	Citizen citizen = (Citizen) request.getAttribute(WebKeys.CITIZEN_ENTRY);
+	Citizen citizen = (Citizen) request.getAttribute(WebKeys.CITIZEN_ENTRY);	
+
 	DictCollection dictCollection = null;
-	
-	DictItem dictItemCity = null;
-	DictItem dictItemDistrict = null;
-	DictItem dictItemWard = null;
 	
 	long citizenID = citizen != null ? citizen.getCitizenId() : 0L;
 	
@@ -54,48 +52,32 @@
 	
 	boolean isAdminViewProfile = GetterUtil.get((Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_ADMIN_PROFILE), false);
 	
-	StringBuilder getAddress = new StringBuilder();
-	
 	Citizen citizenFromProfile = null;
-	DLFileEntry dlFileEntry = null;
-	String url = StringPool.BLANK;
+	
 	Date defaultBirthDate = citizen != null && citizen.getBirthdate() != null ? 
 		citizen.getBirthdate() : DateTimeUtil.convertStringToDate("01/01/1970");
 		
 	PortletUtil.SplitDate spd = new PortletUtil.SplitDate(defaultBirthDate);
-	try {
-		dictCollection = DictCollectionLocalServiceUtil
-						.getDictCollection(scopeGroupId, "ADMINISTRATIVE_REGION");
-		if(dictCollection != null) {
-			long dictCollectionId = dictCollection.getDictCollectionId();
-			dictItemCity = DictItemLocalServiceUtil.getDictItemInuseByItemCode(dictCollectionId, citizen.getCityCode());
-			dictItemDistrict = DictItemLocalServiceUtil.getDictItemInuseByItemCode(dictCollectionId, citizen.getDistrictCode());
-			dictItemWard = DictItemLocalServiceUtil.getDictItemInuseByItemCode(dictCollectionId, citizen.getWardCode());
-			
-			if(dictItemCity != null && dictItemDistrict!= null && dictItemWard!=null) {
-				getAddress.append(dictItemCity.getDictItemId()+ ",");
-				getAddress.append(dictItemWard.getDictItemId()+ ",");
-				getAddress.append(dictItemDistrict.getDictItemId());
-			
-				_log.info(getAddress);
-			}
-		}
-		
-		
-		dlFileEntry = DLFileEntryLocalServiceUtil.getDLFileEntry(citizen.getAttachFile());
-		
-		if(dlFileEntry != null) {
-			 url = themeDisplay.getPortalURL()+"/c/document_library/get_file?uuid="+dlFileEntry.getUuid()+"&groupId="+themeDisplay.getScopeGroupId() ;
-		}
-	} catch(Exception e) {
-		
-	}
+	
 %>
 
 <aui:model-context bean="<%=citizen %>" model="<%=Citizen.class%>" />
 
 <c:if test="<%=isAdminViewProfile %>">
-	<aui:input name="<%=CitizenDisplayTerms.CITIZEN_ACCOUNTSTATUS%>" disabled="true" />
+	<aui:row>
+		<aui:col width="50">
+			<aui:input 
+				type="text"
+				name="<%=CitizenDisplayTerms.CITIZEN_CREATEDDATE %>" 
+				value="<%=DateTimeUtil.convertDateToString(citizen.getCreateDate(), DateTimeUtil._VN_DATE_FORMAT) %>"
+				disabled="<%=isAdminViewProfile %>"
+			/>
+		</aui:col>
+		<aui:col width="50">
+			<aui:input name="<%=CitizenDisplayTerms.CITIZEN_ACCOUNTSTATUS%>" disabled="<%=isAdminViewProfile %>" />
+		</aui:col>
+		
+	</aui:row>
 </c:if>
 
 <aui:row>
@@ -161,59 +143,6 @@
 		</aui:select>
 	</aui:col>
 </aui:row>
-
-<aui:row>
-	<aui:col width="100">
-		<aui:input 
-			name="<%=CitizenDisplayTerms.CITIZEN_ADDRESS %>" 
-			cssClass="input100"
-		>
-			<aui:validator name="required" />
-			<aui:validator name="maxLength">255</aui:validator>
-		</aui:input>
-	</aui:col>
-</aui:row>
-
-<aui:row>
-	<aui:col width="100">
-		<datamgt:ddr 
-			cssClass="input100"
-			depthLevel="3" 
-			dictCollectionCode="ADMINISTRATIVE_REGION"
-			itemNames="cityId,districtId,wardId"
-			itemsEmptyOption="true,true,true"	
-			selectedItems="<%=getAddress.toString() %>"
-		/>	
-	</aui:col>
-</aui:row>
-
-<aui:row>
-	<aui:col width="50">
-		<aui:input 
-			name="<%=CitizenDisplayTerms.CITIZEN_EMAIL %>"
-			disabled="<%=isViewProfile ||  isAdminViewProfile%>"
-		>
-			<aui:validator name="required" />
-			<aui:validator name="email" />
-			<aui:validator name="maxLength">255</aui:validator>	
-		</aui:input>
-	</aui:col>
-	
-	<aui:col width="50">
-		<aui:input name="<%=CitizenDisplayTerms.CITIZEN_TELNO %>">
-			<aui:validator name="required" />
-			<aui:validator name="minLength">10</aui:validator>
-		</aui:input>
-	</aui:col>
-</aui:row>
-
-<c:if test="<%=isViewProfile %>">
-	<aui:row>
-		<aui:col width="100">
-		<aui:input type="file" name="<%=CitizenDisplayTerms.CITIZEN_ATTACHFILE %>" />
-		</aui:col>
-	</aui:row>
-</c:if>
 
 
 <%!
