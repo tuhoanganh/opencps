@@ -16,6 +16,7 @@ package org.opencps.servicemgt.search;
 import javax.portlet.PortletRequest;
 
 import com.liferay.portal.kernel.dao.search.DisplayTerms;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -23,8 +24,9 @@ import com.liferay.portal.theme.ThemeDisplay;
 /**
  * @author khoavd
  */
-public class ServiceDisplyTerms extends DisplayTerms {
+public class ServiceDisplayTerms extends DisplayTerms {
 
+	public static final String SERVICE_ID = "serviceinfoId";
 	public static final String SERVICE_NO = "serviceNo";
 	public static final String SERVICE_NAME = "serviceName";
 	public static final String SERVICE_SHORTNAME = "shortName";
@@ -49,10 +51,13 @@ public class ServiceDisplyTerms extends DisplayTerms {
 	public static final String GROUP_ID = "groupId";
 	public static final String COMPANY_ID = "companyId";
 
+	public static final String TEMPLATE_FILE_IDS =
+	    "templateSearchContainerPrimaryKeys";
+
 	/**
 	 * @param request
 	 */
-	public ServiceDisplyTerms(PortletRequest request) {
+	public ServiceDisplayTerms(PortletRequest request) {
 
 		super(request);
 
@@ -88,16 +93,19 @@ public class ServiceDisplyTerms extends DisplayTerms {
 
 		administrationIndex =
 		    ParamUtil.getString(request, SERVICE_ADMINISTRATIONINDEX);
-		
+
 		domainCode = ParamUtil.getString(request, SERVICE_DOMAINCODE);
-		
+
 		domainIndex = ParamUtil.getString(request, SERVICE_DOMAININDEX);
-		
+
 		activeStatus = ParamUtil.getInteger(request, SERVICE_ACTIVESTATUS);
-		
+
 		onlineUrl = ParamUtil.getString(request, SERVICE_ONLINEURL);
-		
+
 		groupId = setGroupId(request);
+		
+		serviceId = ParamUtil.getLong(request, SERVICE_ID);
+
 	}
 
 	/**
@@ -466,6 +474,25 @@ public class ServiceDisplyTerms extends DisplayTerms {
 		return themeDisplay.getScopeGroupId();
 	}
 
+	
+    /**
+     * @return the serviceId
+     */
+    public long getServiceId() {
+    
+    	return serviceId;
+    }
+
+	
+    /**
+     * @param serviceId the serviceId to set
+     */
+    public void setServiceId(long serviceId) {
+    
+    	this.serviceId = serviceId;
+    }
+
+	protected long serviceId;
 	protected String serviceNo;
 	protected String serviceName;
 	protected String shortName;
@@ -488,4 +515,26 @@ public class ServiceDisplyTerms extends DisplayTerms {
 	protected String onlineUrl;
 	protected long groupId;
 
+	/**
+	 * @return the fileTemplateIds
+	 */
+	public long[] getFileTemplateIds() {
+
+		return fileTemplateIds;
+	}
+
+	/**
+	 * @param fileTemplateIds
+	 *            the fileTemplateIds to set
+	 */
+	public long[] setFileTemplateIds(PortletRequest portletRequest) {
+
+		String[] strFileTemplateIds =
+		    ParamUtil.getParameterValues(portletRequest, TEMPLATE_FILE_IDS);
+
+		
+		return GetterUtil.getLongValues(strFileTemplateIds, new long [] {});
+	}
+
+	protected long[] fileTemplateIds;
 }
