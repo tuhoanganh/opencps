@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
-<service-builder package-path="org.opencps.accountmgt">
+<service-builder package-path="org.opencps.accountmgt" auto-namespace-tables="false">
 	<author>khoavd</author>
 	<namespace>accountmgt</namespace>
 
@@ -69,7 +69,27 @@
 			<finder-column name="accountStatus" />
 			<finder-column name="wardCode" />
 		</finder>
+        <finder name="MappingUserId" return-type="Citizen">
+            <finder-column name="mappingUserId"></finder-column>
+        </finder>
 		
+		<finder return-type="Citizen" name="Email">
+			<finder-column name="email"></finder-column>
+		</finder>
+        <finder name="UUID" return-type="Citizen">
+            <finder-column name="uuid"></finder-column>
+        </finder>
+		
+		<finder return-type="Collection" name="G_N">
+			<finder-column name="groupId"></finder-column>
+			<finder-column name="fullName" comparator="LIKE" />
+		</finder>
+		
+		<finder return-type="Collection" name="G_N_S">
+			<finder-column name="groupId"></finder-column>
+			<finder-column name="fullName" comparator="LIKE" />
+			<finder-column name="accountStatus"/>
+		</finder>
 		<reference entity="User" package-path="com.liferay.portal" />
 		
 	</entity>
@@ -124,7 +144,18 @@
 			<finder-column name="groupId" />
 			<finder-column name="accountStatus" />
 		</finder>
-
+		
+		<finder return-type="Collection" name="G_N">
+			<finder-column name="groupId"></finder-column>
+			<finder-column name="name" comparator="LIKE" />
+		</finder>
+		
+		<finder return-type="Collection" name="G_N_S">
+			<finder-column name="groupId"></finder-column>
+			<finder-column name="name" comparator="LIKE" />
+			<finder-column name="accountStatus"/>
+		</finder>
+		
 		<finder name="G_S_C" return-type="Collection">
 			<finder-column name="groupId" />
 			<finder-column name="accountStatus" />
@@ -142,6 +173,16 @@
 			<finder-column name="businessType" />
 		</finder>
 		
+		<finder return-type="Business" name="Email">
+			<finder-column name="email"></finder-column>
+		</finder>
+        <finder name="MappingUserId" return-type="Business">
+            <finder-column name="mappingUserId"></finder-column>
+        </finder>
+        <finder name="UUID" return-type="Business">
+            <finder-column name="uuid"></finder-column>
+        </finder>
+		
 		<reference package-path="com.liferay.portal" entity="Organization" />
 		<reference package-path="com.liferay.portal" entity="User" />
 	</entity>
@@ -152,7 +193,7 @@
 		<!-- PK fields -->
 
 		<column name="businessId" type="long" primary="true" />
-		<column name="businessDomainId" type="String" primary="true" />
+		<column name="businessDomainId" type="String" primary="false" />
 
 		<!-- Finder methods -->
 		<finder name="BusinessId" return-type="Collection">
@@ -209,11 +250,18 @@
 	</entity>
 
 	<exceptions>
-		<exception>EmptyCitizenName</exception>
-		<exception>EmptyBusinessName</exception>
+		<exception>DuplicateCitizenEmail</exception>
 		<exception>OutOfLengthCitizenName</exception>
+		<exception>OutOfLengthCitizenAddress</exception>
+		<exception>OutOfLengthCitizenEmail</exception>
+		
+		<exception>DuplicateBusinessEmail</exception>
+		<exception>OutOfLengthBusinessEmail</exception>
 		<exception>OutOfLengthBusinessName</exception>
 		<exception>OutOfLengthBusinessEnName</exception>
+		<exception>OutOfLengthBusinessEmail</exception>
 		<exception>OutOfLengthBusinessShortName</exception>
+		<exception>OutOfLengthBusinessRepresentativeName</exception>
+		<exception>OutOfLengthBusinessRepresentativeRole</exception>
 	</exceptions>
 </service-builder>

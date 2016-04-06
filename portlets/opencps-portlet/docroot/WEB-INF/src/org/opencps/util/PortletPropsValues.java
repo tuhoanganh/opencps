@@ -52,6 +52,10 @@ public class PortletPropsValues {
 			.getStringValues(
 					PortletProps.get(PortletPropsKeys.DATAMGT_MASTERDATA_CODE),
 					new String[0]);
+	
+	public static final String DATAMGT_MASTERDATA_BUSINESS_DOMAIN = GetterUtil
+					.getString(PortletProps
+						.get(PortletPropsKeys.DATAMGT_MASTERDATA_BUSINESS_DOMAIN));
 
 	// User Management
 	public static final int[] USERMGT_JOBPOS_LEADER = GetterUtil
@@ -131,6 +135,43 @@ public class PortletPropsValues {
 					.getInteger(PortletProps
 							.get(PortletPropsKeys.USERMGT_WORKINGUNIT_ENNAME_LENGTH));
 	
+	// citizen validate
+	public static final int ACCOUNTMGT_CITIZEN_NAME_LENGTH = GetterUtil
+					.getInteger(PortletProps
+						.get(PortletPropsKeys.ACCOUNTMGT_CITIZEN_NAME_LENGTH));
+	
+	public static final int ACCOUNTMGT_CITIZEN_ADDRESS_LENGTH = GetterUtil
+					.getInteger(PortletProps
+						.get(PortletPropsKeys.ACCOUNTMGT_CITIZEN_ADDRESS_LENGTH));
+	public static final int ACCOUNTMGT_CITIZEN_EMAIL_LENGTH = GetterUtil
+					.getInteger(PortletProps
+						.get(PortletPropsKeys.ACCOUNTMGT_CITIZEN_EMAIL_LENGTH));
+	
+	//business validate
+	public static final int ACCOUNTMGT_BUSINESS_NAME_LENGTH = GetterUtil
+					.getInteger(PortletProps
+						.get(PortletPropsKeys.ACCOUNTMGT_BUSINESS_NAME_LENGTH));
+	public static final int ACCOUNTMGT_BUSINESS_ENNAME_LENGTH = GetterUtil
+					.getInteger(PortletProps
+						.get(PortletPropsKeys.ACCOUNTMGT_BUSINESS_ENNAME_LENGTH));
+	public static final int ACCOUNTMGT_BUSINESS_EMAIL_LENGTH = GetterUtil
+					.getInteger(PortletProps
+						.get(PortletPropsKeys.ACCOUNTMGT_BUSINESS_EMAIL_LENGTH));
+	public static final int ACCOUNTMGT_BUSINESS_ADDRESS_LENGTH = GetterUtil
+					.getInteger(PortletProps
+						.get(PortletPropsKeys.ACCOUNTMGT_BUSINESS_ADDRESS_LENGTH));
+	public static final int ACCOUNTMGT_BUSINESS_SHORTNAME_LENGTH = GetterUtil
+					.getInteger(PortletProps
+						.get(PortletPropsKeys.ACCOUNTMGT_BUSINESS_SHORTNAME_LENGTH));
+	public static final int ACCOUNTMGT_BUSINESS_REPRESENTATIVENAME_LENGTH = GetterUtil
+					.getInteger(PortletProps
+						.get(PortletPropsKeys.ACCOUNTMGT_BUSINESS_REPRESENTATIVENAME_LENGTH));
+	public static final int ACCOUNTMGT_BUSINESS_REPRESENTATIVEROLE_LENGTH = GetterUtil
+					.getInteger(PortletProps
+						.get(PortletPropsKeys.ACCOUNTMGT_BUSINESS_REPRESENTATIVEROLE_LENGTH));
+	
+	
+	
 	//resource action
 	
 	public static final String USERMGT_WORKINGUNIT_RESOURCE = GetterUtil
@@ -143,4 +184,5 @@ public class PortletPropsValues {
 					.getString(PortletProps
 						.get(PortletPropsKeys.USERMGT_EMPLOYEE_RESOURCE));
 	
+
 }

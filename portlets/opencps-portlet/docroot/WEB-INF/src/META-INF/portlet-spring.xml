@@ -38,7 +38,9 @@
 	<bean id="org.opencps.servicemgt.service.ServiceInfoLocalService" class="org.opencps.servicemgt.service.impl.ServiceInfoLocalServiceImpl" />
 	<bean id="org.opencps.servicemgt.service.ServiceInfoService" class="org.opencps.servicemgt.service.impl.ServiceInfoServiceImpl" />
 	<bean id="org.opencps.servicemgt.service.persistence.ServiceInfoPersistence" class="org.opencps.servicemgt.service.persistence.ServiceInfoPersistenceImpl" parent="basePersistence" />
+	<bean id="org.opencps.servicemgt.service.persistence.ServiceInfoFinder" class="org.opencps.servicemgt.service.persistence.ServiceInfoFinderImpl" parent="basePersistence" />
 	<bean id="org.opencps.servicemgt.service.TemplateFileLocalService" class="org.opencps.servicemgt.service.impl.TemplateFileLocalServiceImpl" />
 	<bean id="org.opencps.servicemgt.service.TemplateFileService" class="org.opencps.servicemgt.service.impl.TemplateFileServiceImpl" />
 	<bean id="org.opencps.servicemgt.service.persistence.TemplateFilePersistence" class="org.opencps.servicemgt.service.persistence.TemplateFilePersistenceImpl" parent="basePersistence" />
+	<bean id="org.opencps.servicemgt.service.persistence.TemplateFileFinder" class="org.opencps.servicemgt.service.persistence.TemplateFileFinderImpl" parent="basePersistence" />
 </beans>

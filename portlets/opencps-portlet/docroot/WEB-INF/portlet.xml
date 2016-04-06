@@ -160,8 +160,6 @@
 		</security-role-ref>
 	</portlet>
 	
-
-	
 	<portlet>
 		<portlet-name>5</portlet-name>
 		<display-name>Account Registration</display-name>
@@ -170,7 +168,7 @@
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/portlets/accountmgt/registration/citizenregistration.jsp</value>
+			<value>/html/portlets/accountmgt/registration/registration.jsp</value>
 		</init-param>
 		<init-param>
 			<name>template-path</name>
@@ -208,7 +206,7 @@
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/portlets/accountmgt/profile/profile.jsp</value>
+			<value>/html/portlets/accountmgt/profile/viewprofile.jsp</value>
 		</init-param>
 		<init-param>
 			<name>template-path</name>
@@ -246,7 +244,7 @@
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/portlets/accountmgt/admin/account.jsp</value>
+			<value>/html/portlets/accountmgt/admin/citizenlist.jsp</value>
 		</init-param>
 		<init-param>
 			<name>template-path</name>

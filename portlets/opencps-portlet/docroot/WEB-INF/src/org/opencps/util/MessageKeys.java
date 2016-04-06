@@ -48,5 +48,7 @@ public class MessageKeys {
 	public static final String SERVICE_TEMPLATE_FILE_NAME_EXCEPTION = "service.template.file.name.exception";
 	public static final String SERVICE_TEMPLATE_FILE_NO_EXCEPTION = "service.template.file.no.exception";
 	public static final String SERVICE_TEMPLATE_UPLOAD_EXCEPTION = "service.template.file.upload.exception";
+	
+	public static final String NO_ACCOUNT_STATUS_FOUND = "no.account.status.found";
 
 }

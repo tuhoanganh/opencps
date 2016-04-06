@@ -109,16 +109,13 @@ public class JobPosLocalServiceImpl extends JobPosLocalServiceBaseImpl {
 				ResourceAction resourceAction = ResourceActionLocalServiceUtil
 				.fetchResourceAction(rowIds[jndex]);
 				String className = resourceAction.getName();
-				long classNameId = ClassNameLocalServiceUtil
-								.getClassNameId(className);
 				
 				ResourcePermissionLocalServiceUtil.addResourcePermission(
 					serviceContext.getCompanyId(), 
 					className, ResourceConstants.SCOPE_GROUP, 
-					String.valueOf(classNameId), 
+					String.valueOf(role.getRoleId()), 
 					role.getRoleId(), resourceAction.getActionId()
-					);
-				
+					);	
 				_log.info("rowIds[jndex]  " + rowIds[jndex] +
 					" resourceAction.getActionId() " + resourceAction.getActionId());
 			}

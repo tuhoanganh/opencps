@@ -54,7 +54,18 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String USERMGT_VIEW_PROFILE = "USERMGT_VIEW_PROFILE";
 	
 	public static final String SERVICE_ENTRY = "SERVICE_ENTRY";
-
+	
+	public static final String CITIZEN_ENTRY = "CITIZEN_ENTRY";
+	
+	public static final String MAPPING_USERID = "MAPPING_USERID";
+	
+	public static final String BUSINESS_ENTRY = "BUSINESS_ENTRY";
+	
+	public static final String ACCOUNTMGT_ADMIN_PROFILE = "ACCOUNTMGT_ADMIN_PROFILE";
+	
+	public static final String ACCOUNTMGT_VIEW_PROFILE = "ACCOUNTMGT_VIEW_PROFILE";
+	
+	public static final String ACCOUNT_TYPE = "ACCOUNT_TYPE";
 	public static final String SERVICE_TEMPLATE_ENTRY = "SERVICE_TEMPLATE_ENTRY";
 
 }

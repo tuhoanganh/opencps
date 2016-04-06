@@ -195,6 +195,7 @@
 			<basic name="enName" />
 			<basic name="shortName" />
 			<basic name="businessType" />
+			<basic name="idNumber" />
 			<basic name="address" />
 			<basic name="cityCode" />
 			<basic name="districtCode" />
@@ -242,10 +243,9 @@
 		</attributes>
 	</mapped-superclass>
 	<mapped-superclass class="org.opencps.accountmgt.model.impl.BusinessDomainModelImpl">
-		<id-class class="org.opencps.accountmgt.service.persistence.BusinessDomainPK" />
 		<attributes>
 			<id name="businessId" />
-			<id name="businessDomainId" />
+			<basic name="businessDomainId" />
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
@@ -301,6 +301,9 @@
 	<mapped-superclass class="org.opencps.servicemgt.model.impl.ServiceInfoModelImpl">
 		<attributes>
 			<id name="serviceinfoId" />
+			<basic name="uuid">
+				<column name="UUID_" />
+			</basic>
 			<basic name="companyId" />
 			<basic name="groupId" />
 			<basic name="userId" />
@@ -398,7 +401,7 @@
 		<attributes />
 	</entity>
 	<entity class="org.opencps.servicemgt.model.impl.ServiceFileTemplateImpl" name="ServiceFileTemplate">
-		<table name="opencps_dictitem" />
+		<table name="opencps_service_templatefile" />
 		<attributes />
 	</entity>
 	<entity class="org.opencps.servicemgt.model.impl.ServiceInfoImpl" name="ServiceInfo">
