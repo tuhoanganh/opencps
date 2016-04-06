@@ -63,7 +63,7 @@
 
 <aui:model-context bean="<%=citizen %>" model="<%=Citizen.class%>" />
 
-<c:if test="<%=isAdminViewProfile %>">
+<c:if test="<%=isAdminViewProfile && citizenID > 0%>">
 	<aui:row>
 		<aui:col width="50">
 			<aui:input 
