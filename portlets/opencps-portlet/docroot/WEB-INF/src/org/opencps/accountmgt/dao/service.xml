@@ -144,7 +144,18 @@
 			<finder-column name="groupId" />
 			<finder-column name="accountStatus" />
 		</finder>
-
+		
+		<finder return-type="Collection" name="G_N">
+			<finder-column name="groupId"></finder-column>
+			<finder-column name="name" comparator="LIKE" />
+		</finder>
+		
+		<finder return-type="Collection" name="G_N_S">
+			<finder-column name="groupId"></finder-column>
+			<finder-column name="name" comparator="LIKE" />
+			<finder-column name="accountStatus"/>
+		</finder>
+		
 		<finder name="G_S_C" return-type="Collection">
 			<finder-column name="groupId" />
 			<finder-column name="accountStatus" />

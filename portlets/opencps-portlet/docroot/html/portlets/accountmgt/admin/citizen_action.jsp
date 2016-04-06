@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -22,6 +21,8 @@
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.accountmgt.model.Citizen"%>
 <%@page import="com.liferay.portal.kernel.dao.search.ResultRow"%>
+<%@page import="org.opencps.util.ActionKeys"%>
+<%@page import="org.opencps.accountmgt.permissions.CitizenPermission"%>
 <%@ include file="../init.jsp" %>
 
 <%
@@ -41,16 +42,24 @@
 		<portlet:param name="<%=CitizenDisplayTerms.CITIZEN_ID %>" value="<%=String.valueOf(citizen.getCitizenId()) %>"/>
 		<portlet:param name="mvcPath" value="/html/portlets/accountmgt/admin/update_profile.jsp"/>
 	</portlet:renderURL>
+		<c:if test="<%=CitizenPermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) %>">
+			<liferay-ui:icon 
+				image="edit" 
+				message="edit"
+				url="<%=updateCitizen.toString()%>" />
+		</c:if>
 	
-	<liferay-ui:icon image="edit" message="edit"
-		url="<%=updateCitizen.toString()%>" />
 	
-	
-	<portlet:actionURL var="changeAccountStatusURL" name="changeAccountStatusURL">
+	<portlet:actionURL var="changeAccountStatusCitizenURL" name="changeAccountStatusCitizen">
 		<portlet:param name="<%=CitizenDisplayTerms.CITIZEN_ACCOUNTSTATUS %>" value="<%=String.valueOf(citizen.getAccountStatus()) %>"/>
 		<portlet:param name="<%=CitizenDisplayTerms.CITIZEN_ID %>" value="<%=String.valueOf(citizen.getCitizenId()) %>"/>
 	</portlet:actionURL>
 	
-	<liferay-ui:icon image="status_online" message="<%=accountActionName %>"
-		url="<%= changeAccountStatusURL.toString()%>" />
+	<c:if test="<%=CitizenPermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) %>">
+		<liferay-ui:icon
+		 	image="status_online" 
+		 	message="<%=accountActionName %>"
+			url="<%= changeAccountStatusCitizenURL.toString()%>" />
+	</c:if>
+	
 </liferay-ui:icon-menu>

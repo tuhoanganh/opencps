@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
@@ -510,6 +511,30 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		    .update(business);
 	}
 
+	public List<Business> getBusinesses(int start, int end, OrderByComparator odc)
+					throws SystemException {
+		return businessPersistence.findAll(start, end, odc);
+	}
+	
+	public List<Business> getBusinesses(long groupId, int accountStatus)
+					throws SystemException {
+		return businessPersistence.findByG_S(groupId, accountStatus);
+	}
+	
+	public List<Business> getBusinesses(long groupId, String name)
+					throws SystemException {
+		return businessPersistence.findByG_N(groupId, name);
+	}
+	
+	
+	public List<Business> getBusinesses(long groupId,String name , int accountStatus)
+					throws SystemException {
+		return businessPersistence.findByG_N_S(groupId, name, accountStatus);
+	}
+	
+	public int countAll() throws SystemException {
+		return businessPersistence.countAll();
+	}
 	private Log _log = LogFactoryUtil
 	    .getLog(BusinessLocalServiceImpl.class
 	        .getName());

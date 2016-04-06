@@ -9,19 +9,32 @@ import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.opencps.accountmgt.OutOfLengthBusinessEnNameException;
+import org.opencps.accountmgt.OutOfLengthBusinessNameException;
+import org.opencps.accountmgt.OutOfLengthBusinessRepresentativeNameException;
+import org.opencps.accountmgt.OutOfLengthBusinessRepresentativeRoleException;
+import org.opencps.accountmgt.OutOfLengthBusinessShortNameException;
+import org.opencps.accountmgt.OutOfLengthCitizenAddressException;
+import org.opencps.accountmgt.OutOfLengthCitizenNameException;
 import org.opencps.accountmgt.model.Business;
 import org.opencps.accountmgt.model.Citizen;
 import org.opencps.accountmgt.search.BusinessDisplayTerms;
 import org.opencps.accountmgt.search.CitizenDisplayTerms;
 import org.opencps.accountmgt.service.BusinessLocalServiceUtil;
 import org.opencps.accountmgt.service.CitizenLocalServiceUtil;
+import org.opencps.datamgt.model.DictItem;
+import org.opencps.datamgt.service.DictItemLocalServiceUtil;
+import org.opencps.usermgt.search.EmployeeDisplayTerm;
 import org.opencps.util.MessageKeys;
 import org.opencps.util.WebKeys;
 
+import com.liferay.portal.UserPasswordException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.util.bridges.mvc.MVCPortlet;
@@ -41,8 +54,7 @@ public class AccountMgtPortlet extends MVCPortlet {
 		        renderRequest, BusinessDisplayTerms.BUSINESS_BUSINESSID);
 
 		try {
-			
-			
+
 			if (citizenId > 0) {
 				Citizen citizen =
 				    CitizenLocalServiceUtil.fetchCitizen(citizenId);
@@ -52,10 +64,9 @@ public class AccountMgtPortlet extends MVCPortlet {
 			if (businessId > 0) {
 				Business business =
 				    BusinessLocalServiceUtil.fetchBusiness(businessId);
-				renderRequest.setAttribute(
-				    WebKeys.BUSINESS_ENTRY, business);
+				renderRequest.setAttribute(WebKeys.BUSINESS_ENTRY, business);
 			}
-			
+
 			renderRequest.setAttribute(WebKeys.ACCOUNTMGT_ADMIN_PROFILE, true);
 		}
 
@@ -66,7 +77,7 @@ public class AccountMgtPortlet extends MVCPortlet {
 		super.render(renderRequest, renderResponse);
 	}
 
-	public void changeAccountStatusURL(
+	public void changeAccountStatusCitizen(
 	    ActionRequest actionRequest, ActionResponse actionResponse) {
 
 		int accountStatus =
@@ -79,6 +90,7 @@ public class AccountMgtPortlet extends MVCPortlet {
 		try {
 			ServiceContext serviceContext =
 			    ServiceContextFactory.getInstance(actionRequest);
+
 			citizen = CitizenLocalServiceUtil.fetchCitizen(citizenId);
 			if (citizen != null) {
 				if (accountStatus == 0) {
@@ -108,22 +120,238 @@ public class AccountMgtPortlet extends MVCPortlet {
 		}
 	}
 
-	public void searchCitizen(
-	    ActionRequest actionRequest, ActionResponse actionResponse) {
+	public void updateCitizenProfile(
+	    ActionRequest actionRequest, ActionResponse actionResponse)
+	    throws IOException {
 
-		String fullName =
+		long citizenId =
+		    ParamUtil.getLong(actionRequest, CitizenDisplayTerms.CITIZEN_ID);
+		String returnURL = ParamUtil.getString(actionRequest, "returnURL");
+		String address =
 		    ParamUtil.getString(
-		        actionRequest, CitizenDisplayTerms.CITIZEN_FULLNAME);
-		int accountStatus =
-		    ParamUtil.getInteger(
-		        actionRequest, CitizenDisplayTerms.CITIZEN_ACCOUNTSTATUS);
+		        actionRequest, CitizenDisplayTerms.CITIZEN_ADDRESS);
+		String telNo =
+		    ParamUtil.getString(actionRequest, EmployeeDisplayTerm.TEL_NO);
+		String curPass =
+		    ParamUtil.getString(
+		        actionRequest, CitizenDisplayTerms.CURRENT_PASSWORD);
+		String newPass =
+		    ParamUtil.getString(actionRequest, CitizenDisplayTerms.NEW_PASSWORD);
+		String rePass =
+		    ParamUtil.getString(actionRequest, CitizenDisplayTerms.RE_PASSWORD);
+		long cityId =
+		    ParamUtil.getLong(
+		        actionRequest, CitizenDisplayTerms.CITIZEN_CITY_ID);
+		long districtId =
+		    ParamUtil.getLong(
+		        actionRequest, CitizenDisplayTerms.CITIZEN_DISTRICT_ID);
+		long wardId =
+		    ParamUtil.getLong(
+		        actionRequest, CitizenDisplayTerms.CITIZEN_WARD_ID);
 
-		actionResponse.setRenderParameter(
-		    CitizenDisplayTerms.CITIZEN_FULLNAME, fullName);
-		actionResponse.setRenderParameter(
-		    CitizenDisplayTerms.CITIZEN_ACCOUNTSTATUS,
-		    String.valueOf(accountStatus));
+		DictItem city = null;
+
+		DictItem district = null;
+
+		DictItem ward = null;
+
+		boolean isChangePassWord = false;
+	    if(Validator.isNotNull(curPass) 
+	    && Validator.isNotNull(newPass) 
+	    && Validator.isNotNull(rePass)) {
+	    	isChangePassWord = true;
+	    }
+
+		try {
+			AccountRegPortlet.ValidateCitizen(
+			    citizenId, StringPool.BLANK, StringPool.BLANK, address,
+			    StringPool.BLANK, telNo, 0, StringPool.BLANK);
+
+			ServiceContext serviceContext =
+			    ServiceContextFactory.getInstance(actionRequest);
+
+			city = DictItemLocalServiceUtil.getDictItem(cityId);
+
+			district = DictItemLocalServiceUtil.getDictItem(districtId);
+
+			ward = DictItemLocalServiceUtil.getDictItem(wardId);
+
+			if (citizenId > 0) {
+				CitizenLocalServiceUtil.updateCitizen(
+				    citizenId, address, city.getItemCode(),
+				    district.getItemCode(), ward.getItemCode(),
+				    city.getItemName(serviceContext.getLocale(), true),
+				    district.getItemName(serviceContext.getLocale(), true),
+				    ward.getItemName(serviceContext.getLocale(), true), telNo,
+				    isChangePassWord, newPass, rePass,
+				    serviceContext.getUserId(), serviceContext);
+
+			}
+		}
+		catch (Exception e) {
+			if (e instanceof UserPasswordException) {
+				SessionErrors.add(actionRequest, UserPasswordException.class);
+			}
+			else if (e instanceof OutOfLengthCitizenAddressException) {
+				SessionErrors.add(
+				    actionRequest, OutOfLengthCitizenAddressException.class);
+			}
+			else if (e instanceof OutOfLengthCitizenNameException) {
+				SessionErrors.add(
+				    actionRequest, OutOfLengthCitizenNameException.class);
+			}
+			else {
+				SessionErrors.add(
+				    actionRequest,
+				    MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED);
+			}
+
+			if (Validator.isNotNull(returnURL)) {
+				actionResponse.sendRedirect(returnURL);
+			}
+		}
 	}
 
+	public void updateBusinessProfile(
+	    ActionRequest actionRequest, ActionResponse actionResponse)
+	    throws IOException {
+
+		long businessId =
+		    ParamUtil.getLong(
+		        actionRequest, BusinessDisplayTerms.BUSINESS_BUSINESSID);
+
+		long cityId =
+		    ParamUtil.getLong(
+		        actionRequest, BusinessDisplayTerms.BUSINESS_CITY_ID);
+		long districtId =
+		    ParamUtil.getLong(
+		        actionRequest, BusinessDisplayTerms.BUSINESS_DISTRICT_ID);
+		long wardId =
+		    ParamUtil.getLong(
+		        actionRequest, BusinessDisplayTerms.BUSINESS_WARD_ID);
+
+		String returnURL = ParamUtil.getString(actionRequest, "returnURL");
+		String name =
+		    ParamUtil.getString(
+		        actionRequest, BusinessDisplayTerms.BUSINESS_NAME);
+		String enName =
+		    ParamUtil.getString(
+		        actionRequest, BusinessDisplayTerms.BUSINESS_ENNAME);
+		String idNumber =
+		    ParamUtil.getString(
+		        actionRequest, BusinessDisplayTerms.BUSINESS_IDNUMBER);
+		String shortName =
+		    ParamUtil.getString(
+		        actionRequest, BusinessDisplayTerms.BUSINESS_SHORTNAME);
+		String type =
+		    ParamUtil.getString(
+		        actionRequest, BusinessDisplayTerms.BUSINESS_BUSINESSTYPE);
+		String address =
+		    ParamUtil.getString(
+		        actionRequest, BusinessDisplayTerms.BUSINESS_ADDRESS);
+		String email =
+		    ParamUtil.getString(
+		        actionRequest, BusinessDisplayTerms.BUSINESS_EMAIL);
+		String telNo =
+		    ParamUtil.getString(
+		        actionRequest, BusinessDisplayTerms.BUSINESS_TELNO);
+		String representativeName =
+		    ParamUtil.getString(
+		        actionRequest, BusinessDisplayTerms.BUSINESS_REPRESENTATIVENAME);
+		String representativeRole =
+		    ParamUtil.getString(
+		        actionRequest, BusinessDisplayTerms.BUSINESS_REPRESENTATIVEROLE);
+		String[] domain =
+		    ParamUtil.getParameterValues(
+		        actionRequest, BusinessDisplayTerms.BUSINESS_DOMAIN);
+		String curPass =
+		    ParamUtil.getString(
+		        actionRequest, BusinessDisplayTerms.CURRENT_PASSWORD);
+		String newPass =
+		    ParamUtil.getString(
+		        actionRequest, BusinessDisplayTerms.NEW_PASSWORD);
+		String rePass =
+		    ParamUtil.getString(actionRequest, BusinessDisplayTerms.RE_PASSWORD);
+		boolean isChangePassWord = false;
+		    if(Validator.isNotNull(curPass) 
+		    && Validator.isNotNull(newPass) 
+		    && Validator.isNotNull(rePass)) {
+		    	isChangePassWord = true;
+		    }
+
+		DictItem city = null;
+
+		DictItem district = null;
+
+		DictItem ward = null;
+
+		try {
+
+			AccountRegPortlet.ValidateBusiness(
+			    businessId, email, StringPool.BLANK, enName, shortName,
+			    address, representativeName, representativeRole);
+
+			city = DictItemLocalServiceUtil.getDictItem(cityId);
+
+			district = DictItemLocalServiceUtil.getDictItem(districtId);
+
+			ward = DictItemLocalServiceUtil.getDictItem(wardId);
+			ServiceContext serviceContext =
+			    ServiceContextFactory.getInstance(actionRequest);
+
+			if (businessId > 0) {
+				district.getItemName(serviceContext.getLocale(), true);
+				BusinessLocalServiceUtil.updateBusiness(
+				    businessId, name, enName, shortName, type, idNumber,
+				    address, city.getItemCode(), district.getItemCode(),
+				    ward.getItemCode(),
+				    city.getItemName(serviceContext.getLocale(), true),
+				    district.getItemName(serviceContext.getLocale(), true),
+				    ward.getItemName(serviceContext.getLocale(), true), telNo,
+				    representativeName, representativeRole, domain,
+				    isChangePassWord, curPass, rePass,
+				    serviceContext.getUserId(), serviceContext);
+
+			}
+
+		}
+		catch (Exception e) {
+			if (e instanceof UserPasswordException) {
+				SessionErrors.add(actionRequest, UserPasswordException.class);
+			}
+			else if (e instanceof OutOfLengthBusinessNameException) {
+				SessionErrors.add(
+				    actionRequest, OutOfLengthBusinessNameException.class);
+			}
+			else if (e instanceof OutOfLengthBusinessEnNameException) {
+				SessionErrors.add(
+				    actionRequest, OutOfLengthBusinessEnNameException.class);
+			}
+			else if (e instanceof OutOfLengthBusinessShortNameException) {
+				SessionErrors.add(
+				    actionRequest, OutOfLengthBusinessShortNameException.class);
+			}
+			else if (e instanceof OutOfLengthBusinessRepresentativeNameException) {
+				SessionErrors.add(
+				    actionRequest,
+				    OutOfLengthBusinessRepresentativeNameException.class);
+			}
+			else if (e instanceof OutOfLengthBusinessRepresentativeRoleException) {
+				SessionErrors.add(
+				    actionRequest,
+				    OutOfLengthBusinessRepresentativeRoleException.class);
+			}
+			else {
+				SessionErrors.add(
+				    actionRequest,
+				    MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED);
+			}
+
+			if (Validator.isNotNull(returnURL)) {
+				actionResponse.sendRedirect(returnURL);
+			}
+
+		}
+	}
 	private Log _log = LogFactoryUtil.getLog(AccountMgtPortlet.class.getName());
 }

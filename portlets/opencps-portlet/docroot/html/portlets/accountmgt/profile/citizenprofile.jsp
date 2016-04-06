@@ -1,5 +1,3 @@
-<%@page import="com.liferay.portal.kernel.management.jmx.GetAttributesAction"%>
-<%@page import="org.opencps.util.PortletPropsValues"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -18,6 +16,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
+
+<%@page import="org.opencps.util.MessageKeys"%>
+<%@page import="org.opencps.accountmgt.OutOfLengthBusinessNameException"%>
+<%@page import="org.opencps.accountmgt.OutOfLengthBusinessRepresentativeRoleException"%>
+<%@page import="org.opencps.accountmgt.OutOfLengthBusinessShortNameException"%>
+<%@page import="org.opencps.accountmgt.OutOfLengthBusinessRepresentativeNameException"%>
+<%@page import="org.opencps.accountmgt.OutOfLengthBusinessEnNameException"%>
+<%@page import="org.opencps.accountmgt.OutOfLengthCitizenNameException"%>
+<%@page import="org.opencps.accountmgt.OutOfLengthCitizenAddressException"%>
+<%@page import="com.liferay.portal.kernel.management.jmx.GetAttributesAction"%>
+<%@page import="org.opencps.util.PortletPropsValues"%>
+<%@page import="com.liferay.portal.UserPasswordException"%>
 <%@page import="com.liferay.portal.model.User"%>
 <%@page import="com.liferay.portal.service.UserLocalServiceUtil"%>
 <%@page import="org.opencps.accountmgt.service.CitizenLocalServiceUtil"%>
@@ -48,6 +58,54 @@
 
 <c:choose>
 	<c:when test="<%=themeDisplay.isSignedIn() %>">
+		<liferay-ui:error 
+				exception="<%= UserPasswordException.class %>" 
+			message="<%= UserPasswordException.class.getName() %>" 
+		/>
+		
+		<liferay-ui:error 
+			exception="<%= OutOfLengthCitizenAddressException.class %>" 
+			message="<%= OutOfLengthCitizenAddressException.class.getName() %>" 
+		/>
+		
+		<liferay-ui:error 
+			exception="<%= OutOfLengthCitizenNameException.class %>" 
+			message="<%= OutOfLengthCitizenNameException.class.getName() %>" 
+		/>
+		
+		<liferay-ui:error 
+			exception="<%= OutOfLengthBusinessNameException.class %>" 
+			message="<%= OutOfLengthBusinessNameException.class.getName() %>" 
+		/>
+		
+		<liferay-ui:error 
+			exception="<%= OutOfLengthBusinessEnNameException.class %>" 
+			message="<%= OutOfLengthBusinessEnNameException.class.getName() %>" 
+		/>
+		
+		<liferay-ui:error 
+			exception="<%= OutOfLengthBusinessEnNameException.class %>" 
+			message="<%= OutOfLengthBusinessShortNameException.class.getName() %>" 
+		/>
+		
+		<liferay-ui:error 
+			exception="<%= OutOfLengthBusinessEnNameException.class %>" 
+			message="<%= OutOfLengthBusinessEnNameException.class.getName() %>" 
+		/><liferay-ui:error 
+			exception="<%= OutOfLengthBusinessShortNameException.class %>" 
+			message="<%= OutOfLengthBusinessShortNameException.class.getName() %>" 
+		/><liferay-ui:error 
+			exception="<%= OutOfLengthBusinessRepresentativeNameException.class %>" 
+			message="<%= OutOfLengthBusinessRepresentativeNameException.class.getName() %>" 
+		/><liferay-ui:error 
+			exception="<%= OutOfLengthBusinessRepresentativeRoleException.class %>" 
+			message="<%= OutOfLengthBusinessRepresentativeRoleException.class.getName() %>" 
+		/>
+		
+		<liferay-ui:error 
+			key="<%=MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED %>" 
+			message="system.exception.occured" 
+		/>
 		<portlet:actionURL var="updateCitizenProfileURL" name="updateCitizenProfile" >
 			<portlet:param name="returnURL" value="<%=currentURL %>"/>
 		</portlet:actionURL>
