@@ -20,7 +20,10 @@
 <%@ include file="init.jsp"%>
 
 <%
+	String randomInstance = PwdGenerator.getPassword();
+
 	boolean isHorizontal = true;
+	
 	if(depthLevel > 0){
 		
 		int colWidth = 100;
@@ -58,7 +61,7 @@
 					if(!isHorizontal){
 						%>
 							<aui:row>
-								<aui:col id='<%="col_" + i %>' cssClass='<%=cssClass + "_" + i %>' width="<%=colWidth %>">
+								<aui:col id='<%="col_" + randomInstance + i %>' cssClass='<%=cssClass + "_" + i %>' width="<%=colWidth %>">
 									<aui:select 
 										name='<%=elementName %>' 
 										onchange='<%=themeDisplay.getPortletDisplay().getNamespace() + "renderChildItems(this," + i + ",true)" %>'
@@ -77,10 +80,10 @@
 						<%
 					}else{
 						%>
-							<aui:col id='<%="col_" + i %>' cssClass='<%=cssClass + "_" + i %>' width="<%=colWidth %>">
+							<aui:col id='<%="col_" + randomInstance + i %>' cssClass='<%=cssClass + "_" + i %>' width="<%=colWidth %>">
 							<aui:select 
 								name='<%=elementName %>' 
-								onchange='<%=themeDisplay.getPortletDisplay().getNamespace() + "renderChildItems(this," + i + ",true)" %>'
+								onchange='<%=themeDisplay.getPortletDisplay().getNamespace() + randomInstance + "renderChildItems(this," + i + ",true)" %>'
 								cssClass='<%=cssClass %>'
 							>
 								<%
@@ -102,14 +105,9 @@
 	}
 %>
 
-<portlet:renderURL var="selectBoxRenderURL" windowState="<%=LiferayWindowState.EXCLUSIVE.toString() %>">
-	<portlet:param name="mvcPath" value="/html/taglib/datamgt/ddr/selectbox_render.jsp"/>
-</portlet:renderURL>
 
 <aui:script>
 
-	var selectBoxRenderURL = '<%=selectBoxRenderURL.toString()%>';
-	
 	var localeCode = '<%=themeDisplay.getLanguageId() %>';
 	
 	var depthLevel = parseInt('<%=depthLevel %>');
@@ -118,7 +116,7 @@
 	
 	var strItemEmptyOption = '<%=StringUtil.merge(itemsEmptyOption) %>';
 	
-	var selectItems = strSelectItems.split(",");
+	var selectItems<%=randomInstance %> = strSelectItems.split(",");
 	
 	var itemsEmptyOption = strItemEmptyOption.split(",");
 	
@@ -126,7 +124,7 @@
 	
 	AUI().ready('aui-base','liferay-portlet-url','aui-io', function(A){
 	
-		rootDictItemsContainer = A.one('#<portlet:namespace/>col_1');
+		rootDictItemsContainer = A.one('#<portlet:namespace/>col_<%=randomInstance %>1');
 		
 		var dictCollectionCode = '<%=dictCollectionCode %>';
 		
@@ -147,7 +145,7 @@
 					if(obj){
 						var dictCollectionId = obj.dictCollectionId;
 						
-						<portlet:namespace/>renderRootDataItemsByCollection(dictCollectionId);
+						<portlet:namespace/><%=randomInstance %>renderRootDataItemsByCollection(dictCollectionId);
 					}
 					
 				}
@@ -161,8 +159,8 @@
 		});*/
 	});
 	
-	Liferay.provide(window, '<portlet:namespace/>renderRootDataItemsByCollection', function(dictCollectionId) {
-	
+	Liferay.provide(window, '<portlet:namespace/><%=randomInstance %>renderRootDataItemsByCollection', function(dictCollectionId) {
+		var A = AUI();
 		if(dictCollectionId){			
 		
 			Liferay.Service(
@@ -173,13 +171,13 @@
 			    parentItemId: 0
 			  },
 			  function(objs) {
-			    <portlet:namespace/>renderDataItems(objs, rootDictItemsContainer, 1, false);
+			    <portlet:namespace/><%=randomInstance %>renderDataItems(objs, A.one('#<portlet:namespace/>col_<%=randomInstance %>1'), 1, false);
 			  }
 			);
 		}
 	});
 	
-	Liferay.provide(window, '<portlet:namespace/>renderDataItems', function(objs, boundingBox, level, clearChild) {
+	Liferay.provide(window, '<portlet:namespace/><%=randomInstance %>renderDataItems', function(objs, boundingBox, level, clearChild) {
 		
 		var labelName = boundingBox.one('label').text().trim();
 		
@@ -214,12 +212,19 @@
 		  	
 		  	var localeItemNames = xmlDoc.getElementsByTagName("ItemName");
 		  	
+		  	var isDefaultLanguage = true;
+		  	
 		  	for(var n = 0; n < localeItemNames.length; n ++){
 		  		var node = localeItemNames[n];
 		  		var nodeAttr = node.getAttribute('language-id');
 		  		if(nodeAttr === localeCode){
-		  			itemName = nodeAttr.nodeValue;
+		  			isDefaultLanguage = false;
+		  			itemName = node.childNodes[0].nodeValue;
 		  			break;
+		  		}
+		  		
+		  		if(isDefaultLanguage){
+		  			itemName = localeItemNames[0].childNodes[0].nodeValue;
 		  		}
 		  	}
 			
@@ -227,17 +232,14 @@
 			
 			var itemEmptyOption = false;
 			
-			if(selectItems.length >= parseInt(level)){
-				selectedItem = selectItems[parseInt(level) - 1];
+			if(selectItems<%=randomInstance %>.length >= parseInt(level)){
+				selectedItem = selectItems<%=randomInstance %>[parseInt(level) - 1];
 			}
-			
-			
-			
+		
 			if(parseInt(opt.dictItemId) == selectedItem && clearChild == false){
 				opts += '<option value="' + opt.dictItemId + '" selected="selected">' + itemName + '</option>'
 			}else{
 				opts += '<option value="' + opt.dictItemId + '">' + itemName + '</option>'
-				
 			}
 		}
 		
@@ -245,19 +247,20 @@
 		
 		boundingBox.one('select').html(opts);
 		
-		if(parseInt(selectedItem) > 0 && clearChild == false){
-			
-			<portlet:namespace/>renderChildItems(boundingBox.one('select'), level, clearChild);
-		}
+		<portlet:namespace/><%=randomInstance %>renderChildItems(boundingBox.one('select'), level, clearChild);
+		
+		<%-- if(parseInt(selectedItem) > 0 && clearChild == false){
+			<portlet:namespace/><%=randomInstance %>renderChildItems(boundingBox.one('select'), level, clearChild);
+		}else{
+			<portlet:namespace/><%=randomInstance %>renderChildItems(boundingBox.one('select'), level, clearChild);
+		} --%>
 	});
 	
-	Liferay.provide(window, '<portlet:namespace/>renderChildItems', function(evt, parentLevel, clearChild) {
+	Liferay.provide(window, '<portlet:namespace/><%=randomInstance %>renderChildItems', function(evt, parentLevel, clearChild) {
 	
 		var A = AUI();
 		
 		var parent = A.one(evt);
-		
-		//var parentLevel = parseInt(parent.attr('level'));
 		
 		var level = parentLevel + 1;
 		
@@ -266,7 +269,7 @@
 		var boundingBox = null;
 		
 		if(level <= depthLevel){
-			boundingBox = A.one('#<portlet:namespace/>col_' + level);
+			boundingBox = A.one('#<portlet:namespace/>col_<%=randomInstance %>' + level);
 			
 			if(parentItemId != 0){
 				Liferay.Service(
@@ -276,10 +279,13 @@
 				  },
 				  function(objs) {
 					  if(objs.length > 0){
-					  	 <portlet:namespace/>renderDataItems(objs, boundingBox, level, clearChild);
+					  	 <portlet:namespace/><%=randomInstance %>renderDataItems(objs, boundingBox, level, clearChild);
 					  }else{
 					  	for(var childLevel = level; childLevel <= depthLevel; childLevel++){
-							var childBoundingBox = A.one('#<portlet:namespace/>col_' + childLevel);
+					  	
+							var childBoundingBox = A.one('#<portlet:namespace/>col_<%=randomInstance %>' + childLevel);
+							
+							console.log(childBoundingBox);
 							
 							if(childBoundingBox){
 								childBoundingBox.one('select').empty();
@@ -290,7 +296,7 @@
 			}else{
 				
 				for(var childLevel = level; childLevel <= depthLevel; childLevel++){
-					var childBoundingBox = A.one('#<portlet:namespace/>col_' + childLevel);
+					var childBoundingBox = A.one('#<portlet:namespace/>col_<%=randomInstance %>' + childLevel);
 					
 					if(childBoundingBox){
 						childBoundingBox.one('select').empty();

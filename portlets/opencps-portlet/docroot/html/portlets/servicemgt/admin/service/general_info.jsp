@@ -29,27 +29,27 @@
 
 <aui:row>
 	<aui:col width="100">
-		<aui:input name="<%= ServiceDisplyTerms.SERVICE_NAME %>" ></aui:input>
+		<aui:input name="<%= ServiceDisplayTerms.SERVICE_NAME %>" ></aui:input>
 	</aui:col>
 </aui:row>
 
 <aui:row>
 	<aui:col width="50">
-		<aui:input name="<%= ServiceDisplyTerms.SERVICE_NO %>"></aui:input>
+		<aui:input name="<%= ServiceDisplayTerms.SERVICE_NO %>"></aui:input>
 	</aui:col>
 	<aui:col width="50">
-		<aui:input name="<%= ServiceDisplyTerms.SERVICE_SHORTNAME %>"></aui:input>
+		<aui:input name="<%= ServiceDisplayTerms.SERVICE_SHORTNAME %>"></aui:input>
 	</aui:col>
 </aui:row>
-
 <aui:row>
 	<aui:col>
 		<datamgt:ddr 
-		cssClass="input100"
-		depthLevel="1" 
-		dictCollectionCode="SERVICE_DOMAIN"
-		itemNames="serviceDomain"
-		itemsEmptyOption="true"	
+			cssClass="input100"
+			depthLevel="1" 
+			dictCollectionCode="SERVICE_ADMINISTRATION"
+			itemNames="<%= ServiceDisplayTerms.SERVICE_ADMINISTRATION %>"
+			itemsEmptyOption="true"
+			selectedItems="<%= Validator.isNotNull(serviceInfo) ? serviceInfo.getAdministrationCode() : StringPool.BLANK %>"
 		>
 		</datamgt:ddr>
 	</aui:col>
@@ -58,25 +58,27 @@
 <aui:row>
 	<aui:col>
 		<datamgt:ddr 
-		cssClass="input100"
-		depthLevel="1" 
-		dictCollectionCode="SERVICE_ADMINISTRATION"
-		itemNames="serviceAdministrator"
-		itemsEmptyOption="true"	
+			cssClass="input100"
+			depthLevel="1" 
+			dictCollectionCode="SERVICE_DOMAIN"
+			itemNames="<%= ServiceDisplayTerms.SERVICE_DOMAINCODE %>"
+			itemsEmptyOption="true"
+			selectedItems="<%= Validator.isNotNull(serviceInfo) ? serviceInfo.getDomainCode() : StringPool.BLANK %>"
 		>
 		</datamgt:ddr>
 	</aui:col>
 </aui:row>
 
+
 <aui:row>
 	<aui:col width="100">
-		<aui:input name="<%= ServiceDisplyTerms.SERVICE_ONLINEURL %>"></aui:input>
+		<aui:input cssClass="input100" name="<%= ServiceDisplayTerms.SERVICE_ONLINEURL %>"></aui:input>
 	</aui:col>
 </aui:row>
 
 <aui:row>
 	<aui:col width="100">
-		<aui:select name="<%= ServiceDisplyTerms.SERVICE_ACTIVESTATUS %>" showEmptyOption="true">
+		<aui:select name="<%= ServiceDisplayTerms.SERVICE_ACTIVESTATUS %>" showEmptyOption="true">
 			<aui:option value="0">
 				<liferay-ui:message key="service-private"/>
 			</aui:option>

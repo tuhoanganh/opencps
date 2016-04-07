@@ -34,13 +34,14 @@ public class PortletUtil {
 	public static class SplitName {
 
 		public SplitName(String fullName) {
+
 			_firstName = StringPool.BLANK;
 			_lastName = StringPool.BLANK;
 			_midName = StringPool.BLANK;
 
 			if (Validator.isNotNull(fullName)) {
-				String[] splitNames = StringUtil.split(fullName,
-						StringPool.SPACE);
+				String[] splitNames =
+				    StringUtil.split(fullName, StringPool.SPACE);
 				if (splitNames != null && splitNames.length > 0) {
 					_lastName = splitNames[0];
 
@@ -96,6 +97,7 @@ public class PortletUtil {
 	public static class SplitDate {
 
 		public SplitDate(Date date) {
+
 			if (date != null) {
 				Calendar calendar = Calendar.getInstance();
 				calendar.setTime(date);
@@ -240,18 +242,69 @@ public class PortletUtil {
 		String genderLabel = StringPool.BLANK;
 
 		switch (value) {
-			case 0 :
-				genderLabel = LanguageUtil.get(locale, "female");
-				break;
-			case 1 :
-				genderLabel = LanguageUtil.get(locale, "male");
-				break;
-			default :
-				genderLabel = LanguageUtil.get(locale, "male");
-				break;
+		case 0:
+			genderLabel = LanguageUtil.get(locale, "female");
+			break;
+		case 1:
+			genderLabel = LanguageUtil.get(locale, "male");
+			break;
+		default:
+			genderLabel = LanguageUtil.get(locale, "male");
+			break;
 		}
 
 		return genderLabel;
+	}
+
+	public static String getAccountStatus(int value, Locale locale) {
+
+		String accountStatus = StringPool.BLANK;
+
+		switch (value) {
+		case 0:
+			accountStatus = LanguageUtil.get(locale, "registered");
+			break;
+		case 1:
+			accountStatus = LanguageUtil.get(locale, "confirmed");
+			break;
+		case 2:
+			accountStatus = LanguageUtil.get(locale, "approved");
+			break;
+		case 3:
+			accountStatus = LanguageUtil.get(locale, "locked");
+			break;
+		default:
+			accountStatus = LanguageUtil.get(locale, "");
+			break;
+
+		}
+
+		return accountStatus;
+	}
+
+	public static int changeAccountStatus(int value) {
+
+		int changeAccountStatus = 0;
+
+		switch (value) {
+		case 0:
+			changeAccountStatus = 4; // huy
+			break;
+		case 1:
+			changeAccountStatus = 2; // xac nhan;
+			break;
+		case 2:
+			changeAccountStatus = 3; // khoa
+			break;
+		case 3:
+			changeAccountStatus = 1; // mo lai;
+			break;
+		default:
+			changeAccountStatus = 0;
+			break;
+		}
+
+		return changeAccountStatus;
 	}
 
 	public static String getLeaderLabel(int value, Locale locale) {
@@ -259,20 +312,25 @@ public class PortletUtil {
 		String leaderLabel = StringPool.BLANK;
 
 		switch (value) {
-			case 0 :
-				leaderLabel = LanguageUtil.get(locale, "normal");
-				break;
-			case 1 :
-				leaderLabel = LanguageUtil.get(locale, "leader");
-				break;
-			case 2 :
-				leaderLabel = LanguageUtil.get(locale, "deputy");
-				break;
-			default :
-				leaderLabel = LanguageUtil.get(locale, "normal");
-				break;
+		case 0:
+			leaderLabel = LanguageUtil.get(locale, "normal");
+			break;
+		case 1:
+			leaderLabel = LanguageUtil.get(locale, "leader");
+			break;
+		case 2:
+			leaderLabel = LanguageUtil.get(locale, "deputy");
+			break;
+		default:
+			leaderLabel = LanguageUtil.get(locale, "normal");
+			break;
 		}
 
 		return leaderLabel;
+	}
+
+	public static String getDestinationFolder(String[] folderNames) {
+
+		return StringUtil.merge(folderNames, StringPool.FORWARD_SLASH);
 	}
 }

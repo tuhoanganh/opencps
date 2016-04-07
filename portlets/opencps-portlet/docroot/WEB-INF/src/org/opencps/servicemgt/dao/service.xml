@@ -5,7 +5,7 @@
 	<namespace>servicemgt</namespace>
 
 	<entity name="ServiceInfo" local-service="true"
-		remote-service="true" table="opencps_serviceinfo">
+		remote-service="true" table="opencps_serviceinfo" uuid="true">
 
 		<!-- PK fields -->
 
@@ -83,16 +83,34 @@
 
 		<!-- Other fields -->
 
-		<column name="fileName" type="long" />
+		<column name="fileName" type="String" />
 		<column name="fileNo" type="String" />
-		<column name="fileEntryId" type="String" />
+		<column name="fileEntryId" type="long" />
+		
+		<!-- Finder methods -->
+		<finder name="G_F_NAME" return-type="TemplateFile">
+			<finder-column name="groupId" />
+			<finder-column name="fileName"/>
+		</finder>
+
+		<finder name="G_F_NO" return-type="TemplateFile">
+			<finder-column name="groupId" />
+			<finder-column name="fileNo"/>
+		</finder>
+		
+		<finder name="G_F_N" return-type="Collection">
+			<finder-column name="groupId" />
+			<finder-column name="fileName" comparator="LIKE"/>
+		</finder>
+		
 		<!-- Order -->
-
-
+		<reference package-path="com.liferay.portlet.asset" entity="AssetEntry" />
+		<reference package-path="com.liferay.portlet.documentlibrary" entity="DLFileEntry" />
+		<reference package-path="com.liferay.portlet.documentlibrary" entity="DLApp" />
 	</entity>
 
 	<entity name="ServiceFileTemplate" local-service="true" remote-service="true"
-		table="opencps_dictitem">
+		table="opencps_service_templatefile">
 
 		<!-- PK fields -->
 
@@ -106,13 +124,18 @@
 		</finder>
 
 		<finder name="TemplatefileId" return-type="Collection">
-			<finder-column name="serviceinfoId" />
+			<finder-column name="templatefileId" />
 		</finder>
 
 	</entity>
 
 	<exceptions>
 		<exception>EmptyServiceContent</exception>
+		<exception>EmptyFileNo</exception>
+		<exception>OutOfLengthFileNo</exception>
+		<exception>DuplicateFileNo</exception>
+		<exception>DuplicateFileName</exception>
+		<exception>IOFileUpload</exception>
 		<exception>DuplicateServiceName</exception>
 		<exception>OutOfLengthServiceContent</exception>
 	</exceptions>
