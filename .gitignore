@@ -115,3 +115,11 @@ portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/accountmgt/service/pers
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/accountmgt/service/persistence/BusinessPersistenceImpl.java
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/accountmgt/service/persistence/CitizenPersistenceImpl.java
 
+portlets/opencps-portlet/docroot/WEB-INF/.gitignore
+portlets/opencps-portlet/docroot/WEB-INF/src/.gitignore
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/datamgt/service/.gitignore
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/servicemgt/service/.gitignore
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/usermgt/service/.gitignore
+
+.gitignore
+
