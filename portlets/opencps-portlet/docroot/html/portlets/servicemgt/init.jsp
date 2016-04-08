@@ -1,3 +1,4 @@
+<%@page import="javax.portlet.PortletPreferences"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -50,3 +51,22 @@
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
 <%@page import="com.liferay.portal.model.User"%>
+<%@page import="com.liferay.portlet.AdministratorControlPanelEntry"%>
+<%@page import="org.opencps.datamgt.service.DictCollectionLocalServiceUtil"%>
+<%@page import="org.opencps.datamgt.model.DictCollection"%>
+<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
+<%@page import="org.opencps.datamgt.model.DictItem"%>
+<%@page import="java.util.List"%>
+
+<%
+	PortletPreferences preferences = renderRequest.getPreferences();
+	
+	portletResource = ParamUtil.getString(request, "portletResource");
+	
+	if (Validator.isNotNull(portletResource)) {
+		preferences = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
+	}
+	
+	String menuTye = preferences.getValue("menuType","administrator");
+%>
+

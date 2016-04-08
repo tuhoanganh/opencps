@@ -1,3 +1,6 @@
+<%@page import="org.opencps.util.WebKeys"%>
+<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
+<%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,8 +20,9 @@
  */
 %>
 
-<%@ include file="../init.jsp" %>
+<%
+	long serviceInfoId = ParamUtil.getLong(request, "serviceinfoId");
+%>
 
-<liferay-util:include page='<%= templatePath + "display/" + menuTye + ".jsp" %>' 
-	servletContext="<%= application %>" />
-
+<h1>OKKKKK</h1>
+	

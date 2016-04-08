@@ -1,4 +1,3 @@
-<%
 /**
  * OpenCPS is the open source Core Public Services software
  * Copyright (C) 2016-present OpenCPS community
@@ -15,10 +14,16 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
-%>
 
-<%@ include file="../init.jsp" %>
+package org.opencps.servicemgt.portlet;
 
-<liferay-util:include page='<%= templatePath + "display/" + menuTye + ".jsp" %>' 
-	servletContext="<%= application %>" />
+import com.liferay.util.bridges.mvc.MVCPortlet;
 
+
+/**
+ * @author khoavd
+ *
+ */
+public class ServiceMenuPortlet extends MVCPortlet{
+
+}
