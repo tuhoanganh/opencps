@@ -354,7 +354,7 @@
 		<portlet-name>11</portlet-name>
 		<display-name>Service Menu</display-name>
 		<portlet-class>
-			org.opencps.servicemgt.portlet.ServiceMenuPortlet		
+			org.opencps.servicemgt.portlet.ServiceMenuPortlet
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
@@ -387,5 +387,152 @@
 			<role-name>user</role-name>
 		</security-role-ref>
 	</portlet>
-	
+	<portlet>	
+		<portlet-name>15</portlet-name>
+		<display-name>Process Admin Management</display-name>
+		<portlet-class>
+			org.opencps.processmgt.portlet.ProcessMgtAdminPortlet
+		</portlet-class>
+		<init-param>
+			<name>view-template</name>
+			<value>/html/portlets/processmgt/admin/serviceprocesslist.jsp</value>
+		</init-param>
+		<init-param>
+			<name>template-path</name>
+			<value>/html/portlets/processmgt/admin/</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+		</supports>
+		<resource-bundle>content.Language_15</resource-bundle>
+		<portlet-info>
+			<title>Process Admin Management</title>
+			<short-title>Process Admin Management</short-title>
+			<keywords>Process Admin Management</keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>power-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+	</portlet>
+	<portlet>	
+		<portlet-name>16</portlet-name>
+		<display-name>Dossier Process Order Management</display-name>
+		<portlet-class>
+			org.opencps.processmgt.portlet.ProcessOrderPortlet
+		</portlet-class>
+		<init-param>
+			<name>view-template</name>
+			<value>/html/portlets/processmgt/processorder/processordertodolist.jsp</value>
+		</init-param>
+		<init-param>
+			<name>template-path</name>
+			<value>/html/portlets/processmgt/processorder/</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+		</supports>
+		<resource-bundle>content.Language_16</resource-bundle>
+		<portlet-info>
+			<title>Dossier Process Order Management</title>
+			<short-title>Dossier Process Order Management</short-title>
+			<keywords>Dossier Process Order Management</keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>power-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+	</portlet>
+	<portlet>	
+		<portlet-name>17</portlet-name>
+		<display-name>Process Order Menu</display-name>
+		<portlet-class>
+			org.opencps.processmgt.portlet.ProcessOrderMenuPortlet
+		</portlet-class>
+		<init-param>
+			<name>view-template</name>
+			<value>/html/portlets/processmgt/ordermenu/processordermenu.jsp</value>
+		</init-param>
+		<init-param>
+			<name>template-path</name>
+			<value>/html/portlets/processmgt/ordermenu/</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+		</supports>
+		<resource-bundle>content.Language_17</resource-bundle>
+		<portlet-info>
+			<title>Process Order Menu</title>
+			<short-title>Process Order Menu</short-title>
+			<keywords>Process Order Menu</keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>power-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+	</portlet>
+	<portlet>	
+		<portlet-name>18</portlet-name>
+		<display-name>Dossier BackOffice Management</display-name>
+		<portlet-class>
+			org.opencps.processmgt.portlet.DossierMgtBackOfficePortlet
+		</portlet-class>
+		<init-param>
+			<name>view-template</name>
+			<value>/html/portlets/processmgt/backofficedossier/backofficedossierlist.jsp</value>
+		</init-param>
+		<init-param>
+			<name>template-path</name>
+			<value>/html/portlets/processmgt/backofficedossier/</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+		</supports>
+		<resource-bundle>content.Language_18</resource-bundle>
+		<portlet-info>
+			<title>Dossier BackOffice Management</title>
+			<short-title>Dossier BackOffice Management</short-title>
+			<keywords>Dossier BackOffice Management</keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>power-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+	</portlet>
 </portlet-app>
