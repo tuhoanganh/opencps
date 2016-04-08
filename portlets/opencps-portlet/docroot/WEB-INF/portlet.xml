@@ -392,11 +392,11 @@
 		<portlet-name>12</portlet-name>
 		<display-name>Service ConfigManagement</display-name>
 		<portlet-class>
-			org.opencps.serviceconfigmgt.portlet.ServiceConfigMgtPortlet
+			org.opencps.dossiermgt.portlet.DossierMgtAdminPortlet
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/portlets/serviceconfigmgt/view.jsp</value>
+			<value>/html/portlets/dossiermgt/admin/dossiertemplatelist.jsp</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
@@ -423,24 +423,28 @@
 		</security-role-ref>
 	</portlet>
 	<portlet>
-		<portlet-name>23</portlet-name>
+		<portlet-name>13</portlet-name>
 		<display-name>Dossier Management</display-name>
 		<portlet-class>
-			org.opencps.dossiermgt.portlet.DossierMgtPortlet
+			org.opencps.dossiermgt.portlet.DossierMgtFrontOfficePortlet
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/portlets/dossiermgt/view.jsp</value>
+			<value>html/portlets/dossiermgt/frontoffice/frontofficedossierlist.jsp</value>
+		</init-param>
+		<init-param>
+			<name>template-path</name>
+			<value>html/portlets/dossiermgt/frontoffice/</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
 			<mime-type>text/html</mime-type>
 			<portlet-mode>view</portlet-mode>
 		</supports>
-		<resource-bundle>content.Language_23</resource-bundle>
+		<resource-bundle>content.Language_13</resource-bundle>
 		<portlet-info>
 			<title>Dossier Management</title>
-			<short-title>23</short-title>
+			<short-title>Dossier Management</short-title>
 			<keywords></keywords>
 		</portlet-info>
 		<security-role-ref>
