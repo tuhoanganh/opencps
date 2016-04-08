@@ -41,6 +41,14 @@ public class MessageKeys {
 	public static final String USERMGT_WORKINGUNIT_UPDATE_ERROR = "usermgt.workingunit.update.error";
 	public static final String USERMGT_WORKINGUNIT_UPDATE_SUCESS = "usermgt.workingunit.update.success";
 	
+	
+	public static final String SERVICE_TEMPLATE_FILE_UPDATE_ERROR = "service.template.file.update.error";
+	public static final String SERVICE_TEMPLATE_FILE_UPDATE_SUCESS = "service.template.file.update.sucess";
+	public static final String SERVICE_TEMPLATE_EXCEPTION_OCCURRED = "service.template.file.exception.occurred";
+	public static final String SERVICE_TEMPLATE_FILE_NAME_EXCEPTION = "service.template.file.name.exception";
+	public static final String SERVICE_TEMPLATE_FILE_NO_EXCEPTION = "service.template.file.no.exception";
+	public static final String SERVICE_TEMPLATE_UPLOAD_EXCEPTION = "service.template.file.upload.exception";
+	
 	public static final String NO_ACCOUNT_STATUS_FOUND = "no.account.status.found";
 
 }

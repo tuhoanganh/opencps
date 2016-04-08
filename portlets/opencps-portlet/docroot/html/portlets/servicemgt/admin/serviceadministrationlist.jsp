@@ -21,4 +21,4 @@
 
 <liferay-util:include page="/html/portlets/servicemgt/admin/toptabs.jsp" servletContext="<%=application %>" />
 
-Admin cap tthc
+<liferay-ui:message key="under-constuctor"/>

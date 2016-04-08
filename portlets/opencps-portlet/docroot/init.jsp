@@ -35,7 +35,7 @@
 <%@page import="com.liferay.portal.kernel.util.StringPool"%>
 <%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
 <%@page import="com.liferay.portal.util.PortalUtil"%>
-
+<%@page import="com.liferay.portal.kernel.dao.search.SearchContainer"%>
 
 <%@ page contentType="text/html; charset=UTF-8" %>
 

@@ -16,17 +16,24 @@
 	width : 100% !important;
 }
 
-.inputstandart{
-	width: 400px;
+.input30_1 select {
+	width: 150px !important;
 }
 
-.scrollfield{
-	overflow:scroll; 
-	height:200px; 
-	width:400px;
-}
 
 .ocps-editor {
 	margin-bottom: 10px;
 	height: 50px;
+}
+
+.cke_contents {
+	height: 150px !important;
+}
+
+.opcps-rows {
+	margin-bottom: 15px;
+}
+
+.txtarea-medium {
+	width : 95% !important;
 }

@@ -66,4 +66,6 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String ACCOUNTMGT_VIEW_PROFILE = "ACCOUNTMGT_VIEW_PROFILE";
 	
 	public static final String ACCOUNT_TYPE = "ACCOUNT_TYPE";
+	public static final String SERVICE_TEMPLATE_ENTRY = "SERVICE_TEMPLATE_ENTRY";
+
 }

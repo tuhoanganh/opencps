@@ -1,6 +1,3 @@
-<%@page import="org.opencps.servicemgt.permissions.ServiceAdministrationPermission"%>
-<%@page import="org.opencps.servicemgt.permissions.ServiceDomainPermission"%>
-<%@page import="org.opencps.servicemgt.permissions.ServiceTemplatePermission"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -70,6 +67,8 @@
 				urls.add(viewLevelURL.toString());
 	}
 	
+
+	
 %>
 
 <liferay-ui:tabs
@@ -80,6 +79,4 @@
 	url2="<%=urls != null && urls.size() > 2 ? urls.get(2): StringPool.BLANK %>"
 	url3="<%=urls != null && urls.size() > 3 ? urls.get(3): StringPool.BLANK %>"
 />
-
-<liferay-util:include page='<%= templatePath + "toolbar.jsp" %>' servletContext="<%= application %>" />
 

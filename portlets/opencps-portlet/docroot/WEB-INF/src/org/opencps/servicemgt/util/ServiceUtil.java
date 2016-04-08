@@ -29,4 +29,7 @@ public class ServiceUtil {
 	public static final String TOP_TABS_DOMAIN = "service-domain";
 	
 	public static final String [] SERVICE_CATEGORY_NAMES = {"service-info"};
+
+	public static final String [] SERVICE_TEMPLATE_NAMES = {"template-info"};
+
 }

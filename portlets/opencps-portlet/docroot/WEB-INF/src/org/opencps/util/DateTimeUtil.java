@@ -128,6 +128,34 @@ public class DateTimeUtil {
 		return calendar.getTime();
 	}
 
+	public static String getStringDate() {
+		Calendar calendar = Calendar.getInstance();
+		
+		StringBuffer sb = new StringBuffer();
+		
+		int month = calendar.get(Calendar.MONTH) + 1;
+		
+		int day = calendar.get(Calendar.DAY_OF_MONTH);
+		
+		sb.append(calendar.get(Calendar.YEAR));
+		
+		if (month < 10) {
+			sb.append(0);
+			sb.append(month);
+		} else {
+			sb.append(month);
+		} 
+
+		if (day < 10) {
+			sb.append(0);
+			sb.append(day);
+		} else {
+			sb.append(day);
+		} 
+		
+		return sb.toString();
+	}
+
 	public static final String _TIMESTAMP = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
 	public static final String _VN_DATE_TIME_FORMAT = "dd/MM/yyyy HH:mm:ss";

@@ -30,6 +30,8 @@
 	String[] serviceSections = new String[]{"general_info", "detail_info", "template_info"};
 	
 	String[][] categorySections = {serviceSections};
+	
+	System.out.println(themeDisplay.getLanguageId());
 %>
 
 <liferay-ui:header
@@ -41,7 +43,7 @@
 
 <liferay-util:buffer var="htmlTop">
 	<c:if test="<%= servieInfo != null %>">
-		<liferay-ui:icon iconCssClass="icon-home" />
+		<liferay-ui:icon cssClass="icon-home"/> <%= servieInfo.getServiceName() %>
 	</c:if> 
 </liferay-util:buffer>
 
@@ -53,8 +55,12 @@
 	<aui:input name="redirectURL" type="hidden" value="<%= backURL%>"/>
 	<aui:input name="returnURL" type="hidden" value="<%= currentURL%>"/>
 	
-	<aui:input name="<%= ServiceDisplyTerms.GROUP_ID %>" type="hidden" value="<%= scopeGroupId%>"/>
-	<aui:input name="<%= ServiceDisplyTerms.COMPANY_ID %>" type="hidden" value="<%= company.getCompanyId()%>"/>
+	<aui:input name="<%= ServiceDisplayTerms.GROUP_ID %>" type="hidden" 
+		value="<%= scopeGroupId%>"/>
+	<aui:input name="<%= ServiceDisplayTerms.COMPANY_ID %>" type="hidden" 
+		value="<%= company.getCompanyId()%>"/>
+	<aui:input name="<%= ServiceDisplayTerms.SERVICE_ID %>" type="hidden" 
+		value="<%= Validator.isNotNull(servieInfo) ? servieInfo.getServiceinfoId() : StringPool.BLANK %>"/>
 
 	<liferay-ui:form-navigator
 		backURL="<%= backURL %>"
