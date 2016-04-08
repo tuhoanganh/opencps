@@ -19,6 +19,16 @@
 
 <%@ include file="../init.jsp" %>
 
-<liferay-util:include page='<%= templatePath + "display/" + menuTye + ".jsp" %>' 
-	servletContext="<%= application %>" />
+<liferay-ui:success key="potlet-config-saved" message="portlet-configuration-have-been-successfully-saved" />
 
+<liferay-portlet:actionURL var="configurationActionURL" portletConfiguration="true"/>
+
+<aui:form action="<%=configurationActionURL%>" method="post" name="configurationForm">
+	<aui:select name="menuType" id="menuType">
+		<aui:option value="administrator" label="administrator"></aui:option>
+		<aui:option value="domain" label="domain"></aui:option>
+	</aui:select>
+
+	<aui:button type="submit" name="Save" value="save"></aui:button>
+
+</aui:form>
