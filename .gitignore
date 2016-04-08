@@ -115,3 +115,8 @@ portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/accountmgt/service/pers
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/accountmgt/service/persistence/BusinessPersistenceImpl.java
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/accountmgt/service/persistence/CitizenPersistenceImpl.java
 
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/dossiermgt/service/base/
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/dossiermgt/service/http/
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/dossiermgt/model/impl/
+
+
