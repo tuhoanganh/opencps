@@ -20,6 +20,8 @@
 		<portlet id="6" />
 		<portlet id="10" />
 		<portlet id="11" />
-		<portlet id="13"/>
+		<portlet id="13" />
+		<portlet id="14"></portlet>
+		<portlet id="19"></portlet>
 	</category>
 </display>

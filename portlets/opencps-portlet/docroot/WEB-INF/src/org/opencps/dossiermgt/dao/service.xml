@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+<service-builder package-path="org.opencps.dossiermgt" auto-namespace-tables="false">
+	<author>trungnt</author>
+	<namespace>dossiermgt</namespace>
+    <entity name="dossiertemplate" local-service="true"></entity>
+    <entity name="dossierpart" local-service="true"></entity>
+    <entity name="serviceconfig" local-service="true"></entity>
+    <entity name="dossier" local-service="true"></entity>
+    <entity name="dossierstatus" local-service="true"></entity>
+    <entity name="dossierlog" local-service="true"></entity>
+    <entity name="filegroup" local-service="true"></entity>
+    <entity name="dossierfile" local-service="true"></entity>
+
+</service-builder>

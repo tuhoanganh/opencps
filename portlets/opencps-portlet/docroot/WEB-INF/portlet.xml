@@ -390,13 +390,17 @@
 	
 	<portlet>
 		<portlet-name>12</portlet-name>
-		<display-name>Service ConfigManagement</display-name>
+		<display-name>Dossier Admin Management</display-name>
 		<portlet-class>
 			org.opencps.dossiermgt.portlet.DossierMgtAdminPortlet
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
 			<value>/html/portlets/dossiermgt/admin/dossiertemplatelist.jsp</value>
+		</init-param>
+		<init-param>
+			<name>template-path</name>
+			<value>/html/portlets/dossiermgt/admin/</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
@@ -405,7 +409,7 @@
 		</supports>
 		<resource-bundle>content.Language_12</resource-bundle>
 		<portlet-info>
-			<title>Service ConfigManagement</title>
+			<title>Dossier Admin Management</title>
 			<short-title>12</short-title>
 			<keywords></keywords>
 		</portlet-info>
@@ -424,7 +428,7 @@
 	</portlet>
 	<portlet>
 		<portlet-name>13</portlet-name>
-		<display-name>Dossier Management</display-name>
+		<display-name>Dossier FrontOffice Management</display-name>
 		<portlet-class>
 			org.opencps.dossiermgt.portlet.DossierMgtFrontOfficePortlet
 		</portlet-class>
@@ -443,8 +447,78 @@
 		</supports>
 		<resource-bundle>content.Language_13</resource-bundle>
 		<portlet-info>
-			<title>Dossier Management</title>
-			<short-title>Dossier Management</short-title>
+			<title>Dossier FrontOffice Management</title>
+			<short-title>Dossier FrontOffice Management</short-title>
+			<keywords></keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>power-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+	</portlet>
+	<portlet>
+		<portlet-name>14</portlet-name>
+		<display-name>Dossier State Menu</display-name>
+		<portlet-class>
+			org.opencps.dossiermgt.portlet.DossierStateMenuPortlet
+		</portlet-class>
+		<init-param>
+			<name>view-template</name>
+			<value>/html/portlets/dossiermgt/statemenu//view.jsp</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<resource-bundle>content.Language_14</resource-bundle>
+		<portlet-info>
+			<title>Dossier State Menu</title>
+			<short-title>14</short-title>
+			<keywords></keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>power-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+	</portlet>
+	<portlet>
+		<portlet-name>19</portlet-name>
+		<display-name>Dossier FrontOffice Monitoring</display-name>
+		<portlet-class>
+			org.opencps.dossiermgt.portlet.DossierMornitoringPortlet
+		</portlet-class>
+		<init-param>
+			<name>view-template</name>
+			<value>
+				/html/portlets/dossiermgt/monitoring//view.jsp
+			</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<resource-bundle>content.Language_19</resource-bundle>
+		<portlet-info>
+			<title>Dossier FrontOffice Monitoring</title>
+			<short-title>19</short-title>
 			<keywords></keywords>
 		</portlet-info>
 		<security-role-ref>
