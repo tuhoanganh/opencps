@@ -17,9 +17,4 @@
  */
 %>
 
-<%@ include file="../init.jsp" %>
-
-<liferay-util:include page='<%= templatePath + "toolbar.jsp" %>' servletContext="<%= application %>" />
-
-
-
+Action
