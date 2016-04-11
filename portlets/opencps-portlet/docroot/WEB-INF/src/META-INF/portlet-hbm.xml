@@ -15,6 +15,13 @@
 	<import class="org.opencps.servicemgt.model.ServiceFileTemplate" />
 	<import class="org.opencps.servicemgt.model.ServiceInfo" />
 	<import class="org.opencps.servicemgt.model.TemplateFile" />
+	<import class="org.opencps.processmgt.model.ActionHistory" />
+	<import class="org.opencps.processmgt.model.ProcessOrder" />
+	<import class="org.opencps.processmgt.model.ProcessStep" />
+	<import class="org.opencps.processmgt.model.ProcessWorkflow" />
+	<import class="org.opencps.processmgt.model.ServiceProcess" />
+	<import class="org.opencps.processmgt.model.StepAllowance" />
+	<import class="org.opencps.processmgt.model.WorkflowOutput" />
 	<class name="org.opencps.datamgt.model.impl.DictCollectionImpl" table="opencps_dictcollection">
 		<cache usage="read-write" />
 		<id name="dictCollectionId" type="long">
@@ -263,5 +270,139 @@
 		<property name="fileName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="fileNo" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="fileEntryId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+	</class>
+	<class name="org.opencps.processmgt.model.impl.ActionHistoryImpl" table="opencps_actionhistory">
+		<cache usage="read-write" />
+		<id name="actionHistoryId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="createDate" type="org.hibernate.type.TimestampType" />
+		<property name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property name="processOrderId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="processWorkflowId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="actionDatetime" type="org.hibernate.type.TimestampType" />
+		<property name="stepName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="actionName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="actionNote" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="actionUserId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="daysDoing" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="daysDelay" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+	</class>
+	<class name="org.opencps.processmgt.model.impl.ProcessOrderImpl" table="opencps_processorder">
+		<cache usage="read-write" />
+		<id name="processOrderId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="createDate" type="org.hibernate.type.TimestampType" />
+		<property name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property name="serviceInfoId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="dossierTemplateId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="govAgencyCode" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="govAgencyName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="govAgencyOrganizationId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="serviceProcessId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="dossierId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="fileGroupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="processStepId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="actionUserId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="actionDatetime" type="org.hibernate.type.TimestampType" />
+		<property name="actionNote" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="assignToUserId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="processWorkflowId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="dossierStatus" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="errorInfo" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
+	<class name="org.opencps.processmgt.model.impl.ProcessStepImpl" table="opencps_processstep">
+		<cache usage="read-write" />
+		<id name="processStepId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="createDate" type="org.hibernate.type.TimestampType" />
+		<property name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property name="serviceProcessId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="stepName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="sequenceNo" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="dossierStatus" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="daysDuration" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="referenceDossierPartId" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="externalAppUrl" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="hasDossierParts" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+	</class>
+	<class name="org.opencps.processmgt.model.impl.ProcessWorkflowImpl" table="opencps_processworkflow">
+		<cache usage="read-write" />
+		<id name="processWorkflowId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="createDate" type="org.hibernate.type.TimestampType" />
+		<property name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property name="serviceProcessId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="preProcessStepId" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="postProcessStepId" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="autoEvent" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="actionName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="assignUser" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="actionUserId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="requestPayment" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="paymentFee" type="com.liferay.portal.dao.orm.hibernate.DoubleType" />
+		<property name="generateReceptionNo" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="receptionNoPattern" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="generateDeadline" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="deadlinePattern" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+	</class>
+	<class name="org.opencps.processmgt.model.impl.ServiceProcessImpl" table="opencps_serviceprocess">
+		<cache usage="read-write" />
+		<id name="serviceProcessId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="createDate" type="org.hibernate.type.TimestampType" />
+		<property name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property name="processNo" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="processName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="description" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
+	<class name="org.opencps.processmgt.model.impl.StepAllowanceImpl" table="opencps_stepallowance">
+		<cache usage="read-write" />
+		<id name="stepAllowanceId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="createDate" type="org.hibernate.type.TimestampType" />
+		<property name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property name="processStepId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="roleId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="readOnly" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+	</class>
+	<class name="org.opencps.processmgt.model.impl.WorkflowOutputImpl" table="opencps_workflowoutput">
+		<cache usage="read-write" />
+		<id name="workflowOutputId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="createDate" type="org.hibernate.type.TimestampType" />
+		<property name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property name="processWorkflowId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="dossierPartId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="required" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="esign" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="postback" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
 	</class>
 </hibernate-mapping>

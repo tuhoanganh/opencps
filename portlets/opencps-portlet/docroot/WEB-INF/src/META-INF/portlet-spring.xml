@@ -43,4 +43,26 @@
 	<bean id="org.opencps.servicemgt.service.TemplateFileService" class="org.opencps.servicemgt.service.impl.TemplateFileServiceImpl" />
 	<bean id="org.opencps.servicemgt.service.persistence.TemplateFilePersistence" class="org.opencps.servicemgt.service.persistence.TemplateFilePersistenceImpl" parent="basePersistence" />
 	<bean id="org.opencps.servicemgt.service.persistence.TemplateFileFinder" class="org.opencps.servicemgt.service.persistence.TemplateFileFinderImpl" parent="basePersistence" />
+	<bean id="org.opencps.processmgt.service.ActionHistoryLocalService" class="org.opencps.processmgt.service.impl.ActionHistoryLocalServiceImpl" />
+	<bean id="org.opencps.processmgt.service.ActionHistoryService" class="org.opencps.processmgt.service.impl.ActionHistoryServiceImpl" />
+	<bean id="org.opencps.processmgt.service.persistence.ActionHistoryPersistence" class="org.opencps.processmgt.service.persistence.ActionHistoryPersistenceImpl" parent="basePersistence" />
+	<bean id="org.opencps.processmgt.service.ProcessOrderLocalService" class="org.opencps.processmgt.service.impl.ProcessOrderLocalServiceImpl" />
+	<bean id="org.opencps.processmgt.service.ProcessOrderService" class="org.opencps.processmgt.service.impl.ProcessOrderServiceImpl" />
+	<bean id="org.opencps.processmgt.service.persistence.ProcessOrderPersistence" class="org.opencps.processmgt.service.persistence.ProcessOrderPersistenceImpl" parent="basePersistence" />
+	<bean id="org.opencps.processmgt.service.ProcessStepLocalService" class="org.opencps.processmgt.service.impl.ProcessStepLocalServiceImpl" />
+	<bean id="org.opencps.processmgt.service.ProcessStepService" class="org.opencps.processmgt.service.impl.ProcessStepServiceImpl" />
+	<bean id="org.opencps.processmgt.service.persistence.ProcessStepPersistence" class="org.opencps.processmgt.service.persistence.ProcessStepPersistenceImpl" parent="basePersistence" />
+	<bean id="org.opencps.processmgt.service.ProcessWorkflowLocalService" class="org.opencps.processmgt.service.impl.ProcessWorkflowLocalServiceImpl" />
+	<bean id="org.opencps.processmgt.service.ProcessWorkflowService" class="org.opencps.processmgt.service.impl.ProcessWorkflowServiceImpl" />
+	<bean id="org.opencps.processmgt.service.persistence.ProcessWorkflowPersistence" class="org.opencps.processmgt.service.persistence.ProcessWorkflowPersistenceImpl" parent="basePersistence" />
+	<bean id="org.opencps.processmgt.service.ServiceProcessLocalService" class="org.opencps.processmgt.service.impl.ServiceProcessLocalServiceImpl" />
+	<bean id="org.opencps.processmgt.service.ServiceProcessService" class="org.opencps.processmgt.service.impl.ServiceProcessServiceImpl" />
+	<bean id="org.opencps.processmgt.service.persistence.ServiceProcessPersistence" class="org.opencps.processmgt.service.persistence.ServiceProcessPersistenceImpl" parent="basePersistence" />
+	<bean id="org.opencps.processmgt.service.persistence.ServiceProcessFinder" class="org.opencps.processmgt.service.persistence.ServiceProcessFinderImpl" parent="basePersistence" />
+	<bean id="org.opencps.processmgt.service.StepAllowanceLocalService" class="org.opencps.processmgt.service.impl.StepAllowanceLocalServiceImpl" />
+	<bean id="org.opencps.processmgt.service.StepAllowanceService" class="org.opencps.processmgt.service.impl.StepAllowanceServiceImpl" />
+	<bean id="org.opencps.processmgt.service.persistence.StepAllowancePersistence" class="org.opencps.processmgt.service.persistence.StepAllowancePersistenceImpl" parent="basePersistence" />
+	<bean id="org.opencps.processmgt.service.WorkflowOutputLocalService" class="org.opencps.processmgt.service.impl.WorkflowOutputLocalServiceImpl" />
+	<bean id="org.opencps.processmgt.service.WorkflowOutputService" class="org.opencps.processmgt.service.impl.WorkflowOutputServiceImpl" />
+	<bean id="org.opencps.processmgt.service.persistence.WorkflowOutputPersistence" class="org.opencps.processmgt.service.persistence.WorkflowOutputPersistenceImpl" parent="basePersistence" />
 </beans>
