@@ -2,4 +2,8 @@
 
 <portlet:defineObjects />
 
-This is the <b>Service ConfigManagement</b> portlet in View mode.
+<%@ include file="../init.jsp"%>
+
+<liferay-util:include page="/html/portlets/dossiermgt/admin/edit_dossier_template.jsp" servletContext="<%=application %>" />
+
+
