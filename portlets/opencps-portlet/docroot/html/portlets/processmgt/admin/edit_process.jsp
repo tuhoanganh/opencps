@@ -27,14 +27,22 @@
 
 	ServiceProcess servieProcess = (ServiceProcess) request.getAttribute(WebKeys.SERVICE_PROCESS_ENTRY);
 	
-	String backURL = ParamUtil.getString(request, "backURL");
+	String tabName = ParamUtil.getString(request, "tab", "general");
+
 	
-	String[] processSections = new String[]{"general", "step", "action", "service"};
+	String backURL = ParamUtil.getString(request, "backURL");
+	String[] processSections = new String [] {};
+
+	if(Validator.isNotNull(servieProcess)) {
+		processSections = new String[]{"general", "step", "action", "service"};
+	} else {
+		processSections = new String[]{"general"};
+	}
+	
 	
 	String[][] categorySections = {processSections};
 	
 %>
-
 <liferay-ui:header
 	backURL="<%= backURL %>"
 	title='<%= (Validator.isNull(servieProcess)) ? "add-process" : "update-process" %>'
@@ -65,7 +73,7 @@
 
 	<liferay-ui:form-navigator
 		backURL="<%= backURL %>"
-		categoryNames="process-info"
+		categoryNames='<%= new String [] {"process-info"} %>'
 		categorySections="<%= categorySections %>"
 		htmlTop="<%= htmlTop %>"
 		jspPath='<%= templatePath + "process/" %>'
