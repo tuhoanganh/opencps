@@ -43,7 +43,7 @@ public class CitizenSearch extends SearchContainer<Citizen>{
 	static {
 		
 		headerNames.add("personal-id");
-		headerNames.add("fullname");
+		headerNames.add("full-name");
 		headerNames.add("gender");
 		headerNames.add("birth-date");
 		headerNames.add("account");
@@ -51,7 +51,7 @@ public class CitizenSearch extends SearchContainer<Citizen>{
 		headerNames.add("action");
 		
 		orderableHeaders.put("personal-id", CitizenSearchTerm.CITIZEN_PERSONALID);
-		orderableHeaders.put("fullname", CitizenSearchTerm.CITIZEN_FULLNAME);
+		orderableHeaders.put("full-name", CitizenSearchTerm.CITIZEN_FULLNAME);
 		orderableHeaders.put("gender", CitizenSearchTerm.CITIZEN_GENDER);
 		orderableHeaders.put("birth-date", CitizenSearchTerm.CITIZEN_BIRTHDATE);
 		orderableHeaders.put("account", CitizenSearchTerm.CITIZEN_EMAIL);

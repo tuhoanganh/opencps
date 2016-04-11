@@ -367,7 +367,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 			    .deleteOrganization(mappingOrgId);
 		}
 
-		// Ham chua kiem tra ca dieu kien lien quan nhu tai khoan phu...
+		businessPersistence.remove(business);
 
 	}
 
