@@ -75,14 +75,14 @@
 		</aui:col>
 	</aui:row>
 	
-	<aui:row>
-		<aui:input 
-			name="<%=DossierPartDisplayTerms.DOSSIERPART_PARTTIP %>"
-			cssClass="input90"
-		>
-			<aui:validator name="requied" />
-			<aui:validator name="maxLength">255</aui:validator>
-		</aui:input>
+	<aui:row >
+			<aui:input 
+				name="<%=DossierPartDisplayTerms.DOSSIERPART_PARTTIP %>"
+				cssClass="input90"
+			>
+				<aui:validator name="required" />
+				<aui:validator name="maxLength">255</aui:validator>
+			</aui:input>
 	</aui:row>
 	
 	<aui:row>
@@ -137,38 +137,46 @@
 		<aui:col cssClass="input30">
 			<aui:input 
 			name="<%=DossierPartDisplayTerms.DOSSIERPART_REQUIRED %>"
-			type="checkboxs"	
+			type="checkbox"	
 		/>
 		</aui:col>
 	</aui:row>
 		
-	<aui:row>
-		<aui:col cssClass="input90">
-			<aui:input name="<%=DossierPartDisplayTerms.DOSSIERPART_FORMSCRIPT %>" />
-		</aui:col>
-	</aui:row>
+	<div id = "<portlet:namespace/>displayFormScript">
+		<aui:row >
+			<aui:input 
+				name="<%=DossierPartDisplayTerms.DOSSIERPART_FORMSCRIPT %>" 
+				cssClass="input90"
+			/>
+		</aui:row>
+	</div>
 	
 	<aui:row>
-		<aui:input name="<%=DossierPartDisplayTerms.DOSSIERPART_SAMPLEDATA %>" />
+		<aui:input 
+			name="<%=DossierPartDisplayTerms.DOSSIERPART_SAMPLEDATA %>" 
+			cssClass="input90"
+		/>
 	</aui:row>
 	
-	<aui:button name="submit" value="submit"/>
+	<aui:button name="submit" value="submit" type="submit"/>
 </aui:form>
 
 <aui:script>
 
 AUI().ready(function(A) {
 	var partType = A.one('#<portlet:namespace /><%=DossierPartDisplayTerms.DOSSIERPART_PARTTYPE %>');
+	var dispalyFormScript = A.one('#<portlet:namespace/>displayFormScript');
+	
+	if(partType.val() == '0') {
+		dispalyFormScript.hide();
+	}
+	
 	if(partType) {
-		var formScript = A.one('#<portlet:namespace /><%=DossierPartDisplayTerms.DOSSIERPART_FORMSCRIPT %>');
 		partType.on('change',function() {
-			alert(partType.val());
 			if(partType.val() == "1" || partType.val() == "2" || partType.val() == "5") {
-				alert("show");
-				formScript.show();
+				dispalyFormScript.show();
 			} else {
-				alert("hide");
-				formScript.hide();
+				dispalyFormScript.hide();
 			}	
 		});
 		

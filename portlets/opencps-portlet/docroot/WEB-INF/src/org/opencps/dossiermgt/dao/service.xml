@@ -17,7 +17,7 @@
         <column name="partTip" type="String"></column>
         <column name="partType" type="int"></column>
         <column name="parentId" type="long"></column>
-        <column name="sibling" type="int"></column>
+        <column name="sibling" type="double"></column>
         <column name="treeIndex" type="String"></column>
         <column name="formScript" type="String"></column>
         <column name="sampleData" type="String"></column>

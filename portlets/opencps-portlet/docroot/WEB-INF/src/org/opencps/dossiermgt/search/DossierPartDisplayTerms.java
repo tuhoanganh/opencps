@@ -54,7 +54,7 @@ public class DossierPartDisplayTerms extends DisplayTerms{
 	    required = ParamUtil.getBoolean(portletRequest, DOSSIERPART_REQUIRED);
 	    
 	    partType = ParamUtil.getInteger(portletRequest, DOSSIERPART_PARTTYPE);
-	    sibling = ParamUtil.getInteger(portletRequest, DOSSIERPART_SIBLING);
+	    sibling = ParamUtil.getDouble(portletRequest, DOSSIERPART_SIBLING);
     }
 
 	public long getDossierpartId() {
@@ -177,12 +177,12 @@ public class DossierPartDisplayTerms extends DisplayTerms{
     	this.partType = partType;
     }
 	
-    public int getSibling() {
+    public double getSibling() {
     
     	return sibling;
     }
 	
-    public void setSibling(int sibling) {
+    public void setSibling(double sibling) {
     
     	this.sibling = sibling;
     }
@@ -201,5 +201,5 @@ public class DossierPartDisplayTerms extends DisplayTerms{
 	protected boolean required;
 	
 	protected int partType;  
-	protected int sibling;
+	protected double sibling;
 }
