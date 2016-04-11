@@ -17,11 +17,15 @@
 package org.opencps.dossiermgt.util;
 
 
+import java.util.Locale;
+
 import org.opencps.dossiermgt.comparator.DossierTemplateNameComparator;
 import org.opencps.dossiermgt.comparator.DossierTemplateNoComparator;
 import org.opencps.dossiermgt.search.DossierTemplateDisplayTerms;
 
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.StringPool;
 
 
 public class DossierMgtUtil {
@@ -50,5 +54,31 @@ public class DossierMgtUtil {
 		}
 		
 		return orderByComparator;
+	}
+	
+	public static String getNameOfPartType(int partType, Locale locale) {
+		String partTypeName = StringPool.BLANK;
+		switch (partType) {
+		case 1: 
+			partTypeName = LanguageUtil.get(locale, "paper submited");
+			break;
+		case 2: 
+			partTypeName = LanguageUtil.get(locale, "Other papers group");
+			break;
+		case 3: 
+			partTypeName = LanguageUtil.get(locale, "groups optional");
+			break;
+		case 4: 
+			partTypeName = LanguageUtil.get(locale, "own records");
+			break;
+		case 5: 
+			partTypeName = LanguageUtil.get(locale, "papers results");
+			break;	
+		default:
+			partTypeName = LanguageUtil.get(locale, StringPool.BLANK);
+			break;
+		}
+		
+		return partTypeName;
 	}
 }
