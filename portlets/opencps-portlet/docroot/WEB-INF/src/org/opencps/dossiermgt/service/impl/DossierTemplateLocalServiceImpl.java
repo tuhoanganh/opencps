@@ -14,7 +14,14 @@
 
 package org.opencps.dossiermgt.service.impl;
 
+import java.util.List;
+
+import org.opencps.dossiermgt.model.DossierTemplate;
 import org.opencps.dossiermgt.service.base.DossierTemplateLocalServiceBaseImpl;
+
+import com.liferay.counter.service.CounterLocalServiceUtil;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.OrderByComparator;
 
 /**
  * The implementation of the dossier template local service.
@@ -32,9 +39,44 @@ import org.opencps.dossiermgt.service.base.DossierTemplateLocalServiceBaseImpl;
  */
 public class DossierTemplateLocalServiceImpl
 	extends DossierTemplateLocalServiceBaseImpl {
-	/*
-	 * NOTE FOR DEVELOPERS:
-	 *
-	 * Never reference this interface directly. Always use {@link org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil} to access the dossier template local service.
-	 */
+	
+	public DossierTemplate addDossierTemplate(String templateNo,
+		String templateName, String description) throws SystemException {
+		
+		long dossierTemplateId = CounterLocalServiceUtil.increment(DossierTemplate.class.getName());
+		DossierTemplate dossierTemplate = dossierTemplatePersistence.create(dossierTemplateId);
+		
+		dossierTemplate.setTemplateNo(templateNo);
+		dossierTemplate.setTemplateName(templateName);
+		dossierTemplate.setDescription(description);
+		
+		return dossierTemplatePersistence.update(dossierTemplate);
+	}
+	
+	public DossierTemplate updateDossierTemplate(long dossierTemplateId, 
+		String templateNo,String templateName, String description) throws SystemException {
+		
+		DossierTemplate dossierTemplate = dossierTemplatePersistence.fetchByPrimaryKey(dossierTemplateId);
+		
+		dossierTemplate.setTemplateNo(templateNo);
+		dossierTemplate.setTemplateName(templateName);
+		dossierTemplate.setDescription(description);
+		
+		return dossierTemplatePersistence.update(dossierTemplate);
+	
+	}
+	
+	public List<DossierTemplate> getDossierTemplates(String templateName) 
+					throws SystemException {
+		return dossierTemplatePersistence.findByTemplateName(templateName);
+	}
+	
+	public List<DossierTemplate> getDossierTemplates(int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		return dossierTemplatePersistence.findAll(start, end, orderByComparator);
+	}
+	
+	public int countAll() throws SystemException {
+		return dossierTemplatePersistence.countAll();
+	}
 }

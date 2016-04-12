@@ -8,6 +8,10 @@
         <column name="templateName" type="String"></column>
         <column name="description" type="String"></column>
         <column name="templateNo" type="String"></column>
+        
+        <finder return-type="Collection" name="TemplateName">
+        	<finder-column name="templateName" />
+        </finder>
     </entity>
     <entity name="DossierPart" local-service="true" table="opencps_dossierpart">
         <column name="dossierpartId" type="long" primary="true"></column>

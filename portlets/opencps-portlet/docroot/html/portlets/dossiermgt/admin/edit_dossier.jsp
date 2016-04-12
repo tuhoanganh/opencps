@@ -33,8 +33,8 @@
 	} else {
 		dossierTemplateSections = new String[3];
 		dossierTemplateSections[0] = "edit_dossier_template";
-		dossierTemplateSections[1] = "edit_dossier_template";
-		dossierTemplateSections[2] = "edit_dossier_template";
+		dossierTemplateSections[1] = "dossierpartlist";
+		dossierTemplateSections[2] = "dossierservicelist";
 	}
 	
 	String[][] categorySections = {dossierTemplateSections};

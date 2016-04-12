@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 public class DossierPartDisplayTerms extends DisplayTerms{
 	
 	public static final String DOSSIERPART_DOSSIERPARTID = "dossierpartId";
+	public static final String DOSSIERPART_DOSSIERTEMPLATEID = "dossierTemplateId";
 	public static final String DOSSIERPART_PARENTID = "parentId";
 	public static final String DOSSIERPART_PARTNO = "partNo";
 	public static final String DOSSIERPART_PARTNAME = "partName";
@@ -42,6 +43,7 @@ public class DossierPartDisplayTerms extends DisplayTerms{
 	    super(portletRequest);
 	    dossierpartId = ParamUtil.getLong(portletRequest, DOSSIERPART_DOSSIERPARTID);
 	    parentId = ParamUtil.getLong(portletRequest, DOSSIERPART_PARENTID);
+	    dossierTemplateId = ParamUtil.getLong(portletRequest, DOSSIERPART_DOSSIERTEMPLATEID);
 	    
 	    partNo = ParamUtil.getString(portletRequest, DOSSIERPART_PARTNO);
 	    partName = ParamUtil.getString(portletRequest, DOSSIERPART_PARTNAME);
@@ -189,6 +191,7 @@ public class DossierPartDisplayTerms extends DisplayTerms{
 	protected long dossierpartId;
 	protected long dossierTemplateId;
 	protected long parentId;
+	
 	
 	protected String partNo;
 	protected String partName;

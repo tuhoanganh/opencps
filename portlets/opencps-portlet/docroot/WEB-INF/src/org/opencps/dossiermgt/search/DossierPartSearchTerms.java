@@ -28,6 +28,7 @@ public class DossierPartSearchTerms extends DossierPartDisplayTerms{
 	    super(portletRequest);
 	    dossierpartId = ParamUtil.getLong(portletRequest, DOSSIERPART_DOSSIERPARTID);
 	    parentId = ParamUtil.getLong(portletRequest, DOSSIERPART_PARENTID);
+	    dossierTemplateId = ParamUtil.getLong(portletRequest, DOSSIERPART_DOSSIERTEMPLATEID);
 	    
 	    partNo = ParamUtil.getString(portletRequest, DOSSIERPART_PARTNO);
 	    partName = ParamUtil.getString(portletRequest, DOSSIERPART_PARTNAME);

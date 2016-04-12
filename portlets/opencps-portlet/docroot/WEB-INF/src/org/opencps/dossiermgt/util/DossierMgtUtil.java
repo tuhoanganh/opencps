@@ -30,6 +30,10 @@ import com.liferay.portal.kernel.util.StringPool;
 
 public class DossierMgtUtil {
 	
+	public static final String TOP_TABS_DOSSIER_TEMPLATE = "top_tab_dossier_template";
+	public static final String TOP_TABS_DOSSIER_PART = "top_tabs_dossier_part";
+	public static final String TOP_TABS_DOSSIER_SERVICE = "top_tabs_dossier_service";
+	
 	public static final String[] _DOSSIER_CATEGORY_NAMES = {
 		"dossier-info"
 	};

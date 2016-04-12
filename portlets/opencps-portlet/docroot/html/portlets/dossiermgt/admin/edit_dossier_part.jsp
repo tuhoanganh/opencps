@@ -1,3 +1,4 @@
+<%@page import="org.opencps.dossiermgt.search.DossierTemplateDisplayTerms"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -19,23 +20,20 @@
 <%@ include file="../init.jsp"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
 <%@page import="org.opencps.dossiermgt.model.DossierPart"%>
+<%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
 <%@page import="org.opencps.dossiermgt.search.DossierPartDisplayTerms"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
 <%
+	DossierTemplate dossierTemplate = (DossierTemplate) request.getAttribute(WebKeys.DOSSIER_TEMPLATE_ENTRY);
+	long dossierTemplateId = dossierTemplate != null ? dossierTemplate.getDossierTemplateId() : 0L;
 	DossierPart dossierPart = (DossierPart) request.getAttribute(WebKeys.DOSSIER_PART_ENTRY);
 	DossierPart dossierPartIsAddChilds = null;
 	long dossierPartId = dossierPart != null ? dossierPart.getDossierpartId() : 0L;
 	int [] dossierType = {1,2,3,4,5};
 	String isAddChilds = ParamUtil.getString(request, "isAddChild");
-	try {
-		
-		
- 	} catch(Exception e) {
-		_log.error(e);
-	}
 %>
 
 <portlet:actionURL name="updateDossierPart" var="updateDossierPartURL" >
@@ -43,6 +41,11 @@
 		name="<%=DossierPartDisplayTerms.DOSSIERPART_DOSSIERPARTID %>" 
 		value="<%=String.valueOf(dossierPartId)%>"
 	/>
+	<portlet:param 
+		name="<%=DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DOSSIERTEMPLATEID %>" 
+		value="<%=String.valueOf(dossierTemplateId)%>"
+	/>
+	
 </portlet:actionURL>
 
 <aui:form 

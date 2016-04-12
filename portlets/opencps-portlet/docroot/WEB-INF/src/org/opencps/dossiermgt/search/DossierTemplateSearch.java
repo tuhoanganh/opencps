@@ -43,6 +43,7 @@ public class DossierTemplateSearch extends SearchContainer<DossierTemplate>{
 	static Map<String, String> orderableHeaders = new HashMap<String, String>();
 	
 	static {
+		headerNames.add("STT");
 		headerNames.add("template-number");
 		headerNames.add("template_name");
 		headerNames.add("template-description");
