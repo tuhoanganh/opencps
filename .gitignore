@@ -8,6 +8,7 @@ build-common.xml
 build.khoavd.properties
 build.properties
 build.trungnt.properties
+build.dunglt.properties
 build.xml
 ci.properties
 common.bnd
