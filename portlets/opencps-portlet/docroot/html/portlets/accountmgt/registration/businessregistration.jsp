@@ -93,7 +93,6 @@
 
 <div class="bottom-horizontal-line"></div>
 
-
 <portlet:actionURL var="updateBusinessURL" name="updateBusiness">
 	<portlet:param 
 		name="<%=BusinessDisplayTerms.BUSINESS_BUSINESSID %>" 

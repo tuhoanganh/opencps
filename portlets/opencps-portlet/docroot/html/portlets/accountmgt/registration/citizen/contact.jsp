@@ -85,8 +85,6 @@
 	}
 %>
 
-
-
 <aui:model-context bean="<%=citizen %>" model="<%=Citizen.class%>" />
 
 <aui:row>

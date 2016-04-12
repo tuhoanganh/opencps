@@ -81,11 +81,6 @@ import com.liferay.util.PwdGenerator;
  * @see org.opencps.accountmgt.service.BusinessLocalServiceUtil
  */
 public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
-	/*
-	 * NOTE FOR DEVELOPERS: Never reference this interface directly. Always use
-	 * {@link org.opencps.accountmgt.service.BusinessLocalServiceUtil} to access
-	 * the business local service.
-	 */
 
 	public Business addBusiness(
 	    String fullName, String enName, String shortName, String businessType,

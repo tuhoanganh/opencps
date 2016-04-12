@@ -27,7 +27,6 @@
 <%@page import="org.opencps.accountmgt.search.CitizenDisplayTerms"%>
 <%@page import="org.opencps.util.MessageKeys"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
-
 <%@ include file="../init.jsp" %>
 
 <%
