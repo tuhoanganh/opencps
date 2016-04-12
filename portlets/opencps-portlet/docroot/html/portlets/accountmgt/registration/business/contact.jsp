@@ -16,7 +16,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil"%>
 <%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>

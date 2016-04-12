@@ -15,7 +15,6 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>
 */
 package org.opencps.accountmgt.portlet;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
