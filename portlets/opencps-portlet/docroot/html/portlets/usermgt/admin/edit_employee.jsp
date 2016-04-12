@@ -150,7 +150,7 @@
 	
 	AUI().ready(function(A){
 		
-		<portlet:namespace/>renderWorkingUnitJobPos();
+		
 		<portlet:namespace/>renderWorkingUnitMainJobPos(selectedMainJobPosId);
 		
 		workingUnitInput.on('change', function(){
