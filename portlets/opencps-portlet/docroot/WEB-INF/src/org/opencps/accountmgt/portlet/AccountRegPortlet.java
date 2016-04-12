@@ -276,7 +276,7 @@ public class AccountRegPortlet extends MVCPortlet {
 			}
 			else {
 				SessionErrors.add(
-				    uploadPortletRequest,
+					actionRequest,
 				    MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED);
 			}
 			if (Validator.isNotNull(currentURL)) {
@@ -435,7 +435,7 @@ public class AccountRegPortlet extends MVCPortlet {
 			else {
 				SessionErrors.add(
 				    uploadPortletRequest,
-				    MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED);
+				    MessageKeys.ACCOUNT_SYSTEM_EXCEPTION_OCCURRED);
 			}
 			if (Validator.isNotNull(currentURL)) {
 				actionResponse.sendRedirect(currentURL);
