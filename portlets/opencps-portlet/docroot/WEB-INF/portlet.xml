@@ -354,7 +354,7 @@
 		<portlet-name>11</portlet-name>
 		<display-name>Service Menu</display-name>
 		<portlet-class>
-			org.opencps.servicemgt.portlet.ServiceMenuPortlet
+			org.opencps.servicemgt.portlet.ServiceMenuPortlet		
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
