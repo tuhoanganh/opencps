@@ -62,8 +62,29 @@
         </order>
         
     </entity>
+    <entity name="DossierStatus" local-service="true">
     
-    <entity name="DossierStatus" local-service="true"></entity>
+   		<!-- PK fields -->
+   		
+        <column name="dossierStatusId" type="long" primary="true"/>
+        
+        <!-- Audit fields -->
+        
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		
+		<!-- Other fields -->
+        <column name="dossierId" type="long"></column>
+        <column name="fileGroupId" type="long"></column>
+        <column name="dossierStatus" type="int"></column>
+        <column name="actionInfo" type="String"></column>
+        <column name="messageInfo" type="String"></column>
+        <column name="updateDatetime" type="Date"></column>
+        <column name="syncStatus" type="int"></column>
+    </entity>
     <entity name="DossierLog" local-service="true"></entity>
     <entity name="FileGroup" local-service="true"></entity>
     <entity name="DossierFile" local-service="true"></entity>
