@@ -60,7 +60,7 @@
 />
 
 <liferay-ui:error 
-	key="<%=MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED %>" 
+	key="<%=MessageKeys.ACCOUNT_SYSTEM_EXCEPTION_OCCURRED %>" 
 	message="system.exception.occured" 
 />
 
