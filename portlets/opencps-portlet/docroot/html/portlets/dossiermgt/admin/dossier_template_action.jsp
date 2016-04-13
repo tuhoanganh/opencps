@@ -38,6 +38,8 @@
 				value="<%=String.valueOf(dossierTemplate.getDossierTemplateId()) %>"
 			/>
 			
+			<portlet:param name="backURL" value="<%=currentURL %>"/>
+			
 			<portlet:param name="mvcPath" value='<%=templatePath + "edit_dossier.jsp"%>'/>
 		</portlet:renderURL>
 		

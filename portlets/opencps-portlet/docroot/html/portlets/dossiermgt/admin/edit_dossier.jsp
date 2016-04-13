@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -25,6 +24,8 @@
 <%
 	long dossierTemplateId = ParamUtil.getLong(request, DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DOSSIERTEMPLATEID);
 	
+	String backURL = ParamUtil.getString(request, "backURL");
+
 	String [] dossierTemplateSections = null;
 	
 	if(dossierTemplateId == 0) {
@@ -40,6 +41,12 @@
 	String[][] categorySections = {dossierTemplateSections};
 %>
 
+<liferay-ui:header
+	backURL="<%= backURL %>"
+	title="update-dossier"
+	backLabel="back"
+/>
+
 <portlet:actionURL name="updateDossier" var="updateDossierURL" >
 
 </portlet:actionURL>
@@ -50,7 +57,10 @@
 </liferay-util:buffer>
 
 <liferay-util:buffer var="htmlBot">
-
+	<div class="button-holder ">
+			<aui:button name="submit" type="submit" value="submit"/>
+			<aui:button name="cancel" value="cancel" href="<%=backURL %>"/>	
+	</div>
 </liferay-util:buffer>
 
 <aui:form name="fm" 
@@ -63,6 +73,8 @@
 		htmlBottom="<%= htmlBot %>"
 		htmlTop="<%= htmlTop %>"
 		jspPath='<%=templatePath + "dossier_common/" %>'
+		showButtons="false"
+		
 		>	
 	</liferay-ui:form-navigator>
 	<%-- <aui:input 
@@ -71,3 +83,35 @@
 		type="hidden"
 	></aui:input> --%>
 </aui:form>
+
+<aui:script>
+
+	AUI().ready(function(A) {
+	
+		var dossierPartLink = A.one('#<portlet:namespace />dossierpartlistLink');
+		var dossierServiceLink = A.one('#<portlet:namespace />dossierservicelistLink'); 
+		var dossierTemplateLink = A.one('#<portlet:namespace />edit_dossier_templateLink');
+		
+		if(dossierTemplateLink) {
+			var submitBtn = A.one('#<portlet:namespace />submit');
+			dossierTemplateLink.on('click',function(){
+				submitBtn.show();
+			});
+		} 
+		
+		if(dossierPartLink) {
+			var submitBtn = A.one('#<portlet:namespace />submit');
+			dossierPartLink.on('click',function(){
+				submitBtn.hide();
+			});
+		} 
+		
+		if(dossierServiceLink) {
+			var submitBtn = A.one('#<portlet:namespace />submit');
+			dossierServiceLink.on('click',function(){
+				submitBtn.hide();
+			});
+		} 
+		
+	});
+</aui:script>

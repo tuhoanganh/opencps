@@ -44,8 +44,8 @@
 				
 				<portlet:renderURL var="editDossierTemplateURL">
 					<portlet:param name="mvcPath" value='<%= templatePath + "edit_dossier.jsp" %>'/>
-					<%-- <portlet:param name="redirectURL" value="<%=currentURL %>"/>
-					<portlet:param name="backURL" value="<%=currentURL %>"/> --%>
+					<%-- <portlet:param name="redirectURL" value="<%=currentURL %>"/> --%>
+					<portlet:param name="backURL" value="<%=currentURL %>"/> 
 				</portlet:renderURL>
 				
 				<c:if 

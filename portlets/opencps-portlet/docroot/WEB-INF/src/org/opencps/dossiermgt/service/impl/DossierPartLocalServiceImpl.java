@@ -48,7 +48,7 @@ public class DossierPartLocalServiceImpl extends DossierPartLocalServiceBaseImpl
 		
 		String treeIndex = getTreeIndex(parentId, dossierPartId);
 		
-		dossierPart.setDossierpartId(dossierTemplateId);
+		dossierPart.setDossierTemplateId(dossierTemplateId);
 		dossierPart.setPartName(partName);
 		dossierPart.setPartTip(partTip);
 		dossierPart.setPartType(partType);

@@ -1,4 +1,3 @@
-<%@page import="org.opencps.dossiermgt.search.DossierTemplateDisplayTerms"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -18,6 +17,7 @@
  */
 %>
 <%@ include file="../init.jsp"%>
+<%@page import="org.opencps.dossiermgt.search.DossierTemplateDisplayTerms"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
 <%@page import="org.opencps.dossiermgt.model.DossierPart"%>
 <%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
@@ -160,8 +160,11 @@
 			cssClass="input90"
 		/>
 	</aui:row>
-	
-	<aui:button name="submit" value="submit" type="submit"/>
+	<aui:row>
+			<aui:button name="submit" value="submit" type="submit"/>
+		
+			<aui:button type="reset" value="clear"/>
+	</aui:row>
 </aui:form>
 
 <aui:script>
