@@ -30,7 +30,9 @@
 
 <%
 	String tabs1 = ParamUtil.getString(request, "tabs1", DossierMgtUtil.TOP_TABS_DOSSIER_TEMPLATE);
-	PortletURL searchURL = renderResponse.createRenderURL();
+	String tabs2 = (String) request.getAttribute("tabs2");	
+	_log.info("tabs2 ==== " + tabs2);
+PortletURL searchURL = renderResponse.createRenderURL();
 %>
 <aui:nav-bar cssClass="custom-toolbar">
 	<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left" >
@@ -44,7 +46,7 @@
 				
 				<portlet:renderURL var="editDossierTemplateURL">
 					<portlet:param name="mvcPath" value='<%= templatePath + "edit_dossier.jsp" %>'/>
-					<%-- <portlet:param name="redirectURL" value="<%=currentURL %>"/> --%>
+					<portlet:param name="redirectURL" value="<%=currentURL %>"/> 
 					<portlet:param name="backURL" value="<%=currentURL %>"/> 
 				</portlet:renderURL>
 				
@@ -61,6 +63,27 @@
 					/>
 				</c:if>
 				
+			</c:when>
+			<c:when test="<%=tabs2.contentEquals(DossierMgtUtil.TOP_TABS_DOSSIER_PART) %>">
+				
+				<portlet:renderURL var="editDossierPartURL">
+					<portlet:param name="mvcPath" value='<%= templatePath + "edit_dossier_part.jsp" %>'/>
+					<portlet:param name="redirectURL" value="<%=currentURL %>"/> 
+					<portlet:param name="backURL" value="<%=currentURL %>"/> 
+				</portlet:renderURL>
+				
+				<c:if 
+						test="<%=DossierPartPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_DOSSIER_TEMPLATE) 
+						&& DossierPartPermission.contains(permissionChecker, scopeGroupId, ActionKeys.VIEW)
+					%>"
+				>
+					<aui:nav-item 
+						id="addDossierPart" 
+						label="add-dosier-part" 
+						iconCssClass="icon-plus"  
+						href="<%=editDossierPartURL %>"
+					/>
+				</c:if>
 			</c:when>
 			
 			<%-- <c:when test="<%= tabs1.contentEquals(DossierMgtUtil.TOP_TABS_DOSSIER_PART) %>">

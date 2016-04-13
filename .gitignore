@@ -8,6 +8,7 @@ build-common.xml
 build.khoavd.properties
 build.properties
 build.trungnt.properties
+build.dunglt.properties
 build.xml
 ci.properties
 common.bnd
@@ -115,6 +116,7 @@ portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/accountmgt/service/pers
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/accountmgt/service/persistence/BusinessPersistenceImpl.java
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/accountmgt/service/persistence/CitizenPersistenceImpl.java
 
+<<<<<<< HEAD
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/dossiermgt/service/base/
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/dossiermgt/service/http/
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/dossiermgt/model/impl/
@@ -122,5 +124,8 @@ portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/dossiermgt/model/impl/
 
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/dossiermgt/service/persistence/DossierPartPersistenceImpl.java
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/dossiermgt/service/persistence/DossierTemplatePersistenceImpl.java
+=======
+portlets/opencps-portlet/.settings/org.eclipse.core.resources.prefs
+>>>>>>> qa-rc-0.1-dunglt-fixbug
 
 
