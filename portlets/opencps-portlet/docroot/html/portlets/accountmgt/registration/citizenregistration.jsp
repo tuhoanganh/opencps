@@ -115,8 +115,6 @@
 	AUI().ready(function(A) {
 		var termsOfUseCheckbox = A.one('#<portlet:namespace />termsOfUseCheckbox');
 		
-		
-		
 		if(termsOfUseCheckbox) {
 			termsOfUseCheckbox.on('click',function() {
 				

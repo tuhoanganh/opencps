@@ -1,15 +1,19 @@
 /**
- * OpenCPS is the open source Core Public Services software Copyright (C)
- * 2016-present OpenCPS community This program is free software: you can
- * redistribute it and/or modify it under the terms of the GNU Affero General
- * Public License as published by the Free Software Foundation, either version 3
- * of the License, or any later version. This program is distributed in the hope
- * that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Affero General Public License for more details. You should have received a
- * copy of the GNU Affero General Public License along with this program. If
- * not, see <http://www.gnu.org/licenses/>
- */
+* OpenCPS is the open source Core Public Services software
+* Copyright (C) 2016-present OpenCPS community
+
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Affero General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU Affero General Public License for more details.
+* You should have received a copy of the GNU Affero General Public License
+* along with this program. If not, see <http://www.gnu.org/licenses/>
+*/
 
 package org.opencps.accountmgt.portlet;
 
@@ -53,7 +57,6 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.UserLocalServiceUtil;
-import com.liferay.util.PwdGenerator;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 /**
@@ -62,12 +65,14 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
 public class AccountMgtPortlet extends MVCPortlet {
 
 	public void deleteBusiness(
-	    ActionRequest actionRequest, ActionResponse actionResponse) {
+	    ActionRequest actionRequest, ActionResponse actionResponse)
+	    throws IOException {
 
 		long businessId = ParamUtil
 		    .getLong(
 		        actionRequest, BusinessDisplayTerms.BUSINESS_BUSINESSID, 0L);
-
+		String redirectURL = ParamUtil
+		    .getString(actionRequest, "redirectURL");
 		try {
 			BusinessLocalServiceUtil
 			    .deleteBusinessByBusinessId(businessId);
@@ -75,15 +80,26 @@ public class AccountMgtPortlet extends MVCPortlet {
 		catch (Exception e) {
 			_log
 			    .error(e);
+			SessionErrors
+			    .add(actionRequest, MessageKeys.ACCOUNT_BUSINESS_DELETE_ERROR);
+		}
+		finally {
+			if (Validator
+			    .isNotNull(redirectURL)) {
+				actionResponse
+				    .sendRedirect(redirectURL);
+			}
 		}
 	}
 
 	public void deleteCitizen(
-	    ActionRequest actionRequest, ActionResponse actionResponse) {
+	    ActionRequest actionRequest, ActionResponse actionResponse)
+	    throws IOException {
 
 		long citizenId = ParamUtil
 		    .getLong(actionRequest, CitizenDisplayTerms.CITIZEN_ID, 0L);
-
+		String redirectURL = ParamUtil
+		    .getString(actionRequest, "redirectURL");
 		try {
 			CitizenLocalServiceUtil
 			    .deleteCitizenByCitizenId(citizenId);
@@ -91,6 +107,15 @@ public class AccountMgtPortlet extends MVCPortlet {
 		catch (Exception e) {
 			_log
 			    .error(e);
+			SessionErrors
+			    .add(actionRequest, MessageKeys.ACCOUNT_CITIZEN_DELETE_ERROR);
+		}
+		finally {
+			if (Validator
+			    .isNotNull(redirectURL)) {
+				actionResponse
+				    .sendRedirect(redirectURL);
+			}
 		}
 	}
 
@@ -207,16 +232,9 @@ public class AccountMgtPortlet extends MVCPortlet {
 				    .getUser(mappingUserId);
 
 				if (mappingUser != null) {
-					String password = PwdGenerator
-					    .getPassword();
-
-					UserLocalServiceUtil
-					    .updatePassword(
-					        mappingUserId, password, password, false);
 
 					MessageBusUtil
-					    .sendEmailActiveAccount(
-					        mappingUser, password, serviceContext);
+					    .sendEmailWelcomeNewUser(mappingUser, serviceContext);
 				}
 
 			}

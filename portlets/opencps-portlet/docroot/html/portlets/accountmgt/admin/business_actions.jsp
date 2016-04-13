@@ -1,4 +1,3 @@
-<%@page import="org.opencps.util.PortletConstants"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -25,6 +24,7 @@
 <%@page import="com.liferay.portal.kernel.dao.search.ResultRow"%>
 <%@page import="org.opencps.util.ActionKeys"%>
 <%@page import="org.opencps.accountmgt.permissions.BusinessPermission"%>
+<%@page import="org.opencps.util.PortletConstants"%>
 <%@ include file="../init.jsp" %>
 
 
@@ -104,6 +104,7 @@
 		<c:if test="<%=BusinessPermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE) %>">
 			<portlet:actionURL var="deleteBusinessURL" name="deleteBusiness">
 				<portlet:param name="<%=BusinessDisplayTerms.BUSINESS_BUSINESSID %>" value="<%=String.valueOf(business.getBusinessId()) %>"/>
+				<portlet:param name="redirectURL" value="<%=currentURL %>"/>
 			</portlet:actionURL>
 			
 			<liferay-ui:icon-delete
