@@ -19,26 +19,26 @@
 
 package org.opencps.dossiermgt.service.impl;
 
-import org.opencps.dossiermgt.service.base.serviceconfigServiceBaseImpl;
+import org.opencps.dossiermgt.service.base.DossierServiceBaseImpl;
 
 /**
- * The implementation of the serviceconfig remote service.
+ * The implementation of the dossier remote service.
  *
  * <p>
- * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link org.opencps.dossiermgt.service.serviceconfigService} interface.
+ * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link org.opencps.dossiermgt.service.DossierService} interface.
  *
  * <p>
  * This is a remote service. Methods of this service are expected to have security checks based on the propagated JAAS credentials because this service can be accessed remotely.
  * </p>
  *
  * @author trungnt
- * @see org.opencps.dossiermgt.service.base.serviceconfigServiceBaseImpl
- * @see org.opencps.dossiermgt.service.serviceconfigServiceUtil
+ * @see org.opencps.dossiermgt.service.base.DossierServiceBaseImpl
+ * @see org.opencps.dossiermgt.service.DossierServiceUtil
  */
-public class serviceconfigServiceImpl extends serviceconfigServiceBaseImpl {
+public class DossierServiceImpl extends DossierServiceBaseImpl {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
-	 * Never reference this interface directly. Always use {@link org.opencps.dossiermgt.service.serviceconfigServiceUtil} to access the serviceconfig remote service.
+	 * Never reference this interface directly. Always use {@link org.opencps.dossiermgt.service.DossierServiceUtil} to access the dossier remote service.
 	 */
 }

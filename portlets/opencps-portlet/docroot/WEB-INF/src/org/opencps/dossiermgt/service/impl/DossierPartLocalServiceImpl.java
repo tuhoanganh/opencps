@@ -19,26 +19,26 @@
 
 package org.opencps.dossiermgt.service.impl;
 
-import org.opencps.dossiermgt.service.base.dossierfileLocalServiceBaseImpl;
+import org.opencps.dossiermgt.service.base.DossierPartLocalServiceBaseImpl;
 
 /**
- * The implementation of the dossierfile local service.
+ * The implementation of the dossier part local service.
  *
  * <p>
- * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link org.opencps.dossiermgt.service.dossierfileLocalService} interface.
+ * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link org.opencps.dossiermgt.service.DossierPartLocalService} interface.
  *
  * <p>
  * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
  * </p>
  *
  * @author trungnt
- * @see org.opencps.dossiermgt.service.base.dossierfileLocalServiceBaseImpl
- * @see org.opencps.dossiermgt.service.dossierfileLocalServiceUtil
+ * @see org.opencps.dossiermgt.service.base.DossierPartLocalServiceBaseImpl
+ * @see org.opencps.dossiermgt.service.DossierPartLocalServiceUtil
  */
-public class dossierfileLocalServiceImpl extends dossierfileLocalServiceBaseImpl {
+public class DossierPartLocalServiceImpl extends DossierPartLocalServiceBaseImpl {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
-	 * Never reference this interface directly. Always use {@link org.opencps.dossiermgt.service.dossierfileLocalServiceUtil} to access the dossierfile local service.
+	 * Never reference this interface directly. Always use {@link org.opencps.dossiermgt.service.DossierPartLocalServiceUtil} to access the dossier part local service.
 	 */
 }

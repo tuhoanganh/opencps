@@ -19,26 +19,26 @@
 
 package org.opencps.dossiermgt.service.impl;
 
-import org.opencps.dossiermgt.service.base.filegroupLocalServiceBaseImpl;
+import org.opencps.dossiermgt.service.base.DossierFileLocalServiceBaseImpl;
 
 /**
- * The implementation of the filegroup local service.
+ * The implementation of the dossier file local service.
  *
  * <p>
- * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link org.opencps.dossiermgt.service.filegroupLocalService} interface.
+ * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link org.opencps.dossiermgt.service.DossierFileLocalService} interface.
  *
  * <p>
  * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
  * </p>
  *
  * @author trungnt
- * @see org.opencps.dossiermgt.service.base.filegroupLocalServiceBaseImpl
- * @see org.opencps.dossiermgt.service.filegroupLocalServiceUtil
+ * @see org.opencps.dossiermgt.service.base.DossierFileLocalServiceBaseImpl
+ * @see org.opencps.dossiermgt.service.DossierFileLocalServiceUtil
  */
-public class filegroupLocalServiceImpl extends filegroupLocalServiceBaseImpl {
+public class DossierFileLocalServiceImpl extends DossierFileLocalServiceBaseImpl {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
-	 * Never reference this interface directly. Always use {@link org.opencps.dossiermgt.service.filegroupLocalServiceUtil} to access the filegroup local service.
+	 * Never reference this interface directly. Always use {@link org.opencps.dossiermgt.service.DossierFileLocalServiceUtil} to access the dossier file local service.
 	 */
 }

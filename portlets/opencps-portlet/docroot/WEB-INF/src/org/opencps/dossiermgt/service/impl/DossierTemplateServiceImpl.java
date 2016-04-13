@@ -19,26 +19,26 @@
 
 package org.opencps.dossiermgt.service.impl;
 
-import org.opencps.dossiermgt.service.base.dossierlogLocalServiceBaseImpl;
+import org.opencps.dossiermgt.service.base.DossierTemplateServiceBaseImpl;
 
 /**
- * The implementation of the dossierlog local service.
+ * The implementation of the dossier template remote service.
  *
  * <p>
- * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link org.opencps.dossiermgt.service.dossierlogLocalService} interface.
+ * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link org.opencps.dossiermgt.service.DossierTemplateService} interface.
  *
  * <p>
- * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
+ * This is a remote service. Methods of this service are expected to have security checks based on the propagated JAAS credentials because this service can be accessed remotely.
  * </p>
  *
  * @author trungnt
- * @see org.opencps.dossiermgt.service.base.dossierlogLocalServiceBaseImpl
- * @see org.opencps.dossiermgt.service.dossierlogLocalServiceUtil
+ * @see org.opencps.dossiermgt.service.base.DossierTemplateServiceBaseImpl
+ * @see org.opencps.dossiermgt.service.DossierTemplateServiceUtil
  */
-public class dossierlogLocalServiceImpl extends dossierlogLocalServiceBaseImpl {
+public class DossierTemplateServiceImpl extends DossierTemplateServiceBaseImpl {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
-	 * Never reference this interface directly. Always use {@link org.opencps.dossiermgt.service.dossierlogLocalServiceUtil} to access the dossierlog local service.
+	 * Never reference this interface directly. Always use {@link org.opencps.dossiermgt.service.DossierTemplateServiceUtil} to access the dossier template remote service.
 	 */
 }

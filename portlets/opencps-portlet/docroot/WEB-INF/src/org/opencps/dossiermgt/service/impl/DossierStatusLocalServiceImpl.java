@@ -19,26 +19,27 @@
 
 package org.opencps.dossiermgt.service.impl;
 
-import org.opencps.dossiermgt.service.base.dossiertemplateServiceBaseImpl;
+import org.opencps.dossiermgt.service.base.DossierStatusLocalServiceBaseImpl;
 
 /**
- * The implementation of the dossiertemplate remote service.
+ * The implementation of the dossier status local service.
  *
  * <p>
- * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link org.opencps.dossiermgt.service.dossiertemplateService} interface.
+ * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link org.opencps.dossiermgt.service.DossierStatusLocalService} interface.
  *
  * <p>
- * This is a remote service. Methods of this service are expected to have security checks based on the propagated JAAS credentials because this service can be accessed remotely.
+ * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
  * </p>
  *
  * @author trungnt
- * @see org.opencps.dossiermgt.service.base.dossiertemplateServiceBaseImpl
- * @see org.opencps.dossiermgt.service.dossiertemplateServiceUtil
+ * @see org.opencps.dossiermgt.service.base.DossierStatusLocalServiceBaseImpl
+ * @see org.opencps.dossiermgt.service.DossierStatusLocalServiceUtil
  */
-public class dossiertemplateServiceImpl extends dossiertemplateServiceBaseImpl {
+public class DossierStatusLocalServiceImpl
+	extends DossierStatusLocalServiceBaseImpl {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
-	 * Never reference this interface directly. Always use {@link org.opencps.dossiermgt.service.dossiertemplateServiceUtil} to access the dossiertemplate remote service.
+	 * Never reference this interface directly. Always use {@link org.opencps.dossiermgt.service.DossierStatusLocalServiceUtil} to access the dossier status local service.
 	 */
 }

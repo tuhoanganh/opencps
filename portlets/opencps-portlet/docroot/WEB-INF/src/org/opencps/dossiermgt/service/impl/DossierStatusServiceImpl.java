@@ -19,26 +19,26 @@
 
 package org.opencps.dossiermgt.service.impl;
 
-import org.opencps.dossiermgt.service.base.dossierpartServiceBaseImpl;
+import org.opencps.dossiermgt.service.base.DossierStatusServiceBaseImpl;
 
 /**
- * The implementation of the dossierpart remote service.
+ * The implementation of the dossier status remote service.
  *
  * <p>
- * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link org.opencps.dossiermgt.service.dossierpartService} interface.
+ * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link org.opencps.dossiermgt.service.DossierStatusService} interface.
  *
  * <p>
  * This is a remote service. Methods of this service are expected to have security checks based on the propagated JAAS credentials because this service can be accessed remotely.
  * </p>
  *
  * @author trungnt
- * @see org.opencps.dossiermgt.service.base.dossierpartServiceBaseImpl
- * @see org.opencps.dossiermgt.service.dossierpartServiceUtil
+ * @see org.opencps.dossiermgt.service.base.DossierStatusServiceBaseImpl
+ * @see org.opencps.dossiermgt.service.DossierStatusServiceUtil
  */
-public class dossierpartServiceImpl extends dossierpartServiceBaseImpl {
+public class DossierStatusServiceImpl extends DossierStatusServiceBaseImpl {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
-	 * Never reference this interface directly. Always use {@link org.opencps.dossiermgt.service.dossierpartServiceUtil} to access the dossierpart remote service.
+	 * Never reference this interface directly. Always use {@link org.opencps.dossiermgt.service.DossierStatusServiceUtil} to access the dossier status remote service.
 	 */
 }

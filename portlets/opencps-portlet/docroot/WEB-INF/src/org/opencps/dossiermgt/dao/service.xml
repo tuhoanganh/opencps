@@ -3,13 +3,69 @@
 <service-builder package-path="org.opencps.dossiermgt" auto-namespace-tables="false">
 	<author>trungnt</author>
 	<namespace>dossiermgt</namespace>
-    <entity name="dossiertemplate" local-service="true"></entity>
-    <entity name="dossierpart" local-service="true"></entity>
-    <entity name="serviceconfig" local-service="true"></entity>
-    <entity name="dossier" local-service="true"></entity>
-    <entity name="dossierstatus" local-service="true"></entity>
-    <entity name="dossierlog" local-service="true"></entity>
-    <entity name="filegroup" local-service="true"></entity>
-    <entity name="dossierfile" local-service="true"></entity>
+    <entity name="DossierTemplate" local-service="true"></entity>
+    <entity name="DossierPart" local-service="true"></entity>
+    <entity name="ServiceConfig" local-service="true"></entity>
+    
+    <entity name="Dossier" local-service="true">
+    
+    	<!-- PK fields -->
+    	
+        <column name="dossierId" type="long" primary="true"/>
+        
+        <!-- Audit fields -->
+        
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		
+		<!-- Other fields -->
+		
+        <column name="uuid" type="String"/>
+        <column name="externalRefNo" type="String"/>
+        <column name="externalRefUrl" type="String"/>
+        <column name="ownerOrganizationId" type="long"/>
+        <column name="serviceConfigId" type="long"/>
+        <column name="serviceInfoId" type="long"/>
+        <column name="serviceDomainIndex" type="String"/>
+        <column name="serviceAdministrationIndex" type="String"/>
+        <column name="dossierTemplateId" type="long"/>
+        <column name="govAgencyCode" type="String"/>
+        <column name="govAgencyName" type="String"/>
+        <column name="govAgencyOrganizationId" type="long"/>
+        <column name="serviceMode" type="int"/>
+        <column name="counter" type="int"/>
+        <column name="subjectId" type="long"/>
+        <column name="subjectName" type="String"/>
+        <column name="address" type="String"/>
+        <column name="cityCode" type="String"/>
+        <column name="cityName" type="String"/>
+        <column name="districtCode" type="String"/>
+        <column name="districtName" type="String"/>
+        <column name="wardCode" type="String"/>
+        <column name="wardName" type="String"/>
+        <column name="contactName" type="String"/>
+        <column name="contactTelNo" type="String"/>
+        <column name="contactEmail" type="String"/>
+        <column name="note" type="String"/>
+        <column name="submitDatetime" type="Date"/>
+        <column name="receiveDatetime" type="Date"/>
+        <column name="receptionNo" type="int"/>
+        <column name="estimateDatetime" type="Date"/>
+        <column name="finishDatetime" type="Date"/>
+        <column name="dossierStatus" type="int"/>
+        <column name="dossierSource" type="int"/>
+        <order by="desc">
+            <order-column name="modifiedDate" order-by="desc"></order-column>
+        </order>
+        
+    </entity>
+    
+    <entity name="DossierStatus" local-service="true"></entity>
+    <entity name="DossierLog" local-service="true"></entity>
+    <entity name="FileGroup" local-service="true"></entity>
+    <entity name="DossierFile" local-service="true"></entity>
 
 </service-builder>

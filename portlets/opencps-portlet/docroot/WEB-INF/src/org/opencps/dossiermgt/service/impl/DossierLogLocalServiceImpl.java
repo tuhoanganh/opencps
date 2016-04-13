@@ -19,26 +19,26 @@
 
 package org.opencps.dossiermgt.service.impl;
 
-import org.opencps.dossiermgt.service.base.filegroupServiceBaseImpl;
+import org.opencps.dossiermgt.service.base.DossierLogLocalServiceBaseImpl;
 
 /**
- * The implementation of the filegroup remote service.
+ * The implementation of the dossier log local service.
  *
  * <p>
- * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link org.opencps.dossiermgt.service.filegroupService} interface.
+ * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link org.opencps.dossiermgt.service.DossierLogLocalService} interface.
  *
  * <p>
- * This is a remote service. Methods of this service are expected to have security checks based on the propagated JAAS credentials because this service can be accessed remotely.
+ * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
  * </p>
  *
  * @author trungnt
- * @see org.opencps.dossiermgt.service.base.filegroupServiceBaseImpl
- * @see org.opencps.dossiermgt.service.filegroupServiceUtil
+ * @see org.opencps.dossiermgt.service.base.DossierLogLocalServiceBaseImpl
+ * @see org.opencps.dossiermgt.service.DossierLogLocalServiceUtil
  */
-public class filegroupServiceImpl extends filegroupServiceBaseImpl {
+public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
-	 * Never reference this interface directly. Always use {@link org.opencps.dossiermgt.service.filegroupServiceUtil} to access the filegroup remote service.
+	 * Never reference this interface directly. Always use {@link org.opencps.dossiermgt.service.DossierLogLocalServiceUtil} to access the dossier log local service.
 	 */
 }

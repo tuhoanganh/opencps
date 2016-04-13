@@ -19,27 +19,27 @@
 
 package org.opencps.dossiermgt.service.impl;
 
-import org.opencps.dossiermgt.service.base.dossierstatusLocalServiceBaseImpl;
+import org.opencps.dossiermgt.service.base.DossierTemplateLocalServiceBaseImpl;
 
 /**
- * The implementation of the dossierstatus local service.
+ * The implementation of the dossier template local service.
  *
  * <p>
- * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link org.opencps.dossiermgt.service.dossierstatusLocalService} interface.
+ * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link org.opencps.dossiermgt.service.DossierTemplateLocalService} interface.
  *
  * <p>
  * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
  * </p>
  *
  * @author trungnt
- * @see org.opencps.dossiermgt.service.base.dossierstatusLocalServiceBaseImpl
- * @see org.opencps.dossiermgt.service.dossierstatusLocalServiceUtil
+ * @see org.opencps.dossiermgt.service.base.DossierTemplateLocalServiceBaseImpl
+ * @see org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil
  */
-public class dossierstatusLocalServiceImpl
-	extends dossierstatusLocalServiceBaseImpl {
+public class DossierTemplateLocalServiceImpl
+	extends DossierTemplateLocalServiceBaseImpl {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
-	 * Never reference this interface directly. Always use {@link org.opencps.dossiermgt.service.dossierstatusLocalServiceUtil} to access the dossierstatus local service.
+	 * Never reference this interface directly. Always use {@link org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil} to access the dossier template local service.
 	 */
 }

@@ -19,26 +19,26 @@
 
 package org.opencps.dossiermgt.service.impl;
 
-import org.opencps.dossiermgt.service.base.dossierfileServiceBaseImpl;
+import org.opencps.dossiermgt.service.base.DossierLogServiceBaseImpl;
 
 /**
- * The implementation of the dossierfile remote service.
+ * The implementation of the dossier log remote service.
  *
  * <p>
- * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link org.opencps.dossiermgt.service.dossierfileService} interface.
+ * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link org.opencps.dossiermgt.service.DossierLogService} interface.
  *
  * <p>
  * This is a remote service. Methods of this service are expected to have security checks based on the propagated JAAS credentials because this service can be accessed remotely.
  * </p>
  *
  * @author trungnt
- * @see org.opencps.dossiermgt.service.base.dossierfileServiceBaseImpl
- * @see org.opencps.dossiermgt.service.dossierfileServiceUtil
+ * @see org.opencps.dossiermgt.service.base.DossierLogServiceBaseImpl
+ * @see org.opencps.dossiermgt.service.DossierLogServiceUtil
  */
-public class dossierfileServiceImpl extends dossierfileServiceBaseImpl {
+public class DossierLogServiceImpl extends DossierLogServiceBaseImpl {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
-	 * Never reference this interface directly. Always use {@link org.opencps.dossiermgt.service.dossierfileServiceUtil} to access the dossierfile remote service.
+	 * Never reference this interface directly. Always use {@link org.opencps.dossiermgt.service.DossierLogServiceUtil} to access the dossier log remote service.
 	 */
 }
