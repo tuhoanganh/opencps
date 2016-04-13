@@ -96,7 +96,7 @@
 	String path = StringPool.BLANK;
 	Citizen citizen = null;
 	Business business = null;
-	
+	String backURL = ParamUtil.getString(request, "backURL");
 	if(citizenId > 0 ) {
 		ProfileSections = new String[2];
 		ProfileSections[0] = "general_info";
@@ -117,6 +117,11 @@
 	
 	
 %>
+
+<liferay-ui:header
+	backURL="<%= backURL %>"
+	title='<%= "update-profile" %>'
+/>
 
 <portlet:actionURL var="updateCitizenProfileURL" name="updateCitizenProfile" >
 	<portlet:param name="returnURL" value="<%=currentURL %>"/>
