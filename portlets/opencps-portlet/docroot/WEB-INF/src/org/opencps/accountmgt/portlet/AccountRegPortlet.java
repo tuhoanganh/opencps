@@ -184,7 +184,7 @@ public class AccountRegPortlet extends MVCPortlet {
 		    ParamUtil.getParameterValues(
 		        uploadPortletRequest, BusinessDisplayTerms.BUSINESS_DOMAIN);
 		
-		String businessTypeName = StringPool.BLANK;
+		String businessTypeCode = StringPool.BLANK;
 
 		Date defaultBirthDate = DateTimeUtil.convertStringToDate("01/01/1970");
 
@@ -221,7 +221,7 @@ public class AccountRegPortlet extends MVCPortlet {
 			ward = DictItemLocalServiceUtil.getDictItem(wardId);
 			if(type != 0) {
 				businessType = DictItemLocalServiceUtil.getDictItem(type);
-				businessTypeName = businessType.getItemName(
+				businessTypeCode = businessType.getItemName(
 		            serviceContext.getLocale(), true);
 			} 
 			
@@ -230,7 +230,7 @@ public class AccountRegPortlet extends MVCPortlet {
 
 				Business business =
 				    BusinessLocalServiceUtil.addBusiness(
-				        name, enName, shortName, businessTypeName, idNumber,
+				        name, enName, shortName, businessTypeCode, idNumber,
 				        address, city.getItemCode(), district.getItemCode(),
 				        ward.getItemCode(), city.getItemName(
 				            serviceContext.getLocale(), true),
@@ -318,7 +318,7 @@ public class AccountRegPortlet extends MVCPortlet {
 			else {
 				SessionErrors.add(
 				    actionRequest,
-				    MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED);
+				    MessageKeys.ACCOUNT_SYSTEM_EXCEPTION_OCCURRED);
 			}
 			if (Validator.isNotNull(currentURL)) {
 				actionResponse.sendRedirect(currentURL);
@@ -498,7 +498,7 @@ public class AccountRegPortlet extends MVCPortlet {
 			}
 			else {
 				SessionErrors.add(
-				    uploadPortletRequest,
+					actionRequest,
 				    MessageKeys.ACCOUNT_SYSTEM_EXCEPTION_OCCURRED);
 			}
 			if (Validator.isNotNull(currentURL)) {
@@ -643,7 +643,7 @@ public class AccountRegPortlet extends MVCPortlet {
 	public static boolean isFileType(String sourceFileName) {
 		String fileType = MimeTypesUtil.getContentType(sourceFileName);
 		for(String str : PortletPropsValues.ACCOUNTMGT_FILE_TYPE) {
-			if(fileType.equals(str)) {
+			if(fileType.endsWith(str)) {
 				return true;
 			}
 		}

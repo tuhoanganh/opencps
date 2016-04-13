@@ -56,10 +56,11 @@ public class PortletPropsKeys {
 	// Data Management Master Data
 	public static final String DATAMGT_MASTERDATA_CODE = "opencps.datamgt.masterdata.code";
 	public static final String DATAMGT_MASTERDATA_BUSINESS_DOMAIN= "opencps.datamgt.masterdata.business.domain";
+	public static final String DATAMGT_MASTERDATA_BUSINESS_TYPE= "opencps.datamgt.masterdata.business.type";
 	
 	// validate file
 	public static final String ACCOUNTMGT_FILE_TYPE = "opencps.accountmgt.file.type";
-	public static final String ACCOUNTMGT_FILE_SIZE ="opencps.accountmgt.file.type";
+	public static final String ACCOUNTMGT_FILE_SIZE ="opencps.accountmgt.file.size";
 	// User Management
 	public static final String USERMGT_JOBPOS_LEADER = "opencps.usermgt.jobpos.leader";
 

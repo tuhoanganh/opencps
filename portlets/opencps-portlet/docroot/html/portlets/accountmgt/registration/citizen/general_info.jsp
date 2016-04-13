@@ -106,7 +106,6 @@
 			<liferay-ui:message key="birth-date"/>
 		</label>
 		<liferay-ui:input-date 
-			nullable="true"
 			dayParam="<%=CitizenDisplayTerms.BIRTH_DATE_DAY %>"
 			dayValue="<%= spd.getDayOfMoth() %>"
 			disabled="<%=isViewProfile%>"
@@ -117,7 +116,6 @@
 			yearValue="<%= spd.getYear() %>"
 			formName="fm"
 			autoFocus="<%=true %>"
-			
 		>
 		</liferay-ui:input-date>
 	</aui:col>

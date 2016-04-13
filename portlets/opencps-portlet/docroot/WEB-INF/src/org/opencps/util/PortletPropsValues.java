@@ -56,6 +56,10 @@ public class PortletPropsValues {
 	public static final String DATAMGT_MASTERDATA_BUSINESS_DOMAIN = GetterUtil
 					.getString(PortletProps
 						.get(PortletPropsKeys.DATAMGT_MASTERDATA_BUSINESS_DOMAIN));
+	
+	public static final String DATAMGT_MASTERDATA_BUSINESS_TYPE = GetterUtil
+					.getString(PortletProps
+						.get(PortletPropsKeys.DATAMGT_MASTERDATA_BUSINESS_TYPE));
 	//validate file 
 	
 	public static final String[] ACCOUNTMGT_FILE_TYPE = GetterUtil
