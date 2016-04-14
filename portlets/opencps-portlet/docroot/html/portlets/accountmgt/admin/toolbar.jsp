@@ -1,15 +1,3 @@
-
-<%@page import="org.opencps.accountmgt.search.BusinessDisplayTerms"%>
-<%@page import="org.opencps.accountmgt.search.CitizenDisplayTerms"%>
-<%@page import="org.opencps.util.PortletUtil"%>
-<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
-<%@page import="org.opencps.accountmgt.permissions.BusinessPermission"%>
-<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
-<%@page import="org.opencps.util.ActionKeys"%>
-<%@page import="org.opencps.accountmgt.permissions.CitizenPermission"%>
-<%@page import="javax.portlet.PortletURL"%>
-<%@page import="org.opencps.accountmgt.util.AccountMgtUtil"%>
-<%@page import="org.opencps.datamgt.search.DictItemDisplayTerms"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -28,7 +16,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
+<%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.accountmgt.search.BusinessDisplayTerms"%>
+<%@page import="org.opencps.accountmgt.search.CitizenDisplayTerms"%>
+<%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
+<%@page import="org.opencps.accountmgt.permissions.BusinessPermission"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
+<%@page import="org.opencps.util.ActionKeys"%>
+<%@page import="org.opencps.accountmgt.permissions.CitizenPermission"%>
+<%@page import="javax.portlet.PortletURL"%>
+<%@page import="org.opencps.accountmgt.util.AccountMgtUtil"%>
+<%@page import="org.opencps.datamgt.search.DictItemDisplayTerms"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
@@ -38,8 +37,12 @@
 	String tabs1 = ParamUtil.getString(request, "tabs1", AccountMgtUtil.TOP_TABS_CITIZEN);
 	
 	PortletURL searchURL = renderResponse.createRenderURL();
-	int [] accoutStatusArr = {0,1,2,3};
 	
+	int [] accoutStatuses = new int [4];
+	accoutStatuses[0] = PortletConstants.ACCOUNT_STATUS_REGISTERED;
+	accoutStatuses[1] = PortletConstants.ACCOUNT_STATUS_CONFIRMED;
+	accoutStatuses[2] = PortletConstants.ACCOUNT_STATUS_APPROVED;
+	accoutStatuses[3] = PortletConstants.ACCOUNT_STATUS_LOCKED;
 	
 	
 %>
@@ -71,10 +74,10 @@
 							<aui:col width="50">
 								<aui:select name="<%=CitizenDisplayTerms.CITIZEN_ACCOUNTSTATUS %>" label="<%=StringPool.BLANK %>">
 									<%
-										for(int i=0; i<accoutStatusArr.length; i++) {
+										for(int i=0; i<accoutStatuses.length; i++) {
 											%>
-												<aui:option value="<%=accoutStatusArr[i] %>">
-													<%=PortletUtil.getAccountStatus(accoutStatusArr[i], themeDisplay.getLocale()) %>
+												<aui:option value="<%=accoutStatuses[i] %>">
+													<%=PortletUtil.getAccountStatus(accoutStatuses[i], themeDisplay.getLocale()) %>
 												</aui:option>
 											<%
 											
@@ -99,10 +102,10 @@
 							<aui:col width="50">
 								<aui:select name="<%=BusinessDisplayTerms.BUSINESS_ACCOUNTSTATUS %>" label="<%=StringPool.BLANK %>">
 									<%
-										for(int i=0; i<accoutStatusArr.length; i++) {
+										for(int i=0; i<accoutStatuses.length; i++) {
 											%>
-												<aui:option value="<%=accoutStatusArr[i] %>">
-												<%=PortletUtil.getAccountStatus(accoutStatusArr[i], themeDisplay.getLocale()) %>
+												<aui:option value="<%=accoutStatuses[i] %>">
+												<%=PortletUtil.getAccountStatus(accoutStatuses[i], themeDisplay.getLocale()) %>
 												</aui:option>
 											<%
 											
