@@ -24,6 +24,7 @@
 		<column name="processNo" type="String" />
 		<column name="processName" type="String"/>
 		<column name="description" type="String" />
+		<column name="dossierTemplateId" type="long" />
 
 		<!-- Order -->
 		<order by="asc">
@@ -59,9 +60,16 @@
 		<column name="sequenceNo" type="int" />
 		<column name="dossierStatus" type="String" />
 		<column name="daysDuration" type="int" />
-		<column name="referenceDossierPartId" type="String" />
+		<column name="referenceDossierPartId" type="long" />
 		<column name="externalAppUrl" type="String" />
-		<column name="hasDossierParts" type="int" />
+
+	</entity>
+
+	<entity name="ProcessStepDossierPart" local-service="true" remote-service="true"
+		table="opencps_processstep_dossierpart">
+
+		<column name="processStepId" type="long" primary="true" />
+		<column name="dossierPartId" type="long" primary="true" />
 
 	</entity>
 
@@ -72,19 +80,25 @@
 
 		<column name="stepAllowanceId" type="long" primary="true" />
 
-		<!-- Audit fields -->
-
-		<column name="companyId" type="long" />
-		<column name="groupId" type="long" />
-		<column name="userId" type="long" />
-		<column name="createDate" type="Date" />
-		<column name="modifiedDate" type="Date" />
-
 		<!-- Other fields -->
 
 		<column name="processStepId" type="long" />
 		<column name="roleId" type="long" />
-		<column name="readOnly" type="int"/>
+		<column name="readOnly" type="boolean"/>
+		
+		<finder return-type="Collection" name="processStepId">
+			<finder-column name="processStepId"/>
+		</finder>
+		
+		<finder return-type="Collection" name="P_S_R_O">
+			<finder-column name="processStepId"/>
+			<finder-column name="readOnly"/>
+		</finder>
+		
+		<finder return-type="StepAllowance" name="STEP_ROLE">
+			<finder-column name="processStepId"/>
+			<finder-column name="readOnly"/>
+		</finder>
 	</entity>
 
 	<entity name="ProcessWorkflow" local-service="true" remote-service="true"
