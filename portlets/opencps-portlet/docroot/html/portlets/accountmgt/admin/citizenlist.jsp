@@ -33,6 +33,7 @@
 <%@page import="com.liferay.portal.kernel.dao.search.SearchEntry"%>
 <%@page import="org.opencps.accountmgt.search.CitizenDisplayTerms"%>
 <%@page import="org.opencps.accountmgt.util.AccountMgtUtil"%>
+<%@page import="org.opencps.util.PortletConstants"%>
 <%@ include file="../init.jsp" %>
 
 
@@ -49,13 +50,13 @@
 	
 	int accountStatus = ParamUtil.getInteger(request, CitizenDisplayTerms.CITIZEN_ACCOUNTSTATUS);
 	
-	int countRegistered = CitizenLocalServiceUtil.countByG_S(scopeGroupId, 0);
+	int countRegistered = CitizenLocalServiceUtil.countByG_S(scopeGroupId, PortletConstants.ACCOUNT_STATUS_REGISTERED);
 	
-	int countConfirmed = CitizenLocalServiceUtil.countByG_S(scopeGroupId, 1);
+	int countConfirmed = CitizenLocalServiceUtil.countByG_S(scopeGroupId, PortletConstants.ACCOUNT_STATUS_CONFIRMED);
 
-	int countApproved = CitizenLocalServiceUtil.countByG_S(scopeGroupId, 2);
+	int countApproved = CitizenLocalServiceUtil.countByG_S(scopeGroupId, PortletConstants.ACCOUNT_STATUS_APPROVED);
 
-	int countLocked = CitizenLocalServiceUtil.countByG_S(scopeGroupId, 3);
+	int countLocked = CitizenLocalServiceUtil.countByG_S(scopeGroupId, PortletConstants.ACCOUNT_STATUS_LOCKED);
 	
 	int totalCount = 0;
 	

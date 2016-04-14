@@ -17,6 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+<%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="org.opencps.util.ActionKeys"%>
 <%@page import="org.opencps.accountmgt.permissions.BusinessPermission"%>
 <%@page import="com.liferay.portal.kernel.upgrade.RenameUpgradePortletPreferences"%>
@@ -48,19 +49,13 @@
 	
 	int accountStatus = ParamUtil.getInteger(request, BusinessDisplayTerms.BUSINESS_ACCOUNTSTATUS);
 	
-	int [] accoutStatuses = new int [4];
-	accoutStatuses[0] = 0;
-	accoutStatuses[1] = 1;
-	accoutStatuses[2] = 2;
-	accoutStatuses[3] = 3;
+	int countRegistered = BusinessLocalServiceUtil.countByG_S(scopeGroupId, PortletConstants.ACCOUNT_STATUS_REGISTERED);
 	
-	int countRegistered = BusinessLocalServiceUtil.countByG_S(scopeGroupId, 0);
-	
-	int countConfirmed = BusinessLocalServiceUtil.countByG_S(scopeGroupId, 1);
+	int countConfirmed = BusinessLocalServiceUtil.countByG_S(scopeGroupId, PortletConstants.ACCOUNT_STATUS_CONFIRMED);
 
-	int countApproved = BusinessLocalServiceUtil.countByG_S(scopeGroupId, 2);
+	int countApproved = BusinessLocalServiceUtil.countByG_S(scopeGroupId, PortletConstants.ACCOUNT_STATUS_APPROVED);
 
-	int countLocked = BusinessLocalServiceUtil.countByG_S(scopeGroupId, 3);
+	int countLocked = BusinessLocalServiceUtil.countByG_S(scopeGroupId, PortletConstants.ACCOUNT_STATUS_LOCKED);
 	
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", "/html/portlets/accountmgt/admin/businesslist.jsp");
