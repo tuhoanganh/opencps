@@ -46,8 +46,9 @@
 	DictItem dictItemCity = null;
 	DictItem dictItemDistrict = null;
 	DictItem dictItemWard = null;
+	DLFileEntry dlFileEntry = null;
 	
-	StringBuilder sbSelectItems = new StringBuilder();
+	String selectItems = StringPool.BLANK;
 	String url = StringPool.BLANK;
 	
 	long citizenID = citizen != null ? citizen.getCitizenId() : 0L;
@@ -55,7 +56,6 @@
 	boolean isViewProfile = GetterUtil.get( (Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_VIEW_PROFILE), false);
 	
 	boolean isAdminViewProfile = GetterUtil.get((Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_ADMIN_PROFILE), false);
-	DLFileEntry dlFileEntry = null;
 	
 	try {
 		dictCollection = DictCollectionLocalServiceUtil
@@ -68,9 +68,13 @@
 			dictItemWard = DictItemLocalServiceUtil.getDictItemInuseByItemCode(dictCollectionId, citizen.getWardCode());
 			
 			if(dictItemCity != null && dictItemDistrict!= null && dictItemWard!=null) {
-				sbSelectItems.append(dictItemCity.getDictItemId()+ StringPool.COMMA);
-				sbSelectItems.append(dictItemWard.getDictItemId()+ StringPool.COMMA);
-				sbSelectItems.append(dictItemDistrict.getDictItemId());
+				String [] strs = new String[3];
+				strs[0] = String.valueOf(dictItemCity.getDictItemId());
+				strs[1] = String.valueOf(dictItemDistrict.getDictItemId());
+				strs[2] = String.valueOf(dictItemWard.getDictItemId());
+				
+				selectItems = StringUtil.merge(strs);
+				
 			}
 			dlFileEntry = DLFileEntryLocalServiceUtil.getDLFileEntry(citizen.getAttachFile());
 		}
@@ -108,7 +112,7 @@
 			dictCollectionCode="ADMINISTRATIVE_REGION"
 			itemNames="cityId,districtId,wardId"
 			itemsEmptyOption="true,true,true"	
-			selectedItems="<%=sbSelectItems.toString() %>"
+			selectedItems="<%=selectItems.toString() %>"
 		/>	
 	</aui:col>
 </aui:row>
@@ -136,7 +140,12 @@
 <c:if test="<%= !isViewProfile && !isAdminViewProfile %>">
 	<aui:row>
 		<aui:col width="100">
-		<aui:input type="file" name="<%=CitizenDisplayTerms.CITIZEN_ATTACHFILE %>" />
+		<aui:input type="file" name="<%=CitizenDisplayTerms.CITIZEN_ATTACHFILE %>" >
+			<aui:validator name="acceptFiles">
+				<%= StringUtil.merge( PortletPropsValues.ACCOUNTMGT_FILE_TYPE) %>
+			</aui:validator>
+			<aui:validator name="required" />
+		</aui:input>
 		</aui:col>
 	</aui:row>
 </c:if>

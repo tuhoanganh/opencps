@@ -16,7 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
+<%@page import="org.opencps.accountmgt.service.BusinessDomainLocalServiceUtil"%>
+<%@page import="org.opencps.accountmgt.model.BusinessDomain"%>
 <%@page import="org.opencps.util.DateTimeUtil"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
@@ -40,35 +41,45 @@
 
 	long businessId = business!=null ? business.getBusinessId() : 0L;
 	
-	List<DictItem> dictItems = new ArrayList<DictItem>();
-	DictItem dictItemDomain = null;
-	
-	DictCollection dictCollection = null;
-	
-	StringBuilder getBussinessType = new StringBuilder();
+	long dictItemTypeId = 0;
 	
 	boolean isViewProfile = GetterUtil.get( (Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_VIEW_PROFILE), false);
 	
 	boolean isAdminViewProfile = GetterUtil.get((Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_ADMIN_PROFILE), false);
 	
+	boolean isCheckItemDomain = false;
+	
+	List<DictItem> dictItemDomains = new ArrayList<DictItem>();
+	DictItem dictItemType = null;
+	
+	DictCollection dictCollectionDomain = null;
+	DictCollection dictCollectionType = null;
+	
+	List<BusinessDomain> businessDomains = new ArrayList<BusinessDomain>();
 	
 	try {
-		dictCollection = DictCollectionLocalServiceUtil
+		//get list dictItemDomains
+		dictCollectionDomain = DictCollectionLocalServiceUtil
 						.getDictCollection(scopeGroupId, 
 							PortletPropsValues.DATAMGT_MASTERDATA_BUSINESS_DOMAIN);
-		if(dictCollection!=null) {
-			dictItems = DictItemLocalServiceUtil
-							.getDictItemsByDictCollectionId(dictCollection.getDictCollectionId());
-			if(business!=null) {
-				dictItemDomain = DictItemLocalServiceUtil
-								.getDictItemInuseByItemCode(dictCollection.getDictCollectionId(), business.getBusinessType());
-				if(dictItemDomain!=null) {
-					getBussinessType.append(dictItemDomain.getDictItemId());
-				}
-			
+		if(dictCollectionDomain!=null) {
+			dictItemDomains = DictItemLocalServiceUtil
+							.getDictItemsByDictCollectionId(dictCollectionDomain.getDictCollectionId());	
 			}
-		
+		//get list dictItem Bussiness Type
+		dictCollectionType = DictCollectionLocalServiceUtil
+						.getDictCollection(scopeGroupId, 
+							PortletPropsValues.DATAMGT_MASTERDATA_BUSINESS_TYPE);
+		if(dictCollectionType != null && business != null) {
+			dictItemType = DictItemLocalServiceUtil.getDictItemInuseByItemCode(dictCollectionType.getDictCollectionId(), business.getBusinessType());
+			dictItemTypeId = dictItemType.getDictItemId();
 		}
+		//get BusinessDomains
+		if(business != null) {
+			businessDomains = BusinessDomainLocalServiceUtil
+							.getBusinessDomains(business.getBusinessId());
+		}
+		
 	} catch(Exception e) {
 		_log.error(e);
 	}
@@ -129,27 +140,36 @@
 <aui:row>
 	<datamgt:ddr
 		depthLevel="1" 
-		dictCollectionCode="BUSINESS_DOMAIN"
+		dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_BUSINESS_TYPE %>"
 		itemNames="businessType"
 		itemsEmptyOption="true"	
-		selectedItems="<%=getBussinessType.toString()%>"
+		selectedItems="<%=String.valueOf(dictItemTypeId)%>"
 	/>	
 </aui:row>
-<c:if test="<%= !dictItems.isEmpty() %>">
+<c:if test="<%= !dictItemDomains.isEmpty() %>">
 	<aui:row>
 		<div class="">
 		<%
-			for(DictItem dictItem : dictItems) {
-				
+			for(DictItem dictItemDomain : dictItemDomains) {
+					if(businessDomains != null) {
+						for(BusinessDomain businessDomainChecked : businessDomains) {
+							if(dictItemDomain.getItemCode().equals(businessDomainChecked.getBusinessDomainId())) {
+								isCheckItemDomain = true;
+								break;
+							}
+						}
+					}
 				%>
 					<aui:input 
-						id='<%= "businessDomains" + dictItem.getDictItemId()%>'
-						name="businessDomains"
-						value="<%=dictItem.getItemCode() %>"
+						id='<%= "businessDomain" + dictItemDomain.getDictItemId()%>'
+						name="businessDomain"
+						value="<%=dictItemDomain.getItemCode() %>"
 						type="checkbox" 
-					    label="<%=dictItem.getItemName(locale, true)%>"
+					    label="<%=dictItemDomain.getItemName(locale, true)%>"
+					    checked="<%= isCheckItemDomain %>"
 					/>		
 				<%
+				isCheckItemDomain = false;
 			}
 		%>
 		</div>
