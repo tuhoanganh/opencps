@@ -15,13 +15,39 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 
+
 package org.opencps.processmgt.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.portlet.RenderRequest;
+
+import com.liferay.portal.model.Role;
+import com.liferay.portal.model.RoleConstants;
+import com.liferay.portal.service.RoleLocalServiceUtil;
 
 /**
  * @author khoavd
- *
  */
 public class ProcessUtils {
 
+	/**
+	 * @param renderRequest
+	 * @return
+	 */
+	public static List<Role> getRoles(RenderRequest renderRequest) {
+
+		List<Role> roles = new ArrayList<Role>();
+		try {
+			roles =
+			    RoleLocalServiceUtil.getTypeRoles(RoleConstants.TYPE_REGULAR);
+
+		}
+		catch (Exception e) {
+			return new ArrayList<Role>();
+		}
+
+		return roles;
+	}
 }
