@@ -312,4 +312,72 @@
 		<field name="dossierStatus" type="int" />
 		<field name="dossierSource" type="int" />
 	</model>
+	<model name="org.opencps.dossiermgt.model.DossierFile">
+		<field name="dossierFileId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="dossierId" type="long" />
+		<field name="uuid" type="String" />
+		<field name="dossierPartId" type="long" />
+		<field name="templateFileNo" type="String" />
+		<field name="groupFileId" type="long" />
+		<field name="ownerUserId" type="long" />
+		<field name="ownerOrganizationId" type="long" />
+		<field name="displayName" type="String" />
+		<field name="formData" type="String" />
+		<field name="fileEntryId" type="long" />
+		<field name="dossierFileMark" type="int" />
+		<field name="dossierFileType" type="int" />
+		<field name="dossierFileNo" type="String" />
+		<field name="dossierFileDate" type="Date" />
+		<field name="removed" type="int" />
+		<field name="original" type="int" />
+		<field name="syncStatus" type="int" />
+	</model>
+	<model name="org.opencps.dossiermgt.model.DossierLog">
+		<field name="dossierLogId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="dossierId" type="long" />
+		<field name="fileGroupId" type="long" />
+		<field name="dossierStatus" type="int" />
+		<field name="actionInfo" type="String" />
+		<field name="messageInfo" type="String" />
+		<field name="updateDatetime" type="Date" />
+		<field name="level" type="int" />
+	</model>
+	<model name="org.opencps.dossiermgt.model.DossierStatus">
+		<field name="dossierStatusId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="dossierId" type="long" />
+		<field name="fileGroupId" type="long" />
+		<field name="dossierStatus" type="int" />
+		<field name="actionInfo" type="String" />
+		<field name="messageInfo" type="String" />
+		<field name="updateDatetime" type="Date" />
+		<field name="syncStatus" type="int" />
+	</model>
+	<model name="org.opencps.dossiermgt.model.FileGroup">
+		<field name="fileGroupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="dossierId" type="long" />
+		<field name="dossierPartId" type="long" />
+		<field name="displayName" type="String" />
+		<field name="removed" type="int" />
+		<field name="syncStatus" type="int" />
+	</model>
 </model-hints>

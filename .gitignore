@@ -121,3 +121,7 @@ portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/dossiermgt/service/http
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/dossiermgt/model/impl/
 
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/dossiermgt/service/persistence/DossierPersistenceImpl.java
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/dossiermgt/service/persistence/DossierFilePersistenceImpl.java
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/dossiermgt/service/persistence/DossierLogPersistenceImpl.java
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/dossiermgt/service/persistence/DossierStatusPersistenceImpl.java
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/dossiermgt/service/persistence/FileGroupPersistenceImpl.java

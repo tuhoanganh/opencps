@@ -62,6 +62,7 @@
         </order>
         
     </entity>
+    
     <entity name="DossierStatus" local-service="true">
     
    		<!-- PK fields -->
@@ -77,16 +78,96 @@
 		<column name="modifiedDate" type="Date" />
 		
 		<!-- Other fields -->
-        <column name="dossierId" type="long"></column>
-        <column name="fileGroupId" type="long"></column>
-        <column name="dossierStatus" type="int"></column>
-        <column name="actionInfo" type="String"></column>
-        <column name="messageInfo" type="String"></column>
-        <column name="updateDatetime" type="Date"></column>
-        <column name="syncStatus" type="int"></column>
+		
+        <column name="dossierId" type="long"/>
+        <column name="fileGroupId" type="long"/>
+        <column name="dossierStatus" type="int"/>
+        <column name="actionInfo" type="String"/>
+        <column name="messageInfo" type="String"/>
+        <column name="updateDatetime" type="Date"/>
+        <column name="syncStatus" type="int"/>
     </entity>
-    <entity name="DossierLog" local-service="true"></entity>
-    <entity name="FileGroup" local-service="true"></entity>
-    <entity name="DossierFile" local-service="true"></entity>
+    
+    <entity name="DossierLog" local-service="true">
+    
+   		<!-- PK fields -->
+    
+        <column name="dossierLogId" type="long" primary="true"/>
+        
+        <!-- Audit fields -->
+        
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		
+		<!-- Other fields -->
+		
+        <column name="dossierId" type="long"/>
+        <column name="fileGroupId" type="long"/>
+        <column name="dossierStatus" type="int"/>
+        <column name="actionInfo" type="String"/>
+        <column name="messageInfo" type="String"/>
+        <column name="updateDatetime" type="Date"/>
+        <column name="level" type="int"/>
+    </entity>
+    
+    <entity name="FileGroup" local-service="true">
+    
+    	<!-- PK fields -->
+    
+        <column name="fileGroupId" type="long" primary="true"/>
+        
+        <!-- Audit fields -->
+        
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		
+		<!-- Other fields -->
+        <column name="dossierId" type="long"/>
+        <column name="dossierPartId" type="long"/>
+        <column name="displayName" type="String"/>
+        <column name="removed" type="int"/>
+        <column name="syncStatus" type="int"/>
+    </entity>
+    
+    <entity name="DossierFile" local-service="true">
+    
+    	<!-- PK fields -->
+    	
+        <column name="dossierFileId" type="long" primary="true"/>
+        
+         <!-- Audit fields -->
+        
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		
+		<!-- Other fields -->
+        <column name="dossierId" type="long"/>
+        
+        <column name="uuid" type="String" />
+        <column name="dossierPartId" type="long"/>
+        <column name="templateFileNo" type="String"/>
+        <column name="groupFileId" type="long"/>
+        <column name="ownerUserId" type="long"/>
+        <column name="ownerOrganizationId" type="long"/>
+        <column name="displayName" type="String"/>
+        <column name="formData" type="String"/>
+        <column name="fileEntryId" type="long"/>
+        <column name="dossierFileMark" type="int"/>
+        <column name="dossierFileType" type="int"/>
+        <column name="dossierFileNo" type="String"/>
+        <column name="dossierFileDate" type="Date"/>
+        <column name="removed" type="int"/>
+        <column name="original" type="int"/>
+        <column name="syncStatus" type="int"/>
+    </entity>
 
 </service-builder>
