@@ -1,6 +1,4 @@
 
-<%@page import="org.opencps.util.ActionKeys"%>
-<%@page import="org.opencps.accountmgt.permissions.BusinessPermission"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -19,6 +17,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+<%@page import="org.opencps.util.ActionKeys"%>
+<%@page import="org.opencps.accountmgt.permissions.BusinessPermission"%>
 <%@page import="com.liferay.portal.kernel.upgrade.RenameUpgradePortletPreferences"%>
 <%@page import="org.opencps.accountmgt.util.AccountMgtUtil"%>
 <%@page import="org.opencps.util.PortletUtil"%>
@@ -48,42 +48,20 @@
 	
 	int accountStatus = ParamUtil.getInteger(request, BusinessDisplayTerms.BUSINESS_ACCOUNTSTATUS);
 	
-	int countRegistered = 0;
-	int countConfirmed = 0;
-	int countApproved = 0;
-	int countLocked = 0;
+	int [] accoutStatuses = new int [4];
+	accoutStatuses[0] = 0;
+	accoutStatuses[1] = 1;
+	accoutStatuses[2] = 2;
+	accoutStatuses[3] = 3;
 	
-	int [] accoutStatusArr = {0,1,2,3}; 
+	int countRegistered = BusinessLocalServiceUtil.countByG_S(scopeGroupId, 0);
 	
-	List<Business> businessRegistered = null;
-	List<Business> businessConfirmed = null;
-	List<Business> businessApproved = null;
-	List<Business> businessLocked = null;
+	int countConfirmed = BusinessLocalServiceUtil.countByG_S(scopeGroupId, 1);
+
+	int countApproved = BusinessLocalServiceUtil.countByG_S(scopeGroupId, 2);
+
+	int countLocked = BusinessLocalServiceUtil.countByG_S(scopeGroupId, 3);
 	
-	try {
-		businessRegistered = BusinessLocalServiceUtil.getBusinesses(scopeGroupId, 0);
-		businessConfirmed = BusinessLocalServiceUtil.getBusinesses(scopeGroupId, 1);
-		businessApproved = BusinessLocalServiceUtil.getBusinesses(scopeGroupId, 2);
-		businessLocked = BusinessLocalServiceUtil.getBusinesses(scopeGroupId, 3);
-		
-		if(businessRegistered != null) {
-			countRegistered = businessRegistered.size();
-		} else if(businessConfirmed!=null) {
-			countConfirmed = businessConfirmed.size();
-		} else if(businessApproved != null) {
-			countApproved = businessApproved.size();
-		} else if(businessLocked!=null) {
-			countLocked = businessLocked.size(); 
-		}
-	} catch(Exception e) {
-		
-	}
-					
-	
-	/* PortletURL searchURL = renderResponse.createRenderURL();
-	searchURL.setParameter("tabs1", AccountMgtUtil.TOP_TABS_BUSINESS);
-	searchURL.setParameter("mvcPath", "/html/portlets/accountmgt/admin/businesslist.jsp");
-	 */
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", "/html/portlets/accountmgt/admin/businesslist.jsp");
 	iteratorURL.setParameter(BusinessDisplayTerms.BUSINESS_ACCOUNTSTATUS, String.valueOf(accountStatus));

@@ -780,6 +780,11 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		return businessPersistence
 		    .countAll();
 	}
+	
+	public int countByG_S(long groupId , int accountStatus) throws SystemException {
+		return businessPersistence.countByG_S(groupId, accountStatus);
+	}
+	
 	private Log _log = LogFactoryUtil
 	    .getLog(BusinessLocalServiceImpl.class
 	        .getName());
