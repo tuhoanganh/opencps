@@ -1,3 +1,5 @@
+<%@page import="org.opencps.processmgt.model.ServiceProcess"%>
+<%@page import="org.opencps.processmgt.model.ProcessStep"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,4 +19,65 @@
  */
 %>
 
-step
+<%@ include file="../../init.jsp" %>
+
+<%
+	ProcessStep step = (ProcessStep) request.getAttribute(WebKeys.PROCESS_STEP_ENTRY);
+
+	ServiceProcess serviceProcess  = (ServiceProcess) request.getAttribute(WebKeys.SERVICE_PROCESS_ENTRY);
+%>
+
+<liferay-portlet:renderURL var="editStepURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+	<portlet:param name="mvcPath" value='<%= templatePath + "edit_step.jsp" %>'/>
+</liferay-portlet:renderURL>
+
+<liferay-portlet:renderURL var="editStepURL2" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+	<portlet:param name="mvcPath" value='<%= templatePath + "edit_step.jsp" %>'/>
+</liferay-portlet:renderURL>
+
+<aui:button-row>
+	<aui:button name="addStep" onClick="showDialog()" value="add-step" ></aui:button>
+	<aui:button name="addStep" value="add-step" href="<%= editStepURL2 %>"></aui:button>
+</aui:button-row>
+
+<aui:script use="liferay-util-window">
+	Liferay.provide(window, 'showDialog', function(action) {
+		page = '<%=editStepURL%>'
+		Liferay.Util.openWindow({
+			dialog: {
+				cache: false,
+				centered: true,
+				modal: true,
+				resizable: false,
+				width: 1000
+			},
+			id: 'addstep',
+			title: 'adding-process-step',
+			uri: page
+		});
+	});
+</aui:script>
+
+<aui:script>
+	Liferay.provide(window, 'refreshPortlet', function() 
+		{	
+// 			alert("refreshPortlet");
+// 			var curPortlet = '#p_p_id<portlet:namespace/>';
+// 			Liferay.Portlet.refresh(curPortlet);
+			window.location.reload();
+			//window.opener.location.href = window.opener.location;
+		},
+		['aui-dialog','aui-dialog-iframe']
+	);
+</aui:script>
+
+<aui:script>
+	Liferay.provide(window, 'closePopup', function(dialogId) 
+		{
+			var A = AUI();
+			var dialog = Liferay.Util.Window.getById(dialogId);
+			dialog.destroy();
+		},
+		['liferay-util-window']
+	);
+</aui:script>

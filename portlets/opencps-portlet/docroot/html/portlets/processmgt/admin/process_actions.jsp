@@ -30,12 +30,13 @@
 			
  <liferay-ui:icon-menu>
  	<c:if test="<%= ProcessPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_PROCESS) %>">
- 		<portlet:renderURL var="updateProcessURL">
-			<portlet:param name="serviceProcessId" value="<%=String.valueOf(process.getServiceProcessId()) %>"/>
-			<portlet:param name="mvcPath" value='<%= templatePath + "edit_process.jsp" %>'/>
-			<portlet:param name="backURL" value="<%= currentURL %>"/>
-		</portlet:renderURL> 
-		<liferay-ui:icon image="edit" url="<%= updateProcessURL.toString() %>" />
+		<%
+			PortletURL editURL = renderResponse.createRenderURL();
+			editURL.setParameter("mvcPath", templatePath + "edit_process.jsp");
+			editURL.setParameter("serviceProcessId", String.valueOf(process.getServiceProcessId()));
+			editURL.setParameter("backURL", currentURL);
+		%>
+		<liferay-ui:icon image="edit" url="<%= editURL.toString() %>" />
  	</c:if>
 
  	<c:if test="<%= ProcessPermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE) %>">

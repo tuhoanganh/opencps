@@ -1,3 +1,5 @@
+<%@page import="org.opencps.processmgt.util.ProcessUtils"%>
+<%@page import="com.liferay.portal.model.Role"%>
 <%@page import="org.opencps.processmgt.model.ServiceProcess"%>
 <%
 /**
@@ -46,4 +48,34 @@
 		</aui:input>
 	</aui:col>
 </aui:row>
+
+<div id="step-allowance">
+	<div class="lfr-form-row lfr-form-row-inline">
+		<div class="row-fields">
+			<aui:select id="roleId0" inlineField="<%= true %>" name="roleId0" showEmptyOption="true">
+				<%
+					List<Role> roles = ProcessUtils.getRoles(renderRequest);
+					
+					for(Role role : roles) {
+				%>
+						<aui:option value="<%= role.getPrimaryKey() %>"><%= role.getName() %></aui:option>
+				<%
+					}
+				%>
+			</aui:select>
+			<aui:input fieldParam="readOnly0" id="readOnly0" inlineField="<%= true %>" name="readOnly0" type="checkbox"/>
+		</div>
+	</div>
+</div>
+
+<aui:script use="liferay-auto-fields">
+	new Liferay.AutoFields(
+		{
+			contentBox: '#step-allowance',
+			fieldIndexes: '<portlet:namespace />stepIndexes',
+		}
+	).render();
+	
+</aui:script>
+
 

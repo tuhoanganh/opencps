@@ -32,19 +32,7 @@
 %>
 <aui:nav-bar cssClass="custom-toolbar">
 	<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left" >
-		<portlet:renderURL var="editProcessURL">
-			<portlet:param name="mvcPath" value='<%= templatePath + "edit_process.jsp" %>'/>
-			<portlet:param name="redirectURL" value="<%=currentURL %>"/>
-			<portlet:param name="backURL" value="<%=currentURL %>"/>
-		</portlet:renderURL>
-		<c:if test="<%= isPermission %>">
-			<aui:nav-item 
-				id="addProcess" 
-				label="add-process" 
-				iconCssClass="icon-plus"  
-				href="<%= editProcessURL %>"
-			/>
-		</c:if>
+		
 	</aui:nav>
 	<aui:nav-bar-search cssClass="pull-right">
 		<div class="form-search">
@@ -61,6 +49,18 @@
 		</div>
 	</aui:nav-bar-search>
 </aui:nav-bar>
+
+<portlet:renderURL var="editProcessURL">
+	<portlet:param name="mvcPath" value='<%= templatePath + "edit_process.jsp" %>'/>
+	<portlet:param name="redirectURL" value="<%=currentURL %>"/>
+	<portlet:param name="backURL" value="<%=currentURL %>"/>
+</portlet:renderURL>
+
+<c:if test="<%= isPermission %>">
+	<aui:button-row>
+		<aui:button name="add-process" value="add-process" href="<%= editProcessURL %>"></aui:button>
+	</aui:button-row>
+</c:if>
 
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.processmgt.admin.toolbar.jsp");

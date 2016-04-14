@@ -77,6 +77,7 @@
 		categorySections="<%= categorySections %>"
 		htmlTop="<%= htmlTop %>"
 		jspPath='<%= templatePath + "process/" %>'
+		formName="fm"
 	/>
 </aui:form>
 
