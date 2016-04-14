@@ -52,6 +52,9 @@
 	<bean id="org.opencps.processmgt.service.ProcessStepLocalService" class="org.opencps.processmgt.service.impl.ProcessStepLocalServiceImpl" />
 	<bean id="org.opencps.processmgt.service.ProcessStepService" class="org.opencps.processmgt.service.impl.ProcessStepServiceImpl" />
 	<bean id="org.opencps.processmgt.service.persistence.ProcessStepPersistence" class="org.opencps.processmgt.service.persistence.ProcessStepPersistenceImpl" parent="basePersistence" />
+	<bean id="org.opencps.processmgt.service.ProcessStepDossierPartLocalService" class="org.opencps.processmgt.service.impl.ProcessStepDossierPartLocalServiceImpl" />
+	<bean id="org.opencps.processmgt.service.ProcessStepDossierPartService" class="org.opencps.processmgt.service.impl.ProcessStepDossierPartServiceImpl" />
+	<bean id="org.opencps.processmgt.service.persistence.ProcessStepDossierPartPersistence" class="org.opencps.processmgt.service.persistence.ProcessStepDossierPartPersistenceImpl" parent="basePersistence" />
 	<bean id="org.opencps.processmgt.service.ProcessWorkflowLocalService" class="org.opencps.processmgt.service.impl.ProcessWorkflowLocalServiceImpl" />
 	<bean id="org.opencps.processmgt.service.ProcessWorkflowService" class="org.opencps.processmgt.service.impl.ProcessWorkflowServiceImpl" />
 	<bean id="org.opencps.processmgt.service.persistence.ProcessWorkflowPersistence" class="org.opencps.processmgt.service.persistence.ProcessWorkflowPersistenceImpl" parent="basePersistence" />

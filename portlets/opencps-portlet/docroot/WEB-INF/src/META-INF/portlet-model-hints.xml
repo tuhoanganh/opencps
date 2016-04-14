@@ -311,9 +311,12 @@
 		<field name="sequenceNo" type="int" />
 		<field name="dossierStatus" type="String" />
 		<field name="daysDuration" type="int" />
-		<field name="referenceDossierPartId" type="String" />
+		<field name="referenceDossierPartId" type="long" />
 		<field name="externalAppUrl" type="String" />
-		<field name="hasDossierParts" type="int" />
+	</model>
+	<model name="org.opencps.processmgt.model.ProcessStepDossierPart">
+		<field name="processStepId" type="long" />
+		<field name="dossierPartId" type="long" />
 	</model>
 	<model name="org.opencps.processmgt.model.ProcessWorkflow">
 		<field name="processWorkflowId" type="long" />
@@ -346,17 +349,13 @@
 		<field name="processNo" type="String" />
 		<field name="processName" type="String" />
 		<field name="description" type="String" />
+		<field name="dossierTemplateId" type="long" />
 	</model>
 	<model name="org.opencps.processmgt.model.StepAllowance">
 		<field name="stepAllowanceId" type="long" />
-		<field name="companyId" type="long" />
-		<field name="groupId" type="long" />
-		<field name="userId" type="long" />
-		<field name="createDate" type="Date" />
-		<field name="modifiedDate" type="Date" />
 		<field name="processStepId" type="long" />
 		<field name="roleId" type="long" />
-		<field name="readOnly" type="int" />
+		<field name="readOnly" type="boolean" />
 	</model>
 	<model name="org.opencps.processmgt.model.WorkflowOutput">
 		<field name="workflowOutputId" type="long" />

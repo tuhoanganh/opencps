@@ -447,11 +447,20 @@
 			<basic name="daysDuration" />
 			<basic name="referenceDossierPartId" />
 			<basic name="externalAppUrl" />
-			<basic name="hasDossierParts" />
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
 			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="org.opencps.processmgt.model.impl.ProcessStepDossierPartModelImpl">
+		<id-class class="org.opencps.processmgt.service.persistence.ProcessStepDossierPartPK" />
+		<attributes>
+			<id name="processStepId" />
+			<id name="dossierPartId" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
 		</attributes>
 	</mapped-superclass>
 	<mapped-superclass class="org.opencps.processmgt.model.impl.ProcessWorkflowModelImpl">
@@ -501,6 +510,7 @@
 			<basic name="processNo" />
 			<basic name="processName" />
 			<basic name="description" />
+			<basic name="dossierTemplateId" />
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
@@ -510,22 +520,12 @@
 	<mapped-superclass class="org.opencps.processmgt.model.impl.StepAllowanceModelImpl">
 		<attributes>
 			<id name="stepAllowanceId" />
-			<basic name="companyId" />
-			<basic name="groupId" />
-			<basic name="userId" />
-			<basic name="createDate">
-				<temporal>TIMESTAMP</temporal>
-			</basic>
-			<basic name="modifiedDate">
-				<temporal>TIMESTAMP</temporal>
-			</basic>
 			<basic name="processStepId" />
 			<basic name="roleId" />
 			<basic name="readOnly" />
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
-			<transient name="userUuid" />
 		</attributes>
 	</mapped-superclass>
 	<mapped-superclass class="org.opencps.processmgt.model.impl.WorkflowOutputModelImpl">
@@ -613,6 +613,10 @@
 	</entity>
 	<entity class="org.opencps.processmgt.model.impl.ProcessStepImpl" name="ProcessStep">
 		<table name="opencps_processstep" />
+		<attributes />
+	</entity>
+	<entity class="org.opencps.processmgt.model.impl.ProcessStepDossierPartImpl" name="ProcessStepDossierPart">
+		<table name="opencps_processstep_dossierpart" />
 		<attributes />
 	</entity>
 	<entity class="org.opencps.processmgt.model.impl.ProcessWorkflowImpl" name="ProcessWorkflow">

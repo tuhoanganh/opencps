@@ -18,6 +18,7 @@
 	<import class="org.opencps.processmgt.model.ActionHistory" />
 	<import class="org.opencps.processmgt.model.ProcessOrder" />
 	<import class="org.opencps.processmgt.model.ProcessStep" />
+	<import class="org.opencps.processmgt.model.ProcessStepDossierPart" />
 	<import class="org.opencps.processmgt.model.ProcessWorkflow" />
 	<import class="org.opencps.processmgt.model.ServiceProcess" />
 	<import class="org.opencps.processmgt.model.StepAllowance" />
@@ -333,9 +334,15 @@
 		<property name="sequenceNo" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
 		<property name="dossierStatus" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="daysDuration" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
-		<property name="referenceDossierPartId" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="referenceDossierPartId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="externalAppUrl" type="com.liferay.portal.dao.orm.hibernate.StringType" />
-		<property name="hasDossierParts" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+	</class>
+	<class name="org.opencps.processmgt.model.impl.ProcessStepDossierPartImpl" table="opencps_processstep_dossierpart">
+		<cache usage="read-write" />
+		<composite-id name="primaryKey" class="org.opencps.processmgt.service.persistence.ProcessStepDossierPartPK">
+			<key-property name="processStepId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+			<key-property name="dossierPartId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		</composite-id>
 	</class>
 	<class name="org.opencps.processmgt.model.impl.ProcessWorkflowImpl" table="opencps_processworkflow">
 		<cache usage="read-write" />
@@ -374,20 +381,16 @@
 		<property name="processNo" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="processName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="description" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="dossierTemplateId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 	</class>
 	<class name="org.opencps.processmgt.model.impl.StepAllowanceImpl" table="opencps_stepallowance">
 		<cache usage="read-write" />
 		<id name="stepAllowanceId" type="long">
 			<generator class="assigned" />
 		</id>
-		<property name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
-		<property name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
-		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
-		<property name="createDate" type="org.hibernate.type.TimestampType" />
-		<property name="modifiedDate" type="org.hibernate.type.TimestampType" />
 		<property name="processStepId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="roleId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
-		<property name="readOnly" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="readOnly" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
 	</class>
 	<class name="org.opencps.processmgt.model.impl.WorkflowOutputImpl" table="opencps_workflowoutput">
 		<cache usage="read-write" />
