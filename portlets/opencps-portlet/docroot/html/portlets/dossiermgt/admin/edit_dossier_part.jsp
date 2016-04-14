@@ -28,13 +28,20 @@
 <%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
 <%
 	DossierTemplate dossierTemplate = (DossierTemplate) request.getAttribute(WebKeys.DOSSIER_TEMPLATE_ENTRY);
-	long dossierTemplateId = dossierTemplate != null ? dossierTemplate.getDossierTemplateId() : 0L;
 	DossierPart dossierPart = (DossierPart) request.getAttribute(WebKeys.DOSSIER_PART_ENTRY);
 	DossierPart dossierPartIsAddChilds = null;
+	long dossierTemplateId = dossierTemplate != null ? dossierTemplate.getDossierTemplateId() : 0L;
 	long dossierPartId = dossierPart != null ? dossierPart.getDossierpartId() : 0L;
 	int [] dossierType = {1,2,3,4,5};
 	String isAddChilds = ParamUtil.getString(request, "isAddChild");
+	String backURL = ParamUtil.getString(request, "backURL");
 %>
+
+<liferay-ui:header
+	backURL="<%= backURL %>"
+	title="update-dossier"
+	backLabel="back"
+/>
 
 <portlet:actionURL name="updateDossierPart" var="updateDossierPartURL" >
 	<portlet:param 

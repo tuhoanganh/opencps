@@ -148,12 +148,12 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		try {
 			if (dossierPartId == 0) {
 				DossierPartLocalServiceUtil.addDossierPart(
-				    dossierTemplateId, partName, partTip, partType, parentId,
+				    dossierTemplateId, partNo ,partName, partTip, partType, parentId,
 				    sibling, formScript, sampleData, required, templateFileNo);
 			}
 			else {
 				DossierPartLocalServiceUtil.updateDossierPart(
-				    dossierPartId, dossierTemplateId, partName, partTip,
+				    dossierPartId, dossierTemplateId, partNo ,partName, partTip,
 				    partType, parentId, sibling, formScript, sampleData,
 				    required, templateFileNo);
 			}

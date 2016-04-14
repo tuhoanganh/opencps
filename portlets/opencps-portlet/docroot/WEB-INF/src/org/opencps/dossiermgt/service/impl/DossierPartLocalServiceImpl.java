@@ -14,12 +14,15 @@
 
 package org.opencps.dossiermgt.service.impl;
 
+import java.util.List;
+
 import org.opencps.dossiermgt.NoSuchDossierPartException;
 import org.opencps.dossiermgt.model.DossierPart;
 import org.opencps.dossiermgt.service.base.DossierPartLocalServiceBaseImpl;
 
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
 
 /**
@@ -38,7 +41,7 @@ import com.liferay.portal.kernel.util.StringPool;
  */
 public class DossierPartLocalServiceImpl extends DossierPartLocalServiceBaseImpl {
 	
-	public DossierPart addDossierPart(long dossierTemplateId,
+	public DossierPart addDossierPart(long dossierTemplateId,String partNo,
 		String partName, String partTip, int partType, long parentId, double sibling,
 		String formScript, String sampleData, boolean required,
 		String templateFileNo) throws SystemException, NoSuchDossierPartException {
@@ -49,6 +52,7 @@ public class DossierPartLocalServiceImpl extends DossierPartLocalServiceBaseImpl
 		String treeIndex = getTreeIndex(parentId, dossierPartId);
 		
 		dossierPart.setDossierTemplateId(dossierTemplateId);
+		dossierPart.setPartNo(partNo);
 		dossierPart.setPartName(partName);
 		dossierPart.setPartTip(partTip);
 		dossierPart.setPartType(partType);
@@ -64,14 +68,15 @@ public class DossierPartLocalServiceImpl extends DossierPartLocalServiceBaseImpl
 	}
 	
 	public DossierPart updateDossierPart(long dossierPartId ,long dossierTemplateId,
-		String partName, String partTip, int partType, long parentId, double sibling,
+		String partNo, String partName, String partTip, int partType, long parentId, double sibling,
 		String formScript, String sampleData, boolean required,
 		String templateFileNo) throws SystemException {
 		
 		DossierPart dossierPart = dossierPartPersistence.fetchByPrimaryKey(dossierPartId);
 		
-		dossierPart.setDossierpartId(dossierTemplateId);
+		dossierPart.setDossierTemplateId(dossierTemplateId);
 		dossierPart.setPartName(partName);
+		dossierPart.setPartNo(partNo);
 		dossierPart.setPartTip(partTip);
 		dossierPart.setPartType(partType);
 		dossierPart.setParentId(parentId);
@@ -95,4 +100,19 @@ public class DossierPartLocalServiceImpl extends DossierPartLocalServiceBaseImpl
 			throw new NoSuchDossierPartException();
 		}
 	}
+	
+	public List<DossierPart> getDossierParts(int start, int end, 
+		OrderByComparator orderByComparator) throws SystemException {
+		return dossierPartPersistence.findAll(start, end, orderByComparator);
+	}
+	
+	public List<DossierPart> getDossierParts (String partName)
+					throws SystemException {
+		return dossierPartPersistence.findByPartName(partName);
+	}
+	
+	public int countAll() throws SystemException {
+		return dossierPartPersistence.countAll();
+	}
+	
 }

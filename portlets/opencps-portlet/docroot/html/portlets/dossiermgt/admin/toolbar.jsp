@@ -31,14 +31,17 @@
 <%
 	String tabs1 = ParamUtil.getString(request, "tabs1", DossierMgtUtil.TOP_TABS_DOSSIER_TEMPLATE);
 	String tabs2 = (String) request.getAttribute("tabs2");	
-	_log.info("tabs2 ==== " + tabs2);
-PortletURL searchURL = renderResponse.createRenderURL();
+	if(tabs2 == null) {
+		tabs2 = ParamUtil.getString(request, "tabs2");
+	}
+	_log.info("tabs2 ==== " + tabs2 + " tabs1  " + tabs1);
+	PortletURL searchURL = renderResponse.createRenderURL();
 %>
 <aui:nav-bar cssClass="custom-toolbar">
 	<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left" >
 		<c:choose>
 			
-			<c:when test="<%= tabs1.contentEquals(DossierMgtUtil.TOP_TABS_DOSSIER_TEMPLATE) %>">
+			<c:when test="<%=!Validator.isNotNull(tabs2) && tabs1.contentEquals(DossierMgtUtil.TOP_TABS_DOSSIER_TEMPLATE) %>">
 				<%
 					searchURL.setParameter("mvcPath", templatePath + "dossiertemplatelist.jsp");
 					searchURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER_TEMPLATE);
@@ -51,9 +54,7 @@ PortletURL searchURL = renderResponse.createRenderURL();
 				</portlet:renderURL>
 				
 				<c:if 
-						test="<%=DossierTemplatePermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_DOSSIER_TEMPLATE) 
-						&& DossierPartPermission.contains(permissionChecker, scopeGroupId, ActionKeys.VIEW)
-					%>"
+						test="<%=DossierTemplatePermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_DOSSIER_TEMPLATE)%>"
 				>
 					<aui:nav-item 
 						id="addDossierTemplate" 
@@ -64,8 +65,11 @@ PortletURL searchURL = renderResponse.createRenderURL();
 				</c:if>
 				
 			</c:when>
-			<c:when test="<%=tabs2.contentEquals(DossierMgtUtil.TOP_TABS_DOSSIER_PART) %>">
-				
+			<c:when test="<%=Validator.isNotNull(tabs2) && tabs2.contentEquals(DossierMgtUtil.TOP_TABS_DOSSIER_PART) %>">
+				<%
+					searchURL.setParameter("mvcPath", templatePath + "dossier_common/dossierpartlist.jsp");
+					searchURL.setParameter("tabs2", DossierMgtUtil.TOP_TABS_DOSSIER_PART);
+				%>
 				<portlet:renderURL var="editDossierPartURL">
 					<portlet:param name="mvcPath" value='<%= templatePath + "edit_dossier_part.jsp" %>'/>
 					<portlet:param name="redirectURL" value="<%=currentURL %>"/> 
@@ -73,9 +77,7 @@ PortletURL searchURL = renderResponse.createRenderURL();
 				</portlet:renderURL>
 				
 				<c:if 
-						test="<%=DossierPartPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_DOSSIER_TEMPLATE) 
-						&& DossierPartPermission.contains(permissionChecker, scopeGroupId, ActionKeys.VIEW)
-					%>"
+						test="<%=DossierPartPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_DOSSIER_PART)%>"
 				>
 					<aui:nav-item 
 						id="addDossierPart" 
@@ -117,7 +119,7 @@ PortletURL searchURL = renderResponse.createRenderURL();
 				<div class="toolbar_search_input">
 					<c:choose>
 						
-						<c:when test="<%= tabs1.contentEquals(DossierMgtUtil.TOP_TABS_DOSSIER_TEMPLATE) %>">
+						<c:when test="<%= !Validator.isNotNull(tabs2) && tabs1.contentEquals(DossierMgtUtil.TOP_TABS_DOSSIER_TEMPLATE) %>">
 								
 								<aui:row>
 									<aui:col width="45">
@@ -135,7 +137,7 @@ PortletURL searchURL = renderResponse.createRenderURL();
 								
 						</c:when>
 						
-						<%-- <c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_TEMPLATE) %>">
+						 <c:when test="<%= Validator.isNotNull(tabs2) && tabs2.contentEquals(DossierMgtUtil.TOP_TABS_DOSSIER_PART) %>">
 							<liferay-ui:input-search 
 								id="keywords1" 
 								name="keywords" 
@@ -143,7 +145,7 @@ PortletURL searchURL = renderResponse.createRenderURL();
 							/>
 						</c:when>
 						
-						<c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_DOMAIN) %>">
+						<%-- <c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_DOMAIN) %>">
 						
 						</c:when>
 						

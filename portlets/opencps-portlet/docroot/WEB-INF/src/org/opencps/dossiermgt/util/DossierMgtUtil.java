@@ -67,7 +67,7 @@ public class DossierMgtUtil {
 			partTypeName = LanguageUtil.get(locale, "paper submited");
 			break;
 		case 2: 
-			partTypeName = LanguageUtil.get(locale, "Other papers group");
+			partTypeName = LanguageUtil.get(locale, "other papers group");
 			break;
 		case 3: 
 			partTypeName = LanguageUtil.get(locale, "groups optional");

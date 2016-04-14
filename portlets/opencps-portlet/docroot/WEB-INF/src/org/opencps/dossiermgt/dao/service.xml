@@ -27,6 +27,10 @@
         <column name="sampleData" type="String"></column>
         <column name="required" type="boolean"></column>
         <column name="templateFileNo" type="String"></column>
+        
+        <finder return-type="Collection" name="PartName">
+        	<finder-column name="partName" />
+        </finder>
     </entity>
     <entity name="serviceconfig" local-service="true"></entity>
     <entity name="dossier" local-service="true"></entity>
