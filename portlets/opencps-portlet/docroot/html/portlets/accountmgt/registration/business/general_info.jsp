@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -42,6 +41,14 @@
 
 	long businessId = business!=null ? business.getBusinessId() : 0L;
 	
+	long dictItemTypeId = 0;
+	
+	boolean isViewProfile = GetterUtil.get( (Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_VIEW_PROFILE), false);
+	
+	boolean isAdminViewProfile = GetterUtil.get((Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_ADMIN_PROFILE), false);
+	
+	boolean isCheckItemDomain = false;
+	
 	List<DictItem> dictItemDomains = new ArrayList<DictItem>();
 	DictItem dictItemType = null;
 	
@@ -50,13 +57,6 @@
 	
 	List<BusinessDomain> businessDomains = new ArrayList<BusinessDomain>();
 	
-	long getbusinessTypeId = 0;
-	
-	boolean isViewProfile = GetterUtil.get( (Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_VIEW_PROFILE), false);
-	
-	boolean isAdminViewProfile = GetterUtil.get((Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_ADMIN_PROFILE), false);
-	
-	boolean isCheckItemDomain = false;
 	try {
 		//get list dictItemDomains
 		dictCollectionDomain = DictCollectionLocalServiceUtil
@@ -72,7 +72,7 @@
 							PortletPropsValues.DATAMGT_MASTERDATA_BUSINESS_TYPE);
 		if(dictCollectionType != null && business != null) {
 			dictItemType = DictItemLocalServiceUtil.getDictItemInuseByItemCode(dictCollectionType.getDictCollectionId(), business.getBusinessType());
-			getbusinessTypeId = dictItemType.getDictItemId();
+			dictItemTypeId = dictItemType.getDictItemId();
 		}
 		//get BusinessDomains
 		if(business != null) {
@@ -143,7 +143,7 @@
 		dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_BUSINESS_TYPE %>"
 		itemNames="businessType"
 		itemsEmptyOption="true"	
-		selectedItems="<%=String.valueOf(getbusinessTypeId)%>"
+		selectedItems="<%=String.valueOf(dictItemTypeId)%>"
 	/>	
 </aui:row>
 <c:if test="<%= !dictItemDomains.isEmpty() %>">
@@ -155,6 +155,7 @@
 						for(BusinessDomain businessDomainChecked : businessDomains) {
 							if(dictItemDomain.getItemCode().equals(businessDomainChecked.getBusinessDomainId())) {
 								isCheckItemDomain = true;
+								break;
 							}
 						}
 					}
