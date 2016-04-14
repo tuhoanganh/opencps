@@ -17,7 +17,12 @@
 
 package org.opencps.processmgt.service.impl;
 
+import org.opencps.processmgt.model.StepAllowance;
 import org.opencps.processmgt.service.base.StepAllowanceLocalServiceBaseImpl;
+
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.Validator;
 
 /**
  * The implementation of the step allowance local service.
@@ -40,4 +45,38 @@ public class StepAllowanceLocalServiceImpl
 	 *
 	 * Never reference this interface directly. Always use {@link org.opencps.processmgt.service.StepAllowanceLocalServiceUtil} to access the step allowance local service.
 	 */
+	
+	/**
+	 * Add StepAllowance
+	 * 
+	 * @param processStepId
+	 * @param roleId
+	 * @param readOnly
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public StepAllowance addAllowance(
+	    long processStepId, long roleId, boolean readOnly)
+	    throws PortalException, SystemException {
+		
+		StepAllowance stepAllowance = stepAllowancePersistence.fetchBySTEP_ROLE(processStepId, readOnly);
+		
+		long stepAllowanceId = counterLocalService.increment(StepAllowance.class.getName());
+		
+		stepAllowance = stepAllowancePersistence.create(stepAllowanceId);
+		
+		if (Validator.isNotNull(stepAllowance)) {
+			
+			stepAllowance.setProcessStepId(processStepId);
+			stepAllowance.setRoleId(roleId);
+			stepAllowance.setReadOnly(readOnly);
+			
+			stepAllowancePersistence.update(stepAllowance);
+		}
+		
+		return stepAllowance;
+		
+	}
+	
 }
