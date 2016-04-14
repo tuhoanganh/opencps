@@ -8,6 +8,7 @@ build-common.xml
 build.khoavd.properties
 build.properties
 build.trungnt.properties
+build.dunglt.properties
 build.xml
 ci.properties
 common.bnd
@@ -115,9 +116,22 @@ portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/accountmgt/service/pers
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/accountmgt/service/persistence/BusinessPersistenceImpl.java
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/accountmgt/service/persistence/CitizenPersistenceImpl.java
 
+<<<<<<< HEAD
+portlets/opencps-portlet/.settings/org.eclipse.core.resources.prefs
+
+
+portlets/opencps-portlet/.settings/org.eclipse.jdt.ui.prefs
+portlets/opencps-portlet/docroot/WEB-INF/.gitignore
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/datamgt/service/.gitignore
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/processmgt/
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/servicemgt/service/.gitignore
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/usermgt/service/.gitignore
+portlets/opencps-portlet/docroot/html/portlets/processmgt/
+=======
 
 portlets/opencps-portlet/.settings/org.eclipse.jdt.ui.prefs
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/datamgt/service/.gitignore
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/processmgt/
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/servicemgt/service/.gitignore
+>>>>>>> refs/remotes/upstream/qa-rc-0.1
 
