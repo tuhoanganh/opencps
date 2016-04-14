@@ -106,6 +106,7 @@
 	<portlet>
 		<portlet-name>15</portlet-name>
 		<icon>/icon.png</icon>
+		<action-url-redirect>true</action-url-redirect>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>
 			/js/main.js
