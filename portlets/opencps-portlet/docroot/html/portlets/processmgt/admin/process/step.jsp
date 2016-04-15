@@ -37,7 +37,6 @@
 
 <aui:button-row>
 	<aui:button name="addStep" onClick="showDialog()" value="add-step" ></aui:button>
-	<aui:button name="addStep" value="add-step" href="<%= editStepURL2 %>"></aui:button>
 </aui:button-row>
 
 <aui:script use="liferay-util-window">

@@ -163,6 +163,26 @@
 		).render();
 	</aui:script>
 
+	<div id="dossier-part">
+		<div class="lfr-form-row lfr-form-row-inline">
+			<div class="row-fields">
+				<aui:select id="dossierPart0" inlineField="<%= true %>" name="dossierPart0" showEmptyOption="true">
+
+				</aui:select>
+			</div>
+		</div>
+	</div>
+	
+	<aui:script use="liferay-auto-fields">
+		new Liferay.AutoFields(
+			{
+				contentBox: '#dossier-part',
+				fieldIndexes: '<portlet:namespace />dossierIndexs',
+				namespace: '<portlet:namespace />'
+			}
+		).render();
+	</aui:script>
+
 	<aui:row>
 		<aui:col width="100">
 			<aui:input name="externalAppUrl" cssClass="input100"></aui:input>
@@ -171,7 +191,6 @@
 
 	<aui:button-row>
 		<aui:button name="saveForm" value="<%= Validator.isNotNull(step) ? Constants.ADD : Constants.UPDATE %>"/>
-		<aui:button type="submit" name="add" value="add-step"/>
 		<aui:button type="cancel" name="closeDialog" />
 	</aui:button-row>
 	
