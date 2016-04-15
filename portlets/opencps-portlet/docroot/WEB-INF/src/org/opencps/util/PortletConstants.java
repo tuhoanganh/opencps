@@ -33,7 +33,13 @@ public class PortletConstants {
 	public static final int ACCOUNT_STATUS_CONFIRMED = 1;
 	public static final int ACCOUNT_STATUS_APPROVED = 2;
 	public static final int ACCOUNT_STATUS_LOCKED = 3;
-
+	
+	public static final int DOSSIER_TYPE_PAPER_SUBMITED = 1;
+	public static final int DOSSIER_TYPE_OTHER_PAPERS_GROUP = 2;
+	public static final int DOSSIER_TYPE_GROUPS_OPTIONAL = 3;
+	public static final int DOSSIER_TYPE_OWN_RECORDS = 4;
+	public static final int DOSSIER_TYPE_PAPERS_RESULTS = 5;
+	
 	public static enum DestinationRoot {
 			CITIZEN("Citizen"), BUSINESS("Business");
 

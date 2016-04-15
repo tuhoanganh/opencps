@@ -25,20 +25,30 @@
 <%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 <%@page import="org.opencps.util.WebKeys"%>
+<%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
 <%
 	DossierTemplate dossierTemplate = (DossierTemplate) request.getAttribute(WebKeys.DOSSIER_TEMPLATE_ENTRY);
 	DossierPart dossierPart = (DossierPart) request.getAttribute(WebKeys.DOSSIER_PART_ENTRY);
 	DossierPart dossierPartIsAddChilds = null;
+	
 	long dossierTemplateId = dossierTemplate != null ? dossierTemplate.getDossierTemplateId() : 0L;
 	long dossierPartId = dossierPart != null ? dossierPart.getDossierpartId() : 0L;
-	int [] dossierType = {1,2,3,4,5};
+	int [] dossierType = new int[5];
+	
+	dossierType[0] = PortletConstants.DOSSIER_TYPE_PAPER_SUBMITED ; 
+	dossierType[1] = PortletConstants.DOSSIER_TYPE_OTHER_PAPERS_GROUP;
+	dossierType[2] = PortletConstants.DOSSIER_TYPE_GROUPS_OPTIONAL; 
+	dossierType[3] = PortletConstants.DOSSIER_TYPE_OWN_RECORDS; 
+	dossierType[4] = PortletConstants.DOSSIER_TYPE_PAPERS_RESULTS;
+	
 	String isAddChilds = ParamUtil.getString(request, "isAddChild");
-	String backURL = ParamUtil.getString(request, "backURL");
+	String partListURL = (String) session.getAttribute("partListURL");
+	
 %>
 
 <liferay-ui:header
-	backURL="<%= backURL %>"
+	backURL="<%= partListURL %>"
 	title="update-dossier"
 	backLabel="back"
 />
@@ -47,10 +57,6 @@
 	<portlet:param 
 		name="<%=DossierPartDisplayTerms.DOSSIERPART_DOSSIERPARTID %>" 
 		value="<%=String.valueOf(dossierPartId)%>"
-	/>
-	<portlet:param 
-		name="<%=DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DOSSIERTEMPLATEID %>" 
-		value="<%=String.valueOf(dossierTemplateId)%>"
 	/>
 	
 </portlet:actionURL>
@@ -100,7 +106,9 @@
 			<aui:select name="<%=DossierPartDisplayTerms.DOSSIERPART_PARENTID %>">
 				<c:choose>
 					<c:when test="<%=Validator.isNotNull(isAddChilds) && Validator.isNotNull(dossierPart)%>">
-						<aui:option value="<%=dossierPart.getDossierpartId() %>"></aui:option>
+						<aui:option value="<%=dossierPart.getDossierpartId() %>">
+							<%=dossierPart.getPartName()%>
+						</aui:option>
 					</c:when>
 					<c:otherwise>
 						<aui:option value="<%=0 %>">
@@ -148,6 +156,7 @@
 			<aui:input 
 			name="<%=DossierPartDisplayTerms.DOSSIERPART_REQUIRED %>"
 			type="checkbox"	
+			checked="<%= !Validator.isNotNull(isAddChilds) && Validator.isNotNull(dossierPart) ? dossierPart.getRequired() : false %>"
 		/>
 		</aui:col>
 	</aui:row>
@@ -167,6 +176,16 @@
 			cssClass="input90"
 		/>
 	</aui:row>
+	
+	
+	<aui:input 
+		name="<%=DossierPartDisplayTerms.DOSSIERPART_DOSSIERTEMPLATEID %>"
+		type="hidden"
+		value= "<%= String.valueOf(dossierTemplateId) %>"
+	/>
+			
+
+	
 	<aui:row>
 			<aui:button name="submit" value="submit" type="submit"/>
 		
@@ -180,7 +199,7 @@ AUI().ready(function(A) {
 	var partType = A.one('#<portlet:namespace /><%=DossierPartDisplayTerms.DOSSIERPART_PARTTYPE %>');
 	var dispalyFormScript = A.one('#<portlet:namespace/>displayFormScript');
 	
-	if(partType.val() == '0') {
+	if(partType.val() == '0' || partType.val() == '3' || partType.val() == '4') {
 		dispalyFormScript.hide();
 	}
 	

@@ -30,10 +30,11 @@ import com.liferay.portal.kernel.util.StringPool;
 
 public class DossierMgtUtil {
 	
-	public static final String TOP_TABS_DOSSIER_TEMPLATE = "top_tab_dossier_template";
+	public static final String TOP_TABS_DOSSIER_TEMPLATE = "top_tabs_dossier_template";
 	public static final String TOP_TABS_DOSSIER_PART = "top_tabs_dossier_part";
-	public static final String TOP_TABS_DOSSIER_SERVICE = "top_tabs_dossier_service";
-	
+	public static final String TOP_TABS_DOSSIER_SERVICE = "top_tabs_service_config";
+	public static final String DOSSIER_PART_TOOLBAR = "dossierPartToolBar";
+	public static final String SERVICE_CONFIG_TOOLBAR = "serviceConfigToolBar";
 	public static final String[] _DOSSIER_CATEGORY_NAMES = {
 		"dossier-info"
 	};
@@ -64,19 +65,19 @@ public class DossierMgtUtil {
 		String partTypeName = StringPool.BLANK;
 		switch (partType) {
 		case 1: 
-			partTypeName = LanguageUtil.get(locale, "paper submited");
+			partTypeName = LanguageUtil.get(locale, "paper-submited");
 			break;
 		case 2: 
-			partTypeName = LanguageUtil.get(locale, "other papers group");
+			partTypeName = LanguageUtil.get(locale, "other-papers-group");
 			break;
 		case 3: 
-			partTypeName = LanguageUtil.get(locale, "groups optional");
+			partTypeName = LanguageUtil.get(locale, "groups-optional");
 			break;
 		case 4: 
-			partTypeName = LanguageUtil.get(locale, "own records");
+			partTypeName = LanguageUtil.get(locale, "own-records");
 			break;
 		case 5: 
-			partTypeName = LanguageUtil.get(locale, "papers results");
+			partTypeName = LanguageUtil.get(locale, "papers-results");
 			break;	
 		default:
 			partTypeName = LanguageUtil.get(locale, StringPool.BLANK);

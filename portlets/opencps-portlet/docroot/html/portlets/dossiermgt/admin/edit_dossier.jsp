@@ -1,3 +1,6 @@
+<%@page import="org.opencps.util.ActionKeys"%>
+<%@page import="org.opencps.dossiermgt.permission.DossierPartPermission"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -25,7 +28,7 @@
 	long dossierTemplateId = ParamUtil.getLong(request, DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DOSSIERTEMPLATEID);
 	
 	String backURL = ParamUtil.getString(request, "backURL");
-
+	
 	String [] dossierTemplateSections = null;
 	
 	if(dossierTemplateId == 0) {
@@ -40,7 +43,9 @@
 	
 	String[][] categorySections = {dossierTemplateSections};
 %>
-
+<portlet:renderURL var="renderToToolBar" windowState="<%=LiferayWindowState.EXCLUSIVE.toString()%>">
+	<portlet:param name="mvcPath" value='<%= templatePath + "toolbar.jsp" %>'/>
+</portlet:renderURL>
 <liferay-ui:header
 	backURL="<%= backURL %>"
 	title="update-dossier"
@@ -48,7 +53,6 @@
 />
 
 <portlet:actionURL name="updateDossier" var="updateDossierURL" >
-
 </portlet:actionURL>
 
 
@@ -85,9 +89,9 @@
 </aui:form>
 
 <aui:script>
-
-	AUI().ready(function(A) {
 	
+	
+	AUI().ready('liferay-portlet-url',function(A) {	
 		var dossierPartLink = A.one('#<portlet:namespace />dossierpartlistLink');
 		var dossierServiceLink = A.one('#<portlet:namespace />dossierservicelistLink'); 
 		var dossierTemplateLink = A.one('#<portlet:namespace />edit_dossier_templateLink');
@@ -103,6 +107,7 @@
 			var submitBtn = A.one('#<portlet:namespace />submit');
 			dossierPartLink.on('click',function(){
 				submitBtn.hide();
+				<portlet:namespace />sentToolBarSignal('dossierPartToolBar');
 			});
 		} 
 		
@@ -110,8 +115,40 @@
 			var submitBtn = A.one('#<portlet:namespace />submit');
 			dossierServiceLink.on('click',function(){
 				submitBtn.hide();
+				<portlet:namespace />sentToolBarSignal('serviceConfigToolBar');
 			});
 		} 
 		
 	});
+	
+Liferay.provide(window, '<portlet:namespace/>sentToolBarSignal', function(tbSignal) {
+		
+		var A = AUI();
+		
+		A.io.request(
+			'<%= renderToToolBar.toString() %>',
+			{
+				dataType : 'text/html',
+				method : 'GET',
+			    data:{    	
+			    	"<portlet:namespace />tabs1" : tbSignal
+			    },   
+			    on: {
+			    	success: function(event, id, obj) {
+						var instance = this;
+						var res = instance.get('responseData');
+						
+						var toolbarResponse = A.one("#<portlet:namespace/>toolbarResponse");
+						
+						if(toolbarResponse){
+							toolbarResponse.empty();
+							toolbarResponse.html(res);
+						}
+							
+					},
+			    	error: function(){}
+				}
+			}
+		);
+	},['aui-base','aui-io']);
 </aui:script>

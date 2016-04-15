@@ -1,15 +1,4 @@
-<%@page import="com.liferay.portal.kernel.dao.search.SearchEntry"%>
-<%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.search.DossierPartSearchTerms"%>
-<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
-<%@page import="org.opencps.dossiermgt.search.DossierPartSearch"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="java.util.List"%>
-<%@page import="javax.portlet.PortletURL"%>
-<%@page import="org.opencps.dossiermgt.permission.DossierPartPermission"%>
-<%@page import="org.opencps.util.ActionKeys"%>
-<%@page import="org.opencps.dossiermgt.permission.DossierTemplatePermission"%>
-<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -27,14 +16,27 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+<%@page import="org.opencps.util.WebKeys"%>
+<%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
+<%@page import="com.liferay.portal.kernel.dao.search.SearchEntry"%>
+<%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.search.DossierPartSearchTerms"%>
+<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
+<%@page import="org.opencps.dossiermgt.search.DossierPartSearch"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page import="javax.portlet.PortletURL"%>
+<%@page import="org.opencps.dossiermgt.permission.DossierPartPermission"%>
+<%@page import="org.opencps.util.ActionKeys"%>
+<%@page import="org.opencps.dossiermgt.permission.DossierTemplatePermission"%>
+<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 <%@ include file="../../init.jsp"%>
 <%
-	request.setAttribute("tabs2", DossierMgtUtil.TOP_TABS_DOSSIER_PART);
-
+	DossierTemplate dossierTemplate = (DossierTemplate) request.getAttribute(WebKeys.DOSSIER_TEMPLATE_ENTRY);
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "dossier_common/dossierpartlist.jsp");
-	iteratorURL.setParameter("tabs2", DossierMgtUtil.TOP_TABS_DOSSIER_PART);
-	
+	iteratorURL.setParameter("tabs1", DossierMgtUtil.DOSSIER_PART_TOOLBAR);
+	List<DossierPart> dossierParts = new ArrayList<DossierPart>();
 	List<String> headerNames = new ArrayList<String>();
 	
 	headerNames.add("row-no");
@@ -47,37 +49,36 @@
 					DossierPartPermission.contains(
 				        themeDisplay.getPermissionChecker(),
 				        themeDisplay.getScopeGroupId(), ActionKeys.ADD_DOSSIER_PART);
+	
+	int totalCount = 0;
+	long dossierTemplateId = dossierTemplate != null ? dossierTemplate.getDossierTemplateId() : 0L;
 
 	if (isPermission) {
 		headerNames.add("action");
 	}
 	
 	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
+	session.setAttribute("partListURL", currentURL);
 	
-	int totalCount = 0;
-	List<DossierPart> dossierParts = new ArrayList<DossierPart>();
+ // chua sap xep theo sibling
 					
 %>
-<c:if test="<%=DossierPartPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_DOSSIER_PART) %>">
-	<liferay-util:include page='<%= templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
-</c:if>
 
+<c:choose>
+	<c:when test="<%=DossierPartPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_DOSSIER_PART) %>">
+		<div id="<portlet:namespace/>toolbarResponse"></div>
+	</c:when>
+</c:choose>
 <liferay-ui:search-container searchContainer="<%= new DossierPartSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" 
 	headerNames="<%= headers %>">
 	<liferay-ui:search-container-results>
 		<%
 			DossierPartSearchTerms searchTerms = (DossierPartSearchTerms) searchContainer.getSearchTerms();
-			if(Validator.isNotNull(searchTerms.getKeywords())) {
-				dossierParts = DossierPartLocalServiceUtil.getDossierParts(searchTerms.getKeywords());
-				totalCount = dossierParts.size();
-			} else {
-				dossierParts = DossierPartLocalServiceUtil.getDossierParts(
-					searchContainer.getStart(),
-					searchContainer.getEnd(),
-					searchContainer.getOrderByComparator()
-								);	
-				totalCount = DossierPartLocalServiceUtil.countAll();
-			}
+			
+			dossierParts = DossierPartLocalServiceUtil.getDossierParts(
+					dossierTemplateId);
+									
+			totalCount = DossierPartLocalServiceUtil.CountByTempalteId(dossierTemplateId);
 			
 			total = totalCount;
 			results = dossierParts;
@@ -93,7 +94,7 @@
 	>
 		<%
 			String partTypeName = DossierMgtUtil.getNameOfPartType(dossierPart.getPartType(), themeDisplay.getLocale());
-			row.addText(String.valueOf(row.getPos() + 1));
+			row.addText(String.valueOf(dossierPart.getSibling()));
 			row.addText(dossierPart.getPartNo());
 			row.addText(dossierPart.getPartName());
 			row.addText(partTypeName);

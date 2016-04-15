@@ -1,11 +1,5 @@
-<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
-<%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
-<%@page import="com.liferay.portal.kernel.log.Log"%>
-<%@page import="org.opencps.dossiermgt.permission.DossierPartPermission"%>
-<%@page import="org.opencps.util.ActionKeys"%>
-<%@page import="org.opencps.dossiermgt.permission.DossierTemplatePermission"%>
-<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
-<%@page import="javax.portlet.PortletURL"%>
+
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -24,24 +18,26 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
+<%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
+<%@page import="com.liferay.portal.kernel.log.Log"%>
+<%@page import="org.opencps.dossiermgt.permission.DossierPartPermission"%>
+<%@page import="org.opencps.util.ActionKeys"%>
+<%@page import="org.opencps.dossiermgt.permission.DossierTemplatePermission"%>
+<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
+<%@page import="javax.portlet.PortletURL"%>
 
 <%@ include file="../init.jsp"%>
 
 <%
 	String tabs1 = ParamUtil.getString(request, "tabs1", DossierMgtUtil.TOP_TABS_DOSSIER_TEMPLATE);
-	String tabs2 = (String) request.getAttribute("tabs2");	
-	if(tabs2 == null) {
-		tabs2 = ParamUtil.getString(request, "tabs2");
-	}
-	_log.info("tabs2 ==== " + tabs2 + " tabs1  " + tabs1);
 	PortletURL searchURL = renderResponse.createRenderURL();
 %>
 <aui:nav-bar cssClass="custom-toolbar">
 	<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left" >
 		<c:choose>
 			
-			<c:when test="<%=!Validator.isNotNull(tabs2) && tabs1.contentEquals(DossierMgtUtil.TOP_TABS_DOSSIER_TEMPLATE) %>">
+			<c:when test="<%=tabs1.contentEquals(DossierMgtUtil.TOP_TABS_DOSSIER_TEMPLATE) %>">
 				<%
 					searchURL.setParameter("mvcPath", templatePath + "dossiertemplatelist.jsp");
 					searchURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER_TEMPLATE);
@@ -54,23 +50,23 @@
 				</portlet:renderURL>
 				
 				<c:if 
-						test="<%=DossierTemplatePermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_DOSSIER_TEMPLATE)%>"
+					test="<%=DossierTemplatePermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_DOSSIER_TEMPLATE)%>"
 				>
 					<aui:nav-item 
 						id="addDossierTemplate" 
-						label="add-dosier-template" 
+						label="add-dossier-template" 
 						iconCssClass="icon-plus"  
 						href="<%=editDossierTemplateURL %>"
 					/>
 				</c:if>
 				
 			</c:when>
-			<c:when test="<%=Validator.isNotNull(tabs2) && tabs2.contentEquals(DossierMgtUtil.TOP_TABS_DOSSIER_PART) %>">
+			<c:when test="<%=tabs1.contentEquals(DossierMgtUtil.DOSSIER_PART_TOOLBAR) %>">
 				<%
 					searchURL.setParameter("mvcPath", templatePath + "dossier_common/dossierpartlist.jsp");
-					searchURL.setParameter("tabs2", DossierMgtUtil.TOP_TABS_DOSSIER_PART);
+					searchURL.setParameter("tabs1", DossierMgtUtil.DOSSIER_PART_TOOLBAR);
 				%>
-				<portlet:renderURL var="editDossierPartURL">
+				<portlet:renderURL var="editDossierPartURL" windowState="<%=LiferayWindowState.NORMAL.toString() %>">
 					<portlet:param name="mvcPath" value='<%= templatePath + "edit_dossier_part.jsp" %>'/>
 					<portlet:param name="redirectURL" value="<%=currentURL %>"/> 
 					<portlet:param name="backURL" value="<%=currentURL %>"/> 
@@ -81,7 +77,7 @@
 				>
 					<aui:nav-item 
 						id="addDossierPart" 
-						label="add-dosier-part" 
+						label="add-dossier-part" 
 						iconCssClass="icon-plus"  
 						href="<%=editDossierPartURL %>"
 					/>
@@ -119,7 +115,7 @@
 				<div class="toolbar_search_input">
 					<c:choose>
 						
-						<c:when test="<%= !Validator.isNotNull(tabs2) && tabs1.contentEquals(DossierMgtUtil.TOP_TABS_DOSSIER_TEMPLATE) %>">
+						<c:when test="<%= tabs1.contentEquals(DossierMgtUtil.TOP_TABS_DOSSIER_TEMPLATE) %>">
 								
 								<aui:row>
 									<aui:col width="45">
@@ -137,29 +133,12 @@
 								
 						</c:when>
 						
-						 <c:when test="<%= Validator.isNotNull(tabs2) && tabs2.contentEquals(DossierMgtUtil.TOP_TABS_DOSSIER_PART) %>">
-							<liferay-ui:input-search 
-								id="keywords1" 
-								name="keywords" 
-								placeholder='<%= LanguageUtil.get(locale, "name") %>' 
-							/>
-						</c:when>
-						
-						<%-- <c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_DOMAIN) %>">
-						
-						</c:when>
-						
-						<c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_SERVICE) %>">
-							
-						</c:when> --%>
-						
 					</c:choose>
 				</div>
 			</aui:form>
 		</div>
 	</aui:nav-bar-search>
 </aui:nav-bar>
-
 
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.dossiermgt.admin.toolbar.jsp");

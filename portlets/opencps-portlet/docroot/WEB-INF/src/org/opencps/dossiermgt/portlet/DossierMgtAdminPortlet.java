@@ -54,7 +54,7 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 			if (dossierPartId > 0) {
 				DossierPart dossierPart =
 				    DossierPartLocalServiceUtil.fetchDossierPart(dossierPartId);
-				renderRequest.setAttribute(WebKeys.BUSINESS_ENTRY, dossierPart);
+				renderRequest.setAttribute(WebKeys.DOSSIER_PART_ENTRY, dossierPart);
 			}
 
 		}

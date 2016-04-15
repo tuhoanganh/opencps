@@ -51,14 +51,14 @@
 	</c:if>
 	
 	<c:if test="<%=DossierTemplatePermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE) %>">
-		<portlet:actionURL var="deleteDossierTemplate">
+		<portlet:actionURL var="deleteDossierTemplateURL" name="deleteDossierTemplate">
 			<portlet:param 
 				name="<%=DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DOSSIERTEMPLATEID %>" 
 				value="<%=String.valueOf(dossierTemplate.getDossierTemplateId()) %>"
 			/>
 		</portlet:actionURL>
 		<liferay-ui:icon image="delete" message="delete"
-			url="<%=deleteDossierTemplate.toString()%>" 
+			url="<%=deleteDossierTemplateURL.toString()%>" 
 		/>
 	</c:if>
 </liferay-ui:icon-menu>

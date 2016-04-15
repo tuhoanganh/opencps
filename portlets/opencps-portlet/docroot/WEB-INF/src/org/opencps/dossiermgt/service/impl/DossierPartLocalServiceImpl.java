@@ -115,4 +115,12 @@ public class DossierPartLocalServiceImpl extends DossierPartLocalServiceBaseImpl
 		return dossierPartPersistence.countAll();
 	}
 	
+	public List<DossierPart> getDossierParts (long dossierTemplateId)
+					throws SystemException {
+		return dossierPartPersistence.findByDossierTemplateId(dossierTemplateId);
+	} 
+	
+	public int CountByTempalteId(long dossierTemplateId) throws SystemException {
+		return dossierPartPersistence.countByDossierTemplateId(dossierTemplateId);
+	}
 }
