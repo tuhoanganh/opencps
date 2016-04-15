@@ -3,7 +3,7 @@
 <service-builder package-path="org.opencps.dossiermgt" auto-namespace-tables="false">
 	<author>trungnt</author>
 	<namespace>dossiermgt</namespace>
-    <entity name="DossierTemplate" local-service="true" table="opencps_dossiertemplate">
+	<entity name="DossierTemplate" local-service="true" table="opencps_dossiertemplate">
         <column name="dossierTemplateId" type="long" primary="true"></column>
         <column name="templateName" type="String"></column>
         <column name="description" type="String"></column>
@@ -30,6 +30,10 @@
         
         <finder return-type="Collection" name="PartName">
         	<finder-column name="partName" />
+        </finder>
+        
+        <finder return-type="Collection" name="DossierTemplateId">
+        	<finder-column name="dossierTemplateId"></finder-column>
         </finder>
     </entity>
     <entity name="serviceconfig" local-service="true"></entity>
