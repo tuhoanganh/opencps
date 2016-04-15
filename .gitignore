@@ -120,7 +120,6 @@ portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/dossiermgt/service/base
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/dossiermgt/service/http/
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/dossiermgt/model/impl/
 
-
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/dossiermgt/service/persistence/DossierPartPersistenceImpl.java
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/dossiermgt/service/persistence/DossierTemplatePersistenceImpl.java
 portlets/opencps-portlet/.settings/org.eclipse.core.resources.prefs
