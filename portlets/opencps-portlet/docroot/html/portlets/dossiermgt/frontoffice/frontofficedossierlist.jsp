@@ -33,6 +33,9 @@
 <%@page import="java.util.List"%>
 <%@ include file="../init.jsp"%>
 
+<liferay-util:include page='<%=templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
+<liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
+
 <%
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "frontofficedossierlist.jsp");
@@ -91,7 +94,7 @@
 				row.addText(dossier.getReceptionNo());
 				
 				//action column
-				row.addJSP("center", SearchEntry.DEFAULT_VALIGN,"/html/portlets/data_management/admin/dictitem_actions.jsp", config.getServletContext(), request, response);
+				row.addJSP("center", SearchEntry.DEFAULT_VALIGN,"/html/portlets/dossiermgt/frontoffice/dossier_actions.jsp", config.getServletContext(), request, response);
 			%>	
 		</liferay-ui:search-container-row> 
 	
