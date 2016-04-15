@@ -85,3 +85,6 @@ themes/
 tools/
 webs/
 
+hooks/opencps-hook/docroot/WEB-INF/classes/.gitignore
+portlets/opencps-portlet/docroot/WEB-INF/src/service.properties
+
