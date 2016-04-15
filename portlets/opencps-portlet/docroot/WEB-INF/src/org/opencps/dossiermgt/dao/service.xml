@@ -36,7 +36,23 @@
         	<finder-column name="dossierTemplateId"></finder-column>
         </finder>
     </entity>
-    <entity name="serviceconfig" local-service="true"></entity>
+    <entity name="ServiceConfig" local-service="true">
+        <column name="serviceConfigId" type="long" primary="true"></column>
+        <column name="serviceInfoId" type="long"></column>
+        <column name="serviceDomainIndex" type="String"></column>
+        <column name="serviceAdministrationIndex" type="String"></column>
+        <column name="dossierTemplateId" type="long"></column>
+        <column name="govAgencyCode" type="String"></column>
+        <column name="govAgencyName" type="String"></column>
+        <column name="govAgencyOrganizationId" type="long"></column>
+        <column name="serviceMode" type="int"></column>
+        <column name="serviceProcessId" type="long"></column>
+        
+        <finder return-type="Collection" name="DossierTemplateId">
+        	<finder-column name="dossierTemplateId"></finder-column>
+        </finder>
+        
+    </entity>
     <entity name="dossier" local-service="true"></entity>
     <entity name="dossierstatus" local-service="true"></entity>
     <entity name="dossierlog" local-service="true"></entity>
