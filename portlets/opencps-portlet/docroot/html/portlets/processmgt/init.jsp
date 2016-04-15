@@ -49,6 +49,6 @@
 	if (Validator.isNotNull(portletResource)) {
 		preferences = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
 	}
-	
+	 
 %>
 
