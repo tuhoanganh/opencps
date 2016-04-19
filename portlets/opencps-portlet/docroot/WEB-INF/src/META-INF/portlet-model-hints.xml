@@ -292,6 +292,7 @@
 		<field name="govAgencyOrganizationId" type="long" />
 		<field name="serviceMode" type="int" />
 		<field name="serviceProcessId" type="long" />
+		<field name="domainCode" type="String" />
 	</model>
 	<model name="org.opencps.processmgt.model.ActionHistory">
 		<field name="actionHistoryId" type="long" />

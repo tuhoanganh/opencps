@@ -14,7 +14,21 @@
 
 package org.opencps.dossiermgt.service.impl;
 
+import java.util.List;
+
+import org.opencps.dossiermgt.NoSuchServiceConfigException;
+import org.opencps.dossiermgt.model.ServiceConfig;
 import org.opencps.dossiermgt.service.base.ServiceConfigLocalServiceBaseImpl;
+import org.opencps.servicemgt.model.ServiceInfo;
+import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
+import org.opencps.usermgt.model.WorkingUnit;
+import org.opencps.usermgt.service.WorkingUnitLocalServiceUtil;
+import org.opencps.util.PortletConstants;
+
+import com.liferay.counter.service.CounterLocalServiceUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.OrderByComparator;
 
 /**
  * The implementation of the service config local service.
@@ -32,9 +46,105 @@ import org.opencps.dossiermgt.service.base.ServiceConfigLocalServiceBaseImpl;
  */
 public class ServiceConfigLocalServiceImpl
 	extends ServiceConfigLocalServiceBaseImpl {
-	/*
-	 * NOTE FOR DEVELOPERS:
-	 *
-	 * Never reference this interface directly. Always use {@link org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil} to access the service config local service.
-	 */
+	
+	public ServiceConfig addServiceConfig(
+		long serviceInfoId, String serviceAdministrationIndex, String serviceDomainIndex,
+		long dossierTemplateId, String govAgencyCode, String govAgencyName, 
+		int serviceMode, String domainCode) throws PortalException, SystemException {
+		
+		ServiceInfo serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(serviceInfoId); 
+		
+		WorkingUnit workingUnit = null;
+		
+		long serviceConfigId = CounterLocalServiceUtil.increment(ServiceConfig.class.getName());
+		
+		ServiceConfig serviceConfig = serviceConfigPersistence.create(serviceConfigId);
+		
+		boolean isBackEnd = false;
+		
+		if(serviceMode == PortletConstants.SERVICE_CONFIG_BACKOFFICE ||
+				serviceMode ==	PortletConstants.SERVICE_CONFIG_FRONT_BACK_OFFICE) {
+			workingUnit = WorkingUnitLocalServiceUtil.getWorkingUnit(serviceInfo.getGroupId(), 
+				govAgencyCode);
+			if(workingUnit != null) {
+				isBackEnd = true;
+			}
+		}
+		
+		serviceConfig.setServiceInfoId(serviceInfoId);
+		serviceConfig.setServiceAdministrationIndex(serviceAdministrationIndex);
+		serviceConfig.setServiceDomainIndex(serviceDomainIndex);
+		serviceConfig.setDomainCode(domainCode);
+		serviceConfig.setDossierTemplateId(dossierTemplateId);
+		serviceConfig.setGovAgencyCode(govAgencyCode);
+		serviceConfig.setGovAgencyName(govAgencyName);
+		serviceConfig.setServiceMode(serviceMode);
+		if(isBackEnd) {
+			serviceConfig.setGovAgencyOrganizationId(workingUnit.getMappingOrganisationId());
+		}
+		
+		return serviceConfigPersistence.update(serviceConfig);
+		
+	}
+	
+	
+	public ServiceConfig updateServiceConfig( long serviceConfigId,
+		long serviceInfoId, String serviceAdministrationIndex, String serviceDomainIndex,
+		long dossierTemplateId, String govAgencyCode, String govAgencyName, 
+		int serviceMode, String domainCode) throws PortalException, SystemException {
+		
+		ServiceInfo serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(serviceInfoId); 
+		
+		WorkingUnit workingUnit = null;
+		
+		ServiceConfig serviceConfig = serviceConfigPersistence.findByPrimaryKey(serviceConfigId);
+				
+		boolean isBackEnd = false;
+		
+		if(serviceMode == PortletConstants.SERVICE_CONFIG_BACKOFFICE ||
+				serviceMode ==	PortletConstants.SERVICE_CONFIG_FRONT_BACK_OFFICE) {
+			workingUnit = WorkingUnitLocalServiceUtil.getWorkingUnit(serviceInfo.getGroupId(), 
+				govAgencyCode);
+			if(workingUnit != null) {
+				isBackEnd = true;
+			}
+		}
+		
+		serviceConfig.setServiceInfoId(serviceInfoId);
+		serviceConfig.setServiceAdministrationIndex(serviceAdministrationIndex);
+		serviceConfig.setServiceDomainIndex(serviceDomainIndex);
+		serviceConfig.setDomainCode(domainCode);
+		serviceConfig.setDossierTemplateId(dossierTemplateId);
+		serviceConfig.setGovAgencyCode(govAgencyCode);
+		serviceConfig.setGovAgencyName(govAgencyName);
+		serviceConfig.setServiceMode(serviceMode);
+		
+		if(isBackEnd) {
+			serviceConfig.setGovAgencyOrganizationId(workingUnit.getMappingOrganisationId());
+		}
+		
+		return serviceConfigPersistence.update(serviceConfig);
+		
+	}
+	
+	public void deleteServiceConfigById(long serviceConfigId) throws NoSuchServiceConfigException, SystemException {
+		serviceConfigPersistence.remove(serviceConfigId);
+	}
+	
+	public List<ServiceConfig> getAll(int start, int end, OrderByComparator orderByComparator)
+					throws SystemException {
+		return serviceConfigPersistence.findAll(start, end, orderByComparator);
+	}
+
+	public int countAll() throws SystemException {
+		return serviceConfigPersistence.countAll();
+	}
+	
+	public List<ServiceConfig> getServiceConfigs (long dossierTemplateId) throws SystemException {
+		return serviceConfigPersistence.findByDossierTemplateId(dossierTemplateId);
+	}
+	
+	public int countByDossierTemplateId(long dossierTemplateId) throws SystemException {
+		return serviceConfigPersistence.countByDossierTemplateId(dossierTemplateId);
+	}
 }

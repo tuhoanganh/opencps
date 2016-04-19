@@ -20,10 +20,12 @@
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
 <%@page import="org.opencps.dossiermgt.search.DossierTemplateDisplayTerms"%>
+<%@page import="org.opencps.util.MessageKeys"%>
 <%
 	DossierTemplate dossierTemplate = (DossierTemplate) request.getAttribute(WebKeys.DOSSIER_TEMPLATE_ENTRY);
 	long dossierTemplateId = dossierTemplate != null ? dossierTemplate.getDossierTemplateId() : 0L;
 %>
+
 <aui:model-context bean="<%=dossierTemplate%>" model="<%=DossierTemplate.class%>" />
 <aui:input 
 	type="hidden" 
@@ -36,6 +38,7 @@
 		cssClass="input50"
 	>
 		<aui:validator name="required" />
+		<aui:validator name="maxLength">100</aui:validator>
 	</aui:input>
 </aui:row>
 
@@ -45,6 +48,7 @@
 		cssClass="input95"
 	>
 		<aui:validator name="required" />
+		<aui:validator name="maxLength">255</aui:validator>
 	</aui:input>
 </aui:row>
 

@@ -34,6 +34,7 @@ public class ServiceConfigSearch extends SearchContainer<ServiceConfig>{
 	static {
 		headerNames.add("row-no");
 		headerNames.add("service-name");
+		headerNames.add("govAgency-Name");
 		headerNames.add("template-name");
 		headerNames.add("service-mode");
 		headerNames.add("process");
@@ -49,7 +50,7 @@ public class ServiceConfigSearch extends SearchContainer<ServiceConfig>{
 	public ServiceConfigSearch(
 	    PortletRequest portletRequest, int delta, PortletURL iteratorURL) {
 		
-		super(portletRequest, new ServiceConfigDisplayTerms(portletRequest), new DossierPartSearchTerms(
+		super(portletRequest, new ServiceConfigDisplayTerms(portletRequest), new ServiceConfigSearchTerm(
 		    portletRequest), DEFAULT_CUR_PARAM, delta, iteratorURL, headerNames, EMPTY_RESULTS_MESSAGE);
 
 	}

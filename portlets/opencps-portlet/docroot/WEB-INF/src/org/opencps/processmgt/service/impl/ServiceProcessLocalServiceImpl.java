@@ -14,7 +14,12 @@
 
 package org.opencps.processmgt.service.impl;
 
+import java.util.List;
+
+import org.opencps.processmgt.model.ServiceProcess;
 import org.opencps.processmgt.service.base.ServiceProcessLocalServiceBaseImpl;
+
+import com.liferay.portal.kernel.exception.SystemException;
 
 /**
  * The implementation of the service process local service.
@@ -32,9 +37,13 @@ import org.opencps.processmgt.service.base.ServiceProcessLocalServiceBaseImpl;
  */
 public class ServiceProcessLocalServiceImpl
 	extends ServiceProcessLocalServiceBaseImpl {
-	/*
-	 * NOTE FOR DEVELOPERS:
-	 *
-	 * Never reference this interface directly. Always use {@link org.opencps.processmgt.service.ServiceProcessLocalServiceUtil} to access the service process local service.
-	 */
+	
+	public List<ServiceProcess> getServiceProcesses(long groupId, long dossierTemplateId) 
+					throws SystemException {
+		return serviceProcessPersistence.findByG_T(groupId, dossierTemplateId);
+	}
+	
+	public int countByG_T(long groupId ,long dossierTemplateId) throws SystemException {
+		return serviceProcessPersistence.countByG_T(groupId, dossierTemplateId);
+	}
 }

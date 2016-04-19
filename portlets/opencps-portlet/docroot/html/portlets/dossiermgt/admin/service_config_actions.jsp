@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,49 +16,49 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-<%@ include file="../init.jsp"%>
-<%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
-<%@page import="com.liferay.portal.kernel.util.WebKeys"%>
-<%@page import="com.liferay.portal.kernel.dao.search.ResultRow"%>
-<%@page import="org.opencps.dossiermgt.search.DossierTemplateDisplayTerms"%>
-<%@page import="org.opencps.dossiermgt.permission.DossierTemplatePermission"%>
+<%@page import="org.opencps.dossiermgt.search.ServiceConfigDisplayTerms"%>
 <%@page import="org.opencps.util.ActionKeys"%>
+<%@page import="org.opencps.dossiermgt.permission.ServiceConfigPermission"%>
+<%@page import="org.opencps.util.WebKeys"%>
+<%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
+<%@page import="com.liferay.portal.kernel.dao.search.ResultRow"%>
+<%@ include file="../init.jsp"%>
 <%
 	ResultRow row = (ResultRow) request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
-	DossierTemplate dossierTemplate = (DossierTemplate)row.getObject();
+	ServiceConfig serviceConfig = (ServiceConfig)row.getObject();
 	String redirectURL = currentURL;
 %>
 
 <liferay-ui:icon-menu>
-	<c:if test="<%=DossierTemplatePermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) %>">
-		<portlet:renderURL var="updateDossierTemplate">
+	<c:if test="<%=ServiceConfigPermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) %>">
+		<portlet:renderURL var="updateServiceConfig">
 			<portlet:param 
-				name="<%=DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DOSSIERTEMPLATEID %>" 
-				value="<%=String.valueOf(dossierTemplate.getDossierTemplateId()) %>"
+				name="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_SERVICECONFIGID %>" 
+				value="<%=String.valueOf(serviceConfig.getServiceConfigId()) %>"
 			/>
 			
 			<portlet:param name="backURL" value="<%=currentURL %>"/>
 			
-			<portlet:param name="mvcPath" value='<%=templatePath + "edit_dossier.jsp"%>'/>
+			<portlet:param name="mvcPath" value='<%=templatePath + "edit_service_config.jsp"%>'/>
 		</portlet:renderURL>
 		
 		<liferay-ui:icon 
 			image="edit" 
 			message="edit"
-			url="<%=updateDossierTemplate.toString()%>" 
+			url="<%=updateServiceConfig.toString()%>" 
 		/>
 	</c:if>
 	
-	<c:if test="<%=DossierTemplatePermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE) %>">
-		<portlet:actionURL var="deleteDossierTemplateURL" name="deleteDossierTemplate">
+	<c:if test="<%=ServiceConfigPermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE) %>">
+		<portlet:actionURL var="deleteServiceConfigURL" name="deleteServiceConfig">
 			<portlet:param 
-				name="<%=DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DOSSIERTEMPLATEID %>" 
-				value="<%=String.valueOf(dossierTemplate.getDossierTemplateId()) %>"
+				name="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_SERVICECONFIGID %>" 
+				value="<%=String.valueOf(serviceConfig.getServiceConfigId()) %>"
 			/>
 			<portlet:param name="CurrentURL" value="<%=currentURL %>"/>
 		</portlet:actionURL>
 		<liferay-ui:icon image="delete" message="delete"
-			url="<%=deleteDossierTemplateURL.toString()%>" 
+			url="<%=deleteServiceConfigURL.toString()%>" 
 		/>
 	</c:if>
 </liferay-ui:icon-menu>

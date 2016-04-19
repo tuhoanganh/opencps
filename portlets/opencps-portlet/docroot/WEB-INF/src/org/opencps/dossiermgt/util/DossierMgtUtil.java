@@ -21,18 +21,21 @@ import java.util.Locale;
 
 import org.opencps.dossiermgt.comparator.DossierTemplateNameComparator;
 import org.opencps.dossiermgt.comparator.DossierTemplateNoComparator;
+import org.opencps.dossiermgt.model.DossierPart;
 import org.opencps.dossiermgt.search.DossierTemplateDisplayTerms;
+import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
 
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 
 
 public class DossierMgtUtil {
 	
 	public static final String TOP_TABS_DOSSIER_TEMPLATE = "top_tabs_dossier_template";
 	public static final String TOP_TABS_DOSSIER_PART = "top_tabs_dossier_part";
-	public static final String TOP_TABS_DOSSIER_SERVICE = "top_tabs_service_config";
+	public static final String TOP_TABS_SERVICE_CONFIG = "top_tabs_service_config";
 	public static final String DOSSIER_PART_TOOLBAR = "dossierPartToolBar";
 	public static final String SERVICE_CONFIG_TOOLBAR = "serviceConfigToolBar";
 	public static final String[] _DOSSIER_CATEGORY_NAMES = {
@@ -85,5 +88,28 @@ public class DossierMgtUtil {
 		}
 		
 		return partTypeName;
+	}
+	
+	public static String getNameOfServiceConfigMode(int mode, Locale locale) {
+		String modeName = StringPool.BLANK;
+		switch (mode) {
+		case 0: 
+			modeName = LanguageUtil.get(locale, "inactive");
+			break;
+		case 1: 
+			modeName = LanguageUtil.get(locale, "front-office");
+			break;
+		case 2: 
+			modeName = LanguageUtil.get(locale, "back-office");
+			break;
+		case 3: 
+			modeName = LanguageUtil.get(locale, "front-back-office");
+			break;
+		default:
+			modeName = LanguageUtil.get(locale, StringPool.BLANK);
+			break;
+		}
+		
+		return modeName;
 	}
 }

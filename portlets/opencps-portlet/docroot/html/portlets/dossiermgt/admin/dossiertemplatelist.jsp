@@ -17,6 +17,7 @@
  */
 %>
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
+<%@page import="org.opencps.util.MessageKeys"%>
 <%@page import="org.opencps.dossiermgt.search.DossierTemplateSearch"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
@@ -45,6 +46,12 @@
 %>
 
 <liferay-util:include page='<%= templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
+
+
+<liferay-ui:error 
+	key="<%=MessageKeys.DOSSIER_TEMPLATE_DELETE_ERROR %>" 
+	message="<%=MessageKeys.DOSSIER_TEMPLATE_DELETE_ERROR %>"
+/>
 
 <c:if test="<%=DossierTemplatePermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_DOSSIER_TEMPLATE) %>">
 	<liferay-util:include page='<%= templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />

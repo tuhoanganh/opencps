@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.dao.orm.Query;
 import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
@@ -36,6 +37,7 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
+import com.liferay.portal.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import org.opencps.dossiermgt.NoSuchServiceConfigException;
@@ -517,6 +519,324 @@ public class ServiceConfigPersistenceImpl extends BasePersistenceImpl<ServiceCon
 	}
 
 	/**
+	 * Returns all the service configs that the user has permission to view where dossierTemplateId = &#63;.
+	 *
+	 * @param dossierTemplateId the dossier template ID
+	 * @return the matching service configs that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<ServiceConfig> filterFindByDossierTemplateId(
+		long dossierTemplateId) throws SystemException {
+		return filterFindByDossierTemplateId(dossierTemplateId,
+			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the service configs that the user has permission to view where dossierTemplateId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.opencps.dossiermgt.model.impl.ServiceConfigModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param dossierTemplateId the dossier template ID
+	 * @param start the lower bound of the range of service configs
+	 * @param end the upper bound of the range of service configs (not inclusive)
+	 * @return the range of matching service configs that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<ServiceConfig> filterFindByDossierTemplateId(
+		long dossierTemplateId, int start, int end) throws SystemException {
+		return filterFindByDossierTemplateId(dossierTemplateId, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the service configs that the user has permissions to view where dossierTemplateId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.opencps.dossiermgt.model.impl.ServiceConfigModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param dossierTemplateId the dossier template ID
+	 * @param start the lower bound of the range of service configs
+	 * @param end the upper bound of the range of service configs (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching service configs that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<ServiceConfig> filterFindByDossierTemplateId(
+		long dossierTemplateId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled()) {
+			return findByDossierTemplateId(dossierTemplateId, start, end,
+				orderByComparator);
+		}
+
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(3 +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_SERVICECONFIG_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_SERVICECONFIG_NO_INLINE_DISTINCT_WHERE_1);
+		}
+
+		query.append(_FINDER_COLUMN_DOSSIERTEMPLATEID_DOSSIERTEMPLATEID_2);
+
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_SERVICECONFIG_NO_INLINE_DISTINCT_WHERE_2);
+		}
+
+		if (orderByComparator != null) {
+			if (getDB().isSupportsInlineDistinct()) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator, true);
+			}
+			else {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_TABLE,
+					orderByComparator, true);
+			}
+		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(ServiceConfigModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(ServiceConfigModelImpl.ORDER_BY_SQL);
+			}
+		}
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				ServiceConfig.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			if (getDB().isSupportsInlineDistinct()) {
+				q.addEntity(_FILTER_ENTITY_ALIAS, ServiceConfigImpl.class);
+			}
+			else {
+				q.addEntity(_FILTER_ENTITY_TABLE, ServiceConfigImpl.class);
+			}
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(dossierTemplateId);
+
+			return (List<ServiceConfig>)QueryUtil.list(q, getDialect(), start,
+				end);
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	/**
+	 * Returns the service configs before and after the current service config in the ordered set of service configs that the user has permission to view where dossierTemplateId = &#63;.
+	 *
+	 * @param serviceConfigId the primary key of the current service config
+	 * @param dossierTemplateId the dossier template ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next service config
+	 * @throws org.opencps.dossiermgt.NoSuchServiceConfigException if a service config with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public ServiceConfig[] filterFindByDossierTemplateId_PrevAndNext(
+		long serviceConfigId, long dossierTemplateId,
+		OrderByComparator orderByComparator)
+		throws NoSuchServiceConfigException, SystemException {
+		if (!InlineSQLHelperUtil.isEnabled()) {
+			return findByDossierTemplateId_PrevAndNext(serviceConfigId,
+				dossierTemplateId, orderByComparator);
+		}
+
+		ServiceConfig serviceConfig = findByPrimaryKey(serviceConfigId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			ServiceConfig[] array = new ServiceConfigImpl[3];
+
+			array[0] = filterGetByDossierTemplateId_PrevAndNext(session,
+					serviceConfig, dossierTemplateId, orderByComparator, true);
+
+			array[1] = serviceConfig;
+
+			array[2] = filterGetByDossierTemplateId_PrevAndNext(session,
+					serviceConfig, dossierTemplateId, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected ServiceConfig filterGetByDossierTemplateId_PrevAndNext(
+		Session session, ServiceConfig serviceConfig, long dossierTemplateId,
+		OrderByComparator orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_SERVICECONFIG_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_SERVICECONFIG_NO_INLINE_DISTINCT_WHERE_1);
+		}
+
+		query.append(_FINDER_COLUMN_DOSSIERTEMPLATEID_DOSSIERTEMPLATEID_2);
+
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_SERVICECONFIG_NO_INLINE_DISTINCT_WHERE_2);
+		}
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				if (getDB().isSupportsInlineDistinct()) {
+					query.append(_ORDER_BY_ENTITY_ALIAS);
+				}
+				else {
+					query.append(_ORDER_BY_ENTITY_TABLE);
+				}
+
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				if (getDB().isSupportsInlineDistinct()) {
+					query.append(_ORDER_BY_ENTITY_ALIAS);
+				}
+				else {
+					query.append(_ORDER_BY_ENTITY_TABLE);
+				}
+
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(ServiceConfigModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(ServiceConfigModelImpl.ORDER_BY_SQL);
+			}
+		}
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				ServiceConfig.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN);
+
+		SQLQuery q = session.createSQLQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		if (getDB().isSupportsInlineDistinct()) {
+			q.addEntity(_FILTER_ENTITY_ALIAS, ServiceConfigImpl.class);
+		}
+		else {
+			q.addEntity(_FILTER_ENTITY_TABLE, ServiceConfigImpl.class);
+		}
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(dossierTemplateId);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(serviceConfig);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<ServiceConfig> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
 	 * Removes all the service configs where dossierTemplateId = &#63; from the database.
 	 *
 	 * @param dossierTemplateId the dossier template ID
@@ -583,6 +903,56 @@ public class ServiceConfigPersistenceImpl extends BasePersistenceImpl<ServiceCon
 		}
 
 		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of service configs that the user has permission to view where dossierTemplateId = &#63;.
+	 *
+	 * @param dossierTemplateId the dossier template ID
+	 * @return the number of matching service configs that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public int filterCountByDossierTemplateId(long dossierTemplateId)
+		throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled()) {
+			return countByDossierTemplateId(dossierTemplateId);
+		}
+
+		StringBundler query = new StringBundler(2);
+
+		query.append(_FILTER_SQL_COUNT_SERVICECONFIG_WHERE);
+
+		query.append(_FINDER_COLUMN_DOSSIERTEMPLATEID_DOSSIERTEMPLATEID_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				ServiceConfig.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(dossierTemplateId);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
 	}
 
 	private static final String _FINDER_COLUMN_DOSSIERTEMPLATEID_DOSSIERTEMPLATEID_2 =
@@ -863,6 +1233,7 @@ public class ServiceConfigPersistenceImpl extends BasePersistenceImpl<ServiceCon
 		serviceConfigImpl.setGovAgencyOrganizationId(serviceConfig.getGovAgencyOrganizationId());
 		serviceConfigImpl.setServiceMode(serviceConfig.getServiceMode());
 		serviceConfigImpl.setServiceProcessId(serviceConfig.getServiceProcessId());
+		serviceConfigImpl.setDomainCode(serviceConfig.getDomainCode());
 
 		return serviceConfigImpl;
 	}
@@ -1176,7 +1547,17 @@ public class ServiceConfigPersistenceImpl extends BasePersistenceImpl<ServiceCon
 	private static final String _SQL_SELECT_SERVICECONFIG_WHERE = "SELECT serviceConfig FROM ServiceConfig serviceConfig WHERE ";
 	private static final String _SQL_COUNT_SERVICECONFIG = "SELECT COUNT(serviceConfig) FROM ServiceConfig serviceConfig";
 	private static final String _SQL_COUNT_SERVICECONFIG_WHERE = "SELECT COUNT(serviceConfig) FROM ServiceConfig serviceConfig WHERE ";
+	private static final String _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN = "serviceConfig.serviceConfigId";
+	private static final String _FILTER_SQL_SELECT_SERVICECONFIG_WHERE = "SELECT DISTINCT {serviceConfig.*} FROM opencps_service_config serviceConfig WHERE ";
+	private static final String _FILTER_SQL_SELECT_SERVICECONFIG_NO_INLINE_DISTINCT_WHERE_1 =
+		"SELECT {opencps_service_config.*} FROM (SELECT DISTINCT serviceConfig.serviceConfigId FROM opencps_service_config serviceConfig WHERE ";
+	private static final String _FILTER_SQL_SELECT_SERVICECONFIG_NO_INLINE_DISTINCT_WHERE_2 =
+		") TEMP_TABLE INNER JOIN opencps_service_config ON TEMP_TABLE.serviceConfigId = opencps_service_config.serviceConfigId";
+	private static final String _FILTER_SQL_COUNT_SERVICECONFIG_WHERE = "SELECT COUNT(DISTINCT serviceConfig.serviceConfigId) AS COUNT_VALUE FROM opencps_service_config serviceConfig WHERE ";
+	private static final String _FILTER_ENTITY_ALIAS = "serviceConfig";
+	private static final String _FILTER_ENTITY_TABLE = "opencps_service_config";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "serviceConfig.";
+	private static final String _ORDER_BY_ENTITY_TABLE = "opencps_service_config.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No ServiceConfig exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No ServiceConfig exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(

@@ -17,6 +17,9 @@
  */
 %>
 <%@page import="org.opencps.util.WebKeys"%>
+<%@page import="org.opencps.util.MessageKeys"%>
+<%@page import="javax.portlet.PortletConfig"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
 <%@page import="com.liferay.portal.kernel.dao.search.SearchEntry"%>
 <%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
@@ -64,16 +67,19 @@
 					
 %>
 
-<c:choose>
-	<c:when test="<%=DossierPartPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_DOSSIER_PART) %>">
-		<div id="<portlet:namespace/>toolbarResponse"></div>
-	</c:when>
-</c:choose>
+<liferay-ui:error
+	key="<%= MessageKeys.DOSSIER_PART_DELETE_ERROR %>"
+	message="<%= MessageKeys.DOSSIER_PART_DELETE_ERROR %>"
+ />
+
+<c:if test="<%=DossierPartPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_DOSSIER_PART) %>">
+	<div id="<portlet:namespace/>toolbarResponse"></div>
+</c:if>
+
 <liferay-ui:search-container searchContainer="<%= new DossierPartSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" 
 	headerNames="<%= headers %>">
 	<liferay-ui:search-container-results>
 		<%
-			DossierPartSearchTerms searchTerms = (DossierPartSearchTerms) searchContainer.getSearchTerms();
 			
 			dossierParts = DossierPartLocalServiceUtil.getDossierParts(
 					dossierTemplateId);
@@ -93,7 +99,7 @@
 		keyProperty="dossierpartId"
 	>
 		<%
-			String partTypeName = DossierMgtUtil.getNameOfPartType(dossierPart.getPartType(), themeDisplay.getLocale());
+			String partTypeName = LanguageUtil.get(portletConfig ,themeDisplay.getLocale(), DossierMgtUtil.getNameOfPartType(dossierPart.getPartType(), themeDisplay.getLocale()));
 			row.addText(String.valueOf(dossierPart.getSibling()));
 			row.addText(dossierPart.getPartNo());
 			row.addText(dossierPart.getPartName());

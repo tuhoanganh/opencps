@@ -16,6 +16,7 @@ package org.opencps.dossiermgt.service.impl;
 
 import java.util.List;
 
+import org.opencps.dossiermgt.NoSuchDossierTemplateException;
 import org.opencps.dossiermgt.model.DossierTemplate;
 import org.opencps.dossiermgt.service.base.DossierTemplateLocalServiceBaseImpl;
 
@@ -66,6 +67,16 @@ public class DossierTemplateLocalServiceImpl
 	
 	}
 	
+	public void deleteDossierTemplateById(long dossierTemplateId) throws SystemException,
+	NoSuchDossierTemplateException {
+		int  dossierPartCounts = dossierPartPersistence
+						.countByDossierTemplateId(dossierTemplateId);
+	
+		if(dossierPartCounts == 0) {
+			dossierTemplatePersistence.remove(dossierTemplateId);
+		}
+	}
+	
 	public List<DossierTemplate> getDossierTemplates(String templateName) 
 					throws SystemException {
 		return dossierTemplatePersistence.findByTemplateName(templateName);
@@ -76,7 +87,23 @@ public class DossierTemplateLocalServiceImpl
 		return dossierTemplatePersistence.findAll(start, end, orderByComparator);
 	}
 	
+	public List<DossierTemplate> getAll() throws SystemException {
+		return dossierTemplatePersistence.findAll();
+	}
+	
+	public DossierTemplate getDossierTemplate(String templateNo) 
+					throws NoSuchDossierTemplateException, SystemException {
+		return dossierTemplatePersistence.findByTemplateNo(templateNo);
+	}
+	
+	public DossierTemplate getDossierTemplateById(long dossierTemplateId) 
+					throws NoSuchDossierTemplateException, SystemException {
+		return dossierTemplatePersistence.findByPrimaryKey(dossierTemplateId);
+	}
+	
 	public int countAll() throws SystemException {
 		return dossierTemplatePersistence.countAll();
 	}
+	
+	
 }

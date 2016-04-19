@@ -36,9 +36,11 @@ public class ServiceConfigSearchTerm extends ServiceConfigDisplayTerms{
 		serviceAdministrationIndex = ParamUtil.getString(request, SERVICE_CONFIG_SERVICEADMINISTRATIONINDEX);
 		govAgencyCode = ParamUtil.getString(request, SERVICE_CONFIG_GOVAGENCYCODE);
 		govAgencyName = ParamUtil.getString(request, SERVICE_CONFIG_GOVAGENCYNAME);
+		domainCode = ParamUtil.getString(request, SERVICE_CONFIG_DOMAINCODE);
+		administrationCode = ParamUtil.getString(request, SERVICE_ADMINISTRATION);
 		
 		serviceMode = ParamUtil.getInteger(request, SERVICE_CONFIG_SERVICEMODE);
-    }
+	}
 	
     public long getServiceConfigId() {
     
@@ -158,6 +160,30 @@ public class ServiceConfigSearchTerm extends ServiceConfigDisplayTerms{
     
     	this.serviceMode = serviceMode;
     }
+	
+    public String getDomainCode() {
+    
+    	return domainCode;
+    }
+
+	
+    public void setDomainCode(String domainCode) {
+    
+    	this.domainCode = domainCode;
+    }
+
+	
+    public String getAdministrationCode() {
+    
+    	return administrationCode;
+    }
+
+	
+    public void setAdministrationCode(String administrationCode) {
+    
+    	this.administrationCode = administrationCode;
+    }
+
 
 	protected long serviceConfigId;
 	protected long serviceInfoId;
@@ -169,6 +195,8 @@ public class ServiceConfigSearchTerm extends ServiceConfigDisplayTerms{
 	protected String serviceAdministrationIndex;	
 	protected String govAgencyCode;
 	protected String govAgencyName;
+	protected String domainCode;
+	protected String administrationCode;
 	
 	protected int serviceMode;
 }

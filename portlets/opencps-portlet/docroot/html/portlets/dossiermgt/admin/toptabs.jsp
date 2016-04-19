@@ -23,13 +23,14 @@
 <%@page import="com.liferay.portal.service.permission.PortletPermissionUtil"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
+<%@page import="org.opencps.dossiermgt.permission.ServiceConfigPermission"%>
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 <%@ include file="../init.jsp"%>
 
 <%
 
 	String[] names = new String[]{DossierMgtUtil.TOP_TABS_DOSSIER_TEMPLATE, 
-	DossierMgtUtil.TOP_TABS_DOSSIER_SERVICE};
+	DossierMgtUtil.TOP_TABS_SERVICE_CONFIG};
 	String value = 
 		ParamUtil.getString(request, "tabs1", DossierMgtUtil.TOP_TABS_DOSSIER_TEMPLATE);
 
@@ -47,11 +48,11 @@
 	
 	if (PortletPermissionUtil.contains(permissionChecker, plid, portletDisplay.getId(), 
 		ActionKeys.VIEW) && 
-					DossierPartPermission.contains(permissionChecker, scopeGroupId, ActionKeys.VIEW)) {
-				PortletURL viewDossierPartURL = renderResponse.createRenderURL();
-				viewDossierPartURL.setParameter("mvcPath", templatePath + "edit_dossier_part.jsp");
-				viewDossierPartURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER_SERVICE);
-				urls.add(viewDossierPartURL.toString());
+					ServiceConfigPermission.contains(permissionChecker, scopeGroupId, ActionKeys.VIEW)) {
+				PortletURL viewServiceConfigURL = renderResponse.createRenderURL();
+				viewServiceConfigURL.setParameter("mvcPath", templatePath + "serviceconfiglist.jsp");
+				viewServiceConfigURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_SERVICE_CONFIG);
+				urls.add(viewServiceConfigURL.toString());
 	} 
 %>
 

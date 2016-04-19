@@ -122,9 +122,10 @@ portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/dossiermgt/model/impl/
 
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/dossiermgt/service/persistence/DossierPartPersistenceImpl.java
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/dossiermgt/service/persistence/DossierTemplatePersistenceImpl.java
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/dossiermgt/service/persistence/ServiceConfigPersistenceImpl.java
 portlets/opencps-portlet/.settings/org.eclipse.core.resources.prefs
 
-portlets/opencps-portletdocroot/WEB-INF/src/org/opencps/processmgt/service/persistence/ActionHistoryPersistenceImpl.java
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/processmgt/service/persistence/ActionHistoryPersistenceImpl.java
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/processmgt/service/persistence/ProcessOrderPersistenceImpl.java
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/processmgt/service/persistence/ProcessStepDossierPartPersistenceImpl.java
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/processmgt/service/persistence/ProcessStepPersistenceImpl.java
@@ -136,5 +137,6 @@ portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/processmgt/service/pers
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/processmgt/model/impl
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/processmgt/service/base
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/processmgt/service/http
+
 
 

@@ -79,11 +79,12 @@
 	</c:if>
 	
 	<c:if test="<%=DossierPartPermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE) %>">
-		<portlet:actionURL var="deleteTemplatePartURL" name="deleteTemplatePart">
+		<portlet:actionURL var="deleteDossierParttURL" name="deleteDossierPart">
 			<portlet:param name="<%=DossierPartDisplayTerms.DOSSIERPART_DOSSIERPARTID %>" value="<%=String.valueOf(dossierPart.getDossierpartId()) %>"/>
+			<portlet:param name="CurrentURL" value="<%=currentURL %>"/>
 		</portlet:actionURL>
 		
 		<liferay-ui:icon image="delete" message="delete"
-				url="<%=deleteTemplatePartURL.toString()%>" />	
+				url="<%=deleteDossierParttURL.toString()%>" />	
 	</c:if>
 </liferay-ui:icon-menu> 

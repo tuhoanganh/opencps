@@ -1,5 +1,6 @@
 
-<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
+<%@page import="org.opencps.servicemgt.search.ServiceDisplayTerms"%>
+<%@page import="org.opencps.dossiermgt.search.ServiceConfigDisplayTerms"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -18,6 +19,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+<%@page import="org.opencps.dossiermgt.search.DossierTemplateDisplayTerms"%>
+<%@page import="org.opencps.util.WebKeys"%>
+<%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
@@ -26,12 +31,15 @@
 <%@page import="org.opencps.dossiermgt.permission.DossierTemplatePermission"%>
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 <%@page import="javax.portlet.PortletURL"%>
-
+<%@page import="org.opencps.dossiermgt.permission.ServiceConfigPermission"%>
 <%@ include file="../init.jsp"%>
 
 <%
 	String tabs1 = ParamUtil.getString(request, "tabs1", DossierMgtUtil.TOP_TABS_DOSSIER_TEMPLATE);
 	PortletURL searchURL = renderResponse.createRenderURL();
+	
+	Long dossierTemplateId = (Long) session.getAttribute(DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DOSSIERTEMPLATEID);
+
 %>
 <aui:nav-bar cssClass="custom-toolbar">
 	<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left" >
@@ -46,7 +54,6 @@
 				<portlet:renderURL var="editDossierTemplateURL">
 					<portlet:param name="mvcPath" value='<%= templatePath + "edit_dossier.jsp" %>'/>
 					<portlet:param name="redirectURL" value="<%=currentURL %>"/> 
-					<portlet:param name="backURL" value="<%=currentURL %>"/> 
 				</portlet:renderURL>
 				
 				<c:if 
@@ -70,6 +77,7 @@
 					<portlet:param name="mvcPath" value='<%= templatePath + "edit_dossier_part.jsp" %>'/>
 					<portlet:param name="redirectURL" value="<%=currentURL %>"/> 
 					<portlet:param name="backURL" value="<%=currentURL %>"/> 
+					<portlet:param name="<%=DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DOSSIERTEMPLATEID %>" value="<%=String.valueOf(dossierTemplateId) %>"/>
 				</portlet:renderURL>
 				
 				<c:if 
@@ -84,28 +92,29 @@
 				</c:if>
 			</c:when>
 			
-			<%-- <c:when test="<%= tabs1.contentEquals(DossierMgtUtil.TOP_TABS_DOSSIER_PART) %>">
+			 <c:when test="<%= tabs1.contentEquals(DossierMgtUtil.TOP_TABS_SERVICE_CONFIG) 
+			 	|| tabs1.contentEquals(DossierMgtUtil.SERVICE_CONFIG_TOOLBAR)
+			 %>">
 				<%
-					searchURL.setParameter("mvcPath", templatePath + "DossierConfig.jsp");
-					searchURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER_PART);
+					searchURL.setParameter("mvcPath", templatePath + "serviceconfiglist.jsp");
+					searchURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_SERVICE_CONFIG);
 				%>
-				<portlet:renderURL var="editDossierServiceURL">
-					<portlet:param name="mvcPath" value='<%= templatePath + "edit_dossier_config.jsp" %>'/>
+				<portlet:renderURL var="editServiceConfigURL" windowState="<%=LiferayWindowState.NORMAL.toString() %>">
+					<portlet:param name="mvcPath" value='<%= templatePath + "edit_service_config.jsp" %>'/>
 					<portlet:param name="redirectURL" value="<%=currentURL %>"/>
-					<portlet:param name="backURL" value="<%=currentURL %>"/>
 				</portlet:renderURL>
 				
 				<aui:row>
-					<c:if test="<%= DossierPartPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_TEMPLATE) %>">
+					<c:if test="<%= ServiceConfigPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_SERVICE_CONFIG) %>">
 						<aui:nav-item 
-							id="addDossierConfig" 
-							label="add-dossier-config" 
+							id="addServiceConfig" 
+							label="add-service-config" 
 							iconCssClass="icon-plus"  
-							href="<%=editTemplateURL %>"
+							href="<%=editServiceConfigURL %>"
 						/>
 					</c:if>
 				</aui:row>
-			</c:when> --%>
+			</c:when>
 		</c:choose>
 	</aui:nav>
 	

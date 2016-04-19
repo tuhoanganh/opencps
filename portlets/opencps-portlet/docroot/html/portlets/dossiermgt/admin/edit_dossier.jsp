@@ -1,6 +1,3 @@
-<%@page import="org.opencps.util.ActionKeys"%>
-<%@page import="org.opencps.dossiermgt.permission.DossierPartPermission"%>
-<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -20,12 +17,26 @@
  */
 %>
 <%@ include file="../init.jsp"%>
+<%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
+<%@page import="javax.portlet.PortletURL"%>
 <%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
 <%@page import="org.opencps.dossiermgt.search.DossierTemplateDisplayTerms"%>
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
-
+<%@page import="org.opencps.util.ActionKeys"%>
+<%@page import="org.opencps.dossiermgt.permission.DossierPartPermission"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
+<%@page import="org.opencps.util.WebKeys"%>
+<%@page import="org.opencps.dossiermgt.permission.ServiceConfigPermission"%>
+<%@page import="org.opencps.dossiermgt.DuplicateDossierTemplateNumberException"%>
+<%@page import="org.opencps.dossiermgt.OutOfLengthDossierTemplateNumberException"%>
+<%@page import="org.opencps.dossiermgt.OutOfLengthDossierTemplateNameException"%>
+<%@page import="org.opencps.util.MessageKeys"%>
 <%
-	long dossierTemplateId = ParamUtil.getLong(request, DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DOSSIERTEMPLATEID);
+
+	DossierTemplate dossierTemplate = (DossierTemplate) request.getAttribute(WebKeys.DOSSIER_TEMPLATE_ENTRY);
+	long dossierTemplateId = dossierTemplate != null ? dossierTemplate.getDossierTemplateId() : 0L;	
+	
+	PortletURL setRenderTemplateId = renderResponse.createRenderURL();
 	
 	String backURL = ParamUtil.getString(request, "backURL");
 	
@@ -40,19 +51,42 @@
 		dossierTemplateSections[1] = "dossierpartlist";
 		dossierTemplateSections[2] = "dossierservicelist";
 	}
-	
+	session.setAttribute(DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DOSSIERTEMPLATEID, dossierTemplateId);
 	String[][] categorySections = {dossierTemplateSections};
 %>
-<portlet:renderURL var="renderToToolBar" windowState="<%=LiferayWindowState.EXCLUSIVE.toString()%>">
-	<portlet:param name="mvcPath" value='<%= templatePath + "toolbar.jsp" %>'/>
-</portlet:renderURL>
+
 <liferay-ui:header
 	backURL="<%= backURL %>"
 	title="update-dossier"
 	backLabel="back"
 />
 
+<liferay-ui:error 
+	exception="<%=OutOfLengthDossierTemplateNameException.class %>"
+	message="<%= OutOfLengthDossierTemplateNameException.class.getName() %>"
+/>
+
+<liferay-ui:error 
+	exception="<%=OutOfLengthDossierTemplateNumberException.class %>"
+	message="<%= OutOfLengthDossierTemplateNumberException.class.getName() %>"
+/>
+
+<liferay-ui:error 
+	exception="<%=DuplicateDossierTemplateNumberException.class %>"
+	message="<%= DuplicateDossierTemplateNumberException.class.getName() %>"
+/>
+
+<liferay-ui:error 
+	key="<%= MessageKeys.DOSSIER_SYSTEM_EXCEPTION_OCCURRED %>"
+	message="<%= MessageKeys.DOSSIER_SYSTEM_EXCEPTION_OCCURRED %>"
+/>
+
+<portlet:renderURL var="renderToToolBar" windowState="<%=LiferayWindowState.EXCLUSIVE.toString()%>">
+	<portlet:param name="mvcPath" value='<%= templatePath + "toolbar.jsp" %>'/>
+</portlet:renderURL>
+
 <portlet:actionURL name="updateDossier" var="updateDossierURL" >
+	<portlet:param name="returnURL" value="<%=currentURL %>"/>
 </portlet:actionURL>
 
 
@@ -81,15 +115,8 @@
 		
 		>	
 	</liferay-ui:form-navigator>
-	<%-- <aui:input 
-		name="<%=WorkingUnitDisplayTerms.WORKINGUNIT_ID %>" 
-		value="<%=String.valueOf(workingUnitId) %>"
-		type="hidden"
-	></aui:input> --%>
 </aui:form>
-
 <aui:script>
-	
 	
 	AUI().ready('liferay-portlet-url',function(A) {	
 		var dossierPartLink = A.one('#<portlet:namespace />dossierpartlistLink');
@@ -138,13 +165,13 @@ Liferay.provide(window, '<portlet:namespace/>sentToolBarSignal', function(tbSign
 						var instance = this;
 						var res = instance.get('responseData');
 						
-						var toolbarResponse = A.one("#<portlet:namespace/>toolbarResponse");
+						var toolbarResponse = A.all("#<portlet:namespace/>toolbarResponse");
 						
 						if(toolbarResponse){
 							toolbarResponse.empty();
 							toolbarResponse.html(res);
 						}
-							
+						
 					},
 			    	error: function(){}
 				}

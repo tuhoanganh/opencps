@@ -35,6 +35,11 @@
 		<finder name="GroupId" return-type="Collection">
 			<finder-column name="groupId" />
 		</finder>
+		
+		<finder return-type="Collection" name="G_T">
+			<finder-column name="groupId" />
+			<finder-column name="dossierTemplateId" />
+		</finder>
 
 	</entity>
 

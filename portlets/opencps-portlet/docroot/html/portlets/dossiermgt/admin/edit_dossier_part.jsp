@@ -27,6 +27,12 @@
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
+<%@page import="org.opencps.util.MessageKeys"%>
+<%@page import="org.opencps.dossiermgt.DuplicateDossierPartNumberException"%>
+<%@page import="org.opencps.dossiermgt.OutOfLengthDossierTemplateFileNumberException"%>
+<%@page import="org.opencps.dossiermgt.OutOfLengthDossierPartNumberException"%>
+<%@page import="org.opencps.dossiermgt.OutOfLengthDossierPartNameException"%>
+<%@page import="org.opencps.dossiermgt.DuplicateDossierPartSiblingException"%>
 <%
 	DossierTemplate dossierTemplate = (DossierTemplate) request.getAttribute(WebKeys.DOSSIER_TEMPLATE_ENTRY);
 	DossierPart dossierPart = (DossierPart) request.getAttribute(WebKeys.DOSSIER_PART_ENTRY);
@@ -53,12 +59,45 @@
 	backLabel="back"
 />
 
+<liferay-ui:error 
+	exception="<%= OutOfLengthDossierPartNameException.class %>"
+	message="<%=OutOfLengthDossierPartNameException.class.getName() %>"
+/>
+
+<liferay-ui:error 
+	exception="<%= OutOfLengthDossierPartNumberException.class %>"
+	message="<%=OutOfLengthDossierPartNumberException.class.getName() %>"
+/>
+
+<liferay-ui:error 
+	exception="<%= OutOfLengthDossierTemplateFileNumberException.class %>"
+	message="<%=OutOfLengthDossierTemplateFileNumberException.class.getName() %>"
+/>
+
+<liferay-ui:error 
+	exception="<%= DuplicateDossierPartNumberException.class %>"
+	message="<%=DuplicateDossierPartNumberException.class.getName() %>"
+/>
+
+<liferay-ui:error 
+	exception="<%= DuplicateDossierPartSiblingException.class %>"
+	message="<%=DuplicateDossierPartSiblingException.class.getName() %>"
+/>
+
+<liferay-ui:error 
+	key="<%= MessageKeys.DOSSIER_SYSTEM_EXCEPTION_OCCURRED %>"
+	message="<%= MessageKeys.DOSSIER_SYSTEM_EXCEPTION_OCCURRED %>"
+/>
+
+
 <portlet:actionURL name="updateDossierPart" var="updateDossierPartURL" >
 	<portlet:param 
 		name="<%=DossierPartDisplayTerms.DOSSIERPART_DOSSIERPARTID %>" 
 		value="<%=String.valueOf(dossierPartId)%>"
 	/>
 	
+	<portlet:param name="returnURL" value="<%=partListURL %>"/>
+	<portlet:param name="isAddChilds" value="<%=isAddChilds %>"/>
 </portlet:actionURL>
 
 <aui:form 
@@ -129,15 +168,15 @@
 	
 	<aui:row>
 		<aui:col cssClass="input30">
-			<aui:select name="<%=DossierPartDisplayTerms.DOSSIERPART_PARTTYPE %>">
-				<aui:option value="<%=0 %>">
+			<aui:select name="<%=DossierPartDisplayTerms.DOSSIERPART_PARTTYPE %>" required="true">
+				<aui:option value="<%=StringPool.BLANK %>">
 					<liferay-ui:message key="root" />
 				</aui:option>
 				<%
 					for(int dosType : dossierType) {
 						%>
 							<aui:option value="<%=dosType %>">
-								<%=DossierMgtUtil.getNameOfPartType(dosType, themeDisplay.getLocale()) %>
+								<liferay-ui:message key="<%=DossierMgtUtil.getNameOfPartType(dosType, themeDisplay.getLocale()) %>" />
 							</aui:option>
 						<%
 					}

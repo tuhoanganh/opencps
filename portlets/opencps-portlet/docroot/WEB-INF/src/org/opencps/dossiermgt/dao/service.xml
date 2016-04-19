@@ -12,6 +12,10 @@
         <finder return-type="Collection" name="TemplateName">
         	<finder-column name="templateName" />
         </finder>
+        
+        <finder return-type="DossierTemplate" name="TemplateNo">
+        	<finder-column name="templateNo"></finder-column>
+        </finder>
     </entity>
     <entity name="DossierPart" local-service="true" table="opencps_dossierpart">
         <column name="dossierpartId" type="long" primary="true"></column>
@@ -28,6 +32,13 @@
         <column name="required" type="boolean"></column>
         <column name="templateFileNo" type="String"></column>
         
+        <!-- order -->
+        <order by="asc">
+			<order-column name="sibling" />
+		</order>
+        
+        <!-- finder -->
+        
         <finder return-type="Collection" name="PartName">
         	<finder-column name="partName" />
         </finder>
@@ -35,8 +46,21 @@
         <finder return-type="Collection" name="DossierTemplateId">
         	<finder-column name="dossierTemplateId"></finder-column>
         </finder>
+        
+        <finder return-type="Collection" name="ParentId">
+        	<finder-column name="parentId"></finder-column>
+        </finder>
+        
+        <finder return-type="DossierPart" name="Sibling">
+        	<finder-column name="sibling"></finder-column>
+        </finder>
+        
+        <finder return-type="DosserPart" name="PartNo">
+        	<finder-column name="partNo"></finder-column>
+        </finder>
     </entity>
-    <entity name="ServiceConfig" local-service="true">
+  
+    <entity name="ServiceConfig" local-service="true" table="opencps_service_config" >
         <column name="serviceConfigId" type="long" primary="true"></column>
         <column name="serviceInfoId" type="long"></column>
         <column name="serviceDomainIndex" type="String"></column>
@@ -47,16 +71,37 @@
         <column name="govAgencyOrganizationId" type="long"></column>
         <column name="serviceMode" type="int"></column>
         <column name="serviceProcessId" type="long"></column>
+        <column name="domainCode" type="String"></column>
         
         <finder return-type="Collection" name="DossierTemplateId">
         	<finder-column name="dossierTemplateId"></finder-column>
         </finder>
-        
+
     </entity>
     <entity name="dossier" local-service="true"></entity>
     <entity name="dossierstatus" local-service="true"></entity>
     <entity name="dossierlog" local-service="true"></entity>
     <entity name="filegroup" local-service="true"></entity>
     <entity name="dossierfile" local-service="true"></entity>
+    
+    <exceptions>
+    	<exception>OutOfLengthDossierTemplateName</exception>
+    	<exception>OutOfLengthDossierTemplateNumber</exception>
+    	<exception>DuplicateDossierTemplateNumber</exception>
+    	
+    	<exception>OutOfLengthDossierPartName</exception>
+    	<exception>OutOfLengthDossierPartNumber</exception>
+    	<exception>OutOfLengthDossierTemplateFileNumber</exception>
+    	<exception>DuplicateDossierPartNumber</exception>
+    	<exception>DuplicateDossierPartSibling</exception>
+    	
+    	<exception>OutOfLengthServiceConfigGovName</exception>
+    	<exception>OutOfLengthServiceConfigGovCode</exception>
+    	
+    	<exception>InvalidServiceConfigGovName</exception>
+    	<exception>InvalidServiceConfigGovCode</exception>
+    	<exception>InvalidInWorkingUnit</exception>
+    	<exception>InvalidServiceDomain</exception>
+    </exceptions>
 	
 </service-builder>

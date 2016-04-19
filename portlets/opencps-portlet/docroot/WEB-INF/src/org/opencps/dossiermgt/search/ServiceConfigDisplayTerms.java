@@ -23,7 +23,8 @@ import com.liferay.portal.kernel.util.ParamUtil;
 
 
 public class ServiceConfigDisplayTerms extends DisplayTerms{
-
+	
+	public static final String SERVICE_ADMINISTRATION = "administrationCode";
 	public static final String SERVICE_CONFIG_SERVICECONFIGID = "serviceConfigId";
 	public static final String SERVICE_CONFIG_SERVICEINFOID = "serviceInfoId";
 	public static final String SERVICE_CONFIG_DOSSIERTEMPLATEID = "dossierTemplateId";
@@ -34,6 +35,7 @@ public class ServiceConfigDisplayTerms extends DisplayTerms{
 	public static final String SERVICE_CONFIG_SERVICEADMINISTRATIONINDEX = "serviceAdministrationIndex";
 	public static final String SERVICE_CONFIG_GOVAGENCYCODE = "govAgencyCode";
 	public static final String SERVICE_CONFIG_GOVAGENCYNAME = "govAgencyName";
+	public static final String SERVICE_CONFIG_DOMAINCODE = "domainCode";
 	
 	public static final String SERVICE_CONFIG_SERVICEMODE = "serviceMode";
 	
@@ -51,6 +53,8 @@ public class ServiceConfigDisplayTerms extends DisplayTerms{
 		serviceAdministrationIndex = ParamUtil.getString(request, SERVICE_CONFIG_SERVICEADMINISTRATIONINDEX);
 		govAgencyCode = ParamUtil.getString(request, SERVICE_CONFIG_GOVAGENCYCODE);
 		govAgencyName = ParamUtil.getString(request, SERVICE_CONFIG_GOVAGENCYNAME);
+		domainCode = ParamUtil.getString(request, SERVICE_CONFIG_DOMAINCODE);
+		administrationCode = ParamUtil.getString(request, SERVICE_ADMINISTRATION);
 		
 		serviceMode = ParamUtil.getInteger(request, SERVICE_CONFIG_SERVICEMODE);
     }
@@ -173,6 +177,31 @@ public class ServiceConfigDisplayTerms extends DisplayTerms{
     
     	this.serviceMode = serviceMode;
     }
+    
+	
+    public String getDomainCode() {
+    
+    	return domainCode;
+    }
+
+	
+    public void setDomainCode(String domainCode) {
+    
+    	this.domainCode = domainCode;
+    }
+    
+    public String getAdministrationCode() {
+        
+    	return administrationCode;
+    }
+
+	
+    public void setAdministrationCode(String administrationCode) {
+    
+    	this.administrationCode = administrationCode;
+    }
+
+	protected int serviceMode;
 
 	protected long serviceConfigId;
 	protected long serviceInfoId;
@@ -184,8 +213,7 @@ public class ServiceConfigDisplayTerms extends DisplayTerms{
 	protected String serviceAdministrationIndex;	
 	protected String govAgencyCode;
 	protected String govAgencyName;
-	
-	protected int serviceMode;
-	
+	protected String domainCode;
+	protected String administrationCode;
 
 }

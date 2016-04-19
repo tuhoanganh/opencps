@@ -89,6 +89,15 @@ public class DossierPartLocalServiceImpl extends DossierPartLocalServiceBaseImpl
 		return dossierPartPersistence.update(dossierPart);
 	}
 	
+	public void deleteDossierPartById(long dossierPartId) throws NoSuchDossierPartException, SystemException {
+		
+		int dossierPartParentCount = dossierPartPersistence.countByParentId(dossierPartId);
+		
+		if(dossierPartParentCount == 0) {
+			dossierPartPersistence.remove(dossierPartId);
+		}
+	}
+	
 	public String getTreeIndex(long parentId, long dossierPartId) 
 					throws SystemException, NoSuchDossierPartException {
 		if(parentId == 0) {
@@ -122,5 +131,19 @@ public class DossierPartLocalServiceImpl extends DossierPartLocalServiceBaseImpl
 	
 	public int CountByTempalteId(long dossierTemplateId) throws SystemException {
 		return dossierPartPersistence.countByDossierTemplateId(dossierTemplateId);
+	}
+	
+	public int CountByParentId(long dossierPartParentId) throws SystemException {
+		return dossierPartPersistence.countByParentId(dossierPartParentId);
+	}
+	
+	public DossierPart getDossierPartByPartNo(String partNo) 
+					throws NoSuchDossierPartException, SystemException {
+		return dossierPartPersistence.findByPartNo(partNo);
+	}
+	
+	public DossierPart getDossierPartBySibling(Double sibling)
+					throws NoSuchDossierPartException, SystemException {
+		return dossierPartPersistence.findBySibling(sibling);
 	}
 }

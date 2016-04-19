@@ -1,3 +1,5 @@
+<%@page import="org.opencps.dossiermgt.search.ServiceConfigSearchTerm"%>
+<%@page import="org.opencps.processmgt.service.ServiceProcessLocalServiceUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -16,31 +18,30 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
-<%@page import="org.opencps.util.ActionKeys"%>
+<%@ include file="../init.jsp"%>
+<%@page import="com.liferay.portal.kernel.dao.search.SearchEntry"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
 <%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
-<%@page import="com.liferay.portal.kernel.dao.search.SearchEntry"%>
-<%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
-<%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.search.ServiceConfigSearchTerm"%>
 <%@page import="org.opencps.dossiermgt.search.ServiceConfigSearch"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
+<%@page import="org.opencps.util.ActionKeys"%>
+<%@page import="org.opencps.dossiermgt.permission.ServiceConfigPermission"%>
 <%@page import="java.util.List"%>
+<%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 <%@page import="javax.portlet.PortletURL"%>
-<%@page import="org.opencps.dossiermgt.permission.ServiceConfigPermission"%>
-<%@ include file="../../init.jsp"%>
+<%@page import="org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
+
+<liferay-util:include page='<%= templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
 
 <%
-	DossierTemplate dossierTemplate = (DossierTemplate) request.getAttribute(WebKeys.DOSSIER_TEMPLATE_ENTRY);
 
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "dossier_common/dossierpartlist.jsp");
-	iteratorURL.setParameter("tabs1", DossierMgtUtil.SERVICE_CONFIG_TOOLBAR);
+	iteratorURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_SERVICE_CONFIG);
 	
 	List<ServiceConfig> serviceConfigs = new ArrayList<ServiceConfig>();
 	List<String> headerNames = new ArrayList<String>();
@@ -48,14 +49,15 @@
 	headerNames.add("row-no");
 	headerNames.add("service-name");
 	headerNames.add("govAgency-Name");
+	headerNames.add("template-name");
 	headerNames.add("service-mode");
+	headerNames.add("process");
 	
 	boolean isPermission =
 					ServiceConfigPermission.contains(
 				        themeDisplay.getPermissionChecker(),
 				        themeDisplay.getScopeGroupId(), ActionKeys.ADD_SERVICE_CONFIG);
 
-	long dossierTemplateId = dossierTemplate != null ? dossierTemplate.getDossierTemplateId() : 0L;
 	
 	int totalCount = 0;
 	if (isPermission) {
@@ -65,19 +67,25 @@
 	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
 %>
 
+<c:if test="<%=ServiceConfigPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_SERVICE_CONFIG) %>">
+	<liferay-util:include page='<%= templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
+</c:if>
 
 <c:if test="<%=ServiceConfigPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_SERVICE_CONFIG) %>">
 		<div id="<portlet:namespace/>toolbarResponse"></div>
 </c:if>
 
-<liferay-ui:search-container searchContainer="<%= new ServiceConfigSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" 
+<liferay-ui:search-container searchContainer="<%= new ServiceConfigSearch (renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" 
 	headerNames="<%= headers %>"> 
 	
 		<liferay-ui:search-container-results>
 		<%
-			serviceConfigs = ServiceConfigLocalServiceUtil.getServiceConfigs(dossierTemplateId);
+			ServiceConfigSearchTerm searchTerm = (ServiceConfigSearchTerm) searchContainer.getSearchTerms();
+			
+			serviceConfigs = ServiceConfigLocalServiceUtil.getAll(
+				searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
 									
-			totalCount = ServiceConfigLocalServiceUtil.countByDossierTemplateId(dossierTemplateId);
+			totalCount = ServiceConfigLocalServiceUtil.countAll();
 			
 			total = totalCount;
 			results = serviceConfigs;
@@ -93,13 +101,24 @@
 	>
 		<%
 			ServiceInfo serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(serviceConfig.getServiceInfoId());
-			
-			String serviceConfigModeName = LanguageUtil.get(portletConfig ,themeDisplay.getLocale(), DossierMgtUtil.getNameOfServiceConfigMode(serviceConfig.getServiceMode(), themeDisplay.getLocale()));
+			DossierTemplate dossierTemplate = DossierTemplateLocalServiceUtil.getDossierTemplate(serviceConfig.getDossierTemplateId());
 		
+			String serviceConfigModeName = LanguageUtil.get(portletConfig ,themeDisplay.getLocale(), DossierMgtUtil.getNameOfServiceConfigMode(serviceConfig.getServiceMode(), themeDisplay.getLocale()));
+			
+			int countProcess = ServiceProcessLocalServiceUtil.countByG_T(themeDisplay.getScopeGroupId(), dossierTemplate.getDossierTemplateId());
+			
+			String process = "<i class=\"opencps-icon checked\"></i>";
+			
+			if(countProcess == 0) {
+				process = "<i class=\"opencps-icon removed\"></i>";
+			}
+			
 			row.addText(String.valueOf(row.getPos()) + 1);
 			row.addText(serviceInfo.getServiceName());
 			row.addText(serviceConfig.getGovAgencyName());
+			row.addText(dossierTemplate.getTemplateName());
 			row.addText(serviceConfigModeName);
+			row.addText(process);
 			if(isPermission) {
 				row.addJSP("center", SearchEntry.DEFAULT_VALIGN, templatePath + "service_config_actions.jsp", config.getServletContext(), request, response);
 			}
@@ -109,4 +128,3 @@
 	
 	<liferay-ui:search-iterator/>
 </liferay-ui:search-container>
-
