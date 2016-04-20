@@ -62,7 +62,21 @@
 		<column name="daysDuration" type="int" />
 		<column name="referenceDossierPartId" type="long" />
 		<column name="externalAppUrl" type="String" />
-
+		
+		<!-- Order -->
+		<order by="desc">
+			<order-column name="sequenceNo"/>
+		</order>
+		
+		<!-- Finder -->
+		<finder return-type="Collection" name="GroupId">
+			<finder-column name="groupId"/>
+		</finder>
+		
+		<finder return-type="Collection" name="S_P_ID">
+			<finder-column name="serviceProcessId"/>
+		</finder>
+		
 	</entity>
 
 	<entity name="ProcessStepDossierPart" local-service="true" remote-service="true"
@@ -131,6 +145,11 @@
 		<column name="receptionNoPattern" type="String"/>
 		<column name="generateDeadline" type="int"/>
 		<column name="deadlinePattern" type="int"/>
+		
+		<finder return-type="Collection" name="S_P_ID">
+			<finder-column name="serviceProcessId"/>
+		</finder>
+		
 	</entity>
 
 	<entity name="WorkflowOutput" local-service="true" remote-service="true"
