@@ -109,8 +109,7 @@ public class DossierTemplateLocalServiceImpl
 		return dossierTemplatePersistence.findAll();
 	}
 	
-	public List<DossierTemplate> getDossierTemplatesByGroupId(long groupId) 
-					throws SystemException {
+	public List<DossierTemplate> getDossierTemplatesByGroupId(long groupId) throws SystemException {
 		return dossierTemplatePersistence.findByGroupId(groupId);
 	}
 	

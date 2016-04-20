@@ -14,6 +14,7 @@
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>
 */
+<<<<<<< HEAD
 package org.opencps.dossiermgt.util;
 
 
@@ -139,3 +140,19 @@ public class DossierMgtUtil {
 			
 	}*/
 }
+=======
+
+package org.opencps.dossiermgt.util;
+
+
+/**
+ * @author trungnt
+ *
+ */
+public class DossierMgtUtil {
+	public static final String TOP_TABS_DOSSIER = "dossier";
+	public static final String TOP_TABS_DOSSIER_FILE = "dossier-file";
+	public static final String TOP_TABS_EXTERNAL_DOSSIER = "external-dossier";
+}
+
+>>>>>>> FETCH_HEAD
