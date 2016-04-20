@@ -14,26 +14,19 @@
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>
 */
-<<<<<<< HEAD
+
 package org.opencps.dossiermgt.util;
 
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import org.opencps.dossiermgt.comparator.DossierTemplateNameComparator;
 import org.opencps.dossiermgt.comparator.DossierTemplateNoComparator;
-import org.opencps.dossiermgt.model.DossierPart;
 import org.opencps.dossiermgt.search.DossierTemplateDisplayTerms;
-import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
 
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 
 
 public class DossierMgtUtil {
@@ -43,6 +36,9 @@ public class DossierMgtUtil {
 	public static final String TOP_TABS_SERVICE_CONFIG = "top_tabs_service_config";
 	public static final String DOSSIER_PART_TOOLBAR = "dossierPartToolBar";
 	public static final String SERVICE_CONFIG_TOOLBAR = "serviceConfigToolBar";
+	public static final String TOP_TABS_DOSSIER = "dossier";
+	public static final String TOP_TABS_DOSSIER_FILE = "dossier-file";
+	public static final String TOP_TABS_EXTERNAL_DOSSIER = "external-dossier";
 	public static final String[] _DOSSIER_CATEGORY_NAMES = {
 		"dossier-info"
 	};
@@ -140,19 +136,8 @@ public class DossierMgtUtil {
 			
 	}*/
 }
-=======
-
-package org.opencps.dossiermgt.util;
 
 
-/**
- * @author trungnt
- *
- */
-public class DossierMgtUtil {
-	public static final String TOP_TABS_DOSSIER = "dossier";
-	public static final String TOP_TABS_DOSSIER_FILE = "dossier-file";
-	public static final String TOP_TABS_EXTERNAL_DOSSIER = "external-dossier";
-}
 
->>>>>>> FETCH_HEAD
+	
+

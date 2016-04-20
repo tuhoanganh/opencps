@@ -32,7 +32,7 @@ public class ActionKeys
 	public static final String ADD_DOCUMENT = "ADD_TEMPLATE";
 	public static final String ADD_PROCESS = "ADD_PROCESS";
 
-<<<<<<< HEAD
+
 	public static final String ADD_DOSSIER_TEMPLATE = "ADD_DOSSIER_TEMPLATE";
 	public static final String ADD_DOSSIER_PART = "ADD_DOSSIER_PART";
 
@@ -41,6 +41,4 @@ public class ActionKeys
 	public static final String ADD_BUSINESS = "ADD_BUSINESS";
 	public static final String ADD_SERVICE_CONFIG = "ADD_SERVICE_CONFIG";
 }
-=======
-}
->>>>>>> FETCH_HEAD
+

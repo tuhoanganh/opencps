@@ -4,7 +4,6 @@
 	auto-namespace-tables="false">
 	<author>trungnt</author>
 	<namespace>dossiermgt</namespace>
-<<<<<<< HEAD
 	<entity name="DossierTemplate" local-service="true"
 		table="opencps_dossiertemplate">
 
@@ -14,61 +13,12 @@
 		
 		<!-- Audit fields -->
 
-=======
-	
-    <entity name="DossierTemplate" local-service="true" table="opencps_dossiertemplate">
-        <column name="dossierTemplateId" type="long" primary="true"/>
-        <column name="templateName" type="String"/>
-        <column name="description" type="String"/>
-        <column name="templateNo" type="String"/>
-        
-        <finder return-type="Collection" name="TemplateName">
-        	<finder-column name="templateName" />
-        </finder>
-    </entity>
-    
-    <entity name="DossierPart" local-service="true" table="opencps_dossierpart">
-        <column name="dossierpartId" type="long" primary="true"/>
-        <column name="dossierTemplateId" type="long"/>
-        <column name="partNo" type="String"/>
-        <column name="partName" type="String"/>
-        <column name="partTip" type="String"/>
-        <column name="partType" type="int"/>
-        <column name="parentId" type="long"/>
-        <column name="sibling" type="double"/>
-        <column name="treeIndex" type="String"/>
-        <column name="formScript" type="String"/>
-        <column name="sampleData" type="String"/>
-        <column name="required" type="boolean"/>
-        <column name="templateFileNo" type="String"/>
-        
-        <finder return-type="Collection" name="PartName">
-        	<finder-column name="partName" />
-        </finder>
-        
-        <finder return-type="Collection" name="DossierTemplateId">
-        	<finder-column name="dossierTemplateId"></finder-column>
-        </finder>
-    </entity>
-    
-    <entity name="ServiceConfig" local-service="true"></entity>
-    
-    <entity name="Dossier" local-service="true">
-    
-    	<!-- PK fields -->
-    	
-        <column name="dossierId" type="long" primary="true"/>
-        
-        <!-- Audit fields -->
-        
->>>>>>> FETCH_HEAD
 		<column name="companyId" type="long" />
 		<column name="groupId" type="long" />
 		<column name="userId" type="long" />
 		<column name="createDate" type="Date" />
 		<column name="modifiedDate" type="Date" />
 		
-<<<<<<< HEAD
 		<!-- Other field -->
 		<column name="templateName" type="String"></column>
 		<column name="description" type="String"></column>
@@ -95,65 +45,12 @@
 		
 		<!-- Audit fields -->
 
-=======
-		<!-- Other fields -->
-		
-        <column name="uuid" type="String"/>
-        <column name="externalRefNo" type="String"/>
-        <column name="externalRefUrl" type="String"/>
-        <column name="ownerOrganizationId" type="long"/>
-        <column name="serviceConfigId" type="long"/>
-        <column name="serviceInfoId" type="long"/>
-        <column name="serviceDomainIndex" type="String"/>
-        <column name="serviceAdministrationIndex" type="String"/>
-        <column name="dossierTemplateId" type="long"/>
-        <column name="govAgencyCode" type="String"/>
-        <column name="govAgencyName" type="String"/>
-        <column name="govAgencyOrganizationId" type="long"/>
-        <column name="serviceMode" type="int"/>
-        <column name="counter" type="int"/>
-        <column name="subjectId" type="long"/>
-        <column name="subjectName" type="String"/>
-        <column name="address" type="String"/>
-        <column name="cityCode" type="String"/>
-        <column name="cityName" type="String"/>
-        <column name="districtCode" type="String"/>
-        <column name="districtName" type="String"/>
-        <column name="wardCode" type="String"/>
-        <column name="wardName" type="String"/>
-        <column name="contactName" type="String"/>
-        <column name="contactTelNo" type="String"/>
-        <column name="contactEmail" type="String"/>
-        <column name="note" type="String"/>
-        <column name="submitDatetime" type="Date"/>
-        <column name="receiveDatetime" type="Date"/>
-        <column name="receptionNo" type="String"/>
-        <column name="estimateDatetime" type="Date"/>
-        <column name="finishDatetime" type="Date"/>
-        <column name="dossierStatus" type="int"/>
-        <column name="dossierSource" type="int"/>
-        <order by="desc">
-            <order-column name="modifiedDate" order-by="desc"></order-column>
-        </order>
-        
-    </entity>
-    
-    <entity name="DossierStatus" local-service="true">
-    
-   		<!-- PK fields -->
-   		
-        <column name="dossierStatusId" type="long" primary="true"/>
-        
-        <!-- Audit fields -->
-        
->>>>>>> FETCH_HEAD
 		<column name="companyId" type="long" />
 		<column name="groupId" type="long" />
 		<column name="userId" type="long" />
 		<column name="createDate" type="Date" />
 		<column name="modifiedDate" type="Date" />
 		
-<<<<<<< HEAD
 		<!-- Other field -->
 		<column name="dossierTemplateId" type="long"></column>
 		<column name="partNo" type="String"></column>
@@ -205,7 +102,102 @@
 		
 		<!-- Audit fields -->
 
-=======
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		
+		<!-- Other field -->
+		
+		<column name="serviceInfoId" type="long"></column>
+		<column name="serviceDomainIndex" type="String"></column>
+		<column name="serviceAdministrationIndex" type="String"></column>
+		<column name="dossierTemplateId" type="long"></column>
+		<column name="govAgencyCode" type="String"></column>
+		<column name="govAgencyName" type="String"></column>
+		<column name="govAgencyOrganizationId" type="long"></column>
+		<column name="serviceMode" type="int"></column>
+		<column name="serviceProcessId" type="long"></column>
+		<column name="domainCode" type="String"></column>
+
+		<finder return-type="Collection" name="DossierTemplateId">
+			<finder-column name="dossierTemplateId"></finder-column>
+		</finder>
+
+	</entity>
+	
+	
+	<entity name="Dossier" local-service="true">
+    
+    	<!-- PK fields -->
+    	
+        <column name="dossierId" type="long" primary="true"/>
+        
+        <!-- Audit fields -->
+        
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		
+		<!-- Other fields -->
+		
+        <column name="uuid" type="String"/>
+        <column name="externalRefNo" type="String"/>
+        <column name="externalRefUrl" type="String"/>
+        <column name="ownerOrganizationId" type="long"/>
+        <column name="serviceConfigId" type="long"/>
+        <column name="serviceInfoId" type="long"/>
+        <column name="serviceDomainIndex" type="String"/>
+        <column name="serviceAdministrationIndex" type="String"/>
+        <column name="dossierTemplateId" type="long"/>
+        <column name="govAgencyCode" type="String"/>
+        <column name="govAgencyName" type="String"/>
+        <column name="govAgencyOrganizationId" type="long"/>
+        <column name="serviceMode" type="int"/>
+        <column name="counter" type="int"/>
+        <column name="subjectId" type="long"/>
+        <column name="subjectName" type="String"/>
+        <column name="address" type="String"/>
+        <column name="cityCode" type="String"/>
+        <column name="cityName" type="String"/>
+        <column name="districtCode" type="String"/>
+        <column name="districtName" type="String"/>
+        <column name="wardCode" type="String"/>
+        <column name="wardName" type="String"/>
+        <column name="contactName" type="String"/>
+        <column name="contactTelNo" type="String"/>
+        <column name="contactEmail" type="String"/>
+        <column name="note" type="String"/>
+        <column name="submitDatetime" type="Date"/>
+        <column name="receiveDatetime" type="Date"/>
+        <column name="receptionNo" type="String"/>
+        <column name="estimateDatetime" type="Date"/>
+        <column name="finishDatetime" type="Date"/>
+        <column name="dossierStatus" type="int"/>
+        <column name="dossierSource" type="int"/>
+        <order by="desc">
+            <order-column name="modifiedDate" order-by="desc"></order-column>
+        </order>
+        
+    </entity>
+    
+    <entity name="DossierStatus" local-service="true">
+    
+   		<!-- PK fields -->
+   		
+        <column name="dossierStatusId" type="long" primary="true"/>
+        
+        <!-- Audit fields -->
+        
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		
 		<!-- Other fields -->
 		
         <column name="dossierId" type="long"/>
@@ -250,60 +242,12 @@
         
         <!-- Audit fields -->
         
->>>>>>> FETCH_HEAD
 		<column name="companyId" type="long" />
 		<column name="groupId" type="long" />
 		<column name="userId" type="long" />
 		<column name="createDate" type="Date" />
 		<column name="modifiedDate" type="Date" />
 		
-<<<<<<< HEAD
-		<!-- Other field -->
-		
-		<column name="serviceInfoId" type="long"></column>
-		<column name="serviceDomainIndex" type="String"></column>
-		<column name="serviceAdministrationIndex" type="String"></column>
-		<column name="dossierTemplateId" type="long"></column>
-		<column name="govAgencyCode" type="String"></column>
-		<column name="govAgencyName" type="String"></column>
-		<column name="govAgencyOrganizationId" type="long"></column>
-		<column name="serviceMode" type="int"></column>
-		<column name="serviceProcessId" type="long"></column>
-		<column name="domainCode" type="String"></column>
-
-		<finder return-type="Collection" name="DossierTemplateId">
-			<finder-column name="dossierTemplateId"></finder-column>
-		</finder>
-
-	</entity>
-	
-	
-	<entity name="dossier" local-service="true"></entity>
-	<entity name="dossierstatus" local-service="true"></entity>
-	<entity name="dossierlog" local-service="true"></entity>
-	<entity name="filegroup" local-service="true"></entity>
-	<entity name="dossierfile" local-service="true"></entity>
-
-	<exceptions>
-		<exception>OutOfLengthDossierTemplateName</exception>
-		<exception>OutOfLengthDossierTemplateNumber</exception>
-		<exception>DuplicateDossierTemplateNumber</exception>
-
-		<exception>OutOfLengthDossierPartName</exception>
-		<exception>OutOfLengthDossierPartNumber</exception>
-		<exception>OutOfLengthDossierTemplateFileNumber</exception>
-		<exception>DuplicateDossierPartNumber</exception>
-		<exception>DuplicateDossierPartSibling</exception>
-
-		<exception>OutOfLengthServiceConfigGovName</exception>
-		<exception>OutOfLengthServiceConfigGovCode</exception>
-
-		<exception>InvalidServiceConfigGovName</exception>
-		<exception>InvalidServiceConfigGovCode</exception>
-		<exception>InvalidInWorkingUnit</exception>
-		<exception>InvalidServiceDomain</exception>
-	</exceptions>
-=======
 		<!-- Other fields -->
         <column name="dossierId" type="long"/>
         <column name="dossierPartId" type="long"/>
@@ -346,6 +290,25 @@
         <column name="original" type="int"/>
         <column name="syncStatus" type="int"/>
     </entity>
->>>>>>> FETCH_HEAD
+
+	<exceptions>
+		<exception>OutOfLengthDossierTemplateName</exception>
+		<exception>OutOfLengthDossierTemplateNumber</exception>
+		<exception>DuplicateDossierTemplateNumber</exception>
+
+		<exception>OutOfLengthDossierPartName</exception>
+		<exception>OutOfLengthDossierPartNumber</exception>
+		<exception>OutOfLengthDossierTemplateFileNumber</exception>
+		<exception>DuplicateDossierPartNumber</exception>
+		<exception>DuplicateDossierPartSibling</exception>
+
+		<exception>OutOfLengthServiceConfigGovName</exception>
+		<exception>OutOfLengthServiceConfigGovCode</exception>
+
+		<exception>InvalidServiceConfigGovName</exception>
+		<exception>InvalidServiceConfigGovCode</exception>
+		<exception>InvalidInWorkingUnit</exception>
+		<exception>InvalidServiceDomain</exception>
+	</exceptions>
 
 </service-builder>

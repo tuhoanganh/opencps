@@ -35,14 +35,12 @@
 		<finder name="GroupId" return-type="Collection">
 			<finder-column name="groupId" />
 		</finder>
-<<<<<<< HEAD
 		
 		<finder return-type="Collection" name="G_T">
 			<finder-column name="groupId" />
 			<finder-column name="dossierTemplateId" />
 		</finder>
-=======
->>>>>>> FETCH_HEAD
+
 
 	</entity>
 
@@ -70,9 +68,6 @@
 		<column name="daysDuration" type="int" />
 		<column name="referenceDossierPartId" type="long" />
 		<column name="externalAppUrl" type="String" />
-<<<<<<< HEAD
-
-=======
 		
 		<!-- Order -->
 		<order by="desc">
@@ -87,8 +82,7 @@
 		<finder return-type="Collection" name="S_P_ID">
 			<finder-column name="serviceProcessId"/>
 		</finder>
-		
->>>>>>> FETCH_HEAD
+	
 	</entity>
 
 	<entity name="ProcessStepDossierPart" local-service="true" remote-service="true"
@@ -157,14 +151,11 @@
 		<column name="receptionNoPattern" type="String"/>
 		<column name="generateDeadline" type="int"/>
 		<column name="deadlinePattern" type="int"/>
-<<<<<<< HEAD
-=======
 		
 		<finder return-type="Collection" name="S_P_ID">
 			<finder-column name="serviceProcessId"/>
 		</finder>
-		
->>>>>>> FETCH_HEAD
+
 	</entity>
 
 	<entity name="WorkflowOutput" local-service="true" remote-service="true"

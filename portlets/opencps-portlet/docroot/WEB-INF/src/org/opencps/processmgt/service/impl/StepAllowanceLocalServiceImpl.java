@@ -31,10 +31,8 @@
 
 package org.opencps.processmgt.service.impl;
 
-<<<<<<< HEAD
 import org.opencps.processmgt.service.base.StepAllowanceLocalServiceBaseImpl;
 
-=======
 import org.opencps.processmgt.model.StepAllowance;
 import org.opencps.processmgt.service.base.StepAllowanceLocalServiceBaseImpl;
 
@@ -42,7 +40,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.Validator;
 
->>>>>>> FETCH_HEAD
+
 /**
  * The implementation of the step allowance local service.
  *
@@ -64,8 +62,6 @@ public class StepAllowanceLocalServiceImpl
 	 *
 	 * Never reference this interface directly. Always use {@link org.opencps.processmgt.service.StepAllowanceLocalServiceUtil} to access the step allowance local service.
 	 */
-<<<<<<< HEAD
-=======
 	
 	/**
 	 * Add StepAllowance
@@ -100,5 +96,4 @@ public class StepAllowanceLocalServiceImpl
 		
 	}
 	
->>>>>>> FETCH_HEAD
 }
