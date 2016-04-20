@@ -20,8 +20,6 @@ import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
 
 import org.opencps.processmgt.model.ServiceProcess;
-import org.opencps.servicemgt.search.ServiceDisplayTerms;
-import org.opencps.servicemgt.search.ServiceSearchTerms;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 
@@ -39,6 +37,7 @@ public class ProcessSearch extends SearchContainer<ServiceProcess> {
 		headerNames.add("no");
 		headerNames.add("process-no");
 		headerNames.add("process-name");
+		headerNames.add("process-description");
 		headerNames.add("action");
 	}
 
