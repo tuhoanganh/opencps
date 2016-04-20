@@ -74,7 +74,9 @@
 			// process name
 			row.addText(process.getProcessName(), editURL);
 
-
+			// process description
+			row.addText(process.getDescription());
+			
 			if(isPermission) {
 				//action column
 				row.addJSP("center", SearchEntry.DEFAULT_VALIGN, templatePath + "process_actions.jsp", config.getServletContext(), request, response);

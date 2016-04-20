@@ -1,5 +1,3 @@
-<%@page import="org.opencps.processmgt.model.ServiceProcess"%>
-<%@page import="org.opencps.processmgt.model.ProcessStep"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -22,22 +20,78 @@
 <%@ include file="../../init.jsp" %>
 
 <%
-	ProcessStep step = (ProcessStep) request.getAttribute(WebKeys.PROCESS_STEP_ENTRY);
-
 	ServiceProcess serviceProcess  = (ServiceProcess) request.getAttribute(WebKeys.SERVICE_PROCESS_ENTRY);
+
+	ProcessStep step  = (ProcessStep) request.getAttribute(WebKeys.PROCESS_STEP_ENTRY);
+	
+	PortletURL iteratorURL = renderResponse.createRenderURL();
+	iteratorURL.setParameter("mvcPath", templatePath + "process/step.jsp");
+
+	boolean isPermission =
+				    ProcessPermission.contains(
+				        themeDisplay.getPermissionChecker(),
+				        themeDisplay.getScopeGroupId(), ActionKeys.ADD_PROCESS);
+
 %>
 
 <liferay-portlet:renderURL var="editStepURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
 	<portlet:param name="mvcPath" value='<%= templatePath + "edit_step.jsp" %>'/>
-</liferay-portlet:renderURL>
-
-<liferay-portlet:renderURL var="editStepURL2" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-	<portlet:param name="mvcPath" value='<%= templatePath + "edit_step.jsp" %>'/>
+	<portlet:param name="serviceProcessId" value="<%= Validator.isNotNull(serviceProcess) ? Long.toString(serviceProcess.getServiceProcessId()) : StringPool.BLANK %>"/>
+	<portlet:param name="processStepId" value="<%= Validator.isNotNull(step) ? Long.toString(step.getProcessStepId()) : StringPool.BLANK %>"/>
 </liferay-portlet:renderURL>
 
 <aui:button-row>
 	<aui:button name="addStep" onClick="showDialog()" value="add-step" ></aui:button>
 </aui:button-row>
+
+<liferay-ui:search-container searchContainer="<%= new StepSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
+		
+	<liferay-ui:search-container-results>
+		<%
+		
+			StepSearchTerms searchTerms = (StepSearchTerms) searchContainer.getSearchTerms();
+
+			total = ProcessStepLocalServiceUtil.countStep(scopeGroupId); 
+
+			results = ProcessStepLocalServiceUtil.searchStep(scopeGroupId,
+				searchContainer.getStart(), searchContainer.getEnd());
+			
+			pageContext.setAttribute("results", results);
+			pageContext.setAttribute("total", total);
+		%>
+		
+	</liferay-ui:search-container-results>
+
+	<liferay-ui:search-container-row 
+		className="org.opencps.processmgt.model.ProcessStep" 
+		modelVar="step" 
+		keyProperty="processStepId"
+	>
+		<%
+			// no column
+			row.addText(String.valueOf(row.getPos() + 1));
+		
+			// step no
+			row.addText(step.getStepName());
+			
+			// step name
+			row.addText(step.getDossierStatus());
+			
+			// step duration
+			row.addText(Integer.toString(step.getDaysDuration()));
+
+			if(isPermission) {
+				//action column
+				row.addJSP("center", SearchEntry.DEFAULT_VALIGN, templatePath + "step_actions.jsp", config.getServletContext(), request, response);
+			}
+		%>	
+	
+	</liferay-ui:search-container-row>	
+
+	<liferay-ui:search-iterator/>
+
+</liferay-ui:search-container>
+
 
 <aui:script use="liferay-util-window">
 	Liferay.provide(window, 'showDialog', function(action) {
@@ -60,11 +114,7 @@
 <aui:script>
 	Liferay.provide(window, 'refreshPortlet', function() 
 		{	
-// 			alert("refreshPortlet");
-// 			var curPortlet = '#p_p_id<portlet:namespace/>';
-// 			Liferay.Portlet.refresh(curPortlet);
 			window.location.reload();
-			//window.opener.location.href = window.opener.location;
 		},
 		['aui-dialog','aui-dialog-iframe']
 	);
