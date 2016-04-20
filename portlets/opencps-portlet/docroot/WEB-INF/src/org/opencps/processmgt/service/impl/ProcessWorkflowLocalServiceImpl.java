@@ -17,7 +17,13 @@
 
 package org.opencps.processmgt.service.impl;
 
+import java.util.List;
+
+import org.opencps.processmgt.model.ProcessWorkflow;
 import org.opencps.processmgt.service.base.ProcessWorkflowLocalServiceBaseImpl;
+
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 
 /**
  * The implementation of the process workflow local service.
@@ -40,4 +46,36 @@ public class ProcessWorkflowLocalServiceImpl
 	 *
 	 * Never reference this interface directly. Always use {@link org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil} to access the process workflow local service.
 	 */
+	
+	/**
+	 * Search ProcessWorkflow
+	 * 
+	 * @param serviceProcessId
+	 * @param start
+	 * @param end
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public List<ProcessWorkflow> searchWorkflow(
+	    long serviceProcessId, int start, int end)
+	    throws PortalException, SystemException {
+
+		return processWorkflowPersistence.findByS_P_ID(
+		    serviceProcessId, start, end);
+	}
+
+	/**
+	 * Count ProcessWorkflow
+	 * 
+	 * @param serviceProcessId
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public int countWorkflow(long serviceProcessId)
+	    throws PortalException, SystemException {
+
+		return processWorkflowPersistence.countByS_P_ID(serviceProcessId);
+	}
 }

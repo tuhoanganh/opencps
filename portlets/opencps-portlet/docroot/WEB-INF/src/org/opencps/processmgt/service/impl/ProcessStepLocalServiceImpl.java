@@ -18,6 +18,7 @@
 package org.opencps.processmgt.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.opencps.processmgt.model.ProcessStep;
 import org.opencps.processmgt.service.base.ProcessStepLocalServiceBaseImpl;
@@ -50,6 +51,32 @@ public class ProcessStepLocalServiceImpl
 	 */
 
 	/**
+	 * @param groupId
+	 * @param start
+	 * @param end
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public List<ProcessStep> searchStep(long groupId, int start, int end)
+	    throws PortalException, SystemException {
+
+		return processStepPersistence.findByGroupId(groupId, start, end);
+	}
+
+	/**
+	 * @param groupId
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public int countStep(long groupId)
+	    throws PortalException, SystemException {
+
+		return processStepPersistence.countByGroupId(groupId);
+	}
+
+	/**
 	 * Add ProcessStep
 	 * 
 	 * @param processStepId
@@ -66,8 +93,8 @@ public class ProcessStepLocalServiceImpl
 	 */
 	public ProcessStep addStep(
 	    long serviceProcessId, String stepName,
-	    String stepNo, String dossierStatus, int daysDuration,
-	    String externalAppUrl, ServiceContext context)
+	    int stepNo, String dossierStatus, int daysDuration,
+	    long referenceDossierPartId, String externalAppUrl, ServiceContext context)
 	    throws PortalException, SystemException {
 		
 		ProcessStep step = null;
@@ -91,10 +118,11 @@ public class ProcessStepLocalServiceImpl
 			
 			step.setServiceProcessId(serviceProcessId);
 			step.setStepName(stepName);
-			step.setStepName(stepNo);
+			step.setSequenceNo(stepNo);
 			step.setDossierStatus(dossierStatus);
 			step.setDaysDuration(daysDuration);
 			step.setExternalAppUrl(externalAppUrl);
+			step.setReferenceDossierPartId(referenceDossierPartId);
 			
 			processStepPersistence.update(step);
 		}
@@ -121,8 +149,8 @@ public class ProcessStepLocalServiceImpl
 	
 	public ProcessStep updateStep(
 	    long processStepId, long serviceProcessId, String stepName,
-	    String stepNo, String dossierStatus, int daysDuration,
-	    String externalAppUrl, ServiceContext context)
+	    int stepNo, String dossierStatus, int daysDuration,
+	    long referenceDossierPartId, String externalAppUrl, ServiceContext context)
 	    throws PortalException, SystemException {
 
 		ProcessStep step = null;
@@ -140,10 +168,11 @@ public class ProcessStepLocalServiceImpl
 
 			step.setServiceProcessId(serviceProcessId);
 			step.setStepName(stepName);
-			step.setStepName(stepNo);
+			step.setSequenceNo(stepNo);
 			step.setDossierStatus(dossierStatus);
 			step.setDaysDuration(daysDuration);
 			step.setExternalAppUrl(externalAppUrl);
+			step.setReferenceDossierPartId(referenceDossierPartId);
 
 			processStepPersistence.update(step);
 		}
