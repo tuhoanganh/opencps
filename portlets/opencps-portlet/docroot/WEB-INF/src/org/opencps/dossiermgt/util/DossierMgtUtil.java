@@ -23,6 +23,9 @@ package org.opencps.dossiermgt.util;
  *
  */
 public class DossierMgtUtil {
+	public static String[] _DOSSIER_CATEGORY_NAMES = {
+		"update-dossier-info"
+	};
 	public static final String TOP_TABS_DOSSIER = "dossier";
 	public static final String TOP_TABS_DOSSIER_FILE = "dossier-file";
 	public static final String TOP_TABS_EXTERNAL_DOSSIER = "external-dossier";
