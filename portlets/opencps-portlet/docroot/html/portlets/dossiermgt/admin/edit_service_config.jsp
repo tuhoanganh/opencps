@@ -61,7 +61,7 @@
 	
 	long serviceConfigId = serviceConfig != null ? serviceConfig.getServiceConfigId() : 0L;
 	
-	long dictItemServiceDomainId = 0;
+	String dictItemServiceDomainId = "0";
 	
 	String backURL = ParamUtil.getString(request, "backURL"); 
 	if(!Validator.isNotNull(backURL)) {
@@ -81,16 +81,8 @@
 		//get dossierTemplates
 		dossierTemplates = DossierTemplateLocalServiceUtil.getAll();
 		
-		// get item service domain
-		dictCollectionServiceDomain = DictCollectionLocalServiceUtil
-						.getDictCollection(scopeGroupId, 
-							PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN);
-		if(dictCollectionServiceDomain != null && serviceConfig != null) {
-			dictItemServiceDomain = DictItemLocalServiceUtil.getDictItemInuseByItemCode(dictCollectionServiceDomain.getDictCollectionId(), serviceConfig.getDomainCode());
-			if(dictItemServiceDomain != null) {
-				dictItemServiceDomainId = dictItemServiceDomain.getDictItemId();
-			}
-			
+		if(serviceConfig != null) {
+			dictItemServiceDomainId = serviceConfig.getDomainCode();
 		}
 		
 	} catch(Exception e) {
@@ -169,7 +161,7 @@
 			dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN %>"
 			itemNames="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_DOMAINCODE %>"
 			itemsEmptyOption="true"	
-			selectedItems="<%=String.valueOf(dictItemServiceDomainId)%>"
+			selectedItems="<%=dictItemServiceDomainId%>"
 		/>	
 	</aui:row>
 	
