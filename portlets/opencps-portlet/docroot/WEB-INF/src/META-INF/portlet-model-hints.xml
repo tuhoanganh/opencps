@@ -260,6 +260,11 @@
 	</model>
 	<model name="org.opencps.dossiermgt.model.DossierPart">
 		<field name="dossierpartId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
 		<field name="dossierTemplateId" type="long" />
 		<field name="partNo" type="String" />
 		<field name="partName" type="String" />
@@ -277,12 +282,22 @@
 	</model>
 	<model name="org.opencps.dossiermgt.model.DossierTemplate">
 		<field name="dossierTemplateId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
 		<field name="templateName" type="String" />
 		<field name="description" type="String" />
 		<field name="templateNo" type="String" />
 	</model>
 	<model name="org.opencps.dossiermgt.model.ServiceConfig">
 		<field name="serviceConfigId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
 		<field name="serviceInfoId" type="long" />
 		<field name="serviceDomainIndex" type="String" />
 		<field name="serviceAdministrationIndex" type="String" />

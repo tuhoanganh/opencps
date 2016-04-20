@@ -14,6 +14,7 @@
 
 package org.opencps.dossiermgt.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.opencps.dossiermgt.NoSuchDossierPartException;
@@ -24,6 +25,7 @@ import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.service.ServiceContext;
 
 /**
  * The implementation of the dossier part local service.
@@ -44,12 +46,20 @@ public class DossierPartLocalServiceImpl extends DossierPartLocalServiceBaseImpl
 	public DossierPart addDossierPart(long dossierTemplateId,String partNo,
 		String partName, String partTip, int partType, long parentId, double sibling,
 		String formScript, String sampleData, boolean required,
-		String templateFileNo) throws SystemException, NoSuchDossierPartException {
+		String templateFileNo, long userId, ServiceContext serviceContext) throws SystemException, NoSuchDossierPartException {
 		
 		long dossierPartId = CounterLocalServiceUtil.increment(DossierPart.class.getName());
 		DossierPart dossierPart = dossierPartPersistence.create(dossierPartId);
 		
 		String treeIndex = getTreeIndex(parentId, dossierPartId);
+		
+		Date currentDate = new Date();
+		
+		dossierPart.setUserId(userId);
+		dossierPart.setCompanyId(serviceContext.getCompanyId());
+		dossierPart.setGroupId(serviceContext.getScopeGroupId());
+		dossierPart.setCreateDate(currentDate);
+		dossierPart.setModifiedDate(currentDate);
 		
 		dossierPart.setDossierTemplateId(dossierTemplateId);
 		dossierPart.setPartNo(partNo);
@@ -70,9 +80,18 @@ public class DossierPartLocalServiceImpl extends DossierPartLocalServiceBaseImpl
 	public DossierPart updateDossierPart(long dossierPartId ,long dossierTemplateId,
 		String partNo, String partName, String partTip, int partType, long parentId, double sibling,
 		String formScript, String sampleData, boolean required,
-		String templateFileNo) throws SystemException {
+		String templateFileNo, long userId, ServiceContext serviceContext) throws SystemException {
 		
 		DossierPart dossierPart = dossierPartPersistence.fetchByPrimaryKey(dossierPartId);
+		
+
+		Date currentDate = new Date();
+		
+		dossierPart.setUserId(userId);
+		dossierPart.setCompanyId(serviceContext.getCompanyId());
+		dossierPart.setGroupId(serviceContext.getScopeGroupId());
+		dossierPart.setCreateDate(currentDate);
+		dossierPart.setModifiedDate(currentDate);
 		
 		dossierPart.setDossierTemplateId(dossierTemplateId);
 		dossierPart.setPartName(partName);
@@ -128,6 +147,10 @@ public class DossierPartLocalServiceImpl extends DossierPartLocalServiceBaseImpl
 					throws SystemException {
 		return dossierPartPersistence.findByDossierTemplateId(dossierTemplateId);
 	} 
+	
+	public List<DossierPart> getDossierPartsByParentId(long parentId) throws SystemException {
+		return dossierPartPersistence.findByParentId(parentId);
+	}
 	
 	public int CountByTempalteId(long dossierTemplateId) throws SystemException {
 		return dossierPartPersistence.countByDossierTemplateId(dossierTemplateId);

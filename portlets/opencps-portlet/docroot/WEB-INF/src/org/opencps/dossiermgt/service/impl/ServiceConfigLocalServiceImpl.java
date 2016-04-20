@@ -14,6 +14,7 @@
 
 package org.opencps.dossiermgt.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.opencps.dossiermgt.NoSuchServiceConfigException;
@@ -29,6 +30,7 @@ import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.service.ServiceContext;
 
 /**
  * The implementation of the service config local service.
@@ -50,7 +52,7 @@ public class ServiceConfigLocalServiceImpl
 	public ServiceConfig addServiceConfig(
 		long serviceInfoId, String serviceAdministrationIndex, String serviceDomainIndex,
 		long dossierTemplateId, String govAgencyCode, String govAgencyName, 
-		int serviceMode, String domainCode) throws PortalException, SystemException {
+		int serviceMode, String domainCode,  long userId, ServiceContext serviceContext) throws PortalException, SystemException {
 		
 		ServiceInfo serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(serviceInfoId); 
 		
@@ -70,6 +72,14 @@ public class ServiceConfigLocalServiceImpl
 				isBackEnd = true;
 			}
 		}
+		
+		Date currentDate = new Date();
+		
+		serviceConfig.setUserId(userId);
+		serviceConfig.setCompanyId(serviceContext.getCompanyId());
+		serviceConfig.setGroupId(serviceContext.getScopeGroupId());
+		serviceConfig.setCreateDate(currentDate);
+		serviceConfig.setModifiedDate(currentDate);
 		
 		serviceConfig.setServiceInfoId(serviceInfoId);
 		serviceConfig.setServiceAdministrationIndex(serviceAdministrationIndex);
@@ -91,7 +101,7 @@ public class ServiceConfigLocalServiceImpl
 	public ServiceConfig updateServiceConfig( long serviceConfigId,
 		long serviceInfoId, String serviceAdministrationIndex, String serviceDomainIndex,
 		long dossierTemplateId, String govAgencyCode, String govAgencyName, 
-		int serviceMode, String domainCode) throws PortalException, SystemException {
+		int serviceMode, String domainCode,  long userId, ServiceContext serviceContext) throws PortalException, SystemException {
 		
 		ServiceInfo serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(serviceInfoId); 
 		
@@ -109,6 +119,14 @@ public class ServiceConfigLocalServiceImpl
 				isBackEnd = true;
 			}
 		}
+		
+		Date currentDate = new Date();
+		
+		serviceConfig.setUserId(userId);
+		serviceConfig.setCompanyId(serviceContext.getCompanyId());
+		serviceConfig.setGroupId(serviceContext.getScopeGroupId());
+		serviceConfig.setCreateDate(currentDate);
+		serviceConfig.setModifiedDate(currentDate);
 		
 		serviceConfig.setServiceInfoId(serviceInfoId);
 		serviceConfig.setServiceAdministrationIndex(serviceAdministrationIndex);

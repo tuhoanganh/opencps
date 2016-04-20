@@ -14,6 +14,7 @@
 
 package org.opencps.dossiermgt.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.opencps.dossiermgt.NoSuchDossierTemplateException;
@@ -23,6 +24,7 @@ import org.opencps.dossiermgt.service.base.DossierTemplateLocalServiceBaseImpl;
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.service.ServiceContext;
 
 /**
  * The implementation of the dossier template local service.
@@ -42,10 +44,18 @@ public class DossierTemplateLocalServiceImpl
 	extends DossierTemplateLocalServiceBaseImpl {
 	
 	public DossierTemplate addDossierTemplate(String templateNo,
-		String templateName, String description) throws SystemException {
+		String templateName, String description, long userId, ServiceContext serviceContext) throws SystemException {
 		
 		long dossierTemplateId = CounterLocalServiceUtil.increment(DossierTemplate.class.getName());
 		DossierTemplate dossierTemplate = dossierTemplatePersistence.create(dossierTemplateId);
+		
+		Date currentDate = new Date();
+		
+		dossierTemplate.setUserId(userId);
+		dossierTemplate.setCompanyId(serviceContext.getCompanyId());
+		dossierTemplate.setGroupId(serviceContext.getScopeGroupId());
+		dossierTemplate.setCreateDate(currentDate);
+		dossierTemplate.setModifiedDate(currentDate);
 		
 		dossierTemplate.setTemplateNo(templateNo);
 		dossierTemplate.setTemplateName(templateName);
@@ -55,9 +65,17 @@ public class DossierTemplateLocalServiceImpl
 	}
 	
 	public DossierTemplate updateDossierTemplate(long dossierTemplateId, 
-		String templateNo,String templateName, String description) throws SystemException {
+		String templateNo,String templateName, String description, long userId, ServiceContext serviceContext) throws SystemException {
 		
 		DossierTemplate dossierTemplate = dossierTemplatePersistence.fetchByPrimaryKey(dossierTemplateId);
+		
+		Date currentDate = new Date();
+		
+		dossierTemplate.setUserId(userId);
+		dossierTemplate.setCompanyId(serviceContext.getCompanyId());
+		dossierTemplate.setGroupId(serviceContext.getScopeGroupId());
+		dossierTemplate.setCreateDate(currentDate);
+		dossierTemplate.setModifiedDate(currentDate);
 		
 		dossierTemplate.setTemplateNo(templateNo);
 		dossierTemplate.setTemplateName(templateName);
@@ -89,6 +107,11 @@ public class DossierTemplateLocalServiceImpl
 	
 	public List<DossierTemplate> getAll() throws SystemException {
 		return dossierTemplatePersistence.findAll();
+	}
+	
+	public List<DossierTemplate> getDossierTemplatesByGroupId(long groupId) 
+					throws SystemException {
+		return dossierTemplatePersistence.findByGroupId(groupId);
 	}
 	
 	public DossierTemplate getDossierTemplate(String templateNo) 

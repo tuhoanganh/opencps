@@ -17,6 +17,8 @@
 package org.opencps.dossiermgt.util;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import org.opencps.dossiermgt.comparator.DossierTemplateNameComparator;
@@ -25,6 +27,8 @@ import org.opencps.dossiermgt.model.DossierPart;
 import org.opencps.dossiermgt.search.DossierTemplateDisplayTerms;
 import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
@@ -112,4 +116,26 @@ public class DossierMgtUtil {
 		
 		return modeName;
 	}
+
+	
+	/*public static List<DossierPart> getTreeDossierPart(long dossierpartId, List<DossierPart> dossierParts) throws
+	PortalException, SystemException {
+		
+		DossierPart dossierPart = DossierPartLocalServiceUtil.getDossierPart(dossierpartId);
+		
+		dossierParts.add(dossierPart);
+		
+		List<DossierPart> dossierPartsChild = new ArrayList<DossierPart>();
+		dossierPartsChild = DossierPartLocalServiceUtil.getDossierPartsByParentId(dossierPart.getParentId());
+		
+		if(dossierPartsChild.isEmpty()) {
+			return dossierParts;
+		}
+		
+		for(DossierPart child : dossierPartsChild) {
+			return getTreeDossierPart(child.getDossierpartId(), dossierParts);
+		}
+		return dossierParts;
+			
+	}*/
 }

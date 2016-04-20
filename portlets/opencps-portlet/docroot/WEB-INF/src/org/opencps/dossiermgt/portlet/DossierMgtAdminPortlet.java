@@ -2,6 +2,7 @@
 package org.opencps.dossiermgt.portlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -34,6 +35,7 @@ import org.opencps.dossiermgt.search.ServiceConfigDisplayTerms;
 import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
+import org.opencps.dossiermgt.util.DossierMgtUtil;
 import org.opencps.usermgt.model.WorkingUnit;
 import org.opencps.usermgt.service.WorkingUnitLocalServiceUtil;
 import org.opencps.util.MessageKeys;
@@ -52,7 +54,6 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.util.bridges.mvc.MVCPortlet;
-
 /**
  * Portlet implementation class ServiceConfigMgtPortlet
  */
@@ -158,15 +159,22 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		String returnURL = ParamUtil.getString(actionRequest, "returnURL");
 
 		try {
+			
+			ServiceContext serviceContext = ServiceContextFactory
+						    .getInstance(actionRequest);
+			
 			dossierTemplateValidate(dossierTemplateId, templateNo, templateName);
 
 			if (dossierTemplateId == 0) {
 				DossierTemplateLocalServiceUtil.addDossierTemplate(
-				    templateNo, templateName, description);
+				    templateNo, templateName, description, serviceContext.getUserId(),
+				    serviceContext);
 			}
 			else {
 				DossierTemplateLocalServiceUtil.updateDossierTemplate(
-				    dossierTemplateId, templateNo, templateName, description);
+				    dossierTemplateId, templateNo, templateName, description,
+				    serviceContext.getUserId(),
+				    serviceContext);
 			}
 		}
 		catch (Exception e) {
@@ -214,7 +222,7 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 	}
 
 	public void updateDossierPart(
-	    ActionRequest actionRequest, ActionResponse actionResponse) throws IOException {
+	    ActionRequest actionRequest, ActionResponse actionResponse) throws IOException, PortalException, SystemException {
 
 		long dossierPartId =
 		    ParamUtil.getLong(
@@ -259,14 +267,22 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		boolean required =
 		    ParamUtil.getBoolean(
 		        actionRequest, DossierPartDisplayTerms.DOSSIERPART_REQUIRED);
-
+		
+		
+		/*for(DossierPart dos : DossierMgtUtil.getTreeDossierPart(dossierPartId, new ArrayList<DossierPart>())) {
+			System.out.println("dos : " + dos.getTreeIndex());
+		}*/
 		try {
+			
+			ServiceContext serviceContext = ServiceContextFactory
+						    .getInstance(actionRequest);
+			
 			dossierPartValidate(dossierPartId, partName, partNo, sibling, templateFileNo);
 			if (dossierPartId == 0) {
 				DossierPartLocalServiceUtil.addDossierPart(
 				    dossierTemplateId, partNo, partName, partTip, partType,
 				    parentId, sibling, formScript, sampleData, required,
-				    templateFileNo);
+				    templateFileNo, serviceContext.getUserId(), serviceContext);
 			}
 			else {
 
@@ -274,13 +290,14 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 					DossierPartLocalServiceUtil.addDossierPart(
 					    dossierTemplateId, partNo, partName, partTip, partType,
 					    parentId, sibling, formScript, sampleData, required,
-					    templateFileNo);
+					    templateFileNo, serviceContext.getUserId(), serviceContext);
 				}
 				else {
 					DossierPartLocalServiceUtil.updateDossierPart(
 					    dossierPartId, dossierTemplateId, partNo, partName,
 					    partTip, partType, parentId, sibling, formScript,
-					    sampleData, required, templateFileNo);
+					    sampleData, required, templateFileNo, 
+					    serviceContext.getUserId(), serviceContext);
 				}
 
 			}
@@ -374,13 +391,15 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 				ServiceConfigLocalServiceUtil.addServiceConfig(
 				    serviceInfoId, serviceAdministrationIndex,
 				    serviceDomainIndex, dossierTemplateId, govAgencyCode,
-				    govAgencyName, serviceMode, String.valueOf(domainCode));
+				    govAgencyName, serviceMode, String.valueOf(domainCode),
+				    serviceContext.getUserId(), serviceContext);
 			}
 			else {
 				ServiceConfigLocalServiceUtil.updateServiceConfig(
 				    serviceConfigId, serviceInfoId, serviceAdministrationIndex,
 				    serviceDomainIndex, dossierTemplateId, govAgencyCode,
-				    govAgencyName, serviceMode, String.valueOf(domainCode));
+				    govAgencyName, serviceMode, String.valueOf(domainCode),
+				    serviceContext.getUserId(), serviceContext);
 			}
 		}
 		catch (Exception e) {
