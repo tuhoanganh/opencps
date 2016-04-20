@@ -2,7 +2,6 @@
 package org.opencps.dossiermgt.portlet;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -35,7 +34,6 @@ import org.opencps.dossiermgt.search.ServiceConfigDisplayTerms;
 import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
-import org.opencps.dossiermgt.util.DossierMgtUtil;
 import org.opencps.usermgt.model.WorkingUnit;
 import org.opencps.usermgt.service.WorkingUnitLocalServiceUtil;
 import org.opencps.util.MessageKeys;

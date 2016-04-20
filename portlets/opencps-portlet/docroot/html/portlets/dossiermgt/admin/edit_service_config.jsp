@@ -250,6 +250,7 @@ AUI().ready(function(A) {
 		var selectServiceInfo = A.one("#<portlet:namespace/>serviceInfoId");
 		
 		if(selectServiceInfo){
+			<portlet:namespace />sentServiceInfoId(selectServiceInfo.val());
 			selectServiceInfo.on('change', function() {
 				<portlet:namespace />sentServiceInfoId(selectServiceInfo.val());
 			});
