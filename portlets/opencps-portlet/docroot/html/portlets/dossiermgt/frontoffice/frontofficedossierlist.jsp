@@ -58,8 +58,6 @@
 				itemNames = CustomSQLUtil.keywords(searchTerms.getKeywords());
 			}
 			
-			
-			
 			try{
 				
 				%>

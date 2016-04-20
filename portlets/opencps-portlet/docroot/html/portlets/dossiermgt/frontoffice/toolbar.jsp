@@ -35,7 +35,7 @@
 		<c:if test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_DOSSIER) && tabs1.equals(DossierMgtUtil.TOP_TABS_DOSSIER)%>">
 			
 			<portlet:renderURL var="addDossierURL" windowState="<%=LiferayWindowState.NORMAL.toString() %>">
-				<portlet:param name="mvcPath" value="/html/portlets/data_management/admin/edit_dictitem.jsp"/>
+				<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/frontoffice/frontofficeservicelist.jsp"/>
 				<portlet:param name="backURL" value="<%=currentURL %>"/>
 			</portlet:renderURL>
 			<aui:nav-item 
