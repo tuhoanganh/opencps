@@ -146,5 +146,14 @@ public class ServiceProcessLocalServiceImpl
 
 		return serviceProcess;
 	}
+	
+	public List<ServiceProcess> getServiceProcesses(long groupId, long dossierTemplateId) 
+					throws SystemException {
+		return serviceProcessPersistence.findByG_T(groupId, dossierTemplateId);
+	}
+	
+	public int countByG_T(long groupId ,long dossierTemplateId) throws SystemException {
+		return serviceProcessPersistence.countByG_T(groupId, dossierTemplateId);
+	}
 
 }
