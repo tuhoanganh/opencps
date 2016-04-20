@@ -27,7 +27,6 @@ import javax.portlet.PortletURL;
 
 import org.opencps.datamgt.model.DictCollection;
 import org.opencps.datamgt.util.DataMgtUtil;
-import org.opencps.util.DateTimeUtil;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.log.Log;

@@ -5,6 +5,9 @@
 	<namespace>dossiermgt</namespace>
 	
     <entity name="DossierTemplate" local-service="true" table="opencps_dossiertemplate">
+    
+    	<!-- PK fields -->
+    	
         <column name="dossierTemplateId" type="long" primary="true"/>
         <column name="templateName" type="String"/>
         <column name="description" type="String"/>
@@ -16,6 +19,9 @@
     </entity>
     
     <entity name="DossierPart" local-service="true" table="opencps_dossierpart">
+    
+    	<!-- PK fields -->
+    
         <column name="dossierpartId" type="long" primary="true"/>
         <column name="dossierTemplateId" type="long"/>
         <column name="partNo" type="String"/>
@@ -39,7 +45,25 @@
         </finder>
     </entity>
     
-    <entity name="ServiceConfig" local-service="true"></entity>
+    <entity name="ServiceConfig" local-service="true">
+    
+    	<!-- PK fields -->
+    	
+    	<column name="serviceConfigId" type="long" primary="true"/>
+        <column name="serviceInfoId" type="long"/>
+        <column name="serviceDomainIndex" type="String"/>
+        <column name="serviceAdministrationIndex" type="String"/>
+        <column name="dossierTemplateId" type="long"/>
+        <column name="govAgencyCode" type="String"/>
+        <column name="govAgencyName" type="String"/>
+        <column name="govAgencyOrganizationId" type="long"/>
+        <column name="serviceMode" type="int"/>
+        <column name="serviceProcessId" type="long"/>
+        
+        <finder return-type="Collection" name="DossierTemplateId">
+        	<finder-column name="dossierTemplateId"></finder-column>
+        </finder>
+    </entity>
     
     <entity name="Dossier" local-service="true">
     

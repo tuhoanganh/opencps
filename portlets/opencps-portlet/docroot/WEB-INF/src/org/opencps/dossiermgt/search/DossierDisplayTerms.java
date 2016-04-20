@@ -81,7 +81,7 @@ public class DossierDisplayTerms extends DisplayTerms {
 	public static final String ESTIMATE_DATETIME = "estimateDatetime";
 	public static final String FINISH_DATETIME = "finishDatetime";
 	public static final String SERVICE_NAME = "serviceName";
-	
+	public static final String SERVICE_NO = "serviceNo";
 
 	public static final String USER_ID = "userId";
 
@@ -92,31 +92,35 @@ public class DossierDisplayTerms extends DisplayTerms {
 		createDate = ParamUtil
 		    .getDate(portletRequest, CREATE_DATE, DateTimeUtil
 		        .getDateTimeFormat(DateTimeUtil._VN_DATE_TIME_FORMAT));
-		
+
 		dossierId = ParamUtil
 		    .getLong(portletRequest, DOSSIER_ID, 0L);
-		
+
 		govAgencyName = ParamUtil
 		    .getString(portletRequest, GOVAGENCY_NAME);
-		
+
 		modifiedDate = ParamUtil
 		    .getDate(portletRequest, MODIFIED_DATE, DateTimeUtil
 		        .getDateTimeFormat(DateTimeUtil._VN_DATE_TIME_FORMAT));
-		
+
 		serviceInfoId = ParamUtil
-					    .getLong(portletRequest, SERVICE_INFO_ID);
-		
+		    .getLong(portletRequest, SERVICE_INFO_ID);
+
 		serviceName = ParamUtil
-					    .getString(portletRequest, SERVICE_NAME);
+		    .getString(portletRequest, SERVICE_NAME);
 		
+		serviceNo = ParamUtil
+					    .getString(portletRequest, SERVICE_NO);
+
 		receiveDatetime = ParamUtil
-						.getDate(portletRequest, RECEIVE_DATETIME, DateTimeUtil
-					        .getDateTimeFormat(DateTimeUtil._VN_DATE_TIME_FORMAT));
+		    .getDate(portletRequest, RECEIVE_DATETIME, DateTimeUtil
+		        .getDateTimeFormat(DateTimeUtil._VN_DATE_TIME_FORMAT));
 		receptionNo = ParamUtil
-					    .getString(portletRequest, RECEPTION_NO);
-		
-		dossierStatus = ParamUtil.getInteger(portletRequest, DOSSIER_STATUS);
-		
+		    .getString(portletRequest, RECEPTION_NO);
+
+		dossierStatus = ParamUtil
+		    .getInteger(portletRequest, DOSSIER_STATUS);
+
 		userId = ParamUtil
 		    .getLong(portletRequest, USER_ID);
 
@@ -164,26 +168,23 @@ public class DossierDisplayTerms extends DisplayTerms {
 		this.counter = counter;
 	}
 
-	
 	public String getReceptionNo() {
-	
+
 		return receptionNo;
 	}
 
-	
 	public void setReceptionNo(String receptionNo) {
-	
+
 		this.receptionNo = receptionNo;
 	}
 
 	public String getServiceName() {
-	
+
 		return serviceName;
 	}
 
-	
 	public void setServiceName(String serviceName) {
-	
+
 		this.serviceName = serviceName;
 	}
 
@@ -537,6 +538,17 @@ public class DossierDisplayTerms extends DisplayTerms {
 
 		this.finishDatetime = finishDatetime;
 	}
+	
+	
+	public String getServiceNo() {
+	
+		return serviceNo;
+	}
+
+	public void setServiceNo(String serviceNo) {
+	
+		this.serviceNo = serviceNo;
+	}
 
 	protected int serviceMode;
 	protected int counter;
@@ -554,9 +566,10 @@ public class DossierDisplayTerms extends DisplayTerms {
 	protected long dossierTemplateId;
 	protected long govAgencyOrganizationId;
 	protected long subjectId;
-	
+
 	protected String receptionNo;
 	protected String serviceName;
+	protected String serviceNo;
 	protected String externalRefNo;
 	protected String externalRefUrl;
 	protected String serviceDomainIndex;
