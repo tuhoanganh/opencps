@@ -23,6 +23,13 @@ import java.util.List;
 
 import javax.portlet.RenderRequest;
 
+import org.opencps.processmgt.model.ProcessStep;
+import org.opencps.processmgt.model.ServiceProcess;
+import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
+import org.opencps.processmgt.service.ServiceProcessLocalServiceUtil;
+
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.service.RoleLocalServiceUtil;
@@ -50,4 +57,58 @@ public class ProcessUtils {
 
 		return roles;
 	}
+	
+	
+	/**
+	 * Get processName
+	 * 
+	 * @param serviceProcessId
+	 * @return
+	 */
+	public static String getServiceProcessName(long serviceProcessId) {
+
+		String processName = StringPool.BLANK;
+
+		ServiceProcess process = null;
+
+		try {
+			process =
+			    ServiceProcessLocalServiceUtil.fetchServiceProcess(serviceProcessId);
+		}
+		catch (Exception e) {
+			return processName;
+		}
+
+		if (Validator.isNotNull(process)) {
+			processName = process.getProcessName();
+		}
+
+		return processName;
+	}
+	
+
+	/**
+	 * @param processStepId
+	 * @return
+	 */
+	public static String getProcessStepName(long processStepId) {
+
+		String stepName = StringPool.BLANK;
+
+		ProcessStep step = null;
+
+		try {
+			step = ProcessStepLocalServiceUtil.fetchProcessStep(processStepId);
+		}
+		catch (Exception e) {
+			return stepName;
+		}
+
+		if (Validator.isNotNull(step)) {
+			stepName = step.getStepName();
+		}
+
+		return stepName;
+	}
+
 }
