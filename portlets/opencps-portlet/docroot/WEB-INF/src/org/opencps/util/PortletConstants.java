@@ -33,6 +33,14 @@ public class PortletConstants {
 	public static final int ACCOUNT_STATUS_CONFIRMED = 1;
 	public static final int ACCOUNT_STATUS_APPROVED = 2;
 	public static final int ACCOUNT_STATUS_LOCKED = 3;
+	
+	public static final int DOSSIER_PART_TYPE_COMPONEMT = 1;
+	public static final int DOSSIER_PART_TYPE_SUBMIT = 2;
+	public static final int DOSSIER_PART_TYPE_OTHER = 3;
+	public static final int DOSSIER_PART_TYPE_PRIVATE = 4;
+	public static final int DOSSIER_PART_TYPE_RESULT = 5;
+	
+	public static final String TEMP_RANDOM_SUFFIX = "--tempRandomSuffix--";
 
 	public static enum DestinationRoot {
 			CITIZEN("Citizen"), BUSINESS("Business");
