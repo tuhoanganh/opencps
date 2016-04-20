@@ -126,3 +126,5 @@ hooks/opencps-hook/.settings/org.eclipse.wst.common.project.facet.core.xml
 hooks/opencps-hook/docroot/WEB-INF/classes/.gitignore
 
 portlets/opencps-sample-portlet/
+
+portlets/opencps-portlet/docroot/WEB-INF/tld/.gitignore
