@@ -128,7 +128,7 @@
 	</entity>
 	
 	
-	<entity name="Dossier" local-service="true">
+	<entity name="Dossier" local-service="true" table="opencps_dossier">
     
     	<!-- PK fields -->
     	
@@ -184,7 +184,7 @@
         
     </entity>
     
-    <entity name="DossierStatus" local-service="true">
+    <entity name="DossierStatus" local-service="true" table="opencps_dossier_status">
     
    		<!-- PK fields -->
    		
@@ -209,7 +209,7 @@
         <column name="syncStatus" type="int"/>
     </entity>
     
-    <entity name="DossierLog" local-service="true">
+    <entity name="DossierLog" local-service="true" table="opencps_dossier_log">
     
    		<!-- PK fields -->
     
@@ -234,7 +234,7 @@
         <column name="level" type="int"/>
     </entity>
     
-    <entity name="FileGroup" local-service="true">
+    <entity name="FileGroup" local-service="true" table="opencps_file_group">
     
     	<!-- PK fields -->
     
@@ -256,7 +256,7 @@
         <column name="syncStatus" type="int"/>
     </entity>
     
-    <entity name="DossierFile" local-service="true">
+    <entity name="DossierFile" local-service="true" table="opencps_dossier_file">
     
     	<!-- PK fields -->
     	

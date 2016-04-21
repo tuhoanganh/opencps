@@ -1,3 +1,5 @@
+<%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -34,7 +36,10 @@
 	iteratorURL.setParameter("mvcPath", templatePath + "frontofficeservicelist.jsp");
 	
 	List<Service> services =  new ArrayList<Service>();
+	
 	String backURL = ParamUtil.getString(request, "backURL");
+	
+	//List<ServiceConfig> serviceConfigs = ServiceConfigLocalServiceUtil.
 %>
 <liferay-ui:header
 	backURL="<%= backURL %>"
@@ -91,6 +96,7 @@
 	
 	<liferay-ui:search-iterator/>
 </liferay-ui:search-container>
+
 
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.dossiermgt.frontoffice.frontofficeservicelist.jsp");
