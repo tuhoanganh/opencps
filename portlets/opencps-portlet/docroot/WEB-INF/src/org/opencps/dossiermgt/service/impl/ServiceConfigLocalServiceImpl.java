@@ -175,4 +175,15 @@ public class ServiceConfigLocalServiceImpl
 	public int countByDossierTemplateId(long dossierTemplateId) throws SystemException {
 		return serviceConfigPersistence.countByDossierTemplateId(dossierTemplateId);
 	}
+	
+	public List<ServiceConfig> searchServiceConfig(long groupId, String keywords, String govAgencyCode,
+		String domainCode, boolean andOperator , int start, int end) {
+		return serviceConfigFinder.searchServiceConfig(groupId, keywords, govAgencyCode, domainCode, start, end);
+		
+	}
+	
+	public int countServiceConfig(long groupId, String keywords, String govAgencyCode,
+		String domainCode) {
+		return serviceConfigFinder.countServiceConfig(groupId, keywords, govAgencyCode, domainCode);
+	}
 }
