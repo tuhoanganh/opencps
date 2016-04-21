@@ -93,6 +93,45 @@
 		<finder return-type="DosserPart" name="PartNo">
 			<finder-column name="partNo" />
 		</finder>
+		
+		<finder return-type="Collection" name="T_T">
+			<finder-column name="dossierTemplateId"/>
+			<finder-column name="partType" />
+		</finder>
+	</entity>
+
+	<entity name="ServiceConfig" local-service="true"
+		table="opencps_service_config">
+		
+		<!-- PK fields -->
+		
+		<column name="serviceConfigId" type="long" primary="true" />
+		
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		
+		<!-- Other field -->
+		
+		<column name="serviceInfoId" type="long" />
+		<column name="serviceDomainIndex" type="String" />
+		<column name="serviceAdministrationIndex" type="String" />
+		<column name="dossierTemplateId" type="long" />
+		<column name="govAgencyCode" type="String" />
+		<column name="govAgencyName" type="String" />
+		<column name="govAgencyOrganizationId" type="long" />
+		<column name="serviceMode" type="int" />
+		<column name="serviceProcessId" type="long" />
+		<column name="domainCode" type="String" />
+
+		<finder return-type="Collection" name="DossierTemplateId">
+			<finder-column name="dossierTemplateId" />
+		</finder>
+
 	</entity>
 
 	<entity name="ServiceConfig" local-service="true"
