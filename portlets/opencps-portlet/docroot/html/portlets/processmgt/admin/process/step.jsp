@@ -22,7 +22,7 @@
 <%
 	ServiceProcess serviceProcess  = (ServiceProcess) request.getAttribute(WebKeys.SERVICE_PROCESS_ENTRY);
 
-	ProcessStep step  = (ProcessStep) request.getAttribute(WebKeys.PROCESS_STEP_ENTRY);
+	ProcessStep processStep  = (ProcessStep) request.getAttribute(WebKeys.PROCESS_STEP_ENTRY);
 	
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "process/step.jsp");
@@ -37,7 +37,7 @@
 <liferay-portlet:renderURL var="editStepURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
 	<portlet:param name="mvcPath" value='<%= templatePath + "edit_step.jsp" %>'/>
 	<portlet:param name="serviceProcessId" value="<%= Validator.isNotNull(serviceProcess) ? Long.toString(serviceProcess.getServiceProcessId()) : StringPool.BLANK %>"/>
-	<portlet:param name="processStepId" value="<%= Validator.isNotNull(step) ? Long.toString(step.getProcessStepId()) : StringPool.BLANK %>"/>
+	<portlet:param name="processStepId" value="<%= Validator.isNotNull(processStep) ? Long.toString(processStep.getProcessStepId()) : StringPool.BLANK %>"/>
 </liferay-portlet:renderURL>
 
 <aui:button-row>
