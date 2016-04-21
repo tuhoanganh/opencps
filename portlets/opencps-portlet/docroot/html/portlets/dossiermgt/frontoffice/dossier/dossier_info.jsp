@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -21,17 +20,40 @@
 <%@page import="org.opencps.util.PortletPropsValues"%>
 <%@ include file="../../init.jsp"%>
 
-
 <aui:row>
-	<aui:col width="30">
-		<aui:input name="<%=DossierDisplayTerms.SERVICE_NAME %>" cssClass="input100" type="text"/>	
-	</aui:col>
-	<aui:col width="30">
-		<aui:input name="<%=DossierDisplayTerms.SERVICE_NAME %>" cssClass="input100" type="text"/>	
+	<aui:col width="70">
+		<aui:input name="<%=DossierDisplayTerms.SERVICE_NAME %>" cssClass="input96" type="text"/>	
 	</aui:col>
 	
 	<aui:col width="30">
-		<aui:input name="<%=DossierDisplayTerms.SERVICE_NO %>" cssClass="input100" type="text"/>	
+		<aui:input name="<%=DossierDisplayTerms.SERVICE_NO %>" cssClass="input90" type="text"/>	
+	</aui:col>
+</aui:row>
+
+<aui:row>
+	<aui:col width="70">
+		<aui:input name="<%=DossierDisplayTerms.GOVAGENCY_NAME%>" cssClass="input96" type="text"/>	
+	</aui:col>
+	
+	<aui:col width="30">
+		<aui:input name="<%=DossierDisplayTerms.GOVAGENCY_CODE %>" cssClass="input90" type="text"/>	
+	</aui:col>
+</aui:row>
+
+
+<aui:row>
+	<aui:col width="70">
+		<aui:input name="<%=DossierDisplayTerms.SUBJECT_NAME %>" cssClass="input96" type="text"/>	
+	</aui:col>
+	
+	<aui:col width="30">
+		<aui:input name="<%=DossierDisplayTerms.SUBJECT_ID %>" cssClass="input90" type="text"/>	
+	</aui:col>
+</aui:row>
+
+<aui:row>
+	<aui:col width="100">
+		<aui:input name="<%=DossierDisplayTerms.ADDRESS %>" cssClass="input97" type="text"/>	
 	</aui:col>
 </aui:row>
 
@@ -43,4 +65,24 @@
 		itemsEmptyOption="true,true,true"
 		cssClass="input100"
 	/>
+</aui:row>
+
+<aui:row>
+	<aui:col width="30">
+		<aui:input name="<%=DossierDisplayTerms.CONTACT_NAME %>" cssClass="input90" type="text"/>	
+	</aui:col>
+	
+	<aui:col width="30">
+		<aui:input name="<%=DossierDisplayTerms.CONTACT_TEL_NO %>" cssClass="input90" type="text"/>	
+	</aui:col>
+	
+	<aui:col width="30">
+		<aui:input name="<%=DossierDisplayTerms.CONTACT_EMAIL %>" cssClass="input90" type="text"/>	
+	</aui:col>
+</aui:row>
+
+<aui:row>
+	<aui:col width="100">
+		<aui:input name="<%=DossierDisplayTerms.NOTE %>" cssClass="input97" type="textarea"/>	
+	</aui:col>
 </aui:row>

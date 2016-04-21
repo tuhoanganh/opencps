@@ -22,6 +22,7 @@
 <%@page import="org.opencps.dossiermgt.model.DossierPart"%>
 <%@page import="org.opencps.dossiermgt.model.DossierFile"%>
 <%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@page import="org.opencps.util.PortletConstants"%>
 <%@ include file="../init.jsp"%>
 
@@ -34,18 +35,25 @@
 	
 	int index = ParamUtil.getInteger(request, "index");
 	
+	int partType = ParamUtil.getInteger(request, "partType");
+	
+	int level = ParamUtil.getInteger(request, "level");
+	
+	String groupName = ParamUtil.getString(request, "groupName");
+	
 %>
 
 <c:if test="<%=true %>">
 	<table width="100%">
 		<tr>
 			<c:choose>
-				<c:when test="<%=dossierPartId == PortletConstants.DOSSIER_PART_TYPE_COMPONEMT %>">
+				<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_COMPONEMT %>">
 					<td width="40%" align="right">
 						<aui:a 
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
 							index="<%=String.valueOf(index) %>"
+							groupName="<%=groupName %>"
 							href="javascript:void(0);" 
 							label="declaration-online" 
 							cssClass="opencps dossiermgt part-file-ctr declaration-online"
@@ -56,6 +64,7 @@
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
 							index="<%=String.valueOf(index) %>"
+							groupName="<%=groupName %>"
 							href="javascript:void(0);" 
 							label="upload-file" 
 							cssClass="opencps dossiermgt part-file-ctr upload-file" 
@@ -71,14 +80,159 @@
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
 							index="<%=String.valueOf(index) %>"
+							groupName="<%=groupName %>"
 							href="javascript:void(0);" 
 							cssClass="opencps dossiermgt part-file-ctr remove-file"
 						>
 							<i class="fa fa-times" aria-hidden="true"></i>
-							<aui:input name='<%= dossierPartId + StringPool.DASH + index %>' type="hidden"/>
+							<aui:input id='<%="dossierFileData" + dossierPartId + StringPool.DASH + index %>' name="dossierFileData"  type="hidden"/>
+							<aui:input id='<%="dossierFormData" + dossierPartId + StringPool.DASH + index %>' name="dossierFormData"  type="hidden"/>
+							<aui:input id='<%="fileUpload" + dossierPartId + StringPool.DASH + index %>' name="fileUpload"  type="hidden"/>
 						</aui:a>
 					</td>
 				</c:when>
+				
+				<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_SUBMIT && level > 0 %>">
+					<td width="40%" align="right">
+						<aui:a 
+							id="<%=String.valueOf(dossierPartId) %>"
+							dossier-part="<%=String.valueOf(dossierPartId) %>"
+							index="<%=String.valueOf(index) %>"
+							groupName="<%=groupName %>"
+							href="javascript:void(0);" 
+							label="upload-file" 
+							cssClass="opencps dossiermgt part-file-ctr upload-file" 
+						/>
+						
+					</td>
+					<td width="40%" align="right">
+						<aui:a 
+							id="<%=String.valueOf(dossierPartId) %>"
+							dossier-part="<%=String.valueOf(dossierPartId) %>"
+							index="<%=String.valueOf(index) %>"
+							groupName="<%=groupName %>"
+							href="javascript:void(0);" 
+							label="taken-from-archive" 
+							cssClass="opencps dossiermgt part-file-ctr taken-from-archive"
+						/>
+					</td>
+					<td width="10%" align="right">
+						<span class="dossier-file-counter">
+							<span class='<%="counter-value alias-" + dossierPartId + StringPool.DASH + index%>'>0</span>
+						</span>
+					</td>
+					<td width="10%" align="right">
+						<aui:a 
+							id="<%=String.valueOf(dossierPartId) %>"
+							dossier-part="<%=String.valueOf(dossierPartId) %>"
+							index="<%=String.valueOf(index) %>"
+							groupName="<%=groupName %>"
+							href="javascript:void(0);" 
+							cssClass="opencps dossiermgt part-file-ctr remove-file"
+						>
+							<i class="fa fa-times" aria-hidden="true"></i>
+							<aui:input id='<%="dossierFileData" + dossierPartId + StringPool.DASH + index %>' name="dossierFileData"  type="hidden"/>
+							<aui:input id='<%="dossierFormData" + dossierPartId + StringPool.DASH + index %>' name="dossierFormData"  type="hidden"/>
+							<aui:input id='<%="fileUpload" + dossierPartId + StringPool.DASH + index %>' name="fileUpload"  type="hidden"/>
+						</aui:a>
+					</td>
+				</c:when>
+				
+				<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_PRIVATE%>">
+					<td width="40%" align="right">
+						
+					</td>
+					<td width="40%" align="right">
+						
+					</td>
+					<td width="10%" align="right">
+						
+					</td>
+					<td width="10%" align="right">
+						<aui:a 
+							id="<%=String.valueOf(dossierPartId) %>"
+							dossier-part="<%=String.valueOf(dossierPartId) %>"
+							index="<%=String.valueOf(index) %>"
+							groupName="<%=groupName %>"
+							href="javascript:void(0);" 
+							cssClass="opencps dossiermgt part-file-ctr remove-group"
+						>
+							<i class="fa fa-minus-circle" aria-hidden="true"></i>
+							
+						</aui:a>
+					</td>
+				</c:when>
+				
+				<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_OTHER && level == 0 %>">
+					<td width="40%" align="right">
+						<aui:a 
+							id="<%=String.valueOf(dossierPartId) %>"
+							dossier-part="<%=String.valueOf(dossierPartId) %>"
+							index="<%=String.valueOf(index) %>"
+							groupName="<%=groupName %>"
+							href="javascript:void(0);" 
+							label="upload-file" 
+							cssClass="opencps dossiermgt part-file-ctr upload-file" 
+						/>
+						
+					</td>
+					<td width="40%" align="right">
+						<aui:a 
+							id="<%=String.valueOf(dossierPartId) %>"
+							dossier-part="<%=String.valueOf(dossierPartId) %>"
+							index="<%=String.valueOf(index) %>"
+							groupName="<%=groupName %>"
+							href="javascript:void(0);" 
+							label="taken-from-archive" 
+							cssClass="opencps dossiermgt part-file-ctr taken-from-archive"
+						/>
+					</td>
+					<td width="10%" align="right">
+						
+					</td>
+					<td width="10%" align="right">
+						
+					</td>
+				</c:when>
+				
+				<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_OTHER && level > 0 %>">
+					<td width="40%" align="right">
+						<aui:a 
+							id="<%=String.valueOf(dossierPartId) %>"
+							dossier-part="<%=String.valueOf(dossierPartId) %>"
+							index="<%=String.valueOf(index) %>"
+							groupName="<%=groupName %>"
+							href="javascript:void(0);" 
+							label="upload-file" 
+							cssClass="opencps dossiermgt part-file-ctr upload-file" 
+						/>
+						
+					</td>
+					<td width="40%" align="right">
+						
+					</td>
+					<td width="10%" align="right">
+						<span class="dossier-file-counter">
+							<span class='<%="counter-value alias-" + dossierPartId + StringPool.DASH + index%>'>0</span>
+						</span>
+					</td>
+					<td width="10%" align="right">
+						<aui:a 
+							id="<%=String.valueOf(dossierPartId) %>"
+							dossier-part="<%=String.valueOf(dossierPartId) %>"
+							index="<%=String.valueOf(index) %>"
+							groupName="<%=groupName %>"
+							href="javascript:void(0);" 
+							cssClass="opencps dossiermgt part-file-ctr remove-file"
+						>
+							<i class="fa fa-times" aria-hidden="true"></i>
+							<aui:input id='<%="dossierFileData" + dossierPartId + StringPool.DASH + index %>' name="dossierFileData"  type="hidden"/>
+							<aui:input id='<%="dossierFormData" + dossierPartId + StringPool.DASH + index %>' name="dossierFormData"  type="hidden"/>
+							<aui:input id='<%="fileUpload" + dossierPartId + StringPool.DASH + index %>' name="fileUpload"  type="hidden"/>
+						</aui:a>
+					</td>
+				</c:when>
+				
 			</c:choose>
 		</tr>
 	</table>

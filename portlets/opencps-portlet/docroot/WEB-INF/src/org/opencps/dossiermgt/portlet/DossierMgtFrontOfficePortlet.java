@@ -108,7 +108,13 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
 		try {
-			jsonArray = JSONFactoryUtil.createJSONArray(jsonData);
+			//Cho phep upload nhieu file
+			//jsonArray = JSONFactoryUtil.createJSONArray(jsonData);
+			
+			//Cho phep upload 1 file, file sau de len file truoc
+			
+			//remove file cu jsonData
+			jsonArray = JSONFactoryUtil.createJSONArray();
 			
 			inputStream = uploadPortletRequest
 			    .getFileAsStream(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
