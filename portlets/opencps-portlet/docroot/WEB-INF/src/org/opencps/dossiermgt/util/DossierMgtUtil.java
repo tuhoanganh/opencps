@@ -124,6 +124,7 @@ public class DossierMgtUtil {
 	}
 	
 	public static List<DossierPart> getTreeDossierPart(long dossierpartId){
+		
 		List<DossierPart> dossierPartsResult = new ArrayList<DossierPart>();
 		
 		Stack<DossierPart> dossierPartsStack = new Stack<DossierPart>();

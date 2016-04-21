@@ -93,6 +93,11 @@
 		<finder return-type="DosserPart" name="PartNo">
 			<finder-column name="partNo" />
 		</finder>
+		
+		<finder return-type="Collection" name="T_T">
+			<finder-column name="dossierTemplateId"/>
+			<finder-column name="partType" />
+		</finder>
 	</entity>
 
 	<entity name="ServiceConfig" local-service="true"
@@ -127,62 +132,6 @@
 			<finder-column name="dossierTemplateId" />
 		</finder>
 
-	</entity>
-	
-	
-	<entity name="Dossier" local-service="true" table="opencps_dossier">
-
-		<column name="dossierpartId" type="long" primary="true" />
-		
-		<!-- Audit fields -->
-
-		<column name="companyId" type="long" />
-		<column name="groupId" type="long" />
-		<column name="userId" type="long" />
-		<column name="createDate" type="Date" />
-		<column name="modifiedDate" type="Date" />
-		
-		<!-- Other field -->
-		<column name="dossierTemplateId" type="long" />
-		<column name="partNo" type="String" />
-		<column name="partName" type="String" />
-		<column name="partTip" type="String" />
-		<column name="partType" type="int" />
-		<column name="parentId" type="long" />
-		<column name="sibling" type="double" />
-		<column name="treeIndex" type="String" />
-		<column name="formScript" type="String" />
-		<column name="formReport" type="String" />
-		<column name="sampleData" type="String" />
-		<column name="required" type="boolean" />
-		<column name="templateFileNo" type="String" />
-
-		<!-- order -->
-		<order by="asc">
-			<order-column name="sibling" />
-		</order>
-
-		<!-- finder -->
-
-		<finder return-type="Collection" name="PartName">
-			<finder-column name="partName" />
-		</finder>
-
-		<finder return-type="Collection" name="DossierTemplateId">
-			<finder-column name="dossierTemplateId" />
-		</finder>
-
-		<finder return-type="Collection" name="ParentId">
-			<finder-column name="parentId" />
-		</finder>
-
-		<finder return-type="DossierPart" name="Sibling">
-			<finder-column name="sibling" />
-		</finder>
-
-		<finder return-type="DosserPart" name="PartNo">
-			<finder-column name="partNo" />
-		</finder>
 	</entity>
 
 	<entity name="ServiceConfig" local-service="true"
