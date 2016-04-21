@@ -144,9 +144,7 @@ public class DossierMgtUtil {
 				dossierPartsChild = DossierPartLocalServiceUtil.getDossierPartsByParentId(dossierPartIndex.getDossierpartId());
 				
 				if(!dossierPartsChild.isEmpty()) {
-					for(DossierPart chirld : dossierPartsChild) {
-						dossierPartsStack.add(chirld);
-					}
+					dossierPartsStack.addAll(dossierPartsChild);
 				}
 				
 				dossierPartsResult.add(dossierPartIndex);
