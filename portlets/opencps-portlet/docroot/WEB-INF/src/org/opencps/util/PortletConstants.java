@@ -34,14 +34,18 @@ public class PortletConstants {
 	public static final int ACCOUNT_STATUS_APPROVED = 2;
 	public static final int ACCOUNT_STATUS_LOCKED = 3;
 	
-	public static final int DOSSIER_PART_TYPE_COMPONEMT = 1;
-	public static final int DOSSIER_PART_TYPE_SUBMIT = 2;
-	public static final int DOSSIER_PART_TYPE_OTHER = 3;
-	public static final int DOSSIER_PART_TYPE_PRIVATE = 4;
-	public static final int DOSSIER_PART_TYPE_RESULT = 5;
+	public static final int DOSSIER_TYPE_PAPER_SUBMITED = 1;
+	public static final int DOSSIER_TYPE_OTHER_PAPERS_GROUP = 2;
+	public static final int DOSSIER_TYPE_GROUPS_OPTIONAL = 3;
+	public static final int DOSSIER_TYPE_OWN_RECORDS = 4;
+	public static final int DOSSIER_TYPE_PAPERS_RESULTS = 5;
 	
-	public static final String TEMP_RANDOM_SUFFIX = "--tempRandomSuffix--";
-
+	public static final int SERVICE_CONFIG_INACTIVE = 0;
+	public static final int SERVICE_CONFIG_FRONTOFFICE = 1;
+	public static final int SERVICE_CONFIG_BACKOFFICE = 2;
+	public static final int SERVICE_CONFIG_FRONT_BACK_OFFICE = 3;
+	
+	
 	public static enum DestinationRoot {
 			CITIZEN("Citizen"), BUSINESS("Business");
 
@@ -73,4 +77,11 @@ public class PortletConstants {
 		}
 	}
 
+	public static final int DOSSIER_PART_TYPE_COMPONEMT = 1;
+	public static final int DOSSIER_PART_TYPE_SUBMIT = 2;
+	public static final int DOSSIER_PART_TYPE_OTHER = 3;
+	public static final int DOSSIER_PART_TYPE_PRIVATE = 4;
+	public static final int DOSSIER_PART_TYPE_RESULT = 5;
+	
+	public static final String TEMP_RANDOM_SUFFIX = "--tempRandomSuffix--";
 }

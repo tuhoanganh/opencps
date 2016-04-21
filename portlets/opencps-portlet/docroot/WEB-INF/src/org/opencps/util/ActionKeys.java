@@ -26,18 +26,26 @@ public class ActionKeys extends com.liferay.portal.security.permission.ActionKey
 	public static final String ADD_DICTITEM = "ADD_DICTITEM";
 	public static final String ADD_DICTCOLLECTION = "ADD_DICTCOLLECTION";
 	public static final String ADD_DICTVERSION = "ADD_DICTVERSION";
-	
-	
+
 	public static final String ADD_WORKINGUNIT = "ADD_WORKINGUNIT";
 	public static final String ADD_EMPLOYEE = "ADD_EMPLOYEE";
 	public static final String ADD_JOBPOS = "ADD_JOBPOS";
-	
+
 	public static final String ADD_SERVICE = "ADD_SERVICE";
-	
+
 	public static final String ADD_DOCUMENT = "ADD_TEMPLATE";
+	public static final String ADD_PROCESS = "ADD_PROCESS";
+
+
+	public static final String ADD_DOSSIER_TEMPLATE = "ADD_DOSSIER_TEMPLATE";
+	public static final String ADD_DOSSIER_PART = "ADD_DOSSIER_PART";
+
+
+	public static final String ADD_CITIZEN = "ADD_CITIZEN";
+	public static final String ADD_BUSINESS = "ADD_BUSINESS";
+	public static final String ADD_SERVICE_CONFIG = "ADD_SERVICE_CONFIG";
 	
 	public static final String ADD_DOSSIER = "ADD_DOSSIER";
-	
 	public static final String ADD_DOSSIER_FILE = "ADD_DOSSIER_FILE";
-
 }
+
