@@ -1,3 +1,6 @@
+<%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
+<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
+<%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
 <%
@@ -35,16 +38,71 @@
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "frontofficeservicelist.jsp");
 	
-	List<Service> services =  new ArrayList<Service>();
-	
 	String backURL = ParamUtil.getString(request, "backURL");
 	
-	//List<ServiceConfig> serviceConfigs = ServiceConfigLocalServiceUtil.
+	List<Service> services =  new ArrayList<Service>();
+	
+	List<ServiceConfig> serviceConfigs = new ArrayList<ServiceConfig>();
+	
+	int totalCount = 0;
+	
 %>
 <liferay-ui:header
 	backURL="<%= backURL %>"
 	title="service-list"
 />
+
+
+<liferay-ui:search-container searchContainer="<%= new ServiceSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
+
+	<liferay-ui:search-container-results>
+		<%
+			ServiceSearchTerms searchTerms = (ServiceSearchTerms)searchContainer.getSearchTerms();
+		
+			String[] itemNames = null;
+			
+			
+			if(Validator.isNotNull(searchTerms.getKeywords())){
+				itemNames = CustomSQLUtil.keywords(searchTerms.getKeywords());
+			}
+			
+			try{
+				
+				%>
+					<%@include file="/html/portlets/dossiermgt/frontoffice/service_search_results.jspf" %>
+				<%
+			}catch(Exception e){
+				_log.error(e);
+			}
+		
+			total = 0;
+			results = services;
+			
+			pageContext.setAttribute("results", results);
+			pageContext.setAttribute("total", total);
+		%>
+	</liferay-ui:search-container-results>	
+		<liferay-ui:search-container-row 
+			className="org.opencps.dossiermgt.bean.Service" 
+			modelVar="service" 
+			keyProperty="serviceConfigId"
+		>
+			<%
+
+				//id column
+				row.addText(String.valueOf(row.getPos() + 1));
+
+				row.addText(service.getServiceName());
+				row.addText(service.getDomainCode());
+				row.addText(service.getGovAgencyName());
+				
+				//action column
+				row.addJSP("center", SearchEntry.DEFAULT_VALIGN,"/html/portlets/dossiermgt/frontoffice/service_actions.jsp", config.getServletContext(), request, response);
+			%>	
+		</liferay-ui:search-container-row> 
+	
+	<liferay-ui:search-iterator/>
+</liferay-ui:search-container>
 
 
 <liferay-ui:search-container searchContainer="<%= new ServiceSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
@@ -68,26 +126,35 @@
 				_log.error(e);
 			}
 		
-			total = 1;
-			results = services;
+			total = totalCount;
+			results = serviceConfigs;
 			
 			pageContext.setAttribute("results", results);
 			pageContext.setAttribute("total", total);
 		%>
 	</liferay-ui:search-container-results>	
 		<liferay-ui:search-container-row 
-			className="org.opencps.dossiermgt.bean.Service" 
-			modelVar="service" 
+			className="org.opencps.dossiermgt.model.ServiceConfig" 
+			modelVar="serviceConfig" 
 			keyProperty="serviceConfigId"
 		>
 			<%
-
+				ServiceInfo serviceInfo = null;
+			
+				try{
+					serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(serviceConfig.getServiceInfoId());
+				}catch(Exception e){
+					
+				}
+				
 				//id column
 				row.addText(String.valueOf(row.getPos() + 1));
 
-				row.addText(service.getServiceName());
-				row.addText(service.getDomainCode());
-				row.addText(service.getGovAgencyName());
+				row.addText(serviceInfo != null ? serviceInfo.getServiceName() : StringPool.BLANK);
+				
+				row.addText(serviceConfig.getDomainCode());
+				
+				row.addText(serviceConfig.getGovAgencyName());
 				
 				//action column
 				row.addJSP("center", SearchEntry.DEFAULT_VALIGN,"/html/portlets/dossiermgt/frontoffice/service_actions.jsp", config.getServletContext(), request, response);
