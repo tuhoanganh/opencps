@@ -548,7 +548,7 @@
 		<portlet-name>12</portlet-name>
 		<display-name>Dossier Admin Management</display-name>
 		<portlet-class>
-			org.opencps.dossiermgt.portlet.DossierMgtAdminPortlet
+			org.opencps.processmgt.portlet.ProcessMgtAdminPortlet
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
@@ -561,7 +561,6 @@
 		<expiration-cache>0</expiration-cache>
 		<supports>
 			<mime-type>text/html</mime-type>
-			<portlet-mode>view</portlet-mode>
 		</supports>
 		<resource-bundle>content.Language_12</resource-bundle>
 		<portlet-info>
@@ -600,7 +599,6 @@
 		<expiration-cache>0</expiration-cache>
 		<supports>
 			<mime-type>text/html</mime-type>
-			<portlet-mode>view</portlet-mode>
 		</supports>
 		<resource-bundle>content.Language_13</resource-bundle>
 		<portlet-info>
@@ -639,7 +637,6 @@
 		<expiration-cache>0</expiration-cache>
 		<supports>
 			<mime-type>text/html</mime-type>
-			<portlet-mode>view</portlet-mode>
 		</supports>
 		<resource-bundle>content.Language_14</resource-bundle>
 		<portlet-info>
@@ -680,7 +677,6 @@
 		<expiration-cache>0</expiration-cache>
 		<supports>
 			<mime-type>text/html</mime-type>
-			<portlet-mode>view</portlet-mode>
 		</supports>
 		<resource-bundle>content.Language_19</resource-bundle>
 		<portlet-info>
