@@ -61,7 +61,7 @@
 	
 	long serviceConfigId = serviceConfig != null ? serviceConfig.getServiceConfigId() : 0L;
 	
-	long dictItemServiceDomainId = 0;
+	String dictItemServiceDomainId = "0";
 	
 	String backURL = ParamUtil.getString(request, "backURL"); 
 	if(!Validator.isNotNull(backURL)) {
@@ -81,16 +81,8 @@
 		//get dossierTemplates
 		dossierTemplates = DossierTemplateLocalServiceUtil.getAll();
 		
-		// get item service domain
-		dictCollectionServiceDomain = DictCollectionLocalServiceUtil
-						.getDictCollection(scopeGroupId, 
-							PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN);
-		if(dictCollectionServiceDomain != null && serviceConfig != null) {
-			dictItemServiceDomain = DictItemLocalServiceUtil.getDictItemInuseByItemCode(dictCollectionServiceDomain.getDictCollectionId(), serviceConfig.getDomainCode());
-			if(dictItemServiceDomain != null) {
-				dictItemServiceDomainId = dictItemServiceDomain.getDictItemId();
-			}
-			
+		if(serviceConfig != null) {
+			dictItemServiceDomainId = serviceConfig.getDomainCode();
 		}
 		
 	} catch(Exception e) {
@@ -153,6 +145,7 @@
 		value="<%=String.valueOf(serviceConfigId) %>"/>
 		
 	<portlet:param name="returnURL" value="<%=currentURL %>"/>
+	<portlet:param name="backURL" value="<%=backURL %>"/>
 </portlet:actionURL>
 
 <aui:form 
@@ -169,7 +162,7 @@
 			dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN %>"
 			itemNames="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_DOMAINCODE %>"
 			itemsEmptyOption="true"	
-			selectedItems="<%=String.valueOf(dictItemServiceDomainId)%>"
+			selectedItems="<%=dictItemServiceDomainId%>"
 		/>	
 	</aui:row>
 	
@@ -250,6 +243,7 @@ AUI().ready(function(A) {
 		var selectServiceInfo = A.one("#<portlet:namespace/>serviceInfoId");
 		
 		if(selectServiceInfo){
+			<portlet:namespace />sentServiceInfoId(selectServiceInfo.val());
 			selectServiceInfo.on('change', function() {
 				<portlet:namespace />sentServiceInfoId(selectServiceInfo.val());
 			});

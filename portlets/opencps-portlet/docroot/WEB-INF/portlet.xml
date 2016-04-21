@@ -548,7 +548,7 @@
 		<portlet-name>12</portlet-name>
 		<display-name>Dossier Admin Management</display-name>
 		<portlet-class>
-			org.opencps.processmgt.portlet.ProcessMgtAdminPortlet
+			org.opencps.dossiermgt.portlet.DossierMgtAdminPortlet
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
