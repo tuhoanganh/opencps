@@ -120,6 +120,14 @@ public class ServiceConfigLocalServiceImpl
 			}
 		}
 		
+		Date currentDate = new Date();
+		
+		serviceConfig.setUserId(userId);
+		serviceConfig.setCompanyId(serviceContext.getCompanyId());
+		serviceConfig.setGroupId(serviceContext.getScopeGroupId());
+		serviceConfig.setCreateDate(currentDate);
+		serviceConfig.setModifiedDate(currentDate);
+		
 		serviceConfig.setServiceInfoId(serviceInfoId);
 		serviceConfig.setServiceAdministrationIndex(serviceAdministrationIndex);
 		serviceConfig.setServiceDomainIndex(serviceDomainIndex);
