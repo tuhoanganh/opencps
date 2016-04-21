@@ -534,7 +534,6 @@
 		<field name="serviceProcessId" type="long" />
 		<field name="domainCode" type="String" />
 	</model>
-
 	<model name="org.opencps.processmgt.model.ActionHistory">
 		<field name="actionHistoryId" type="long" />
 		<field name="companyId" type="long" />
@@ -647,5 +646,4 @@
 		<field name="esign" type="int" />
 		<field name="postback" type="int" />
 	</model>
-
 </model-hints>
