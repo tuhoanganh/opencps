@@ -157,6 +157,7 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		        actionRequest,
 		        DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DESCRIPTION);
 		String returnURL = ParamUtil.getString(actionRequest, "returnURL");
+		String backURL = ParamUtil.getString(actionRequest, "backURL");
 
 		try {
 			
@@ -175,6 +176,10 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 				    dossierTemplateId, templateNo, templateName, description,
 				    serviceContext.getUserId(),
 				    serviceContext);
+			}
+			
+			if(Validator.isNotNull(backURL)) {
+				actionResponse.sendRedirect(backURL);
 			}
 		}
 		catch (Exception e) {
@@ -254,7 +259,13 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		    ParamUtil.getString(
 		        actionRequest,
 		        DossierPartDisplayTerms.DOSSIERPART_TEMPLATEFILENO);
+		String formReport =
+					    ParamUtil.getString(
+					        actionRequest,
+					        DossierPartDisplayTerms.DOSSIERPART_FORMREPORT);
+		
 		String returnURL = ParamUtil.getString(actionRequest, "returnURL");
+		String currentURL = ParamUtil.getString(actionRequest, "currentURL");
 		
 		String isAddChilds = ParamUtil.getString(actionRequest, "isAddChilds");
 		
@@ -267,7 +278,6 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		boolean required =
 		    ParamUtil.getBoolean(
 		        actionRequest, DossierPartDisplayTerms.DOSSIERPART_REQUIRED);
-		
 		try {
 			
 			ServiceContext serviceContext = ServiceContextFactory
@@ -277,7 +287,7 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 			if (dossierPartId == 0) {
 				DossierPartLocalServiceUtil.addDossierPart(
 				    dossierTemplateId, partNo, partName, partTip, partType,
-				    parentId, sibling, formScript, sampleData, required,
+				    parentId, sibling, formScript,formReport, sampleData, required,
 				    templateFileNo, serviceContext.getUserId(), serviceContext);
 			}
 			else {
@@ -285,17 +295,21 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 				if (Validator.isNotNull(isAddChilds)) {
 					DossierPartLocalServiceUtil.addDossierPart(
 					    dossierTemplateId, partNo, partName, partTip, partType,
-					    parentId, sibling, formScript, sampleData, required,
+					    parentId, sibling, formScript,formReport, sampleData, required,
 					    templateFileNo, serviceContext.getUserId(), serviceContext);
 				}
 				else {
 					DossierPartLocalServiceUtil.updateDossierPart(
 					    dossierPartId, dossierTemplateId, partNo, partName,
-					    partTip, partType, parentId, sibling, formScript,
+					    partTip, partType, parentId, sibling, formScript,formReport,
 					    sampleData, required, templateFileNo, 
 					    serviceContext.getUserId(), serviceContext);
 				}
 
+			}
+			
+			if(Validator.isNotNull(returnURL)) {
+				actionResponse.sendRedirect(returnURL);
 			}
 		}
 		catch (Exception e) {
@@ -325,8 +339,8 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 				SessionErrors.add(actionRequest, MessageKeys.DOSSIER_SYSTEM_EXCEPTION_OCCURRED);
 			}
 			
-			if(Validator.isNotNull(returnURL)) {
-				actionResponse.sendRedirect(returnURL);
+			if(Validator.isNotNull(currentURL)) {
+				actionResponse.sendRedirect(currentURL);
 			}
 		}
 
@@ -367,6 +381,7 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		        actionRequest,
 		        ServiceConfigDisplayTerms.SERVICE_CONFIG_GOVAGENCYNAME);
 		String returnURL = ParamUtil.getString(actionRequest, "returnURL");
+		String backURL = ParamUtil.getString(actionRequest, "backURL");
 		
 		int serviceMode =
 		    ParamUtil.getInteger(
@@ -396,6 +411,10 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 				    serviceDomainIndex, dossierTemplateId, govAgencyCode,
 				    govAgencyName, serviceMode, String.valueOf(domainCode),
 				    serviceContext.getUserId(), serviceContext);
+			}
+			
+			if(Validator.isNotNull(backURL)) {
+				actionResponse.sendRedirect(backURL);
 			}
 		}
 		catch (Exception e) {

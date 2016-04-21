@@ -145,6 +145,7 @@
 		value="<%=String.valueOf(serviceConfigId) %>"/>
 		
 	<portlet:param name="returnURL" value="<%=currentURL %>"/>
+	<portlet:param name="backURL" value="<%=backURL %>"/>
 </portlet:actionURL>
 
 <aui:form 
