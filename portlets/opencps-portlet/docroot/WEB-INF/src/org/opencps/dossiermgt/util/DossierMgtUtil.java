@@ -19,10 +19,8 @@ package org.opencps.dossiermgt.util;
 
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Queue;
 import java.util.Stack;
 
 import org.opencps.dossiermgt.comparator.DossierTemplateNameComparator;
@@ -45,12 +43,15 @@ public class DossierMgtUtil {
 	public static final String TOP_TABS_SERVICE_CONFIG = "top_tabs_service_config";
 	public static final String DOSSIER_PART_TOOLBAR = "dossierPartToolBar";
 	public static final String SERVICE_CONFIG_TOOLBAR = "serviceConfigToolBar";
+	
 	public static final String TOP_TABS_DOSSIER = "dossier";
 	public static final String TOP_TABS_DOSSIER_FILE = "dossier-file";
 	public static final String TOP_TABS_EXTERNAL_DOSSIER = "external-dossier";
-	public static final String[] _DOSSIER_CATEGORY_NAMES = {
-		"dossier-info"
+	
+	public static String[] _DOSSIER_CATEGORY_NAMES = {
+		"update-dossier-info"
 	};
+	
 	public static OrderByComparator getDossierTemplateOrderByComparator(
 		String orderByCol, String orderByType) {
 		

@@ -1,3 +1,5 @@
+
+<%@page import="org.opencps.dossiermgt.bean.Service"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,7 +19,14 @@
  */
 %>
 
-<%@ include file="../init.jsp"%>
 
-<liferay-util:include page='<%=templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
-<liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
+<%
+	Service service = new Service();
+	service.setServiceConfigId(1);
+	
+	service.setDomainCode("102ABC");
+	service.setGovAgencyName("BQP");
+	service.setServiceName("Dang Ky Kinh Doanh");
+	
+	services.add(service);
+%>
