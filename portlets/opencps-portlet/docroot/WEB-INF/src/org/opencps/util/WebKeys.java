@@ -79,7 +79,6 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String PROCESS_STEP_ENTRY = "PROCESS_STEP_ENTRY";
 	public static final String PROCESS_WORKFLOW_ENTRY = "PROCESS_WORKFLOW_ENTRY";
 
-	
 	public static final String DOSSIER_ENTRY = "DOSSIER_ENTRY";
 	public static final String DOSSIER_FILE_ENTRY = "DOSSIER_FILE_ENTRY";
 	public static final String RESPONSE_UPLOAD_TEMP_DOSSIER_FILE = "RESPONSE_UPLOAD_TEMP_DOSSIER_FILE";

@@ -66,9 +66,8 @@ public class MessageBusUtil {
 		        serviceContext);
 
 		String verifyEmailAddressURL = serviceContext
-		    .getPortalURL() +
-		    "/opencps-portlet/verify/email?token=" + uuid + "&ticketKey=" +
-		    ticket
+		    .getPortalURL() + "/opencps-portlet/verify/email?token=" + uuid +
+		    "&ticketKey=" + ticket
 		        .getKey() +
 		    "&type=" + type;
 

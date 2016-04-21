@@ -666,9 +666,7 @@
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>
-				/html/portlets/dossiermgt/monitoring/dossiermonitoringsearch.jsp
-			</value>
+			<value>/html/portlets/dossiermgt/monitoring/dossiermonitoringsearch.jsp</value>
 		</init-param>
 		<init-param>
 			<name>template-path</name>
@@ -678,7 +676,7 @@
 		<supports>
 			<mime-type>text/html</mime-type>
 		</supports>
-		<resource-bundle>content.Language_19</resource-bundle>
+		<resource-bundle>content.Language_14</resource-bundle>
 		<portlet-info>
 			<title>Dossier FrontOffice Monitoring</title>
 			<short-title>Dossier FrontOffice Monitoring</short-title>
