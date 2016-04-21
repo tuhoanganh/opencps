@@ -124,32 +124,38 @@ public class DossierMgtUtil {
 		return modeName;
 	}
 	
-	public static List<DossierPart> getTreeDossierPart(long dossierpartId) throws PortalException, SystemException {
+	public static List<DossierPart> getTreeDossierPart(long dossierpartId){
+		
 		List<DossierPart> dossierPartsResult = new ArrayList<DossierPart>();
 		
 		Stack<DossierPart> dossierPartsStack = new Stack<DossierPart>();
 		
-		DossierPart dossierPart = DossierPartLocalServiceUtil.getDossierPart(dossierpartId);
-		
-		dossierPartsStack.add(dossierPart);
-		
-		DossierPart dossierPartIndex = null;
-		
-		while(! dossierPartsStack.isEmpty()) {
-			dossierPartIndex = dossierPartsStack.pop();
+		try {
+			DossierPart dossierPart = DossierPartLocalServiceUtil.getDossierPart(dossierpartId);
 			
-			List<DossierPart> dossierPartsChild = new ArrayList<DossierPart>();
-			dossierPartsChild = DossierPartLocalServiceUtil.getDossierPartsByParentId(dossierPartIndex.getDossierpartId());
+			dossierPartsStack.add(dossierPart);
 			
-			if(!dossierPartsChild.isEmpty()) {
-				for(DossierPart chirld : dossierPartsChild) {
-					dossierPartsStack.add(chirld);
+			DossierPart dossierPartIndex = null;
+			
+			while(! dossierPartsStack.isEmpty()) {
+				dossierPartIndex = dossierPartsStack.pop();
+				
+				List<DossierPart> dossierPartsChild = new ArrayList<DossierPart>();
+				dossierPartsChild = DossierPartLocalServiceUtil.getDossierPartsByParentId(dossierPartIndex.getDossierpartId());
+				
+				if(!dossierPartsChild.isEmpty()) {
+					dossierPartsStack.addAll(dossierPartsChild);
 				}
+				
+				dossierPartsResult.add(dossierPartIndex);
 			}
-			
-			dossierPartsResult.add(dossierPartIndex);
-		}
-		return dossierPartsResult;
+			return dossierPartsResult;
+        }
+        catch (Exception e) {
+	        // nothing to do
+        }
+		
+		return new ArrayList<DossierPart>();
 	}
 }
 

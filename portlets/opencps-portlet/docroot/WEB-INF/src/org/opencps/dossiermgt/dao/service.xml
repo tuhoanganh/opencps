@@ -93,6 +93,11 @@
 		<finder return-type="DosserPart" name="PartNo">
 			<finder-column name="partNo" />
 		</finder>
+		
+		<finder return-type="Collection" name="T_T">
+			<finder-column name="dossierTemplateId"/>
+			<finder-column name="partType" />
+		</finder>
 	</entity>
 
 	<entity name="ServiceConfig" local-service="true"
@@ -126,8 +131,14 @@
 		<finder return-type="Collection" name="DossierTemplateId">
 			<finder-column name="dossierTemplateId" />
 		</finder>
+		
+		<finder return-type="Collection" name="G_M">
+			<finder-column name="groupId" />
+			<finder-column name="serviceMode"/>
+		</finder>
 
 	</entity>
+	
 	
 	<entity name="Dossier" local-service="true">
     
