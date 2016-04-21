@@ -139,18 +139,18 @@
 		<!-- Other fields -->
 
 		<column name="serviceProcessId" type="long" />
-		<column name="preProcessStepId" type="int" />
-		<column name="postProcessStepId" type="int"/>
+		<column name="preProcessStepId" type="long" />
+		<column name="postProcessStepId" type="long"/>
 		<column name="autoEvent" type="String"/>
 		<column name="actionName" type="String"/>
-		<column name="assignUser" type="long"/>
+		<column name="assignUser" type="boolean"/>
 		<column name="actionUserId" type="long"/>
-		<column name="requestPayment" type="int"/>
+		<column name="requestPayment" type="boolean"/>
 		<column name="paymentFee" type="double"/>
 		<column name="generateReceptionNo" type="String"/>
 		<column name="receptionNoPattern" type="String"/>
-		<column name="generateDeadline" type="int"/>
-		<column name="deadlinePattern" type="int"/>
+		<column name="generateDeadline" type="boolean"/>
+		<column name="deadlinePattern" type="boolean"/>
 		
 		<finder return-type="Collection" name="S_P_ID">
 			<finder-column name="serviceProcessId"/>

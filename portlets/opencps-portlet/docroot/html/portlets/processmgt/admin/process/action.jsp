@@ -1,3 +1,5 @@
+<%@page import="org.opencps.processmgt.util.ProcessUtils"%>
+<%@page import="com.liferay.portal.kernel.process.ProcessUtil"%>
 <%@page import="org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.search.WorkflowSearchTerms"%>
 <%@page import="org.opencps.processmgt.search.WorkflowSearch"%>
@@ -79,15 +81,15 @@
 			// no column
 			row.addText(String.valueOf(row.getPos() + 1));
 		
-			// step no
+			// workflow name
 			row.addText(processWorkflow.getActionName());
 			
-			// step name
-			row.addText(processWorkflow.getPostProcessStepId());
-			
-			// step duration
-			row.addText(Integer.toString(step.getDaysDuration()));
+			// Pre StepName
+			row.addText(ProcessUtils.getProcessStepName(processWorkflow.getPreProcessStepId()));
 
+			// Post StepName
+			row.addText(ProcessUtils.getProcessStepName(processWorkflow.getPostProcessStepId()));
+			
 			if(isPermission) {
 				//action column
 				row.addJSP("center", SearchEntry.DEFAULT_VALIGN, templatePath + "workflow_actions.jsp", config.getServletContext(), request, response);
