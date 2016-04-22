@@ -82,16 +82,13 @@
 		<%
 			ServiceConfigSearchTerm searchTerm = (ServiceConfigSearchTerm) searchContainer.getSearchTerms();
 			
-			/* serviceConfigs = ServiceConfigLocalServiceUtil.getAll(
-				searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator()); */
-			System.out.println("searchTerm.getGovAgencyCode() " + govAdencyCode 
-				+ "earchTerm.getKeywords() " + searchTerm.getKeywords() + " " + searchTerm.getDomainCode() + "gr " + themeDisplay.getScopeGroupId());
 			serviceConfigs = ServiceConfigLocalServiceUtil.searchServiceConfig(
-				themeDisplay.getScopeGroupId(), searchTerm.getKeywords(), "", 
+				scopeGroupId, searchTerm.getKeywords(), govAdencyCode, 
 				searchTerm.getDomainCode(), searchContainer.getStart(), searchContainer.getEnd());						
 			
 			totalCount = ServiceConfigLocalServiceUtil.countServiceConfig(
-				themeDisplay.getScopeGroupId(), searchTerm.getKeywords(), "", searchTerm.getDomainCode());
+				scopeGroupId, searchTerm.getKeywords(), govAdencyCode, 
+				searchTerm.getDomainCode());
 			
 			total = totalCount;
 			results = serviceConfigs;
