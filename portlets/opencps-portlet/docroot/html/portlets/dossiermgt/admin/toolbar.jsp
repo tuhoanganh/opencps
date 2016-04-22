@@ -1,4 +1,7 @@
-
+<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page import="org.opencps.datamgt.model.DictItem"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -34,6 +37,7 @@
 <%@page import="org.opencps.dossiermgt.search.ServiceConfigDisplayTerms"%>
 <%@page import="org.opencps.datamgt.service.DictCollectionLocalServiceUtil"%>
 <%@page import="org.opencps.datamgt.model.DictCollection"%>
+<%@page import="org.opencps.util.PortletPropsValues"%>
 <%@ include file="../init.jsp"%>
 
 <%
@@ -41,8 +45,22 @@
 	PortletURL searchURL = renderResponse.createRenderURL();
 	
 	Long dossierTemplateId = (Long) session.getAttribute(DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DOSSIERTEMPLATEID);
-	/* DictCollection dictCollectionServiceAdmin = DictCollectionLocalServiceUtil
-					.getDictCollection(scopeGroupId, collectionCode); */
+	DictCollection dictCollectionServiceAdmin = null;
+	List<DictItem> dictItemsServiceAdmin = new ArrayList<DictItem>();
+	try {
+		dictCollectionServiceAdmin = DictCollectionLocalServiceUtil
+	                    .getDictCollection(scopeGroupId, PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION);
+		if(Validator.isNotNull(dictCollectionServiceAdmin)) {
+			dictItemsServiceAdmin = DictItemLocalServiceUtil
+							.getDictItemsByDictCollectionId(dictCollectionServiceAdmin.getDictCollectionId());
+		}
+		
+	}catch (Exception e) {
+		//no thing to do
+	}
+	
+	DictCollectionLocalServiceUtil
+					.getDictCollection(scopeGroupId, PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION);
 %>
 <aui:nav-bar cssClass="custom-toolbar">
 	<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left" >
@@ -147,7 +165,22 @@
 						<c:when test="<%= tabs1.contentEquals(DossierMgtUtil.TOP_TABS_SERVICE_CONFIG) %>">
 							<aui:row>
 									<aui:col width="25">
-										
+										<aui:select name="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_GOVAGENCYCODE %>">
+										  
+										  <aui:option value="<%=StringPool.BLANK %>">
+										      <liferay-ui:message key="fill-by-service-admin" />
+										  </aui:option>
+										  
+										  <%
+										    for(DictItem item : dictItemsServiceAdmin) {
+										    	%>
+										    	     <aui:option value="<%=item.getItemCode() %>">
+										    	         <%=item.getItemName(locale, true) %>
+										    	     </aui:option>
+										    	<%
+										    }
+										  %>
+										</aui:select>
 									</aui:col>
 									<aui:col width="25">
 										<datamgt:ddr cssClass="input30"

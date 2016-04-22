@@ -127,6 +127,13 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 	}
 
 	
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws SystemException
+	 * @throws NoSuchDossierTemplateException
+	 * @throws IOException
+	 */
 	public void deleteDossierTemplate(
 	    ActionRequest actionRequest, ActionResponse actionResponse)
 	    throws SystemException, NoSuchDossierTemplateException, IOException {
@@ -153,6 +160,11 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		}
 	}
 
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws IOException
+	 */
 	public void updateDossier(
 	    ActionRequest actionRequest, ActionResponse actionResponse) throws IOException {
 
@@ -217,6 +229,13 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		}
 	}
 
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws NoSuchDossierPartException
+	 * @throws SystemException
+	 * @throws IOException
+	 */
 	public void deleteDossierPart(
 	    ActionRequest actionRequest, ActionResponse actionResponse)
 	    throws NoSuchDossierPartException, SystemException, IOException {
@@ -242,6 +261,13 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 
 	}
 
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws IOException
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
 	public void updateDossierPart(
 	    ActionRequest actionRequest, ActionResponse actionResponse) throws IOException, PortalException, SystemException {
 
@@ -362,6 +388,12 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 
 	}
 
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
 	public void deleteServiceConfig(ActionRequest actionRequest, ActionResponse actionResponse) 
 					throws PortalException, SystemException {
 		long serviceConfigId = ParamUtil.getLong(actionRequest, 
@@ -463,6 +495,20 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 
 	}
 	
+	/**
+	 * @param serviceConfigId
+	 * @param govAgencyCode
+	 * @param govAgencyName
+	 * @param domainCode
+	 * @param serviceContext
+	 * @param serviceMode
+	 * @throws OutOfLengthServiceConfigGovCodeException
+	 * @throws OutOfLengthServiceConfigGovNameException
+	 * @throws InvalidServiceConfigGovCodeException
+	 * @throws InvalidServiceConfigGovNameException
+	 * @throws InvalidServiceDomainException
+	 * @throws InvalidInWorkingUnitException
+	 */
 	protected void serviceConfigValidate(long serviceConfigId, String govAgencyCode,
 		String govAgencyName, long domainCode, ServiceContext serviceContext, int serviceMode) 
 						throws OutOfLengthServiceConfigGovCodeException,
@@ -508,6 +554,18 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		
 	}
 	
+	/**
+	 * @param dossierPartId
+	 * @param partName
+	 * @param partNo
+	 * @param sibling
+	 * @param templateFileNo
+	 * @throws OutOfLengthDossierPartNameException
+	 * @throws OutOfLengthDossierPartNumberException
+	 * @throws OutOfLengthDossierTemplateFileNumberException
+	 * @throws DuplicateDossierPartNumberException
+	 * @throws DuplicateDossierPartSiblingException
+	 */
 	protected void dossierPartValidate(long dossierPartId ,String partName, String partNo, double sibling,
 		String templateFileNo) throws OutOfLengthDossierPartNameException, 
 		OutOfLengthDossierPartNumberException, OutOfLengthDossierTemplateFileNumberException,
@@ -556,6 +614,14 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		
 	}
 	
+	/**
+	 * @param dossierTemplateId
+	 * @param templateNo
+	 * @param templateName
+	 * @throws OutOfLengthDossierTemplateNameException
+	 * @throws OutOfLengthDossierTemplateNumberException
+	 * @throws DuplicateDossierTemplateNumberException
+	 */
 	protected void dossierTemplateValidate(
 	    long dossierTemplateId, String templateNo, String templateName)
 	    throws OutOfLengthDossierTemplateNameException,
