@@ -123,6 +123,9 @@
 				<portlet:renderURL var="editServiceConfigURL" windowState="<%=LiferayWindowState.NORMAL.toString() %>">
 					<portlet:param name="mvcPath" value='<%= templatePath + "edit_service_config.jsp" %>'/>
 					<portlet:param name="redirectURL" value="<%=currentURL %>"/>
+					<portlet:param name="tabs1" value="<%= tabs1 %>"/>
+					<portlet:param name="<%=DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DOSSIERTEMPLATEID %>" value="<%=String.valueOf(dossierTemplateId) %>"/>
+				
 				</portlet:renderURL>
 				
 				<aui:row>
@@ -192,7 +195,7 @@
 										</datamgt:ddr>
 
 									</aui:col>
-									<aui:col width="45">
+									<aui:col width="30">
 										<label>
 											<liferay-ui:message key="keywords"/>
 										</label>

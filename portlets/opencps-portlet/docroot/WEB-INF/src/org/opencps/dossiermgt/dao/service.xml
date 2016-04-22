@@ -98,6 +98,11 @@
 			<finder-column name="dossierTemplateId"/>
 			<finder-column name="partType" />
 		</finder>
+		
+		<finder return-type="Collection" name="T_P">
+		  <finder-column name="dossierTemplateId" />
+		  <finder-column name="parentId" />
+		</finder>
 	</entity>
 
 	<entity name="ServiceConfig" local-service="true"
