@@ -26,7 +26,7 @@
 		<column name="templateNo" type="String" />
 
 		<finder return-type="Collection" name="TemplateName">
-			<finder-column name="templateName" />
+			<finder-column name="templateName" comparator="LIKE"/>
 		</finder>
 
 		<finder return-type="DossierTemplate" name="TemplateNo">
