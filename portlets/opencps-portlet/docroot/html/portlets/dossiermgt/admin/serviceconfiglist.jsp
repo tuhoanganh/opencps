@@ -1,5 +1,3 @@
-<%@page import="org.opencps.dossiermgt.search.ServiceConfigSearchTerm"%>
-<%@page import="org.opencps.processmgt.service.ServiceProcessLocalServiceUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -34,7 +32,8 @@
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
-
+<%@page import="org.opencps.dossiermgt.search.ServiceConfigSearchTerm"%>
+<%@page import="org.opencps.processmgt.service.ServiceProcessLocalServiceUtil"%>
 <liferay-util:include page='<%= templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
 
 <%

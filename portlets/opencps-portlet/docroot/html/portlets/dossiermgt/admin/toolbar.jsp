@@ -1,6 +1,4 @@
 
-<%@page import="org.opencps.servicemgt.search.ServiceDisplayTerms"%>
-<%@page import="org.opencps.dossiermgt.search.ServiceConfigDisplayTerms"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -32,6 +30,10 @@
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="org.opencps.dossiermgt.permission.ServiceConfigPermission"%>
+<%@page import="org.opencps.servicemgt.search.ServiceDisplayTerms"%>
+<%@page import="org.opencps.dossiermgt.search.ServiceConfigDisplayTerms"%>
+<%@page import="org.opencps.datamgt.service.DictCollectionLocalServiceUtil"%>
+<%@page import="org.opencps.datamgt.model.DictCollection"%>
 <%@ include file="../init.jsp"%>
 
 <%
@@ -39,7 +41,8 @@
 	PortletURL searchURL = renderResponse.createRenderURL();
 	
 	Long dossierTemplateId = (Long) session.getAttribute(DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DOSSIERTEMPLATEID);
-
+	/* DictCollection dictCollectionServiceAdmin = DictCollectionLocalServiceUtil
+					.getDictCollection(scopeGroupId, collectionCode); */
 %>
 <aui:nav-bar cssClass="custom-toolbar">
 	<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left" >
@@ -141,7 +144,34 @@
 								</aui:row>
 								
 						</c:when>
-						
+						<c:when test="<%= tabs1.contentEquals(DossierMgtUtil.TOP_TABS_SERVICE_CONFIG) %>">
+							<aui:row>
+									<aui:col width="25">
+										
+									</aui:col>
+									<aui:col width="25">
+										<datamgt:ddr cssClass="input30"
+											depthLevel="1" 
+											dictCollectionCode="SERVICE_DOMAIN"
+											itemNames="<%= ServiceDisplayTerms.SERVICE_DOMAINCODE %>"
+											itemsEmptyOption="true"	
+										>
+										</datamgt:ddr>
+
+									</aui:col>
+									<aui:col width="45">
+										<label>
+											<liferay-ui:message key="keywords"/>
+										</label>
+										<liferay-ui:input-search 
+											id="keywords1"
+											name="keywords"
+											title="keywords"
+											placeholder='<%= LanguageUtil.get(locale, "name") %>' 
+										/>
+									</aui:col>
+								</aui:row>
+						</c:when>
 					</c:choose>
 				</div>
 			</aui:form>

@@ -15,6 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 
+
 package org.opencps.dossiermgt.portlet;
 
 import com.liferay.util.bridges.mvc.MVCPortlet;
@@ -22,6 +23,7 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
 /**
  * @author trungnt
  */
+
 public class DossierStateMenuPortlet extends MVCPortlet {
  
 
