@@ -598,7 +598,7 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		}
 		//update dossier
 		else if(dossierPartId > 0 && Validator.isNotNull(dossierPartNo) 
-						&& Validator.equals(dossierPartNo.getDossierpartId(), dossierPartId)) {
+						&& !Validator.equals(dossierPartNo.getDossierpartId(), dossierPartId)) {
 			throw new DuplicateDossierPartNumberException();
 		}
 		
@@ -607,7 +607,7 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		}
 		
 		else if (dossierPartId > 0 && Validator.isNotNull(dossierPartSibling) 
-						&& Validator.equals(dossierPartSibling.getDossierpartId(), dossierPartId)) {
+						&& !Validator.equals(dossierPartSibling.getDossierpartId(), dossierPartId)) {
 			throw new DuplicateDossierPartSiblingException();
 		}
 			
@@ -652,7 +652,7 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		// update dossier template
 		else if (dossierTemplateId > 0 &&
 		    dossierTemplate != null &&
-		    Validator.equals(
+		    !Validator.equals(
 		        dossierTemplate.getDossierTemplateId(), dossierTemplateId)) {
 			throw new DuplicateDossierTemplateNumberException();
 		}
