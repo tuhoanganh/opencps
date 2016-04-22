@@ -28,14 +28,18 @@
 <%@page import="java.util.List"%>
 <%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="org.opencps.dossiermgt.search.ServiceConfigDisplayTerms"%>
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
 <%@page import="org.opencps.dossiermgt.search.ServiceConfigSearchTerm"%>
 <%@page import="org.opencps.processmgt.service.ServiceProcessLocalServiceUtil"%>
-<liferay-util:include page='<%= templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
 
+<liferay-util:include page='<%= templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
+<c:if test="<%=ServiceConfigPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_SERVICE_CONFIG) %>">
+    <liferay-util:include page='<%= templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
+</c:if>
 <%
 
 	PortletURL iteratorURL = renderResponse.createRenderURL();
@@ -64,11 +68,8 @@
 	}
 	
 	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
+	String govAdencyCode = ParamUtil.getString(request, ServiceConfigDisplayTerms.SERVICE_CONFIG_GOVAGENCYCODE);
 %>
-
-<c:if test="<%=ServiceConfigPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_SERVICE_CONFIG) %>">
-	<liferay-util:include page='<%= templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
-</c:if>
 
 <c:if test="<%=ServiceConfigPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_SERVICE_CONFIG) %>">
 		<div id="<portlet:namespace/>toolbarResponse"></div>
@@ -81,10 +82,16 @@
 		<%
 			ServiceConfigSearchTerm searchTerm = (ServiceConfigSearchTerm) searchContainer.getSearchTerms();
 			
-			serviceConfigs = ServiceConfigLocalServiceUtil.getAll(
-				searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-									
-			totalCount = ServiceConfigLocalServiceUtil.countAll();
+			/* serviceConfigs = ServiceConfigLocalServiceUtil.getAll(
+				searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator()); */
+			System.out.println("searchTerm.getGovAgencyCode() " + govAdencyCode 
+				+ "earchTerm.getKeywords() " + searchTerm.getKeywords() + " " + searchTerm.getDomainCode() + "gr " + themeDisplay.getScopeGroupId());
+			serviceConfigs = ServiceConfigLocalServiceUtil.searchServiceConfig(
+				themeDisplay.getScopeGroupId(), searchTerm.getKeywords(), "", 
+				searchTerm.getDomainCode(), searchContainer.getStart(), searchContainer.getEnd());						
+			
+			totalCount = ServiceConfigLocalServiceUtil.countServiceConfig(
+				themeDisplay.getScopeGroupId(), searchTerm.getKeywords(), "", searchTerm.getDomainCode());
 			
 			total = totalCount;
 			results = serviceConfigs;

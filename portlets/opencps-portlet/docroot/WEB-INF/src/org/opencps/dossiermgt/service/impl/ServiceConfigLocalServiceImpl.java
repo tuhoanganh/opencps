@@ -177,7 +177,7 @@ public class ServiceConfigLocalServiceImpl
 	}
 	
 	public List<ServiceConfig> searchServiceConfig(long groupId, String keywords, String govAgencyCode,
-		String domainCode, boolean andOperator , int start, int end) {
+		String domainCode, int start, int end) {
 		return serviceConfigFinder.searchServiceConfig(groupId, keywords, govAgencyCode, domainCode, start, end);
 		
 	}

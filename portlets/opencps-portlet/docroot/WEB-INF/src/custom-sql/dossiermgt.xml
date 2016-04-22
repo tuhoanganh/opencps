@@ -10,7 +10,6 @@
 				groupId = ?
 			AND (
 				(lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$]))
-			 )
 			AND (opencps_service_config.govAgencyCode = ?)
 			AND (opencps_service_config.domainCode = ?)
 		]]>
@@ -26,7 +25,6 @@
 				groupId = ?
 			AND (
 				(lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$]))
-			 )
 			AND (opencps_service_config.govAgencyCode = ?)
 			AND (opencps_service_config.domainCode = ?)
 		]]>

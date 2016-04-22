@@ -52,6 +52,11 @@ public class DossierMgtUtil {
 		"update-dossier-info"
 	};
 	
+	/**
+	 * @param orderByCol
+	 * @param orderByType
+	 * @return
+	 */
 	public static OrderByComparator getDossierTemplateOrderByComparator(
 		String orderByCol, String orderByType) {
 		
@@ -75,6 +80,11 @@ public class DossierMgtUtil {
 		return orderByComparator;
 	}
 	
+	/**
+	 * @param partType
+	 * @param locale
+	 * @return
+	 */
 	public static String getNameOfPartType(int partType, Locale locale) {
 		String partTypeName = StringPool.BLANK;
 		switch (partType) {
@@ -101,6 +111,11 @@ public class DossierMgtUtil {
 		return partTypeName;
 	}
 	
+	/**
+	 * @param mode
+	 * @param locale
+	 * @return
+	 */
 	public static String getNameOfServiceConfigMode(int mode, Locale locale) {
 		String modeName = StringPool.BLANK;
 		switch (mode) {
@@ -124,6 +139,10 @@ public class DossierMgtUtil {
 		return modeName;
 	}
 	
+	/**
+	 * @param dossierpartId
+	 * @return
+	 */
 	public static List<DossierPart> getTreeDossierPart(long dossierpartId){
 		
 		List<DossierPart> dossierPartsResult = new ArrayList<DossierPart>();
