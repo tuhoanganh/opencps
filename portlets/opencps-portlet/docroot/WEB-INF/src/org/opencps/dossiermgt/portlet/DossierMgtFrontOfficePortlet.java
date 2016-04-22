@@ -22,10 +22,20 @@ import java.io.InputStream;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletException;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.opencps.dossiermgt.model.DossierTemplate;
+import org.opencps.dossiermgt.model.ServiceConfig;
+import org.opencps.dossiermgt.search.DossierDisplayTerms;
 import org.opencps.dossiermgt.search.DossierFileDisplayTerms;
+import org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil;
+import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
+import org.opencps.servicemgt.model.ServiceInfo;
+import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
 import org.opencps.util.PortletConstants;
 import org.opencps.util.WebKeys;
 
@@ -53,17 +63,19 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  */
 public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
+	
 	public void addTempFile(
 	    ActionRequest actionRequest, ActionResponse actionResponse) {
 
 		UploadPortletRequest uploadPortletRequest = PortalUtil
 		    .getUploadPortletRequest(actionRequest);
-		
-		String jsonData = ParamUtil
-					    .getString(uploadPortletRequest, "jsonData");
 
-		int index = ParamUtil.getInteger(uploadPortletRequest, "index");
-		
+		String jsonData = ParamUtil
+		    .getString(uploadPortletRequest, "jsonData");
+
+		int index = ParamUtil
+		    .getInteger(uploadPortletRequest, "index");
+
 		long folderId = ParamUtil
 		    .getLong(uploadPortletRequest, DossierFileDisplayTerms.FOLDE_ID);
 
@@ -104,18 +116,20 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		InputStream inputStream = null;
 
 		JSONArray jsonArray = null;
-		
-		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		JSONObject jsonObject = JSONFactoryUtil
+		    .createJSONObject();
 
 		try {
-			//Cho phep upload nhieu file
-			//jsonArray = JSONFactoryUtil.createJSONArray(jsonData);
-			
-			//Cho phep upload 1 file, file sau de len file truoc
-			
-			//remove file cu jsonData
-			jsonArray = JSONFactoryUtil.createJSONArray();
-			
+			// Cho phep upload nhieu file
+			// jsonArray = JSONFactoryUtil.createJSONArray(jsonData);
+
+			// Cho phep upload 1 file, file sau de len file truoc
+
+			// remove file cu jsonData
+			jsonArray = JSONFactoryUtil
+			    .createJSONArray();
+
 			inputStream = uploadPortletRequest
 			    .getFileAsStream(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
 
@@ -149,15 +163,17 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 			jsonObject
 			    .put(DossierFileDisplayTerms.DOSSIER_PART_ID, dossierPartId);
-			
+
 			jsonObject
-		    	.put("index", index);
-			
-			jsonArray.put(jsonObject);
+			    .put("index", index);
+
+			jsonArray
+			    .put(jsonObject);
 
 		}
 		catch (Exception e) {
-			_log.error(e);
+			_log
+			    .error(e);
 			SessionErrors
 			    .add(actionRequest, "upload-error");
 		}
@@ -169,8 +185,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			request
 			    .setAttribute(
 			        WebKeys.RESPONSE_UPLOAD_TEMP_DOSSIER_FILE, jsonArray);
-			
-			if (Validator.isNotNull(redirectURL)) {
+
+			if (Validator
+			    .isNotNull(redirectURL)) {
 				actionResponse
 				    .setRenderParameter(
 				        "jspPage",
@@ -219,6 +236,50 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		writeJSON(actionRequest, actionResponse, jsonObject);
 	}
 
+	@Override
+	public void render(
+	    RenderRequest renderRequest, RenderResponse renderResponse)
+	    throws PortletException, IOException {
+
+		long serviceConfigId = ParamUtil
+		    .getLong(renderRequest, DossierDisplayTerms.SERVICE_CONFIG_ID);
+
+		if (serviceConfigId > 0) {
+			try {
+				ServiceConfig serviceConfig = ServiceConfigLocalServiceUtil
+				    .getServiceConfig(serviceConfigId);
+
+				renderRequest
+				    .setAttribute(WebKeys.SERVICE_CONFIG_ENTRY, serviceConfig);
+
+				if (serviceConfig != null && serviceConfig
+				    .getServiceInfoId() > 0) {
+					ServiceInfo serviceInfo = ServiceInfoLocalServiceUtil
+					    .getServiceInfo(serviceConfig
+					        .getServiceInfoId());
+
+					renderRequest
+					    .setAttribute(WebKeys.SERVICE_INFO_ENTRY, serviceInfo);
+
+					DossierTemplate dossierTemplate =
+					    DossierTemplateLocalServiceUtil
+					        .getDossierTemplate(serviceConfig
+					            .getDossierTemplateId());
+					renderRequest
+					    .setAttribute(
+					        WebKeys.DOSSIER_TEMPLATE_ENTRY, dossierTemplate);
+				}
+			}
+			catch (Exception e) {
+				_log
+				    .error(e);
+			}
+		}
+
+		super.render(renderRequest, renderResponse);
+
+	}
+
 	protected void writeJSON(
 	    UploadPortletRequest uploadPortletRequest,
 	    ActionResponse actionResponse, Object json)
@@ -237,6 +298,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		    .flushBuffer();
 
 	}
-
-	private Log _log = LogFactoryUtil.getLog(DossierMgtFrontOfficePortlet.class.getName());
+	
+	private Log _log = LogFactoryUtil
+				    .getLog(DossierMgtFrontOfficePortlet.class
+				        .getName());
 }

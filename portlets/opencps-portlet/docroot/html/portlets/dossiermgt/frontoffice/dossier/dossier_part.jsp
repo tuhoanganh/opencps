@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -32,6 +31,14 @@
 <%@page import="org.opencps.dossiermgt.model.DossierPart"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.List"%>
+<%@page import="com.liferay.portal.kernel.util.Constants"%>
+<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
+<%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
+<%@page import="org.opencps.dossiermgt.model.Dossier"%>
+<%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
+<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
+<%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil"%>
 
 <%@ include file="../../init.jsp"%>
 
@@ -40,66 +47,31 @@
 </portlet:renderURL>
 
 <%
+	Dossier dossier = (Dossier) request.getAttribute(WebKeys.DOSSIER_ENTRY);
+	ServiceConfig serviceConfig = (ServiceConfig) request.getAttribute(WebKeys.SERVICE_CONFIG_ENTRY);
+	ServiceInfo serviceInfo = (ServiceInfo) request.getAttribute(WebKeys.SERVICE_INFO_ENTRY);
+	DossierTemplate dossierTemplate = (DossierTemplate) request.getAttribute(WebKeys.DOSSIER_TEMPLATE_ENTRY);
+	
+	String cmd = ParamUtil.getString(request, Constants.CMD);
+	
+	List<DossierPart> dossierPartsLevel1 = new ArrayList<DossierPart>();
+	
+	if(dossierTemplate != null){
+		try{
+			dossierPartsLevel1 = DossierPartLocalServiceUtil.getDossierParts(dossierTemplate.getDossierTemplateId());
+		}catch(Exception e){}
+	}
+	
 	HashMap<Integer, List<DossierPart>> hashMap = new LinkedHashMap<Integer, List<DossierPart>>();
 	
-	List<DossierPart> dossierParts1 = new ArrayList<DossierPart>();
-	DossierPart dossierPart1 = new DossierPartImpl();
-	dossierPart1.setDossierpartId(1);
-	dossierPart1.setPartType(1);
-	dossierPart1.setPartName("dossierPart1");
-	dossierPart1.setTreeIndex("1");
-	
-	dossierParts1.add(dossierPart1);
-	
-	hashMap.put(1, dossierParts1);
-	
-	
-	List<DossierPart> dossierParts2 = new ArrayList<DossierPart>();
-	DossierPart dossierPart2 = new DossierPartImpl();
-	dossierPart2.setDossierpartId(2);
-	dossierPart2.setPartType(2);
-	dossierPart2.setPartName("dossierPart2");
-	dossierPart2.setTreeIndex("2");
-	dossierParts2.add(dossierPart2);
-	
-	
-	DossierPart dossierPart21 = new DossierPartImpl();
-	dossierPart21.setDossierpartId(21);
-	dossierPart21.setPartType(2);
-	dossierPart21.setPartName("dossierPart21");
-	dossierPart21.setTreeIndex("2.1");
-	
-	dossierParts2.add(dossierPart21);
-	
-	hashMap.put(2, dossierParts2);
-	
-	List<DossierPart> dossierParts3 = new ArrayList<DossierPart>();
-	DossierPart dossierPart3 = new DossierPartImpl();
-	dossierPart3.setDossierpartId(3);
-	dossierPart3.setPartType(4);
-	dossierPart3.setPartName("dossierPart3");
-	dossierPart3.setTreeIndex("3");
-	
-	dossierParts3.add(dossierPart3);
-	
-	DossierPart dossierPart31 = new DossierPartImpl();
-	dossierPart31.setDossierpartId(31);
-	dossierPart31.setPartType(1);
-	dossierPart31.setPartName("dossierPart31");
-	dossierPart31.setTreeIndex("3.1");
-	
-	dossierParts3.add(dossierPart31);
-	
-	DossierPart dossierPart32 = new DossierPartImpl();
-	dossierPart32.setDossierpartId(32);
-	dossierPart32.setPartType(2);
-	dossierPart32.setPartName("dossierPart32");
-	dossierPart32.setTreeIndex("3.2");
-	
-	dossierParts3.add(dossierPart32);
-	
-	hashMap.put(4, dossierParts3);
-	
+	if(dossierPartsLevel1 != null){
+		for(DossierPart dossierPart : dossierPartsLevel1){
+			List<DossierPart> dossierPartTree = DossierMgtUtil.getTreeDossierPart(dossierPart.getDossierpartId());
+			if(!dossierPartTree.isEmpty()){
+				//hashMap
+			}
+		}
+	}
 	
 	int index = 0; 
 	
