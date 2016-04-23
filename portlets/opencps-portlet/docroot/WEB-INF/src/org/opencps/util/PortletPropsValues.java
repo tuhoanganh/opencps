@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
-
 package org.opencps.util;
 
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -65,9 +64,11 @@ public class PortletPropsValues {
 					.getString(PortletProps
 						.get(PortletPropsKeys.DATAMGT_MASTERDATA_SERVICE_DOMAIN));
 	public static final String DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION = GetterUtil
-	.getString(PortletProps
-		.get(PortletPropsKeys.DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION));
-	
+					.getString(PortletProps
+						.get(PortletPropsKeys.DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION));
+	public static final String DATAMGT_MASTERDATA_ADMINISTRATION_REGION = GetterUtil
+					.getString(PortletProps
+						.get(PortletPropsKeys.DATAMGT_MASTERDATA_ADMINISTRATION_REGION));
 	//validate file 
 	
 	public static final String[] ACCOUNTMGT_FILE_TYPE = GetterUtil
