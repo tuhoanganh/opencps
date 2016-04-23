@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -63,7 +62,7 @@
 
 <aui:model-context bean="<%=citizen %>" model="<%=Citizen.class%>" />
 
-<c:if test="<%=isAdminViewProfile %>">
+<c:if test="<%=isAdminViewProfile && citizenID > 0%>">
 	<aui:row>
 		<aui:col width="50">
 			<aui:input 
@@ -117,14 +116,17 @@
 			yearValue="<%= spd.getYear() %>"
 			formName="fm"
 			autoFocus="<%=true %>"
-		/>	
+		>
+		</liferay-ui:input-date>
 	</aui:col>
 	
 	<aui:col width="50">
 		<aui:select 
 			name="<%=CitizenDisplayTerms.CITIZEN_GENDER %>"
 			disabled="<%=isViewProfile %>"
+			required="true"
 		>
+			<aui:option label="<%=StringPool.BLANK %>" value="" />
 			<%
 				if(PortletPropsValues.USERMGT_GENDER_VALUES != null && 
 					PortletPropsValues.USERMGT_GENDER_VALUES.length > 0){
@@ -143,7 +145,6 @@
 		</aui:select>
 	</aui:col>
 </aui:row>
-
 
 <%!
 	private Log _log = LogFactoryUtil.getLog(".html.portlets.accountmgt.registration/citizen.general_info.jsp");
