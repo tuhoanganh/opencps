@@ -1,4 +1,5 @@
 
+<%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -28,7 +29,6 @@
 <%@page import="com.liferay.portal.kernel.repository.model.FileEntry"%>
 <%@page import="org.opencps.dossiermgt.model.DossierPart"%>
 <%@page import="com.liferay.portal.kernel.json.JSONObject"%>
-<%@page import="com.liferay.portal.kernel.json.JSONArray"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
 <%@page import="org.hsqldb.SessionManager"%>
 <%@ include file="../init.jsp"%>
@@ -37,7 +37,7 @@
 	boolean success = false;
 
 	try{
-		success = !SessionMessages.isEmpty(renderRequest);
+		success = !SessionMessages.isEmpty(renderRequest) && SessionErrors.isEmpty(renderRequest);
 		
 	}catch(Exception e){
 		
@@ -71,10 +71,9 @@
 
 	int index = ParamUtil.getInteger(request, "index");
 	
-	JSONArray responseData = (JSONArray)request.getAttribute(WebKeys.RESPONSE_UPLOAD_TEMP_DOSSIER_FILE);
+	String groupName = ParamUtil.getString(request, "groupName");
 	
-	
-	
+	JSONObject responseData = (JSONObject)request.getAttribute(WebKeys.RESPONSE_UPLOAD_TEMP_DOSSIER_FILE);
 	
 %>
 
@@ -92,6 +91,7 @@
 >
 	<aui:input name="redirectURL" type="hidden" value="<%=currentURL %>"/>
 	<aui:input name="index" type="hidden" value="<%=String.valueOf(index) %>"/>
+	<aui:input name="groupName" type="hidden" value="<%=groupName %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_PART_ID %>" type="hidden" value="<%=dossierPart != null ? dossierPart.getDossierpartId() : dossierPartId %>"/>
 	<aui:row>
 		<aui:col width="100">
@@ -155,15 +155,17 @@
 		var jsonData = {};
 		
 		if(success == 'true'){
+			
 			jsonData = JSON.parse(responseData);
+			
 			<portlet:namespace/>responseData(jsonData);
 		}
 		
 	});
 	
-	Liferay.provide(window, '<portlet:namespace/>responseData', function(data) {
+	Liferay.provide(window, '<portlet:namespace/>responseData', function(schema) {
 		var Util = Liferay.Util;
-		Util.getOpener().Liferay.fire('getUploadDossierFileData', {responseData:data});
+		Util.getOpener().Liferay.fire('getUploadDataSchema', {responseData:schema});
 		<portlet:namespace/>closeDialog();
 	});
 	
@@ -188,7 +190,7 @@
 				},
 				success: function(event, id, obj) {
 					var response = this.get('responseData');
-					console.log(response);
+					
 				},
                 complete: function(event, id, obj){
                    
