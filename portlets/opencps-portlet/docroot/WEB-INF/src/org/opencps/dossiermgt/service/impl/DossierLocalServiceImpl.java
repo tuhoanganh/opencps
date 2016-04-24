@@ -25,6 +25,8 @@ import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.FileGroup;
 import org.opencps.dossiermgt.search.DossierFileDisplayTerms;
 import org.opencps.dossiermgt.service.base.DossierLocalServiceBaseImpl;
+import org.opencps.util.DateTimeUtil;
+import org.opencps.util.PortletConstants;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -32,13 +34,11 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.TempFileUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
-import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
 
 /**
  * The implementation of the dossier local service. <p> All custom service
@@ -62,9 +62,9 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 
 	public Dossier addDossier(
 	    long userId, long ownerOrganizationId, long dossierTemplateId,
-	    long serviceConfigId, long serviceInfoId, String serviceDomainIndex,
-	    long govAgencyOrganizationId, String govAgencyCode,
-	    String govAgencyName, int serviceMode,
+	    String templateFileNo, long serviceConfigId, long serviceInfoId,
+	    String serviceDomainIndex, long govAgencyOrganizationId,
+	    String govAgencyCode, String govAgencyName, int serviceMode,
 	    String serviceAdministrationIndex, String cityCode, String cityName,
 	    String districtCode, String districtName, String wardName,
 	    String wardCode, String subjectName, String subjectId, String address,
@@ -88,11 +88,12 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		int dossierNo = count + 1;
 
 		Date now = new Date();
-		
-		serviceContext.setAddGroupPermissions(true);
-		serviceContext.setAddGuestPermissions(true);
-		
-		
+
+		serviceContext
+		    .setAddGroupPermissions(true);
+		serviceContext
+		    .setAddGuestPermissions(true);
+
 		dossier
 		    .setUserId(userId);
 		dossier
@@ -165,6 +166,18 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		dossier = dossierPersistence
 		    .update(dossier);
 
+		dossierStatusLocalService
+		    .addDossierStatus(
+		        userId, dossierId, 0, PortletConstants.DOSSIER_STATUS_NEW,
+		        "Create New", "", now,
+		        PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
+		        serviceContext);
+		dossierLogLocalService
+		    .addDossierLog(
+		        userId, dossierId, 0, PortletConstants.DOSSIER_STATUS_NEW,
+		        "Create New", "", now, PortletConstants.DOSSIER_LOG_NORMAL,
+		        serviceContext);
+
 		DLFolder dossierNoFolder = dlFolderLocalService
 		    .addFolder(userId, serviceContext
 		        .getScopeGroupId(), serviceContext
@@ -177,49 +190,64 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 			String schema = uploadDataSchemas[i];
 
 			JSONObject jsonObject = null;
-			try {
-				jsonObject = JSONFactoryUtil
-				    .createJSONObject(schema);
-				long dossierPartId = jsonObject
-				    .getLong(DossierFileDisplayTerms.DOSSIER_PART_ID);
-				long fileEntryId = jsonObject
-				    .getLong(DossierFileDisplayTerms.FILE_ENTRY_ID);
 
-				String groupName = jsonObject
-				    .getString(DossierFileDisplayTerms.GROUP_NAME);
-				String dispayName = jsonObject
-				    .getString(DossierFileDisplayTerms.DISPAY_NAME);
-				String mimeType = jsonObject
-				    .getString(DossierFileDisplayTerms.MIME_TYPE);
-				String fileName = jsonObject
-				    .getString(DossierFileDisplayTerms.FILE_NAME);
-				
-				String dossierFileDate = jsonObject
-				    .getString(DossierFileDisplayTerms.DOSSIER_FILE_DATE);
-				String dossierFileNo = jsonObject
-				    .getString(DossierFileDisplayTerms.DOSSIER_FILE_NO);
-				
-				FileEntry tempFileEntry = null;
-				
-				//tempFileEntry = TempFileUtil.getTempFile(groupId, userId, sourceFileName, tempFolderName);
-				
-				FileEntry fileEntry = null;
-				
-				if(fileEntryId > 0){
-					tempFileEntry = DLAppServiceUtil.getFileEntry(fileEntryId);
-					
-					InputStream inputStream = tempFileEntry.getContentStream();
-					
-					long size = tempFileEntry.getSize();
+			jsonObject = JSONFactoryUtil
+			    .createJSONObject(schema);
+			long dossierPartId = jsonObject
+			    .getLong(DossierFileDisplayTerms.DOSSIER_PART_ID);
+			long fileEntryId = jsonObject
+			    .getLong(DossierFileDisplayTerms.FILE_ENTRY_ID);
 
-					String sourceFileName = tempFileEntry.getTitle();
-					
-					fileEntry = DLAppServiceUtil.addFileEntry(serviceContext.getScopeGroupId(),
-						dossierNoFolder.getFolderId(), sourceFileName, mimeType, dispayName,
-						StringPool.BLANK, StringPool.BLANK, inputStream, size,
-						serviceContext);
-				}
+			int dossierFileOriginal = jsonObject
+			    .getInt(DossierFileDisplayTerms.DOSSIER_FILE_ORIGINAL);
+			int dossierFileType = jsonObject
+			    .getInt(DossierFileDisplayTerms.DOSSIER_FILE_TYPE);
+			String formData = jsonObject
+			    .getString(DossierFileDisplayTerms.FORM_DATA);
+			String groupName = jsonObject
+			    .getString(DossierFileDisplayTerms.GROUP_NAME);
+			String displayName = jsonObject
+			    .getString(DossierFileDisplayTerms.DISPLAY_NAME);
+			String mimeType = jsonObject
+			    .getString(DossierFileDisplayTerms.MIME_TYPE);
+			/*
+			 * String fileName = jsonObject
+			 * .getString(DossierFileDisplayTerms.FILE_NAME);
+			 */
+			String dossierFileDate = jsonObject
+			    .getString(DossierFileDisplayTerms.DOSSIER_FILE_DATE);
+			String dossierFileNo = jsonObject
+			    .getString(DossierFileDisplayTerms.DOSSIER_FILE_NO);
 
+			FileEntry tempFileEntry = null;
+
+			// tempFileEntry = TempFileUtil.getTempFile(groupId, userId,
+			// sourceFileName, tempFolderName);
+
+			FileEntry fileEntry = null;
+
+			if (fileEntryId > 0) {
+				tempFileEntry = DLAppServiceUtil
+				    .getFileEntry(fileEntryId);
+
+				InputStream inputStream = tempFileEntry
+				    .getContentStream();
+
+				long size = tempFileEntry
+				    .getSize();
+
+				String sourceFileName = tempFileEntry
+				    .getTitle();
+
+				fileEntry = DLAppServiceUtil
+				    .addFileEntry(serviceContext
+				        .getScopeGroupId(), dossierNoFolder
+				            .getFolderId(),
+				        sourceFileName, mimeType, displayName, StringPool.BLANK,
+				        StringPool.BLANK, inputStream, size, serviceContext);
+			}
+			if (fileEntry != null) {
+				// Add file group
 				FileGroup fileGroup = null;
 
 				if (Validator
@@ -227,17 +255,37 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 					fileGroup = fileGroupLocalService
 					    .addFileGroup(
 					        userId, dossierId, dossierPartId, groupName,
-					        syncStatus, serviceContext);
+					        PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
+					        serviceContext);
 				}
-				
-				
+
+				Date fileDate = null;
+
+				if (Validator
+				    .isNotNull(dossierFileDate)) {
+					fileDate = DateTimeUtil
+					    .convertStringToDate(dossierFileDate);
+				}
+
+				// Add dossier file
+				dossierFileLocalService
+				    .addDossierFile(
+				        userId, dossierId, dossierPartId, templateFileNo,
+				        fileGroup != null ? fileGroup
+				            .getFileGroupId() : 0L,
+				        userId, ownerOrganizationId, displayName, formData,
+				        fileEntry
+				            .getFileEntryId(),
+				        PortletConstants.DOSSIER_FILE_MARK_UNKNOW,
+				        dossierFileType, dossierFileNo, fileDate,
+				        dossierFileOriginal,
+				        PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
+				        serviceContext);
 			}
-			catch (Exception e) {
-				continue;
-			}
+
 		}
 
-		return null;
+		return dossier;
 	}
 
 	public int countByGroupId(long groupId)
