@@ -32,25 +32,35 @@ import com.liferay.portal.kernel.util.ParamUtil;
 public class DossierFileDisplayTerms extends DisplayTerms {
 
 	public static final String DISPAY_NAME = "dispayName";
-	public static final String DOSSIER_FILE_NO = "dossierFileNo";
 	public static final String DOSSIER_FILE_DATE = "dossierFileDate";
-	public static final String DOSSIER_FILE_UPLOAD = "dossierFileUpload";
 	public static final String DOSSIER_FILE_DATE_DAY = "dossierFileDateDay";
 	public static final String DOSSIER_FILE_DATE_MONTH = "dossierFileDateMonth";
 	public static final String DOSSIER_FILE_DATE_YEAR = "dossierFileDateYear";
+	public static final String DOSSIER_FILE_NO = "dossierFileNo";
+	public static final String DOSSIER_FILE_UPLOAD = "dossierFileUpload";
 	
-	public static final String FILE_ENTRY_ID = "fileEntryId";
-	public static final String FOLDE_ID = "folderId";
 	public static final String DOSSIER_PART_ID = "dossierPartId";
-	public static final String PART_NAME = "partName";
-	
-	public static final String SOURCE_FILE_NAME = "sourceFileName";
-	public static final String FILE_TITLE = "fileTitle";
-	public static final String MSG = "msg";
-	public static final String SUCCESS = "success";
 	public static final String ERROR = "error";
+	public static final String FILE_ENTRY_ID = "fileEntryId";
+	public static final String FILE_NAME = "fileName";
+	
+	public static final String FILE_TITLE = "fileTitle";
+	public static final String FOLDE_ID = "folderId";
+	public static final String GROUP_NAME = "groupName";
+	public static final String INDEX = "index";
+	public static final String MIME_TYPE = "mimeType";
+	public static final String MSG = "msg";
+	public static final String PART_NAME = "partName";
+	public static final String SOURCE_FILE_NAME = "sourceFileName";
+	public static final String SUCCESS = "success";
 	public static final String TEMP_FOLDER_NAME = "tempFolderName";
-
+	
+	protected String dispayName;
+	
+	protected Date dossierFileDate;
+	
+	protected String dossierFileNo;
+	
 	public DossierFileDisplayTerms(PortletRequest portletRequest) {
 		super(
 		    portletRequest);
@@ -73,34 +83,26 @@ public class DossierFileDisplayTerms extends DisplayTerms {
 		return dispayName;
 	}
 	
-	public void setDispayName(String dispayName) {
+	public Date getDossierFileDate() {
 	
-		this.dispayName = dispayName;
+		return dossierFileDate;
 	}
 	
 	public String getDossierFileNo() {
 	
 		return dossierFileNo;
 	}
+
+	public void setDispayName(String dispayName) {
 	
-	public void setDossierFileNo(String dossierFileNo) {
-	
-		this.dossierFileNo = dossierFileNo;
+		this.dispayName = dispayName;
 	}
-	
-	public Date getDossierFileDate() {
-	
-		return dossierFileDate;
-	}
-	
 	public void setDossierFileDate(Date dossierFileDate) {
 	
 		this.dossierFileDate = dossierFileDate;
 	}
-
-
-
-	protected String dispayName;
-	protected String dossierFileNo;
-	protected Date dossierFileDate;
+	public void setDossierFileNo(String dossierFileNo) {
+	
+		this.dossierFileNo = dossierFileNo;
+	}
 }

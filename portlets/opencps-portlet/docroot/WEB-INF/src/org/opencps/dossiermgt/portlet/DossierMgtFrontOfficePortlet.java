@@ -14,7 +14,6 @@
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>
 */
-
 package org.opencps.dossiermgt.portlet;
 
 import java.io.IOException;
@@ -32,18 +31,41 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.opencps.accountmgt.model.Business;
 import org.opencps.accountmgt.model.Citizen;
+import org.opencps.accountmgt.search.BusinessDisplayTerms;
 import org.opencps.accountmgt.service.BusinessLocalServiceUtil;
 import org.opencps.accountmgt.service.CitizenLocalServiceUtil;
+import org.opencps.dossiermgt.CreateDossierFolderException;
+import org.opencps.dossiermgt.EmptyDossierAddressException;
+import org.opencps.dossiermgt.EmptyDossierCityCodeException;
+import org.opencps.dossiermgt.EmptyDossierContactNameException;
+import org.opencps.dossiermgt.EmptyDossierDistrictCodeException;
+import org.opencps.dossiermgt.EmptyDossierFileException;
+import org.opencps.dossiermgt.EmptyDossierSubjectIdException;
+import org.opencps.dossiermgt.EmptyDossierSubjectNameException;
+import org.opencps.dossiermgt.EmptyDossierWardCodeException;
+import org.opencps.dossiermgt.InvalidDossierObjecExceptionException;
+import org.opencps.dossiermgt.InvalidDossierObjectException;
+import org.opencps.dossiermgt.OutOfLengthDossierAddressException;
+import org.opencps.dossiermgt.OutOfLengthDossierContactEmailException;
+import org.opencps.dossiermgt.OutOfLengthDossierContactNameException;
+import org.opencps.dossiermgt.OutOfLengthDossierContactTelNoException;
+import org.opencps.dossiermgt.OutOfLengthDossierSubjectIdException;
+import org.opencps.dossiermgt.OutOfLengthDossierSubjectNameException;
 import org.opencps.dossiermgt.model.DossierTemplate;
 import org.opencps.dossiermgt.model.ServiceConfig;
 import org.opencps.dossiermgt.search.DossierDisplayTerms;
 import org.opencps.dossiermgt.search.DossierFileDisplayTerms;
+import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
+import org.opencps.util.DLFolderUtil;
+import org.opencps.util.DictItemUtil;
+import org.opencps.util.MessageKeys;
 import org.opencps.util.PortletConstants;
 import org.opencps.util.PortletPropsValues;
+import org.opencps.util.PortletUtil;
 import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -53,6 +75,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -68,13 +91,16 @@ import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
-import com.liferay.portlet.documentlibrary.service.DLFolderLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 /**
  * @author trungnt
  */
 public class DossierMgtFrontOfficePortlet extends MVCPortlet {
+
+	private Log _log = LogFactoryUtil
+	    .getLog(DossierMgtFrontOfficePortlet.class
+	        .getName());
 
 	public void addTempFile(
 	    ActionRequest actionRequest, ActionResponse actionResponse) {
@@ -83,10 +109,14 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		    .getUploadPortletRequest(actionRequest);
 
 		int index = ParamUtil
-		    .getInteger(uploadPortletRequest, "index");
+		    .getInteger(uploadPortletRequest, DossierFileDisplayTerms.INDEX);
 
 		String groupName = ParamUtil
-		    .getString(uploadPortletRequest, "groupName");
+		    .getString(
+		        uploadPortletRequest, DossierFileDisplayTerms.GROUP_NAME);
+
+		String fileName = ParamUtil
+		    .getString(uploadPortletRequest, DossierFileDisplayTerms.FILE_NAME);
 
 		long folderId = ParamUtil
 		    .getLong(uploadPortletRequest, DossierFileDisplayTerms.FOLDE_ID);
@@ -156,6 +186,14 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			jsonObject
 			    .put(DossierFileDisplayTerms.FILE_TITLE, fileEntry
 			        .getTitle());
+
+			jsonObject
+			    .put(DossierFileDisplayTerms.MIME_TYPE, fileEntry
+			        .getMimeType());
+
+			jsonObject
+			    .put(DossierFileDisplayTerms.FILE_NAME, fileName);
+
 			jsonObject
 			    .put(DossierFileDisplayTerms.FILE_ENTRY_ID, fileEntry
 			        .getFileEntryId());
@@ -171,6 +209,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 			jsonObject
 			    .put("groupName", groupName);
+
+			// DLAppServiceUtil.a
 
 		}
 		catch (Exception e) {
@@ -231,6 +271,23 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		writeJSON(actionRequest, actionResponse, jsonObject);
 	}
 
+	protected void deleteTempFile(
+	    long groupId, long folderId, String tempFolderName, String fileName)
+	    throws Exception {
+
+		try {
+			DLAppServiceUtil
+			    .deleteTempFileEntry(
+			        groupId, folderId, fileName, tempFolderName);
+
+		}
+		catch (Exception e) {
+			_log
+			    .error(e);
+		}
+
+	}
+
 	public void deleteTempFiles(
 	    ActionRequest actionRequest, ActionResponse actionResponse) {
 
@@ -252,23 +309,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 					}
 				}
 			}
-		}
-
-	}
-
-	protected void deleteTempFile(
-	    long groupId, long folderId, String tempFolderName, String fileName)
-	    throws Exception {
-
-		try {
-			DLAppServiceUtil
-			    .deleteTempFileEntry(
-			        groupId, folderId, fileName, tempFolderName);
-
-		}
-		catch (Exception e) {
-			_log
-			    .error(e);
 		}
 
 	}
@@ -385,10 +425,16 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		    .getLong(actionRequest, DossierDisplayTerms.DISTRICT_ID);
 		long wardId = ParamUtil
 		    .getLong(actionRequest, DossierDisplayTerms.WARD_ID);
+		long serviceConfigId = ParamUtil
+		    .getLong(actionRequest, DossierDisplayTerms.SERVICE_CONFIG_ID);
+		long mappingOrganizationId = ParamUtil
+		    .getLong(
+		        actionRequest,
+		        BusinessDisplayTerms.BUSINESS_MAPPINGORGANIZATIONID);
 
 		String subjectName = ParamUtil
 		    .getString(actionRequest, DossierDisplayTerms.SUBJECT_NAME);
-		String subjectID = ParamUtil
+		String subjectId = ParamUtil
 		    .getString(actionRequest, DossierDisplayTerms.SUBJECT_ID);
 		String address = ParamUtil
 		    .getString(actionRequest, DossierDisplayTerms.ADDRESS);
@@ -400,31 +446,214 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		    .getString(actionRequest, DossierDisplayTerms.CONTACT_EMAIL);
 		String note = ParamUtil
 		    .getString(actionRequest, DossierDisplayTerms.NOTE);
-
 		String accountType = ParamUtil
-					    .getString(actionRequest, "accountType", PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN);
-		
-		
+		    .getString(
+		        actionRequest, "accountType",
+		        PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN);
+		String returnURL = ParamUtil
+		    .getString(actionRequest, "returnURL");
+		String redirectURL = ParamUtil
+		    .getString(actionRequest, "redirectURL");
+
 		String[] uploadDataSchemas = ParamUtil
 		    .getParameterValues(actionRequest, "uploadDataSchema");
 
-		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest
-		    .getAttribute(WebKeys.THEME_DISPLAY);
-		
 		try {
 			ServiceContext serviceContext = ServiceContextFactory
 			    .getInstance(actionRequest);
 
 			long userId = serviceContext
 			    .getUserId();
-			
-			//DLAppServiceUtil.getfo
-			
+
+			String dossierDestinationFolder = StringPool.BLANK;
+
+			if (accountType
+			    .equals(PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN)) {
+				dossierDestinationFolder = PortletUtil
+				    .getCitizenDossierDestinationFolder(serviceContext
+				        .getScopeGroupId(), userId);
+			}
+			else if (accountType
+			    .equals(PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS) &&
+			    mappingOrganizationId > 0) {
+				dossierDestinationFolder = PortletUtil
+				    .getBusinessDossierDestinationFolder(serviceContext
+				        .getScopeGroupId(), mappingOrganizationId);
+			}
+
+			validateDossier(
+			    cityId, districtId, wardId, accountType,
+			    dossierDestinationFolder, subjectName, subjectId, address,
+			    contactName, contactTelNo, contactEmail, uploadDataSchemas);
+
+			String cityCode = DictItemUtil
+			    .getDictItemCode(cityId);
+			String districtCode = DictItemUtil
+			    .getDictItemCode(districtId);
+			String wardCode = DictItemUtil
+			    .getDictItemCode(wardId);
+
+			DLFolder dossierFolder = DLFolderUtil
+			    .getTargetFolder(userId, serviceContext
+			        .getScopeGroupId(), serviceContext
+			            .getScopeGroupId(),
+			        false, 0, dossierDestinationFolder, StringPool.BLANK, false,
+			        serviceContext);
+
+			DossierLocalServiceUtil
+			    .addDossier(userId, dossierId, serviceInfoId, dossierFolder
+			        .getFolderId(), cityCode, districtCode, wardCode,
+			        subjectName, subjectId, address, contactName, contactTelNo,
+			        contactEmail, note, uploadDataSchemas, serviceContext);
+
+			SessionMessages
+			    .add(actionRequest, MessageKeys.DOSSIER_UPDATE_SUCCESS);
+			if (Validator
+			    .isNotNull(redirectURL)) {
+				actionResponse
+				    .sendRedirect(redirectURL);
+			}
+
 		}
 		catch (Exception e) {
-			// TODO: handle exception
+			if (e instanceof EmptyDossierCityCodeException ||
+			    e instanceof EmptyDossierDistrictCodeException ||
+			    e instanceof EmptyDossierWardCodeException ||
+			    e instanceof InvalidDossierObjectException ||
+			    e instanceof CreateDossierFolderException ||
+			    e instanceof EmptyDossierSubjectNameException ||
+			    e instanceof OutOfLengthDossierSubjectNameException ||
+			    e instanceof EmptyDossierSubjectIdException ||
+			    e instanceof OutOfLengthDossierSubjectIdException ||
+			    e instanceof EmptyDossierAddressException ||
+			    e instanceof OutOfLengthDossierContactEmailException ||
+			    e instanceof OutOfLengthDossierContactNameException ||
+			    e instanceof OutOfLengthDossierContactTelNoException ||
+			    e instanceof EmptyDossierContactNameException ||
+			    e instanceof OutOfLengthDossierAddressException ||
+			    e instanceof InvalidDossierObjecExceptionException ||
+			    e instanceof EmptyDossierFileException) {
+
+				SessionErrors
+				    .add(actionRequest, e
+				        .getClass());
+			}
+			else {
+				SessionErrors
+				    .add(
+				        actionRequest,
+				        MessageKeys.DOSSIER_SYSTEM_EXCEPTION_OCCURRED);
+			}
+
+			_log
+			    .error(e);
+
+			actionResponse
+			    .setRenderParameter(
+			        "mvcPath",
+			        "/html/portlets/dossiermgt/frontoffice/edit_dossier.jsp");
+			actionResponse
+			    .setRenderParameter("backURL", returnURL);
+
+			actionResponse
+			    .setRenderParameter(
+			        DossierDisplayTerms.SERVICE_CONFIG_ID, String
+			            .valueOf(serviceConfigId));
+
+		}
+	}
+
+	protected void validateDossier(
+	    long cityId, long districtId, long wardId, String accountType,
+	    String dossierDestinationFolder, String subjectName, String subjectId,
+	    String address, String contactName, String contactTelNo,
+	    String contactEmail, String[] uploadDataSchemas)
+	    throws EmptyDossierCityCodeException, EmptyDossierDistrictCodeException,
+	    EmptyDossierWardCodeException, InvalidDossierObjectException,
+	    CreateDossierFolderException, EmptyDossierSubjectNameException,
+	    OutOfLengthDossierSubjectNameException, EmptyDossierSubjectIdException,
+	    OutOfLengthDossierSubjectIdException, EmptyDossierAddressException,
+	    OutOfLengthDossierContactEmailException,
+	    OutOfLengthDossierContactNameException,
+	    OutOfLengthDossierContactTelNoException,
+	    EmptyDossierContactNameException, OutOfLengthDossierAddressException,
+	    InvalidDossierObjecExceptionException, EmptyDossierFileException {
+
+		if (cityId <= 0) {
+			throw new EmptyDossierCityCodeException();
 		}
 
+		if (districtId <= 0) {
+			throw new EmptyDossierDistrictCodeException();
+		}
+
+		if (wardId <= 0) {
+			throw new EmptyDossierWardCodeException();
+		}
+
+		if (Validator
+		    .isNull(accountType)) {
+			throw new InvalidDossierObjectException();
+		}
+
+		if (Validator
+		    .isNull(dossierDestinationFolder)) {
+			throw new CreateDossierFolderException();
+		}
+
+		if (Validator
+		    .isNull(subjectName)) {
+			throw new EmptyDossierSubjectNameException();
+		}
+
+		if (subjectName
+		    .trim().length() > PortletPropsValues.DOSSIERMGT_DOSSIER_SUBJECT_NAME_LENGTH) {
+			throw new OutOfLengthDossierSubjectNameException();
+		}
+
+		if (Validator
+		    .isNull(subjectId)) {
+			throw new EmptyDossierSubjectIdException();
+		}
+
+		if (subjectId
+		    .trim().length() > PortletPropsValues.DOSSIERMGT_DOSSIER_SUBJECT_ID_LENGTH) {
+			throw new OutOfLengthDossierSubjectIdException();
+		}
+
+		if (Validator
+		    .isNull(address)) {
+			throw new EmptyDossierAddressException();
+		}
+
+		if (address
+		    .trim().length() > PortletPropsValues.DOSSIERMGT_DOSSIER_ADDRESS_LENGTH) {
+			throw new OutOfLengthDossierAddressException();
+		}
+
+		if (Validator
+		    .isNull(contactName)) {
+			throw new EmptyDossierContactNameException();
+		}
+
+		if (contactName
+		    .trim().length() > PortletPropsValues.DOSSIERMGT_DOSSIER_CONTACT_NAME_LENGTH) {
+			throw new OutOfLengthDossierContactNameException();
+		}
+
+		if (contactTelNo
+		    .trim().length() > PortletPropsValues.DOSSIERMGT_DOSSIER_CONTACT_TEL_NO_LENGTH) {
+			throw new OutOfLengthDossierContactTelNoException();
+		}
+
+		if (contactEmail
+		    .trim().length() > PortletPropsValues.DOSSIERMGT_DOSSIER_CONTACT_EMAIL_LENGTH) {
+			throw new OutOfLengthDossierContactEmailException();
+		}
+
+		if (uploadDataSchemas == null || uploadDataSchemas.length == 0) {
+			throw new EmptyDossierFileException();
+		}
 	}
 
 	protected void writeJSON(
@@ -445,8 +674,4 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		    .flushBuffer();
 
 	}
-
-	private Log _log = LogFactoryUtil
-	    .getLog(DossierMgtFrontOfficePortlet.class
-	        .getName());
 }

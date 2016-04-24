@@ -78,7 +78,7 @@
 	
 	<aui:input name="redirectURL" type="hidden" value="<%= backURL%>"/>
 	<aui:input name="returnURL" type="hidden" value="<%= currentURL%>"/>
-	
+	<aui:input name="<%=DossierDisplayTerms.SERVICE_CONFIG_ID %>" type="hidden" value="<%= serviceConfig != null ? serviceConfig.getServiceConfigId() : 0%>"/>
 	<aui:input name="<%=DossierDisplayTerms.GROUP_ID %>" type="hidden" value="<%= scopeGroupId%>"/>
 	<aui:input name="<%=DossierDisplayTerms.COMPANY_ID %>" type="hidden" value="<%= company.getCompanyId()%>"/>
 

@@ -19,7 +19,14 @@
 
 package org.opencps.dossiermgt.service.impl;
 
+import java.util.Date;
+
+import org.opencps.dossiermgt.model.FileGroup;
 import org.opencps.dossiermgt.service.base.FileGroupLocalServiceBaseImpl;
+
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
+import com.liferay.portal.service.ServiceContext;
 
 /**
  * The implementation of the file group local service.
@@ -41,4 +48,24 @@ public class FileGroupLocalServiceImpl extends FileGroupLocalServiceBaseImpl {
 	 *
 	 * Never reference this interface directly. Always use {@link org.opencps.dossiermgt.service.FileGroupLocalServiceUtil} to access the file group local service.
 	 */
+	
+	public FileGroup addFileGroup(long userId, long dossierId, long dossierPartId, String displayName, int syncStatus, ServiceContext serviceContext) throws SystemException{
+		long fileGroupId = counterLocalService.increment(FileGroup.class.getName());
+		FileGroup fileGroup = fileGroupPersistence.create(fileGroupId);
+		Date now = new Date();
+		fileGroup.setUserId(userId);
+		fileGroup.setGroupId(serviceContext.getScopeGroupId());
+		fileGroup.setCompanyId(serviceContext.getCompanyId());
+		fileGroup.setCreateDate(now);
+		fileGroup.setModifiedDate(now);
+		
+		fileGroup.setDisplayName(displayName);
+		fileGroup.setDossierId(dossierId);
+		fileGroup.setDossierPartId(dossierPartId);
+		fileGroup.setRemoved(0);
+		fileGroup.setSyncStatus(syncStatus);
+		fileGroup.setUuid(PortalUUIDUtil.generate());
+		
+		return fileGroupPersistence.update(fileGroup);
+	}
 }
