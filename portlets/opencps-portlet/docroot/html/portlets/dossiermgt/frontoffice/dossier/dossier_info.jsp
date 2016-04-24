@@ -1,3 +1,4 @@
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -21,6 +22,8 @@
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
 <%@page import="com.liferay.portal.kernel.util.Constants"%>
+<%@page import="org.opencps.accountmgt.model.Business"%>
+<%@page import="org.opencps.accountmgt.model.Citizen"%>
 <%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
 <%@page import="org.opencps.dossiermgt.EmptyDossierCityCodeException"%>
@@ -46,6 +49,8 @@
 	Dossier dossier = (Dossier) request.getAttribute(WebKeys.DOSSIER_ENTRY);
 	ServiceConfig serviceConfig = (ServiceConfig) request.getAttribute(WebKeys.SERVICE_CONFIG_ENTRY);
 	ServiceInfo serviceInfo = (ServiceInfo) request.getAttribute(WebKeys.SERVICE_INFO_ENTRY);
+	Citizen citizen = (Citizen)request.getAttribute(WebKeys.CITIZEN_ENTRY);
+	Business business = (Business)request.getAttribute(WebKeys.BUSINESS_ENTRY);
 	String cmd = ParamUtil.getString(request, Constants.CMD);
 %>
 
@@ -53,21 +58,66 @@
 
 <liferay-ui:error-marker key="errorSection" value="dossier_info" />
 
-<liferay-ui:error exception="<%= EmptyDossierCityCodeException.class %>" message="<%=EmptyDossierCityCodeException.class.getName() %>"/>
-<liferay-ui:error exception="<%= EmptyDossierDistrictCodeException.class %>" message="<%=EmptyDossierDistrictCodeException.class.getName() %>"/>
-<liferay-ui:error exception="<%= EmptyDossierWardCodeException.class %>" message="<%=EmptyDossierWardCodeException.class.getName() %>"/>
-<liferay-ui:error exception="<%= InvalidDossierObjectException.class %>" message="<%=InvalidDossierObjectException.class.getName() %>"/>
-<liferay-ui:error exception="<%= CreateDossierFolderException.class %>" message="<%=CreateDossierFolderException.class.getName() %>"/>
-<liferay-ui:error exception="<%= EmptyDossierSubjectNameException.class %>" message="<%=EmptyDossierSubjectNameException.class.getName() %>"/>
-<liferay-ui:error exception="<%= OutOfLengthDossierSubjectNameException.class %>" message="<%=OutOfLengthDossierSubjectNameException.class.getName() %>"/>
-<liferay-ui:error exception="<%= EmptyDossierSubjectIdException.class %>" message="<%=EmptyDossierSubjectIdException.class.getName() %>"/>
-<liferay-ui:error exception="<%= EmptyDossierAddressException.class %>" message="<%=EmptyDossierAddressException.class.getName() %>"/>
-<liferay-ui:error exception="<%= OutOfLengthDossierContactEmailException.class %>" message="<%=OutOfLengthDossierContactEmailException.class.getName() %>"/>
-<liferay-ui:error exception="<%= OutOfLengthDossierContactNameException.class %>" message="<%=OutOfLengthDossierContactNameException.class.getName() %>"/>
-<liferay-ui:error exception="<%= OutOfLengthDossierContactTelNoException.class %>" message="<%=OutOfLengthDossierContactTelNoException.class.getName() %>"/>
-<liferay-ui:error exception="<%= EmptyDossierContactNameException.class %>" message="<%=EmptyDossierContactNameException.class.getName() %>"/>
-<liferay-ui:error exception="<%= OutOfLengthDossierAddressException.class %>" message="<%=OutOfLengthDossierAddressException.class.getName() %>"/>
-<liferay-ui:error exception="<%= InvalidDossierObjecExceptionException.class %>" message="<%=InvalidDossierObjecExceptionException.class.getName() %>"/>
+<liferay-ui:error 
+	exception="<%= EmptyDossierCityCodeException.class %>" 
+	message="<%=EmptyDossierCityCodeException.class.getName() %>"
+/>
+<liferay-ui:error 
+	exception="<%= EmptyDossierDistrictCodeException.class %>"
+	message="<%=EmptyDossierDistrictCodeException.class.getName() %>"
+/>
+<liferay-ui:error 
+	exception="<%= EmptyDossierWardCodeException.class %>" 
+	message="<%=EmptyDossierWardCodeException.class.getName() %>"
+/>
+<liferay-ui:error 
+	exception="<%= InvalidDossierObjectException.class %>" 
+	message="<%=InvalidDossierObjectException.class.getName() %>"
+/>
+<liferay-ui:error 
+	exception="<%= CreateDossierFolderException.class %>" 
+	message="<%=CreateDossierFolderException.class.getName() %>"
+/>
+<liferay-ui:error 
+	exception="<%= EmptyDossierSubjectNameException.class %>" 
+	message="<%=EmptyDossierSubjectNameException.class.getName() %>"
+/>
+<liferay-ui:error 
+	exception="<%= OutOfLengthDossierSubjectNameException.class %>" 
+	message="<%=OutOfLengthDossierSubjectNameException.class.getName() %>"
+/>
+<liferay-ui:error 
+	exception="<%= EmptyDossierSubjectIdException.class %>" 
+	message="<%=EmptyDossierSubjectIdException.class.getName() %>"
+/>
+<liferay-ui:error 
+	exception="<%= EmptyDossierAddressException.class %>" 
+	message="<%=EmptyDossierAddressException.class.getName() %>"
+/>
+<liferay-ui:error 
+	exception="<%= OutOfLengthDossierContactEmailException.class %>" 
+	message="<%=OutOfLengthDossierContactEmailException.class.getName() %>"
+/>
+<liferay-ui:error 
+	exception="<%= OutOfLengthDossierContactNameException.class %>" 
+	message="<%=OutOfLengthDossierContactNameException.class.getName() %>"
+/>
+<liferay-ui:error 
+	exception="<%= OutOfLengthDossierContactTelNoException.class %>" 
+	message="<%=OutOfLengthDossierContactTelNoException.class.getName() %>"
+/>
+<liferay-ui:error 
+	exception="<%= EmptyDossierContactNameException.class %>" 
+	message="<%=EmptyDossierContactNameException.class.getName() %>"
+/>
+<liferay-ui:error 
+	exception="<%= OutOfLengthDossierAddressException.class %>" 
+	message="<%=OutOfLengthDossierAddressException.class.getName() %>"
+/>
+<liferay-ui:error 
+	exception="<%= InvalidDossierObjecExceptionException.class %>" 
+	message="<%=InvalidDossierObjecExceptionException.class.getName() %>"
+/>
 
 <aui:row>
 	<aui:col width="70">
@@ -117,6 +167,8 @@
 		<aui:input 
 			name="<%=DossierDisplayTerms.SUBJECT_NAME %>" 
 			cssClass="input96"
+			type="text"
+			value="<%=citizen != null ? citizen.getFullName() : business != null ? business.getName() : StringPool.BLANK %>"
 		>
 			<aui:validator name="required"/>
 			<aui:validator name="maxLength">
@@ -130,6 +182,7 @@
 			name="<%=DossierDisplayTerms.SUBJECT_ID %>" 
 			cssClass="input90" 
 			type="text"
+			value="<%=citizen != null ? citizen.getPersonalId() : business != null ? business.getIdNumber() : StringPool.BLANK %>"
 		>
 			<aui:validator name="required"/>
 			<aui:validator name="maxLength">
@@ -141,7 +194,12 @@
 
 <aui:row>
 	<aui:col width="100">
-		<aui:input name="<%=DossierDisplayTerms.ADDRESS %>" cssClass="input97" type="text">
+		<aui:input 
+			name="<%=DossierDisplayTerms.ADDRESS %>" 
+			cssClass="input97" 
+			type="text"
+			value="<%=citizen != null ? citizen.getAddress() : business != null ? business.getAddress() : StringPool.BLANK %>"
+		>
 			<aui:validator name="required"/>
 			<aui:validator name="maxLength">
 				<%= PortletPropsValues.DOSSIERMGT_DOSSIER_ADDRESS_LENGTH %>
@@ -157,12 +215,17 @@
 		itemNames='<%=StringUtil.merge(new String[]{DossierDisplayTerms.CITY_ID,DossierDisplayTerms.DISTRICT_ID,DossierDisplayTerms.WARD_ID}) %>'
 		itemsEmptyOption="true,true,true"
 		cssClass="input100"
+		selectedItems=""
 	/>
 </aui:row>
 
 <aui:row>
 	<aui:col width="30">
-		<aui:input name="<%=DossierDisplayTerms.CONTACT_NAME %>" cssClass="input90" type="text">
+		<aui:input name="<%=DossierDisplayTerms.CONTACT_NAME %>" 
+			cssClass="input90" 
+			type="text"
+			value="<%=citizen != null ? citizen.getFullName() : business != null ? business.getName() : StringPool.BLANK %>"
+		>
 			<aui:validator name="required"/>
 			<aui:validator name="maxLength">
 				<%= PortletPropsValues.DOSSIERMGT_DOSSIER_CONTACT_NAME_LENGTH %>
@@ -171,7 +234,12 @@
 	</aui:col>
 	
 	<aui:col width="30">
-		<aui:input name="<%=DossierDisplayTerms.CONTACT_TEL_NO %>" cssClass="input90" type="text">
+		<aui:input 
+			name="<%=DossierDisplayTerms.CONTACT_TEL_NO %>" 
+			cssClass="input90" 
+			type="text"
+			value="<%=citizen != null && Validator.isNotNull(citizen.getTelNo()) ? citizen.getTelNo() : business != null && Validator.isNotNull(business.getTelNo())? business.getTelNo() : StringPool.BLANK %>"
+		>
 			<aui:validator name="maxLength">
 				<%= PortletPropsValues.DOSSIERMGT_DOSSIER_CONTACT_TEL_NO_LENGTH %>
 			</aui:validator>
@@ -179,7 +247,12 @@
 	</aui:col>
 	
 	<aui:col width="30">
-		<aui:input name="<%=DossierDisplayTerms.CONTACT_EMAIL %>" cssClass="input90" type="text">
+		<aui:input 
+			name="<%=DossierDisplayTerms.CONTACT_EMAIL %>" 
+			cssClass="input90" 
+			type="text"
+			value="<%=citizen != null && Validator.isNotNull(citizen.getEmail()) ? citizen.getEmail() : business != null && Validator.isNotNull(business.getEmail())? business.getEmail() : StringPool.BLANK %>"
+		>
 			<aui:validator name="email"/>
 			<aui:validator name="maxLength">
 				<%= PortletPropsValues.DOSSIERMGT_DOSSIER_CONTACT_EMAIL_LENGTH %>

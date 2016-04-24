@@ -97,7 +97,7 @@
 	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_PART_ID %>" type="hidden" value="<%=dossierPart != null ? dossierPart.getDossierpartId() : dossierPartId %>"/>
 	<aui:row>
 		<aui:col width="100">
-			<aui:input name="<%= DossierFileDisplayTerms.DISPAY_NAME %>" type="text" cssClass="input97">
+			<aui:input name="<%= DossierFileDisplayTerms.DISPLAY_NAME %>" type="text" cssClass="input97">
 				<aui:validator name="required"/>
 			</aui:input>
 		</aui:col>
