@@ -53,21 +53,24 @@
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
 							index="<%=String.valueOf(index) %>"
-							groupName="<%=groupName %>"
+							group-name="<%=groupName %>"
 							href="javascript:void(0);" 
 							label="declaration-online" 
 							cssClass="opencps dossiermgt part-file-ctr declaration-online"
+							onClick='<%=renderResponse.getNamespace() + "declarationOnline(this)" %>'
 						/>
 					</td>
+					
 					<td width="40%" align="right">
 						<aui:a 
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
 							index="<%=String.valueOf(index) %>"
-							groupName="<%=groupName %>"
+							group-name="<%=groupName %>"
 							href="javascript:void(0);" 
 							label="upload-file" 
 							cssClass="opencps dossiermgt part-file-ctr upload-file" 
+							onClick='<%=renderResponse.getNamespace() + "uploadFile(this)" %>'
 						/>
 					</td>
 					<td width="10%" align="right">
@@ -80,13 +83,13 @@
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
 							index="<%=String.valueOf(index) %>"
-							groupName="<%=groupName %>"
+							group-name="<%=groupName %>"
 							href="javascript:void(0);" 
 							cssClass="opencps dossiermgt part-file-ctr remove-file"
+							onClick='<%=renderResponse.getNamespace() + "removeFileUpload(this)" %>'
 						>
 							<i class="fa fa-times" aria-hidden="true"></i>
-							<aui:input id='<%="dossierFileData" + dossierPartId + StringPool.DASH + index %>' name="dossierFileData"  type="hidden"/>
-							<aui:input id='<%="dossierFormData" + dossierPartId + StringPool.DASH + index %>' name="dossierFormData"  type="hidden"/>
+							<aui:input id='<%="uploadDataSchema" + dossierPartId + StringPool.DASH + index %>' name="uploadDataSchema"  type="hidden" cssClass="uploadDataSchema"/>
 							<aui:input id='<%="fileUpload" + dossierPartId + StringPool.DASH + index %>' name="fileUpload"  type="hidden"/>
 						</aui:a>
 					</td>
@@ -98,10 +101,11 @@
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
 							index="<%=String.valueOf(index) %>"
-							groupName="<%=groupName %>"
+							group-name="<%=groupName %>"
 							href="javascript:void(0);" 
 							label="upload-file" 
 							cssClass="opencps dossiermgt part-file-ctr upload-file" 
+							onClick='<%=renderResponse.getNamespace() + "uploadFile(this)" %>'
 						/>
 						
 					</td>
@@ -110,7 +114,7 @@
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
 							index="<%=String.valueOf(index) %>"
-							groupName="<%=groupName %>"
+							group-name="<%=groupName %>"
 							href="javascript:void(0);" 
 							label="taken-from-archive" 
 							cssClass="opencps dossiermgt part-file-ctr taken-from-archive"
@@ -126,13 +130,13 @@
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
 							index="<%=String.valueOf(index) %>"
-							groupName="<%=groupName %>"
+							group-name="<%=groupName %>"
 							href="javascript:void(0);" 
 							cssClass="opencps dossiermgt part-file-ctr remove-file"
+							onClick='<%=renderResponse.getNamespace() + "removeFileUpload(this)" %>'
 						>
 							<i class="fa fa-times" aria-hidden="true"></i>
-							<aui:input id='<%="dossierFileData" + dossierPartId + StringPool.DASH + index %>' name="dossierFileData"  type="hidden"/>
-							<aui:input id='<%="dossierFormData" + dossierPartId + StringPool.DASH + index %>' name="dossierFormData"  type="hidden"/>
+							<aui:input id='<%="uploadDataSchema" + dossierPartId + StringPool.DASH + index %>' name="uploadDataSchema"  type="hidden" cssClass="uploadDataSchema"/>
 							<aui:input id='<%="fileUpload" + dossierPartId + StringPool.DASH + index %>' name="fileUpload"  type="hidden"/>
 						</aui:a>
 					</td>
@@ -153,9 +157,10 @@
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
 							index="<%=String.valueOf(index) %>"
-							groupName="<%=groupName %>"
+							group-name="<%=groupName %>"
 							href="javascript:void(0);" 
 							cssClass="opencps dossiermgt part-file-ctr remove-group"
+							onClick='<%=renderResponse.getNamespace() + "removeDossierGroup(this)" %>'
 						>
 							<i class="fa fa-minus-circle" aria-hidden="true"></i>
 							
@@ -169,10 +174,11 @@
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
 							index="<%=String.valueOf(index) %>"
-							groupName="<%=groupName %>"
+							group-name="<%=groupName %>"
 							href="javascript:void(0);" 
 							label="upload-file" 
 							cssClass="opencps dossiermgt part-file-ctr upload-file" 
+							onClick='<%=renderResponse.getNamespace() + "uploadFile(this)" %>'
 						/>
 						
 					</td>
@@ -181,7 +187,7 @@
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
 							index="<%=String.valueOf(index) %>"
-							groupName="<%=groupName %>"
+							group-name="<%=groupName %>"
 							href="javascript:void(0);" 
 							label="taken-from-archive" 
 							cssClass="opencps dossiermgt part-file-ctr taken-from-archive"
@@ -201,10 +207,11 @@
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
 							index="<%=String.valueOf(index) %>"
-							groupName="<%=groupName %>"
+							group-name="<%=groupName %>"
 							href="javascript:void(0);" 
 							label="upload-file" 
 							cssClass="opencps dossiermgt part-file-ctr upload-file" 
+							onClick='<%=renderResponse.getNamespace() + "uploadFile(this)" %>'
 						/>
 						
 					</td>
@@ -221,13 +228,13 @@
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
 							index="<%=String.valueOf(index) %>"
-							groupName="<%=groupName %>"
+							group-name="<%=groupName %>"
 							href="javascript:void(0);" 
 							cssClass="opencps dossiermgt part-file-ctr remove-file"
+							onClick='<%=renderResponse.getNamespace() + "removeFileUpload(this)" %>'
 						>
 							<i class="fa fa-times" aria-hidden="true"></i>
-							<aui:input id='<%="dossierFileData" + dossierPartId + StringPool.DASH + index %>' name="dossierFileData"  type="hidden"/>
-							<aui:input id='<%="dossierFormData" + dossierPartId + StringPool.DASH + index %>' name="dossierFormData"  type="hidden"/>
+							<aui:input id='<%="uploadDataSchema" + dossierPartId + StringPool.DASH + index %>' name="uploadDataSchema"  type="hidden" cssClass="uploadDataSchema"/>
 							<aui:input id='<%="fileUpload" + dossierPartId + StringPool.DASH + index %>' name="fileUpload"  type="hidden"/>
 						</aui:a>
 					</td>

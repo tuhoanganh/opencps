@@ -1,4 +1,4 @@
-<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -23,6 +23,8 @@
 <%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
 <%@page import="com.liferay.portal.kernel.util.Constants"%>
 <%@page import="org.opencps.dossiermgt.model.Dossier"%>
+<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
+
 <%@ include file="../../init.jsp"%>
 
 
@@ -44,6 +46,7 @@
 			name="<%=DossierDisplayTerms.SERVICE_NAME %>" 
 			cssClass="input96" 
 			disabled="<%=true %>"
+			type="text"
 			value="<%=serviceInfo != null ? serviceInfo.getServiceName() : StringPool.BLANK %>"
 		/>	
 	</aui:col>
@@ -53,6 +56,7 @@
 			name="<%=DossierDisplayTerms.SERVICE_NO %>" 
 			cssClass="input90" 
 			disabled="<%=true %>"
+			type="text"
 			value="<%=serviceInfo != null ? serviceInfo.getServiceNo() : StringPool.BLANK %>"
 		/>	
 	</aui:col>
@@ -60,11 +64,21 @@
 
 <aui:row>
 	<aui:col width="70">
-		<aui:input name="<%=DossierDisplayTerms.GOVAGENCY_NAME%>" cssClass="input96" type="text"/>	
+		<aui:input 
+			name="<%=DossierDisplayTerms.GOVAGENCY_NAME%>"
+			cssClass="input96" 
+			disabled="<%=true %>"
+			value="<%=serviceConfig != null ? serviceConfig.getGovAgencyName() : StringPool.BLANK %>"
+		/>	
 	</aui:col>
 	
 	<aui:col width="30">
-		<aui:input name="<%=DossierDisplayTerms.GOVAGENCY_CODE %>" cssClass="input90" type="text"/>	
+		<aui:input 
+			name="<%=DossierDisplayTerms.GOVAGENCY_CODE %>" 
+			cssClass="input90"
+			disabled="<%=true %>"
+			value="<%=serviceConfig != null ? serviceConfig.getGovAgencyCode() : StringPool.BLANK %>"
+		/>	
 	</aui:col>
 </aui:row>
 
@@ -74,8 +88,6 @@
 		<aui:input 
 			name="<%=DossierDisplayTerms.SUBJECT_NAME %>" 
 			cssClass="input96"
-			disabled="<%=true %>"
-			value="<%=serviceConfig != null ? serviceConfig.getGovAgencyName() : StringPool.BLANK %>"
 		/>	
 	</aui:col>
 	
@@ -83,8 +95,6 @@
 		<aui:input 
 			name="<%=DossierDisplayTerms.SUBJECT_ID %>" 
 			cssClass="input90" 
-			disabled="<%=true %>"
-			value="<%=serviceConfig != null ? serviceConfig.getGovAgencyCode() : StringPool.BLANK %>"
 		/>	
 	</aui:col>
 </aui:row>
@@ -98,8 +108,8 @@
 <aui:row>
 	<datamgt:ddr 
 		depthLevel="3" 
-		dictCollectionCode="ADMINISTRATIVE_REGION"
-		itemNames="cityCode,districtCode,wardCode"
+		dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_ADMINISTRATIVE_REGION %>"
+		itemNames='<%=StringUtil.merge(new String[]{DossierDisplayTerms.CITY_ID,DossierDisplayTerms.DISTRICT_ID,DossierDisplayTerms.WARD_ID}) %>'
 		itemsEmptyOption="true,true,true"
 		cssClass="input100"
 	/>

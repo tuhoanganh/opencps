@@ -17,81 +17,37 @@
  */
 %>
 
-<%@page import="org.opencps.util.PortletUtil"%>
-<%@page import="org.opencps.util.DateTimeUtil"%>
-<%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.dossiermgt.model.DossierFile"%>
-<%@page import="java.util.Date"%>
 <%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
+<%@page import="org.opencps.util.WebKeys"%>
+<%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
 <%@ include file="../init.jsp"%>
 
 <%
-	DossierFile dossierFile = (DossierFile) request.getAttribute(WebKeys.DOSSIER_FILE_ENTRY);
+	long dossierPartId = ParamUtil.getLong(request, DossierFileDisplayTerms.DOSSIER_PART_ID);
 
-	Date defaultDossierFileDate = dossierFile != null && dossierFile.getDossierFileDate() != null ? 
-			dossierFile.getDossierFileDate() : DateTimeUtil.convertStringToDate("01/01/1970");
+	DossierPart dossierPart = null;
+	
+	if(dossierPartId > 0){
+		try{
+			dossierPart = DossierPartLocalServiceUtil.getDossierPart(dossierPartId);
+		}catch(Exception e){
 			
-	PortletUtil.SplitDate spd = new PortletUtil.SplitDate(defaultDossierFileDate);
-%>
-<aui:form name="fm" method="post" action="">
-	<aui:row>
-		<aui:col width="100">
-			<aui:input name="<%= DossierFileDisplayTerms.DISPAY_NAME %>" type="text" cssClass="input97">
-				<aui:validator name="required"/>
-			</aui:input>
-		</aui:col>
-	</aui:row>
-	
-	<aui:row>
-		<aui:col width="70">
-			<aui:input name="<%= DossierFileDisplayTerms.DOSSIER_FILE_NO %>" type="text" cssClass="input90"/>
-		</aui:col>
-		
-		<aui:col width="30">
-			<label class="control-label custom-lebel" for='<portlet:namespace/><%=DossierFileDisplayTerms.DOSSIER_FILE_DATE %>'>
-				<liferay-ui:message key="dossier-file-date"/>
-			</label>
-			<liferay-ui:input-date
-				dayParam="<%=DossierFileDisplayTerms.DOSSIER_FILE_DATE_DAY %>"
-				dayValue="<%=spd.getDayOfMoth() %>"
-				disabled="<%= false %>"
-				monthParam="<%=DossierFileDisplayTerms.DOSSIER_FILE_DATE_MONTH %>"
-				monthValue="<%=spd.getMonth() %>"
-				name="<%=DossierFileDisplayTerms.DOSSIER_FILE_DATE%>"
-				yearParam="<%=DossierFileDisplayTerms.DOSSIER_FILE_DATE_YEAR %>"
-				yearValue="<%=spd.getYear() %>"
-				formName="fm"
-				autoFocus="<%=true %>"
-				nullable="<%=dossierFile == null || dossierFile.getDossierFileDate() == null ? true : false %>"
-			/>
-		</aui:col>
-	</aui:row>
-	<aui:row>
-		<aui:col width="100">
-			<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD %>" type="file"/>
-		</aui:col>
-	</aui:row>
-	
-	<aui:row>
-		<aui:button name="agree" type="button" value="agree"/>
-		<aui:button name="cancel" type="button" value="cancel"/>
-	</aui:row>
-</aui:form>
-
-<aui:script use="aui-base,aui-io">
-	AUI().ready(function(A){
-		var cancelButton = A.one('#<portlet:namespace/>cancel');
-		if(cancelButton){
-			cancelButton.on('click', function(){
-				var dialog = Liferay.Util.getWindow('<portlet:namespace/>dossierFileId');
-				dialog.destroy(); // You can try toggle/hide whate
-			});
 		}
-	});
-	
-	Liferay.provide(window, '<portlet:namespace/>uploadDossierFile', function() {
-		var Util = Liferay.Util;
-		
-		Util.getOpener().Liferay.fire('getUserData', {name:'xxx'});
-	});
-</aui:script>
+	}
+	String alpacaSchema = dossierPart != null && Validator.isNotNull(dossierPart.getFormScript()) ? 
+			dossierPart.getFormScript() : PortletConstants.UNKNOW_ALPACA_SCHEMA;
+
+	//verify alpacaSchema before render form
+%>
+
+<div id="form"></div>
+<script type="text/javascript">
+	var alpacaSchema = <%=alpacaSchema%>;
+    $(document).ready(function() {
+        var test = $("#form").alpaca(alpacaSchema);
+        console.log($("#form").alpaca("get"));
+    });
+</script>
