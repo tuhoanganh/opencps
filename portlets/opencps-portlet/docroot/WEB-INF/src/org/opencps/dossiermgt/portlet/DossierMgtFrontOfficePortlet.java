@@ -14,6 +14,7 @@
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>
 */
+
 package org.opencps.dossiermgt.portlet;
 
 import java.io.IOException;
@@ -34,6 +35,8 @@ import org.opencps.accountmgt.model.Citizen;
 import org.opencps.accountmgt.search.BusinessDisplayTerms;
 import org.opencps.accountmgt.service.BusinessLocalServiceUtil;
 import org.opencps.accountmgt.service.CitizenLocalServiceUtil;
+import org.opencps.datamgt.model.DictItem;
+import org.opencps.datamgt.service.DictItemLocalServiceUtil;
 import org.opencps.dossiermgt.CreateDossierFolderException;
 import org.opencps.dossiermgt.EmptyDossierAddressException;
 import org.opencps.dossiermgt.EmptyDossierCityCodeException;
@@ -61,7 +64,6 @@ import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
 import org.opencps.util.DLFolderUtil;
-import org.opencps.util.DictItemUtil;
 import org.opencps.util.MessageKeys;
 import org.opencps.util.PortletConstants;
 import org.opencps.util.PortletPropsValues;
@@ -137,7 +139,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		String displayName = ParamUtil
 		    .getString(
-		        uploadPortletRequest, DossierFileDisplayTerms.DISPAY_NAME);
+		        uploadPortletRequest, DossierFileDisplayTerms.DISPLAY_NAME);
 
 		String dossierFileNo = ParamUtil
 		    .getString(
@@ -177,7 +179,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			    .put(DossierFileDisplayTerms.DOSSIER_FILE_NO, dossierFileNo);
 
 			jsonObject
-			    .put(DossierFileDisplayTerms.DISPAY_NAME, displayName);
+			    .put(DossierFileDisplayTerms.DISPLAY_NAME, displayName);
 
 			jsonObject
 			    .put(
@@ -417,6 +419,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		long dossierId = ParamUtil
 		    .getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
+		long dossierTemplateId = ParamUtil
+		    .getLong(actionRequest, DossierDisplayTerms.DOSSIER_TEMPLATE_ID);
 		long serviceInfoId = ParamUtil
 		    .getLong(actionRequest, DossierDisplayTerms.SERVICE_INFO_ID);
 		long cityId = ParamUtil
@@ -431,7 +435,25 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		    .getLong(
 		        actionRequest,
 		        BusinessDisplayTerms.BUSINESS_MAPPINGORGANIZATIONID);
+		long govAgencyOrganizationId = ParamUtil
+		    .getLong(
+		        actionRequest, DossierDisplayTerms.GOVAGENCY_ORGANIZATION_ID);
+		int serviceMode = ParamUtil
+		    .getInteger(actionRequest, DossierDisplayTerms.SERVICE_MODE);
+		String serviceDomainIndex = ParamUtil
+		    .getString(actionRequest, DossierDisplayTerms.SERVICE_DOMAIN_INDEX);
 
+		String govAgencyCode = ParamUtil
+		    .getString(actionRequest, DossierDisplayTerms.GOVAGENCY_CODE);
+		String govAgencyName = ParamUtil
+		    .getString(actionRequest, DossierDisplayTerms.GOVAGENCY_NAME);
+
+		String serviceAdministrationIndex = ParamUtil
+		    .getString(
+		        actionRequest,
+		        DossierDisplayTerms.SERVICE_ADMINISTRATION_INDEX);
+		String templateFileNo = ParamUtil
+		    .getString(actionRequest, DossierDisplayTerms.TEMPLATE_FILE_NO);
 		String subjectName = ParamUtil
 		    .getString(actionRequest, DossierDisplayTerms.SUBJECT_NAME);
 		String subjectId = ParamUtil
@@ -448,7 +470,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		    .getString(actionRequest, DossierDisplayTerms.NOTE);
 		String accountType = ParamUtil
 		    .getString(
-		        actionRequest, "accountType",
+		        actionRequest, DossierDisplayTerms.ACCOUNT_TYPE,
 		        PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN);
 		String returnURL = ParamUtil
 		    .getString(actionRequest, "returnURL");
@@ -486,12 +508,41 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			    dossierDestinationFolder, subjectName, subjectId, address,
 			    contactName, contactTelNo, contactEmail, uploadDataSchemas);
 
-			String cityCode = DictItemUtil
-			    .getDictItemCode(cityId);
-			String districtCode = DictItemUtil
-			    .getDictItemCode(districtId);
-			String wardCode = DictItemUtil
-			    .getDictItemCode(wardId);
+			String cityCode = StringPool.BLANK;
+			String districtCode = StringPool.BLANK;
+			String wardCode = StringPool.BLANK;
+
+			String cityName = StringPool.BLANK;
+			String districtName = StringPool.BLANK;
+			String wardName = StringPool.BLANK;
+
+			DictItem city = DictItemLocalServiceUtil
+			    .getDictItem(cityId);
+			DictItem district = DictItemLocalServiceUtil
+			    .getDictItem(districtId);
+			DictItem ward = DictItemLocalServiceUtil
+			    .getDictItem(wardId);
+
+			if (city != null) {
+				cityCode = city
+				    .getItemCode();
+				cityName = city
+				    .getItemName();
+			}
+
+			if (district != null) {
+				districtCode = district
+				    .getItemCode();
+				districtName = district
+				    .getItemName();
+			}
+
+			if (ward != null) {
+				wardCode = ward
+				    .getItemCode();
+				wardName = ward
+				    .getItemName();
+			}
 
 			DLFolder dossierFolder = DLFolderUtil
 			    .getTargetFolder(userId, serviceContext
@@ -501,10 +552,19 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			        serviceContext);
 
 			DossierLocalServiceUtil
-			    .addDossier(userId, dossierId, serviceInfoId, dossierFolder
-			        .getFolderId(), cityCode, districtCode, wardCode,
-			        subjectName, subjectId, address, contactName, contactTelNo,
-			        contactEmail, note, uploadDataSchemas, serviceContext);
+			    .addDossier(
+			        userId, mappingOrganizationId, dossierTemplateId,
+			        templateFileNo, serviceConfigId, serviceInfoId,
+			        serviceDomainIndex, govAgencyOrganizationId, govAgencyCode,
+			        govAgencyName, serviceMode, serviceAdministrationIndex,
+			        cityCode, cityName, districtCode, districtName, wardName,
+			        wardCode, subjectName, subjectId, address, contactName,
+			        contactTelNo, contactEmail, note,
+			        PortletConstants.DOSSIER_SOURCE_DIRECT,
+			        PortletConstants.DOSSIER_STATUS_NEW, uploadDataSchemas,
+			        dossierFolder
+			            .getFolderId(),
+			        serviceContext);
 
 			SessionMessages
 			    .add(actionRequest, MessageKeys.DOSSIER_UPDATE_SUCCESS);
