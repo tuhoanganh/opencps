@@ -52,7 +52,7 @@ public class DossierFileLocalServiceImpl
 	    long groupFileId, long ownerUserId, long ownerOrganizationId,
 	    String displayName, String formData, long fileEntryId,
 	    int dossierFileMark, int dossierFileType, String dossierFileNo,
-	    Date dossierFileDate, int removed, int original, int syncStatus,
+	    Date dossierFileDate, int original, int syncStatus,
 	    ServiceContext serviceContext)
 	    throws SystemException {
 
