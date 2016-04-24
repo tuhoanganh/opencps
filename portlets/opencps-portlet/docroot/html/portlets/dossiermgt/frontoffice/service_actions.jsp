@@ -1,3 +1,6 @@
+<%@page import="com.liferay.portal.kernel.util.Constants"%>
+<%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -23,14 +26,14 @@
 <%@page import="org.opencps.dossiermgt.permissions.DossierPermission"%>
 <%@page import="org.opencps.util.ActionKeys"%>
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
-<%@page import="org.opencps.dossiermgt.bean.Service"%>
+
 
 <%@ include file="../init.jsp"%>
 
  
 <%
 	ResultRow row = (ResultRow)request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
-	Service service = (Service) row.getObject();
+	ServiceConfig service = (ServiceConfig) row.getObject();
 %> 
 
 			
@@ -38,7 +41,8 @@
  	<c:if test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_DOSSIER) %>">
  		<portlet:renderURL var="addDossierURL">
 			<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/frontoffice/edit_dossier.jsp"/>
-			<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(service.getServiceConfigId()) %>"/>
+			<portlet:param name="<%=DossierDisplayTerms.SERVICE_CONFIG_ID %>" value="<%=String.valueOf(service.getServiceConfigId()) %>"/>
+			<portlet:param name="<%=Constants.CMD %>" value="<%=Constants.ADD %>"/>
 			<portlet:param name="backURL" value="<%=currentURL %>"/>
 		</portlet:renderURL> 
  		<liferay-ui:icon image="add" message="add" url="<%=addDossierURL.toString() %>" /> 

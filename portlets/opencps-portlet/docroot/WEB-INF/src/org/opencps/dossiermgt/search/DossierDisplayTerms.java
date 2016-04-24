@@ -68,10 +68,13 @@ public class DossierDisplayTerms extends DisplayTerms {
 	public static final String ADDRESS = "address";
 	public static final String CITY_CODE = "cityCode";
 	public static final String CITY_NAME = "cityName";
+	public static final String CITY_ID = "cityId";
 	public static final String DISTRICT_CODE = "districtCode";
 	public static final String DISTRICT_NAME = "districtName";
+	public static final String DISTRICT_ID = "districtId";
 	public static final String WARD_CODE = "wardCode";
 	public static final String WARD_NAME = "wardName";
+	public static final String WARD_ID = "wardId";
 	public static final String CONTACT_NAME = "contactName";
 	public static final String CONTACT_TEL_NO = "contactTelNo";
 	public static final String CONTACT_EMAIL = "contactEmail";

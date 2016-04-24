@@ -43,12 +43,14 @@
 
 	int index = ParamUtil.getInteger(request, "index");
 	
+	int size = ParamUtil.getInteger(request, "size");
+	
 	String groupNames = ParamUtil.getString(request, "groupNames");
 	
 %>
 
 
-<aui:form name="fm" method="post" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "addPrivateDossierPartGroup();" %>'> 
+<aui:form name="fm" method="post" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "addPrivateDossierGroup();" %>'> 
 	<aui:row>
 		<aui:col width="100">
 			<aui:input name="<%= DossierFileDisplayTerms.PART_NAME %>" type="text" cssClass="input97">
@@ -75,30 +77,30 @@
 		}
 	});
 	
-	Liferay.provide(window, '<portlet:namespace/>responseData', function(data) {
+	Liferay.provide(window, '<portlet:namespace/>responseData', function(schema) {
 		var Util = Liferay.Util;
-		Util.getOpener().Liferay.fire('getPrivateDossierPartGroupData', {responseData:data});
+		Util.getOpener().Liferay.fire('getPrivateDossierGroupSchema', {responseData:schema});
 		<portlet:namespace/>closeDialog();
 	});
 	
 	Liferay.provide(window, '<portlet:namespace/>closeDialog', function() {
-		var dialog = Liferay.Util.getWindow('<portlet:namespace/>privateDossierPartGroup');
+		var dialog = Liferay.Util.getWindow('<portlet:namespace/>privateDossierGroup');
 		dialog.destroy(); // You can try toggle/hide whate
 	});
 	
-	Liferay.provide(window, '<portlet:namespace/>addPrivateDossierPartGroup', function() {
+	Liferay.provide(window, '<portlet:namespace/>addPrivateDossierGroup', function() {
 		var A = AUI();
 		var groupNames = '<%=groupNames%>';
 		var dossierPartId = '<%=dossierPartId%>';
 		var index = '<%=index%>';
-		
+		var size = '<%=size%>';
 		groupNames = groupNames.split(',');
 		
 		var partName = A.one('#<portlet:namespace/>partName').val().trim();
 		if(groupNames.indexOf(partName) > -1){
 			alert('<%=UnicodeLanguageUtil.get(pageContext, "group-name-existing")%>');
 		}else{
-			<portlet:namespace/>responseData({groupName:partName, dossierPartId:dossierPartId, index:index});
+			<portlet:namespace/>responseData({groupName:partName, dossierPartId:dossierPartId, index:index, size:size});
 		}
 	});
 	

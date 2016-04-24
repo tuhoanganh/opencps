@@ -1,3 +1,4 @@
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -30,6 +31,7 @@
 <%@page import="java.util.List"%>
 <%@page import="org.opencps.dossiermgt.model.impl.DossierPartImpl"%>
 <%@page import="org.hsqldb.SessionManager"%>
+<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 <%@ include file="../init.jsp"%>
 
 <%
@@ -44,35 +46,18 @@
 	
 	String groupName = ParamUtil.getString(request, "groupName");
 	
-	List<DossierPart> dossierParts3 = new ArrayList<DossierPart>();
-	DossierPart dossierPart3 = new DossierPartImpl();
-	dossierPart3.setDossierpartId(3);
-	dossierPart3.setPartType(4);
-	dossierPart3.setPartName("dossierPart3");
-	dossierPart3.setTreeIndex("3");
+	List<DossierPart> dossierParts = new ArrayList<DossierPart>();
 	
-	dossierParts3.add(dossierPart3);
+	if(dossierPartId > 0){
+		dossierParts = DossierMgtUtil.getTreeDossierPart(dossierPartId);
+	}
 	
-	DossierPart dossierPart31 = new DossierPartImpl();
-	dossierPart31.setDossierpartId(31);
-	dossierPart31.setPartType(1);
-	dossierPart31.setPartName("dossierPart31");
-	dossierPart31.setTreeIndex("3.1");
-	
-	dossierParts3.add(dossierPart31);
-	
-	DossierPart dossierPart32 = new DossierPartImpl();
-	dossierPart32.setDossierpartId(32);
-	dossierPart32.setPartType(2);
-	dossierPart32.setPartName("dossierPart32");
-	dossierPart32.setTreeIndex("3.2");
-	
-	dossierParts3.add(dossierPart32);
-	
+	if(!dossierParts.isEmpty()){
+		
 	%>
-		<div id='<%=renderResponse.getNamespace() + "privateDossierPartGroup" + dossierParts3.get(0).getDossierpartId() + StringPool.DASH + index%>' class="opencps dossiermgt dossier-part-tree">
+		<div id='<%=renderResponse.getNamespace() + "privateDossierPartGroup" + dossierParts.get(0).getDossierpartId() + StringPool.DASH + index%>' class="opencps dossiermgt dossier-part-tree">
 			<%
-			for(DossierPart dossierPart : dossierParts3){
+			for(DossierPart dossierPart : dossierParts){
 				int level = 1;
 				String treeIndex = dossierPart.getTreeIndex();
 				if(Validator.isNotNull(treeIndex)){
@@ -87,19 +72,23 @@
 						class="opencps dossiermgt dossier-part-row"
 					>
 						<span class='<%="level-" + level + " opencps dossiermgt dossier-part"%>'>
-							<i id='<%="rowcheck" + dossierPart.getDossierpartId() + StringPool.DASH + index %>' class="fa fa-square-o" aria-hidden="true"></i>
-							<span class="opencps dossiermgt dossier-part-name">
-								<%
-									if(Validator.isNotNull(groupName) && dossierParts3.indexOf(dossierPart) == 0){
-										%>
-											<%=groupName %>
-										<%
-									}else{
-										%>
-											<%=dossierPart.getPartName() %>
-										<%
-									}
-								%>
+							<span class="row-icon">
+								<i id='<%="rowcheck" + dossierPart.getDossierpartId() + StringPool.DASH + index %>' class="fa fa-square-o" aria-hidden="true"></i>
+							</span>
+							<%
+								String dossierPartName = dossierPart.getPartName();
+							
+								String dossierGroup = StringPool.SPACE;
+							
+								if(dossierParts.indexOf(dossierPart) == 0){
+									
+									dossierPartName = groupName;
+									
+									dossierGroup = StringPool.SPACE +  "dossier-group" + StringPool.SPACE;
+								}
+							%>
+							<span class='<%="opencps dossiermgt" +  dossierGroup + "dossier-part-name" %>'>
+								<%=dossierPartName %>
 							</span>
 						</span>
 					
@@ -118,4 +107,5 @@
 		%>
 		</div>
 	<%
+	}
 %>
