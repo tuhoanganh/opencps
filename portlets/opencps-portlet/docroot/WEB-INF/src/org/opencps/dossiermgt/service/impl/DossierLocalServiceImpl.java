@@ -257,6 +257,8 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 					        userId, dossierId, dossierPartId, groupName,
 					        PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
 					        serviceContext);
+					
+					
 				}
 
 				Date fileDate = null;
