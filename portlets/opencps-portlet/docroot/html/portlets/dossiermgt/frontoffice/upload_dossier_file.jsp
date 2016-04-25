@@ -1,5 +1,3 @@
-
-<%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -31,6 +29,7 @@
 <%@page import="com.liferay.portal.kernel.json.JSONObject"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
 <%@page import="org.hsqldb.SessionManager"%>
+<%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
 <%@ include file="../init.jsp"%>
 
 <%
@@ -73,6 +72,8 @@
 	
 	String groupName = ParamUtil.getString(request, "groupName");
 	
+	String fileName = ParamUtil.getString(request, "fileName");
+	
 	JSONObject responseData = (JSONObject)request.getAttribute(WebKeys.RESPONSE_UPLOAD_TEMP_DOSSIER_FILE);
 	
 %>
@@ -92,10 +93,11 @@
 	<aui:input name="redirectURL" type="hidden" value="<%=currentURL %>"/>
 	<aui:input name="index" type="hidden" value="<%=String.valueOf(index) %>"/>
 	<aui:input name="groupName" type="hidden" value="<%=groupName %>"/>
+	<aui:input name="fileName" type="hidden" value="<%=fileName %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_PART_ID %>" type="hidden" value="<%=dossierPart != null ? dossierPart.getDossierpartId() : dossierPartId %>"/>
 	<aui:row>
 		<aui:col width="100">
-			<aui:input name="<%= DossierFileDisplayTerms.DISPAY_NAME %>" type="text" cssClass="input97">
+			<aui:input name="<%= DossierFileDisplayTerms.DISPLAY_NAME %>" type="text" cssClass="input97">
 				<aui:validator name="required"/>
 			</aui:input>
 		</aui:col>
