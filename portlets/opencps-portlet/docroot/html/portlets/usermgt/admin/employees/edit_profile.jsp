@@ -118,7 +118,7 @@
 	</aui:row>
 	
 	<aui:row>
-		<aui:input name="changePassWord" type="checkbox" checked="false"/>
+		<aui:input name="changePassWordEmployer" type="checkbox" checked="false"/>
 	</aui:row>
 	
 	<div id = "<portlet:namespace />showOrHidePasswordsField" >
@@ -144,9 +144,11 @@
 
 <aui:script>
 	AUI().ready(function(A) {
-		var changePasswordCheckbox = A.one('#<portlet:namespace />changePassWordCheckbox');
+		
+		var changePasswordCheckbox = A.one('#<portlet:namespace />changePassWordEmployerCheckbox');
+		alert("changePassWordCheckbox " + changePassWordCheckbox.val());
 		if(changePasswordCheckbox) {
-			changePasswordCheckbox.on('change', function() {
+			changePasswordCheckbox.on('click', function() {
 				alert("changePassWordCheckbox " + changePassWordCheckbox.val());
 			})
 		}

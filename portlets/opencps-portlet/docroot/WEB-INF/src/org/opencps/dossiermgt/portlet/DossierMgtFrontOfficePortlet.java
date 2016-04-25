@@ -46,7 +46,6 @@ import org.opencps.dossiermgt.EmptyDossierFileException;
 import org.opencps.dossiermgt.EmptyDossierSubjectIdException;
 import org.opencps.dossiermgt.EmptyDossierSubjectNameException;
 import org.opencps.dossiermgt.EmptyDossierWardCodeException;
-import org.opencps.dossiermgt.InvalidDossierObjecExceptionException;
 import org.opencps.dossiermgt.InvalidDossierObjectException;
 import org.opencps.dossiermgt.OutOfLengthDossierAddressException;
 import org.opencps.dossiermgt.OutOfLengthDossierContactEmailException;
@@ -591,7 +590,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			    e instanceof OutOfLengthDossierContactTelNoException ||
 			    e instanceof EmptyDossierContactNameException ||
 			    e instanceof OutOfLengthDossierAddressException ||
-			    e instanceof InvalidDossierObjecExceptionException ||
 			    e instanceof EmptyDossierFileException) {
 
 				SessionErrors
