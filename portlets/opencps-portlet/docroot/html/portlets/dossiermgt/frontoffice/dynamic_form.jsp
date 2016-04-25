@@ -47,11 +47,16 @@
 <div id="form"></div>
 <script type="text/javascript">
 	var alpacaSchema = <%=alpacaSchema%>;
-    $(document).ready(function() {
+   /*  $(document).ready(function() {
         var test = $("#form").alpaca(alpacaSchema);
         console.log(test.alpaca("get"));
         console.log($("#form").alpaca("get"));
     });
+ */    
+ var el = $("#form");
+ var xxx =  Alpaca(el, alpacaSchema);
     
-    
+ console.log(el);
+ console.log(xxx); 
+ console.log(xxx); 
 </script>
