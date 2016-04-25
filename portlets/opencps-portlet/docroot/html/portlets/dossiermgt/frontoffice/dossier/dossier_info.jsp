@@ -41,7 +41,7 @@
 <%@page import="org.opencps.dossiermgt.OutOfLengthDossierContactTelNoException"%>
 <%@page import="org.opencps.dossiermgt.EmptyDossierContactNameException"%>
 <%@page import="org.opencps.dossiermgt.OutOfLengthDossierAddressException"%>
-<%@page import="org.opencps.dossiermgt.InvalidDossierObjecExceptionException"%>
+<%@page import="org.opencps.dossiermgt.InvalidDossierObjectException"%>
 <%@ include file="../../init.jsp"%>
 
 
@@ -115,8 +115,8 @@
 	message="<%=OutOfLengthDossierAddressException.class.getName() %>"
 />
 <liferay-ui:error 
-	exception="<%= InvalidDossierObjecExceptionException.class %>" 
-	message="<%=InvalidDossierObjecExceptionException.class.getName() %>"
+	exception="<%= InvalidDossierObjectException.class %>" 
+	message="<%=InvalidDossierObjectException.class.getName() %>"
 />
 
 <aui:row>
