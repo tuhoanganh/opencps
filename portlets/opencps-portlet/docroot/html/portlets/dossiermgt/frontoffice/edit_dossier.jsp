@@ -58,8 +58,6 @@
 
 <portlet:actionURL var="updateDossierURL" name="updateDossier"/>
 
-
-
 <liferay-util:buffer var="htmlTop">
 	<c:if test="<%= dossier != null %>">
 		<div class="dossier-info">

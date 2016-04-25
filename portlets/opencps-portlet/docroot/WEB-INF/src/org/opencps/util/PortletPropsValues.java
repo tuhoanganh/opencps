@@ -69,8 +69,11 @@ public class PortletPropsValues {
 	public static final String DATAMGT_MASTERDATA_ADMINISTRATION_REGION = GetterUtil
 					.getString(PortletProps
 						.get(PortletPropsKeys.DATAMGT_MASTERDATA_ADMINISTRATION_REGION));
-	//validate file 
 	
+	public static final String DATAMGT_MASTERDATA_ADMINISTRATIVE_REGION = GetterUtil
+					.getString(PortletProps
+						.get(PortletPropsKeys.DATAMGT_MASTERDATA_ADMINISTRATIVE_REGION));
+		//validate file 
 	public static final String[] ACCOUNTMGT_FILE_TYPE = GetterUtil
 					.getStringValues(
 						PortletProps.getArray(PortletPropsKeys.ACCOUNTMGT_FILE_TYPE));
