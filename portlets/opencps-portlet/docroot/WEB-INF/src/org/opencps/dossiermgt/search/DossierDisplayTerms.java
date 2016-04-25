@@ -53,6 +53,7 @@ public class DossierDisplayTerms extends DisplayTerms {
 	public static final String SERVICE_CONFIG_ID = "serviceConfigId";
 	public static final String SERVICE_INFO_ID = "serviceInfoId";
 	public static final String DOSSIER_TEMPLATE_ID = "dossierTemplateId";
+	public static final String TEMPLATE_FILE_NO = "templateFileNo";
 	public static final String GOVAGENCY_ORGANIZATION_ID =
 	    "govAgencyOrganizationId";
 	public static final String SUBJECT_ID = "subjectId";
@@ -85,6 +86,7 @@ public class DossierDisplayTerms extends DisplayTerms {
 	public static final String FINISH_DATETIME = "finishDatetime";
 	public static final String SERVICE_NAME = "serviceName";
 	public static final String SERVICE_NO = "serviceNo";
+	public static final String ACCOUNT_TYPE = "accountType";
 
 	public static final String USER_ID = "userId";
 

@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -41,7 +40,7 @@
 <%@page import="com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil"%>
 <%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
-
+<%@page import="org.opencps.dossiermgt.EmptyDossierFileException"%>
 
 <%@ include file="../../init.jsp"%>
 
@@ -52,6 +51,10 @@
 <portlet:actionURL var="deleteTempFileURL" name="deleteTempFile">
 	<portlet:param name="fileEntryId" value="<%=String.valueOf(12345) %>"/>
 </portlet:actionURL>
+
+<liferay-ui:error-marker key="errorSection" value="dossier_part" />
+
+<liferay-ui:error exception="<%= EmptyDossierFileException.class %>" message="<%=EmptyDossierFileException.class.getName() %>"/>
 
 <%
 	Dossier dossier = (Dossier) request.getAttribute(WebKeys.DOSSIER_ENTRY);
@@ -467,6 +470,8 @@
 		
 		var groupName = instance.attr('group-name');
 		
+		var fileName = instance.attr('file-name');
+		
 		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
 		portletURL.setParameter("mvcPath", "/html/portlets/dossiermgt/frontoffice/upload_dossier_file.jsp");
 		portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
@@ -474,6 +479,7 @@
 		portletURL.setParameter("dossierPartId", dossierPartId);
 		portletURL.setParameter("index", index);
 		portletURL.setParameter("groupName", groupName);
+		portletURL.setParameter("fileName", fileName);
 
 		<portlet:namespace/>openDossierDialog(portletURL.toString(), '<portlet:namespace />dossierFileId','<%= UnicodeLanguageUtil.get(pageContext, "upload-dossier-file") %>');
 	});
