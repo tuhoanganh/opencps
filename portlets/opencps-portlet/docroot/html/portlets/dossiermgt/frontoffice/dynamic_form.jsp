@@ -18,11 +18,11 @@
 %>
 
 <%@page import="org.opencps.dossiermgt.model.DossierFile"%>
-<%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
-<%@page import="org.opencps.util.WebKeys"%>
-<%@page import="org.opencps.util.PortletConstants"%>
-<%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.model.DossierPart"%>
+<%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
+<%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
+<%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.util.WebKeys"%>
 <%@ include file="../init.jsp"%>
 
 <%
@@ -39,15 +39,19 @@
 	}
 	String alpacaSchema = dossierPart != null && Validator.isNotNull(dossierPart.getFormScript()) ? 
 			dossierPart.getFormScript() : PortletConstants.UNKNOW_ALPACA_SCHEMA;
+	System.out.println(alpacaSchema);
 
 	//verify alpacaSchema before render form
 %>
-
+<a href="javascript:void(0);" target-id="form" class="btn run">Run »</a>
 <div id="form"></div>
 <script type="text/javascript">
 	var alpacaSchema = <%=alpacaSchema%>;
     $(document).ready(function() {
         var test = $("#form").alpaca(alpacaSchema);
+        console.log(test.alpaca("get"));
         console.log($("#form").alpaca("get"));
     });
+    
+    
 </script>
