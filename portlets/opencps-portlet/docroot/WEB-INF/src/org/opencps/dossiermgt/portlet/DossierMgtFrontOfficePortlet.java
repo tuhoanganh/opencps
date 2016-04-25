@@ -637,7 +637,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	    OutOfLengthDossierContactNameException,
 	    OutOfLengthDossierContactTelNoException,
 	    EmptyDossierContactNameException, OutOfLengthDossierAddressException,
-	    InvalidDossierObjecExceptionException, EmptyDossierFileException {
+	    InvalidDossierObjectException, EmptyDossierFileException {
 
 		if (cityId <= 0) {
 			throw new EmptyDossierCityCodeException();

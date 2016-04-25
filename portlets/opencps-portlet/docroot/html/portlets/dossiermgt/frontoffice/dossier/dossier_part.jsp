@@ -16,31 +16,31 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
-<%@page import="javax.portlet.PortletRequest"%>
-<%@page import="org.opencps.util.WebKeys"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
+<%@page import="com.liferay.portal.kernel.util.Constants"%>
+<%@page import="com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil"%>
 <%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
-<%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
-<%@page import="org.opencps.dossiermgt.model.impl.DossierPartImpl"%>
-<%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="java.util.HashMap"%>
 <%@page import="java.util.LinkedHashMap"%>
 <%@page import="java.util.LinkedList"%>
-<%@page import="java.util.Map"%>
-<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
-<%@page import="java.util.HashMap"%>
 <%@page import="java.util.List"%>
-<%@page import="com.liferay.portal.kernel.util.Constants"%>
-<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
-<%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
-<%@page import="org.opencps.dossiermgt.model.Dossier"%>
-<%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
+<%@page import="java.util.Map"%>
+<%@page import="javax.portlet.PortletRequest"%>
 <%@page import="javax.portlet.WindowState"%>
-<%@page import="com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil"%>
+<%@page import="org.opencps.dossiermgt.EmptyDossierFileException"%>
+<%@page import="org.opencps.dossiermgt.model.Dossier"%>
+<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
+<%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
+<%@page import="org.opencps.dossiermgt.model.impl.DossierPartImpl"%>
+<%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
+<%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
 <%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
-<%@page import="org.opencps.dossiermgt.EmptyDossierFileException"%>
+<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
+<%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.util.WebKeys"%>
 
 <%@ include file="../../init.jsp"%>
 
@@ -64,8 +64,6 @@
 	
 	String cmd = ParamUtil.getString(request, Constants.CMD);
 	
-	System.out.println(deleteTempFileURL.toString());
-	
 	String privateDossierGroup = StringPool.BLANK;
 	
 	List<DossierPart> dossierPartsLevel1 = new ArrayList<DossierPart>();
@@ -76,123 +74,22 @@
 		}catch(Exception e){}
 	}
 	
-	HashMap<Integer, List<DossierPart>> hashMap = new LinkedHashMap<Integer, List<DossierPart>>();
-	
-	if(dossierPartsLevel1 != null){
-		for(DossierPart dossierPart : dossierPartsLevel1){
-			List<DossierPart> dossierPartTree = DossierMgtUtil.getTreeDossierPart(dossierPart.getDossierpartId());
-			if(!dossierPartTree.isEmpty()){
-				hashMap.put(dossierPart.getPartType(), dossierPartTree);
-			}
-		}
-	}
-	
 	int index = 0; 
 	
-	for (Map.Entry<Integer, List<DossierPart>> entry : hashMap.entrySet()){
-		
-		int key = entry.getKey();
-		
-		List<DossierPart> dossierParts = entry.getValue();
-		
-		if(dossierParts != null){
-			%>
-			<div class="opencps dossiermgt dossier-part-tree" id='<%= renderResponse.getNamespace() + "tree" + dossierParts.get(0).getDossierpartId()%>'>
-				<c:choose>
-					<c:when test="<%=key == PortletConstants.DOSSIER_PART_TYPE_COMPONEMT ||
-							key == PortletConstants.DOSSIER_PART_TYPE_SUBMIT || 
-							key == PortletConstants.DOSSIER_PART_TYPE_OTHER %>">
-						<%
-						for(DossierPart dossierPart : dossierParts){
-							
-							int level = 1;
-							
-							String treeIndex = dossierPart.getTreeIndex();
-							
-							if(Validator.isNotNull(treeIndex)){
-								level = StringUtil.count(treeIndex, StringPool.PERIOD);
-							}
-							
-							%>
-								<div 
-									id='<%=renderResponse.getNamespace() + "row-" + dossierPart.getDossierpartId() + StringPool.DASH + index %>' 
-									index="<%=index %>"
-									dossier-part="<%=dossierPart.getDossierpartId() %>"
-									class="opencps dossiermgt dossier-part-row"
-								>
-									<span class='<%="level-" + level + " opencps dossiermgt dossier-part"%>'>
-										<span class="row-icon">
-											<i 
-												id='<%="rowcheck" + dossierPart.getDossierpartId() + StringPool.DASH + index %>' 
-												class="fa fa-square-o" 
-												aria-hidden="true">
-											</i>
-										</span>
-										<span class="opencps dossiermgt dossier-part-name">
-											<%=dossierPart.getPartName() %>
-										</span>
-									</span>
-								
-									<span class="opencps dossiermgt dossier-part-control">
-										<liferay-util:include 
-											page="/html/portlets/dossiermgt/frontoffice/dossier_file_controls.jsp" 
-											servletContext="<%=application %>"
-										>
-											<portlet:param 
-												name="<%=DossierFileDisplayTerms.DOSSIER_PART_ID %>" 
-												value="<%=String.valueOf(dossierPart.getDossierpartId()) %>"
-											/>
-											<portlet:param name="index" value="<%=String.valueOf(index) %>"/>
-											<portlet:param name="level" value="<%=String.valueOf(level) %>"/>
-											<portlet:param name="groupName" value="<%=StringPool.BLANK%>"/>
-											<portlet:param name="partType" value="<%=String.valueOf(dossierPart.getPartType()) %>"/>
-										</liferay-util:include>
-									</span>
-								</div>
-							<%
-							index++;
-						}
-						%>
-					</c:when>
-					
-					<c:when test="<%=key == PortletConstants.DOSSIER_PART_TYPE_PRIVATE%>">
-						<%
-							privateDossierGroup = dossierParts.get(0).getPartName();
-						%>
-						<div
-							id='<%=renderResponse.getNamespace() + "row-" + dossierParts.get(0).getDossierpartId() + StringPool.DASH + index %>' 
-							index="<%=index %>"
-							dossier-part-size="<%=dossierParts.size() %>"
-							dossier-part="<%=dossierParts.get(0).getDossierpartId() %>" 
-							class="opencps dossiermgt dossier-part-row root-group"
-						>
-							<span class='<%="level-0 opencps dossiermgt dossier-part"%>'>
-								<span class="row-icon">
-									<i class="fa fa-minus-square-o" aria-hidden="true"></i>
-								</span>
-								<span class="opencps dossiermgt dossier-part-name">
-									<liferay-ui:message key="private-dossier"/>
-								</span>
-							</span>
-							
-							<span class="opencps dossiermgt dossier-part-control">
-								<aui:a 
-									id="<%=String.valueOf(dossierParts.get(0).getDossierpartId()) %>"
-									dossier-part="<%=String.valueOf(dossierParts.get(0).getDossierpartId()) %>"
-									index="<%=String.valueOf(index) %>"
-									dossier-part-size="<%=dossierParts.size() %>"
-									href="javascript:void(0);" 
-									label="add-private-dossier" 
-									cssClass="opencps dossiermgt part-file-ctr add-private-dossier"
-									onClick='<%=renderResponse.getNamespace() + "addPrivateDossierGroup(this)" %>'
-								/>
-								
-							</span>
-						</div>
-						<div 
-							id='<%=renderResponse.getNamespace() + "privateDossierPartGroup" + dossierParts.get(0).getDossierpartId() + StringPool.DASH + index%>' 
-							class="opencps dossiermgt dossier-part-tree"
-						>
+	if(dossierPartsLevel1 != null){
+		for (DossierPart dossierPartLevel1 : dossierPartsLevel1){
+			
+			int partType = dossierPartLevel1.getPartType();
+			
+			List<DossierPart> dossierParts = DossierMgtUtil.getTreeDossierPart(dossierPartLevel1.getDossierpartId());
+			
+			if(dossierParts != null){
+				%>
+				<div class="opencps dossiermgt dossier-part-tree" id='<%= renderResponse.getNamespace() + "tree" + dossierParts.get(0).getDossierpartId()%>'>
+					<c:choose>
+						<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_COMPONEMT ||
+								partType == PortletConstants.DOSSIER_PART_TYPE_SUBMIT || 
+								partType == PortletConstants.DOSSIER_PART_TYPE_OTHER %>">
 							<%
 							for(DossierPart dossierPart : dossierParts){
 								
@@ -219,20 +116,14 @@
 													aria-hidden="true">
 												</i>
 											</span>
-											<%
-												String dossierGroup = StringPool.SPACE;
-												if(dossierParts.indexOf(dossierPart) == 0){
-													dossierGroup = StringPool.SPACE +  "dossier-group" + StringPool.SPACE;
-												}
-											%>
-											<span class='<%="opencps dossiermgt" +  dossierGroup + "dossier-part-name" %>'>
+											<span class="opencps dossiermgt dossier-part-name">
 												<%=dossierPart.getPartName() %>
 											</span>
 										</span>
 									
 										<span class="opencps dossiermgt dossier-part-control">
 											<liferay-util:include 
-												page="/html/portlets/dossiermgt/frontoffice/dossier_file_controls.jsp"  
+												page="/html/portlets/dossiermgt/frontoffice/dossier_file_controls.jsp" 
 												servletContext="<%=application %>"
 											>
 												<portlet:param 
@@ -241,23 +132,121 @@
 												/>
 												<portlet:param name="index" value="<%=String.valueOf(index) %>"/>
 												<portlet:param name="level" value="<%=String.valueOf(level) %>"/>
-												<portlet:param name="groupName" value="<%=dossierParts.get(0).getPartName() %>"/>
+												<portlet:param name="groupName" value="<%=StringPool.BLANK%>"/>
 												<portlet:param name="partType" value="<%=String.valueOf(dossierPart.getPartType()) %>"/>
 											</liferay-util:include>
 										</span>
 									</div>
-									
 								<%
 								index++;
 							}
 							%>
-						</div>
-					</c:when>
-				</c:choose>
+						</c:when>
+						
+						<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_PRIVATE%>">
+							<%
+								privateDossierGroup = dossierParts.get(0).getPartName();
+							%>
+							<div
+								id='<%=renderResponse.getNamespace() + "row-" + dossierParts.get(0).getDossierpartId() + StringPool.DASH + index %>' 
+								index="<%=index %>"
+								dossier-part-size="<%=dossierParts.size() %>"
+								dossier-part="<%=dossierParts.get(0).getDossierpartId() %>" 
+								class="opencps dossiermgt dossier-part-row root-group"
+							>
+								<span class='<%="level-0 opencps dossiermgt dossier-part"%>'>
+									<span class="row-icon">
+										<i class="fa fa-minus-square-o" aria-hidden="true"></i>
+									</span>
+									<span class="opencps dossiermgt dossier-part-name">
+										<liferay-ui:message key="private-dossier"/>
+									</span>
+								</span>
+								
+								<span class="opencps dossiermgt dossier-part-control">
+									<aui:a 
+										id="<%=String.valueOf(dossierParts.get(0).getDossierpartId()) %>"
+										dossier-part="<%=String.valueOf(dossierParts.get(0).getDossierpartId()) %>"
+										index="<%=String.valueOf(index) %>"
+										dossier-part-size="<%=dossierParts.size() %>"
+										href="javascript:void(0);" 
+										label="add-private-dossier" 
+										cssClass="opencps dossiermgt part-file-ctr add-private-dossier"
+										onClick='<%=renderResponse.getNamespace() + "addPrivateDossierGroup(this)" %>'
+									/>
+									
+								</span>
+							</div>
+							<div 
+								id='<%=renderResponse.getNamespace() + "privateDossierPartGroup" + dossierParts.get(0).getDossierpartId() + StringPool.DASH + index%>' 
+								class="opencps dossiermgt dossier-part-tree"
+							>
+								<%
+								for(DossierPart dossierPart : dossierParts){
+									
+									int level = 1;
+									
+									String treeIndex = dossierPart.getTreeIndex();
+									
+									if(Validator.isNotNull(treeIndex)){
+										level = StringUtil.count(treeIndex, StringPool.PERIOD);
+									}
+									
+									%>
+										<div 
+											id='<%=renderResponse.getNamespace() + "row-" + dossierPart.getDossierpartId() + StringPool.DASH + index %>' 
+											index="<%=index %>"
+											dossier-part="<%=dossierPart.getDossierpartId() %>"
+											class="opencps dossiermgt dossier-part-row"
+										>
+											<span class='<%="level-" + level + " opencps dossiermgt dossier-part"%>'>
+												<span class="row-icon">
+													<i 
+														id='<%="rowcheck" + dossierPart.getDossierpartId() + StringPool.DASH + index %>' 
+														class="fa fa-square-o" 
+														aria-hidden="true">
+													</i>
+												</span>
+												<%
+													String dossierGroup = StringPool.SPACE;
+													if(dossierParts.indexOf(dossierPart) == 0){
+														dossierGroup = StringPool.SPACE +  "dossier-group" + StringPool.SPACE;
+													}
+												%>
+												<span class='<%="opencps dossiermgt" +  dossierGroup + "dossier-part-name" %>'>
+													<%=dossierPart.getPartName() %>
+												</span>
+											</span>
+										
+											<span class="opencps dossiermgt dossier-part-control">
+												<liferay-util:include 
+													page="/html/portlets/dossiermgt/frontoffice/dossier_file_controls.jsp"  
+													servletContext="<%=application %>"
+												>
+													<portlet:param 
+														name="<%=DossierFileDisplayTerms.DOSSIER_PART_ID %>" 
+														value="<%=String.valueOf(dossierPart.getDossierpartId()) %>"
+													/>
+													<portlet:param name="index" value="<%=String.valueOf(index) %>"/>
+													<portlet:param name="level" value="<%=String.valueOf(level) %>"/>
+													<portlet:param name="groupName" value="<%=dossierParts.get(0).getPartName() %>"/>
+													<portlet:param name="partType" value="<%=String.valueOf(dossierPart.getPartType()) %>"/>
+												</liferay-util:include>
+											</span>
+										</div>
+										
+									<%
+									index++;
+								}
+								%>
+							</div>
+						</c:when>
+					</c:choose>
+					
+				</div>
 				
-			</div>
-			
-		<%
+			<%
+			}
 		}
 	}
 	%>
