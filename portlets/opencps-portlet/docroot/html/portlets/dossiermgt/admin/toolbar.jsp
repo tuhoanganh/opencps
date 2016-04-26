@@ -167,7 +167,7 @@
 						</c:when>
 						<c:when test="<%= tabs1.contentEquals(DossierMgtUtil.TOP_TABS_SERVICE_CONFIG) %>">
 							<aui:row>
-									<aui:col width="25">
+									<aui:col width="30">
 										<aui:select name="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_GOVAGENCYCODE %>">
 										  
 										  <aui:option value="<%=StringPool.BLANK %>">
@@ -185,7 +185,7 @@
 										  %>
 										</aui:select>
 									</aui:col>
-									<aui:col width="25">
+									<aui:col width="30">
 										<datamgt:ddr cssClass="input30"
 											depthLevel="1" 
 											dictCollectionCode="SERVICE_DOMAIN"

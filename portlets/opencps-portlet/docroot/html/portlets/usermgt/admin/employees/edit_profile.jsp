@@ -143,7 +143,7 @@
 </div>	
 
 <aui:script>
-	AUI().ready(function(A) {
+	 AUI().ready(function(A) {
 		
 		var changePassword = A.one('#<portlet:namespace />changePassWordCheckbox');
 		var showOrHidePasswordsField = A.one('#<portlet:namespace />showOrHidePasswordsField');
@@ -158,7 +158,7 @@
 				} else {
 					showOrHidePasswordsField.hide();
 				}
-			})
+			});
 		}
-	});
+	}); 
 </aui:script>
