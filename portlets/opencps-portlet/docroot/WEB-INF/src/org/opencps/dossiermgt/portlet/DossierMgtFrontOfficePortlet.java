@@ -54,6 +54,7 @@ import org.opencps.dossiermgt.OutOfLengthDossierContactNameException;
 import org.opencps.dossiermgt.OutOfLengthDossierContactTelNoException;
 import org.opencps.dossiermgt.OutOfLengthDossierSubjectIdException;
 import org.opencps.dossiermgt.OutOfLengthDossierSubjectNameException;
+import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierTemplate;
 import org.opencps.dossiermgt.model.ServiceConfig;
 import org.opencps.dossiermgt.search.DossierDisplayTerms;
@@ -335,14 +336,29 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	    RenderRequest renderRequest, RenderResponse renderResponse)
 	    throws PortletException, IOException {
 
+		long dossierId = ParamUtil
+			.getLong(renderRequest, DossierDisplayTerms.DOSSIER_ID);
+		
 		long serviceConfigId = ParamUtil
 		    .getLong(renderRequest, DossierDisplayTerms.SERVICE_CONFIG_ID);
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest
 		    .getAttribute(WebKeys.THEME_DISPLAY);
+		
 		String accountType = StringPool.BLANK;
 
 		try {
+			
+			if(dossierId > 0){
+				Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
+				
+				if(dossier != null){
+					renderRequest
+				    	.setAttribute(WebKeys.DOSSIER_ENTRY, dossier);
+					serviceConfigId = dossier.getServiceConfigId();
+				}
+			}
+			
 			if (serviceConfigId > 0) {
 				ServiceConfig serviceConfig = ServiceConfigLocalServiceUtil
 				    .getServiceConfig(serviceConfigId);
@@ -369,8 +385,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				}
 			}
 
-			if (themeDisplay
-			    .isSignedIn()) {
+			if (themeDisplay.isSignedIn()) {
+				
 				List<UserGroup> userGroups = new ArrayList<UserGroup>();
 
 				User user = themeDisplay
