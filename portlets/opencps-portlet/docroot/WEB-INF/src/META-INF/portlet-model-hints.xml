@@ -391,7 +391,7 @@
 		<field name="govAgencyOrganizationId" type="long" />
 		<field name="serviceMode" type="int" />
 		<field name="counter" type="int" />
-		<field name="subjectId" type="long" />
+		<field name="subjectId" type="String" />
 		<field name="subjectName" type="String" />
 		<field name="address" type="String" />
 		<field name="cityCode" type="String" />
@@ -510,6 +510,7 @@
 		<field name="userId" type="long" />
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
+		<field name="uuid" type="String" />
 		<field name="dossierId" type="long" />
 		<field name="dossierPartId" type="long" />
 		<field name="displayName" type="String" />
