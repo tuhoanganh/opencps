@@ -145,7 +145,7 @@
 	</entity>
 	
 	
-	<entity name="Dossier" local-service="true">
+	<entity name="Dossier" local-service="true" table="opencps_dossier">
     
     	<!-- PK fields -->
     	
@@ -203,6 +203,7 @@
         </finder>
         <reference entity="DLFileEntry" package-path="com.liferay.portlet.documentlibrary"/>
         <reference package-path="com.liferay.portlet.documentlibrary" entity="DLFolder" />
+        <reference package-path="com.liferay.portlet.asset" entity="AssetEntry" />
     </entity>
     
     <entity name="DossierStatus" local-service="true" table="opencps_dossier_status">
