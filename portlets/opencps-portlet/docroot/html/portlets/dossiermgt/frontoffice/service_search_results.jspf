@@ -1,3 +1,4 @@
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,7 +18,9 @@
  */
 %>
 
-<%@ include file="../init.jsp"%>
 
-<liferay-util:include page='<%=templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
-<liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
+<%
+	serviceConfigs = ServiceConfigLocalServiceUtil.getServiceConFigsByG_M(scopeGroupId, PortletConstants.SERVICE_CONFIG_FRONTOFFICE, searchContainer.getStart(), searchContainer.getEnd());
+
+	totalCount = ServiceConfigLocalServiceUtil.countServiceConFigsByG_M(scopeGroupId, PortletConstants.SERVICE_CONFIG_FRONTOFFICE);
+%>
