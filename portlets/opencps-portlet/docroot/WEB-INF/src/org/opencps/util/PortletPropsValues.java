@@ -1,3 +1,4 @@
+
 /**
  * OpenCPS is the open source Core Public Services software
  * Copyright (C) 2016-present OpenCPS community
@@ -14,6 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
+
 package org.opencps.util;
 
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -52,17 +54,8 @@ public class PortletPropsValues {
 	        .get(PortletPropsKeys.DATAMGT_MASTERDATA_BUSINESS_TYPE));
 
 	public static final String DATAMGT_MASTERDATA_SERVICE_DOMAIN = GetterUtil
-
-					.getString(PortletProps
-						.get(PortletPropsKeys.DATAMGT_MASTERDATA_SERVICE_DOMAIN));
-	
-	public static final String DATAMGT_MASTERDATA_ADMINISTRATION_REGION = GetterUtil
-					.getString(PortletProps
-						.get(PortletPropsKeys.DATAMGT_MASTERDATA_ADMINISTRATION_REGION));
-	
-		//validate file 
-
-	   
+	    .getString(PortletProps
+	        .get(PortletPropsKeys.DATAMGT_MASTERDATA_SERVICE_DOMAIN));
 	public static final String DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION =
 	    GetterUtil
 	        .getString(PortletProps
@@ -74,6 +67,12 @@ public class PortletPropsValues {
 	        .getString(PortletProps
 	            .get(
 	                PortletPropsKeys.DATAMGT_MASTERDATA_ADMINISTRATIVE_REGION));
+	
+	public static final String DATAMGT_MASTERDATA_ADMINISTRATION_REGION = 
+			 GetterUtil
+		        .getString(PortletProps
+		            .get(
+		                PortletPropsKeys.DATAMGT_MASTERDATA_ADMINISTRATION_REGION));
 
 	// validate file
 

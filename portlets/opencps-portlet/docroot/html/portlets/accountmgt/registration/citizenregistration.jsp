@@ -124,7 +124,7 @@
 		page="/html/portlets/accountmgt/registration/citizen/general_info.jsp" 
 		servletContext="<%=application %>" 
 	/> 
-	
+
 	<liferay-util:include 
 		page="/html/portlets/accountmgt/registration/citizen/contact.jsp" 
 		servletContext="<%=application %>" 

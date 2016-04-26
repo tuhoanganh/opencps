@@ -1,7 +1,4 @@
-<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="java.util.List"%>
-<%@page import="org.opencps.datamgt.model.DictItem"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -38,6 +35,10 @@
 <%@page import="org.opencps.datamgt.service.DictCollectionLocalServiceUtil"%>
 <%@page import="org.opencps.datamgt.model.DictCollection"%>
 <%@page import="org.opencps.util.PortletPropsValues"%>
+<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page import="org.opencps.datamgt.model.DictItem"%>
 <%@ include file="../init.jsp"%>
 
 <%
@@ -168,6 +169,7 @@
 						<c:when test="<%= tabs1.contentEquals(DossierMgtUtil.TOP_TABS_SERVICE_CONFIG) %>">
 							<aui:row>
 									<aui:col width="30">
+
 										<aui:select name="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_GOVAGENCYCODE %>">
 										  
 										  <aui:option value="<%=StringPool.BLANK %>">
@@ -186,6 +188,7 @@
 										</aui:select>
 									</aui:col>
 									<aui:col width="30">
+
 										<datamgt:ddr cssClass="input30"
 											depthLevel="1" 
 											dictCollectionCode="SERVICE_DOMAIN"

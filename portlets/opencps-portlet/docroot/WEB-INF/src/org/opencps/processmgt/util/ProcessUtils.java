@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.portlet.RenderRequest;
 
+import org.opencps.dossiermgt.model.DossierPart;
 import org.opencps.dossiermgt.model.DossierTemplate;
 import org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil;
 import org.opencps.processmgt.model.ProcessStep;
@@ -42,6 +43,23 @@ import com.liferay.portal.service.ServiceContextFactory;
  */
 public class ProcessUtils {
 	
+	/**
+	 * Get DossierPart
+	 * 
+	 * @param dossierTemplateId
+	 * @param renderRequest
+	 * @return
+	 */
+	public static List<DossierPart> getDossierParts(
+	    long dossierTemplateId, RenderRequest renderRequest) {
+
+		List<DossierPart> dossierParts = new ArrayList<DossierPart>();
+		
+		
+		
+		return dossierParts;
+	}
+
 	/**
 	 * Get DossierTemplate by GroupId
 	 * 

@@ -401,5 +401,6 @@ public class PortletUtil {
 	        // TODO: nothing
         }
 		return dictItem;
+
 	}
 }
