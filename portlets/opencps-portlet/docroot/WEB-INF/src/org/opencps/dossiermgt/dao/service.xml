@@ -4,6 +4,7 @@
 	auto-namespace-tables="false">
 	<author>trungnt</author>
 	<namespace>dossiermgt</namespace>
+	
 	<entity name="DossierTemplate" local-service="true"
 		table="opencps_dossiertemplate">
 
@@ -25,7 +26,7 @@
 		<column name="templateNo" type="String" />
 
 		<finder return-type="Collection" name="TemplateName">
-			<finder-column name="templateName" />
+			<finder-column name="templateName" comparator="LIKE"/>
 		</finder>
 
 		<finder return-type="DossierTemplate" name="TemplateNo">
@@ -92,6 +93,16 @@
 		<finder return-type="DosserPart" name="PartNo">
 			<finder-column name="partNo" />
 		</finder>
+		
+		<finder return-type="Collection" name="T_T">
+			<finder-column name="dossierTemplateId"/>
+			<finder-column name="partType" />
+		</finder>
+		
+		<finder return-type="Collection" name="T_P">
+		  <finder-column name="dossierTemplateId" />
+		  <finder-column name="parentId" />
+		</finder>
 	</entity>
 
 	<entity name="ServiceConfig" local-service="true"
@@ -124,6 +135,11 @@
 
 		<finder return-type="Collection" name="DossierTemplateId">
 			<finder-column name="dossierTemplateId" />
+		</finder>
+		
+		<finder return-type="Collection" name="G_M">
+			<finder-column name="groupId" />
+			<finder-column name="serviceMode"/>
 		</finder>
 
 	</entity>
@@ -159,7 +175,7 @@
         <column name="govAgencyOrganizationId" type="long"/>
         <column name="serviceMode" type="int"/>
         <column name="counter" type="int"/>
-        <column name="subjectId" type="long"/>
+        <column name="subjectId" type="String"/>
         <column name="subjectName" type="String"/>
         <column name="address" type="String"/>
         <column name="cityCode" type="String"/>
@@ -182,10 +198,14 @@
         <order by="desc">
             <order-column name="modifiedDate" order-by="desc"></order-column>
         </order>
-        
+        <finder name="GroupId" return-type="Collection">
+            <finder-column name="groupId"></finder-column>
+        </finder>
+        <reference entity="DLFileEntry" package-path="com.liferay.portlet.documentlibrary"/>
+        <reference package-path="com.liferay.portlet.documentlibrary" entity="DLFolder" />
     </entity>
     
-    <entity name="DossierStatus" local-service="true">
+    <entity name="DossierStatus" local-service="true" table="opencps_dossier_status">
     
    		<!-- PK fields -->
    		
@@ -210,7 +230,7 @@
         <column name="syncStatus" type="int"/>
     </entity>
     
-    <entity name="DossierLog" local-service="true">
+    <entity name="DossierLog" local-service="true" table="opencps_dossier_log">
     
    		<!-- PK fields -->
     
@@ -235,7 +255,7 @@
         <column name="level" type="int"/>
     </entity>
     
-    <entity name="FileGroup" local-service="true">
+    <entity name="FileGroup" local-service="true" table="opencps_file_group">
     
     	<!-- PK fields -->
     
@@ -250,6 +270,8 @@
 		<column name="modifiedDate" type="Date" />
 		
 		<!-- Other fields -->
+		
+		<column name="uuid" type="String"/>
         <column name="dossierId" type="long"/>
         <column name="dossierPartId" type="long"/>
         <column name="displayName" type="String"/>
@@ -257,7 +279,7 @@
         <column name="syncStatus" type="int"/>
     </entity>
     
-    <entity name="DossierFile" local-service="true">
+    <entity name="DossierFile" local-service="true" table="opencps_dossier_file">
     
     	<!-- PK fields -->
     	
@@ -310,6 +332,23 @@
 		<exception>InvalidServiceConfigGovCode</exception>
 		<exception>InvalidInWorkingUnit</exception>
 		<exception>InvalidServiceDomain</exception>
+        <exception>EmptyDossierCityCode</exception>
+        <exception>EmptyDossierDistrictCode</exception>
+        <exception>EmptyDossierWardCode</exception>
+        <exception>EmptyDossierSubjectName</exception>
+        <exception>EmptyDossierSubjectId</exception>
+        <exception>EmptyDossierAddress</exception>
+        <exception>EmptyDossierContactName</exception>
+        <exception>OutOfLengthDossierSubjectName</exception>
+        <exception>OutOfLengthDossierSubjectId</exception>
+        <exception>OutOfLengthDossierAddress</exception>
+        <exception>OutOfLengthDossierContactName</exception>
+        <exception>OutOfLengthDossierContactTelNo</exception>
+        <exception>OutOfLengthDossierContactEmail</exception>
+        <exception>OutOfLengthDossierNote</exception>
+        <exception>EmptyDossierFile</exception>
+        <exception>InvalidDossierObject</exception>
+        <exception>CreateDossierFolder</exception>
 	</exceptions>
 
 </service-builder>
