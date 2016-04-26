@@ -29,4 +29,50 @@
 			AND (opencps_service_config.domainCode = ?)
 		]]>
 	</sql>
+	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierFinder.countDossier">	
+		<![CDATA[
+			SELECT
+				count(*) AS COUNT_VALUE
+			FROM
+				opencps_dossier
+			INNER JOIN
+				opencps_serviceinfo
+			ON
+				opencps_dossier.serviceInfoId = opencps_serviceinfo.serviceInfoId
+			INNER JOIN
+				opencps_serviceconfig
+			ON
+				opencps_dossier.serviceConfigId = opencps_serviceconfig.serviceConfigId
+			WHERE
+				(lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))
+			OR 
+				(lower(opencps_serviceconfig.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$]))s
+			AND 
+				(opencps_dossier.dossierStatus = ?)
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierFinder.searchDossier">	
+		<![CDATA[
+			SELECT
+				*
+			FROM
+				opencps_dossier
+			INNER JOIN
+				opencps_serviceinfo
+			ON
+				opencps_dossier.serviceInfoId = opencps_serviceinfo.serviceInfoId
+			INNER JOIN
+				opencps_serviceconfig
+			ON
+				opencps_dossier.serviceConfigId = opencps_serviceconfig.serviceConfigId
+			WHERE
+				(lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))
+			OR 
+				(lower(opencps_serviceconfig.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$]))s
+			AND 
+				(opencps_dossier.dossierStatus = ?)
+		]]>
+	</sql>
 </custom-sql>
