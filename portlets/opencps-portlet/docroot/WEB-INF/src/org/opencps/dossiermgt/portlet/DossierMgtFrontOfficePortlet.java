@@ -15,6 +15,7 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>
 */
 
+
 package org.opencps.dossiermgt.portlet;
 
 import java.io.IOException;
@@ -109,6 +110,13 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		UploadPortletRequest uploadPortletRequest = PortalUtil
 		    .getUploadPortletRequest(actionRequest);
 
+		long folderId = ParamUtil
+		    .getLong(uploadPortletRequest, DossierFileDisplayTerms.FOLDE_ID);
+
+		long dossierPartId = ParamUtil
+		    .getLong(
+		        uploadPortletRequest, DossierFileDisplayTerms.DOSSIER_PART_ID);
+
 		int index = ParamUtil
 		    .getInteger(uploadPortletRequest, DossierFileDisplayTerms.INDEX);
 
@@ -116,15 +124,12 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		    .getString(
 		        uploadPortletRequest, DossierFileDisplayTerms.GROUP_NAME);
 
+		String templateFileNo = ParamUtil
+		    .getString(
+		        uploadPortletRequest, DossierDisplayTerms.TEMPLATE_FILE_NO);
+
 		String fileName = ParamUtil
 		    .getString(uploadPortletRequest, DossierFileDisplayTerms.FILE_NAME);
-
-		long folderId = ParamUtil
-		    .getLong(uploadPortletRequest, DossierFileDisplayTerms.FOLDE_ID);
-
-		long dossierPartId = ParamUtil
-		    .getLong(
-		        uploadPortletRequest, DossierFileDisplayTerms.DOSSIER_PART_ID);
 
 		String tempFolderName = ParamUtil
 		    .getString(
@@ -206,12 +211,23 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			    .put(DossierFileDisplayTerms.DOSSIER_PART_ID, dossierPartId);
 
 			jsonObject
-			    .put("index", index);
+			    .put(DossierFileDisplayTerms.INDEX, index);
 
 			jsonObject
-			    .put("groupName", groupName);
+			    .put(DossierFileDisplayTerms.GROUP_NAME, groupName);
 
-			// DLAppServiceUtil.a
+			jsonObject
+			    .put(
+			        DossierFileDisplayTerms.DOSSIER_FILE_ORIGINAL,
+			        PortletConstants.DOSSIER_FILE_ORIGINAL);
+
+			jsonObject
+			    .put(
+			        DossierFileDisplayTerms.DOSSIER_FILE_TYPE,
+			        PortletConstants.DOSSIER_FILE_TYPE_INPUT);
+
+			jsonObject
+			    .put(DossierDisplayTerms.TEMPLATE_FILE_NO, templateFileNo);
 
 		}
 		catch (Exception e) {
@@ -416,6 +432,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	public void updateDossier(
 	    ActionRequest actionRequest, ActionResponse actionResponse) {
 
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest
+		    .getAttribute(WebKeys.THEME_DISPLAY);
+
 		long dossierId = ParamUtil
 		    .getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
 		long dossierTemplateId = ParamUtil
@@ -526,21 +545,24 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				cityCode = city
 				    .getItemCode();
 				cityName = city
-				    .getItemName();
+				    .getItemName(themeDisplay
+				        .getLocale());
 			}
 
 			if (district != null) {
 				districtCode = district
 				    .getItemCode();
 				districtName = district
-				    .getItemName();
+				    .getItemName(themeDisplay
+				        .getLocale());
 			}
 
 			if (ward != null) {
 				wardCode = ward
 				    .getItemCode();
 				wardName = ward
-				    .getItemName();
+				    .getItemName(themeDisplay
+				        .getLocale());
 			}
 
 			DLFolder dossierFolder = DLFolderUtil

@@ -1,4 +1,4 @@
-<%@page import="org.opencps.dossiermgt.model.impl.DossierImpl"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software

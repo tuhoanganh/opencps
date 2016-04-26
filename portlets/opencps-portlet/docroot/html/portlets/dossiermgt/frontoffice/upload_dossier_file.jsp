@@ -74,6 +74,8 @@
 	
 	String fileName = ParamUtil.getString(request, "fileName");
 	
+	String templateFileNo = ParamUtil.getString(request, "templateFileNo");
+	
 	JSONObject responseData = (JSONObject)request.getAttribute(WebKeys.RESPONSE_UPLOAD_TEMP_DOSSIER_FILE);
 	
 %>
@@ -94,6 +96,7 @@
 	<aui:input name="index" type="hidden" value="<%=String.valueOf(index) %>"/>
 	<aui:input name="groupName" type="hidden" value="<%=groupName %>"/>
 	<aui:input name="fileName" type="hidden" value="<%=fileName %>"/>
+	<aui:input name="templateFileNo" type="hidden" value="<%=templateFileNo %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_PART_ID %>" type="hidden" value="<%=dossierPart != null ? dossierPart.getDossierpartId() : dossierPartId %>"/>
 	<aui:row>
 		<aui:col width="100">

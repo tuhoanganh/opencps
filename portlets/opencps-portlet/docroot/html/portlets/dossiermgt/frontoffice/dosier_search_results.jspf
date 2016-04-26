@@ -20,7 +20,5 @@
 
 
 <%
-	Dossier dossier = new DossierImpl();
-	dossier.setDossierId(1);
-	dossiers.add(dossier);
+	
 %>

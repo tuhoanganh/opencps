@@ -28,6 +28,8 @@
 <%
 	long dossierPartId = ParamUtil.getLong(request, DossierFileDisplayTerms.DOSSIER_PART_ID);
 
+	int index = ParamUtil.getInteger(request, DossierFileDisplayTerms.INDEX);
+
 	DossierPart dossierPart = null;
 	
 	if(dossierPartId > 0){
@@ -39,24 +41,52 @@
 	}
 	String alpacaSchema = dossierPart != null && Validator.isNotNull(dossierPart.getFormScript()) ? 
 			dossierPart.getFormScript() : PortletConstants.UNKNOW_ALPACA_SCHEMA;
-	System.out.println(alpacaSchema);
 
-	//verify alpacaSchema before render form
 %>
-<a href="javascript:void(0);" target-id="form" class="btn run">Run »</a>
-<div id="form"></div>
-<script type="text/javascript">
-	var alpacaSchema = <%=alpacaSchema%>;
-   /*  $(document).ready(function() {
-        var test = $("#form").alpaca(alpacaSchema);
-        console.log(test.alpaca("get"));
-        console.log($("#form").alpaca("get"));
-    });
- */    
- var el = $("#form");
- var xxx =  Alpaca(el, alpacaSchema);
-    
- console.log(el);
- console.log(xxx); 
- console.log(xxx); 
-</script>
+
+<aui:form name="fm" action="post">
+	<aui:fieldset id="dynamicForm"></aui:fieldset>
+	<aui:fieldset>
+		<aui:button type="button" value="save" name="save" cssClass="saveForm"/>
+	</aui:fieldset>
+</aui:form>
+
+<aui:script>
+	AUI().ready(function(A){
+		var alpacaSchema = <%=alpacaSchema%>;
+		var index = '<%=index%>';
+		var dossierPartId = '<%=dossierPartId%>';
+		
+		if(alpacaSchema.options != 'undefined' && alpacaSchema.schema != 'undefined'){
+			//Overwrite function
+			alpacaSchema.postRender = function(control){
+				$(".saveForm").click(function(e) {
+					var formData = control.getValue();
+					var responseData = new Object();
+					responseData.index = index;
+					responseData.dossierPartId = dossierPartId;
+					responseData.formData = formData;
+					console.log(responseData);
+					<portlet:namespace/>responseData(responseData);
+			    });
+			};
+		}
+		var el = $("#<portlet:namespace/>dynamicForm");
+		
+		Alpaca(el, alpacaSchema);
+	});
+	
+	
+	
+	Liferay.provide(window, '<portlet:namespace/>responseData', function(schema) {
+		console.log(schema);
+		var Util = Liferay.Util;
+		Util.getOpener().Liferay.fire('getDynamicFormDataSchema', {responseData:schema});
+		<portlet:namespace/>closeDialog();
+	});
+	
+	Liferay.provide(window, '<portlet:namespace/>closeDialog', function() {
+		var dialog = Liferay.Util.getWindow('<portlet:namespace/>dynamicForm');
+		dialog.destroy(); // You can try toggle/hide whate
+	});
+</aui:script>

@@ -461,6 +461,8 @@
 		
 		var fileName = instance.attr('file-name');
 		
+		var templateFileNo = instance.attr('template-no');
+		
 		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
 		portletURL.setParameter("mvcPath", "/html/portlets/dossiermgt/frontoffice/upload_dossier_file.jsp");
 		portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
@@ -469,6 +471,7 @@
 		portletURL.setParameter("index", index);
 		portletURL.setParameter("groupName", groupName);
 		portletURL.setParameter("fileName", fileName);
+		portletURL.setParameter("templateFileNo", templateFileNo);
 
 		<portlet:namespace/>openDossierDialog(portletURL.toString(), '<portlet:namespace />dossierFileId','<%= UnicodeLanguageUtil.get(pageContext, "upload-dossier-file") %>');
 	});
@@ -541,6 +544,35 @@
 		
 	},['aui-io']);
 	
+	Liferay.on('getDynamicFormDataSchema',function(event) {
+		
+		var A = AUI();
+		
+		var schema = event.responseData;
+		
+		var dossierPartId = schema.dossierPartId;
+		
+		var index = schema.index;
+		
+		var formData = schema.formData;
+		
+		var uploadDataSchema = A.one('#<portlet:namespace/>uploadDataSchema' + dossierPartId + '-' + index);
+		
+		var data = uploadDataSchema.val();
+		
+		if(data != ''){
+			data = JSON.parse(data);
+			data.formData = formData;
+		}else{
+			var object = new Object();
+			object.formData = formData;
+			data = object;
+		}
+				
+		uploadDataSchema.val(JSON.stringify(data));
+		
+	});
+	
 	Liferay.on('getUploadDataSchema',function(event) {
 		
 		var A = AUI();
@@ -563,8 +595,17 @@
 				 
 			if(uploadDataSchema){
 				
-				uploadDataSchema.val(JSON.stringify(schema));
-				
+				if(uploadDataSchema.val() == ''){
+					uploadDataSchema.val(JSON.stringify(schema));
+				}else{
+					console.log(schema);
+					console.log(uploadDataSchema.val());
+					var formData = JSON.parse(uploadDataSchema.val());
+					schema.formData = formData.formData;
+					console.log(JSON.stringify(schema));
+					uploadDataSchema.val(JSON.stringify(schema));
+				}
+								
 				rowcheck.replaceClass('fa-square-o', 'fa-check-square-o');
 			}
 			
