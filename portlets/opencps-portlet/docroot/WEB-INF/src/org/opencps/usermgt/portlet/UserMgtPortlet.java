@@ -74,6 +74,7 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroup;
+import com.liferay.portal.service.OrganizationLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.UserGroupLocalServiceUtil;
@@ -99,7 +100,7 @@ public class UserMgtPortlet extends MVCPortlet {
 	public void deleteEmployee(
 	    ActionRequest actionRequest, ActionResponse actionResponse)
 	    throws IOException {
-
+		
 		long employeeId = ParamUtil
 		    .getLong(actionRequest, EmployeeDisplayTerm.EMPLOYEE_ID);
 		String redirectURL = ParamUtil
@@ -184,7 +185,9 @@ public class UserMgtPortlet extends MVCPortlet {
 		    .add(actionRequest, PortalUtil
 		        .getPortletId(actionRequest) +
 		        SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_ERROR_MESSAGE);
-
+		
+		WorkingUnit unit = WorkingUnitLocalServiceUtil.getWorkingUnit(workingUnitId);
+		
 		if (workingUnitId <= 0) {
 			SessionErrors
 			    .add(
@@ -200,6 +203,15 @@ public class UserMgtPortlet extends MVCPortlet {
 			        actionRequest,
 			        MessageKeys.USERMGT_WORKINGUNIT_DELETE_ERROR);
 
+		}
+		
+		else if(! OrganizationLocalServiceUtil
+						.getOrganizations(unit.getCompanyId(), unit.getMappingOrganisationId())
+						.isEmpty()) {
+			SessionErrors
+		    .add(
+		        actionRequest,
+		        MessageKeys.USERMGT_WORKINGUNIT_DELETE_ERROR);
 		}
 		else {
 			WorkingUnitLocalServiceUtil
@@ -758,6 +770,9 @@ public class UserMgtPortlet extends MVCPortlet {
 		    .getString(actionRequest, "redirectURL");
 		String returnURL = ParamUtil
 		    .getString(actionRequest, "returnURL");
+		
+		String isAddChild = ParamUtil.getString(actionRequest, "isAddChild");
+		
 		SessionMessages
 		    .add(actionRequest, PortalUtil
 		        .getPortletId(actionRequest) +
@@ -772,6 +787,7 @@ public class UserMgtPortlet extends MVCPortlet {
 			        .getScopeGroupId(),
 			    parentWorkingUnitId, isEmployer);
 			if (workingUnitId == 0) {
+				
 				WorkingUnitLocalServiceUtil
 				    .addWorkingUnit(serviceContext
 				        .getUserId(), name, enName, govAgencyCode,
@@ -785,17 +801,32 @@ public class UserMgtPortlet extends MVCPortlet {
 				        MessageKeys.USERMGT_WORKINGUNIT_UPDATE_SUCESS);
 			}
 			else {
-				WorkingUnitLocalServiceUtil
+				if(Validator.isNotNull(isAddChild)) {
+					WorkingUnitLocalServiceUtil
+				    .addWorkingUnit(serviceContext
+				        .getUserId(), name, enName, govAgencyCode,
+				        parentWorkingUnitId, address, cityCode, districtCode,
+				        wardCode, telNo, faxNo, email, website, isEmployer,
+				        managerWorkingUnitId, serviceContext);
+
+					SessionMessages
+					    .add(
+					        actionRequest,
+					        MessageKeys.USERMGT_WORKINGUNIT_UPDATE_SUCESS);
+				} else {
+					WorkingUnitLocalServiceUtil
 				    .updateWorkingUnit(workingUnitId, serviceContext
 				        .getUserId(), name, enName, govAgencyCode,
 				        parentWorkingUnitId, address, cityCode, districtCode,
 				        wardCode, telNo, faxNo, email, website, isEmployer,
 				        managerWorkingUnitId, serviceContext);
-				SessionMessages
-				    .add(
-				        actionRequest,
-				        MessageKeys.USERMGT_WORKINGUNIT_UPDATE_SUCESS);
+					SessionMessages
+					    .add(
+					        actionRequest,
+					        MessageKeys.USERMGT_WORKINGUNIT_UPDATE_SUCESS);
 
+				}
+				
 			}
 			if (Validator
 			    .isNotNull(redirectURL)) {
