@@ -39,9 +39,10 @@ public class PortletUtil {
 			_lastName = StringPool.BLANK;
 			_midName = StringPool.BLANK;
 
-			if (Validator.isNotNull(fullName)) {
-				String[] splitNames =
-				    StringUtil.split(fullName, StringPool.SPACE);
+			if (Validator
+			    .isNotNull(fullName)) {
+				String[] splitNames = StringUtil
+				    .split(fullName, StringPool.SPACE);
 				if (splitNames != null && splitNames.length > 0) {
 					_lastName = splitNames[0];
 
@@ -52,9 +53,12 @@ public class PortletUtil {
 							_midName += splitNames[i] + StringPool.SPACE;
 						}
 					}
-					this.setLastName(_lastName);
-					this.setFirstName(_firstName);
-					this.setMidName(_midName);
+					this
+					    .setLastName(_lastName);
+					this
+					    .setFirstName(_firstName);
+					this
+					    .setMidName(_midName);
 				}
 			}
 		}
@@ -99,19 +103,31 @@ public class PortletUtil {
 		public SplitDate(Date date) {
 
 			if (date != null) {
-				Calendar calendar = Calendar.getInstance();
-				calendar.setTime(date);
+				Calendar calendar = Calendar
+				    .getInstance();
+				calendar
+				    .setTime(date);
 
-				_miniSecond = calendar.get(Calendar.MILLISECOND);
-				_second = calendar.get(Calendar.SECOND);
-				_minute = calendar.get(Calendar.MINUTE);
-				_hour = calendar.get(Calendar.HOUR);
-				_dayOfMoth = calendar.get(Calendar.DAY_OF_MONTH);
-				_dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
-				_weekOfMonth = calendar.get(Calendar.WEEK_OF_MONTH);
-				_weekOfYear = calendar.get(Calendar.WEEK_OF_YEAR);
-				_month = calendar.get(Calendar.MONTH);
-				_year = calendar.get(Calendar.YEAR);
+				_miniSecond = calendar
+				    .get(Calendar.MILLISECOND);
+				_second = calendar
+				    .get(Calendar.SECOND);
+				_minute = calendar
+				    .get(Calendar.MINUTE);
+				_hour = calendar
+				    .get(Calendar.HOUR);
+				_dayOfMoth = calendar
+				    .get(Calendar.DAY_OF_MONTH);
+				_dayOfYear = calendar
+				    .get(Calendar.DAY_OF_YEAR);
+				_weekOfMonth = calendar
+				    .get(Calendar.WEEK_OF_MONTH);
+				_weekOfYear = calendar
+				    .get(Calendar.WEEK_OF_YEAR);
+				_month = calendar
+				    .get(Calendar.MONTH);
+				_year = calendar
+				    .get(Calendar.YEAR);
 			}
 		}
 
@@ -243,13 +259,16 @@ public class PortletUtil {
 
 		switch (value) {
 		case 0:
-			genderLabel = LanguageUtil.get(locale, "female");
+			genderLabel = LanguageUtil
+			    .get(locale, "female");
 			break;
 		case 1:
-			genderLabel = LanguageUtil.get(locale, "male");
+			genderLabel = LanguageUtil
+			    .get(locale, "male");
 			break;
 		default:
-			genderLabel = LanguageUtil.get(locale, "male");
+			genderLabel = LanguageUtil
+			    .get(locale, "male");
 			break;
 		}
 
@@ -262,19 +281,24 @@ public class PortletUtil {
 
 		switch (value) {
 		case 0:
-			accountStatus = LanguageUtil.get(locale, "registered");
+			accountStatus = LanguageUtil
+			    .get(locale, "registered");
 			break;
 		case 1:
-			accountStatus = LanguageUtil.get(locale, "confirmed");
+			accountStatus = LanguageUtil
+			    .get(locale, "confirmed");
 			break;
 		case 2:
-			accountStatus = LanguageUtil.get(locale, "approved");
+			accountStatus = LanguageUtil
+			    .get(locale, "approved");
 			break;
 		case 3:
-			accountStatus = LanguageUtil.get(locale, "locked");
+			accountStatus = LanguageUtil
+			    .get(locale, "locked");
 			break;
 		default:
-			accountStatus = LanguageUtil.get(locale, "");
+			accountStatus = LanguageUtil
+			    .get(locale, "");
 			break;
 
 		}
@@ -313,16 +337,20 @@ public class PortletUtil {
 
 		switch (value) {
 		case 0:
-			leaderLabel = LanguageUtil.get(locale, "normal");
+			leaderLabel = LanguageUtil
+			    .get(locale, "normal");
 			break;
 		case 1:
-			leaderLabel = LanguageUtil.get(locale, "leader");
+			leaderLabel = LanguageUtil
+			    .get(locale, "leader");
 			break;
 		case 2:
-			leaderLabel = LanguageUtil.get(locale, "deputy");
+			leaderLabel = LanguageUtil
+			    .get(locale, "deputy");
 			break;
 		default:
-			leaderLabel = LanguageUtil.get(locale, "normal");
+			leaderLabel = LanguageUtil
+			    .get(locale, "normal");
 			break;
 		}
 
@@ -331,6 +359,25 @@ public class PortletUtil {
 
 	public static String getDestinationFolder(String[] folderNames) {
 
-		return StringUtil.merge(folderNames, StringPool.FORWARD_SLASH);
+		return StringUtil
+		    .merge(folderNames, StringPool.FORWARD_SLASH);
+	}
+
+	public static String getCitizenDossierDestinationFolder(
+	    long groupId, long userId) {
+
+		return String
+		    .valueOf(groupId) + StringPool.SLASH +
+		    "opencps/dossierfiles/citizen" + StringPool.SLASH + String
+		        .valueOf(userId);
+	}
+	
+	public static String getBusinessDossierDestinationFolder(
+	    long groupId, long orgId) {
+
+		return String
+		    .valueOf(groupId) + StringPool.SLASH +
+		    "opencps/dossierfiles/business" + StringPool.SLASH + String
+		        .valueOf(orgId);
 	}
 }
