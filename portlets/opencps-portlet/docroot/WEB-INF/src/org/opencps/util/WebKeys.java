@@ -90,5 +90,10 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String RESPONSE_UPLOAD_TEMP_DOSSIER_FILE = "RESPONSE_UPLOAD_TEMP_DOSSIER_FILE";
 	
 	public static final String SERVICE_INFO_ENTRY = "SERVICE_INFO_ENTRY";
+	
+	
+	
+	public static final String STEP_ALLOWANCE_ENTRY = "STEP_ALLOWANCE_ENTRY";
+
 
 }
