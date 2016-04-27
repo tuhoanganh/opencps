@@ -1,3 +1,5 @@
+<%@page import="org.opencps.util.DictItemUtil"%>
+<%@page import="org.opencps.processmgt.util.ProcessUtils"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -40,8 +42,19 @@
 	<portlet:param name="processStepId" value="<%= Validator.isNotNull(processStep) ? Long.toString(processStep.getProcessStepId()) : StringPool.BLANK %>"/>
 </liferay-portlet:renderURL>
 
+<liferay-portlet:renderURL var="editStepInlineURL" windowState="<%= LiferayWindowState.NORMAL.toString() %>">
+	<portlet:param name="mvcPath" value='<%= templatePath + "edit_step.jsp" %>'/>
+	<portlet:param name="redirectURL" value="<%= currentURL %>"/>
+	<portlet:param name="serviceProcessId" value="<%= Validator.isNotNull(serviceProcess) ? Long.toString(serviceProcess.getServiceProcessId()) : StringPool.BLANK %>"/>
+	<portlet:param name="processStepId" value="<%= Validator.isNotNull(processStep) ? Long.toString(processStep.getProcessStepId()) : StringPool.BLANK %>"/>
+</liferay-portlet:renderURL>
+
 <aui:button-row>
 	<aui:button name="addStep" onClick="showDialog()" value="add-step" ></aui:button>
+</aui:button-row>
+
+<aui:button-row>
+	<aui:button name="addStep" href="<%= editStepInlineURL.toString() %>" value="add-step-inline" ></aui:button>
 </aui:button-row>
 
 <liferay-ui:search-container searchContainer="<%= new StepSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
@@ -75,7 +88,7 @@
 			row.addText(step.getStepName());
 			
 			// step name
-			row.addText(step.getDossierStatus());
+			row.addText(DictItemUtil.getNameDictItem(step.getDossierStatus()));
 			
 			// step duration
 			row.addText(Integer.toString(step.getDaysDuration()));
@@ -95,7 +108,7 @@
 
 <aui:script use="liferay-util-window">
 	Liferay.provide(window, 'showDialog', function(action) {
-		page = '<%=editStepURL%>'
+		page = '<%= editStepURL %>'
 		Liferay.Util.openWindow({
 			dialog: {
 				cache: false,
@@ -105,7 +118,7 @@
 				width: 1000
 			},
 			id: 'addstep',
-			title: 'adding-process-step',
+			title: Liferay.Language.get("adding-process-step"),
 			uri: page
 		});
 	});

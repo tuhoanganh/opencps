@@ -53,7 +53,7 @@
 </liferay-portlet:renderURL>
 
 <aui:button-row>
-	<aui:button name="addAction" onClick="showDialog()" value="add-action" ></aui:button>
+	<aui:button name="addAction" onClick="editActionURL()" value="add-action" ></aui:button>
 </aui:button-row>
 
 <liferay-ui:search-container searchContainer="<%= new WorkflowSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
@@ -103,7 +103,7 @@
 </liferay-ui:search-container>
 
 <aui:script use="liferay-util-window">
-	Liferay.provide(window, 'showDialog', function(action) {
+	Liferay.provide(window, 'addAction', function(action) {
 		page = '<%= editActionURL %>'
 		Liferay.Util.openWindow({
 			dialog: {
