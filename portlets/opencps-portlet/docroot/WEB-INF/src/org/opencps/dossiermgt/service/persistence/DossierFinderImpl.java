@@ -216,8 +216,6 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 				        StringPool.LIKE, true, keywords);
 			}
 
-			
-
 			if (keywords == null || keywords.length == 0) {
 				sql = StringUtil
 				    .replace(
