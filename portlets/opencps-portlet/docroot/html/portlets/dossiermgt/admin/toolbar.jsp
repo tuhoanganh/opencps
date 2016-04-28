@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -24,12 +23,12 @@
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
-<%@page import="org.opencps.dossiermgt.permission.DossierPartPermission"%>
+<%@page import="org.opencps.dossiermgt.permissions.ServiceConfigPermission"%>
+<%@page import="org.opencps.dossiermgt.permissions.DossierPartPermission"%>
+<%@page import="org.opencps.dossiermgt.permissions.DossierTemplatePermission"%>
 <%@page import="org.opencps.util.ActionKeys"%>
-<%@page import="org.opencps.dossiermgt.permission.DossierTemplatePermission"%>
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 <%@page import="javax.portlet.PortletURL"%>
-<%@page import="org.opencps.dossiermgt.permission.ServiceConfigPermission"%>
 <%@page import="org.opencps.servicemgt.search.ServiceDisplayTerms"%>
 <%@page import="org.opencps.dossiermgt.search.ServiceConfigDisplayTerms"%>
 <%@page import="org.opencps.datamgt.service.DictCollectionLocalServiceUtil"%>
@@ -75,7 +74,7 @@
 				
 				<portlet:renderURL var="editDossierTemplateURL">
 					<portlet:param name="mvcPath" value='<%= templatePath + "edit_dossier.jsp" %>'/>
-					<portlet:param name="redirectURL" value="<%=currentURL %>"/> 
+					<portlet:param name="backURL" value="<%=currentURL %>"/> 
 				</portlet:renderURL>
 				
 				<c:if 
