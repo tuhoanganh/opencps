@@ -41,13 +41,15 @@
 			ON
 				opencps_dossier.serviceInfoId = opencps_serviceinfo.serviceInfoId
 			INNER JOIN
-				opencps_serviceconfig
+				opencps_service_config
 			ON
-				opencps_dossier.serviceConfigId = opencps_serviceconfig.serviceConfigId
+				opencps_dossier.serviceConfigId = opencps_service_config.serviceConfigId
 			WHERE
-				(lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))
+				(opencps_dossier.groupId = ?)
+			AND
+				(lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$])
 			OR 
-				(lower(opencps_serviceconfig.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$]))s
+				(lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$])
 			AND 
 				(opencps_dossier.dossierStatus = ?)
 		]]>
@@ -64,13 +66,15 @@
 			ON
 				opencps_dossier.serviceInfoId = opencps_serviceinfo.serviceInfoId
 			INNER JOIN
-				opencps_serviceconfig
+				opencps_service_config
 			ON
-				opencps_dossier.serviceConfigId = opencps_serviceconfig.serviceConfigId
+				opencps_dossier.serviceConfigId = opencps_service_config.serviceConfigId
 			WHERE
-				(lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))
+				(opencps_dossier.groupId = ?)
+			AND
+				(lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$])
 			OR 
-				(lower(opencps_serviceconfig.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$]))s
+				(lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$])
 			AND 
 				(opencps_dossier.dossierStatus = ?)
 		]]>
