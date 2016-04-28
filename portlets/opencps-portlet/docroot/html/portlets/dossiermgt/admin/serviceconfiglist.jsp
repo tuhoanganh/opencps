@@ -18,13 +18,13 @@
 %>
 <%@ include file="../init.jsp"%>
 <%@page import="com.liferay.portal.kernel.dao.search.SearchEntry"%>
+<%@page import="org.opencps.dossiermgt.permissions.ServiceConfigPermission"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
 <%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
 <%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.search.ServiceConfigSearch"%>
 <%@page import="org.opencps.util.ActionKeys"%>
-<%@page import="org.opencps.dossiermgt.permission.ServiceConfigPermission"%>
 <%@page import="java.util.List"%>
 <%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
 <%@page import="java.util.ArrayList"%>
