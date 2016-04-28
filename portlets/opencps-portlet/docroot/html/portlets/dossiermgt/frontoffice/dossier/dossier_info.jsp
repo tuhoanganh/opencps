@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,6 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
 <%@page import="org.opencps.util.PortletPropsValues"%>
 <%@page import="org.opencps.util.WebKeys"%>
@@ -47,10 +47,17 @@
 
 <%
 	Dossier dossier = (Dossier) request.getAttribute(WebKeys.DOSSIER_ENTRY);
+
 	ServiceConfig serviceConfig = (ServiceConfig) request.getAttribute(WebKeys.SERVICE_CONFIG_ENTRY);
+	
 	ServiceInfo serviceInfo = (ServiceInfo) request.getAttribute(WebKeys.SERVICE_INFO_ENTRY);
+	
 	Citizen citizen = (Citizen)request.getAttribute(WebKeys.CITIZEN_ENTRY);
+	
 	Business business = (Business)request.getAttribute(WebKeys.BUSINESS_ENTRY);
+	
+	String itemSelected = GetterUtil.getString(request.getAttribute(WebKeys.DICT_ITEM_SELECTED), StringPool.BLANK);
+	
 	String cmd = ParamUtil.getString(request, Constants.CMD);
 %>
 
@@ -215,7 +222,7 @@
 		itemNames='<%=StringUtil.merge(new String[]{DossierDisplayTerms.CITY_ID,DossierDisplayTerms.DISTRICT_ID,DossierDisplayTerms.WARD_ID}) %>'
 		itemsEmptyOption="true,true,true"
 		cssClass="input100"
-		selectedItems=""
+		selectedItems="<%=itemSelected %>"
 	/>
 </aui:row>
 

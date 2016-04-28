@@ -121,7 +121,11 @@ public class PortletConstants {
 	public static final int DOSSIER_SOURCE_DIRECT = 0;
 	public static final int DOSSIER_SOURCE_INDIRECT = 1;
 	
+	public static enum AlpacaArguments{
+		data,schema,options,view,render,postRender,error,connector;
+	}
+	
 	public static final String TEMP_RANDOM_SUFFIX = "--tempRandomSuffix--";
 	
-	public static final String UNKNOW_ALPACA_SCHEMA = "\"schema\": {\"title\":\"No Dynamic Form\",\"description\":\"Can not load alpaca scheme\",\"type\":\"object\"}";
+	public static final String UNKNOW_ALPACA_SCHEMA = "{\"schema\": {\"title\":\"No Dynamic Form\",\"description\":\"Can not load alpaca scheme\",\"type\":\"object\"}}";
 }
