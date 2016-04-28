@@ -72,9 +72,11 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.ResourcePermission;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.service.OrganizationLocalServiceUtil;
+import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.UserGroupLocalServiceUtil;
@@ -236,13 +238,12 @@ public class UserMgtPortlet extends MVCPortlet {
 
 		long jobPosId = ParamUtil
 		    .getLong(actionRequest, JobPosDisplayTerms.ID_JOBPOS);
-
+		long[] rowIds = ParamUtil
+					    .getLongValues(actionRequest, "rowIds");
 		int leader = ParamUtil
 		    .getInteger(actionRequest, JobPosDisplayTerms.LEADER_JOBPOS);
 		String title = ParamUtil
 		    .getString(actionRequest, JobPosDisplayTerms.TITLE_JOBPOS);
-		String redirectURL = ParamUtil
-		    .getString(actionRequest, "redirectURL");
 		String returnURL = ParamUtil
 		    .getString(actionRequest, "returnURL");
 		SessionMessages
@@ -259,13 +260,13 @@ public class UserMgtPortlet extends MVCPortlet {
 			    .updateJobPos(jobPosId, serviceContext
 			        .getUserId(), title, StringPool.BLANK, jobPos
 			            .getWorkingUnitId(),
-			        leader, serviceContext);
+			        leader, rowIds ,serviceContext);
 			SessionMessages
 			    .add(actionRequest, MessageKeys.USERMGT_JOBPOS_UPDATE_SUCESS);
 			if (Validator
-			    .isNotNull(redirectURL)) {
+			    .isNotNull(returnURL)) {
 				actionResponse
-				    .sendRedirect(redirectURL);
+				    .sendRedirect(returnURL);
 			}
 
 		}
@@ -290,7 +291,10 @@ public class UserMgtPortlet extends MVCPortlet {
 
 		long employeeId = ParamUtil
 		    .getLong(renderRequest, EmployeeDisplayTerm.EMPLOYEE_ID);
-
+		
+		long jobPosId = ParamUtil
+			.getLong(renderRequest, JobPosDisplayTerms.ID_JOBPOS);
+		
 		try {
 			if (workingUnitId > 0) {
 				WorkingUnit workingUnit = WorkingUnitLocalServiceUtil
@@ -298,7 +302,12 @@ public class UserMgtPortlet extends MVCPortlet {
 				renderRequest
 				    .setAttribute(WebKeys.WORKING_UNIT_ENTRY, workingUnit);
 			}
-
+			
+			if(jobPosId > 0) {
+				JobPos jobPos = JobPosLocalServiceUtil.getJobPos(jobPosId);
+				renderRequest.setAttribute(WebKeys.JOBPOS_ENTRY, jobPos);
+			}
+			
 			if (employeeId > 0) {
 				Employee employee = EmployeeLocalServiceUtil
 				    .getEmployee(employeeId);
@@ -870,6 +879,36 @@ public class UserMgtPortlet extends MVCPortlet {
 
 	}
 
+	public void deletePermissionAction(ActionRequest actionRequest, ActionResponse actionResponse)
+					throws IOException
+	{
+		
+		long permissionId = ParamUtil.getLong(actionRequest, "permissionId");
+		long bitwide = ParamUtil.getLong(actionRequest, "bitwide");
+		String returnURL = ParamUtil.getString(actionRequest, "returnURL");		
+		ResourcePermission resourcePermission = null;
+		try {
+			resourcePermission = ResourcePermissionLocalServiceUtil
+							.getResourcePermission(permissionId);
+			if(resourcePermission != null) {
+				resourcePermission.setActionIds(resourcePermission.getActionIds() - bitwide);
+				ResourcePermissionLocalServiceUtil.updateResourcePermission(resourcePermission);
+				SessionMessages.add(actionRequest, "DELETE_PERMISSION_SUCCESS");
+				if(Validator.isNotNull(returnURL)) {
+					actionResponse.sendRedirect(returnURL);
+				}
+			}
+        }
+        catch (Exception e) {
+        	SessionErrors.add(actionRequest, "DELETE_PERMISSION_ERROR");
+        	if(Validator.isNotNull(returnURL)) {
+				actionResponse.sendRedirect(returnURL);
+			}
+        }
+		
+		
+	}
+	
 	protected void validateEmployee(
 	    long employeeId, String fullName, String email, String employeeNo,
 	    String mobile, String telNo, long workingUnitId, long mainJobPosId,
