@@ -94,6 +94,7 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	
 	
 	public static final String STEP_ALLOWANCE_ENTRY = "STEP_ALLOWANCE_ENTRY";
+	public static final String WORKFLOW_ENTRY = "WORKFLOW_ENTRY";
 
 
 }
