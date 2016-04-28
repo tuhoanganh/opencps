@@ -38,6 +38,8 @@
 	DossierPart dossierPart = (DossierPart) request.getAttribute(WebKeys.DOSSIER_PART_ENTRY);
 	DossierPart dossierPartIsAddChilds = null;
 	
+	DossierPart dossierPartParent = null; 
+	
 	long dossierTemplateId = dossierTemplate != null ? dossierTemplate.getDossierTemplateId() : 0L;
 	long dossierPartId = dossierPart != null ? dossierPart.getDossierpartId() : 0L;
 	int [] dossierType = new int[5];
@@ -50,6 +52,17 @@
 	
 	String isAddChilds = ParamUtil.getString(request, "isAddChild");
 	String partListURL = (String) session.getAttribute("partListURL");
+	
+	try {
+		if(dossierPart != null) {
+			dossierPartParent = DossierPartLocalServiceUtil
+							.getDossierPart(dossierPart.getParentId());
+		}
+	}catch(Exception e) {
+		
+	}
+	
+	
 	
 %>
 
@@ -145,9 +158,14 @@
 		<aui:col cssClass="input60">
 			<aui:select name="<%=DossierPartDisplayTerms.DOSSIERPART_PARENTID %>">
 				<c:choose>
-					<c:when test="<%=Validator.isNotNull(isAddChilds) || Validator.isNotNull(dossierPart)%>">
+					<c:when test="<%=Validator.isNotNull(isAddChilds) && Validator.isNotNull(dossierPart)%>">
 						<aui:option value="<%=dossierPart.getDossierpartId() %>">
 							<%=dossierPart.getPartName()%>
+						</aui:option>
+					</c:when>
+					<c:when test="<%=!Validator.isNotNull(isAddChilds) && Validator.isNotNull(dossierPart) %>">
+						<aui:option value="<%=dossierPart.getParentId() %>">
+							<%=dossierPartParent != null ?  dossierPartParent.getPartName() : StringPool.BLANK%>
 						</aui:option>
 					</c:when>
 					<c:otherwise>
