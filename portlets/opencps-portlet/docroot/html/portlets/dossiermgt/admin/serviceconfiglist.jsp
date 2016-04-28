@@ -116,7 +116,7 @@
 				process = "<i class=\"opencps-icon removed\"></i>";
 			}
 			
-			row.addText(String.valueOf(row.getPos()) + 1);
+			row.addText(String.valueOf(row.getPos() + 1));
 			row.addText(serviceInfo.getServiceName());
 			row.addText(serviceConfig.getGovAgencyName());
 			row.addText(dossierTemplate.getTemplateName());

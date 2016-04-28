@@ -1,3 +1,4 @@
+
 /**
  * OpenCPS is the open source Core Public Services software
  * Copyright (C) 2016-present OpenCPS community
@@ -66,6 +67,12 @@ public class PortletPropsValues {
 	        .getString(PortletProps
 	            .get(
 	                PortletPropsKeys.DATAMGT_MASTERDATA_ADMINISTRATIVE_REGION));
+	
+	public static final String DATAMGT_MASTERDATA_ADMINISTRATION_REGION = 
+			 GetterUtil
+		        .getString(PortletProps
+		            .get(
+		                PortletPropsKeys.DATAMGT_MASTERDATA_ADMINISTRATION_REGION));
 
 	// validate file
 

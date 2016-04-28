@@ -23,6 +23,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import org.opencps.datamgt.model.DictCollection;
+import org.opencps.datamgt.model.DictItem;
+import org.opencps.datamgt.service.DictCollectionLocalServiceUtil;
+import org.opencps.datamgt.service.DictItemLocalServiceUtil;
+
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -463,5 +468,23 @@ public class PortletUtil {
 		    .valueOf(groupId) + StringPool.SLASH +
 		    "opencps/dossierfiles/business" + StringPool.SLASH + String
 		        .valueOf(orgId);
+	}
+	
+	public static DictItem getDictItem(String collectionCode, String itemCode,
+		long groupId) {
+		DictCollection dictCollection = null;
+		DictItem dictItem = null;
+		
+		try {
+	        dictCollection = DictCollectionLocalServiceUtil
+	        				.getDictCollection(groupId, collectionCode);
+	        dictItem = DictItemLocalServiceUtil
+	        				.getDictItemInuseByItemCode(dictCollection.getDictCollectionId(), itemCode);	        
+		}
+        catch (Exception e) {
+	        // TODO: nothing
+        }
+		return dictItem;
+
 	}
 }
