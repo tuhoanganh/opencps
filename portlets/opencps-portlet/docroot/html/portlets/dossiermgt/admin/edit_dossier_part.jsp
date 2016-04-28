@@ -237,6 +237,7 @@
 	
 	<aui:row>
 		<aui:input 
+			type="textarea"
 			name="<%=DossierPartDisplayTerms.DOSSIERPART_SAMPLEDATA %>" 
 			cssClass="input90"
 		/>

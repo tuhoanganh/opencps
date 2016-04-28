@@ -24,6 +24,8 @@
 <%@page import="com.liferay.portal.kernel.dao.search.SearchEntry"%>
 <%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
 <%@page import="org.opencps.util.WebKeys"%>
+<%@page import="org.opencps.dossiermgt.permissions.ServiceConfigPermission"%>
+
 <%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.search.ServiceConfigSearchTerm"%>
 <%@page import="org.opencps.dossiermgt.search.ServiceConfigSearch"%>
@@ -32,7 +34,6 @@
 <%@page import="java.util.List"%>
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 <%@page import="javax.portlet.PortletURL"%>
-<%@page import="org.opencps.dossiermgt.permission.ServiceConfigPermission"%>
 <%@ include file="../../init.jsp"%>
 
 <%
