@@ -359,16 +359,11 @@
 	</model>
 	<model name="org.opencps.processmgt.model.WorkflowOutput">
 		<field name="workflowOutputId" type="long" />
-		<field name="companyId" type="long" />
-		<field name="groupId" type="long" />
-		<field name="userId" type="long" />
-		<field name="createDate" type="Date" />
-		<field name="modifiedDate" type="Date" />
 		<field name="processWorkflowId" type="long" />
 		<field name="dossierPartId" type="long" />
-		<field name="required" type="int" />
-		<field name="esign" type="int" />
-		<field name="postback" type="int" />
+		<field name="required" type="boolean" />
+		<field name="esign" type="boolean" />
+		<field name="postback" type="boolean" />
 	</model>
 	<model name="org.opencps.dossiermgt.model.Dossier">
 		<field name="dossierId" type="long" />
