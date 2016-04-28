@@ -51,7 +51,21 @@ public class ProcessStepLocalServiceImpl
 	 * {@link org.opencps.processmgt.service.ProcessStepLocalServiceUtil} to
 	 * access the process step local service.
 	 */
-	
+
+	/**
+	 * @param serviceProcessId
+	 * @param start
+	 * @param end
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public List<ProcessStep> getStepByProcess(long serviceProcessId, int start, int end)
+	    throws PortalException, SystemException {
+
+		return processStepPersistence.findByS_P_ID(serviceProcessId, start, end);
+	}
+
 	/**
 	 * @param serviceProcessId
 	 * @return
@@ -61,6 +75,17 @@ public class ProcessStepLocalServiceImpl
 	public List<ProcessStep> getStepByProcess(long serviceProcessId)
 	    throws PortalException, SystemException {
 		return processStepPersistence.findByS_P_ID(serviceProcessId);
+	}
+	
+	/**
+	 * @param serviceProcessId
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public int countStepByProcess(long serviceProcessId)
+	    throws PortalException, SystemException {
+		return processStepPersistence.countByS_P_ID(serviceProcessId);
 	}
 	
 	/**

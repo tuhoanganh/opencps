@@ -83,7 +83,7 @@
 	
 	if(dossierPartsLevel1 != null){
 		for (DossierPart dossierPartLevel1 : dossierPartsLevel1){
-			
+			System.out.println(dossierPartLevel1.getPartName() + "-" + dossierPartLevel1.getPartType());
 			int partType = dossierPartLevel1.getPartType();
 			
 			List<DossierPart> dossierParts = DossierMgtUtil.getTreeDossierPart(dossierPartLevel1.getDossierpartId());
@@ -146,10 +146,11 @@
 													value="<%=String.valueOf(dossierPart.getDossierpartId()) %>"
 												/>
 												<portlet:param name="<%=DossierFileDisplayTerms.FILE_ENTRY_ID %>" value="<%=String.valueOf(dossierFile != null ? dossierFile.getFileEntryId() : 0) %>"/>
+												<portlet:param name="<%=DossierFileDisplayTerms.DOSSIER_FILE_ID %>" value="<%=String.valueOf(dossierFile != null ? dossierFile.getDossierFileId() : 0) %>"/>
 												<portlet:param name="<%=DossierFileDisplayTerms.INDEX %>" value="<%=String.valueOf(index) %>"/>
-												<portlet:param name="level" value="<%=String.valueOf(level) %>"/>
+												<portlet:param name="<%=DossierFileDisplayTerms.LEVEL %>" value="<%=String.valueOf(level) %>"/>
 												<portlet:param name="<%=DossierFileDisplayTerms.GROUP_NAME %>" value="<%=StringPool.BLANK%>"/>
-												<portlet:param name="partType" value="<%=String.valueOf(dossierPart.getPartType()) %>"/>
+												<portlet:param name="<%=DossierFileDisplayTerms.PART_TYPE %>" value="<%=String.valueOf(dossierPart.getPartType()) %>"/>
 											</liferay-util:include>
 										</span>
 									</div>
@@ -208,6 +209,15 @@
 										level = StringUtil.count(treeIndex, StringPool.PERIOD);
 									}
 									
+									DossierFile dossierFile = null;
+									
+									if(dossier != null){
+										try{
+											dossierFile = DossierFileLocalServiceUtil.getDossierFileByD_P(dossier.getDossierId(), 
+													dossierPart.getDossierpartId());
+										}catch(Exception e){}
+									}
+									
 									%>
 										<div 
 											id='<%=renderResponse.getNamespace() + "row-" + dossierPart.getDossierpartId() + StringPool.DASH + index %>' 
@@ -243,10 +253,12 @@
 														name="<%=DossierFileDisplayTerms.DOSSIER_PART_ID %>" 
 														value="<%=String.valueOf(dossierPart.getDossierpartId()) %>"
 													/>
-													<portlet:param name="index" value="<%=String.valueOf(index) %>"/>
-													<portlet:param name="level" value="<%=String.valueOf(level) %>"/>
-													<portlet:param name="groupName" value="<%=dossierParts.get(0).getPartName() %>"/>
-													<portlet:param name="partType" value="<%=String.valueOf(dossierPart.getPartType()) %>"/>
+													<portlet:param name="<%=DossierFileDisplayTerms.FILE_ENTRY_ID %>" value="<%=String.valueOf(dossierFile != null ? dossierFile.getFileEntryId() : 0) %>"/>
+													<portlet:param name="<%=DossierFileDisplayTerms.DOSSIER_FILE_ID %>" value="<%=String.valueOf(dossierFile != null ? dossierFile.getDossierFileId() : 0) %>"/>
+													<portlet:param name="<%=DossierFileDisplayTerms.INDEX %>" value="<%=String.valueOf(index) %>"/>
+													<portlet:param name="<%=DossierFileDisplayTerms.LEVEL %>" value="<%=String.valueOf(level) %>"/>
+													<portlet:param name="<%=DossierFileDisplayTerms.GROUP_NAME %>" value="<%=StringPool.BLANK%>"/>
+													<portlet:param name="<%=DossierFileDisplayTerms.PART_TYPE %>" value="<%=String.valueOf(dossierPart.getPartType()) %>"/>
 												</liferay-util:include>
 											</span>
 										</div>
@@ -303,6 +315,7 @@
 	});
 	
 	Liferay.provide(window, '<portlet:namespace/>addPrivateDossierGroup', function(e) {
+		
 		var A = AUI();
 		
 		var instance = A.one(e);
@@ -488,7 +501,14 @@
 		
 		var templateFileNo = instance.attr('template-no');
 		
+		var fileUpload = A.one('#<portlet:namespace/>fileUpload' + dossierPartId + '-' + index);
+		
 		var dossierFileId = parseInt(A.one('#<portlet:namespace/>dossierFile' + dossierPartId + '-' + index).val());
+		
+		if(fileUpload && parseInt(fileUpload.val()) > 0){
+			alert('<%=UnicodeLanguageUtil.get(pageContext, "remove-old-file-before-upload")%>');
+			return;
+		}
 		
 		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
 		portletURL.setParameter("mvcPath", "/html/portlets/dossiermgt/frontoffice/upload_dossier_file.jsp");

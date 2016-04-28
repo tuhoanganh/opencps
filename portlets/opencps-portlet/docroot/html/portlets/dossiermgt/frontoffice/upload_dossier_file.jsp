@@ -1,3 +1,4 @@
+<%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -42,6 +43,8 @@
 	}catch(Exception e){
 		
 	}
+	
+	Dossier dossier = (Dossier) request.getAttribute(WebKeys.DOSSIER_ENTRY);
 
 	DossierFile dossierFile = (DossierFile) request.getAttribute(WebKeys.DOSSIER_FILE_ENTRY);
 
@@ -89,7 +92,8 @@
 </portlet:actionURL>
 
 <portlet:actionURL var="updateDossierFileURL" name="updateDossierFile">
-	<portlet:param name="<%=DossierFileDisplayTerms.DOSSIER_FILE_ID %>" value="<%=dossierFileId%>"/>
+	<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier != null ? dossier.getDossierId() : 0L)%>"/>
+	<portlet:param name="<%=DossierFileDisplayTerms.DOSSIER_FILE_ID %>" value="<%=String.valueOf(dossierFileId)%>"/>
 </portlet:actionURL>
 
 <liferay-ui:error message="upload-error" key="upload-error"/>
@@ -97,7 +101,7 @@
 <aui:form 
 	name="fm" 
 	method="post" 
-	action="<%=dossierFileId > 0 ? updateDossierFileURL : addTempFileURL%>" 
+	action="<%=addTempFileURL%>" 
 	enctype="multipart/form-data"
 >
 	<aui:input name="redirectURL" type="hidden" value="<%=currentURL %>"/>

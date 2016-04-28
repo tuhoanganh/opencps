@@ -26,11 +26,13 @@
 <%@ include file="../init.jsp"%>
 
 <%
-	DossierFile dossierFile = (DossierFile) request.getAttribute(WebKeys.DOSSIER_FILE_ENTRY);
+	//DossierFile dossierFile = (DossierFile) request.getAttribute(WebKeys.DOSSIER_FILE_ENTRY);
 
 	DossierPart dossierPart = (DossierPart) request.getAttribute(WebKeys.DOSSIER_PART_ENTRY);
 	
 	long dossierPartId = ParamUtil.getLong(request, DossierFileDisplayTerms.DOSSIER_PART_ID);
+	
+	long dossierFileId = ParamUtil.getLong(request, DossierFileDisplayTerms.DOSSIER_FILE_ID);
 	
 	long fileEntryId = ParamUtil.getLong(request, DossierFileDisplayTerms.FILE_ENTRY_ID);
 	
@@ -110,7 +112,7 @@
 								id='<%="dossierFile" + dossierPartId + StringPool.DASH + index %>' 
 								name="dossierFile" 
 								type="hidden"
-								value="<%=dossierFile != null ? dossierFile.getDossierFileId() : 0%>"
+								value="<%=dossierFileId%>"
 							/>
 						</aui:a>
 					</td>
@@ -177,7 +179,7 @@
 								id='<%="dossierFile" + dossierPartId + StringPool.DASH + index %>' 
 								name="dossierFile" 
 								type="hidden"
-								value="<%=dossierFile != null ? dossierFile.getDossierFileId() : 0%>"
+								value="<%=dossierFileId%>"
 							/>
 						</aui:a>
 					</td>
@@ -297,7 +299,7 @@
 								id='<%="dossierFile" + dossierPartId + StringPool.DASH + index %>' 
 								name="dossierFile" 
 								type="hidden"
-								value="<%=dossierFile != null ? dossierFile.getDossierFileId() : 0%>"
+								value="<%=dossierFileId%>"
 							/>
 						</aui:a>
 					</td>
