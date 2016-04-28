@@ -232,7 +232,7 @@
 		%>
 	</div>
 	
-	<label class="bold"><liferay-ui:message key="role-id"/></label>
+	<label class="bold"><liferay-ui:message key="result-action"/></label>
 	
 	<div id="step-allowance">
 	
