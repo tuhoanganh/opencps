@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -33,14 +32,16 @@
 	
 	long dossierPartId = ParamUtil.getLong(request, DossierFileDisplayTerms.DOSSIER_PART_ID);
 	
-	int index = ParamUtil.getInteger(request, "index");
+	long fileEntryId = ParamUtil.getLong(request, DossierFileDisplayTerms.FILE_ENTRY_ID);
 	
-	int partType = ParamUtil.getInteger(request, "partType");
+	int index = ParamUtil.getInteger(request, DossierFileDisplayTerms.INDEX);
 	
-	int level = ParamUtil.getInteger(request, "level");
+	int level = ParamUtil.getInteger(request, DossierFileDisplayTerms.LEVEL);
 	
-	String groupName = ParamUtil.getString(request, "groupName");
+	int partType = ParamUtil.getInteger(request, DossierFileDisplayTerms.PART_TYPE);
 	
+	String groupName = ParamUtil.getString(request, DossierFileDisplayTerms.GROUP_NAME);
+		
 %>
 
 <c:if test="<%=true %>">
@@ -68,6 +69,7 @@
 							index="<%=String.valueOf(index) %>"
 							group-name="<%=groupName %>"
 							file-name="<%=dossierPart != null ? dossierPart.getPartName() : StringPool.BLANK %>"
+							template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
 							href="javascript:void(0);" 
 							label="upload-file" 
 							cssClass="opencps dossiermgt part-file-ctr upload-file" 
@@ -76,22 +78,40 @@
 					</td>
 					<td width="10%" align="right">
 						<span class="dossier-file-counter">
-							<span class='<%="counter-value alias-" + dossierPartId + StringPool.DASH + index%>'>0</span>
+							<span class='<%="counter-value alias-" + dossierPartId + StringPool.DASH + index%>'>
+								<%=fileEntryId > 0 ? 1 : 0 %>
+							</span>
 						</span>
 					</td>
 					<td width="10%" align="right">
-						<aui:a 
-							id="<%=String.valueOf(dossierPartId) %>"
+						<aui:a
+							cssClass="opencps dossiermgt part-file-ctr remove-file"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
-							index="<%=String.valueOf(index) %>"
 							group-name="<%=groupName %>"
 							href="javascript:void(0);" 
-							cssClass="opencps dossiermgt part-file-ctr remove-file"
+							id="<%=String.valueOf(dossierPartId) %>"
+							index="<%=String.valueOf(index) %>"
 							onClick='<%=renderResponse.getNamespace() + "removeFileUpload(this)" %>'
 						>
 							<i class="fa fa-times" aria-hidden="true"></i>
-							<aui:input id='<%="uploadDataSchema" + dossierPartId + StringPool.DASH + index %>' name="uploadDataSchema"  type="hidden" cssClass="uploadDataSchema"/>
-							<aui:input id='<%="fileUpload" + dossierPartId + StringPool.DASH + index %>' name="fileUpload"  type="hidden"/>
+							<aui:input 
+								id='<%="uploadDataSchema" + dossierPartId + StringPool.DASH + index %>' 
+								name="uploadDataSchema" 
+								type="hidden" 
+								cssClass="uploadDataSchema"
+							/>
+							<aui:input 
+								id='<%="fileUpload" + dossierPartId + StringPool.DASH + index %>' 
+								name="fileUpload" 
+								type="hidden"
+								value="<%=fileEntryId %>"
+							/>
+							<aui:input 
+								id='<%="dossierFile" + dossierPartId + StringPool.DASH + index %>' 
+								name="dossierFile" 
+								type="hidden"
+								value="<%=dossierFile != null ? dossierFile.getDossierFileId() : 0%>"
+							/>
 						</aui:a>
 					</td>
 				</c:when>
@@ -103,6 +123,7 @@
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
 							index="<%=String.valueOf(index) %>"
 							group-name="<%=groupName %>"
+							template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
 							file-name="<%=dossierPart != null ? dossierPart.getPartName() : StringPool.BLANK %>"
 							href="javascript:void(0);" 
 							label="upload-file" 
@@ -124,22 +145,40 @@
 					</td>
 					<td width="10%" align="right">
 						<span class="dossier-file-counter">
-							<span class='<%="counter-value alias-" + dossierPartId + StringPool.DASH + index%>'>0</span>
+							<span class='<%="counter-value alias-" + dossierPartId + StringPool.DASH + index%>'>
+								<%=fileEntryId > 0 ? 1 : 0 %>
+							</span>
 						</span>
 					</td>
 					<td width="10%" align="right">
 						<aui:a 
-							id="<%=String.valueOf(dossierPartId) %>"
-							dossier-part="<%=String.valueOf(dossierPartId) %>"
-							index="<%=String.valueOf(index) %>"
+							cssClass="opencps dossiermgt part-file-ctr remove-file"
+							dossier-part="<%=String.valueOf(dossierPartId) %>"	
 							group-name="<%=groupName %>"
 							href="javascript:void(0);" 
-							cssClass="opencps dossiermgt part-file-ctr remove-file"
+							id="<%=String.valueOf(dossierPartId) %>"
+							index="<%=String.valueOf(index) %>"
 							onClick='<%=renderResponse.getNamespace() + "removeFileUpload(this)" %>'
 						>
 							<i class="fa fa-times" aria-hidden="true"></i>
-							<aui:input id='<%="uploadDataSchema" + dossierPartId + StringPool.DASH + index %>' name="uploadDataSchema"  type="hidden" cssClass="uploadDataSchema"/>
-							<aui:input id='<%="fileUpload" + dossierPartId + StringPool.DASH + index %>' name="fileUpload"  type="hidden"/>
+							<aui:input 
+								id='<%="uploadDataSchema" + dossierPartId + StringPool.DASH + index %>' 
+								name="uploadDataSchema" 
+								type="hidden" 
+								cssClass="uploadDataSchema"
+							/>
+							<aui:input 
+								id='<%="fileUpload" + dossierPartId + StringPool.DASH + index %>' 
+								name="fileUpload" 
+								type="hidden"
+								value="<%=fileEntryId %>"
+							/>
+							<aui:input 
+								id='<%="dossierFile" + dossierPartId + StringPool.DASH + index %>' 
+								name="dossierFile" 
+								type="hidden"
+								value="<%=dossierFile != null ? dossierFile.getDossierFileId() : 0%>"
+							/>
 						</aui:a>
 					</td>
 				</c:when>
@@ -178,6 +217,7 @@
 							index="<%=String.valueOf(index) %>"
 							group-name="<%=groupName %>"
 							file-name="<%=dossierPart != null ? dossierPart.getPartName() : StringPool.BLANK %>"
+							template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
 							href="javascript:void(0);" 
 							label="upload-file" 
 							cssClass="opencps dossiermgt part-file-ctr upload-file" 
@@ -212,6 +252,7 @@
 							index="<%=String.valueOf(index) %>"
 							group-name="<%=groupName %>"
 							file-name="<%=dossierPart != null ? dossierPart.getPartName() : StringPool.BLANK %>"
+							template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
 							href="javascript:void(0);" 
 							label="upload-file" 
 							cssClass="opencps dossiermgt part-file-ctr upload-file" 
@@ -224,22 +265,40 @@
 					</td>
 					<td width="10%" align="right">
 						<span class="dossier-file-counter">
-							<span class='<%="counter-value alias-" + dossierPartId + StringPool.DASH + index%>'>0</span>
+							<span class='<%="counter-value alias-" + dossierPartId + StringPool.DASH + index%>'>
+								<%=fileEntryId > 0 ? 1 : 0 %>
+							</span>
 						</span>
 					</td>
 					<td width="10%" align="right">
 						<aui:a 
-							id="<%=String.valueOf(dossierPartId) %>"
+							cssClass="opencps dossiermgt part-file-ctr remove-file"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
-							index="<%=String.valueOf(index) %>"
 							group-name="<%=groupName %>"
 							href="javascript:void(0);" 
-							cssClass="opencps dossiermgt part-file-ctr remove-file"
+							id="<%=String.valueOf(dossierPartId) %>"
+							index="<%=String.valueOf(index) %>"
 							onClick='<%=renderResponse.getNamespace() + "removeFileUpload(this)" %>'
 						>
 							<i class="fa fa-times" aria-hidden="true"></i>
-							<aui:input id='<%="uploadDataSchema" + dossierPartId + StringPool.DASH + index %>' name="uploadDataSchema"  type="hidden" cssClass="uploadDataSchema"/>
-							<aui:input id='<%="fileUpload" + dossierPartId + StringPool.DASH + index %>' name="fileUpload"  type="hidden"/>
+							<aui:input 
+								id='<%="uploadDataSchema" + dossierPartId + StringPool.DASH + index %>' 
+								name="uploadDataSchema" 
+								type="hidden" 
+								cssClass="uploadDataSchema"
+							/>
+							<aui:input 
+								id='<%="fileUpload" + dossierPartId + StringPool.DASH + index %>' 
+								name="fileUpload" 
+								type="hidden"
+								value="<%=fileEntryId %>"
+							/>
+							<aui:input 
+								id='<%="dossierFile" + dossierPartId + StringPool.DASH + index %>' 
+								name="dossierFile" 
+								type="hidden"
+								value="<%=dossierFile != null ? dossierFile.getDossierFileId() : 0%>"
+							/>
 						</aui:a>
 					</td>
 				</c:when>

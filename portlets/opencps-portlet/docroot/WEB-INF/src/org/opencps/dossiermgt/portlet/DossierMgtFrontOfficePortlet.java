@@ -29,13 +29,16 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.opencps.accountmgt.model.Business;
 import org.opencps.accountmgt.model.Citizen;
 import org.opencps.accountmgt.search.BusinessDisplayTerms;
 import org.opencps.accountmgt.service.BusinessLocalServiceUtil;
 import org.opencps.accountmgt.service.CitizenLocalServiceUtil;
+import org.opencps.datamgt.model.DictCollection;
 import org.opencps.datamgt.model.DictItem;
+import org.opencps.datamgt.service.DictCollectionLocalServiceUtil;
 import org.opencps.datamgt.service.DictItemLocalServiceUtil;
 import org.opencps.dossiermgt.CreateDossierFolderException;
 import org.opencps.dossiermgt.EmptyDossierAddressException;
@@ -53,10 +56,13 @@ import org.opencps.dossiermgt.OutOfLengthDossierContactNameException;
 import org.opencps.dossiermgt.OutOfLengthDossierContactTelNoException;
 import org.opencps.dossiermgt.OutOfLengthDossierSubjectIdException;
 import org.opencps.dossiermgt.OutOfLengthDossierSubjectNameException;
+import org.opencps.dossiermgt.model.Dossier;
+import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.DossierTemplate;
 import org.opencps.dossiermgt.model.ServiceConfig;
 import org.opencps.dossiermgt.search.DossierDisplayTerms;
 import org.opencps.dossiermgt.search.DossierFileDisplayTerms;
+import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
@@ -109,6 +115,13 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		UploadPortletRequest uploadPortletRequest = PortalUtil
 		    .getUploadPortletRequest(actionRequest);
 
+		long folderId = ParamUtil
+		    .getLong(uploadPortletRequest, DossierFileDisplayTerms.FOLDE_ID);
+
+		long dossierPartId = ParamUtil
+		    .getLong(
+		        uploadPortletRequest, DossierFileDisplayTerms.DOSSIER_PART_ID);
+
 		int index = ParamUtil
 		    .getInteger(uploadPortletRequest, DossierFileDisplayTerms.INDEX);
 
@@ -116,15 +129,12 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		    .getString(
 		        uploadPortletRequest, DossierFileDisplayTerms.GROUP_NAME);
 
+		String templateFileNo = ParamUtil
+		    .getString(
+		        uploadPortletRequest, DossierDisplayTerms.TEMPLATE_FILE_NO);
+
 		String fileName = ParamUtil
 		    .getString(uploadPortletRequest, DossierFileDisplayTerms.FILE_NAME);
-
-		long folderId = ParamUtil
-		    .getLong(uploadPortletRequest, DossierFileDisplayTerms.FOLDE_ID);
-
-		long dossierPartId = ParamUtil
-		    .getLong(
-		        uploadPortletRequest, DossierFileDisplayTerms.DOSSIER_PART_ID);
 
 		String tempFolderName = ParamUtil
 		    .getString(
@@ -206,12 +216,23 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			    .put(DossierFileDisplayTerms.DOSSIER_PART_ID, dossierPartId);
 
 			jsonObject
-			    .put("index", index);
+			    .put(DossierFileDisplayTerms.INDEX, index);
 
 			jsonObject
-			    .put("groupName", groupName);
+			    .put(DossierFileDisplayTerms.GROUP_NAME, groupName);
 
-			// DLAppServiceUtil.a
+			jsonObject
+			    .put(
+			        DossierFileDisplayTerms.DOSSIER_FILE_ORIGINAL,
+			        PortletConstants.DOSSIER_FILE_ORIGINAL);
+
+			jsonObject
+			    .put(
+			        DossierFileDisplayTerms.DOSSIER_FILE_TYPE,
+			        PortletConstants.DOSSIER_FILE_TYPE_INPUT);
+
+			jsonObject
+			    .put(DossierDisplayTerms.TEMPLATE_FILE_NO, templateFileNo);
 
 		}
 		catch (Exception e) {
@@ -237,6 +258,46 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				        "/html/portlets/dossiermgt/frontoffice/upload_dossier_file.jsp");
 			}
 		}
+	}
+
+	public void deleteDossierFile(
+	    ActionRequest actionRequest, ActionResponse actionResponse)
+	    throws IOException {
+
+		long dossierFileId = ParamUtil
+		    .getLong(actionRequest, DossierFileDisplayTerms.DOSSIER_FILE_ID);
+		if (dossierFileId > 0) {
+			DossierFile dossierFile = null;
+			JSONObject jsonObject = JSONFactoryUtil
+			    .createJSONObject();
+			try {
+				dossierFile = DossierFileLocalServiceUtil
+				    .getDossierFile(dossierFileId);
+				if (dossierFile != null) {
+					long fileEntryId = dossierFile
+					    .getFileEntryId();
+					if (fileEntryId > 0) {
+						DLAppServiceUtil
+						    .deleteFileEntry(fileEntryId);
+					}
+					DossierFileLocalServiceUtil
+					    .deleteDossierFile(dossierFile);
+					jsonObject
+					    .put("deleted", Boolean.TRUE);
+				}
+			}
+			catch (Exception e) {
+				_log
+				    .error(e);
+
+				jsonObject
+				    .put("deleted", Boolean.FALSE);
+
+			}
+
+			writeJSON(actionRequest, actionResponse, jsonObject);
+		}
+
 	}
 
 	public void deleteTempFile(
@@ -319,14 +380,82 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	    RenderRequest renderRequest, RenderResponse renderResponse)
 	    throws PortletException, IOException {
 
+		long dossierId = ParamUtil
+		    .getLong(renderRequest, DossierDisplayTerms.DOSSIER_ID);
+
 		long serviceConfigId = ParamUtil
 		    .getLong(renderRequest, DossierDisplayTerms.SERVICE_CONFIG_ID);
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest
 		    .getAttribute(WebKeys.THEME_DISPLAY);
+
 		String accountType = StringPool.BLANK;
+		String itemSelected = StringPool.BLANK;
 
 		try {
+
+			if (dossierId > 0) {
+				Dossier dossier = DossierLocalServiceUtil
+				    .getDossier(dossierId);
+
+				if (dossier != null) {
+					renderRequest
+					    .setAttribute(WebKeys.DOSSIER_ENTRY, dossier);
+					serviceConfigId = dossier
+					    .getServiceConfigId();
+					try {
+						DictCollection dictCollection =
+						    DictCollectionLocalServiceUtil
+						        .getDictCollection(themeDisplay
+						            .getScopeGroupId(),
+						            PortletPropsValues.DATAMGT_MASTERDATA_ADMINISTRATIVE_REGION);
+
+						if (dictCollection != null) {
+							DictItem city = DictItemLocalServiceUtil
+							    .getDictItemInuseByItemCode(dictCollection
+							        .getDictCollectionId(), dossier
+							            .getCityCode());
+							DictItem district = DictItemLocalServiceUtil
+							    .getDictItemInuseByItemCode(dictCollection
+							        .getDictCollectionId(), dossier
+							            .getDistrictCode());
+							DictItem ward = DictItemLocalServiceUtil
+							    .getDictItemInuseByItemCode(dictCollection
+							        .getDictCollectionId(), dossier
+							            .getWardCode());
+
+							String[] dictItemIds = new String[3];
+
+							dictItemIds[0] = city != null ? String
+							    .valueOf(city
+							        .getDictItemId())
+							    : StringPool.BLANK;
+
+							dictItemIds[1] = district != null ? String
+							    .valueOf(district
+							        .getDictItemId())
+							    : StringPool.BLANK;
+
+							dictItemIds[2] = ward != null ? String
+							    .valueOf(ward
+							        .getDictItemId())
+							    : StringPool.BLANK;
+
+							itemSelected = StringUtil
+							    .merge(dictItemIds);
+
+							renderRequest
+							    .setAttribute(
+							        WebKeys.DICT_ITEM_SELECTED, itemSelected);
+						}
+					}
+					catch (Exception e) {
+						// TODO: handle exception
+					}
+
+				}
+			}
+
 			if (serviceConfigId > 0) {
 				ServiceConfig serviceConfig = ServiceConfigLocalServiceUtil
 				    .getServiceConfig(serviceConfigId);
@@ -355,6 +484,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 			if (themeDisplay
 			    .isSignedIn()) {
+
 				List<UserGroup> userGroups = new ArrayList<UserGroup>();
 
 				User user = themeDisplay
@@ -415,6 +545,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 	public void updateDossier(
 	    ActionRequest actionRequest, ActionResponse actionResponse) {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest
+		    .getAttribute(WebKeys.THEME_DISPLAY);
 
 		long dossierId = ParamUtil
 		    .getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
@@ -526,21 +659,24 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				cityCode = city
 				    .getItemCode();
 				cityName = city
-				    .getItemName();
+				    .getItemName(themeDisplay
+				        .getLocale());
 			}
 
 			if (district != null) {
 				districtCode = district
 				    .getItemCode();
 				districtName = district
-				    .getItemName();
+				    .getItemName(themeDisplay
+				        .getLocale());
 			}
 
 			if (ward != null) {
 				wardCode = ward
 				    .getItemCode();
 				wardName = ward
-				    .getItemName();
+				    .getItemName(themeDisplay
+				        .getLocale());
 			}
 
 			DLFolder dossierFolder = DLFolderUtil
@@ -619,6 +755,258 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			            .valueOf(serviceConfigId));
 
 		}
+	}
+
+	public void updateDossierFile(
+	    ActionRequest actionRequest, ActionResponse actionResponse) {
+
+		UploadPortletRequest uploadPortletRequest = PortalUtil
+		    .getUploadPortletRequest(actionRequest);
+
+		long dossierFileId = ParamUtil
+		    .getLong(
+		        uploadPortletRequest, DossierFileDisplayTerms.DOSSIER_FILE_ID);
+
+		long folderId = ParamUtil
+		    .getLong(uploadPortletRequest, DossierFileDisplayTerms.FOLDE_ID);
+
+		long dossierPartId = ParamUtil
+		    .getLong(
+		        uploadPortletRequest, DossierFileDisplayTerms.DOSSIER_PART_ID);
+
+		int index = ParamUtil
+		    .getInteger(uploadPortletRequest, DossierFileDisplayTerms.INDEX);
+
+		String groupName = ParamUtil
+		    .getString(
+		        uploadPortletRequest, DossierFileDisplayTerms.GROUP_NAME);
+
+		String templateFileNo = ParamUtil
+		    .getString(
+		        uploadPortletRequest, DossierDisplayTerms.TEMPLATE_FILE_NO);
+
+		String fileName = ParamUtil
+		    .getString(uploadPortletRequest, DossierFileDisplayTerms.FILE_NAME);
+
+		String tempFolderName = ParamUtil
+		    .getString(
+		        uploadPortletRequest, DossierFileDisplayTerms.TEMP_FOLDER_NAME);
+
+		String redirectURL = ParamUtil
+		    .getString(uploadPortletRequest, "redirectURL");
+
+		String displayName = ParamUtil
+		    .getString(
+		        uploadPortletRequest, DossierFileDisplayTerms.DISPLAY_NAME);
+
+		String dossierFileNo = ParamUtil
+		    .getString(
+		        uploadPortletRequest, DossierFileDisplayTerms.DOSSIER_FILE_NO);
+
+		String dossierFileDate = ParamUtil
+		    .getString(
+		        uploadPortletRequest,
+		        DossierFileDisplayTerms.DOSSIER_FILE_DATE);
+
+		String sourceFileName = uploadPortletRequest
+		    .getFileName(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
+
+		sourceFileName = sourceFileName
+		    .concat(PortletConstants.TEMP_RANDOM_SUFFIX).concat(StringUtil
+		        .randomString());
+
+		String accountType = ParamUtil
+		    .getString(uploadPortletRequest, WebKeys.ACCOUNT_TYPE);
+
+		InputStream inputStream = null;
+
+		JSONObject jsonObject = JSONFactoryUtil
+		    .createJSONObject();
+
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest
+		    .getAttribute(WebKeys.THEME_DISPLAY);
+		try {
+			ServiceContext serviceContext = ServiceContextFactory
+			    .getInstance(uploadPortletRequest);
+			DossierFile dossierFile = DossierFileLocalServiceUtil
+			    .getDossierFile(dossierFileId);
+			long storeFolderId = 0;
+
+			if (dossierFile != null) {
+				long fileEntryId = dossierFile
+				    .getFileEntryId();
+				if (fileEntryId > 0) {
+					FileEntry fileEntry = DLAppServiceUtil
+					    .getFileEntry(fileEntryId);
+					storeFolderId = fileEntry
+					    .getFolderId();
+				}
+				else {
+					long dossierId = dossierFile
+					    .getDossierId();
+					Dossier dossier = DossierLocalServiceUtil
+					    .getDossier(dossierId);
+
+					int dossierNo = dossier
+					    .getCounter();
+
+					String destination = StringPool.BLANK;
+					if (accountType
+					    .equals(
+					        PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN)) {
+						destination = PortletUtil
+						    .getCitizenDossierDestinationFolder(dossier
+						        .getGroupId(), themeDisplay
+						            .getUserId()) +
+						    StringPool.SLASH + String
+						        .valueOf(dossierNo);
+
+					}
+					else if (accountType
+					    .equals(
+					        PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS)) {
+
+						destination = PortletUtil
+						    .getBusinessDossierDestinationFolder(dossier
+						        .getGroupId(), dossier
+						            .getOwnerOrganizationId()) +
+						    StringPool.SLASH + String
+						        .valueOf(dossierNo);
+
+					}
+					DLFolder storeFolder = DLFolderUtil
+					    .getTargetFolder(themeDisplay
+					        .getUserId(), themeDisplay
+					            .getScopeGroupId(),
+					        themeDisplay
+					            .getScopeGroupId(),
+					        false, 0, destination, StringPool.BLANK, false,
+					        serviceContext);
+					
+					storeFolderId = storeFolder.getFolderId();
+				}
+			}
+
+			inputStream = uploadPortletRequest
+			    .getFileAsStream(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
+
+			String contentType = uploadPortletRequest
+			    .getContentType(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
+
+			FileEntry fileEntry = DLAppServiceUtil
+			    .addTempFileEntry(themeDisplay
+			        .getScopeGroupId(), folderId, sourceFileName,
+			        tempFolderName, inputStream, contentType);
+
+			jsonObject
+			    .put(DossierFileDisplayTerms.DOSSIER_FILE_NO, dossierFileNo);
+
+			jsonObject
+			    .put(DossierFileDisplayTerms.DISPLAY_NAME, displayName);
+
+			jsonObject
+			    .put(
+			        DossierFileDisplayTerms.DOSSIER_FILE_DATE, dossierFileDate);
+
+			jsonObject
+			    .put(DossierFileDisplayTerms.FILE_TITLE, fileEntry
+			        .getTitle());
+
+			jsonObject
+			    .put(DossierFileDisplayTerms.MIME_TYPE, fileEntry
+			        .getMimeType());
+
+			jsonObject
+			    .put(DossierFileDisplayTerms.FILE_NAME, fileName);
+
+			jsonObject
+			    .put(DossierFileDisplayTerms.FILE_ENTRY_ID, fileEntry
+			        .getFileEntryId());
+			jsonObject
+			    .put(DossierFileDisplayTerms.FOLDE_ID, fileEntry
+			        .getFolderId());
+
+			jsonObject
+			    .put(DossierFileDisplayTerms.DOSSIER_PART_ID, dossierPartId);
+
+			jsonObject
+			    .put(DossierFileDisplayTerms.INDEX, index);
+
+			jsonObject
+			    .put(DossierFileDisplayTerms.GROUP_NAME, groupName);
+
+			jsonObject
+			    .put(
+			        DossierFileDisplayTerms.DOSSIER_FILE_ORIGINAL,
+			        PortletConstants.DOSSIER_FILE_ORIGINAL);
+
+			jsonObject
+			    .put(
+			        DossierFileDisplayTerms.DOSSIER_FILE_TYPE,
+			        PortletConstants.DOSSIER_FILE_TYPE_INPUT);
+
+			jsonObject
+			    .put(DossierDisplayTerms.TEMPLATE_FILE_NO, templateFileNo);
+
+		}
+		catch (Exception e) {
+			_log
+			    .error(e);
+			SessionErrors
+			    .add(actionRequest, "upload-error");
+		}
+		finally {
+			StreamUtil
+			    .cleanUp(inputStream);
+			HttpServletRequest request = PortalUtil
+			    .getHttpServletRequest(actionRequest);
+			request
+			    .setAttribute(
+			        WebKeys.RESPONSE_UPLOAD_TEMP_DOSSIER_FILE, jsonObject);
+
+			if (Validator
+			    .isNotNull(redirectURL)) {
+				actionResponse
+				    .setRenderParameter(
+				        "jspPage",
+				        "/html/portlets/dossiermgt/frontoffice/upload_dossier_file.jsp");
+			}
+		}
+	}
+
+	public void updateTempDynamicFormData(
+	    ActionRequest actionRequest, ActionResponse actionResponse)
+	    throws IOException {
+
+		long dossierPartId = ParamUtil
+		    .getLong(actionRequest, DossierFileDisplayTerms.DOSSIER_PART_ID);
+		int index = ParamUtil
+		    .getInteger(actionRequest, DossierFileDisplayTerms.INDEX);
+		String formData = ParamUtil
+		    .getString(actionRequest, DossierFileDisplayTerms.FORM_DATA);
+
+		HttpServletRequest request = PortalUtil
+		    .getHttpServletRequest(actionRequest);
+
+		request
+		    .setAttribute(WebKeys.FORM_DATA + String
+		        .valueOf(dossierPartId) + StringPool.DASH + String
+		            .valueOf(index),
+		        formData);
+
+		HttpSession session = request
+		    .getSession();
+		session
+		    .setAttribute(WebKeys.FORM_DATA + String
+		        .valueOf(dossierPartId) + StringPool.DASH + String
+		            .valueOf(index),
+		        formData);
+
+		actionResponse
+		    .setRenderParameter(
+		        "mvcPath",
+		        "/html/portlets/dossiermgt/frontoffice/dynamic_form.jsp");
+
 	}
 
 	protected void validateDossier(
@@ -715,8 +1103,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	}
 
 	protected void writeJSON(
-	    UploadPortletRequest uploadPortletRequest,
-	    ActionResponse actionResponse, Object json)
+	    ActionRequest actionRequest, ActionResponse actionResponse, Object json)
 	    throws IOException {
 
 		HttpServletResponse response = PortalUtil

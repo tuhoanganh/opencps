@@ -18,6 +18,7 @@
 package org.opencps.dossiermgt.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.opencps.dossiermgt.model.FileGroup;
 import org.opencps.dossiermgt.service.base.FileGroupLocalServiceBaseImpl;
@@ -84,5 +85,18 @@ public class FileGroupLocalServiceImpl extends FileGroupLocalServiceBaseImpl {
 
 		return fileGroupPersistence
 		    .update(fileGroup);
+	}
+
+	/**
+	 * @param dossierId
+	 * @param dossierPartId
+	 * @return
+	 * @throws SystemException
+	 */
+	public List<FileGroup> getFileGroupByD_P(long dossierId, long dossierPartId)
+	    throws SystemException {
+
+		return fileGroupPersistence
+		    .findByD_P(dossierId, dossierPartId);
 	}
 }

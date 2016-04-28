@@ -17,8 +17,10 @@
 
 package org.opencps.util;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import org.opencps.datamgt.model.DictCollection;
@@ -360,6 +362,88 @@ public class PortletUtil {
 		}
 
 		return leaderLabel;
+	}
+	
+	public static String getDossierStatusLabel(int value, Locale locale) {
+
+		String statusLabel = StringPool.BLANK;
+
+		switch (value) {
+		case 0:
+			statusLabel = LanguageUtil
+			    .get(locale, "new");
+			break;
+		case 1:
+			statusLabel = LanguageUtil
+			    .get(locale, "receiving");
+			break;
+		case 2:
+			statusLabel = LanguageUtil
+			    .get(locale, "waiting");
+			break;
+		case 3:
+			statusLabel = LanguageUtil
+			    .get(locale, "paying");
+			break;
+		case 4:
+			statusLabel = LanguageUtil
+			    .get(locale, "denied");
+			break;
+		case 5:
+			statusLabel = LanguageUtil
+			    .get(locale, "received");
+			break;
+		case 6:
+			statusLabel = LanguageUtil
+			    .get(locale, "processing");
+			break;
+		case 7:
+			statusLabel = LanguageUtil
+			    .get(locale, "canceled");
+			break;
+		case 8:
+			statusLabel = LanguageUtil
+			    .get(locale, "done");
+			break;
+		case 9:
+			statusLabel = LanguageUtil
+			    .get(locale, "archived");
+			break;
+		case 10:
+			statusLabel = LanguageUtil
+			    .get(locale, "system");
+			break;
+		case 11:
+			statusLabel = LanguageUtil
+			    .get(locale, "error");
+			break;
+		default:
+			statusLabel = LanguageUtil
+			    .get(locale, "new");
+			break;
+		}
+
+		return statusLabel;
+	}
+	
+	public static List<Integer> getDossierStatus(){
+		
+		List<Integer> dossierStatus = new ArrayList<Integer>();
+		
+		dossierStatus.add(PortletConstants.DOSSIER_STATUS_NEW);
+		dossierStatus.add(PortletConstants.DOSSIER_STATUS_RECEIVING);
+		dossierStatus.add(PortletConstants.DOSSIER_STATUS_WAITING);
+		dossierStatus.add(PortletConstants.DOSSIER_STATUS_PAYING);
+		dossierStatus.add(PortletConstants.DOSSIER_STATUS_DENIED);
+		dossierStatus.add(PortletConstants.DOSSIER_STATUS_RECEIVED);
+		dossierStatus.add(PortletConstants.DOSSIER_STATUS_PROCESSING);
+		dossierStatus.add(PortletConstants.DOSSIER_STATUS_CANCELED);
+		dossierStatus.add(PortletConstants.DOSSIER_STATUS_DONE);
+		dossierStatus.add(PortletConstants.DOSSIER_STATUS_ARCHIVED);
+		dossierStatus.add(PortletConstants.DOSSIER_STATUS_SYSTEM);
+		dossierStatus.add(PortletConstants.DOSSIER_STATUS_ERROR);
+	
+		return dossierStatus;
 	}
 
 	public static String getDestinationFolder(String[] folderNames) {
