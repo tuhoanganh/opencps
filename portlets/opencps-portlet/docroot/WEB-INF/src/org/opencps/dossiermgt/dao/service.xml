@@ -278,6 +278,10 @@
         <column name="displayName" type="String"/>
         <column name="removed" type="int"/>
         <column name="syncStatus" type="int"/>
+        <finder name="D_P" return-type="Collection">
+            <finder-column name="dossierId"></finder-column>
+            <finder-column name="dossierPartId"></finder-column>
+        </finder>
     </entity>
     
     <entity name="DossierFile" local-service="true" table="opencps_dossier_file">
@@ -313,6 +317,10 @@
         <column name="removed" type="int"/>
         <column name="original" type="int"/>
         <column name="syncStatus" type="int"/>
+        <finder name="D_P" return-type="DossierFile">
+            <finder-column name="dossierId"></finder-column>
+            <finder-column name="dossierPartId"></finder-column>
+        </finder>
     </entity>
 
 	<exceptions>
