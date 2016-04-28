@@ -28,12 +28,16 @@ import javax.portlet.RenderResponse;
 
 import org.opencps.processmgt.model.ProcessStep;
 import org.opencps.processmgt.model.ProcessStepDossierPart;
+import org.opencps.processmgt.model.ProcessWorkflow;
 import org.opencps.processmgt.model.ServiceProcess;
 import org.opencps.processmgt.model.StepAllowance;
+import org.opencps.processmgt.model.WorkflowOutput;
 import org.opencps.processmgt.service.ProcessStepDossierPartLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
+import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
 import org.opencps.processmgt.service.ServiceProcessLocalServiceUtil;
 import org.opencps.processmgt.service.StepAllowanceLocalServiceUtil;
+import org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil;
 import org.opencps.processmgt.util.ProcessUtils;
 import org.opencps.util.WebKeys;
 
@@ -53,6 +57,189 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
 public class ProcessMgtAdminPortlet extends MVCPortlet {
 	
 	/**
+	 * Update action
+	 * 
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws IOException
+	 */
+	public void updateAction(
+	    ActionRequest actionRequest, ActionResponse actionResponse)
+	    throws IOException {
+
+		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
+
+		String returnURL = ParamUtil.getString(actionRequest, "returnURL");
+
+		SessionMessages.add(
+		    actionRequest, PortalUtil.getPortletId(actionRequest) +
+		        SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_ERROR_MESSAGE);
+
+		long processWorkflowId =
+		    ParamUtil.getLong(actionRequest, "processWorkflowId");
+
+		long serviceProcessId =
+		    ParamUtil.getLong(actionRequest, "serviceProcessId");
+
+		long preProcessStepId =
+		    ParamUtil.getLong(actionRequest, "preProcessStepId");
+
+		long postProcessStepId =
+		    ParamUtil.getLong(actionRequest, "postProcessStepId");
+
+		String autoEvent = ParamUtil.getString(actionRequest, "autoEvent");
+
+		String actionName = ParamUtil.getString(actionRequest, "actionName");
+
+		boolean assignUser = ParamUtil.getBoolean(actionRequest, "assignUserCheckbox");
+
+		long actionUserId = ParamUtil.getLong(actionRequest, "actionUserId");
+
+		boolean requestPayment =
+		    ParamUtil.getBoolean(actionRequest, "requestPaymentCheckbox");
+
+		double paymentFee = ParamUtil.getDouble(actionRequest, "paymentFee");
+
+		String generateReceptionNo =
+		    ParamUtil.getString(actionRequest, "generateReceptionNo");
+
+		String receptionNoPattern =
+		    ParamUtil.getString(actionRequest, "receptionNoPattern");
+
+		boolean generateDeadline =
+		    ParamUtil.getBoolean(actionRequest, "generateDeadlineCheckbox");
+
+		boolean deadlinePattern =
+		    ParamUtil.getBoolean(actionRequest, "deadlinePatternCheckbox");
+
+		try {
+			ServiceContext serviceContext =
+			    ServiceContextFactory.getInstance(actionRequest);
+
+			if (processWorkflowId <= 0) {
+
+				// Add Workflow
+
+				ProcessWorkflow workflow =
+				    ProcessWorkflowLocalServiceUtil.addWorkflow(
+				        serviceProcessId, preProcessStepId, postProcessStepId,
+				        autoEvent, actionName, assignUser, actionUserId,
+				        requestPayment, paymentFee, generateReceptionNo,
+				        receptionNoPattern, generateDeadline, deadlinePattern,
+				        serviceContext);
+
+				// Add WorkflowOutput
+
+				List<WorkflowOutput> workflowOutputs =
+				    ProcessUtils.getWorkflowOutput(
+				        actionRequest, workflow.getProcessWorkflowId());
+
+				for (WorkflowOutput output : workflowOutputs) {
+					WorkflowOutputLocalServiceUtil.addWorkflowOutput(
+					    output.getDossierPartId(),
+					    output.getProcessWorkflowId(), output.getRequired(),
+					    output.getEsign(), output.getPostback());
+				}
+
+			}
+			else {
+				// Update Workflow
+
+				ProcessWorkflow workflow =
+				    ProcessWorkflowLocalServiceUtil.updateWorkflow(
+				        processWorkflowId, preProcessStepId, postProcessStepId,
+				        autoEvent, actionName, assignUser, actionUserId,
+				        requestPayment, paymentFee, generateReceptionNo,
+				        receptionNoPattern, generateDeadline, deadlinePattern,
+				        serviceContext);
+
+				// Add WorkflowOutput
+
+				List<WorkflowOutput> workflowOutputs =
+				    ProcessUtils.getWorkflowOutput(
+				        actionRequest, workflow.getProcessWorkflowId());
+
+				List<WorkflowOutput> beforeList =
+				    WorkflowOutputLocalServiceUtil.getByProcessWF(workflow.getProcessWorkflowId());
+
+				List<WorkflowOutput> removeWorkflow =
+				    ProcessUtils.getWorkflowOutputRemove(
+				        beforeList, workflowOutputs);
+
+				for (WorkflowOutput output : removeWorkflow) {
+					WorkflowOutputLocalServiceUtil.deleteWorkflowOutput(output);
+				}
+
+				for (WorkflowOutput output : workflowOutputs) {
+					if (output.getWorkflowOutputId() >= 0) {
+						WorkflowOutputLocalServiceUtil.updateWorkflowOutput(
+						    output.getWorkflowOutputId(),
+						    output.getDossierPartId(),
+						    output.getProcessWorkflowId(),
+						    output.getRequired(), output.getEsign(),
+						    output.getPostback());
+					}
+					else {
+						WorkflowOutputLocalServiceUtil.addWorkflowOutput(
+						    output.getDossierPartId(),
+						    output.getProcessWorkflowId(),
+						    output.getRequired(), output.getEsign(),
+						    output.getPostback());
+					}
+				}
+
+			}
+
+			if (Validator.isNotNull(redirectURL)) {
+				actionResponse.sendRedirect(redirectURL +
+				    "#_15_WAR_opencpsportlet_tab=_15_WAR_opencpsportlet_action");
+			}
+		}
+		catch (Exception e) {
+			if (Validator.isNotNull(returnURL)) {
+				actionResponse.sendRedirect(returnURL);
+			}
+		}
+	}
+	
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws IOException
+	 */
+	public void deleteAction( ActionRequest actionRequest, ActionResponse actionResponse)
+	    throws IOException {
+
+		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
+
+		String returnURL = ParamUtil.getString(actionRequest, "returnURL");
+
+		long processWorkflowId = ParamUtil.getLong(actionRequest, "processWorkflowId");
+
+		try {
+
+			if (isRemoveProcessWorkflow(processWorkflowId)) {
+				ProcessWorkflowLocalServiceUtil.deleteWorkflow(processWorkflowId);
+			}
+
+			// Redirect page
+			if (Validator.isNotNull(redirectURL)) {
+				actionResponse.sendRedirect(redirectURL +
+				    "#_15_WAR_opencpsportlet_tab=_15_WAR_opencpsportlet_action");
+			}
+
+		}
+		catch (Exception e) {
+			if (Validator.isNotNull(returnURL)) {
+				actionResponse.sendRedirect(returnURL +
+				    "#_15_WAR_opencpsportlet_tab=_15_WAR_opencpsportlet_action");
+			}
+		}
+
+	}
+
+
+	/**
 	 * @param actionRequest
 	 * @param actionResponse
 	 * @throws IOException
@@ -66,26 +253,27 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 		String returnURL = ParamUtil.getString(actionRequest, "returnURL");
 
 		long processStepId = ParamUtil.getLong(actionRequest, "processStepId");
-		
+
 		try {
-			
+
 			if (isRemoveProcessStep(processStepId)) {
 				ProcessStepLocalServiceUtil.removeStep(processStepId);
 			}
-			
+
 			// Redirect page
 			if (Validator.isNotNull(redirectURL)) {
-				actionResponse.sendRedirect(redirectURL+"#_15_WAR_opencpsportlet_tab=_15_WAR_opencpsportlet_step");
+				actionResponse.sendRedirect(redirectURL +
+				    "#_15_WAR_opencpsportlet_tab=_15_WAR_opencpsportlet_step");
 			}
 
-        }
-        catch (Exception e) {
+		}
+		catch (Exception e) {
 			if (Validator.isNotNull(returnURL)) {
-				actionResponse.sendRedirect(returnURL+"#_15_WAR_opencpsportlet_tab=_15_WAR_opencpsportlet_step");
+				actionResponse.sendRedirect(returnURL +
+				    "#_15_WAR_opencpsportlet_tab=_15_WAR_opencpsportlet_step");
 			}
-        }
-		
-		
+		}
+
 	}
 
 	/**
@@ -184,7 +372,8 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 
 				// Redirect page
 				if (Validator.isNotNull(redirectURL)) {
-					actionResponse.sendRedirect(redirectURL);
+					actionResponse.sendRedirect(redirectURL +
+					    "#_15_WAR_opencpsportlet_tab=_15_WAR_opencpsportlet_step");
 				}
 			}
 			else {
@@ -272,8 +461,20 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 	 * @return
 	 */
 	private boolean isRemoveProcessStep(long processId) {
+		//TODO: implement in here
+		
 		return true;
 	}
+	
+	/**
+	 * @param processWorkflowId
+	 * @return
+	 */
+	private boolean isRemoveProcessWorkflow(long processWorkflowId) {
+		//TODO: implement in here
+		return true;
+	}
+
 
 	/**
 	 * @param actionRequest
@@ -356,12 +557,16 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 		long stepAllowanceId = ParamUtil.getLong(renderRequest, "stepAllowanceId");
 		
 		long processStepId = ParamUtil.getLong(renderRequest, "processStepId");
+		
+		long processWorkflowId = ParamUtil.getLong(renderRequest, "processWorkflowId");
 
 		ServiceProcess serviceProcess = null;
 		
 		StepAllowance stepAllowance = null;
 		
 		ProcessStep processStep = null;
+		
+		ProcessWorkflow processWorkflow = null;
 
 		try {
 			serviceProcess =
@@ -370,6 +575,8 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 			stepAllowance = StepAllowanceLocalServiceUtil.fetchStepAllowance(stepAllowanceId);
 			
 			processStep = ProcessStepLocalServiceUtil.fetchProcessStep(processStepId);
+			
+			processWorkflow = ProcessWorkflowLocalServiceUtil.fetchProcessWorkflow(processWorkflowId);
 		}
 		catch (Exception e) {
 			_log.error(e);
@@ -381,6 +588,8 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 		renderRequest.setAttribute(WebKeys.STEP_ALLOWANCE_ENTRY, stepAllowance);
 		
 		renderRequest.setAttribute(WebKeys.PROCESS_STEP_ENTRY, processStep);
+		
+		renderRequest.setAttribute(WebKeys.WORKFLOW_ENTRY, processWorkflow);
 		
 		super.render(renderRequest, renderResponse);
 
