@@ -92,7 +92,7 @@
 				%>
 				<div class="opencps dossiermgt dossier-part-tree" id='<%= renderResponse.getNamespace() + "tree" + dossierParts.get(0).getDossierpartId()%>'>
 					<c:choose>
-						<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_COMPONEMT ||
+						<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_OPTION ||
 								partType == PortletConstants.DOSSIER_PART_TYPE_SUBMIT || 
 								partType == PortletConstants.DOSSIER_PART_TYPE_OTHER %>">
 							<%
@@ -321,8 +321,8 @@
 		var instance = A.one(e);
 		
 		var dossierPartId = instance.attr('dossier-part');
-		
-		var size = parseInt(dossierPartId = instance.attr('dossier-part-size'));
+	
+		var size = parseInt(instance.attr('dossier-part-size'));
 		
 		var index = parseInt(A.one('#<portlet:namespace/>curIndex').val()) + 1;
 		
@@ -351,7 +351,7 @@
 			
 			var index = instance.attr('index');
 			
-			var groupName = instance.attr('groupName');
+			var groupName = instance.attr('group-name');
 			
 			var privateDossierPartGroup = A.one('#<portlet:namespace />privateDossierPartGroup' + dossierPartId + '-' + index);
 			
@@ -365,29 +365,6 @@
 		}
 	});
 	
-	Liferay.provide(window, '<portlet:namespace/>removeDossierGroup', function(e) {
-		if(confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-remove-group") %>')){
-			var A = AUI();
-			
-			var instance = A.one(e);
-			
-			var dossierPartId = instance.attr('dossier-part');
-			
-			var index = instance.attr('index');
-			
-			var groupName = instance.attr('groupName');
-			
-			var privateDossierPartGroup = A.one('#<portlet:namespace />privateDossierPartGroup' + dossierPartId + '-' + index);
-			
-			privateDossierPartGroup.remove();
-			
-			var groupNameIndex = privateDossierGroup.indexOf(groupName);
-			
-			if (groupNameIndex > -1) {
-				privateDossierPartGroup.splice(groupNameIndex, 1);
-			}
-		}
-	});
 	
 	Liferay.provide(window, '<portlet:namespace/>removeFileUpload', function(e) {
 		if(confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-remove-dossier-file") %>')){
@@ -560,7 +537,7 @@
 					success: function(event, id, obj) {
 						var response = this.get('responseData');
 						var tree = A.one('#<portlet:namespace />tree' + dossierPartId);
-						
+		
 						if(tree){
 							tree.append(response);
 							privateDossierGroup.push(groupName);
@@ -584,7 +561,7 @@
 		var index = schema.index;
 		
 		var size = schema.size;
-	
+		
 		A.one('#<portlet:namespace/>curIndex').val(parseInt(index) + parseInt(size));
 		
 		<portlet:namespace/>renderPrivateDossierGroup(dossierPartId, index, groupName);

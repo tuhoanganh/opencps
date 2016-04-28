@@ -174,7 +174,9 @@
 		
 		if(success == 'true'){
 			
-			jsonData = JSON.parse(responseData);
+			if(responseData != ''){
+				jsonData = JSON.parse(responseData);
+			}
 			
 			<portlet:namespace/>responseData(jsonData);
 		}

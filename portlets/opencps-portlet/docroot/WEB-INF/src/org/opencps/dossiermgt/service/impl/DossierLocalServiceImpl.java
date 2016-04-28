@@ -323,6 +323,255 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 
 		return dossier;
 	}
+	
+	public Dossier updateDossier(
+	    long dossierId, long userId, long ownerOrganizationId, long dossierTemplateId,
+	    String templateFileNo, long serviceConfigId, long serviceInfoId,
+	    String serviceDomainIndex, long govAgencyOrganizationId,
+	    String govAgencyCode, String govAgencyName, int serviceMode,
+	    String serviceAdministrationIndex, String cityCode, String cityName,
+	    String districtCode, String districtName, String wardName,
+	    String wardCode, String subjectName, String subjectId, String address,
+	    String contactName, String contactTelNo, String contactEmail,
+	    String note, int dossierSource, int dossierStatus,
+	    String[] uploadDataSchemas, long parentFolderId,
+	    ServiceContext serviceContext)
+	    throws SystemException, PortalException {
+
+		
+		Dossier dossier = dossierPersistence.findByPrimaryKey(dossierId);
+		
+		int count = dossierLocalService
+		    .countByGroupId(serviceContext
+		        .getScopeGroupId());
+
+		int dossierNo = count + 1;
+
+		Date now = new Date();
+
+		serviceContext
+		    .setAddGroupPermissions(true);
+		serviceContext
+		    .setAddGuestPermissions(true);
+
+		dossier
+		    .setUserId(userId);
+		dossier
+		    .setModifiedDate(now);
+
+		dossier
+		    .setAddress(address);
+		dossier
+		    .setCityCode(cityCode);
+		dossier
+		    .setCityName(cityName);
+		dossier
+		    .setContactEmail(contactEmail);
+		dossier
+		    .setContactName(contactName);
+		dossier
+		    .setContactTelNo(contactTelNo);
+		dossier
+		    .setCounter(dossierNo);
+		dossier
+		    .setDistrictCode(districtCode);
+		dossier
+		    .setDistrictName(districtName);
+		dossier
+		    .setDossierSource(dossierSource);
+		dossier
+		    .setDossierStatus(dossierStatus);
+		dossier
+		    .setDossierTemplateId(dossierTemplateId);
+		dossier
+		    .setGovAgencyCode(govAgencyCode);
+		dossier
+		    .setGovAgencyName(govAgencyName);
+		dossier
+		    .setGovAgencyOrganizationId(govAgencyOrganizationId);
+		dossier
+		    .setNote(note);
+		dossier
+		    .setOwnerOrganizationId(ownerOrganizationId);
+		dossier
+		    .setServiceAdministrationIndex(serviceAdministrationIndex);
+		dossier
+		    .setServiceConfigId(serviceConfigId);
+		dossier
+		    .setServiceDomainIndex(serviceDomainIndex);
+		dossier
+		    .setServiceInfoId(serviceInfoId);
+		dossier
+		    .setServiceMode(serviceMode);
+		dossier
+		    .setSubjectId(subjectId);
+		dossier
+		    .setSubjectName(subjectName);
+		dossier
+		    .setUuid(PortalUUIDUtil
+		        .generate());
+		dossier
+		    .setWardCode(wardCode);
+		dossier
+		    .setWardName(wardName);
+
+		dossier = dossierPersistence
+		    .update(dossier);
+
+		dossierStatusLocalService
+		    .addDossierStatus(
+		        userId, dossierId, 0, PortletConstants.DOSSIER_STATUS_NEW,
+		        "Create New", "", now,
+		        PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
+		        serviceContext);
+		dossierLogLocalService
+		    .addDossierLog(
+		        userId, dossierId, 0, PortletConstants.DOSSIER_STATUS_NEW,
+		        "Create New", "", now, PortletConstants.DOSSIER_LOG_NORMAL,
+		        serviceContext);
+
+		DLFolder dossierNoFolder = dlFolderLocalService
+		    .addFolder(userId, serviceContext
+		        .getScopeGroupId(), serviceContext
+		            .getScopeGroupId(),
+		        false, parentFolderId, String
+		            .valueOf(dossierNo),
+		        StringPool.BLANK, false, serviceContext);
+
+		for (int i = 0; i < uploadDataSchemas.length; i++) {
+			String schema = uploadDataSchemas[i];
+
+			JSONObject jsonObject = null;
+
+			jsonObject = JSONFactoryUtil
+			    .createJSONObject(schema);
+			long dossierPartId = jsonObject
+			    .getLong(DossierFileDisplayTerms.DOSSIER_PART_ID);
+			long fileEntryId = jsonObject
+			    .getLong(DossierFileDisplayTerms.FILE_ENTRY_ID);
+
+			int dossierFileOriginal = jsonObject
+			    .getInt(DossierFileDisplayTerms.DOSSIER_FILE_ORIGINAL);
+			int dossierFileType = jsonObject
+			    .getInt(DossierFileDisplayTerms.DOSSIER_FILE_TYPE);
+			String formData = jsonObject
+			    .getString(DossierFileDisplayTerms.FORM_DATA);
+			String groupName = jsonObject
+			    .getString(DossierFileDisplayTerms.GROUP_NAME);
+			String displayName = jsonObject
+			    .getString(DossierFileDisplayTerms.DISPLAY_NAME);
+			String mimeType = jsonObject
+			    .getString(DossierFileDisplayTerms.MIME_TYPE);
+			/*
+			 * String fileName = jsonObject
+			 * .getString(DossierFileDisplayTerms.FILE_NAME);
+			 */
+			String dossierFileDate = jsonObject
+			    .getString(DossierFileDisplayTerms.DOSSIER_FILE_DATE);
+			String dossierFileNo = jsonObject
+			    .getString(DossierFileDisplayTerms.DOSSIER_FILE_NO);
+
+			FileEntry tempFileEntry = null;
+
+			// tempFileEntry = TempFileUtil.getTempFile(groupId, userId,
+			// sourceFileName, tempFolderName);
+
+			FileEntry fileEntry = null;
+
+			if (fileEntryId > 0) {
+				tempFileEntry = DLAppServiceUtil
+				    .getFileEntry(fileEntryId);
+
+				InputStream inputStream = tempFileEntry
+				    .getContentStream();
+
+				long size = tempFileEntry
+				    .getSize();
+
+				String sourceFileName = tempFileEntry
+				    .getTitle();
+
+				fileEntry = DLAppServiceUtil
+				    .addFileEntry(serviceContext
+				        .getScopeGroupId(), dossierNoFolder
+				            .getFolderId(),
+				        sourceFileName, mimeType, displayName, StringPool.BLANK,
+				        StringPool.BLANK, inputStream, size, serviceContext);
+			}
+			if (fileEntry != null) {
+				// Add file group
+				FileGroup fileGroup = null;
+
+				if (Validator
+				    .isNotNull(groupName)) {
+					fileGroup = fileGroupLocalService
+					    .addFileGroup(
+					        userId, dossierId, dossierPartId, groupName,
+					        PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
+					        serviceContext);
+
+					dossierStatusLocalService
+					    .addDossierStatus(userId, dossierId, fileGroup
+					        .getFileGroupId(),
+					        PortletConstants.DOSSIER_STATUS_NEW, "Create New",
+					        "", now,
+					        PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
+					        serviceContext);
+					dossierLogLocalService
+					    .addDossierLog(userId, dossierId, fileGroup
+					        .getFileGroupId(),
+					        PortletConstants.DOSSIER_STATUS_NEW, "Create New",
+					        "", now, PortletConstants.DOSSIER_LOG_NORMAL,
+					        serviceContext);
+
+				}
+
+				Date fileDate = null;
+
+				if (Validator
+				    .isNotNull(dossierFileDate)) {
+					fileDate = DateTimeUtil
+					    .convertStringToDate(dossierFileDate);
+				}
+
+				// Add dossier file
+				dossierFileLocalService
+				    .addDossierFile(
+				        userId, dossierId, dossierPartId, templateFileNo,
+				        fileGroup != null ? fileGroup
+				            .getFileGroupId() : 0L,
+				        userId, ownerOrganizationId, displayName, formData,
+				        fileEntry
+				            .getFileEntryId(),
+				        PortletConstants.DOSSIER_FILE_MARK_UNKNOW,
+				        dossierFileType, dossierFileNo, fileDate,
+				        dossierFileOriginal,
+				        PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
+				        serviceContext);
+			}
+
+		}
+
+		long classTypeId = 0;
+
+		assetEntryLocalService
+		    .updateEntry(userId, serviceContext
+		        .getScopeGroupId(), ServiceInfo.class
+		            .getName(),
+		        dossier
+		            .getDossierId(),
+		        dossier
+		            .getUuid(),
+		        classTypeId, serviceContext
+		            .getAssetCategoryIds(),
+		        serviceContext
+		            .getAssetTagNames(),
+		        false, now, null, null, ContentTypes.TEXT_HTML, dossier
+		            .getSubjectName(),
+		        StringPool.BLANK, StringPool.BLANK, null, null, 0, 0, 0, false);
+
+		return dossier;
+	}
 
 	public int countByGroupId(long groupId)
 	    throws SystemException {
