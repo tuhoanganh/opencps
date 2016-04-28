@@ -145,7 +145,7 @@
 		<aui:col cssClass="input60">
 			<aui:select name="<%=DossierPartDisplayTerms.DOSSIERPART_PARENTID %>">
 				<c:choose>
-					<c:when test="<%=Validator.isNotNull(isAddChilds) && Validator.isNotNull(dossierPart)%>">
+					<c:when test="<%=Validator.isNotNull(isAddChilds) || Validator.isNotNull(dossierPart)%>">
 						<aui:option value="<%=dossierPart.getDossierpartId() %>">
 							<%=dossierPart.getPartName()%>
 						</aui:option>

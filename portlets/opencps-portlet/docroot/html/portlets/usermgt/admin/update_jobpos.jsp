@@ -50,6 +50,11 @@
 	message="<%=LanguageUtil.get(pageContext, 
 		MessageKeys.USERMGT_JOBPOS_UPDATE_ERROR) %>"
 />
+
+<liferay-ui:success 
+	key="<%= MessageKeys.USERMGT_JOBPOS_UPDATE_SUCESS %>"
+	message="<%= MessageKeys.USERMGT_JOBPOS_UPDATE_SUCESS%>"
+/>
 <portlet:actionURL var="editJobPosURL" name="updateJobPos">
 	<portlet:param name="redirectURL" value="<%=redirectURL %>"/>
 	<portlet:param name="returnURL" value="<%=currentURL %>"/>

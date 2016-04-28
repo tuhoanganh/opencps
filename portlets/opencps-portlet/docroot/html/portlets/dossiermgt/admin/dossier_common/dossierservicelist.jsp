@@ -96,7 +96,7 @@
 			
 			String serviceConfigModeName = LanguageUtil.get(portletConfig ,themeDisplay.getLocale(), DossierMgtUtil.getNameOfServiceConfigMode(serviceConfig.getServiceMode(), themeDisplay.getLocale()));
 		
-			row.addText(String.valueOf(row.getPos()) + 1);
+			row.addText(String.valueOf(row.getPos() + 1));
 			row.addText(serviceInfo.getServiceName());
 			row.addText(serviceConfig.getGovAgencyName());
 			row.addText(serviceConfigModeName);
