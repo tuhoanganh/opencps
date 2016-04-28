@@ -25,6 +25,7 @@ import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.FileGroup;
 import org.opencps.dossiermgt.search.DossierFileDisplayTerms;
 import org.opencps.dossiermgt.service.base.DossierLocalServiceBaseImpl;
+import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.util.DateTimeUtil;
 import org.opencps.util.PortletConstants;
 
@@ -33,6 +34,8 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
@@ -257,8 +260,21 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 					        userId, dossierId, dossierPartId, groupName,
 					        PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
 					        serviceContext);
-					
-					
+
+					dossierStatusLocalService
+					    .addDossierStatus(userId, dossierId, fileGroup
+					        .getFileGroupId(),
+					        PortletConstants.DOSSIER_STATUS_NEW, "Create New",
+					        "", now,
+					        PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
+					        serviceContext);
+					dossierLogLocalService
+					    .addDossierLog(userId, dossierId, fileGroup
+					        .getFileGroupId(),
+					        PortletConstants.DOSSIER_STATUS_NEW, "Create New",
+					        "", now, PortletConstants.DOSSIER_LOG_NORMAL,
+					        serviceContext);
+
 				}
 
 				Date fileDate = null;
@@ -287,6 +303,24 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 
 		}
 
+		long classTypeId = 0;
+
+		assetEntryLocalService
+		    .updateEntry(userId, serviceContext
+		        .getScopeGroupId(), ServiceInfo.class
+		            .getName(),
+		        dossier
+		            .getDossierId(),
+		        dossier
+		            .getUuid(),
+		        classTypeId, serviceContext
+		            .getAssetCategoryIds(),
+		        serviceContext
+		            .getAssetTagNames(),
+		        false, now, null, null, ContentTypes.TEXT_HTML, dossier
+		            .getSubjectName(),
+		        StringPool.BLANK, StringPool.BLANK, null, null, 0, 0, 0, false);
+
 		return dossier;
 	}
 
@@ -297,11 +331,25 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		    .countByGroupId(groupId);
 	}
 
+	public int countDossier(long groupId, String keyword, int dossierStatus) {
+
+		return dossierFinder
+		    .countDossier(groupId, keyword, dossierStatus);
+	}
+
 	public List<Dossier> getDossierByGroupId(long groupId)
 	    throws SystemException {
 
 		return dossierPersistence
 		    .filterFindByGroupId(groupId);
+	}
+
+	public List<Dossier> getDossier(
+	    long groupId, String keyword, int dossierStatus, int start, int end,
+	    OrderByComparator obc) {
+
+		return dossierFinder
+		    .searchDossier(groupId, keyword, dossierStatus, start, end, obc);
 	}
 
 }

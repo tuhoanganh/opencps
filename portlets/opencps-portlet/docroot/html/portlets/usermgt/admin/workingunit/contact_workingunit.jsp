@@ -1,9 +1,4 @@
-<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
-<%@page import="java.util.List"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="org.opencps.util.PortletUtil"%>
-<%@page import="com.liferay.portal.kernel.log.Log"%>
-<%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
+
 <%
 	/**
 	 * OpenCPS is the open source Core Public Services software
@@ -26,6 +21,12 @@
 <%@page import="org.opencps.usermgt.model.WorkingUnit"%>
 <%@page import="org.opencps.usermgt.search.WorkingUnitDisplayTerms"%>
 <%@page import="org.opencps.util.PortletPropsValues"%>
+<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="com.liferay.portal.kernel.log.Log"%>
+<%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%
 	WorkingUnit workingUnit =
@@ -70,9 +71,10 @@
 	</aui:input>
 
 	<datamgt:ddr cssClass="input100" depthLevel="3"
-		dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_ADMINISTRATION_REGION%>"
+		dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_ADMINISTRATIVE_REGION%>"
 		itemNames="cityCode,districtCode,wardCode"
-		itemsEmptyOption="true,true,true" selectedItems="<%=region%>">
+		itemsEmptyOption="true,true,true" 
+		selectedItems="<%= region %>">
 
 	</datamgt:ddr>
 

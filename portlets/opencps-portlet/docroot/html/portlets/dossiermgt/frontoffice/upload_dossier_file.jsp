@@ -1,3 +1,4 @@
+<%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -30,6 +31,7 @@
 <%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
 <%@page import="org.hsqldb.SessionManager"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
+<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
 <%@ include file="../init.jsp"%>
 
 <%
@@ -41,6 +43,8 @@
 	}catch(Exception e){
 		
 	}
+	
+	Dossier dossier = (Dossier) request.getAttribute(WebKeys.DOSSIER_ENTRY);
 
 	DossierFile dossierFile = (DossierFile) request.getAttribute(WebKeys.DOSSIER_FILE_ENTRY);
 
@@ -60,6 +64,8 @@
 	long folderId = BeanParamUtil.getLong(fileEntry, request, "folderId");
 	
 	long dossierPartId = ParamUtil.getLong(request, DossierFileDisplayTerms.DOSSIER_PART_ID);
+	
+	long dossierFileId = ParamUtil.getLong(request, DossierFileDisplayTerms.DOSSIER_FILE_ID);
 
 	if (repositoryId <= 0) {
 
@@ -74,6 +80,8 @@
 	
 	String fileName = ParamUtil.getString(request, "fileName");
 	
+	String templateFileNo = ParamUtil.getString(request, "templateFileNo");
+	
 	JSONObject responseData = (JSONObject)request.getAttribute(WebKeys.RESPONSE_UPLOAD_TEMP_DOSSIER_FILE);
 	
 %>
@@ -83,17 +91,25 @@
 	<portlet:param name="<%=DossierFileDisplayTerms.FOLDE_ID %>" value="<%=String.valueOf(folderId)%>"/>
 </portlet:actionURL>
 
+<portlet:actionURL var="updateDossierFileURL" name="updateDossierFile">
+	<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier != null ? dossier.getDossierId() : 0L)%>"/>
+	<portlet:param name="<%=DossierFileDisplayTerms.DOSSIER_FILE_ID %>" value="<%=String.valueOf(dossierFileId)%>"/>
+</portlet:actionURL>
+
 <liferay-ui:error message="upload-error" key="upload-error"/>
+
 <aui:form 
 	name="fm" 
 	method="post" 
-	action="<%=addTempFileURL %>" 
+	action="<%=addTempFileURL%>" 
 	enctype="multipart/form-data"
 >
 	<aui:input name="redirectURL" type="hidden" value="<%=currentURL %>"/>
-	<aui:input name="index" type="hidden" value="<%=String.valueOf(index) %>"/>
-	<aui:input name="groupName" type="hidden" value="<%=groupName %>"/>
-	<aui:input name="fileName" type="hidden" value="<%=fileName %>"/>
+	<aui:input name="<%=DossierFileDisplayTerms.INDEX %>" type="hidden" value="<%=index %>"/>
+	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_ID %>" type="hidden" value="<%=dossierFileId %>"/>
+	<aui:input name="<%=DossierFileDisplayTerms.GROUP_NAME %>" type="hidden" value="<%=groupName %>"/>
+	<aui:input name="<%=DossierFileDisplayTerms.FILE_NAME %>" type="hidden" value="<%=fileName %>"/>
+	<aui:input name="<%=DossierDisplayTerms.TEMPLATE_FILE_NO %>" type="hidden" value="<%=templateFileNo %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_PART_ID %>" type="hidden" value="<%=dossierPart != null ? dossierPart.getDossierpartId() : dossierPartId %>"/>
 	<aui:row>
 		<aui:col width="100">

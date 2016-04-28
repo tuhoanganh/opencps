@@ -529,7 +529,9 @@
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
 		<field name="templateName" type="String" />
-		<field name="description" type="String" />
+		<field name="description" type="String">
+			<hint-collection name="TEXTAREA" />
+		</field>
 		<field name="templateNo" type="String" />
 	</model>
 	<model name="org.opencps.dossiermgt.model.FileGroup">

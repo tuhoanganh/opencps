@@ -1,3 +1,4 @@
+<%@page import="org.opencps.util.PortletConstants"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -33,21 +34,24 @@
 
 			
  <liferay-ui:icon-menu>
- 	<c:if test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_DOSSIER) %>">
- 		<portlet:renderURL var="updateDossierURL">
-			<portlet:param name="mvcPath" value="/html/portlets/data_management/admin/edit_dictitem.jsp"/>
-			<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
-			<portlet:param name="backURL" value="<%=currentURL %>"/>
-		</portlet:renderURL> 
- 		<liferay-ui:icon image="edit" message="edit" url="<%=updateDossierURL.toString() %>" /> 
- 	</c:if>
- 	
- 	<c:if test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE) %>">
- 		<portlet:actionURL var="deleteDossierURL" name="deleteDossier" >
-			<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
-			<portlet:param name="redirectURL" value="<%=currentURL %>"/>
-		</portlet:actionURL> 
-		<liferay-ui:icon-delete image="delete" confirmation="are-you-sure-delete-entry" message="delete"  url="<%=deleteDossierURL.toString() %>" />
- 	</c:if>
-	  
+ 	<c:choose>
+ 		<c:when test="<%=dossier.getDossierStatus() == PortletConstants.DOSSIER_STATUS_NEW %>">
+ 			<c:if test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) %>">
+		 		<portlet:renderURL var="updateDossierURL">
+					<portlet:param name="mvcPath" value='<%=templatePath + "edit_dossier.jsp" %>'/>
+					<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
+					<portlet:param name="backURL" value="<%=currentURL %>"/>
+				</portlet:renderURL> 
+		 		<liferay-ui:icon image="edit" message="edit" url="<%=updateDossierURL.toString() %>" /> 
+		 	</c:if>
+		 	
+		 	<c:if test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE) %>">
+		 		<portlet:actionURL var="deleteDossierURL" name="deleteDossier" >
+					<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
+					<portlet:param name="redirectURL" value="<%=currentURL %>"/>
+				</portlet:actionURL> 
+				<liferay-ui:icon-delete image="delete" confirmation="are-you-sure-delete-entry" message="delete"  url="<%=deleteDossierURL.toString() %>" />
+		 	</c:if>
+ 		</c:when>
+ 	</c:choose>
 </liferay-ui:icon-menu> 
