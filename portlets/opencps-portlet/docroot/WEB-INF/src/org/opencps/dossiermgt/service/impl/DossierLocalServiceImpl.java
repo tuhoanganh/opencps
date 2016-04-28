@@ -35,6 +35,7 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
@@ -330,11 +331,25 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		    .countByGroupId(groupId);
 	}
 
+	public int countDossier(long groupId, String keyword, int dossierStatus) {
+
+		return dossierFinder
+		    .countDossier(groupId, keyword, dossierStatus);
+	}
+
 	public List<Dossier> getDossierByGroupId(long groupId)
 	    throws SystemException {
 
 		return dossierPersistence
 		    .filterFindByGroupId(groupId);
+	}
+
+	public List<Dossier> getDossier(
+	    long groupId, String keyword, int dossierStatus, int start, int end,
+	    OrderByComparator obc) {
+
+		return dossierFinder
+		    .searchDossier(groupId, keyword, dossierStatus, start, end, obc);
 	}
 
 }
