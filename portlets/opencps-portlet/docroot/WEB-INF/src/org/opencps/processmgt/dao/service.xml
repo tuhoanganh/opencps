@@ -90,7 +90,11 @@
 
 		<column name="processStepId" type="long" primary="true" />
 		<column name="dossierPartId" type="long" primary="true" />
-
+		
+		<finder return-type="Collection" name="ProcessStepId">
+			<finder-column name="processStepId"/>
+		</finder>
+		
 	</entity>
 
 	<entity name="StepAllowance" local-service="true" remote-service="true"

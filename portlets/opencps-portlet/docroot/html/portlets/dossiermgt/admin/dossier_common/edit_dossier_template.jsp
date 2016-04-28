@@ -59,6 +59,5 @@
 		name="<%=DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DESCRIPTION %>"
 		cssClass="input95"
 	>
-		<aui:validator name="required" />
 	</aui:input>
 </aui:row>
