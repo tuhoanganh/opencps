@@ -31,25 +31,120 @@ import org.opencps.processmgt.model.ProcessStep;
 import org.opencps.processmgt.model.ProcessStepDossierPart;
 import org.opencps.processmgt.model.ServiceProcess;
 import org.opencps.processmgt.model.StepAllowance;
+import org.opencps.processmgt.model.WorkflowOutput;
 import org.opencps.processmgt.model.impl.ProcessStepDossierPartImpl;
 import org.opencps.processmgt.model.impl.StepAllowanceImpl;
+import org.opencps.processmgt.model.impl.WorkflowOutputImpl;
 import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
 import org.opencps.processmgt.service.ServiceProcessLocalServiceUtil;
 
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
+import com.liferay.portal.model.User;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
+import com.liferay.portal.service.UserLocalServiceUtil;
 
 /**
  * @author khoavd
  */
 public class ProcessUtils {
+	
+	/**
+	 * @param processStepId
+	 * @return
+	 */
+	public static List<User> getAssignUsers(long processStepId) {
+
+		List<User> users = new ArrayList<User>();
+
+		try {
+			users =
+			    UserLocalServiceUtil.getUsers(
+			        QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+		}
+		catch (Exception e) {
+
+		}
+
+		return users;
+
+	}
+	
+	/**
+	 * Get Workflow Output Removed
+	 * 
+	 * @param beforeList
+	 * @param afterList
+	 * @return
+	 */
+	public static List<WorkflowOutput> getWorkflowOutputRemove(
+	    List<WorkflowOutput> beforeList, List<WorkflowOutput> afterList) {
+
+		List<WorkflowOutput> removeWorkflow = new ArrayList<WorkflowOutput>();
+
+		for (WorkflowOutput before : beforeList) {
+
+			boolean isNotContain = true;
+
+			for (WorkflowOutput after : afterList) {
+
+				if (Validator.equals(
+				    before.getWorkflowOutputId(), after.getWorkflowOutputId())) {
+					isNotContain = false;
+				}
+			}
+
+			if (isNotContain) {
+				removeWorkflow.add(before);
+			}
+
+		}
+
+		return removeWorkflow;
+
+	}
+	
+	/**
+	 * @param actionRequest
+	 * @param processWorkflowId
+	 * @return
+	 */
+	public static List<WorkflowOutput> getWorkflowOutput(ActionRequest actionRequest, long processWorkflowId) {
+		List<WorkflowOutput> outputs = new ArrayList<WorkflowOutput>();
+		
+		String outputIndexString = ParamUtil.getString(actionRequest, "outputIndexs");
+		
+		int [] outputIndexes = StringUtil.split(outputIndexString, 0);
+		
+		for (int outputIndex : outputIndexes) {
+			
+			WorkflowOutput output = new WorkflowOutputImpl();
+			
+			long workflowOutputId = ParamUtil.getLong(actionRequest, "workflowOutputId" + outputIndex);
+			long dossierPartId = ParamUtil.getLong(actionRequest, "dossierPartId" + outputIndex);
+			boolean required = ParamUtil.getBoolean(actionRequest, "required" + outputIndex);
+			boolean esign = ParamUtil.getBoolean(actionRequest, "esign" + outputIndex);
+			boolean postback = ParamUtil.getBoolean(actionRequest, "postback" + outputIndex);
+			
+			output.setWorkflowOutputId(workflowOutputId);
+			output.setProcessWorkflowId(processWorkflowId);
+			output.setDossierPartId(dossierPartId);
+			output.setRequired(required);
+			output.setEsign(esign);
+			output.setPostback(postback);
+			
+			outputs.add(output);
+		}
+		
+		return outputs;
+	}
 	
 	/**
 	 * @param beforeList
