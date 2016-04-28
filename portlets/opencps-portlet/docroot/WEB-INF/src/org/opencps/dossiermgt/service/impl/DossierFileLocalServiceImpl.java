@@ -19,6 +19,7 @@ package org.opencps.dossiermgt.service.impl;
 
 import java.util.Date;
 
+import org.opencps.dossiermgt.NoSuchDossierFileException;
 import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.service.base.DossierFileLocalServiceBaseImpl;
 
@@ -47,6 +48,9 @@ public class DossierFileLocalServiceImpl
 	 * access the dossier file local service.
 	 */
 
+	/* (non-Javadoc)
+	 * @see org.opencps.dossiermgt.service.DossierFileLocalService#addDossierFile(long, long, long, java.lang.String, long, long, long, java.lang.String, java.lang.String, long, int, int, java.lang.String, java.util.Date, int, int, com.liferay.portal.service.ServiceContext)
+	 */
 	public DossierFile addDossierFile(
 	    long userId, long dossierId, long dossierPartId, String templateFileNo,
 	    long groupFileId, long ownerUserId, long ownerOrganizationId,
@@ -104,5 +108,19 @@ public class DossierFileLocalServiceImpl
 
 		return dossierFilePersistence
 		    .update(dossierFile);
+	}
+	
+	/**
+	 * @param dossierId
+	 * @param dossierPartId
+	 * @return
+	 * @throws NoSuchDossierFileException
+	 * @throws SystemException
+	 */
+	public DossierFile getDossierFileByD_P(long dossierId, long dossierPartId)
+	    throws NoSuchDossierFileException, SystemException {
+
+		return dossierFilePersistence
+		    .findByD_P(dossierId, dossierPartId);
 	}
 }
