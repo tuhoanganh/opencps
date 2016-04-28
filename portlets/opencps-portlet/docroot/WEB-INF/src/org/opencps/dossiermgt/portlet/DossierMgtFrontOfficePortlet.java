@@ -85,6 +85,7 @@ import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringPool;
@@ -276,10 +277,16 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				if (dossierFile != null) {
 					long fileEntryId = dossierFile
 					    .getFileEntryId();
-					if (fileEntryId > 0) {
-						DLAppServiceUtil
-						    .deleteFileEntry(fileEntryId);
+					try {
+						if (fileEntryId > 0) {
+							DLAppServiceUtil
+							    .deleteFileEntry(fileEntryId);
+						}
 					}
+					catch (Exception e) {
+						// nothing to do
+					}
+
 					DossierFileLocalServiceUtil
 					    .deleteDossierFile(dossierFile);
 					jsonObject
@@ -347,7 +354,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			_log
 			    .error(e);
 		}
-
 	}
 
 	public void deleteTempFiles(
@@ -767,9 +773,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		    .getLong(
 		        uploadPortletRequest, DossierFileDisplayTerms.DOSSIER_FILE_ID);
 
-		long folderId = ParamUtil
-		    .getLong(uploadPortletRequest, DossierFileDisplayTerms.FOLDE_ID);
-
 		long dossierPartId = ParamUtil
 		    .getLong(
 		        uploadPortletRequest, DossierFileDisplayTerms.DOSSIER_PART_ID);
@@ -787,10 +790,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		String fileName = ParamUtil
 		    .getString(uploadPortletRequest, DossierFileDisplayTerms.FILE_NAME);
-
-		String tempFolderName = ParamUtil
-		    .getString(
-		        uploadPortletRequest, DossierFileDisplayTerms.TEMP_FOLDER_NAME);
 
 		String redirectURL = ParamUtil
 		    .getString(uploadPortletRequest, "redirectURL");
@@ -825,11 +824,13 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest
 		    .getAttribute(WebKeys.THEME_DISPLAY);
+
 		try {
 			ServiceContext serviceContext = ServiceContextFactory
 			    .getInstance(uploadPortletRequest);
 			DossierFile dossierFile = DossierFileLocalServiceUtil
 			    .getDossierFile(dossierFileId);
+
 			long storeFolderId = 0;
 
 			if (dossierFile != null) {
@@ -874,6 +875,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 						        .valueOf(dossierNo);
 
 					}
+
 					DLFolder storeFolder = DLFolderUtil
 					    .getTargetFolder(themeDisplay
 					        .getUserId(), themeDisplay
@@ -882,21 +884,30 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 					            .getScopeGroupId(),
 					        false, 0, destination, StringPool.BLANK, false,
 					        serviceContext);
-					
-					storeFolderId = storeFolder.getFolderId();
+
+					storeFolderId = storeFolder
+					    .getFolderId();
 				}
 			}
 
 			inputStream = uploadPortletRequest
 			    .getFileAsStream(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
 
+			long size = uploadPortletRequest
+			    .getSize(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
+
 			String contentType = uploadPortletRequest
 			    .getContentType(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
 
+			String mimeType = Validator
+			    .isNotNull(contentType) ? MimeTypesUtil
+			        .getContentType(contentType) : StringPool.BLANK;
+
 			FileEntry fileEntry = DLAppServiceUtil
-			    .addTempFileEntry(themeDisplay
-			        .getScopeGroupId(), folderId, sourceFileName,
-			        tempFolderName, inputStream, contentType);
+			    .addFileEntry(serviceContext
+			        .getScopeGroupId(), storeFolderId, sourceFileName, mimeType,
+			        displayName, StringPool.BLANK, StringPool.BLANK,
+			        inputStream, size, serviceContext);
 
 			jsonObject
 			    .put(DossierFileDisplayTerms.DOSSIER_FILE_NO, dossierFileNo);
