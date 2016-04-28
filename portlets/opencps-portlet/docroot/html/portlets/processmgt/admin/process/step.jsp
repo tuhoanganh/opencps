@@ -24,6 +24,12 @@
 <%
 	ServiceProcess serviceProcess  = (ServiceProcess) request.getAttribute(WebKeys.SERVICE_PROCESS_ENTRY);
 
+	long serviceProcessId = 0;
+	
+	if (Validator.isNotNull(serviceProcess)) {
+		serviceProcessId = serviceProcess.getServiceProcessId();
+	}
+
 	ProcessStep processStep  = (ProcessStep) request.getAttribute(WebKeys.PROCESS_STEP_ENTRY);
 	
 	PortletURL iteratorURL = renderResponse.createRenderURL();
@@ -64,9 +70,9 @@
 		
 			StepSearchTerms searchTerms = (StepSearchTerms) searchContainer.getSearchTerms();
 
-			total = ProcessStepLocalServiceUtil.countStep(scopeGroupId); 
+			total = ProcessStepLocalServiceUtil.countStepByProcess(serviceProcessId); 
 
-			results = ProcessStepLocalServiceUtil.searchStep(scopeGroupId,
+			results = ProcessStepLocalServiceUtil.getStepByProcess(serviceProcessId,
 				searchContainer.getStart(), searchContainer.getEnd());
 			
 			pageContext.setAttribute("results", results);
