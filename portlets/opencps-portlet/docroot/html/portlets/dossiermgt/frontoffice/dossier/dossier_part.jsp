@@ -1,5 +1,3 @@
-<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -42,6 +40,8 @@
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 <%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
 <%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
 <%@page import="org.opencps.util.WebKeys"%>
 
 <%@ include file="../../init.jsp"%>
@@ -257,7 +257,7 @@
 													<portlet:param name="<%=DossierFileDisplayTerms.DOSSIER_FILE_ID %>" value="<%=String.valueOf(dossierFile != null ? dossierFile.getDossierFileId() : 0) %>"/>
 													<portlet:param name="<%=DossierFileDisplayTerms.INDEX %>" value="<%=String.valueOf(index) %>"/>
 													<portlet:param name="<%=DossierFileDisplayTerms.LEVEL %>" value="<%=String.valueOf(level) %>"/>
-													<portlet:param name="<%=DossierFileDisplayTerms.GROUP_NAME %>" value="<%=StringPool.BLANK%>"/>
+													<portlet:param name="<%=DossierFileDisplayTerms.GROUP_NAME %>" value="<%=dossierParts.get(0).getPartName()%>"/>
 													<portlet:param name="<%=DossierFileDisplayTerms.PART_TYPE %>" value="<%=String.valueOf(dossierPart.getPartType()) %>"/>
 												</liferay-util:include>
 											</span>
@@ -504,6 +504,7 @@
 		var dossierFileDialog = Liferay.Util.openWindow(
 			{
 				dialog: {
+					cache: false,
 					cssClass: 'opencps-dossiermgt-upload-dossier-file',
 					modal: true,
 					height: 480,

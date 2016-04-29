@@ -1,4 +1,3 @@
-<%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -32,6 +31,7 @@
 <%@page import="org.hsqldb.SessionManager"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
+<%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%@ include file="../init.jsp"%>
 
 <%
