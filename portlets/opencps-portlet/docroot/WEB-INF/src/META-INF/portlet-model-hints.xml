@@ -491,7 +491,7 @@
 		<field name="dossierTemplateId" type="long" />
 		<field name="partNo" type="String" />
 		<field name="partName" type="String" />
-		<field name="partTip" type="String" >
+		<field name="partTip" type="String">
 			<hint-collection name="TEXTAREA" />
 		</field>
 		<field name="partType" type="int" />
@@ -504,7 +504,7 @@
 		<field name="formReport" type="String">
 			<hint-collection name="TEXTAREA" />
 		</field>
-		<field name="sampleData" type="String" >
+		<field name="sampleData" type="String">
 			<hint-collection name="TEXTAREA" />
 		</field>
 		<field name="required" type="boolean" />

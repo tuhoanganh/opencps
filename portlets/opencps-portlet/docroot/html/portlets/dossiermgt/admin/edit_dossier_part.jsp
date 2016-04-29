@@ -129,15 +129,15 @@
 	</c:choose>
 	
 	<aui:row>
-		<aui:col cssClass="input60">
-			<aui:input name="<%=DossierPartDisplayTerms.DOSSIERPART_PARTNAME %>">
+		<aui:col width="70">
+			<aui:input name="<%=DossierPartDisplayTerms.DOSSIERPART_PARTNAME %>" cssClass="input90">
 				<aui:validator name="required" />
 				<aui:validator name="maxLength">255</aui:validator>
 			</aui:input>
 		</aui:col>
 		
-		<aui:col cssClass="input30">
-			<aui:input name="<%=DossierPartDisplayTerms.DOSSIERPART_PARTNO %>">
+		<aui:col width="20">
+			<aui:input name="<%=DossierPartDisplayTerms.DOSSIERPART_PARTNO %>" cssClass="input90">
 				<aui:validator name="required" />
 				<aui:validator name="maxLength">100</aui:validator>
 			</aui:input>
@@ -145,18 +145,20 @@
 	</aui:row>
 	
 	<aui:row >
-			<aui:input
+		<aui:col width="90">
+			<aui:input cssClass="input90"
 				type="textarea"
 				name="<%=DossierPartDisplayTerms.DOSSIERPART_PARTTIP %>"
 			>
 				<aui:validator name="required" />
 				<aui:validator name="maxLength">255</aui:validator>
 			</aui:input>
+		</aui:col>
 	</aui:row>
 	
 	<aui:row>
-		<aui:col cssClass="input60">
-			<aui:select name="<%=DossierPartDisplayTerms.DOSSIERPART_PARENTID %>">
+		<aui:col width="60">
+			<aui:select name="<%=DossierPartDisplayTerms.DOSSIERPART_PARENTID %>" cssClass="input90">
 				<c:choose>
 					<c:when test="<%=Validator.isNotNull(isAddChilds) && Validator.isNotNull(dossierPart)%>">
 						<aui:option value="<%=dossierPart.getDossierpartId() %>">
@@ -177,8 +179,8 @@
 			</aui:select>
 		</aui:col>
 		
-		<aui:col cssClass="input30">
-			<aui:input name="<%=DossierPartDisplayTerms.DOSSIERPART_SIBLING %>">
+		<aui:col width="25">
+			<aui:input name="<%=DossierPartDisplayTerms.DOSSIERPART_SIBLING %>" cssClass="input90">
 				<aui:validator name="required" />
 				<aui:validator name="numbers" />
 			</aui:input>
@@ -218,26 +220,34 @@
 		
 	<div id = "<portlet:namespace/>displayFormScript">
 		<aui:row >
-			<aui:input 
-				name="<%=DossierPartDisplayTerms.DOSSIERPART_FORMSCRIPT %>" 
-				cssClass="input90"
-			/>
+			<aui:col width="90">
+				<aui:input
+					type="textarea"
+					name="<%=DossierPartDisplayTerms.DOSSIERPART_FORMSCRIPT %>" 
+					cssClass="input90"
+				/>
+			</aui:col>
 		</aui:row>
 	</div>
 	
 	<aui:row >
-			<aui:input 
+		<aui:col width="90">
+			<aui:input
+				type="textarea"
 				name="<%=DossierPartDisplayTerms.DOSSIERPART_FORMREPORT %>" 
 				cssClass="input90"
 			/>
-		</aui:row>
+		</aui:col>	
+	</aui:row>
 	
 	<aui:row>
-		<aui:input 
-			type="textarea"
-			name="<%=DossierPartDisplayTerms.DOSSIERPART_SAMPLEDATA %>" 
-			cssClass="input90"
-		/>
+		<aui:col width="90">
+			<aui:input 
+				type="textarea"
+				name="<%=DossierPartDisplayTerms.DOSSIERPART_SAMPLEDATA %>" 
+				cssClass="input90"
+			/>
+		</aui:col>
 	</aui:row>
 	
 	
