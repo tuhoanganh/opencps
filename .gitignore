@@ -199,3 +199,6 @@ portlets/opencps-sample-portlet/
 
 portlets/opencps-portlet/docroot/WEB-INF/tld/.gitignore
 
+portlets/message-portlet/
+
+portlets/LiferayBulkMailSender-portlet/
