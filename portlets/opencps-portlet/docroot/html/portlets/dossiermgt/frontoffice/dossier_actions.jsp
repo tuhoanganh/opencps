@@ -1,4 +1,3 @@
-<%@page import="org.opencps.util.PortletConstants"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -24,10 +23,13 @@
 <%@page import="org.opencps.dossiermgt.permissions.DossierPermission"%>
 <%@page import="org.opencps.util.ActionKeys"%>
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
+<%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
 <%@ include file="../init.jsp"%>
 
  
 <%
+	ServiceConfig serviceConfig = (ServiceConfig)request.getAttribute(WebKeys.SERVICE_CONFIG_ENTRY);
 	ResultRow row = (ResultRow)request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
 	Dossier dossier = (Dossier) row.getObject();
 %> 
@@ -43,6 +45,13 @@
 					<portlet:param name="backURL" value="<%=currentURL %>"/>
 				</portlet:renderURL> 
 		 		<liferay-ui:icon image="edit" message="edit" url="<%=updateDossierURL.toString() %>" /> 
+		 		
+		 		<portlet:actionURL var="updateDossierStatusURL" name="updateDossierStatus">
+					<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
+					<portlet:param name="<%=DossierDisplayTerms.DOSSIER_STATUS %>" value="<%=String.valueOf(PortletConstants.DOSSIER_STATUS_SYSTEM) %>"/>
+					<portlet:param name="backURL" value="<%=currentURL %>"/>
+				</portlet:actionURL> 
+		 		<liferay-ui:icon image="send" message="send" url="<%=updateDossierStatusURL.toString() %>" /> 
 		 	</c:if>
 		 	
 		 	<c:if test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE) %>">

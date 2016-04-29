@@ -19,6 +19,7 @@ package org.opencps.dossiermgt.service.impl;
 
 import java.util.Date;
 
+import org.opencps.dossiermgt.NoSuchDossierStatusException;
 import org.opencps.dossiermgt.model.DossierStatus;
 import org.opencps.dossiermgt.service.base.DossierStatusLocalServiceBaseImpl;
 
@@ -45,12 +46,11 @@ public class DossierStatusLocalServiceImpl
 	 * {@link org.opencps.dossiermgt.service.DossierStatusLocalServiceUtil} to
 	 * access the dossier status local service.
 	 */
-	
+
 	public DossierStatus addDossierStatus(
 	    long userId, long dossierId, long fileGroupId, int status,
 	    String actionInfo, String messageInfo, Date updateDatetime,
-	    int syncStatus,
-	    ServiceContext serviceContext)
+	    int syncStatus, ServiceContext serviceContext)
 	    throws SystemException {
 
 		long dossierStatusId = counterLocalService
@@ -79,6 +79,43 @@ public class DossierStatusLocalServiceImpl
 		    .setDossierId(dossierId);
 		dossierStatus
 		    .setFileGroupId(fileGroupId);
+		dossierStatus
+		    .setDossierStatus(status);
+		dossierStatus
+		    .setActionInfo(actionInfo);
+		dossierStatus
+		    .setMessageInfo(messageInfo);
+		dossierStatus
+		    .setUpdateDatetime(updateDatetime);
+		dossierStatus
+		    .setSyncStatus(syncStatus);
+
+		return dossierStatusPersistence
+		    .update(dossierStatus);
+	}
+
+	public DossierStatus getDossierStatus(long dossierId)
+	    throws NoSuchDossierStatusException, SystemException {
+
+		return dossierStatusPersistence
+		    .findByDossierId(dossierId);
+	}
+
+	public DossierStatus updateDossierStatus(
+	    long dossierStatusId, long userId, long dossierId, long fileGroupId,
+	    int status, String actionInfo, String messageInfo, Date updateDatetime,
+	    int syncStatus, ServiceContext serviceContext)
+	    throws SystemException, NoSuchDossierStatusException {
+
+		DossierStatus dossierStatus = dossierStatusPersistence
+		    .findByPrimaryKey(dossierStatusId);
+
+		Date now = new Date();
+
+		dossierStatus
+		    .setUserId(userId);
+		dossierStatus
+		    .setModifiedDate(now);
 		dossierStatus
 		    .setDossierStatus(status);
 		dossierStatus

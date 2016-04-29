@@ -50,7 +50,7 @@
 	<table width="100%">
 		<tr>
 			<c:choose>
-				<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_COMPONEMT %>">
+				<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_SUBMIT%>">
 					<td width="40%" align="right">
 						<aui:a 
 							id="<%=String.valueOf(dossierPartId) %>"
@@ -118,7 +118,7 @@
 					</td>
 				</c:when>
 				
-				<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_SUBMIT && level > 0 %>">
+				<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_OTHER && level == 0 %>">
 					<td width="40%" align="right">
 						<aui:a 
 							id="<%=String.valueOf(dossierPartId) %>"
@@ -144,6 +144,33 @@
 							label="taken-from-archive" 
 							cssClass="opencps dossiermgt part-file-ctr taken-from-archive"
 						/>
+					</td>
+					<td width="10%" align="right">
+						
+					</td>
+					<td width="10%" align="right">
+						
+					</td>
+				</c:when>
+				
+				<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_OTHER && level > 0 %>">
+					<td width="40%" align="right">
+						<aui:a 
+							id="<%=String.valueOf(dossierPartId) %>"
+							dossier-part="<%=String.valueOf(dossierPartId) %>"
+							index="<%=String.valueOf(index) %>"
+							group-name="<%=groupName %>"
+							template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
+							file-name="<%=dossierPart != null ? dossierPart.getPartName() : StringPool.BLANK %>"
+							href="javascript:void(0);" 
+							label="upload-file" 
+							cssClass="opencps dossiermgt part-file-ctr upload-file" 
+							onClick='<%=renderResponse.getNamespace() + "uploadFile(this)" %>'
+						/>
+						
+					</td>
+					<td width="40%" align="right">
+						
 					</td>
 					<td width="10%" align="right">
 						<span class="dossier-file-counter">
@@ -211,7 +238,22 @@
 					</td>
 				</c:when>
 				
-				<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_OTHER && level == 0 %>">
+				<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_OPTION && level == 0 %>">
+					<td width="40%" align="right">
+						
+					</td>
+					<td width="40%" align="right">
+						
+					</td>
+					<td width="10%" align="right">
+						
+					</td>
+					<td width="10%" align="right">
+						
+					</td>
+				</c:when>
+				
+				<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_OPTION && level > 0 %>">
 					<td width="40%" align="right">
 						<aui:a 
 							id="<%=String.valueOf(dossierPartId) %>"
@@ -237,33 +279,6 @@
 							label="taken-from-archive" 
 							cssClass="opencps dossiermgt part-file-ctr taken-from-archive"
 						/>
-					</td>
-					<td width="10%" align="right">
-						
-					</td>
-					<td width="10%" align="right">
-						
-					</td>
-				</c:when>
-				
-				<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_OTHER && level > 0 %>">
-					<td width="40%" align="right">
-						<aui:a 
-							id="<%=String.valueOf(dossierPartId) %>"
-							dossier-part="<%=String.valueOf(dossierPartId) %>"
-							index="<%=String.valueOf(index) %>"
-							group-name="<%=groupName %>"
-							file-name="<%=dossierPart != null ? dossierPart.getPartName() : StringPool.BLANK %>"
-							template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
-							href="javascript:void(0);" 
-							label="upload-file" 
-							cssClass="opencps dossiermgt part-file-ctr upload-file" 
-							onClick='<%=renderResponse.getNamespace() + "uploadFile(this)" %>'
-						/>
-						
-					</td>
-					<td width="40%" align="right">
-						
 					</td>
 					<td width="10%" align="right">
 						<span class="dossier-file-counter">

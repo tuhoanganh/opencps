@@ -18,6 +18,7 @@
 package org.opencps.dossiermgt.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.opencps.dossiermgt.model.DossierLog;
 import org.opencps.dossiermgt.service.base.DossierLogLocalServiceBaseImpl;
@@ -44,6 +45,51 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 	 * {@link org.opencps.dossiermgt.service.DossierLogLocalServiceUtil} to
 	 * access the dossier log local service.
 	 */
+
+	public DossierLog addDossierLog(
+	    long userId, long groupId, long companyId, long dossierId,
+	    long fileGroupId, int status, String actionInfo, String messageInfo,
+	    Date updateDatetime, int level)
+	    throws SystemException {
+
+		long dossierLogId = counterLocalService
+		    .increment(DossierLog.class
+		        .getName());
+		DossierLog dossierLog = dossierLogPersistence
+		    .create(dossierLogId);
+
+		dossierLog
+		    .setGroupId(groupId);
+		dossierLog
+		    .setCompanyId(companyId);
+
+		Date now = new Date();
+
+		dossierLog
+		    .setUserId(userId);
+
+		dossierLog
+		    .setModifiedDate(now);
+
+		dossierLog
+		    .setDossierId(dossierId);
+		dossierLog
+		    .setFileGroupId(fileGroupId);
+		dossierLog
+		    .setDossierStatus(status);
+		dossierLog
+		    .setActionInfo(actionInfo);
+		dossierLog
+		    .setMessageInfo(messageInfo);
+		dossierLog
+		    .setUpdateDatetime(updateDatetime);
+		dossierLog
+		    .setLevel(level);
+
+		return dossierLogPersistence
+		    .update(dossierLog);
+
+	}
 
 	public DossierLog addDossierLog(
 	    long userId, long dossierId, long fileGroupId, int status,
@@ -89,6 +135,13 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 		return dossierLogPersistence
 		    .update(dossierLog);
 
+	}
+
+	public List<DossierLog> getDossierLogByDossierId(long doosierId)
+	    throws SystemException {
+
+		return dossierLogPersistence
+		    .findByDossierId(doosierId);
 	}
 
 }

@@ -18,6 +18,7 @@
 package org.opencps.dossiermgt.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.opencps.dossiermgt.NoSuchDossierFileException;
 import org.opencps.dossiermgt.model.DossierFile;
@@ -48,8 +49,13 @@ public class DossierFileLocalServiceImpl
 	 * access the dossier file local service.
 	 */
 
-	/* (non-Javadoc)
-	 * @see org.opencps.dossiermgt.service.DossierFileLocalService#addDossierFile(long, long, long, java.lang.String, long, long, long, java.lang.String, java.lang.String, long, int, int, java.lang.String, java.util.Date, int, int, com.liferay.portal.service.ServiceContext)
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * org.opencps.dossiermgt.service.DossierFileLocalService#addDossierFile(
+	 * long, long, long, java.lang.String, long, long, long, java.lang.String,
+	 * java.lang.String, long, int, int, java.lang.String, java.util.Date, int,
+	 * int, com.liferay.portal.service.ServiceContext)
 	 */
 	public DossierFile addDossierFile(
 	    long userId, long dossierId, long dossierPartId, String templateFileNo,
@@ -104,12 +110,14 @@ public class DossierFileLocalServiceImpl
 		    .setOriginal(original);
 		dossierFile
 		    .setOwnerOrganizationId(ownerOrganizationId);
-		dossierFile.setUuid(PortalUUIDUtil.generate());
+		dossierFile
+		    .setUuid(PortalUUIDUtil
+		        .generate());
 
 		return dossierFilePersistence
 		    .update(dossierFile);
 	}
-	
+
 	/**
 	 * @param dossierId
 	 * @param dossierPartId
@@ -122,5 +130,20 @@ public class DossierFileLocalServiceImpl
 
 		return dossierFilePersistence
 		    .findByD_P(dossierId, dossierPartId);
+	}
+
+	public List<DossierFile> getDossierFileByDossierId(long dossierId)
+	    throws SystemException {
+
+		return dossierFilePersistence
+		    .findByDossierId(dossierId);
+	}
+
+	public List<DossierFile> getDossierFileByD_F(
+	    long dossierId, long groupFileId)
+	    throws SystemException {
+
+		return dossierFilePersistence
+		    .findByD_F(dossierId, groupFileId);
 	}
 }

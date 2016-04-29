@@ -51,6 +51,7 @@ public class DossierFileDisplayTerms extends DisplayTerms {
 	public static final String FOLDE_ID = "folderId";
 	public static final String FORM_DATA = "formData";
 	public static final String GROUP_NAME = "groupName";
+	public static final String GROUP_NAMES = "groupNames";
 	public static final String INDEX = "index";
 	public static final String LEVEL = "level";
 	public static final String MIME_TYPE = "mimeType";
@@ -59,6 +60,7 @@ public class DossierFileDisplayTerms extends DisplayTerms {
 	public static final String PART_TYPE = "partType";
 	public static final String SOURCE_FILE_NAME = "sourceFileName";
 	public static final String SUCCESS = "success";
+	public static final String SIZE = "size";
 	public static final String TEMP_FOLDER_NAME = "tempFolderName";
 	
 	protected String displayName;
