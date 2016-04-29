@@ -321,7 +321,7 @@ public class AccountProfilePortlet extends MVCPortlet {
 				    district.getItemName(serviceContext.getLocale(), true),
 				    ward.getItemName(serviceContext.getLocale(), true), telNo,
 				    representativeName, representativeRole, domain,
-				    isChangePassWord, newPass, rePass,
+				    isChangePassWord, curPass, rePass,
 				    serviceContext.getUserId(), serviceContext);
 
 			}

@@ -98,6 +98,11 @@
 		value="<%= currentURL%>"
 	/>
 	<aui:input 
+		name="<%=DossierDisplayTerms.DOSSIER_ID %>" 
+		type="hidden" 
+		value="<%= dossier != null ? dossier.getDossierId() : 0%>"
+	/>
+	<aui:input 
 		name="<%=DossierDisplayTerms.DOSSIER_TEMPLATE_ID %>" 
 		type="hidden" 
 		value="<%= serviceConfig != null ? serviceConfig.getDossierTemplateId() : 0%>"

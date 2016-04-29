@@ -95,7 +95,9 @@
 	
 	AUI().ready(function(A){
 		if(success == 'true'){
-			jsonData = JSON.parse(formData);
+			if(formData != ''){
+				jsonData = JSON.parse(formData);
+			}
 			var responseData = new Object();
 			responseData.index = index;
 			responseData.dossierPartId = dossierPartId;

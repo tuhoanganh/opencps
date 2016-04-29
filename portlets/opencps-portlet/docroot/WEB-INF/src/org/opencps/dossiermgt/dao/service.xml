@@ -229,6 +229,12 @@
         <column name="messageInfo" type="String"/>
         <column name="updateDatetime" type="Date"/>
         <column name="syncStatus" type="int"/>
+        <order by="desc">
+            <order-column name="modifiedDate" order-by="desc"></order-column>
+        </order>
+        <finder name="DossierId" return-type="DossierStatus">
+            <finder-column name="dossierId"></finder-column>
+        </finder>
     </entity>
     
     <entity name="DossierLog" local-service="true" table="opencps_dossier_log">
@@ -254,6 +260,12 @@
         <column name="messageInfo" type="String"/>
         <column name="updateDatetime" type="Date"/>
         <column name="level" type="int"/>
+        <order by="desc">
+            <order-column name="modifiedDate" order-by="desc"></order-column>
+        </order>
+        <finder name="DossierId" return-type="Collection">
+            <finder-column name="dossierId"></finder-column>
+        </finder>
     </entity>
     
     <entity name="FileGroup" local-service="true" table="opencps_file_group">
@@ -281,6 +293,9 @@
         <finder name="D_P" return-type="Collection">
             <finder-column name="dossierId"></finder-column>
             <finder-column name="dossierPartId"></finder-column>
+        </finder>
+        <finder name="DossierId" return-type="Collection">
+            <finder-column name="dossierId"></finder-column>
         </finder>
     </entity>
     
@@ -320,6 +335,13 @@
         <finder name="D_P" return-type="DossierFile">
             <finder-column name="dossierId"></finder-column>
             <finder-column name="dossierPartId"></finder-column>
+        </finder>
+        <finder name="DossierId" return-type="Collection">
+            <finder-column name="dossierId"></finder-column>
+        </finder>
+        <finder name="D_F" return-type="Collection">
+            <finder-column name="dossierId"></finder-column>
+            <finder-column name="groupFileId"></finder-column>
         </finder>
     </entity>
 

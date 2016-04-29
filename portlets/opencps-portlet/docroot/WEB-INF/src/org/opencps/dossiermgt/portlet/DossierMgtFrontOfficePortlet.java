@@ -20,6 +20,8 @@ package org.opencps.dossiermgt.portlet;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.portlet.ActionRequest;
@@ -259,6 +261,18 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				        "/html/portlets/dossiermgt/frontoffice/upload_dossier_file.jsp");
 			}
 		}
+	}
+
+	public void createReport(
+	    ActionRequest actionRequest, ActionResponse actionResponse) {
+
+	}
+
+	public void deleteDossier(
+	    ActionRequest actionRequest, ActionResponse actionResponse) {
+
+		long dossierId = ParamUtil
+		    .getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
 	}
 
 	public void deleteDossierFile(
@@ -555,6 +569,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest
 		    .getAttribute(WebKeys.THEME_DISPLAY);
 
+		Dossier dossier = null;
+
 		long dossierId = ParamUtil
 		    .getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
 		long dossierTemplateId = ParamUtil
@@ -622,6 +638,11 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			ServiceContext serviceContext = ServiceContextFactory
 			    .getInstance(actionRequest);
 
+			if (dossierId > 0) {
+				dossier = DossierLocalServiceUtil
+				    .getDossier(dossierId);
+			}
+
 			long userId = serviceContext
 			    .getUserId();
 
@@ -639,6 +660,11 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				dossierDestinationFolder = PortletUtil
 				    .getBusinessDossierDestinationFolder(serviceContext
 				        .getScopeGroupId(), mappingOrganizationId);
+			}
+
+			if (dossier != null) {
+				dossierDestinationFolder += StringPool.SLASH + dossier
+				    .getCounter();
 			}
 
 			validateDossier(
@@ -685,6 +711,42 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				        .getLocale());
 			}
 
+			List<String> normalDossierSchemas = new ArrayList<String>();
+			HashMap<String, List<String>> groupPrivateDossier =
+			    new LinkedHashMap<String, List<String>>();
+			if (uploadDataSchemas != null && uploadDataSchemas.length > 0) {
+				for (int i = 0; i < uploadDataSchemas.length; i++) {
+					JSONObject jsonObject = JSONFactoryUtil
+					    .createJSONObject(uploadDataSchemas[i]);
+					String groupName = jsonObject
+					    .getString(DossierFileDisplayTerms.GROUP_NAME);
+					if (Validator
+					    .isNotNull(groupName)) {
+						if (groupPrivateDossier
+						    .containsKey(groupName)) {
+							List<String> dossierSchemas = groupPrivateDossier
+							    .get(groupName);
+							dossierSchemas
+							    .add(uploadDataSchemas[i]);
+							groupPrivateDossier
+							    .put(groupName, dossierSchemas);
+						}
+						else {
+							List<String> dossierSchemas =
+							    new ArrayList<String>();
+							dossierSchemas
+							    .add(uploadDataSchemas[i]);
+							groupPrivateDossier
+							    .put(groupName, dossierSchemas);
+						}
+					}
+					else {
+						normalDossierSchemas
+						    .add(uploadDataSchemas[i]);
+					}
+				}
+			}
+
 			DLFolder dossierFolder = DLFolderUtil
 			    .getTargetFolder(userId, serviceContext
 			        .getScopeGroupId(), serviceContext
@@ -692,20 +754,39 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			        false, 0, dossierDestinationFolder, StringPool.BLANK, false,
 			        serviceContext);
 
-			DossierLocalServiceUtil
-			    .addDossier(
-			        userId, mappingOrganizationId, dossierTemplateId,
-			        templateFileNo, serviceConfigId, serviceInfoId,
-			        serviceDomainIndex, govAgencyOrganizationId, govAgencyCode,
-			        govAgencyName, serviceMode, serviceAdministrationIndex,
-			        cityCode, cityName, districtCode, districtName, wardName,
-			        wardCode, subjectName, subjectId, address, contactName,
-			        contactTelNo, contactEmail, note,
-			        PortletConstants.DOSSIER_SOURCE_DIRECT,
-			        PortletConstants.DOSSIER_STATUS_NEW, uploadDataSchemas,
-			        dossierFolder
-			            .getFolderId(),
-			        serviceContext);
+			if (dossierId == 0) {
+				DossierLocalServiceUtil
+				    .addDossier(
+				        userId, mappingOrganizationId, dossierTemplateId,
+				        templateFileNo, serviceConfigId, serviceInfoId,
+				        serviceDomainIndex, govAgencyOrganizationId,
+				        govAgencyCode, govAgencyName, serviceMode,
+				        serviceAdministrationIndex, cityCode, cityName,
+				        districtCode, districtName, wardName, wardCode,
+				        subjectName, subjectId, address, contactName,
+				        contactTelNo, contactEmail, note,
+				        PortletConstants.DOSSIER_SOURCE_DIRECT,
+				        PortletConstants.DOSSIER_STATUS_NEW,
+				        normalDossierSchemas, groupPrivateDossier, dossierFolder
+				            .getFolderId(),
+				        serviceContext);
+
+			}
+			else {
+				DossierLocalServiceUtil
+				    .updateDossier(
+				        dossierId, userId, mappingOrganizationId,
+				        dossierTemplateId, templateFileNo, serviceConfigId,
+				        serviceInfoId, serviceDomainIndex,
+				        govAgencyOrganizationId, govAgencyCode, govAgencyName,
+				        serviceMode, serviceAdministrationIndex, cityCode,
+				        cityName, districtCode, districtName, wardName,
+				        wardCode, subjectName, subjectId, address, contactName,
+				        contactTelNo, contactEmail, note, normalDossierSchemas,
+				        groupPrivateDossier, dossierFolder
+				            .getFolderId(),
+				        serviceContext);
+			}
 
 			SessionMessages
 			    .add(actionRequest, MessageKeys.DOSSIER_UPDATE_SUCCESS);
@@ -1110,6 +1191,56 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		if (uploadDataSchemas == null || uploadDataSchemas.length == 0) {
 			throw new EmptyDossierFileException();
+		}
+	}
+
+	public void updateDossierStatus(
+	    ActionRequest actionRequest, ActionResponse actionResponse)
+	    throws IOException {
+
+		long dossierId = ParamUtil
+		    .getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
+
+		long fileGroupId = ParamUtil
+		    .getLong(actionRequest, DossierFileDisplayTerms.DOSSIER_FILE_DATE);
+
+		long govAgencyOrganizationId = ParamUtil
+		    .getLong(
+		        actionRequest, DossierDisplayTerms.GOVAGENCY_ORGANIZATION_ID);
+
+		int dossierStatus = ParamUtil
+		    .getInteger(actionRequest, DossierDisplayTerms.DOSSIER_STATUS);
+
+		String redirectURL = ParamUtil
+		    .getString(actionRequest, "redirectURL");
+
+		try {
+			ServiceContext serviceContext = ServiceContextFactory
+			    .getInstance(actionRequest);
+
+			DossierLocalServiceUtil
+			    .updateDossierStatus(serviceContext
+			        .getUserId(), serviceContext
+			            .getScopeGroupId(),
+			        serviceContext
+			            .getCompanyId(),
+			        dossierId, govAgencyOrganizationId, dossierStatus,
+			        PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC,
+			        fileGroupId, PortletConstants.DOSSIER_LOG_NORMAL,
+			        serviceContext
+			            .getLocale());
+
+		}
+		catch (Exception e) {
+			_log
+			    .error(e);
+		}
+		finally {
+			if (Validator
+			    .isNotNull(redirectURL)) {
+				actionResponse
+				    .sendRedirect(redirectURL);
+			}
 		}
 	}
 
