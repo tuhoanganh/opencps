@@ -263,6 +263,18 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		}
 	}
 
+	public void createReport(
+	    ActionRequest actionRequest, ActionResponse actionResponse) {
+
+	}
+
+	public void deleteDossier(
+	    ActionRequest actionRequest, ActionResponse actionResponse) {
+
+		long dossierId = ParamUtil
+		    .getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
+	}
+
 	public void deleteDossierFile(
 	    ActionRequest actionRequest, ActionResponse actionResponse)
 	    throws IOException {
@@ -698,26 +710,39 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				    .getItemName(themeDisplay
 				        .getLocale());
 			}
-			
+
 			List<String> normalDossierSchemas = new ArrayList<String>();
-			HashMap<String, List<String>> groupPrivateDossier = new LinkedHashMap<String, List<String>>();
-			if(uploadDataSchemas != null && uploadDataSchemas.length > 0){
-				for(int i = 0; i < uploadDataSchemas.length; i++){
+			HashMap<String, List<String>> groupPrivateDossier =
+			    new LinkedHashMap<String, List<String>>();
+			if (uploadDataSchemas != null && uploadDataSchemas.length > 0) {
+				for (int i = 0; i < uploadDataSchemas.length; i++) {
 					JSONObject jsonObject = JSONFactoryUtil
-								    .createJSONObject(uploadDataSchemas[i]);
-					String groupName = jsonObject.getString(DossierFileDisplayTerms.GROUP_NAME);
-					if(Validator.isNotNull(groupName)){
-						if(groupPrivateDossier.containsKey(groupName)){
-							List<String> dossierSchemas = groupPrivateDossier.get(groupName);
-							dossierSchemas.add(uploadDataSchemas[i]);
-							groupPrivateDossier.put(groupName, dossierSchemas);
-						}else{
-							List<String> dossierSchemas = new ArrayList<String>();
-							dossierSchemas.add(uploadDataSchemas[i]);
-							groupPrivateDossier.put(groupName, dossierSchemas);
+					    .createJSONObject(uploadDataSchemas[i]);
+					String groupName = jsonObject
+					    .getString(DossierFileDisplayTerms.GROUP_NAME);
+					if (Validator
+					    .isNotNull(groupName)) {
+						if (groupPrivateDossier
+						    .containsKey(groupName)) {
+							List<String> dossierSchemas = groupPrivateDossier
+							    .get(groupName);
+							dossierSchemas
+							    .add(uploadDataSchemas[i]);
+							groupPrivateDossier
+							    .put(groupName, dossierSchemas);
 						}
-					}else{
-						normalDossierSchemas.add(uploadDataSchemas[i]);
+						else {
+							List<String> dossierSchemas =
+							    new ArrayList<String>();
+							dossierSchemas
+							    .add(uploadDataSchemas[i]);
+							groupPrivateDossier
+							    .put(groupName, dossierSchemas);
+						}
+					}
+					else {
+						normalDossierSchemas
+						    .add(uploadDataSchemas[i]);
 					}
 				}
 			}
@@ -741,8 +766,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				        subjectName, subjectId, address, contactName,
 				        contactTelNo, contactEmail, note,
 				        PortletConstants.DOSSIER_SOURCE_DIRECT,
-				        PortletConstants.DOSSIER_STATUS_NEW, normalDossierSchemas,
-				        groupPrivateDossier, dossierFolder
+				        PortletConstants.DOSSIER_STATUS_NEW,
+				        normalDossierSchemas, groupPrivateDossier, dossierFolder
 				            .getFolderId(),
 				        serviceContext);
 
@@ -1166,6 +1191,56 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		if (uploadDataSchemas == null || uploadDataSchemas.length == 0) {
 			throw new EmptyDossierFileException();
+		}
+	}
+
+	public void updateDossierStatus(
+	    ActionRequest actionRequest, ActionResponse actionResponse)
+	    throws IOException {
+
+		long dossierId = ParamUtil
+		    .getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
+
+		long fileGroupId = ParamUtil
+		    .getLong(actionRequest, DossierFileDisplayTerms.DOSSIER_FILE_DATE);
+
+		long govAgencyOrganizationId = ParamUtil
+		    .getLong(
+		        actionRequest, DossierDisplayTerms.GOVAGENCY_ORGANIZATION_ID);
+
+		int dossierStatus = ParamUtil
+		    .getInteger(actionRequest, DossierDisplayTerms.DOSSIER_STATUS);
+
+		String redirectURL = ParamUtil
+		    .getString(actionRequest, "redirectURL");
+
+		try {
+			ServiceContext serviceContext = ServiceContextFactory
+			    .getInstance(actionRequest);
+
+			DossierLocalServiceUtil
+			    .updateDossierStatus(serviceContext
+			        .getUserId(), serviceContext
+			            .getScopeGroupId(),
+			        serviceContext
+			            .getCompanyId(),
+			        dossierId, govAgencyOrganizationId, dossierStatus,
+			        PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC,
+			        fileGroupId, PortletConstants.DOSSIER_LOG_NORMAL,
+			        serviceContext
+			            .getLocale());
+
+		}
+		catch (Exception e) {
+			_log
+			    .error(e);
+		}
+		finally {
+			if (Validator
+			    .isNotNull(redirectURL)) {
+				actionResponse
+				    .sendRedirect(redirectURL);
+			}
 		}
 	}
 

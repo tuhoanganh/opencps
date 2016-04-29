@@ -99,4 +99,11 @@ public class FileGroupLocalServiceImpl extends FileGroupLocalServiceBaseImpl {
 		return fileGroupPersistence
 		    .findByD_P(dossierId, dossierPartId);
 	}
+
+	public List<FileGroup> getFileGroupByDossierId(long dossierId)
+	    throws SystemException {
+
+		return fileGroupPersistence
+		    .findByDossierId(dossierId);
+	}
 }
