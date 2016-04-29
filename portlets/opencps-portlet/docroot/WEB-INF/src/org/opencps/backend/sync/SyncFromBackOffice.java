@@ -17,11 +17,26 @@
 
 package org.opencps.backend.sync;
 
+import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageListener;
+import com.liferay.portal.kernel.messaging.MessageListenerException;
+
 
 /**
  * @author khoavd
  *
  */
-public class SyncFromBackOffice {
+public class SyncFromBackOffice implements MessageListener{
+
+	/* (non-Javadoc)
+     * @see com.liferay.portal.kernel.messaging.MessageListener#receive(com.liferay.portal.kernel.messaging.Message)
+     */
+    @Override
+    public void receive(Message message)
+        throws MessageListenerException {
+
+	    // TODO Auto-generated method stub
+	    
+    }
 
 }

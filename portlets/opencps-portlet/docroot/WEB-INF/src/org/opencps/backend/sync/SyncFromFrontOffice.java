@@ -17,11 +17,44 @@
 
 package org.opencps.backend.sync;
 
+import java.util.Date;
+
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageListener;
+import com.liferay.portal.kernel.messaging.MessageListenerException;
+
 
 /**
  * @author khoavd
  *
  */
-public class SyncFromFrontOffice {
+public class SyncFromFrontOffice implements MessageListener{
+
+	/* (non-Javadoc)
+     * @see com.liferay.portal.kernel.messaging.MessageListener#receive(com.liferay.portal.kernel.messaging.Message)
+     */
+    @Override
+    public void receive(Message message)
+        throws MessageListenerException {
+
+        try {
+            doReceive(message);
+        }
+        catch (Exception e) {
+            _log.error("Unable to process message " + message, e);
+        }	    
+    }
+    
+    private void doReceive(Message message) {
+    	Date curTime = (Date) message.get("curTime");
+    	
+    	System.out.println("Send time: " + curTime);
+    	System.out.println("Reviced time: " + new Date());
+    	
+    }
+    
+    private Log _log = LogFactoryUtil.getLog(SyncFromFrontOffice.class);
 
 }
