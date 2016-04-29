@@ -41,6 +41,8 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.OrderByComparator;
@@ -592,8 +594,17 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 			break;
 		case 1:
 			break;
-		case 10:
-			// System: send to destination
+		case PortletConstants.DOSSIER_STATUS_SYSTEM:
+
+			Message message = new Message();
+			message
+			    .put("action", "submit");
+			message
+			    .put("dossierId", dossierId);
+			message
+			    .put("fileGroupId", fileGroupId);
+			MessageBusUtil
+			    .sendMessage("opencps/frontoffice/out/destination", message);
 			break;
 
 		default:
