@@ -33,3 +33,6 @@
 	<aui:button name="addAction" href="<%= editServiceURL %>" value="add-service" ></aui:button>
 </aui:button-row>
 
+<portlet:actionURL name="sendMessage" var="sendMessagenURL"/>
+
+
