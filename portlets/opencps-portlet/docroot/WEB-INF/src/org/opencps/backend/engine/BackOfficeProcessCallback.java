@@ -1,4 +1,3 @@
-<%
 /**
  * OpenCPS is the open source Core Public Services software
  * Copyright (C) 2016-present OpenCPS community
@@ -15,24 +14,29 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
-%>
 
-<%@ include file="../../init.jsp" %>
+package org.opencps.backend.engine;
 
-<%
-	ServiceProcess serviceProcess = (ServiceProcess) request.getAttribute(WebKeys.SERVICE_PROCESS_ENTRY);
-
-%>
-
-<liferay-portlet:renderURL var="editServiceURL" windowState="<%= LiferayWindowState.NORMAL.toString() %>">
-	<portlet:param name="mvcPath" value='<%= templatePath + "edit_service.jsp" %>'/>
-	<portlet:param name="serviceProcessId" value="<%= Validator.isNotNull(serviceProcess) ? Long.toString(serviceProcess.getServiceProcessId()) : StringPool.BLANK %>"/>
-</liferay-portlet:renderURL>
-
-<aui:button-row>
-	<aui:button name="addAction" href="<%= editServiceURL %>" value="add-service" ></aui:button>
-</aui:button-row>
-
-<portlet:actionURL name="sendMessage" var="sendMessagenURL"/>
+import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageListener;
+import com.liferay.portal.kernel.messaging.MessageListenerException;
 
 
+/**
+ * @author khoavd
+ *
+ */
+public class BackOfficeProcessCallback implements MessageListener{
+
+	/* (non-Javadoc)
+     * @see com.liferay.portal.kernel.messaging.MessageListener#receive(com.liferay.portal.kernel.messaging.Message)
+     */
+    @Override
+    public void receive(Message message)
+        throws MessageListenerException {
+
+	    // TODO Auto-generated method stub
+	    
+    }
+
+}

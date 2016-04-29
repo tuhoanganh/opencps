@@ -18,6 +18,7 @@
 package org.opencps.processmgt.portlet;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import javax.portlet.ActionRequest;
@@ -43,6 +44,9 @@ import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageBus;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -55,6 +59,26 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  * @author khoavd
  */
 public class ProcessMgtAdminPortlet extends MVCPortlet {
+	
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 */
+	public void sendMessage(
+	    ActionRequest actionRequest, ActionResponse actionResponse) throws IOException, PortletException{
+		
+		Message message = new Message();
+		
+		message.put("curTime", new Date());
+		
+		try {
+	        MessageBusUtil.sendMessage("opencps/frontoffice/out/destination", message);
+        }
+        catch (Exception e) {
+		    e.printStackTrace();
+        }
+		
+	}
 	
 	/**
 	 * Update action
