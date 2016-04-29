@@ -145,9 +145,9 @@
 	</aui:row>
 	
 	<aui:row >
-			<aui:input 
+			<aui:input
+				type="textarea"
 				name="<%=DossierPartDisplayTerms.DOSSIERPART_PARTTIP %>"
-				cssClass="input90"
 			>
 				<aui:validator name="required" />
 				<aui:validator name="maxLength">255</aui:validator>
@@ -204,10 +204,7 @@
 		</aui:col>
 		
 		<aui:col cssClass="input30">
-			<aui:input name="<%=DossierPartDisplayTerms.DOSSIERPART_TEMPLATEFILENO %>">
-				<aui:validator name="required" />
-				<aui:validator name="maxLength"> 100</aui:validator>
-			</aui:input>
+			<aui:input name="<%=DossierPartDisplayTerms.DOSSIERPART_TEMPLATEFILENO %>" />	
 		</aui:col>
 		
 		<aui:col cssClass="input30">
@@ -258,22 +255,63 @@
 	</aui:row>
 </aui:form>
 
-<aui:script>
+<aui:script >
 
-AUI().ready(function(A) {
+AUI().ready('aui-base','liferay-form',function(A) {
 	var partType = A.one('#<portlet:namespace /><%=DossierPartDisplayTerms.DOSSIERPART_PARTTYPE %>');
 	var dispalyFormScript = A.one('#<portlet:namespace/>displayFormScript');
+	var rules = {
+		<portlet:namespace/>templateFileNo: {
+			required: true,
+			},
+		};
+	var rulesFalse = {
+			<portlet:namespace/>templateFileNo: {
+				required: false,
+				},
+			};
+		
+	if(partType.val() == '5') {
+		new A.FormValidator(
+				{
+					boundingBox: '#<portlet:namespace/>fm',
+					rules: rules
+				}
+			);
+		}
 	
-	if(partType.val() == '' || partType.val() == '3' || partType.val() == '4') {
+	if(partType.val() == '' || partType.val() == '3' || partType.val() == '4' || partType.val() == "2") {
 		dispalyFormScript.hide();
 	}
 	
 	if(partType) {
 		partType.on('change',function() {
-			if(partType.val() == "1" || partType.val() == "2" || partType.val() == "5") {
+			if(partType.val() == "1" ) {
 				dispalyFormScript.show();
-			} else {
+				new A.FormValidator(
+						{
+							boundingBox: '#<portlet:namespace/>fm',
+							rules: rulesFalse
+						}
+					);
+			} else if(partType.val() == "5"){
+				dispalyFormScript.show();
+				new A.FormValidator(
+						{
+							boundingBox: '#<portlet:namespace/>fm',
+							rules: rules
+						}
+					);
+			} 
+			
+			else {
 				dispalyFormScript.hide();
+				new A.FormValidator(
+						{
+							boundingBox: '#<portlet:namespace/>fm',
+							rules: rulesFalse
+						}
+					);
 			}	
 		});
 		
