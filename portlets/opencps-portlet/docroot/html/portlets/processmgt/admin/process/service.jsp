@@ -35,4 +35,6 @@
 
 <portlet:actionURL name="sendMessage" var="sendMessagenURL"/>
 
+<aui:button name="sendMessage" value="send-message" href="<%= sendMessagenURL %>"></aui:button>
+
 
