@@ -631,9 +631,10 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		String redirectURL = ParamUtil
 		    .getString(actionRequest, "redirectURL");
 
-		String[] uploadDataSchemas = ParamUtil
-		    .getParameterValues(actionRequest, "uploadDataSchema");
-
+		String[][] uploadDataSchemas = new String[][] {
+		    ParamUtil
+		        .getParameterValues(actionRequest, "uploadDataSchema")
+		};
 		try {
 			ServiceContext serviceContext = ServiceContextFactory
 			    .getInstance(actionRequest);
@@ -716,34 +717,51 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			    new LinkedHashMap<String, List<String>>();
 			if (uploadDataSchemas != null && uploadDataSchemas.length > 0) {
 				for (int i = 0; i < uploadDataSchemas.length; i++) {
-					JSONObject jsonObject = JSONFactoryUtil
-					    .createJSONObject(uploadDataSchemas[i]);
-					String groupName = jsonObject
-					    .getString(DossierFileDisplayTerms.GROUP_NAME);
-					if (Validator
-					    .isNotNull(groupName)) {
-						if (groupPrivateDossier
-						    .containsKey(groupName)) {
-							List<String> dossierSchemas = groupPrivateDossier
-							    .get(groupName);
-							dossierSchemas
-							    .add(uploadDataSchemas[i]);
-							groupPrivateDossier
-							    .put(groupName, dossierSchemas);
-						}
-						else {
-							List<String> dossierSchemas =
-							    new ArrayList<String>();
-							dossierSchemas
-							    .add(uploadDataSchemas[i]);
-							groupPrivateDossier
-							    .put(groupName, dossierSchemas);
+					System.out
+					    .println(StringUtil
+					        .merge(uploadDataSchemas[i]));
+
+					if (uploadDataSchemas[i].length > 0) {
+
+						for (int j = 0; j < uploadDataSchemas[i].length; j++) {
+							String uploadDataSchema = uploadDataSchemas[i][j];
+							if (Validator
+							    .isNotNull(uploadDataSchema)) {
+								JSONObject jsonObject = JSONFactoryUtil
+								    .createJSONObject(uploadDataSchema);
+								String groupName = jsonObject
+								    .getString(
+								        DossierFileDisplayTerms.GROUP_NAME);
+								if (Validator
+								    .isNotNull(groupName)) {
+									if (groupPrivateDossier
+									    .containsKey(groupName)) {
+										List<String> dossierSchemas =
+										    groupPrivateDossier
+										        .get(groupName);
+										dossierSchemas
+										    .add(uploadDataSchema);
+										groupPrivateDossier
+										    .put(groupName, dossierSchemas);
+									}
+									else {
+										List<String> dossierSchemas =
+										    new ArrayList<String>();
+										dossierSchemas
+										    .add(uploadDataSchema);
+										groupPrivateDossier
+										    .put(groupName, dossierSchemas);
+									}
+								}
+								else {
+									normalDossierSchemas
+									    .add(uploadDataSchema);
+								}
+							}
+
 						}
 					}
-					else {
-						normalDossierSchemas
-						    .add(uploadDataSchemas[i]);
-					}
+
 				}
 			}
 
@@ -1105,7 +1123,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	    long cityId, long districtId, long wardId, String accountType,
 	    String dossierDestinationFolder, String subjectName, String subjectId,
 	    String address, String contactName, String contactTelNo,
-	    String contactEmail, String[] uploadDataSchemas)
+	    String contactEmail, String[][] uploadDataSchemas)
 	    throws EmptyDossierCityCodeException, EmptyDossierDistrictCodeException,
 	    EmptyDossierWardCodeException, InvalidDossierObjectException,
 	    CreateDossierFolderException, EmptyDossierSubjectNameException,
@@ -1220,11 +1238,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 			DossierLocalServiceUtil
 			    .updateDossierStatus(serviceContext
-			        .getUserId(), serviceContext
-			            .getScopeGroupId(),
-			        serviceContext
-			            .getCompanyId(),
-			        dossierId, govAgencyOrganizationId, dossierStatus,
+			        .getUserId(), dossierId, govAgencyOrganizationId,
+			        dossierStatus,
 			        PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC,
 			        fileGroupId, PortletConstants.DOSSIER_LOG_NORMAL,
 			        serviceContext
