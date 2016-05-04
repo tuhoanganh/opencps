@@ -51,7 +51,10 @@
 					<portlet:param name="<%=DossierDisplayTerms.DOSSIER_STATUS %>" value="<%=String.valueOf(PortletConstants.DOSSIER_STATUS_SYSTEM) %>"/>
 					<portlet:param name="backURL" value="<%=currentURL %>"/>
 				</portlet:actionURL> 
-		 		<liferay-ui:icon image="send" message="send" url="<%=updateDossierStatusURL.toString() %>" /> 
+		 		<liferay-ui:icon 
+		 			image="send"
+		 			message="send" url="<%=updateDossierStatusURL.toString() %>" 
+		 		/> 
 		 	</c:if>
 		 	
 		 	<c:if test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE) %>">
@@ -59,7 +62,10 @@
 					<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
 					<portlet:param name="redirectURL" value="<%=currentURL %>"/>
 				</portlet:actionURL> 
-				<liferay-ui:icon-delete image="delete" confirmation="are-you-sure-delete-entry" message="delete"  url="<%=deleteDossierURL.toString() %>" />
+				<liferay-ui:icon-delete image="delete" 
+					confirmation="are-you-sure-delete-entry" 
+					message="delete"  url="<%=deleteDossierURL.toString() %>" 
+				/>
 		 	</c:if>
  		</c:when>
  	</c:choose>
