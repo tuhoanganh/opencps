@@ -129,15 +129,15 @@
 	</c:choose>
 	
 	<aui:row>
-		<aui:col cssClass="input60">
-			<aui:input name="<%=DossierPartDisplayTerms.DOSSIERPART_PARTNAME %>">
+		<aui:col width="70">
+			<aui:input name="<%=DossierPartDisplayTerms.DOSSIERPART_PARTNAME %>" cssClass="input90">
 				<aui:validator name="required" />
 				<aui:validator name="maxLength">255</aui:validator>
 			</aui:input>
 		</aui:col>
 		
-		<aui:col cssClass="input30">
-			<aui:input name="<%=DossierPartDisplayTerms.DOSSIERPART_PARTNO %>">
+		<aui:col width="20">
+			<aui:input name="<%=DossierPartDisplayTerms.DOSSIERPART_PARTNO %>" cssClass="input90">
 				<aui:validator name="required" />
 				<aui:validator name="maxLength">100</aui:validator>
 			</aui:input>
@@ -145,18 +145,20 @@
 	</aui:row>
 	
 	<aui:row >
-			<aui:input 
+		<aui:col width="90">
+			<aui:input cssClass="input90"
+				type="textarea"
 				name="<%=DossierPartDisplayTerms.DOSSIERPART_PARTTIP %>"
-				cssClass="input90"
 			>
 				<aui:validator name="required" />
 				<aui:validator name="maxLength">255</aui:validator>
 			</aui:input>
+		</aui:col>
 	</aui:row>
 	
 	<aui:row>
-		<aui:col cssClass="input60">
-			<aui:select name="<%=DossierPartDisplayTerms.DOSSIERPART_PARENTID %>">
+		<aui:col width="60">
+			<aui:select name="<%=DossierPartDisplayTerms.DOSSIERPART_PARENTID %>" cssClass="input90">
 				<c:choose>
 					<c:when test="<%=Validator.isNotNull(isAddChilds) && Validator.isNotNull(dossierPart)%>">
 						<aui:option value="<%=dossierPart.getDossierpartId() %>">
@@ -177,8 +179,8 @@
 			</aui:select>
 		</aui:col>
 		
-		<aui:col cssClass="input30">
-			<aui:input name="<%=DossierPartDisplayTerms.DOSSIERPART_SIBLING %>">
+		<aui:col width="25">
+			<aui:input name="<%=DossierPartDisplayTerms.DOSSIERPART_SIBLING %>" cssClass="input90">
 				<aui:validator name="required" />
 				<aui:validator name="numbers" />
 			</aui:input>
@@ -204,10 +206,7 @@
 		</aui:col>
 		
 		<aui:col cssClass="input30">
-			<aui:input name="<%=DossierPartDisplayTerms.DOSSIERPART_TEMPLATEFILENO %>">
-				<aui:validator name="required" />
-				<aui:validator name="maxLength"> 100</aui:validator>
-			</aui:input>
+			<aui:input name="<%=DossierPartDisplayTerms.DOSSIERPART_TEMPLATEFILENO %>" />	
 		</aui:col>
 		
 		<aui:col cssClass="input30">
@@ -221,26 +220,34 @@
 		
 	<div id = "<portlet:namespace/>displayFormScript">
 		<aui:row >
-			<aui:input 
-				name="<%=DossierPartDisplayTerms.DOSSIERPART_FORMSCRIPT %>" 
-				cssClass="input90"
-			/>
+			<aui:col width="90">
+				<aui:input
+					type="textarea"
+					name="<%=DossierPartDisplayTerms.DOSSIERPART_FORMSCRIPT %>" 
+					cssClass="input90"
+				/>
+			</aui:col>
 		</aui:row>
 	</div>
 	
 	<aui:row >
-			<aui:input 
+		<aui:col width="90">
+			<aui:input
+				type="textarea"
 				name="<%=DossierPartDisplayTerms.DOSSIERPART_FORMREPORT %>" 
 				cssClass="input90"
 			/>
-		</aui:row>
+		</aui:col>	
+	</aui:row>
 	
 	<aui:row>
-		<aui:input 
-			type="textarea"
-			name="<%=DossierPartDisplayTerms.DOSSIERPART_SAMPLEDATA %>" 
-			cssClass="input90"
-		/>
+		<aui:col width="90">
+			<aui:input 
+				type="textarea"
+				name="<%=DossierPartDisplayTerms.DOSSIERPART_SAMPLEDATA %>" 
+				cssClass="input90"
+			/>
+		</aui:col>
 	</aui:row>
 	
 	
@@ -258,22 +265,63 @@
 	</aui:row>
 </aui:form>
 
-<aui:script>
+<aui:script >
 
-AUI().ready(function(A) {
+AUI().ready('aui-base','liferay-form',function(A) {
 	var partType = A.one('#<portlet:namespace /><%=DossierPartDisplayTerms.DOSSIERPART_PARTTYPE %>');
 	var dispalyFormScript = A.one('#<portlet:namespace/>displayFormScript');
+	var rules = {
+		<portlet:namespace/>templateFileNo: {
+			required: true,
+			},
+		};
+	var rulesFalse = {
+			<portlet:namespace/>templateFileNo: {
+				required: false,
+				},
+			};
+		
+	if(partType.val() == '5') {
+		new A.FormValidator(
+				{
+					boundingBox: '#<portlet:namespace/>fm',
+					rules: rules
+				}
+			);
+		}
 	
-	if(partType.val() == '' || partType.val() == '3' || partType.val() == '4') {
+	if(partType.val() == '' || partType.val() == '3' || partType.val() == '4' || partType.val() == "2") {
 		dispalyFormScript.hide();
 	}
 	
 	if(partType) {
 		partType.on('change',function() {
-			if(partType.val() == "1" || partType.val() == "2" || partType.val() == "5") {
+			if(partType.val() == "1" ) {
 				dispalyFormScript.show();
-			} else {
+				new A.FormValidator(
+						{
+							boundingBox: '#<portlet:namespace/>fm',
+							rules: rulesFalse
+						}
+					);
+			} else if(partType.val() == "5"){
+				dispalyFormScript.show();
+				new A.FormValidator(
+						{
+							boundingBox: '#<portlet:namespace/>fm',
+							rules: rules
+						}
+					);
+			} 
+			
+			else {
 				dispalyFormScript.hide();
+				new A.FormValidator(
+						{
+							boundingBox: '#<portlet:namespace/>fm',
+							rules: rulesFalse
+						}
+					);
 			}	
 		});
 		
