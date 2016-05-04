@@ -34,7 +34,7 @@ public class SyncFromBackOffice implements MessageListener{
     @Override
     public void receive(Message message)
         throws MessageListenerException {
-
+    	System.out.println("Back-------");
 	    // TODO Auto-generated method stub
 	    
     }

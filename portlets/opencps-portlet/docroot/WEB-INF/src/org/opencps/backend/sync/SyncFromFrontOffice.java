@@ -17,13 +17,16 @@
 
 package org.opencps.backend.sync;
 
-import java.util.Date;
+import org.opencps.dossiermgt.model.Dossier;
+import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.MessageListenerException;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 
 /**
@@ -48,11 +51,49 @@ public class SyncFromFrontOffice implements MessageListener{
     }
     
     private void doReceive(Message message) {
-    	Date curTime = (Date) message.get("curTime");
+    	String actionId = (String) message.get("action");
+    	long dossierId = GetterUtil.getLong(message.get("dossierId"));
+    	long fileGroupId = GetterUtil.getLong(message.get("fileGroupId"));
     	
-    	System.out.println("Send time: " + curTime);
-    	System.out.println("Reviced time: " + new Date());
+    	System.out.println("actionId: " + actionId);
+    	System.out.println("dossierId: " + dossierId);
+    	System.out.println("fileGroupId: " + fileGroupId);
     	
+		// DossierLocalServiceUtil.updateDossierStatus(userId, groupId,
+		// companyId, dossierId, govAgencyOrganizationId, status, syncStatus,
+		// fileGroupId, level, locale)
+    	
+    }
+    
+    
+    /**
+     * @param dossierId
+     * @return
+     */
+    private boolean checkServiceMode(long dossierId) {
+    	boolean trustServiceMode = false;
+    	
+    	int serviceMode = 0;
+    	
+    	try {
+	        Dossier dossier = DossierLocalServiceUtil.fetchDossier(dossierId);
+	        
+	        if (Validator.isNotNull(dossier)) {
+	        	serviceMode = dossier.getServiceMode();
+	        }
+        }
+        catch (Exception e) {
+        }
+    	
+    	if (serviceMode == 3) {
+    		trustServiceMode = true;
+    	}
+    	
+    	return trustServiceMode;
+    }
+    
+    private boolean checkStatus(long dossierId, long fileGroupId, String action) {
+    	return false;
     }
     
     private Log _log = LogFactoryUtil.getLog(SyncFromFrontOffice.class);
