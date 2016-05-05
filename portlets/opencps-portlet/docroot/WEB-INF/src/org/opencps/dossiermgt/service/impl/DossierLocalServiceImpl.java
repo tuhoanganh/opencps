@@ -516,9 +516,8 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	};
 
 	public Dossier updateDossierStatus(
-	    long userId, long groupId, long companyId, long dossierId,
-	    long govAgencyOrganizationId, int status, int syncStatus,
-	    long fileGroupId, int level, Locale locale)
+	    long userId, long dossierId, long govAgencyOrganizationId, int status,
+	    int syncStatus, long fileGroupId, int level, Locale locale)
 	    throws SystemException, NoSuchDossierStatusException, PortalException {
 
 		Date now = new Date();
@@ -576,9 +575,10 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		}
 
 		dossierLogLocalService
-		    .addDossierLog(
-		        userId, groupId, companyId, dossierId, fileGroupId, status,
-		        PortletUtil
+		    .addDossierLog(userId, dossier
+		        .getGroupId(), dossier
+		            .getCompanyId(),
+		        dossierId, fileGroupId, status, PortletUtil
 		            .getAccountStatus(status, locale),
 		        PortletUtil
 		            .getMessageInfo(status, locale),
@@ -589,29 +589,6 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 
 		dossierPersistence
 		    .update(dossier);
-
-		switch (status) {
-		case 0:
-			break;
-		case 1:
-			break;
-		case PortletConstants.DOSSIER_STATUS_SYSTEM:
-
-			Message message = new Message();
-			message
-			    .put("action", "submit");
-			message
-			    .put("dossierId", dossierId);
-			message
-			    .put("fileGroupId", fileGroupId);
-			MessageBusUtil
-			    .sendMessage("opencps/frontoffice/out/destination", message);
-			break;
-
-		default:
-			break;
-		}
-
 		return dossier;
 	}
 

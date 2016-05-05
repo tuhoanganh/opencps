@@ -15,7 +15,7 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>
 */
 
-package org.opencps.dossiermgt.search;
+package org.opencps.processmgt.search;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,79 +25,88 @@ import java.util.Map;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
 
-import org.opencps.datamgt.util.DataMgtUtil;
-import org.opencps.dossiermgt.model.Dossier;
+import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.util.DateTimeUtil;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.OrderByComparator;
-import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringPool;
 
 /**
  * @author trungnt
  */
-public class DossierSearch extends SearchContainer<Dossier> {
+public class ProcessOrderSearch extends SearchContainer<ProcessOrder> {
 
 	static List<String> headerNames = new ArrayList<String>();
 	static Map<String, String> orderableHeaders = new HashMap<String, String>();
 	static {
-		headerNames.add("no");
-		headerNames.add("create-date");
-		headerNames.add("service-name");
-		headerNames.add("gov-agency-name");
-		headerNames.add("dossier-status");
-		headerNames.add("receive-datetime");
-		headerNames.add("reception-no");
-		headerNames.add("action");
-
-		orderableHeaders
-		    .put("gov-agency-name", DossierDisplayTerms.GOVAGENCY_NAME);
-		orderableHeaders
-		    .put("receive-datetime", DossierDisplayTerms.RECEIVE_DATETIME);
-		orderableHeaders
-		    .put("create-date", DossierDisplayTerms.CREATE_DATE);
-		orderableHeaders
-		    .put("dossier-status", DossierDisplayTerms.DOSSIER_STATUS);
-		
+		headerNames
+		    .add(StringPool.BLANK);
+		headerNames
+		    .add("reception-no");
+		headerNames
+		    .add("subject-name");
+		headerNames
+		    .add("service-name");
+		headerNames
+		    .add("process-step");
+		headerNames
+		    .add("action-user-id");
+		headerNames
+		    .add("action-date-time");
+		headerNames
+		    .add("action");
 	}
-	public static final String EMPTY_RESULTS_MESSAGE =
-	    "no-dossier-were-found";
+	public static final String EMPTY_RESULTS_MESSAGE = "no-dossier-were-found";
 
-	public DossierSearch(
+	public ProcessOrderSearch(
 	    PortletRequest portletRequest, int delta, PortletURL iteratorURL) {
 
 		super(
-		    portletRequest, new DossierDisplayTerms(
-		        portletRequest), new DossierSearchTerms(
-		            portletRequest), DEFAULT_CUR_PARAM, delta, iteratorURL, 
-		    	headerNames, EMPTY_RESULTS_MESSAGE);
+		    portletRequest, new ProcessOrderDisplayTerms(
+		        portletRequest), new ProcessOrderSearchTerms(
+		            portletRequest), DEFAULT_CUR_PARAM, delta, iteratorURL, headerNames, EMPTY_RESULTS_MESSAGE);
 
-		DossierDisplayTerms displayTerms =
-		    (DossierDisplayTerms) getDisplayTerms();
-		
-		iteratorURL
-		    .setParameter(DossierDisplayTerms.GOVAGENCY_NAME, displayTerms
-		        .getGovAgencyName());
-		iteratorURL
-		    .setParameter(DossierDisplayTerms.DOSSIER_STATUS, String.valueOf(displayTerms
-		        .getDossierStatus()));
+		ProcessOrderDisplayTerms displayTerms =
+		    (ProcessOrderDisplayTerms) getDisplayTerms();
 
 		iteratorURL
-		    .setParameter(DossierDisplayTerms.GROUP_ID, String
+		    .setParameter(ProcessOrderDisplayTerms.SERVICE_INFO_ID, String
 		        .valueOf(displayTerms
-		            .getGroupId()));
+		            .getServiceInfoId()));
+
 		iteratorURL
-		    .setParameter(DossierDisplayTerms.CREATE_DATE, DateTimeUtil
-		        .convertDateToString(displayTerms
-		            .getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT));
+		    .setParameter(ProcessOrderDisplayTerms.USER_ID, String
+		        .valueOf(displayTerms
+		            .getUserId()));
+
 		iteratorURL
-		    .setParameter(DossierDisplayTerms.RECEIVE_DATETIME, DateTimeUtil
-		        .convertDateToString(displayTerms
-		            .getReceiveDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT));
-		
-		try {
+		    .setParameter(
+		        ProcessOrderDisplayTerms.GOV_AGENCY_ORGANIZATION_ID, String
+		            .valueOf(displayTerms
+		                .getGovAgencyOrganizationId()));
+		iteratorURL
+		    .setParameter(ProcessOrderDisplayTerms.PROCESS_STEP_ID, String
+		        .valueOf(displayTerms
+		            .getProcessStepId()));
+
+		iteratorURL
+		    .setParameter(ProcessOrderDisplayTerms.ACTION_USER_ID, String
+		        .valueOf(displayTerms
+		            .getActionUserId()));
+
+		iteratorURL
+		    .setParameter(ProcessOrderDisplayTerms.RECEPTION_NO, displayTerms
+		        .getReceptionNo());
+		iteratorURL
+		    .setParameter(
+		        ProcessOrderDisplayTerms.ACTION_DATE_TIME, DateTimeUtil
+		            .convertDateToString(displayTerms
+		                .getActionDatetime(),
+		                DateTimeUtil._VN_DATE_TIME_FORMAT));
+		//Code sau
+		/*try {
 
 			String orderByCol = ParamUtil
 			    .getString(portletRequest, "orderByCol");
@@ -115,10 +124,10 @@ public class DossierSearch extends SearchContainer<Dossier> {
 		catch (Exception e) {
 			_log
 			    .error(e);
-		}
+		}*/
 	}
 
-	public DossierSearch(
+	public ProcessOrderSearch(
 	    PortletRequest portletRequest, PortletURL iteratorURL) {
 
 		this(
@@ -126,6 +135,6 @@ public class DossierSearch extends SearchContainer<Dossier> {
 	}
 
 	private static Log _log = LogFactoryUtil
-	    .getLog(DossierSearch.class);
+	    .getLog(ProcessOrderSearch.class);
 
 }
