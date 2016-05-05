@@ -51,7 +51,8 @@
 	dossierType[4] = PortletConstants.DOSSIER_TYPE_PAPERS_RESULTS;
 	
 	String isAddChilds = ParamUtil.getString(request, "isAddChild");
-	String partListURL = (String) session.getAttribute("partListURL");
+	String partListURL = ParamUtil.getString(request, "partListURL");
+	String backURL = ParamUtil.getString(request, "backURL");
 	
 	try {
 		if(dossierPart != null) {
@@ -112,6 +113,7 @@
 	<portlet:param name="currentURL" value="<%=currentURL %>"/>
 	<portlet:param name="returnURL" value="<%=partListURL %>"/>
 	<portlet:param name="isAddChilds" value="<%=isAddChilds %>"/>
+	<portlet:param name="backURL" value="<%=backURL %>"/>
 </portlet:actionURL>
 
 <aui:form 

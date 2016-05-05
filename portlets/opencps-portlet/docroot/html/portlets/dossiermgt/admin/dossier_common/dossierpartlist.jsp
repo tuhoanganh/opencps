@@ -59,7 +59,6 @@
 	}
 	
 	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
-	session.setAttribute("partListURL", currentURL);
 	
  // chua sap xep theo sibling
 					

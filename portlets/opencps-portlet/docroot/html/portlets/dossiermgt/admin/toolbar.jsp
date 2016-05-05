@@ -47,6 +47,7 @@
 	Long dossierTemplateId = (Long) session.getAttribute(DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DOSSIERTEMPLATEID);
 	DictCollection dictCollectionServiceAdmin = null;
 	List<DictItem> dictItemsServiceAdmin = new ArrayList<DictItem>();
+	String currURL = ParamUtil.getString(request, "currURL");
 	try {
 		dictCollectionServiceAdmin = DictCollectionLocalServiceUtil
 	                    .getDictCollection(scopeGroupId, PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION);
@@ -96,7 +97,7 @@
 				%>
 				<portlet:renderURL var="editDossierPartURL" windowState="<%=LiferayWindowState.NORMAL.toString() %>">
 					<portlet:param name="mvcPath" value='<%= templatePath + "edit_dossier_part.jsp" %>'/>
-					<portlet:param name="redirectURL" value="<%=currentURL %>"/> 
+					<portlet:param name="partListURL" value="<%=currURL %>"/>
 					<portlet:param name="backURL" value="<%=currentURL %>"/> 
 					<portlet:param name="<%=DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DOSSIERTEMPLATEID %>" value="<%=String.valueOf(dossierTemplateId) %>"/>
 				</portlet:renderURL>
@@ -128,7 +129,6 @@
 				
 				</portlet:renderURL>
 				
-				<aui:row>
 					<c:if test="<%= ServiceConfigPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_SERVICE_CONFIG) %>">
 						<aui:nav-item 
 							id="addServiceConfig" 
@@ -137,7 +137,6 @@
 							href="<%=editServiceConfigURL %>"
 						/>
 					</c:if>
-				</aui:row>
 			</c:when>
 		</c:choose>
 	</aui:nav>
