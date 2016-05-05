@@ -1217,6 +1217,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		try {
 			ServiceContext serviceContext = ServiceContextFactory
 			    .getInstance(actionRequest);
+			
+			
 
 			DossierLocalServiceUtil
 			    .updateDossierStatus(serviceContext
