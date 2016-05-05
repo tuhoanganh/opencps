@@ -589,6 +589,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 
 		dossierPersistence
 		    .update(dossier);
+
 		switch (status) {
 		case 0:
 			break;
