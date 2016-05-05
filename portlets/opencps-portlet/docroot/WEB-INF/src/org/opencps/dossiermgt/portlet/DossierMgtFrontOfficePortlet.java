@@ -81,6 +81,8 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
@@ -1244,6 +1246,25 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			        fileGroupId, PortletConstants.DOSSIER_LOG_NORMAL,
 			        serviceContext
 			            .getLocale());
+
+			switch (dossierStatus) {
+			case PortletConstants.DOSSIER_STATUS_SYSTEM:
+
+				Message message = new Message();
+				message
+				    .put("action", "submit");
+				message
+				    .put("dossierId", dossierId);
+				message
+				    .put("fileGroupId", fileGroupId);
+				MessageBusUtil
+				    .sendMessage(
+				        "opencps/frontoffice/out/destination", message);
+				break;
+
+			default:
+				break;
+			}
 
 		}
 		catch (Exception e) {

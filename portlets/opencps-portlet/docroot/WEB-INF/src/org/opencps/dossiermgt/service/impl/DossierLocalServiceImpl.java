@@ -589,24 +589,6 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 
 		dossierPersistence
 		    .update(dossier);
-		switch (status) {
-		case PortletConstants.DOSSIER_STATUS_SYSTEM:
-
-			Message message = new Message();
-			message
-			    .put("action", "submit");
-			message
-			    .put("dossierId", dossierId);
-			message
-			    .put("fileGroupId", fileGroupId);
-			MessageBusUtil
-			    .sendMessage("opencps/frontoffice/out/destination", message);
-			break;
-
-		default:
-			break;
-		}
-
 		return dossier;
 	}
 
