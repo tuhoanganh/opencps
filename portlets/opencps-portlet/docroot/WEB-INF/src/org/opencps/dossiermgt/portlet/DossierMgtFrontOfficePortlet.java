@@ -110,10 +110,6 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  */
 public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
-	private Log _log = LogFactoryUtil
-	    .getLog(DossierMgtFrontOfficePortlet.class
-	        .getName());
-
 	public void addTempFile(
 	    ActionRequest actionRequest, ActionResponse actionResponse) {
 
@@ -129,6 +125,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		int index = ParamUtil
 		    .getInteger(uploadPortletRequest, DossierFileDisplayTerms.INDEX);
+		
+		int level = ParamUtil
+					    .getInteger(uploadPortletRequest, DossierFileDisplayTerms.LEVEL);
 
 		String groupName = ParamUtil
 		    .getString(
@@ -140,6 +139,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		String fileName = ParamUtil
 		    .getString(uploadPortletRequest, DossierFileDisplayTerms.FILE_NAME);
+		
+		String partType = ParamUtil
+					    .getString(uploadPortletRequest, DossierFileDisplayTerms.PART_TYPE);
 
 		String tempFolderName = ParamUtil
 		    .getString(
@@ -222,6 +224,12 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 			jsonObject
 			    .put(DossierFileDisplayTerms.INDEX, index);
+			
+			jsonObject
+		    	.put(DossierFileDisplayTerms.LEVEL, level);
+			
+			jsonObject
+		    	.put(DossierFileDisplayTerms.PART_TYPE, partType);
 
 			jsonObject
 			    .put(DossierFileDisplayTerms.GROUP_NAME, groupName);
@@ -1257,6 +1265,17 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				    .put("dossierId", dossierId);
 				message
 				    .put("fileGroupId", fileGroupId);
+				message
+			    	.put("level", PortletConstants.DOSSIER_LOG_NORMAL);
+				message
+		    		.put("locale", serviceContext.getLocale());
+				
+				message
+	    			.put("govAgencyOrganizationId", govAgencyOrganizationId);
+				
+				message
+    				.put("userId", serviceContext.getUserId());
+				
 				MessageBusUtil
 				    .sendMessage(
 				        "opencps/frontoffice/out/destination", message);
@@ -1297,4 +1316,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		    .flushBuffer();
 
 	}
+
+	private Log _log = LogFactoryUtil
+	    .getLog(DossierMgtFrontOfficePortlet.class
+	        .getName());
 }
