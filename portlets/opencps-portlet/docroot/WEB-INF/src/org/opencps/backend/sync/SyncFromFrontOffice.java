@@ -18,7 +18,9 @@
 package org.opencps.backend.sync;
 
 import org.opencps.dossiermgt.model.Dossier;
+import org.opencps.dossiermgt.model.DossierStatus;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
+import org.opencps.dossiermgt.service.DossierStatusLocalServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -58,6 +60,7 @@ public class SyncFromFrontOffice implements MessageListener{
     	System.out.println("actionId: " + actionId);
     	System.out.println("dossierId: " + dossierId);
     	System.out.println("fileGroupId: " + fileGroupId);
+  	
     	
 		// DossierLocalServiceUtil.updateDossierStatus(userId, groupId,
 		// companyId, dossierId, govAgencyOrganizationId, status, syncStatus,
@@ -93,6 +96,8 @@ public class SyncFromFrontOffice implements MessageListener{
     }
     
     private boolean checkStatus(long dossierId, long fileGroupId, String action) {
+    	
+    	
     	return false;
     }
     
