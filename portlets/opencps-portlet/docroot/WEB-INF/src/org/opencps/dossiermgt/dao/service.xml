@@ -86,7 +86,8 @@
 			<finder-column name="parentId" />
 		</finder>
 
-		<finder return-type="DossierPart" name="Sibling">
+		<finder return-type="DossierPart" name="T_S">
+			<finder-column name="dossierTemplateId" />
 			<finder-column name="sibling" />
 		</finder>
 
