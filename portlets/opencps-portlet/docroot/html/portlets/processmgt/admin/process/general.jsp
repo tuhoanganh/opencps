@@ -25,7 +25,6 @@
 
 <%
 	ServiceProcess serviceProcess = (ServiceProcess) request.getAttribute(WebKeys.SERVICE_PROCESS_ENTRY);
-
 	List<DossierTemplate> dossierTemplates = ProcessUtils.getDossierTemplate(renderRequest);
 %>
 
@@ -65,4 +64,3 @@
 		</aui:select>
 	</aui:col>
 </aui:row>
-

@@ -23,10 +23,8 @@
 <%@page import="org.opencps.dossiermgt.search.DossierTemplateDisplayTerms"%>
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 <%@page import="org.opencps.util.ActionKeys"%>
-<%@page import="org.opencps.dossiermgt.permission.DossierPartPermission"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="org.opencps.util.WebKeys"%>
-<%@page import="org.opencps.dossiermgt.permission.ServiceConfigPermission"%>
 <%@page import="org.opencps.dossiermgt.DuplicateDossierTemplateNumberException"%>
 <%@page import="org.opencps.dossiermgt.OutOfLengthDossierTemplateNumberException"%>
 <%@page import="org.opencps.dossiermgt.OutOfLengthDossierTemplateNameException"%>
@@ -159,7 +157,8 @@ Liferay.provide(window, '<portlet:namespace/>sentToolBarSignal', function(tbSign
 				dataType : 'text/html',
 				method : 'GET',
 			    data:{    	
-			    	"<portlet:namespace />tabs1" : tbSignal
+			    	"<portlet:namespace />tabs1" : tbSignal,
+			    	"<portlet:namespace />currURL" : '<%=currentURL %>'
 			    },   
 			    on: {
 			    	success: function(event, id, obj) {
