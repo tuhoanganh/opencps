@@ -53,6 +53,13 @@
 	String isAddChilds = ParamUtil.getString(request, "isAddChild");
 	String partListURL = ParamUtil.getString(request, "partListURL");
 	String backURL = ParamUtil.getString(request, "backURL");
+	String back = StringPool.BLANK;
+	
+	if(Validator.isNotNull(partListURL)) {
+		back = partListURL;
+	} else {
+		back = backURL;
+	}
 	
 	try {
 		if(dossierPart != null) {
@@ -68,7 +75,7 @@
 %>
 
 <liferay-ui:header
-	backURL="<%= partListURL %>"
+	backURL="<%= back %>"
 	title="update-dossier"
 	backLabel="back"
 />
@@ -134,7 +141,7 @@
 		<aui:col width="70">
 			<aui:input name="<%=DossierPartDisplayTerms.DOSSIERPART_PARTNAME %>" cssClass="input90">
 				<aui:validator name="required" />
-				<aui:validator name="maxLength">255</aui:validator>
+				<aui:validator name="maxLength">500</aui:validator>
 			</aui:input>
 		</aui:col>
 		

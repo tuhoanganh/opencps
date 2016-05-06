@@ -17,7 +17,10 @@
  */
 %>
 <%@ include file="../init.jsp"%>
-
 <%
-	List<DictItem> dictItems = new ArrayList<DictItem>();
+	DictItem dictItem = (DictItem) request.getAttribute(WebKeys.DICT_ITEM_ENTRY);
+	long dictItemId = Validator.isNotNull(dictItem) ? dictItem.getDictItemId() : 0L;
+	
+	
+	
 %>
