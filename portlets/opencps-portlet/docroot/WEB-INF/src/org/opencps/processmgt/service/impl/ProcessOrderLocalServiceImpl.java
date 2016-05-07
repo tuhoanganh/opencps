@@ -19,10 +19,13 @@ package org.opencps.processmgt.service.impl;
 
 import java.util.Date;
 
+import org.opencps.dossiermgt.model.Dossier;
+import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.processmgt.NoSuchProcessOrderException;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.service.base.ProcessOrderLocalServiceBaseImpl;
 
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.service.ServiceContext;
 
@@ -49,10 +52,11 @@ public class ProcessOrderLocalServiceImpl
 
 	public ProcessOrder addProcessOrder(
 	    long dossierId, long fileGroupId, long serviceProcessId,
-	    long processStepId, long actionUserId, Date actionDatetime,
+	    long processStepId, long processWorkflowId, long actionUserId,
+	    Date actionDatetime, String stepName, String actionName,
 	    String actionNote, long assignToUserId, int dossierStatus,
-	    ServiceContext serviceContext)
-	    throws SystemException {
+	    int daysDoing, int daysDelay, ServiceContext serviceContext)
+	    throws SystemException, PortalException {
 
 		long processOrderId = counterLocalService
 		    .increment(ProcessOrder.class
@@ -60,7 +64,72 @@ public class ProcessOrderLocalServiceImpl
 		ProcessOrder processOrder = processOrderPersistence
 		    .create(processOrderId);
 
-		return processOrder;
+		Dossier dossier = DossierLocalServiceUtil
+		    .getDossier(dossierId);
+
+		Date now = new Date();
+
+		processOrder
+		    .setUserId(serviceContext
+		        .getUserId());
+		processOrder
+		    .setGroupId(serviceContext
+		        .getScopeGroupId());
+		processOrder
+		    .setCompanyId(serviceContext
+		        .getCompanyId());
+		processOrder
+		    .setCreateDate(now);
+		processOrder
+		    .setModifiedDate(now);
+
+		processOrder
+		    .setActionDatetime(actionDatetime);
+		processOrder
+		    .setActionNote(actionNote);
+		processOrder
+		    .setActionUserId(actionUserId);
+		processOrder
+		    .setAssignToUserId(assignToUserId);
+		processOrder
+		    .setDossierId(dossierId);
+		processOrder
+		    .setDossierStatus(dossierStatus);
+		processOrder
+		    .setDossierTemplateId(dossier
+		        .getDossierTemplateId());
+		// processOrder.setErrorInfo(errorInfo);
+		processOrder
+		    .setFileGroupId(fileGroupId);
+		processOrder
+		    .setGovAgencyCode(dossier
+		        .getGovAgencyCode());
+		processOrder
+		    .setGovAgencyName(dossier
+		        .getGovAgencyName());
+		processOrder
+		    .setGovAgencyOrganizationId(dossier
+		        .getGovAgencyOrganizationId());
+		processOrder
+		    .setProcessOrderId(processOrderId);
+		processOrder
+		    .setProcessStepId(processStepId);
+		processOrder
+		    .setProcessWorkflowId(processWorkflowId);
+		processOrder
+		    .setServiceInfoId(dossier
+		        .getServiceInfoId());
+		processOrder
+		    .setServiceProcessId(serviceProcessId);
+
+		actionHistoryLocalService
+		    .addActionHistory(
+		        processOrderId, processWorkflowId, actionDatetime, stepName,
+		        actionName, actionNote, actionUserId, daysDoing, daysDelay,
+		        serviceContext);
+
+		return processOrderPersistence
+		    .update(processOrder);
 	}
 
 	public ProcessOrder getProcessOrder(long dossierId, long fileGroupId)
