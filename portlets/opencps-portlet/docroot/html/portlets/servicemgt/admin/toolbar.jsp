@@ -1,3 +1,4 @@
+<%@page import="com.sun.xml.internal.bind.v2.util.EditDistance"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -151,9 +152,10 @@
 						
 						<c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_DOMAIN) %>">
 							
-							<portlet:renderURL var="editDomainURL">
+							<portlet:renderURL var="editDomainURL" windowState="<%=LiferayWindowState.POP_UP.toString() %>">
 								<portlet:param name="mvcPath" value='<%= templatePath + "edit_domain.jsp" %>'/>
 								<portlet:param name="backURL" value="<%=currentURL %>"/>
+								<portlet:param name="tabs1" value="<%=tabs1 %>"/>
 							</portlet:renderURL>
 							
 							<c:if test="<%= ServiceTemplatePermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_TEMPLATE) %>">
@@ -161,7 +163,7 @@
 									id="addDomain" 
 									label="add-domain" 
 									iconCssClass="icon-plus"  
-									href="<%=editDomainURL %>"
+									href="<%= \"javascript:\" + renderResponse.getNamespace() + \"showPopup('\" + editDomainURL +\"');\" %>"
 								/>
 							</c:if>
 						
@@ -177,7 +179,21 @@
 		</div>
 	</aui:nav-bar-search>
 </aui:nav-bar>
-
+<aui:script>
+	Liferay.provide(window, '<portlet:namespace />showPopup', function(url){
+		Liferay.Util.openWindow({
+			dialog : {
+				centered : true,
+				height : 800,
+				modal : true,
+				width : 800
+			},
+			id : '<portlet:namespace/>dialog',
+			title : 'Edit-Domain',
+			uri : url
+		});
+	});
+</aui:script>
 
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.servicemgt.admin.toolbar.jsp");
