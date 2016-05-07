@@ -17,27 +17,56 @@
 
 package org.opencps.processmgt.service.impl;
 
+import java.util.Date;
+
+import org.opencps.processmgt.NoSuchProcessOrderException;
+import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.service.base.ProcessOrderLocalServiceBaseImpl;
 
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.service.ServiceContext;
+
 /**
- * The implementation of the process order local service.
+ * The implementation of the process order local service. <p> All custom service
+ * methods should be put in this class. Whenever methods are added, rerun
+ * ServiceBuilder to copy their definitions into the
+ * {@link org.opencps.processmgt.service.ProcessOrderLocalService} interface.
+ * <p> This is a local service. Methods of this service will not have security
+ * checks based on the propagated JAAS credentials because this service can only
+ * be accessed from within the same VM. </p>
  *
- * <p>
- * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link org.opencps.processmgt.service.ProcessOrderLocalService} interface.
- *
- * <p>
- * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
- * </p>
- *
- * @author khoavd
+ * @author trungnt
  * @see org.opencps.processmgt.service.base.ProcessOrderLocalServiceBaseImpl
  * @see org.opencps.processmgt.service.ProcessOrderLocalServiceUtil
  */
 public class ProcessOrderLocalServiceImpl
-	extends ProcessOrderLocalServiceBaseImpl {
+    extends ProcessOrderLocalServiceBaseImpl {
 	/*
-	 * NOTE FOR DEVELOPERS:
-	 *
-	 * Never reference this interface directly. Always use {@link org.opencps.processmgt.service.ProcessOrderLocalServiceUtil} to access the process order local service.
+	 * NOTE FOR DEVELOPERS: Never reference this interface directly. Always use
+	 * {@link org.opencps.processmgt.service.ProcessOrderLocalServiceUtil} to
+	 * access the process order local service.
 	 */
+
+	public ProcessOrder addProcessOrder(
+	    long dossierId, long fileGroupId, long serviceProcessId,
+	    long processStepId, long actionUserId, Date actionDatetime,
+	    String actionNote, long assignToUserId, int dossierStatus,
+	    ServiceContext serviceContext)
+	    throws SystemException {
+
+		long processOrderId = counterLocalService
+		    .increment(ProcessOrder.class
+		        .getName());
+		ProcessOrder processOrder = processOrderPersistence
+		    .create(processOrderId);
+
+		return processOrder;
+	}
+
+	public ProcessOrder getProcessOrder(long dossierId, long fileGroupId)
+	    throws NoSuchProcessOrderException, SystemException {
+
+		return processOrderPersistence
+		    .findByD_F(dossierId, fileGroupId);
+	}
 }

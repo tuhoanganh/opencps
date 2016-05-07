@@ -217,6 +217,10 @@
 		<column name="processWorkflowId" type="long"/>
 		<column name="dossierStatus" type="int"/>
 		<column name="errorInfo" type="String"/>
+        <finder name="D_F" return-type="ProcessOrder">
+            <finder-column name="dossierId"></finder-column>
+            <finder-column name="fileGroupId"></finder-column>
+        </finder>
 	</entity>
 
 	<entity name="ActionHistory" local-service="true" remote-service="true"
