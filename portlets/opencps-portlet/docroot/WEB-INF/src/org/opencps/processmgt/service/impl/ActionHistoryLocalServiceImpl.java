@@ -47,6 +47,73 @@ public class ActionHistoryLocalServiceImpl
 	 * access the action history local service.
 	 */
 
+	/**
+	 * @param userId
+	 * @param groupId
+	 * @param companyId
+	 * @param processOrderId
+	 * @param processWorkflowId
+	 * @param actionDatetime
+	 * @param stepName
+	 * @param actionName
+	 * @param actionNote
+	 * @param actionUserId
+	 * @param daysDoing
+	 * @param daysDelay
+	 * @return
+	 * @throws SystemException
+	 */
+	public ActionHistory addActionHistory(
+	    long userId, long groupId, long companyId, long processOrderId,
+	    long processWorkflowId, Date actionDatetime, String stepName,
+	    String actionName, String actionNote, long actionUserId, int daysDoing,
+	    int daysDelay)
+	    throws SystemException {
+
+		long actionHistoryId = counterLocalService
+		    .increment(ActionHistory.class
+		        .getName());
+		ActionHistory actionHistory = actionHistoryPersistence
+		    .create(actionHistoryId);
+
+		Date now = new Date();
+
+		actionHistory
+		    .setUserId(userId);
+		actionHistory
+		    .setGroupId(groupId);
+		actionHistory
+		    .setCompanyId(companyId);
+		actionHistory
+		    .setCreateDate(now);
+		actionHistory
+		    .setModifiedDate(now);
+
+		actionHistory
+		    .setProcessOrderId(processOrderId);
+		actionHistory
+		    .setProcessWorkflowId(processWorkflowId);
+		actionHistory
+		    .setActionDatetime(actionDatetime);
+		actionHistory
+		    .setStepName(stepName);
+		actionHistory
+		    .setActionName(actionName);
+		actionHistory
+		    .setActionNote(actionNote);
+		actionHistory
+		    .setActionUserId(actionUserId);
+		actionHistory
+		    .setDaysDoing(daysDoing);
+		actionHistory
+		    .setDaysDelay(daysDelay);
+		return actionHistoryPersistence
+		    .update(actionHistory);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opencps.processmgt.service.ActionHistoryLocalService#addActionHistory(long, long, java.util.Date, java.lang.String, java.lang.String, java.lang.String, long, int, int, com.liferay.portal.service.ServiceContext)
+	 */
 	public ActionHistory addActionHistory(
 	    long processOrderId, long processWorkflowId, Date actionDatetime,
 	    String stepName, String actionName, String actionNote,
@@ -94,7 +161,8 @@ public class ActionHistoryLocalServiceImpl
 		    .setDaysDoing(daysDoing);
 		actionHistory
 		    .setDaysDelay(daysDelay);
-		return actionHistoryPersistence.update(actionHistory);
+		return actionHistoryPersistence
+		    .update(actionHistory);
 	}
 
 }
