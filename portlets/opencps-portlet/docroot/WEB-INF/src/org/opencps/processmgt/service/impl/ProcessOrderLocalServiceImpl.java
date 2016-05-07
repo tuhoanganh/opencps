@@ -51,6 +51,88 @@ public class ProcessOrderLocalServiceImpl
 	 */
 
 	public ProcessOrder addProcessOrder(
+	    long userId, long dossierId, long fileGroupId, long serviceProcessId,
+	    long processStepId, long processWorkflowId, long actionUserId,
+	    Date actionDatetime, String stepName, String actionName,
+	    String actionNote, long assignToUserId, int dossierStatus,
+	    int daysDoing, int daysDelay)
+	    throws SystemException, PortalException {
+
+		long processOrderId = counterLocalService
+		    .increment(ProcessOrder.class
+		        .getName());
+		ProcessOrder processOrder = processOrderPersistence
+		    .create(processOrderId);
+
+		Dossier dossier = DossierLocalServiceUtil
+		    .getDossier(dossierId);
+
+		Date now = new Date();
+
+		processOrder
+		    .setUserId(userId);
+		processOrder
+		    .setGroupId(dossier
+		        .getGroupId());
+		processOrder
+		    .setCompanyId(dossier
+		        .getCompanyId());
+		processOrder
+		    .setCreateDate(now);
+		processOrder
+		    .setModifiedDate(now);
+
+		processOrder
+		    .setActionDatetime(actionDatetime);
+		processOrder
+		    .setActionNote(actionNote);
+		processOrder
+		    .setActionUserId(actionUserId);
+		processOrder
+		    .setAssignToUserId(assignToUserId);
+		processOrder
+		    .setDossierId(dossierId);
+		processOrder
+		    .setDossierStatus(dossierStatus);
+		processOrder
+		    .setDossierTemplateId(dossier
+		        .getDossierTemplateId());
+		// processOrder.setErrorInfo(errorInfo);
+		processOrder
+		    .setFileGroupId(fileGroupId);
+		processOrder
+		    .setGovAgencyCode(dossier
+		        .getGovAgencyCode());
+		processOrder
+		    .setGovAgencyName(dossier
+		        .getGovAgencyName());
+		processOrder
+		    .setGovAgencyOrganizationId(dossier
+		        .getGovAgencyOrganizationId());
+		processOrder
+		    .setProcessOrderId(processOrderId);
+		processOrder
+		    .setProcessStepId(processStepId);
+		processOrder
+		    .setProcessWorkflowId(processWorkflowId);
+		processOrder
+		    .setServiceInfoId(dossier
+		        .getServiceInfoId());
+		processOrder
+		    .setServiceProcessId(serviceProcessId);
+
+		actionHistoryLocalService
+		    .addActionHistory(userId, dossier
+		        .getGroupId(), dossier
+		            .getCompanyId(),
+		        processOrderId, processWorkflowId, actionDatetime, stepName,
+		        actionName, actionNote, actionUserId, daysDoing, daysDelay);
+
+		return processOrderPersistence
+		    .update(processOrder);
+	}
+
+	public ProcessOrder addProcessOrder(
 	    long dossierId, long fileGroupId, long serviceProcessId,
 	    long processStepId, long processWorkflowId, long actionUserId,
 	    Date actionDatetime, String stepName, String actionName,
