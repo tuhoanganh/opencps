@@ -17,13 +17,16 @@
 
 package org.opencps.backend.sync;
 
+import java.util.Date;
 import java.util.Locale;
 
+import org.opencps.backend.util.BackendUtils;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierStatus;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLogLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierStatusLocalServiceUtil;
+import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.util.PortletConstants;
 
 import com.liferay.portal.kernel.log.Log;
@@ -33,6 +36,7 @@ import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.MessageListenerException;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 
 
@@ -65,6 +69,17 @@ public class SyncFromFrontOffice implements MessageListener{
     	long govAgencyOrganizationId = GetterUtil.getLong(message.get("govAgencyOrganizationId"));
     	int level = GetterUtil.getInteger(message.get("level"));
     	Locale locale = (Locale)message.get("locale");
+    	long groupId = GetterUtil.getLong(message.get("groupId"));
+    	long companyId = GetterUtil.getLong(message.get("companyId"));
+    	
+    	ProcessOrder processOrder = BackendUtils.getProcessOrder(dossierId, fileGroupId);
+    	
+    	long processOrderId = 0;
+    	
+    	if (Validator.isNotNull(processOrder))
+    		processOrderId = processOrder.getProcessOrderId();
+    	
+    	
     	// Check ServiceMode
     	boolean isServiceMode = checkServiceMode(dossierId);
     	
@@ -110,13 +125,30 @@ public class SyncFromFrontOffice implements MessageListener{
 
 			msgSend.put("dossierId", dossierId);
 			msgSend.put("fileGroupId", fileGroupId);
+			msgSend.put("processOrderId", processOrderId);
+
+			msgSend.put("processWorkflowId", 0);
+			msgSend.put("actionUserId", 0);
+			msgSend.put("actionNote", StringPool.BLANK);
+			msgSend.put("assignToUserId", 0);
+			msgSend.put("receptionNo", StringPool.BLANK);
+			msgSend.put("estimateDatetime", 0);
+			msgSend.put("paymentValue", 0.0);
+			msgSend.put("signature", false);
 			
 			// Send message to activiti workflow
 			MessageBusUtil.sendMessage("opencps/backoffice/engine/destination", msgSend);
 
 		}
 
-
+		try {
+			DossierLogLocalServiceUtil.addDossierLog(
+			    userId, groupId, companyId, dossierId, fileGroupId, PortletConstants.DOSSIER_STATUS_NEW,
+			    "send-to-system-backend", StringPool.BLANK, new Date(), level);
+        }
+        catch (Exception e) {
+	        _log.error(e);
+        }
     	
     }
     
