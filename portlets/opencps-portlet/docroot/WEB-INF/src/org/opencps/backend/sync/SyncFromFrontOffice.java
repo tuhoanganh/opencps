@@ -17,14 +17,19 @@
 
 package org.opencps.backend.sync;
 
+import java.util.Locale;
+
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierStatus;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
+import org.opencps.dossiermgt.service.DossierLogLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierStatusLocalServiceUtil;
+import org.opencps.util.PortletConstants;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.MessageListenerException;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -56,15 +61,62 @@ public class SyncFromFrontOffice implements MessageListener{
     	String actionId = (String) message.get("action");
     	long dossierId = GetterUtil.getLong(message.get("dossierId"));
     	long fileGroupId = GetterUtil.getLong(message.get("fileGroupId"));
+    	long userId = GetterUtil.getLong(message.get("userId"));
+    	long govAgencyOrganizationId = GetterUtil.getLong(message.get("govAgencyOrganizationId"));
+    	int level = GetterUtil.getInteger(message.get("level"));
+    	Locale locale = (Locale)message.get("locale");
+    	// Check ServiceMode
+    	boolean isServiceMode = checkServiceMode(dossierId);
     	
-    	System.out.println("actionId: " + actionId);
-    	System.out.println("dossierId: " + dossierId);
-    	System.out.println("fileGroupId: " + fileGroupId);
-  	
+    	// Check Status 
+    	boolean isStatus = checkStatus(dossierId, fileGroupId);
     	
-		// DossierLocalServiceUtil.updateDossierStatus(userId, groupId,
-		// companyId, dossierId, govAgencyOrganizationId, status, syncStatus,
-		// fileGroupId, level, locale)
+    	// 
+		if (isServiceMode && isStatus) {
+			// Update dossierStatus -> system
+			Message msgSend = new Message();
+
+			if (Validator.equals(actionId, "submit")) {
+				try {
+					DossierLocalServiceUtil.updateDossierStatus(
+					    userId, dossierId, govAgencyOrganizationId,
+					    PortletConstants.DOSSIER_STATUS_SYSTEM,
+					    PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS,
+					    fileGroupId, level, locale);
+				}
+				catch (Exception e) {
+					_log.error(e);
+				}
+				
+				msgSend.put("action", "submit");
+				msgSend.put("event", "submit");
+
+			}
+			else if (Validator.equals(actionId, "resubmit")) {
+				try {
+					DossierLocalServiceUtil.updateDossierStatus(
+					    userId, dossierId, govAgencyOrganizationId,
+					    PortletConstants.DOSSIER_STATUS_SYSTEM,
+					    PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS,
+					    fileGroupId, level, locale);
+				}
+				catch (Exception e) {
+					_log.error(e);
+				}
+				msgSend.put("action", "resubmit");
+				msgSend.put("event", "resubmit");
+
+			}
+
+			msgSend.put("dossierId", dossierId);
+			msgSend.put("fileGroupId", fileGroupId);
+			
+			// Send message to activiti workflow
+			MessageBusUtil.sendMessage("opencps/backoffice/engine/destination", msgSend);
+
+		}
+
+
     	
     }
     
@@ -95,10 +147,27 @@ public class SyncFromFrontOffice implements MessageListener{
     	return trustServiceMode;
     }
     
-    private boolean checkStatus(long dossierId, long fileGroupId, String action) {
+    private boolean checkStatus(long dossierId, long fileGroupId) {
     	
+    	boolean isValidatorStatus = false;
     	
-    	return false;
+    	DossierStatus status = null;
+    	
+    	try {
+	        status = DossierStatusLocalServiceUtil.getStatus(dossierId, fileGroupId);
+        }
+        catch (Exception e) {
+        	_log.error(e);
+        }
+    	
+    	if (Validator.isNotNull(status)) {
+			if (status.getDossierStatus() == PortletConstants.DOSSIER_STATUS_NEW ||
+			    status.getDossierStatus() == PortletConstants.DOSSIER_STATUS_WAITING) {
+				isValidatorStatus = true;
+			}
+    	}
+    	
+    	return isValidatorStatus;
     }
     
     private Log _log = LogFactoryUtil.getLog(SyncFromFrontOffice.class);

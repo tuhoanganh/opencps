@@ -18,11 +18,13 @@
 package org.opencps.dossiermgt.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.opencps.dossiermgt.NoSuchDossierStatusException;
 import org.opencps.dossiermgt.model.DossierStatus;
 import org.opencps.dossiermgt.service.base.DossierStatusLocalServiceBaseImpl;
 
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.service.ServiceContext;
 
@@ -46,6 +48,18 @@ public class DossierStatusLocalServiceImpl
 	 * {@link org.opencps.dossiermgt.service.DossierStatusLocalServiceUtil} to
 	 * access the dossier status local service.
 	 */
+	
+	/**
+	 * @param dossierId
+	 * @param fileGroupId
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public DossierStatus getStatus(long dossierId, long fileGroupId)
+	    throws PortalException, SystemException {
+		return dossierStatusPersistence.fetchByD_FG(dossierId, fileGroupId);
+	}
 
 	public DossierStatus addDossierStatus(
 	    long userId, long dossierId, long fileGroupId, int status,

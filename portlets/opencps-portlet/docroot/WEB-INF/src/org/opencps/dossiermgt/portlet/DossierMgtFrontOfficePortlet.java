@@ -1258,7 +1258,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			            .getLocale());
 
 			switch (dossierStatus) {
-			case PortletConstants.DOSSIER_STATUS_SYSTEM:
+			case PortletConstants.DOSSIER_STATUS_NEW:
 
 				Message message = new Message();
 				message
