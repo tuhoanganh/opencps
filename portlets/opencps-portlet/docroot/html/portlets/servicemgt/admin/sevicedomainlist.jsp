@@ -67,7 +67,7 @@
 				name="service-name" value="<%= dictItem.getItemName(locale, true) %>"
 			/>
 			
-			<liferay-ui:search-container-column-jsp path="" name="action"/>
+			<liferay-ui:search-container-column-jsp path='<%=templatePath + "domain_actions.jsp" %>' name="action"/>
 		</liferay-ui:search-container-row>
 <liferay-ui:search-iterator/>
 </liferay-ui:search-container>

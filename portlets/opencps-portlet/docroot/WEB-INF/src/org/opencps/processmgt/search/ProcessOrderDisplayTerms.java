@@ -31,6 +31,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
  */
 public class ProcessOrderDisplayTerms extends DisplayTerms {
 
+	public static String PROCESS_ORDER_ID = "processOrderId";
 	public static String ASSIGN_TO_USER_ID = "assignToUserId";
 	public static String SERVICE_INFO_ID = "serviceInfoId";
 	public static String DOSSIER_TEMPLATE_ID = "dossierTemplateId";
@@ -40,6 +41,7 @@ public class ProcessOrderDisplayTerms extends DisplayTerms {
 	public static String FILE_GROUP_ID = "fileGroupId";
 	public static String PROCESS_STEP_ID = "processStepId";
 	public static String ACTION_USER_ID = "actionUserId";
+	
 	public static String ACTION_DATE_TIME = "actionDatetime";
 	public static String ACTION_NOTE = "actionNote";
 	public static String GOV_AGENCY_CODE = "govAgencyCode";

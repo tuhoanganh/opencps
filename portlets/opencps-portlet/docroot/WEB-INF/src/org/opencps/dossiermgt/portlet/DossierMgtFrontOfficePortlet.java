@@ -20,6 +20,7 @@ package org.opencps.dossiermgt.portlet;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -68,6 +69,7 @@ import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
+import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
 import org.opencps.util.DLFolderUtil;
@@ -109,6 +111,21 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  * @author trungnt
  */
 public class DossierMgtFrontOfficePortlet extends MVCPortlet {
+	
+	public void addProcessOrder(ActionRequest actionRequest, ActionResponse actionResponse){
+		long dossierId =  ParamUtil.getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
+		try {
+			ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
+			ProcessOrderLocalServiceUtil.addProcessOrder(dossierId,
+				0, 1,
+				1, 1,
+				28055, new Date(), "Buoc 1", "Buoc 1 Action", "xxx",
+				28055, 1, 10, 2, serviceContext);
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
+	}
 
 	public void addTempFile(
 	    ActionRequest actionRequest, ActionResponse actionResponse) {

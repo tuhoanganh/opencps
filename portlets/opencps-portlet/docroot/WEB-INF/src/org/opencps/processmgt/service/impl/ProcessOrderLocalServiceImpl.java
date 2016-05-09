@@ -18,6 +18,7 @@
 package org.opencps.processmgt.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
@@ -27,6 +28,7 @@ import org.opencps.processmgt.service.base.ProcessOrderLocalServiceBaseImpl;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.service.ServiceContext;
 
 /**
@@ -214,6 +216,12 @@ public class ProcessOrderLocalServiceImpl
 		    .update(processOrder);
 	}
 
+	public int countProcessOrder(long processStepId) {
+
+		return processOrderFinder
+		    .countProcessOrder(processStepId);
+	}
+
 	public ProcessOrder getProcessOrder(long dossierId, long fileGroupId)
 	    throws NoSuchProcessOrderException, SystemException {
 
@@ -272,5 +280,13 @@ public class ProcessOrderLocalServiceImpl
 		processOrderPersistence.update(order);
 		
 		return order;
+	}
+
+	public List searchProcessOrder(
+	    long processStepId, int start, int end,
+	    OrderByComparator orderByComparator) {
+
+		return processOrderFinder
+		    .searchProcessOrder(processStepId, start, end, orderByComparator);
 	}
 }

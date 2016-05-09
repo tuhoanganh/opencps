@@ -160,7 +160,6 @@
 				name="<%=DossierPartDisplayTerms.DOSSIERPART_PARTTIP %>"
 			>
 				<aui:validator name="required" />
-				<aui:validator name="maxLength">255</aui:validator>
 			</aui:input>
 		</aui:col>
 	</aui:row>
