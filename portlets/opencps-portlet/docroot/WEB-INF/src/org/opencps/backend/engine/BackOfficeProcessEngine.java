@@ -13,10 +13,16 @@
 
 package org.opencps.backend.engine;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.opencps.backend.util.BackendUtils;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
+import org.opencps.util.PortletConstants;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.MessageListenerException;
@@ -38,7 +44,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 	public void receive(Message message)
 	    throws MessageListenerException {
 
-		// TODO Auto-generated method stub
+		doReceive(message);
 
 	}
 
@@ -51,6 +57,13 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 		long processWorkflowId =
 		    GetterUtil.getLong(message.get("processWorkflowId"));
+		
+		long processStepId = GetterUtil.getLong(message.get("processStepId"));
+		long actionUserId = GetterUtil.getLong(message.get("actionUserId"));
+		long assignToUserId = GetterUtil.getLong(message.get("assignToUserId"));
+		Date actionDatetime = GetterUtil.getDate(message.get("actionDatetime"), new SimpleDateFormat("dd/MM/yyyy : HH/mm"));
+		String actionNote = GetterUtil.getString(message.get("actionNote"));
+		
 
 		ProcessOrder processOrder = null;
 
@@ -60,11 +73,46 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 		// Neu phieu xl ko ton tai thi tao phieu xu ly moi
 		if (Validator.isNull(processOrder)) {
+			try {
+				processOrder = ProcessOrderLocalServiceUtil.initProcessOrder();
+				processOrderId = processOrder.getProcessOrderId();
+				
+				// Gui thong bao cho kenh "pencps/backoffice/out/destination"
+				
+				Message msgToBOFUD = new Message();
+				
+				msgToBOFUD.put("processOrderId", processOrderId);
+            }
+            catch (Exception e) {
+	            _log.error(e);
+            }
 			
+			
+		}
+		
+		if (Validator.isNotNull(processOrder)) {
+			try {
+				// Cap nhat phieu xu ly co trang thai System
+
+				ProcessOrderLocalServiceUtil.updateProcessOrderStatus(
+				    processOrderId, PortletConstants.DOSSIER_STATUS_SYSTEM);
+			
+				// Cap nhat trung gia tri cua phieu xu ly
+				ProcessOrderLocalServiceUtil.updateProcessOrder(
+				    processOrderId, processStepId, actionUserId, actionDatetime,
+				    actionNote, assignToUserId);
+            }
+            catch (Exception e) {
+	            _log.error(e);
+            }
+			
+
 		}
 		
 		
 
 	}
+	
+	private Log _log = LogFactoryUtil.getLog(BackOfficeProcessEngine.class);
 
 }
