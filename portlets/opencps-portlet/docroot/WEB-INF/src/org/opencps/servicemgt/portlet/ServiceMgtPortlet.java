@@ -15,6 +15,8 @@ package org.opencps.servicemgt.portlet;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Locale;
+import java.util.Map;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -22,8 +24,17 @@ import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.opencps.datamgt.DuplicateItemException;
+import org.opencps.datamgt.EmptyDictItemNameException;
+import org.opencps.datamgt.EmptyItemCodeException;
+import org.opencps.datamgt.NoSuchDictItemException;
+import org.opencps.datamgt.OutOfLengthItemCodeException;
+import org.opencps.datamgt.OutOfLengthItemNameException;
+import org.opencps.datamgt.model.DictCollection;
 import org.opencps.datamgt.model.DictItem;
+import org.opencps.datamgt.portlet.DataMamagementPortlet;
 import org.opencps.datamgt.search.DictItemDisplayTerms;
+import org.opencps.datamgt.service.DictCollectionLocalServiceUtil;
 import org.opencps.datamgt.service.DictItemLocalServiceUtil;
 import org.opencps.servicemgt.DuplicateFileNameException;
 import org.opencps.servicemgt.DuplicateFileNoException;
@@ -31,10 +42,12 @@ import org.opencps.servicemgt.IOFileUploadException;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.model.TemplateFile;
 import org.opencps.servicemgt.search.ServiceDisplayTerms;
+import org.opencps.servicemgt.service.ServiceFileTemplateLocalServiceUtil;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
 import org.opencps.servicemgt.service.TemplateFileLocalServiceUtil;
 import org.opencps.util.DateTimeUtil;
 import org.opencps.util.MessageKeys;
+import org.opencps.util.PortletPropsValues;
 import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.exception.PortalException;
@@ -49,6 +62,7 @@ import com.liferay.portal.kernel.upload.LiferayFileItemException;
 import com.liferay.portal.kernel.upload.UploadException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.Constants;
+import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StreamUtil;
@@ -68,7 +82,105 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  * @author khoavd
  */
 public class ServiceMgtPortlet extends MVCPortlet {
-
+	
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws IOException
+	 */
+	public void deleteDomain(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException { 
+		long dictItemId = ParamUtil.getLong(actionRequest,
+				DictItemDisplayTerms.DICTITEM_ID, 0L);
+		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
+		try {
+			DictItemLocalServiceUtil.deleteDictItem(dictItemId);
+		} catch (Exception e) {
+			SessionErrors.add(actionRequest,
+					MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED);
+			_log.error(e);
+		} finally {
+			if (Validator.isNotNull(redirectURL)) {
+				actionResponse.sendRedirect(redirectURL);
+			}
+		}
+	}
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws IOException
+	 */
+	public void updateDomain(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException {
+		long dictItemId = ParamUtil.getLong(actionRequest, DictItemDisplayTerms.DICTITEM_ID);
+		long parentItemId = ParamUtil.getLong(actionRequest, DictItemDisplayTerms.PARENTITEM_ID);
+		String itemName = ParamUtil.getString(actionRequest, DictItemDisplayTerms.ITEM_NAME);
+		String itemCode = ParamUtil.getString(actionRequest, DictItemDisplayTerms.ITEM_CODE);
+		String isAddchirld = ParamUtil.getString(actionRequest, "isAddchirld");
+		String backURL = ParamUtil.getString(actionRequest, "backURL");
+		String currentURL = ParamUtil.getString(actionRequest, "currentURL");
+		
+		Map<Locale, String> itemNameMap = LocalizationUtil.getLocalizationMap(
+			actionRequest, DictItemDisplayTerms.ITEM_NAME);
+		DictCollection dictCollection = null;
+		
+		try {
+			
+			ServiceContext serviceContext = ServiceContextFactory
+						    .getInstance(actionRequest);
+	        dictCollection = DictCollectionLocalServiceUtil
+	        				.getDictCollection(serviceContext.getScopeGroupId(), PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN);
+	        DataMamagementPortlet.validatetDictItem(dictItemId, itemName, itemCode, serviceContext);
+	        if(dictItemId == 0) {
+	        	DictItemLocalServiceUtil.addDictItem(serviceContext.getUserId(), dictCollection.getDictCollectionId(),
+	        		itemCode, itemNameMap, parentItemId, serviceContext);
+	        	SessionMessages.add(actionRequest,
+					MessageKeys.DATAMGT_ADD_SUCESS);
+	        } else {
+	        	
+	        	if(Validator.isNotNull(isAddchirld)) {
+	        		DictItemLocalServiceUtil.addDictItem(serviceContext.getUserId(), dictCollection.getDictCollectionId(),
+		        		itemCode, itemNameMap, parentItemId, serviceContext);
+	        		SessionMessages.add(actionRequest,
+						MessageKeys.DATAMGT_ADD_SUCESS);
+	        	} else {
+	        		//tam thoi hard code dictversionId = 0
+	        		
+	        		DictItemLocalServiceUtil.updateDictItem(dictItemId, dictCollection.getDictCollectionId(), 0,
+	        			itemCode, itemNameMap, parentItemId, serviceContext);
+	        		SessionMessages.add(actionRequest,
+						MessageKeys.DATAMGT_UPDATE_SUCESS);
+	        	}
+	        }
+	        
+	        if(Validator.isNotNull(backURL)) {
+	        	actionResponse.sendRedirect(backURL);
+	        }
+        }
+        catch (Exception e) {
+        	if (e instanceof EmptyItemCodeException) {
+				SessionErrors.add(actionRequest, EmptyItemCodeException.class);
+			} else if (e instanceof OutOfLengthItemCodeException) {
+				SessionErrors.add(actionRequest,
+						OutOfLengthItemCodeException.class);
+			} else if (e instanceof EmptyDictItemNameException) {
+				SessionErrors.add(actionRequest,
+						EmptyDictItemNameException.class);
+			} else if (e instanceof OutOfLengthItemNameException) {
+				SessionErrors.add(actionRequest,
+						OutOfLengthItemNameException.class);
+			} else if (e instanceof DuplicateItemException) {
+				SessionErrors.add(actionRequest, DuplicateItemException.class);
+			} else if (e instanceof NoSuchDictItemException) {
+				SessionErrors.add(actionRequest, NoSuchDictItemException.class);
+			} else {
+				SessionErrors.add(actionRequest,
+						MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED);
+			}
+        	
+        	if(Validator.isNotNull(currentURL)) {
+	        	actionResponse.sendRedirect(currentURL);
+	        }
+        }
+	}
 	/**
 	 * @param renderRequest
 	 * @param renderResponse
@@ -183,6 +295,7 @@ public class ServiceMgtPortlet extends MVCPortlet {
 
 		long templateFileId =
 		    ParamUtil.getLong(actionRequest, "templateFileId");
+		
 		String fileNo = ParamUtil.getString(actionRequest, "fileNo");
 		String fileName = ParamUtil.getString(actionRequest, "fileName");
 
@@ -264,7 +377,59 @@ public class ServiceMgtPortlet extends MVCPortlet {
 		}
 
 	}
-
+	
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws PortalException
+	 * @throws SystemException
+	 * @throws IOException
+	 */
+	public void chooseServiceInfo(ActionRequest actionRequest, ActionResponse actionResponse) 
+					throws PortalException, SystemException, IOException {
+		long templatefileId = ParamUtil.getLong(actionRequest, "templateFileId");
+		long [] serviceInfoIds = ParamUtil
+					    .getLongValues(actionRequest, "rowIds");
+		String backURL = ParamUtil.getString(actionRequest, "backURL");
+		TemplateFileLocalServiceUtil.addChooseServceInfo(templatefileId, serviceInfoIds);
+		if(Validator.isNotNull(backURL)) {
+			actionResponse.sendRedirect(backURL);
+		}
+		
+	}
+	
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws PortalException
+	 * @throws SystemException
+	 * @throws IOException
+	 */
+	public void deteleRelaSeInfoAndTempFile (ActionRequest actionRequest, ActionResponse actionResponse)
+					throws PortalException, SystemException, IOException{
+		long templatefileId = ParamUtil.getLong(actionRequest, "templateFileId");
+		long serviceInfoId = ParamUtil.getLong(actionRequest, "serviceInfoId");
+		String backURL = ParamUtil.getString(actionRequest, "backURL");
+		ServiceFileTemplateLocalServiceUtil.deleteServiceFile(serviceInfoId, templatefileId);
+		if(Validator.isNotNull(backURL)) {
+			actionResponse.sendRedirect(backURL);
+		}
+		
+	}
+	
+	public void deleteTemplate (ActionRequest actionRequest, ActionResponse actionResponse)
+					throws PortalException, SystemException, IOException {
+		long templateId = ParamUtil.getLong(actionRequest, "templateId");
+		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
+		TemplateFileLocalServiceUtil.deleteTemplateFile(templateId);
+		
+		if(Validator.isNotNull(redirectURL)) {
+			actionResponse.sendRedirect(redirectURL);
+		}
+		
+		
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * @see javax.portlet.GenericPortlet#render(javax.portlet.RenderRequest,
