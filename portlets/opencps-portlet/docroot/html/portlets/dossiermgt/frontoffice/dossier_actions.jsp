@@ -52,8 +52,20 @@
 					<portlet:param name="backURL" value="<%=currentURL %>"/>
 				</portlet:actionURL> 
 		 		<liferay-ui:icon 
-		 			image="send"
-		 			message="send" url="<%=updateDossierStatusURL.toString() %>" 
+		 			image="forward"
+		 			message="send" 
+		 			url="<%=updateDossierStatusURL.toString() %>" 
+		 		/> 
+		 		
+		 		<portlet:actionURL var="addProcessOrderURL" name="addProcessOrder">
+					<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
+					<portlet:param name="<%=DossierDisplayTerms.DOSSIER_STATUS %>" value="<%=String.valueOf(PortletConstants.DOSSIER_STATUS_SYSTEM) %>"/>
+					<portlet:param name="backURL" value="<%=currentURL %>"/>
+				</portlet:actionURL> 
+		 		<liferay-ui:icon 
+		 			image="forward"
+		 			message="Create Process Order" 
+		 			url="<%=addProcessOrderURL.toString() %>" 
 		 		/> 
 		 	</c:if>
 		 	
@@ -62,9 +74,11 @@
 					<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
 					<portlet:param name="redirectURL" value="<%=currentURL %>"/>
 				</portlet:actionURL> 
-				<liferay-ui:icon-delete image="delete" 
+				<liferay-ui:icon-delete 
+					image="delete" 
 					confirmation="are-you-sure-delete-entry" 
-					message="delete"  url="<%=deleteDossierURL.toString() %>" 
+					message="delete"  
+					url="<%=deleteDossierURL.toString() %>" 
 				/>
 		 	</c:if>
  		</c:when>

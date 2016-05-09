@@ -91,14 +91,13 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	
 	public static final String SERVICE_INFO_ENTRY = "SERVICE_INFO_ENTRY";
 	
-	
-	
 	public static final String STEP_ALLOWANCE_ENTRY = "STEP_ALLOWANCE_ENTRY";
+	
 	public static final String WORKFLOW_ENTRY = "WORKFLOW_ENTRY";
 
-	
 	public static final String DICT_ITEM_SELECTED = "DICT_ITEM_SELECTED";
 	
 	public static final String FORM_DATA = "FORM_DATA";
-
+	
+	public static final String PROCESS_ORDER_ENTRY = "PROCESS_ORDER_ENTRY";
 }

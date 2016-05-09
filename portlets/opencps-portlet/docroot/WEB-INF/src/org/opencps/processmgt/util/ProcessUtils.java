@@ -374,7 +374,11 @@ public class ProcessUtils {
 	}
 
 	public static final String TOP_TABS_PROCESS_ORDER_WAITING_PROCESS =
-				    "top_tabs_process_order_waiting_process";
+				    "waiting-process";
 	public static final String TOP_TABS_PROCESS_ORDER_FINISHED_PROCESSING = 
-					"top_tabs_process_order_finished_processing";
+					"finished-processing";
+	
+	public static String[] _PROCESS_ORDER_CATEGORY_NAMES = {
+	    "process-order"
+	};
 }
