@@ -1265,14 +1265,14 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			
 			
 
-			DossierLocalServiceUtil
+			/*DossierLocalServiceUtil
 			    .updateDossierStatus(serviceContext
 			        .getUserId(), dossierId, govAgencyOrganizationId,
 			        dossierStatus,
 			        PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC,
 			        fileGroupId, PortletConstants.DOSSIER_LOG_NORMAL,
 			        serviceContext
-			            .getLocale());
+			            .getLocale());*/
 
 			switch (dossierStatus) {
 			case PortletConstants.DOSSIER_STATUS_NEW:
