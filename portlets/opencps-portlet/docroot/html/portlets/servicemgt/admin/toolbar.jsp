@@ -170,7 +170,20 @@
 						</c:when>
 						
 						<c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_ADMINISTRATION) %>">
+							<portlet:renderURL var="editDomainURL" windowState="<%=LiferayWindowState.POP_UP.toString() %>">
+								<portlet:param name="mvcPath" value='<%= templatePath + "edit_domain.jsp" %>'/>
+								<portlet:param name="backURL" value="<%=currentURL %>"/>
+								<portlet:param name="tabs1" value="<%=tabs1 %>"/>
+							</portlet:renderURL>
 							
+							<c:if test="<%= ServiceTemplatePermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_TEMPLATE) %>">
+								<aui:nav-item 
+									id="addDomain" 
+									label="add-administration" 
+									iconCssClass="icon-plus"  
+									href="<%= \"javascript:\" + renderResponse.getNamespace() + \"showPopup('\" + editDomainURL +\"');\" %>"
+								/>
+							</c:if>
 						</c:when>
 						
 					</c:choose>
@@ -189,7 +202,7 @@
 				width : 800
 			},
 			id : '<portlet:namespace/>dialog',
-			title : 'Edit-Domain',
+			title : '',
 			uri : url
 		});
 	});

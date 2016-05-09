@@ -73,7 +73,7 @@
 				width : 800
 			},
 			id : '<portlet:namespace/>dialog',
-			title : 'Edit-Domain',
+			title : '',
 			uri : url
 		});
 	});

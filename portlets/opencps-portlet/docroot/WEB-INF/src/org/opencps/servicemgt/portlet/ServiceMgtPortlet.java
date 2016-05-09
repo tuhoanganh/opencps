@@ -42,6 +42,7 @@ import org.opencps.servicemgt.IOFileUploadException;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.model.TemplateFile;
 import org.opencps.servicemgt.search.ServiceDisplayTerms;
+import org.opencps.servicemgt.service.ServiceFileTemplateLocalServiceUtil;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
 import org.opencps.servicemgt.service.TemplateFileLocalServiceUtil;
 import org.opencps.util.DateTimeUtil;
@@ -294,6 +295,7 @@ public class ServiceMgtPortlet extends MVCPortlet {
 
 		long templateFileId =
 		    ParamUtil.getLong(actionRequest, "templateFileId");
+		
 		String fileNo = ParamUtil.getString(actionRequest, "fileNo");
 		String fileName = ParamUtil.getString(actionRequest, "fileName");
 
@@ -375,7 +377,59 @@ public class ServiceMgtPortlet extends MVCPortlet {
 		}
 
 	}
-
+	
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws PortalException
+	 * @throws SystemException
+	 * @throws IOException
+	 */
+	public void chooseServiceInfo(ActionRequest actionRequest, ActionResponse actionResponse) 
+					throws PortalException, SystemException, IOException {
+		long templatefileId = ParamUtil.getLong(actionRequest, "templateFileId");
+		long [] serviceInfoIds = ParamUtil
+					    .getLongValues(actionRequest, "rowIds");
+		String backURL = ParamUtil.getString(actionRequest, "backURL");
+		TemplateFileLocalServiceUtil.addChooseServceInfo(templatefileId, serviceInfoIds);
+		if(Validator.isNotNull(backURL)) {
+			actionResponse.sendRedirect(backURL);
+		}
+		
+	}
+	
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws PortalException
+	 * @throws SystemException
+	 * @throws IOException
+	 */
+	public void deteleRelaSeInfoAndTempFile (ActionRequest actionRequest, ActionResponse actionResponse)
+					throws PortalException, SystemException, IOException{
+		long templatefileId = ParamUtil.getLong(actionRequest, "templateFileId");
+		long serviceInfoId = ParamUtil.getLong(actionRequest, "serviceInfoId");
+		String backURL = ParamUtil.getString(actionRequest, "backURL");
+		ServiceFileTemplateLocalServiceUtil.deleteServiceFile(serviceInfoId, templatefileId);
+		if(Validator.isNotNull(backURL)) {
+			actionResponse.sendRedirect(backURL);
+		}
+		
+	}
+	
+	public void deleteTemplate (ActionRequest actionRequest, ActionResponse actionResponse)
+					throws PortalException, SystemException, IOException {
+		long templateId = ParamUtil.getLong(actionRequest, "templateId");
+		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
+		TemplateFileLocalServiceUtil.deleteTemplateFile(templateId);
+		
+		if(Validator.isNotNull(redirectURL)) {
+			actionResponse.sendRedirect(redirectURL);
+		}
+		
+		
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * @see javax.portlet.GenericPortlet#render(javax.portlet.RenderRequest,

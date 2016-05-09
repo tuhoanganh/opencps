@@ -36,7 +36,7 @@
 
 <liferay-ui:header
 	backURL="<%= backURL %>"
-	title="update-dossier"
+	title="update"
 	backLabel="back"
 />
 

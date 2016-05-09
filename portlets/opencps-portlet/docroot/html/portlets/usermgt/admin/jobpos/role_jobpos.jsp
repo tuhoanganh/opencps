@@ -112,13 +112,11 @@
 				</liferay-ui:search-container-results>
 				
 				<liferay-ui:search-container-row 
-					className="com.liferay.portal.model.ResourceAction" 
-					modelVar="resourceAction" 
-					keyProperty="resourceActionId"
+					className="org.opencps.servicemgt.model.ServiceInfo" 
+					modelVar="serviceInfo" 
+					keyProperty="serviceinfoId"
 				>
-					<%
-						row.addText(resourceAction.getActionId());
-					%>
+					
 				</liferay-ui:search-container-row>
 				
 				<liferay-ui:search-iterator/>
