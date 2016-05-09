@@ -159,6 +159,14 @@
 		<finder return-type="Collection" name="S_P_ID">
 			<finder-column name="serviceProcessId"/>
 		</finder>
+        <finder return-type="ProcessWorkflow" name="S_PPSID">
+            <finder-column name="serviceProcessId"></finder-column>
+            <finder-column name="postProcessStepId"></finder-column>
+        </finder>
+        <finder name="S_PRE_PS_ID" return-type="Collection">
+            <finder-column name="serviceProcessId"></finder-column>
+            <finder-column name="preProcessStepId"></finder-column>
+        </finder>
 
 	</entity>
 
@@ -249,6 +257,10 @@
 		<column name="actionUserId" type="long"/>
 		<column name="daysDoing" type="int"/>
 		<column name="daysDelay" type="int"/>
+        <finder name="POID_PWID" return-type="ActionHistory">
+            <finder-column name="processOrderId"></finder-column>
+            <finder-column name="processWorkflowId"></finder-column>
+        </finder>
 	</entity>
 
 	<exceptions>
