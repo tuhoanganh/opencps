@@ -19,6 +19,7 @@ package org.opencps.processmgt.service.impl;
 
 import java.util.Date;
 
+import org.opencps.processmgt.NoSuchActionHistoryException;
 import org.opencps.processmgt.model.ActionHistory;
 import org.opencps.processmgt.service.base.ActionHistoryLocalServiceBaseImpl;
 
@@ -111,8 +112,13 @@ public class ActionHistoryLocalServiceImpl
 		    .update(actionHistory);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.opencps.processmgt.service.ActionHistoryLocalService#addActionHistory(long, long, java.util.Date, java.lang.String, java.lang.String, java.lang.String, long, int, int, com.liferay.portal.service.ServiceContext)
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * org.opencps.processmgt.service.ActionHistoryLocalService#addActionHistory
+	 * (long, long, java.util.Date, java.lang.String, java.lang.String,
+	 * java.lang.String, long, int, int,
+	 * com.liferay.portal.service.ServiceContext)
 	 */
 	public ActionHistory addActionHistory(
 	    long processOrderId, long processWorkflowId, Date actionDatetime,
@@ -163,6 +169,14 @@ public class ActionHistoryLocalServiceImpl
 		    .setDaysDelay(daysDelay);
 		return actionHistoryPersistence
 		    .update(actionHistory);
+	}
+
+	public ActionHistory getActionHistory(
+	    long processOrderId, long processWorkflowId)
+	    throws NoSuchActionHistoryException, SystemException {
+
+		return actionHistoryPersistence
+		    .findByPOID_PWID(processOrderId, processWorkflowId);
 	}
 
 }
