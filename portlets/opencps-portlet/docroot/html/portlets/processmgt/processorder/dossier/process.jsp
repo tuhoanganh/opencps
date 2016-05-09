@@ -333,13 +333,13 @@
 		var serviceProcessId = instance.attr('service-process')
 	
 		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
-		portletURL.setParameter("mvcPath", "/html/portlets/processmgt/service-process/assign_to_user.jsp");
+		portletURL.setParameter("mvcPath", "/html/portlets/processmgt/processorder/assign_to_user.jsp");
 		portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
 		portletURL.setPortletMode("normal");
 		portletURL.setParameter("processWorkflowId", processWorkflowId);
 		portletURL.setParameter("serviceProcessId", serviceProcessId);
 
-		<portlet:namespace/>assignDialog(portletURL.toString(), '<portlet:namespace />assignToUser', '<%= UnicodeLanguageUtil.get(pageContext, "assign-to-user") %>');
+		<portlet:namespace/>assignDialog(portletURL.toString(), '<portlet:namespace />assignToUser', '<%= UnicodeLanguageUtil.get(pageContext, "assign") %>');
 	});
 	
 	
@@ -479,7 +479,7 @@
 		
 		var groupName = instance.attr('group-name');
 
-		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
+		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
 		portletURL.setParameter("mvcPath", "/html/portlets/dossiermgt/frontoffice/dynamic_form.jsp");
 		portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
 		portletURL.setPortletMode("normal");

@@ -24,14 +24,29 @@
 	long serviceProcessId = ParamUtil.getLong(request, "serviceProcessId");
 %>
 
-<aui:form>
+<aui:form name="fm" action="" method="post">
 	<aui:select name="assignToUser" label="assign-to-user">
 		
 	</aui:select>
 	
-	<aui:input name="requestPayment" label="request-payment"/>
+	<aui:input name="requestPayment" label="request-payment" type="text"/>
 	
-	<aui:input name="eceptionNo" label="request-payment"/>
+	<aui:input name="receptionNo" label="reception-no" type="text"/>
 	
-	<aui:input name="requestPayment" label="request-payment"/>
+	<aui:input name="deadline"/>
+	
+	<label class="control-label custom-lebel" for='<portlet:namespace/><%="deadline" %>'>
+		<liferay-ui:message key="deadline"/>
+	</label>
+		
+		<liferay-ui:input-date
+			dayParam="deadlineDay"
+			disabled="<%= false %>"
+			monthParam="deadlineMonth"
+			name="deadline"
+			yearParam="deadlineYear"
+			formName="fm"
+			autoFocus="<%=true %>"
+			nullable="<%=true %>"
+		/>
 </aui:form>
