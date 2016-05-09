@@ -31,10 +31,12 @@ import org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.model.ProcessStep;
+import org.opencps.processmgt.model.ProcessWorkflow;
 import org.opencps.processmgt.model.ServiceProcess;
 import org.opencps.processmgt.search.ProcessOrderDisplayTerms;
 import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
+import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
 import org.opencps.processmgt.service.ServiceProcessLocalServiceUtil;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
@@ -77,9 +79,16 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				ServiceConfig serviceConfig = ServiceConfigLocalServiceUtil
 				    .getServiceConfig(dossier
 				        .getServiceConfigId());
-				
-				DossierTemplate dossierTemplate = DossierTemplateLocalServiceUtil
-					.getDossierTemplate(dossier.getDossierTemplateId());
+
+				DossierTemplate dossierTemplate =
+				    DossierTemplateLocalServiceUtil
+				        .getDossierTemplate(dossier
+				            .getDossierTemplateId());
+
+				ProcessWorkflow processWorkflow =
+				    ProcessWorkflowLocalServiceUtil
+				        .getProcessWorkflow(processOrder
+				            .getProcessWorkflowId());
 
 				renderRequest
 				    .setAttribute(WebKeys.PROCESS_ORDER_ENTRY, processOrder);
@@ -94,9 +103,14 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				    .setAttribute(WebKeys.SERVICE_INFO_ENTRY, serviceInfo);
 				renderRequest
 				    .setAttribute(WebKeys.SERVICE_CONFIG_ENTRY, serviceConfig);
-				
+
 				renderRequest
-			    	.setAttribute(WebKeys.DOSSIER_TEMPLATE_ENTRY, dossierTemplate);
+				    .setAttribute(
+				        WebKeys.DOSSIER_TEMPLATE_ENTRY, dossierTemplate);
+
+				renderRequest
+				    .setAttribute(
+				        WebKeys.PROCESS_WORKFLOW_ENTRY, processWorkflow);
 			}
 			catch (Exception e) {
 				_log
