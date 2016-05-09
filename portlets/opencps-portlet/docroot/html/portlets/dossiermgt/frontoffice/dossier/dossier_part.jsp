@@ -1,3 +1,4 @@
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -42,6 +43,8 @@
 <%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.model.DossierFile"%>
+<%@page import="org.opencps.dossiermgt.service.FileGroupLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.FileGroup"%>
 <%@page import="org.opencps.util.WebKeys"%>
 
 <%@ include file="../../init.jsp"%>
@@ -162,7 +165,23 @@
 						
 						<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_PRIVATE%>">
 							<%
-								privateDossierGroup = dossierParts.get(0).getPartName();
+								List<FileGroup> fileGroups = new ArrayList<FileGroup>();
+							
+								if(dossier != null){
+									try{
+										fileGroups = FileGroupLocalServiceUtil.getFileGroupByDossierId(dossier.getDossierId());
+									}catch(Exception e){}
+								}
+								
+								if(fileGroups == null || fileGroups.isEmpty()){
+									privateDossierGroup = dossierParts.get(0).getPartName();
+								}
+								
+								if(fileGroups != null && !fileGroups.isEmpty()){
+									for(FileGroup fileGroup : fileGroups){
+										
+									}
+								}
 							%>
 							<div
 								id='<%=renderResponse.getNamespace() + "row-" + dossierParts.get(0).getDossierpartId() + StringPool.DASH + index %>' 
@@ -476,6 +495,10 @@
 		
 		var fileName = instance.attr('file-name');
 		
+		var level = instance.attr('level');
+		
+		var partType = instance.attr('part-type');
+		
 		var templateFileNo = instance.attr('template-no');
 		
 		var fileUpload = A.one('#<portlet:namespace/>fileUpload' + dossierPartId + '-' + index);
@@ -493,10 +516,12 @@
 		portletURL.setPortletMode("normal");
 		portletURL.setParameter("dossierPartId", dossierPartId);
 		portletURL.setParameter("index", index);
+		portletURL.setParameter("level", level);
 		portletURL.setParameter("groupName", groupName);
 		portletURL.setParameter("fileName", fileName);
 		portletURL.setParameter("templateFileNo", templateFileNo);
 		portletURL.setParameter("dossierFileId", dossierFileId);
+		portletURL.setParameter("partType", partType);
 		<portlet:namespace/>openDossierDialog(portletURL.toString(), '<portlet:namespace />dossierFileId','<%= UnicodeLanguageUtil.get(pageContext, "upload-dossier-file") %>');
 	});
 
@@ -605,50 +630,98 @@
 		var schema = event.responseData;
 		
 		if(schema){
-			
+
 			var index = schema.index;
 			
+			var displayName = schema.displayName;
+			
 			var dossierPartId = schema.dossierPartId;
+			
+			var level = schema.level;
 			
 			var fileEntryId = schema.fileEntryId;
 			
 			var dossierFileId = schema.dossierFileId;
 			
+			var partType = schema.partType;
+			
+			if(partType == '<%=PortletConstants.DOSSIER_PART_TYPE_OTHER%>' && parseInt(level) == 0){
+				var index = parseInt(A.one('#<portlet:namespace/>curIndex').val()) + 1;
+				var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
+					portletURL.setParameter("mvcPath", "/html/portlets/dossiermgt/frontoffice/render_other_dossier_part.jsp");
+					portletURL.setWindowState("<%=LiferayWindowState.EXCLUSIVE.toString()%>"); 
+					portletURL.setPortletMode("normal");
+					portletURL.setParameter("dossierPartId", dossierPartId);
+					portletURL.setParameter("index", index);
+					portletURL.setParameter("displayName", displayName);
+				
+				A.io.request(
+					portletURL.toString(),
+					{
+						on: {
+							success: function(event, id, obj) {
+								var response = this.get('responseData');
+								
+								var tree = A.one('#<portlet:namespace />tree' + dossierPartId);
+								
+								if(tree){
+									tree.append(response);
+								}
+								
+								A.one('#<portlet:namespace/>curIndex').val(index);
+								
+								<portlet:namespace/>rePaintStatus(schema, dossierPartId, dossierFileId, fileEntryId, index);
+							}
+						}
+					}
+				);
+			}
+			
+	
+			if(partType != '<%=PortletConstants.DOSSIER_PART_TYPE_OTHER%>'){
+				
+				<portlet:namespace/>rePaintStatus(schema, dossierPartId, dossierFileId, fileEntryId, index);
+			}			
+		}
+	},['aui-io','liferay-portlet-url']);
+	
+	Liferay.provide(window, '<portlet:namespace/>rePaintStatus', function(schema, dossierPartId, dossierFileId, fileEntryId, index) {
+		var A = AUI();
+		
+		var uploadDataSchema = A.one('#<portlet:namespace/>uploadDataSchema' + dossierPartId + '-' + index);
+		
+		var fileUpload = A.one('#<portlet:namespace/>fileUpload' + dossierPartId + '-' + index);
+		
+		var dossierFile = A.one('#<portlet:namespace/>dossierFile' + dossierPartId + '-' + index);
+		
+		if(fileUpload && parseInt(fileEntryId) > 0){
+			tempFileEntryIds.push(fileEntryId);
+			fileUpload.val(fileEntryId);
+		}
+		
+		if(dossierFile){
+			dossierFile.val(dossierFileId);
+		}
+			 
+		var counterLabel = A.one('.alias-' + dossierPartId + '-' + index);
+			 
+		if(counterLabel){
+			counterLabel.text(1);
+		}
+		
+		if(uploadDataSchema){
+			
 			var rowcheck = A.one('#rowcheck' + dossierPartId + '-' + index);
 			
-			var uploadDataSchema = A.one('#<portlet:namespace/>uploadDataSchema' + dossierPartId + '-' + index);
-			
-			var fileUpload = A.one('#<portlet:namespace/>fileUpload' + dossierPartId + '-' + index);
-			
-			var dossierFile = A.one('#<portlet:namespace/>dossierFile' + dossierPartId + '-' + index);
-				 
-			if(uploadDataSchema){
-				
-				if(uploadDataSchema.val() == ''){
-					uploadDataSchema.val(JSON.stringify(schema));
-				}else{
-					var formData = JSON.parse(uploadDataSchema.val());
-					schema.formData = formData.formData;
-					uploadDataSchema.val(JSON.stringify(schema));
-				}
-								
-				rowcheck.replaceClass('fa-square-o', 'fa-check-square-o');
+			if(uploadDataSchema.val() == ''){
+				uploadDataSchema.val(JSON.stringify(schema));
+			}else{
+				var formData = JSON.parse(uploadDataSchema.val());
+				schema.formData = formData.formData;
+				uploadDataSchema.val(JSON.stringify(schema));
 			}
 			
-			if(fileUpload && parseInt(fileEntryId) > 0){
-				tempFileEntryIds.push(fileEntryId);
-				fileUpload.val(fileEntryId);
-			}
-			
-			if(dossierFile){
-				dossierFile.val(dossierFileId);
-			}
-				 
-			var counterLabel = A.one('.alias-' + dossierPartId + '-' + index);
-				 
-			if(counterLabel){
-				counterLabel.text(1);
-			}
+			rowcheck.replaceClass('fa-square-o', 'fa-check-square-o');
 		}
 	});
 </aui:script>

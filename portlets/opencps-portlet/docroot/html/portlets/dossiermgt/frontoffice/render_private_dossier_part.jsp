@@ -42,9 +42,9 @@
 	
 	long dossierPartId = ParamUtil.getLong(request, DossierFileDisplayTerms.DOSSIER_PART_ID);
 
-	int index = ParamUtil.getInteger(request, "index");
+	int index = ParamUtil.getInteger(request, DossierFileDisplayTerms.INDEX);
 	
-	String groupName = ParamUtil.getString(request, "groupName");
+	String groupName = ParamUtil.getString(request, DossierFileDisplayTerms.GROUP_NAME);
 	
 	List<DossierPart> dossierParts = new ArrayList<DossierPart>();
 	
