@@ -1290,6 +1290,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		    		.put("locale", serviceContext.getLocale());
 				
 				message
+	    			.put("groupId", serviceContext.getScopeGroupId());
+				
+				message
 	    			.put("govAgencyOrganizationId", govAgencyOrganizationId);
 				
 				message

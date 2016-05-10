@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
+import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
 
 /**
@@ -76,6 +77,20 @@ public class DLFileEntryUtil {
 			    .error(e);
 		}
 
+		return fileEntry;
+	}
+
+	public static FileEntry getFileEntry(long fileEntryId) {
+
+		FileEntry fileEntry = null;
+		try {
+			fileEntry = DLAppLocalServiceUtil
+			    .getFileEntry(fileEntryId);
+		}
+		catch (Exception e) {
+			_log
+			    .error(e);
+		}
 		return fileEntry;
 	}
 

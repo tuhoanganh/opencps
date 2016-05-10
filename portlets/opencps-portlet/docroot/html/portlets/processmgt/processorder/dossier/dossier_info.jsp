@@ -1,5 +1,4 @@
 
-<%@page import="org.opencps.util.DateTimeUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -19,6 +18,7 @@
  */
 %>
 
+<%@page import="org.opencps.util.DateTimeUtil"%>
 <%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
 <%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%@page import="org.opencps.processmgt.model.ProcessOrder"%>
