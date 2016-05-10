@@ -120,6 +120,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				    .setAttribute(
 				        WebKeys.PROCESS_WORKFLOW_ENTRY, processWorkflow);
 			}
+			
 			catch (Exception e) {
 				_log
 				    .error(e);
