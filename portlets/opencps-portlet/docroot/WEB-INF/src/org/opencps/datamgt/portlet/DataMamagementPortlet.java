@@ -361,7 +361,7 @@ public class DataMamagementPortlet extends MVCPortlet {
 		}
 	}
 
-	protected void validatetDictItem(long dictItemId, String itemName,
+	public static void validatetDictItem(long dictItemId, String itemName,
 			String itemCode, ServiceContext serviceContext)
 			throws EmptyItemCodeException, OutOfLengthItemCodeException,
 			EmptyDictItemNameException, OutOfLengthItemNameException,

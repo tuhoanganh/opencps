@@ -19,6 +19,7 @@ import java.util.List;
 
 import org.opencps.servicemgt.model.ServiceFileTemplate;
 import org.opencps.servicemgt.model.TemplateFile;
+import org.opencps.servicemgt.service.TemplateFileLocalServiceUtil;
 import org.opencps.servicemgt.service.base.TemplateFileLocalServiceBaseImpl;
 
 import com.liferay.counter.service.CounterLocalServiceUtil;
@@ -26,6 +27,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
 
 /**
  * The implementation of the template file local service. <p> All custom service
@@ -162,6 +164,7 @@ public class TemplateFileLocalServiceImpl
 	 * @param fileNo
 	 * @param fileName
 	 * @param serviceContext
+	 * @param serviceInfoIds
 	 * @return
 	 * @throws PortalException
 	 * @throws SystemException
@@ -181,12 +184,15 @@ public class TemplateFileLocalServiceImpl
 
 			template.setFileName(fileName);
 			template.setFileNo(fileNo);
-
 			templateFilePersistence.update(template);
 
 		}
 
 		return template;
+	}
+	
+	public void addChooseServceInfo(long templatefileId ,long [] serviceInfoIds) throws PortalException, SystemException {
+		serviceFileTemplateLocalService.addFileServices(templatefileId, serviceInfoIds);
 	}
 
 	/*
@@ -199,13 +205,18 @@ public class TemplateFileLocalServiceImpl
 
 		TemplateFile template =
 		    templateFilePersistence.fetchByPrimaryKey(templatefileId);
-
+		List<ServiceFileTemplate> serviceFileTemplates = new ArrayList<ServiceFileTemplate>();
+		serviceFileTemplates = serviceFileTemplatePersistence.findByTemplatefileId(templatefileId);
 		if (Validator.isNotNull(template)) {
 
 			long fileEntryId = template.getFileEntryId();
 
 			dlAppLocalService.deleteFileEntry(fileEntryId);
-
+			
+			for(ServiceFileTemplate serviceFileTemplate : serviceFileTemplates) {
+				serviceFileTemplatePersistence.remove(serviceFileTemplate);
+			}
+			
 			templateFilePersistence.remove(template);
 		}
 

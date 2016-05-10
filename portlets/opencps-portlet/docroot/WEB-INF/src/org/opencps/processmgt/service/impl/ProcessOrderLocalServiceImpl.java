@@ -269,6 +269,18 @@ public class ProcessOrderLocalServiceImpl
 		    .update(processOrder);
 
 	}
+	
+	public ProcessOrder initProcessOrder() throws PortalException, SystemException {
+		ProcessOrder order = null;
+		
+		long processOrderId = counterLocalService.increment(ProcessOrder.class.getName());
+		
+		order = processOrderPersistence.create(processOrderId);
+		
+		processOrderPersistence.update(order);
+		
+		return order;
+	}
 
 	public List searchProcessOrder(
 	    long processStepId, int start, int end,
