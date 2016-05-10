@@ -18,6 +18,7 @@
  */
 %>
 
+<%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
 <%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="com.liferay.portal.kernel.util.Constants"%>
@@ -69,6 +70,7 @@
 <%
 	ProcessOrder processOrder = (ProcessOrder)request.getAttribute(WebKeys.PROCESS_ORDER_ENTRY);
 	ProcessStep processStep = (ProcessStep)request.getAttribute(WebKeys.PROCESS_STEP_ENTRY);
+	FileGroup fileGroup = (FileGroup) request.getAttribute(WebKeys.FILE_GROUP_ENTRY);
 	Dossier dossier = (Dossier)request.getAttribute(WebKeys.DOSSIER_ENTRY);
 	ServiceProcess serviceProcess = (ServiceProcess)request.getAttribute(WebKeys.SERVICE_PROCESS_ENTRY);
 	ServiceInfo serviceInfo = (ServiceInfo)request.getAttribute(WebKeys.SERVICE_INFO_ENTRY);
@@ -172,7 +174,7 @@
 	
 	if(dossierPartsLevel1 != null){
 		for (DossierPart dossierPartLevel1 : dossierPartsLevel1){
-			System.out.println(dossierPartLevel1.getPartName() + "-" + dossierPartLevel1.getPartType());
+			System.out.println(dossierPartLevel1.getPartName() + StringPool.DASH + dossierPartLevel1.getPartType());
 			int partType = dossierPartLevel1.getPartType();
 			
 			List<DossierPart> dossierParts = DossierMgtUtil.getTreeDossierPart(dossierPartLevel1.getDossierpartId());
@@ -262,10 +264,36 @@
 
 <aui:row>
 	<aui:col>
-		<aui:input name="actionNote" label="note" cssClass="input95"/>
+		<aui:input name="<%=ProcessOrderDisplayTerms.ACTION_NOTE %>" label="action-note" cssClass="input95"/>
 	</aui:col>
 </aui:row>
 
+<aui:input 
+	name="<%=ProcessOrderDisplayTerms.DOSSIER_ID %>" 
+	value="<%=dossier != null ? dossier.getDossierId() : 0 %>" 
+	type="hidden"
+/>
+<aui:input 
+	name="<%=ProcessOrderDisplayTerms.PROCESS_STEP_ID %>" 
+	value="<%=processStep != null ? processStep.getProcessStepId() : 0 %>" 
+	type="hidden"
+/>
+<aui:input 
+	name="<%=ProcessOrderDisplayTerms.PROCESS_ORDER_ID %>" 
+	value="<%=processOrder != null ? processOrder.getProcessOrderId() : 0 %>" 
+	type="hidden"
+/>
+<aui:input 
+	name="<%=ProcessOrderDisplayTerms.ACTION_USER_ID %>" 
+	value="<%=user != null ? user.getUserId() : 0 %>" 
+	type="hidden"
+/>
+
+<aui:input 
+	name="<%=ProcessOrderDisplayTerms.FILE_GROUP_ID %>" 
+	value="<%=fileGroup != null ? fileGroup.getFileGroupId() : 0 %>" 
+	type="hidden"
+/>
 
 <aui:row>
 	<%
@@ -278,6 +306,7 @@
 						value="<%=postProcessWorkflow.getActionName() %>"
 						process-workflow="<%=String.valueOf(postProcessWorkflow.getProcessWorkflowId()) %>"
 						service-process="<%=String.valueOf(postProcessWorkflow.getServiceProcessId()) %>"
+						auto-event="<%=Validator.isNotNull(postProcessWorkflow.getAutoEvent()) ? postProcessWorkflow.getAutoEvent() : StringPool.BLANK %>"
 						onClick='<%=renderResponse.getNamespace() +  "assignToUser(this)"%>'
 					/>
 				<%
@@ -293,14 +322,6 @@
 	
 	var tempFileEntryIds = []; 
 	
-	/* $(window).on('beforeunload', function(e) {
-		return "Sure U are?";
-	});
-
-	$(window).on('unload', function(e) {
-		alert(tempFileEntryIds);
-	}); */
-
 	AUI().ready('aui-base','liferay-portlet-url','aui-io', function(A){
 		
 		//reset all uploadDataSchema
@@ -320,8 +341,6 @@
 		
 	});
 	
-	
-	
 	Liferay.provide(window, '<portlet:namespace/>assignToUser', function(e) {
 		
 		var A = AUI();
@@ -331,17 +350,38 @@
 		var processWorkflowId = instance.attr('process-workflow');
 		
 		var serviceProcessId = instance.attr('service-process')
+		
+		var autoEvent = instance.attr('auto-event');
+		
+		var  dossierId = A.one('#<portlet:namespace/>dossierId').val();
+		
+		var  processStepId = A.one('#<portlet:namespace/>processStepId').val();
 	
-		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
-		portletURL.setParameter("mvcPath", "/html/portlets/processmgt/service-process/assign_to_user.jsp");
+		var  processOrderId = A.one('#<portlet:namespace/>processOrderId').val();
+		
+		var  actionUserId = A.one('#<portlet:namespace/>actionUserId').val();
+		
+		var  fileGroupId = A.one('#<portlet:namespace/>fileGroupId').val();
+		
+		var actionNote = A.one('#<portlet:namespace/>actionNote').val();
+		
+		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
+		portletURL.setParameter("mvcPath", "/html/portlets/processmgt/processorder/assign_to_user.jsp");
 		portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
 		portletURL.setPortletMode("normal");
 		portletURL.setParameter("processWorkflowId", processWorkflowId);
 		portletURL.setParameter("serviceProcessId", serviceProcessId);
+		
+		portletURL.setParameter("autoEvent", autoEvent);
+		portletURL.setParameter("dossierId", dossierId);
+		portletURL.setParameter("processStepId", processStepId);
+		portletURL.setParameter("processOrderId", processOrderId);
+		portletURL.setParameter("actionUserId", actionUserId);
+		portletURL.setParameter("fileGroupId", fileGroupId);
+		portletURL.setParameter("actionNote", actionNote);
 
-		<portlet:namespace/>assignDialog(portletURL.toString(), '<portlet:namespace />assignToUser', '<%= UnicodeLanguageUtil.get(pageContext, "assign-to-user") %>');
+		<portlet:namespace/>assignDialog(portletURL.toString(), '<portlet:namespace />assignToUser', '<%= UnicodeLanguageUtil.get(pageContext, "handle") %>');
 	});
-	
 	
 	Liferay.provide(window, '<portlet:namespace/>addPrivateDossierGroup', function(e) {
 		
@@ -479,7 +519,7 @@
 		
 		var groupName = instance.attr('group-name');
 
-		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
+		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
 		portletURL.setParameter("mvcPath", "/html/portlets/dossiermgt/frontoffice/dynamic_form.jsp");
 		portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
 		portletURL.setPortletMode("normal");

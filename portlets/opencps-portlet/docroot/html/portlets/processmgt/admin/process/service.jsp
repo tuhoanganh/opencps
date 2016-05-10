@@ -112,6 +112,7 @@
 	<liferay-ui:search-iterator/>
 </liferay-ui:search-container>
 
+<<<<<<< HEAD
 <aui:script>
 
 	AUI().ready(function(A) {

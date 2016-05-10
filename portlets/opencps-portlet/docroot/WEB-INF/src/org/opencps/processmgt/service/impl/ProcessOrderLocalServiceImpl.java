@@ -269,6 +269,19 @@ public class ProcessOrderLocalServiceImpl
 		    .update(processOrder);
 
 	}
+	
+	public ProcessOrder initProcessOrder() throws PortalException, SystemException {
+		ProcessOrder order = null;
+		
+		long processOrderId = counterLocalService.increment(ProcessOrder.class.getName());
+		
+		order = processOrderPersistence.create(processOrderId);
+		
+		processOrderPersistence.update(order);
+		
+		return order;
+	}
+	
 
 	public List searchProcessOrder(
 	    long processStepId, int start, int end,
@@ -277,4 +290,60 @@ public class ProcessOrderLocalServiceImpl
 		return processOrderFinder
 		    .searchProcessOrder(processStepId, start, end, orderByComparator);
 	}
+	
+	
+	
+	
+	/**
+	 * @param userId
+	 * @param companyId
+	 * @param groupId
+	 * @param serviceInfoId
+	 * @param dossierTempateId
+	 * @param govAgencyCode
+	 * @param govAgencyName
+	 * @param govAgencyOrganizationId
+	 * @param serviceProcessId
+	 * @param dossierId
+	 * @param fileGroupId
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public ProcessOrder initProcessOrder(
+	    long userId, long companyId, long groupId, long serviceInfoId,
+	    long dossierTemplateId, String govAgencyCode, String govAgencyName,
+	    long govAgencyOrganizationId, long serviceProcessId, long dossierId,
+	    long fileGroupId)
+	    throws PortalException, SystemException {
+
+		ProcessOrder order = null;
+
+		long processOrderId =
+		    counterLocalService.increment(ProcessOrder.class.getName());
+
+		order = processOrderPersistence.create(processOrderId);
+		
+		Date now = new Date();
+		
+		order.setCreateDate(now);
+		order.setModifiedDate(now);
+		order.setUserId(userId);
+		order.setCompanyId(companyId);
+		order.setGroupId(groupId);
+		order.setServiceInfoId(serviceInfoId);
+		order.setDossierTemplateId(dossierTemplateId);
+		order.setGovAgencyCode(govAgencyCode);
+		order.setGovAgencyName(govAgencyName);
+		order.setGovAgencyOrganizationId(govAgencyOrganizationId);
+		order.setServiceProcessId(serviceProcessId);
+		order.setDossierId(dossierId);
+		order.setFileGroupId(fileGroupId);
+
+		processOrderPersistence.update(order);
+
+		return order;
+	}
+
+
 }

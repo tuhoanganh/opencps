@@ -48,7 +48,7 @@
 		 		
 		 		<portlet:actionURL var="updateDossierStatusURL" name="updateDossierStatus">
 					<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
-					<portlet:param name="<%=DossierDisplayTerms.DOSSIER_STATUS %>" value="<%=String.valueOf(PortletConstants.DOSSIER_STATUS_SYSTEM) %>"/>
+					<portlet:param name="<%=DossierDisplayTerms.DOSSIER_STATUS %>" value="<%=String.valueOf(PortletConstants.DOSSIER_STATUS_NEW) %>"/>
 					<portlet:param name="backURL" value="<%=currentURL %>"/>
 				</portlet:actionURL> 
 		 		<liferay-ui:icon 

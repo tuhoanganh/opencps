@@ -111,7 +111,7 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 		message.put("curTime", new Date());
 		
 		try {
-	        MessageBusUtil.sendMessage("opencps/frontoffice/out/destination", message);
+	        MessageBusUtil.sendMessage("opencps/backoffice/out/destination", message);
         }
         catch (Exception e) {
 		    e.printStackTrace();

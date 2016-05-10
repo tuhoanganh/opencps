@@ -24,6 +24,8 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String DATA_MANAGEMENT_ADMIN_PORTLET = "1_WAR_opencpsportlet";
 	
 	public static final String DOSSIER_MGT_PORTLET = "13_WAR_opencpsportlet";
+	
+	public static final String PROCESS_ORDER_PORTLET = "16_WAR_opencpsportlet";
 
 	public static final String DICT_COLLECTION_ENTRY = "DICT_COLLECTION_ENTRY";
 
@@ -100,4 +102,6 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String FORM_DATA = "FORM_DATA";
 	
 	public static final String PROCESS_ORDER_ENTRY = "PROCESS_ORDER_ENTRY";
+	
+	public static final String FILE_GROUP_ENTRY = "FILE_GROUP_ENTRY";
 }

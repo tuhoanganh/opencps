@@ -31,6 +31,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
  */
 public class ProcessOrderDisplayTerms extends DisplayTerms {
 
+	public static String PROCESS_WORKFLOW_ID = "processWorkflowId";
 	public static String PROCESS_ORDER_ID = "processOrderId";
 	public static String ASSIGN_TO_USER_ID = "assignToUserId";
 	public static String SERVICE_INFO_ID = "serviceInfoId";
@@ -41,7 +42,7 @@ public class ProcessOrderDisplayTerms extends DisplayTerms {
 	public static String FILE_GROUP_ID = "fileGroupId";
 	public static String PROCESS_STEP_ID = "processStepId";
 	public static String ACTION_USER_ID = "actionUserId";
-	
+	public static String EVENT = "event";
 	public static String ACTION_DATE_TIME = "actionDatetime";
 	public static String ACTION_NOTE = "actionNote";
 	public static String GOV_AGENCY_CODE = "govAgencyCode";
@@ -51,8 +52,15 @@ public class ProcessOrderDisplayTerms extends DisplayTerms {
 	public static String SERVICE_NAME = "serviceName";
 	public static String GOVAGENCY_NAME = "govagencyName";
 	public static String SUBJECT_NAME = "subjectName";
+	public static String PAYMENTVALUE = "paymentValue";
 	public static String USER_ID = "userId";
-
+	
+	public static String ESTIMATE_DATETIME_DAY = "estimateDatetimeDay";
+	public static String ESTIMATE_DATETIME_MONTH = "estimateDatetimeMonth";
+	public static String ESTIMATE_DATETIME_YEAR = "estimateDatetimeYear";
+	public static String ESTIMATE_DATETIME = "estimateDatetime";
+	public static String SIGNATURE = "signature";
+	
 	/**
 	 * @param request
 	 */
