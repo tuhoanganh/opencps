@@ -83,7 +83,7 @@
 	<aui:col width="50">
 		<aui:input 
 			name="<%=CitizenDisplayTerms.CITIZEN_FULLNAME %>" 
-			disabled="<%=isViewProfile %>"
+			disabled="<%=isViewProfile %>" cssClass=""
 		>
 		<aui:validator name="required" />
 		<aui:validator name="maxLength">255</aui:validator>

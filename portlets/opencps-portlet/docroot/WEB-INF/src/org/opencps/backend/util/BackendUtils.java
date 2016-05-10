@@ -15,28 +15,44 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 
-package org.opencps.backend.sync;
+package org.opencps.backend.util;
 
-import com.liferay.portal.kernel.messaging.Message;
-import com.liferay.portal.kernel.messaging.MessageListener;
-import com.liferay.portal.kernel.messaging.MessageListenerException;
+import org.opencps.processmgt.model.ProcessOrder;
+import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
+
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 
 
 /**
  * @author khoavd
  *
  */
-public class SyncFromBackOffice implements MessageListener{
+public class BackendUtils {
+	
 
-	/* (non-Javadoc)
-     * @see com.liferay.portal.kernel.messaging.MessageListener#receive(com.liferay.portal.kernel.messaging.Message)
-     */
-    @Override
-    public void receive(Message message)
-        throws MessageListenerException {
-    	System.out.println("Back-------");
-	    // TODO Auto-generated method stub
-	    
-    }
+	/**
+	 * Get ProcessOrder
+	 * 
+	 * @param dossierId
+	 * @param fileGroupId
+	 * @return
+	 */
+	public static ProcessOrder getProcessOrder(long dossierId, long fileGroupId) {
 
+		ProcessOrder order = null;
+
+		try {
+			order =
+			    ProcessOrderLocalServiceUtil. getProcessOrder(
+			        dossierId, fileGroupId);
+		}
+		catch (Exception e) {
+			return order;
+		}
+		return order;
+
+	}
+	
+	private static Log _log = LogFactoryUtil.getLog(BackendUtils.class);
 }
