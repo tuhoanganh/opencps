@@ -241,7 +241,17 @@ public class JobPosLocalServiceImpl extends JobPosLocalServiceBaseImpl {
 
 		return jobPosPersistence.findByG_W(groupId, workingUnitId);
 	}
+	
+	public List<JobPos> getJobPossG_W(long groupId, long workingUnitId, int start,
+		int end, OrderByComparator orderByComparator)
+					throws SystemException {
 
+				return jobPosPersistence.findByG_W(groupId, workingUnitId, start, end, orderByComparator);
+			}
+	
+	public int countJobPosG_W(long groupId, long workingUnitId) throws SystemException {
+		return jobPosPersistence.countByG_W(groupId, workingUnitId);
+	}
 	public List<JobPos> getJobPoss(long groupId, long workingUnitId,
 			long directWorkingUnitId) throws SystemException {
 
