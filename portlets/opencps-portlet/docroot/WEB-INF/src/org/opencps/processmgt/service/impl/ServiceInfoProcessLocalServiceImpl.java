@@ -21,6 +21,7 @@ import org.opencps.processmgt.model.ServiceInfoProcess;
 import org.opencps.processmgt.service.base.ServiceInfoProcessLocalServiceBaseImpl;
 import org.opencps.processmgt.service.persistence.ServiceInfoProcessPK;
 
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -96,5 +97,16 @@ public class ServiceInfoProcessLocalServiceImpl
 	public List<ServiceInfoProcess> getServiceInfoProcessByProcessId(long serviceProcessId)
 					throws SystemException {
 		return serviceInfoProcessPersistence.findByServiceProcessId(serviceProcessId);
+	}
+	
+	/**
+	 * @param serviceInfoId
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public ServiceInfoProcess getServiceInfo(long serviceInfoId)
+	    throws PortalException, SystemException {
+		return serviceInfoProcessPersistence.findByS_I_P(serviceInfoId);
 	}
 }
