@@ -57,6 +57,7 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
 /**
  * @author trungnt
  */
+
 public class ProcessOrderPortlet extends MVCPortlet {
 
 	@Override
