@@ -165,11 +165,11 @@
 									privateDossierGroup = dossierParts.get(0).getPartName();
 								}
 								
-								if(fileGroups != null && !fileGroups.isEmpty()){
+								/* if(fileGroups != null && !fileGroups.isEmpty()){
 									for(FileGroup fileGroup : fileGroups){
 										
 									}
-								}
+								} */
 							%>
 							<div
 								id='<%=renderResponse.getNamespace() + "row-" + dossierParts.get(0).getDossierpartId() + StringPool.DASH + index %>' 
@@ -223,7 +223,7 @@
 												<span class="row-icon">
 													<i 
 														id='<%="rowcheck" + dossierPart.getDossierpartId() + StringPool.DASH + index %>' 
-														class="fa fa-square-o" 
+														class='<%=dossierFile != null ? "fa fa-check-square-o" : "fa fa-square-o" %>' 
 														aria-hidden="true">
 													</i>
 												</span>

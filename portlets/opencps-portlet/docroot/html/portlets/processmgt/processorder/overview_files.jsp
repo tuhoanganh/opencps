@@ -1,3 +1,4 @@
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,12 +18,19 @@
  */
 %>
 
+<%@page import="javax.portlet.PortletRequest"%>
+<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.dossiermgt.model.DossierPart"%>
 <%@page import="org.opencps.dossiermgt.model.DossierFile"%>
 <%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
 <%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.util.DLFileEntryUtil"%>
+<%@page import="com.liferay.portal.kernel.repository.model.FileEntry"%>
+<%@page import="com.liferay.portlet.documentlibrary.util.DLUtil"%>
+<%@page import="com.liferay.portlet.documentlibrary.service.DLAppServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
 <%@ include file="../init.jsp"%>
 
 <%
@@ -43,6 +51,27 @@
 	int partType = ParamUtil.getInteger(request, DossierFileDisplayTerms.PART_TYPE);
 	
 	String groupName = ParamUtil.getString(request, DossierFileDisplayTerms.GROUP_NAME);
+	
+	DossierFile dossierFile = null;
+	
+	if(dossierFileId > 0){
+		try{
+			dossierFile = DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
+		}catch(Exception e){
+			
+		}
+	}
+	
+	String fileURL = StringPool.BLANK;
+	
+	if(dossierFile != null && dossierFile.getFileEntryId() > 0){
+		FileEntry fileEntry = DLFileEntryUtil.getFileEntry(fileEntryId);
+		if(fileEntry != null){
+			fileURL = DLUtil.getPreviewURL(fileEntry, fileEntry.getFileVersion(), 
+					themeDisplay, StringPool.BLANK);
+		}
+		
+	}
 		
 %>
 
@@ -55,6 +84,7 @@
 						<aui:a 
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
+							dossier-file="<%=String.valueOf(dossierFileId) %>"
 							index="<%=String.valueOf(index) %>"
 							group-name="<%=groupName %>"
 							level = "<%=level %>"
@@ -69,6 +99,8 @@
 						<aui:a 
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
+							dossier-file="<%=String.valueOf(dossierFileId) %>"
+							file-url="<%=fileURL %>"
 							index="<%=String.valueOf(index) %>"
 							group-name="<%=groupName %>"
 							level = "<%=level %>"
@@ -92,6 +124,8 @@
 						<aui:a 
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
+							dossier-file="<%=String.valueOf(dossierFileId) %>"
+							file-url="<%=fileURL %>"
 							index="<%=String.valueOf(index) %>"
 							group-name="<%=groupName %>"
 							level = "<%=level %>"
@@ -114,6 +148,8 @@
 						<aui:a 
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
+							dossier-file="<%=String.valueOf(dossierFileId) %>"
+							file-url="<%=fileURL %>"
 							index="<%=String.valueOf(index) %>"
 							group-name="<%=groupName %>"
 							level = "<%=level %>"
@@ -156,6 +192,8 @@
 						<aui:a 
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
+							dossier-file="<%=String.valueOf(dossierFileId) %>"
+							file-url="<%=fileURL %>"
 							index="<%=String.valueOf(index) %>"
 							group-name="<%=groupName %>"
 							level = "<%=level %>"
@@ -190,42 +228,42 @@
 		
 	});
 	
-	Liferay.provide(window, '<portlet:namespace/>responseData', function(data) {
-		var Util = Liferay.Util;
-		Util.getOpener().Liferay.fire('getUploadDossierFileData', {responseData:data});
-		<portlet:namespace/>closeDialog();
-	});
-	
 	Liferay.provide(window, '<portlet:namespace/>closeDialog', function() {
 		var dialog = Liferay.Util.getWindow('<portlet:namespace/>dossierFileId');
 		dialog.destroy(); // You can try toggle/hide whate
 	});
-
-	Liferay.provide(window, '<portlet:namespace />uploadTempFile', function() {
-		var A = AUI();
-		var uri = A.one('#<portlet:namespace/>fm').attr('action');
-		var configs = {
-             method: 'POST',
-             form: {
-                 id: '#<portlet:namespace/>fm',
-                 upload: true
-             },
-             sync: true,
-             on: {
-             	failure: function(event, id, obj) {
-				
-				},
-				success: function(event, id, obj) {
-					var response = this.get('responseData');
-					console.log(response);
-				},
-                complete: function(event, id, obj){
-                   
-                }
-             }
-        };
-	            
-	    A.io.request(uri, configs);    
+	
+	Liferay.provide(window, '<portlet:namespace/>viewForm', function(e) {
 		
-	},['aui-io']);
+		var A = AUI();
+		
+		var instance = A.one(e);
+		
+		var dossierPartId = instance.attr('dossier-part');
+		
+		dossierFileId = instance.attr('dossier-file');
+
+		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
+		portletURL.setParameter("mvcPath", "/html/portlets/processmgt/processorder/dynamic_form.jsp");
+		portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
+		portletURL.setPortletMode("normal");
+		portletURL.setParameter("dossierPartId", dossierPartId);
+		portletURL.setParameter("dossierFileId", dossierFileId);
+
+		<portlet:namespace/>openDossierDialog(portletURL.toString(), '<portlet:namespace />dynamicForm','<%= UnicodeLanguageUtil.get(pageContext, "view-form") %>');
+	});
+
+	Liferay.provide(window, '<portlet:namespace />viewAttachment', function(e) {
+		var A = AUI();
+		var instance = A.one(e);
+		var dossierFileId = instance.attr('dossier-file');
+		var fileURL = instance.attr('file-url');
+		if(fileURL == ''){
+			alert('<%= UnicodeLanguageUtil.get(pageContext, "not-attachment-file") %>');
+			return;
+		}else{
+			window.open(fileURL, '_blank');
+		}
+		
+	});
 </aui:script>
