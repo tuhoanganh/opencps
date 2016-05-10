@@ -102,4 +102,6 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String FORM_DATA = "FORM_DATA";
 	
 	public static final String PROCESS_ORDER_ENTRY = "PROCESS_ORDER_ENTRY";
+	
+	public static final String FILE_GROUP_ENTRY = "FILE_GROUP_ENTRY";
 }
