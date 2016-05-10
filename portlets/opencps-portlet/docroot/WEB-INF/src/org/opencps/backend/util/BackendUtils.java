@@ -17,6 +17,8 @@
 
 package org.opencps.backend.util;
 
+import org.opencps.dossiermgt.model.Dossier;
+import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
 
@@ -29,6 +31,25 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
  *
  */
 public class BackendUtils {
+	
+	/**
+	 * Get Dossier by DossierId
+	 * 
+	 * @param dossierId
+	 * @return
+	 */
+	public static Dossier getDossier(long dossierId) {
+		Dossier dossier = null;
+		
+		try {
+	        dossier = DossierLocalServiceUtil.fetchDossier(dossierId);
+        }
+        catch (Exception e) {
+	        _log.error(e);
+        }
+		
+		return dossier;
+	}
 	
 
 	/**
