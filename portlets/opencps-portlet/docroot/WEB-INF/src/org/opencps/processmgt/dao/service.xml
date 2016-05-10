@@ -281,6 +281,11 @@
 			<finder-column name="serviceinfoId" />
 		</finder>
 		
+		<finder return-type="ServiceInfoProcess" name="S_I_P" unique="true">
+			<finder-column name="serviceinfoId" />
+		</finder>
+		
+		
 	</entity>
 	
 	<exceptions>
