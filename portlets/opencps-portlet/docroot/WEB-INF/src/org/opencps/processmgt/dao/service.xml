@@ -262,7 +262,27 @@
             <finder-column name="processWorkflowId"></finder-column>
         </finder>
 	</entity>
-
+	
+	<entity name="ServiceInfoProcess" local-service="true"
+		remote-service="true" table="opencps_serviceinfoprocess">
+		
+		<!-- PK fields -->
+		
+		<column name="serviceProcessId" type="long" primary="true" />
+		<column name="serviceinfoId" type="long" primary="true" />
+		
+		<!-- Finder methods -->
+		<finder return-type="Collection" name="ServiceProcessId" >
+			<finder-column name="serviceProcessId" />
+		</finder>
+		
+		<finder return-type="ServiceInfoProcess" name="I_P" >
+			<finder-column name="serviceProcessId" />
+			<finder-column name="serviceinfoId" />
+		</finder>
+		
+	</entity>
+	
 	<exceptions>
 		<exception>EmptyProcessNo</exception>
 		<exception>EmptyProcessName</exception>
