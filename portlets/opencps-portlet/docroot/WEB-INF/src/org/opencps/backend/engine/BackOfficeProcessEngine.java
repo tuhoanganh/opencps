@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.opencps.backend.util.BackendUtils;
+import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
 import org.opencps.util.PortletConstants;
@@ -27,6 +28,7 @@ import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.MessageListenerException;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 
 /**
@@ -51,6 +53,8 @@ public class BackOfficeProcessEngine implements MessageListener {
 	private void doReceive(Message message) {
 
 		long dossierId = GetterUtil.getLong(message.get("dossierId"));
+		
+		
 		long fileGroupId = GetterUtil.getLong(message.get("fileGroupId"));
 
 		long processOrderId = GetterUtil.getLong("processOrderId");
@@ -64,7 +68,10 @@ public class BackOfficeProcessEngine implements MessageListener {
 		Date actionDatetime = GetterUtil.getDate(message.get("actionDatetime"), new SimpleDateFormat("dd/MM/yyyy : HH/mm"));
 		String actionNote = GetterUtil.getString(message.get("actionNote"));
 		
-
+		long userId = GetterUtil.getLong(message.get("userId"));
+		long groupId = GetterUtil.getLong(message.get("groupId"));
+		long companyId = GetterUtil.getLong(message.get("companyId"));
+		
 		ProcessOrder processOrder = null;
 
 		// Check ProcessOder
@@ -74,7 +81,33 @@ public class BackOfficeProcessEngine implements MessageListener {
 		// Neu phieu xl ko ton tai thi tao phieu xu ly moi
 		if (Validator.isNull(processOrder)) {
 			try {
-				processOrder = ProcessOrderLocalServiceUtil.initProcessOrder();
+				
+				Dossier dossier = BackendUtils.getDossier(dossierId);
+				
+				long serviceInfoId = 0;
+				long dossierTemplateId = 0;
+				String govAgencyCode = StringPool.BLANK;
+				String govAgencyName = StringPool.BLANK;
+				long govAgencyOrganizationId = 0;
+				long serviceProcessId = 0;
+				
+				if (Validator.isNotNull(dossier)) {
+					serviceInfoId = dossier.getServiceInfoId();
+					dossierTemplateId = dossier.getDossierTemplateId();
+					govAgencyCode = dossier.getGovAgencyCode();
+					govAgencyName = dossier.getGovAgencyName();
+					govAgencyOrganizationId = dossier.getGovAgencyOrganizationId();
+				}
+				
+				//processOrder = ProcessOrderLocalServiceUtil.initProcessOrder();
+				
+				processOrder =
+				    ProcessOrderLocalServiceUtil.initProcessOrder(
+				        userId, companyId, groupId, serviceInfoId,
+				        dossierTemplateId, govAgencyCode, govAgencyName,
+				        govAgencyOrganizationId, serviceProcessId, dossierId,
+				        fileGroupId);
+				
 				processOrderId = processOrder.getProcessOrderId();
 				
 				// Gui thong bao cho kenh "pencps/backoffice/out/destination"
