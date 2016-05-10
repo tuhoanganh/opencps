@@ -44,14 +44,14 @@ public class BackendUtils {
 
 		try {
 			order =
-			    ProcessOrderLocalServiceUtil.getProcessOrder(
+			    ProcessOrderLocalServiceUtil. getProcessOrder(
 			        dossierId, fileGroupId);
 		}
 		catch (Exception e) {
-			_log.error(e);
+			return order;
 		}
-
 		return order;
+
 	}
 	
 	private static Log _log = LogFactoryUtil.getLog(BackendUtils.class);
