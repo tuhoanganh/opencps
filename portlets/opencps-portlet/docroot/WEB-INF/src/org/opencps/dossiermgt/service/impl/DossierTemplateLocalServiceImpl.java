@@ -20,6 +20,8 @@ import java.util.List;
 import org.opencps.dossiermgt.NoSuchDossierTemplateException;
 import org.opencps.dossiermgt.model.DossierTemplate;
 import org.opencps.dossiermgt.service.base.DossierTemplateLocalServiceBaseImpl;
+import org.opencps.processmgt.service.ServiceProcessLocalServiceUtil;
+import org.opencps.processmgt.service.persistence.ServiceProcessPersistence;
 
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -89,10 +91,16 @@ public class DossierTemplateLocalServiceImpl
 	
 	public void deleteDossierTemplateById(long dossierTemplateId) throws SystemException,
 	NoSuchDossierTemplateException {
+		
+		DossierTemplate dossierTemplate = dossierTemplatePersistence.findByPrimaryKey(dossierTemplateId);
+		
 		int  dossierPartCounts = dossierPartPersistence
 						.countByDossierTemplateId(dossierTemplateId);
+		
+		int serviceConfigCount = serviceConfigPersistence.countByDossierTemplateId(dossierTemplateId);
+		int serviceProcessCount = ServiceProcessLocalServiceUtil.countByG_T(dossierTemplate.getGroupId(), dossierTemplateId);
 	
-		if(dossierPartCounts == 0) {
+		if(dossierPartCounts == 0 && serviceConfigCount == 0 && serviceProcessCount == 0) {
 			dossierTemplatePersistence.remove(dossierTemplateId);
 		}
 	}
