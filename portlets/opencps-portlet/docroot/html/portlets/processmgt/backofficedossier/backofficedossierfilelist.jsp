@@ -16,3 +16,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
+<%@ include file="../init.jsp"%>
+<liferay-util:include page="/html/portlets/processmgt/backofficedossier/toptabs.jsp" servletContext="<%=application %>" />
+<%
+	String backURL = ParamUtil.getString(request, "backURL");
+	User mappingUser = (User)request.getAttribute(WebKeys.USER_MAPPING_ENTRY);
+	PortletURL iteratorURL = renderResponse.createRenderURL();
+	iteratorURL.setParameter("mvcPath", templatePath + "backofficedossierfilelist.jsp");
+%>

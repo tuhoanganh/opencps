@@ -18,11 +18,13 @@
 package org.opencps.processmgt.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.opencps.processmgt.model.ActionHistory;
 import org.opencps.processmgt.service.base.ActionHistoryLocalServiceBaseImpl;
 
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.service.ServiceContext;
 
 /**
@@ -165,4 +167,17 @@ public class ActionHistoryLocalServiceImpl
 		    .update(actionHistory);
 	}
 
+	
+	/**
+	 * @param groupId
+	 * @param dossierId
+	 * @return
+	 * @throws SystemException
+	 */
+	public List<ActionHistory> searchActionHistoryByDossierId(long groupId, long dossierId) {
+
+		return actionHistoryFinder
+		    .searchActionHistoryByDossierId(groupId, dossierId);
+	}
+	
 }

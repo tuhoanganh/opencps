@@ -967,4 +967,11 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		    .searchDossier(groupId, keyword, dossierStatus, start, end, obc);
 	}
 
+	public int countDossierByKeywordDomainAndStatus(long groupId, String keyword, String domainCode, int dossierStatus) {
+		return dossierFinder.countDossierByKeywordDomainAndStatus(groupId, keyword, domainCode, dossierStatus);
+	}
+	
+	public List<Dossier> searchDossierByKeywordDomainAndStatus(long groupId, String keyword, String domainCode, int dossierStatus, int start, int end, OrderByComparator obc) {
+		return dossierFinder.searchDossierByKeywordDomainAndStatus(groupId, keyword, domainCode, dossierStatus, start, end, obc);
+	}
 }
