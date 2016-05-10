@@ -20,6 +20,7 @@ import org.opencps.backend.util.BackendUtils;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
+import org.opencps.processmgt.service.ServiceInfoProcessLocalServiceUtil;
 import org.opencps.util.PortletConstants;
 
 import com.liferay.portal.kernel.log.Log;
@@ -97,6 +98,14 @@ public class BackOfficeProcessEngine implements MessageListener {
 					govAgencyCode = dossier.getGovAgencyCode();
 					govAgencyName = dossier.getGovAgencyName();
 					govAgencyOrganizationId = dossier.getGovAgencyOrganizationId();
+					
+					try {
+						serviceProcessId = ServiceInfoProcessLocalServiceUtil.getServiceInfo(serviceInfoId).getServiceProcessId();
+                    }
+                    catch (Exception e) {
+                    	
+                    }
+					
 				}
 				
 				//processOrder = ProcessOrderLocalServiceUtil.initProcessOrder();
