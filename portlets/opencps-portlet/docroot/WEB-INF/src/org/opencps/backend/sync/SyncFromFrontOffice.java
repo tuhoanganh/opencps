@@ -87,7 +87,7 @@ public class SyncFromFrontOffice implements MessageListener{
     	boolean isStatus = checkStatus(dossierId, fileGroupId);
     	
     	// 
-		if (isServiceMode && isStatus) {
+		if (isStatus) {
 			// Update dossierStatus -> system
 			Message msgSend = new Message();
 
