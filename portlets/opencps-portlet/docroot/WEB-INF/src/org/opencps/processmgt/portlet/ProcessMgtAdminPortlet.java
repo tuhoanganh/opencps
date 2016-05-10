@@ -30,18 +30,21 @@ import javax.portlet.RenderResponse;
 import org.opencps.processmgt.model.ProcessStep;
 import org.opencps.processmgt.model.ProcessStepDossierPart;
 import org.opencps.processmgt.model.ProcessWorkflow;
+import org.opencps.processmgt.model.ServiceInfoProcess;
 import org.opencps.processmgt.model.ServiceProcess;
 import org.opencps.processmgt.model.StepAllowance;
 import org.opencps.processmgt.model.WorkflowOutput;
 import org.opencps.processmgt.service.ProcessStepDossierPartLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
+import org.opencps.processmgt.service.ServiceInfoProcessLocalServiceUtil;
 import org.opencps.processmgt.service.ServiceProcessLocalServiceUtil;
 import org.opencps.processmgt.service.StepAllowanceLocalServiceUtil;
 import org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil;
 import org.opencps.processmgt.util.ProcessUtils;
 import org.opencps.util.WebKeys;
 
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
@@ -59,6 +62,42 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  * @author khoavd
  */
 public class ProcessMgtAdminPortlet extends MVCPortlet {
+	
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws SystemException
+	 * @throws IOException
+	 */
+	public void deteleRelaSeInfoAndProcess (ActionRequest actionRequest, ActionResponse actionResponse) 
+					throws SystemException, IOException {
+		long serviceProcessId = ParamUtil.getLong(actionRequest, "serviceProcessId");
+		long serviceInfoId = ParamUtil.getLong(actionRequest, "serviceInfoId");
+		String backURL = ParamUtil.getString(actionRequest, "backURL");
+		
+		ServiceInfoProcessLocalServiceUtil.deleteServiceInfoProcess(serviceProcessId, serviceInfoId);
+		if(Validator.isNotNull(backURL)) {
+			actionResponse.sendRedirect(backURL);
+		}
+	}
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws SystemException
+	 * @throws IOException
+	 */
+	public void chooseServiceInfoFromProcess(ActionRequest actionRequest, ActionResponse actionResponse) throws SystemException, IOException {
+		long serviceProcessId = ParamUtil.getLong(actionRequest, "serviceProcessId");
+		long [] serviceinfoIds = ParamUtil
+					    .getLongValues(actionRequest, "rowIds");
+		String backURL = ParamUtil.getString(actionRequest, "backURL");
+		
+		ServiceInfoProcessLocalServiceUtil.addProcessServiceInfos(serviceProcessId, serviceinfoIds);
+	
+		if(Validator.isNotNull(backURL)) {
+			actionResponse.sendRedirect(backURL);
+		}
+	}
 	
 	/**
 	 * @param actionRequest
@@ -262,7 +301,7 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 
 	}
 
-
+	
 	/**
 	 * @param actionRequest
 	 * @param actionResponse

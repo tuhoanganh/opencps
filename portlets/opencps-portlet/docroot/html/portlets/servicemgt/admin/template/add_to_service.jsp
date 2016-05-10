@@ -54,7 +54,7 @@
 </aui:row>
 
 <liferay-ui:search-container 
-		emptyResultsMessage="no-permission-were-found"
+		emptyResultsMessage="no-service-were-found"
 		iteratorURL="<%=iteratorURL %>"
 		delta="<%=20 %>"
 		deltaConfigurable="true"
