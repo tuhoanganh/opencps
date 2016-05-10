@@ -57,6 +57,7 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
 /**
  * @author trungnt
  */
+
 public class ProcessOrderPortlet extends MVCPortlet {
 
 	@Override
@@ -119,6 +120,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				    .setAttribute(
 				        WebKeys.PROCESS_WORKFLOW_ENTRY, processWorkflow);
 			}
+			
 			catch (Exception e) {
 				_log
 				    .error(e);
