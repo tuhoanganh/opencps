@@ -409,10 +409,47 @@ public class ProcessOrderLocalServiceImpl
 		    .setActionNote(actionNote);
 		processOrder
 		    .setAssignToUserId(assignToUserId);
+		
 		return processOrderPersistence
 		    .update(processOrder);
-
 	}
+	
+	public ProcessOrder updateProcessOrder(
+	    long processOrderId, long processStepId, long actionUserId,
+	    Date actionDatetime, String actionNote, long assignToUserId,
+	    String stepName, String actionName, int daysDoing, int daysDelay)
+	    throws NoSuchProcessOrderException, SystemException {
+
+		ProcessOrder processOrder = processOrderPersistence
+		    .findByPrimaryKey(processOrderId);
+
+		processOrder
+		    .setModifiedDate(new Date());
+
+		processOrder
+		    .setProcessStepId(processStepId);
+		processOrder
+		    .setActionUserId(actionUserId);
+		processOrder
+		    .setActionDatetime(actionDatetime);
+		processOrder
+		    .setActionNote(actionNote);
+		processOrder
+		    .setAssignToUserId(assignToUserId);
+		actionHistoryLocalService
+		    .addActionHistory(processOrder
+		        .getUserId(), processOrder
+		            .getGroupId(),
+		        processOrder
+		            .getCompanyId(),
+		        processOrderId, processOrder
+		            .getProcessWorkflowId(),
+		        actionDatetime, stepName, actionName, actionNote, actionUserId,
+		        daysDoing, daysDelay);
+		return processOrderPersistence
+		    .update(processOrder);
+	}
+	
 
 	public ProcessOrder updateProcessOrderStatus(
 	    long processOrderId, int dossierStatus)
