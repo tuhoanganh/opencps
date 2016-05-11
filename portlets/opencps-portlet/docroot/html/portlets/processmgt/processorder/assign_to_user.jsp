@@ -131,7 +131,7 @@
 		nullable="<%=true %>"
 	/>
 	
-	<aui:input name="<%=ProcessOrderDisplayTerms.ACTION_NOTE %>" label="action-note"s/>
+	<aui:input name="<%=ProcessOrderDisplayTerms.ACTION_NOTE %>" label="action-note"/>
 	
 	
 	<aui:input name="signature" type="checkbox" label="apcept-signature"/>
