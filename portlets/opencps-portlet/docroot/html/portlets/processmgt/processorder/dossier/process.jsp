@@ -173,9 +173,9 @@
 	
 	if(dossierPartsLevel1 != null){
 		for (DossierPart dossierPartLevel1 : dossierPartsLevel1){
-			System.out.println(dossierPartLevel1.getPartName() + StringPool.DASH + dossierPartLevel1.getPartType());
-			int partType = dossierPartLevel1.getPartType();
 			
+			int partType = dossierPartLevel1.getPartType();
+		
 			List<DossierPart> dossierParts = DossierMgtUtil.getTreeDossierPart(dossierPartLevel1.getDossierpartId());
 			
 			if(dossierParts != null){
@@ -226,7 +226,7 @@
 									
 										<span class="opencps dossiermgt dossier-part-control">
 											<liferay-util:include 
-												page="/html/portlets/dossiermgt/frontoffice/dossier_file_controls.jsp" 
+												page="/html/common/dossiers/controls.jsp" 
 												servletContext="<%=application %>"
 											>
 												<portlet:param 
@@ -389,7 +389,7 @@
 		var groupNames = privateDossierGroup.toString();
 			
 		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
-		portletURL.setParameter("mvcPath", "/html/portlets/dossiermgt/frontoffice/edit_dossier_part_group.jsp");
+		portletURL.setParameter("mvcPath", "/html/common/dossiers/edit_dossier_part_group.jsp");
 		portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
 		portletURL.setPortletMode("normal");
 		portletURL.setParameter("dossierPartId", dossierPartId);
@@ -511,7 +511,7 @@
 		var groupName = instance.attr('group-name');
 
 		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
-		portletURL.setParameter("mvcPath", "/html/portlets/dossiermgt/frontoffice/dynamic_form.jsp");
+		portletURL.setParameter("mvcPath", "/html/common/dossiers/dynamic_form.jsp");
 		portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
 		portletURL.setPortletMode("normal");
 		portletURL.setParameter("dossierPartId", dossierPartId);
@@ -552,7 +552,7 @@
 		}
 		
 		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
-		portletURL.setParameter("mvcPath", "/html/portlets/dossiermgt/frontoffice/upload_dossier_file.jsp");
+		portletURL.setParameter("mvcPath", "/html/common/dossiers/upload_dossier_file.jsp");
 		portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
 		portletURL.setPortletMode("normal");
 		portletURL.setParameter("dossierPartId", dossierPartId);
@@ -611,7 +611,7 @@
 	Liferay.provide(window, '<portlet:namespace/>renderPrivateDossierGroup', function(dossierPartId, index, groupName) {
 		var A = AUI();
 		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
-			portletURL.setParameter("mvcPath", "/html/portlets/dossiermgt/frontoffice/render_private_dossier_part.jsp");
+			portletURL.setParameter("mvcPath", "/html/common/dossiers/render_private_dossier_part.jsp");
 			portletURL.setWindowState("<%=LiferayWindowState.EXCLUSIVE.toString()%>"); 
 			portletURL.setPortletMode("normal");
 			portletURL.setParameter("dossierPartId", dossierPartId);
@@ -710,7 +710,7 @@
 			if(partType == '<%=PortletConstants.DOSSIER_PART_TYPE_OTHER%>' && parseInt(level) == 0){
 				var index = parseInt(A.one('#<portlet:namespace/>curIndex').val()) + 1;
 				var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
-					portletURL.setParameter("mvcPath", "/html/portlets/dossiermgt/frontoffice/render_other_dossier_part.jsp");
+					portletURL.setParameter("mvcPath", "/html/common/dossiers/render_other_dossier_part.jsp");
 					portletURL.setWindowState("<%=LiferayWindowState.EXCLUSIVE.toString()%>"); 
 					portletURL.setPortletMode("normal");
 					portletURL.setParameter("dossierPartId", dossierPartId);
