@@ -293,6 +293,29 @@ public class ProcessOrderLocalServiceImpl
 	}
 	
 
+	
+	/**
+	 * Update Step
+	 * 
+	 * @param processOrderId
+	 * @param processStepId
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public ProcessOrder updateInitStep(long processOrderId, long processStepId)
+	    throws PortalException, SystemException {
+		
+		ProcessOrder order = processOrderPersistence.fetchByPrimaryKey(processOrderId);
+		
+		order.setProcessStepId(processStepId);
+		
+		processOrderPersistence.update(order);
+		
+		return order;
+		
+	}
+
 	/**
 	 * @param userId
 	 * @param companyId
