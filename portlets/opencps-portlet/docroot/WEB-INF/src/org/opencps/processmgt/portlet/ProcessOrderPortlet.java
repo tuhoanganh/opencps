@@ -123,7 +123,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			
 			catch (Exception e) {
 				_log
-				    .error(e);
+				    .error(e.getCause());
 			}
 		}
 		super.render(renderRequest, renderResponse);

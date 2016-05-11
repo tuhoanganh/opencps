@@ -18,12 +18,17 @@
 package org.opencps.processmgt.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
+import org.opencps.datamgt.search.DictCollectionDisplayTerms;
+import org.opencps.datamgt.util.comparator.DictCollectionCreateDateComparator;
 import org.opencps.processmgt.NoSuchActionHistoryException;
 import org.opencps.processmgt.model.ActionHistory;
 import org.opencps.processmgt.service.base.ActionHistoryLocalServiceBaseImpl;
+import org.opencps.processmgt.util.comparator.ActionHistoryCreateDateComparator;
 
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.service.ServiceContext;
 
 /**
@@ -92,8 +97,12 @@ public class ActionHistoryLocalServiceImpl
 
 		actionHistory
 		    .setProcessOrderId(processOrderId);
-		actionHistory
-		    .setProcessWorkflowId(processWorkflowId);
+
+		if (processWorkflowId >= 0) {
+			actionHistory
+			    .setProcessWorkflowId(processWorkflowId);
+		}
+
 		actionHistory
 		    .setActionDatetime(actionDatetime);
 		actionHistory
@@ -102,10 +111,16 @@ public class ActionHistoryLocalServiceImpl
 		    .setActionName(actionName);
 		actionHistory
 		    .setActionNote(actionNote);
-		actionHistory
-		    .setActionUserId(actionUserId);
-		actionHistory
-		    .setDaysDoing(daysDoing);
+		if (actionUserId > 0) {
+			actionHistory
+			    .setActionUserId(actionUserId);
+		}
+
+		if (daysDelay >= 0) {
+			actionHistory
+			    .setDaysDoing(daysDoing);
+		}
+
 		actionHistory
 		    .setDaysDelay(daysDelay);
 		return actionHistoryPersistence
@@ -170,8 +185,22 @@ public class ActionHistoryLocalServiceImpl
 		return actionHistoryPersistence
 		    .update(actionHistory);
 	}
+	
+	public ActionHistory getLatestActionHistory(
+	    long processOrderId, long processWorkflowId)
+	    throws NoSuchActionHistoryException, SystemException {
 
-	public ActionHistory getActionHistory(
+		boolean orderByAsc = false;
+
+		OrderByComparator orderByComparator =
+		    new ActionHistoryCreateDateComparator(orderByAsc);
+
+		return actionHistoryPersistence
+		    .findByPOID_PWID_First(
+		        processOrderId, processWorkflowId, orderByComparator);
+	}
+
+	public List<ActionHistory> getActionHistory(
 	    long processOrderId, long processWorkflowId)
 	    throws NoSuchActionHistoryException, SystemException {
 

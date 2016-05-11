@@ -465,6 +465,8 @@
 		
 		var dossierPartId = instance.attr('dossier-part');
 		
+		var dossierFileId = instance.attr('dossier-file');
+		
 		var index = instance.attr('index');
 		
 		var groupName = instance.attr('group-name');
@@ -474,6 +476,7 @@
 		portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
 		portletURL.setPortletMode("normal");
 		portletURL.setParameter("dossierPartId", dossierPartId);
+		portletURL.setParameter("dossierFileId", dossierFileId);
 		portletURL.setParameter("index", index);
 		portletURL.setParameter("groupName", groupName);
 		
