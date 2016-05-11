@@ -200,12 +200,12 @@ public class ProcessOrderBean {
 		this._serviceConfigId = serviceConfigId;
 	}
 
-	public long getSubjectId() {
+	public String getSubjectId() {
 
 		return _subjectId;
 	}
 
-	public void setSubjectId(long subjectId) {
+	public void setSubjectId(String subjectId) {
 
 		this._subjectId = subjectId;
 	}
@@ -369,7 +369,7 @@ public class ProcessOrderBean {
 	private int _dossierStatus;
 	
 	private long _serviceConfigId;
-	private long _subjectId;
+	private String _subjectId;
 	private String _subjectName;
 	private String _receptionNo;
 	

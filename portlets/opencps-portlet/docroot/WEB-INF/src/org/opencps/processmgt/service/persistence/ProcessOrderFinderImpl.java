@@ -153,7 +153,7 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 					ProcessOrder processOrder = (ProcessOrder)objects[0];
 					
 					long serviceConfigId = (long)objects[1];
-					long subjectId = (long)objects[2];
+					String subjectId = (String)objects[2];
 					String subjectName =  (String)objects[3];
 					String receptionNo=  (String)objects[4];
 					String serviceName=  (String)objects[5];

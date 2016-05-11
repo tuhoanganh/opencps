@@ -171,6 +171,14 @@ public class DossierPartLocalServiceImpl extends DossierPartLocalServiceBaseImpl
 		return dossierPartPersistence.findByT_P(dossierTemplateId, parentId);
 	}
 	
+	public List<DossierPart> getDossierPartsByT_P_PT(
+	    long dossierTemplateId, long parentId, int partType)
+	    throws SystemException {
+
+		return dossierPartPersistence
+		    .findByT_P_PT(dossierTemplateId, parentId, partType);
+	}
+	
 	public DossierPart getDossierPartByT_S(long dossierTemplateId , Double sibling)
 					throws NoSuchDossierPartException, SystemException {
 		return dossierPartPersistence.findByT_S(dossierTemplateId, sibling);

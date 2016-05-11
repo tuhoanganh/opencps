@@ -54,7 +54,8 @@ public class ProcessOrderDisplayTerms extends DisplayTerms {
 	public static String SUBJECT_NAME = "subjectName";
 	public static String PAYMENTVALUE = "paymentValue";
 	public static String USER_ID = "userId";
-	
+	public static String GROUP_ID = "groupId";
+	public static String COMPANY_ID = "companyId";
 	public static String ESTIMATE_DATETIME_DAY = "estimateDatetimeDay";
 	public static String ESTIMATE_DATETIME_MONTH = "estimateDatetimeMonth";
 	public static String ESTIMATE_DATETIME_YEAR = "estimateDatetimeYear";
