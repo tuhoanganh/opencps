@@ -51,8 +51,8 @@ public class BackOfficeProcessEngine implements MessageListener {
 	public void receive(Message message)
 	    throws MessageListenerException {
 
-		doReceive(message);
-
+		//doReceive(message);
+		activeEngine(message);
 	}
 
 	private void doReceive(Message message) {
@@ -259,6 +259,8 @@ public class BackOfficeProcessEngine implements MessageListener {
 					    StringPool.BLANK, actionName, actionNote, actionUserId,
 					    0, 0);
 					
+					ProcessOrderLocalServiceUtil.updateInitStep(processOrderId, currentStep);
+
 				} else {
 					// luong phu
 					
