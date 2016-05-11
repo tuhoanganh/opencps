@@ -52,7 +52,16 @@ public class ProcessWorkflowLocalServiceImpl
 	 * Never reference this interface directly. Always use {@link org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil} to access the process workflow local service.
 	 */
 	
-	
+	/**
+	 * @param serviceProcessId
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public ProcessWorkflow getFirstProcessWorkflow(long serviceProcessId)
+	    throws PortalException, SystemException {
+		return processWorkflowPersistence.fetchByFIRST_WORKFLOW(serviceProcessId);
+	}	
 	
 	/**
 	 * Update workflow

@@ -94,7 +94,7 @@ public class SyncFromFrontOffice implements MessageListener{
 			if (Validator.equals(actionId, "submit")) {
 				try {
 					DossierLocalServiceUtil.updateDossierStatus(
-					    userId, dossierId, govAgencyOrganizationId,
+					    userId, dossierId, -1,
 					    PortletConstants.DOSSIER_STATUS_SYSTEM,
 					    PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS,
 					    fileGroupId, level, locale);
@@ -110,7 +110,7 @@ public class SyncFromFrontOffice implements MessageListener{
 			else if (Validator.equals(actionId, "resubmit")) {
 				try {
 					DossierLocalServiceUtil.updateDossierStatus(
-					    userId, dossierId, govAgencyOrganizationId,
+					    userId, dossierId, -1,
 					    PortletConstants.DOSSIER_STATUS_SYSTEM,
 					    PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS,
 					    fileGroupId, level, locale);

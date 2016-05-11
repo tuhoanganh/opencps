@@ -168,6 +168,10 @@
             <finder-column name="preProcessStepId"></finder-column>
         </finder>
 
+        <finder name="FIRST_WORKFLOW" return-type="ProcessWorkflow" where="preProcessStepId = 0">
+            <finder-column name="serviceProcessId"></finder-column>
+        </finder>
+
 	</entity>
 
 	<entity name="WorkflowOutput" local-service="true" remote-service="true"
@@ -257,7 +261,10 @@
 		<column name="actionUserId" type="long"/>
 		<column name="daysDoing" type="int"/>
 		<column name="daysDelay" type="int"/>
-        <finder name="POID_PWID" return-type="ActionHistory">
+        <order by="desc">
+            <order-column name="createDate" order-by="desc"></order-column>
+        </order>
+        <finder name="POID_PWID" return-type="Collection">
             <finder-column name="processOrderId"></finder-column>
             <finder-column name="processWorkflowId"></finder-column>
         </finder>
@@ -280,6 +287,11 @@
 			<finder-column name="serviceProcessId" />
 			<finder-column name="serviceinfoId" />
 		</finder>
+		
+		<finder return-type="ServiceInfoProcess" name="S_I_P" unique="true">
+			<finder-column name="serviceinfoId" />
+		</finder>
+		
 		
 	</entity>
 	

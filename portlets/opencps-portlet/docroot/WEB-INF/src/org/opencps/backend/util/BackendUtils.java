@@ -20,7 +20,10 @@ package org.opencps.backend.util;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.processmgt.model.ProcessOrder;
+import org.opencps.processmgt.model.ProcessWorkflow;
+import org.opencps.processmgt.model.ServiceProcess;
 import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
+import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -31,6 +34,30 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
  *
  */
 public class BackendUtils {
+	
+
+	
+	/**
+	 * @param serviceProcessId
+	 * @return
+	 */
+	public static long getFristStepLocalService(long serviceProcessId) {
+		
+		ProcessWorkflow flow = null;
+		
+		long stepId = 0;
+		
+		try {
+			flow = ProcessWorkflowLocalServiceUtil.getFirstProcessWorkflow(serviceProcessId);
+			
+			stepId = flow.getPostProcessStepId();
+        }
+        catch (Exception e) {
+	        // TODO: handle exception
+        }
+		
+		return stepId;
+	}
 	
 	/**
 	 * Get Dossier by DossierId
