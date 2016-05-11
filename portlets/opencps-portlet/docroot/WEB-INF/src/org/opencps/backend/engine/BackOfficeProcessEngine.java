@@ -110,6 +110,8 @@ public class BackOfficeProcessEngine implements MessageListener {
 				
 				//processOrder = ProcessOrderLocalServiceUtil.initProcessOrder();
 				
+				
+				
 				processOrder =
 				    ProcessOrderLocalServiceUtil.initProcessOrder(
 				        userId, companyId, groupId, serviceInfoId,
@@ -117,7 +119,16 @@ public class BackOfficeProcessEngine implements MessageListener {
 				        govAgencyOrganizationId, serviceProcessId, dossierId,
 				        fileGroupId);
 				
+				// Cap nhat buoc xy ly
+				
+				_log.debug("Cap nhat buoc xu ly");
+				
+				
 				processOrderId = processOrder.getProcessOrderId();
+				
+				long initProcessStepId = BackendUtils.getFristStepLocalService(serviceProcessId);
+				
+				ProcessOrderLocalServiceUtil.updateInitStep(processOrderId, initProcessStepId);
 				
 				// Gui thong bao cho kenh "pencps/backoffice/out/destination"
 				
@@ -130,9 +141,7 @@ public class BackOfficeProcessEngine implements MessageListener {
             }
 			
 			
-		}
-		
-		if (Validator.isNotNull(processOrder)) {
+		} else {
 			try {
 				// Cap nhat phieu xu ly co trang thai System
 
