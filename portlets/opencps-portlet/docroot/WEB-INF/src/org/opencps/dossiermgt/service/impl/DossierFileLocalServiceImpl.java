@@ -156,4 +156,8 @@ public class DossierFileLocalServiceImpl
 	public int countDossierFile(long groupId, String keyword, long dossierTemplateId, long fileEntryId, boolean onlyViewFileResult) throws SystemException {
 		return dossierFileFinder.countDossierFile(groupId, keyword, dossierTemplateId, fileEntryId, onlyViewFileResult);
 	}
+	
+	public List<DossierFile> getDossierFileByDossierAndDossierPart(long dossierId, long dossierPartId) throws SystemException {
+		return dossierFilePersistence.findByD_P_C(dossierId, dossierPartId);
+	}
 }
