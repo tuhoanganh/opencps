@@ -168,6 +168,10 @@
             <finder-column name="preProcessStepId"></finder-column>
         </finder>
 
+        <finder name="FIRST_WORKFLOW" return-type="ProcessWorkflow" where="preProcessStepId = 0">
+            <finder-column name="serviceProcessId"></finder-column>
+        </finder>
+
 	</entity>
 
 	<entity name="WorkflowOutput" local-service="true" remote-service="true"
