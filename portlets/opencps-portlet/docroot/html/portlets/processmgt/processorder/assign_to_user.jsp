@@ -130,6 +130,10 @@
 		autoFocus="<%=true %>"
 		nullable="<%=true %>"
 	/>
+	
+	<aui:input name="<%=ProcessOrderDisplayTerms.ACTION_NOTE %>" label="action-note"s/>
+	
+	
 	<aui:input name="signature" type="checkbox" label="apcept-signature"/>
 	<aui:button type="submit" value="submit" name="submit"/>
 	<aui:button type="button" value="cancel" name="cancel"/>

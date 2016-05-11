@@ -261,7 +261,10 @@
 		<column name="actionUserId" type="long"/>
 		<column name="daysDoing" type="int"/>
 		<column name="daysDelay" type="int"/>
-        <finder name="POID_PWID" return-type="ActionHistory">
+        <order by="desc">
+            <order-column name="createDate" order-by="desc"></order-column>
+        </order>
+        <finder name="POID_PWID" return-type="Collection">
             <finder-column name="processOrderId"></finder-column>
             <finder-column name="processWorkflowId"></finder-column>
         </finder>

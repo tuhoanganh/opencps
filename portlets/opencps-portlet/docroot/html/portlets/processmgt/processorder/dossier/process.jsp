@@ -76,22 +76,21 @@
 	ServiceInfo serviceInfo = (ServiceInfo)request.getAttribute(WebKeys.SERVICE_INFO_ENTRY);
 	ServiceConfig serviceConfig = (ServiceConfig)request.getAttribute(WebKeys.SERVICE_CONFIG_ENTRY);
 	DossierTemplate dossierTemplate = (DossierTemplate) request.getAttribute(WebKeys.DOSSIER_TEMPLATE_ENTRY);
+	
 	ProcessWorkflow processWorkflow = (ProcessWorkflow) request.getAttribute(WebKeys.PROCESS_WORKFLOW_ENTRY);
 	
-	ProcessWorkflow preProcessWorkflow = null;
+	//ProcessWorkflow preProcessWorkflow = null;
+	
+	ActionHistory latestWorkflowActionHistory = null;
 	
 	try{
 		if(processWorkflow != null){
-			preProcessWorkflow = ProcessWorkflowLocalServiceUtil.
-				getPreProcessWorkflow(processOrder.getServiceProcessId(), processWorkflow.getPreProcessStepId());
-		}	
+			
+			latestWorkflowActionHistory = ActionHistoryLocalServiceUtil.
+					getLatestActionHistory(processOrder.getProcessOrderId(), processOrder.getProcessWorkflowId());
+		}
 	}catch(Exception e){}
 	
-	ActionHistory preProcessWorkflowActionHistory = null;
-	
-	if(preProcessWorkflow != null){
-		preProcessWorkflowActionHistory = ActionHistoryLocalServiceUtil.getActionHistory(processOrder.getProcessOrderId(), preProcessWorkflow.getProcessWorkflowId());
-	}
 	
 	List<ProcessWorkflow> postProcessWorkflows = new ArrayList<ProcessWorkflow>();
 	
@@ -138,14 +137,14 @@
 		<liferay-ui:message key="pre-action-user"/>
 	</aui:col>
 	<aui:col width="30">
-		<%=preProcessWorkflowActionHistory != null ? new ProcessOrderBean().getAssignToUserName(preProcessWorkflowActionHistory.getActionUserId()) : StringPool.BLANK %>
+		<%=latestWorkflowActionHistory != null ? new ProcessOrderBean().getAssignToUserName(latestWorkflowActionHistory.getActionUserId()) : StringPool.BLANK %>
 	</aui:col>
 	<aui:col width="20">
 		<liferay-ui:message key="pre-action-date"/>
 	</aui:col>
 	
 	<aui:col width="30">
-		<%=preProcessWorkflowActionHistory != null ? DateTimeUtil.convertDateToString(preProcessWorkflowActionHistory.getActionDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) : StringPool.BLANK %>
+		<%=latestWorkflowActionHistory != null ? DateTimeUtil.convertDateToString(latestWorkflowActionHistory.getActionDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) : StringPool.BLANK %>
 	</aui:col>
 </aui:row>
 
@@ -154,7 +153,7 @@
 		<liferay-ui:message key="pre-action-note"/>
 	</aui:col>
 	<aui:col width="70">
-		<%=preProcessWorkflowActionHistory != null ? preProcessWorkflowActionHistory.getActionNote() : StringPool.BLANK %>
+		<%=latestWorkflowActionHistory != null ? latestWorkflowActionHistory.getActionNote() : StringPool.BLANK %>
 	</aui:col>
 </aui:row>
 
@@ -262,11 +261,6 @@
 	<%
 %>
 
-<aui:row>
-	<aui:col>
-		<aui:input name="<%=ProcessOrderDisplayTerms.ACTION_NOTE %>" label="action-note" cssClass="input95"/>
-	</aui:col>
-</aui:row>
 
 <aui:input 
 	name="<%=ProcessOrderDisplayTerms.DOSSIER_ID %>" 
@@ -363,8 +357,6 @@
 		
 		var  fileGroupId = A.one('#<portlet:namespace/>fileGroupId').val();
 		
-		var actionNote = A.one('#<portlet:namespace/>actionNote').val();
-		
 		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
 		portletURL.setParameter("mvcPath", "/html/portlets/processmgt/processorder/assign_to_user.jsp");
 		portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
@@ -378,7 +370,6 @@
 		portletURL.setParameter("processOrderId", processOrderId);
 		portletURL.setParameter("actionUserId", actionUserId);
 		portletURL.setParameter("fileGroupId", fileGroupId);
-		portletURL.setParameter("actionNote", actionNote);
 
 		<portlet:namespace/>assignDialog(portletURL.toString(), '<portlet:namespace />assignToUser', '<%= UnicodeLanguageUtil.get(pageContext, "handle") %>');
 	});

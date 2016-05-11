@@ -55,6 +55,7 @@
 						<aui:a 
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
+							dossier-file="<%=String.valueOf(dossierFileId) %>"
 							index="<%=String.valueOf(index) %>"
 							group-name="<%=groupName %>"
 							level = "<%=level %>"
