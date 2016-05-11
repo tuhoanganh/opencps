@@ -95,7 +95,7 @@
 	List<ProcessWorkflow> postProcessWorkflows = new ArrayList<ProcessWorkflow>();
 	
 	try{
-		postProcessWorkflows = ProcessWorkflowLocalServiceUtil.getPostProcessWorkflow(processOrder.getServiceProcessId(), processWorkflow.getPreProcessStepId());
+		postProcessWorkflows = ProcessWorkflowLocalServiceUtil.getPostProcessWorkflow(processOrder.getServiceProcessId(), processWorkflow.getPostProcessStepId());
 	}catch(Exception e){}
 %>
 
