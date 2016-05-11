@@ -19,6 +19,7 @@ import java.util.Date;
 import org.opencps.backend.util.BackendUtils;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.processmgt.model.ProcessOrder;
+import org.opencps.processmgt.model.ProcessWorkflow;
 import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
 import org.opencps.processmgt.service.ServiceInfoProcessLocalServiceUtil;
 import org.opencps.util.PortletConstants;
@@ -218,6 +219,19 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 		long currentStep = 0;
 
+		ProcessWorkflow firstProcessWorkflow = BackendUtils.getFirstProcessWorkflow(serviceProcessId);
+		
+		String actionName = StringPool.BLANK;
+		
+		
+		if (Validator.isNotNull(firstProcessWorkflow)) {
+			processWorkflowId = firstProcessWorkflow.getProcessWorkflowId();
+			
+			actionName = firstProcessWorkflow.getActionName();
+			
+			actionNote = "system-receive";
+		}
+
 		try {
 			
 			if(Validator.equals(processOrderId, 0)) {
@@ -233,6 +247,14 @@ public class BackOfficeProcessEngine implements MessageListener {
 					currentStep = BackendUtils.getFristStepLocalService(serviceProcessId);
 					
 					
+					ProcessOrderLocalServiceUtil.initProcessOrder(
+					    userId, companyId, groupId, serviceInfoId,
+					    dossierTemplateId, govAgencyCode, govAgencyName,
+					    govAgencyOrganizationId, serviceProcessId, dossierId,
+					    fileGroupId, processWorkflowId, actionDatetime,
+					    StringPool.BLANK, actionName, actionNote, actionUserId,
+					    0, 0);
+					
 				} else {
 					// luong phu
 					
@@ -241,6 +263,15 @@ public class BackOfficeProcessEngine implements MessageListener {
 					
 					if(Validator.isNull(processOrder)) {
 						// Tao phieu xu ly cho luong phu
+						ProcessOrderLocalServiceUtil.initProcessOrder(
+						    userId, companyId, groupId, serviceInfoId,
+						    dossierTemplateId, govAgencyCode, govAgencyName,
+						    govAgencyOrganizationId, serviceProcessId, dossierId,
+						    fileGroupId, processWorkflowId, actionDatetime,
+						    StringPool.BLANK, actionName, actionNote, actionUserId,
+						    0, 0);
+					} else {
+						// co phieu cho luong phu, thuc hien update phieu xu ly
 					}
 				}
 				
@@ -248,6 +279,14 @@ public class BackOfficeProcessEngine implements MessageListener {
 				
 			} else {
 				// Co phieu su ly
+				
+				ProcessOrder order = ProcessOrderLocalServiceUtil.getProcessOrder(processOrderId);
+				// Khac voi System moi xu ly
+				if (!Validator.equals(order.getDossierStatus(), PortletConstants.DOSSIER_STATUS_SYSTEM)) {
+					ProcessOrderLocalServiceUtil.updateProcessOrder(
+					    processOrderId, processStepId, actionUserId,
+					    actionDatetime, actionNote, assignToUserId);
+				}
 				
 			}
 
