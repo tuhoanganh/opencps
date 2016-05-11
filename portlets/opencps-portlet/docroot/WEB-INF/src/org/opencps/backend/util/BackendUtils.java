@@ -35,6 +35,20 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
  */
 public class BackendUtils {
 	
+	public static ProcessWorkflow getFirstProcessWorkflow(long serviceProcessId) {
+		ProcessWorkflow flow = null;
+		
+		
+		try {
+			flow = ProcessWorkflowLocalServiceUtil.getFirstProcessWorkflow(serviceProcessId);
+			
+        }
+        catch (Exception e) {
+        }
+		
+		return flow;
+	}
+	
 
 	
 	/**
