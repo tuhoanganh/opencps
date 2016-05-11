@@ -19,8 +19,11 @@ import java.util.Date;
 import org.opencps.backend.util.BackendUtils;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.processmgt.model.ProcessOrder;
+import org.opencps.processmgt.model.ProcessStep;
 import org.opencps.processmgt.model.ProcessWorkflow;
 import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
+import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
+import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
 import org.opencps.processmgt.service.ServiceInfoProcessLocalServiceUtil;
 import org.opencps.util.PortletConstants;
 
@@ -180,6 +183,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 		    GetterUtil.getLong(message.get("processWorkflowId"));
 		
 		long processStepId = GetterUtil.getLong(message.get("processStepId"));
+		
 
 		long actionUserId = GetterUtil.getLong(message.get("actionUserId"));
 		long assignToUserId = GetterUtil.getLong(message.get("assignToUserId"));
@@ -272,6 +276,12 @@ public class BackOfficeProcessEngine implements MessageListener {
 						    0, 0);
 					} else {
 						// co phieu cho luong phu, thuc hien update phieu xu ly
+						
+//						ProcessOrderLocalServiceUtil.updateProcessOrder(
+//						    processOrderId, processStepId, processWorkflowId,
+//						    actionUserId, actionDatetime, actionNote,
+//						    assignToUserId, stepName, actionName, daysDoing,
+//						    daysDelay);
 					}
 				}
 				
@@ -281,11 +291,31 @@ public class BackOfficeProcessEngine implements MessageListener {
 				// Co phieu su ly
 				
 				ProcessOrder order = ProcessOrderLocalServiceUtil.getProcessOrder(processOrderId);
+				
 				// Khac voi System moi xu ly
 				if (!Validator.equals(order.getDossierStatus(), PortletConstants.DOSSIER_STATUS_SYSTEM)) {
+					
+					Date now = new Date();
+					
+					String stepName = StringPool.BLANK;
+					
+					ProcessWorkflow currentProcessWorkflow = ProcessWorkflowLocalServiceUtil.getProcessWorkflow(processWorkflowId);
+					
+					if (Validator.isNotNull(currentProcessWorkflow)) {
+						ProcessStep step = ProcessStepLocalServiceUtil.getProcessStep(currentProcessWorkflow.getPreProcessStepId());
+						
+						stepName = step.getStepName();
+						
+						actionName = currentProcessWorkflow.getActionName();
+					}
+					
+					
+
 					ProcessOrderLocalServiceUtil.updateProcessOrder(
-					    processOrderId, processStepId, actionUserId,
-					    actionDatetime, actionNote, assignToUserId);
+					    processOrderId, processStepId, processWorkflowId,
+					    actionUserId, now, actionNote,
+					    assignToUserId, stepName, actionName, 1,
+					    0);
 				}
 				
 			}
