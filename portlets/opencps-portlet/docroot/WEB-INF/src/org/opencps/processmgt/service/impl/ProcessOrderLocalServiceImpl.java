@@ -433,9 +433,10 @@ public class ProcessOrderLocalServiceImpl
 	}
 
 	public ProcessOrder updateProcessOrder(
-	    long processOrderId, long processStepId, long actionUserId,
-	    Date actionDatetime, String actionNote, long assignToUserId,
-	    String stepName, String actionName, int daysDoing, int daysDelay)
+	    long processOrderId, long processStepId, long processWorkflowId,
+	    long actionUserId, Date actionDatetime, String actionNote,
+	    long assignToUserId, String stepName, String actionName, int daysDoing,
+	    int daysDelay)
 	    throws NoSuchProcessOrderException, SystemException {
 
 		ProcessOrder processOrder = processOrderPersistence
@@ -454,16 +455,18 @@ public class ProcessOrderLocalServiceImpl
 		    .setActionNote(actionNote);
 		processOrder
 		    .setAssignToUserId(assignToUserId);
+
+		processOrder
+		    .setProcessWorkflowId(processWorkflowId);
+
 		actionHistoryLocalService
 		    .addActionHistory(processOrder
 		        .getUserId(), processOrder
 		            .getGroupId(),
 		        processOrder
 		            .getCompanyId(),
-		        processOrderId, processOrder
-		            .getProcessWorkflowId(),
-		        actionDatetime, stepName, actionName, actionNote, actionUserId,
-		        daysDoing, daysDelay);
+		        processOrderId, processWorkflowId, actionDatetime, stepName,
+		        actionName, actionNote, actionUserId, daysDoing, daysDelay);
 		return processOrderPersistence
 		    .update(processOrder);
 	}
