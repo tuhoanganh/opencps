@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
-
 package org.opencps.processmgt.service.impl;
 
 import java.util.Date;
@@ -229,15 +228,21 @@ public class ProcessOrderLocalServiceImpl
 		    .findByD_F(dossierId, fileGroupId);
 	}
 
-	public ProcessOrder initProcessOrder() throws PortalException, SystemException {
+	public ProcessOrder initProcessOrder()
+	    throws PortalException, SystemException {
+
 		ProcessOrder order = null;
-		
-		long processOrderId = counterLocalService.increment(ProcessOrder.class.getName());
-		
-		order = processOrderPersistence.create(processOrderId);
-		
-		processOrderPersistence.update(order);
-		
+
+		long processOrderId = counterLocalService
+		    .increment(ProcessOrder.class
+		        .getName());
+
+		order = processOrderPersistence
+		    .create(processOrderId);
+
+		processOrderPersistence
+		    .update(order);
+
 		return order;
 	}
 
@@ -266,32 +271,47 @@ public class ProcessOrderLocalServiceImpl
 
 		ProcessOrder order = null;
 
-		long processOrderId =
-		    counterLocalService.increment(ProcessOrder.class.getName());
+		long processOrderId = counterLocalService
+		    .increment(ProcessOrder.class
+		        .getName());
 
-		order = processOrderPersistence.create(processOrderId);
-		
+		order = processOrderPersistence
+		    .create(processOrderId);
+
 		Date now = new Date();
-		
-		order.setCreateDate(now);
-		order.setModifiedDate(now);
-		order.setUserId(userId);
-		order.setCompanyId(companyId);
-		order.setGroupId(groupId);
-		order.setServiceInfoId(serviceInfoId);
-		order.setDossierTemplateId(dossierTemplateId);
-		order.setGovAgencyCode(govAgencyCode);
-		order.setGovAgencyName(govAgencyName);
-		order.setGovAgencyOrganizationId(govAgencyOrganizationId);
-		order.setServiceProcessId(serviceProcessId);
-		order.setDossierId(dossierId);
-		order.setFileGroupId(fileGroupId);
 
-		processOrderPersistence.update(order);
+		order
+		    .setCreateDate(now);
+		order
+		    .setModifiedDate(now);
+		order
+		    .setUserId(userId);
+		order
+		    .setCompanyId(companyId);
+		order
+		    .setGroupId(groupId);
+		order
+		    .setServiceInfoId(serviceInfoId);
+		order
+		    .setDossierTemplateId(dossierTemplateId);
+		order
+		    .setGovAgencyCode(govAgencyCode);
+		order
+		    .setGovAgencyName(govAgencyName);
+		order
+		    .setGovAgencyOrganizationId(govAgencyOrganizationId);
+		order
+		    .setServiceProcessId(serviceProcessId);
+		order
+		    .setDossierId(dossierId);
+		order
+		    .setFileGroupId(fileGroupId);
+
+		processOrderPersistence
+		    .update(order);
 
 		return order;
 	}
-	
 
 	
 	/**
@@ -400,7 +420,6 @@ public class ProcessOrderLocalServiceImpl
 
 		return order;
 	}
-	
 
 	public List searchProcessOrder(
 	    long processStepId, int start, int end,
@@ -409,8 +428,7 @@ public class ProcessOrderLocalServiceImpl
 		return processOrderFinder
 		    .searchProcessOrder(processStepId, start, end, orderByComparator);
 	}
-	
-	
+
 	public ProcessOrder updateProcessOrder(
 	    long processOrderId, long processStepId, long actionUserId,
 	    Date actionDatetime, String actionNote, long assignToUserId)
@@ -432,11 +450,11 @@ public class ProcessOrderLocalServiceImpl
 		    .setActionNote(actionNote);
 		processOrder
 		    .setAssignToUserId(assignToUserId);
-		
+
 		return processOrderPersistence
 		    .update(processOrder);
 	}
-	
+
 	public ProcessOrder updateProcessOrder(
 	    long processOrderId, long processStepId, long actionUserId,
 	    Date actionDatetime, String actionNote, long assignToUserId,
@@ -472,7 +490,6 @@ public class ProcessOrderLocalServiceImpl
 		return processOrderPersistence
 		    .update(processOrder);
 	}
-	
 
 	public ProcessOrder updateProcessOrderStatus(
 	    long processOrderId, int dossierStatus)
