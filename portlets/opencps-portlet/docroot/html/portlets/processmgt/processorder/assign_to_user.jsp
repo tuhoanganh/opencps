@@ -48,8 +48,13 @@
 		type="hidden"
 	/>
 	<aui:input 
-		name="<%=ProcessOrderDisplayTerms.ACTION_NOTE %>" 
-		value="<%=actionNote %>" 
+		name="<%=ProcessOrderDisplayTerms.GROUP_ID %>" 
+		value="<%=scopeGroupId %>" 
+		type="hidden"
+	/>
+	<aui:input 
+		name="<%=ProcessOrderDisplayTerms.COMPANY_ID %>" 
+		value="<%=company.getCompanyId() %>" 
 		type="hidden"
 	/>
 	<aui:input 
