@@ -123,4 +123,51 @@
 			AND (opencps_serviceinfo.domainCode = ?)
 		]]>
 	</sql>	
+
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierFileFinder.countDossierFile">	
+		<![CDATA[
+			SELECT
+				count(*) AS COUNT_VALUE
+			FROM
+				opencps_dossier_file
+			WHERE
+				(opencps_dossier_file.groupId = ?)
+			AND
+				(lower(opencps_dossier_file.templateFileNo) LIKE ? [$AND_OR_NULL_CHECK$])
+			OR 
+				(lower(opencps_dossier_file.displayName) LIKE ? [$AND_OR_NULL_CHECK$])
+			OR 
+				(lower(opencps_dossier_file.dossierFileNo) LIKE ? [$AND_OR_NULL_CHECK$])
+			AND 
+				(opencps_dossier_file.fileEntryId IS NOT NULL AND opencps_dossier_file.fileEntryId = ?)
+			AND 
+				(opencps_dossier_file.fileEntryId IS NULL)
+			AND
+				(opencps_dossier_file.dossierFileType = ?)
+		]]>
+	</sql>	
+	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierFileFinder.searchDossierFile">	
+		<![CDATA[
+			SELECT
+				*
+			FROM
+				opencps_dossier_file
+			WHERE
+				(opencps_dossier_file.groupId = ?)
+			AND
+				(lower(opencps_dossier_file.templateFileNo) LIKE ? [$AND_OR_NULL_CHECK$])
+			OR 
+				(lower(opencps_dossier_file.displayName) LIKE ? [$AND_OR_NULL_CHECK$])
+			OR 
+				(lower(opencps_dossier_file.dossierFileNo) LIKE ? [$AND_OR_NULL_CHECK$])
+			AND 
+				(opencps_dossier_file.fileEntryId IS NOT NULL AND opencps_dossier_file.fileEntryId = ?)
+			AND 
+				(opencps_dossier_file.fileEntryId IS NULL)
+			AND
+				(opencps_dossier_file.dossierFileType = ?)
+		]]>
+	</sql>	
+
 </custom-sql>

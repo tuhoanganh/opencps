@@ -141,7 +141,5 @@ public class DossierTemplateLocalServiceImpl
 	
 	public int countAll() throws SystemException {
 		return dossierTemplatePersistence.countAll();
-	}
-	
-	
+	}	
 }

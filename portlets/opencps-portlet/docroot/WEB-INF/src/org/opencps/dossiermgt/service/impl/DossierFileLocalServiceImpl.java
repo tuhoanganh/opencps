@@ -25,6 +25,7 @@ import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.service.base.DossierFileLocalServiceBaseImpl;
 
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.service.ServiceContext;
 
@@ -145,5 +146,14 @@ public class DossierFileLocalServiceImpl
 
 		return dossierFilePersistence
 		    .findByD_F(dossierId, groupFileId);
+	}
+
+	public List<DossierFile> searchDossierFile(long groupId, String keyword, long dossierTemplateId, long fileEntryId, boolean onlyViewFileResult, int start, int end, OrderByComparator obc)
+				    throws SystemException {
+		return dossierFileFinder.searchDossierFile(groupId, keyword, dossierTemplateId, fileEntryId, onlyViewFileResult, start, end, obc);
+	}
+
+	public int countDossierFile(long groupId, String keyword, long dossierTemplateId, long fileEntryId, boolean onlyViewFileResult) throws SystemException {
+		return dossierFileFinder.countDossierFile(groupId, keyword, dossierTemplateId, fileEntryId, onlyViewFileResult);
 	}
 }

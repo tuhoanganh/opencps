@@ -51,6 +51,10 @@ public class DossierMgtUtil {
 	public static final String TOP_TABS_DOSSIER_FILE = "dossier-file";
 	public static final String TOP_TABS_EXTERNAL_DOSSIER = "external-dossier";
 
+	public static final int DOSSIERFILETYPE_INPUT = 1;
+	public static final int DOSSIERFILETYPE_OUTPUT = 2;
+	public static final int DOSSIERFILETYPE_ALL = 0;
+	
 	public static String[] _DOSSIER_CATEGORY_NAMES = {
 	    "update-dossier-info"
 	};
