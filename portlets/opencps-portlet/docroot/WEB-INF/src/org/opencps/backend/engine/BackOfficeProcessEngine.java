@@ -251,7 +251,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 					currentStep = BackendUtils.getFristStepLocalService(serviceProcessId);
 					
 					
-					ProcessOrderLocalServiceUtil.initProcessOrder(
+					ProcessOrder order = ProcessOrderLocalServiceUtil.initProcessOrder(
 					    userId, companyId, groupId, serviceInfoId,
 					    dossierTemplateId, govAgencyCode, govAgencyName,
 					    govAgencyOrganizationId, serviceProcessId, dossierId,
@@ -259,7 +259,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 					    StringPool.BLANK, actionName, actionNote, actionUserId,
 					    0, 0);
 					
-					ProcessOrderLocalServiceUtil.updateInitStep(processOrderId, currentStep);
+					ProcessOrderLocalServiceUtil.updateInitStep(order.getProcessOrderId(), currentStep);
 
 				} else {
 					// luong phu
