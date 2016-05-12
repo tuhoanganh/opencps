@@ -45,6 +45,8 @@
 </liferay-util:buffer>
 
 <liferay-util:buffer var="htmlBot" >
+	</br>
+	<aui:button name="choose-service" value="choose"></aui:button>
 </liferay-util:buffer>
 
 <aui:form name="fm" 
@@ -57,6 +59,33 @@
 		htmlBottom="<%= htmlBot %>"
 		htmlTop="<%= htmlTop %>"
 		jspPath='<%=templatePath + "serviceinfolist_choose/" %>'
+		showButtons="false"
 		>	
 	</liferay-ui:form-navigator>
 </aui:form>
+
+<aui:script use='liferay-util-window'>
+	AUI().ready(function(A) {
+		var btnChoose = A.one('#<portlet:namespace />choose-service');
+		if(btnChoose) {
+			btnChoose.on('click',function(){
+				<portlet:namespace/>submitItemForm();
+			});
+		}
+	});
+	
+    Liferay.provide(window,'<portlet:namespace/>submitItemForm',
+         function() {
+          var A = AUI();
+          A.io.request('<%=chooseServiceInfoFromProcessURL %>',{
+              method: 'POST',
+              form: { id: '<portlet:namespace />fm' },
+              on: {
+                  success: function(){
+                	  Liferay.Util.getOpener().<portlet:namespace/>closePopup('<portlet:namespace/>dialog');
+                	  
+                  }
+             }
+        });
+  	},['aui-base','aui-io','aui-node']);
+</aui:script>

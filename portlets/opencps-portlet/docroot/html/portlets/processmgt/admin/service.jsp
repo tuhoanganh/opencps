@@ -112,30 +112,27 @@
 	<liferay-ui:search-iterator/>
 </liferay-ui:search-container>
 
-<aui:script use="liferay-util-window">
-	A.one('#<portlet:namespace/>chooseService').on('click', function(event) {
-		Liferay.Util.openWindow({
-			dialog : {
-				centered : true,
-				height : 900,
-				modal : true,
-				width : 1100
-			},
-			id : '<portlet:namespace/>dialog',
-			title : '',
-			uri : '<%=chooseServiceURL %>'
-		});
-	});
-</aui:script>
-
 <aui:script>
-	Liferay.provide(window, '<portlet:namespace/>closePopup', function(
-			dialogId) {
-		var A = AUI();
-		// Closing the dialog
-		var dialog = Liferay.Util.Window.getById(dialogId);
-		dialog.destroy();
+
+	AUI().ready(function(A) {
+		var btnChoose = A.one("#<portlet:namespace/>chooseService");
 		
-		window.location.reload();
-	}, [ 'liferay-util-window' ]);
+		if(btnChoose) {
+			btnChoose.on('click', function(){
+				Liferay.Util.openWindow({
+					dialog : {
+						centered : true,
+						height : 900,
+						modal : true,
+						width : 1100
+					},
+					id : '<portlet:namespace/>dialog',
+					title : '',
+					uri : '<%=chooseServiceURL %>'
+				});
+			});
+		}
+		
+	});
+	
 </aui:script>

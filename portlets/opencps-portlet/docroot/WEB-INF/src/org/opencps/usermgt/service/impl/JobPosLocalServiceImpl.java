@@ -172,7 +172,7 @@ public class JobPosLocalServiceImpl extends JobPosLocalServiceBaseImpl {
 		roleName = title + StringPool.UNDERLINE + workingUnit.getName();
 
 		jobPos.setUserId(userId);
-		jobPos.setGroupId(serviceContext.getUserId());
+		jobPos.setGroupId(serviceContext.getScopeGroupId());
 		jobPos.setCompanyId(serviceContext.getCompanyId());
 		jobPos.setCreateDate(currentDate);
 		jobPos.setModifiedDate(currentDate);
