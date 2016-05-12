@@ -346,7 +346,7 @@
 		
 		var serviceProcessId = instance.attr('service-process')
 		
-		var processStepId = instance.attr('service-process')
+		var processStepId = instance.attr('process-step')
 		
 		var autoEvent = instance.attr('auto-event');
 		
