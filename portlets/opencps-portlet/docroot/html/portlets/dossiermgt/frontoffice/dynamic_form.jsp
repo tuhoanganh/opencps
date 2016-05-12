@@ -93,14 +93,14 @@
 			formData = dossierFile.getFormData();
 		}
 	}
-	System.out.println(dossierPart.getFormReport());	
-	if(dossierFile != null && Validator.isNotNull(dossierFile.getFormData())){
+
+	/* if(dossierFile != null && Validator.isNotNull(dossierFile.getFormData())){
 		InputStream template = new ByteArrayInputStream(dossierPart.getFormReport().getBytes(StandardCharsets.UTF_8));
 		JasperReport jasperReport = JasperCompileManager.compileReport(template);
 		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, new HashMap<String, Object>() , JRJSONDataSource.getDataSource(dossierFile.getFormData())); 
 		
 		JasperExportManager.exportReportToPdfFile(jasperPrint, "/home/trungnt/test.pdf");
-	} 	
+	} 	 */
 	
 	
 %>
