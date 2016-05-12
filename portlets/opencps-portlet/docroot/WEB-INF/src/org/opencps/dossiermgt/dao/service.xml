@@ -104,6 +104,11 @@
 		  <finder-column name="dossierTemplateId" />
 		  <finder-column name="parentId" />
 		</finder>
+        <finder name="T_P_PT" return-type="Collection">
+            <finder-column name="dossierTemplateId"></finder-column>
+            <finder-column name="parentId"></finder-column>
+            <finder-column name="partType"></finder-column>
+        </finder>
 	</entity>
 
 	<entity name="ServiceConfig" local-service="true"

@@ -32,6 +32,7 @@ import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.Type;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.util.dao.orm.CustomSQLUtil;
@@ -120,7 +121,7 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 			q
 		    .addScalar("serviceConfigId", Type.LONG);
 			q
-		    .addScalar("subjectId", Type.LONG);
+		    .addScalar("subjectId", Type.STRING);
 			q
 		    .addScalar("subjectName", Type.STRING);
 			q
@@ -152,15 +153,15 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 					
 					ProcessOrder processOrder = (ProcessOrder)objects[0];
 					
-					long serviceConfigId = (long)objects[1];
-					long subjectId = (long)objects[2];
+					long serviceConfigId = GetterUtil.getLong(objects[1]);
+					String subjectId = (String)objects[2];
 					String subjectName =  (String)objects[3];
 					String receptionNo=  (String)objects[4];
 					String serviceName=  (String)objects[5];
 					String stepName=  (String)objects[6];
 					String sequenceNo=  (String)objects[7];
-					int daysDuration=  (int)objects[8];
-					long referenceDossierPartId=  (long)objects[9];
+					int daysDuration=  GetterUtil.getInteger(objects[8]);
+					long referenceDossierPartId=  GetterUtil.getLong(objects[9]);
 					
 					processOrderBean.setActionDatetime(processOrder.getActionDatetime());
 					processOrderBean.setActionUserId(processOrder.getActionUserId());

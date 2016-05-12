@@ -147,6 +147,13 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 		long dossierId = ParamUtil
 		    .getLong(actionRequest, ProcessOrderDisplayTerms.DOSSIER_ID);
+
+		long groupId = ParamUtil
+		    .getLong(actionRequest, ProcessOrderDisplayTerms.GROUP_ID);
+
+		long companyId = ParamUtil
+		    .getLong(actionRequest, ProcessOrderDisplayTerms.COMPANY_ID);
+
 		long fileGroupId = ParamUtil
 		    .getLong(actionRequest, ProcessOrderDisplayTerms.FILE_GROUP_ID);
 		long processOrderId = ParamUtil
@@ -210,6 +217,12 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 		message
 		    .put(ProcessOrderDisplayTerms.SIGNATURE, signature);
+
+		message
+		    .put(ProcessOrderDisplayTerms.GROUP_ID, groupId);
+
+		message
+		    .put(ProcessOrderDisplayTerms.COMPANY_ID, companyId);
 
 		MessageBusUtil
 		    .sendMessage("opencps/backoffice/engine/destination", message);
