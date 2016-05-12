@@ -318,6 +318,10 @@ public class BackOfficeProcessEngine implements MessageListener {
 					    actionUserId, now, actionNote,
 					    assignToUserId, stepName, actionName, 1,
 					    0);
+					
+					//Update Step
+					ProcessOrderLocalServiceUtil.updateInitStep(order.getProcessOrderId(), currentStep);
+
 				}
 				
 			}
