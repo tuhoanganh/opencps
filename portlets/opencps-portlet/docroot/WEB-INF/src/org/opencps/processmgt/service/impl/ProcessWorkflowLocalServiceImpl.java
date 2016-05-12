@@ -60,7 +60,7 @@ public class ProcessWorkflowLocalServiceImpl
 	 */
 	public ProcessWorkflow getFirstProcessWorkflow(long serviceProcessId)
 	    throws PortalException, SystemException {
-		return processWorkflowPersistence.fetchByFIRST_WORKFLOW(serviceProcessId);
+		return processWorkflowPersistence.findBySPI_(serviceProcessId, 0);
 	}	
 	
 	/**
