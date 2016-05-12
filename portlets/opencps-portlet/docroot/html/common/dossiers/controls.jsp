@@ -1,3 +1,7 @@
+<%@page import="javax.portlet.WindowState"%>
+<%@page import="javax.portlet.PortletRequest"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
+<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -429,57 +433,5 @@
 			</c:choose>
 		</tr>
 	</table>
-
 </c:if>
 
-<aui:script use="aui-base,aui-io">
-	AUI().ready(function(A){
-		var cancelButton = A.one('#<portlet:namespace/>cancel');
-		if(cancelButton){
-			cancelButton.on('click', function(){
-				<portlet:namespace/>closeDialog();
-			});
-		}
-		
-		
-	});
-	
-	Liferay.provide(window, '<portlet:namespace/>responseData', function(data) {
-		var Util = Liferay.Util;
-		Util.getOpener().Liferay.fire('getUploadDossierFileData', {responseData:data});
-		<portlet:namespace/>closeDialog();
-	});
-	
-	Liferay.provide(window, '<portlet:namespace/>closeDialog', function() {
-		var dialog = Liferay.Util.getWindow('<portlet:namespace/>dossierFileId');
-		dialog.destroy(); // You can try toggle/hide whate
-	});
-
-	Liferay.provide(window, '<portlet:namespace />uploadTempFile', function() {
-		var A = AUI();
-		var uri = A.one('#<portlet:namespace/>fm').attr('action');
-		var configs = {
-             method: 'POST',
-             form: {
-                 id: '#<portlet:namespace/>fm',
-                 upload: true
-             },
-             sync: true,
-             on: {
-             	failure: function(event, id, obj) {
-				
-				},
-				success: function(event, id, obj) {
-					var response = this.get('responseData');
-					console.log(response);
-				},
-                complete: function(event, id, obj){
-                   
-                }
-             }
-        };
-	            
-	    A.io.request(uri, configs);    
-		
-	},['aui-io']);
-</aui:script>

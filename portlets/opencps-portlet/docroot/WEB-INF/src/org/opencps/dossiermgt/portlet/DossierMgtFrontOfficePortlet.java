@@ -69,10 +69,11 @@ import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
-import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
+import org.opencps.util.DLFileEntryUtil;
 import org.opencps.util.DLFolderUtil;
+import org.opencps.util.DateTimeUtil;
 import org.opencps.util.MessageKeys;
 import org.opencps.util.PortletConstants;
 import org.opencps.util.PortletPropsValues;
@@ -112,18 +113,183 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  */
 public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	
-	public void addProcessOrder(ActionRequest actionRequest, ActionResponse actionResponse){
-		long dossierId =  ParamUtil.getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
+	private Log _log = LogFactoryUtil
+	    .getLog(DossierMgtFrontOfficePortlet.class
+	        .getName());
+
+	public void addAttachmentFile(
+	    ActionRequest actionRequest, ActionResponse actionResponse)
+	    throws IOException {
+
+		UploadPortletRequest uploadPortletRequest = PortalUtil
+		    .getUploadPortletRequest(actionRequest);
+
+		long dossierId = ParamUtil
+		    .getLong(uploadPortletRequest, DossierDisplayTerms.DOSSIER_ID);
+
+		long dossierFileId = ParamUtil
+		    .getLong(
+		        uploadPortletRequest, DossierFileDisplayTerms.DOSSIER_FILE_ID);
+
+		long dossierPartId = ParamUtil
+		    .getLong(
+		        uploadPortletRequest, DossierFileDisplayTerms.DOSSIER_PART_ID);
+
+		long fileGroupId = ParamUtil
+		    .getLong(uploadPortletRequest, DossierDisplayTerms.FILE_GROUP_ID);
+
+		long mappingOrganizationId = ParamUtil
+		    .getLong(
+		        actionRequest,
+		        BusinessDisplayTerms.BUSINESS_MAPPINGORGANIZATIONID);
+
+		long size = uploadPortletRequest
+		    .getSize(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
+
+		long ownerOrganizationId = 0;
+		
+		long ownerUserId = 0;
+
+		int dossierFileType = ParamUtil
+		    .getInteger(
+		        uploadPortletRequest,
+		        DossierFileDisplayTerms.DOSSIER_FILE_TYPE);
+
+		int dossierFileOriginal = ParamUtil
+		    .getInteger(
+		        uploadPortletRequest,
+		        DossierFileDisplayTerms.DOSSIER_FILE_ORIGINAL);
+		String accountType = ParamUtil
+		    .getString(
+		        actionRequest, DossierDisplayTerms.ACCOUNT_TYPE,
+		        PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN);
+
+		String displayName = ParamUtil
+		    .getString(
+		        uploadPortletRequest, DossierFileDisplayTerms.DISPLAY_NAME);
+
+		String dossierFileNo = ParamUtil
+		    .getString(
+		        uploadPortletRequest, DossierFileDisplayTerms.DOSSIER_FILE_NO);
+
+		String dossierFileDate = ParamUtil
+		    .getString(
+		        uploadPortletRequest,
+		        DossierFileDisplayTerms.DOSSIER_FILE_DATE);
+
+		String sourceFileName = uploadPortletRequest
+		    .getFileName(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
+
+		sourceFileName = sourceFileName
+		    .concat(PortletConstants.TEMP_RANDOM_SUFFIX).concat(StringUtil
+		        .randomString());
+
+		String templateFileNo = ParamUtil
+		    .getString(
+		        uploadPortletRequest, DossierDisplayTerms.TEMPLATE_FILE_NO);
+
+		String redirectURL = ParamUtil
+		    .getString(uploadPortletRequest, "redirectURL");
+
+		Dossier dossier = null;
+
+		InputStream inputStream = null;
+
+		Date fileDate = DateTimeUtil
+		    .convertStringToDate(dossierFileDate);
+
 		try {
-			ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
-			ProcessOrderLocalServiceUtil.addProcessOrder(dossierId,
-				0, 1,
-				1, 1,
-				28055, new Date(), "Buoc 1", "Buoc 1 Action", "xxx",
-				28055, 1, 10, 2, serviceContext);
+			inputStream = uploadPortletRequest
+			    .getFileAsStream(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
+
+			ServiceContext serviceContext = ServiceContextFactory
+			    .getInstance(uploadPortletRequest);
+			dossier = DossierLocalServiceUtil
+			    .getDossier(dossierId);
+
+			String contentType = uploadPortletRequest
+			    .getContentType(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
+
+			String dossierDestinationFolder = StringPool.BLANK;
+
+			if (accountType
+			    .equals(PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN)) {
+				dossierDestinationFolder = PortletUtil
+				    .getCitizenDossierDestinationFolder(serviceContext
+				        .getScopeGroupId(), serviceContext
+				            .getUserId());
+				ownerUserId = serviceContext
+				    .getUserId();
+
+			}
+			else if (accountType
+			    .equals(PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS) &&
+			    mappingOrganizationId > 0) {
+				dossierDestinationFolder = PortletUtil
+				    .getBusinessDossierDestinationFolder(serviceContext
+				        .getScopeGroupId(), mappingOrganizationId);
+				ownerOrganizationId = mappingOrganizationId;
+			}
+
+			if (dossier != null) {
+				dossierDestinationFolder += StringPool.SLASH + dossier
+				    .getCounter();
+			}
+
+			DLFolder dossierFolder = DLFolderUtil
+			    .getTargetFolder(serviceContext
+			        .getUserId(), serviceContext
+			            .getScopeGroupId(),
+			        serviceContext
+			            .getScopeGroupId(),
+			        false, 0, dossierDestinationFolder, StringPool.BLANK, false,
+			        serviceContext);
+
+			FileEntry fileEntry = DLFileEntryUtil
+			    .addFileEntry(serviceContext
+			        .getScopeGroupId(), dossierFolder
+			            .getFolderId(),
+			        sourceFileName, contentType, displayName, StringPool.BLANK,
+			        StringPool.BLANK, inputStream, size, serviceContext);
+
+			if (dossierFileId == 0) {
+				DossierFileLocalServiceUtil
+				    .addDossierFile(serviceContext
+				        .getUserId(), dossierId, dossierPartId, templateFileNo,
+				        fileGroupId, ownerUserId, ownerOrganizationId,
+				        displayName, StringPool.BLANK, fileEntry
+				            .getFileEntryId(),
+				        PortletConstants.DOSSIER_FILE_MARK_UNKNOW,
+				        dossierFileType, dossierFileNo, fileDate,
+				        dossierFileOriginal,
+				        PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
+				        serviceContext);
+			}
+			else {
+				DossierFileLocalServiceUtil
+				    .updateDossierFile(dossierFileId, serviceContext
+				        .getUserId(), dossierId, dossierPartId, templateFileNo,
+				        fileGroupId, ownerUserId, ownerOrganizationId,
+				        displayName, StringPool.BLANK, fileEntry
+				            .getFileEntryId(),
+				        PortletConstants.DOSSIER_FILE_MARK_UNKNOW,
+				        dossierFileType, dossierFileNo, fileDate,
+				        dossierFileOriginal,
+				        PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
+				        serviceContext);
+			}
+
 		}
 		catch (Exception e) {
-			_log.error(e);
+			_log
+			    .error(e);
+		}
+		finally {
+			if (Validator
+			    .isNotNull(redirectURL)) {
+				actionResponse
+				    .sendRedirect(redirectURL);
+			}
 		}
 	}
 
@@ -292,7 +458,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 	public void createReport(
 	    ActionRequest actionRequest, ActionResponse actionResponse) {
-
 	}
 
 	public void deleteDossier(
@@ -744,10 +909,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			    new LinkedHashMap<String, List<String>>();
 			if (uploadDataSchemas != null && uploadDataSchemas.length > 0) {
 				for (int i = 0; i < uploadDataSchemas.length; i++) {
-					System.out
-					    .println(StringUtil
-					        .merge(uploadDataSchemas[i]));
-
+					
 					if (uploadDataSchemas[i].length > 0) {
 
 						for (int j = 0; j < uploadDataSchemas[i].length; j++) {
@@ -1111,6 +1273,80 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		}
 	}
 
+	public void updateDossierStatus(
+	    ActionRequest actionRequest, ActionResponse actionResponse)
+	    throws IOException {
+
+		long dossierId = ParamUtil
+		    .getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
+
+		long fileGroupId = ParamUtil
+		    .getLong(actionRequest, DossierFileDisplayTerms.DOSSIER_FILE_DATE);
+
+		long govAgencyOrganizationId = ParamUtil
+		    .getLong(
+		        actionRequest, DossierDisplayTerms.GOVAGENCY_ORGANIZATION_ID);
+
+		int dossierStatus = ParamUtil
+		    .getInteger(actionRequest, DossierDisplayTerms.DOSSIER_STATUS);
+
+		String redirectURL = ParamUtil
+		    .getString(actionRequest, "redirectURL");
+
+		try {
+			ServiceContext serviceContext = ServiceContextFactory
+			    .getInstance(actionRequest);
+
+			switch (dossierStatus) {
+			case PortletConstants.DOSSIER_STATUS_NEW:
+
+				Message message = new Message();
+				message
+				    .put("action", "submit");
+				message
+				    .put("dossierId", dossierId);
+				message
+				    .put("fileGroupId", fileGroupId);
+				message
+				    .put("level", PortletConstants.DOSSIER_LOG_NORMAL);
+				message
+				    .put("locale", serviceContext
+				        .getLocale());
+
+				message
+				    .put("groupId", serviceContext
+				        .getScopeGroupId());
+
+				message
+				    .put("govAgencyOrganizationId", govAgencyOrganizationId);
+
+				message
+				    .put("userId", serviceContext
+				        .getUserId());
+
+				MessageBusUtil
+				    .sendMessage(
+				        "opencps/frontoffice/out/destination", message);
+				break;
+
+			default:
+				break;
+			}
+
+		}
+		catch (Exception e) {
+			_log
+			    .error(e);
+		}
+		finally {
+			if (Validator
+			    .isNotNull(redirectURL)) {
+				actionResponse
+				    .sendRedirect(redirectURL);
+			}
+		}
+	}
+
 	public void updateTempDynamicFormData(
 	    ActionRequest actionRequest, ActionResponse actionResponse)
 	    throws IOException {
@@ -1239,88 +1475,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		}
 	}
 
-	public void updateDossierStatus(
-	    ActionRequest actionRequest, ActionResponse actionResponse)
-	    throws IOException {
-
-		long dossierId = ParamUtil
-		    .getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
-
-		long fileGroupId = ParamUtil
-		    .getLong(actionRequest, DossierFileDisplayTerms.DOSSIER_FILE_DATE);
-
-		long govAgencyOrganizationId = ParamUtil
-		    .getLong(
-		        actionRequest, DossierDisplayTerms.GOVAGENCY_ORGANIZATION_ID);
-
-		int dossierStatus = ParamUtil
-		    .getInteger(actionRequest, DossierDisplayTerms.DOSSIER_STATUS);
-
-		String redirectURL = ParamUtil
-		    .getString(actionRequest, "redirectURL");
-
-		try {
-			ServiceContext serviceContext = ServiceContextFactory
-			    .getInstance(actionRequest);
-			
-			
-
-			/*DossierLocalServiceUtil
-			    .updateDossierStatus(serviceContext
-			        .getUserId(), dossierId, govAgencyOrganizationId,
-			        dossierStatus,
-			        PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC,
-			        fileGroupId, PortletConstants.DOSSIER_LOG_NORMAL,
-			        serviceContext
-			            .getLocale());*/
-
-			switch (dossierStatus) {
-			case PortletConstants.DOSSIER_STATUS_NEW:
-
-				Message message = new Message();
-				message
-				    .put("action", "submit");
-				message
-				    .put("dossierId", dossierId);
-				message
-				    .put("fileGroupId", fileGroupId);
-				message
-			    	.put("level", PortletConstants.DOSSIER_LOG_NORMAL);
-				message
-		    		.put("locale", serviceContext.getLocale());
-				
-				message
-	    			.put("groupId", serviceContext.getScopeGroupId());
-				
-				message
-	    			.put("govAgencyOrganizationId", govAgencyOrganizationId);
-				
-				message
-    				.put("userId", serviceContext.getUserId());
-				
-				MessageBusUtil
-				    .sendMessage(
-				        "opencps/frontoffice/out/destination", message);
-				break;
-
-			default:
-				break;
-			}
-
-		}
-		catch (Exception e) {
-			_log
-			    .error(e);
-		}
-		finally {
-			if (Validator
-			    .isNotNull(redirectURL)) {
-				actionResponse
-				    .sendRedirect(redirectURL);
-			}
-		}
-	}
-
 	protected void writeJSON(
 	    ActionRequest actionRequest, ActionResponse actionResponse, Object json)
 	    throws IOException {
@@ -1338,8 +1492,4 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		    .flushBuffer();
 
 	}
-
-	private Log _log = LogFactoryUtil
-	    .getLog(DossierMgtFrontOfficePortlet.class
-	        .getName());
 }
