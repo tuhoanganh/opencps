@@ -293,11 +293,7 @@
 	value="<%=dossier != null ? dossier.getDossierId() : 0 %>" 
 	type="hidden"
 />
-<aui:input 
-	name="<%=ProcessOrderDisplayTerms.PROCESS_STEP_ID %>" 
-	value="<%=processStep != null ? processStep.getProcessStepId() : 0 %>" 
-	type="hidden"
-/>
+
 <aui:input 
 	name="<%=ProcessOrderDisplayTerms.PROCESS_ORDER_ID %>" 
 	value="<%=processOrder != null ? processOrder.getProcessOrderId() : 0 %>" 
@@ -319,6 +315,7 @@
 	<%
 		if(postProcessWorkflows != null && !postProcessWorkflows.isEmpty()){
 			for(ProcessWorkflow postProcessWorkflow : postProcessWorkflows){
+				
 				%>
 					<aui:button 
 						type="button"
@@ -326,6 +323,7 @@
 						value="<%=postProcessWorkflow.getActionName() %>"
 						process-workflow="<%=String.valueOf(postProcessWorkflow.getProcessWorkflowId()) %>"
 						service-process="<%=String.valueOf(postProcessWorkflow.getServiceProcessId()) %>"
+						process-step="<%=String.valueOf(postProcessWorkflow.getPostProcessStepId()) %>"
 						auto-event="<%=Validator.isNotNull(postProcessWorkflow.getAutoEvent()) ? postProcessWorkflow.getAutoEvent() : StringPool.BLANK %>"
 						onClick='<%=renderResponse.getNamespace() +  "assignToUser(this)"%>'
 					/>
@@ -348,12 +346,12 @@
 		
 		var serviceProcessId = instance.attr('service-process')
 		
+		var processStepId = instance.attr('service-process')
+		
 		var autoEvent = instance.attr('auto-event');
 		
 		var  dossierId = A.one('#<portlet:namespace/>dossierId').val();
 		
-		var  processStepId = A.one('#<portlet:namespace/>processStepId').val();
-	
 		var  processOrderId = A.one('#<portlet:namespace/>processOrderId').val();
 		
 		var  actionUserId = A.one('#<portlet:namespace/>actionUserId').val();
