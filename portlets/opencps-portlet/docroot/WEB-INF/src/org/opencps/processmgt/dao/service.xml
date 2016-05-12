@@ -172,6 +172,12 @@
             <finder-column name="serviceProcessId"></finder-column>
         </finder>
 
+        <finder name="SPI_" return-type="ProcessWorkflow">
+            <finder-column name="serviceProcessId"></finder-column>
+            <finder-column name="preProcessStepId"></finder-column>
+        </finder>
+
+
 	</entity>
 
 	<entity name="WorkflowOutput" local-service="true" remote-service="true"
