@@ -86,8 +86,6 @@
 	
 	String partType = ParamUtil.getString(request, DossierFileDisplayTerms.PART_TYPE);
 	
-	System.out.println(partType);
-	
 	JSONObject responseData = (JSONObject)request.getAttribute(WebKeys.RESPONSE_UPLOAD_TEMP_DOSSIER_FILE);
 	
 %>

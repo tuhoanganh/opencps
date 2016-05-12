@@ -61,8 +61,8 @@
 
 	long repositoryId = BeanParamUtil.getLong(fileEntry, request, "repositoryId");
 	
-	long folderId = BeanParamUtil.getLong(fileEntry, request, "folderId");
-	
+	long folderId = BeanParamUtil.getLong(fileEntry, request, "folderId");	
+
 	long dossierPartId = ParamUtil.getLong(request, DossierFileDisplayTerms.DOSSIER_PART_ID);
 	
 	long dossierFileId = ParamUtil.getLong(request, DossierFileDisplayTerms.DOSSIER_FILE_ID);
@@ -85,9 +85,7 @@
 	String templateFileNo = ParamUtil.getString(request, DossierDisplayTerms.TEMPLATE_FILE_NO);
 	
 	String partType = ParamUtil.getString(request, DossierFileDisplayTerms.PART_TYPE);
-	
-	System.out.println(partType);
-	
+
 	JSONObject responseData = (JSONObject)request.getAttribute(WebKeys.RESPONSE_UPLOAD_TEMP_DOSSIER_FILE);
 	
 %>
@@ -119,6 +117,9 @@
 	<aui:input name="<%=DossierFileDisplayTerms.FILE_NAME %>" type="hidden" value="<%=fileName %>"/>
 	<aui:input name="<%=DossierDisplayTerms.TEMPLATE_FILE_NO %>" type="hidden" value="<%=templateFileNo %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_PART_ID %>" type="hidden" value="<%=dossierPart != null ? dossierPart.getDossierpartId() : dossierPartId %>"/>
+	
+	
+	
 	<aui:row>
 		<aui:col width="100">
 			<aui:input name="<%= DossierFileDisplayTerms.DISPLAY_NAME %>" type="text" cssClass="input97">
