@@ -1,4 +1,3 @@
-<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -124,13 +123,6 @@
 	<portlet:param name="backURL" value="<%=backURL %>"/>
 </portlet:actionURL>
 
-<portlet:renderURL 
-	var="renderValidateURL" 
-	windowState="<%=LiferayWindowState.EXCLUSIVE.toString() %>" 
->
-	<portlet:param name="mvcPath" value='<%=templatePath + "ajax/validate_part_type"%>'/>
-</portlet:renderURL>
-
 <aui:form 
 	action="<%=updateDossierPartURL.toString() %>"
 	method="post"
@@ -220,11 +212,10 @@
 				%>
 			</aui:select>
 		</aui:col>
-		<div id = '<portlet:namespace/>valideByPartType' >
-			<aui:col cssClass="input30">
-				<aui:input name="<%=DossierPartDisplayTerms.DOSSIERPART_TEMPLATEFILENO %>" />	
-			</aui:col>
-		</div>
+		
+		<aui:col cssClass="input30">
+			<aui:input name="<%=DossierPartDisplayTerms.DOSSIERPART_TEMPLATEFILENO %>" />	
+		</aui:col>
 		
 		<aui:col cssClass="input30">
 			<aui:input 
@@ -313,50 +304,37 @@ AUI().ready('aui-base','liferay-form',function(A) {
 	
 	if(partType) {
 		partType.on('change',function() {
-			if(partType.val() == "1" || partType.val() == "5") {
+			if(partType.val() == "1" ) {
 				dispalyFormScript.show();
+				new A.FormValidator(
+						{
+							boundingBox: '#<portlet:namespace/>fm',
+							rules: rulesFalse
+						}
+					);
+			} else if(partType.val() == "5"){
+				dispalyFormScript.show();
+				new A.FormValidator(
+						{
+							boundingBox: '#<portlet:namespace/>fm',
+							rules: rules
+						}
+					);
 			} 
+			
 			else {
 				dispalyFormScript.hide();
-			}
-			
-			<portlet:namespace/>validateReq(partType.val());
-			
+				new A.FormValidator(
+						{
+							boundingBox: '#<portlet:namespace/>fm',
+							rules: rulesFalse
+						}
+					);
+			}	
 		});
 		
 	}
 });
-
-Liferay.provide(window,'<portlet:namespace/>validateReq', function(partType){
-	var A = AUI();
-	
-	A.io.request(
-			'<%= renderValidateURL.toString() %>',
-			{
-				dataType : 'text/html',
-				method : 'GET',
-			    data:{    	
-			    	"<portlet:namespace />partType" : partType
-			    },   
-			    on: {
-			    	success: function(event, id, obj) {
-						var instance = this;
-						var res = instance.get('responseData');
-						
-						var validPartType = A.one("#<portlet:namespace/><portlet:namespace/>valideByPartType");
-						
-						if(validPartType){
-							validPartType.empty();
-							validPartType.html(res);
-						}
-							
-					},
-			    	error: function(){}
-				}
-			}
-		);
-},['aui-base','aui-io']);
-
 
 </aui:script>
 
