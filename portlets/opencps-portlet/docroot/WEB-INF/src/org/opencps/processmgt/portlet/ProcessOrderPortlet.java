@@ -27,8 +27,11 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
 import org.opencps.dossiermgt.model.Dossier;
+import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.DossierTemplate;
 import org.opencps.dossiermgt.model.ServiceConfig;
+import org.opencps.dossiermgt.search.DossierFileDisplayTerms;
+import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
@@ -67,6 +70,9 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 		long processOrderId = ParamUtil
 		    .getLong(renderRequest, ProcessOrderDisplayTerms.PROCESS_ORDER_ID);
+
+		long dossierFileId = ParamUtil
+		    .getLong(renderRequest, DossierFileDisplayTerms.DOSSIER_FILE_ID);
 
 		if (processOrderId > 0) {
 			try {
@@ -120,10 +126,27 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				    .setAttribute(
 				        WebKeys.PROCESS_WORKFLOW_ENTRY, processWorkflow);
 			}
-			
+
 			catch (Exception e) {
 				_log
-				    .error(e.getCause());
+				    .error(e
+				        .getCause());
+			}
+
+			if (dossierFileId > 0) {
+				try {
+					DossierFile dossierFile = DossierFileLocalServiceUtil
+					    .getDossierFile(dossierFileId);
+
+					renderRequest
+					    .setAttribute(WebKeys.DOSSIER_FILE_ENTRY, dossierFile);
+				}
+				catch (Exception e) {
+					_log
+					    .error(e
+					        .getCause());
+				}
+
 			}
 		}
 		super.render(renderRequest, renderResponse);
