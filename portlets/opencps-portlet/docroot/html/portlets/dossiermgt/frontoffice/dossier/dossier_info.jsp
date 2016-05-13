@@ -130,7 +130,7 @@
 	<aui:col width="70">
 		<aui:input 
 			name="<%=DossierDisplayTerms.SERVICE_NAME %>" 
-			cssClass="input96" 
+			cssClass="input100" 
 			disabled="<%=true %>"
 			type="text"
 			value="<%=serviceInfo != null ? serviceInfo.getServiceName() : StringPool.BLANK %>"
@@ -140,7 +140,7 @@
 	<aui:col width="30">
 		<aui:input 
 			name="<%=DossierDisplayTerms.SERVICE_NO %>" 
-			cssClass="input90" 
+			cssClass="input100" 
 			disabled="<%=true %>"
 			type="text"
 			value="<%=serviceInfo != null ? serviceInfo.getServiceNo() : StringPool.BLANK %>"
@@ -152,7 +152,7 @@
 	<aui:col width="70">
 		<aui:input 
 			name="<%=DossierDisplayTerms.GOVAGENCY_NAME%>"
-			cssClass="input96" 
+			cssClass="input100" 
 			disabled="<%=true %>"
 			value="<%=serviceConfig != null ? serviceConfig.getGovAgencyName() : StringPool.BLANK %>"
 		/>	
@@ -161,7 +161,7 @@
 	<aui:col width="30">
 		<aui:input 
 			name="<%=DossierDisplayTerms.GOVAGENCY_CODE %>" 
-			cssClass="input90"
+			cssClass="input100"
 			disabled="<%=true %>"
 			value="<%=serviceConfig != null ? serviceConfig.getGovAgencyCode() : StringPool.BLANK %>"
 		/>	
@@ -173,7 +173,7 @@
 	<aui:col width="70">
 		<aui:input 
 			name="<%=DossierDisplayTerms.SUBJECT_NAME %>" 
-			cssClass="input96"
+			cssClass="input100"
 			type="text"
 			value="<%=citizen != null ? citizen.getFullName() : business != null ? business.getName() : StringPool.BLANK %>"
 		>
@@ -187,7 +187,7 @@
 	<aui:col width="30">
 		<aui:input 
 			name="<%=DossierDisplayTerms.SUBJECT_ID %>" 
-			cssClass="input90" 
+			cssClass="input100" 
 			type="text"
 			value="<%=citizen != null ? citizen.getPersonalId() : business != null ? business.getIdNumber() : StringPool.BLANK %>"
 		>
@@ -203,7 +203,7 @@
 	<aui:col width="100">
 		<aui:input 
 			name="<%=DossierDisplayTerms.ADDRESS %>" 
-			cssClass="input97" 
+			cssClass="input100" 
 			type="text"
 			value="<%=citizen != null ? citizen.getAddress() : business != null ? business.getAddress() : StringPool.BLANK %>"
 		>
@@ -229,7 +229,7 @@
 <aui:row>
 	<aui:col width="30">
 		<aui:input name="<%=DossierDisplayTerms.CONTACT_NAME %>" 
-			cssClass="input90" 
+			cssClass="input100" 
 			type="text"
 			value="<%=citizen != null ? citizen.getFullName() : business != null ? business.getName() : StringPool.BLANK %>"
 		>
@@ -243,7 +243,7 @@
 	<aui:col width="30">
 		<aui:input 
 			name="<%=DossierDisplayTerms.CONTACT_TEL_NO %>" 
-			cssClass="input90" 
+			cssClass="input100" 
 			type="text"
 			value="<%=citizen != null && Validator.isNotNull(citizen.getTelNo()) ? citizen.getTelNo() : business != null && Validator.isNotNull(business.getTelNo())? business.getTelNo() : StringPool.BLANK %>"
 		>
@@ -256,7 +256,7 @@
 	<aui:col width="30">
 		<aui:input 
 			name="<%=DossierDisplayTerms.CONTACT_EMAIL %>" 
-			cssClass="input90" 
+			cssClass="input100" 
 			type="text"
 			value="<%=citizen != null && Validator.isNotNull(citizen.getEmail()) ? citizen.getEmail() : business != null && Validator.isNotNull(business.getEmail())? business.getEmail() : StringPool.BLANK %>"
 		>
@@ -270,7 +270,7 @@
 
 <aui:row>
 	<aui:col width="100">
-		<aui:input name="<%=DossierDisplayTerms.NOTE %>" cssClass="input97" type="textarea">
+		<aui:input name="<%=DossierDisplayTerms.NOTE %>" cssClass="input100" type="textarea">
 			<aui:validator name="maxLength">
 				<%= PortletPropsValues.DOSSIERMGT_DOSSIER_NOTE_LENGTH %>
 			</aui:validator>

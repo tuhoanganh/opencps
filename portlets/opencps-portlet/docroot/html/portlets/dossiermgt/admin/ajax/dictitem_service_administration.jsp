@@ -52,8 +52,8 @@
 <c:choose>
 	<c:when test="<%= Validator.isNotNull(dictItemServiceAdmin) %>">
 		<aui:row>
-			<aui:col cssClass="input40">
-				<aui:input
+			<aui:col width="50">
+				<aui:input cssClass="input100"
 					type="text" 
 					name="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_GOVAGENCYNAME %>" 
 					value="<%=dictItemServiceAdmin.getItemName(themeDisplay.getLocale(), true) %>"
@@ -61,8 +61,8 @@
 				</aui:input>
 			</aui:col>
 			
-			<aui:col cssClass="input40">
-				<aui:input 
+			<aui:col width="50">
+				<aui:input cssClass="input100"
 					type="text" 
 					name="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_GOVAGENCYCODE %>" 
 					value="<%=dictItemServiceAdmin.getItemCode() %>"

@@ -36,9 +36,9 @@
 	<portlet:param name="processWorkflowId" value="<%= Validator.isNotNull(workflow) ? Long.toString(workflow.getProcessWorkflowId()) : StringPool.BLANK %>"/>
 </liferay-portlet:renderURL>
 			
- <liferay-ui:icon-menu>
+ <%-- <liferay-ui:icon-menu> --%>
 	<c:if test="<%= ProcessPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_PROCESS) %>">
-		<liferay-ui:icon image="edit" url="<%= editActionURL %>" />
+		<liferay-ui:icon cssClass="edit" image="edit" url="<%= editActionURL %>" />
  	</c:if>
 
  	<c:if test="<%= ProcessPermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE) %>">
@@ -47,6 +47,6 @@
 			<portlet:param name="redirectURL" value="<%=currentURL %>"/>
 			<portlet:param name="returnURL" value="<%=currentURL %>"/>
 		</portlet:actionURL> 
-		<liferay-ui:icon-delete image="delete" confirmation="are-you-sure-delete-entry" message="delete" url="<%= deleteActionURL.toString() %>" />
+		<liferay-ui:icon-delete cssClass="delete" image="delete" confirmation="are-you-sure-delete-entry" message="delete" url="<%= deleteActionURL.toString() %>" />
  	</c:if>
-</liferay-ui:icon-menu> 
+<%-- </liferay-ui:icon-menu>  --%>

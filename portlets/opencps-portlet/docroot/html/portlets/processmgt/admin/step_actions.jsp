@@ -35,9 +35,9 @@
 	<portlet:param name="processStepId" value="<%= Validator.isNotNull(step) ? Long.toString(step.getProcessStepId()) : StringPool.BLANK %>"/>
 </liferay-portlet:renderURL>
 			
- <liferay-ui:icon-menu>
+<%--  <liferay-ui:icon-menu> --%>
 	<c:if test="<%= ProcessPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_PROCESS) %>">
-		<liferay-ui:icon image="edit" url="<%= editStepURL %>" />
+		<liferay-ui:icon cssClass="edit" image="edit" url="<%= editStepURL %>" />
  	</c:if>
 
  	<c:if test="<%= ProcessPermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE) %>">
@@ -46,9 +46,9 @@
 			<portlet:param name="redirectURL" value="<%=currentURL %>"/>
 			<portlet:param name="currentURL" value="<%=currentURL %>"/>
 		</portlet:actionURL> 
-		<liferay-ui:icon-delete image="delete" confirmation="are-you-sure-delete-entry" message="delete" url="<%= deleteStepURL.toString() %>" />
+		<liferay-ui:icon-delete cssClass="delete" image="delete" confirmation="are-you-sure-delete-entry" message="delete" url="<%= deleteStepURL.toString() %>" />
  	</c:if>
-</liferay-ui:icon-menu> 
+<%-- </liferay-ui:icon-menu>  --%>
 
 <aui:script use="liferay-util-window">
 	Liferay.provide(window, 'showDialog', function(action) {

@@ -218,7 +218,7 @@
 		</aui:col>
 		
 		<aui:col width="30">
-			<aui:input cssClass="input100"
+			<aui:input
 			name="<%=DossierPartDisplayTerms.DOSSIERPART_REQUIRED %>"
 			type="checkbox"	
 			checked="<%= !Validator.isNotNull(isAddChilds) && Validator.isNotNull(dossierPart) ? dossierPart.getRequired() : false %>"

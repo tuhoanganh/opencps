@@ -32,7 +32,7 @@
 
 <aui:row>
 	<aui:col width="100">
-		<aui:input cssClass="input50" name="processNo" >
+		<aui:input cssClass="input100" name="processNo" >
 			<aui:validator name="required" errorMessage="not-empty"></aui:validator>
 		</aui:input>
 	</aui:col>

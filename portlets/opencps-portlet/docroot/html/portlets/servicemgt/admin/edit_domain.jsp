@@ -71,7 +71,7 @@
 		</aui:col>
 		
 		<aui:col width="50">
-			<aui:input type="text" name="sibling" cssClass="input90"/>
+			<aui:input type="text" name="sibling" cssClass="input100"/>
 		</aui:col>
 	</aui:row>
 	

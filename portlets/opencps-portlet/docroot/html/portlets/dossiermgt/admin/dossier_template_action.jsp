@@ -30,7 +30,7 @@
 	String redirectURL = currentURL;
 %>
 
-<liferay-ui:icon-menu>
+<%-- <liferay-ui:icon-menu> --%>
 	<c:if test="<%=DossierTemplatePermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) %>">
 		<portlet:renderURL var="updateDossierTemplate">
 			<portlet:param 
@@ -43,7 +43,8 @@
 			<portlet:param name="mvcPath" value='<%=templatePath + "edit_dossier.jsp"%>'/>
 		</portlet:renderURL>
 		
-		<liferay-ui:icon 
+		<liferay-ui:icon
+			cssClass="edit" 
 			image="edit" 
 			message="edit"
 			url="<%=updateDossierTemplate.toString()%>" 
@@ -58,8 +59,8 @@
 			/>
 			<portlet:param name="backURL" value="<%=currentURL %>"/>
 		</portlet:actionURL>
-		<liferay-ui:icon image="delete" message="delete"
+		<liferay-ui:icon-delete cssClass="delete" confirmation="do-you-want-to-delete?" image="delete" message="delete"
 			url="<%=deleteDossierTemplateURL.toString()%>" 
 		/>
 	</c:if>
-</liferay-ui:icon-menu>
+<%-- </liferay-ui:icon-menu> --%>
