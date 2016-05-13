@@ -17,11 +17,28 @@
 
 package org.opencps.backend.util;
 
+import java.util.Random;
+
 
 /**
  * @author khoavd
  *
  */
 public class DossierNoGenerator {
-
+	/**
+	 * @return
+	 */
+	public static String noGenarator() {
+		char[] chars = "012346789".toCharArray();
+		
+		StringBuilder sb = new StringBuilder();
+		
+		Random random = new Random();
+		
+		for (int i = 0; i < 12; i++) {
+		    char c = chars[random.nextInt(chars.length)];
+		    sb.append(c);
+		}
+		return sb.toString();
+	}
 }
