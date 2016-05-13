@@ -33,7 +33,7 @@
 %> 
 
 			
- <liferay-ui:icon-menu>
+<%--  <liferay-ui:icon-menu> --%>
  	<c:if test="<%=EmployeePermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_EMPLOYEE) %>">
  		<portlet:renderURL var="updateEmployeeURL">
 			<portlet:param name="mvcPath" value='<%=templatePath + "edit_employee.jsp" %>'/>
@@ -41,7 +41,7 @@
 			<portlet:param name="backURL" value="<%=currentURL %>"/>
 		</portlet:renderURL> 
 		
- 		<liferay-ui:icon image="edit" message="edit" url="<%=updateEmployeeURL.toString() %>" /> 
+ 		<liferay-ui:icon cssClass="edit" image="edit" message="edit" url="<%=updateEmployeeURL.toString() %>" /> 
  	</c:if>
  	
  	<c:if test="<%=EmployeePermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) 
@@ -51,7 +51,7 @@
 			<portlet:param name="<%=EmployeeDisplayTerm.WORKING_STATUS %>" value="<%=String.valueOf(employee.getWorkingStatus()) %>"/>
 			<portlet:param name="redirectURL" value="<%=currentURL %>"/>
 		</portlet:actionURL> 
-		<liferay-ui:icon image="activate" url="<%= updateEmployeeWorkingStatusURL %>"/>
+		<liferay-ui:icon cssClass="activate" image="activate" url="<%= updateEmployeeWorkingStatusURL %>"/>
  	</c:if>
  	
  	<c:if test="<%=EmployeePermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) 
@@ -61,7 +61,7 @@
 			<portlet:param name="<%=EmployeeDisplayTerm.WORKING_STATUS %>" value="<%=String.valueOf(employee.getWorkingStatus()) %>"/>
 			<portlet:param name="redirectURL" value="<%=currentURL %>"/>
 		</portlet:actionURL> 
-		<liferay-ui:icon-deactivate url="<%=updateEmployeeWorkingStatusURL.toString() %>"/>
+		<liferay-ui:icon cssClass="deactivate" image="deactivate" url="<%=updateEmployeeWorkingStatusURL.toString() %>"/>
  	</c:if>
  	
  	<c:if test="<%=EmployeePermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE)
@@ -70,7 +70,7 @@
 			<portlet:param name="<%=EmployeeDisplayTerm.EMPLOYEE_ID %>" value="<%=String.valueOf(employee.getEmployeeId()) %>"/>
 			<portlet:param name="redirectURL" value="<%=currentURL %>"/>
 		</portlet:actionURL> 
-		<liferay-ui:icon-delete image="delete" confirmation="are-you-sure-delete-entry" message="delete"  url="<%=deleteEmployeeURL.toString() %>" />
+		<liferay-ui:icon-delete cssClass="delete" image="delete" confirmation="are-you-sure-delete-entry" message="delete"  url="<%=deleteEmployeeURL.toString() %>" />
  	</c:if>
 	  
-</liferay-ui:icon-menu> 
+<%-- </liferay-ui:icon-menu>  --%>

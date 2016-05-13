@@ -34,7 +34,7 @@
 	Business business = (Business)row.getObject();
 %>
 
-<liferay-ui:icon-menu>
+<%-- <liferay-ui:icon-menu> --%>
 	<c:if test="<%=BusinessPermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) %>">
 		<portlet:renderURL var="updateBusiness"> 
 			<portlet:param name="<%=BusinessDisplayTerms.BUSINESS_BUSINESSID %>" value="<%=String.valueOf(business.getBusinessId()) %>"/>
@@ -43,7 +43,8 @@
 		</portlet:renderURL>
 	
 		<liferay-ui:icon 
-			image="edit" 
+			image="edit"
+			cssClass="edit" 
 			message="edit"
 			url="<%=updateBusiness.toString()%>" 
 		/>
@@ -59,7 +60,8 @@
 			</portlet:actionURL>
 	
 			<liferay-ui:icon
-			 	image="publish" 
+			 	image="publish"
+			 	cssClass="publish" 
 			 	message="approve"
 				url="<%= updateStatusURL.toString()%>" 
 			/>
@@ -74,8 +76,9 @@
 				<portlet:param name="redirectURL" value="<%=currentURL %>"/>
 			</portlet:actionURL>
 	
-			<liferay-ui:icon-deactivate
+			<liferay-ui:icon
 			 	label="deactivate"
+			 	cssClass="deactivate"
 				url="<%= updateStatusURL.toString()%>" 
 			/>
 		</c:if>
@@ -91,6 +94,7 @@
 	
 			<liferay-ui:icon
 			 	image="activate" 
+			 	cssClass="activate"
 			 	message="activate"
 				url="<%= updateStatusURL.toString()%>" 
 			/>
@@ -110,9 +114,10 @@
 			<liferay-ui:icon-delete
 				confirmation="are-you-sure-remove-this-account"
 			 	message="delete"
+			 	cssClass="delete"
 				url="<%=deleteBusinessURL.toString()%>" 
 			/>
 		</c:if>
 	</c:if>
 
-</liferay-ui:icon-menu>
+<%-- </liferay-ui:icon-menu> --%>

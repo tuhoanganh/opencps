@@ -187,7 +187,7 @@
 									</aui:col>
 									<aui:col width="30">
 
-										<datamgt:ddr cssClass="input30"
+										<datamgt:ddr cssClass="input100"
 											depthLevel="1" 
 											dictCollectionCode="SERVICE_DOMAIN"
 											itemNames="<%= ServiceDisplayTerms.SERVICE_DOMAINCODE %>"

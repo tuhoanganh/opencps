@@ -37,7 +37,7 @@
 %> 
 
 			
- <liferay-ui:icon-menu>
+ <%-- <liferay-ui:icon-menu> --%>
  	<c:if test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_DOSSIER) %>">
  		<portlet:renderURL var="addDossierURL">
 			<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/frontoffice/edit_dossier.jsp"/>
@@ -45,7 +45,7 @@
 			<portlet:param name="<%=Constants.CMD %>" value="<%=Constants.ADD %>"/>
 			<portlet:param name="backURL" value="<%=currentURL %>"/>
 		</portlet:renderURL> 
- 		<liferay-ui:icon image="add" message="add" url="<%=addDossierURL.toString() %>" /> 
+ 		<liferay-ui:icon cssClass="add" image="add" message="add" url="<%=addDossierURL.toString() %>" /> 
  	</c:if>
  	  
-</liferay-ui:icon-menu> 
+<%-- </liferay-ui:icon-menu>  --%>

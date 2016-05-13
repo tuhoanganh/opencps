@@ -35,7 +35,7 @@
 <aui:row>
 	<aui:input 
 		name="<%=DossierTemplateDisplayTerms.DOSSIERTEMPLATE_TEMPLATENO %>"
-		cssClass="input50"
+		cssClass="input100"
 	>
 		<aui:validator name="required" />
 		<aui:validator name="maxLength">100</aui:validator>
