@@ -1,3 +1,4 @@
+<%@page import="org.opencps.util.PortletUtil"%>
 <%@page import="org.opencps.processmgt.model.impl.ProcessStepDossierPartImpl"%>
 <%@page import="org.opencps.processmgt.service.ProcessStepDossierPartLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.model.ProcessStepDossierPart"%>
@@ -167,15 +168,17 @@
 	</aui:row>
 	<aui:row>
 		<aui:col width="70">
-			<datamgt:ddr 
-				cssClass="input100"
-				depthLevel="1" 
-				dictCollectionCode="DOSSIER_STATUS"
-				itemNames="dossierStatus"
-				itemsEmptyOption="true"
-				selectedItems="<%= Validator.isNotNull(step) ? step.getDossierStatus() : StringPool.BLANK %>"
-			>
-			</datamgt:ddr>
+			<aui:select name="dossierStatus" label="" inlineField="<%=true %>" inlineLabel="left">
+				<aui:option value="-1"><liferay-ui:message key="all"/></aui:option>
+				<%
+					for(Integer status : PortletUtil.getDossierStatus()){
+						%>
+							<aui:option value="<%= status%>"><%=PortletUtil.getDossierStatusLabel(status, locale) %></aui:option>
+						<%
+					}
+				%>
+			</aui:select>
+			
 		</aui:col>
 		<aui:col width="30">
 			<aui:input name="daysDuration" inlineField="false"></aui:input>

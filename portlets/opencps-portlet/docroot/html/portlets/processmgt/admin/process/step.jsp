@@ -56,10 +56,6 @@
 </liferay-portlet:renderURL>
 
 <aui:button-row>
-	<aui:button name="addStep" onClick="showDialog()" value="add-step" ></aui:button>
-</aui:button-row>
-
-<aui:button-row>
 	<aui:button name="addStep" href="<%= editStepInlineURL.toString() %>" value="add-step-inline" ></aui:button>
 </aui:button-row>
 
