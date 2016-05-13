@@ -20,13 +20,17 @@ package org.opencps.backend.util;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.processmgt.model.ProcessOrder;
+import org.opencps.processmgt.model.ProcessStep;
 import org.opencps.processmgt.model.ProcessWorkflow;
 import org.opencps.processmgt.model.ServiceProcess;
 import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
+import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 
 /**
@@ -34,6 +38,25 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
  *
  */
 public class BackendUtils {
+	
+	public static int getDossierStatus(long stepId) {
+		
+		int status = 0;
+		
+		try {
+			ProcessStep step = ProcessStepLocalServiceUtil.fetchProcessStep(stepId);
+			
+			if (Validator.isNotNull(step)) {
+				status = GetterUtil.getInteger(step.getDossierStatus());
+			} 
+
+        }
+        catch (Exception e) {
+	        return 0;
+        }
+		
+		return status;
+	}
 	
 	public static ProcessWorkflow getFirstProcessWorkflow(long serviceProcessId) {
 		ProcessWorkflow flow = null;

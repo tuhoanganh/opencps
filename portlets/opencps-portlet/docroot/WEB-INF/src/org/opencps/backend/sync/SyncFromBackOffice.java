@@ -17,9 +17,17 @@
 
 package org.opencps.backend.sync;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import org.opencps.dossiermgt.model.Dossier;
+import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
+
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.MessageListenerException;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.StringPool;
 
 
 /**
@@ -34,9 +42,42 @@ public class SyncFromBackOffice implements MessageListener{
     @Override
     public void receive(Message message)
         throws MessageListenerException {
+    	
+    	doRevice(message);
     	System.out.println("Back-------");
 	    // TODO Auto-generated method stub
 	    
+    }
+    
+    private void doRevice(Message message) {
+    	
+    	long processOrderId = GetterUtil.getLong(message.get("processOrderId"), 0);
+    	long dossierId = GetterUtil.getLong(message.get("dossierId"), 0);
+    	long fileGroupId = GetterUtil.getLong(message.get("fileGroupId"), 0);
+    	int dossierStatus = GetterUtil.getInteger(message.get("dossierStatus"), 0);
+    	String actionInfo = GetterUtil.getString(message.get("actionInfo"), StringPool.BLANK);
+    	String messageInfo = GetterUtil.getString(message.get("messageInfo"), StringPool.BLANK);
+    	boolean sendResult = GetterUtil.getBoolean(message.get("sendResult"), false);
+    	boolean requestPayment = GetterUtil.getBoolean(message.get("requestPayment"), false);
+    	Date updateDatetime = GetterUtil.getDate(message.get("updateDatetime"), new SimpleDateFormat("dd/MM/yyyy mm:HH"));
+    	String receptionNo = GetterUtil.getString(message.get("receptionNo"), StringPool.BLANK);
+    	Date receiveDatetime = GetterUtil.getDate(message.get("receiveDatetime"), new SimpleDateFormat("dd/MM/yyyy mm:HH"));
+    	Date estimateDatetime = GetterUtil.getDate(message.get("estimateDatetime"), new SimpleDateFormat("dd/MM/yyyy mm:HH"));
+    	Date finishDatetime = GetterUtil.getDate(message.get("finishDatetime"), new SimpleDateFormat("dd/MM/yyyy mm:HH"));
+    	
+    	long userId = GetterUtil.getLong(message.get("userId"));
+    	long groupId = GetterUtil.getLong(message.get("groupId"));
+    	long companyId = GetterUtil.getLong(message.get("companyId"));
+    	
+    	try {
+			DossierLocalServiceUtil.updateDossierStatus(
+			    userId, groupId, companyId, dossierId, fileGroupId,
+			    receptionNo, estimateDatetime, receiveDatetime, finishDatetime,
+			    dossierStatus, actionInfo, messageInfo);
+        }
+        catch (Exception e) {
+	        // TODO: handle exception
+        }
     }
 
 }
