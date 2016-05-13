@@ -59,7 +59,7 @@
 	String[] dossierSections = new String[]{"dossier_info", "dossier_part", "result", "history"};
 	
 	String[][] categorySections = {dossierSections};
-
+	System.out.println(request.isUserInRole("Administrator"));
 %>
 
 <liferay-ui:header
@@ -71,9 +71,10 @@
 
 <liferay-util:buffer var="htmlTop">
 	<c:if test="<%= dossier != null %>">
-		<div class="dossier-info">
+		<div class="form-navigator-topper dossier-info">
 			<div class="float-container">
-				<span class="dossier-name"><%= HtmlUtil.escape(dossier.getSubjectName()) %></span>
+				<i aria-hidden="true" class="fa fa-suitcase"></i>
+				<span class="form-navigator-topper-name"><%= HtmlUtil.escape(dossier.getSubjectName()) %></span>
 			</div>
 		</div>
 	</c:if> 
