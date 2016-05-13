@@ -45,7 +45,7 @@
 <aui:row>
 	<aui:input 
 		name="<%=DossierTemplateDisplayTerms.DOSSIERTEMPLATE_TEMPLATENAME %>"
-		cssClass="input95"
+		cssClass="input100"
 	>
 		<aui:validator name="required" />
 		<aui:validator name="maxLength">255</aui:validator>
@@ -57,7 +57,7 @@
 	<aui:input 
 		type="textarea"
 		name="<%=DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DESCRIPTION %>"
-		cssClass="input95"
+		cssClass="input100"
 	>
 	</aui:input>
 </aui:row>
