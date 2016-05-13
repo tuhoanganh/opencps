@@ -70,6 +70,46 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 * {@link org.opencps.dossiermgt.service.DossierLocalServiceUtil} to access
 	 * the dossier local service.
 	 */
+	
+	/**
+	 * @param userId
+	 * @param groupId
+	 * @param companyId
+	 * @param dossierId
+	 * @param fileGroupId
+	 * @param receptionNo
+	 * @param estimateDatetime
+	 * @param receiveDatetime
+	 * @param finishDatetime
+	 * @param dossierStatus
+	 * @param actionInfo
+	 * @param messageInfo
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public void updateDossierStatus(
+	    long userId, long groupId, long companyId, long dossierId,
+	    long fileGroupId, String receptionNo, Date estimateDatetime,
+	    Date receiveDatetime, Date finishDatetime, int dossierStatus,
+	    String actionInfo, String messageInfo)
+	    throws PortalException, SystemException {
+
+		Dossier dossier = dossierPersistence.fetchByPrimaryKey(dossierId);
+
+		dossier.setReceptionNo(receptionNo);
+		dossier.setEstimateDatetime(estimateDatetime);
+		dossier.setReceiveDatetime(receiveDatetime);
+		dossier.setFinishDatetime(finishDatetime);
+		dossier.setDossierStatus(dossierStatus);
+
+		dossierPersistence.update(dossier);
+
+		// add DossierLog
+
+		dossierLogLocalService.addDossierLog(
+		    userId, groupId, companyId, dossierId, fileGroupId, 2, actionInfo,
+		    messageInfo, new Date(), 1);
+	}
 
 	public Dossier addDossier(
 	    long userId, long ownerOrganizationId, long dossierTemplateId,

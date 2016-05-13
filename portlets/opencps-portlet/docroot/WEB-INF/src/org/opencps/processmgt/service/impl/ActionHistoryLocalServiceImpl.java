@@ -73,7 +73,7 @@ public class ActionHistoryLocalServiceImpl
 	    long userId, long groupId, long companyId, long processOrderId,
 	    long processWorkflowId, Date actionDatetime, String stepName,
 	    String actionName, String actionNote, long actionUserId, int daysDoing,
-	    int daysDelay)
+	    int daysDelay, int dossierStatus)
 	    throws SystemException {
 
 		long actionHistoryId = counterLocalService

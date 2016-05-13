@@ -23,6 +23,7 @@ import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.processmgt.NoSuchProcessOrderException;
 import org.opencps.processmgt.model.ProcessOrder;
+import org.opencps.processmgt.model.ProcessWorkflow;
 import org.opencps.processmgt.service.base.ProcessOrderLocalServiceBaseImpl;
 
 import com.liferay.portal.kernel.exception.PortalException;
@@ -209,7 +210,7 @@ public class ProcessOrderLocalServiceImpl
 		        .getGroupId(), dossier
 		            .getCompanyId(),
 		        processOrderId, processWorkflowId, actionDatetime, stepName,
-		        actionName, actionNote, actionUserId, daysDoing, daysDelay);
+		        actionName, actionNote, actionUserId, daysDoing, daysDelay, 1);
 
 		return processOrderPersistence
 		    .update(processOrder);
@@ -366,7 +367,7 @@ public class ProcessOrderLocalServiceImpl
 	    long govAgencyOrganizationId, long serviceProcessId, long dossierId,
 	    long fileGroupId, long processWorkflowId, Date actionDatetime,
 	    String stepName, String actionName, String actionNote,
-	    long actionUserId, int daysDoing, int daysDelay)
+	    long actionUserId, int daysDoing, int daysDelay, int dossierStatus)
 	    throws PortalException, SystemException {
 
 		ProcessOrder order = null;
@@ -374,6 +375,7 @@ public class ProcessOrderLocalServiceImpl
 		long processOrderId = counterLocalService
 		    .increment(ProcessOrder.class
 		        .getName());
+		
 
 		order = processOrderPersistence
 		    .create(processOrderId);
@@ -416,7 +418,7 @@ public class ProcessOrderLocalServiceImpl
 		    .addActionHistory(
 		        userId, fileGroupId, companyId, processOrderId,
 		        processWorkflowId, actionDatetime, stepName, actionName,
-		        actionNote, actionUserId, daysDoing, daysDelay);
+		        actionNote, actionUserId, daysDoing, daysDelay, dossierStatus);
 
 		return order;
 	}
@@ -459,11 +461,13 @@ public class ProcessOrderLocalServiceImpl
 	    long processOrderId, long processStepId, long processWorkflowId,
 	    long actionUserId, Date actionDatetime, String actionNote,
 	    long assignToUserId, String stepName, String actionName, int daysDoing,
-	    int daysDelay)
+	    int daysDelay, int dossierStatus)
 	    throws NoSuchProcessOrderException, SystemException {
 
 		ProcessOrder processOrder = processOrderPersistence
 		    .findByPrimaryKey(processOrderId);
+		
+		processOrder.setDossierStatus(dossierStatus);
 
 		processOrder
 		    .setModifiedDate(new Date());
@@ -489,7 +493,7 @@ public class ProcessOrderLocalServiceImpl
 		        processOrder
 		            .getCompanyId(),
 		        processOrderId, processWorkflowId, actionDatetime, stepName,
-		        actionName, actionNote, actionUserId, daysDoing, daysDelay);
+		        actionName, actionNote, actionUserId, daysDoing, daysDelay, dossierStatus);
 		return processOrderPersistence
 		    .update(processOrder);
 	}
