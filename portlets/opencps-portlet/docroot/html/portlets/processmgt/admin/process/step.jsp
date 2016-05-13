@@ -1,3 +1,4 @@
+<%@page import="org.opencps.util.PortletUtil"%>
 <%@page import="org.opencps.util.DictItemUtil"%>
 <%@page import="org.opencps.processmgt.util.ProcessUtils"%>
 <%
@@ -90,7 +91,7 @@
 			row.addText(step.getStepName());
 			
 			// step name
-			row.addText(DictItemUtil.getNameDictItem(step.getDossierStatus()));
+			row.addText(PortletUtil.getDossierStatusLabel(GetterUtil.getInteger(step.getDossierStatus()), locale));
 			
 			// step duration
 			row.addText(Integer.toString(step.getDaysDuration()));
