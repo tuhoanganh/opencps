@@ -308,7 +308,7 @@ public class ServiceInfoLocalServiceImpl
 		boolean sync = false;
 
 		serviceFileTemplateLocalService.addServiveFiles(
-		    serviceId, fileTemplateIds);
+			serviceInfoId, fileTemplateIds);
 
 		assetEntryLocalService.updateEntry(
 		    context.getUserId(), context.getScopeGroupId(),

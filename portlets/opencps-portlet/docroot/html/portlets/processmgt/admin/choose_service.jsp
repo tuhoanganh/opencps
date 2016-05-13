@@ -40,7 +40,12 @@
 
 <liferay-util:buffer var="htmlTop">
 	<c:if test="<%=Validator.isNotNull(serviceProcess) %>">
-		<h5><%=serviceProcess.getProcessName() %></h5>
+	 	<div class="form-navigator-topper service-process">
+            <div class="form-navigator-container">
+                <i aria-hidden="true" class="fa service-process"></i>
+                <span class="form-navigator-topper-name"><%= HtmlUtil.escape(serviceProcess.getProcessName()) %></span>
+            </div>
+        </div>
 	</c:if>
 </liferay-util:buffer>
 

@@ -139,14 +139,14 @@
 	
 	<aui:row>
 		<aui:col width="70">
-			<aui:input name="<%=DossierPartDisplayTerms.DOSSIERPART_PARTNAME %>" cssClass="input90">
+			<aui:input name="<%=DossierPartDisplayTerms.DOSSIERPART_PARTNAME %>" cssClass="input100">
 				<aui:validator name="required" />
 				<aui:validator name="maxLength">500</aui:validator>
 			</aui:input>
 		</aui:col>
 		
-		<aui:col width="20">
-			<aui:input name="<%=DossierPartDisplayTerms.DOSSIERPART_PARTNO %>" cssClass="input90">
+		<aui:col width="30">
+			<aui:input name="<%=DossierPartDisplayTerms.DOSSIERPART_PARTNO %>" cssClass="input100">
 				<aui:validator name="required" />
 				<aui:validator name="maxLength">100</aui:validator>
 			</aui:input>
@@ -154,8 +154,8 @@
 	</aui:row>
 	
 	<aui:row >
-		<aui:col width="90">
-			<aui:input cssClass="input90"
+		<aui:col width="100">
+			<aui:input cssClass="input100"
 				type="textarea"
 				name="<%=DossierPartDisplayTerms.DOSSIERPART_PARTTIP %>"
 			>
@@ -165,8 +165,8 @@
 	</aui:row>
 	
 	<aui:row>
-		<aui:col width="60">
-			<aui:select name="<%=DossierPartDisplayTerms.DOSSIERPART_PARENTID %>" cssClass="input90">
+		<aui:col width="70">
+			<aui:select name="<%=DossierPartDisplayTerms.DOSSIERPART_PARENTID %>" cssClass="input100">
 				<c:choose>
 					<c:when test="<%=Validator.isNotNull(isAddChilds) && Validator.isNotNull(dossierPart)%>">
 						<aui:option value="<%=dossierPart.getDossierpartId() %>">
@@ -187,8 +187,8 @@
 			</aui:select>
 		</aui:col>
 		
-		<aui:col width="25">
-			<aui:input name="<%=DossierPartDisplayTerms.DOSSIERPART_SIBLING %>" cssClass="input90">
+		<aui:col width="30">
+			<aui:input name="<%=DossierPartDisplayTerms.DOSSIERPART_SIBLING %>" cssClass="input100">
 				<aui:validator name="required" />
 				<aui:validator name="numbers" />
 			</aui:input>
@@ -196,8 +196,8 @@
 	</aui:row>
 	
 	<aui:row>
-		<aui:col cssClass="input30">
-			<aui:select name="<%=DossierPartDisplayTerms.DOSSIERPART_PARTTYPE %>" required="true">
+		<aui:col width="30">
+			<aui:select name="<%=DossierPartDisplayTerms.DOSSIERPART_PARTTYPE %>" required="true" cssClass="input100">
 				<aui:option value="<%=StringPool.BLANK %>">
 					<liferay-ui:message key="root" />
 				</aui:option>
@@ -213,12 +213,12 @@
 			</aui:select>
 		</aui:col>
 		
-		<aui:col cssClass="input30">
-			<aui:input name="<%=DossierPartDisplayTerms.DOSSIERPART_TEMPLATEFILENO %>" />	
+		<aui:col width="30">
+			<aui:input cssClass="input100" name="<%=DossierPartDisplayTerms.DOSSIERPART_TEMPLATEFILENO %>" />	
 		</aui:col>
 		
-		<aui:col cssClass="input30">
-			<aui:input 
+		<aui:col width="30">
+			<aui:input
 			name="<%=DossierPartDisplayTerms.DOSSIERPART_REQUIRED %>"
 			type="checkbox"	
 			checked="<%= !Validator.isNotNull(isAddChilds) && Validator.isNotNull(dossierPart) ? dossierPart.getRequired() : false %>"
@@ -228,32 +228,32 @@
 		
 	<div id = "<portlet:namespace/>displayFormScript">
 		<aui:row >
-			<aui:col width="90">
+			<aui:col width="100">
 				<aui:input
 					type="textarea"
 					name="<%=DossierPartDisplayTerms.DOSSIERPART_FORMSCRIPT %>" 
-					cssClass="input90"
+					cssClass="input100"
 				/>
 			</aui:col>
 		</aui:row>
 	</div>
 	
 	<aui:row >
-		<aui:col width="90">
+		<aui:col width="100">
 			<aui:input
 				type="textarea"
 				name="<%=DossierPartDisplayTerms.DOSSIERPART_FORMREPORT %>" 
-				cssClass="input90"
+				cssClass="input100"
 			/>
 		</aui:col>	
 	</aui:row>
 	
 	<aui:row>
-		<aui:col width="90">
+		<aui:col width="100">
 			<aui:input 
 				type="textarea"
 				name="<%=DossierPartDisplayTerms.DOSSIERPART_SAMPLEDATA %>" 
-				cssClass="input90"
+				cssClass="input100"
 			/>
 		</aui:col>
 	</aui:row>

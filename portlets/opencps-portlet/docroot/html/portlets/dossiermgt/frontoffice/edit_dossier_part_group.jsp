@@ -53,7 +53,7 @@
 <aui:form name="fm" method="post" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "addPrivateDossierGroup();" %>'> 
 	<aui:row>
 		<aui:col width="100">
-			<aui:input name="<%= DossierFileDisplayTerms.PART_NAME %>" type="text" cssClass="input97">
+			<aui:input name="<%= DossierFileDisplayTerms.PART_NAME %>" type="text" cssClass="input100">
 				<aui:validator name="required"/>
 			</aui:input>
 		</aui:col>

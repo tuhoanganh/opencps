@@ -27,7 +27,7 @@
 	
 %>
 
-<liferay-ui:icon-menu>
+<%-- <liferay-ui:icon-menu> --%>
 
 	<portlet:renderURL var="updateDomainChirldURL" windowState="<%=LiferayWindowState.POP_UP.toString() %>">
 		<portlet:param name="backURL" value="<%=currentURL %>"/>
@@ -48,20 +48,20 @@
 	
 	<c:if test="<%=DictItemPermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) %>">
 		
-		<liferay-ui:icon image="edit" message="edit"
+		<liferay-ui:icon cssClass="edit" image="edit" message="edit"
 					url="#" onClick="<%= \"javascript:\" + renderResponse.getNamespace() + \"showPopup('\" + updateDomainURL +\"');\" %>" />
 	</c:if>
 	
 	<c:if test="<%=DictItemPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_DICTITEM) %>">
-		<liferay-ui:icon image="add" message="add_chirld_dictitem"
+		<liferay-ui:icon cssClass="add" image="add" message="add_chirld_dictitem"
 					url="#" onClick="<%= \"javascript:\" + renderResponse.getNamespace() + \"showPopup('\" + updateDomainChirldURL +\"');\" %>"/>
 	</c:if>
 	
 	<c:if test="<%=DictItemPermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE) %>">
-		<liferay-ui:icon image="delete" message="delete"
+		<liferay-ui:icon cssClass="delete" image="delete" message="delete"
 					url="<%=deleteDomainURL.toString()%>" />
 	</c:if>
-</liferay-ui:icon-menu>
+<%-- </liferay-ui:icon-menu> --%>
 
 <aui:script use="liferay-util-window">
 	Liferay.provide(window, '<portlet:namespace />showPopup', function(url){

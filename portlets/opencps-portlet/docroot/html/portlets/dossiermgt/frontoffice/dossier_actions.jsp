@@ -35,7 +35,7 @@
 %> 
 
 			
- <liferay-ui:icon-menu>
+ <%-- <liferay-ui:icon-menu> --%>
  	<c:choose>
  		<c:when test="<%=dossier.getDossierStatus() == PortletConstants.DOSSIER_STATUS_NEW %>">
  			<c:if test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) %>">
@@ -44,14 +44,15 @@
 					<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
 					<portlet:param name="backURL" value="<%=currentURL %>"/>
 				</portlet:renderURL> 
-		 		<liferay-ui:icon image="edit" message="edit" url="<%=updateDossierURL.toString() %>" /> 
+		 		<liferay-ui:icon cssClass="edit" image="edit" message="edit" url="<%=updateDossierURL.toString() %>" /> 
 		 		
 		 		<portlet:actionURL var="updateDossierStatusURL" name="updateDossierStatus">
 					<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
 					<portlet:param name="<%=DossierDisplayTerms.DOSSIER_STATUS %>" value="<%=String.valueOf(PortletConstants.DOSSIER_STATUS_NEW) %>"/>
 					<portlet:param name="backURL" value="<%=currentURL %>"/>
 				</portlet:actionURL> 
-		 		<liferay-ui:icon 
+		 		<liferay-ui:icon
+		 			cssClass="forward"
 		 			image="forward"
 		 			message="send" 
 		 			url="<%=updateDossierStatusURL.toString() %>" 
@@ -64,6 +65,7 @@
 				</portlet:actionURL> 
 		 		<liferay-ui:icon 
 		 			image="forward"
+		 			cssClass="forward"
 		 			message="Create Process Order" 
 		 			url="<%=addProcessOrderURL.toString() %>" 
 		 		/> 
@@ -75,7 +77,8 @@
 					<portlet:param name="redirectURL" value="<%=currentURL %>"/>
 				</portlet:actionURL> 
 				<liferay-ui:icon-delete 
-					image="delete" 
+					image="delete"
+					cssClass="delete"
 					confirmation="are-you-sure-delete-entry" 
 					message="delete"  
 					url="<%=deleteDossierURL.toString() %>" 
@@ -83,4 +86,4 @@
 		 	</c:if>
  		</c:when>
  	</c:choose>
-</liferay-ui:icon-menu> 
+<%-- </liferay-ui:icon-menu> --%> 
