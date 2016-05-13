@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -90,7 +91,12 @@
 
 <liferay-util:buffer var="htmlTop">
 	<c:if test="<%=dossierTemplate!=null %>">
-		<h4><%=dossierTemplate.getTemplateName() %></h4>
+		 <div class="form-navigator-topper [customcss]">
+            <div class="form-navigator-container">
+                <i aria-hidden="true" class="fa [customcss]"></i>
+                <span class="form-navigator-topper-name"><%= HtmlUtil.escape(dossierTemplate.getTemplateName()) %></span>
+            </div>
+        </div>
 	</c:if>
 </liferay-util:buffer>
 
