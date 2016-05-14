@@ -355,6 +355,7 @@
             <finder-column name="dossierId"></finder-column>
             <finder-column name="groupFileId"></finder-column>
         </finder>
+         <reference entity="DLFileEntry" package-path="com.liferay.portlet.documentlibrary"/>
     </entity>
 
 	<exceptions>
