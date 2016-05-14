@@ -216,10 +216,10 @@ public class ProcessOrderLocalServiceImpl
 		    .update(processOrder);
 	}
 
-	public int countProcessOrder(long processStepId) {
+	public int countProcessOrder(long processStepId, long actionUserId) {
 
 		return processOrderFinder
-		    .countProcessOrder(processStepId);
+		    .countProcessOrder(processStepId, actionUserId);
 	}
 
 	public ProcessOrder getProcessOrder(long dossierId, long fileGroupId)
@@ -424,13 +424,21 @@ public class ProcessOrderLocalServiceImpl
 	}
 
 	public List searchProcessOrder(
-	    long processStepId, int start, int end,
+	    long processStepId, long actionUserId, int start, int end,
 	    OrderByComparator orderByComparator) {
 
 		return processOrderFinder
-		    .searchProcessOrder(processStepId, start, end, orderByComparator);
+		    .searchProcessOrder(
+		        processStepId, actionUserId, start, end, orderByComparator);
 	}
+	
+	public List getUserProcessStep(long actionUserId) {
 
+		return processOrderFinder
+		    .getUserProcessStep(actionUserId);
+	}
+	
+	
 	public ProcessOrder updateProcessOrder(
 	    long processOrderId, long processStepId, long actionUserId,
 	    Date actionDatetime, String actionNote, long assignToUserId)
