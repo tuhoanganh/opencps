@@ -18,9 +18,8 @@
  */
 %>
 
-
 <%
 	serviceConfigs = ServiceConfigLocalServiceUtil.getServiceConFigsByG_M(scopeGroupId, PortletConstants.SERVICE_CONFIG_FRONTOFFICE, searchContainer.getStart(), searchContainer.getEnd());
-
+	
 	totalCount = ServiceConfigLocalServiceUtil.countServiceConFigsByG_M(scopeGroupId, PortletConstants.SERVICE_CONFIG_FRONTOFFICE);
 %>
