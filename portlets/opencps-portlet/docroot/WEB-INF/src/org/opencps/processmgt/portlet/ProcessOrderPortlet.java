@@ -18,7 +18,10 @@
 package org.opencps.processmgt.portlet;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -26,13 +29,21 @@ import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.opencps.accountmgt.model.Business;
+import org.opencps.accountmgt.model.Citizen;
+import org.opencps.accountmgt.search.BusinessDisplayTerms;
+import org.opencps.accountmgt.service.BusinessLocalServiceUtil;
+import org.opencps.accountmgt.service.CitizenLocalServiceUtil;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierFile;
+import org.opencps.dossiermgt.model.DossierPart;
 import org.opencps.dossiermgt.model.DossierTemplate;
 import org.opencps.dossiermgt.model.ServiceConfig;
+import org.opencps.dossiermgt.search.DossierDisplayTerms;
 import org.opencps.dossiermgt.search.DossierFileDisplayTerms;
 import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
+import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
 import org.opencps.processmgt.model.ProcessOrder;
@@ -46,15 +57,31 @@ import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
 import org.opencps.processmgt.service.ServiceProcessLocalServiceUtil;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
+import org.opencps.util.DLFileEntryUtil;
+import org.opencps.util.DLFolderUtil;
 import org.opencps.util.DateTimeUtil;
+import org.opencps.util.PortletConstants;
+import org.opencps.util.PortletPropsValues;
+import org.opencps.util.PortletUtil;
 import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
+import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.User;
+import com.liferay.portal.model.UserGroup;
+import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.ServiceContextFactory;
+import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 /**
@@ -62,7 +89,172 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  */
 
 public class ProcessOrderPortlet extends MVCPortlet {
+	
+	public void addAttachmentFile(
+	    ActionRequest actionRequest, ActionResponse actionResponse)
+	    throws IOException {
 
+		UploadPortletRequest uploadPortletRequest = PortalUtil
+		    .getUploadPortletRequest(actionRequest);
+
+		long dossierId = ParamUtil
+		    .getLong(uploadPortletRequest, DossierDisplayTerms.DOSSIER_ID);
+
+		long dossierFileId = ParamUtil
+		    .getLong(
+		        uploadPortletRequest, DossierFileDisplayTerms.DOSSIER_FILE_ID);
+
+		long dossierPartId = ParamUtil
+		    .getLong(
+		        uploadPortletRequest, DossierFileDisplayTerms.DOSSIER_PART_ID);
+
+		long fileGroupId = ParamUtil
+		    .getLong(uploadPortletRequest, DossierDisplayTerms.FILE_GROUP_ID);
+
+		long mappingOrganizationId = ParamUtil
+		    .getLong(
+		        actionRequest,
+		        BusinessDisplayTerms.BUSINESS_MAPPINGORGANIZATIONID);
+
+		long size = uploadPortletRequest
+		    .getSize(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
+
+		long ownerOrganizationId = 0;
+
+		long ownerUserId = 0;
+
+		int dossierFileType = ParamUtil
+		    .getInteger(
+		        uploadPortletRequest,
+		        DossierFileDisplayTerms.DOSSIER_FILE_TYPE);
+
+		int dossierFileOriginal = ParamUtil
+		    .getInteger(
+		        uploadPortletRequest,
+		        DossierFileDisplayTerms.DOSSIER_FILE_ORIGINAL);
+		String accountType = ParamUtil
+		    .getString(
+		        actionRequest, DossierDisplayTerms.ACCOUNT_TYPE,
+		        PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN);
+
+		String displayName = ParamUtil
+		    .getString(
+		        uploadPortletRequest, DossierFileDisplayTerms.DISPLAY_NAME);
+
+		String dossierFileNo = ParamUtil
+		    .getString(
+		        uploadPortletRequest, DossierFileDisplayTerms.DOSSIER_FILE_NO);
+
+		String dossierFileDate = ParamUtil
+		    .getString(
+		        uploadPortletRequest,
+		        DossierFileDisplayTerms.DOSSIER_FILE_DATE);
+
+		String sourceFileName = uploadPortletRequest
+		    .getFileName(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
+
+		sourceFileName = sourceFileName
+		    .concat(PortletConstants.TEMP_RANDOM_SUFFIX).concat(StringUtil
+		        .randomString());
+
+		String templateFileNo = ParamUtil
+		    .getString(
+		        uploadPortletRequest, DossierDisplayTerms.TEMPLATE_FILE_NO);
+
+		String redirectURL = ParamUtil
+		    .getString(uploadPortletRequest, "redirectURL");
+
+		Dossier dossier = null;
+
+		InputStream inputStream = null;
+
+		Date fileDate = DateTimeUtil
+		    .convertStringToDate(dossierFileDate);
+
+		try {
+			ServiceContext serviceContext = ServiceContextFactory
+			    .getInstance(uploadPortletRequest);
+			serviceContext
+			    .setAddGroupPermissions(true);
+			serviceContext
+			    .setAddGuestPermissions(true);
+			inputStream = uploadPortletRequest
+			    .getFileAsStream(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
+
+			dossier = DossierLocalServiceUtil
+			    .getDossier(dossierId);
+
+			String contentType = uploadPortletRequest
+			    .getContentType(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
+
+			String dossierDestinationFolder = StringPool.BLANK;
+
+			if (accountType
+			    .equals(PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN)) {
+				dossierDestinationFolder = PortletUtil
+				    .getCitizenDossierDestinationFolder(serviceContext
+				        .getScopeGroupId(), serviceContext
+				            .getUserId());
+				ownerUserId = serviceContext
+				    .getUserId();
+
+			}
+			else if (accountType
+			    .equals(PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS) &&
+			    mappingOrganizationId > 0) {
+				dossierDestinationFolder = PortletUtil
+				    .getBusinessDossierDestinationFolder(serviceContext
+				        .getScopeGroupId(), mappingOrganizationId);
+				ownerOrganizationId = mappingOrganizationId;
+			}
+
+			if (dossier != null) {
+				dossierDestinationFolder += StringPool.SLASH + dossier
+				    .getCounter();
+			}
+
+			DLFolder dossierFolder = DLFolderUtil
+			    .getTargetFolder(serviceContext
+			        .getUserId(), serviceContext
+			            .getScopeGroupId(),
+			        serviceContext
+			            .getScopeGroupId(),
+			        false, 0, dossierDestinationFolder, StringPool.BLANK, false,
+			        serviceContext);
+
+			FileEntry fileEntry = DLFileEntryUtil
+			    .addFileEntry(serviceContext
+			        .getScopeGroupId(), dossierFolder
+			            .getFolderId(),
+			        sourceFileName, contentType, displayName, StringPool.BLANK,
+			        StringPool.BLANK, inputStream, size, serviceContext);
+
+			DossierFileLocalServiceUtil
+			    .addDossierFile(serviceContext
+			        .getUserId(), dossierId, dossierPartId, templateFileNo,
+			        fileGroupId, ownerUserId, ownerOrganizationId,
+			        displayName, StringPool.BLANK, fileEntry
+			            .getFileEntryId(),
+			        PortletConstants.DOSSIER_FILE_MARK_UNKNOW,
+			        dossierFileType, dossierFileNo, fileDate,
+			        dossierFileOriginal,
+			        PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
+			        serviceContext);
+
+		}
+		catch (Exception e) {
+			_log
+			    .error(e);
+		}
+		finally {
+			if (Validator
+			    .isNotNull(redirectURL)) {
+				actionResponse
+				    .sendRedirect(redirectURL);
+			}
+		}
+	}
+	
 	@Override
 	public void render(
 	    RenderRequest renderRequest, RenderResponse renderResponse)
@@ -73,6 +265,9 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 		long dossierFileId = ParamUtil
 		    .getLong(renderRequest, DossierFileDisplayTerms.DOSSIER_FILE_ID);
+
+		long dossierPartId = ParamUtil
+		    .getLong(renderRequest, DossierFileDisplayTerms.DOSSIER_PART_ID);
 
 		if (processOrderId > 0) {
 			try {
@@ -125,6 +320,79 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				renderRequest
 				    .setAttribute(
 				        WebKeys.PROCESS_WORKFLOW_ENTRY, processWorkflow);
+
+				ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest
+				    .getAttribute(WebKeys.THEME_DISPLAY);
+
+				String accountType = StringPool.BLANK;
+
+				if (themeDisplay
+				    .isSignedIn()) {
+
+					List<UserGroup> userGroups = new ArrayList<UserGroup>();
+
+					User user = themeDisplay
+					    .getUser();
+					userGroups = user
+					    .getUserGroups();
+
+					if (!userGroups
+					    .isEmpty()) {
+						for (UserGroup userGroup : userGroups) {
+							if (userGroup
+							    .getName().equals(
+							        PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN) ||
+							    userGroup
+							        .getName().equals(
+							            PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS)) {
+								accountType = userGroup
+								    .getName();
+								break;
+							}
+
+						}
+					}
+
+					renderRequest
+					    .setAttribute(WebKeys.ACCOUNT_TYPE, accountType);
+
+					if (accountType
+					    .equals(
+					        PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN)) {
+						Citizen citizen = CitizenLocalServiceUtil
+						    .getCitizen(user
+						        .getUserId());
+						renderRequest
+						    .setAttribute(WebKeys.CITIZEN_ENTRY, citizen);
+					}
+					else if (accountType
+					    .equals(
+					        PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS)) {
+
+						Business business = BusinessLocalServiceUtil
+						    .getBusiness(user
+						        .getUserId());
+						renderRequest
+						    .setAttribute(WebKeys.BUSINESS_ENTRY, business);
+					}
+
+				}
+
+				if (dossierFileId > 0) {
+					DossierFile dossierFile = DossierFileLocalServiceUtil
+					    .getDossierFile(dossierFileId);
+
+					renderRequest
+					    .setAttribute(WebKeys.DOSSIER_FILE_ENTRY, dossierFile);
+				}
+
+				if (dossierPartId > 0) {
+					DossierPart dossierPart = DossierPartLocalServiceUtil
+					    .getDossierPart(dossierPartId);
+					renderRequest
+					    .setAttribute(WebKeys.DOSSIER_PART_ENTRY, dossierPart);
+				}
+
 			}
 
 			catch (Exception e) {
@@ -133,21 +401,6 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				        .getCause());
 			}
 
-			if (dossierFileId > 0) {
-				try {
-					DossierFile dossierFile = DossierFileLocalServiceUtil
-					    .getDossierFile(dossierFileId);
-
-					renderRequest
-					    .setAttribute(WebKeys.DOSSIER_FILE_ENTRY, dossierFile);
-				}
-				catch (Exception e) {
-					_log
-					    .error(e
-					        .getCause());
-				}
-
-			}
 		}
 		super.render(renderRequest, renderResponse);
 	}

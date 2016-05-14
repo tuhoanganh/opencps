@@ -58,6 +58,7 @@
 <%@page import="org.opencps.processmgt.model.ProcessWorkflow"%>
 <%@page import="org.opencps.util.PortletUtil"%>
 <%@page import="org.opencps.dossiermgt.bean.ProcessOrderBean"%>
+<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
 
 <%@ include file="../../init.jsp"%>
 
@@ -78,10 +79,7 @@
 	ServiceInfo serviceInfo = (ServiceInfo)request.getAttribute(WebKeys.SERVICE_INFO_ENTRY);
 	ServiceConfig serviceConfig = (ServiceConfig)request.getAttribute(WebKeys.SERVICE_CONFIG_ENTRY);
 	DossierTemplate dossierTemplate = (DossierTemplate) request.getAttribute(WebKeys.DOSSIER_TEMPLATE_ENTRY);
-	
 	ProcessWorkflow processWorkflow = (ProcessWorkflow) request.getAttribute(WebKeys.PROCESS_WORKFLOW_ENTRY);
-	
-	//ProcessWorkflow preProcessWorkflow = null;
 	
 	ActionHistory latestWorkflowActionHistory = null;
 	
@@ -258,12 +256,22 @@
 														name="<%=DossierFileDisplayTerms.DOSSIER_PART_ID %>" 
 														value="<%=String.valueOf(dossierPart.getDossierpartId()) %>"
 													/>
-													<portlet:param name="<%=DossierFileDisplayTerms.FILE_ENTRY_ID %>" value="<%=String.valueOf(dossierFile != null ? dossierFile.getFileEntryId() : 0) %>"/>
-													<portlet:param name="<%=DossierFileDisplayTerms.DOSSIER_FILE_ID %>" value="<%=String.valueOf(dossierFile != null ? dossierFile.getDossierFileId() : 0) %>"/>
-													<portlet:param name="<%=DossierFileDisplayTerms.INDEX %>" value="<%=String.valueOf(index) %>"/>
-													<portlet:param name="<%=DossierFileDisplayTerms.LEVEL %>" value="<%=String.valueOf(level) %>"/>
-													<portlet:param name="<%=DossierFileDisplayTerms.GROUP_NAME %>" value="<%=StringPool.BLANK%>"/>
-													<portlet:param name="<%=DossierFileDisplayTerms.PART_TYPE %>" value="<%=String.valueOf(dossierPart.getPartType()) %>"/>
+													<portlet:param 
+														name="<%=ProcessOrderDisplayTerms.PROCESS_ORDER_ID %>" 
+														value="<%=String.valueOf(processOrder != null ? processOrder.getProcessOrderId() : 0) %>"
+													/>
+													<portlet:param 
+														name="<%=DossierFileDisplayTerms.DOSSIER_FILE_ID %>" 
+														value="<%=String.valueOf(dossierFile != null ? dossierFile.getDossierFileId() : 0) %>"
+													/>
+													<portlet:param 
+														name="<%=DossierFileDisplayTerms.PART_TYPE %>" 
+														value="<%=String.valueOf(dossierPart.getPartType()) %>"
+													/>
+													<portlet:param 
+														name="<%=DossierFileDisplayTerms.FILE_ENTRY_ID %>" 
+														value="<%=String.valueOf(dossierFile != null ? dossierFile.getFileEntryId() : 0) %>"
+													/>
 												</liferay-util:include>
 											</span>
 										</div>
@@ -306,6 +314,18 @@
 />
 
 <aui:input 
+	name="<%=DossierDisplayTerms.RECEPTION_NO %>" 
+	value="<%=dossier != null && Validator.isNotNull(dossier.getReceptionNo()) ? dossier.getReceptionNo() : 0 %>" 
+	type="hidden"
+/>
+
+<aui:input 
+	name="<%=ProcessOrderDisplayTerms.ESTIMATE_DATETIME %>" 
+	
+	type="hidden"
+/>
+
+<aui:input 
 	name="<%=ProcessOrderDisplayTerms.FILE_GROUP_ID %>" 
 	value="<%=fileGroup != null ? fileGroup.getFileGroupId() : 0 %>" 
 	type="hidden"
@@ -334,7 +354,7 @@
 </aui:row>
 
 
-<aui:script>
+<aui:script use="aui-base,liferay-portlet-url,aui-io">
 
 	Liferay.provide(window, '<portlet:namespace/>assignToUser', function(e) {
 		
@@ -350,13 +370,15 @@
 		
 		var autoEvent = instance.attr('auto-event');
 		
-		var  dossierId = A.one('#<portlet:namespace/>dossierId').val();
+		var dossierId = A.one('#<portlet:namespace/>dossierId').val();
 		
-		var  processOrderId = A.one('#<portlet:namespace/>processOrderId').val();
+		var processOrderId = A.one('#<portlet:namespace/>processOrderId').val();
 		
-		var  actionUserId = A.one('#<portlet:namespace/>actionUserId').val();
+		var actionUserId = A.one('#<portlet:namespace/>actionUserId').val();
 		
-		var  fileGroupId = A.one('#<portlet:namespace/>fileGroupId').val();
+		var fileGroupId = A.one('#<portlet:namespace/>fileGroupId').val();
+		
+		var receptionNo = A.one('#<portlet:namespace/>receptionNo').val();
 		
 		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
 		portletURL.setParameter("mvcPath", "/html/portlets/processmgt/processorder/assign_to_user.jsp");
@@ -371,7 +393,8 @@
 		portletURL.setParameter("processOrderId", processOrderId);
 		portletURL.setParameter("actionUserId", actionUserId);
 		portletURL.setParameter("fileGroupId", fileGroupId);
-
+		portletURL.setParameter("receptionNo", receptionNo);
+		
 		<portlet:namespace/>assignDialog(portletURL.toString(), '<portlet:namespace />assignToUser', '<%= UnicodeLanguageUtil.get(pageContext, "handle") %>');
 	});
 	
@@ -453,22 +476,16 @@
 		
 		var instance = A.one(e);
 		
-		var dossierPartId = instance.attr('dossier-part');
+		var processOrderId = instance.attr('process-order');
 		
 		var dossierFileId = instance.attr('dossier-file');
-		
-		var index = instance.attr('index');
-		
-		var groupName = instance.attr('group-name');
 
 		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
 		portletURL.setParameter("mvcPath", "/html/portlets/processmgt/processorder/dynamic_form.jsp");
 		portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
 		portletURL.setPortletMode("normal");
-		portletURL.setParameter("dossierPartId", dossierPartId);
+		portletURL.setParameter("processOrderId", processOrderId);
 		portletURL.setParameter("dossierFileId", dossierFileId);
-		portletURL.setParameter("index", index);
-		portletURL.setParameter("groupName", groupName);
 		
 		<portlet:namespace/>openDossierDialog(portletURL.toString(), '<portlet:namespace />dynamicForm','<%= UnicodeLanguageUtil.get(pageContext, "declaration-online") %>');
 	});
@@ -480,25 +497,15 @@
 		
 		var instance = A.one(e);
 		
+		var processOrderId = instance.attr('process-order');
+		
+		var dossierFileId = instance.attr('dossier-file');
+		
 		var dossierPartId = instance.attr('dossier-part');
 		
-		var index = instance.attr('index');
+		var fileEntryId = instance.attr('file-entry');
 		
-		var groupName = instance.attr('group-name');
-		
-		var fileName = instance.attr('file-name');
-		
-		var level = instance.attr('level');
-		
-		var partType = instance.attr('part-type');
-		
-		var templateFileNo = instance.attr('template-no');
-		
-		var fileUpload = A.one('#<portlet:namespace/>fileUpload' + dossierPartId + '-' + index);
-		
-		var dossierFileId = parseInt(A.one('#<portlet:namespace/>dossierFile' + dossierPartId + '-' + index).val());
-		
-		if(fileUpload && parseInt(fileUpload.val()) > 0){
+		if(parseInt(fileEntryId) > 0){
 			alert('<%=UnicodeLanguageUtil.get(pageContext, "remove-old-file-before-upload")%>');
 			return;
 		}
@@ -507,14 +514,9 @@
 		portletURL.setParameter("mvcPath", "/html/portlets/processmgt/processorder/upload_dossier_file.jsp");
 		portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
 		portletURL.setPortletMode("normal");
-		portletURL.setParameter("dossierPartId", dossierPartId);
-		portletURL.setParameter("index", index);
-		portletURL.setParameter("level", level);
-		portletURL.setParameter("groupName", groupName);
-		portletURL.setParameter("fileName", fileName);
-		portletURL.setParameter("templateFileNo", templateFileNo);
+		portletURL.setParameter("processOrderId", processOrderId);
 		portletURL.setParameter("dossierFileId", dossierFileId);
-		portletURL.setParameter("partType", partType);
+		portletURL.setParameter("dossierPartId", dossierPartId);
 		<portlet:namespace/>openDossierDialog(portletURL.toString(), '<portlet:namespace />dossierFileId','<%= UnicodeLanguageUtil.get(pageContext, "upload-dossier-file") %>');
 	});
 
@@ -525,8 +527,7 @@
 					cache: false,
 					cssClass: 'opencps-dossiermgt-upload-dossier-file',
 					modal: true,
-					height: 480,
-					width: 800
+					
 				},
 				cache: false,
 				id: id,
@@ -546,8 +547,7 @@
 					cache: false,
 					cssClass: 'opencps-processmgt-assign',
 					modal: true,
-					height: 480,
-					width: 800
+					
 				},
 				cache: false,
 				id: id,
