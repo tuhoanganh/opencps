@@ -93,7 +93,7 @@
 	</aui:nav-bar-search>
 </aui:nav-bar>
 
-<aui:script>
+<aui:script use="liferay-util-list-fields,liferay-portlet-url">
 	Liferay.provide(window, '<portlet:namespace/>processMultipleDossier', function() {
 	
 		var A = AUI();
@@ -116,11 +116,11 @@
 			portletURL.setWindowState("<%=LiferayWindowState.NORMAL.toString()%>"); 
 			portletURL.setPortletMode("normal");
 		
-			processURL.setParameter("processOrderId", processOrderIds[0]);
-			processURL.setParameter("backURL", currentURL);
-			window.location.href = processURL.toString();
+			portletURL.setParameter("processOrderId", processOrderIds[0]);
+			portletURL.setParameter("backURL", currentURL);
+			window.location.href = portletURL.toString();
 		}
-	},['liferay-util-list-fields','liferay-portlet-url']);
+	});
 	
 	Liferay.provide(window, '<portlet:namespace/>searchByProcecssStep', function(e) {
 		

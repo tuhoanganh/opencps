@@ -86,7 +86,7 @@
 					row.addText(processOrder.getServiceName(), processURL);	
 					row.addText(processOrder.getStepName(), processURL);	
 					row.addText(processOrder.getAssignToUserName(), processURL);
-					row.addText(processOrder.getDealine(), processURL);
+					row.addText(Validator.isNotNull(processOrder.getDealine()) ? processOrder.getDealine() : StringPool.DASH, processURL);
 					
 				%>	
 			</liferay-ui:search-container-row> 
