@@ -274,19 +274,13 @@ public class ProcessOrderUtils {
 	 * @throws WindowStateException 
 	 * @throws PortletModeException 
 	 */
-	public static String generateMenuBuocXuLy(RenderRequest renderRequest, long[] roleIds, String active, boolean counter, String mvcPath) throws WindowStateException, PortletModeException {
+	public static String generateMenuBuocXuLy(RenderRequest renderRequest, long[] roleIds, String active, boolean counter, String renderURL) throws WindowStateException, PortletModeException {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
         long groupId = themeDisplay.getScopeGroupId();
 
 
-		PortletURL renderUrl =  PortletURLFactoryUtil.create(renderRequest, themeDisplay.getPortletDisplay().getId(), themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
-		
-		renderUrl.setWindowState(LiferayWindowState.NORMAL);
-		renderUrl.setPortletMode(LiferayPortletMode.VIEW);
-		renderUrl.setParameter("mvcPath", mvcPath);
-		
         // now read your parameters, e.g. like this:
         // long someParameter = ParamUtil.getLong(request, "someParameter");
 
@@ -295,10 +289,9 @@ public class ProcessOrderUtils {
 		sbHtml.append("<ul class=\"menu-opencps\">");
 		
 		for(ProcessStep ett: getProcessSteps(groupId, roleIds)){
-			renderUrl.setParameter(WebKeys.MENU_ACTIVE, ett.getProcessStepId()+"");
 			String mnClass =(Validator.isNotNull(active) && active.equalsIgnoreCase(String.valueOf(ett.getProcessStepId()))?"active-menu":"");
 			
-			sbHtml.append("<li class=\"menu-opencps-li "+mnClass+"\" onclick=\"openCPS_menu_submit('"+renderUrl+"')\" >");
+			sbHtml.append("<li class=\"menu-opencps-li "+mnClass+"\" onclick=\"openCPS_menu_submit('"+renderURL+"','"+ett.getProcessStepId()+"')\" >");
 			
 			sbHtml.append("<a>");
 			
@@ -374,18 +367,11 @@ public class ProcessOrderUtils {
 	
 	
 	
-	public static String generateMenuTrangThaiHoSo(RenderRequest renderRequest, long[] roleIds, String active, boolean counter, String mvcPath) throws WindowStateException, PortletModeException {
+	public static String generateMenuTrangThaiHoSo(RenderRequest renderRequest, long[] roleIds, String active, boolean counter, String renderURL) throws WindowStateException, PortletModeException {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
         long groupId = themeDisplay.getScopeGroupId();
-
-
-		PortletURL renderUrl =  PortletURLFactoryUtil.create(renderRequest, themeDisplay.getPortletDisplay().getId(), themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
-		
-		renderUrl.setWindowState(LiferayWindowState.NORMAL);
-		renderUrl.setPortletMode(LiferayPortletMode.VIEW);
-		renderUrl.setParameter("mvcPath", mvcPath);
 		
         // now read your parameters, e.g. like this:
         // long someParameter = ParamUtil.getLong(request, "someParameter");
@@ -395,10 +381,9 @@ public class ProcessOrderUtils {
 		sbHtml.append("<ul class=\"menu-opencps\">");
 		
 		for(Integer ett: PortletUtil.getDossierStatus()){
-			renderUrl.setParameter(WebKeys.MENU_ACTIVE, ett+"");
 			String mnClass =(Validator.isNotNull(active) && active.equalsIgnoreCase(String.valueOf(ett))?"active-menu":"");
 			
-			sbHtml.append("<li class=\"menu-opencps-li "+mnClass+"\" onclick=\"openCPS_menu_submit('"+renderUrl+"')\" >");
+			sbHtml.append("<li class=\"menu-opencps-li "+mnClass+"\" onclick=\"openCPS_menu_submit('"+renderURL+"','"+ett+"')\" >");
 			
 			sbHtml.append("<a>");
 			
