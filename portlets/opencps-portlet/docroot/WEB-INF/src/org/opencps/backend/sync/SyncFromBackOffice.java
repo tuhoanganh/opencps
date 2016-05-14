@@ -24,6 +24,7 @@ import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 
 import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.MessageListenerException;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -78,6 +79,15 @@ public class SyncFromBackOffice implements MessageListener{
         catch (Exception e) {
 	        // TODO: handle exception
         }
+    	
+    	Message msg = new Message();
+    	
+    	msg.put("_processOrderId", processOrderId);
+    	msg.put("_syncStatus", "ok");
+    	msg.put("_dossierStatus", dossierStatus);
+    	
+    	MessageBusUtil.sendMessage("opencps/backoffice/engine/callback", msg);
+    	
     }
 
 }
