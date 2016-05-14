@@ -1,7 +1,4 @@
-<%@page import="javax.portlet.WindowState"%>
-<%@page import="javax.portlet.PortletRequest"%>
-<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
-<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -21,18 +18,23 @@
  */
 %>
 
+<%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.dossiermgt.model.DossierPart"%>
 <%@page import="org.opencps.dossiermgt.model.DossierFile"%>
 <%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
 <%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="javax.portlet.WindowState"%>
+<%@page import="javax.portlet.PortletRequest"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
+<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
 <%@ include file="/init.jsp"%>
 
 <%
-	//DossierFile dossierFile = (DossierFile) request.getAttribute(WebKeys.DOSSIER_FILE_ENTRY);
-
-	DossierPart dossierPart = (DossierPart) request.getAttribute(WebKeys.DOSSIER_PART_ENTRY);
+	
+	DossierPart dossierPart = null;
 	
 	long dossierPartId = ParamUtil.getLong(request, DossierFileDisplayTerms.DOSSIER_PART_ID);
 	
@@ -47,7 +49,17 @@
 	int partType = ParamUtil.getInteger(request, DossierFileDisplayTerms.PART_TYPE);
 	
 	String groupName = ParamUtil.getString(request, DossierFileDisplayTerms.GROUP_NAME);
+	
+	long processOrderId = ParamUtil.getLong(request, ProcessOrderDisplayTerms.PROCESS_ORDER_ID);
+	
+	try{
+		if(dossierPartId > 0){
+			dossierPart = DossierPartLocalServiceUtil.getDossierPart(dossierPartId);
+		}
+	}
+	catch(Exception e){
 		
+	}
 %>
 
 <c:if test="<%=true %>">
@@ -359,30 +371,25 @@
 				
 				<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_RESULT %>">
 					<td width="40%" align="right">
-						<aui:a 
+						<%-- <aui:a 
 							id="<%=String.valueOf(dossierPartId) %>"
-							dossier-part="<%=String.valueOf(dossierPartId) %>"
+							process-order="<%=String.valueOf(processOrderId) %>"
 							dossier-file="<%=String.valueOf(dossierFileId) %>"
-							index="<%=String.valueOf(index) %>"
-							group-name="<%=groupName %>"
-							level = "<%=level %>"
+							dossier-part="<%=String.valueOf(dossierPartId) %>"
 							href="javascript:void(0);" 
 							label="declaration-online" 
 							cssClass="opencps dossiermgt part-file-ctr declaration-online"
 							onClick='<%=renderResponse.getNamespace() + "declarationOnline(this)" %>'
-						/>
+						/> --%>
 					</td>
 					
 					<td width="40%" align="right">
 						<aui:a 
 							id="<%=String.valueOf(dossierPartId) %>"
+							process-order="<%=String.valueOf(processOrderId) %>"
+							dossier-file="<%=String.valueOf(dossierFileId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
-							index="<%=String.valueOf(index) %>"
-							group-name="<%=groupName %>"
-							level = "<%=level %>"
-							file-name="<%=dossierPart != null ? dossierPart.getPartName() : StringPool.BLANK %>"
-							part-type="<%=partType %>"
-							template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
+							file-entry="<%=String.valueOf(fileEntryId) %>"
 							href="javascript:void(0);" 
 							label="upload-file" 
 							cssClass="opencps dossiermgt part-file-ctr upload-file" 
@@ -399,12 +406,11 @@
 					<td width="10%" align="right">
 						<aui:a
 							cssClass="opencps dossiermgt part-file-ctr remove-file"
-							dossier-part="<%=String.valueOf(dossierPartId) %>"
-							group-name="<%=groupName %>"
+							process-order="<%=String.valueOf(processOrderId) %>"
+							dossier-file="<%=String.valueOf(dossierFileId) %>"
 							level = "<%=level %>"
 							href="javascript:void(0);" 
 							id="<%=String.valueOf(dossierPartId) %>"
-							index="<%=String.valueOf(index) %>"
 							onClick='<%=renderResponse.getNamespace() + "removeFileUpload(this)" %>'
 						>
 							<i class="fa fa-times" aria-hidden="true"></i>

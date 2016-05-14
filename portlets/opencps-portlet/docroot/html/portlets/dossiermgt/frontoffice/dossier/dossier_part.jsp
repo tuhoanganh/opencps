@@ -535,8 +535,7 @@
 					cache: false,
 					cssClass: 'opencps-dossiermgt-upload-dossier-file',
 					modal: true,
-					height: 480,
-					width: 800
+					
 				},
 				cache: false,
 				id: id,
