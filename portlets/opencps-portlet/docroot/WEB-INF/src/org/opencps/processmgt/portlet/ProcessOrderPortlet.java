@@ -65,6 +65,8 @@ import org.opencps.util.PortletPropsValues;
 import org.opencps.util.PortletUtil;
 import org.opencps.util.WebKeys;
 
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
@@ -100,9 +102,9 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		long dossierId = ParamUtil
 		    .getLong(uploadPortletRequest, DossierDisplayTerms.DOSSIER_ID);
 
-		long dossierFileId = ParamUtil
+		/*long dossierFileId = ParamUtil
 		    .getLong(
-		        uploadPortletRequest, DossierFileDisplayTerms.DOSSIER_FILE_ID);
+		        uploadPortletRequest, DossierFileDisplayTerms.DOSSIER_FILE_ID);*/
 
 		long dossierPartId = ParamUtil
 		    .getLong(
@@ -253,6 +255,44 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				    .sendRedirect(redirectURL);
 			}
 		}
+	}
+	
+	public void deleteAttachmentFile(
+	    ActionRequest actionRequest, ActionResponse actionResponse)
+	    throws IOException {
+
+		long dossierFileId = ParamUtil
+		    .getLong(actionRequest, DossierFileDisplayTerms.DOSSIER_FILE_ID);
+		DossierFile dossierFile = null;
+
+		JSONObject jsonObject = null;
+
+		try {
+			if (dossierFileId > 0) {
+				jsonObject = JSONFactoryUtil
+				    .createJSONObject();
+				dossierFile = DossierFileLocalServiceUtil
+				    .getDossierFile(dossierFileId);
+				long fileEntryId = dossierFile
+				    .getFileEntryId();
+				DossierFileLocalServiceUtil
+				    .deleteDossierFile(dossierFileId, fileEntryId);
+				jsonObject
+				    .put("deleted", Boolean.TRUE);
+			}
+
+		}
+		catch (Exception e) {
+			jsonObject
+			    .put("deleted", Boolean.FALSE);
+			_log
+			    .error(e);
+		}
+		finally {
+			PortletUtil
+			    .writeJSON(actionRequest, actionResponse, jsonObject);
+		}
+
 	}
 	
 	@Override
@@ -503,17 +543,10 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		MessageBusUtil
 		    .sendMessage("opencps/backoffice/engine/destination", message);
 
-		if (Validator
-		    .isNotNull(redirectURL)) {
-			try {
-				actionResponse
-				    .sendRedirect(redirectURL);
-			}
-			catch (IOException e) {
-				_log
-				    .error(e);
-			}
-		}
+		actionResponse
+	    .setRenderParameter(
+	        "jspPage",
+	        "/html/portlets/dossiermgt/frontoffice/upload_dossier_file.jsp");
 	}
 
 	private Log _log = LogFactoryUtil
