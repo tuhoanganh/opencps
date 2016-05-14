@@ -84,6 +84,10 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String PROCESS_STEP_ENTRY = "PROCESS_STEP_ENTRY";
 	
 	public static final String PROCESS_WORKFLOW_ENTRY = "PROCESS_WORKFLOW_ENTRY";
+	
+	public static final String MENU_ACTIVE = "active";
+	
+	public static final String PROCESS_ORDER = "PROCESS_ORDER";
 
 	public static final String DOSSIER_ENTRY = "DOSSIER_ENTRY";
 	
@@ -104,4 +108,10 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String PROCESS_ORDER_ENTRY = "PROCESS_ORDER_ENTRY";
 	
 	public static final String FILE_GROUP_ENTRY = "FILE_GROUP_ENTRY";
+
+	
+	public static final String FILE_ID = "dossierFileId";
+	
+	public static final int DOSSIER_MONITORING_LIST = 1;
+	public static final int DOSSIER_MONITORING_UPDATE = 2;
 }

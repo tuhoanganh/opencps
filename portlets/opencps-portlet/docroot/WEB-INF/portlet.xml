@@ -642,7 +642,7 @@
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/portlets/dossiermgt/statemenu/view.jsp</value>
+			<value>/html/portlets/dossiermgt/statemenu/dossiermenu.jsp</value>
 		</init-param>
 		<init-param>
 			<name>template-path</name>
