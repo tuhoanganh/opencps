@@ -17,11 +17,16 @@
 
 package org.opencps.util;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
+import javax.servlet.http.HttpServletResponse;
 
 import org.opencps.datamgt.model.DictCollection;
 import org.opencps.datamgt.model.DictItem;
@@ -29,9 +34,12 @@ import org.opencps.datamgt.service.DictCollectionLocalServiceUtil;
 import org.opencps.datamgt.service.DictItemLocalServiceUtil;
 
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.servlet.ServletResponseUtil;
+import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.util.PortalUtil;
 
 /**
  * @author trungnt
@@ -615,5 +623,23 @@ public class PortletUtil {
 			break;
 		}
 		return messageInfo;
+	}
+	
+	public static void writeJSON(
+	    ActionRequest actionRequest, ActionResponse actionResponse, Object json)
+	    throws IOException {
+
+		HttpServletResponse response = PortalUtil
+		    .getHttpServletResponse(actionResponse);
+
+		response
+		    .setContentType(ContentTypes.APPLICATION_JSON);
+
+		ServletResponseUtil
+		    .write(response, json
+		        .toString());
+		response
+		    .flushBuffer();
+
 	}
 }
