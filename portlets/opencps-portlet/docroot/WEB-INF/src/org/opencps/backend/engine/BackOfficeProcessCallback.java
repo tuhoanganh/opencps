@@ -17,9 +17,14 @@
 
 package org.opencps.backend.engine;
 
+import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
+
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.MessageListenerException;
+import com.liferay.portal.kernel.util.GetterUtil;
 
 
 /**
@@ -35,8 +40,23 @@ public class BackOfficeProcessCallback implements MessageListener{
     public void receive(Message message)
         throws MessageListenerException {
 
-	    // TODO Auto-generated method stub
+	    //Run doRevice
+    	
+    	doRevice(message);
 	    
     }
+    
+    private void doRevice(Message message) {
+    	long processOrderId = GetterUtil.getLong(message.get("_processOrderId"));
+    	int dossierStatus = GetterUtil.getInteger(message.get("_dossierStatus"));
+    	try {
+        	ProcessOrderLocalServiceUtil.updateProcessOrderStatus(processOrderId, dossierStatus);
+        }
+        catch (Exception e) {
+	        _log.error(e);
+        }
+    }
+    
+    private Log _log = LogFactoryUtil.getLog(BackOfficeProcessCallback.class);
 
 }
