@@ -20,7 +20,7 @@
 
 
 <%
-	serviceConfigs = ServiceConfigLocalServiceUtil.getServiceConFigsByG_M(scopeGroupId, PortletConstants.SERVICE_CONFIG_FRONTOFFICE, searchContainer.getStart(), searchContainer.getEnd());
+	serviceConfigs = ServiceConfigLocalServiceUtil.searchServiceConfigByServiceMode(scopeGroupId, new int[]{PortletConstants.SERVICE_CONFIG_FRONTOFFICE, PortletConstants.SERVICE_CONFIG_FRONT_BACK_OFFICE}, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
 
-	totalCount = ServiceConfigLocalServiceUtil.countServiceConFigsByG_M(scopeGroupId, PortletConstants.SERVICE_CONFIG_FRONTOFFICE);
+	totalCount = ServiceConfigLocalServiceUtil.countServiceConfigByServiceMode(scopeGroupId, new int[]{PortletConstants.SERVICE_CONFIG_FRONTOFFICE, PortletConstants.SERVICE_CONFIG_FRONT_BACK_OFFICE});
 %>
