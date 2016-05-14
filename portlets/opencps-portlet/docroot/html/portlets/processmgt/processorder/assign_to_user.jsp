@@ -18,6 +18,8 @@
  */
 %>
 
+<%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
+<%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
 <%@page import="org.opencps.processmgt.util.ProcessUtils"%>
 <%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
 <%@page import="org.opencps.dossiermgt.model.DossierFile"%>
@@ -25,6 +27,14 @@
 <%@ include file="../init.jsp"%>
 
 <%
+	boolean success = false;
+	
+	try{
+		success = !SessionMessages.isEmpty(renderRequest) && SessionErrors.isEmpty(renderRequest);
+		
+	}catch(Exception e){
+		
+	}
 	ProcessOrder processOrder = (ProcessOrder) request.getAttribute(WebKeys.PROCESS_ORDER_ENTRY);
 	DossierFile  dossierFile = (DossierFile) request.getAttribute(WebKeys.DOSSIER_FILE_ENTRY);
 
@@ -161,10 +171,17 @@
 				<portlet:namespace/>closeDialog();
 			});
 		}
+		
+		var success = '<%=success%>';
+		
+		if(success == 'true'){
+			<portlet:namespace/>closeDialog();
+		}
 	});
 	
 	Liferay.provide(window, '<portlet:namespace/>closeDialog', function() {
 		var dialog = Liferay.Util.getWindow('<portlet:namespace/>assignToUser');
-		dialog.destroy(); // You can try toggle/hide whate
+		dialog.destroy();
+		Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.PROCESS_ORDER_PORTLET %>_');
 	});
 </aui:script>

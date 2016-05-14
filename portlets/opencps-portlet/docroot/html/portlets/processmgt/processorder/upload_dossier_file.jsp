@@ -65,13 +65,9 @@
 			
 	PortletUtil.SplitDate spd = new PortletUtil.SplitDate(defaultDossierFileDate);
 	
-	
-	
 %>
 
-
 <portlet:actionURL var="addAttachmentFileURL" name="addAttachmentFile"/>
-
 
 <liferay-ui:error message="upload-error" key="upload-error"/>
 

@@ -249,11 +249,15 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			    .error(e);
 		}
 		finally {
-			if (Validator
+			/*if (Validator
 			    .isNotNull(redirectURL)) {
 				actionResponse
 				    .sendRedirect(redirectURL);
-			}
+			}*/
+			actionResponse
+		    .setRenderParameter(
+		        "jspPage",
+		        "/html/portlets/processmgt/processorder/upload_dossier_file.jsp");
 		}
 	}
 	
@@ -458,8 +462,8 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		    .getString(
 		        actionRequest, ProcessOrderDisplayTerms.ESTIMATE_DATETIME);
 
-		String redirectURL = ParamUtil
-		    .getString(actionRequest, "redirectURL");
+		/*String redirectURL = ParamUtil
+		    .getString(actionRequest, "redirectURL");*/
 
 		long dossierId = ParamUtil
 		    .getLong(actionRequest, ProcessOrderDisplayTerms.DOSSIER_ID);
@@ -544,9 +548,9 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		    .sendMessage("opencps/backoffice/engine/destination", message);
 
 		actionResponse
-	    .setRenderParameter(
-	        "jspPage",
-	        "/html/portlets/dossiermgt/frontoffice/upload_dossier_file.jsp");
+		    .setRenderParameter(
+		        "jspPage",
+		        "/html/portlets/processmgt/processorder/assign_to_user.jsp");
 	}
 
 	private Log _log = LogFactoryUtil
