@@ -20,8 +20,8 @@
 
 
 <%
-	totalCount = ProcessOrderLocalServiceUtil.countProcessOrder(0);
-	processOrders = ProcessOrderLocalServiceUtil.searchProcessOrder(0, 
+	totalCount = ProcessOrderLocalServiceUtil.countProcessOrder(processStepId, actionUserId);
+	processOrders = ProcessOrderLocalServiceUtil.searchProcessOrder(processStepId, actionUserId, 
 		searchContainer.getStart(), searchContainer.getEnd(), 
 		searchContainer.getOrderByComparator());
 %>

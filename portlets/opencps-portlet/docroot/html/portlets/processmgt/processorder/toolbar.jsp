@@ -1,3 +1,6 @@
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
+<%@page import="org.opencps.processmgt.service.ProcessOrderLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.bean.ProcessOrderBean"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -32,6 +35,12 @@
 <%
 	String tabs1 = ParamUtil.getString(request, "tabs1", ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS);
 	PortletURL searchURL = renderResponse.createRenderURL();
+	
+	List<ProcessOrderBean> processOrderBeans = new ArrayList<ProcessOrderBean>();
+	
+	try{
+		processOrderBeans = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getUserProcessStep(themeDisplay.getUserId());
+	}catch(Exception e){}
 %>
 
 <aui:nav-bar cssClass="custom-toolbar">
@@ -45,24 +54,34 @@
 				id="processDossier" 
 				label="process-dossier" 
 				iconCssClass="icon-plus"  
-				href="<%=processDossierURL %>"
+				href='<%="javascript:" + renderResponse.getNamespace() + "processMultipleDossier()" %>'
 			/>
 		</c:if>
 	</aui:nav>
 	
 	<aui:nav-bar-search cssClass="pull-right">
 		<div class="form-search">
-			<aui:form action="<%= searchURL %>" method="post" name="fm">
+			<aui:form action="<%= searchURL %>" method="post" name="fmSearch">
 				<aui:row>
-					<aui:col width="50">
-						<aui:select name="dossierStatus" label="" inlineField="<%=true %>" inlineLabel="left">
-							<aui:option value="-1"><liferay-ui:message key="all"/></aui:option>
+					<aui:col width="100">
+						<aui:select 
+							name="dossierStatus" 
+							label="step-name" 
+							inlineField="<%=true %>" 
+							inlineLabel="left"
+							onChange='<%=renderResponse.getNamespace() + "searchByProcecssStep(this)"%>'
+						>
+							<aui:option value="0"><liferay-ui:message key="all"/></aui:option>
 							<%
-								for(Integer status : PortletUtil.getDossierStatus()){
-									%>
-										<aui:option value="<%= status%>"><%=PortletUtil.getDossierStatusLabel(status, locale) %></aui:option>
-									<%
+							
+								if(processOrderBeans != null){
+									for(ProcessOrderBean processOrderBean : processOrderBeans){
+										%>
+											<aui:option value="<%= processOrderBean.getProcessStepId()%>"><%=processOrderBean.getStepName() %></aui:option>
+										<%
+									}
 								}
+								
 							%>
 						</aui:select>
 					</aui:col>
@@ -71,6 +90,38 @@
 		</div>
 	</aui:nav-bar-search>
 </aui:nav-bar>
+
+<aui:script>
+	Liferay.provide(window, '<portlet:namespace/>processMultipleDossier', function() {
+	
+		var A = AUI();
+		
+		var processOrderIds = Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, '<portlet:namespace />allRowIds');
+		
+		processOrderIds = processOrderIds.split(",");
+		
+		if(processOrderIds.length > 0){
+			alert('<%= UnicodeLanguageUtil.get(pageContext, "multiple-process-order-handle-is-developing") %>');
+			return;
+		}else if(processOrderIds.length == 0){
+			alert('<%= UnicodeLanguageUtil.get(pageContext, "you-need-select-any-process-order-to-process") %>');
+			return;
+		}else{
+			
+		}
+	},['liferay-util-list-fields']);
+	
+	Liferay.provide(window, '<portlet:namespace/>searchByProcecssStep', function(e) {
+		
+		var A = AUI();
+		
+		var instance = A.one(e);
+		
+		var processStepId = instance.attr(instance.val());
+		
+		submitForm(document.<portlet:namespace />fmSearch);
+	});
+</aui:script>
 
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.dossiermgt.frontoffice.toolbar.jsp");
