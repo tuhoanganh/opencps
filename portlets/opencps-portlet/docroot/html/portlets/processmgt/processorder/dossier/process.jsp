@@ -386,7 +386,6 @@
 		portletURL.setPortletMode("normal");
 		portletURL.setParameter("processWorkflowId", processWorkflowId);
 		portletURL.setParameter("serviceProcessId", serviceProcessId);
-		
 		portletURL.setParameter("autoEvent", autoEvent);
 		portletURL.setParameter("dossierId", dossierId);
 		portletURL.setParameter("processStepId", processStepId);
@@ -404,30 +403,14 @@
 			
 			var instance = A.one(e);
 			
-			var dossierPartId = instance.attr('dossier-part');
+			var dossierFileId = instance.attr('dossier-file');
 			
-			var index = instance.attr('index');
-
-			var rowcheck = A.one('#rowcheck' + dossierPartId + '-' + index);
-			
-			var dossierFileData = A.one('#<portlet:namespace/>dossierFileData' + dossierPartId + '-' + index);
-			
-			var fileUpload = A.one('#<portlet:namespace/>fileUpload' + dossierPartId + '-' + index);
-			
-			var dossierFileId = parseInt(A.one('#<portlet:namespace/>dossierFile' + dossierPartId + '-' + index).val());
-			
-			if(fileUpload && parseInt(fileUpload.val()) > 0){
+			if(parseInt(dossierFileId) > 0){
 				var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.ACTION_PHASE) %>');
-				
-				if(dossierFileId > 0){
-					portletURL.setParameter("javax.portlet.action", "deleteDossierFile");
-					portletURL.setParameter("dossierFileId", dossierFileId);
-				}else{
-					portletURL.setParameter("javax.portlet.action", "deleteTempFile");
-				}
-				
+
+				portletURL.setParameter("javax.portlet.action", "deleteAttachmentFile");
+				portletURL.setParameter("dossierFileId", dossierFileId);
 				portletURL.setPortletMode("view");
-				portletURL.setParameter("fileEntryId", fileUpload.val());
 				portletURL.setWindowState('<%=WindowState.NORMAL%>');
 				
 				A.io.request(
@@ -440,22 +423,7 @@
 									response = JSON.parse(response);
 									
 									if(response.deleted == true){
-										
-										fileUpload.val('');
-
-										if(dossierFileData){
-											dossierFileData.val('');
-										}
-										
-										if(rowcheck){
-											rowcheck.replaceClass('fa-check-square-o', 'fa-square-o');
-										}
-										
-										var counterLabel = A.one('.alias-' + dossierPartId + '-' + index);
-										 
-										if(counterLabel){
-											counterLabel.text(0);
-										}
+										Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.PROCESS_ORDER_PORTLET %>_');
 									}else{
 										alert('<%= UnicodeLanguageUtil.get(pageContext, "error-while-remove-this-file") %>');
 									}

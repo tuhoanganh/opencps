@@ -1,5 +1,4 @@
 
-<%@page import="org.opencps.util.PortletConstants"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -38,6 +37,7 @@
 <%@page import="org.opencps.accountmgt.search.BusinessDisplayTerms"%>
 <%@page import="org.opencps.accountmgt.model.Business"%>
 <%@page import="org.opencps.accountmgt.model.Citizen"%>
+<%@page import="org.opencps.util.PortletConstants"%>
 <%@ include file="../init.jsp"%>
 
 <%
@@ -65,13 +65,9 @@
 			
 	PortletUtil.SplitDate spd = new PortletUtil.SplitDate(defaultDossierFileDate);
 	
-	
-	
 %>
 
-
 <portlet:actionURL var="addAttachmentFileURL" name="addAttachmentFile"/>
-
 
 <liferay-ui:error message="upload-error" key="upload-error"/>
 
@@ -179,7 +175,7 @@
 		}
 		
 		if(success == 'true'){
-			
+			<portlet:namespace/>closeDialog();
 		}
 		
 	});
@@ -187,7 +183,8 @@
 	
 	Liferay.provide(window, '<portlet:namespace/>closeDialog', function() {
 		var dialog = Liferay.Util.getWindow('<portlet:namespace/>dossierFileId');
-		dialog.destroy(); // You can try toggle/hide whate
+		dialog.destroy();
+		Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.PROCESS_ORDER_PORTLET %>_');
 	});
 
 </aui:script>

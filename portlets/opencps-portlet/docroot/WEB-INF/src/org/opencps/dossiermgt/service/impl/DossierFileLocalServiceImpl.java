@@ -24,6 +24,7 @@ import org.opencps.dossiermgt.NoSuchDossierFileException;
 import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.service.base.DossierFileLocalServiceBaseImpl;
 
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.service.ServiceContext;
@@ -49,7 +50,6 @@ public class DossierFileLocalServiceImpl
 	 * access the dossier file local service.
 	 */
 
-	
 	public DossierFile addDossierFile(
 	    long userId, long dossierId, long dossierPartId, String templateFileNo,
 	    long groupFileId, long ownerUserId, long ownerOrganizationId,
@@ -111,6 +111,18 @@ public class DossierFileLocalServiceImpl
 		    .update(dossierFile);
 	}
 
+	public void deleteDossierFile(long dossierFileId, long fileEntryId)
+	    throws PortalException, SystemException {
+
+		if (fileEntryId > 0) {
+			dlFileEntryLocalService
+			    .deleteDLFileEntry(fileEntryId);
+		}
+
+		dossierFilePersistence
+		    .remove(dossierFileId);
+	}
+
 	/**
 	 * @param dossierId
 	 * @param dossierPartId
@@ -139,7 +151,7 @@ public class DossierFileLocalServiceImpl
 		return dossierFilePersistence
 		    .findByD_F(dossierId, groupFileId);
 	}
-	
+
 	public DossierFile updateDossierFile(
 	    long dossierFileId, long userId, long dossierId, long dossierPartId,
 	    String templateFileNo, long groupFileId, long ownerUserId,
