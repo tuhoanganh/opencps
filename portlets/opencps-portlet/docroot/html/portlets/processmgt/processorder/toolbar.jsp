@@ -1,3 +1,5 @@
+<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
+<%@page import="javax.portlet.PortletRequest"%>
 <%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@page import="org.opencps.processmgt.service.ProcessOrderLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.bean.ProcessOrderBean"%>
@@ -96,20 +98,29 @@
 	
 		var A = AUI();
 		
+		var currentURL = '<%=currentURL.toString()%>';
+		
 		var processOrderIds = Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, '<portlet:namespace />allRowIds');
 		
 		processOrderIds = processOrderIds.split(",");
-		
-		if(processOrderIds.length > 0){
+	
+		if(processOrderIds.length > 1){
 			alert('<%= UnicodeLanguageUtil.get(pageContext, "multiple-process-order-handle-is-developing") %>');
 			return;
 		}else if(processOrderIds.length == 0){
 			alert('<%= UnicodeLanguageUtil.get(pageContext, "you-need-select-any-process-order-to-process") %>');
 			return;
 		}else{
-			
+			var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
+			portletURL.setParameter("mvcPath", "/html/portlets/processmgt/processorder/process_order_detail.jsp");
+			portletURL.setWindowState("<%=LiferayWindowState.NORMAL.toString()%>"); 
+			portletURL.setPortletMode("normal");
+		
+			processURL.setParameter("processOrderId", processOrderIds[0]);
+			processURL.setParameter("backURL", currentURL);
+			window.location.href = processURL.toString();
 		}
-	},['liferay-util-list-fields']);
+	},['liferay-util-list-fields','liferay-portlet-url']);
 	
 	Liferay.provide(window, '<portlet:namespace/>searchByProcecssStep', function(e) {
 		
