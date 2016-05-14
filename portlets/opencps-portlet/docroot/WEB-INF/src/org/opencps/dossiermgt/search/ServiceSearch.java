@@ -25,19 +25,16 @@ import java.util.Map;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
 
-import org.opencps.datamgt.model.DictCollection;
-import org.opencps.datamgt.util.DataMgtUtil;
+import org.opencps.dossiermgt.model.ServiceConfig;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.OrderByComparator;
-import com.liferay.portal.kernel.util.ParamUtil;
 
 /**
  * @author trungnt
  */
-public class ServiceSearch extends SearchContainer<DictCollection> {
+public class ServiceSearch extends SearchContainer<ServiceConfig> {
 
 	static List<String> headerNames = new ArrayList<String>();
 	static Map<String, String> orderableHeaders = new HashMap<String, String>();
@@ -55,7 +52,7 @@ public class ServiceSearch extends SearchContainer<DictCollection> {
 		
 	}
 	public static final String EMPTY_RESULTS_MESSAGE =
-	    "no-servicexp-were-found";
+	    "no-service-were-found";
 
 	public ServiceSearch(
 	    PortletRequest portletRequest, int delta, PortletURL iteratorURL) {
@@ -81,7 +78,7 @@ public class ServiceSearch extends SearchContainer<DictCollection> {
 		        .valueOf(displayTerms
 		            .getGroupId()));
 		
-		try {
+		/*try {
 
 			String orderByCol = ParamUtil
 			    .getString(portletRequest, "orderByCol");
@@ -99,7 +96,7 @@ public class ServiceSearch extends SearchContainer<DictCollection> {
 		catch (Exception e) {
 			_log
 			    .error(e);
-		}
+		}*/
 	}
 
 	public ServiceSearch(
