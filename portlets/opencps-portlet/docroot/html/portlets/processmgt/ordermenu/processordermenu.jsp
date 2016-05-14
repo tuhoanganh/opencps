@@ -1,3 +1,4 @@
+<%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
 <%@page import="com.liferay.portal.kernel.util.GroupThreadLocal"%>
 <%@page import="org.opencps.processmgt.util.ProcessOrderUtils"%>
 <%
@@ -23,22 +24,22 @@
 
 <%
 	long[] roleIds = user.getRoleIds();
-	String active = ParamUtil.getString(request, WebKeys.MENU_ACTIVE);
+	String active = PortalUtil.getOriginalServletRequest(request).getParameter("_"+WebKeys.PROCESS_ORDER_PORTLET+"_"+ProcessOrderDisplayTerms.PROCESS_STEP_ID);
 	boolean counter = true;
 %>
-<liferay-portlet:renderURL var="renderURL">
-	<portlet:param name="mvcPath" value="<%=templatePath + \"processordermenu.jsp\" %>"/>
+<liferay-portlet:renderURL var="renderURL" portletName="<%=WebKeys.PROCESS_ORDER_PORTLET %>">
+	<portlet:param name="mvcPath" value="/html/portlets/processmgt/processorder/processordertodolist.jsp"/>
 </liferay-portlet:renderURL>
 <liferay-portlet:actionURL  var="menuCounterUrl" name="menuCounterAction" >
 </liferay-portlet:actionURL>
-<%=ProcessOrderUtils.generateMenuBuocXuLy(renderRequest, roleIds, active, counter, templatePath + "processordermenu.jsp")  %>
+<%=ProcessOrderUtils.generateMenuBuocXuLy(renderRequest, roleIds, active, counter, renderURL.toString())  %>
 <aui:script use="io,aui-loading-mask">
 	menu_left_count('<%=menuCounterUrl.toString() %>');
 </aui:script>
 <script type="text/javascript">
-function openCPS_menu_submit(renderURL) {
+function openCPS_menu_submit(renderURL, stepId) {
 	var A = AUI();
-	window.location = renderURL ;
+	window.location = renderURL + '&<%="_"+WebKeys.PROCESS_ORDER_PORTLET+"_"+ProcessOrderDisplayTerms.PROCESS_STEP_ID %>=' + stepId;
 }
 function menu_left_count(url) {
 	var A = AUI();
