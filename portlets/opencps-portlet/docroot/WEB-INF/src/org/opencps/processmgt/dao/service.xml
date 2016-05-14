@@ -238,7 +238,6 @@
 		<column name="actionUserId" type="long"/>
 		<column name="actionDatetime" type="Date"/>
 		<column name="actionNote" type="String"/>
-		<column name="actionStepId" type="long"/>
 		<column name="assignToUserId" type="long"/>
 		<column name="processWorkflowId" type="long"/>
 		<column name="dossierStatus" type="int"/>
