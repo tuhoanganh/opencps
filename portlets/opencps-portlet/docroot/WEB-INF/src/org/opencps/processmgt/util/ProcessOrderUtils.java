@@ -22,23 +22,22 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import javax.portlet.PortletModeException;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
+import javax.portlet.WindowStateException;
 
-import org.opencps.accountmgt.search.BusinessDisplayTerms;
-import org.opencps.accountmgt.util.comparator.BusinessAccountComparator;
-import org.opencps.accountmgt.util.comparator.BusinessNameComparator;
-import org.opencps.accountmgt.util.comparator.BusinessNumberComparator;
-import org.opencps.accountmgt.util.comparator.BusinessTypeComparator;
-import org.opencps.accountmgt.util.comparator.CitizenAccountStatusComparator;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.model.ProcessStep;
 import org.opencps.processmgt.model.StepAllowance;
-import org.opencps.processmgt.search.ProcessOrderDisplayTerms;
 import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
 import org.opencps.processmgt.service.StepAllowanceLocalServiceUtil;
+import org.opencps.util.PortletUtil;
 //import org.opencps.processmgt.util.comparator.BuocXuLyComparator;
 //import org.opencps.processmgt.util.comparator.ChuHoSoComparator;
 //import org.opencps.processmgt.util.comparator.MaTiepNhanComparator;
@@ -47,12 +46,15 @@ import org.opencps.processmgt.service.StepAllowanceLocalServiceUtil;
 import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.portlet.LiferayPortletMode;
+import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portlet.PortletURLFactoryUtil;
 
 /**
  * @author binhth
@@ -108,7 +110,6 @@ public class ProcessOrderUtils {
         private String trangThaiHoSo;
 		public CustomDisPlay() {
 
-	        // TODO Auto-generated constructor stub
         }
 		
         public CustomDisPlay(long id,
