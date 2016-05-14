@@ -86,7 +86,7 @@ public class SyncFromBackOffice implements MessageListener{
     	msg.put("_syncStatus", "ok");
     	msg.put("_dossierStatus", dossierStatus);
     	
-    	MessageBusUtil.sendMessage("opencps/backoffice/engine/callback", msg);
+    	//MessageBusUtil.sendMessage("opencps/backoffice/engine/callback", msg);
     	
     }
 
