@@ -1,3 +1,4 @@
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -19,10 +20,15 @@
 
 <%@page import="org.opencps.processmgt.util.ProcessUtils"%>
 <%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
+<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
+<%@page import="org.opencps.processmgt.model.ProcessOrder"%>
 <%@ include file="../init.jsp"%>
 
 <%
-	long dossierId = ParamUtil.getLong(request, ProcessOrderDisplayTerms.DOSSIER_ID);
+	ProcessOrder processOrder = (ProcessOrder) request.getAttribute(WebKeys.PROCESS_ORDER_ENTRY);
+	DossierFile  dossierFile = (DossierFile) request.getAttribute(WebKeys.DOSSIER_FILE_ENTRY);
+
+	/* long dossierId = ParamUtil.getLong(request, ProcessOrderDisplayTerms.DOSSIER_ID);
 	long fileGroupId =  ParamUtil.getLong(request, ProcessOrderDisplayTerms.FILE_GROUP_ID);
 	long processOrderId = ParamUtil.getLong(request, ProcessOrderDisplayTerms.PROCESS_ORDER_ID);
 	long actionUserId = ParamUtil.getLong(request, ProcessOrderDisplayTerms.ACTION_USER_ID);
@@ -32,6 +38,7 @@
 	
 	String actionNote = ParamUtil.getString(request, ProcessOrderDisplayTerms.ACTION_NOTE);
 	String event = ParamUtil.getString(request, ProcessOrderDisplayTerms.EVENT);
+	String receptionNo = ParamUtil.getString(request, ProcessOrderDisplayTerms.RECEPTION_NO); */
 %>
 
 <portlet:actionURL var="assignToUserURL" name="assignToUser"/>
@@ -116,6 +123,7 @@
 	<aui:input 
 		name="<%=ProcessOrderDisplayTerms.RECEPTION_NO %>" 
 		label="reception-no" 
+		value="<%=receptionNo %>"
 		type="text"
 	/>
 	
@@ -136,8 +144,7 @@
 		nullable="<%=true %>"
 	/>
 	
-	<aui:input name="<%=ProcessOrderDisplayTerms.ACTION_NOTE %>" label="action-note"/>
-	
+	<aui:input name="<%=ProcessOrderDisplayTerms.ACTION_NOTE %>" label="action-note" type="textarea"/>
 	
 	<aui:input name="signature" type="checkbox" label="apcept-signature"/>
 	<aui:button type="submit" value="submit" name="submit"/>
