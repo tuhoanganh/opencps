@@ -19,5 +19,6 @@
 
 <%@ include file="../../init.jsp"%>
 
-<h5>Developing</h5>
-
+<div class="portlet-msg-info">
+	<liferay-ui:message key="this-module-is-in-development-stage"/>
+</div>
