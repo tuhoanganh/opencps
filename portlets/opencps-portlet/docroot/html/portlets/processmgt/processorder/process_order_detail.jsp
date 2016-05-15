@@ -51,9 +51,10 @@
 
 <liferay-util:buffer var="htmlTop">
 	<c:if test="<%= processOrder != null %>">
-		<div class="dossier-info">
-			<div class="float-container">
-				<span class="service-name"><%= HtmlUtil.escape(serviceInfo != null ? serviceInfo.getServiceName() : StringPool.BLANK) %></span>
+		<div class="form-navigator-topper dossier-info">
+			<div class="form-navigator-container">
+				<i aria-hidden="true" class="fa fa-suitcase"></i>
+				<span class="form-navigator-topper-name"><%= Validator.isNotNull(dossier.getReceptionNo()) ? dossier.getReceptionNo() : StringPool.BLANK %></span>
 			</div>
 		</div>
 	</c:if> 

@@ -18,6 +18,9 @@
  */
 %>
 
+<%@page import="com.liferay.portlet.documentlibrary.util.DLUtil"%>
+<%@page import="org.opencps.util.DLFileEntryUtil"%>
+<%@page import="com.liferay.portal.kernel.repository.model.FileEntry"%>
 <%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
 <%@page import="org.opencps.util.WebKeys"%>
@@ -47,14 +50,24 @@
 	int level = ParamUtil.getInteger(request, DossierFileDisplayTerms.LEVEL);
 	
 	int partType = ParamUtil.getInteger(request, DossierFileDisplayTerms.PART_TYPE);
+
+	long processOrderId = ParamUtil.getLong(request, ProcessOrderDisplayTerms.PROCESS_ORDER_ID);
 	
 	String groupName = ParamUtil.getString(request, DossierFileDisplayTerms.GROUP_NAME);
 	
-	long processOrderId = ParamUtil.getLong(request, ProcessOrderDisplayTerms.PROCESS_ORDER_ID);
-	
+	String fileURL = StringPool.BLANK;
 	try{
 		if(dossierPartId > 0){
 			dossierPart = DossierPartLocalServiceUtil.getDossierPart(dossierPartId);
+		}
+		
+		if(fileEntryId > 0){
+			FileEntry fileEntry = DLFileEntryUtil.getFileEntry(fileEntryId);
+			if(fileEntry != null){
+				fileURL = DLUtil.getPreviewURL(fileEntry, fileEntry.getFileVersion(), 
+						themeDisplay, StringPool.BLANK);
+			}
+			
 		}
 	}
 	catch(Exception e){
@@ -384,17 +397,40 @@
 					</td>
 					
 					<td width="40%" align="right">
-						<aui:a 
-							id="<%=String.valueOf(dossierPartId) %>"
-							process-order="<%=String.valueOf(processOrderId) %>"
-							dossier-file="<%=String.valueOf(dossierFileId) %>"
-							dossier-part="<%=String.valueOf(dossierPartId) %>"
-							file-entry="<%=String.valueOf(fileEntryId) %>"
-							href="javascript:void(0);" 
-							label="upload-file" 
-							cssClass="opencps dossiermgt part-file-ctr upload-file" 
-							onClick='<%=renderResponse.getNamespace() + "uploadFile(this)" %>'
-						/>
+						<c:choose>
+							<c:when test="<%=fileEntryId > 0 %>">
+								<aui:a 
+									id="<%=String.valueOf(dossierPartId) %>"
+									dossier-part="<%=String.valueOf(dossierPartId) %>"
+									dossier-file="<%=String.valueOf(dossierFileId) %>"
+									file-url="<%=fileURL %>"
+									index="<%=String.valueOf(index) %>"
+									group-name="<%=groupName %>"
+									level = "<%=level %>"
+									file-name="<%=dossierPart != null ? dossierPart.getPartName() : StringPool.BLANK %>"
+									part-type="<%=partType %>"
+									template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
+									href="javascript:void(0);" 
+									label="view-attachment" 
+									cssClass="opencps dossiermgt part-file-ctr view-attachment" 
+									onClick='<%=renderResponse.getNamespace() + "viewAttachment(this)" %>'
+								/>
+							</c:when>
+							<c:otherwise>
+								<aui:a 
+									id="<%=String.valueOf(dossierPartId) %>"
+									process-order="<%=String.valueOf(processOrderId) %>"
+									dossier-file="<%=String.valueOf(dossierFileId) %>"
+									dossier-part="<%=String.valueOf(dossierPartId) %>"
+									file-entry="<%=String.valueOf(fileEntryId) %>"
+									href="javascript:void(0);" 
+									label="upload-file" 
+									cssClass="opencps dossiermgt part-file-ctr upload-file" 
+									onClick='<%=renderResponse.getNamespace() + "uploadFile(this)" %>'
+								/>
+							</c:otherwise>
+						</c:choose>
+						
 					</td>
 					<td width="10%" align="right">
 						<span class="dossier-file-counter">
