@@ -1,8 +1,4 @@
-<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
-<%@page import="javax.portlet.PortletRequest"%>
-<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
-<%@page import="org.opencps.processmgt.service.ProcessOrderLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.bean.ProcessOrderBean"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -31,6 +27,11 @@
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="org.opencps.processmgt.permissions.ProcessOrderPermission"%>
 <%@page import="org.opencps.processmgt.util.ProcessUtils"%>
+<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
+<%@page import="javax.portlet.PortletRequest"%>
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
+<%@page import="org.opencps.processmgt.service.ProcessOrderLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.bean.ProcessOrderBean"%>
 
 <%@ include file="../init.jsp"%>
 
