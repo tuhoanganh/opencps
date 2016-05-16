@@ -44,7 +44,6 @@
 navigation = navigation.trim();
 %>
 
-
 <c:if test="<%= Validator.isNotNull(navigation) %>">
 	<div class="navigation">
 		<%= navigation %>
