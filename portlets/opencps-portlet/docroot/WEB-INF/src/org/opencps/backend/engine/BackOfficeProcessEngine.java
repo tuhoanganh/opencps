@@ -19,6 +19,7 @@ import java.util.Date;
 import org.opencps.backend.util.BackendUtils;
 import org.opencps.backend.util.DossierNoGenerator;
 import org.opencps.dossiermgt.model.Dossier;
+import org.opencps.dossiermgt.model.DossierStatus;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.model.ProcessStep;
 import org.opencps.processmgt.model.ProcessWorkflow;
@@ -213,8 +214,11 @@ public class BackOfficeProcessEngine implements MessageListener {
 						dossierStatus = BackendUtils.getDossierStatus(step.getProcessStepId());
 					}
 					
+				
+					if (Validator.equals(dossierStatus, PortletConstants.DOSSIER_STATUS_DONE)) {
+						assignToUserId = actionUserId;
+					}
 					
-
 					ProcessOrderLocalServiceUtil.updateProcessOrder(
 					    processOrderId, processStepId, processWorkflowId,
 					    actionUserId, now, actionNote,
