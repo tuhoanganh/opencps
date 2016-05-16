@@ -33,6 +33,8 @@
 <%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
+<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
+<%@page import="org.opencps.datamgt.model.DictItem"%>
 <%@ include file="../init.jsp"%>
 
 <%
@@ -153,7 +155,17 @@
 
 				row.addText(serviceInfo != null ? serviceInfo.getServiceName() : StringPool.BLANK);
 				
-				row.addText(serviceConfig.getDomainCode());
+				DictItem dictItem = null;
+				String domainCode = StringPool.DASH;
+				
+				try{
+					dictItem = DictItemLocalServiceUtil.getDictItem(GetterUtil.getLong(serviceConfig.getDomainCode()));
+					domainCode = dictItem.getItemName(locale);
+				}catch(Exception e){
+					
+				}
+				
+				row.addText(domainCode);
 				
 				row.addText(serviceConfig.getGovAgencyName());
 				

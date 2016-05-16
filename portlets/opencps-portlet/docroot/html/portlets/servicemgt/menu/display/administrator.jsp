@@ -1,4 +1,4 @@
-<%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,7 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
-
+<%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
 <%@ include file="../../init.jsp" %>
 
 <%
@@ -36,11 +36,15 @@
 			for (DictItem di : ls ) {
 			filter.setParameter(ServiceDisplayTerms.SERVICE_ADMINISTRATION,
 				Long.toString(di.getDictItemId()));
+			String css = "odd";
+			if(ls.indexOf(di) % 2 == 0){
+				css = "even";
+			}
 		%>
-			<li>
+			<li class="<%=css%>">
+				<i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
 				<a href="<%= filter.toString() %>">
 					<%= di.getItemName(locale) %>
-					
 				</a>
 			</li>
 		<%
