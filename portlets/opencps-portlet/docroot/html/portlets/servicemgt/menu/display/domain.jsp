@@ -44,7 +44,7 @@
 				}
 		%>
 			<li class="<%=css%>">
-				
+				<i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
 				<a href="<%= filter.toString() %>">
 					<%= di.getItemName(locale) %> 
 						(<%= ServiceInfoLocalServiceUtil.countServiceInDomain(scopeGroupId,
