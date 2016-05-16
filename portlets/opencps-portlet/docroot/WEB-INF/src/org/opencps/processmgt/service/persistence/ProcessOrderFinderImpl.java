@@ -307,12 +307,12 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 	
 	
 	/**
-	 * @param actionUserId
+	 * @param longinUserId
 	 * @return
 	 */
 	public List getUserProcessStep(
 
-	    long actionUserId) {
+	    long longinUserId) {
 
 		Session session = null;
 		try {
@@ -336,9 +336,9 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 			    .getInstance(q);
 
 			qPos
-			    .add(actionUserId);
+			    .add(longinUserId);
 			qPos
-			    .add(actionUserId);
+			    .add(longinUserId);
 
 			Iterator<Object[]> itr = (Iterator<Object[]>) QueryUtil
 			    .list(
