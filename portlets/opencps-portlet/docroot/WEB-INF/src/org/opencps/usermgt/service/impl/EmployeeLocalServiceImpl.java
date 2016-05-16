@@ -159,7 +159,7 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 				listRoles[i] = roleIds.get(i);
 			}
 		}
-		
+
 		if (isAddUser) {
 			user = userService.addUserWithWorkflow(
 					serviceContext.getCompanyId(), false, password,
