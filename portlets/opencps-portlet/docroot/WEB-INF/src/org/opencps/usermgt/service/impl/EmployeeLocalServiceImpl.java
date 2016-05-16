@@ -147,19 +147,16 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 				birthDateYear);
 
 		User user = null;
-		
-		long [] listRoles = null;
-		
-		listRoles[0] = (jobPos.getMappingRoleId());
+		roleIds.add(jobPos.getMappingRoleId());
+		long [] listRoles = null;	
 		
 		if(!roleIds.isEmpty()) {
-			listRoles = new long[roleIds.size()];
-			
-			for(int i = 1; i <= roleIds.size(); i++) {
+			listRoles = new long[roleIds.size()];		
+			for(int i = 0; i < roleIds.size(); i++) {
 				listRoles[i] = roleIds.get(i);
 			}
 		}
-
+		
 		if (isAddUser) {
 			user = userService.addUserWithWorkflow(
 					serviceContext.getCompanyId(), false, password,
@@ -486,14 +483,12 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 						workingUnit.getMappingOrganisationId()};
 			}
 			
-			long [] listRoles = null;
-			
-			listRoles[0] = (jobPos.getMappingRoleId());
+			roleIds.add(jobPos.getMappingRoleId());
+			long [] listRoles = null;	
 			
 			if(!roleIds.isEmpty()) {
-				listRoles = new long[roleIds.size()];
-				
-				for(int i = 1; i <= roleIds.size(); i++) {
+				listRoles = new long[roleIds.size()];		
+				for(int i = 0; i < roleIds.size(); i++) {
 					listRoles[i] = roleIds.get(i);
 				}
 			}
