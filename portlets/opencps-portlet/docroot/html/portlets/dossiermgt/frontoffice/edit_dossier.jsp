@@ -58,7 +58,7 @@
 	
 	String backURL = ParamUtil.getString(request, "backURL");
 	
-	String cmd = ParamUtil.getString(request, Constants.CMD);
+	String cmd = ParamUtil.getString(request, Constants.CMD, Constants.UPDATE);
 	
 	String[] dossierSections = new String[]{"dossier_info", "dossier_part", "result", "history"};
 	
@@ -68,7 +68,7 @@
 
 <liferay-ui:header
 	backURL="<%= backURL %>"
-	title='<%= (dossier == null) ? "add-dossier" : cmd.equals(Constants.VIEW) ? "view-dossier" : "update-dossier" %>'
+	title='<%= (dossier == null) ? "add-dossier" : (cmd.equals(Constants.VIEW) ? "view-dossier" : "update-dossier") %>'
 />
 
 <portlet:actionURL var="updateDossierURL" name="updateDossier"/>
@@ -185,7 +185,7 @@
 		htmlBottom="<%= htmlBottom %>"
 		htmlTop="<%= htmlTop %>"
 		jspPath='<%=templatePath + "dossier/" %>'
-		showButtons="<%=cmd.equals(Constants.VIEW) || dossier.getDossierStatus() != PortletConstants.DOSSIER_STATUS_NEW ? false : true %>"
+		showButtons="<%=(cmd.equals(Constants.VIEW) || (dossier != null && dossier.getDossierStatus()  != PortletConstants.DOSSIER_STATUS_NEW)) ? false : true %>"
 	/>
 </aui:form>
 
