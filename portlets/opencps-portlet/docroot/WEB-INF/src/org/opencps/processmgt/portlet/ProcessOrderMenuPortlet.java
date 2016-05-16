@@ -103,7 +103,7 @@ public class ProcessOrderMenuPortlet extends MVCPortlet{
 		
 		for (ProcessStep item : list) {
 		
-			counterVal = ProcessOrderLocalServiceUtil.countProcessOrder(item.getProcessStepId(), 0);
+			counterVal = ProcessOrderLocalServiceUtil.countProcessOrder(item.getProcessStepId(), 0, 0);
 			
 			par.put("badge_" + item.getProcessStepId(), String.valueOf(counterVal));
 		
