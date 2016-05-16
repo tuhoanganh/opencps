@@ -1,6 +1,4 @@
-<%@page import="org.opencps.servicemgt.util.ServiceUtil"%>
-<%@page import="org.opencps.servicemgt.search.ServiceDisplayTerms"%>
-<%@page import="org.opencps.processmgt.model.ServiceProcess"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -19,7 +17,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
-
+<%@page import="org.opencps.servicemgt.util.ServiceUtil"%>
+<%@page import="org.opencps.servicemgt.search.ServiceDisplayTerms"%>
+<%@page import="org.opencps.processmgt.model.ServiceProcess"%>
 <%@ include file="../init.jsp"%>
 
 <%
@@ -52,7 +52,12 @@
 
 <liferay-util:buffer var="htmlTop">
 	<c:if test="<%= servieProcess != null %>">
-		<liferay-ui:icon cssClass="icon-home"/> <%= servieProcess.getProcessName() %>
+		<div class="form-navigator-topper process-info">
+			<div class="form-navigator-container">
+				<i aria-hidden="true" class="fa fa-suitcase"></i>
+				<span class="form-navigator-topper-name"><%= Validator.isNotNull(servieProcess.getProcessName()) ? servieProcess.getProcessName() : StringPool.BLANK %></span>
+			</div>
+		</div>
 	</c:if> 
 </liferay-util:buffer>
 

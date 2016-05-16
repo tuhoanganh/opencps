@@ -13,7 +13,6 @@
 
 package org.opencps.backend.engine;
 
-import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -35,7 +34,6 @@ import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.MessageListenerException;
-import com.liferay.portal.kernel.security.SecureRandom;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
@@ -61,29 +59,33 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 	private void activeEngine(Message message) {
 		
-		long dossierId = GetterUtil.getLong(message.get("dossierId"));
-		
-		long fileGroupId = GetterUtil.getLong(message.get("fileGroupId"));
-
-		long processOrderId = GetterUtil.getLong(message.get("processOrderId"), 0);
-
-		long processWorkflowId =
-		    GetterUtil.getLong(message.get("processWorkflowId"));
-		
-		long processStepId = GetterUtil.getLong(message.get("processStepId"));
-		
-
-		long actionUserId = GetterUtil.getLong(message.get("actionUserId"));
-		long assignToUserId = GetterUtil.getLong(message.get("assignToUserId"));
-		Date actionDatetime = GetterUtil.getDate(message.get("actionDatetime"), new SimpleDateFormat("dd/MM/yyyy : HH/mm"));
-		String actionNote = GetterUtil.getString(message.get("actionNote"));
-		
+		// General info
 		long userId = GetterUtil.getLong(message.get("userId"));
 		long groupId = GetterUtil.getLong(message.get("groupId"));
 		long companyId = GetterUtil.getLong(message.get("companyId"));
 		
-		String receptionNo = GetterUtil.getString(message.get("receptionNo"));
+		// Dossier Identifi
+		long dossierId = GetterUtil.getLong(message.get("dossierId"));
+		long fileGroupId = GetterUtil.getLong(message.get("fileGroupId"));
 		
+		// ProcessOrder
+		long processOrderId = GetterUtil.getLong(message.get("processOrderId"), 0);
+		
+		// Workflow in Action
+		long processWorkflowId =
+		    GetterUtil.getLong(message.get("processWorkflowId"));
+		
+		// Step of Action (Onclick in popup)
+		long processStepId = GetterUtil.getLong(message.get("processStepId"));
+		
+		
+		// Infomation in dialog
+		long actionUserId = GetterUtil.getLong(message.get("actionUserId"));
+		long assignToUserId = GetterUtil.getLong(message.get("assignToUserId"));
+		Date actionDatetime = GetterUtil.getDate(message.get("actionDatetime"), new SimpleDateFormat("dd/MM/yyyy : HH/mm"));
+		String actionNote = GetterUtil.getString(message.get("actionNote"));
+		String receptionNo = GetterUtil.getString(message.get("receptionNo"));
+
 		if (Validator.equals(receptionNo, StringPool.BLANK)) {
 			receptionNo = DossierNoGenerator.noGenarator();
 		}

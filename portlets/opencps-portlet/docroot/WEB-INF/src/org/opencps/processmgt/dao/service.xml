@@ -70,7 +70,7 @@
 		<column name="externalAppUrl" type="String" />
 		
 		<!-- Order -->
-		<order by="desc">
+		<order by="asc">
 			<order-column name="sequenceNo"/>
 		</order>
 		
@@ -83,6 +83,10 @@
 			<finder-column name="serviceProcessId"/>
 		</finder>
 	
+		<finder return-type="Collection" name="ProcessStepIds">
+			<finder-column name="groupId"/>
+			<finder-column name="processStepId" arrayable-operator="OR"/>
+		</finder>
 	</entity>
 
 	<entity name="ProcessStepDossierPart" local-service="true" remote-service="true"
@@ -122,6 +126,9 @@
 		<finder return-type="StepAllowance" name="STEP_ROLE">
 			<finder-column name="processStepId"/>
 			<finder-column name="readOnly"/>
+		</finder>
+		<finder return-type="Collection" name="RoleIds">
+			<finder-column name="roleId" arrayable-operator="OR"/>
 		</finder>
 	</entity>
 
@@ -231,6 +238,7 @@
 		<column name="actionUserId" type="long"/>
 		<column name="actionDatetime" type="Date"/>
 		<column name="actionNote" type="String"/>
+		<column name="actionStepId" type="long"/>
 		<column name="assignToUserId" type="long"/>
 		<column name="processWorkflowId" type="long"/>
 		<column name="dossierStatus" type="int"/>
@@ -239,6 +247,10 @@
             <finder-column name="dossierId"></finder-column>
             <finder-column name="fileGroupId"></finder-column>
         </finder>
+		
+		<finder return-type="Collection" name="processStepId">
+			<finder-column name="processStepId"/>
+		</finder>
 	</entity>
 
 	<entity name="ActionHistory" local-service="true" remote-service="true"
@@ -267,13 +279,24 @@
 		<column name="actionUserId" type="long"/>
 		<column name="daysDoing" type="int"/>
 		<column name="daysDelay" type="int"/>
-        <order by="desc">
+
+        <order >
             <order-column name="createDate" order-by="desc"></order-column>
+            <order-column name="actionHistoryId" order-by="asc"/>
         </order>
+
+
         <finder name="POID_PWID" return-type="Collection">
             <finder-column name="processOrderId"></finder-column>
             <finder-column name="processWorkflowId"></finder-column>
         </finder>
+		
+		
+		<finder return-type="Collection" name="F_ProcessOrderId">
+			<finder-column name="groupId"/>
+			<finder-column name="processOrderId"/>
+		</finder>
+		
 	</entity>
 	
 	<entity name="ServiceInfoProcess" local-service="true"
