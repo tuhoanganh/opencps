@@ -68,7 +68,7 @@
 					opencps_stepallowance.roleId = role.roleId
             )
             OR
-				opencps_processorder.assignUserId = ?
+				opencps_processorder.assignToUserId = ?
 		]]>
 	</sql>
 	
@@ -125,7 +125,7 @@
 					opencps_stepallowance.roleId = role.roleId
             )
             OR
-				opencps_processorder.assignUserId = ?
+				opencps_processorder.assignToUserId = ?
 		]]>
 	</sql>
 	
@@ -172,7 +172,7 @@
 					opencps_stepallowance.roleId = role.roleId
             )
             OR
-				opencps_processorder.assignUserId = ?
+				opencps_processorder.assignToUserId = ?
 		]]>
 	</sql>
 </custom-sql>
