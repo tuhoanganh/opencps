@@ -58,7 +58,7 @@
 	
 	String backURL = ParamUtil.getString(request, "backURL");
 	
-	String cmd = ParamUtil.getString(request, Constants.CMD);
+	String cmd = ParamUtil.getString(request, Constants.CMD, Constants.UPDATE);
 	
 	String[] dossierSections = new String[]{"dossier_info", "dossier_part", "result", "history"};
 	
