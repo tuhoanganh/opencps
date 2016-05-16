@@ -1,4 +1,3 @@
-
 <%--
 /**
  * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
@@ -22,13 +21,16 @@
 
 		<%
 		String signedInAs = HtmlUtil.escape(user.getFullName());
+
 		if (themeDisplay.isShowMyAccountIcon() && (themeDisplay.getURLMyAccount() != null)) {
 			String myAccountURL = String.valueOf(themeDisplay.getURLMyAccount());
+
 			if (PropsValues.DOCKBAR_ADMINISTRATIVE_LINKS_SHOW_IN_POP_UP) {
 				signedInAs = "<a class=\"signed-in\" href=\"javascript:Liferay.Util.openWindow({dialog: {destroyOnHide: true}, title: '" + HtmlUtil.escapeJS(LanguageUtil.get(pageContext, "my-account")) + "', uri: '" + HtmlUtil.escapeJS(myAccountURL) + "'});\">" + signedInAs + "</a>";
 			}
 			else {
 				myAccountURL = HttpUtil.setParameter(myAccountURL, "controlPanelCategory", PortletCategoryKeys.MY);
+
 				signedInAs = "<a class=\"signed-in\" href=\"" + HtmlUtil.escape(myAccountURL) + "\">" + signedInAs + "</a>";
 			}
 		}
@@ -40,9 +42,11 @@
 
 		<%
 		String redirect = ParamUtil.getString(request, "redirect");
+
 		String login = LoginUtil.getLogin(request, "login", company);
 		String password = StringPool.BLANK;
 		boolean rememberMe = ParamUtil.getBoolean(request, "rememberMe");
+
 		if (Validator.isNull(authType)) {
 			authType = company.getAuthType();
 		}
@@ -110,6 +114,7 @@
 
 				<%
 				String loginLabel = null;
+
 				if (authType.equals(CompanyConstants.AUTH_TYPE_EA)) {
 					loginLabel = "email-address";
 				}
