@@ -80,28 +80,28 @@
 </c:if>
 
 <aui:row>
-	<aui:col width="50">
+	<aui:col width="25">
 		<aui:input 
 			name="<%=CitizenDisplayTerms.CITIZEN_FULLNAME %>" 
-			disabled="<%=isViewProfile %>" cssClass=""
+			disabled="<%=isViewProfile %>" 
+			cssClass="input100"
 		>
 		<aui:validator name="required" />
 		<aui:validator name="maxLength">255</aui:validator>
 		</aui:input>
 	</aui:col>
 	
-	<aui:col width="50">
+	<aui:col width="25">
 		<aui:input 
 			name="<%=CitizenDisplayTerms.CITIZEN_PERSONALID %>"
 			disabled="<%=isViewProfile %>"
+			cssClass="input100"
 		>
 		<aui:validator name="required" />
 		</aui:input>
 	</aui:col>
-</aui:row>
-
-<aui:row>
-	<aui:col width="50">
+	
+	<aui:col width="25">
 		<label class="control-label custom-lebel" for='<portlet:namespace/><%=CitizenDisplayTerms.CITIZEN_BIRTHDATE %>'>
 			<liferay-ui:message key="birth-date"/>
 		</label>
@@ -116,14 +116,16 @@
 			yearValue="<%= spd.getYear() %>"
 			formName="fm"
 			autoFocus="<%=true %>"
+			cssClass="input100"
 		>
 		</liferay-ui:input-date>
 	</aui:col>
 	
-	<aui:col width="50">
+	<aui:col width="25">
 		<aui:select 
 			name="<%=CitizenDisplayTerms.CITIZEN_GENDER %>"
 			disabled="<%=isViewProfile %>"
+			cssClass="input100"
 			required="true"
 		>
 			<aui:option label="<%=StringPool.BLANK %>" value="" />
@@ -145,6 +147,7 @@
 		</aui:select>
 	</aui:col>
 </aui:row>
+
 
 <%!
 	private Log _log = LogFactoryUtil.getLog(".html.portlets.accountmgt.registration/citizen.general_info.jsp");
