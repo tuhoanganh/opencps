@@ -467,5 +467,7 @@ for (String analyticsType : analyticsTypes) {
 <!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.3/handlebars.js"></script> -->
 <script type="text/javascript" src="<%= themeDisplay.getCDNHost() %>/html/extensions/handlebars-v4.0.5.js"></script>
 <!-- alpaca -->
-<link type="text/css" href="//code.cloudcms.com/alpaca/1.5.17/bootstrap/alpaca.min.css" rel="stylesheet" />
-<script type="text/javascript" src="//code.cloudcms.com/alpaca/1.5.17/bootstrap/alpaca.min.js"></script>
+<!-- <link type="text/css" href="//code.cloudcms.com/alpaca/1.5.17/bootstrap/alpaca.min.css" rel="stylesheet" /> -->
+
+<!-- <script type="text/javascript" src="//code.cloudcms.com/alpaca/1.5.17/bootstrap/alpaca.min.js"></script> -->
+<script type="text/javascript" src="<%= themeDisplay.getCDNHost() %>/html/extensions/alpaca.min.js"></script>
