@@ -276,7 +276,7 @@ public class ProcessOrderBean {
 		try {
 			user = UserLocalServiceUtil
 			    .fetchUserById(this
-			        .getActionUserId());
+			        .getAssignToUsesrId());
 
 		}
 		catch (Exception e) {
