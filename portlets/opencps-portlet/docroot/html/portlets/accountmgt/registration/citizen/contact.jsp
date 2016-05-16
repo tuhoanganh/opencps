@@ -118,10 +118,11 @@
 </aui:row>
 
 <aui:row>
-	<aui:col width="50">
+	<aui:col width="30">
 		<aui:input 
 			name="<%=CitizenDisplayTerms.CITIZEN_EMAIL %>"
 			disabled="<%=isViewProfile ||  isAdminViewProfile%>"
+			cssClass="input100"
 		>
 			<aui:validator name="required" />
 			<aui:validator name="email" />
@@ -129,26 +130,25 @@
 		</aui:input>
 	</aui:col>
 	
-	<aui:col width="50">
-		<aui:input name="<%=CitizenDisplayTerms.CITIZEN_TELNO %>">
+	<aui:col width="30">
+		<aui:input name="<%=CitizenDisplayTerms.CITIZEN_TELNO %>" cssClass="input100">
 			<aui:validator name="required" />
 			<aui:validator name="minLength">10</aui:validator>
 		</aui:input>
 	</aui:col>
-</aui:row>
-
-<c:if test="<%= !isViewProfile && !isAdminViewProfile %>">
-	<aui:row>
-		<aui:col width="100">
-		<aui:input type="file" name="<%=CitizenDisplayTerms.CITIZEN_ATTACHFILE %>" >
-			<aui:validator name="acceptFiles">
-				'<%= StringUtil.merge( PortletPropsValues.ACCOUNTMGT_FILE_TYPE) %>'
-			</aui:validator>
-			<aui:validator name="required" />
-		</aui:input>
+	
+	<c:if test="<%= !isViewProfile && !isAdminViewProfile %>">
+		<aui:col width="30">
+			<aui:input type="file" name="<%=CitizenDisplayTerms.CITIZEN_ATTACHFILE %>" cssClass="input100">
+				<aui:validator name="acceptFiles">
+					'<%= StringUtil.merge( PortletPropsValues.ACCOUNTMGT_FILE_TYPE) %>'
+				</aui:validator>
+				<aui:validator name="required" />
+			</aui:input>
 		</aui:col>
-	</aui:row>
-</c:if>
+	</c:if>
+	
+</aui:row>
 
 <c:if test="<%=isAdminViewProfile && citizenID > 0 %>">
 	<a href="<%=url%>"><liferay-ui:message key="url.file.entry"></liferay-ui:message></a>
