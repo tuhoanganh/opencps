@@ -45,10 +45,6 @@
 				opencps_processorder.processStepId = opencps_processstep.processStepId
 			AND 
 				opencps_processstep.processStepId = ?
-			INNER JOIN
-				opencps_processworkflow
-            ON
-				opencps_processstep.processStepId = opencps_processworkflow.preProcessStepId
 			WHERE
 				opencps_processorder.processStepId IN 
 			(
@@ -72,7 +68,7 @@
 					opencps_stepallowance.roleId = role.roleId
             )
             OR
-				opencps_processworkflow.assignUserId = ?
+				opencps_processorder.assignUserId = ?
 		]]>
 	</sql>
 	
@@ -106,10 +102,6 @@
 				opencps_processorder.processStepId = opencps_processstep.processStepId
 			AND 
 				opencps_processstep.processStepId = ?
-			INNER JOIN
-				opencps_processworkflow
-            ON
-				opencps_processstep.processStepId = opencps_processworkflow.preProcessStepId
 			WHERE
 				opencps_processorder.processStepId IN 
 			(
@@ -133,7 +125,7 @@
 					opencps_stepallowance.roleId = role.roleId
             )
             OR
-				opencps_processworkflow.assignUserId = ?
+				opencps_processorder.assignUserId = ?
 		]]>
 	</sql>
 	
@@ -157,10 +149,6 @@
 				opencps_processstep
 			ON
 				opencps_processorder.processStepId = opencps_processstep.processStepId
-			INNER JOIN
-				opencps_processworkflow
-            ON
-				opencps_processstep.processStepId = opencps_processworkflow.preProcessStepId
 			WHERE
 				opencps_processorder.processStepId IN 
 			(
@@ -184,7 +172,7 @@
 					opencps_stepallowance.roleId = role.roleId
             )
             OR
-				opencps_processworkflow.assignUserId = ?
+				opencps_processorder.assignUserId = ?
 		]]>
 	</sql>
 </custom-sql>
