@@ -60,7 +60,7 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 					ProcessOrderFinder.class
 	        .getName() + ".getUserProcessStep";
 
-	public int countProcessOrder(long processStepId, long actionUserId) {
+	public int countProcessOrder(long processStepId, long loginUserId, long actionUserId) {
 
 		Session session = null;
 		try {
@@ -93,7 +93,7 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 			}
 
 			qPos
-			    .add(actionUserId);
+			    .add(loginUserId);
 			qPos
 			    .add(actionUserId);
 
@@ -127,7 +127,7 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 	
 	public List searchProcessOrder(
 
-	    long processStepId, long actionUserId, int start, int end,
+	    long processStepId, long loginUserId, long actionUserId, int start, int end,
 	    OrderByComparator orderByComparator) {
 
 		Session session = null;
@@ -181,7 +181,7 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 			}
 
 			qPos
-			    .add(actionUserId);
+			    .add(loginUserId);
 			qPos
 			    .add(actionUserId);
 
