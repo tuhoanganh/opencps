@@ -1,4 +1,5 @@
 
+<%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -69,7 +70,14 @@
 </portlet:actionURL>
 
 <liferay-util:buffer var="htmlTop">
-
+	<c:if test="<%= jobPos != null %>">
+        <div class="form-navigator-topper edit-jobpos">
+            <div class="form-navigator-container">
+                <i aria-hidden="true" class="fa edit-jobpos"></i>
+                <span class="form-navigator-topper-name"><%= HtmlUtil.escape(jobPos.getTitle()) %></span>
+            </div>
+        </div>
+    </c:if> 
 </liferay-util:buffer>
 
 <liferay-util:buffer var="htmlBot">

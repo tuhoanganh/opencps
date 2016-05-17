@@ -150,6 +150,9 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 
 		if (dossierPartCount == 0) {
 			DossierTemplateLocalServiceUtil.deleteDossierTemplateById(dossierTemplateId);
+			if (Validator.isNotNull(currentURL)) {
+				actionResponse.sendRedirect(currentURL);
+			}
 		}
 		else {
 
@@ -251,6 +254,9 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 
 		if (dossierPartParentCount == 0) {
 			DossierPartLocalServiceUtil.deleteDossierPartById(dossierPartId);
+			if (Validator.isNotNull(currentURL)) {
+				actionResponse.sendRedirect(currentURL);
+			}
 		}
 		else {
 			if (Validator.isNotNull(currentURL)) {
@@ -327,7 +333,7 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 			ServiceContext serviceContext = ServiceContextFactory
 						    .getInstance(actionRequest);
 			
-			dossierPartValidate(dossierPartId, partName, partNo, sibling, templateFileNo);
+			dossierPartValidate(dossierTemplateId,dossierPartId, partName, partNo, sibling, templateFileNo);
 			if (dossierPartId == 0) {
 				DossierPartLocalServiceUtil.addDossierPart(
 				    dossierTemplateId, partNo, partName, partTip, partType,
@@ -570,7 +576,7 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 	 * @throws DuplicateDossierPartNumberException
 	 * @throws DuplicateDossierPartSiblingException
 	 */
-	protected void dossierPartValidate(long dossierPartId ,String partName, String partNo, double sibling,
+	protected void dossierPartValidate(long dossierTemplateId , long dossierPartId ,String partName, String partNo, double sibling,
 		String templateFileNo) throws OutOfLengthDossierPartNameException, 
 		OutOfLengthDossierPartNumberException, OutOfLengthDossierTemplateFileNumberException,
 		DuplicateDossierPartNumberException, DuplicateDossierPartSiblingException {
@@ -580,11 +586,17 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		try {
 	        dossierPartNo = DossierPartLocalServiceUtil
 	        				.getDossierPartByPartNo(partNo);
-	        dossierPartSibling = DossierPartLocalServiceUtil
-	        				.getDossierPartBySibling(sibling);
 		}
         catch (Exception e) {
 	        // nothing to do
+        }
+		
+		try {
+			 dossierPartSibling = DossierPartLocalServiceUtil
+		        				.getDossierPartByT_S(dossierTemplateId, sibling);
+        }
+        catch (Exception e) {
+	        // TODO: handle exception
         }
 		
 		if(partName.length() > PortletPropsValues.DOSSIERMGT_PART_NAME_LENGTH) {
@@ -606,7 +618,7 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 			throw new DuplicateDossierPartNumberException();
 		}
 		
-		else if(dossierPartId == 0 && Validator.isNotNull(dossierPartSibling)) {
+		else if(dossierPartId == 0 && dossierPartSibling != null) {
 			throw new DuplicateDossierPartSiblingException();
 		}
 		

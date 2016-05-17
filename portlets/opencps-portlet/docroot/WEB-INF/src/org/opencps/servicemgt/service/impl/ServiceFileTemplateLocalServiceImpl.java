@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.opencps.servicemgt.model.ServiceFileTemplate;
+import org.opencps.servicemgt.permissions.ServiceTemplatePermission;
 import org.opencps.servicemgt.service.base.ServiceFileTemplateLocalServiceBaseImpl;
 import org.opencps.servicemgt.service.persistence.ServiceFileTemplatePK;
 
@@ -58,7 +59,7 @@ public class ServiceFileTemplateLocalServiceImpl
 
 		List<ServiceFileTemplate> currentFileTemplates =
 		    new ArrayList<ServiceFileTemplate>();
-
+		currentFileTemplates = serviceFileTemplatePersistence.findByTemplatefileId(serviceId);
 		// Remove current fileTemplate
 
 		for (ServiceFileTemplate sft : currentFileTemplates) {
@@ -71,7 +72,25 @@ public class ServiceFileTemplateLocalServiceImpl
 		}
 
 	}
-
+	
+	/* (non-Javadoc)
+	 * @see org.opencps.servicemgt.service.ServiceFileTemplateLocalService#addFileServices(long, long[])
+	 */
+	public void addFileServices(long templatefileId, long [] serviceInfoIds) 
+					throws SystemException, PortalException {
+		List<ServiceFileTemplate> currentFileTemplates =
+					    new ArrayList<ServiceFileTemplate>();
+		currentFileTemplates = serviceFileTemplatePersistence.findByTemplatefileId(templatefileId);
+		for(ServiceFileTemplate sft : currentFileTemplates) {
+			serviceFileTemplatePersistence.remove(sft);
+		}
+		
+		for(long serviceinfoId : serviceInfoIds) {
+			addServiceFile(serviceinfoId, templatefileId);
+		}
+	}
+	
+	
 	/**
 	 * Add serviceFile
 	 * 
@@ -102,7 +121,7 @@ public class ServiceFileTemplateLocalServiceImpl
 		return sft;
 
 	}
-
+	
 	/**
 	 * Delete ServiceFile
 	 * 
@@ -128,6 +147,11 @@ public class ServiceFileTemplateLocalServiceImpl
 		else {
 		}
 
+	}
+	
+	public List<ServiceFileTemplate> getServiceFileTemplatesByTemplateFile(long templateFileId)
+					throws SystemException {
+		return serviceFileTemplatePersistence.findByTemplatefileId(templateFileId);
 	}
 
 }

@@ -43,6 +43,9 @@ public class ActionKeys
 
 	public static final String ADD_DOSSIER = "ADD_DOSSIER";
 	public static final String ADD_DOSSIER_FILE = "ADD_DOSSIER_FILE";
+	
+	public static final String ADD_PROCESS_ORDER = "ADD_PROCESS_ORDER";
+	public static final String ASSIGN_PROCESS_ORDER = "ASSIGN_PROCESS_ORDER";
 
 }
 

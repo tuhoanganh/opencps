@@ -125,13 +125,15 @@
 			action='<%=accountType.equals("CITIZEN") ? updateCitizenProfileURL.toString() : updateBusinessProfileURL.toString() %>'>
 		
 		<liferay-util:buffer var="htmlTop">
-			<div class="user-info">
-				<div class="float-container">
+			
+			<div class="form-navigator-topper account-info">
+				<div class="form-navigator-container">
+					<i aria-hidden="true" class="fa account-info"></i>
 					<img alt="<%= HtmlUtil.escape(user.getFullName()) %>" class="user-logo" src="<%= user.getPortraitURL(themeDisplay) %>" />
-	
 					<span class="user-name"><%= HtmlUtil.escape(user.getFullName()) %></span>
 				</div>
 			</div>
+			
 		</liferay-util:buffer>
 		
 		<liferay-util:buffer var="htmlBott">
@@ -225,7 +227,7 @@
 			</c:when>
 
 			<c:otherwise>
-				<div class="portlet-msg-alert"><liferay-ui:message key="do-not-permission"/></div>
+				<div class="portlet-msg-alert"><liferay-ui:message key="not-account-profile"/></div>
 			</c:otherwise>
 		</c:choose>
 		</aui:form>

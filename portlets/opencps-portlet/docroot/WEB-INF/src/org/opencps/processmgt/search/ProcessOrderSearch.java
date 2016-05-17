@@ -25,24 +25,21 @@ import java.util.Map;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
 
-import org.opencps.processmgt.model.ProcessOrder;
-import org.opencps.util.DateTimeUtil;
+import org.opencps.dossiermgt.bean.ProcessOrderBean;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.StringPool;
 
 /**
  * @author trungnt
  */
-public class ProcessOrderSearch extends SearchContainer<ProcessOrder> {
+public class ProcessOrderSearch extends SearchContainer<ProcessOrderBean> {
 
 	static List<String> headerNames = new ArrayList<String>();
 	static Map<String, String> orderableHeaders = new HashMap<String, String>();
 	static {
-		headerNames
-		    .add(StringPool.BLANK);
+		
 		headerNames
 		    .add("reception-no");
 		headerNames
@@ -52,13 +49,12 @@ public class ProcessOrderSearch extends SearchContainer<ProcessOrder> {
 		headerNames
 		    .add("process-step");
 		headerNames
-		    .add("action-user-id");
+		    .add("assign-to-user");
 		headerNames
-		    .add("action-date-time");
-		headerNames
-		    .add("action");
+		    .add("dealine");
+		
 	}
-	public static final String EMPTY_RESULTS_MESSAGE = "no-dossier-were-found";
+	public static final String EMPTY_RESULTS_MESSAGE = "no-process-order-were-found";
 
 	public ProcessOrderSearch(
 	    PortletRequest portletRequest, int delta, PortletURL iteratorURL) {
@@ -92,19 +88,13 @@ public class ProcessOrderSearch extends SearchContainer<ProcessOrder> {
 		            .getProcessStepId()));
 
 		iteratorURL
-		    .setParameter(ProcessOrderDisplayTerms.ACTION_USER_ID, String
+		    .setParameter(ProcessOrderDisplayTerms.ASSIGN_TO_USER_ID, String
 		        .valueOf(displayTerms
-		            .getActionUserId()));
+		            .getAssignToUserId()));
 
 		iteratorURL
 		    .setParameter(ProcessOrderDisplayTerms.RECEPTION_NO, displayTerms
 		        .getReceptionNo());
-		iteratorURL
-		    .setParameter(
-		        ProcessOrderDisplayTerms.ACTION_DATE_TIME, DateTimeUtil
-		            .convertDateToString(displayTerms
-		                .getActionDatetime(),
-		                DateTimeUtil._VN_DATE_TIME_FORMAT));
 		//Code sau
 		/*try {
 

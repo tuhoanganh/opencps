@@ -74,13 +74,17 @@
 		repositoryId = BeanParamUtil.getLong(fileEntry, request, "groupId");
 	}
 
-	int index = ParamUtil.getInteger(request, "index");
+	int index = ParamUtil.getInteger(request, DossierFileDisplayTerms.INDEX);
 	
-	String groupName = ParamUtil.getString(request, "groupName");
+	int level = ParamUtil.getInteger(request, DossierFileDisplayTerms.LEVEL);
 	
-	String fileName = ParamUtil.getString(request, "fileName");
+	String groupName = ParamUtil.getString(request, DossierFileDisplayTerms.GROUP_NAME);
 	
-	String templateFileNo = ParamUtil.getString(request, "templateFileNo");
+	String fileName = ParamUtil.getString(request, DossierFileDisplayTerms.FILE_NAME);
+	
+	String templateFileNo = ParamUtil.getString(request, DossierDisplayTerms.TEMPLATE_FILE_NO);
+	
+	String partType = ParamUtil.getString(request, DossierFileDisplayTerms.PART_TYPE);
 	
 	JSONObject responseData = (JSONObject)request.getAttribute(WebKeys.RESPONSE_UPLOAD_TEMP_DOSSIER_FILE);
 	
@@ -106,6 +110,8 @@
 >
 	<aui:input name="redirectURL" type="hidden" value="<%=currentURL %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.INDEX %>" type="hidden" value="<%=index %>"/>
+	<aui:input name="<%=DossierFileDisplayTerms.LEVEL %>" type="hidden" value="<%=level %>"/>
+	<aui:input name="<%=DossierFileDisplayTerms.PART_TYPE %>" type="hidden" value="<%=partType %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_ID %>" type="hidden" value="<%=dossierFileId %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.GROUP_NAME %>" type="hidden" value="<%=groupName %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.FILE_NAME %>" type="hidden" value="<%=fileName %>"/>
@@ -113,7 +119,7 @@
 	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_PART_ID %>" type="hidden" value="<%=dossierPart != null ? dossierPart.getDossierpartId() : dossierPartId %>"/>
 	<aui:row>
 		<aui:col width="100">
-			<aui:input name="<%= DossierFileDisplayTerms.DISPLAY_NAME %>" type="text" cssClass="input97">
+			<aui:input name="<%= DossierFileDisplayTerms.DISPLAY_NAME %>" type="text" cssClass="input100">
 				<aui:validator name="required"/>
 			</aui:input>
 		</aui:col>
@@ -121,7 +127,7 @@
 	
 	<aui:row>
 		<aui:col width="70">
-			<aui:input name="<%= DossierFileDisplayTerms.DOSSIER_FILE_NO %>" type="text" cssClass="input90"/>
+			<aui:input name="<%= DossierFileDisplayTerms.DOSSIER_FILE_NO %>" type="text" cssClass="input100"/>
 		</aui:col>
 		
 		<aui:col width="30">

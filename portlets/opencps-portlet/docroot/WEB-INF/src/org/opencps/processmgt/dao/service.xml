@@ -70,7 +70,7 @@
 		<column name="externalAppUrl" type="String" />
 		
 		<!-- Order -->
-		<order by="desc">
+		<order by="asc">
 			<order-column name="sequenceNo"/>
 		</order>
 		
@@ -83,6 +83,10 @@
 			<finder-column name="serviceProcessId"/>
 		</finder>
 	
+		<finder return-type="Collection" name="ProcessStepIds">
+			<finder-column name="groupId"/>
+			<finder-column name="processStepId" arrayable-operator="OR"/>
+		</finder>
 	</entity>
 
 	<entity name="ProcessStepDossierPart" local-service="true" remote-service="true"
@@ -123,6 +127,9 @@
 			<finder-column name="processStepId"/>
 			<finder-column name="readOnly"/>
 		</finder>
+		<finder return-type="Collection" name="RoleIds">
+			<finder-column name="roleId" arrayable-operator="OR"/>
+		</finder>
 	</entity>
 
 	<entity name="ProcessWorkflow" local-service="true" remote-service="true"
@@ -159,6 +166,24 @@
 		<finder return-type="Collection" name="S_P_ID">
 			<finder-column name="serviceProcessId"/>
 		</finder>
+        <finder return-type="ProcessWorkflow" name="S_PPSID">
+            <finder-column name="serviceProcessId"></finder-column>
+            <finder-column name="postProcessStepId"></finder-column>
+        </finder>
+        <finder name="S_PRE_PS_ID" return-type="Collection">
+            <finder-column name="serviceProcessId"></finder-column>
+            <finder-column name="preProcessStepId"></finder-column>
+        </finder>
+
+        <finder name="FIRST_WORKFLOW" return-type="ProcessWorkflow" where="preProcessStepId = 0">
+            <finder-column name="serviceProcessId"></finder-column>
+        </finder>
+
+        <finder name="SPI_" return-type="ProcessWorkflow">
+            <finder-column name="serviceProcessId"></finder-column>
+            <finder-column name="preProcessStepId"></finder-column>
+        </finder>
+
 
 	</entity>
 
@@ -217,6 +242,14 @@
 		<column name="processWorkflowId" type="long"/>
 		<column name="dossierStatus" type="int"/>
 		<column name="errorInfo" type="String"/>
+        <finder name="D_F" return-type="ProcessOrder">
+            <finder-column name="dossierId"></finder-column>
+            <finder-column name="fileGroupId"></finder-column>
+        </finder>
+		
+		<finder return-type="Collection" name="processStepId">
+			<finder-column name="processStepId"/>
+		</finder>
 	</entity>
 
 	<entity name="ActionHistory" local-service="true" remote-service="true"
@@ -245,8 +278,51 @@
 		<column name="actionUserId" type="long"/>
 		<column name="daysDoing" type="int"/>
 		<column name="daysDelay" type="int"/>
-	</entity>
 
+        <order >
+            <order-column name="createDate" order-by="desc"></order-column>
+            <order-column name="actionHistoryId" order-by="asc"/>
+        </order>
+
+
+        <finder name="POID_PWID" return-type="Collection">
+            <finder-column name="processOrderId"></finder-column>
+            <finder-column name="processWorkflowId"></finder-column>
+        </finder>
+		
+		
+		<finder return-type="Collection" name="F_ProcessOrderId">
+			<finder-column name="groupId"/>
+			<finder-column name="processOrderId"/>
+		</finder>
+		
+	</entity>
+	
+	<entity name="ServiceInfoProcess" local-service="true"
+		remote-service="true" table="opencps_serviceinfoprocess">
+		
+		<!-- PK fields -->
+		
+		<column name="serviceProcessId" type="long" primary="true" />
+		<column name="serviceinfoId" type="long" primary="true" />
+		
+		<!-- Finder methods -->
+		<finder return-type="Collection" name="ServiceProcessId" >
+			<finder-column name="serviceProcessId" />
+		</finder>
+		
+		<finder return-type="ServiceInfoProcess" name="I_P" >
+			<finder-column name="serviceProcessId" />
+			<finder-column name="serviceinfoId" />
+		</finder>
+		
+		<finder return-type="ServiceInfoProcess" name="S_I_P" unique="true">
+			<finder-column name="serviceinfoId" />
+		</finder>
+		
+		
+	</entity>
+	
 	<exceptions>
 		<exception>EmptyProcessNo</exception>
 		<exception>EmptyProcessName</exception>

@@ -55,8 +55,10 @@
 						<aui:a 
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
+							dossier-file="<%=String.valueOf(dossierFileId) %>"
 							index="<%=String.valueOf(index) %>"
 							group-name="<%=groupName %>"
+							level = "<%=level %>"
 							href="javascript:void(0);" 
 							label="declaration-online" 
 							cssClass="opencps dossiermgt part-file-ctr declaration-online"
@@ -70,7 +72,9 @@
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
 							index="<%=String.valueOf(index) %>"
 							group-name="<%=groupName %>"
+							level = "<%=level %>"
 							file-name="<%=dossierPart != null ? dossierPart.getPartName() : StringPool.BLANK %>"
+							part-type="<%=partType %>"
 							template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
 							href="javascript:void(0);" 
 							label="upload-file" 
@@ -90,6 +94,7 @@
 							cssClass="opencps dossiermgt part-file-ctr remove-file"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
 							group-name="<%=groupName %>"
+							level = "<%=level %>"
 							href="javascript:void(0);" 
 							id="<%=String.valueOf(dossierPartId) %>"
 							index="<%=String.valueOf(index) %>"
@@ -125,8 +130,10 @@
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
 							index="<%=String.valueOf(index) %>"
 							group-name="<%=groupName %>"
-							template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
+							level = "<%=level %>"
 							file-name="<%=dossierPart != null ? dossierPart.getPartName() : StringPool.BLANK %>"
+							part-type="<%=partType %>"
+							template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
 							href="javascript:void(0);" 
 							label="upload-file" 
 							cssClass="opencps dossiermgt part-file-ctr upload-file" 
@@ -140,6 +147,7 @@
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
 							index="<%=String.valueOf(index) %>"
 							group-name="<%=groupName %>"
+							level = "<%=level %>"
 							href="javascript:void(0);" 
 							label="taken-from-archive" 
 							cssClass="opencps dossiermgt part-file-ctr taken-from-archive"
@@ -149,7 +157,24 @@
 						
 					</td>
 					<td width="10%" align="right">
-						
+						<aui:input 
+							id='<%="uploadDataSchema" + dossierPartId + StringPool.DASH + index %>' 
+							name="uploadDataSchema" 
+							type="hidden" 
+							cssClass="uploadDataSchema"
+						/>
+						<aui:input 
+							id='<%="fileUpload" + dossierPartId + StringPool.DASH + index %>' 
+							name="fileUpload" 
+							type="hidden"
+							value="<%=fileEntryId %>"
+						/>
+						<aui:input 
+							id='<%="dossierFile" + dossierPartId + StringPool.DASH + index %>' 
+							name="dossierFile" 
+							type="hidden"
+							value="<%=dossierFileId%>"
+						/>
 					</td>
 				</c:when>
 				
@@ -160,8 +185,10 @@
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
 							index="<%=String.valueOf(index) %>"
 							group-name="<%=groupName %>"
-							template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
+							level = "<%=level %>"
 							file-name="<%=dossierPart != null ? dossierPart.getPartName() : StringPool.BLANK %>"
+							part-type="<%=partType %>"
+							template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
 							href="javascript:void(0);" 
 							label="upload-file" 
 							cssClass="opencps dossiermgt part-file-ctr upload-file" 
@@ -184,6 +211,7 @@
 							cssClass="opencps dossiermgt part-file-ctr remove-file"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"	
 							group-name="<%=groupName %>"
+							level = "<%=level %>"
 							href="javascript:void(0);" 
 							id="<%=String.valueOf(dossierPartId) %>"
 							index="<%=String.valueOf(index) %>"
@@ -228,6 +256,7 @@
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
 							index="<%=String.valueOf(index) %>"
 							group-name="<%=groupName %>"
+							level = "<%=level %>"
 							href="javascript:void(0);" 
 							cssClass="opencps dossiermgt part-file-ctr remove-group"
 							onClick='<%=renderResponse.getNamespace() + "removeDossierGroup(this)" %>'
@@ -260,7 +289,9 @@
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
 							index="<%=String.valueOf(index) %>"
 							group-name="<%=groupName %>"
+							level = "<%=level %>"
 							file-name="<%=dossierPart != null ? dossierPart.getPartName() : StringPool.BLANK %>"
+							part-type="<%=partType %>"
 							template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
 							href="javascript:void(0);" 
 							label="upload-file" 
@@ -275,6 +306,7 @@
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
 							index="<%=String.valueOf(index) %>"
 							group-name="<%=groupName %>"
+							level = "<%=level %>"
 							href="javascript:void(0);" 
 							label="taken-from-archive" 
 							cssClass="opencps dossiermgt part-file-ctr taken-from-archive"
@@ -292,6 +324,7 @@
 							cssClass="opencps dossiermgt part-file-ctr remove-file"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
 							group-name="<%=groupName %>"
+							level = "<%=level %>"
 							href="javascript:void(0);" 
 							id="<%=String.valueOf(dossierPartId) %>"
 							index="<%=String.valueOf(index) %>"

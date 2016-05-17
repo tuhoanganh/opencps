@@ -1,9 +1,4 @@
-<%@page import="org.opencps.util.DictItemUtil"%>
-<%@page import="com.liferay.portal.kernel.util.StringPool"%>
-<%@page import="com.liferay.portal.kernel.util.Validator"%>
-<%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
-<%@page import="org.opencps.util.WebKeys"%>
-<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -22,7 +17,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
-
+<%@page import="org.opencps.util.DictItemUtil"%>
+<%@page import="com.liferay.portal.kernel.util.StringPool"%>
+<%@page import="com.liferay.portal.kernel.util.Validator"%>
+<%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
+<%@page import="org.opencps.util.WebKeys"%>
+<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
 <%@ include file="../init.jsp" %>
 
 <%
@@ -34,7 +34,7 @@
 
 <liferay-ui:header
 	backURL="<%= backURL %>"
-	title="<%= Validator.isNotNull(serviceInfo) ? serviceInfo.getServiceName() : StringPool.BLANK %>"
+	title="service"
 />
 
 <c:if test="<%= Validator.isNotNull(serviceInfo) %>">

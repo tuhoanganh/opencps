@@ -1,3 +1,4 @@
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -16,6 +17,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
+<%@page import="org.opencps.processmgt.search.ProcessOrderSearchTerms"%>
+<%@page import="org.opencps.processmgt.search.ProcessOrderSearch"%>
+<%@page import="org.opencps.processmgt.model.ProcessOrder"%>
+<%@page import="org.opencps.processmgt.util.ProcessUtils"%>
+<%@page import="org.opencps.dossiermgt.bean.ProcessOrderBean"%>
+<%@page import="com.liferay.portal.kernel.dao.search.RowChecker"%>
+<%@page import="org.opencps.processmgt.service.ProcessOrderLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
 <%@ include file="../init.jsp"%>
 
 
@@ -24,64 +33,67 @@
 
 <%
 	PortletURL iteratorURL = renderResponse.createRenderURL();
-	iteratorURL.setParameter("mvcPath", templatePath + "frontofficedossierlist.jsp");
-	iteratorURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER);
+	iteratorURL.setParameter("mvcPath", templatePath + "processordertodolist.jsp");
+	iteratorURL.setParameter("tabs1", ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS);
 	
-	List<Dossier> dossiers =  new ArrayList<Dossier>();
+	List<ProcessOrderBean> processOrders =  new ArrayList<ProcessOrderBean>();
 	
 	int totalCount = 0;
-%>
-
-
-<liferay-ui:search-container searchContainer="<%= new DossierSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
-
-	<liferay-ui:search-container-results>
-		<%
-			DossierSearchTerms searchTerms = (DossierSearchTerms)searchContainer.getSearchTerms();
-			
-			int dossierStatus = searchTerms.getDossierStatus();
-
-			try{
-				
-				%>
-					<%@include file="/html/portlets/dossiermgt/frontoffice/dosier_search_results.jspf" %>
-				<%
-			}catch(Exception e){
-				_log.error(e);
-			}
-		
-			total = totalCount;
-			results = dossiers;
-			
-			pageContext.setAttribute("results", results);
-			pageContext.setAttribute("total", total);
-		%>
-	</liferay-ui:search-container-results>	
-		<liferay-ui:search-container-row 
-			className="org.opencps.dossiermgt.model.Dossier" 
-			modelVar="dossier" 
-			keyProperty="dossierId"
-		>
-			<%
-
-				//id column
-				row.addText(String.valueOf(dossier.getDossierId()));
-				row.addText(DateTimeUtil.convertDateToString(dossier.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT));
-				row.addText(String.valueOf(dossier.getSubjectId()));
-				row.addText(dossier.getGovAgencyName());
-				row.addText(PortletUtil.getDossierStatusLabel(dossier.getDossierStatus(), locale));
-				row.addText(DateTimeUtil.convertDateToString(dossier.getReceiveDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT));
-				
-				row.addText(dossier.getReceptionNo());
-				
-				//action column
-				row.addJSP("center", SearchEntry.DEFAULT_VALIGN,"/html/portlets/dossiermgt/frontoffice/dossier_actions.jsp", config.getServletContext(), request, response);
-			%>	
-		</liferay-ui:search-container-row> 
 	
-	<liferay-ui:search-iterator/>
-</liferay-ui:search-container>
-
+	RowChecker rowChecker = new RowChecker(liferayPortletResponse);
+%>
+<aui:form name="fm">
+	<liferay-ui:search-container 
+		searchContainer="<%= new ProcessOrderSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>"
+		rowChecker="<%=rowChecker%>"
+	>
+	
+		<liferay-ui:search-container-results>
+			<%
+				ProcessOrderSearchTerms searchTerms = (ProcessOrderSearchTerms)searchContainer.getSearchTerms();
+				
+				long processStepId = searchTerms.getProcessStepId();
+				long actionUserId = themeDisplay.getUserId();
+				try{
+					
+					%>
+						<%@include file="/html/portlets/processmgt/processorder/process_order_search_results.jspf" %>
+					<%
+				}catch(Exception e){
+					_log.error(e);
+				}
+			
+				total = totalCount;
+				results = processOrders;
+				
+				pageContext.setAttribute("results", results);
+				pageContext.setAttribute("total", total);
+			%>
+		</liferay-ui:search-container-results>	
+			<liferay-ui:search-container-row 
+				className="org.opencps.dossiermgt.bean.ProcessOrderBean" 
+				modelVar="processOrder" 
+				keyProperty="processOrderId"
+			>
+				<%
+					PortletURL processURL = renderResponse.createRenderURL();
+					processURL.setParameter("mvcPath", templatePath + "process_order_detail.jsp");
+					processURL.setParameter(ProcessOrderDisplayTerms.PROCESS_ORDER_ID, String.valueOf(processOrder.getProcessOrderId()));
+					processURL.setParameter("backURL", currentURL);
+				
+					row.addText(processOrder.getReceptionNo(), processURL);
+					row.addText(processOrder.getSubjectName(), processURL);
+					row.addText(processOrder.getServiceName(), processURL);	
+					row.addText(processOrder.getStepName(), processURL);	
+					row.addText(processOrder.getAssignToUserName(), processURL);
+					row.addText(Validator.isNotNull(processOrder.getDealine()) ? processOrder.getDealine() : StringPool.DASH, processURL);
+					
+				%>	
+			</liferay-ui:search-container-row> 
+		
+		<liferay-ui:search-iterator/>
+	</liferay-ui:search-container>
+</aui:form>
 <%!
-	private Log _log = LogFactoryUtil.getLog("html.portlets.dossiermgt.frontoffice.frontofficedossierlist.jsp");
+	private Log _log = LogFactoryUtil.getLog("html.portlets.processmgt.processorder.processordertodolist.jsp");
 %>

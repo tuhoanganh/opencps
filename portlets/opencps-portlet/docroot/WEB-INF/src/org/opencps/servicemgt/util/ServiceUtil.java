@@ -36,6 +36,10 @@ public class ServiceUtil {
 		"template-info"
 	};
 	
+	public static final String[] CHOOSE_SERVICE_INFO_NAMES = {
+		"update-choose-service-infos"
+	};
+	
 	public static final String SERVICE_ADMINISTRATION = "SERVICE_ADMINISTRATION";
 	public static final String SERVICE_DOMAIN = "SERVICE_DOMAIN";
 	

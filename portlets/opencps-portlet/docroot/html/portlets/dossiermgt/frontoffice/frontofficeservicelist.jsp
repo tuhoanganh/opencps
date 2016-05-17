@@ -1,8 +1,4 @@
-<%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
-<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
-<%@page import="org.opencps.util.PortletConstants"%>
-<%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -32,6 +28,13 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="javax.portlet.PortletURL"%>
+<%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
+<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
+<%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
+<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
+<%@page import="org.opencps.datamgt.model.DictItem"%>
 <%@ include file="../init.jsp"%>
 
 <%
@@ -53,7 +56,7 @@
 />
 
 
-<liferay-ui:search-container searchContainer="<%= new ServiceSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
+<%-- <liferay-ui:search-container searchContainer="<%= new ServiceSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
 
 	<liferay-ui:search-container-results>
 		<%
@@ -102,7 +105,7 @@
 		</liferay-ui:search-container-row> 
 	
 	<liferay-ui:search-iterator/>
-</liferay-ui:search-container>
+</liferay-ui:search-container> --%>
 
 
 <liferay-ui:search-container searchContainer="<%= new ServiceSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
@@ -152,7 +155,17 @@
 
 				row.addText(serviceInfo != null ? serviceInfo.getServiceName() : StringPool.BLANK);
 				
-				row.addText(serviceConfig.getDomainCode());
+				DictItem dictItem = null;
+				String domainCode = StringPool.DASH;
+				
+				try{
+					dictItem = DictItemLocalServiceUtil.getDictItem(GetterUtil.getLong(serviceConfig.getDomainCode()));
+					domainCode = dictItem.getItemName(locale);
+				}catch(Exception e){
+					
+				}
+				
+				row.addText(domainCode);
 				
 				row.addText(serviceConfig.getGovAgencyName());
 				

@@ -24,6 +24,8 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String DATA_MANAGEMENT_ADMIN_PORTLET = "1_WAR_opencpsportlet";
 	
 	public static final String DOSSIER_MGT_PORTLET = "13_WAR_opencpsportlet";
+	
+	public static final String PROCESS_ORDER_PORTLET = "16_WAR_opencpsportlet";
 
 	public static final String DICT_COLLECTION_ENTRY = "DICT_COLLECTION_ENTRY";
 
@@ -82,6 +84,10 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String PROCESS_STEP_ENTRY = "PROCESS_STEP_ENTRY";
 	
 	public static final String PROCESS_WORKFLOW_ENTRY = "PROCESS_WORKFLOW_ENTRY";
+	
+	public static final String MENU_ACTIVE = "active";
+	
+	public static final String PROCESS_ORDER = "PROCESS_ORDER";
 
 	public static final String DOSSIER_ENTRY = "DOSSIER_ENTRY";
 	
@@ -91,14 +97,21 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	
 	public static final String SERVICE_INFO_ENTRY = "SERVICE_INFO_ENTRY";
 	
-	
-	
 	public static final String STEP_ALLOWANCE_ENTRY = "STEP_ALLOWANCE_ENTRY";
+	
 	public static final String WORKFLOW_ENTRY = "WORKFLOW_ENTRY";
 
-	
 	public static final String DICT_ITEM_SELECTED = "DICT_ITEM_SELECTED";
 	
 	public static final String FORM_DATA = "FORM_DATA";
+	
+	public static final String PROCESS_ORDER_ENTRY = "PROCESS_ORDER_ENTRY";
+	
+	public static final String FILE_GROUP_ENTRY = "FILE_GROUP_ENTRY";
 
+	
+	public static final String FILE_ID = "dossierFileId";
+	
+	public static final int DOSSIER_MONITORING_LIST = 1;
+	public static final int DOSSIER_MONITORING_UPDATE = 2;
 }

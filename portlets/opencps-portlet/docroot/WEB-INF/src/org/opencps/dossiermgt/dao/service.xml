@@ -86,7 +86,8 @@
 			<finder-column name="parentId" />
 		</finder>
 
-		<finder return-type="DossierPart" name="Sibling">
+		<finder return-type="DossierPart" name="T_S">
+			<finder-column name="dossierTemplateId" />
 			<finder-column name="sibling" />
 		</finder>
 
@@ -103,6 +104,11 @@
 		  <finder-column name="dossierTemplateId" />
 		  <finder-column name="parentId" />
 		</finder>
+        <finder name="T_P_PT" return-type="Collection">
+            <finder-column name="dossierTemplateId"></finder-column>
+            <finder-column name="parentId"></finder-column>
+            <finder-column name="partType"></finder-column>
+        </finder>
 	</entity>
 
 	<entity name="ServiceConfig" local-service="true"
@@ -232,9 +238,15 @@
         <order by="desc">
             <order-column name="modifiedDate" order-by="desc"></order-column>
         </order>
-        <finder name="DossierId" return-type="DossierStatus">
+        <finder name="DossierId" return-type="DossierStatus" where="fileGroupId = 0">
             <finder-column name="dossierId"></finder-column>
         </finder>
+        
+        <finder name="D_FG" return-type="DossierStatus">
+            <finder-column name="dossierId"/>
+            <finder-column name="fileGroupId"/>
+        </finder>
+        
     </entity>
     
     <entity name="DossierLog" local-service="true" table="opencps_dossier_log">
@@ -343,6 +355,7 @@
             <finder-column name="dossierId"></finder-column>
             <finder-column name="groupFileId"></finder-column>
         </finder>
+         <reference entity="DLFileEntry" package-path="com.liferay.portlet.documentlibrary"/>
     </entity>
 
 	<exceptions>
