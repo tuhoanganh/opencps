@@ -41,26 +41,16 @@
 				css = "even";
 			}
 		%>
-		<aui:row>
-			<aui:col width="5">
-				<li class="<%=css%>">
-					<i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
-				</li>
-			</aui:col>					
-			<aui:col width="75">
-			<a href="<%= filter.toString() %>">
-				<%= di.getItemName(locale) %> 
-			</a>
-			</aui:col>
-			<aui:col width="20">
+		<li class="<%=css%>">
+				<i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
 				<a href="<%= filter.toString() %>">
-					<span class="service-counter">
+					<%= di.getItemName(locale) %> 
+					<span class="badge">
 						<%= ServiceInfoLocalServiceUtil.countServiceInAdmin(scopeGroupId,
 							Long.toString(di.getDictItemId()), 1) %>
-					</span>
+					</span>	
 				</a>
-			</aui:col>
-		</aui:row>
+			</li>
 		<%
 			}
 		%>

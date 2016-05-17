@@ -10,13 +10,3 @@
 .col-left {
 	width: 150px;
 }
-
-.service-counter {
-    background-color: #ecf0f1;
-    border: 1px solid green;
-    border-radius: 100%;
-    display: block;
-    height: 25px;
-    text-align: center;
-    width: 29px;
-}
