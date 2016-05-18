@@ -147,6 +147,11 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 		    .findByDossierId(doosierId);
 	}
 	
+	public List<DossierLog> getDossierLogByDossierId(long dossierId, int start, int end) 
+					throws SystemException {
+		return dossierLogPersistence.findByDossierId(dossierId, start, end);
+	}
+	
 	public int countDossierLogByDossierId(long dossierId) throws SystemException {
 		return dossierLogPersistence.countByDossierId(dossierId);
 	}
