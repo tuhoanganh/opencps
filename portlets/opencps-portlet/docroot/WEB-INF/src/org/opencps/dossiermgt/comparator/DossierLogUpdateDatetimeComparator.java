@@ -60,13 +60,7 @@ public class DossierLogUpdateDatetimeComparator extends OrderByComparator{
 
 	    DossierLog dossierLog0 = (DossierLog) arg0;
 	    DossierLog dossierLog1 = (DossierLog) arg1;
-	    
-	    String updateDatetime0 = StringUtil.lowerCase(
-	    	DateTimeUtil.convertDateToString(dossierLog0.getUpdateDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT));
-	    
-	    String updateDatetime1 = StringUtil.lowerCase(
-	    	DateTimeUtil.convertDateToString(dossierLog1.getUpdateDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT));
-	    int value = updateDatetime0.compareTo(updateDatetime1);
+	    int value = (dossierLog0.getUpdateDatetime()).compareTo(dossierLog1.getUpdateDatetime());
 	    return _ascending ? value : -value;
     }
 	
