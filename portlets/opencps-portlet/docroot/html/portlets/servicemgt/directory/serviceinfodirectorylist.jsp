@@ -137,11 +137,11 @@
 			// service name
 			row.addText(service.getServiceName(), viewURL);
 			
-			// service admin
-			row.addText(DictItemUtil.getNameDictItem(service.getAdministrationCode()), viewURL);
-
 			// service domain
 			row.addText(DictItemUtil.getNameDictItem(service.getDomainCode()) , viewURL);
+			
+			// service admin
+			row.addText(DictItemUtil.getNameDictItem(service.getAdministrationCode()), viewURL);
 		%>	
 	
 	</liferay-ui:search-container-row>	
