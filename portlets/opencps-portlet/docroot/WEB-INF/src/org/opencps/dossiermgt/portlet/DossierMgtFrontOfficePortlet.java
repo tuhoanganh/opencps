@@ -31,7 +31,6 @@ import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.opencps.accountmgt.model.Business;
@@ -61,14 +60,17 @@ import org.opencps.dossiermgt.OutOfLengthDossierSubjectIdException;
 import org.opencps.dossiermgt.OutOfLengthDossierSubjectNameException;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierFile;
+import org.opencps.dossiermgt.model.DossierPart;
 import org.opencps.dossiermgt.model.DossierTemplate;
 import org.opencps.dossiermgt.model.ServiceConfig;
 import org.opencps.dossiermgt.search.DossierDisplayTerms;
 import org.opencps.dossiermgt.search.DossierFileDisplayTerms;
 import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
+import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
+import org.opencps.jasperreport.util.JRReportUtil;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
 import org.opencps.util.DLFileEntryUtil;
@@ -87,11 +89,9 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
-import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
-import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StreamUtil;
@@ -457,7 +457,60 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	}
 
 	public void createReport(
-	    ActionRequest actionRequest, ActionResponse actionResponse) {
+	    ActionRequest actionRequest, ActionResponse actionResponse)
+	    throws IOException {
+
+		long dossierFileId = ParamUtil
+		    .getLong(actionRequest, DossierFileDisplayTerms.DOSSIER_FILE_ID);
+
+		JSONObject responseJSON = JSONFactoryUtil
+		    .createJSONObject();
+
+		String fileExportDir = StringPool.BLANK;
+		try {
+			if (dossierFileId > 0) {
+				DossierFile dossierFile = DossierFileLocalServiceUtil
+				    .getDossierFile(dossierFileId);
+				long dossierPartId = dossierFile
+				    .getDossierPartId();
+				DossierPart dossierPart = DossierPartLocalServiceUtil
+				    .getDossierPart(dossierPartId);
+				String formData = dossierFile
+				    .getFormData();
+				String jrxmlTemplate = dossierPart
+				    .getFormReport();
+				
+				//Validate json string
+				
+				JSONObject json = JSONFactoryUtil
+				    .createJSONObject(formData);
+				if (json != null) {
+					String outputDestination =
+					    PortletPropsValues.OPENCPS_FILE_SYSTEM_TEMP_DIR;
+					String fileName = System
+					    .currentTimeMillis() + StringPool.DASH + dossierFileId +
+					    StringPool.DASH + dossierPartId + ".pdf";
+
+					fileExportDir = JRReportUtil
+					    .createReportPDFfFile(
+					        jrxmlTemplate, formData, null, outputDestination,
+					        fileName);
+
+				}
+
+			}
+
+		}
+		catch (Exception e) {
+			_log
+			    .error(e);
+		}
+		finally {
+			responseJSON
+			    .put("fileExportDir", fileExportDir);
+			PortletUtil
+			    .writeJSON(actionRequest, actionResponse, responseJSON);
+		}
 	}
 
 	public void deleteDossier(
@@ -1473,23 +1526,5 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		if (uploadDataSchemas == null || uploadDataSchemas.length == 0) {
 			throw new EmptyDossierFileException();
 		}
-	}
-
-	protected void writeJSON(
-	    ActionRequest actionRequest, ActionResponse actionResponse, Object json)
-	    throws IOException {
-
-		HttpServletResponse response = PortalUtil
-		    .getHttpServletResponse(actionResponse);
-
-		response
-		    .setContentType(ContentTypes.APPLICATION_JSON);
-
-		ServletResponseUtil
-		    .write(response, json
-		        .toString());
-		response
-		    .flushBuffer();
-
 	}
 }
