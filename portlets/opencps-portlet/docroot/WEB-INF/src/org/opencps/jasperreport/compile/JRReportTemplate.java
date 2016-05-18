@@ -34,14 +34,14 @@ import net.sf.jasperreports.engine.base.JRBaseObjectFactory;
 /**
  * @author trungnt
  */
-public class ReportTemplate extends JasperReport {
+public class JRReportTemplate extends JasperReport {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public ReportTemplate(
+	public JRReportTemplate(
 	    JRReport report, String compilerClass, Serializable compileData,
 	    JRExpressionCollector expressionCollector, String compileNameSuffix) {
 		super(
@@ -49,7 +49,7 @@ public class ReportTemplate extends JasperReport {
 
 	}
 
-	public ReportTemplate(
+	public JRReportTemplate(
 	    JRReport report, String compilerClass, Serializable compileData,
 	    JRBaseObjectFactory factory, String compileNameSuffix) {
 		super(
@@ -57,13 +57,13 @@ public class ReportTemplate extends JasperReport {
 
 	}
 
-	public static ReportTemplate compile(String jrxmlTemplate) {
+	public static JRReportTemplate compile(String jrxmlTemplate) {
 
-		ReportTemplate reportTemplate = null;
+		JRReportTemplate reportTemplate = null;
 		try {
 			InputStream isTemplate = new ByteArrayInputStream(jrxmlTemplate
 			    .getBytes(StandardCharsets.UTF_8));
-			reportTemplate = (ReportTemplate) JasperCompileManager
+			reportTemplate = (JRReportTemplate) JasperCompileManager
 			    .compileReport(isTemplate);
 
 		}
@@ -76,5 +76,5 @@ public class ReportTemplate extends JasperReport {
 	}
 
 	private static Log _log = LogFactoryUtil
-	    .getLog(ReportTemplate.class);
+	    .getLog(JRReportTemplate.class);
 }
