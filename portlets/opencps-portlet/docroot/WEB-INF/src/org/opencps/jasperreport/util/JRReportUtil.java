@@ -37,41 +37,52 @@ import net.sf.jasperreports.engine.JasperPrint;
  */
 public class JRReportUtil {
 
-	public static JasperPrint getJasperPrint(
-	    JRReportTemplate jrReportTemplate, Map<String, Object> parameters,
-	    JRJSONDataSource dataSource) {
+	public static String createReportPDFfFile(
+	    String jrxmlTemplate, String jsonData, Map<String, Object> parameters,
+	    String outputDestination, String exportName) {
 
-		JasperPrint jasperPrint = null;
+		String sourceFileName = outputDestination + exportName;
 		try {
-			jasperPrint = JasperFillManager
-			    .fillReport(jrReportTemplate, null, dataSource);
+			JRReportTemplate reportTemplate = JRReportTemplate
+			    .compile(jrxmlTemplate);
+			JRJSONDataSource dataSource = JRJSONDataSource
+			    .getInstance(jsonData);
+			JasperPrint jasperPrint =
+			    getJasperPrint(reportTemplate, parameters, dataSource);
 
+			return exportReportToPdfFile(jasperPrint, sourceFileName);
 		}
 		catch (Exception e) {
 			_log
 			    .error(e);
+
+			return StringPool.BLANK;
+
 		}
+
+	}
+
+	protected static JasperPrint getJasperPrint(
+	    JRReportTemplate jrReportTemplate, Map<String, Object> parameters,
+	    JRJSONDataSource dataSource)
+	    throws JRException {
+
+		JasperPrint jasperPrint = JasperFillManager
+		    .fillReport(jrReportTemplate, null, dataSource);
+
 		return jasperPrint;
 	}
-	
-	public static String exportReportToPdfFile(
-	    JasperPrint jasperPrint, String outputDestination, String exportName) {
 
-		try {
-			JasperExportManager
-			    .exportReportToPdfFile(
-			        jasperPrint, outputDestination + exportName);
-			return outputDestination + exportName;
-		}
-		catch (JRException e) {
-			_log
-			    .error(e);
-			return StringPool.BLANK;
-		}
+	protected static String exportReportToPdfFile(
+	    JasperPrint jasperPrint, String sourceFileName)
+	    throws JRException {
+
+		return JasperExportManager
+		    .exportReportToHtmlFile(sourceFileName);
+
 	}
 
 	private static Log _log = LogFactoryUtil
 	    .getLog(JRReportUtil.class
 	        .getName());
 }
-
