@@ -22,9 +22,7 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExpressionCollector;
 import net.sf.jasperreports.engine.JRReport;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -57,24 +55,16 @@ public class JRReportTemplate extends JasperReport {
 
 	}
 
-	public static JRReportTemplate compile(String jrxmlTemplate) {
+	public static JRReportTemplate compile(String jrxmlTemplate)
+	    throws JRException {
 
-		JRReportTemplate reportTemplate = null;
-		try {
-			InputStream isTemplate = new ByteArrayInputStream(jrxmlTemplate
-			    .getBytes(StandardCharsets.UTF_8));
-			reportTemplate = (JRReportTemplate) JasperCompileManager
-			    .compileReport(isTemplate);
-
-		}
-		catch (Exception e) {
-			_log
-			    .error(e);
-		}
+		InputStream isTemplate = new ByteArrayInputStream(jrxmlTemplate
+		    .getBytes(StandardCharsets.UTF_8));
+		JRReportTemplate reportTemplate =
+		    (JRReportTemplate) JasperCompileManager
+		        .compileReport(isTemplate);
 
 		return reportTemplate;
 	}
 
-	private static Log _log = LogFactoryUtil
-	    .getLog(JRReportTemplate.class);
 }
