@@ -1,3 +1,4 @@
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -16,7 +17,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
+<%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="com.liferay.portal.kernel.util.Constants"%>
 <%@page import="org.opencps.dossiermgt.model.DossierPart"%>
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 <%@page import="org.opencps.util.DateTimeUtil"%>
@@ -56,24 +58,27 @@
 	
 	String backURL = ParamUtil.getString(request, "backURL");
 	
+	String cmd = ParamUtil.getString(request, Constants.CMD, Constants.UPDATE);
+	
 	String[] dossierSections = new String[]{"dossier_info", "dossier_part", "result", "history"};
 	
 	String[][] categorySections = {dossierSections};
-
+	
 %>
 
 <liferay-ui:header
 	backURL="<%= backURL %>"
-	title='<%= (dossier == null) ? "add-dossier" : "update-dossier" %>'
+	title='<%= (dossier == null) ? "add-dossier" : (cmd.equals(Constants.VIEW) ? "view-dossier" : "update-dossier") %>'
 />
 
 <portlet:actionURL var="updateDossierURL" name="updateDossier"/>
 
 <liferay-util:buffer var="htmlTop">
 	<c:if test="<%= dossier != null %>">
-		<div class="dossier-info">
-			<div class="float-container">
-				<span class="dossier-name"><%= HtmlUtil.escape(dossier.getSubjectName()) %></span>
+		<div class="form-navigator-topper dossier-info">
+			<div class="form-navigator-container">
+				<i aria-hidden="true" class="fa fa-suitcase"></i>
+				<span class="form-navigator-topper-name"><%= Validator.isNotNull(dossier.getReceptionNo()) ? dossier.getReceptionNo() : StringPool.BLANK %></span>
 			</div>
 		</div>
 	</c:if> 
@@ -180,6 +185,7 @@
 		htmlBottom="<%= htmlBottom %>"
 		htmlTop="<%= htmlTop %>"
 		jspPath='<%=templatePath + "dossier/" %>'
+		showButtons="<%=(cmd.equals(Constants.VIEW) || (dossier != null && dossier.getDossierStatus()  != PortletConstants.DOSSIER_STATUS_NEW)) ? false : true %>"
 	/>
 </aui:form>
 

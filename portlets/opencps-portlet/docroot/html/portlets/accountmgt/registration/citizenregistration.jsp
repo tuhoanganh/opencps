@@ -1,4 +1,3 @@
-<%@page import="com.liferay.util.Normalizer"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software

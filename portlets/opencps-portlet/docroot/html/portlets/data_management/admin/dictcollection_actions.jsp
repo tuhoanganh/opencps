@@ -33,14 +33,14 @@
 %> 
 
 			
- <liferay-ui:icon-menu>
+<%--  <liferay-ui:icon-menu> --%>
  	<c:if test="<%=DictCollectionPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_DICTCOLLECTION) %>">
  		<portlet:renderURL var="updateDictCollectionURL">
 			<portlet:param name="mvcPath" value="/html/portlets/data_management/admin/edit_dictcollection.jsp"/>
 			<portlet:param name="<%=DictCollectionDisplayTerms.DICTCOLLECTION_ID %>" value="<%=String.valueOf(dictCollection.getDictCollectionId()) %>"/>
 			<portlet:param name="backURL" value="<%=currentURL %>"/>
 		</portlet:renderURL> 
- 		<liferay-ui:icon image="edit" message="edit" url="<%=updateDictCollectionURL.toString() %>" /> 
+ 		<liferay-ui:icon image="edit" cssClass="edit" message="edit" url="<%=updateDictCollectionURL.toString() %>" /> 
  	</c:if>
  	
  	<c:if test="<%=DictCollectionPermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE) %>">
@@ -48,7 +48,7 @@
 			<portlet:param name="<%=DictCollectionDisplayTerms.DICTCOLLECTION_ID %>" value="<%=String.valueOf(dictCollection.getDictCollectionId()) %>"/>
 			<portlet:param name="redirectURL" value="<%=currentURL %>"/>
 		</portlet:actionURL> 
-		<liferay-ui:icon-delete image="delete" confirmation="are-you-sure-delete-entry" message="delete"  url="<%=deleteDictCollectionURL.toString() %>" />
+		<liferay-ui:icon-delete cssClass="delete" image="delete" confirmation="are-you-sure-delete-entry" message="delete"  url="<%=deleteDictCollectionURL.toString() %>" />
  	</c:if>
 	  
-</liferay-ui:icon-menu> 
+<%-- </liferay-ui:icon-menu> --%> 

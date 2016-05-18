@@ -20,8 +20,12 @@ package org.opencps.processmgt.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.opencps.datamgt.search.DictCollectionDisplayTerms;
+import org.opencps.datamgt.util.comparator.DictCollectionCreateDateComparator;
+import org.opencps.processmgt.NoSuchActionHistoryException;
 import org.opencps.processmgt.model.ActionHistory;
 import org.opencps.processmgt.service.base.ActionHistoryLocalServiceBaseImpl;
+import org.opencps.processmgt.util.comparator.ActionHistoryCreateDateComparator;
 
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.OrderByComparator;
@@ -69,7 +73,7 @@ public class ActionHistoryLocalServiceImpl
 	    long userId, long groupId, long companyId, long processOrderId,
 	    long processWorkflowId, Date actionDatetime, String stepName,
 	    String actionName, String actionNote, long actionUserId, int daysDoing,
-	    int daysDelay)
+	    int daysDelay, int dossierStatus)
 	    throws SystemException {
 
 		long actionHistoryId = counterLocalService
@@ -93,8 +97,12 @@ public class ActionHistoryLocalServiceImpl
 
 		actionHistory
 		    .setProcessOrderId(processOrderId);
-		actionHistory
-		    .setProcessWorkflowId(processWorkflowId);
+
+		if (processWorkflowId >= 0) {
+			actionHistory
+			    .setProcessWorkflowId(processWorkflowId);
+		}
+
 		actionHistory
 		    .setActionDatetime(actionDatetime);
 		actionHistory
@@ -103,18 +111,29 @@ public class ActionHistoryLocalServiceImpl
 		    .setActionName(actionName);
 		actionHistory
 		    .setActionNote(actionNote);
-		actionHistory
-		    .setActionUserId(actionUserId);
-		actionHistory
-		    .setDaysDoing(daysDoing);
+		if (actionUserId > 0) {
+			actionHistory
+			    .setActionUserId(actionUserId);
+		}
+
+		if (daysDelay >= 0) {
+			actionHistory
+			    .setDaysDoing(daysDoing);
+		}
+
 		actionHistory
 		    .setDaysDelay(daysDelay);
 		return actionHistoryPersistence
 		    .update(actionHistory);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.opencps.processmgt.service.ActionHistoryLocalService#addActionHistory(long, long, java.util.Date, java.lang.String, java.lang.String, java.lang.String, long, int, int, com.liferay.portal.service.ServiceContext)
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * org.opencps.processmgt.service.ActionHistoryLocalService#addActionHistory
+	 * (long, long, java.util.Date, java.lang.String, java.lang.String,
+	 * java.lang.String, long, int, int,
+	 * com.liferay.portal.service.ServiceContext)
 	 */
 	public ActionHistory addActionHistory(
 	    long processOrderId, long processWorkflowId, Date actionDatetime,
@@ -165,6 +184,28 @@ public class ActionHistoryLocalServiceImpl
 		    .setDaysDelay(daysDelay);
 		return actionHistoryPersistence
 		    .update(actionHistory);
+	}
+	
+	public ActionHistory getLatestActionHistory(
+	    long processOrderId, long processWorkflowId)
+	    throws NoSuchActionHistoryException, SystemException {
+
+		boolean orderByAsc = false;
+
+		OrderByComparator orderByComparator =
+		    new ActionHistoryCreateDateComparator(orderByAsc);
+
+		return actionHistoryPersistence
+		    .findByPOID_PWID_First(
+		        processOrderId, processWorkflowId, orderByComparator);
+	}
+
+	public List<ActionHistory> getActionHistory(
+	    long processOrderId, long processWorkflowId)
+	    throws NoSuchActionHistoryException, SystemException {
+
+		return actionHistoryPersistence
+		    .findByPOID_PWID(processOrderId, processWorkflowId);
 	}
 
 	

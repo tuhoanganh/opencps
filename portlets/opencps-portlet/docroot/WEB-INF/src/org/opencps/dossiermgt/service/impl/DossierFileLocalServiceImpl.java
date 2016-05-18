@@ -24,6 +24,7 @@ import org.opencps.dossiermgt.NoSuchDossierFileException;
 import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.service.base.DossierFileLocalServiceBaseImpl;
 
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
@@ -50,14 +51,6 @@ public class DossierFileLocalServiceImpl
 	 * access the dossier file local service.
 	 */
 
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * org.opencps.dossiermgt.service.DossierFileLocalService#addDossierFile(
-	 * long, long, long, java.lang.String, long, long, long, java.lang.String,
-	 * java.lang.String, long, int, int, java.lang.String, java.util.Date, int,
-	 * int, com.liferay.portal.service.ServiceContext)
-	 */
 	public DossierFile addDossierFile(
 	    long userId, long dossierId, long dossierPartId, String templateFileNo,
 	    long groupFileId, long ownerUserId, long ownerOrganizationId,
@@ -119,6 +112,18 @@ public class DossierFileLocalServiceImpl
 		    .update(dossierFile);
 	}
 
+	public void deleteDossierFile(long dossierFileId, long fileEntryId)
+	    throws PortalException, SystemException {
+
+		if (fileEntryId > 0) {
+			dlFileEntryLocalService
+			    .deleteDLFileEntry(fileEntryId);
+		}
+
+		dossierFilePersistence
+		    .remove(dossierFileId);
+	}
+
 	/**
 	 * @param dossierId
 	 * @param dossierPartId
@@ -148,6 +153,7 @@ public class DossierFileLocalServiceImpl
 		    .findByD_F(dossierId, groupFileId);
 	}
 
+<<<<<<< HEAD
 	public List<DossierFile> searchDossierFile(long groupId, String keyword, long dossierTemplateId, long fileEntryId, boolean onlyViewFileResult, int start, int end, OrderByComparator obc)
 				    throws SystemException {
 		return dossierFileFinder.searchDossierFile(groupId, keyword, dossierTemplateId, fileEntryId, onlyViewFileResult, start, end, obc);
@@ -159,5 +165,51 @@ public class DossierFileLocalServiceImpl
 	
 	public List<DossierFile> getDossierFileByDossierAndDossierPart(long dossierId, long dossierPartId) throws SystemException {
 		return dossierFilePersistence.findByD_P_C(dossierId, dossierPartId);
+=======
+	public DossierFile updateDossierFile(
+	    long dossierFileId, long userId, long dossierId, long dossierPartId,
+	    String templateFileNo, long groupFileId, long ownerUserId,
+	    long ownerOrganizationId, String displayName, String formData,
+	    long fileEntryId, int dossierFileMark, int dossierFileType,
+	    String dossierFileNo, Date dossierFileDate, int original,
+	    int syncStatus, ServiceContext serviceContext)
+	    throws NoSuchDossierFileException, SystemException {
+
+		DossierFile dossierFile = dossierFilePersistence
+		    .findByPrimaryKey(dossierFileId);
+
+		Date now = new Date();
+
+		dossierFile
+		    .setModifiedDate(now);
+		dossierFile
+		    .setUserId(userId);
+		dossierFile
+		    .setDisplayName(displayName);
+		dossierFile
+		    .setDossierFileDate(dossierFileDate);
+		dossierFile
+		    .setDossierFileMark(dossierFileMark);
+		dossierFile
+		    .setDossierFileNo(dossierFileNo);
+		dossierFile
+		    .setDossierFileType(dossierFileType);
+		dossierFile
+		    .setDossierId(dossierId);
+		dossierFile
+		    .setDossierPartId(dossierPartId);
+		dossierFile
+		    .setFileEntryId(fileEntryId);
+		dossierFile
+		    .setFormData(formData);
+		dossierFile
+		    .setGroupFileId(groupFileId);
+		dossierFile
+		    .setOriginal(original);
+		dossierFile
+		    .setOwnerOrganizationId(ownerOrganizationId);
+		return dossierFilePersistence
+		    .update(dossierFile);
+>>>>>>> center_repo/master
 	}
 }

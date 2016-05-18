@@ -1,3 +1,4 @@
+<%@page import="org.opencps.util.PortletUtil"%>
 <%@page import="org.opencps.util.DictItemUtil"%>
 <%@page import="org.opencps.processmgt.util.ProcessUtils"%>
 <%
@@ -56,10 +57,6 @@
 </liferay-portlet:renderURL>
 
 <aui:button-row>
-	<aui:button name="addStep" onClick="showDialog()" value="add-step" ></aui:button>
-</aui:button-row>
-
-<aui:button-row>
 	<aui:button name="addStep" href="<%= editStepInlineURL.toString() %>" value="add-step-inline" ></aui:button>
 </aui:button-row>
 
@@ -94,7 +91,7 @@
 			row.addText(step.getStepName());
 			
 			// step name
-			row.addText(DictItemUtil.getNameDictItem(step.getDossierStatus()));
+			row.addText(PortletUtil.getDossierStatusLabel(GetterUtil.getInteger(step.getDossierStatus()), locale));
 			
 			// step duration
 			row.addText(Integer.toString(step.getDaysDuration()));

@@ -33,7 +33,7 @@
 	String redirectURL = currentURL;
 %>
 
-<liferay-ui:icon-menu>
+<%-- <liferay-ui:icon-menu> --%>
 	<portlet:renderURL var="updateWorkingUnit">
 		<portlet:param name="mvcPath"
 			value="/html/portlets/usermgt/admin/edit_workingunit.jsp" />
@@ -56,10 +56,10 @@
     </portlet:renderURL>
 	
 	<c:if test="<%=WorkingUnitPermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) %>">
-		<liferay-ui:icon image="edit" message="edit"
+		<liferay-ui:icon cssClass="edit" image="edit" message="edit"
 		url="<%=updateWorkingUnit.toString()%>" />
 		
-		<liferay-ui:icon image="add" message="add-child"
+		<liferay-ui:icon cssClass="add" image="add" message="add-child"
         url="<%=updateWorkingUnitChirl.toString()%>" />
 	</c:if>
 
@@ -75,11 +75,11 @@
 	</portlet:actionURL>
 	<c:if test="<%=WorkingUnitPermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE) %>">
 		
-		<liferay-ui:icon image="delete" message="delete"
+		<liferay-ui:icon cssClass="delete" image="delete" message="delete"
 			url="<%=deleteWorkingUnitURL.toString()%>" />
 		</c:if>
 	
-</liferay-ui:icon-menu>
+<%-- </liferay-ui:icon-menu> --%>
 
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.usermgt.admin.workingunit_action.jsp");

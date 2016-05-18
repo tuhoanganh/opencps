@@ -32,7 +32,7 @@
 	JobPos jobPos = (JobPos)row.getObject();
 %>
 
-<liferay-ui:icon-menu>
+<%-- <liferay-ui:icon-menu> --%>
 	<portlet:renderURL var="updateJobPos">
 		<portlet:param name="mvcPath"
 			value="/html/portlets/usermgt/admin/update_jobpos.jsp" />
@@ -43,7 +43,7 @@
 		<portlet:param name="redirectURL" value="<%=currentURL%>" />
 	</portlet:renderURL>
 	<c:if test="<%=JobPosPermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) %>">
-		<liferay-ui:icon image="edit" message="edit"
+		<liferay-ui:icon cssClass="edit" image="edit" message="edit"
 		url="<%=updateJobPos.toString()%>" />
 	</c:if>
 
@@ -54,8 +54,8 @@
 	</portlet:actionURL>
 	
 	<c:if test="<%=JobPosPermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE) %>">
-		<liferay-ui:icon image="delete" message="delete"
+		<liferay-ui:icon cssClass="delete" image="delete" message="delete"
 		url="<%=deleteJobPosURL.toString()%>" />
 	</c:if>
 
-</liferay-ui:icon-menu>
+<%-- </liferay-ui:icon-menu> --%>

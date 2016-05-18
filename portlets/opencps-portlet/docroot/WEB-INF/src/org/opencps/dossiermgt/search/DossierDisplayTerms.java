@@ -43,6 +43,7 @@ public class DossierDisplayTerms extends DisplayTerms {
 	public static final String DOSSIER_STATUS = "dossierStatus";
 	public static final String DOSSIER_SOURCE = "dossierSource";
 	public static final String DOSSIER_ID = "dossierId";
+	public static final String FILE_GROUP_ID = "fileGroupId";
 	public static final String OWNERORGANIZATION_ID = "ownerOrganizationId";
 	public static final String SERVICE_CONFIG_ID = "serviceConfigId";
 	public static final String SERVICE_INFO_ID = "serviceInfoId";

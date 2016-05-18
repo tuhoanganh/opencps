@@ -14,6 +14,21 @@
 			AND (opencps_service_config.domainCode = ?)
 		]]>
 	</sql>
+	
+	<sql id="org.opencps.dossiermgt.service.persistence.ServiceConfigFinder.searchServiceConfigByServiceMode">	
+		<![CDATA[
+			SELECT
+				opencps_service_config.*
+			FROM
+				opencps_service_config
+			WHERE
+				groupId = ?
+			AND 
+				opencps_service_config.serviceMode IN (?)
+			ORDER BY
+				opencps_service_config.govAgencyName ASC
+		]]>
+	</sql>
 
 	<sql id="org.opencps.dossiermgt.service.persistence.ServiceConfigFinder.countServiceConfig">	
 		<![CDATA[
@@ -27,6 +42,19 @@
 				(lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$]))
 			AND (opencps_service_config.govAgencyCode = ?)
 			AND (opencps_service_config.domainCode = ?)
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.dossiermgt.service.persistence.ServiceConfigFinder.countServiceConfigByServiceMode">	
+		<![CDATA[
+			SELECT
+				count(*) AS COUNT_VALUE
+			FROM
+				opencps_service_config
+			WHERE
+				groupId = ?
+			AND 
+				opencps_service_config.serviceMode IN (?)
 		]]>
 	</sql>
 	

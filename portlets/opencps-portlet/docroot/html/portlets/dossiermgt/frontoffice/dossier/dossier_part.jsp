@@ -86,7 +86,7 @@
 	
 	if(dossierPartsLevel1 != null){
 		for (DossierPart dossierPartLevel1 : dossierPartsLevel1){
-			System.out.println(dossierPartLevel1.getPartName() + "-" + dossierPartLevel1.getPartType());
+	
 			int partType = dossierPartLevel1.getPartType();
 			
 			List<DossierPart> dossierParts = DossierMgtUtil.getTreeDossierPart(dossierPartLevel1.getDossierpartId());
@@ -141,7 +141,7 @@
 									
 										<span class="opencps dossiermgt dossier-part-control">
 											<liferay-util:include 
-												page="/html/portlets/dossiermgt/frontoffice/dossier_file_controls.jsp" 
+												page='<%=templatePath + (cmd.equals(Constants.VIEW) ? "overview_files.jsp" : "dossier_file_controls.jsp") %>' 
 												servletContext="<%=application %>"
 											>
 												<portlet:param 
@@ -198,20 +198,20 @@
 										<liferay-ui:message key="private-dossier"/>
 									</span>
 								</span>
-								
-								<span class="opencps dossiermgt dossier-part-control">
-									<aui:a 
-										id="<%=String.valueOf(dossierParts.get(0).getDossierpartId()) %>"
-										dossier-part="<%=String.valueOf(dossierParts.get(0).getDossierpartId()) %>"
-										index="<%=String.valueOf(index) %>"
-										dossier-part-size="<%=dossierParts.size() %>"
-										href="javascript:void(0);" 
-										label="add-private-dossier" 
-										cssClass="opencps dossiermgt part-file-ctr add-private-dossier"
-										onClick='<%=renderResponse.getNamespace() + "addPrivateDossierGroup(this)" %>'
-									/>
-									
-								</span>
+								<c:if test="<%=!cmd.equals(Constants.VIEW) %>">
+									<span class="opencps dossiermgt dossier-part-control">
+										<aui:a 
+											id="<%=String.valueOf(dossierParts.get(0).getDossierpartId()) %>"
+											dossier-part="<%=String.valueOf(dossierParts.get(0).getDossierpartId()) %>"
+											index="<%=String.valueOf(index) %>"
+											dossier-part-size="<%=dossierParts.size() %>"
+											href="javascript:void(0);" 
+											label="add-private-dossier" 
+											cssClass="opencps dossiermgt part-file-ctr add-private-dossier"
+											onClick='<%=renderResponse.getNamespace() + "addPrivateDossierGroup(this)" %>'
+										/>
+									</span>
+								</c:if>
 							</div>
 							<div 
 								id='<%=renderResponse.getNamespace() + "privateDossierPartGroup" + dossierParts.get(0).getDossierpartId() + StringPool.DASH + index%>' 
@@ -265,7 +265,7 @@
 										
 											<span class="opencps dossiermgt dossier-part-control">
 												<liferay-util:include 
-													page="/html/portlets/dossiermgt/frontoffice/dossier_file_controls.jsp"  
+													page='<%=templatePath + (cmd.equals(Constants.VIEW) ? "overview_files.jsp" : "dossier_file_controls.jsp") %>' 
 													servletContext="<%=application %>"
 												>
 													<portlet:param 
@@ -465,6 +465,8 @@
 		
 		var dossierPartId = instance.attr('dossier-part');
 		
+		var dossierFileId = instance.attr('dossier-file');
+		
 		var index = instance.attr('index');
 		
 		var groupName = instance.attr('group-name');
@@ -474,9 +476,10 @@
 		portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
 		portletURL.setPortletMode("normal");
 		portletURL.setParameter("dossierPartId", dossierPartId);
+		portletURL.setParameter("dossierFileId", dossierFileId);
 		portletURL.setParameter("index", index);
 		portletURL.setParameter("groupName", groupName);
-		
+
 		<portlet:namespace/>openDossierDialog(portletURL.toString(), '<portlet:namespace />dynamicForm','<%= UnicodeLanguageUtil.get(pageContext, "declaration-online") %>');
 	});
 
@@ -532,8 +535,7 @@
 					cache: false,
 					cssClass: 'opencps-dossiermgt-upload-dossier-file',
 					modal: true,
-					height: 480,
-					width: 800
+					
 				},
 				cache: false,
 				id: id,

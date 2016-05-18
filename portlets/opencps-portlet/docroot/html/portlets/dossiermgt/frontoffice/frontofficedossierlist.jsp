@@ -1,3 +1,5 @@
+<%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
+<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -82,7 +84,13 @@
 				//id column
 				row.addText(String.valueOf(dossier.getDossierId()));
 				row.addText(DateTimeUtil.convertDateToString(dossier.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT));
-				row.addText(String.valueOf(dossier.getSubjectId()));
+				ServiceInfo serviceInfo = null;
+				String serviceName = StringPool.DASH;
+				try{
+					serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(dossier.getServiceInfoId());
+					serviceName = serviceInfo.getServiceName();
+				}catch(Exception e){}
+				row.addText(serviceName);
 				row.addText(dossier.getGovAgencyName());
 				row.addText(PortletUtil.getDossierStatusLabel(dossier.getDossierStatus(), locale));
 				row.addText(DateTimeUtil.convertDateToString(dossier.getReceiveDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT));

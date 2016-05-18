@@ -39,7 +39,7 @@
 				<div class="toolbar_search_input">
 					<aui:row>
 						<aui:col width="25">
-							<datamgt:ddr cssClass="input30"
+							<datamgt:ddr cssClass="input100"
 								depthLevel="1" 
 								dictCollectionCode="SERVICE_ADMINISTRATION"
 								itemNames="<%= ServiceDisplayTerms.SERVICE_ADMINISTRATION %>"
@@ -50,7 +50,7 @@
 
 						</aui:col>
 						<aui:col width="25">
-							<datamgt:ddr cssClass="input30"
+							<datamgt:ddr cssClass="input100"
 								depthLevel="1" 
 								dictCollectionCode="SERVICE_DOMAIN"
 								itemNames="<%= ServiceDisplayTerms.SERVICE_DOMAINCODE %>"

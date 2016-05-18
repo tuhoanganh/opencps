@@ -67,6 +67,9 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 
 		dossierLog
 		    .setUserId(userId);
+		
+		dossierLog
+	    	.setCreateDate(now);
 
 		dossierLog
 		    .setModifiedDate(now);

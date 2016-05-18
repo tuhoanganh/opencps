@@ -20,6 +20,7 @@ package org.opencps.processmgt.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.opencps.processmgt.NoSuchProcessWorkflowException;
 import org.opencps.processmgt.model.ProcessWorkflow;
 import org.opencps.processmgt.model.WorkflowOutput;
 import org.opencps.processmgt.service.base.ProcessWorkflowLocalServiceBaseImpl;
@@ -51,7 +52,16 @@ public class ProcessWorkflowLocalServiceImpl
 	 * Never reference this interface directly. Always use {@link org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil} to access the process workflow local service.
 	 */
 	
-	
+	/**
+	 * @param serviceProcessId
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public ProcessWorkflow getFirstProcessWorkflow(long serviceProcessId)
+	    throws PortalException, SystemException {
+		return processWorkflowPersistence.findBySPI_(serviceProcessId, 0);
+	}	
 	
 	/**
 	 * Update workflow
@@ -228,5 +238,23 @@ public class ProcessWorkflowLocalServiceImpl
 	    throws PortalException, SystemException {
 
 		return processWorkflowPersistence.countByS_P_ID(serviceProcessId);
+	}
+	
+	/**
+	 * @param serviceProcessId
+	 * @param preProcessStepId
+	 * @return
+	 * @throws NoSuchProcessWorkflowException
+	 * @throws SystemException
+	 */
+	public ProcessWorkflow getPreProcessWorkflow(long serviceProcessId, long preProcessStepId)
+		throws NoSuchProcessWorkflowException, SystemException{
+		//preProcessStepId current step as postProcessStepId of pre step
+		return processWorkflowPersistence.findByS_PPSID(serviceProcessId, preProcessStepId);
+	}
+	
+	public List<ProcessWorkflow> getPostProcessWorkflow(long serviceProcessId, long preProcessStepId) 
+		throws SystemException{
+		return processWorkflowPersistence.findByS_PRE_PS_ID(serviceProcessId, preProcessStepId);
 	}
 }

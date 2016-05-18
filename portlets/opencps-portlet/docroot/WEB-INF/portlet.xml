@@ -444,6 +444,10 @@
 			<name>template-path</name>
 			<value>/html/portlets/processmgt/processorder/</value>
 		</init-param>
+		<init-param>
+		    <name>copy-request-parameters</name>
+		    <value>true</value>
+		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
 			<mime-type>text/html</mime-type>
@@ -466,6 +470,9 @@
 		<security-role-ref>
 			<role-name>user</role-name>
 		</security-role-ref>
+		<supported-public-render-parameter>
+			active
+		</supported-public-render-parameter>
 	</portlet>
 
 	<portlet>	
@@ -504,6 +511,9 @@
 		<security-role-ref>
 			<role-name>user</role-name>
 		</security-role-ref>
+		<supported-public-render-parameter>
+			active
+		</supported-public-render-parameter>
 	</portlet>
 
 	<portlet>	
@@ -632,7 +642,7 @@
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/portlets/dossiermgt/statemenu/view.jsp</value>
+			<value>/html/portlets/dossiermgt/statemenu/dossiermenu.jsp</value>
 		</init-param>
 		<init-param>
 			<name>template-path</name>
@@ -701,4 +711,8 @@
 			<role-name>user</role-name>
 		</security-role-ref>
 	</portlet>
+	<public-render-parameter>
+    	<identifier>active</identifier>
+   		<qname>active</qname>
+    </public-render-parameter>
 </portlet-app>
