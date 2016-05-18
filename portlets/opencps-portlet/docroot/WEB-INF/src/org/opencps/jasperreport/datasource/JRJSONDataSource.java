@@ -15,7 +15,7 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>
 */
 
-package org.opencps.report.datasource;
+package org.opencps.jasperreport.datasource;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
