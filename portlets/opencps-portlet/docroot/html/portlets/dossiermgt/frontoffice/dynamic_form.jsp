@@ -1,16 +1,4 @@
 
-<%@page import="java.util.HashMap"%>
-<%@page import="java.util.Map"%>
-<%@page import="org.opencps.report.datasource.adapter.JRJSONDataSource"%>
-<%@page import="net.sf.jasperreports.engine.JRDataSource"%>
-<%@page import="net.sf.jasperreports.engine.JREmptyDataSource"%>
-<%@page import="net.sf.jasperreports.engine.JasperExportManager"%>
-<%@page import="net.sf.jasperreports.engine.JasperFillManager"%>
-<%@page import="net.sf.jasperreports.engine.JasperPrint"%>
-<%@page import="java.nio.charset.StandardCharsets"%>
-<%@page import="java.io.ByteArrayInputStream"%>
-<%@page import="net.sf.jasperreports.engine.JasperCompileManager"%>
-<%@page import="java.io.InputStream"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -30,6 +18,7 @@
  */
 %>
 
+<%@page import="net.sf.jasperreports.engine.data.JsonDataSource"%>
 <%@page import="net.sf.jasperreports.engine.JasperReport"%>
 <%@page import="org.opencps.dossiermgt.model.DossierFile"%>
 <%@page import="org.opencps.dossiermgt.model.DossierPart"%>
@@ -40,6 +29,18 @@
 <%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.Map"%>
+
+<%@page import="net.sf.jasperreports.engine.JRDataSource"%>
+<%@page import="net.sf.jasperreports.engine.JREmptyDataSource"%>
+<%@page import="net.sf.jasperreports.engine.JasperExportManager"%>
+<%@page import="net.sf.jasperreports.engine.JasperFillManager"%>
+<%@page import="net.sf.jasperreports.engine.JasperPrint"%>
+<%@page import="java.nio.charset.StandardCharsets"%>
+<%@page import="java.io.ByteArrayInputStream"%>
+<%@page import="net.sf.jasperreports.engine.JasperCompileManager"%>
+<%@page import="java.io.InputStream"%>
 <%@ include file="../init.jsp"%>
 
 <%
@@ -93,15 +94,22 @@
 			formData = dossierFile.getFormData();
 		}
 	}
-
-	/* if(dossierFile != null && Validator.isNotNull(dossierFile.getFormData())){
-		InputStream template = new ByteArrayInputStream(dossierPart.getFormReport().getBytes(StandardCharsets.UTF_8));
-		JasperReport jasperReport = JasperCompileManager.compileReport(template);
-		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, new HashMap<String, Object>() , JRJSONDataSource.getDataSource(dossierFile.getFormData())); 
-		
-		JasperExportManager.exportReportToPdfFile(jasperPrint, "/home/trungnt/test.pdf");
-	} 	 */
 	
+	
+	 if(dossierFile != null && Validator.isNotNull(dossierFile.getFormData())){
+		 InputStream stream = new ByteArrayInputStream(formData.getBytes(StandardCharsets.UTF_8));
+			
+			JsonDataSource dataSource = new JsonDataSource(stream);
+
+			
+			InputStream template = new ByteArrayInputStream(dossierPart.getFormReport().getBytes(StandardCharsets.UTF_8));
+			JasperReport jasperReport = JasperCompileManager.compileReport(template);
+
+		    JasperPrint jrPrint = JasperFillManager.fillReport(jasperReport, null, dataSource);
+
+		    JasperExportManager.exportReportToPdfFile(jrPrint, "/home/trungnt/test.pdf");
+	} 
+
 	
 %>
 
