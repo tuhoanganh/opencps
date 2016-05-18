@@ -20,6 +20,7 @@ package org.opencps.dossiermgt.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.opencps.dossiermgt.comparator.DossierLogUpdateDatetimeComparator;
 import org.opencps.dossiermgt.model.DossierLog;
 import org.opencps.dossiermgt.service.base.DossierLogLocalServiceBaseImpl;
 
@@ -149,7 +150,11 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 	
 	public List<DossierLog> getDossierLogByDossierId(long dossierId, int start, int end) 
 					throws SystemException {
-		return dossierLogPersistence.findByDossierId(dossierId, start, end);
+		
+		boolean orderByAsc = true;
+		DossierLogUpdateDatetimeComparator orderByComparator = 
+						new DossierLogUpdateDatetimeComparator(orderByAsc);
+		return dossierLogPersistence.findByDossierId(dossierId, start, end, orderByComparator);
 	}
 	
 	public int countDossierLogByDossierId(long dossierId) throws SystemException {
