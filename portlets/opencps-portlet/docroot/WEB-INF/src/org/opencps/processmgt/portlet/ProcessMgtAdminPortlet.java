@@ -178,7 +178,11 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 		boolean isFinishStep =
 					    ParamUtil.getBoolean(actionRequest, "isFinishStepCheckbox");
 		
-
+		String preCondition = ParamUtil.getString(actionRequest, "preCondition");
+		
+		boolean isMultipled = ParamUtil.getBoolean(actionRequest, "isMultipledCheckbox");
+		
+		
 		try {
 			ServiceContext serviceContext =
 			    ServiceContextFactory.getInstance(actionRequest);
@@ -192,7 +196,7 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 				        serviceProcessId, preProcessStepId, postProcessStepId,
 				        autoEvent, actionName, assignUser, actionUserId,
 				        requestPayment, paymentFee, generateReceptionNo,
-				        receptionNoPattern, generateDeadline, deadlinePattern, isFinishStep,
+				        receptionNoPattern, generateDeadline, deadlinePattern, isFinishStep, preCondition, isMultipled,
 				        serviceContext);
 
 				// Add WorkflowOutput
@@ -218,7 +222,7 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 				        autoEvent, actionName, assignUser, actionUserId,
 				        requestPayment, paymentFee, generateReceptionNo,
 				        receptionNoPattern, generateDeadline, deadlinePattern,
-				        isFinishStep, serviceContext);
+				        isFinishStep, preCondition, isMultipled, serviceContext);
 
 				// Add WorkflowOutput
 

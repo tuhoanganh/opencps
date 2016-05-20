@@ -67,7 +67,7 @@ public class SyncFromFrontOffice implements MessageListener{
     	
     	String action = userActionMgs.getAction();
     	
-
+    	
     }
     
     private void doReceive(Message message) {
