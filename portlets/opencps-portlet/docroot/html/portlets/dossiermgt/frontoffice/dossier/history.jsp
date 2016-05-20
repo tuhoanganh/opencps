@@ -47,7 +47,7 @@
 		>
 		<liferay-ui:search-container-results>
 			<%
-				dossierLogs = DossierLogLocalServiceUtil.getDossierLogByDossierId(dossierId);
+				dossierLogs = DossierLogLocalServiceUtil.getDossierLogByDossierId(dossierId, searchContainer.getStart(), searchContainer.getEnd());
 				
 				results = dossierLogs;
 				total = DossierLogLocalServiceUtil.countDossierLogByDossierId(dossierId);
