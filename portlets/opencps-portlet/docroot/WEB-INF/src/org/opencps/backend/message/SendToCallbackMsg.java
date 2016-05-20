@@ -15,35 +15,46 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 
-package org.opencps.backend.util;
-
-import java.util.Random;
-
-import com.liferay.portal.kernel.util.StringPool;
+package org.opencps.backend.message;
 
 
 /**
  * @author khoavd
  *
  */
-public class DossierNoGenerator {
+public class SendToCallbackMsg {
 	
-
+    /**
+     * @return the processOrderId
+     */
+    public long getProcessOrderId() {
+    
+    	return processOrderId;
+    }
 	
-	/**
-	 * @return
-	 */
-	public static String noGenarator() {
-		char[] chars = "012346789".toCharArray();
-		
-		StringBuilder sb = new StringBuilder();
-		
-		Random random = new Random();
-		
-		for (int i = 0; i < 12; i++) {
-		    char c = chars[random.nextInt(chars.length)];
-		    sb.append(c);
-		}
-		return sb.toString();
-	}
+    /**
+     * @param processOrderId the processOrderId to set
+     */
+    public void setProcessOrderId(long processOrderId) {
+    
+    	this.processOrderId = processOrderId;
+    }
+	
+    /**
+     * @return the syncStatus
+     */
+    public String getSyncStatus() {
+    
+    	return syncStatus;
+    }
+	
+    /**
+     * @param syncStatus the syncStatus to set
+     */
+    public void setSyncStatus(String syncStatus) {
+    
+    	this.syncStatus = syncStatus;
+    }
+	protected long processOrderId;
+	protected String syncStatus;
 }

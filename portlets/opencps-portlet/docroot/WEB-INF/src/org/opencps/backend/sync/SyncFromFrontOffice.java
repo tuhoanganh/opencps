@@ -20,6 +20,7 @@ package org.opencps.backend.sync;
 import java.util.Date;
 import java.util.Locale;
 
+import org.opencps.backend.message.UserActionMsg;
 import org.opencps.backend.util.BackendUtils;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierStatus;
@@ -59,6 +60,14 @@ public class SyncFromFrontOffice implements MessageListener{
         catch (Exception e) {
             _log.error("Unable to process message " + message, e);
         }	    
+    }
+    
+    private void doReceiveDossier(Message message) {
+    	UserActionMsg userActionMgs = (UserActionMsg) message.get("userActionMgs");
+    	
+    	String action = userActionMgs.getAction();
+    	
+    	
     }
     
     private void doReceive(Message message) {
@@ -190,6 +199,7 @@ public class SyncFromFrontOffice implements MessageListener{
         }
         catch (Exception e) {
         	_log.error(e);
+        	
         }
     	
     	if (Validator.isNotNull(status)) {
