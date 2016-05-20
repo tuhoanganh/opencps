@@ -49,6 +49,8 @@ public class DossierFileLocalServiceImpl
 	 * {@link org.opencps.dossiermgt.service.DossierFileLocalServiceUtil} to
 	 * access the dossier file local service.
 	 */
+	
+	
 
 	public DossierFile addDossierFile(
 	    long userId, long dossierId, long dossierPartId, String templateFileNo,
@@ -150,6 +152,32 @@ public class DossierFileLocalServiceImpl
 
 		return dossierFilePersistence
 		    .findByD_F(dossierId, groupFileId);
+	}
+	
+	public DossierFile updateDossierFile(
+	    long dossierFileId, long ownerUserId, long ownerOrganizationId,
+	    long fileEntryId, String displayName)
+	    throws NoSuchDossierFileException, SystemException {
+
+		DossierFile dossierFile = dossierFilePersistence
+		    .findByPrimaryKey(dossierFileId);
+
+		Date now = new Date();
+
+		dossierFile
+		    .setModifiedDate(now);
+
+		dossierFile
+		    .setDisplayName(displayName);
+
+		dossierFile
+		    .setFileEntryId(fileEntryId);
+		dossierFile
+		    .setOwnerUserId(ownerUserId);
+		dossierFile
+		    .setOwnerOrganizationId(ownerOrganizationId);
+		return dossierFilePersistence
+		    .update(dossierFile);
 	}
 
 	public DossierFile updateDossierFile(
