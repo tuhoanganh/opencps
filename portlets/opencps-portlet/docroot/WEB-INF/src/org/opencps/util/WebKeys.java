@@ -122,4 +122,6 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String ACTION_PAY_VALUE = "pay";
 	public static final String ACTION_CANCEL_VALUE = "cancel";
 	public static final String ACTION_CLOSE_VALUE = "close";
+	
+	public static final String ACCOUNT_FOLDER = "accountFolder";
 }
