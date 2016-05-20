@@ -190,6 +190,7 @@ public class SyncFromFrontOffice implements MessageListener{
         }
         catch (Exception e) {
         	_log.error(e);
+        	
         }
     	
     	if (Validator.isNotNull(status)) {
