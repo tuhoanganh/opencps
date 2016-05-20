@@ -14,7 +14,6 @@
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>
 */
-
 package org.opencps.jasperreport.util;
 
 import java.util.Map;
@@ -30,27 +29,27 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 
 /**
  * @author trungnt
- *
  */
 public class JRReportUtil {
 
-	public static String createReportPDFfFile(
+	public synchronized static String createReportPDFfFile(
 	    String jrxmlTemplate, String jsonData, Map<String, Object> parameters,
 	    String outputDestination, String exportName) {
 
 		String sourceFileName = outputDestination + exportName;
 		try {
-			JRReportTemplate reportTemplate = JRReportTemplate
-			    .compile(jrxmlTemplate);
+			JasperReport reportTemplate = JRReportTemplate
+			    .getJasperReport(jrxmlTemplate);
 			JRJSONDataSource dataSource = JRJSONDataSource
 			    .getInstance(jsonData);
 			JasperPrint jasperPrint =
 			    getJasperPrint(reportTemplate, parameters, dataSource);
 
-			return exportReportToPdfFile(jasperPrint, sourceFileName);
+			return exportPdfFile(jasperPrint, sourceFileName);
 		}
 		catch (Exception e) {
 			_log
@@ -60,6 +59,17 @@ public class JRReportUtil {
 
 		}
 
+	}
+
+	protected static JasperPrint getJasperPrint(
+	    JasperReport jrReportTemplate, Map<String, Object> parameters,
+	    JRJSONDataSource dataSource)
+	    throws JRException {
+
+		JasperPrint jasperPrint = JasperFillManager
+		    .fillReport(jrReportTemplate, null, dataSource);
+
+		return jasperPrint;
 	}
 
 	protected static JasperPrint getJasperPrint(
@@ -73,12 +83,14 @@ public class JRReportUtil {
 		return jasperPrint;
 	}
 
-	protected static String exportReportToPdfFile(
+	protected static String exportPdfFile(
 	    JasperPrint jasperPrint, String sourceFileName)
 	    throws JRException {
 
-		return JasperExportManager
-		    .exportReportToHtmlFile(sourceFileName);
+		JasperExportManager
+		    .exportReportToPdfFile(jasperPrint, sourceFileName);
+
+		return sourceFileName;
 
 	}
 
