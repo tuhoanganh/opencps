@@ -202,6 +202,12 @@
 		</aui:col>	
 	</aui:row>
 	
+	<aui:row>
+		<aui:col width="100">
+			<aui:input name="isFinishStep"></aui:input>
+		</aui:col>
+	</aui:row>
+	
 	<label class="bold"><liferay-ui:message key="result-action"/></label>
 	
 	<div id="workflow-output">

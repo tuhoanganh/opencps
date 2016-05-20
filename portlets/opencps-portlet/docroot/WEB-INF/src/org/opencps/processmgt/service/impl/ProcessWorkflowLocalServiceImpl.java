@@ -89,7 +89,7 @@ public class ProcessWorkflowLocalServiceImpl
 	    String autoEvent, String actionName, boolean assignUser,
 	    long actionUserId, boolean requestPayment, double paymentFee,
 	    String generateReceptionNo, String receptionNoPattern,
-	    boolean generateDeadline, boolean deadlinePattern,
+	    boolean generateDeadline, String deadlinePattern, boolean isFinishStep,
 	    ServiceContext context)
 	    throws PortalException, SystemException {
 
@@ -115,6 +115,7 @@ public class ProcessWorkflowLocalServiceImpl
 			workflow.setReceptionNoPattern(receptionNoPattern);
 			workflow.setGenerateDeadline(generateDeadline);
 			workflow.setDeadlinePattern(deadlinePattern);
+			workflow.setIsFinishStep(isFinishStep);
 			
 			processWorkflowPersistence.update(workflow);
 		}
@@ -166,7 +167,7 @@ public class ProcessWorkflowLocalServiceImpl
 	    String autoEvent, String actionName, boolean assignUser,
 	    long actionUserId, boolean requestPayment, double paymentFee,
 	    String generateReceptionNo, String receptionNoPattern,
-	    boolean generateDeadline, boolean deadlinePattern,
+	    boolean generateDeadline, String deadlinePattern, boolean isFinishStep,
 	    ServiceContext context)
 	    throws PortalException, SystemException {
 		
@@ -201,6 +202,7 @@ public class ProcessWorkflowLocalServiceImpl
 			workflow.setReceptionNoPattern(receptionNoPattern);
 			workflow.setGenerateDeadline(generateDeadline);
 			workflow.setDeadlinePattern(deadlinePattern);
+			workflow.setIsFinishStep(isFinishStep);
 			
 			processWorkflowPersistence.update(workflow);
 		}
