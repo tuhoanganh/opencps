@@ -128,20 +128,22 @@
 			viewURL.setParameter("serviceinfoId", String.valueOf(service.getServiceinfoId()));
 			viewURL.setParameter("backURL", currentURL);
 			
-			// no column
-			row.addText(String.valueOf(row.getPos() + 1), viewURL);
-		
-			// service no
-			row.addText(service.getServiceNo(), viewURL);
+			if(service.getActiveStatus() !=0) {
+				// no column
+				row.addText(String.valueOf(row.getPos() + 1), viewURL);
 			
-			// service name
-			row.addText(service.getServiceName(), viewURL);
-			
-			// service domain
-			row.addText(DictItemUtil.getNameDictItem(service.getDomainCode()) , viewURL);
-			
-			// service admin
-			row.addText(DictItemUtil.getNameDictItem(service.getAdministrationCode()), viewURL);
+				// service no
+				row.addText(service.getServiceNo(), viewURL);
+				
+				// service name
+				row.addText(service.getServiceName(), viewURL);
+				
+				// service domain
+				row.addText(DictItemUtil.getNameDictItem(service.getDomainCode()) , viewURL);
+				
+				// service admin
+				row.addText(DictItemUtil.getNameDictItem(service.getAdministrationCode()), viewURL);
+			}
 		%>	
 	
 	</liferay-ui:search-container-row>	

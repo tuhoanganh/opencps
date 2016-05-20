@@ -185,6 +185,18 @@
 					
 				</td>
 			</tr>
+			<tr>
+				<td class="col-left">
+					<liferay-ui:message key="online-url"/>
+				</td>
+				<td class="col-right">
+					<ul>
+						<li>
+							<a href="<%= serviceInfo.getOnlineUrl()%>"><span style="color:blue"><%= serviceInfo.getOnlineUrl()%></span> </a>
+						</li>
+					</ul>
+				</td>
+			</tr>
 		</table>
 	</div>
 </c:if>
