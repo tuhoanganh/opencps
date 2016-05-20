@@ -54,8 +54,19 @@ public class JRReportTemplate extends JasperReport {
 		    report, compilerClass, compileData, factory, compileNameSuffix);
 
 	}
+	
+	public static JasperReport getJasperReport(String jrxmlTemplate)
+	    throws JRException {
 
-	public static JRReportTemplate compile(String jrxmlTemplate)
+		InputStream isTemplate = new ByteArrayInputStream(jrxmlTemplate
+		    .getBytes(StandardCharsets.UTF_8));
+		JasperReport reportTemplate = JasperCompileManager
+		    .compileReport(isTemplate);
+
+		return reportTemplate;
+	}
+
+	public static JRReportTemplate getJRReportTemplate(String jrxmlTemplate)
 	    throws JRException {
 
 		InputStream isTemplate = new ByteArrayInputStream(jrxmlTemplate
