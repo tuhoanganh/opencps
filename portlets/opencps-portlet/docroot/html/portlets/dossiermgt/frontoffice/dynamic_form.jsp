@@ -1,6 +1,4 @@
-<%@page import="javax.portlet.WindowState"%>
-<%@page import="javax.portlet.PortletRequest"%>
-<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -30,6 +28,9 @@
 <%@page import="org.opencps.dossiermgt.model.DossierFile"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="javax.portlet.WindowState"%>
+<%@page import="javax.portlet.PortletRequest"%>
+<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
 <%@ include file="../init.jsp"%>
 
 <%
