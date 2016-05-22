@@ -46,6 +46,7 @@
 <%@page import="org.opencps.dossiermgt.service.FileGroupLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.model.FileGroup"%>
 <%@page import="org.opencps.util.WebKeys"%>
+<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
 
 <%@ include file="../../init.jsp"%>
 
@@ -129,7 +130,7 @@
 											<span class="row-icon">
 												<i 
 													id='<%="rowcheck" + dossierPart.getDossierpartId() + StringPool.DASH + index %>' 
-													class='<%=dossierFile != null ? "fa fa-check-square-o" : "fa fa-square-o" %>' 
+													class='<%=dossierFile != null &&  dossierFile.getFileEntryId() > 0 ? "fa fa-check-square-o" : "fa fa-square-o" %>' 
 													aria-hidden="true"
 												>
 												</i>
@@ -145,15 +146,37 @@
 												servletContext="<%=application %>"
 											>
 												<portlet:param 
+													name="<%=DossierDisplayTerms.DOSSIER_ID %>" 
+													value="<%=String.valueOf(dossier != null ? dossier.getDossierId() : 0) %>"
+												/>
+												<portlet:param 
 													name="<%=DossierFileDisplayTerms.DOSSIER_PART_ID %>" 
 													value="<%=String.valueOf(dossierPart.getDossierpartId()) %>"
 												/>
-												<portlet:param name="<%=DossierFileDisplayTerms.FILE_ENTRY_ID %>" value="<%=String.valueOf(dossierFile != null ? dossierFile.getFileEntryId() : 0) %>"/>
-												<portlet:param name="<%=DossierFileDisplayTerms.DOSSIER_FILE_ID %>" value="<%=String.valueOf(dossierFile != null ? dossierFile.getDossierFileId() : 0) %>"/>
-												<portlet:param name="<%=DossierFileDisplayTerms.INDEX %>" value="<%=String.valueOf(index) %>"/>
-												<portlet:param name="<%=DossierFileDisplayTerms.LEVEL %>" value="<%=String.valueOf(level) %>"/>
-												<portlet:param name="<%=DossierFileDisplayTerms.GROUP_NAME %>" value="<%=StringPool.BLANK%>"/>
-												<portlet:param name="<%=DossierFileDisplayTerms.PART_TYPE %>" value="<%=String.valueOf(dossierPart.getPartType()) %>"/>
+												<portlet:param 
+													name="<%=DossierFileDisplayTerms.FILE_ENTRY_ID %>" 
+													value="<%=String.valueOf(dossierFile != null ? dossierFile.getFileEntryId() : 0) %>"
+												/>
+												<portlet:param 
+													name="<%=DossierFileDisplayTerms.DOSSIER_FILE_ID %>" 
+													value="<%=String.valueOf(dossierFile != null ? dossierFile.getDossierFileId() : 0) %>"
+												/>
+												<portlet:param 
+													name="<%=DossierFileDisplayTerms.INDEX %>" 
+													value="<%=String.valueOf(index) %>"
+												/>
+												<portlet:param 
+													name="<%=DossierFileDisplayTerms.LEVEL %>" 
+													value="<%=String.valueOf(level) %>"
+												/>
+												<portlet:param 
+													name="<%=DossierFileDisplayTerms.GROUP_NAME %>" 
+													value="<%=dossierParts.get(0).getPartName()%>"
+												/>
+												<portlet:param 
+													name="<%=DossierFileDisplayTerms.PART_TYPE %>" 
+													value="<%=String.valueOf(dossierPart.getPartType()) %>"
+												/>
 											</liferay-util:include>
 										</span>
 									</div>
@@ -269,15 +292,37 @@
 													servletContext="<%=application %>"
 												>
 													<portlet:param 
+														name="<%=DossierDisplayTerms.DOSSIER_ID %>" 
+														value="<%=String.valueOf(dossier != null ? dossier.getDossierId() : 0) %>"
+													/>
+													<portlet:param 
 														name="<%=DossierFileDisplayTerms.DOSSIER_PART_ID %>" 
 														value="<%=String.valueOf(dossierPart.getDossierpartId()) %>"
 													/>
-													<portlet:param name="<%=DossierFileDisplayTerms.FILE_ENTRY_ID %>" value="<%=String.valueOf(dossierFile != null ? dossierFile.getFileEntryId() : 0) %>"/>
-													<portlet:param name="<%=DossierFileDisplayTerms.DOSSIER_FILE_ID %>" value="<%=String.valueOf(dossierFile != null ? dossierFile.getDossierFileId() : 0) %>"/>
-													<portlet:param name="<%=DossierFileDisplayTerms.INDEX %>" value="<%=String.valueOf(index) %>"/>
-													<portlet:param name="<%=DossierFileDisplayTerms.LEVEL %>" value="<%=String.valueOf(level) %>"/>
-													<portlet:param name="<%=DossierFileDisplayTerms.GROUP_NAME %>" value="<%=dossierParts.get(0).getPartName()%>"/>
-													<portlet:param name="<%=DossierFileDisplayTerms.PART_TYPE %>" value="<%=String.valueOf(dossierPart.getPartType()) %>"/>
+													<portlet:param 
+														name="<%=DossierFileDisplayTerms.FILE_ENTRY_ID %>" 
+														value="<%=String.valueOf(dossierFile != null ? dossierFile.getFileEntryId() : 0) %>"
+													/>
+													<portlet:param 
+														name="<%=DossierFileDisplayTerms.DOSSIER_FILE_ID %>" 
+														value="<%=String.valueOf(dossierFile != null ? dossierFile.getDossierFileId() : 0) %>"
+													/>
+													<portlet:param 
+														name="<%=DossierFileDisplayTerms.INDEX %>" 
+														value="<%=String.valueOf(index) %>"
+													/>
+													<portlet:param 
+														name="<%=DossierFileDisplayTerms.LEVEL %>" 
+														value="<%=String.valueOf(level) %>"
+													/>
+													<portlet:param 
+														name="<%=DossierFileDisplayTerms.GROUP_NAME %>" 
+														value="<%=dossierParts.get(0).getPartName()%>"
+													/>
+													<portlet:param 
+														name="<%=DossierFileDisplayTerms.PART_TYPE %>" 
+														value="<%=String.valueOf(dossierPart.getPartType()) %>"
+													/>
 												</liferay-util:include>
 											</span>
 										</div>
@@ -463,6 +508,8 @@
 		
 		var instance = A.one(e);
 		
+		var dossierId = instance.attr('dossier');
+		
 		var dossierPartId = instance.attr('dossier-part');
 		
 		var dossierFileId = instance.attr('dossier-file');
@@ -477,10 +524,10 @@
 		portletURL.setPortletMode("normal");
 		portletURL.setParameter("dossierPartId", dossierPartId);
 		portletURL.setParameter("dossierFileId", dossierFileId);
-		portletURL.setParameter("index", index);
+		portletURL.setParameter("dossierId", dossierId);
 		portletURL.setParameter("groupName", groupName);
 
-		<portlet:namespace/>openDossierDialog(portletURL.toString(), '<portlet:namespace />dynamicForm','<%= UnicodeLanguageUtil.get(pageContext, "declaration-online") %>');
+		<portlet:namespace/>openDossierDialog(portletURL.toString(), '<portlet:namespace />dynamicForm','<%= UnicodeLanguageUtil.get(pageContext, "declaration-") %>');
 	});
 
 	

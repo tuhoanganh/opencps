@@ -1,3 +1,4 @@
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -23,12 +24,15 @@
 <%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
 <%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
 <%@ include file="../init.jsp"%>
 
 <%
 	//DossierFile dossierFile = (DossierFile) request.getAttribute(WebKeys.DOSSIER_FILE_ENTRY);
 
 	DossierPart dossierPart = (DossierPart) request.getAttribute(WebKeys.DOSSIER_PART_ENTRY);
+	
+	long dossierId = ParamUtil.getLong(request, DossierDisplayTerms.DOSSIER_ID);
 	
 	long dossierPartId = ParamUtil.getLong(request, DossierFileDisplayTerms.DOSSIER_PART_ID);
 	
@@ -52,8 +56,10 @@
 			<c:choose>
 				<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_SUBMIT%>">
 					<td width="40%" align="right">
-						<aui:a 
+						<aui:a
+						
 							id="<%=String.valueOf(dossierPartId) %>"
+							dossier="<%=String.valueOf(dossierId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
 							dossier-file="<%=String.valueOf(dossierFileId) %>"
 							index="<%=String.valueOf(index) %>"
@@ -69,6 +75,7 @@
 					<td width="40%" align="right">
 						<aui:a 
 							id="<%=String.valueOf(dossierPartId) %>"
+							dossier="<%=String.valueOf(dossierId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
 							index="<%=String.valueOf(index) %>"
 							group-name="<%=groupName %>"
@@ -127,6 +134,7 @@
 					<td width="40%" align="right">
 						<aui:a 
 							id="<%=String.valueOf(dossierPartId) %>"
+							dossier="<%=String.valueOf(dossierId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
 							index="<%=String.valueOf(index) %>"
 							group-name="<%=groupName %>"
@@ -144,6 +152,7 @@
 					<td width="40%" align="right">
 						<aui:a 
 							id="<%=String.valueOf(dossierPartId) %>"
+							dossier="<%=String.valueOf(dossierId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
 							index="<%=String.valueOf(index) %>"
 							group-name="<%=groupName %>"
@@ -182,6 +191,7 @@
 					<td width="40%" align="right">
 						<aui:a 
 							id="<%=String.valueOf(dossierPartId) %>"
+							dossier="<%=String.valueOf(dossierId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
 							index="<%=String.valueOf(index) %>"
 							group-name="<%=groupName %>"
@@ -253,6 +263,7 @@
 					<td width="10%" align="right">
 						<aui:a 
 							id="<%=String.valueOf(dossierPartId) %>"
+							dossier="<%=String.valueOf(dossierId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
 							index="<%=String.valueOf(index) %>"
 							group-name="<%=groupName %>"
@@ -286,6 +297,7 @@
 					<td width="40%" align="right">
 						<aui:a 
 							id="<%=String.valueOf(dossierPartId) %>"
+							dossier="<%=String.valueOf(dossierId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
 							index="<%=String.valueOf(index) %>"
 							group-name="<%=groupName %>"
@@ -303,6 +315,7 @@
 					<td width="40%" align="right">
 						<aui:a 
 							id="<%=String.valueOf(dossierPartId) %>"
+							dossier="<%=String.valueOf(dossierId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
 							index="<%=String.valueOf(index) %>"
 							group-name="<%=groupName %>"

@@ -1,16 +1,6 @@
-
-<%@page import="java.util.HashMap"%>
-<%@page import="java.util.Map"%>
-<%@page import="org.opencps.report.datasource.adapter.JRJSONDataSource"%>
-<%@page import="net.sf.jasperreports.engine.JRDataSource"%>
-<%@page import="net.sf.jasperreports.engine.JREmptyDataSource"%>
-<%@page import="net.sf.jasperreports.engine.JasperExportManager"%>
-<%@page import="net.sf.jasperreports.engine.JasperFillManager"%>
-<%@page import="net.sf.jasperreports.engine.JasperPrint"%>
-<%@page import="java.nio.charset.StandardCharsets"%>
-<%@page import="java.io.ByteArrayInputStream"%>
-<%@page import="net.sf.jasperreports.engine.JasperCompileManager"%>
-<%@page import="java.io.InputStream"%>
+<%@page import="javax.portlet.WindowState"%>
+<%@page import="javax.portlet.PortletRequest"%>
+<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -30,16 +20,16 @@
  */
 %>
 
-<%@page import="net.sf.jasperreports.engine.JasperReport"%>
-<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
 <%@page import="org.opencps.dossiermgt.model.DossierPart"%>
-<%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
 <%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
-<%@page import="org.opencps.util.PortletConstants"%>
-<%@page import="org.opencps.util.WebKeys"%>
-<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
+<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
+<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
+<%@page import="org.opencps.util.WebKeys"%>
+<%@page import="org.opencps.util.PortletConstants"%>
 <%@ include file="../init.jsp"%>
 
 <%
@@ -52,13 +42,14 @@
 		
 	}
 	
+	long dossierId = ParamUtil.getLong(request, DossierDisplayTerms.DOSSIER_ID);
+	
 	long dossierPartId = ParamUtil.getLong(request, DossierFileDisplayTerms.DOSSIER_PART_ID);
 
 	long dossierFileId = ParamUtil.getLong(request, DossierFileDisplayTerms.DOSSIER_FILE_ID);
 
-	int index = ParamUtil.getInteger(request, DossierFileDisplayTerms.INDEX);
-
 	DossierPart dossierPart = null;
+	
 	
 	if(dossierPartId > 0){
 		try{
@@ -69,16 +60,10 @@
 	}
 	
 	String formData = StringPool.BLANK;
-	
-	//String formData = GetterUtil.getString((String)request.getAttribute(WebKeys.FORM_DATA + String.valueOf(dossierPartId) + StringPool.DASH + String.valueOf(index)), StringPool.BLANK);
-	
+
 	String alpacaSchema = dossierPart != null && Validator.isNotNull(dossierPart.getFormScript()) ? 
 			dossierPart.getFormScript() : PortletConstants.UNKNOW_ALPACA_SCHEMA;
-	try{
-		formData = session.getAttribute(WebKeys.FORM_DATA + String.valueOf(dossierPartId) + StringPool.DASH + String.valueOf(index)).toString();
-	}catch(Exception e){
-		
-	}
+	
 	
 	DossierFile dossierFile = null;
 	
@@ -86,60 +71,43 @@
 		try{
 			dossierFile = DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
 		}catch(Exception e){
-			//nothing todo
+			
 		}
 		
 		if(dossierFile != null && Validator.isNotNull(dossierFile.getFormData())){
 			formData = dossierFile.getFormData();
 		}
 	}
-
-	/* if(dossierFile != null && Validator.isNotNull(dossierFile.getFormData())){
-		InputStream template = new ByteArrayInputStream(dossierPart.getFormReport().getBytes(StandardCharsets.UTF_8));
-		JasperReport jasperReport = JasperCompileManager.compileReport(template);
-		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, new HashMap<String, Object>() , JRJSONDataSource.getDataSource(dossierFile.getFormData())); 
-		
-		JasperExportManager.exportReportToPdfFile(jasperPrint, "/home/trungnt/test.pdf");
-	} 	 */
-	
 	
 %>
 
-<portlet:actionURL var="updateTempDynamicFormDataURL" name="updateTempDynamicFormData"/>
+<portlet:actionURL var="updateDynamicFormDataURL" name="updateDynamicFormData"/>
+
+<%-- onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveDynamicFormData();" %>' --%>
 
 <aui:form 
-	name="fm" action="<%=updateTempDynamicFormDataURL.toString() %>" 
+	name="fm" action="<%=updateDynamicFormDataURL.toString() %>" 
 	method="post"
-	onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveDynamicFormData();" %>'
 >
 	<aui:input name="redirectURL" type="hidden" value="<%=currentURL %>"/>
-	<aui:input name="<%=DossierFileDisplayTerms.INDEX %>" type="hidden" value="<%=index %>"/>
+	<aui:input name="<%=DossierDisplayTerms.DOSSIER_ID %>" type="hidden" value="<%=dossierId %>"/>
+	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_ID %>" type="hidden" value="<%=dossierFileId %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_PART_ID %>" type="hidden" value="<%=dossierPartId %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.FORM_DATA %>" type="hidden" value=""/>
 	<aui:fieldset id="dynamicForm"></aui:fieldset>
 	<aui:fieldset>
 		<aui:button type="button" value="save" name="save" cssClass="saveForm"/>
+		<aui:button type="button" value="preview" name="preview"/>
+		<aui:button type="button" value="create-file" name="create-file"/>
 	</aui:fieldset>
 </aui:form>
 
 <aui:script>
-	var success = '<%=success%>';
 	var alpacaSchema = <%=alpacaSchema%>;
-	var index = '<%=index%>';
-	var dossierPartId = '<%=dossierPartId%>';
 	var formData = '<%=formData%>';
+	var dossierFileId = '<%=dossierFileId%>';
 	
 	AUI().ready(function(A){
-		if(success == 'true'){
-			if(formData != ''){
-				jsonData = JSON.parse(formData);
-			}
-			var responseData = new Object();
-			responseData.index = index;
-			responseData.dossierPartId = dossierPartId;
-			responseData.formData = JSON.parse(formData);
-			<portlet:namespace/>responseData(responseData);
-		}
 		
 		if(alpacaSchema.options != 'undefined' && alpacaSchema.schema != 'undefined'){
 			
@@ -153,7 +121,6 @@
 					var formData = control.getValue();
 					$("#<portlet:namespace />formData" ).val(JSON.stringify(formData));
 					$("#<portlet:namespace />fm" ).submit();
-					
 			    });
 			};
 		
@@ -161,13 +128,41 @@
 		var el = $("#<portlet:namespace/>dynamicForm");
 		
 		Alpaca(el, alpacaSchema);
+		
+		var createReportBtn = A.one('#<portlet:namespace/>create-file');
+		if(createReportBtn){
+			createReportBtn.on('click', function(){
+				<portlet:namespace/>createReport(dossierFileId);
+			});
+		}
 	});
 	
-	Liferay.provide(window, '<portlet:namespace/>responseData', function(schema) {
-		var Util = Liferay.Util;
-		Util.getOpener().Liferay.fire('getDynamicFormDataSchema', {responseData:schema});
-		//<portlet:namespace/>closeDialog();
-	});
+	Liferay.provide(window, '<portlet:namespace/>createReport', function(dossierFileId) {
+		var A = AUI();
+		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.ACTION_PHASE) %>');
+		portletURL.setParameter("javax.portlet.action", "createReport");
+		portletURL.setWindowState('<%=WindowState.NORMAL%>');
+		A.io.request(
+			portletURL.toString(),
+			{
+			    dataType : 'json',
+			    data:{    	
+			    	<portlet:namespace/>dossierFileId : dossierFileId,
+			    },   
+			    on: {
+			        success: function(event, id, obj) {
+						var instance = this;
+						var res = instance.get('responseData');
+						
+						var fileExportDir = res.fileExportDir;
+						console.log(fileExportDir);
+
+					},
+			    	error: function(){}
+				}
+			}
+		);
+	},['aui-io','liferay-portlet-url']);
 	
 	Liferay.provide(window, '<portlet:namespace/>closeDialog', function() {
 		var dialog = Liferay.Util.getWindow('<portlet:namespace/>dynamicForm');

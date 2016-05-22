@@ -109,17 +109,23 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	
 	public static final String FILE_GROUP_ENTRY = "FILE_GROUP_ENTRY";
 
-	
 	public static final String FILE_ID = "dossierFileId";
 	
 	public static final int DOSSIER_MONITORING_LIST = 1;
+	
 	public static final int DOSSIER_MONITORING_UPDATE = 2;
 	
-	
 	public static final String ACTION_SUBMIT_VALUE = "submit";
+	
 	public static final String ACTION_RESUBMIT_VALUE = "resubmit";
+	
 	public static final String ACTION_CHANGE_VALUE = "change";
+	
 	public static final String ACTION_PAY_VALUE = "pay";
+	
 	public static final String ACTION_CANCEL_VALUE = "cancel";
+	
 	public static final String ACTION_CLOSE_VALUE = "close";
+	
+	public static final String ACCOUNT_FOLDER = "accountFolder";
 }
