@@ -1,14 +1,4 @@
-<%@page import="org.opencps.util.PortletUtil"%>
-<%@page import="com.liferay.portal.service.UserLocalServiceUtil"%>
-<%@page import="com.liferay.portal.model.User"%>
-<%@page import="org.opencps.util.DateTimeUtil"%>
-<%@page import="org.opencps.dossiermgt.service.DossierLogLocalServiceUtil"%>
-<%@page import="javax.portlet.PortletURL"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="java.util.List"%>
-<%@page import="org.opencps.dossiermgt.model.DossierLog"%>
-<%@page import="org.opencps.util.WebKeys"%>
-<%@page import="org.opencps.dossiermgt.model.Dossier"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -27,7 +17,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
+<%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="com.liferay.portal.service.UserLocalServiceUtil"%>
+<%@page import="com.liferay.portal.model.User"%>
+<%@page import="org.opencps.util.DateTimeUtil"%>
+<%@page import="org.opencps.dossiermgt.service.DossierLogLocalServiceUtil"%>
+<%@page import="javax.portlet.PortletURL"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page import="org.opencps.dossiermgt.model.DossierLog"%>
+<%@page import="org.opencps.util.WebKeys"%>
+<%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%@ include file="../../init.jsp"%>
 
 <%
