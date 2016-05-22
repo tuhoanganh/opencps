@@ -17,6 +17,8 @@
 
 package org.opencps.backend.message;
 
+import java.util.Locale;
+
 
 /**
  * @author khoavd
@@ -70,7 +72,44 @@ public class UserActionMsg {
     
     	this.fileGroupId = fileGroupId;
     }
+	
+    /**
+     * @return the userId
+     */
+    public long getUserId() {
+    
+    	return userId;
+    }
+
+	
+    /**
+     * @param userId the userId to set
+     */
+    public void setUserId(long userId) {
+    
+    	this.userId = userId;
+    }
+
+	
+    /**
+     * @return the locale
+     */
+    public Locale getLocale() {
+    
+    	return locale;
+    }
+
+	
+    /**
+     * @param locale the locale to set
+     */
+    public void setLocale(Locale locale) {
+    
+    	this.locale = locale;
+    }
 	protected String action;
 	protected long dossierId;
 	protected long fileGroupId;
+	protected long userId;
+	protected Locale locale;
 }

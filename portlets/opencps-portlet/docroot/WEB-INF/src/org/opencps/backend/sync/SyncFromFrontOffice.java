@@ -20,6 +20,9 @@ package org.opencps.backend.sync;
 import java.util.Date;
 import java.util.Locale;
 
+import net.sf.jasperreports.engine.util.MessageUtil;
+
+import org.opencps.backend.message.SendToEngineMsg;
 import org.opencps.backend.message.UserActionMsg;
 import org.opencps.backend.util.BackendUtils;
 import org.opencps.dossiermgt.model.Dossier;
@@ -29,6 +32,7 @@ import org.opencps.dossiermgt.service.DossierLogLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierStatusLocalServiceUtil;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.util.PortletConstants;
+import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -39,6 +43,7 @@ import com.liferay.portal.kernel.messaging.MessageListenerException;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.util.PortletKeys;
 
 
 /**
@@ -62,10 +67,63 @@ public class SyncFromFrontOffice implements MessageListener{
         }	    
     }
     
-    private void doReceiveDossier(Message message) {
+    private void _doReceiveDossier(Message message) {
     	UserActionMsg userActionMgs = (UserActionMsg) message.get("userActionMgs");
     	
     	String action = userActionMgs.getAction();
+    	
+    	try {
+        	if (Validator.equals(WebKeys.ACTION_SUBMIT_VALUE, action)) {
+        		
+    			if (Validator.equals(
+    			    PortletConstants.DOSSIER_STATUS_NEW,
+    			    BackendUtils.getDossierStatus(
+    			        userActionMgs.getDossierId(),
+    			        userActionMgs.getFileGroupId()))) {
+    				
+    				int logLevel = 0;
+    				
+    				long govAgencyOrgId = BackendUtils.getGovAgencyOrgId(userActionMgs.getDossierId());
+    				
+    				//Change dossier status to SYSTEM
+    				//Update govAgencyOrgId of dossier and dossierFile
+    				DossierLocalServiceUtil.updateDossierStatus(
+    					userActionMgs.getUserId(), userActionMgs.getDossierId(), govAgencyOrgId,
+    				    PortletConstants.DOSSIER_STATUS_SYSTEM,
+    				    PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS,
+    				    userActionMgs.getFileGroupId(), logLevel, userActionMgs.getLocale());
+    				
+    				//Create message 
+    				Message msgToEngine = new Message();
+    				
+    				SendToEngineMsg engineMsg = new SendToEngineMsg();
+    				
+    				engineMsg.setDossierId(userActionMgs.getDossierId());
+    				engineMsg.setFileGroupId(userActionMgs.getFileGroupId());
+    				engineMsg.setEvent(WebKeys.ACTION_SUBMIT_VALUE);
+    				
+    				msgToEngine.put("msgToEngine", engineMsg);
+    				
+    				//Send message to engine/destination
+    				MessageBusUtil.sendMessage("opencps/backoffice/engine/destination", msgToEngine);
+    			}
+        		
+        	} else if (Validator.equals(WebKeys.ACTION_RESUBMIT_VALUE, action)) {
+        		
+        	} else if (Validator.equals(WebKeys.ACTION_CHANGE_VALUE, action)) {
+        		
+        	} else if (Validator.equals(WebKeys.ACTION_CANCEL_VALUE, action)) {
+        		
+        	} else if (Validator.equals(WebKeys.ACTION_CLOSE_VALUE, action)) {
+        		
+        	} else if (Validator.equals(WebKeys.ACTION_PAY_VALUE, action)) {
+        		
+        	}
+	        
+        }
+        catch (Exception e) {
+	        _log.error(e);
+        }
     	
     	
     }
