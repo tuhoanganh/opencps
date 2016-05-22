@@ -31,6 +31,7 @@
 <%@page import="javax.portlet.WindowState"%>
 <%@page import="javax.portlet.PortletRequest"%>
 <%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@ include file="../init.jsp"%>
 
 <%
@@ -143,6 +144,15 @@
 		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.ACTION_PHASE) %>');
 		portletURL.setParameter("javax.portlet.action", "createReport");
 		portletURL.setWindowState('<%=WindowState.NORMAL%>');
+		var loadingMask = new A.LoadingMask(
+			{
+				'strings.loading': '<%= UnicodeLanguageUtil.get(pageContext, "exporting-file") %>',
+				target: A.one('#<portlet:namespace/>fm')
+			}
+		);
+		
+		loadingMask.show();
+		
 		A.io.request(
 			portletURL.toString(),
 			{
@@ -157,13 +167,17 @@
 						
 						var fileExportDir = res.fileExportDir;
 						console.log(fileExportDir);
+						
+						loadingMask.hide();
 
 					},
-			    	error: function(){}
+			    	error: function(){
+			    		loadingMask.hide();
+			    	}
 				}
 			}
 		);
-	},['aui-io','liferay-portlet-url']);
+	},['aui-io','liferay-portlet-url', 'aui-loading-mask-deprecated']);
 	
 	Liferay.provide(window, '<portlet:namespace/>closeDialog', function() {
 		var dialog = Liferay.Util.getWindow('<portlet:namespace/>dynamicForm');
