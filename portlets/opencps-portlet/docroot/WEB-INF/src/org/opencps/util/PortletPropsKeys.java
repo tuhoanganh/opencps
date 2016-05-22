@@ -117,4 +117,8 @@ public class PortletPropsKeys {
 	public static final String OPENCPS_FILE_SYSTEM_DIR = "opencps.file.system.dir";
 	public static final String OPENCPS_FILE_SYSTEM_TEMP_DIR = "opencps.file.system.temp.dir";
 	public static final String OPENCPS_SERVER_DIR = "opencps.server.dir";
+	
+	//Servlet url
+	
+	public static final String OPENCPS_SERVLET_PREVIEW_DOSSIER_FORM_URL = "opencps.servlet.preview.dossier.form.url";
 }

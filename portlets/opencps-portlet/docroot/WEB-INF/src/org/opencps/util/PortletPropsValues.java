@@ -273,4 +273,11 @@ public class PortletPropsValues {
 	    .get(PortletPropsKeys.OPENCPS_FILE_SYSTEM_TEMP_DIR);
 	public static final String OPENCPS_SERVER_DIR = System
 	    .getProperty(PortletPropsKeys.OPENCPS_SERVER_DIR);
+	
+	
+	// Servlet url
+
+	public static final String OPENCPS_SERVLET_PREVIEW_DOSSIER_FORM_URL =
+	    PortletProps
+	        .get(PortletPropsKeys.OPENCPS_SERVLET_PREVIEW_DOSSIER_FORM_URL);
 }
