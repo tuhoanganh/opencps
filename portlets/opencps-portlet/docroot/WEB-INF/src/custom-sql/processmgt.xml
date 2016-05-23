@@ -175,7 +175,6 @@
 				opencps_processorder.assignToUserId = ?
 		]]>
 	</sql>
-<<<<<<< HEAD
 
 	<sql id="org.opencps.processmgt.service.persistence.ActionHistoryFinder.searchActionHistoryByDossierId">	
 		<![CDATA[
@@ -194,6 +193,4 @@
 		]]>
 	</sql>
 
-=======
->>>>>>> center_repo/master
 </custom-sql>

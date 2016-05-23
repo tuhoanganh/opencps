@@ -153,7 +153,6 @@ public class DossierFileLocalServiceImpl
 		    .findByD_F(dossierId, groupFileId);
 	}
 
-<<<<<<< HEAD
 	public List<DossierFile> searchDossierFile(long groupId, String keyword, long dossierTemplateId, long fileEntryId, boolean onlyViewFileResult, int start, int end, OrderByComparator obc)
 				    throws SystemException {
 		return dossierFileFinder.searchDossierFile(groupId, keyword, dossierTemplateId, fileEntryId, onlyViewFileResult, start, end, obc);
@@ -165,7 +164,8 @@ public class DossierFileLocalServiceImpl
 	
 	public List<DossierFile> getDossierFileByDossierAndDossierPart(long dossierId, long dossierPartId) throws SystemException {
 		return dossierFilePersistence.findByD_P_C(dossierId, dossierPartId);
-=======
+	}
+	
 	public DossierFile updateDossierFile(
 	    long dossierFileId, long userId, long dossierId, long dossierPartId,
 	    String templateFileNo, long groupFileId, long ownerUserId,
@@ -210,6 +210,5 @@ public class DossierFileLocalServiceImpl
 		    .setOwnerOrganizationId(ownerOrganizationId);
 		return dossierFilePersistence
 		    .update(dossierFile);
->>>>>>> center_repo/master
 	}
 }

@@ -14,7 +14,6 @@
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>
 */
-
 package org.opencps.dossiermgt.search;
 
 import java.util.ArrayList;
@@ -26,7 +25,7 @@ import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
 
 import org.opencps.datamgt.util.DataMgtUtil;
-import org.opencps.dossiermgt.model.DossierFile;
+import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.util.DateTimeUtil;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
@@ -36,34 +35,55 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.ParamUtil;
 
 
-public class DossierFileSearch extends SearchContainer<DossierFile> {
+public class DossierNewProcessingSearch extends SearchContainer<Dossier> {
+
 	static List<String> headerNames = new ArrayList<String>();
 	static Map<String, String> orderableHeaders = new HashMap<String, String>();
 	static {
-		headerNames.add("no");
-		//headerNames.add("create-date");
-		headerNames.add("dossierfile-fileno");
-		headerNames.add("dossierfile-filedate");
-		headerNames.add("dossierfile-displayname");
-		headerNames.add("govagency-name");
-		headerNames.add("owner-name");
-		//headerNames.add("dossierfile-filetype");
+		headerNames.add("create-date");
+		headerNames.add("subject-name");
+		headerNames.add("service-name");
+
+		orderableHeaders
+		    .put("create-date", DossierDisplayTerms.CREATE_DATE);
+		orderableHeaders
+		    .put("subject-name", DossierDisplayTerms.SUBJECT_NAME);
+
+		orderableHeaders
+	    .put("service-name", DossierDisplayTerms.SERVICE_NAME);
+		
 	}
 	public static final String EMPTY_RESULTS_MESSAGE =
-	    "no-dossierfile-were-found";
+	    "no-dossier-were-found";
 
-	public DossierFileSearch(
+	public DossierNewProcessingSearch(
 	    PortletRequest portletRequest, int delta, PortletURL iteratorURL) {
 
 		super(
-		    portletRequest, new DossierFileDisplayTerms(
-		        portletRequest), new DossierFileSearchTerms(
+		    portletRequest, new DossierDisplayTerms(
+		        portletRequest), new DossierSearchTerms(
 		            portletRequest), DEFAULT_CUR_PARAM, delta, iteratorURL, 
 		    	headerNames, EMPTY_RESULTS_MESSAGE);
 
-		DossierFileDisplayTerms displayTerms =
-		    (DossierFileDisplayTerms) getDisplayTerms();
-		
+		DossierDisplayTerms displayTerms =
+		    (DossierDisplayTerms) getDisplayTerms();
+		/*
+		iteratorURL
+		    .setParameter(DossierDisplayTerms.SUBJECT_NAME, displayTerms
+		        .getSubjectName());
+		iteratorURL
+		    .setParameter(DossierDisplayTerms.SERVICE_NAME, String.valueOf(displayTerms
+		        .getServiceName()));
+
+		iteratorURL
+		    .setParameter(DossierDisplayTerms.GROUP_ID, String
+		        .valueOf(displayTerms
+		            .getGroupId()));
+		iteratorURL
+		    .setParameter(DossierDisplayTerms.CREATE_DATE, DateTimeUtil
+		        .convertDateToString(displayTerms
+		            .getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT));
+		*/
 		try {
 
 			String orderByCol = ParamUtil
@@ -85,7 +105,7 @@ public class DossierFileSearch extends SearchContainer<DossierFile> {
 		}
 	}
 
-	public DossierFileSearch(
+	public DossierNewProcessingSearch(
 	    PortletRequest portletRequest, PortletURL iteratorURL) {
 
 		this(
@@ -93,6 +113,5 @@ public class DossierFileSearch extends SearchContainer<DossierFile> {
 	}
 
 	private static Log _log = LogFactoryUtil
-	    .getLog(DossierFileSearch.class);
-
+	    .getLog(DossierNewProcessingSearch.class);
 }

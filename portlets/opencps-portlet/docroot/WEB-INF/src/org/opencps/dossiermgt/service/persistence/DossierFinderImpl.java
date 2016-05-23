@@ -121,11 +121,11 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 				        StringPool.BLANK);
 			}
 
-			SQLQuery q = session
-			    .createSQLQuery(sql);
-			
 			sql = CustomSQLUtil
 						    .replaceAndOperator(sql, andOperator);
+
+			SQLQuery q = session
+			    .createSQLQuery(sql);
 
 			q
 			    .addScalar(COUNT_COLUMN_NAME, Type.INTEGER);
@@ -492,7 +492,6 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 			}
 			sql = CustomSQLUtil
 						    .replaceAndOperator(sql, false);
-			System.out.println(sql);
 			SQLQuery q = session
 			    .createSQLQuery(sql);
 			

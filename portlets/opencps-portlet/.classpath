@@ -25,5 +25,7 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/home/trungdk/Downloads/json-20160212.jar"/>
+	<classpathentry kind="lib" path="/home/trungdk/Downloads/jasperreports-3.7.5.jar"/>
 	<classpathentry kind="output" path="docroot/WEB-INF/classes"/>
 </classpath>
