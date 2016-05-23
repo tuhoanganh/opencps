@@ -31,7 +31,7 @@ import com.liferay.portlet.documentlibrary.model.DLFolder;
 public class AccountBean {
 
 	public AccountBean(
-	    Class<?> accountInstance, String accountType, DLFolder accountFolder,
+		Object accountInstance, String accountType, DLFolder accountFolder,
 	    List<Role> accountRoles, List<Organization> accountOrgs,
 	    long ownerUserId, long ownerOrganizationId) {
 		this
@@ -50,7 +50,7 @@ public class AccountBean {
 		    .setOwnerUserId(ownerUserId);
 	}
 
-	private Class<?> _accountInstance;
+	private Object _accountInstance;
 
 	private String _accountType;
 
@@ -64,12 +64,12 @@ public class AccountBean {
 
 	private long _ownerOrganizationId;
 
-	public Class<?> get_accountInstance() {
+	public Object getAccountInstance() {
 
 		return _accountInstance;
 	}
 
-	public void setAccountInstance(Class<?> accountInstance) {
+	public void setAccountInstance(Object accountInstance) {
 
 		this._accountInstance = accountInstance;
 	}
