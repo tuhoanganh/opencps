@@ -18,6 +18,9 @@
  */
 %>
 
+<%@page import="com.liferay.portlet.documentlibrary.util.DLUtil"%>
+<%@page import="org.opencps.util.DLFileEntryUtil"%>
+<%@page import="com.liferay.portal.kernel.repository.model.FileEntry"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.dossiermgt.model.DossierPart"%>
 <%@page import="org.opencps.dossiermgt.model.DossierFile"%>
@@ -47,6 +50,18 @@
 	int partType = ParamUtil.getInteger(request, DossierFileDisplayTerms.PART_TYPE);
 	
 	String groupName = ParamUtil.getString(request, DossierFileDisplayTerms.GROUP_NAME);
+	
+	
+	String fileURL = StringPool.BLANK;
+	
+	if(fileEntryId > 0){
+		FileEntry fileEntry = DLFileEntryUtil.getFileEntry(fileEntryId);
+		if(fileEntry != null){
+			fileURL = DLUtil.getPreviewURL(fileEntry, fileEntry.getFileVersion(), 
+					themeDisplay, StringPool.BLANK);
+		}
+		
+	}
 		
 %>
 
@@ -81,12 +96,13 @@
 							group-name="<%=groupName %>"
 							level = "<%=level %>"
 							file-name="<%=dossierPart != null ? dossierPart.getPartName() : StringPool.BLANK %>"
+							file-url="<%=fileURL %>"
 							part-type="<%=partType %>"
 							template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
 							href="javascript:void(0);" 
-							label="upload-file" 
+							label='<%=fileEntryId <= 0 ? "upload-file" : "view-attachment" %>' 
 							cssClass="opencps dossiermgt part-file-ctr upload-file" 
-							onClick='<%=renderResponse.getNamespace() + "uploadFile(this)" %>'
+							onClick='<%=renderResponse.getNamespace() + (fileEntryId <= 0 ? "uploadFile(this)" : "viewAttachment(this)") %>'
 						/>
 					</td>
 					<td width="10%" align="right">
@@ -197,12 +213,13 @@
 							group-name="<%=groupName %>"
 							level = "<%=level %>"
 							file-name="<%=dossierPart != null ? dossierPart.getPartName() : StringPool.BLANK %>"
+							file-url="<%=fileURL %>"
 							part-type="<%=partType %>"
 							template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
 							href="javascript:void(0);" 
-							label="upload-file" 
+							label='<%=fileEntryId <= 0 ? "upload-file" : "view-attachment" %>' 
 							cssClass="opencps dossiermgt part-file-ctr upload-file" 
-							onClick='<%=renderResponse.getNamespace() + "uploadFile(this)" %>'
+							onClick='<%=renderResponse.getNamespace() + (fileEntryId <= 0 ? "uploadFile(this)" : "viewAttachment(this)") %>'
 						/>
 						
 					</td>
@@ -306,9 +323,9 @@
 							part-type="<%=partType %>"
 							template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
 							href="javascript:void(0);" 
-							label="upload-file" 
+							label='<%=fileEntryId <= 0 ? "upload-file" : "view-attachment" %>' 
 							cssClass="opencps dossiermgt part-file-ctr upload-file" 
-							onClick='<%=renderResponse.getNamespace() + "uploadFile(this)" %>'
+							onClick='<%=renderResponse.getNamespace() + (fileEntryId <= 0 ? "uploadFile(this)" : "viewAttachment(this)") %>'
 						/>
 						
 					</td>
@@ -422,4 +439,18 @@
 	    A.io.request(uri, configs);    
 		
 	},['aui-io']);
+	
+	Liferay.provide(window, '<portlet:namespace />viewAttachment', function(e) {
+		var A = AUI();
+		var instance = A.one(e);
+		var dossierFileId = instance.attr('dossier-file');
+		var fileURL = instance.attr('file-url');
+		if(fileURL == ''){
+			alert('<%= UnicodeLanguageUtil.get(pageContext, "not-attachment-file") %>');
+			return;
+		}else{
+			window.open(fileURL, '_blank');
+		}
+		
+	});
 </aui:script>
