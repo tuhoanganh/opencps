@@ -85,7 +85,7 @@ public class PaymentConfigModelImpl extends BaseModelImpl<PaymentConfig>
 			{ "keypayMerchantCode", Types.VARCHAR },
 			{ "keypaySecureKey", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table opencps_payment_config (paymentConfigId LONG not null primary key,companyId LONG,groupId LONG,userId LONG,createDate DATE null,modifiedDate DATE null,govAgencyOrganizationId LONG,govAgencyName VARCHAR(75) null,govAgencyTaxNo VARCHAR(75) null,invoiceTemplateNo VARCHAR(75) null,invoiceIssueNo VARCHAR(75) null,invoiceLastNo VARCHAR(75) null,bankInfo VARCHAR(75) null,placeInfo VARCHAR(75) null,keypayDomain VARCHAR(75) null,keypayVersion VARCHAR(75) null,keypayMerchantCode VARCHAR(75) null,keypaySecureKey VARCHAR(75) null)";
+	public static final String TABLE_SQL_CREATE = "create table opencps_payment_config (paymentConfigId LONG not null primary key,companyId LONG,groupId LONG,userId LONG,createDate DATE null,modifiedDate DATE null,govAgencyOrganizationId LONG,govAgencyName VARCHAR(75) null,govAgencyTaxNo VARCHAR(75) null,invoiceTemplateNo VARCHAR(75) null,invoiceIssueNo VARCHAR(75) null,invoiceLastNo VARCHAR(7) null,bankInfo VARCHAR(75) null,placeInfo VARCHAR(75) null,keypayDomain VARCHAR(75) null,keypayVersion VARCHAR(75) null,keypayMerchantCode VARCHAR(75) null,keypaySecureKey VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table opencps_payment_config";
 	public static final String ORDER_BY_JPQL = " ORDER BY paymentConfig.paymentConfigId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY opencps_payment_config.paymentConfigId ASC";

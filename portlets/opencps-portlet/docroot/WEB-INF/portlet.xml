@@ -719,7 +719,7 @@
 		<portlet-name>22</portlet-name>
 		<display-name>Dossier Backoffice</display-name>
 		<portlet-class>
-			org.opencps.paymentmgt.portlet.PaymentBackofficePortlet
+			org.opencps.paymentmgt.portlet.PaymentMgtBackOfficePortlet
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
