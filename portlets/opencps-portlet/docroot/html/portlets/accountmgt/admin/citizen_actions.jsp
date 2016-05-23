@@ -30,8 +30,9 @@
 <%
 	ResultRow row =	(ResultRow) request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
 
-	Citizen citizen = (Citizen)row.getObject();
+	citizen = (Citizen)row.getObject();
 	
+	System.out.println(citizen.getAccountStatus());
 %>
 
 <%-- <liferay-ui:icon-menu> --%>
@@ -77,6 +78,7 @@
 			</portlet:actionURL>
 	
 			<liferay-ui:icon
+				image="deactivate"
 			 	label="deactivate"
 			 	cssClass="deactivate"
 				url="<%= updateStatusURL.toString()%>" 

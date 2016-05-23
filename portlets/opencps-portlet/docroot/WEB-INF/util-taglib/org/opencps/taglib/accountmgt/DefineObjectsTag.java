@@ -48,6 +48,8 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.service.OrganizationLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
+import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.taglib.util.IncludeTag;
@@ -241,17 +243,33 @@ public class DefineObjectsTag extends IncludeTag {
 
 				if (Validator
 				    .isNotNull(dossierDestinationFolder)) {
-					accountFolder = DLFolderUtil
-					    .getTargetFolder(themeDisplay
-					        .getScopeGroupId(), 0, dossierDestinationFolder);
-					request
-					    .setAttribute(
-					        org.opencps.util.WebKeys.ACCOUNT_FOLDER,
-					        accountFolder);
-					session
-					    .setAttribute(
-					        org.opencps.util.WebKeys.ACCOUNT_FOLDER,
-					        accountFolder);
+					try {
+						ServiceContext serviceContext = ServiceContextFactory
+						    .getInstance(request);
+						serviceContext
+						    .setAddGroupPermissions(true);
+						serviceContext
+						    .setAddGuestPermissions(true);
+						accountFolder = DLFolderUtil
+						    .getTargetFolder(themeDisplay
+						        .getUserId(), themeDisplay
+						            .getScopeGroupId(),
+						        themeDisplay
+						            .getScopeGroupId(),
+						        false, 0, dossierDestinationFolder,
+						        StringPool.BLANK, false, serviceContext);
+						request
+						    .setAttribute(
+						        org.opencps.util.WebKeys.ACCOUNT_FOLDER,
+						        accountFolder);
+						session
+						    .setAttribute(
+						        org.opencps.util.WebKeys.ACCOUNT_FOLDER,
+						        accountFolder);
+					}
+					catch (Exception e) {
+						// TODO: handle exception
+					}
 				}
 			}
 			catch (Exception e) {
