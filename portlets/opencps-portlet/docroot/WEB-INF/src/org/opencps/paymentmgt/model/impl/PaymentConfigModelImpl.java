@@ -98,7 +98,12 @@ public class PaymentConfigModelImpl extends BaseModelImpl<PaymentConfig>
 	public static final boolean FINDER_CACHE_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.finder.cache.enabled.org.opencps.paymentmgt.model.PaymentConfig"),
 			true);
-	public static final boolean COLUMN_BITMASK_ENABLED = false;
+	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
+				"value.object.column.bitmask.enabled.org.opencps.paymentmgt.model.PaymentConfig"),
+			true);
+	public static long GOVAGENCYORGANIZATIONID_COLUMN_BITMASK = 1L;
+	public static long GROUPID_COLUMN_BITMASK = 2L;
+	public static long PAYMENTCONFIGID_COLUMN_BITMASK = 4L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -359,7 +364,19 @@ public class PaymentConfigModelImpl extends BaseModelImpl<PaymentConfig>
 
 	@Override
 	public void setGroupId(long groupId) {
+		_columnBitmask |= GROUPID_COLUMN_BITMASK;
+
+		if (!_setOriginalGroupId) {
+			_setOriginalGroupId = true;
+
+			_originalGroupId = _groupId;
+		}
+
 		_groupId = groupId;
+	}
+
+	public long getOriginalGroupId() {
+		return _originalGroupId;
 	}
 
 	@JSON
@@ -413,7 +430,19 @@ public class PaymentConfigModelImpl extends BaseModelImpl<PaymentConfig>
 
 	@Override
 	public void setGovAgencyOrganizationId(long govAgencyOrganizationId) {
+		_columnBitmask |= GOVAGENCYORGANIZATIONID_COLUMN_BITMASK;
+
+		if (!_setOriginalGovAgencyOrganizationId) {
+			_setOriginalGovAgencyOrganizationId = true;
+
+			_originalGovAgencyOrganizationId = _govAgencyOrganizationId;
+		}
+
 		_govAgencyOrganizationId = govAgencyOrganizationId;
+	}
+
+	public long getOriginalGovAgencyOrganizationId() {
+		return _originalGovAgencyOrganizationId;
 	}
 
 	@JSON
@@ -592,6 +621,10 @@ public class PaymentConfigModelImpl extends BaseModelImpl<PaymentConfig>
 		_keypaySecureKey = keypaySecureKey;
 	}
 
+	public long getColumnBitmask() {
+		return _columnBitmask;
+	}
+
 	@Override
 	public ExpandoBridge getExpandoBridge() {
 		return ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
@@ -687,6 +720,17 @@ public class PaymentConfigModelImpl extends BaseModelImpl<PaymentConfig>
 
 	@Override
 	public void resetOriginalValues() {
+		PaymentConfigModelImpl paymentConfigModelImpl = this;
+
+		paymentConfigModelImpl._originalGroupId = paymentConfigModelImpl._groupId;
+
+		paymentConfigModelImpl._setOriginalGroupId = false;
+
+		paymentConfigModelImpl._originalGovAgencyOrganizationId = paymentConfigModelImpl._govAgencyOrganizationId;
+
+		paymentConfigModelImpl._setOriginalGovAgencyOrganizationId = false;
+
+		paymentConfigModelImpl._columnBitmask = 0;
 	}
 
 	@Override
@@ -950,11 +994,15 @@ public class PaymentConfigModelImpl extends BaseModelImpl<PaymentConfig>
 	private long _paymentConfigId;
 	private long _companyId;
 	private long _groupId;
+	private long _originalGroupId;
+	private boolean _setOriginalGroupId;
 	private long _userId;
 	private String _userUuid;
 	private Date _createDate;
 	private Date _modifiedDate;
 	private long _govAgencyOrganizationId;
+	private long _originalGovAgencyOrganizationId;
+	private boolean _setOriginalGovAgencyOrganizationId;
 	private String _govAgencyName;
 	private String _govAgencyTaxNo;
 	private String _invoiceTemplateNo;
@@ -966,5 +1014,6 @@ public class PaymentConfigModelImpl extends BaseModelImpl<PaymentConfig>
 	private String _keypayVersion;
 	private String _keypayMerchantCode;
 	private String _keypaySecureKey;
+	private long _columnBitmask;
 	private PaymentConfig _escapedModel;
 }

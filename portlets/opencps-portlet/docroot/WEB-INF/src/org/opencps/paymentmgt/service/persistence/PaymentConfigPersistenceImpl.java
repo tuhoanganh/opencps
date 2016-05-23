@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.dao.orm.Query;
+import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -30,6 +31,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.model.CacheModel;
@@ -82,6 +84,252 @@ public class PaymentConfigPersistenceImpl extends BasePersistenceImpl<PaymentCon
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(PaymentConfigModelImpl.ENTITY_CACHE_ENABLED,
 			PaymentConfigModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_FETCH_BY_GOVAGENCY = new FinderPath(PaymentConfigModelImpl.ENTITY_CACHE_ENABLED,
+			PaymentConfigModelImpl.FINDER_CACHE_ENABLED,
+			PaymentConfigImpl.class, FINDER_CLASS_NAME_ENTITY,
+			"fetchByGovAgency",
+			new String[] { Long.class.getName(), Long.class.getName() },
+			PaymentConfigModelImpl.GROUPID_COLUMN_BITMASK |
+			PaymentConfigModelImpl.GOVAGENCYORGANIZATIONID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_GOVAGENCY = new FinderPath(PaymentConfigModelImpl.ENTITY_CACHE_ENABLED,
+			PaymentConfigModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGovAgency",
+			new String[] { Long.class.getName(), Long.class.getName() });
+
+	/**
+	 * Returns the Payment configuration where groupId = &#63; and govAgencyOrganizationId = &#63; or throws a {@link org.opencps.paymentmgt.NoSuchPaymentConfigException} if it could not be found.
+	 *
+	 * @param groupId the group ID
+	 * @param govAgencyOrganizationId the gov agency organization ID
+	 * @return the matching Payment configuration
+	 * @throws org.opencps.paymentmgt.NoSuchPaymentConfigException if a matching Payment configuration could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public PaymentConfig findByGovAgency(long groupId,
+		long govAgencyOrganizationId)
+		throws NoSuchPaymentConfigException, SystemException {
+		PaymentConfig paymentConfig = fetchByGovAgency(groupId,
+				govAgencyOrganizationId);
+
+		if (paymentConfig == null) {
+			StringBundler msg = new StringBundler(6);
+
+			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			msg.append("groupId=");
+			msg.append(groupId);
+
+			msg.append(", govAgencyOrganizationId=");
+			msg.append(govAgencyOrganizationId);
+
+			msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+			if (_log.isWarnEnabled()) {
+				_log.warn(msg.toString());
+			}
+
+			throw new NoSuchPaymentConfigException(msg.toString());
+		}
+
+		return paymentConfig;
+	}
+
+	/**
+	 * Returns the Payment configuration where groupId = &#63; and govAgencyOrganizationId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param groupId the group ID
+	 * @param govAgencyOrganizationId the gov agency organization ID
+	 * @return the matching Payment configuration, or <code>null</code> if a matching Payment configuration could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public PaymentConfig fetchByGovAgency(long groupId,
+		long govAgencyOrganizationId) throws SystemException {
+		return fetchByGovAgency(groupId, govAgencyOrganizationId, true);
+	}
+
+	/**
+	 * Returns the Payment configuration where groupId = &#63; and govAgencyOrganizationId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param groupId the group ID
+	 * @param govAgencyOrganizationId the gov agency organization ID
+	 * @param retrieveFromCache whether to use the finder cache
+	 * @return the matching Payment configuration, or <code>null</code> if a matching Payment configuration could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public PaymentConfig fetchByGovAgency(long groupId,
+		long govAgencyOrganizationId, boolean retrieveFromCache)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { groupId, govAgencyOrganizationId };
+
+		Object result = null;
+
+		if (retrieveFromCache) {
+			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_GOVAGENCY,
+					finderArgs, this);
+		}
+
+		if (result instanceof PaymentConfig) {
+			PaymentConfig paymentConfig = (PaymentConfig)result;
+
+			if ((groupId != paymentConfig.getGroupId()) ||
+					(govAgencyOrganizationId != paymentConfig.getGovAgencyOrganizationId())) {
+				result = null;
+			}
+		}
+
+		if (result == null) {
+			StringBundler query = new StringBundler(4);
+
+			query.append(_SQL_SELECT_PAYMENTCONFIG_WHERE);
+
+			query.append(_FINDER_COLUMN_GOVAGENCY_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_GOVAGENCY_GOVAGENCYORGANIZATIONID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(govAgencyOrganizationId);
+
+				List<PaymentConfig> list = q.list();
+
+				if (list.isEmpty()) {
+					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_GOVAGENCY,
+						finderArgs, list);
+				}
+				else {
+					if ((list.size() > 1) && _log.isWarnEnabled()) {
+						_log.warn(
+							"PaymentConfigPersistenceImpl.fetchByGovAgency(long, long, boolean) with parameters (" +
+							StringUtil.merge(finderArgs) +
+							") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
+					}
+
+					PaymentConfig paymentConfig = list.get(0);
+
+					result = paymentConfig;
+
+					cacheResult(paymentConfig);
+
+					if ((paymentConfig.getGroupId() != groupId) ||
+							(paymentConfig.getGovAgencyOrganizationId() != govAgencyOrganizationId)) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_GOVAGENCY,
+							finderArgs, paymentConfig);
+					}
+				}
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_GOVAGENCY,
+					finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
+		else {
+			return (PaymentConfig)result;
+		}
+	}
+
+	/**
+	 * Removes the Payment configuration where groupId = &#63; and govAgencyOrganizationId = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param govAgencyOrganizationId the gov agency organization ID
+	 * @return the Payment configuration that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public PaymentConfig removeByGovAgency(long groupId,
+		long govAgencyOrganizationId)
+		throws NoSuchPaymentConfigException, SystemException {
+		PaymentConfig paymentConfig = findByGovAgency(groupId,
+				govAgencyOrganizationId);
+
+		return remove(paymentConfig);
+	}
+
+	/**
+	 * Returns the number of Payment configurations where groupId = &#63; and govAgencyOrganizationId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param govAgencyOrganizationId the gov agency organization ID
+	 * @return the number of matching Payment configurations
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public int countByGovAgency(long groupId, long govAgencyOrganizationId)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_GOVAGENCY;
+
+		Object[] finderArgs = new Object[] { groupId, govAgencyOrganizationId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_PAYMENTCONFIG_WHERE);
+
+			query.append(_FINDER_COLUMN_GOVAGENCY_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_GOVAGENCY_GOVAGENCYORGANIZATIONID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(govAgencyOrganizationId);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_GOVAGENCY_GROUPID_2 = "paymentConfig.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_GOVAGENCY_GOVAGENCYORGANIZATIONID_2 =
+		"paymentConfig.govAgencyOrganizationId = ?";
 
 	public PaymentConfigPersistenceImpl() {
 		setModelClass(PaymentConfig.class);
@@ -97,6 +345,12 @@ public class PaymentConfigPersistenceImpl extends BasePersistenceImpl<PaymentCon
 		EntityCacheUtil.putResult(PaymentConfigModelImpl.ENTITY_CACHE_ENABLED,
 			PaymentConfigImpl.class, paymentConfig.getPrimaryKey(),
 			paymentConfig);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_GOVAGENCY,
+			new Object[] {
+				paymentConfig.getGroupId(),
+				paymentConfig.getGovAgencyOrganizationId()
+			}, paymentConfig);
 
 		paymentConfig.resetOriginalValues();
 	}
@@ -154,6 +408,8 @@ public class PaymentConfigPersistenceImpl extends BasePersistenceImpl<PaymentCon
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		clearUniqueFindersCache(paymentConfig);
 	}
 
 	@Override
@@ -164,6 +420,61 @@ public class PaymentConfigPersistenceImpl extends BasePersistenceImpl<PaymentCon
 		for (PaymentConfig paymentConfig : paymentConfigs) {
 			EntityCacheUtil.removeResult(PaymentConfigModelImpl.ENTITY_CACHE_ENABLED,
 				PaymentConfigImpl.class, paymentConfig.getPrimaryKey());
+
+			clearUniqueFindersCache(paymentConfig);
+		}
+	}
+
+	protected void cacheUniqueFindersCache(PaymentConfig paymentConfig) {
+		if (paymentConfig.isNew()) {
+			Object[] args = new Object[] {
+					paymentConfig.getGroupId(),
+					paymentConfig.getGovAgencyOrganizationId()
+				};
+
+			FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GOVAGENCY, args,
+				Long.valueOf(1));
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_GOVAGENCY, args,
+				paymentConfig);
+		}
+		else {
+			PaymentConfigModelImpl paymentConfigModelImpl = (PaymentConfigModelImpl)paymentConfig;
+
+			if ((paymentConfigModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_GOVAGENCY.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						paymentConfig.getGroupId(),
+						paymentConfig.getGovAgencyOrganizationId()
+					};
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GOVAGENCY, args,
+					Long.valueOf(1));
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_GOVAGENCY, args,
+					paymentConfig);
+			}
+		}
+	}
+
+	protected void clearUniqueFindersCache(PaymentConfig paymentConfig) {
+		PaymentConfigModelImpl paymentConfigModelImpl = (PaymentConfigModelImpl)paymentConfig;
+
+		Object[] args = new Object[] {
+				paymentConfig.getGroupId(),
+				paymentConfig.getGovAgencyOrganizationId()
+			};
+
+		FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GOVAGENCY, args);
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_GOVAGENCY, args);
+
+		if ((paymentConfigModelImpl.getColumnBitmask() &
+				FINDER_PATH_FETCH_BY_GOVAGENCY.getColumnBitmask()) != 0) {
+			args = new Object[] {
+					paymentConfigModelImpl.getOriginalGroupId(),
+					paymentConfigModelImpl.getOriginalGovAgencyOrganizationId()
+				};
+
+			FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GOVAGENCY, args);
+			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_GOVAGENCY, args);
 		}
 	}
 
@@ -302,13 +613,16 @@ public class PaymentConfigPersistenceImpl extends BasePersistenceImpl<PaymentCon
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 
-		if (isNew) {
+		if (isNew || !PaymentConfigModelImpl.COLUMN_BITMASK_ENABLED) {
 			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
 
 		EntityCacheUtil.putResult(PaymentConfigModelImpl.ENTITY_CACHE_ENABLED,
 			PaymentConfigImpl.class, paymentConfig.getPrimaryKey(),
 			paymentConfig);
+
+		clearUniqueFindersCache(paymentConfig);
+		cacheUniqueFindersCache(paymentConfig);
 
 		return paymentConfig;
 	}
@@ -651,9 +965,12 @@ public class PaymentConfigPersistenceImpl extends BasePersistenceImpl<PaymentCon
 	}
 
 	private static final String _SQL_SELECT_PAYMENTCONFIG = "SELECT paymentConfig FROM PaymentConfig paymentConfig";
+	private static final String _SQL_SELECT_PAYMENTCONFIG_WHERE = "SELECT paymentConfig FROM PaymentConfig paymentConfig WHERE ";
 	private static final String _SQL_COUNT_PAYMENTCONFIG = "SELECT COUNT(paymentConfig) FROM PaymentConfig paymentConfig";
+	private static final String _SQL_COUNT_PAYMENTCONFIG_WHERE = "SELECT COUNT(paymentConfig) FROM PaymentConfig paymentConfig WHERE ";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "paymentConfig.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No PaymentConfig exists with the primary key ";
+	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No PaymentConfig exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(PaymentConfigPersistenceImpl.class);
