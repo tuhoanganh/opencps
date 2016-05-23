@@ -1,5 +1,4 @@
 
-<%@page import="org.opencps.util.AccountUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -19,6 +18,7 @@
  */
 %>
 
+<%@page import="org.opencps.util.AccountUtil"%>
 <%@page import="org.opencps.util.ActionKeys"%>
 <%@page import="org.opencps.dossiermgt.permissions.DossierPermission"%>
 <%@page import="org.opencps.util.PortletConstants"%>
@@ -64,12 +64,6 @@
 		new String[]{"dossier_info"};
 	
 	String[][] categorySections = {dossierSections};
-	
-	System.out.println(accountType);
-	
-	System.out.println(AccountUtil.getAccountBean().getAccountType());
-	
-	System.out.println(citizen.getCitizenId());
 
 %>
 <c:choose>
