@@ -1,3 +1,7 @@
+<%@page import="java.util.Date"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
+<%@page import="org.opencps.dossiermgt.search.DossierSearch"%>
+<%@page import="org.opencps.dossiermgt.search.DossierListSearch"%>
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="com.liferay.portal.kernel.util.FastDateFormatFactoryUtil"%>
 <%@page import="java.text.Format"%>
@@ -10,7 +14,6 @@
 <%@page import="java.util.List"%>
 <%@page import="com.liferay.util.dao.orm.CustomSQLUtil"%>
 <%@page import="org.opencps.dossiermgt.search.DossierSearchTerms"%>
-<%@page import="org.opencps.dossiermgt.search.DossierSearch"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
 <%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
@@ -79,35 +82,36 @@
 			modelVar="dossier" 
 			keyProperty="dossierId"
 		>
-			<%				
-			    // no column
-				row.addText(String.valueOf(row.getPos() + 1));
-				
-				//uuid column
-				row.addText(dossier.getUuid());
-				
-				//subjectName column
-				row.addText(dossier.getSubjectName());
-				ServiceInfo serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(dossier.getServiceInfoId());
-				
-				//serviceinfo-name column
-				row.addText(serviceInfo.getServiceName());
-				
-				//govagencyname column
-				row.addText(dossier.getGovAgencyName());
-
-				//receivedatetime column
-				if (Validator.isNotNull(dossier.getReceiveDatetime()))
-					row.addText(dateFormatDate.format(dossier.getReceiveDatetime()));
-				else
-					row.addText(StringPool.BLANK);
-
-				row.addText(dossier.getReceptionNo());
-				
-				//dossierstatus column
-				DictItem dictItem = DictItemLocalServiceUtil.getDictItem(dossier.getDossierStatus());
-				row.addText(dictItem.getItemName());				
-			%>	
+		<%
+			String statusText = "";
+			if (Validator.isNotNull(dossier.getFinishDatetime())) {
+				if (dossier.getFinishDatetime().after(dossier.getEstimateDatetime())) {
+					statusText = LanguageUtil.get(locale, "status-late");
+				}
+				else if (dossier.getFinishDatetime().before(dossier.getEstimateDatetime())) {
+					statusText = LanguageUtil.get(locale, "status-soon");
+				}
+				else if (dossier.getFinishDatetime().equals(dossier.getEstimateDatetime())) {
+					statusText = LanguageUtil.get(locale, "status-ontime");
+				}
+			}
+			else {
+				Date now = new Date();
+				if (dossier.getEstimateDatetime().before(now)) {
+					statusText = LanguageUtil.get(locale, "status-toosoon");
+				}
+				else if (dossier.getEstimateDatetime().after(now)) {
+					statusText = LanguageUtil.get(locale, "status-toolate");
+				}
+			}
+		%>
+		<liferay-ui:search-container-column-text name="row-no" title="row-no" value="<%= String.valueOf(row.getPos() + 1) %>"/>
+		<liferay-ui:search-container-column-text orderable="true" name="subject-name" title="subject-name" value="<%= dossier.getSubjectName() %>"/>
+		<liferay-ui:search-container-column-text name="govagency-name" title="govagency-name" value="<%= dossier.getGovAgencyName() %>"/>
+		<liferay-ui:search-container-column-text orderable="true" name="receive-datetime" title="receive-datetime" value="<%= Validator.isNotNull(dossier.getReceiveDatetime()) ? dateFormatDate.format(dossier.getReceiveDatetime()) : \"\" %>"/>
+		<liferay-ui:search-container-column-text orderable="true" name="finish-datetime" title="finish-datetime" value="<%= Validator.isNotNull(dossier.getFinishDatetime()) ? dateFormatDate.format(dossier.getFinishDatetime()) : \"\" %>"/>
+		<liferay-ui:search-container-column-text name="status" title="status" value="<%= statusText %>"/>
+		
 		</liferay-ui:search-container-row> 
 	
 	<liferay-ui:search-iterator/>
