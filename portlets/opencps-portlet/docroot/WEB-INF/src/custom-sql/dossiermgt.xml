@@ -105,6 +105,7 @@
 				(lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$])
 			AND 
 				(opencps_dossier.dossierStatus = ?)
+			ORDER BY opencps_dossier.modifiedDate DESC
 		]]>
 	</sql>
 </custom-sql>
