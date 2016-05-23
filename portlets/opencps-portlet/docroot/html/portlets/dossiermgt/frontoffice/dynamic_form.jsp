@@ -1,4 +1,5 @@
 
+<%@page import="org.opencps.util.PortletPropsValues"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -36,7 +37,7 @@
 
 <%
 	boolean success = false;
-	
+
 	try{
 		success = !SessionMessages.isEmpty(renderRequest) && SessionErrors.isEmpty(renderRequest);
 		
@@ -44,14 +45,19 @@
 		
 	}
 	
+	long primaryKey = ParamUtil.getLong(request, "primaryKey");
+	
 	long dossierId = ParamUtil.getLong(request, DossierDisplayTerms.DOSSIER_ID);
 	
 	long dossierPartId = ParamUtil.getLong(request, DossierFileDisplayTerms.DOSSIER_PART_ID);
 
 	long dossierFileId = ParamUtil.getLong(request, DossierFileDisplayTerms.DOSSIER_FILE_ID);
-
-	DossierPart dossierPart = null;
 	
+	if(primaryKey > 0){
+		dossierFileId = primaryKey;
+	}
+	
+	DossierPart dossierPart = null;
 	
 	if(dossierPartId > 0){
 		try{
@@ -80,7 +86,7 @@
 			formData = dossierFile.getFormData();
 		}
 	}
-	
+
 %>
 
 <portlet:actionURL var="updateDynamicFormDataURL" name="updateDynamicFormData"/>
@@ -93,14 +99,16 @@
 >
 	<aui:input name="redirectURL" type="hidden" value="<%=currentURL %>"/>
 	<aui:input name="<%=DossierDisplayTerms.DOSSIER_ID %>" type="hidden" value="<%=dossierId %>"/>
-	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_ID %>" type="hidden" value="<%=dossierFileId %>"/>
+	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_ID %>" type="hidden" value="<%=dossierFile != null ? dossierFile.getDossierFileId() : 0 %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_PART_ID %>" type="hidden" value="<%=dossierPartId %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.FORM_DATA %>" type="hidden" value=""/>
 	<aui:fieldset id="dynamicForm"></aui:fieldset>
 	<aui:fieldset>
 		<aui:button type="button" value="save" name="save" cssClass="saveForm"/>
 		<aui:button type="button" value="preview" name="preview"/>
-		<aui:button type="button" value="create-file" name="create-file"/>
+		<c:if test="<%=dossierFileId > 0%>">
+			<aui:button type="button" value="create-file" name="create-file"/>
+		</c:if>
 	</aui:fieldset>
 </aui:form>
 
@@ -137,6 +145,19 @@
 				<portlet:namespace/>createReport(dossierFileId);
 			});
 		}
+		
+		var previewFormBtn = A.one('#<portlet:namespace/>preview');
+		if(previewFormBtn){
+			previewFormBtn.on('click', function(){
+				<portlet:namespace/>previewForm(dossierFileId);
+			});
+		}
+		
+		var success = '<%=success%>';
+		
+		if(success == 'true'){
+			Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.DOSSIER_MGT_PORTLET %>_');
+		}
 	});
 	
 	Liferay.provide(window, '<portlet:namespace/>createReport', function(dossierFileId) {
@@ -166,10 +187,13 @@
 						var res = instance.get('responseData');
 						
 						var fileExportDir = res.fileExportDir;
-						console.log(fileExportDir);
 						
 						loadingMask.hide();
-
+						if(fileExportDir == ''){
+							alert('<%= UnicodeLanguageUtil.get(pageContext, "error-while-export-file") %>');
+						}else{
+							<portlet:namespace/>closeDialog();
+						}
 					},
 			    	error: function(){
 			    		loadingMask.hide();
@@ -179,9 +203,28 @@
 		);
 	},['aui-io','liferay-portlet-url', 'aui-loading-mask-deprecated']);
 	
+	Liferay.provide(window, '<portlet:namespace/>previewForm', function(dossierFileId) {
+		var A = AUI();
+		var uri = '<%=PortletPropsValues.OPENCPS_SERVLET_PREVIEW_DOSSIER_FORM_URL%>' + dossierFileId;
+		var loadingMask = new A.LoadingMask(
+			{
+				'strings.loading': '<%= UnicodeLanguageUtil.get(pageContext, "loading-form") %>',
+				target: A.one('#<portlet:namespace/>fm')
+			}
+		);
+		
+		loadingMask.show();
+		
+		openDialog(uri, '<portlet:namespace />previewDynamicForm','<%= UnicodeLanguageUtil.get(pageContext, "preview") %>');
+		
+		loadingMask.hide();
+		
+	},['aui-io','liferay-portlet-url', 'aui-loading-mask-deprecated']);
+	
 	Liferay.provide(window, '<portlet:namespace/>closeDialog', function() {
 		var dialog = Liferay.Util.getWindow('<portlet:namespace/>dynamicForm');
 		dialog.destroy(); // You can try toggle/hide whate
+		Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.DOSSIER_MGT_PORTLET %>_');
 	});
 	
 	Liferay.provide(window, '<portlet:namespace/>saveDynamicFormData', function() {

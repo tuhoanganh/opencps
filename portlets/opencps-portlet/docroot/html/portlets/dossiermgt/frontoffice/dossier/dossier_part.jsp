@@ -527,7 +527,7 @@
 		portletURL.setParameter("dossierId", dossierId);
 		portletURL.setParameter("groupName", groupName);
 
-		<portlet:namespace/>openDossierDialog(portletURL.toString(), '<portlet:namespace />dynamicForm','<%= UnicodeLanguageUtil.get(pageContext, "declaration-") %>');
+		<portlet:namespace/>openDossierDialog(portletURL.toString(), '<portlet:namespace />dynamicForm','<%= UnicodeLanguageUtil.get(pageContext, "declaration-online") %>');
 	});
 
 	
