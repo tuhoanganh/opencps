@@ -28,7 +28,10 @@ import org.opencps.accountmgt.model.Citizen;
 import org.opencps.accountmgt.service.BusinessLocalServiceUtil;
 import org.opencps.accountmgt.service.CitizenLocalServiceUtil;
 import org.opencps.usermgt.model.Employee;
+import org.opencps.usermgt.model.WorkingUnit;
 import org.opencps.usermgt.service.EmployeeLocalServiceUtil;
+import org.opencps.usermgt.service.WorkingUnitLocalServiceUtil;
+import org.opencps.util.AccountUtil;
 import org.opencps.util.DLFolderUtil;
 import org.opencps.util.PortletPropsValues;
 import org.opencps.util.PortletUtil;
@@ -39,8 +42,12 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.Organization;
+import com.liferay.portal.model.Role;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroup;
+import com.liferay.portal.service.OrganizationLocalServiceUtil;
+import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.taglib.util.IncludeTag;
@@ -65,6 +72,7 @@ public class DefineObjectsTag extends IncludeTag {
 
 		HttpSession session = request
 		    .getSession();
+		Object accountInstance = null;
 
 		String accountType = GetterUtil
 		    .getString(session
@@ -79,8 +87,25 @@ public class DefineObjectsTag extends IncludeTag {
 		Employee employee = (Employee) session
 		    .getAttribute(org.opencps.util.WebKeys.EMPLOYEE_ENTRY);
 
-		DLFolder folder = (DLFolder) session
+		DLFolder accountFolder = (DLFolder) session
 		    .getAttribute(org.opencps.util.WebKeys.ACCOUNT_FOLDER);
+
+		List<Role> accountRoles = (List<Role>) session
+		    .getAttribute(org.opencps.util.WebKeys.ACCOUNT_ROLES);
+
+		List<Organization> accountOrgs = (List<Organization>) session
+		    .getAttribute(org.opencps.util.WebKeys.ACCOUNT_ORGANIZATION);
+
+		long ownerUserId = GetterUtil
+		    .getLong(session
+		        .getAttribute(org.opencps.util.WebKeys.ACCOUNT_OWNERUSERID),
+		        0L);
+
+		long ownerOrganizationId = GetterUtil
+		    .getLong(session
+		        .getAttribute(
+		            org.opencps.util.WebKeys.ACCOUNT_OWNERORGANIZATIONID),
+		        0L);
 
 		if (themeDisplay
 		    .isSignedIn() && Validator
@@ -93,6 +118,21 @@ public class DefineObjectsTag extends IncludeTag {
 				    .getUser();
 				userGroups = user
 				    .getUserGroups();
+
+				accountRoles = RoleLocalServiceUtil
+				    .getUserRoles(user
+				        .getUserId());
+				request
+				    .setAttribute(
+				        org.opencps.util.WebKeys.ACCOUNT_TYPE, accountType);
+
+				session
+				    .setAttribute(
+				        org.opencps.util.WebKeys.ACCOUNT_TYPE, accountType);
+
+				accountOrgs = OrganizationLocalServiceUtil
+				    .getUserOrganizations(user
+				        .getUserId());
 
 				if (!userGroups
 				    .isEmpty()) {
@@ -128,6 +168,9 @@ public class DefineObjectsTag extends IncludeTag {
 					citizen = CitizenLocalServiceUtil
 					    .getCitizen(user
 					        .getUserId());
+
+					accountInstance = citizen;
+
 					dossierDestinationFolder = PortletUtil
 					    .getCitizenDossierDestinationFolder(citizen
 					        .getGroupId(), citizen
@@ -138,6 +181,7 @@ public class DefineObjectsTag extends IncludeTag {
 					session
 					    .setAttribute(
 					        org.opencps.util.WebKeys.CITIZEN_ENTRY, citizen);
+
 				}
 				else if (accountType
 				    .equals(
@@ -146,10 +190,17 @@ public class DefineObjectsTag extends IncludeTag {
 					business = BusinessLocalServiceUtil
 					    .getBusiness(user
 					        .getUserId());
+
+					ownerOrganizationId = business
+					    .getMappingOrganizationId();
+
 					dossierDestinationFolder = PortletUtil
 					    .getBusinessDossierDestinationFolder(business
 					        .getGroupId(), business
 					            .getMappingOrganizationId());
+
+					accountInstance = citizen;
+
 					request
 					    .setAttribute(
 					        org.opencps.util.WebKeys.BUSINESS_ENTRY, business);
@@ -166,6 +217,20 @@ public class DefineObjectsTag extends IncludeTag {
 					        .getScopeGroupId(), user
 					            .getUserId());
 
+					accountInstance = citizen;
+
+					try {
+						WorkingUnit workingUnit = WorkingUnitLocalServiceUtil
+						    .getWorkingUnit(employee
+						        .getWorkingUnitId());
+
+						ownerOrganizationId = workingUnit
+						    .getMappingOrganisationId();
+					}
+					catch (Exception e) {
+
+					}
+
 					request
 					    .setAttribute(
 					        org.opencps.util.WebKeys.EMPLOYEE_ENTRY, employee);
@@ -176,20 +241,29 @@ public class DefineObjectsTag extends IncludeTag {
 
 				if (Validator
 				    .isNotNull(dossierDestinationFolder)) {
-					folder = DLFolderUtil
+					accountFolder = DLFolderUtil
 					    .getTargetFolder(themeDisplay
-					        .getUserId(), 0, dossierDestinationFolder);
+					        .getScopeGroupId(), 0, dossierDestinationFolder);
 					request
 					    .setAttribute(
-					        org.opencps.util.WebKeys.ACCOUNT_FOLDER, folder);
+					        org.opencps.util.WebKeys.ACCOUNT_FOLDER,
+					        accountFolder);
 					session
 					    .setAttribute(
-					        org.opencps.util.WebKeys.ACCOUNT_FOLDER, folder);
+					        org.opencps.util.WebKeys.ACCOUNT_FOLDER,
+					        accountFolder);
 				}
 			}
 			catch (Exception e) {
 				_log
 				    .error(e);
+			}
+			finally {
+				AccountUtil
+				    .initAccount(
+				        accountInstance, accountType, accountFolder,
+				        accountRoles, accountOrgs, ownerUserId,
+				        ownerOrganizationId);
 			}
 
 		}
