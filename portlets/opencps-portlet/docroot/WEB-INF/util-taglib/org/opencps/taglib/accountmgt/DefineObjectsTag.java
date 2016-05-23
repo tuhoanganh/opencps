@@ -27,7 +27,6 @@ import org.opencps.accountmgt.model.Business;
 import org.opencps.accountmgt.model.Citizen;
 import org.opencps.accountmgt.service.BusinessLocalServiceUtil;
 import org.opencps.accountmgt.service.CitizenLocalServiceUtil;
-import org.opencps.dossiermgt.bean.AccountBean;
 import org.opencps.usermgt.model.Employee;
 import org.opencps.usermgt.model.WorkingUnit;
 import org.opencps.usermgt.service.EmployeeLocalServiceUtil;
@@ -73,28 +72,40 @@ public class DefineObjectsTag extends IncludeTag {
 
 		HttpSession session = request
 		    .getSession();
+		Object accountInstance = null;
 
 		String accountType = GetterUtil
 		    .getString(session
 		        .getAttribute(org.opencps.util.WebKeys.ACCOUNT_TYPE));
-		
-		Object accountInstance = null;
 
-		Citizen citizen = null;
+		Citizen citizen = (Citizen) session
+		    .getAttribute(org.opencps.util.WebKeys.CITIZEN_ENTRY);
 
-		Business business = null;
+		Business business = (Business) session
+		    .getAttribute(org.opencps.util.WebKeys.BUSINESS_ENTRY);
 
-		Employee employee = null;
+		Employee employee = (Employee) session
+		    .getAttribute(org.opencps.util.WebKeys.EMPLOYEE_ENTRY);
 
-		DLFolder accountFolder = null;
+		DLFolder accountFolder = (DLFolder) session
+		    .getAttribute(org.opencps.util.WebKeys.ACCOUNT_FOLDER);
 
-		List<Role> accountRoles = new ArrayList<Role>();
+		List<Role> accountRoles = (List<Role>) session
+		    .getAttribute(org.opencps.util.WebKeys.ACCOUNT_ROLES);
 
-		List<Organization> accountOrgs = new ArrayList<>();
+		List<Organization> accountOrgs = (List<Organization>) session
+		    .getAttribute(org.opencps.util.WebKeys.ACCOUNT_ORGANIZATION);
 
-		long ownerUserId = 0;
+		long ownerUserId = GetterUtil
+		    .getLong(session
+		        .getAttribute(org.opencps.util.WebKeys.ACCOUNT_OWNERUSERID),
+		        0L);
 
-		long ownerOrganizationId = 0;
+		long ownerOrganizationId = GetterUtil
+		    .getLong(session
+		        .getAttribute(
+		            org.opencps.util.WebKeys.ACCOUNT_OWNERORGANIZATIONID),
+		        0L);
 
 		if (themeDisplay
 		    .isSignedIn() && Validator
@@ -111,6 +122,13 @@ public class DefineObjectsTag extends IncludeTag {
 				accountRoles = RoleLocalServiceUtil
 				    .getUserRoles(user
 				        .getUserId());
+				request
+				    .setAttribute(
+				        org.opencps.util.WebKeys.ACCOUNT_TYPE, accountType);
+
+				session
+				    .setAttribute(
+				        org.opencps.util.WebKeys.ACCOUNT_TYPE, accountType);
 
 				accountOrgs = OrganizationLocalServiceUtil
 				    .getUserOrganizations(user
@@ -248,8 +266,6 @@ public class DefineObjectsTag extends IncludeTag {
 				        ownerOrganizationId);
 			}
 
-		}else{
-			AccountUtil.setAccountBean(null);
 		}
 
 		return SKIP_BODY;

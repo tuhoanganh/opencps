@@ -17,6 +17,8 @@
 
 package org.opencps.taglib.accountmgt;
 
+import java.util.List;
+
 import javax.servlet.jsp.tagext.TagData;
 import javax.servlet.jsp.tagext.TagExtraInfo;
 import javax.servlet.jsp.tagext.VariableInfo;
@@ -29,7 +31,6 @@ import com.liferay.portlet.documentlibrary.model.DLFolder;
 
 /**
  * @author trungnt
- *
  */
 public class DefineObjectsTei extends TagExtraInfo {
 
@@ -49,6 +50,14 @@ public class DefineObjectsTei extends TagExtraInfo {
 	    new VariableInfo("accountType", String.class
 	        .getName(), true, VariableInfo.AT_END),
 	    new VariableInfo("accountFolder", DLFolder.class
+	        .getName(), true, VariableInfo.AT_END),
+	    new VariableInfo("accountRoles", List.class
+	        .getName(), true, VariableInfo.AT_END),
+	    new VariableInfo("accountOrgs", List.class
+	        .getName(), true, VariableInfo.AT_END),
+	    new VariableInfo("ownerUserId", Long.class
+	        .getName(), true, VariableInfo.AT_END),
+	    new VariableInfo("ownerOrganizationId", Long.class
 	        .getName(), true, VariableInfo.AT_END)
 	};
 }
