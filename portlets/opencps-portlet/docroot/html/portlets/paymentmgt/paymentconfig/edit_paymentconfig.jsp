@@ -1,3 +1,6 @@
+<%@page import="org.opencps.paymentmgt.NoSuchPaymentConfigException"%>
+<%@page import="org.opencps.paymentmgt.service.PaymentConfigLocalServiceUtil"%>
+<%@page import="org.opencps.paymentmgt.model.PaymentConfig"%>
 <%@page import="org.opencps.paymentmgt.permissions.PaymentConfigPermission"%>
 <%@page import="org.opencps.util.ActionKeys"%>
 <%@page import="com.liferay.portal.model.Organization"%>
@@ -26,7 +29,14 @@
 <%@ include file="../init.jsp"%>
 <%
 	String backURL = ParamUtil.getString(request, "backURL");
-	long paymentConfigId = ParamUtil.getLong(request, PaymentConfigDisplayTerms.PAYMENT_CONFIG_ID);
+	long paymentConfigId = ParamUtil.getLong(request, PaymentConfigDisplayTerms.PAYMENT_CONFIG_ID, 0L);
+	PaymentConfig c = null;
+	try {
+		c = PaymentConfigLocalServiceUtil.getPaymentConfig(paymentConfigId);
+	}
+	catch (NoSuchPaymentConfigException e) {
+		
+	}
 	List<Organization> orgs = OrganizationLocalServiceUtil.getOrganizations(QueryUtil.ALL_POS,QueryUtil.ALL_POS);
 %>
 <c:choose>
@@ -47,6 +57,10 @@
 		                 	var paymentConfig = this.get('responseData');
 		                 	A.Array.each(paymentConfig, function(obj, idx) {
 		                 		if (obj) {
+		                 			if (obj.<%= PaymentConfigDisplayTerms.PAYMENT_CONFIG_ID %>)
+			                 			A.one('#<portlet:namespace /><%= PaymentConfigDisplayTerms.PAYMENT_CONFIG_ID %>').set('value', obj.<%= PaymentConfigDisplayTerms.PAYMENT_CONFIG_ID %>);
+		                 			else 
+		                 				A.one('#<portlet:namespace /><%= PaymentConfigDisplayTerms.PAYMENT_CONFIG_ID %>').set('value', '0');		                 			
 		                 			if (obj.<%= PaymentConfigDisplayTerms.BANK_INFO %>)
 			                 			A.one('#<portlet:namespace /><%= PaymentConfigDisplayTerms.BANK_INFO %>').set('value', obj.<%= PaymentConfigDisplayTerms.BANK_INFO %>);
 		                 			else 
@@ -95,11 +109,7 @@
 		    });
 		} 
 	</script>
-	<portlet:actionURL var="updatePaymentConfigURL" name="updatePaymentConfig">
-		<portlet:param 
-			name="<%= PaymentConfigDisplayTerms.PAYMENT_CONFIG_ID %>" 
-			value="<%=String.valueOf(paymentConfigId) %>"/>
-			
+	<portlet:actionURL var="updatePaymentConfigURL" name="updatePaymentConfig">			
 		<portlet:param name="returnURL" value="<%=currentURL %>"/>
 		<portlet:param name="backURL" value="<%=backURL %>"/>
 	</portlet:actionURL>
@@ -110,14 +120,28 @@
 		name="fm"
 		id="fm"
 	>
+	<aui:input 
+		type="hidden" 
+		id="<%= PaymentConfigDisplayTerms.PAYMENT_CONFIG_ID %>"
+		name="<%= PaymentConfigDisplayTerms.PAYMENT_CONFIG_ID %>" 
+		value="<%= String.valueOf(paymentConfigId) %>"
+	/>
+	
 	<aui:row>
 		<aui:col>
 			<aui:select id="<%= PaymentConfigDisplayTerms.GOV_AGENCY_ORGANIZATION_ID %>" onChange="loadPaymentConfig()" name="<%= PaymentConfigDisplayTerms.GOV_AGENCY_ORGANIZATION_ID %>" label="gov-agency-organization-id">
 			<%
 				for (Organization org : orgs) {
+					if (c != null && org.getOrganizationId() == c.getGovAgencyOrganizationId()) {
 			%>	
-			<aui:option value="<%= org.getOrganizationId() %>"><%= org.getName() %></aui:option>
+			<aui:option selected="<%= true %>" value="<%= org.getOrganizationId() %>"><%= org.getName() %></aui:option>
 			<%
+					}
+					else {
+			%>
+			<aui:option selected="<%= false %>" value="<%= org.getOrganizationId() %>"><%= org.getName() %></aui:option>
+			<%			
+					}
 				}
 			%>
 			</aui:select>	
@@ -125,12 +149,12 @@
 	</aui:row>
 	<aui:row>
 		<aui:col width="50">
-			<aui:input id="<%= PaymentConfigDisplayTerms.BANK_INFO %>" style="width: 98%;" name="<%= PaymentConfigDisplayTerms.BANK_INFO %>" type="textarea" label="bank-info">
+			<aui:input value="<%= c != null ? c.getBankInfo() : \"\" %>" id="<%= PaymentConfigDisplayTerms.BANK_INFO %>" style="width: 98%;" name="<%= PaymentConfigDisplayTerms.BANK_INFO %>" type="textarea" label="bank-info">
 				<aui:validator name="required"></aui:validator>
 			</aui:input>
 		</aui:col>
 		<aui:col width="50">
-			<aui:input id="<%= PaymentConfigDisplayTerms.PLACE_INFO %>" style="width: 98%;" name="<%= PaymentConfigDisplayTerms.PLACE_INFO %>" type="textarea" label="place-info">
+			<aui:input value="<%= c != null ? c.getPlaceInfo() : \"\" %>" id="<%= PaymentConfigDisplayTerms.PLACE_INFO %>" style="width: 98%;" name="<%= PaymentConfigDisplayTerms.PLACE_INFO %>" type="textarea" label="place-info">
 				<aui:validator name="required"></aui:validator>
 			</aui:input>
 		</aui:col>
@@ -148,25 +172,25 @@
 	</aui:row>
 	<aui:row>
 		<aui:col width="50">
-			<aui:input id="<%= PaymentConfigDisplayTerms.KEYPAY_DOMAIN  %>" style="width: 98%;" name="<%= PaymentConfigDisplayTerms.KEYPAY_DOMAIN %>" label="keypay-domain">
+			<aui:input value="<%= c != null ? c.getKeypayDomain() : \"\" %>" id="<%= PaymentConfigDisplayTerms.KEYPAY_DOMAIN  %>" style="width: 98%;" name="<%= PaymentConfigDisplayTerms.KEYPAY_DOMAIN %>" label="keypay-domain">
 				<aui:validator name="required"></aui:validator>
 				<aui:validator name="url"/>
 			</aui:input>
 		</aui:col>
 		<aui:col width="50">
-			<aui:input id="<%= PaymentConfigDisplayTerms.KEYPAY_VERSION %>" style="width: 98%;" name="<%= PaymentConfigDisplayTerms.KEYPAY_VERSION %>" label="keypay-version">
+			<aui:input value="<%= c != null ? c.getKeypayVersion() : \"\" %>" id="<%= PaymentConfigDisplayTerms.KEYPAY_VERSION %>" style="width: 98%;" name="<%= PaymentConfigDisplayTerms.KEYPAY_VERSION %>" label="keypay-version">
 				<aui:validator name="required"></aui:validator>
 			</aui:input>
 		</aui:col>
 	</aui:row>
 	<aui:row>
 		<aui:col width="50">
-			<aui:input id="<%= PaymentConfigDisplayTerms.KEYPAY_MERCHANT_CODE %>" style="width: 98%;" name="<%= PaymentConfigDisplayTerms.KEYPAY_MERCHANT_CODE %>" label="keypay-merchant-code">
+			<aui:input value="<%= c != null ? c.getKeypayMerchantCode() : \"\" %>" id="<%= PaymentConfigDisplayTerms.KEYPAY_MERCHANT_CODE %>" style="width: 98%;" name="<%= PaymentConfigDisplayTerms.KEYPAY_MERCHANT_CODE %>" label="keypay-merchant-code">
 				<aui:validator name="required"></aui:validator>
 			</aui:input>
 		</aui:col>
 		<aui:col width="50">
-			<aui:input id="<%= PaymentConfigDisplayTerms.KEYPAY_SECURE_KEY %>" style="width: 98%;" name="<%= PaymentConfigDisplayTerms.KEYPAY_SECURE_KEY %>" label="keypay-secure-key">
+			<aui:input value="<%= c != null ? c.getKeypaySecureKey() : \"\" %>" id="<%= PaymentConfigDisplayTerms.KEYPAY_SECURE_KEY %>" style="width: 98%;" name="<%= PaymentConfigDisplayTerms.KEYPAY_SECURE_KEY %>" label="keypay-secure-key">
 				<aui:validator name="required"></aui:validator>
 			</aui:input>
 		</aui:col>
@@ -184,24 +208,24 @@
 	</aui:row>
 	<aui:row>
 		<aui:col width="50">
-			<aui:input id="<%= PaymentConfigDisplayTerms.GOV_AGENCY_TAX_NO %>" style="width: 98%;" name="<%= PaymentConfigDisplayTerms.GOV_AGENCY_TAX_NO %>" label="gov-agency-tax-no">
+			<aui:input value="<%= c != null ? c.getGovAgencyTaxNo() : \"\" %>" id="<%= PaymentConfigDisplayTerms.GOV_AGENCY_TAX_NO %>" style="width: 98%;" name="<%= PaymentConfigDisplayTerms.GOV_AGENCY_TAX_NO %>" label="gov-agency-tax-no">
 				<aui:validator name="required"></aui:validator>
 			</aui:input>
 		</aui:col>
 		<aui:col width="50">
-			<aui:input id="<%= PaymentConfigDisplayTerms.INVOICE_TEMPLATE_NO %>" style="width: 98%;" name="<%= PaymentConfigDisplayTerms.INVOICE_TEMPLATE_NO %>" label="invoice-template-no">
+			<aui:input value="<%= c != null ? c.getInvoiceTemplateNo() : \"\" %>" id="<%= PaymentConfigDisplayTerms.INVOICE_TEMPLATE_NO %>" style="width: 98%;" name="<%= PaymentConfigDisplayTerms.INVOICE_TEMPLATE_NO %>" label="invoice-template-no">
 				<aui:validator name="required"></aui:validator>
 			</aui:input>	
 		</aui:col>
 	</aui:row>
 	<aui:row>
 		<aui:col width="50">
-			<aui:input id="<%= PaymentConfigDisplayTerms.INVOICE_ISSUE_NO %>" style="width: 98%;" name="<%= PaymentConfigDisplayTerms.INVOICE_ISSUE_NO %>" label="invoice-issue-no">
+			<aui:input value="<%= c != null ? c.getInvoiceIssueNo() : \"\" %>" id="<%= PaymentConfigDisplayTerms.INVOICE_ISSUE_NO %>" style="width: 98%;" name="<%= PaymentConfigDisplayTerms.INVOICE_ISSUE_NO %>" label="invoice-issue-no">
 				<aui:validator name="required"></aui:validator>
 			</aui:input>
 		</aui:col>
 		<aui:col width="50">
-			<aui:input id="<%= PaymentConfigDisplayTerms.INVOICE_LAST_NO %>" style="width: 98%;" name="<%= PaymentConfigDisplayTerms.INVOICE_LAST_NO %>" label="invoice-last-no">
+			<aui:input value="<%= c != null ? c.getInvoiceLastNo() : \"\" %>" id="<%= PaymentConfigDisplayTerms.INVOICE_LAST_NO %>" style="width: 98%;" name="<%= PaymentConfigDisplayTerms.INVOICE_LAST_NO %>" label="invoice-last-no">
 				<aui:validator name="required"></aui:validator>
 				<aui:validator name="maxLength"
 	            	errorMessage="no-more-than-7-characters">7</aui:validator>

@@ -78,6 +78,7 @@ public class PaymentMgtPaymentConfigPortlet extends MVCPortlet {
 		
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 		if (pc != null) {
+			jsonObject.put(PaymentConfigDisplayTerms.PAYMENT_CONFIG_ID, pc.getPaymentConfigId());
 			jsonObject.put(
 			    PaymentConfigDisplayTerms.BANK_INFO, pc.getBankInfo());
 			jsonObject.put(PaymentConfigDisplayTerms.PLACE_INFO, pc.getPlaceInfo());
@@ -136,15 +137,16 @@ public class PaymentMgtPaymentConfigPortlet extends MVCPortlet {
 
 			ServiceContext serviceContext =
 			    ServiceContextFactory.getInstance(actionRequest);
-
 			if (paymentConfigId == 0) {
-				PaymentConfigLocalServiceUtil.addPaymentConfig(govAgencyOrganizationId, govAgencyName, govAgencyTaxNo, invoiceTemplateNo, invoiceIssueNo, invoiceLastNo, bankInfo, placeInfo, keypayDomain, keypayVersion, keypayMerchantCode, keypaySecureKey, serviceContext.getUserId(), serviceContext);
+				 PaymentConfig c = PaymentConfigLocalServiceUtil.addPaymentConfig(govAgencyOrganizationId, govAgencyName, govAgencyTaxNo, invoiceTemplateNo, invoiceIssueNo, invoiceLastNo, bankInfo, placeInfo, keypayDomain, keypayVersion, keypayMerchantCode, keypaySecureKey, serviceContext.getUserId(), serviceContext);
+				 paymentConfigId = c.getPaymentConfigId();
 			}
 			else {
 				PaymentConfigLocalServiceUtil.updatePaymentConfig(paymentConfigId, govAgencyOrganizationId, govAgencyName, govAgencyTaxNo, invoiceTemplateNo, invoiceIssueNo, invoiceLastNo, bankInfo, placeInfo, keypayDomain, keypayVersion, keypayMerchantCode, keypaySecureKey, serviceContext.getUserId(), serviceContext);
 			}
 
 			addProcessActionSuccessMessage = false;
+			actionResponse.setRenderParameter(PaymentConfigDisplayTerms.PAYMENT_CONFIG_ID, String.valueOf(paymentConfigId));
 			if (Validator.isNotNull(returnURL)) {
 				actionResponse.sendRedirect(returnURL);
 			}
