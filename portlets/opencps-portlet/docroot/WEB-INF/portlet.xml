@@ -715,6 +715,45 @@
 			<role-name>user</role-name>
 		</security-role-ref>
 	</portlet>
+	<portlet>
+		<portlet-name>22</portlet-name>
+		<display-name>Dossier Backoffice</display-name>
+		<portlet-class>
+			org.opencps.paymentmgt.portlet.PaymentBackofficePortlet
+		</portlet-class>
+		<init-param>
+			<name>view-template</name>
+			<value>
+				/html/portlets/paymentmgt/backoffice/backofficepaymentlist.jsp
+			</value>
+		</init-param>
+		<init-param>
+			<name>template-path</name>
+			<value>/html/portlets/paymentmgt/backoffice/</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+		</supports>
+		<resource-bundle>content.Language_22</resource-bundle>
+		<portlet-info>
+			<title>Payment Backoffice</title>
+			<short-title>Payment Backoffice</short-title>
+			<keywords>Payment Backoffice</keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>power-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+	</portlet>
 	<public-render-parameter>
     	<identifier>active</identifier>
    		<qname>active</qname>
