@@ -16,6 +16,7 @@ package org.opencps.backend.engine;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.opencps.backend.message.SendToEngineMsg;
 import org.opencps.backend.util.BackendUtils;
 import org.opencps.backend.util.DossierNoGenerator;
 import org.opencps.dossiermgt.model.Dossier;
@@ -56,6 +57,15 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 		//doReceive(message);
 		activeEngine(message);
+	}
+	
+	private void _doRecevie(Message message) {
+
+		SendToEngineMsg toEngineMsg =
+		    (SendToEngineMsg) message.get("msgToEngine");
+		
+		
+
 	}
 
 	private void activeEngine(Message message) {

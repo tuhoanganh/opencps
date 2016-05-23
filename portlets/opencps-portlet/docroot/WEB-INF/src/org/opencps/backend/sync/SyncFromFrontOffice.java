@@ -104,7 +104,7 @@ public class SyncFromFrontOffice implements MessageListener{
     				
     				msgToEngine.put("msgToEngine", engineMsg);
     				
-    				//Send message to engine/destination
+    				//Send message to ...engine/destination
     				MessageBusUtil.sendMessage("opencps/backoffice/engine/destination", msgToEngine);
     			}
         		
