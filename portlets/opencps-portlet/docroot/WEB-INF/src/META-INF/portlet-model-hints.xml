@@ -449,6 +449,7 @@
 		<field name="groupFileId" type="long" />
 		<field name="ownerUserId" type="long" />
 		<field name="ownerOrganizationId" type="long" />
+		<field name="govAgencyOrganizationId" type="int" />
 		<field name="displayName" type="String">
 			<hint name="max-length">255</hint>
 		</field>

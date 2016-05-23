@@ -343,7 +343,8 @@
         <column name="templateFileNo" type="String"/>
         <column name="groupFileId" type="long"/>
         <column name="ownerUserId" type="long"/>
-        <column name="ownerOrganizationId" type="long"/>
+        <column name="ownerOrganizationId" type="long" />
+        <column name="govAgencyOrganizationId" type="int"></column>
         <column name="displayName" type="String"/>
         <column name="formData" type="String"/>
         <column name="fileEntryId" type="long"/>

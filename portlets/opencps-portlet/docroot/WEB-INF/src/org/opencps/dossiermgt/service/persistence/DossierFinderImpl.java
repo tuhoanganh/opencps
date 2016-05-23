@@ -112,6 +112,18 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 				        sql,
 				        "OR (lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$])",
 				        StringPool.BLANK);
+				
+				sql = StringUtil
+							    .replace(
+							        sql,
+							        "OR (lower(opencps_dossier.subjectName) LIKE ? [$AND_OR_NULL_CHECK$])",
+							        StringPool.BLANK);
+
+				sql = StringUtil
+							    .replace(
+							        sql,
+							        "OR (lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$])",
+							        StringPool.BLANK);			
 			}
 
 			if (dossierStatus < 0) {
@@ -141,6 +153,10 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 				    .add(keywords, 2);
 				qPos
 				    .add(keywords, 2);
+				qPos
+					.add(keywords, 2);
+				qPos
+			    	.add(keywords, 2);
 			}
 
 			if (dossierStatus >= 0) {
@@ -241,6 +257,18 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 				        sql,
 				        "OR (lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$])",
 				        StringPool.BLANK);
+				
+				sql = StringUtil
+							    .replace(
+							        sql,
+							        "OR (lower(opencps_dossier.subjectName) LIKE ? [$AND_OR_NULL_CHECK$])",
+							        StringPool.BLANK);
+
+				sql = StringUtil
+							    .replace(
+							        sql,
+							        "OR (lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$])",
+							        StringPool.BLANK);			
 			}
 
 			if (dossierStatus < 0) {
@@ -270,6 +298,10 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 				    .add(keywords, 2);
 				qPos
 				    .add(keywords, 2);
+				qPos
+					.add(keywords, 2);
+				qPos
+			    	.add(keywords, 2);
 			}
 
 			if (dossierStatus >= 0) {
