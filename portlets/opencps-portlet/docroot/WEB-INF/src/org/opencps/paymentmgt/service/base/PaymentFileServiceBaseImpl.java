@@ -25,6 +25,7 @@ import com.liferay.portal.service.persistence.UserPersistence;
 import org.opencps.paymentmgt.model.PaymentFile;
 import org.opencps.paymentmgt.service.PaymentFileService;
 import org.opencps.paymentmgt.service.persistence.PaymentConfigPersistence;
+import org.opencps.paymentmgt.service.persistence.PaymentFileFinder;
 import org.opencps.paymentmgt.service.persistence.PaymentFilePersistence;
 
 import javax.sql.DataSource;
@@ -161,6 +162,24 @@ public abstract class PaymentFileServiceBaseImpl extends BaseServiceImpl
 	public void setPaymentFilePersistence(
 		PaymentFilePersistence paymentFilePersistence) {
 		this.paymentFilePersistence = paymentFilePersistence;
+	}
+
+	/**
+	 * Returns the Payment file finder.
+	 *
+	 * @return the Payment file finder
+	 */
+	public PaymentFileFinder getPaymentFileFinder() {
+		return paymentFileFinder;
+	}
+
+	/**
+	 * Sets the Payment file finder.
+	 *
+	 * @param paymentFileFinder the Payment file finder
+	 */
+	public void setPaymentFileFinder(PaymentFileFinder paymentFileFinder) {
+		this.paymentFileFinder = paymentFileFinder;
 	}
 
 	/**
@@ -346,6 +365,8 @@ public abstract class PaymentFileServiceBaseImpl extends BaseServiceImpl
 	protected org.opencps.paymentmgt.service.PaymentFileService paymentFileService;
 	@BeanReference(type = PaymentFilePersistence.class)
 	protected PaymentFilePersistence paymentFilePersistence;
+	@BeanReference(type = PaymentFileFinder.class)
+	protected PaymentFileFinder paymentFileFinder;
 	@BeanReference(type = com.liferay.counter.service.CounterLocalService.class)
 	protected com.liferay.counter.service.CounterLocalService counterLocalService;
 	@BeanReference(type = com.liferay.portal.service.ResourceLocalService.class)
