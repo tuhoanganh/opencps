@@ -218,3 +218,4 @@ portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/processmgt/model/*
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/processmgt/service/base/*
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/processmgt/service/http/*
 
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/model/
