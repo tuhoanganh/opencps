@@ -182,8 +182,5 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 		return dossierLogPersistence
 			.findByDossierId(dossierId, start, end, obc);
 	}
-	
-	public int countDossierLogByDossierId(long dossierId) throws SystemException {
-		return dossierLogPersistence.countByDossierId(dossierId);
-	}
+
 }
