@@ -218,6 +218,23 @@ public class SendToEngineMsg {
     
     	this.signature = signature;
     }
+	
+    /**
+     * @return the action
+     */
+    public String getAction() {
+    
+    	return action;
+    }
+
+	
+    /**
+     * @param action the action to set
+     */
+    public void setAction(String action) {
+    
+    	this.action = action;
+    }
 	protected long dossierId;
 	protected long fileGroupId;
 	protected String event;
@@ -230,4 +247,5 @@ public class SendToEngineMsg {
 	protected Date estimateDatetime;
 	protected double paymentValue;
 	protected int signature;
+	protected String action;
 }
