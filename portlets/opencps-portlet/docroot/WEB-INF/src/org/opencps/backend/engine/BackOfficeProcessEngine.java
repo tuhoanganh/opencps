@@ -64,6 +64,42 @@ public class BackOfficeProcessEngine implements MessageListener {
 		SendToEngineMsg toEngineMsg =
 		    (SendToEngineMsg) message.get("msgToEngine");
 		
+		long curStepId = 0;
+		
+		
+		long processOrderId = toEngineMsg.getProcessOrderId();
+		
+		try {
+			if (Validator.isNull(processOrderId)) {
+				
+				ProcessOrder processOrder =
+				    ProcessOrderLocalServiceUtil.getProcessOrder(
+				        toEngineMsg.getDossierId(),
+				        toEngineMsg.getFileGroupId());
+				
+				if (Validator.isNotNull(processOrder)) {
+					//Contains process order
+					processOrderId = processOrder.getProcessOrderId();
+					
+					
+					
+				} else {
+					//Not contains process order
+					//Create process order
+				}
+				
+			} else {
+				//Find process order by processOrderId
+				ProcessOrder processOrder =
+				    ProcessOrderLocalServiceUtil.getProcessOrder(processOrderId);
+				
+				
+			}
+	        
+        }
+        catch (Exception e) {
+	        // TODO: handle exception
+        }
 		
 
 	}
