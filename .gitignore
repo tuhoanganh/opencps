@@ -210,3 +210,5 @@ portlets/opencps-portlet/.settings/org.eclipse.wst.validation.prefs
 
 portlets/opencps-portlet/.settings/org.eclipse.core.resources.prefs
 
+portlets/opencps-portlet/.settings/*
+portlets/opencps-portlet/docroot/WEB-INF/tld/c.tld
