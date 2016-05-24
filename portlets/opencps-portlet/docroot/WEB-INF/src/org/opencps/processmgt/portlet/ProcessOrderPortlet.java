@@ -34,6 +34,7 @@ import org.opencps.accountmgt.model.Citizen;
 import org.opencps.accountmgt.search.BusinessDisplayTerms;
 import org.opencps.accountmgt.service.BusinessLocalServiceUtil;
 import org.opencps.accountmgt.service.CitizenLocalServiceUtil;
+import org.opencps.backend.message.SendToEngineMsg;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.DossierPart;
@@ -73,6 +74,7 @@ import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -462,8 +464,10 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		    .getString(
 		        actionRequest, ProcessOrderDisplayTerms.ESTIMATE_DATETIME);
 
-		/*String redirectURL = ParamUtil
-		    .getString(actionRequest, "redirectURL");*/
+		/*
+		 * String redirectURL = ParamUtil .getString(actionRequest,
+		 * "redirectURL");
+		 */
 
 		long dossierId = ParamUtil
 		    .getLong(actionRequest, ProcessOrderDisplayTerms.DOSSIER_ID);
@@ -502,6 +506,17 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		    .isNotNull(estimateDatetime)) {
 			deadline = DateTimeUtil
 			    .convertStringToDate(estimateDatetime);
+		}
+
+		Dossier dossier = null;
+
+		try {
+			dossier = DossierLocalServiceUtil
+			    .getDossier(dossierId);
+		}
+		catch (Exception e) {
+			_log
+			    .error(e);
 		}
 
 		Message message = new Message();
@@ -544,6 +559,35 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		message
 		    .put(ProcessOrderDisplayTerms.COMPANY_ID, companyId);
 
+		SendToEngineMsg sendToEngineMsg = new SendToEngineMsg();
+
+		// sendToEngineMsg.setAction(WebKeys.ACTION);
+		sendToEngineMsg
+		    .setActionNote(actionNote);
+		sendToEngineMsg
+		    .setActionUserId(actionUserId);
+		sendToEngineMsg
+		    .setDossierId(dossierId);
+		sendToEngineMsg
+		    .setEstimateDatetime(deadline);
+		sendToEngineMsg
+		    .setFileGroupId(fileGroupId);
+		sendToEngineMsg
+		    .setPaymentValue(GetterUtil
+		        .getDouble(paymentValue));
+		sendToEngineMsg
+		    .setProcessOrderId(processOrderId);
+		sendToEngineMsg
+		    .setProcessWorkflowId(processWorkflowId);
+		sendToEngineMsg
+		    .setReceptionNo(Validator
+		        .isNotNull(dossier
+		            .getReceptionNo()) ? dossier
+		                .getReceptionNo() : StringPool.BLANK);
+		sendToEngineMsg
+		    .setSignature(signature ? 1 : 0);
+		message
+		    .put("msgToEngine", sendToEngineMsg);
 		MessageBusUtil
 		    .sendMessage("opencps/backoffice/engine/destination", message);
 
