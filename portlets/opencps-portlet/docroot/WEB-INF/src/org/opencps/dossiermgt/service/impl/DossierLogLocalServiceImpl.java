@@ -170,10 +170,11 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 	    throws SystemException {
 
 		boolean orderByAsc = true;
-		DossierLogUpdateDatetimeComparator orderByComparator =
-		    new DossierLogUpdateDatetimeComparator(orderByAsc);
-		return dossierLogPersistence
-		    .findByDossierId(dossierId, start, end, orderByComparator);
+
+		DossierLogUpdateDatetimeComparator orderByComparator = 
+						new DossierLogUpdateDatetimeComparator(orderByAsc);
+		return dossierLogPersistence.findByDossierId(dossierId, start, end, orderByComparator);
+
 	}
 
 	public List<DossierLog> getDossierLogByDossierId(long dossierId, int start, int end, OrderByComparator obc)
