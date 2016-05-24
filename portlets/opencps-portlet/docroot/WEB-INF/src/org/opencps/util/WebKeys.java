@@ -142,5 +142,14 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String ACTOR_ACTION_CITIZEN = "citizen";
 	
 	public static final String ACTOR_ACTION_EMPLOYEE = "employee";
-
+	
+	public static final String DOSSIER_LOG_PAYMENT_REQUEST = "paymentRequest";
+	
+	public static final String DOSSIER_LOG_CHANGE_REQUEST = "changeRequest";
+	
+	public static final String DOSSIER_LOG_RESUBMIT_REQUEST = "resubmitRequest";
+	
+	public static final String DOSSIER_LOG_CANCEL_REQUEST = "cancelRequest";
+	
+	public static final String DOSSIER_LOG_NO_REQUEST = "noRequest";
 }
