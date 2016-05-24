@@ -235,6 +235,76 @@ public class SendToEngineMsg {
     
     	this.action = action;
     }
+	
+    /**
+     * @return the userId
+     */
+    public long getUserId() {
+    
+    	return userId;
+    }
+
+	
+    /**
+     * @param userId the userId to set
+     */
+    public void setUserId(long userId) {
+    
+    	this.userId = userId;
+    }
+
+	
+    /**
+     * @return the groupId
+     */
+    public long getGroupId() {
+    
+    	return groupId;
+    }
+
+	
+    /**
+     * @param groupId the groupId to set
+     */
+    public void setGroupId(long groupId) {
+    
+    	this.groupId = groupId;
+    }
+
+	
+    /**
+     * @return the companyId
+     */
+    public long getCompanyId() {
+    
+    	return companyId;
+    }
+
+	
+    /**
+     * @param companyId the companyId to set
+     */
+    public void setCompanyId(long companyId) {
+    
+    	this.companyId = companyId;
+    }
+	
+    /**
+     * @return the actionDatetime
+     */
+    public Date getActionDatetime() {
+    
+    	return actionDatetime;
+    }
+
+	
+    /**
+     * @param actionDatetime the actionDatetime to set
+     */
+    public void setActionDatetime(Date actionDatetime) {
+    
+    	this.actionDatetime = actionDatetime;
+    }
 	protected long dossierId;
 	protected long fileGroupId;
 	protected String event;
@@ -248,4 +318,9 @@ public class SendToEngineMsg {
 	protected double paymentValue;
 	protected int signature;
 	protected String action;
+	
+	protected long userId;
+	protected long groupId;
+	protected long companyId;
+	protected Date actionDatetime;
 }
