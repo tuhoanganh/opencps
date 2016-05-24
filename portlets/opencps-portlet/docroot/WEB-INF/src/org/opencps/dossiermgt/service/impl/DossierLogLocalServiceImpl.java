@@ -157,10 +157,6 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 						new DossierLogUpdateDatetimeComparator(orderByAsc);
 		return dossierLogPersistence.findByDossierId(dossierId, start, end, orderByComparator);
 	}
-	
-	public int countDossierLogByDossierId(long dossierId) throws SystemException {
-		return dossierLogPersistence.countByDossierId(dossierId);
-	}
 
 	public List<DossierLog> getDossierLogByDossierId(long dossierId, int start, int end, OrderByComparator obc)
 		throws SystemException {

@@ -483,8 +483,7 @@
 		<field name="modifiedDate" type="Date" />
 		<field name="dossierId" type="long" />
 		<field name="fileGroupId" type="long" />
-		<field name="actor" type="int" />
-		<field name="requestCommand" type="int" />
+		<field name="requestCommand" type="String" />
 		<field name="dossierStatus" type="int" />
 		<field name="actionInfo" type="String">
 			<hint name="max-length">255</hint>
