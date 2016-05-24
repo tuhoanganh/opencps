@@ -483,7 +483,11 @@
 		<field name="modifiedDate" type="Date" />
 		<field name="dossierId" type="long" />
 		<field name="fileGroupId" type="long" />
+<<<<<<< HEAD
 		<field name="requestCommand" type="String" />
+=======
+		<field name="requestCommand" type="int" />
+>>>>>>> refs/remotes/upstream/rc-1.0.1
 		<field name="dossierStatus" type="int" />
 		<field name="actionInfo" type="String">
 			<hint name="max-length">255</hint>
