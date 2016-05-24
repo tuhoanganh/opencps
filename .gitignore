@@ -210,3 +210,8 @@ portlets/opencps-portlet/.settings/org.eclipse.wst.validation.prefs
 
 portlets/opencps-portlet/.settings/org.eclipse.core.resources.prefs
 
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/model/impl
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/service/base
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/service/http
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/service/persistence/PaymentConfigPersistenceImpl.java
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/service/persistence/PaymentFilePersistenceImpl.java
