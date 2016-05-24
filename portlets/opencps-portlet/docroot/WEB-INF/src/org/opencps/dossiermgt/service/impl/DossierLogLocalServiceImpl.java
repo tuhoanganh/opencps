@@ -95,57 +95,6 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 		    .update(dossierLog);
 
 	}
-	
-	public DossierLog addDossierLog(
-	    long userId, long groupId, long companyId, long dossierId,
-	    long fileGroupId, int status, String actor, String requestCommand,
-	    String actionInfo, String messageInfo, Date updateDatetime, int level)
-	    throws SystemException {
-
-		long dossierLogId = counterLocalService
-		    .increment(DossierLog.class
-		        .getName());
-		DossierLog dossierLog = dossierLogPersistence
-		    .create(dossierLogId);
-
-		dossierLog
-		    .setGroupId(groupId);
-		dossierLog
-		    .setCompanyId(companyId);
-
-		Date now = new Date();
-
-		dossierLog
-		    .setUserId(userId);
-
-		dossierLog
-		    .setCreateDate(now);
-
-		dossierLog
-		    .setModifiedDate(now);
-
-		dossierLog
-		    .setDossierId(dossierId);
-		dossierLog
-		    .setFileGroupId(fileGroupId);
-		dossierLog
-		    .setDossierStatus(status);
-		dossierLog
-		    .setActionInfo(actionInfo);
-		dossierLog
-		    .setMessageInfo(messageInfo);
-		dossierLog
-		    .setUpdateDatetime(updateDatetime);
-		dossierLog
-		    .setLevel(level);
-		
-		dossierLog.setActor(actor);
-		dossierLog.setRequestCommand(requestCommand);
-
-		return dossierLogPersistence
-		    .update(dossierLog);
-
-	}
 
 	public DossierLog addDossierLog(
 	    long userId, long dossierId, long fileGroupId, int status,
@@ -221,10 +170,11 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 	    throws SystemException {
 
 		boolean orderByAsc = true;
-		DossierLogUpdateDatetimeComparator orderByComparator =
-		    new DossierLogUpdateDatetimeComparator(orderByAsc);
-		return dossierLogPersistence
-		    .findByDossierId(dossierId, start, end, orderByComparator);
+
+		DossierLogUpdateDatetimeComparator orderByComparator = 
+						new DossierLogUpdateDatetimeComparator(orderByAsc);
+		return dossierLogPersistence.findByDossierId(dossierId, start, end, orderByComparator);
+
 	}
 
 	public List<DossierLog> getDossierLogByDossierId(long dossierId, int start, int end, OrderByComparator obc)
