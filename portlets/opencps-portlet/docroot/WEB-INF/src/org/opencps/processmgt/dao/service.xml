@@ -190,6 +190,7 @@
 		<finder return-type="ProcessWorkflow" name="SPI_AEV">
 			<finder-column name="serviceProcessId"/>
 			<finder-column name="autoEvent"/>
+			<finder-column name="preProcessStepId"/>
 		</finder>
 
 	</entity>
