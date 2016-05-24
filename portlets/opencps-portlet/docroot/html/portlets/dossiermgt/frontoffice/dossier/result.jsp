@@ -1,13 +1,4 @@
 
-<%@page import="com.liferay.portlet.documentlibrary.util.DLUtil"%>
-<%@page import="org.opencps.util.DLFileEntryUtil"%>
-<%@page import="com.liferay.portal.kernel.repository.model.FileEntry"%>
-<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
-<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
-<%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -27,6 +18,15 @@
  */
 %>
 
+<%@page import="com.liferay.portlet.documentlibrary.util.DLUtil"%>
+<%@page import="org.opencps.util.DLFileEntryUtil"%>
+<%@page import="com.liferay.portal.kernel.repository.model.FileEntry"%>
+<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
+<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
+<%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
 <%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.dossiermgt.model.Dossier"%>
@@ -43,7 +43,7 @@
 %>
 
 <c:choose>
-	<c:when test="<%=true %>">
+	<c:when test="<%=dossier != null && dossier.getDossierStatus() != PortletConstants.DOSSIER_STATUS_NEW %>">
 		<%
 			String[] actors = new String[]{WebKeys.ACTOR_ACTION_CITIZEN};
 			String[] requestCommands = new String[]{WebKeys.ACTION_RESUBMIT_VALUE, WebKeys.ACTION_PAY_VALUE};
@@ -104,7 +104,7 @@
 			</aui:col>
 			<aui:col width="25"></aui:col>
 			<aui:col width="25">
-				<liferay-ui:message key="dossier-status"/>
+				<liferay-ui:message key="log-status"/>
 			</aui:col>
 			<aui:col width="25"></aui:col>
 		</aui:row>
@@ -189,6 +189,7 @@
 									}
 								}catch(Exception e){
 									continue;
+									
 								}
 								
 								%>
@@ -200,7 +201,11 @@
 										<td>
 											<%=Validator.isNotNull(dossierFile.getDossierFileNo()) ? dossierFile.getDossierFileNo() : StringPool.BLANK %>
 										</td>
-										<td><%=Validator.isNotNull(dossierFile.getDisplayName()) ? dossierFile.getDisplayName() : StringPool.BLANK  %></td>
+										<td>
+											<a href="<%=fileURL%>">
+												<%=Validator.isNotNull(dossierFile.getDisplayName()) ? dossierFile.getDisplayName() : StringPool.BLANK  %>
+											</a>
+										</td>
 									</tr>
 								<%
 								
