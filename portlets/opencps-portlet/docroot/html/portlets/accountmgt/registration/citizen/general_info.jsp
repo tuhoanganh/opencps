@@ -98,9 +98,7 @@
 					name="<%=CitizenDisplayTerms.CITIZEN_PERSONALID %>"
 					disabled="<%=isViewProfile %>"
 					cssClass="input100"
-				>
-				<aui:validator name="required" />
-				</aui:input>
+				/>
 			</aui:col>
 		</aui:row>
 		
@@ -110,6 +108,7 @@
 					<liferay-ui:message key="birth-date"/>
 				</label>
 				<liferay-ui:input-date 
+					
 					dayParam="<%=CitizenDisplayTerms.BIRTH_DATE_DAY %>"
 					dayValue="<%= spd.getDayOfMoth() %>"
 					disabled="<%=isViewProfile%>"
@@ -130,7 +129,6 @@
 					name="<%=CitizenDisplayTerms.CITIZEN_GENDER %>"
 					disabled="<%=isViewProfile %>"
 					cssClass="input100"
-					required="true"
 				>
 					<aui:option label="<%=StringPool.BLANK %>" value="" />
 					<%
@@ -170,9 +168,7 @@
 					name="<%=CitizenDisplayTerms.CITIZEN_PERSONALID %>"
 					disabled="<%=isViewProfile %>"
 					cssClass="input100"
-				>
-				<aui:validator name="required" />
-				</aui:input>
+				/>
 			</aui:col>
 			
 			<aui:col width="25">
@@ -200,7 +196,6 @@
 					name="<%=CitizenDisplayTerms.CITIZEN_GENDER %>"
 					disabled="<%=isViewProfile %>"
 					cssClass="input100"
-					required="true"
 				>
 					<aui:option label="<%=StringPool.BLANK %>" value="" />
 					<%
