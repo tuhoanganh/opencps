@@ -58,7 +58,7 @@ public class SyncFromBackOffice implements MessageListener{
     	
     	try {
 			statusUpdate = DossierLocalServiceUtil.updateDossierStatus(
-				toBackOffice.getDossierId(), toBackOffice.getFileGroupId(),toBackOffice.getReceptionNo(),toBackOffice.getEstimateDatetime(),
+				toBackOffice.getDossierId(), toBackOffice.getFileGroupId(), Integer.parseInt(toBackOffice.getDossierStatus()), toBackOffice.getReceptionNo(),toBackOffice.getEstimateDatetime(),
 				toBackOffice.getReceiveDatetime(), toBackOffice.getFinishDatetime(), "ACTOR", toBackOffice.getRequestCommand(),
 				toBackOffice.getActionInfo(), toBackOffice.getMessageInfo());
         }

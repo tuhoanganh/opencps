@@ -230,7 +230,7 @@
 		<field name="serviceName" type="String">
 			<hint name="max-length">500</hint>
 		</field>
-		<field name="fullName" type="String" >
+		<field name="fullName" type="String">
 			<hint name="max-length">500</hint>
 		</field>
 		<field name="serviceProcess" type="String" />
