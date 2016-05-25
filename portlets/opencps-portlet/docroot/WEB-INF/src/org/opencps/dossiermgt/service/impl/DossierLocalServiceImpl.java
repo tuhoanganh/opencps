@@ -565,10 +565,10 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		    .findByPrimaryKey(dossierId);
 		dossier =
 		    getDossier(dossier, userId, govAgencyOrganizationId, syncStatus);
-		DossierStatus dossierStatus = dossierStatusLocalService
+		/*DossierStatus dossierStatus = dossierStatusLocalService
 		    .getDossierStatus(dossierId);
 		dossierStatus = getDossierStatus(
-		    dossierStatus, userId, govAgencyOrganizationId, syncStatus);
+		    dossierStatus, userId, govAgencyOrganizationId, syncStatus);*/
 
 		if (fileGroupId > 0) {
 			FileGroup fileGroup = fileGroupLocalService
@@ -623,8 +623,8 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		            .getMessageInfo(status, locale),
 		        now, level);
 
-		dossierStatusLocalService
-		    .updateDossierStatus(dossierStatus);
+		/*dossierStatusLocalService
+		    .updateDossierStatus(dossierStatus);*/
 
 		dossierPersistence
 		    .update(dossier);
@@ -979,7 +979,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	}
 	
 	public boolean updateDossierStatus(
-	    long dossierId, long fileGroupId, String receptionNo,
+	    long dossierId, long fileGroupId, int dossierStatus, String receptionNo,
 	    Date estimateDatetime, Date receiveDatetime, Date finishDatetime,
 	    String actor, String requestCommand, String actionInfo,
 	    String messageInfo) {
@@ -997,6 +997,8 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 			    .setReceiveDatetime(receiveDatetime);
 			dossier
 			    .setFinishDatetime(finishDatetime);
+			
+			dossier.setDossierStatus(dossierStatus);
 
 			int level = 0;
 			if (dossier
@@ -1015,8 +1017,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 			            .getGroupId(),
 			        dossier
 			            .getCompanyId(),
-			        dossierId, fileGroupId, dossier
-			            .getDossierStatus(),
+			        dossierId, fileGroupId, dossierStatus,
 			        actor, requestCommand, actionInfo, messageInfo,
 			        level);
 
