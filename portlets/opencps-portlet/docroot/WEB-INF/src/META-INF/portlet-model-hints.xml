@@ -228,7 +228,7 @@
 		<field name="modifiedDate" type="Date" />
 		<field name="serviceNo" type="String" />
 		<field name="serviceName" type="String" />
-		<field name="shortName" type="String" />
+		<field name="fullName" type="String" />
 		<field name="serviceProcess" type="String" />
 		<field name="serviceMethod" type="String" />
 		<field name="serviceDossier" type="String" />
