@@ -29,13 +29,16 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.service.ServiceContext;
 
 /**
- * The implementation of the dossier log local service. <p> All custom service
- * methods should be put in this class. Whenever methods are added, rerun
- * ServiceBuilder to copy their definitions into the
- * {@link org.opencps.dossiermgt.service.DossierLogLocalService} interface. <p>
+ * The implementation of the dossier log local service.
+ * <p>
+ * All custom service methods should be put in this class. Whenever methods are
+ * added, rerun ServiceBuilder to copy their definitions into the
+ * {@link org.opencps.dossiermgt.service.DossierLogLocalService} interface.
+ * <p>
  * This is a local service. Methods of this service will not have security
  * checks based on the propagated JAAS credentials because this service can only
- * be accessed from within the same VM. </p>
+ * be accessed from within the same VM.
+ * </p>
  *
  * @author trungnt
  * @see org.opencps.dossiermgt.service.base.DossierLogLocalServiceBaseImpl
@@ -48,140 +51,121 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 	 * access the dossier log local service.
 	 */
 
-	public DossierLog addDossierLog(
-	    long userId, long groupId, long companyId, long dossierId,
-	    long fileGroupId, int status, String actionInfo, String messageInfo,
-	    Date updateDatetime, int level)
-	    throws SystemException {
+	public DossierLog addDossierLog(long userId, long groupId, long companyId, long dossierId, long fileGroupId,
+			int status, String actionInfo, String messageInfo, Date updateDatetime, int level) throws SystemException {
 
-		long dossierLogId = counterLocalService
-		    .increment(DossierLog.class
-		        .getName());
-		DossierLog dossierLog = dossierLogPersistence
-		    .create(dossierLogId);
+		long dossierLogId = counterLocalService.increment(DossierLog.class.getName());
+		DossierLog dossierLog = dossierLogPersistence.create(dossierLogId);
 
-		dossierLog
-		    .setGroupId(groupId);
-		dossierLog
-		    .setCompanyId(companyId);
+		dossierLog.setGroupId(groupId);
+		dossierLog.setCompanyId(companyId);
 
 		Date now = new Date();
 
-		dossierLog
-		    .setUserId(userId);
+		dossierLog.setUserId(userId);
 
-		dossierLog
-		    .setCreateDate(now);
+		dossierLog.setCreateDate(now);
 
-		dossierLog
-		    .setModifiedDate(now);
+		dossierLog.setModifiedDate(now);
 
-		dossierLog
-		    .setDossierId(dossierId);
-		dossierLog
-		    .setFileGroupId(fileGroupId);
-		dossierLog
-		    .setDossierStatus(status);
-		dossierLog
-		    .setActionInfo(actionInfo);
-		dossierLog
-		    .setMessageInfo(messageInfo);
-		dossierLog
-		    .setUpdateDatetime(updateDatetime);
-		dossierLog
-		    .setLevel(level);
+		dossierLog.setDossierId(dossierId);
+		dossierLog.setFileGroupId(fileGroupId);
+		dossierLog.setDossierStatus(status);
+		dossierLog.setActionInfo(actionInfo);
+		dossierLog.setMessageInfo(messageInfo);
+		dossierLog.setUpdateDatetime(updateDatetime);
+		dossierLog.setLevel(level);
 
-		return dossierLogPersistence
-		    .update(dossierLog);
+		return dossierLogPersistence.update(dossierLog);
 
 	}
 
-	public DossierLog addDossierLog(
-	    long userId, long dossierId, long fileGroupId, int status,
-	    String actionInfo, String messageInfo, Date updateDatetime, int level,
-	    ServiceContext serviceContext)
-	    throws SystemException {
+	public DossierLog addDossierLog(long userId, long dossierId, long fileGroupId, int status, String actionInfo,
+			String messageInfo, Date updateDatetime, int level, ServiceContext serviceContext) throws SystemException {
 
-		long dossierLogId = counterLocalService
-		    .increment(DossierLog.class
-		        .getName());
-		DossierLog dossierLog = dossierLogPersistence
-		    .create(dossierLogId);
+		long dossierLogId = counterLocalService.increment(DossierLog.class.getName());
+		DossierLog dossierLog = dossierLogPersistence.create(dossierLogId);
 		Date now = new Date();
 
-		dossierLog
-		    .setUserId(userId);
-		dossierLog
-		    .setGroupId(serviceContext
-		        .getScopeGroupId());
-		dossierLog
-		    .setCompanyId(serviceContext
-		        .getCompanyId());
-		dossierLog
-		    .setCreateDate(now);
-		dossierLog
-		    .setModifiedDate(now);
+		dossierLog.setUserId(userId);
+		dossierLog.setGroupId(serviceContext.getScopeGroupId());
+		dossierLog.setCompanyId(serviceContext.getCompanyId());
+		dossierLog.setCreateDate(now);
+		dossierLog.setModifiedDate(now);
 
-		dossierLog
-		    .setDossierId(dossierId);
-		dossierLog
-		    .setFileGroupId(fileGroupId);
-		dossierLog
-		    .setDossierStatus(status);
-		dossierLog
-		    .setActionInfo(actionInfo);
-		dossierLog
-		    .setMessageInfo(messageInfo);
-		dossierLog
-		    .setUpdateDatetime(updateDatetime);
-		dossierLog
-		    .setLevel(level);
+		dossierLog.setDossierId(dossierId);
+		dossierLog.setFileGroupId(fileGroupId);
+		dossierLog.setDossierStatus(status);
+		dossierLog.setActionInfo(actionInfo);
+		dossierLog.setMessageInfo(messageInfo);
+		dossierLog.setUpdateDatetime(updateDatetime);
+		dossierLog.setLevel(level);
 
-		return dossierLogPersistence
-		    .update(dossierLog);
+		return dossierLogPersistence.update(dossierLog);
 
 	}
 
-	public int countDossierLogByDossierId(long dossierId)
-	    throws SystemException {
+	public DossierLog addDossierLog(long userId, long groupId, long companyId, long dossierId, long fileGroupId,
+			int dossierStatus, String actor, String requestCommand, String actionInfo, String messageInfo, int level)
+			throws SystemException {
 
-		return dossierLogPersistence
-		    .countByDossierId(dossierId);
+		long dossierLogId = counterLocalService.increment(DossierLog.class.getName());
+		DossierLog dossierLog = dossierLogPersistence.create(dossierLogId);
+		Date now = new Date();
+
+		dossierLog.setUserId(userId);
+		dossierLog.setGroupId(groupId);
+		dossierLog.setCompanyId(companyId);
+		dossierLog.setCreateDate(now);
+		dossierLog.setModifiedDate(now);
+
+		dossierLog.setDossierId(dossierId);
+		dossierLog.setFileGroupId(fileGroupId);
+		dossierLog.setDossierStatus(dossierStatus);
+		dossierLog.setActionInfo(actionInfo);
+		dossierLog.setMessageInfo(messageInfo);
+		dossierLog.setUpdateDatetime(now);
+
+		dossierLog.setLevel(level);
+
+		dossierLog.setActionInfo(actionInfo);
+
+		dossierLog.setRequestCommand(requestCommand);
+
+		return dossierLogPersistence.update(dossierLog);
+
 	}
 
-	public List<DossierLog> findRequiredProcessDossier(
-	    long dossierId, String[] actors, String[] requestCommands)
-	    throws SystemException {
+	public int countDossierLogByDossierId(long dossierId) throws SystemException {
 
-		return dossierLogFinder
-		    .findRequiredProcessDossier(dossierId, actors, requestCommands);
+		return dossierLogPersistence.countByDossierId(dossierId);
+	}
+
+	public List<DossierLog> findRequiredProcessDossier(long dossierId, String[] actors, String[] requestCommands)
+			throws SystemException {
+
+		return dossierLogFinder.findRequiredProcessDossier(dossierId, actors, requestCommands);
 
 	}
 
-	public List<DossierLog> getDossierLogByDossierId(long doosierId)
-	    throws SystemException {
+	public List<DossierLog> getDossierLogByDossierId(long doosierId) throws SystemException {
 
-		return dossierLogPersistence
-		    .findByDossierId(doosierId);
+		return dossierLogPersistence.findByDossierId(doosierId);
 	}
 
-	public List<DossierLog> getDossierLogByDossierId(
-	    long dossierId, int start, int end)
-	    throws SystemException {
+	public List<DossierLog> getDossierLogByDossierId(long dossierId, int start, int end) throws SystemException {
 
 		boolean orderByAsc = true;
 
-		DossierLogUpdateDatetimeComparator orderByComparator = 
-						new DossierLogUpdateDatetimeComparator(orderByAsc);
+		DossierLogUpdateDatetimeComparator orderByComparator = new DossierLogUpdateDatetimeComparator(orderByAsc);
 		return dossierLogPersistence.findByDossierId(dossierId, start, end, orderByComparator);
 
 	}
 
 	public List<DossierLog> getDossierLogByDossierId(long dossierId, int start, int end, OrderByComparator obc)
-		throws SystemException {
+			throws SystemException {
 
-		return dossierLogPersistence
-			.findByDossierId(dossierId, start, end, obc);
+		return dossierLogPersistence.findByDossierId(dossierId, start, end, obc);
 	}
 
 }

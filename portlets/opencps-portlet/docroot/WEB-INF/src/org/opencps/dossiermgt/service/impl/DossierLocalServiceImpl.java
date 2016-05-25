@@ -1024,7 +1024,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 			            .getCompanyId(),
 			        dossierId, fileGroupId, dossier
 			            .getDossierStatus(),
-			        actor, requestCommand, actionInfo, messageInfo, new Date(),
+			        actor, requestCommand, actionInfo, messageInfo,
 			        level);
 
 			dossierPersistence

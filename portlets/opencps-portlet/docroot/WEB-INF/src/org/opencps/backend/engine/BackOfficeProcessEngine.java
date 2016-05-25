@@ -1,21 +1,27 @@
 /**
- * OpenCPS is the open source Core Public Services software Copyright (C)
- * 2016-present OpenCPS community This program is free software: you can
- * redistribute it and/or modify it under the terms of the GNU Affero General
- * Public License as published by the Free Software Foundation, either version 3
- * of the License, or any later version. This program is distributed in the hope
- * that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Affero General Public License for more details. You should have received a
- * copy of the GNU Affero General Public License along with this program. If
- * not, see <http://www.gnu.org/licenses/>
+ * OpenCPS is the open source Core Public Services software
+ * Copyright (C) 2016-present OpenCPS community
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
+
 
 package org.opencps.backend.engine;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.opencps.backend.message.SendToBackOfficeMsg;
 import org.opencps.backend.message.SendToEngineMsg;
 import org.opencps.backend.util.BackendUtils;
 import org.opencps.backend.util.DossierNoGenerator;
@@ -29,6 +35,7 @@ import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
 import org.opencps.processmgt.service.ServiceInfoProcessLocalServiceUtil;
 import org.opencps.util.PortletConstants;
+import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -64,43 +71,148 @@ public class BackOfficeProcessEngine implements MessageListener {
 		SendToEngineMsg toEngineMsg =
 		    (SendToEngineMsg) message.get("msgToEngine");
 		
+		SendToBackOfficeMsg toBackOffice = new SendToBackOfficeMsg();
+		
+		Dossier dossier = BackendUtils.getDossier(toEngineMsg.getDossierId());
+		
+		long serviceInfoId = 0;
+		long dossierTemplateId = 0;
+		String govAgencyCode = StringPool.BLANK;
+		String govAgencyName = StringPool.BLANK;
+		long govAgencyOrganizationId = 0;
+		long serviceProcessId = 0;
+		
+		if (Validator.isNotNull(dossier)) {
+			serviceInfoId = dossier.getServiceInfoId();
+			dossierTemplateId = dossier.getDossierTemplateId();
+			govAgencyCode = dossier.getGovAgencyCode();
+			govAgencyName = dossier.getGovAgencyName();
+			govAgencyOrganizationId = dossier.getGovAgencyOrganizationId();
+
+			try {
+				serviceProcessId =
+				    ServiceInfoProcessLocalServiceUtil.getServiceInfo(
+				        serviceInfoId).getServiceProcessId();
+			}
+			catch (Exception e) {
+				_log.error(e);
+			}
+		}
+
 		long curStepId = 0;
 		
+		long processWorkflowId = toEngineMsg.getProcessWorkflowId();
 		
 		long processOrderId = toEngineMsg.getProcessOrderId();
 		
+		long processStepId = 0;
+		
+		String actionName = StringPool.BLANK;
+		String stepName = StringPool.BLANK;
+
 		try {
 			if (Validator.isNull(processOrderId)) {
-				
+
 				ProcessOrder processOrder =
 				    ProcessOrderLocalServiceUtil.getProcessOrder(
 				        toEngineMsg.getDossierId(),
 				        toEngineMsg.getFileGroupId());
-				
-				if (Validator.isNotNull(processOrder)) {
-					//Contains process order
-					processOrderId = processOrder.getProcessOrderId();
-					
-					
-					
-				} else {
-					//Not contains process order
-					//Create process order
+
+				if (Validator.isNull(processOrder)) {
+
+					// Init process order
+					processOrder =
+					    ProcessOrderLocalServiceUtil.initProcessOrder(
+					        toEngineMsg.getUserId(),
+					        toEngineMsg.getCompanyId(),
+					        toEngineMsg.getGroupId(), serviceInfoId,
+					        dossierTemplateId, govAgencyCode, govAgencyName,
+					        govAgencyOrganizationId, serviceProcessId,
+					        toEngineMsg.getDossierId(),
+					        toEngineMsg.getFileGroupId(),
+					        toEngineMsg.getProcessWorkflowId(),
+					        toEngineMsg.getActionDatetime(), StringPool.BLANK,
+					        StringPool.BLANK, StringPool.BLANK, 0, 0, 0,
+					        PortletConstants.DOSSIER_STATUS_SYSTEM);
 				}
-				
-			} else {
-				//Find process order by processOrderId
-				ProcessOrder processOrder =
-				    ProcessOrderLocalServiceUtil.getProcessOrder(processOrderId);
+
+				processOrderId = processOrder.getProcessOrderId();
 				
 				
 			}
-	        
-        }
-        catch (Exception e) {
-	        // TODO: handle exception
-        }
-		
+			else {
+				// Find process order by processOrderId
+				ProcessOrder processOrder =
+				    ProcessOrderLocalServiceUtil.getProcessOrder(processOrderId);
+
+				processOrderId = processOrder.getProcessOrderId();
+				
+				curStepId = processOrder.getProcessStepId();
+			}
+			
+			
+
+			ProcessWorkflow processWorkflow = null;
+
+			// Find workflow
+			if (Validator.isNull(processWorkflowId)) {
+				processWorkflow =
+				    ProcessWorkflowLocalServiceUtil.getProcessWorkflowByEvent(
+				        serviceProcessId, toEngineMsg.getEvent(), curStepId);
+			}
+			else {
+				processWorkflow =
+				    ProcessWorkflowLocalServiceUtil.fetchProcessWorkflow(processWorkflowId);
+				
+			}
+
+			if (Validator.isNotNull(processWorkflow)) {
+				actionName = processWorkflow.getActionName();
+				
+				processStepId = processWorkflow.getPostProcessStepId();
+				
+				if (curStepId != 0) {
+					stepName = ProcessStepLocalServiceUtil.fetchProcessStep(curStepId).getStepName();
+				}
+				
+				long changeStepId = processWorkflow.getPostProcessStepId();
+				
+				String changeStatus = ProcessStepLocalServiceUtil.fetchProcessStep(changeStepId).getDossierStatus();
+				
+				//Update process order to SYSTEM
+				ProcessOrderLocalServiceUtil.updateProcessOrderStatus(
+				    processOrderId, PortletConstants.DOSSIER_STATUS_SYSTEM);
+				
+				// Update process order
+				ProcessOrderLocalServiceUtil.updateProcessOrder(
+				    processOrderId, processStepId,
+				    processWorkflowId, toEngineMsg.getActionUserId(),
+				    toEngineMsg.getActionDatetime(), toEngineMsg.getActionNote(),
+				    toEngineMsg.getAssignToUserId(), stepName, actionName,
+				    0, 0, PortletConstants.DOSSIER_STATUS_SYSTEM);
+				
+				toBackOffice.setProcessOrderId(processOrderId);
+				toBackOffice.setDossierId(toEngineMsg.getDossierId());
+				toBackOffice.setFileGroupId(toEngineMsg.getFileGroupId());
+				toBackOffice.setDossierStatus(changeStatus);
+				toBackOffice.setActionInfo(processWorkflow.getActionName());
+				toBackOffice.setMessageInfo(toEngineMsg.getActionNote());
+				
+				
+			} else {
+				//Send message to backoffice/out/destination
+				toBackOffice.setProcessOrderId(processOrderId);
+				toBackOffice.setDossierId(toEngineMsg.getDossierId());
+				toBackOffice.setFileGroupId(toEngineMsg.getFileGroupId());
+				toBackOffice.setDossierStatus(Integer.toString(PortletConstants.DOSSIER_STATUS_ERROR));
+				
+				MessageBusUtil.sendMessage("opencps/backoffice/out/destination", toBackOffice);
+			}
+			
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
 
 	}
 
