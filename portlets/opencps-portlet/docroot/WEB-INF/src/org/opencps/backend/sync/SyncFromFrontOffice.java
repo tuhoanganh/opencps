@@ -109,7 +109,21 @@ public class SyncFromFrontOffice implements MessageListener{
     			}
         		
         	} else if (Validator.equals(WebKeys.ACTION_RESUBMIT_VALUE, action)) {
-        		
+				Message msgToEngine = new Message();
+				
+				SendToEngineMsg engineMsg = new SendToEngineMsg();
+				
+				engineMsg.setDossierId(userActionMgs.getDossierId());
+				engineMsg.setFileGroupId(userActionMgs.getFileGroupId());
+				engineMsg.setEvent(WebKeys.ACTION_RESUBMIT_VALUE);
+				engineMsg.setActionDatetime(new Date());
+				
+				msgToEngine.put("msgToEngine", engineMsg);
+				
+				//Send message to ...engine/destination
+				MessageBusUtil.sendMessage("opencps/backoffice/engine/destination", msgToEngine);
+				
+				
         	} else if (Validator.equals(WebKeys.ACTION_CHANGE_VALUE, action)) {
         		
         	} else if (Validator.equals(WebKeys.ACTION_CANCEL_VALUE, action)) {

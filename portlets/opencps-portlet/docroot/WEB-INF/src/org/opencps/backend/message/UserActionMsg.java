@@ -107,9 +107,27 @@ public class UserActionMsg {
     
     	this.locale = locale;
     }
+	
+    /**
+     * @return the processOrderId
+     */
+    public long getProcessOrderId() {
+    
+    	return processOrderId;
+    }
+
+	
+    /**
+     * @param processOrderId the processOrderId to set
+     */
+    public void setProcessOrderId(long processOrderId) {
+    
+    	this.processOrderId = processOrderId;
+    }
 	protected String action;
 	protected long dossierId;
 	protected long fileGroupId;
 	protected long userId;
 	protected Locale locale;
+	protected long processOrderId;
 }
