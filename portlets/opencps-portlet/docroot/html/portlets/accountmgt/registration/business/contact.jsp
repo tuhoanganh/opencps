@@ -150,7 +150,7 @@
 
 <c:if test="<%= !isViewProfile && !isAdminViewProfile %>">
 	<aui:row>
-		<aui:input type="file" name="attachFile" label="businessAttachFile">
+		<aui:input type="file" name="attachFile" label="business-attach-file">
 			<aui:validator name="acceptFiles">
 				'<%= StringUtil.merge(PortletPropsValues.ACCOUNTMGT_FILE_TYPE) %>'
 			</aui:validator>
