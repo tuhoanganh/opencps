@@ -73,7 +73,7 @@ public class SyncFromBackOffice implements MessageListener{
     	
     	Message sendToCallBack = new Message();
     	
-    	sendToCallBack.put("toCallback", sendToCallBack);
+    	sendToCallBack.put("toCallback", toCallBack);
     	
     	MessageBusUtil.sendMessage("opencps/backoffice/engine/callback", sendToCallBack);
     }
