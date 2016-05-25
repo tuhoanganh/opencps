@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.opencps.backend.message.SendToBackOfficeMsg;
+import org.opencps.backend.message.SendToCallbackMsg;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 
@@ -45,7 +46,7 @@ public class SyncFromBackOffice implements MessageListener{
     public void receive(Message message)
         throws MessageListenerException {
     	
-    	doRevice(message);
+    	_doRecevie(message);
 
     }
     
@@ -53,7 +54,28 @@ public class SyncFromBackOffice implements MessageListener{
     private void _doRecevie(Message message) {
     	SendToBackOfficeMsg toBackOffice = (SendToBackOfficeMsg) message.get("toBackOffice");
     	
+    	boolean statusUpdate = false;
     	
+    	try {
+			statusUpdate = DossierLocalServiceUtil.updateDossierStatus(
+				toBackOffice.getDossierId(), toBackOffice.getFileGroupId(),toBackOffice.getReceptionNo(),toBackOffice.getEstimateDatetime(),
+				toBackOffice.getReceiveDatetime(), toBackOffice.getFinishDatetime(), "ACTOR", toBackOffice.getRequestCommand(),
+				toBackOffice.getActionInfo(), toBackOffice.getMessageInfo());
+        }
+        catch (Exception e) {
+	        // TODO: handle exception
+        }
+    	
+    	SendToCallbackMsg toCallBack = new SendToCallbackMsg();
+    	
+    	toCallBack.setProcessOrderId(toBackOffice.getProcessOrderId());
+    	toCallBack.setSyncStatus(statusUpdate ? "ok" : "error");
+    	
+    	Message sendToCallBack = new Message();
+    	
+    	sendToCallBack.put("toCallback", sendToCallBack);
+    	
+    	MessageBusUtil.sendMessage("opencps/backoffice/engine/callback", sendToCallBack);
     }
     
     

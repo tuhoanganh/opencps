@@ -60,7 +60,7 @@ public class SyncFromFrontOffice implements MessageListener{
         throws MessageListenerException {
 
         try {
-            doReceive(message);
+        	_doReceiveDossier(message);
         }
         catch (Exception e) {
             _log.error("Unable to process message " + message, e);
