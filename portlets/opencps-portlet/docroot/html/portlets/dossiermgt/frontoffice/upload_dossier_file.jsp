@@ -58,28 +58,11 @@
 			
 	PortletUtil.SplitDate spd = new PortletUtil.SplitDate(defaultDossierFileDate);
 	
-	String tempFolderName = user != null ? user.getScreenName() : StringPool.BLANK;
-	
-	FileEntry fileEntry = (FileEntry)request.getAttribute("DOCUMENT_LIBRARY_FILE_ENTRY");
-
-	long repositoryId = BeanParamUtil.getLong(fileEntry, request, "repositoryId");
-	
-	long folderId = BeanParamUtil.getLong(fileEntry, request, "folderId");
 	
 	long dossierPartId = ParamUtil.getLong(request, DossierFileDisplayTerms.DOSSIER_PART_ID);
 	
 	long dossierFileId = ParamUtil.getLong(request, DossierFileDisplayTerms.DOSSIER_FILE_ID);
 
-	if (repositoryId <= 0) {
-
-		// add_asset.jspf only passes in groupId
-
-		repositoryId = BeanParamUtil.getLong(fileEntry, request, "groupId");
-	}
-
-	int index = ParamUtil.getInteger(request, DossierFileDisplayTerms.INDEX);
-	
-	int level = ParamUtil.getInteger(request, DossierFileDisplayTerms.LEVEL);
 	
 	String groupName = ParamUtil.getString(request, DossierFileDisplayTerms.GROUP_NAME);
 	
@@ -89,14 +72,9 @@
 	
 	String partType = ParamUtil.getString(request, DossierFileDisplayTerms.PART_TYPE);
 	
-	JSONObject responseData = (JSONObject)request.getAttribute(WebKeys.RESPONSE_UPLOAD_TEMP_DOSSIER_FILE);
+	String redirectURL = ParamUtil.getString(request, "redirectURL");
 	
 %>
-
-<portlet:actionURL var="addTempFileURL" name="addTempFile">
-	<portlet:param name="<%=DossierFileDisplayTerms.TEMP_FOLDER_NAME %>" value="<%=tempFolderName%>"/>
-	<portlet:param name="<%=DossierFileDisplayTerms.FOLDE_ID %>" value="<%=String.valueOf(folderId)%>"/>
-</portlet:actionURL>
 
 <portlet:actionURL var="addAttachmentFileURL" name="addAttachmentFile">
 	<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier != null ? dossier.getDossierId() : 0L)%>"/>
@@ -116,9 +94,8 @@
 	action="<%=addAttachmentFileURL%>" 
 	enctype="multipart/form-data"
 >
-	<aui:input name="redirectURL" type="hidden" value="<%=currentURL %>"/>
-	<aui:input name="<%=DossierFileDisplayTerms.INDEX %>" type="hidden" value="<%=index %>"/>
-	<aui:input name="<%=DossierFileDisplayTerms.LEVEL %>" type="hidden" value="<%=level %>"/>
+	<aui:input name="redirectURL" type="hidden" value="<%=Validator.isNull(redirectURL) ? currentURL : redirectURL %>"/>
+
 	<aui:input name="<%=DossierFileDisplayTerms.PART_TYPE %>" type="hidden" value="<%=partType %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_ID %>" type="hidden" value="<%=dossierFileId %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.GROUP_NAME %>" type="hidden" value="<%=groupName %>"/>
@@ -182,10 +159,6 @@
 				<portlet:namespace/>closeDialog();
 			});
 		}
-		
-		var responseData = '<%=responseData != null ? responseData.toString() : StringPool.BLANK%>';
-		
-		var jsonData = {};
 		
 		if(success == 'true'){
 			

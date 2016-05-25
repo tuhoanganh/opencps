@@ -571,10 +571,10 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		    .findByPrimaryKey(dossierId);
 		dossier =
 		    getDossier(dossier, userId, govAgencyOrganizationId, syncStatus);
-		DossierStatus dossierStatus = dossierStatusLocalService
+		/*DossierStatus dossierStatus = dossierStatusLocalService
 		    .getDossierStatus(dossierId);
 		dossierStatus = getDossierStatus(
-		    dossierStatus, userId, govAgencyOrganizationId, syncStatus);
+		    dossierStatus, userId, govAgencyOrganizationId, syncStatus);*/
 
 		if (fileGroupId > 0) {
 			FileGroup fileGroup = fileGroupLocalService
@@ -629,8 +629,8 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		            .getMessageInfo(status, locale),
 		        now, level);
 
-		dossierStatusLocalService
-		    .updateDossierStatus(dossierStatus);
+		/*dossierStatusLocalService
+		    .updateDossierStatus(dossierStatus);*/
 
 		dossierPersistence
 		    .update(dossier);

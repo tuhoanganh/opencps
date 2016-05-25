@@ -1,5 +1,4 @@
 
-<%@page import="org.opencps.util.PortletPropsValues"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -19,6 +18,7 @@
  */
 %>
 
+<%@page import="org.opencps.util.PortletPropsValues"%>
 <%@page import="org.opencps.dossiermgt.model.DossierPart"%>
 <%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
@@ -70,7 +70,7 @@
 	String formData = StringPool.BLANK;
 
 	String alpacaSchema = dossierPart != null && Validator.isNotNull(dossierPart.getFormScript()) ? 
-			dossierPart.getFormScript() : PortletConstants.UNKNOW_ALPACA_SCHEMA;
+			dossierPart.getFormScript() : StringPool.BLANK;
 	
 	
 	DossierFile dossierFile = null;
@@ -104,8 +104,11 @@
 	<aui:input name="<%=DossierFileDisplayTerms.FORM_DATA %>" type="hidden" value=""/>
 	<aui:fieldset id="dynamicForm"></aui:fieldset>
 	<aui:fieldset>
-		<aui:button type="button" value="save" name="save" cssClass="saveForm"/>
-		<aui:button type="button" value="preview" name="preview"/>
+		<c:if test="<%=Validator.isNotNull(alpacaSchema) %>">
+			<aui:button type="button" value="save" name="save" cssClass="saveForm"/>
+			<aui:button type="button" value="preview" name="preview"/>
+		</c:if>
+			
 		<c:if test="<%=dossierFileId > 0%>">
 			<aui:button type="button" value="create-file" name="create-file"/>
 		</c:if>
@@ -113,7 +116,7 @@
 </aui:form>
 
 <aui:script>
-	var alpacaSchema = <%=alpacaSchema%>;
+	var alpacaSchema = <%=Validator.isNotNull(alpacaSchema) ? alpacaSchema : PortletConstants.UNKNOW_ALPACA_SCHEMA%>;
 	var formData = '<%=formData%>';
 	var dossierFileId = '<%=dossierFileId%>';
 	
