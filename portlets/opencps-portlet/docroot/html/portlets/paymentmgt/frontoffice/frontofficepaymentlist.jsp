@@ -141,16 +141,16 @@
 				String paymentStatusText = "";
 				switch (paymentFile.getPaymentStatus()) {
 				case 0:
-					paymentStatusText = LanguageUtil.get(locale, "on-processing");
+					paymentStatusText = LanguageUtil.get(pageContext, "on-processing");
 					break;
 				case 1:
-					paymentStatusText = LanguageUtil.get(locale, "requested");
+					paymentStatusText = LanguageUtil.get(pageContext, "requested");
 					break;
 				case 2:
-					paymentStatusText = LanguageUtil.get(locale, "approved");
+					paymentStatusText = LanguageUtil.get(pageContext, "approved");
 					break;
 				case 3:
-					paymentStatusText = LanguageUtil.get(locale, "rejected");
+					paymentStatusText = LanguageUtil.get(pageContext, "rejected");
 					break;
 				default:
 					paymentStatusText = "";		

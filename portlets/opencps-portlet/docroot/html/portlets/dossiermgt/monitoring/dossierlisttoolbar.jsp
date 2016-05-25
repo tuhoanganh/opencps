@@ -43,7 +43,7 @@
 							</label>
 							<liferay-ui:input-search id="keywords" name="keywords"
 								title='<%= LanguageUtil.get(portletConfig, locale, "keywords") %>'
-								placeholder="<%= LanguageUtil.get(portletConfig, locale, \"keywords\") %>" />
+								placeholder="<%= LanguageUtil.get(pageContext, \"search-dossier-placeholder\") %>" />
 						</aui:col>
 					</aui:row>
 				</div>

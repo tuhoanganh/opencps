@@ -46,15 +46,15 @@
 					<aui:form action="<%= searchUrl %>" method="post" name="fm">
 						<div class="toolbar_search_input" style="width: 98%">
 							<aui:row>
-								<aui:col width="65">
+								<aui:col>
 									<label>
 										<liferay-ui:message key="keywords"/>
 									</label>
-									<liferay-ui:input-search
+									<liferay-ui:input-search										
 										id="keywords"
 										name="keywords"
 										title='<%= LanguageUtil.get(portletConfig, locale, "keywords") %>'
-										placeholder="<%= LanguageUtil.get(portletConfig, locale, \"keywords\") %>" 
+										placeholder="<%= LanguageUtil.get(portletConfig, locale, \"search-dossier-placeholder\") %>" 
 									/>
 								</aui:col>
 							</aui:row>

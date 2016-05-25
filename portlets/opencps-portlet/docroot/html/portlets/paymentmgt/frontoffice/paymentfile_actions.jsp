@@ -25,6 +25,9 @@
 	ResultRow row =	(ResultRow) request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
 
 	PaymentFile paymentFile = (PaymentFile)row.getObject();
+	boolean isCash = (((paymentFile.getPaymentOptions()) & 1) != 0);
+	boolean isKeypay = (((paymentFile.getPaymentOptions() >>> 1) & 1) != 0);
+	boolean isBank = (((paymentFile.getPaymentOptions() >>> 2) & 1) != 0);
 	
 %>
 
@@ -34,7 +37,35 @@
 	<portlet:param name="mvcPath"
 		value="/html/portlets/paymentmgt/frontoffice/frontofficepaymentdetail.jsp" />
 	<portlet:param name="redirectURL" value="<%= currentURL %>" />
+	<portlet:param name="backURL" value="<%=currentURL %>"/>
+	
+</portlet:renderURL>
+
+<portlet:renderURL var="keypayTransaction">
+	<portlet:param name="<%= PaymentFileDisplayTerms.PAYMENT_FILE_ID %>"
+		value="<%=String.valueOf(paymentFile.getPaymentFileId()) %>" />
+	<portlet:param name="mvcPath"
+		value="/html/portlets/paymentmgt/frontoffice/frontofficekeypay.jsp" />
+	<portlet:param name="redirectURL" value="<%= currentURL %>" />
+	<portlet:param name="backURL" value="<%=currentURL %>"/>
+	
+</portlet:renderURL>
+
+<portlet:renderURL var="bankTransaction">
+	<portlet:param name="<%= PaymentFileDisplayTerms.PAYMENT_FILE_ID %>"
+		value="<%=String.valueOf(paymentFile.getPaymentFileId()) %>" />
+	<portlet:param name="mvcPath"
+		value="/html/portlets/paymentmgt/frontoffice/frontofficebank.jsp" />
+	<portlet:param name="redirectURL" value="<%= currentURL %>" />
+	<portlet:param name="backURL" value="<%=currentURL %>"/>
+	
 </portlet:renderURL>
 
 <liferay-ui:icon image="view" cssClass="view" message="view"
 	url="<%=viewPaymentDetail.toString()%>" />
+
+<liferay-ui:icon image="portlet" cssClass="view" message="keypay-transaction"
+	url="<%=keypayTransaction.toString()%>" />
+
+<liferay-ui:icon image="portlet" cssClass="view" message="bank-transaction"
+	url="<%=bankTransaction.toString()%>" />	
