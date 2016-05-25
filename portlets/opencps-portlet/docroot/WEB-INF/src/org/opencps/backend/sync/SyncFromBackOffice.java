@@ -20,6 +20,7 @@ package org.opencps.backend.sync;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.opencps.backend.message.SendToBackOfficeMsg;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 
@@ -48,6 +49,12 @@ public class SyncFromBackOffice implements MessageListener{
 
     }
     
+    
+    private void _doRecevie(Message message) {
+    	SendToBackOfficeMsg toBackOffice = (SendToBackOfficeMsg) message.get("toBackOffice");
+    	
+    	
+    }
     
     
     private void doRevice(Message message) {
