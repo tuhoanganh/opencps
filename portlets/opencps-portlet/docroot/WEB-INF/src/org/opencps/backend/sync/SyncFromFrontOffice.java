@@ -68,7 +68,7 @@ public class SyncFromFrontOffice implements MessageListener{
     }
     
     private void _doReceiveDossier(Message message) {
-    	UserActionMsg userActionMgs = (UserActionMsg) message.get("userActionMgs");
+    	UserActionMsg userActionMgs = (UserActionMsg) message.get("msgToEngine");
     	
     	String action = userActionMgs.getAction();
     	
