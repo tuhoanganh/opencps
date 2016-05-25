@@ -977,6 +977,60 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		return dossierPersistence
 		    .update(dossier);
 	}
+	
+	public boolean updateDossierStatus(
+	    long dossierId, long fileGroupId, String receptionNo,
+	    Date estimateDatetime, Date receiveDatetime, Date finishDatetime,
+	    String actor, String requestCommand, String actionInfo,
+	    String messageInfo) {
+
+		boolean result = false;
+		try {
+
+			Dossier dossier = dossierPersistence
+			    .findByPrimaryKey(dossierId);
+			dossier
+			    .setReceptionNo(receptionNo);
+			dossier
+			    .setEstimateDatetime(estimateDatetime);
+			dossier
+			    .setReceiveDatetime(receiveDatetime);
+			dossier
+			    .setFinishDatetime(finishDatetime);
+
+			int level = 0;
+			if (dossier
+			    .getDossierStatus() == PortletConstants.DOSSIER_STATUS_ERROR) {
+				level = 2;
+			}
+			else if (dossier
+			    .getDossierStatus() == PortletConstants.DOSSIER_STATUS_WAITING ||
+			    dossier
+			        .getDossierStatus() == PortletConstants.DOSSIER_STATUS_PAYING) {
+				level = 1;
+			}
+			dossierLogLocalService
+			    .addDossierLog(dossier
+			        .getUserId(), dossier
+			            .getGroupId(),
+			        dossier
+			            .getCompanyId(),
+			        dossierId, fileGroupId, dossier
+			            .getDossierStatus(),
+			        actor, requestCommand, actionInfo, messageInfo,
+			        level);
+
+			dossierPersistence
+			    .update(dossier);
+
+			result = true;
+		}
+		catch (Exception e) {
+			result = false;
+		}
+
+		return result;
+	}
 
 	public int countByGroupId(long groupId)
 	    throws SystemException {
