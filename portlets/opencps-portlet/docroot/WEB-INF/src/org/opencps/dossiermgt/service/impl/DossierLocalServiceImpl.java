@@ -30,7 +30,6 @@ import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.DossierStatus;
 import org.opencps.dossiermgt.model.FileGroup;
 import org.opencps.dossiermgt.search.DossierFileDisplayTerms;
-import org.opencps.dossiermgt.service.dossierlogLocalService;
 import org.opencps.dossiermgt.service.base.DossierLocalServiceBaseImpl;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.util.DateTimeUtil;
