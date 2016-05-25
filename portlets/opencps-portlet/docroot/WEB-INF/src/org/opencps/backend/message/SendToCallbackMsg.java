@@ -55,6 +55,24 @@ public class SendToCallbackMsg {
     
     	this.syncStatus = syncStatus;
     }
+	
+    /**
+     * @return the dossierStatus
+     */
+    public int getDossierStatus() {
+    
+    	return dossierStatus;
+    }
+
+	
+    /**
+     * @param dossierStatus the dossierStatus to set
+     */
+    public void setDossierStatus(int dossierStatus) {
+    
+    	this.dossierStatus = dossierStatus;
+    }
 	protected long processOrderId;
 	protected String syncStatus;
+	protected int dossierStatus;
 }

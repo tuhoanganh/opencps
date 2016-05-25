@@ -246,6 +246,23 @@ public class SendToBackOfficeMsg {
 	protected Date receiveDatetime;
 	protected Date estimateDatetime;
 	protected Date finishDatetime;
+	
+    /**
+     * @return the requestCommand
+     */
+    public String getRequestCommand() {
+    
+    	return requestCommand;
+    }
+
+	
+    /**
+     * @param requestCommand the requestCommand to set
+     */
+    public void setRequestCommand(String requestCommand) {
+    
+    	this.requestCommand = requestCommand;
+    }
 	protected String requestCommand;
 	
 
