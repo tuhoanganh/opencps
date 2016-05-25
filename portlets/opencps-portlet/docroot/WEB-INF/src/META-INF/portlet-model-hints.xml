@@ -235,9 +235,7 @@
 		</field>
 		<field name="serviceProcess" type="String" />
 		<field name="serviceMethod" type="String" />
-		<field name="serviceDossier" type="String" >
-			<hint name="max-length">500</hint>
-		</field>
+		<field name="serviceDossier" type="String" />
 		<field name="serviceCondition" type="String" />
 		<field name="serviceDuration" type="String" />
 		<field name="serviceActors" type="String" />
