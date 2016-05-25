@@ -56,9 +56,6 @@
 
 	DossierPart dossierPart = (DossierPart) request.getAttribute(WebKeys.DOSSIER_PART_ENTRY);
 	
-	Citizen citizen = (Citizen)request.getAttribute(WebKeys.CITIZEN_ENTRY);
-	
-	Business business = (Business)request.getAttribute(WebKeys.BUSINESS_ENTRY);
 
 	Date defaultDossierFileDate = dossierFile != null && dossierFile.getDossierFileDate() != null ? 
 			dossierFile.getDossierFileDate() : DateTimeUtil.convertStringToDate("01/01/1970");
