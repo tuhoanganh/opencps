@@ -39,7 +39,6 @@ import javax.servlet.http.HttpSession;
 
 import org.opencps.accountmgt.model.Business;
 import org.opencps.accountmgt.model.Citizen;
-import org.opencps.accountmgt.search.BusinessDisplayTerms;
 import org.opencps.backend.message.UserActionMsg;
 import org.opencps.datamgt.model.DictCollection;
 import org.opencps.datamgt.model.DictItem;
@@ -131,6 +130,12 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	public void addAttachmentFile(
 	    ActionRequest actionRequest, ActionResponse actionResponse)
 	    throws IOException {
+		
+		HttpServletRequest request = PortalUtil
+		    .getHttpServletRequest(actionRequest);
+
+		HttpSession session = request
+		    .getSession();
 
 		UploadPortletRequest uploadPortletRequest = PortalUtil
 		    .getUploadPortletRequest(actionRequest);
@@ -151,17 +156,16 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		long fileGroupId = ParamUtil
 		    .getLong(uploadPortletRequest, DossierDisplayTerms.FILE_GROUP_ID);
 
-		long mappingOrganizationId = ParamUtil
-		    .getLong(
-		        actionRequest,
-		        BusinessDisplayTerms.BUSINESS_MAPPINGORGANIZATIONID);
-
+	
 		long size = uploadPortletRequest
 		    .getSize(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
 
-		long ownerOrganizationId = 0;
-
-		long ownerUserId = 0;
+		long ownerUserId = GetterUtil
+			    .getLong(session
+			        .getAttribute(WebKeys.ACCOUNT_OWNERUSERID));
+			long ownerOrganizationId = GetterUtil
+			    .getLong(session
+			        .getAttribute(WebKeys.ACCOUNT_OWNERORGANIZATIONID));
 
 		int dossierFileType = ParamUtil
 		    .getInteger(
@@ -172,10 +176,10 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		    .getInteger(
 		        uploadPortletRequest,
 		        DossierFileDisplayTerms.DOSSIER_FILE_ORIGINAL);
-		String accountType = ParamUtil
-		    .getString(
-		        actionRequest, DossierDisplayTerms.ACCOUNT_TYPE,
-		        PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN);
+		
+		String accountType = GetterUtil
+			    .getString(session
+			        .getAttribute(WebKeys.ACCOUNT_TYPE));
 
 		String displayName = ParamUtil
 		    .getString(
@@ -236,12 +240,11 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 			}
 			else if (accountType
-			    .equals(PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS) &&
-			    mappingOrganizationId > 0) {
+			    .equals(PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS)) {
 				dossierDestinationFolder = PortletUtil
 				    .getBusinessDossierDestinationFolder(serviceContext
-				        .getScopeGroupId(), mappingOrganizationId);
-				ownerOrganizationId = mappingOrganizationId;
+				        .getScopeGroupId(), ownerOrganizationId);
+				
 			}
 
 			if (dossier != null) {
@@ -322,6 +325,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				}
 			}
 			else {
+				actionResponse.setRenderParameter("redirectURL", redirectURL);
 				actionResponse.setRenderParameter("jspPage",
 			        "/html/portlets/dossiermgt/frontoffice/upload_dossier_file.jsp");
 				   
