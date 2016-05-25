@@ -113,6 +113,19 @@ public class PaymentFileLocalServiceClpInvoker {
 		_methodName43 = "setBeanIdentifier";
 
 		_methodParameterTypes43 = new String[] { "java.lang.String" };
+
+		_methodName48 = "countCustomerPaymentFile";
+
+		_methodParameterTypes48 = new String[] {
+				"long", "java.lang.String", "boolean", "long", "int"
+			};
+
+		_methodName49 = "searchCustomerPaymentFile";
+
+		_methodParameterTypes49 = new String[] {
+				"long", "java.lang.String", "boolean", "long", "int", "int",
+				"int", "com.liferay.portal.kernel.util.OrderByComparator"
+			};
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -216,6 +229,27 @@ public class PaymentFileLocalServiceClpInvoker {
 			return null;
 		}
 
+		if (_methodName48.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes48, parameterTypes)) {
+			return PaymentFileLocalServiceUtil.countCustomerPaymentFile(((Long)arguments[0]).longValue(),
+				(java.lang.String)arguments[1],
+				((Boolean)arguments[2]).booleanValue(),
+				((Long)arguments[3]).longValue(),
+				((Integer)arguments[4]).intValue());
+		}
+
+		if (_methodName49.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes49, parameterTypes)) {
+			return PaymentFileLocalServiceUtil.searchCustomerPaymentFile(((Long)arguments[0]).longValue(),
+				(java.lang.String)arguments[1],
+				((Boolean)arguments[2]).booleanValue(),
+				((Long)arguments[3]).longValue(),
+				((Integer)arguments[4]).intValue(),
+				((Integer)arguments[5]).intValue(),
+				((Integer)arguments[6]).intValue(),
+				(com.liferay.portal.kernel.util.OrderByComparator)arguments[7]);
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -255,4 +289,8 @@ public class PaymentFileLocalServiceClpInvoker {
 	private String[] _methodParameterTypes42;
 	private String _methodName43;
 	private String[] _methodParameterTypes43;
+	private String _methodName48;
+	private String[] _methodParameterTypes48;
+	private String _methodName49;
+	private String[] _methodParameterTypes49;
 }

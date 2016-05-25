@@ -30,6 +30,7 @@ public class PaymentFileDisplayTerms extends DisplayTerms {
 	public static final String MODIFIED_DATE = "modifiedDate";
 	public static final String USER_ID = "userId";
 
+	public static final String PAYMENT_FILE_ID = "paymentFileId";
 	public static final String DOSSIER_ID = "dossierId";
 	public static final String FILE_GROUP_ID = "fileGroupId";
 	public static final String OWNER_USER_ID = "ownerUserId";

@@ -14,7 +14,13 @@
 
 package org.opencps.paymentmgt.service.impl;
 
+import java.util.List;
+
+import org.opencps.dossiermgt.model.Dossier;
+import org.opencps.paymentmgt.model.PaymentFile;
 import org.opencps.paymentmgt.service.base.PaymentFileLocalServiceBaseImpl;
+
+import com.liferay.portal.kernel.util.OrderByComparator;
 
 /**
  * The implementation of the Payment file local service.
@@ -36,4 +42,13 @@ public class PaymentFileLocalServiceImpl extends PaymentFileLocalServiceBaseImpl
 	 *
 	 * Never reference this interface directly. Always use {@link org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil} to access the Payment file local service.
 	 */
+	
+	public int countCustomerPaymentFile(long groupId, String keyword, boolean isCitizen, long customerId, int paymentStatus) {
+		return paymentFileFinder.countCustomerPaymentFile(groupId, keyword, isCitizen, customerId, paymentStatus);
+	}
+	
+	public List<PaymentFile> searchCustomerPaymentFile(long groupId, String keyword, boolean isCitizen, long customerId, int paymentStatus, int start, int end, OrderByComparator obc) {
+		return paymentFileFinder.searchCustomerPaymentFile(groupId, keyword, isCitizen, customerId, paymentStatus, start, end, obc);
+	}
+	
 }
