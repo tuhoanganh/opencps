@@ -150,8 +150,6 @@ public class BackOfficeProcessEngine implements MessageListener {
 				curStepId = processOrder.getProcessStepId();
 			}
 			
-			
-
 			ProcessWorkflow processWorkflow = null;
 
 			// Find workflow
@@ -177,7 +175,13 @@ public class BackOfficeProcessEngine implements MessageListener {
 				
 				long changeStepId = processWorkflow.getPostProcessStepId();
 				
-				String changeStatus = ProcessStepLocalServiceUtil.fetchProcessStep(changeStepId).getDossierStatus();
+				ProcessStep changeStep = ProcessStepLocalServiceUtil.getProcessStep(changeStepId);
+				
+				String changeStatus = StringPool.BLANK;
+				
+				if (Validator.isNotNull(changeStep)) {
+					changeStatus = changeStep.getDossierStatus();
+				}
 				
 				//Update process order to SYSTEM
 				ProcessOrderLocalServiceUtil.updateProcessOrderStatus(
@@ -197,7 +201,27 @@ public class BackOfficeProcessEngine implements MessageListener {
 				toBackOffice.setDossierStatus(changeStatus);
 				toBackOffice.setActionInfo(processWorkflow.getActionName());
 				toBackOffice.setMessageInfo(toEngineMsg.getActionNote());
+				toBackOffice.setSendResult(0);
+				toBackOffice.setRequestPayment(0);
+				toBackOffice.setUpdateDatetime(new Date());
 				
+				toBackOffice.setReceptionNo(DossierNoGenerator.noGenarator());
+				
+				toBackOffice.setReceiveDatetime(new Date());
+				
+				toBackOffice.setEstimateDatetime(toEngineMsg.getEstimateDatetime());
+				
+				if (processWorkflow.getIsFinishStep()) {
+					toBackOffice.setFinishDatetime(new Date());
+				}
+				
+				
+				Message sendToBackOffice = new Message();
+				
+				sendToBackOffice.put("toBackOffice", toBackOffice);
+				
+				
+				MessageBusUtil.sendMessage("opencps/backoffice/out/destination", sendToBackOffice);
 				
 			} else {
 				//Send message to backoffice/out/destination
@@ -206,7 +230,11 @@ public class BackOfficeProcessEngine implements MessageListener {
 				toBackOffice.setFileGroupId(toEngineMsg.getFileGroupId());
 				toBackOffice.setDossierStatus(Integer.toString(PortletConstants.DOSSIER_STATUS_ERROR));
 				
-				MessageBusUtil.sendMessage("opencps/backoffice/out/destination", toBackOffice);
+				Message sendToBackOffice = new Message();
+				
+				sendToBackOffice.put("toBackOffice", toBackOffice);
+				
+				MessageBusUtil.sendMessage("opencps/backoffice/out/destination", sendToBackOffice);
 			}
 			
 		}

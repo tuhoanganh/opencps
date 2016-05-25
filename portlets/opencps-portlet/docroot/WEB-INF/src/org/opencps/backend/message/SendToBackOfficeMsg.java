@@ -246,4 +246,7 @@ public class SendToBackOfficeMsg {
 	protected Date receiveDatetime;
 	protected Date estimateDatetime;
 	protected Date finishDatetime;
+	protected String requestCommand;
+	
+
 }
