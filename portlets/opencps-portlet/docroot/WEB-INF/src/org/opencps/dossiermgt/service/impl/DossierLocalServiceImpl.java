@@ -985,7 +985,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	}
 	
 	public boolean updateDossierStatus(
-	    long dossierId, long fileGroupId, String receptionNo,
+	    long dossierId, long fileGroupId, int dossierStatus, String receptionNo,
 	    Date estimateDatetime, Date receiveDatetime, Date finishDatetime,
 	    String actor, String requestCommand, String actionInfo,
 	    String messageInfo) {
@@ -1003,6 +1003,8 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 			    .setReceiveDatetime(receiveDatetime);
 			dossier
 			    .setFinishDatetime(finishDatetime);
+			
+			dossier.setDossierStatus(dossierStatus);
 
 			int level = 0;
 			if (dossier
@@ -1021,8 +1023,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 			            .getGroupId(),
 			        dossier
 			            .getCompanyId(),
-			        dossierId, fileGroupId, dossier
-			            .getDossierStatus(),
+			        dossierId, fileGroupId, dossierStatus,
 			        actor, requestCommand, actionInfo, messageInfo,
 			        level);
 
