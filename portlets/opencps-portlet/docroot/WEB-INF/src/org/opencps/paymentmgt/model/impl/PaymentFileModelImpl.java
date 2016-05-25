@@ -82,6 +82,7 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 			{ "requestDatetime", Types.TIMESTAMP },
 			{ "amount", Types.DOUBLE },
 			{ "requestNote", Types.VARCHAR },
+			{ "paymentOptions", Types.INTEGER },
 			{ "keypayUrl", Types.VARCHAR },
 			{ "keypayTransactionId", Types.BIGINT },
 			{ "keypayGoodCode", Types.VARCHAR },
@@ -100,7 +101,7 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 			{ "invoiceIssueNo", Types.VARCHAR },
 			{ "invoiceNo", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table opencps_payment_file (paymentFileId LONG not null primary key,companyId LONG,groupId LONG,userId LONG,createDate DATE null,modifiedDate DATE null,uuid_ VARCHAR(75) null,dossierId LONG,fileGroupId LONG,ownerUserId LONG,ownerOrganizationId LONG,govAgencyOrganizationId LONG,paymentName VARCHAR(75) null,requestDatetime DATE null,amount DOUBLE,requestNote VARCHAR(75) null,keypayUrl VARCHAR(75) null,keypayTransactionId LONG,keypayGoodCode VARCHAR(20) null,keypayMerchantCode VARCHAR(75) null,bankInfo VARCHAR(75) null,placeInfo VARCHAR(75) null,paymentStatus INTEGER,paymentMethod INTEGER,confirmDatetime DATE null,confirmFileEntryId LONG,approveDatetime DATE null,accountUserName VARCHAR(75) null,approveNote VARCHAR(75) null,govAgencyTaxNo VARCHAR(75) null,invoiceTemplateNo VARCHAR(75) null,invoiceIssueNo VARCHAR(75) null,invoiceNo VARCHAR(75) null)";
+	public static final String TABLE_SQL_CREATE = "create table opencps_payment_file (paymentFileId LONG not null primary key,companyId LONG,groupId LONG,userId LONG,createDate DATE null,modifiedDate DATE null,uuid_ VARCHAR(75) null,dossierId LONG,fileGroupId LONG,ownerUserId LONG,ownerOrganizationId LONG,govAgencyOrganizationId LONG,paymentName VARCHAR(75) null,requestDatetime DATE null,amount DOUBLE,requestNote VARCHAR(75) null,paymentOptions INTEGER,keypayUrl VARCHAR(75) null,keypayTransactionId LONG,keypayGoodCode VARCHAR(20) null,keypayMerchantCode VARCHAR(75) null,bankInfo VARCHAR(75) null,placeInfo VARCHAR(75) null,paymentStatus INTEGER,paymentMethod INTEGER,confirmDatetime DATE null,confirmFileEntryId LONG,approveDatetime DATE null,accountUserName VARCHAR(75) null,approveNote VARCHAR(75) null,govAgencyTaxNo VARCHAR(75) null,invoiceTemplateNo VARCHAR(75) null,invoiceIssueNo VARCHAR(75) null,invoiceNo VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table opencps_payment_file";
 	public static final String ORDER_BY_JPQL = " ORDER BY paymentFile.paymentFileId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY opencps_payment_file.paymentFileId ASC";
@@ -144,6 +145,7 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 		model.setRequestDatetime(soapModel.getRequestDatetime());
 		model.setAmount(soapModel.getAmount());
 		model.setRequestNote(soapModel.getRequestNote());
+		model.setPaymentOptions(soapModel.getPaymentOptions());
 		model.setKeypayUrl(soapModel.getKeypayUrl());
 		model.setKeypayTransactionId(soapModel.getKeypayTransactionId());
 		model.setKeypayGoodCode(soapModel.getKeypayGoodCode());
@@ -241,6 +243,7 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 		attributes.put("requestDatetime", getRequestDatetime());
 		attributes.put("amount", getAmount());
 		attributes.put("requestNote", getRequestNote());
+		attributes.put("paymentOptions", getPaymentOptions());
 		attributes.put("keypayUrl", getKeypayUrl());
 		attributes.put("keypayTransactionId", getKeypayTransactionId());
 		attributes.put("keypayGoodCode", getKeypayGoodCode());
@@ -359,6 +362,12 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 
 		if (requestNote != null) {
 			setRequestNote(requestNote);
+		}
+
+		Integer paymentOptions = (Integer)attributes.get("paymentOptions");
+
+		if (paymentOptions != null) {
+			setPaymentOptions(paymentOptions);
 		}
 
 		String keypayUrl = (String)attributes.get("keypayUrl");
@@ -677,6 +686,17 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 
 	@JSON
 	@Override
+	public int getPaymentOptions() {
+		return _paymentOptions;
+	}
+
+	@Override
+	public void setPaymentOptions(int paymentOptions) {
+		_paymentOptions = paymentOptions;
+	}
+
+	@JSON
+	@Override
 	public String getKeypayUrl() {
 		if (_keypayUrl == null) {
 			return StringPool.BLANK;
@@ -960,6 +980,7 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 		paymentFileImpl.setRequestDatetime(getRequestDatetime());
 		paymentFileImpl.setAmount(getAmount());
 		paymentFileImpl.setRequestNote(getRequestNote());
+		paymentFileImpl.setPaymentOptions(getPaymentOptions());
 		paymentFileImpl.setKeypayUrl(getKeypayUrl());
 		paymentFileImpl.setKeypayTransactionId(getKeypayTransactionId());
 		paymentFileImpl.setKeypayGoodCode(getKeypayGoodCode());
@@ -1104,6 +1125,8 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 			paymentFileCacheModel.requestNote = null;
 		}
 
+		paymentFileCacheModel.paymentOptions = getPaymentOptions();
+
 		paymentFileCacheModel.keypayUrl = getKeypayUrl();
 
 		String keypayUrl = paymentFileCacheModel.keypayUrl;
@@ -1223,7 +1246,7 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(67);
+		StringBundler sb = new StringBundler(69);
 
 		sb.append("{paymentFileId=");
 		sb.append(getPaymentFileId());
@@ -1257,6 +1280,8 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 		sb.append(getAmount());
 		sb.append(", requestNote=");
 		sb.append(getRequestNote());
+		sb.append(", paymentOptions=");
+		sb.append(getPaymentOptions());
 		sb.append(", keypayUrl=");
 		sb.append(getKeypayUrl());
 		sb.append(", keypayTransactionId=");
@@ -1298,7 +1323,7 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(103);
+		StringBundler sb = new StringBundler(106);
 
 		sb.append("<model><model-name>");
 		sb.append("org.opencps.paymentmgt.model.PaymentFile");
@@ -1367,6 +1392,10 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 		sb.append(
 			"<column><column-name>requestNote</column-name><column-value><![CDATA[");
 		sb.append(getRequestNote());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>paymentOptions</column-name><column-value><![CDATA[");
+		sb.append(getPaymentOptions());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>keypayUrl</column-name><column-value><![CDATA[");
@@ -1464,6 +1493,7 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 	private Date _requestDatetime;
 	private double _amount;
 	private String _requestNote;
+	private int _paymentOptions;
 	private String _keypayUrl;
 	private long _keypayTransactionId;
 	private String _keypayGoodCode;

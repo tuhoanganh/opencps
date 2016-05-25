@@ -38,7 +38,7 @@ public class PaymentFileCacheModel implements CacheModel<PaymentFile>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(67);
+		StringBundler sb = new StringBundler(69);
 
 		sb.append("{paymentFileId=");
 		sb.append(paymentFileId);
@@ -72,6 +72,8 @@ public class PaymentFileCacheModel implements CacheModel<PaymentFile>,
 		sb.append(amount);
 		sb.append(", requestNote=");
 		sb.append(requestNote);
+		sb.append(", paymentOptions=");
+		sb.append(paymentOptions);
 		sb.append(", keypayUrl=");
 		sb.append(keypayUrl);
 		sb.append(", keypayTransactionId=");
@@ -169,6 +171,8 @@ public class PaymentFileCacheModel implements CacheModel<PaymentFile>,
 		else {
 			paymentFileImpl.setRequestNote(requestNote);
 		}
+
+		paymentFileImpl.setPaymentOptions(paymentOptions);
 
 		if (keypayUrl == null) {
 			paymentFileImpl.setKeypayUrl(StringPool.BLANK);
@@ -291,6 +295,7 @@ public class PaymentFileCacheModel implements CacheModel<PaymentFile>,
 		requestDatetime = objectInput.readLong();
 		amount = objectInput.readDouble();
 		requestNote = objectInput.readUTF();
+		paymentOptions = objectInput.readInt();
 		keypayUrl = objectInput.readUTF();
 		keypayTransactionId = objectInput.readLong();
 		keypayGoodCode = objectInput.readUTF();
@@ -349,6 +354,8 @@ public class PaymentFileCacheModel implements CacheModel<PaymentFile>,
 		else {
 			objectOutput.writeUTF(requestNote);
 		}
+
+		objectOutput.writeInt(paymentOptions);
 
 		if (keypayUrl == null) {
 			objectOutput.writeUTF(StringPool.BLANK);
@@ -452,6 +459,7 @@ public class PaymentFileCacheModel implements CacheModel<PaymentFile>,
 	public long requestDatetime;
 	public double amount;
 	public String requestNote;
+	public int paymentOptions;
 	public String keypayUrl;
 	public long keypayTransactionId;
 	public String keypayGoodCode;

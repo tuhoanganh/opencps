@@ -132,9 +132,55 @@
 			<tr>
 				<td class="col-left"><liferay-ui:message key="payment-options"></liferay-ui:message></td>
 				<td class="col-right">
-					
+					<%
+						boolean isCash = (((paymentFile.getPaymentOptions()) & 1) != 0);
+						boolean isKeypay = (((paymentFile.getPaymentOptions() >>> 1) & 1) != 0);
+						boolean isBank = (((paymentFile.getPaymentOptions() >>> 2) & 1) != 0);
+					%>
+					<c:if test="<%= isCash %>">
+						[<liferay-ui:message key="cash"></liferay-ui:message>]&nbsp;
+					</c:if>
+					<c:if test="<%= isKeypay %>">
+						[<liferay-ui:message key="keypay"></liferay-ui:message>]&nbsp;
+					</c:if>
+					<c:if test="<%= isBank %>">
+						[<liferay-ui:message key="bank"></liferay-ui:message>]
+					</c:if>
 				</td>
 			</tr>
+			<c:if test="<%= isBank %>">
+			<tr>
+				<td class="col-left"><liferay-ui:message key="bank-info"></liferay-ui:message></td>
+				<td class="col-right">
+					<%= paymentFile.getBankInfo() %>
+				</td>
+			</tr>
+			</c:if>
+			<c:if test="<%= isCash %>">
+			<tr>
+				<td class="col-left"><liferay-ui:message key="place-info"></liferay-ui:message></td>
+				<td class="col-right">
+					<%= paymentFile.getPlaceInfo() %>
+				</td>
+			</tr>
+			</c:if>
+			<tr>
+				<td class="col-left"><liferay-ui:message key="payment-status-detail"></liferay-ui:message></td>
+				<td class="col-right">
+					<c:if test="<%= paymentFile.getPaymentStatus() == 0 %>">
+						<liferay-ui:message key="on-processing"></liferay-ui:message>
+					</c:if>
+					<c:if test="<%= paymentFile.getPaymentStatus() == 1 %>">
+						<liferay-ui:message key="requested"></liferay-ui:message>
+					</c:if>
+					<c:if test="<%= paymentFile.getPaymentStatus() == 2 %>">
+						<liferay-ui:message key="approved"></liferay-ui:message>
+					</c:if>
+					<c:if test="<%= paymentFile.getPaymentStatus() == 3 %>">
+						<liferay-ui:message key="rejected"></liferay-ui:message>
+					</c:if>
+				</td>
+			</tr>			
 		</table>
 	</c:when>
 	<c:otherwise>

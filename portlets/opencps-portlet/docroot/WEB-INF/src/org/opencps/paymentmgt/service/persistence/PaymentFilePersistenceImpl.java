@@ -337,6 +337,7 @@ public class PaymentFilePersistenceImpl extends BasePersistenceImpl<PaymentFile>
 		paymentFileImpl.setRequestDatetime(paymentFile.getRequestDatetime());
 		paymentFileImpl.setAmount(paymentFile.getAmount());
 		paymentFileImpl.setRequestNote(paymentFile.getRequestNote());
+		paymentFileImpl.setPaymentOptions(paymentFile.getPaymentOptions());
 		paymentFileImpl.setKeypayUrl(paymentFile.getKeypayUrl());
 		paymentFileImpl.setKeypayTransactionId(paymentFile.getKeypayTransactionId());
 		paymentFileImpl.setKeypayGoodCode(paymentFile.getKeypayGoodCode());
