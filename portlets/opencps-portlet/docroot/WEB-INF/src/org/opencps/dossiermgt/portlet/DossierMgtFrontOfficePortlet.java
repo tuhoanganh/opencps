@@ -40,6 +40,7 @@ import javax.servlet.http.HttpSession;
 import org.opencps.accountmgt.model.Business;
 import org.opencps.accountmgt.model.Citizen;
 import org.opencps.accountmgt.search.BusinessDisplayTerms;
+import org.opencps.backend.message.UserActionMsg;
 import org.opencps.datamgt.model.DictCollection;
 import org.opencps.datamgt.model.DictItem;
 import org.opencps.datamgt.service.DictCollectionLocalServiceUtil;
@@ -591,12 +592,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 						    .substring(fileExportDir
 						        .lastIndexOf(StringPool.SLASH) + 1, fileExportDir
 						            .length());
-						System.out
-						    .println(sourceFileName);
-						
-						System.out
-					    	.println(file.getName());
-						
 						String mimeType = MimeTypesUtil
 						    .getContentType(file);
 
@@ -1540,7 +1535,21 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 			switch (dossierStatus) {
 			case PortletConstants.DOSSIER_STATUS_NEW:
+				
+				UserActionMsg actionMsg = new UserActionMsg();
 
+				actionMsg.setAction(WebKeys.ACTION_SUBMIT_VALUE);
+				
+				actionMsg.setDossierId(dossierId);
+				
+				actionMsg.setFileGroupId(fileGroupId);
+				
+				actionMsg.setLocale(serviceContext
+				        .getLocale());
+				
+				actionMsg.setUserId(serviceContext
+				        .getUserId());
+				
 				Message message = new Message();
 				message
 				    .put("action", "submit");
@@ -1564,6 +1573,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				message
 				    .put("userId", serviceContext
 				        .getUserId());
+				
+				message.put("msgToEngine", actionMsg);
 
 				MessageBusUtil
 				    .sendMessage(
