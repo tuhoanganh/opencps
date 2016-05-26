@@ -70,7 +70,7 @@ public class SyncFromBackOffice implements MessageListener{
     	
     	toCallBack.setProcessOrderId(toBackOffice.getProcessOrderId());
     	toCallBack.setSyncStatus(statusUpdate ? "ok" : "error");
-    	
+    	toCallBack.setDossierStatus(Integer.parseInt(toBackOffice.getDossierStatus()));
     	Message sendToCallBack = new Message();
     	
     	sendToCallBack.put("toCallback", toCallBack);
@@ -116,6 +116,8 @@ public class SyncFromBackOffice implements MessageListener{
     	msg.put("_dossierStatus", dossierStatus);
     	
     	MessageBusUtil.sendMessage("opencps/backoffice/engine/callback", msg);
+    	
+    	
     	
     }
 

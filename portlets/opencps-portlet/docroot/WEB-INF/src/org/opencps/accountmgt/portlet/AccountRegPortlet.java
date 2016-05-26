@@ -173,7 +173,6 @@ public class AccountRegPortlet extends MVCPortlet {
 		    ParamUtil.getString(
 		        uploadPortletRequest,
 		        BusinessDisplayTerms.BUSINESS_REPRESENTATIVEROLE);
-
 		String contentType =
 		    uploadPortletRequest.getContentType(BusinessDisplayTerms.BUSINESS_ATTACHFILE);
 
@@ -189,9 +188,9 @@ public class AccountRegPortlet extends MVCPortlet {
 		Date defaultBirthDate = DateTimeUtil.convertStringToDate("01/01/1970");
 
 		PortletUtil.SplitDate spd = new PortletUtil.SplitDate(defaultBirthDate);
-
-		contentType = MimeTypesUtil.getContentType(contentType);
-
+		contentType =
+					    Validator.isNotNull(contentType)
+					        ? MimeTypesUtil.getContentType(contentType) : StringPool.BLANK;
 		String title = "Business File";
 
 		DictItem city = null;

@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  * OpenCPS is the open source Core Public Services software
  * Copyright (C) 2016-present OpenCPS community
@@ -14,6 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
+
 package org.opencps.dossiermgt.service.impl;
 
 import java.io.InputStream;
@@ -69,7 +71,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 * {@link org.opencps.dossiermgt.service.DossierLocalServiceUtil} to access
 	 * the dossier local service.
 	 */
-
+	
 	/**
 	 * @param userId
 	 * @param groupId
@@ -93,29 +95,21 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	    String actionInfo, String messageInfo)
 	    throws PortalException, SystemException {
 
-		Dossier dossier = dossierPersistence
-		    .fetchByPrimaryKey(dossierId);
+		Dossier dossier = dossierPersistence.fetchByPrimaryKey(dossierId);
 
-		dossier
-		    .setReceptionNo(receptionNo);
-		dossier
-		    .setEstimateDatetime(estimateDatetime);
-		dossier
-		    .setReceiveDatetime(receiveDatetime);
-		dossier
-		    .setFinishDatetime(finishDatetime);
-		dossier
-		    .setDossierStatus(dossierStatus);
+		dossier.setReceptionNo(receptionNo);
+		dossier.setEstimateDatetime(estimateDatetime);
+		dossier.setReceiveDatetime(receiveDatetime);
+		dossier.setFinishDatetime(finishDatetime);
+		dossier.setDossierStatus(dossierStatus);
 
-		dossierPersistence
-		    .update(dossier);
+		dossierPersistence.update(dossier);
 
 		// add DossierLog
 
-		dossierLogLocalService
-		    .addDossierLog(
-		        userId, groupId, companyId, dossierId, fileGroupId, 2,
-		        actionInfo, messageInfo, new Date(), 1);
+		dossierLogLocalService.addDossierLog(
+		    userId, groupId, companyId, dossierId, fileGroupId, 2, actionInfo,
+		    messageInfo, new Date(), 1);
 	}
 
 	public Dossier addDossier(
@@ -1067,43 +1061,27 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		    .searchDossier(groupId, keyword, dossierStatus, start, end, obc);
 	}
 
-	public int countDossierByStatus(long groupId, int dossierStatus)
-	    throws SystemException {
-
-		return dossierPersistence
-		    .countByG_DS(groupId, dossierStatus);
+	public int countDossierByStatus(long groupId, int dossierStatus) throws SystemException {
+		return dossierPersistence.countByG_DS(groupId, dossierStatus);
 	}
-
+	
 	public List<Dossier> getDossierByStatus(
 	    long groupId, int dossierStatus, int start, int end,
-	    OrderByComparator obc)
-	    throws SystemException {
+	    OrderByComparator obc) throws SystemException {
 
 		return dossierPersistence
 		    .findByG_DS(groupId, dossierStatus, start, end, obc);
 	}
-
-	public int countDossierByKeywordDomainAndStatus(
-	    long groupId, String keyword, String domainCode, int dossierStatus) {
-
-		return dossierFinder
-		    .countDossierByKeywordDomainAndStatus(
-		        groupId, keyword, domainCode, dossierStatus);
+	
+	public int countDossierByKeywordDomainAndStatus(long groupId, String keyword, String domainCode, int dossierStatus) {
+		return dossierFinder.countDossierByKeywordDomainAndStatus(groupId, keyword, domainCode, dossierStatus);
 	}
-
-	public List<Dossier> searchDossierByKeywordDomainAndStatus(
-	    long groupId, String keyword, String domainCode, int dossierStatus,
-	    int start, int end, OrderByComparator obc) {
-
-		return dossierFinder
-		    .searchDossierByKeywordDomainAndStatus(
-		        groupId, keyword, domainCode, dossierStatus, start, end, obc);
+	
+	public List<Dossier> searchDossierByKeywordDomainAndStatus(long groupId, String keyword, String domainCode, int dossierStatus, int start, int end, OrderByComparator obc) {
+		return dossierFinder.searchDossierByKeywordDomainAndStatus(groupId, keyword, domainCode, dossierStatus, start, end, obc);
 	}
-
-	public Dossier getDossierByReceptionNo(String receptionNo)
-	    throws SystemException {
-
-		return dossierPersistence
-		    .fetchByReceptionNo(receptionNo);
+	
+	public Dossier getDossierByReceptionNo(String receptionNo) throws SystemException {
+		return dossierPersistence.fetchByReceptionNo(receptionNo);
 	}
 }
