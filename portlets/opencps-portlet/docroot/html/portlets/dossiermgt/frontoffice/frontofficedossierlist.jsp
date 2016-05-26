@@ -58,7 +58,7 @@
 			DossierSearchTerms searchTerms = (DossierSearchTerms)searchContainer.getSearchTerms();
 			
 			int dossierStatus = searchTerms.getDossierStatus();
-
+			
 			try{
 				
 				%>

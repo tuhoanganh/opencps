@@ -118,7 +118,7 @@ public class DossierDisplayTerms extends DisplayTerms {
 		    .getString(portletRequest, RECEPTION_NO);
 
 		dossierStatus = ParamUtil
-		    .getInteger(portletRequest, DOSSIER_STATUS);
+		    .getInteger(portletRequest, DOSSIER_STATUS, -1);
 
 		userId = ParamUtil
 		    .getLong(portletRequest, USER_ID);

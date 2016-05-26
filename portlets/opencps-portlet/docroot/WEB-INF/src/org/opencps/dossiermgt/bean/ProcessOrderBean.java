@@ -154,6 +154,50 @@ public class ProcessOrderBean {
 
 		return _actionUserId;
 	}
+	
+	public String getActionUserName() {
+
+		User user = null;
+		try {
+			user = UserLocalServiceUtil
+			    .fetchUserById(this
+			        .getActionUserId());
+
+		}
+		catch (Exception e) {
+			_log
+			    .error(e
+			        .getMessage());
+		}
+
+		this._actionUserName = user != null ? user
+		    .getFullName() : StringPool.BLANK;
+
+		setActionUserName(_actionUserName);
+
+		return _actionUserName;
+	}
+	
+	public String getActionUserName(long actionUserId){
+		User user = null;
+		try {
+			user = UserLocalServiceUtil
+			    .fetchUserById(actionUserId);
+
+		}
+		catch (Exception e) {
+			_log
+			    .error(e
+			        .getMessage());
+		}
+
+		this._actionUserName = user != null ? user
+		    .getFullName() : StringPool.BLANK;
+
+		setActionUserName(_actionUserName);
+
+		return _actionUserName;
+	}
 
 	public void setActionUserId(long actionUserId) {
 
@@ -349,6 +393,10 @@ public class ProcessOrderBean {
 	
 		this._processOrderId = processOrderId;
 	}
+	
+	public void setActionUserName(String _actionUserName) {
+		this._actionUserName = _actionUserName;
+	}
 
 	private long _processOrderId;
 	private long _companyId;
@@ -381,6 +429,7 @@ public class ProcessOrderBean {
 	private long _referenceDossierPartId;
 
 	private String _assignToUserName;
+	private String _actionUserName;
 	private String _dealine;
 
 	private Log _log = LogFactoryUtil
