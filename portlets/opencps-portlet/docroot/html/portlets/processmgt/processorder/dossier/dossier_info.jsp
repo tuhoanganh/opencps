@@ -1,4 +1,5 @@
 
+<%@page import="org.opencps.util.PortletUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -137,7 +138,7 @@
 		<liferay-ui:message key="dossier-status"/>
 	</aui:col>
 	<aui:col width="70">
-		<%=dossier != null ? dossier.getDossierStatus() :  StringPool.BLANK %>
+		<%=dossier != null ? PortletUtil.getDossierStatusLabel(dossier.getDossierStatus(), locale) :  StringPool.BLANK %>
 	</aui:col>
 </aui:row>
 

@@ -150,12 +150,12 @@
 		<%
 		if(dossierPartsLevel1 != null){
 			%>
-				<table>
+				<table width="100%" border="1">
 					<tr>
-						<td width="10%"><liferay-ui:message key="number-order"/></td>
-						<td width="30%"><liferay-ui:message key="dossier-file-date"/></td>
-						<td width="30%"><liferay-ui:message key="dossier-file-no"/></td>
-						<td width="30%"><liferay-ui:message key="dossier-file-name"/></td>
+						<td width="10%" bordercolor="#ccc"><liferay-ui:message key="number-order"/></td>
+						<td width="30%" bordercolor="#ccc"><liferay-ui:message key="dossier-file-date"/></td>
+						<td width="30%" bordercolor="#ccc"><liferay-ui:message key="dossier-file-no"/></td>
+						<td width="30%" bordercolor="#ccc"><liferay-ui:message key="dossier-file-name"/></td>
 					</tr>
 					<%
 					int count = 1;
