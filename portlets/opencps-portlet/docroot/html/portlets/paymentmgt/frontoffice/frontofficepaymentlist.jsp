@@ -1,3 +1,5 @@
+<%@page import="org.opencps.paymentmgt.util.PaymentMgtUtil"%>
+<%@page import="org.opencps.paymentmgt.service.persistence.PaymentFileUtil"%>
 <%@page import="org.opencps.datamgt.NoSuchDictItemException"%>
 <%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
 <%@page import="org.opencps.datamgt.model.DictItem"%>
@@ -140,16 +142,19 @@
 				// payment status column
 				String paymentStatusText = "";
 				switch (paymentFile.getPaymentStatus()) {
-				case 0:
+				case PaymentMgtUtil.PAYMENT_STATUS_ON_PROCESSING:
 					paymentStatusText = LanguageUtil.get(pageContext, "on-processing");
 					break;
-				case 1:
+				case PaymentMgtUtil.PAYMENT_STATUS_REQUESTED:
 					paymentStatusText = LanguageUtil.get(pageContext, "requested");
 					break;
-				case 2:
+				case PaymentMgtUtil.PAYMENT_STATUS_CONFIRMED:
+					paymentStatusText = LanguageUtil.get(pageContext, "confirmed");
+					break;
+				case PaymentMgtUtil.PAYMENT_STATUS_APPROVED:
 					paymentStatusText = LanguageUtil.get(pageContext, "approved");
 					break;
-				case 3:
+				case PaymentMgtUtil.PAYMENT_STATUS_REJECTED:
 					paymentStatusText = LanguageUtil.get(pageContext, "rejected");
 					break;
 				default:

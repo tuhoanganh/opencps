@@ -114,7 +114,12 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 	public static final boolean FINDER_CACHE_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.finder.cache.enabled.org.opencps.paymentmgt.model.PaymentFile"),
 			true);
-	public static final boolean COLUMN_BITMASK_ENABLED = false;
+	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
+				"value.object.column.bitmask.enabled.org.opencps.paymentmgt.model.PaymentFile"),
+			true);
+	public static long GROUPID_COLUMN_BITMASK = 1L;
+	public static long KEYPAYGOODCODE_COLUMN_BITMASK = 2L;
+	public static long PAYMENTFILEID_COLUMN_BITMASK = 4L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -503,7 +508,19 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 
 	@Override
 	public void setGroupId(long groupId) {
+		_columnBitmask |= GROUPID_COLUMN_BITMASK;
+
+		if (!_setOriginalGroupId) {
+			_setOriginalGroupId = true;
+
+			_originalGroupId = _groupId;
+		}
+
 		_groupId = groupId;
+	}
+
+	public long getOriginalGroupId() {
+		return _originalGroupId;
 	}
 
 	@JSON
@@ -735,7 +752,17 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 
 	@Override
 	public void setKeypayGoodCode(String keypayGoodCode) {
+		_columnBitmask |= KEYPAYGOODCODE_COLUMN_BITMASK;
+
+		if (_originalKeypayGoodCode == null) {
+			_originalKeypayGoodCode = _keypayGoodCode;
+		}
+
 		_keypayGoodCode = keypayGoodCode;
+	}
+
+	public String getOriginalKeypayGoodCode() {
+		return GetterUtil.getString(_originalKeypayGoodCode);
 	}
 
 	@JSON
@@ -937,6 +964,10 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 		_invoiceNo = invoiceNo;
 	}
 
+	public long getColumnBitmask() {
+		return _columnBitmask;
+	}
+
 	@Override
 	public ExpandoBridge getExpandoBridge() {
 		return ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
@@ -1048,6 +1079,15 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 
 	@Override
 	public void resetOriginalValues() {
+		PaymentFileModelImpl paymentFileModelImpl = this;
+
+		paymentFileModelImpl._originalGroupId = paymentFileModelImpl._groupId;
+
+		paymentFileModelImpl._setOriginalGroupId = false;
+
+		paymentFileModelImpl._originalKeypayGoodCode = paymentFileModelImpl._keypayGoodCode;
+
+		paymentFileModelImpl._columnBitmask = 0;
 	}
 
 	@Override
@@ -1478,6 +1518,8 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 	private long _paymentFileId;
 	private long _companyId;
 	private long _groupId;
+	private long _originalGroupId;
+	private boolean _setOriginalGroupId;
 	private long _userId;
 	private String _userUuid;
 	private Date _createDate;
@@ -1497,6 +1539,7 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 	private String _keypayUrl;
 	private long _keypayTransactionId;
 	private String _keypayGoodCode;
+	private String _originalKeypayGoodCode;
 	private String _keypayMerchantCode;
 	private String _bankInfo;
 	private String _placeInfo;
@@ -1511,5 +1554,6 @@ public class PaymentFileModelImpl extends BaseModelImpl<PaymentFile>
 	private String _invoiceTemplateNo;
 	private String _invoiceIssueNo;
 	private String _invoiceNo;
+	private long _columnBitmask;
 	private PaymentFile _escapedModel;
 }

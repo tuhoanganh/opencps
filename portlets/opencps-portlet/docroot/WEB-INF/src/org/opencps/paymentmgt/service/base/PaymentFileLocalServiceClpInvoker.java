@@ -126,6 +126,10 @@ public class PaymentFileLocalServiceClpInvoker {
 				"long", "java.lang.String", "boolean", "long", "int", "int",
 				"int", "com.liferay.portal.kernel.util.OrderByComparator"
 			};
+
+		_methodName50 = "getPaymentFileByGoodCode";
+
+		_methodParameterTypes50 = new String[] { "long", "java.lang.String" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -250,6 +254,12 @@ public class PaymentFileLocalServiceClpInvoker {
 				(com.liferay.portal.kernel.util.OrderByComparator)arguments[7]);
 		}
 
+		if (_methodName50.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes50, parameterTypes)) {
+			return PaymentFileLocalServiceUtil.getPaymentFileByGoodCode(((Long)arguments[0]).longValue(),
+				(java.lang.String)arguments[1]);
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -293,4 +303,6 @@ public class PaymentFileLocalServiceClpInvoker {
 	private String[] _methodParameterTypes48;
 	private String _methodName49;
 	private String[] _methodParameterTypes49;
+	private String _methodName50;
+	private String[] _methodParameterTypes50;
 }

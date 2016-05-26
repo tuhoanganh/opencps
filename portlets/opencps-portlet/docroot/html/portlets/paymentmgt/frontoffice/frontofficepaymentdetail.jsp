@@ -89,7 +89,6 @@
 	title="payment-request"
 	backLabel="back"
 />
-
 <div class="lookup-result">
 <c:choose>
 	<c:when test="<%= paymentFile != null %>">

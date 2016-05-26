@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.dao.orm.Query;
+import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -31,8 +32,10 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnmodifiableList;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
@@ -82,6 +85,278 @@ public class PaymentFilePersistenceImpl extends BasePersistenceImpl<PaymentFile>
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(PaymentFileModelImpl.ENTITY_CACHE_ENABLED,
 			PaymentFileModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_FETCH_BY_GOODCODE = new FinderPath(PaymentFileModelImpl.ENTITY_CACHE_ENABLED,
+			PaymentFileModelImpl.FINDER_CACHE_ENABLED, PaymentFileImpl.class,
+			FINDER_CLASS_NAME_ENTITY, "fetchByGoodCode",
+			new String[] { Long.class.getName(), String.class.getName() },
+			PaymentFileModelImpl.GROUPID_COLUMN_BITMASK |
+			PaymentFileModelImpl.KEYPAYGOODCODE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_GOODCODE = new FinderPath(PaymentFileModelImpl.ENTITY_CACHE_ENABLED,
+			PaymentFileModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGoodCode",
+			new String[] { Long.class.getName(), String.class.getName() });
+
+	/**
+	 * Returns the Payment file where groupId = &#63; and keypayGoodCode = &#63; or throws a {@link org.opencps.paymentmgt.NoSuchPaymentFileException} if it could not be found.
+	 *
+	 * @param groupId the group ID
+	 * @param keypayGoodCode the keypay good code
+	 * @return the matching Payment file
+	 * @throws org.opencps.paymentmgt.NoSuchPaymentFileException if a matching Payment file could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public PaymentFile findByGoodCode(long groupId, String keypayGoodCode)
+		throws NoSuchPaymentFileException, SystemException {
+		PaymentFile paymentFile = fetchByGoodCode(groupId, keypayGoodCode);
+
+		if (paymentFile == null) {
+			StringBundler msg = new StringBundler(6);
+
+			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			msg.append("groupId=");
+			msg.append(groupId);
+
+			msg.append(", keypayGoodCode=");
+			msg.append(keypayGoodCode);
+
+			msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+			if (_log.isWarnEnabled()) {
+				_log.warn(msg.toString());
+			}
+
+			throw new NoSuchPaymentFileException(msg.toString());
+		}
+
+		return paymentFile;
+	}
+
+	/**
+	 * Returns the Payment file where groupId = &#63; and keypayGoodCode = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param groupId the group ID
+	 * @param keypayGoodCode the keypay good code
+	 * @return the matching Payment file, or <code>null</code> if a matching Payment file could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public PaymentFile fetchByGoodCode(long groupId, String keypayGoodCode)
+		throws SystemException {
+		return fetchByGoodCode(groupId, keypayGoodCode, true);
+	}
+
+	/**
+	 * Returns the Payment file where groupId = &#63; and keypayGoodCode = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param groupId the group ID
+	 * @param keypayGoodCode the keypay good code
+	 * @param retrieveFromCache whether to use the finder cache
+	 * @return the matching Payment file, or <code>null</code> if a matching Payment file could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public PaymentFile fetchByGoodCode(long groupId, String keypayGoodCode,
+		boolean retrieveFromCache) throws SystemException {
+		Object[] finderArgs = new Object[] { groupId, keypayGoodCode };
+
+		Object result = null;
+
+		if (retrieveFromCache) {
+			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_GOODCODE,
+					finderArgs, this);
+		}
+
+		if (result instanceof PaymentFile) {
+			PaymentFile paymentFile = (PaymentFile)result;
+
+			if ((groupId != paymentFile.getGroupId()) ||
+					!Validator.equals(keypayGoodCode,
+						paymentFile.getKeypayGoodCode())) {
+				result = null;
+			}
+		}
+
+		if (result == null) {
+			StringBundler query = new StringBundler(4);
+
+			query.append(_SQL_SELECT_PAYMENTFILE_WHERE);
+
+			query.append(_FINDER_COLUMN_GOODCODE_GROUPID_2);
+
+			boolean bindKeypayGoodCode = false;
+
+			if (keypayGoodCode == null) {
+				query.append(_FINDER_COLUMN_GOODCODE_KEYPAYGOODCODE_1);
+			}
+			else if (keypayGoodCode.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_GOODCODE_KEYPAYGOODCODE_3);
+			}
+			else {
+				bindKeypayGoodCode = true;
+
+				query.append(_FINDER_COLUMN_GOODCODE_KEYPAYGOODCODE_2);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				if (bindKeypayGoodCode) {
+					qPos.add(keypayGoodCode);
+				}
+
+				List<PaymentFile> list = q.list();
+
+				if (list.isEmpty()) {
+					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_GOODCODE,
+						finderArgs, list);
+				}
+				else {
+					if ((list.size() > 1) && _log.isWarnEnabled()) {
+						_log.warn(
+							"PaymentFilePersistenceImpl.fetchByGoodCode(long, String, boolean) with parameters (" +
+							StringUtil.merge(finderArgs) +
+							") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
+					}
+
+					PaymentFile paymentFile = list.get(0);
+
+					result = paymentFile;
+
+					cacheResult(paymentFile);
+
+					if ((paymentFile.getGroupId() != groupId) ||
+							(paymentFile.getKeypayGoodCode() == null) ||
+							!paymentFile.getKeypayGoodCode()
+											.equals(keypayGoodCode)) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_GOODCODE,
+							finderArgs, paymentFile);
+					}
+				}
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_GOODCODE,
+					finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
+		else {
+			return (PaymentFile)result;
+		}
+	}
+
+	/**
+	 * Removes the Payment file where groupId = &#63; and keypayGoodCode = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param keypayGoodCode the keypay good code
+	 * @return the Payment file that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public PaymentFile removeByGoodCode(long groupId, String keypayGoodCode)
+		throws NoSuchPaymentFileException, SystemException {
+		PaymentFile paymentFile = findByGoodCode(groupId, keypayGoodCode);
+
+		return remove(paymentFile);
+	}
+
+	/**
+	 * Returns the number of Payment files where groupId = &#63; and keypayGoodCode = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param keypayGoodCode the keypay good code
+	 * @return the number of matching Payment files
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public int countByGoodCode(long groupId, String keypayGoodCode)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_GOODCODE;
+
+		Object[] finderArgs = new Object[] { groupId, keypayGoodCode };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_PAYMENTFILE_WHERE);
+
+			query.append(_FINDER_COLUMN_GOODCODE_GROUPID_2);
+
+			boolean bindKeypayGoodCode = false;
+
+			if (keypayGoodCode == null) {
+				query.append(_FINDER_COLUMN_GOODCODE_KEYPAYGOODCODE_1);
+			}
+			else if (keypayGoodCode.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_GOODCODE_KEYPAYGOODCODE_3);
+			}
+			else {
+				bindKeypayGoodCode = true;
+
+				query.append(_FINDER_COLUMN_GOODCODE_KEYPAYGOODCODE_2);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				if (bindKeypayGoodCode) {
+					qPos.add(keypayGoodCode);
+				}
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_GOODCODE_GROUPID_2 = "paymentFile.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_GOODCODE_KEYPAYGOODCODE_1 = "paymentFile.keypayGoodCode IS NULL";
+	private static final String _FINDER_COLUMN_GOODCODE_KEYPAYGOODCODE_2 = "paymentFile.keypayGoodCode = ?";
+	private static final String _FINDER_COLUMN_GOODCODE_KEYPAYGOODCODE_3 = "(paymentFile.keypayGoodCode IS NULL OR paymentFile.keypayGoodCode = '')";
 
 	public PaymentFilePersistenceImpl() {
 		setModelClass(PaymentFile.class);
@@ -96,6 +371,11 @@ public class PaymentFilePersistenceImpl extends BasePersistenceImpl<PaymentFile>
 	public void cacheResult(PaymentFile paymentFile) {
 		EntityCacheUtil.putResult(PaymentFileModelImpl.ENTITY_CACHE_ENABLED,
 			PaymentFileImpl.class, paymentFile.getPrimaryKey(), paymentFile);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_GOODCODE,
+			new Object[] {
+				paymentFile.getGroupId(), paymentFile.getKeypayGoodCode()
+			}, paymentFile);
 
 		paymentFile.resetOriginalValues();
 	}
@@ -153,6 +433,8 @@ public class PaymentFilePersistenceImpl extends BasePersistenceImpl<PaymentFile>
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		clearUniqueFindersCache(paymentFile);
 	}
 
 	@Override
@@ -163,6 +445,59 @@ public class PaymentFilePersistenceImpl extends BasePersistenceImpl<PaymentFile>
 		for (PaymentFile paymentFile : paymentFiles) {
 			EntityCacheUtil.removeResult(PaymentFileModelImpl.ENTITY_CACHE_ENABLED,
 				PaymentFileImpl.class, paymentFile.getPrimaryKey());
+
+			clearUniqueFindersCache(paymentFile);
+		}
+	}
+
+	protected void cacheUniqueFindersCache(PaymentFile paymentFile) {
+		if (paymentFile.isNew()) {
+			Object[] args = new Object[] {
+					paymentFile.getGroupId(), paymentFile.getKeypayGoodCode()
+				};
+
+			FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GOODCODE, args,
+				Long.valueOf(1));
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_GOODCODE, args,
+				paymentFile);
+		}
+		else {
+			PaymentFileModelImpl paymentFileModelImpl = (PaymentFileModelImpl)paymentFile;
+
+			if ((paymentFileModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_GOODCODE.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						paymentFile.getGroupId(),
+						paymentFile.getKeypayGoodCode()
+					};
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GOODCODE, args,
+					Long.valueOf(1));
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_GOODCODE, args,
+					paymentFile);
+			}
+		}
+	}
+
+	protected void clearUniqueFindersCache(PaymentFile paymentFile) {
+		PaymentFileModelImpl paymentFileModelImpl = (PaymentFileModelImpl)paymentFile;
+
+		Object[] args = new Object[] {
+				paymentFile.getGroupId(), paymentFile.getKeypayGoodCode()
+			};
+
+		FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GOODCODE, args);
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_GOODCODE, args);
+
+		if ((paymentFileModelImpl.getColumnBitmask() &
+				FINDER_PATH_FETCH_BY_GOODCODE.getColumnBitmask()) != 0) {
+			args = new Object[] {
+					paymentFileModelImpl.getOriginalGroupId(),
+					paymentFileModelImpl.getOriginalKeypayGoodCode()
+				};
+
+			FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GOODCODE, args);
+			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_GOODCODE, args);
 		}
 	}
 
@@ -301,12 +636,15 @@ public class PaymentFilePersistenceImpl extends BasePersistenceImpl<PaymentFile>
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 
-		if (isNew) {
+		if (isNew || !PaymentFileModelImpl.COLUMN_BITMASK_ENABLED) {
 			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
 
 		EntityCacheUtil.putResult(PaymentFileModelImpl.ENTITY_CACHE_ENABLED,
 			PaymentFileImpl.class, paymentFile.getPrimaryKey(), paymentFile);
+
+		clearUniqueFindersCache(paymentFile);
+		cacheUniqueFindersCache(paymentFile);
 
 		return paymentFile;
 	}
@@ -670,9 +1008,12 @@ public class PaymentFilePersistenceImpl extends BasePersistenceImpl<PaymentFile>
 	}
 
 	private static final String _SQL_SELECT_PAYMENTFILE = "SELECT paymentFile FROM PaymentFile paymentFile";
+	private static final String _SQL_SELECT_PAYMENTFILE_WHERE = "SELECT paymentFile FROM PaymentFile paymentFile WHERE ";
 	private static final String _SQL_COUNT_PAYMENTFILE = "SELECT COUNT(paymentFile) FROM PaymentFile paymentFile";
+	private static final String _SQL_COUNT_PAYMENTFILE_WHERE = "SELECT COUNT(paymentFile) FROM PaymentFile paymentFile WHERE ";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "paymentFile.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No PaymentFile exists with the primary key ";
+	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No PaymentFile exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(PaymentFilePersistenceImpl.class);

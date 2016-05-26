@@ -47,6 +47,7 @@
 <portlet:actionURL var="keypayTransactionUrl" name="keypayTransaction" />
 
 <aui:form action="<%=keypayTransactionUrl.toString() %>" method="post" name="fm">
+<aui:input name="<%= PaymentFileDisplayTerms.PAYMENT_FILE_ID %>" type="hidden" value="<%= paymentFileId %>"></aui:input>
 <c:choose>
 	<c:when test="<%= paymentFile != null %>">
 		<aui:row>

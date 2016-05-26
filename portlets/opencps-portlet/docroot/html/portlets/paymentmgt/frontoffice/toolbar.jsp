@@ -1,3 +1,4 @@
+<%@page import="org.opencps.paymentmgt.util.PaymentMgtUtil"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
@@ -39,16 +40,16 @@
 								<aui:option value="-1">
 									<liferay-ui:message key="all-status"></liferay-ui:message>
 								</aui:option>
-								<aui:option value="0">
+								<aui:option value="<%= PaymentMgtUtil.PAYMENT_STATUS_ON_PROCESSING %>">
 									<liferay-ui:message key="on-processing"></liferay-ui:message>
 								</aui:option>
-								<aui:option value="1">
+								<aui:option value="<%= PaymentMgtUtil.PAYMENT_STATUS_REQUESTED %>">
 									<liferay-ui:message key="requested"></liferay-ui:message>
 								</aui:option>
-								<aui:option value="2">
+								<aui:option value="<%= PaymentMgtUtil.PAYMENT_STATUS_APPROVED %>">
 									<liferay-ui:message key="approved"></liferay-ui:message>
 								</aui:option>
-								<aui:option value="3">
+								<aui:option value="<%= PaymentMgtUtil.PAYMENT_STATUS_REJECTED %>">
 									<liferay-ui:message key="rejected"></liferay-ui:message>
 								</aui:option>
 							</aui:select>							

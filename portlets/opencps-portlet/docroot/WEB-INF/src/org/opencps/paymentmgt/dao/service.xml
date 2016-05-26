@@ -38,6 +38,10 @@
         <column name="invoiceTemplateNo" type="String"></column>
         <column name="invoiceIssueNo" type="String"></column>
         <column name="invoiceNo" type="String"></column>
+        <finder name="GoodCode" return-type="PaymentFile">
+            <finder-column name="groupId"></finder-column>
+            <finder-column name="keypayGoodCode"></finder-column>
+        </finder>
     </entity>
     <entity name="PaymentConfig" local-service="true" human-name="Payment configuration" table="opencps_payment_config">
         <column name="paymentConfigId" type="long" primary="true"></column>
