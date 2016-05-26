@@ -220,3 +220,4 @@ portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/processmgt/service/http
 
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/model/
 bin/
+portlets/opencps-portlet/.classpath
