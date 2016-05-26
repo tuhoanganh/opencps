@@ -43,6 +43,8 @@
 
 <liferay-theme:defineObjects />
 
+<accountmgt:defineObjects/>
+
 <%
 	String currentURL = PortalUtil.getCurrentURL(liferayPortletRequest);
 	String keyword = ParamUtil.getString(request, "keywords", StringPool.BLANK);
