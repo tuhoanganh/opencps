@@ -111,7 +111,18 @@ public class SyncFromFrontOffice implements MessageListener{
         	} else if (Validator.equals(WebKeys.ACTION_RESUBMIT_VALUE, action)) {
 				Message msgToEngine = new Message();
 				
+				int logLevel = 0;
+
+				long govAgencyOrgId = BackendUtils.getGovAgencyOrgId(userActionMgs.getDossierId());
+
 				SendToEngineMsg engineMsg = new SendToEngineMsg();
+				
+				DossierLocalServiceUtil.updateDossierStatus(
+					userActionMgs.getUserId(), userActionMgs.getDossierId(), govAgencyOrgId,
+				    PortletConstants.DOSSIER_STATUS_SYSTEM,
+				    PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS,
+				    userActionMgs.getFileGroupId(), logLevel, userActionMgs.getLocale());
+				
 				
 				engineMsg.setDossierId(userActionMgs.getDossierId());
 				engineMsg.setFileGroupId(userActionMgs.getFileGroupId());

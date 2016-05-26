@@ -24,6 +24,7 @@ import org.opencps.backend.message.SendToBackOfficeMsg;
 import org.opencps.backend.message.SendToCallbackMsg;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
+import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
@@ -31,6 +32,7 @@ import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.MessageListenerException;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 
 
 /**
@@ -56,10 +58,12 @@ public class SyncFromBackOffice implements MessageListener{
     	
     	boolean statusUpdate = false;
     	
+    	String actor = _getActor(toBackOffice.getRequestCommand());
+    	
     	try {
 			statusUpdate = DossierLocalServiceUtil.updateDossierStatus(
 				toBackOffice.getDossierId(), toBackOffice.getFileGroupId(), Integer.parseInt(toBackOffice.getDossierStatus()), toBackOffice.getReceptionNo(),toBackOffice.getEstimateDatetime(),
-				toBackOffice.getReceiveDatetime(), toBackOffice.getFinishDatetime(), "ACTOR", toBackOffice.getRequestCommand(),
+				toBackOffice.getReceiveDatetime(), toBackOffice.getFinishDatetime(), actor, toBackOffice.getRequestCommand(),
 				toBackOffice.getActionInfo(), toBackOffice.getMessageInfo());
         }
         catch (Exception e) {
@@ -76,6 +80,25 @@ public class SyncFromBackOffice implements MessageListener{
     	sendToCallBack.put("toCallback", toCallBack);
     	
     	MessageBusUtil.sendMessage("opencps/backoffice/engine/callback", sendToCallBack);
+    }
+    
+    
+    private String _getActor(String requestComand) {
+    	
+    	String actor = WebKeys.ACTOR_ACTION_SYSTEM;
+    	
+		if (Validator.equals(WebKeys.DOSSIER_LOG_PAYMENT_REQUEST, requestComand) ||
+		    Validator.equals(
+		        WebKeys.DOSSIER_LOG_RESUBMIT_REQUEST, requestComand)) {
+			actor = WebKeys.ACTOR_ACTION_EMPLOYEE;
+		} 
+		
+		if (Validator.equals(WebKeys.DOSSIER_LOG_CANCEL_REQUEST, requestComand) ||
+		    Validator.equals(WebKeys.DOSSIER_LOG_CHANGE_REQUEST, requestComand)) {
+			actor = WebKeys.ACTOR_ACTION_CITIZEN;
+		}
+		
+		return actor;
     }
     
     
