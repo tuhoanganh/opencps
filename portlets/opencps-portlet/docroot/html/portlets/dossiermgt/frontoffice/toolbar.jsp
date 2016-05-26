@@ -62,12 +62,17 @@
 					%>
 					<aui:row>
 						<aui:col width="50">
-							<aui:select name="dossierStatus" label="" inlineField="<%=true %>" inlineLabel="left">
+							<aui:select name="dossierStatus" label="dossier-status" inlineField="<%=true %>" inlineLabel="left">
 								<aui:option value="-1"><liferay-ui:message key="all"/></aui:option>
 								<%
 									for(Integer status : PortletUtil.getDossierStatus()){
 										%>
-											<aui:option value="<%= status%>"><%=PortletUtil.getDossierStatusLabel(status, locale) %></aui:option>
+											<aui:option 
+												value="<%= status%>"
+												
+											>
+												<%=PortletUtil.getDossierStatusLabel(status, locale) %>
+											</aui:option>
 										<%
 									}
 								%>

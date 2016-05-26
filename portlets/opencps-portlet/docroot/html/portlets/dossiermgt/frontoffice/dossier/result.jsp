@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -174,7 +173,7 @@
 									continue;
 								}
 								
-								if(dossierFile.getFileEntryId() <= 0){
+								if(dossierFile.getFileEntryId() <= 0 || dossierFile.getSyncStatus() != PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS){
 									continue;
 								}
 								
@@ -202,7 +201,7 @@
 											<%=Validator.isNotNull(dossierFile.getDossierFileNo()) ? dossierFile.getDossierFileNo() : StringPool.BLANK %>
 										</td>
 										<td>
-											<a href="<%=fileURL%>">
+											<a href="<%=fileURL%>" target="_blank">
 												<%=Validator.isNotNull(dossierFile.getDisplayName()) ? dossierFile.getDisplayName() : StringPool.BLANK  %>
 											</a>
 										</td>
