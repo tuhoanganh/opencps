@@ -160,7 +160,6 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 			PortletURL redirectURL = PortletURLFactoryUtil.create(PortalUtil.getHttpServletRequest(actionRequest),
 				portletName,
 				themeDisplay.getLayout().getPlid(), PortletRequest.RENDER_PHASE); 
-
 			redirectURL.setParameter("jspPage", templatePath + "frontofficeconfirmkeypay.jsp");	        
 	        String return_url = redirectURL.toString();
 	        KeyPay keypay = new KeyPay(merchant_trans_id, merchant_code, good_code,
