@@ -1536,12 +1536,53 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		try {
 			ServiceContext serviceContext = ServiceContextFactory
 			    .getInstance(actionRequest);
-
+			
+			UserActionMsg actionMsg = new UserActionMsg();
+			Message message = new Message();
 			switch (dossierStatus) {
+			case PortletConstants.DOSSIER_STATUS_WAITING:
+			
+				actionMsg.setAction(WebKeys.ACTION_RESUBMIT_VALUE);
+				
+				actionMsg.setDossierId(dossierId);
+				
+				actionMsg.setFileGroupId(fileGroupId);
+				
+				actionMsg.setLocale(serviceContext
+				        .getLocale());
+				
+				actionMsg.setUserId(serviceContext
+				        .getUserId());
+				
+				message
+				    .put("action", "resubmit");
+				message
+				    .put("dossierId", dossierId);
+				message
+				    .put("fileGroupId", fileGroupId);
+				message
+				    .put("level", PortletConstants.DOSSIER_LOG_NORMAL);
+				message
+				    .put("locale", serviceContext
+				        .getLocale());
+
+				message
+				    .put("groupId", serviceContext
+				        .getScopeGroupId());
+
+				message
+				    .put("govAgencyOrganizationId", govAgencyOrganizationId);
+
+				message
+				    .put("userId", serviceContext
+				        .getUserId());
+				
+				message.put("msgToEngine", actionMsg);
+
+				
+				break;
 			case PortletConstants.DOSSIER_STATUS_NEW:
 				
-				UserActionMsg actionMsg = new UserActionMsg();
-
 				actionMsg.setAction(WebKeys.ACTION_SUBMIT_VALUE);
 				
 				actionMsg.setDossierId(dossierId);
@@ -1554,7 +1595,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				actionMsg.setUserId(serviceContext
 				        .getUserId());
 				
-				Message message = new Message();
 				message
 				    .put("action", "submit");
 				message
@@ -1580,14 +1620,16 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				
 				message.put("msgToEngine", actionMsg);
 
-				MessageBusUtil
-				    .sendMessage(
-				        "opencps/frontoffice/out/destination", message);
+				
 				break;
 
 			default:
 				break;
 			}
+			
+			MessageBusUtil
+		    .sendMessage(
+		        "opencps/frontoffice/out/destination", message);
 
 		}
 		catch (Exception e) {

@@ -242,6 +242,12 @@
 		var dossierPartId = instance.attr('dossier-part');
 		
 		dossierFileId = instance.attr('dossier-file');
+		
+		
+		if(parseInt(dossierFileId) <= 0 || isNaN(parseInt(dossierFileId))){
+			alert('<%= UnicodeLanguageUtil.get(pageContext, "not-dynamic-form") %>');
+			return;
+		}
 
 		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
 		portletURL.setParameter("mvcPath", "/html/portlets/processmgt/processorder/dynamic_form.jsp");
@@ -257,7 +263,14 @@
 		var A = AUI();
 		var instance = A.one(e);
 		var dossierFileId = instance.attr('dossier-file');
+		
+		if(parseInt(dossierFileId) <= 0 || isNaN(parseInt(dossierFileId))){
+			alert('<%= UnicodeLanguageUtil.get(pageContext, "not-attachment-file") %>');
+			return;
+		}
+			
 		var fileURL = instance.attr('file-url');
+		
 		if(fileURL == ''){
 			alert('<%= UnicodeLanguageUtil.get(pageContext, "not-attachment-file") %>');
 			return;

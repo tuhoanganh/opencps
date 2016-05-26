@@ -1,5 +1,4 @@
 
-<%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -48,6 +47,7 @@
 <%@page import="org.opencps.dossiermgt.model.FileGroup"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
+<%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
 
 <%@ include file="../../init.jsp"%>
 

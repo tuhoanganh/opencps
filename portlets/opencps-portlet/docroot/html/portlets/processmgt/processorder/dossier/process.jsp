@@ -127,23 +127,6 @@
 	</aui:col>
 </aui:row>
 
-
-<aui:row>
-	<aui:col width="20">
-		<liferay-ui:message key="dossier-status"/>
-	</aui:col>
-	<aui:col width="30">
-		<%=processOrder != null ? PortletUtil.getDossierStatusLabel(processOrder.getDossierStatus(), locale) : StringPool.BLANK %>
-	</aui:col>
-	<aui:col width="20">
-		<liferay-ui:message key="assign-to-user"/>
-	</aui:col>
-	
-	<aui:col width="30">
-		<%=processOrder != null ? new ProcessOrderBean().getAssignToUserName(processOrder.getAssignToUserId()) : StringPool.BLANK %>
-	</aui:col>
-</aui:row>
-
 <aui:row>
 	<aui:col width="20">
 		<liferay-ui:message key="pre-action-user"/>
@@ -157,6 +140,15 @@
 	
 	<aui:col width="30">
 		<%=latestWorkflowActionHistory != null ? DateTimeUtil.convertDateToString(latestWorkflowActionHistory.getActionDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) : StringPool.BLANK %>
+	</aui:col>
+</aui:row>
+
+<aui:row>
+	<aui:col width="30">
+		<liferay-ui:message key="pre-action"/>
+	</aui:col>
+	<aui:col width="70">
+		<%=latestWorkflowActionHistory.getActionName() %>
 	</aui:col>
 </aui:row>
 
