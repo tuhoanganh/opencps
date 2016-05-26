@@ -243,6 +243,7 @@
 		
 		dossierFileId = instance.attr('dossier-file');
 		
+		console.log(dossierFileId);
 		
 		if(parseInt(dossierFileId) <= 0 || isNaN(parseInt(dossierFileId))){
 			alert('<%= UnicodeLanguageUtil.get(pageContext, "not-dynamic-form") %>');
