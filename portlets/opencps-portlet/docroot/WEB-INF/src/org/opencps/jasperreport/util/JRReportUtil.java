@@ -21,13 +21,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.opencps.jasperreport.compile.JRReportTemplate;
-import org.opencps.jasperreport.datasource.JRJSONDataSource;
-
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.StringPool;
-
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -36,6 +29,13 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.export.HtmlExporter;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleHtmlExporterOutput;
+
+import org.opencps.jasperreport.compile.JRReportTemplate;
+import org.opencps.jasperreport.datasource.JRJSONDataSource;
+
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.StringPool;
 
 /**
  * @author trungnt
@@ -52,12 +52,13 @@ public class JRReportUtil {
 			    .getJasperReport(jrxmlTemplate);
 			JRJSONDataSource dataSource = JRJSONDataSource
 			    .getInstance(jsonData);
+			
 			JasperPrint jasperPrint =
 			    getJasperPrint(reportTemplate, parameters, dataSource);
 
 			return exportPdfFile(jasperPrint, sourceFileName);
 		}
-		catch (Exception e) {
+		catch (JRException e) {
 			_log
 			    .error(e);
 

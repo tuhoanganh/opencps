@@ -125,6 +125,7 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 		dossierLog.setActionInfo(actionInfo);
 		dossierLog.setMessageInfo(messageInfo);
 		dossierLog.setUpdateDatetime(now);
+		dossierLog.setActor(actor);
 
 		dossierLog.setLevel(level);
 
