@@ -76,6 +76,8 @@ import org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil;
 import org.opencps.dossiermgt.service.FileGroupLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
 import org.opencps.jasperreport.util.JRReportUtil;
+import org.opencps.processmgt.model.ProcessOrder;
+import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
 import org.opencps.util.AccountUtil;
@@ -1541,7 +1543,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			Message message = new Message();
 			switch (dossierStatus) {
 			case PortletConstants.DOSSIER_STATUS_WAITING:
-			
+				
 				actionMsg.setAction(WebKeys.ACTION_RESUBMIT_VALUE);
 				
 				actionMsg.setDossierId(dossierId);
@@ -1553,6 +1555,11 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				
 				actionMsg.setUserId(serviceContext
 				        .getUserId());
+				
+				ProcessOrder processOrder = ProcessOrderLocalServiceUtil.
+					getProcessOrder(dossierId, fileGroupId);
+				
+				actionMsg.setProcessOrderId(processOrder.getProcessOrderId());
 				
 				message
 				    .put("action", "resubmit");
