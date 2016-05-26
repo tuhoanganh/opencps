@@ -17,6 +17,7 @@
 
 package org.opencps.backend.engine;
 
+import org.opencps.backend.message.SendToCallbackMsg;
 import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -42,8 +43,20 @@ public class BackOfficeProcessCallback implements MessageListener{
 
 	    //Run doRevice
     	
-    	doRevice(message);
+    	_doRecevie(message);
 	    
+    }
+    
+    private void _doRecevie(Message message) {
+    	
+    	SendToCallbackMsg msgToCalback = (SendToCallbackMsg) message.get("toCallback");
+    	
+    	try {
+        	ProcessOrderLocalServiceUtil.updateProcessOrderStatus(msgToCalback.getProcessOrderId(), msgToCalback.getDossierStatus());
+        }
+        catch (Exception e) {
+	        // TODO: handle exception
+        }
     }
     
     private void doRevice(Message message) {

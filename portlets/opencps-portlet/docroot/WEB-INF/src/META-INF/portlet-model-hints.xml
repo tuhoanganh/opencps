@@ -227,8 +227,12 @@
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
 		<field name="serviceNo" type="String" />
-		<field name="serviceName" type="String" />
-		<field name="shortName" type="String" />
+		<field name="serviceName" type="String">
+			<hint name="max-length">500</hint>
+		</field>
+		<field name="fullName" type="String">
+			<hint name="max-length">500</hint>
+		</field>
 		<field name="serviceProcess" type="String" />
 		<field name="serviceMethod" type="String" />
 		<field name="serviceDossier" type="String" />
@@ -337,7 +341,10 @@
 		<field name="generateReceptionNo" type="String" />
 		<field name="receptionNoPattern" type="String" />
 		<field name="generateDeadline" type="boolean" />
-		<field name="deadlinePattern" type="boolean" />
+		<field name="deadlinePattern" type="String" />
+		<field name="isFinishStep" type="boolean" />
+		<field name="preCondition" type="String" />
+		<field name="isMultipled" type="boolean" />
 	</model>
 	<model name="org.opencps.processmgt.model.ServiceInfoProcess">
 		<field name="serviceProcessId" type="long" />

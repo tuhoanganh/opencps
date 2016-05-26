@@ -60,7 +60,7 @@ public class SyncFromFrontOffice implements MessageListener{
         throws MessageListenerException {
 
         try {
-            doReceive(message);
+        	_doReceiveDossier(message);
         }
         catch (Exception e) {
             _log.error("Unable to process message " + message, e);
@@ -68,7 +68,7 @@ public class SyncFromFrontOffice implements MessageListener{
     }
     
     private void _doReceiveDossier(Message message) {
-    	UserActionMsg userActionMgs = (UserActionMsg) message.get("userActionMgs");
+    	UserActionMsg userActionMgs = (UserActionMsg) message.get("msgToEngine");
     	
     	String action = userActionMgs.getAction();
     	

@@ -52,7 +52,8 @@
 		url="<%=viewDossierURL.toString() %>" 
 	/>
  	<c:choose>
- 		<c:when test="<%=dossier.getDossierStatus() == PortletConstants.DOSSIER_STATUS_NEW %>">
+ 		<c:when test="<%=dossier.getDossierStatus() == PortletConstants.DOSSIER_STATUS_NEW || 
+ 			dossier.getDossierStatus() == PortletConstants.DOSSIER_STATUS_WAITING%>">
  			<c:if test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) %>">
 		 		<portlet:renderURL var="updateDossierURL">
 					<portlet:param name="mvcPath" value='<%=templatePath + "edit_dossier.jsp" %>'/>

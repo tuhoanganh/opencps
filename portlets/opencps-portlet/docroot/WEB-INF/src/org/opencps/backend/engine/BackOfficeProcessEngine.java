@@ -63,7 +63,8 @@ public class BackOfficeProcessEngine implements MessageListener {
 	    throws MessageListenerException {
 
 		//doReceive(message);
-		activeEngine(message);
+		//activeEngine(message);
+		_doRecevie(message);
 	}
 	
 	private void _doRecevie(Message message) {
@@ -113,10 +114,11 @@ public class BackOfficeProcessEngine implements MessageListener {
 		try {
 			if (Validator.isNull(processOrderId)) {
 
-				ProcessOrder processOrder =
-				    ProcessOrderLocalServiceUtil.getProcessOrder(
+				ProcessOrder processOrder = BackendUtils.getProcessOrder(toEngineMsg.getDossierId(),
+			        toEngineMsg.getFileGroupId());
+/*				    ProcessOrderLocalServiceUtil.getProcessOrder(
 				        toEngineMsg.getDossierId(),
-				        toEngineMsg.getFileGroupId());
+				        toEngineMsg.getFileGroupId());*/
 
 				if (Validator.isNull(processOrder)) {
 
@@ -143,7 +145,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 			else {
 				// Find process order by processOrderId
 				ProcessOrder processOrder =
-				    ProcessOrderLocalServiceUtil.getProcessOrder(processOrderId);
+				    ProcessOrderLocalServiceUtil.fetchProcessOrder(processOrderId);
 
 				processOrderId = processOrder.getProcessOrderId();
 				
@@ -190,7 +192,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 				// Update process order
 				ProcessOrderLocalServiceUtil.updateProcessOrder(
 				    processOrderId, processStepId,
-				    processWorkflowId, toEngineMsg.getActionUserId(),
+				    processWorkflow.getProcessWorkflowId(), toEngineMsg.getActionUserId(),
 				    toEngineMsg.getActionDatetime(), toEngineMsg.getActionNote(),
 				    toEngineMsg.getAssignToUserId(), stepName, actionName,
 				    0, 0, PortletConstants.DOSSIER_STATUS_SYSTEM);
@@ -210,6 +212,8 @@ public class BackOfficeProcessEngine implements MessageListener {
 				toBackOffice.setReceiveDatetime(new Date());
 				
 				toBackOffice.setEstimateDatetime(toEngineMsg.getEstimateDatetime());
+				
+				
 				
 				if (processWorkflow.getIsFinishStep()) {
 					toBackOffice.setFinishDatetime(new Date());
