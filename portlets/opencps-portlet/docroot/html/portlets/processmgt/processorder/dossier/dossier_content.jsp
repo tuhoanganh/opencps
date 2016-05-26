@@ -117,7 +117,7 @@
 											<span class="row-icon">
 												<i 
 													id='<%="rowcheck" + dossierPart.getDossierpartId() + StringPool.DASH + index %>' 
-													class='<%=dossierFile != null ? "fa fa-check-square-o" : "fa fa-square-o" %>' 
+													class='<%=dossierFile != null && dossierFile.getSyncStatus() == PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS ? "fa fa-check-square-o" : "fa fa-square-o" %>' 
 													aria-hidden="true"
 												>
 												</i>
@@ -223,7 +223,7 @@
 												<span class="row-icon">
 													<i 
 														id='<%="rowcheck" + dossierPart.getDossierpartId() + StringPool.DASH + index %>' 
-														class='<%=dossierFile != null ? "fa fa-check-square-o" : "fa fa-square-o" %>' 
+														class='<%=dossierFile != null && dossierFile.getSyncStatus() == PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS ? "fa fa-check-square-o" : "fa fa-square-o" %>' 
 														aria-hidden="true">
 													</i>
 												</span>
