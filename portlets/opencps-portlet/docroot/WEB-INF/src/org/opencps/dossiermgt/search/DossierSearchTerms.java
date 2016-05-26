@@ -42,8 +42,8 @@ public class DossierSearchTerms extends DossierDisplayTerms {
 		receiveDatetime = ParamUtil
 						.getDate(portletRequest, RECEIVE_DATETIME, DateTimeUtil
 							.getDateTimeFormat(DateTimeUtil._VN_DATE_TIME_FORMAT));
-		dossierStatus = DAOParamUtil
-			.getInteger(portletRequest, DOSSIER_STATUS);
+		dossierStatus = ParamUtil
+			    .getInteger(portletRequest, DOSSIER_STATUS, -1);
 		
 		serviceName = DAOParamUtil
 			.getString(portletRequest, SERVICE_NAME);
