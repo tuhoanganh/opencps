@@ -82,13 +82,12 @@
 			if(dossierParts != null){
 				%>
 				<div class="opencps dossiermgt dossier-part-tree" id='<%= renderResponse.getNamespace() + "tree" + dossierParts.get(0).getDossierpartId()%>'>
-					<table class="table table-bordered">
 					<c:choose>
 						<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_OPTION ||
 								partType == PortletConstants.DOSSIER_PART_TYPE_SUBMIT || 
 								partType == PortletConstants.DOSSIER_PART_TYPE_OTHER %>">
 							<%
-							for(DossierPart dossierPart : dossierParts) {
+							for(DossierPart dossierPart : dossierParts){
 								
 								int level = 1;
 								
@@ -108,13 +107,13 @@
 								}
 								
 								%>
-									<tr 
+									<div 
 										id='<%=renderResponse.getNamespace() + "row-" + dossierPart.getDossierpartId() + StringPool.DASH + index %>' 
 										index="<%=index %>"
 										dossier-part="<%=dossierPart.getDossierpartId() %>"
 										class="opencps dossiermgt dossier-part-row"
 									>
-										<td class='<%="level-" + level + " opencps dossiermgt dossier-part"%>'>
+										<span class='<%="level-" + level + " opencps dossiermgt dossier-part"%>'>
 											<span class="row-icon">
 												<i 
 													id='<%="rowcheck" + dossierPart.getDossierpartId() + StringPool.DASH + index %>' 
@@ -126,9 +125,9 @@
 											<span class="opencps dossiermgt dossier-part-name">
 												<%=dossierPart.getPartName() %>
 											</span>
-										</td>
+										</span>
 									
-										<td class="opencps dossiermgt dossier-part-control">
+										<span class="opencps dossiermgt dossier-part-control">
 											<liferay-util:include 
 												page="/html/portlets/processmgt/processorder/overview_files.jsp" 
 												servletContext="<%=application %>"
@@ -144,11 +143,11 @@
 												<portlet:param name="<%=DossierFileDisplayTerms.GROUP_NAME %>" value="<%=StringPool.BLANK%>"/>
 												<portlet:param name="<%=DossierFileDisplayTerms.PART_TYPE %>" value="<%=String.valueOf(dossierPart.getPartType()) %>"/>
 											</liferay-util:include>
-										</td>
-									</tr>
+										</span>
+									</div>
 								<%
 								index++;
-							} //end here
+							}
 							%>
 						</c:when>
 						
@@ -194,7 +193,7 @@
 								class="opencps dossiermgt dossier-part-tree"
 							>
 								<%
-								for(DossierPart dossierPart : dossierParts) {
+								for(DossierPart dossierPart : dossierParts){
 									
 									int level = 1;
 									
@@ -265,7 +264,7 @@
 							</div>
 						</c:when>
 					</c:choose>
-					</table>
+					
 				</div>
 				
 			<%

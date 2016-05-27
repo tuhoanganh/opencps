@@ -76,9 +76,11 @@
 %>
 
 <c:if test="<%=true %>">
+	<table width="100%">
+		<tr>
 			<c:choose>
 				<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_SUBMIT%>">
-					
+					<td width="50%" align="right">
 						<aui:a 
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
@@ -91,9 +93,9 @@
 							cssClass="opencps dossiermgt part-file-ctr view-form"
 							onClick='<%=renderResponse.getNamespace() + "viewForm(this)" %>'
 						/>
+					</td>
 					
-					
-					
+					<td width="50%" align="right">
 						<aui:a 
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
@@ -110,15 +112,15 @@
 							cssClass="opencps dossiermgt part-file-ctr view-attachment" 
 							onClick='<%=renderResponse.getNamespace() + "viewAttachment(this)" %>'
 						/>
-					
+					</td>
 					
 				</c:when>
 				
 				<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_OTHER && level == 0 %>">
-					
+					<td width="50%" align="right">
 
-					
-					
+					</td>
+					<td width="50%" align="right">
 						<aui:a 
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
@@ -135,14 +137,14 @@
 							cssClass="opencps dossiermgt part-file-ctr view-attachment" 
 							onClick='<%=renderResponse.getNamespace() + "viewAttachment(this)" %>'
 						/>
-					
+					</td>
 				</c:when>
 				
 				<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_OTHER && level > 0 %>">
-					
+					<td width="50%" align="right">
 
-					
-					
+					</td>
+					<td width="50%" align="right">
 						<aui:a 
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
@@ -159,34 +161,34 @@
 							cssClass="opencps dossiermgt part-file-ctr view-attachment" 
 							onClick='<%=renderResponse.getNamespace() + "viewAttachment(this)" %>'
 						/>
-					
+					</td>
 				</c:when>
 				
 				<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_PRIVATE%>">
-					
+					<td width="50%" align="right">
 						
-					
-					
+					</td>
+					<td width="50%" align="right">
 						
-					
+					</td>
 					
 				</c:when>
 				
 				<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_OPTION && level == 0 %>">
-					
+					<td width="50%" align="right">
 						
-					
-					
+					</td>
+					<td width="50%" align="right">
 						
-					
+					</td>
 					
 				</c:when>
 				
 				<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_OPTION && level > 0 %>">
-					
+					<td width="50%" align="right">
 
-					
-					
+					</td>
+					<td width="50%" align="right">
 						<aui:a 
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
@@ -204,11 +206,13 @@
 							onClick='<%=renderResponse.getNamespace() + "viewAttachment(this)" %>'
 						/>
 						
-					
+					</td>
 					
 				</c:when>
 				
 			</c:choose>
+		</tr>
+	</table>
 
 </c:if>
 
