@@ -17,11 +17,17 @@
 
 package org.opencps.util;
 
+import org.opencps.accountmgt.model.Business;
+import org.opencps.accountmgt.model.Citizen;
+import org.opencps.accountmgt.service.BusinessLocalServiceUtil;
+import org.opencps.accountmgt.service.CitizenLocalServiceUtil;
+
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.service.DLFolderLocalServiceUtil;
@@ -184,5 +190,100 @@ public class DLFolderUtil {
 			    userId, groupId, repositoryId, mountPoint, parentFolderId, name,
 			    description, hidden, serviceContext);
 		}
+	}
+	
+	public static DLFolder getAccountFolder(
+		long groupId, long userId, ServiceContext serviceContext) {
+
+		DLFolder dlFolder = null;
+		String destination = StringPool.BLANK;
+		try {
+			Citizen citizen = CitizenLocalServiceUtil
+				.getByMappingUserId(userId);
+			if (citizen != null) {
+				destination = PortletUtil
+					.getCitizenDossierDestinationFolder(groupId, userId);
+			}
+		}
+		catch (Exception e) {
+		}
+
+		if (Validator
+			.isNull(destination)) {
+			try {
+				Business business = BusinessLocalServiceUtil
+					.getBusiness(userId);
+				if (business != null) {
+					destination = PortletUtil
+						.getBusinessDossierDestinationFolder(groupId, business
+							.getMappingOrganizationId());
+				}
+			}
+			catch (Exception e) {
+			}
+		}
+
+		if (Validator
+			.isNotNull(destination)) {
+			dlFolder = DLFolderUtil
+				.getTargetFolder(serviceContext
+					.getUserId(), serviceContext
+						.getScopeGroupId(),
+					serviceContext
+						.getScopeGroupId(),
+					false, 0, destination, StringPool.BLANK, false,
+					serviceContext);
+		}
+
+		return dlFolder;
+	}
+	
+	
+	public static DLFolder getDossierFolder(
+		long groupId, long userId, int dossierCount,
+		ServiceContext serviceContext) {
+
+		DLFolder dlFolder = null;
+		String destination = StringPool.BLANK;
+		try {
+			Citizen citizen = CitizenLocalServiceUtil
+				.getByMappingUserId(userId);
+			if (citizen != null) {
+				destination = PortletUtil
+					.getCitizenDossierDestinationFolder(groupId, userId);
+			}
+		}
+		catch (Exception e) {
+		}
+
+		if (Validator
+			.isNull(destination)) {
+			try {
+				Business business = BusinessLocalServiceUtil
+					.getBusiness(userId);
+				if (business != null) {
+					destination = PortletUtil
+						.getBusinessDossierDestinationFolder(groupId, business
+							.getMappingOrganizationId());
+				}
+			}
+			catch (Exception e) {
+			}
+		}
+
+		if (Validator
+			.isNotNull(destination)) {
+			dlFolder = DLFolderUtil
+				.getTargetFolder(serviceContext
+					.getUserId(), serviceContext
+						.getScopeGroupId(),
+					serviceContext
+						.getScopeGroupId(),
+					false, 0, destination + StringPool.SLASH + String
+						.valueOf(dossierCount),
+					StringPool.BLANK, false, serviceContext);
+		}
+
+		return dlFolder;
 	}
 }

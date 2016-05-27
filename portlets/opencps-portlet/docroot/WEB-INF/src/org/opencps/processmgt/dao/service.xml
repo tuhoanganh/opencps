@@ -158,7 +158,7 @@
 		<column name="actionUserId" type="long"/>
 		<column name="requestPayment" type="boolean"/>
 		<column name="paymentFee" type="double"/>
-		<column name="generateReceptionNo" type="String"/>
+		<column name="generateReceptionNo" type="boolean"/>
 		<column name="receptionNoPattern" type="String"/>
 		<column name="generateDeadline" type="boolean"/>
 		<column name="deadlinePattern" type="String"/>
