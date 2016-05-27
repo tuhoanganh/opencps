@@ -635,6 +635,7 @@
 		<field name="requestDatetime" type="Date" />
 		<field name="amount" type="double" />
 		<field name="requestNote" type="String" />
+		<field name="paymentOptions" type="int" />
 		<field name="keypayUrl" type="String" />
 		<field name="keypayTransactionId" type="long">
 			<hint name="max-length">6</hint>
