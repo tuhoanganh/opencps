@@ -33,8 +33,123 @@
 	ServiceInfo serviceInfo = (ServiceInfo)request.getAttribute(WebKeys.SERVICE_INFO_ENTRY);
 	ServiceConfig serviceConfig = (ServiceConfig)request.getAttribute(WebKeys.SERVICE_CONFIG_ENTRY);
 %>
+<table class="table table-bordered dossier-info-table">
+	<tr>
+		<td width="150">
+			<liferay-ui:message key="dossier-no"/>
+		</td>
+		<td >
+			<%=dossier != null ? dossier.getReceptionNo() :  StringPool.BLANK %>
+		</td>
+	</tr>
+	<tr>
+		<td >
+			<liferay-ui:message key="service-name"/>
+		</td>
+		<td >
+			<%=serviceInfo != null ? serviceInfo.getServiceName() :  StringPool.BLANK %>
+		</td>
+	</tr>
+	<tr>
+		<td >
+			<liferay-ui:message key="subject-name"/>
+		</td>
+		<td >
+			<%=dossier != null ? dossier.getSubjectName() :  StringPool.BLANK %>
+		</td>
+	</tr>
+	<tr>
+		<td >
+			<liferay-ui:message key="address"/>
+		</td>
+		<td >
+			<%=dossier != null ? dossier.getAddress() :  StringPool.BLANK %>
+		</td>
+	</tr>
+	<tr>
+		<td >
+			<liferay-ui:message key="contact-name"/>
+		</td>
+		<td >
+			<%=dossier != null && Validator.isNotNull(dossier.getContactName()) ? dossier.getContactName() :  StringPool.BLANK %>
+		</td>
+	</tr>
+	<tr>
+		<td >
+			<liferay-ui:message key="contact-tel-no"/>
+		</td>
+		<td >
+			<%=dossier != null && Validator.isNotNull(dossier.getContactTelNo()) ? dossier.getContactTelNo() :  StringPool.BLANK %>
+		</td>
+	</tr>
+	<tr>
+		<td >
+			<liferay-ui:message key="email"/>
+		</td>
+		<td >
+			<%=dossier != null && Validator.isNotNull(dossier.getContactEmail()) ? dossier.getContactEmail() :  StringPool.BLANK %>
+		</td>
+	</tr>
+	<tr>
+		<td >
+			<liferay-ui:message key="reception-date"/>
+		</td>
+		<td >
+			<%=processOrder != null ? DateTimeUtil.convertDateToString(processOrder.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT) :  StringPool.BLANK %>
+		</td>
+	</tr>
+	<tr>
+		<td >
+			<liferay-ui:message key="reception-no"/>
+		</td>
+		<td >
+			<%=dossier != null &&  Validator.isNotNull(dossier.getReceptionNo())? dossier.getReceptionNo() :  StringPool.BLANK %>
+		</td>
+	</tr>
+	<tr>
+		<td >
+			<liferay-ui:message key="estimate-date"/>
+		</td>
+		<td >
+			<%=StringPool.BLANK %>
+		</td>
+	</tr>
+	<tr>
+		<td >
+			<liferay-ui:message key="complate-date"/>
+		</td>
+		<td >
+			<%=StringPool.BLANK %>
+		</td>
+	</tr>
+	<tr>
+		<td >
+			<liferay-ui:message key="dossier-status"/>
+		</td>
+		<td >
+			<%=dossier != null ? dossier.getDossierStatus() :  StringPool.BLANK %>
+		</td>
+	</tr>
+	<tr>
+		<td >
+			<liferay-ui:message key="modified-date"/>
+		</td>
+		<td >
+			<%=processOrder != null ? DateTimeUtil.convertDateToString(processOrder.getModifiedDate(), DateTimeUtil._VN_DATE_TIME_FORMAT) :  StringPool.BLANK %>
+		</td>
+	</tr>
+	<tr>
+		<td >
+			<liferay-ui:message key="note"/>
+		</td>
+		<td >
+			<%=processOrder != null && Validator.isNotNull(processOrder.getActionNote()) ? processOrder.getActionNote() : StringPool.BLANK%>
+		</td>
+	</tr>
+</table>
 
-<aui:row>
+
+<%-- <aui:row>
 	<aui:col width="30">
 		<liferay-ui:message key="dossier-no"/>
 	</aui:col>
@@ -158,4 +273,4 @@
 	<aui:col width="70">
 		<%=processOrder != null && Validator.isNotNull(processOrder.getActionNote()) ? processOrder.getActionNote() : StringPool.BLANK%>
 	</aui:col>
-</aui:row>
+</aui:row> --%>
