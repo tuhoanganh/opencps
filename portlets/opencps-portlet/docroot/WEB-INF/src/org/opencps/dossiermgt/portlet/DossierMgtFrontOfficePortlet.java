@@ -76,6 +76,8 @@ import org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil;
 import org.opencps.dossiermgt.service.FileGroupLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
 import org.opencps.jasperreport.util.JRReportUtil;
+import org.opencps.processmgt.model.ProcessOrder;
+import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
 import org.opencps.util.AccountUtil;
@@ -1536,12 +1538,58 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		try {
 			ServiceContext serviceContext = ServiceContextFactory
 			    .getInstance(actionRequest);
-
+			
+			UserActionMsg actionMsg = new UserActionMsg();
+			Message message = new Message();
 			switch (dossierStatus) {
+			case PortletConstants.DOSSIER_STATUS_WAITING:
+				
+				actionMsg.setAction(WebKeys.ACTION_RESUBMIT_VALUE);
+				
+				actionMsg.setDossierId(dossierId);
+				
+				actionMsg.setFileGroupId(fileGroupId);
+				
+				actionMsg.setLocale(serviceContext
+				        .getLocale());
+				
+				actionMsg.setUserId(serviceContext
+				        .getUserId());
+				
+				ProcessOrder processOrder = ProcessOrderLocalServiceUtil.
+					getProcessOrder(dossierId, fileGroupId);
+				
+				actionMsg.setProcessOrderId(processOrder.getProcessOrderId());
+				
+				message
+				    .put("action", "resubmit");
+				message
+				    .put("dossierId", dossierId);
+				message
+				    .put("fileGroupId", fileGroupId);
+				message
+				    .put("level", PortletConstants.DOSSIER_LOG_NORMAL);
+				message
+				    .put("locale", serviceContext
+				        .getLocale());
+
+				message
+				    .put("groupId", serviceContext
+				        .getScopeGroupId());
+
+				message
+				    .put("govAgencyOrganizationId", govAgencyOrganizationId);
+
+				message
+				    .put("userId", serviceContext
+				        .getUserId());
+				
+				message.put("msgToEngine", actionMsg);
+
+				
+				break;
 			case PortletConstants.DOSSIER_STATUS_NEW:
 				
-				UserActionMsg actionMsg = new UserActionMsg();
-
 				actionMsg.setAction(WebKeys.ACTION_SUBMIT_VALUE);
 				
 				actionMsg.setDossierId(dossierId);
@@ -1554,7 +1602,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				actionMsg.setUserId(serviceContext
 				        .getUserId());
 				
-				Message message = new Message();
 				message
 				    .put("action", "submit");
 				message
@@ -1580,14 +1627,16 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				
 				message.put("msgToEngine", actionMsg);
 
-				MessageBusUtil
-				    .sendMessage(
-				        "opencps/frontoffice/out/destination", message);
+				
 				break;
 
 			default:
 				break;
 			}
+			
+			MessageBusUtil
+		    .sendMessage(
+		        "opencps/frontoffice/out/destination", message);
 
 		}
 		catch (Exception e) {

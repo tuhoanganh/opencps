@@ -66,17 +66,33 @@
 		 			message="edit" 
 		 			url="<%=updateDossierURL.toString() %>" 
 		 		/>
-		 		<portlet:actionURL var="updateDossierStatusURL" name="updateDossierStatus">
-					<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
-					<portlet:param name="<%=DossierDisplayTerms.DOSSIER_STATUS %>" value="<%=String.valueOf(PortletConstants.DOSSIER_STATUS_NEW) %>"/>
-					<portlet:param name="backURL" value="<%=currentURL %>"/>
-				</portlet:actionURL> 
-		 		<liferay-ui:icon
-		 			cssClass="search-container-action forward"
-		 			image="forward"
-		 			message="send" 
-		 			url="<%=updateDossierStatusURL.toString() %>" 
-		 		/> 
+		 		<c:if test="<%=dossier.getDossierStatus() == PortletConstants.DOSSIER_STATUS_NEW %>">
+			 		<portlet:actionURL var="updateDossierStatusURL" name="updateDossierStatus">
+						<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
+						<portlet:param name="<%=DossierDisplayTerms.DOSSIER_STATUS %>" value="<%=String.valueOf(PortletConstants.DOSSIER_STATUS_NEW) %>"/>
+						<portlet:param name="backURL" value="<%=currentURL %>"/>
+					</portlet:actionURL> 
+			 		<liferay-ui:icon
+			 			cssClass="search-container-action forward"
+			 			image="forward"
+			 			message="send" 
+			 			url="<%=updateDossierStatusURL.toString() %>" 
+			 		/> 
+		 		</c:if>
+		 		
+		 		<c:if test="<%=dossier.getDossierStatus() == PortletConstants.DOSSIER_STATUS_WAITING %>">
+			 		<portlet:actionURL var="updateDossierStatusURL" name="updateDossierStatus">
+						<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
+						<portlet:param name="<%=DossierDisplayTerms.DOSSIER_STATUS %>" value="<%=String.valueOf(PortletConstants.DOSSIER_STATUS_WAITING) %>"/>
+						<portlet:param name="backURL" value="<%=currentURL %>"/>
+					</portlet:actionURL> 
+			 		<liferay-ui:icon
+			 			cssClass="search-container-action forward"
+			 			image="reply"
+			 			message="resend" 
+			 			url="<%=updateDossierStatusURL.toString() %>" 
+			 		/> 
+		 		</c:if>
 		 	</c:if>
 		 	
 		 	<c:if test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE) %>">
