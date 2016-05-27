@@ -115,4 +115,66 @@ public class PaymentFileLocalServiceImpl extends PaymentFileLocalServiceBaseImpl
 	public PaymentFile getPaymentFileByGoodCode(long groupId, String keypayGoodCode) throws SystemException {
 		return paymentFilePersistence.fetchByGoodCode(groupId, keypayGoodCode);
 	}
+	
+	
+	/**
+	 * @param dossierId
+	 * @param fileGroupId
+	 * @param ownerUserId
+	 * @param ownerOrganizationId
+	 * @param govAgencyOrganizationId
+	 * @param paymentName
+	 * @param requestDatetime
+	 * @param amount
+	 * @param requestNote
+	 * @param placeInfo
+	 * @return
+	 * @throws SystemException
+	 */
+	public PaymentFile addPaymentFile(
+	    long dossierId, long fileGroupId, long ownerUserId,
+	    long ownerOrganizationId, long govAgencyOrganizationId,
+	    String paymentName, Date requestDatetime, Double amount,
+	    String requestNote, String placeInfo)
+	    throws SystemException {
+
+		long paymentFileId =
+		    counterLocalService.increment(PaymentFile.class.getName());
+		PaymentFile paymentFile = paymentFilePersistence.create(paymentFileId);
+
+		Date now = new Date();
+
+		// paymentFile.setUserId(userId);
+
+		// paymentFile.setGroupId(serviceContext.getScopeGroupId());
+
+		// paymentFile.setCompanyId(serviceContext.getCompanyId());
+
+		paymentFile.setCreateDate(now);
+
+		paymentFile.setModifiedDate(now);
+		// paymentFile
+		// .setUuid(PortalUUIDUtil
+		// .generate());
+
+		paymentFile.setDossierId(dossierId);
+		paymentFile.setFileGroupId(fileGroupId);
+		paymentFile.setOwnerUserId(ownerUserId);
+		paymentFile.setOwnerOrganizationId(ownerOrganizationId);
+		paymentFile.setPaymentName(paymentName);
+		paymentFile.setRequestDatetime(requestDatetime);
+		paymentFile.setAmount(amount);
+		paymentFile.setRequestNote(requestNote);
+		paymentFile.setPlaceInfo(placeInfo);
+		paymentFile.setPaymentStatus(0);
+
+		// govAgencyOrganizationId > 0 insert
+		// paymentFile.setGovAgencyTaxNo(govAgencyTaxNo);
+		// paymentFile.setInvoiceTemplateNo(invoiceTemplateNo);
+		// paymentFile.setInvoiceIssueNo(invoiceIssueNo);
+		// paymentFile.setInvoiceNo(invoiceNo);
+
+		return paymentFilePersistence.update(paymentFile);
+	}
+
 }
