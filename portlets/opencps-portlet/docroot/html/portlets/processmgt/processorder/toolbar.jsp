@@ -105,6 +105,8 @@
 		var processOrderIds = Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, '<portlet:namespace />allRowIds');
 		
 		processOrderIds = processOrderIds.split(",");
+		
+		alert(processOrderIds);
 	
 		if(processOrderIds.length > 1){
 			alert('<%= UnicodeLanguageUtil.get(pageContext, "multiple-process-order-handle-is-developing") %>');

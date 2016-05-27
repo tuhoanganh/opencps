@@ -1094,7 +1094,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			    .getInstance(actionRequest);
 			
 			serviceContext.setAddGroupPermissions(true);
-			serviceContext.setAddGroupPermissions(true);
+			serviceContext.setAddGuestPermissions(true);
 
 			if (dossierId > 0) {
 				dossier = DossierLocalServiceUtil
