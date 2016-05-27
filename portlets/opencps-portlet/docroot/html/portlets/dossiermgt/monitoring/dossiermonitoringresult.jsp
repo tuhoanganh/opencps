@@ -178,13 +178,13 @@
 			<liferay-ui:search-container-column-text name="update-datetime" title="update-datetime" value="<%= (Validator.isNotNull(dossierLog.getUpdateDatetime())) ? dateFormatDate.format(dossierLog.getUpdateDatetime()) : \"\" %>"/>
 			<c:choose>
 				<c:when test="<%= dossierLog.getActor() == 0 %>">
-					<liferay-ui:search-container-column-text name="actor" title="actor" value="<%= LanguageUtil.get(locale, \"actor-system\") %>"/>
+					<liferay-ui:search-container-column-text name="actor" title="actor" value="<%= LanguageUtil.get(pageContext, \"actor-system\") %>"/>
 				</c:when>
 				<c:when test="<%= dossierLog.getActor() == 1 %>">
-					<liferay-ui:search-container-column-text name="actor" title="actor" value="<%= LanguageUtil.get(locale, \"actor-citizen\") %>"/>
+					<liferay-ui:search-container-column-text name="actor" title="actor" value="<%= LanguageUtil.get(pageContext, \"actor-citizen\") %>"/>
 				</c:when>
 				<c:when test="<%= dossierLog.getActor() == 2 %>">
-					<liferay-ui:search-container-column-text name="actor" title="actor" value="<%= LanguageUtil.get(locale, \"actor-employee\") %>"/>
+					<liferay-ui:search-container-column-text name="actor" title="actor" value="<%= LanguageUtil.get(pageContext, \"actor-employee\") %>"/>
 				</c:when>
 			</c:choose>
 			<!--<liferay-ui:search-container-column-text name="dossier-status" title="dossier-status" value="<%= dictItem.getItemName() %>"/>-->

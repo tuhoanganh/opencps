@@ -41,4 +41,45 @@
 				(opencps_payment_file.paymentStatus = ?)
 		]]>
 	</sql>
+	<sql id="org.opencps.paymentmgt.service.persistence.PaymentFileFinder.countCustomerPaymentFile">	
+		<![CDATA[
+			SELECT
+				count(*) AS COUNT_VALUE
+	    	FROM
+	    		opencps_payment_file
+	    	WHERE
+	    		(opencps_payment_file.groupId = ?)
+	    	AND
+	    		(opencps_payment_file.ownerUserId=?)
+	    	AND
+	    		(opencps_payment_file.ownerOrganizationId=?)
+	    	AND
+	    		(lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$])
+	    	OR
+	    		(lower(opencps_payment_file.accountUserName) LIKE ? [$AND_OR_NULL_CHECK$])
+	    	AND
+				(opencps_payment_file.paymentStatus = ?)
+		]]>
+	</sql>	
+	
+	<sql id="org.opencps.paymentmgt.service.persistence.PaymentFileFinder.searchCustomerPaymentFile">	
+		<![CDATA[
+	    	SELECT 
+	    		*
+	    	FROM
+	    		opencps_payment_file
+	    	WHERE
+	    		(opencps_payment_file.groupId = ?)
+	    	AND
+	    		(opencps_payment_file.ownerUserId=?)
+	    	AND
+	    		(opencps_payment_file.ownerOrganizationId=?)
+	    	AND
+	    		(lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$])
+	    	OR
+	    		(lower(opencps_payment_file.accountUserName) LIKE ? [$AND_OR_NULL_CHECK$])
+	    	AND
+				(opencps_payment_file.paymentStatus = ?)
+		]]>
+	</sql>
 </custom-sql>

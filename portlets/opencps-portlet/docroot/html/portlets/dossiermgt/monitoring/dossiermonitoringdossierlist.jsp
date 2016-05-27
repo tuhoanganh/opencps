@@ -1,7 +1,6 @@
 <%@page import="java.util.Date"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="org.opencps.dossiermgt.search.DossierSearch"%>
-<%@page import="org.opencps.dossiermgt.search.DossierListSearch"%>
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="com.liferay.portal.kernel.util.FastDateFormatFactoryUtil"%>
 <%@page import="java.text.Format"%>
@@ -86,22 +85,22 @@
 			String statusText = "";
 			if (Validator.isNotNull(dossier.getFinishDatetime())) {
 				if (dossier.getFinishDatetime().after(dossier.getEstimateDatetime())) {
-					statusText = LanguageUtil.get(locale, "status-late");
+					statusText = LanguageUtil.get(pageContext, "status-late");
 				}
 				else if (dossier.getFinishDatetime().before(dossier.getEstimateDatetime())) {
-					statusText = LanguageUtil.get(locale, "status-soon");
+					statusText = LanguageUtil.get(pageContext, "status-soon");
 				}
 				else if (dossier.getFinishDatetime().equals(dossier.getEstimateDatetime())) {
-					statusText = LanguageUtil.get(locale, "status-ontime");
+					statusText = LanguageUtil.get(pageContext, "status-ontime");
 				}
 			}
 			else {
 				Date now = new Date();
 				if (dossier.getEstimateDatetime().before(now)) {
-					statusText = LanguageUtil.get(locale, "status-toosoon");
+					statusText = LanguageUtil.get(pageContext, "status-toosoon");
 				}
 				else if (dossier.getEstimateDatetime().after(now)) {
-					statusText = LanguageUtil.get(locale, "status-toolate");
+					statusText = LanguageUtil.get(pageContext, "status-toolate");
 				}
 			}
 		%>

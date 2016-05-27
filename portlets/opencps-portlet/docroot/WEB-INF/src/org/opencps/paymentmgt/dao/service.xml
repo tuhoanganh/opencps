@@ -19,6 +19,7 @@
         <column name="requestDatetime" type="Date"></column>
         <column name="amount" type="double"></column>
         <column name="requestNote" type="String"></column>
+        <column name="paymentOptions" type="int"></column>
         <column name="keypayUrl" type="String"></column>
         <column name="keypayTransactionId" type="long"></column>
         <column name="keypayGoodCode" type="String"></column>
@@ -36,6 +37,10 @@
         <column name="invoiceTemplateNo" type="String"></column>
         <column name="invoiceIssueNo" type="String"></column>
         <column name="invoiceNo" type="String"></column>
+        <finder name="GoodCode" return-type="PaymentFile">
+            <finder-column name="groupId"></finder-column>
+            <finder-column name="keypayGoodCode"></finder-column>
+        </finder>
     </entity>
     <entity name="PaymentConfig" local-service="true" human-name="Payment configuration" table="opencps_payment_config">
         <column name="paymentConfigId" type="long" primary="true"></column>

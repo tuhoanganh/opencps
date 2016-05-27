@@ -18,12 +18,16 @@ import java.util.Date;
 import java.util.List;
 
 import org.opencps.dossiermgt.model.DossierFile;
+import java.util.List;
+
+import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.paymentmgt.model.PaymentFile;
 import org.opencps.paymentmgt.service.base.PaymentFileLocalServiceBaseImpl;
 
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.kernel.util.OrderByComparator;
 
 /**
  * The implementation of the Payment file local service.
@@ -99,4 +103,16 @@ public class PaymentFileLocalServiceImpl extends PaymentFileLocalServiceBaseImpl
 	public int countPaymentFiles(long groupId, String paymentStatus, String keywords) {
 		return paymentFileFinder.countPaymentFiles(groupId, paymentStatus, keywords);
     }
+	
+	public int countCustomerPaymentFile(long groupId, String keyword, boolean isCitizen, long customerId, int paymentStatus) {
+		return paymentFileFinder.countCustomerPaymentFile(groupId, keyword, isCitizen, customerId, paymentStatus);
+	}
+	
+	public List<PaymentFile> searchCustomerPaymentFile(long groupId, String keyword, boolean isCitizen, long customerId, int paymentStatus, int start, int end, OrderByComparator obc) {
+		return paymentFileFinder.searchCustomerPaymentFile(groupId, keyword, isCitizen, customerId, paymentStatus, start, end, obc);
+	}
+	
+	public PaymentFile getPaymentFileByGoodCode(long groupId, String keypayGoodCode) throws SystemException {
+		return paymentFilePersistence.fetchByGoodCode(groupId, keypayGoodCode);
+	}
 }
