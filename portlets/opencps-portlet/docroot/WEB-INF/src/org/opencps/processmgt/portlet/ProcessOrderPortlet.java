@@ -28,10 +28,11 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.opencps.accountmgt.model.Business;
 import org.opencps.accountmgt.model.Citizen;
-import org.opencps.accountmgt.search.BusinessDisplayTerms;
 import org.opencps.accountmgt.service.BusinessLocalServiceUtil;
 import org.opencps.accountmgt.service.CitizenLocalServiceUtil;
 import org.opencps.backend.message.SendToEngineMsg;
@@ -98,6 +99,12 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
 
+		HttpServletRequest request = PortalUtil
+			.getHttpServletRequest(actionRequest);
+
+		HttpSession session = request
+			.getSession();
+
 		UploadPortletRequest uploadPortletRequest = PortalUtil
 			.getUploadPortletRequest(actionRequest);
 
@@ -116,16 +123,15 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		long fileGroupId = ParamUtil
 			.getLong(uploadPortletRequest, DossierDisplayTerms.FILE_GROUP_ID);
 
-		long mappingOrganizationId = ParamUtil
-			.getLong(actionRequest,
-				BusinessDisplayTerms.BUSINESS_MAPPINGORGANIZATIONID);
-
 		long size = uploadPortletRequest
 			.getSize(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
 
-		long ownerOrganizationId = 0;
-
-		long ownerUserId = 0;
+		long ownerUserId = GetterUtil
+			.getLong(session
+				.getAttribute(WebKeys.ACCOUNT_OWNERUSERID));
+		long ownerOrganizationId = GetterUtil
+			.getLong(session
+				.getAttribute(WebKeys.ACCOUNT_OWNERORGANIZATIONID));
 
 		int dossierFileType = ParamUtil
 			.getInteger(uploadPortletRequest,
