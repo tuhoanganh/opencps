@@ -1,3 +1,4 @@
+<%@page import="org.opencps.util.WebKeys"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
 <%@page import="org.opencps.datamgt.model.DictItem"%>
@@ -52,7 +53,7 @@
 	catch (Exception ex) {
 		
 	}
-	_log.info("----DOSSIER ID----" + dossierId);
+	_log.debug("----DOSSIER ID----" + dossierId);
 	Format dateFormatDate = FastDateFormatFactoryUtil.getDate(locale, timeZone);
 %>
 <style>
@@ -172,22 +173,21 @@
 			keyProperty="dossierLogId"
 		>
 			<%
-				DictItem dictItem = DictItemLocalServiceUtil.getDictItem(dossierLog.getDossierStatus());
+				//DictItem dictItem = DictItemLocalServiceUtil.getDictItem(dossierLog.getDossierStatus());
 			%>
 			<liferay-ui:search-container-column-text name="row-no" title="row-no" value="<%= String.valueOf(row.getPos() + 1) %>"/>
 			<liferay-ui:search-container-column-text name="update-datetime" title="update-datetime" value="<%= (Validator.isNotNull(dossierLog.getUpdateDatetime())) ? dateFormatDate.format(dossierLog.getUpdateDatetime()) : \"\" %>"/>
 			<c:choose>
-				<c:when test="<%= dossierLog.getActor() == 0 %>">
+				<c:when test="<%= Validator.equals(dossierLog.getActor(), WebKeys.ACTOR_ACTION_SYSTEM)%>">
 					<liferay-ui:search-container-column-text name="actor" title="actor" value="<%= LanguageUtil.get(pageContext, \"actor-system\") %>"/>
 				</c:when>
-				<c:when test="<%= dossierLog.getActor() == 1 %>">
+				<c:when test="<%= Validator.equals(dossierLog.getActor(), WebKeys.ACTOR_ACTION_CITIZEN) %>">
 					<liferay-ui:search-container-column-text name="actor" title="actor" value="<%= LanguageUtil.get(pageContext, \"actor-citizen\") %>"/>
 				</c:when>
-				<c:when test="<%= dossierLog.getActor() == 2 %>">
+				<c:when test="<%= Validator.equals(dossierLog.getActor(), WebKeys.ACTOR_ACTION_EMPLOYEE) %>">
 					<liferay-ui:search-container-column-text name="actor" title="actor" value="<%= LanguageUtil.get(pageContext, \"actor-employee\") %>"/>
 				</c:when>
 			</c:choose>
-			<!--<liferay-ui:search-container-column-text name="dossier-status" title="dossier-status" value="<%= dictItem.getItemName() %>"/>-->
 			<liferay-ui:search-container-column-text name="action-info" title="action-info" value="<%= dossierLog.getActionInfo() %>"/>
 			<liferay-ui:search-container-column-text name="message-info" title="message-info" value="<%= dossierLog.getMessageInfo() %>"/>
 		
