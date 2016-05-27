@@ -163,8 +163,8 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 
 		double paymentFee = ParamUtil.getDouble(actionRequest, "paymentFee");
 
-		String generateReceptionNo =
-		    ParamUtil.getString(actionRequest, "generateReceptionNo");
+		boolean generateReceptionNo =
+		    ParamUtil.getBoolean(actionRequest, "generateReceptionNoCheckbox");
 
 		String receptionNoPattern =
 		    ParamUtil.getString(actionRequest, "receptionNoPattern");

@@ -241,7 +241,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 				}
 
 				// Update Paying
-				if (changeStatus.equals(Integer.toString(PortletConstants.DOSSIER_STATUS_PAYING))) {
+				if (processWorkflow.getRequestPayment()) {
 					PaymentFileLocalServiceUtil.addPaymentFile(
 					    toEngineMsg.getDossierId(),
 					    toEngineMsg.getFileGroupId(),
@@ -249,7 +249,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 					    dossier.getOwnerOrganizationId(),
 					    govAgencyOrganizationId, changeStep.getStepName(),
 					    toEngineMsg.getActionDatetime(),
-					    toEngineMsg.getPaymentValue(),
+					    processWorkflow.getPaymentFee(),
 					    toEngineMsg.getActionNote(), StringPool.BLANK);
 				}
 				else {
