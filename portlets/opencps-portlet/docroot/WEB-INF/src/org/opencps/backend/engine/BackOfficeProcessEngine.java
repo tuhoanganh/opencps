@@ -114,11 +114,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 		try {
 			if (Validator.isNull(processOrderId)) {
 
-				ProcessOrder processOrder = BackendUtils.getProcessOrder(toEngineMsg.getDossierId(),
-			        toEngineMsg.getFileGroupId());
-/*				    ProcessOrderLocalServiceUtil.getProcessOrder(
-				        toEngineMsg.getDossierId(),
-				        toEngineMsg.getFileGroupId());*/
+				ProcessOrder processOrder = BackendUtils.getProcessOrder(toEngineMsg.getDossierId(), toEngineMsg.getFileGroupId());
 
 				if (Validator.isNull(processOrder)) {
 
@@ -201,14 +197,22 @@ public class BackOfficeProcessEngine implements MessageListener {
 				toBackOffice.setDossierId(toEngineMsg.getDossierId());
 				toBackOffice.setFileGroupId(toEngineMsg.getFileGroupId());
 				toBackOffice.setDossierStatus(changeStatus);
+				if (changeStatus.equals(Integer.toString(PortletConstants.DOSSIER_STATUS_WAITING))) {
+					toBackOffice.setRequestCommand(WebKeys.DOSSIER_LOG_RESUBMIT_REQUEST);
+				}
+				if (changeStatus.equals(Integer.toString(PortletConstants.DOSSIER_STATUS_PAYING))) {
+					toBackOffice.setRequestCommand(WebKeys.DOSSIER_LOG_PAYMENT_REQUEST);
+				}
 				toBackOffice.setActionInfo(processWorkflow.getActionName());
 				toBackOffice.setMessageInfo(toEngineMsg.getActionNote());
 				toBackOffice.setSendResult(0);
 				toBackOffice.setRequestPayment(0);
 				toBackOffice.setUpdateDatetime(new Date());
-				
-				toBackOffice.setReceptionNo(DossierNoGenerator.noGenarator());
-				
+				if (Validator.isNull(toEngineMsg.getReceptionNo())) {
+					toBackOffice.setReceptionNo(DossierNoGenerator.noGenarator());
+				} else {
+					toBackOffice.setReceptionNo(toEngineMsg.getReceptionNo());
+				}
 				toBackOffice.setReceiveDatetime(new Date());
 				
 				toBackOffice.setEstimateDatetime(toEngineMsg.getEstimateDatetime());

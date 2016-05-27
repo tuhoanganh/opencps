@@ -113,6 +113,7 @@ public class PortletConstants {
 	public static final int DOSSIER_STATUS_ARCHIVED = 9;
 	public static final int DOSSIER_STATUS_SYSTEM = 10;
 	public static final int DOSSIER_STATUS_ERROR = 11;
+
 	
 	public static final int DOSSIER_LOG_NORMAL = 0;
 	public static final int DOSSIER_LOG_WARNING = 2;
