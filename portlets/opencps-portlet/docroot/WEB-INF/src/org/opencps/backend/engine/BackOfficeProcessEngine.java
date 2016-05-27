@@ -27,6 +27,7 @@ import org.opencps.backend.util.BackendUtils;
 import org.opencps.backend.util.DossierNoGenerator;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierStatus;
+import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.model.ProcessStep;
 import org.opencps.processmgt.model.ProcessWorkflow;
@@ -71,18 +72,18 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 		SendToEngineMsg toEngineMsg =
 		    (SendToEngineMsg) message.get("msgToEngine");
-		
+
 		SendToBackOfficeMsg toBackOffice = new SendToBackOfficeMsg();
-		
+
 		Dossier dossier = BackendUtils.getDossier(toEngineMsg.getDossierId());
-		
+
 		long serviceInfoId = 0;
 		long dossierTemplateId = 0;
 		String govAgencyCode = StringPool.BLANK;
 		String govAgencyName = StringPool.BLANK;
 		long govAgencyOrganizationId = 0;
 		long serviceProcessId = 0;
-		
+
 		if (Validator.isNotNull(dossier)) {
 			serviceInfoId = dossier.getServiceInfoId();
 			dossierTemplateId = dossier.getDossierTemplateId();
@@ -101,20 +102,23 @@ public class BackOfficeProcessEngine implements MessageListener {
 		}
 
 		long curStepId = 0;
-		
+
 		long processWorkflowId = toEngineMsg.getProcessWorkflowId();
-		
+
 		long processOrderId = toEngineMsg.getProcessOrderId();
-		
+
 		long processStepId = 0;
-		
+
 		String actionName = StringPool.BLANK;
 		String stepName = StringPool.BLANK;
 
 		try {
 			if (Validator.isNull(processOrderId)) {
 
-				ProcessOrder processOrder = BackendUtils.getProcessOrder(toEngineMsg.getDossierId(), toEngineMsg.getFileGroupId());
+				ProcessOrder processOrder =
+				    BackendUtils.getProcessOrder(
+				        toEngineMsg.getDossierId(),
+				        toEngineMsg.getFileGroupId());
 
 				if (Validator.isNull(processOrder)) {
 
@@ -135,8 +139,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 				}
 
 				processOrderId = processOrder.getProcessOrderId();
-				
-				
+
 			}
 			else {
 				// Find process order by processOrderId
@@ -144,10 +147,10 @@ public class BackOfficeProcessEngine implements MessageListener {
 				    ProcessOrderLocalServiceUtil.fetchProcessOrder(processOrderId);
 
 				processOrderId = processOrder.getProcessOrderId();
-				
+
 				curStepId = processOrder.getProcessStepId();
 			}
-			
+
 			ProcessWorkflow processWorkflow = null;
 
 			// Find workflow
@@ -159,44 +162,51 @@ public class BackOfficeProcessEngine implements MessageListener {
 			else {
 				processWorkflow =
 				    ProcessWorkflowLocalServiceUtil.fetchProcessWorkflow(processWorkflowId);
-				
+
 			}
+
+			// To Workflow
 
 			if (Validator.isNotNull(processWorkflow)) {
 				actionName = processWorkflow.getActionName();
-				
+
 				processStepId = processWorkflow.getPostProcessStepId();
-				
+
 				if (curStepId != 0) {
-					stepName = ProcessStepLocalServiceUtil.fetchProcessStep(curStepId).getStepName();
+					stepName =
+					    ProcessStepLocalServiceUtil.fetchProcessStep(curStepId).getStepName();
 				}
-				
+
 				long changeStepId = processWorkflow.getPostProcessStepId();
-				
-				ProcessStep changeStep = ProcessStepLocalServiceUtil.getProcessStep(changeStepId);
-				
+
+				ProcessStep changeStep =
+				    ProcessStepLocalServiceUtil.getProcessStep(changeStepId);
+
 				String changeStatus = StringPool.BLANK;
-				
+
 				if (Validator.isNotNull(changeStep)) {
 					changeStatus = changeStep.getDossierStatus();
 				}
-				
-				//Update process order to SYSTEM
+
+				// Update process order to SYSTEM
 				ProcessOrderLocalServiceUtil.updateProcessOrderStatus(
 				    processOrderId, PortletConstants.DOSSIER_STATUS_SYSTEM);
-				
+
 				// Update process order
 				ProcessOrderLocalServiceUtil.updateProcessOrder(
 				    processOrderId, processStepId,
-				    processWorkflow.getProcessWorkflowId(), toEngineMsg.getActionUserId(),
-				    toEngineMsg.getActionDatetime(), toEngineMsg.getActionNote(),
-				    toEngineMsg.getAssignToUserId(), stepName, actionName,
-				    0, 0, PortletConstants.DOSSIER_STATUS_SYSTEM);
-				
+				    processWorkflow.getProcessWorkflowId(),
+				    toEngineMsg.getActionUserId(),
+				    toEngineMsg.getActionDatetime(),
+				    toEngineMsg.getActionNote(),
+				    toEngineMsg.getAssignToUserId(), stepName, actionName, 0,
+				    0, PortletConstants.DOSSIER_STATUS_SYSTEM);
+
 				toBackOffice.setProcessOrderId(processOrderId);
 				toBackOffice.setDossierId(toEngineMsg.getDossierId());
 				toBackOffice.setFileGroupId(toEngineMsg.getFileGroupId());
 				toBackOffice.setDossierStatus(changeStatus);
+
 				if (changeStatus.equals(Integer.toString(PortletConstants.DOSSIER_STATUS_WAITING))) {
 					toBackOffice.setRequestCommand(WebKeys.DOSSIER_LOG_RESUBMIT_REQUEST);
 				}
@@ -206,30 +216,52 @@ public class BackOfficeProcessEngine implements MessageListener {
 				toBackOffice.setActionInfo(processWorkflow.getActionName());
 				toBackOffice.setMessageInfo(toEngineMsg.getActionNote());
 				toBackOffice.setSendResult(0);
-				toBackOffice.setRequestPayment(0);
+
+				if (changeStatus.equals(Integer.toString(PortletConstants.DOSSIER_STATUS_PAYING))) {
+					toBackOffice.setRequestPayment(1);
+				}
+				else {
+					toBackOffice.setRequestPayment(0);
+				}
+
 				toBackOffice.setUpdateDatetime(new Date());
+
 				if (Validator.isNull(toEngineMsg.getReceptionNo())) {
 					toBackOffice.setReceptionNo(DossierNoGenerator.noGenarator());
-				} else {
+				}
+				else {
 					toBackOffice.setReceptionNo(toEngineMsg.getReceptionNo());
 				}
 				toBackOffice.setReceiveDatetime(new Date());
-				
+
 				toBackOffice.setEstimateDatetime(toEngineMsg.getEstimateDatetime());
-				
-				
-				
+
 				if (processWorkflow.getIsFinishStep()) {
 					toBackOffice.setFinishDatetime(new Date());
 				}
-				
-				
+
+				// Update Paying
+				if (changeStatus.equals(Integer.toString(PortletConstants.DOSSIER_STATUS_PAYING))) {
+					PaymentFileLocalServiceUtil.addPaymentFile(
+					    toEngineMsg.getDossierId(),
+					    toEngineMsg.getFileGroupId(),
+					    Long.parseLong(dossier.getSubjectId()),
+					    dossier.getOwnerOrganizationId(),
+					    govAgencyOrganizationId, changeStep.getStepName(),
+					    toEngineMsg.getActionDatetime(),
+					    toEngineMsg.getPaymentValue(),
+					    toEngineMsg.getActionNote(), StringPool.BLANK);
+				}
+				else {
+					toBackOffice.setRequestPayment(0);
+				}
+
 				Message sendToBackOffice = new Message();
-				
+
 				sendToBackOffice.put("toBackOffice", toBackOffice);
-				
-				
-				MessageBusUtil.sendMessage("opencps/backoffice/out/destination", sendToBackOffice);
+
+				MessageBusUtil.sendMessage(
+				    "opencps/backoffice/out/destination", sendToBackOffice);
 				
 			} else {
 				//Send message to backoffice/out/destination

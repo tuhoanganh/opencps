@@ -65,6 +65,8 @@ public class SyncFromBackOffice implements MessageListener{
 				toBackOffice.getDossierId(), toBackOffice.getFileGroupId(), Integer.parseInt(toBackOffice.getDossierStatus()), toBackOffice.getReceptionNo(),toBackOffice.getEstimateDatetime(),
 				toBackOffice.getReceiveDatetime(), toBackOffice.getFinishDatetime(), actor, toBackOffice.getRequestCommand(),
 				toBackOffice.getActionInfo(), toBackOffice.getMessageInfo());
+			
+			
         }
         catch (Exception e) {
 	        // TODO: handle exception
