@@ -37,6 +37,7 @@ import org.opencps.paymentmgt.model.PaymentFile;
 import org.opencps.paymentmgt.search.PaymentFileDisplayTerms;
 import org.opencps.paymentmgt.service.PaymentConfigLocalServiceUtil;
 import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
+import org.opencps.paymentmgt.util.PaymentMgtUtil;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -147,6 +148,8 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 	        String country_code = "+84";
 	        String internal_bank = "all_card";
 	        String merchant_secure_key = paymentConfig.getKeypaySecureKey();
+	        paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_REQUESTED);
+	        updatePaymentFile = true;
 	        if (updatePaymentFile) {
 	        	try {
 	        		PaymentFileLocalServiceUtil.updatePaymentFile(paymentFile);

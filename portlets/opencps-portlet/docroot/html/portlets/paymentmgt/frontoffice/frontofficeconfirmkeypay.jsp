@@ -156,4 +156,23 @@
 			<liferay-ui:message key="good-code-not-valid"></liferay-ui:message>
 		</div>
 	</c:when>
+	<c:otherwise>
+		<%
+			String good_code = PortalUtil.getOriginalServletRequest(r).getParameter("good_code");
+			String receptionNo = good_code.split("GC_")[1];
+			System.out.println("----RECEPTION NO----" + receptionNo);
+			System.out.println("----GOOD CODE----" + good_code);
+
+			PaymentFile paymentFile = null;
+			try {
+				paymentFile = PaymentFileLocalServiceUtil.getPaymentFileByGoodCode(scopeGroupId, good_code);
+				paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_REJECTED);
+				PaymentFileLocalServiceUtil.updatePaymentFile(paymentFile);
+			}
+			catch (SystemException e) {
+				
+			}
+			
+		%>
+	</c:otherwise>
 </c:choose>
