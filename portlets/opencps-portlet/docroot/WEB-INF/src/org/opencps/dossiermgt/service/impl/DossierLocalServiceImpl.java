@@ -1084,4 +1084,34 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	public Dossier getDossierByReceptionNo(String receptionNo) throws SystemException {
 		return dossierPersistence.fetchByReceptionNo(receptionNo);
 	}
+	
+	
+	/**
+	 * @param userId
+	 * @param dossierId
+	 * @param syncStatus
+	 * @throws SystemException
+	 * @throws NoSuchDossierStatusException
+	 * @throws PortalException
+	 */
+	public void updateDossierStatus(long userId, long dossierId, int syncStatus)
+	    throws SystemException, NoSuchDossierStatusException, PortalException {
+
+		Date now = new Date();
+
+		List<DossierFile> dossierFiles =
+		    dossierFileLocalService.getDossierFileByD_F(dossierId, 0);
+		if (dossierFiles != null) {
+			for (DossierFile dossierFile : dossierFiles) {
+				dossierFile.setSyncStatus(syncStatus);
+				dossierFile.setModifiedDate(now);
+				if (userId != 0) {
+					dossierFile.setUserId(userId);
+				}
+				dossierFileLocalService.updateDossierFile(dossierFile);
+			}
+		}
+
+	}
+
 }

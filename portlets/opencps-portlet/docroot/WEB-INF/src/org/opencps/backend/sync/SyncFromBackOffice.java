@@ -24,6 +24,7 @@ import org.opencps.backend.message.SendToBackOfficeMsg;
 import org.opencps.backend.message.SendToCallbackMsg;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
+import org.opencps.util.PortletConstants;
 import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.messaging.Message;
@@ -66,7 +67,7 @@ public class SyncFromBackOffice implements MessageListener{
 				toBackOffice.getReceiveDatetime(), toBackOffice.getFinishDatetime(), actor, toBackOffice.getRequestCommand(),
 				toBackOffice.getActionInfo(), toBackOffice.getMessageInfo());
 			
-			
+			DossierLocalServiceUtil.updateDossierStatus(0, toBackOffice.getDossierId(), PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS);
         }
         catch (Exception e) {
 	        // TODO: handle exception
