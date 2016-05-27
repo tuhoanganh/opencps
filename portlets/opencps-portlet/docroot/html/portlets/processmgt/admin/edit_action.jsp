@@ -195,7 +195,7 @@
 			</aui:select>
 		</aui:col>
 		<aui:col width="50">
-			<aui:input name="requestPayment" type="checkbox"></aui:input>
+			<aui:input name="requestPayment" ></aui:input>
 			
 			<aui:input name="paymentFee" label=""></aui:input>
 		</aui:col>	
@@ -203,12 +203,12 @@
 
 	<aui:row>
 		<aui:col width="50">
-			<aui:input name="generateReceptionNo" type="checkbox"></aui:input>
+			<aui:input name="generateReceptionNo" ></aui:input>
 			
 			<aui:input name="receptionNoPattern" label=""></aui:input>
 		</aui:col>
 		<aui:col width="50">
-			<aui:input name="generateDeadline" type="checkbox"></aui:input>
+			<aui:input name="generateDeadline" ></aui:input>
 			
 			<aui:input name="deadlinePattern" label=""></aui:input>
 		</aui:col>	
