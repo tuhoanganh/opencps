@@ -33,6 +33,7 @@ import org.opencps.dossiermgt.model.DossierStatus;
 import org.opencps.dossiermgt.model.FileGroup;
 import org.opencps.dossiermgt.search.DossierFileDisplayTerms;
 import org.opencps.dossiermgt.service.base.DossierLocalServiceBaseImpl;
+import org.opencps.processmgt.model.WorkflowOutput;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.util.DateTimeUtil;
 import org.opencps.util.PortletConstants;
@@ -1101,6 +1102,9 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 
 		List<DossierFile> dossierFiles =
 		    dossierFileLocalService.getDossierFileByD_F(dossierId, 0);
+		
+		
+		
 		if (dossierFiles != null) {
 			for (DossierFile dossierFile : dossierFiles) {
 				dossierFile.setSyncStatus(syncStatus);
@@ -1111,6 +1115,37 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 				dossierFileLocalService.updateDossierFile(dossierFile);
 			}
 		}
+
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.opencps.dossiermgt.service.DossierLocalService#updateDossierStatus(long, long, int)
+	 */
+	public void updateDossierStatus(
+	    long userId, long dossierId, int syncStatus,
+	    List<WorkflowOutput> worklows)
+	    throws SystemException, NoSuchDossierStatusException, PortalException {
+
+		Date now = new Date();
+
+		List<DossierFile> dossierFiles =
+		    dossierFileLocalService.getDossierFileByD_F(dossierId, 0);
+		
+		for (WorkflowOutput output : worklows) {
+			
+			DossierFile dossierFile = dossierFileLocalService.getDossierFileByD_P(dossierId, output.getDossierPartId());
+			
+			dossierFile.setSyncStatus(syncStatus);
+			dossierFile.setModifiedDate(now);
+			
+			if (userId != 0) {
+				dossierFile.setUserId(userId);
+			}
+			
+			dossierFileLocalService.updateDossierFile(dossierFile);
+
+		}
+		
 
 	}
 

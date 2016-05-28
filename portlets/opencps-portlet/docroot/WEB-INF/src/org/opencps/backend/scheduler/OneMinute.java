@@ -15,24 +15,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 
-package org.opencps.backend.engine;
+package org.opencps.backend.scheduler;
 
-import org.opencps.backend.message.SendToCallbackMsg;
-import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
-
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.MessageListenerException;
-import com.liferay.portal.kernel.util.GetterUtil;
 
 
 /**
  * @author khoavd
  *
  */
-public class BackOfficeProcessCallback implements MessageListener{
+public class OneMinute implements MessageListener{
 
 	/* (non-Javadoc)
      * @see com.liferay.portal.kernel.messaging.MessageListener#receive(com.liferay.portal.kernel.messaging.Message)
@@ -41,25 +35,8 @@ public class BackOfficeProcessCallback implements MessageListener{
     public void receive(Message message)
         throws MessageListenerException {
 
-	    //Run doRevice
-    	
-    	_doRecevie(message);
+	    System.out.println("5 minite inteval");
 	    
     }
-    
-    private void _doRecevie(Message message) {
-    	
-    	SendToCallbackMsg msgToCalback = (SendToCallbackMsg) message.get("toCallback");
-    	
-    	try {
-        	ProcessOrderLocalServiceUtil.updateProcessOrderStatus(msgToCalback.getProcessOrderId(), msgToCalback.getDossierStatus());
-        }
-        catch (Exception e) {
-	        // TODO: handle exception
-        }
-    }
-    
-
-    private Log _log = LogFactoryUtil.getLog(BackOfficeProcessCallback.class);
 
 }

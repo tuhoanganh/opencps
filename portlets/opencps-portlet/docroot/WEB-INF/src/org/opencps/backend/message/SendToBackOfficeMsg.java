@@ -233,6 +233,23 @@ public class SendToBackOfficeMsg {
     
     	this.finishDatetime = finishDatetime;
     }
+	
+    /**
+     * @return the processWorkflowId
+     */
+    public long getProcessWorkflowId() {
+    
+    	return processWorkflowId;
+    }
+
+	
+    /**
+     * @param processWorkflowId the processWorkflowId to set
+     */
+    public void setProcessWorkflowId(long processWorkflowId) {
+    
+    	this.processWorkflowId = processWorkflowId;
+    }
 	protected long processOrderId;
 	protected long dossierId;
 	protected long fileGroupId;
@@ -246,7 +263,7 @@ public class SendToBackOfficeMsg {
 	protected Date receiveDatetime;
 	protected Date estimateDatetime;
 	protected Date finishDatetime;
-	
+	protected long processWorkflowId;
     /**
      * @return the requestCommand
      */

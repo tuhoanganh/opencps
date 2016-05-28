@@ -2,6 +2,7 @@
 <!DOCTYPE liferay-portlet-app PUBLIC "-//Liferay//DTD Portlet Application 6.2.0//EN" "http://www.liferay.com/dtd/liferay-portlet-app_6_2_0.dtd">
 
 <liferay-portlet-app>
+	
 	<portlet>
 		<portlet-name>1</portlet-name>
 		<icon>/icon.png</icon>
@@ -12,6 +13,7 @@
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
 		<css-class-wrapper>1-opencps-datamgt-portlet</css-class-wrapper>
+		
 	</portlet>
 	<portlet>
 		<portlet-name>2</portlet-name>
@@ -106,6 +108,24 @@
 	<portlet>
 		<portlet-name>15</portlet-name>
 		<icon>/icon.png</icon>
+		<scheduler-entry>
+			<scheduler-event-listener-class>org.opencps.backend.scheduler.OneMinute</scheduler-event-listener-class>
+			<trigger>
+				<simple>
+					<simple-trigger-value>1</simple-trigger-value>
+					<time-unit>minute</time-unit>
+				</simple>
+			</trigger>
+		</scheduler-entry>
+		<scheduler-entry>
+			<scheduler-event-listener-class>org.opencps.backend.scheduler.FiveMinutes</scheduler-event-listener-class>
+			<trigger>
+				<simple>
+					<simple-trigger-value>5</simple-trigger-value>
+					<time-unit>minute</time-unit>
+				</simple>
+			</trigger>
+		</scheduler-entry>
 		<action-url-redirect>true</action-url-redirect>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>
@@ -228,4 +248,5 @@
 		<role-name>user</role-name>
 		<role-link>User</role-link>
 	</role-mapper>
+	
 </liferay-portlet-app>
