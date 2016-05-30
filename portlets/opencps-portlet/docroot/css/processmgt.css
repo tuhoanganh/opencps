@@ -60,7 +60,9 @@
 }
 
 .opencps.dossiermgt.dossier-part-row {
+    border-bottom: 1px dotted #ccc;
     display: table;
+    padding: 5px 0;
     vertical-align: middle;
     width: 100%;
 }
@@ -94,4 +96,12 @@
 
 .opencps.dossiermgt.part-file-ctr.add-private-dossier {
     padding-left: 0;
+}
+
+.label.opencps.dossiermgt.part-file-ctr{
+	color: #fff !important;
+    background-color: #25BB61;
+    float: right;
+    margin-left: 5px;
+    padding: 5px 3px;
 }
