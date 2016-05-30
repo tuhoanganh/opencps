@@ -48,7 +48,7 @@
 	    	FROM
 	    		opencps_payment_file
 	    	WHERE
-	    		(opencps_payment_file.groupId = ?)
+	    		(1 = 1)
 	    	AND
 	    		(opencps_payment_file.ownerUserId=?)
 	    	AND
@@ -69,7 +69,7 @@
 	    	FROM
 	    		opencps_payment_file
 	    	WHERE
-	    		(opencps_payment_file.groupId = ?)
+	    		(1 = 1)
 	    	AND
 	    		(opencps_payment_file.ownerUserId=?)
 	    	AND

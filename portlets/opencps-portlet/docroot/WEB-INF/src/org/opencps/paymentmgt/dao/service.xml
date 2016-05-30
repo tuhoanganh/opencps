@@ -41,6 +41,13 @@
             <finder-column name="groupId"></finder-column>
             <finder-column name="keypayGoodCode"></finder-column>
         </finder>
+        <finder return-type="Collection" name="D_P">
+        	<finder-column name="dossierId"/>
+        	<finder-column name="paymentStatus"/>
+        </finder>
+        <finder return-type="Collection" name="D_">
+        	<finder-column name="dossierId"/>
+        </finder>
     </entity>
     <entity name="PaymentConfig" local-service="true" human-name="Payment configuration" table="opencps_payment_config">
         <column name="paymentConfigId" type="long" primary="true"></column>

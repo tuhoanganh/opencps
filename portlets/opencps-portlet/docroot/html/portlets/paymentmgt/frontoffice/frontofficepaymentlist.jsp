@@ -1,3 +1,4 @@
+<%@page import="org.opencps.util.AccountUtil"%>
 <%@page import="org.opencps.paymentmgt.util.PaymentMgtUtil"%>
 <%@page import="org.opencps.paymentmgt.service.persistence.PaymentFileUtil"%>
 <%@page import="org.opencps.datamgt.NoSuchDictItemException"%>
@@ -55,12 +56,28 @@
 	<liferay-ui:search-container-results>
 		<%
 			PaymentFileSearchTerms searchTerms = (PaymentFileSearchTerms)searchContainer.getSearchTerms();
+		
+			boolean isCitizen = true;
+			
+			if (AccountUtil.getAccountBean().isBusiness()) {
+				isCitizen = false;
+			}
+			
+			long ownerObjectId = 0;
+			
+			
+			if (AccountUtil.getAccountBean().isCitizen()) {
+				ownerObjectId = AccountUtil.getAccountBean().getOwnerUserId();
+			} else if (AccountUtil.getAccountBean().isBusiness()) {
+				ownerObjectId = AccountUtil.getAccountBean().getOwnerOrganizationId();
+			}
+			
 			
 			Integer totalCount = 0;										
 			List<PaymentFile> paymentFiles = null;		
 			try {
-				paymentFiles = PaymentFileLocalServiceUtil.searchCustomerPaymentFile(scopeGroupId, searchTerms.getKeywords(), true, user.getUserId(), paymentStatus, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-				totalCount = PaymentFileLocalServiceUtil.countCustomerPaymentFile(scopeGroupId, searchTerms.getKeywords(), true, user.getUserId(), paymentStatus);
+				paymentFiles = PaymentFileLocalServiceUtil.searchCustomerPaymentFile(scopeGroupId, searchTerms.getKeywords(), isCitizen, ownerObjectId, paymentStatus, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
+				totalCount = PaymentFileLocalServiceUtil.countCustomerPaymentFile(scopeGroupId, searchTerms.getKeywords(), isCitizen, ownerObjectId, paymentStatus);
 			}catch(Exception e){
 			}
 			

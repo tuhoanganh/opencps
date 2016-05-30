@@ -21,6 +21,7 @@ import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.ServiceConfig;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
+import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.model.ProcessStep;
 import org.opencps.processmgt.model.ProcessWorkflow;
@@ -40,6 +41,38 @@ import com.liferay.portal.kernel.util.Validator;
  */
 public class BackendUtils {
 	
+	/**
+	 * @param dossierId
+	 * @return
+	 */
+	public boolean checkPaymentStatus(long dossierId) {
+		
+		boolean paymentStatus = true;
+		
+		int countAllPayment = 0;
+		
+		int countPaymentComplated = 0;
+		
+		try {
+	        countAllPayment = PaymentFileLocalServiceUtil.countAllPaymentFile(dossierId);
+	        
+	        countPaymentComplated = PaymentFileLocalServiceUtil.countPaymentFile(dossierId, 2);
+	        
+	        if (!((countAllPayment - countPaymentComplated) == 0)) {
+	        	paymentStatus = false;
+	        }
+        }
+        catch (Exception e) {
+        	paymentStatus = false;
+        }
+		
+		return paymentStatus;
+	}
+	
+	/**
+	 * @param dossierId
+	 * @return
+	 */
 	public static long getGovAgencyOrgId(long dossierId) {
 		
 		long govAgencyOrgId = 0;

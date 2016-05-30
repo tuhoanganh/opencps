@@ -101,6 +101,7 @@
 			                 			A.one('#<portlet:namespace /><%= PaymentConfigDisplayTerms.INVOICE_LAST_NO %>').set('value', obj.<%= PaymentConfigDisplayTerms.INVOICE_LAST_NO %>);
 		                 			else
 		                 				A.one('#<portlet:namespace /><%= PaymentConfigDisplayTerms.INVOICE_LAST_NO %>').set('value', '');
+		                 			
 		                 			if (obj.<%= PaymentConfigDisplayTerms.REPORT_TEMPLATE %>)
 			                 			A.one('#<portlet:namespace /><%= PaymentConfigDisplayTerms.REPORT_TEMPLATE %>').set('value', obj.<%= PaymentConfigDisplayTerms.REPORT_TEMPLATE %>);
 		                 			else

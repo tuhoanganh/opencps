@@ -17,6 +17,8 @@
 
 package org.opencps.backend.scheduler;
 
+import java.util.Date;
+
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.MessageListenerException;
@@ -35,7 +37,6 @@ public class OneMinute implements MessageListener{
     public void receive(Message message)
         throws MessageListenerException {
 
-	    System.out.println("5 minite inteval");
 	    
     }
 
