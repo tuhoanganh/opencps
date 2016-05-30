@@ -81,6 +81,7 @@
 			<c:choose>
 				<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_SUBMIT%>">
 					<td width="50%" align="right">
+						<c:if test="<%=dossierPart != null && Validator.isNotNull(dossierPart.getFormReport()) && Validator.isNotNull(dossierPart.getFormScript()) %>">
 						<aui:a 
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
@@ -93,6 +94,7 @@
 							cssClass="opencps dossiermgt part-file-ctr view-form"
 							onClick='<%=renderResponse.getNamespace() + "viewForm(this)" %>'
 						/>
+						</c:if>
 					</td>
 					
 					<td width="50%" align="right">
