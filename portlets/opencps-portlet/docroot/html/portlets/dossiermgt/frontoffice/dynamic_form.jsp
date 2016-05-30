@@ -53,6 +53,8 @@
 
 	long dossierFileId = ParamUtil.getLong(request, DossierFileDisplayTerms.DOSSIER_FILE_ID);
 	
+	System.out.println(dossierFileId);
+	
 	if(primaryKey > 0){
 		dossierFileId = primaryKey;
 	}

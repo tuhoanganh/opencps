@@ -477,7 +477,7 @@
 		portletURL.setParameter("processOrderId", processOrderId);
 		portletURL.setParameter("dossierFileId", dossierFileId);
 		portletURL.setParameter("dossierPartId", dossierPartId);
-		<portlet:namespace/>openDossierDialog(portletURL.toString(), '<portlet:namespace />dossierFileId','<%= UnicodeLanguageUtil.get(pageContext, "upload-dossier-file") %>');
+		<portlet:namespace/>openDossierDialog(portletURL.toString(), '<portlet:namespace />dossierFileId','<%= UnicodeLanguageUtil.get(pageContext, "upload-file-result") %>');
 	});
 
 	Liferay.provide(window, '<portlet:namespace/>openDossierDialog', function(uri, id, title) {

@@ -1,4 +1,5 @@
 
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -18,6 +19,7 @@
  */
 %>
 
+<%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
 <%@page import="com.liferay.portlet.documentlibrary.util.DLUtil"%>
 <%@page import="org.opencps.util.DLFileEntryUtil"%>
 <%@page import="com.liferay.portal.kernel.repository.model.FileEntry"%>
@@ -33,7 +35,9 @@
 <%
 	//DossierFile dossierFile = (DossierFile) request.getAttribute(WebKeys.DOSSIER_FILE_ENTRY);
 
-	DossierPart dossierPart = (DossierPart) request.getAttribute(WebKeys.DOSSIER_PART_ENTRY);
+	//DossierPart dossierPart = (DossierPart) request.getAttribute(WebKeys.DOSSIER_PART_ENTRY);
+	
+	DossierPart dossierPart = null;
 	
 	long dossierId = ParamUtil.getLong(request, DossierDisplayTerms.DOSSIER_ID);
 	
@@ -50,6 +54,12 @@
 	int partType = ParamUtil.getInteger(request, DossierFileDisplayTerms.PART_TYPE);
 	
 	String groupName = ParamUtil.getString(request, DossierFileDisplayTerms.GROUP_NAME);
+	
+	if(dossierPartId > 0){
+		try{
+			dossierPart = DossierPartLocalServiceUtil.getDossierPart(dossierPartId);
+		}catch(Exception e){}
+	}
 	
 	
 	String fileURL = StringPool.BLANK;
