@@ -175,6 +175,8 @@ public class DefineObjectsTag extends IncludeTag {
 					        .getUserId());
 
 					accountInstance = citizen;
+					
+					ownerUserId = citizen.getMappingUserId();
 
 					dossierDestinationFolder = PortletUtil
 					    .getCitizenDossierDestinationFolder(citizen
@@ -186,6 +188,13 @@ public class DefineObjectsTag extends IncludeTag {
 					session
 					    .setAttribute(
 					        org.opencps.util.WebKeys.CITIZEN_ENTRY, citizen);
+					
+					request
+				    	.setAttribute(
+				    		org.opencps.util.WebKeys.ACCOUNT_OWNERUSERID, ownerUserId);
+					session
+					    .setAttribute(
+					        org.opencps.util.WebKeys.ACCOUNT_OWNERUSERID, ownerUserId);
 
 				}
 				else if (accountType
@@ -213,6 +222,13 @@ public class DefineObjectsTag extends IncludeTag {
 					session
 					    .setAttribute(
 					        org.opencps.util.WebKeys.BUSINESS_ENTRY, business);
+					
+					request
+				    	.setAttribute(
+				    		org.opencps.util.WebKeys.ACCOUNT_OWNERORGANIZATIONID, ownerOrganizationId);
+					session
+					    .setAttribute(
+					        org.opencps.util.WebKeys.ACCOUNT_OWNERORGANIZATIONID, ownerOrganizationId);
 				}
 				else if (accountType
 				    .equals(
@@ -246,6 +262,7 @@ public class DefineObjectsTag extends IncludeTag {
 
 				if (Validator
 				    .isNotNull(dossierDestinationFolder)) {
+					System.out.println(dossierDestinationFolder);
 					try {
 						ServiceContext serviceContext = ServiceContextFactory
 						    .getInstance(request);
