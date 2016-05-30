@@ -249,11 +249,13 @@ public class BackOfficeProcessEngine implements MessageListener {
 				long ownerUserId = 0;
 				long ownerOrganizationId = 0;
 				
-				if (AccountUtil.getAccountBean().isCitizen()) {
-					ownerUserId = dossier.getUserId();
-				} else if (AccountUtil.getAccountBean().isBusiness()) {
+				if (dossier.getOwnerOrganizationId() != 0) {
+					ownerUserId = 0;
 					ownerOrganizationId = dossier.getOwnerOrganizationId();
+				} else {
+					ownerUserId = dossier.getUserId();
 				}
+				
 
 				// Update Paying
 				if (processWorkflow.getRequestPayment()) {

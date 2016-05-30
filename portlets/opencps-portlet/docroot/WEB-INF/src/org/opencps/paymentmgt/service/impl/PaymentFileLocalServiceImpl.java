@@ -18,12 +18,14 @@ import java.util.Date;
 import java.util.List;
 
 import org.opencps.dossiermgt.model.DossierFile;
+
 import java.util.List;
 
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.paymentmgt.model.PaymentFile;
 import org.opencps.paymentmgt.service.base.PaymentFileLocalServiceBaseImpl;
 
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.service.ServiceContext;
@@ -44,6 +46,31 @@ import com.liferay.portal.kernel.util.OrderByComparator;
  * @see org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil
  */
 public class PaymentFileLocalServiceImpl extends PaymentFileLocalServiceBaseImpl {
+	
+	/**
+	 * @param dossierId
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public int countAllPaymentFile(long dossierId)
+	    throws PortalException, SystemException {
+		return paymentFilePersistence.countByD_(dossierId);
+	}
+	
+	/**
+	 * @param dossierId
+	 * @param paymentStatus
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public int countPaymentFile(long dossierId, int paymentStatus)
+	    throws PortalException, SystemException {
+
+		return paymentFilePersistence.countByD_P(dossierId, paymentStatus);
+	}
+	
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
