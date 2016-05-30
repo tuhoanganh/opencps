@@ -76,6 +76,11 @@
 			/>
 			
 			<liferay-ui:search-container-column-text 
+				name="action-name"
+			 	value="<%= actionHistory.getActionName() %>"
+			/>
+			
+			<liferay-ui:search-container-column-text 
 				name="action-date"
 			 	value="<%= date %>"
 			/>
