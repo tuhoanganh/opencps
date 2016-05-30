@@ -105,3 +105,19 @@
     margin-left: 5px;
     padding: 5px 3px;
 }
+
+.process-workflow-info {
+    width: 100%;
+}
+
+.process-workflow-info tr{
+	height: 30px;
+}
+
+.process-workflow-info tr, .process-workflow-info td{
+    border: 1px solid #ccc;
+}
+
+.row-fluid.process-workflow-action {
+    padding-top: 10px;
+}

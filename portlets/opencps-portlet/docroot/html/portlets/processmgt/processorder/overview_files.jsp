@@ -91,7 +91,7 @@
 							level = "<%=level %>"
 							href="javascript:void(0);" 
 							label="view-form" 
-							cssClass="opencps dossiermgt part-file-ctr view-form"
+							cssClass="label opencps dossiermgt part-file-ctr view-form"
 							onClick='<%=renderResponse.getNamespace() + "viewForm(this)" %>'
 						/>
 						</c:if>
@@ -111,7 +111,7 @@
 							template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
 							href="javascript:void(0);" 
 							label="view-attachment" 
-							cssClass="opencps dossiermgt part-file-ctr view-attachment" 
+							cssClass="label opencps dossiermgt part-file-ctr view-attachment" 
 							onClick='<%=renderResponse.getNamespace() + "viewAttachment(this)" %>'
 						/>
 					</td>
@@ -136,7 +136,7 @@
 							template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
 							href="javascript:void(0);" 
 							label="view-attachment" 
-							cssClass="opencps dossiermgt part-file-ctr view-attachment" 
+							cssClass="label opencps dossiermgt part-file-ctr view-attachment" 
 							onClick='<%=renderResponse.getNamespace() + "viewAttachment(this)" %>'
 						/>
 					</td>
@@ -160,7 +160,7 @@
 							template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
 							href="javascript:void(0);" 
 							label="view-attachment" 
-							cssClass="opencps dossiermgt part-file-ctr view-attachment" 
+							cssClass="label opencps dossiermgt part-file-ctr view-attachment" 
 							onClick='<%=renderResponse.getNamespace() + "viewAttachment(this)" %>'
 						/>
 					</td>
@@ -204,7 +204,7 @@
 							template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
 							href="javascript:void(0);" 
 							label="view-attachment" 
-							cssClass="opencps dossiermgt part-file-ctr view-attachment" 
+							cssClass="label opencps dossiermgt part-file-ctr view-attachment" 
 							onClick='<%=renderResponse.getNamespace() + "viewAttachment(this)" %>'
 						/>
 						
