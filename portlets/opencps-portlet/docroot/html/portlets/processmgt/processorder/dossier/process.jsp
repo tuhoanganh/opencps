@@ -1,4 +1,5 @@
 
+<%@page import="org.opencps.backend.util.BackendUtils"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -327,18 +328,30 @@
 	<%
 		if(postProcessWorkflows != null && !postProcessWorkflows.isEmpty()){
 			for(ProcessWorkflow postProcessWorkflow : postProcessWorkflows){
-				
+				String preCondition = Validator.isNotNull(postProcessWorkflow.getPreCondition()) ? 
+					postProcessWorkflow.getPreCondition() : StringPool.BLANK;
+					
+					boolean showButton = true;
+					
+					if(preCondition.contains(WebKeys.PRE_CONDITION_PAYOK)){
+						if(!BackendUtils.checkPaymentStatus(dossier.getDossierId())){
+							showButton = false;
+						}
+					}
+					
 				%>
-					<aui:button 
-						type="button"
-						name="<%=String.valueOf(postProcessWorkflow.getProcessWorkflowId()) %>"
-						value="<%=postProcessWorkflow.getActionName() %>"
-						process-workflow="<%=String.valueOf(postProcessWorkflow.getProcessWorkflowId()) %>"
-						service-process="<%=String.valueOf(postProcessWorkflow.getServiceProcessId()) %>"
-						process-step="<%=String.valueOf(postProcessWorkflow.getPostProcessStepId()) %>"
-						auto-event="<%=Validator.isNotNull(postProcessWorkflow.getAutoEvent()) ? postProcessWorkflow.getAutoEvent() : StringPool.BLANK %>"
-						onClick='<%=renderResponse.getNamespace() +  "assignToUser(this)"%>'
-					/>
+					<c:if test="<%=showButton %>">
+						<aui:button 
+							type="button"
+							name="<%=String.valueOf(postProcessWorkflow.getProcessWorkflowId()) %>"
+							value="<%=postProcessWorkflow.getActionName() %>"
+							process-workflow="<%=String.valueOf(postProcessWorkflow.getProcessWorkflowId()) %>"
+							service-process="<%=String.valueOf(postProcessWorkflow.getServiceProcessId()) %>"
+							process-step="<%=String.valueOf(postProcessWorkflow.getPostProcessStepId()) %>"
+							auto-event="<%=Validator.isNotNull(postProcessWorkflow.getAutoEvent()) ? postProcessWorkflow.getAutoEvent() : StringPool.BLANK %>"
+							onClick='<%=renderResponse.getNamespace() +  "assignToUser(this)"%>'
+						/>
+					</c:if>
 				<%
 			}
 		}
