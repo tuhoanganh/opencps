@@ -151,5 +151,15 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	
 	public static final String DOSSIER_LOG_CANCEL_REQUEST = "cancelRequest";
 	
+	public static final String PRE_CONDITION_PAYOK = "payok";
 
+	public static final String PRE_CONDITION_TAG_LABEL = "tag label";
+	
+	public static final String PRE_CONDITION_CANCEL = "cancel";
+	
+	public static final String PRE_CONDITION_SERVICE_ID = "service id";
+	
+	public static final String PRE_CONDITION_ONEGATE = "onegate";
+	
+	public static final String PRE_CONDITION_ONELINE = "oneline";
 }
