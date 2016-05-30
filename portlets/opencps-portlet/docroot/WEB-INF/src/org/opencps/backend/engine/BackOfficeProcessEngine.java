@@ -35,8 +35,11 @@ import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
 import org.opencps.processmgt.service.ServiceInfoProcessLocalServiceUtil;
+import org.opencps.util.AccountUtil;
 import org.opencps.util.PortletConstants;
 import org.opencps.util.WebKeys;
+
+import sun.swing.AccumulativeRunnable;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -210,10 +213,10 @@ public class BackOfficeProcessEngine implements MessageListener {
 				if (changeStatus.equals(Integer.toString(PortletConstants.DOSSIER_STATUS_WAITING))) {
 					toBackOffice.setRequestCommand(WebKeys.DOSSIER_LOG_RESUBMIT_REQUEST);
 				}
-				if (changeStatus.equals(Integer.toString(PortletConstants.DOSSIER_STATUS_PAYING))) {
+/*				if (changeStatus.equals(Integer.toString(PortletConstants.DOSSIER_STATUS_PAYING))) {
 					toBackOffice.setRequestCommand(WebKeys.DOSSIER_LOG_PAYMENT_REQUEST);
 				}
-				toBackOffice.setActionInfo(processWorkflow.getActionName());
+*/				toBackOffice.setActionInfo(processWorkflow.getActionName());
 				toBackOffice.setMessageInfo(toEngineMsg.getActionNote());
 				toBackOffice.setSendResult(0);
 
@@ -242,18 +245,31 @@ public class BackOfficeProcessEngine implements MessageListener {
 				
 				
 				toBackOffice.setProcessWorkflowId(processWorkflowId);
+				
+				long ownerUserId = 0;
+				long ownerOrganizationId = 0;
+				
+				if (AccountUtil.getAccountBean().isCitizen()) {
+					ownerUserId = dossier.getUserId();
+				} else if (AccountUtil.getAccountBean().isBusiness()) {
+					ownerOrganizationId = dossier.getOwnerOrganizationId();
+				}
 
 				// Update Paying
 				if (processWorkflow.getRequestPayment()) {
 					PaymentFileLocalServiceUtil.addPaymentFile(
 					    toEngineMsg.getDossierId(),
 					    toEngineMsg.getFileGroupId(),
-					    Long.parseLong(dossier.getSubjectId()),
-					    dossier.getOwnerOrganizationId(),
+					    ownerUserId,
+					    ownerOrganizationId,
 					    govAgencyOrganizationId, changeStep.getStepName(),
 					    toEngineMsg.getActionDatetime(),
 					    processWorkflow.getPaymentFee(),
 					    toEngineMsg.getActionNote(), StringPool.BLANK);
+					
+					
+					toBackOffice.setRequestCommand(WebKeys.DOSSIER_LOG_PAYMENT_REQUEST);
+
 				}
 				else {
 					toBackOffice.setRequestPayment(0);
