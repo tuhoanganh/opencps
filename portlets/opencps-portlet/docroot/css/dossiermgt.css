@@ -46,11 +46,14 @@
 
 .opencps.dossiermgt.dossier-part-tree {
     display: table;
+    padding: 5px 0;
     width: 100%;
 }
 
 .opencps.dossiermgt.dossier-part-row {
+	border-bottom: 1px dotted #ccc;
     display: table;
+    padding: 5px 0;
     vertical-align: middle;
     width: 100%;
 }
@@ -77,12 +80,24 @@
 .opencps.dossiermgt.dossier-part-control {
     display: table-cell;
     max-width: 255px;
-   line-height: 30px;
+    line-height: 30px;
     vertical-align: top;
     width: 255px;
 }
 
 .opencps.dossiermgt.part-file-ctr.add-private-dossier {
+	background-color: #698C77 !important;
     padding-left: 0;
+    color: #fff !important;
 }
+
+.label.opencps.dossiermgt.part-file-ctr{
+	color: #fff !important;
+    background-color: #25BB61;
+    float: right;
+    margin-left: 5px;
+    padding: 5px 3px;
+}
+
+
 

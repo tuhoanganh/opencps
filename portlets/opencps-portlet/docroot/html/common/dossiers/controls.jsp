@@ -91,7 +91,7 @@
 							level = "<%=level %>"
 							href="javascript:void(0);" 
 							label="declaration-online" 
-							cssClass="opencps dossiermgt part-file-ctr declaration-online"
+							cssClass="label opencps dossiermgt part-file-ctr declaration-online"
 							onClick='<%=renderResponse.getNamespace() + "declarationOnline(this)" %>'
 						/>
 						</c:if>
@@ -109,7 +109,7 @@
 							template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
 							href="javascript:void(0);" 
 							label="upload-file" 
-							cssClass="opencps dossiermgt part-file-ctr upload-file" 
+							cssClass="label opencps dossiermgt part-file-ctr upload-file" 
 							onClick='<%=renderResponse.getNamespace() + "uploadFile(this)" %>'
 						/>
 					</td>
@@ -167,7 +167,7 @@
 							template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
 							href="javascript:void(0);" 
 							label="upload-file" 
-							cssClass="opencps dossiermgt part-file-ctr upload-file" 
+							cssClass="label opencps dossiermgt part-file-ctr upload-file" 
 							onClick='<%=renderResponse.getNamespace() + "uploadFile(this)" %>'
 						/>
 						
@@ -222,7 +222,7 @@
 							template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
 							href="javascript:void(0);" 
 							label="upload-file" 
-							cssClass="opencps dossiermgt part-file-ctr upload-file" 
+							cssClass="label opencps dossiermgt part-file-ctr upload-file" 
 							onClick='<%=renderResponse.getNamespace() + "uploadFile(this)" %>'
 						/>
 						
@@ -326,7 +326,7 @@
 							template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
 							href="javascript:void(0);" 
 							label="upload-file" 
-							cssClass="opencps dossiermgt part-file-ctr upload-file" 
+							cssClass="label opencps dossiermgt part-file-ctr upload-file" 
 							onClick='<%=renderResponse.getNamespace() + "uploadFile(this)" %>'
 						/>
 						
@@ -340,7 +340,7 @@
 							level = "<%=level %>"
 							href="javascript:void(0);" 
 							label="taken-from-archive" 
-							cssClass="opencps dossiermgt part-file-ctr taken-from-archive"
+							cssClass="label opencps dossiermgt part-file-ctr taken-from-archive"
 						/>
 					</td>
 					<td width="10%" align="right">
@@ -414,7 +414,7 @@
 									template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
 									href="javascript:void(0);" 
 									label="view-attachment" 
-									cssClass="opencps dossiermgt part-file-ctr view-attachment" 
+									cssClass="label opencps dossiermgt part-file-ctr view-attachment" 
 									onClick='<%=renderResponse.getNamespace() + "viewAttachment(this)" %>'
 								/>
 							</c:when>
@@ -427,7 +427,7 @@
 									file-entry="<%=String.valueOf(fileEntryId) %>"
 									href="javascript:void(0);" 
 									label="upload-file" 
-									cssClass="opencps dossiermgt part-file-ctr upload-file" 
+									cssClass="label opencps dossiermgt part-file-ctr upload-file" 
 									onClick='<%=renderResponse.getNamespace() + "uploadFile(this)" %>'
 								/>
 							</c:otherwise>
