@@ -17,7 +17,6 @@
 
 package org.opencps.taglib.accountmgt;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,29 +24,17 @@ import javax.servlet.http.HttpSession;
 
 import org.opencps.accountmgt.model.Business;
 import org.opencps.accountmgt.model.Citizen;
-import org.opencps.accountmgt.service.BusinessLocalServiceUtil;
-import org.opencps.accountmgt.service.CitizenLocalServiceUtil;
+import org.opencps.dossiermgt.bean.AccountBean;
 import org.opencps.usermgt.model.Employee;
-import org.opencps.usermgt.model.WorkingUnit;
-import org.opencps.usermgt.service.EmployeeLocalServiceUtil;
-import org.opencps.usermgt.service.WorkingUnitLocalServiceUtil;
 import org.opencps.util.AccountUtil;
-import org.opencps.util.DLFolderUtil;
-import org.opencps.util.PortletPropsValues;
-import org.opencps.util.PortletUtil;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.Role;
-import com.liferay.portal.model.User;
-import com.liferay.portal.model.UserGroup;
-import com.liferay.portal.service.OrganizationLocalServiceUtil;
-import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -63,245 +50,174 @@ public class DefineObjectsTag extends IncludeTag {
 	public int doStartTag() {
 
 		HttpServletRequest request = (HttpServletRequest) pageContext
-		    .getRequest();
+			.getRequest();
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) request
-		    .getAttribute(WebKeys.THEME_DISPLAY);
+			.getAttribute(WebKeys.THEME_DISPLAY);
 
 		if (themeDisplay == null) {
 			return SKIP_BODY;
 		}
 
 		HttpSession session = request
-		    .getSession();
+			.getSession();
 		Object accountInstance = null;
 
 		String accountType = GetterUtil
-		    .getString(session
-		        .getAttribute(org.opencps.util.WebKeys.ACCOUNT_TYPE));
+			.getString(session
+				.getAttribute(org.opencps.util.WebKeys.ACCOUNT_TYPE));
 
 		Citizen citizen = (Citizen) session
-		    .getAttribute(org.opencps.util.WebKeys.CITIZEN_ENTRY);
+			.getAttribute(org.opencps.util.WebKeys.CITIZEN_ENTRY);
 
 		Business business = (Business) session
-		    .getAttribute(org.opencps.util.WebKeys.BUSINESS_ENTRY);
+			.getAttribute(org.opencps.util.WebKeys.BUSINESS_ENTRY);
 
 		Employee employee = (Employee) session
-		    .getAttribute(org.opencps.util.WebKeys.EMPLOYEE_ENTRY);
+			.getAttribute(org.opencps.util.WebKeys.EMPLOYEE_ENTRY);
 
 		DLFolder accountFolder = (DLFolder) session
-		    .getAttribute(org.opencps.util.WebKeys.ACCOUNT_FOLDER);
+			.getAttribute(org.opencps.util.WebKeys.ACCOUNT_FOLDER);
 
 		List<Role> accountRoles = (List<Role>) session
-		    .getAttribute(org.opencps.util.WebKeys.ACCOUNT_ROLES);
+			.getAttribute(org.opencps.util.WebKeys.ACCOUNT_ROLES);
 
 		List<Organization> accountOrgs = (List<Organization>) session
-		    .getAttribute(org.opencps.util.WebKeys.ACCOUNT_ORGANIZATION);
+			.getAttribute(org.opencps.util.WebKeys.ACCOUNT_ORGANIZATION);
 
 		long ownerUserId = GetterUtil
-		    .getLong(session
-		        .getAttribute(org.opencps.util.WebKeys.ACCOUNT_OWNERUSERID),
-		        0L);
+			.getLong(session
+				.getAttribute(org.opencps.util.WebKeys.ACCOUNT_OWNERUSERID),
+				0L);
 
 		long ownerOrganizationId = GetterUtil
-		    .getLong(session
-		        .getAttribute(
-		            org.opencps.util.WebKeys.ACCOUNT_OWNERORGANIZATIONID),
-		        0L);
+			.getLong(session
+				.getAttribute(
+					org.opencps.util.WebKeys.ACCOUNT_OWNERORGANIZATIONID),
+				0L);
 
 		if (themeDisplay
-		    .isSignedIn() && Validator
-		        .isNull(accountType)) {
-			String dossierDestinationFolder = StringPool.BLANK;
+			.isSignedIn() && Validator
+				.isNull(accountType)) {
+
 			try {
-				
-				AccountUtil.destroy(request, false);
-				
-				List<UserGroup> userGroups = new ArrayList<UserGroup>();
 
-				User user = themeDisplay
-				    .getUser();
-				userGroups = user
-				    .getUserGroups();
+				// Clean account bean
+				AccountUtil
+					.destroy(request, false);
 
-				accountRoles = RoleLocalServiceUtil
-				    .getUserRoles(user
-				        .getUserId());
-				request
-				    .setAttribute(
-				        org.opencps.util.WebKeys.ACCOUNT_TYPE, accountType);
+				ServiceContext serviceContext = ServiceContextFactory
+					.getInstance(request);
 
-				session
-				    .setAttribute(
-				        org.opencps.util.WebKeys.ACCOUNT_TYPE, accountType);
+				AccountBean accountBean = AccountUtil
+					.getAccountBean(themeDisplay
+						.getUserId(), themeDisplay
+							.getScopeGroupId(),
+						serviceContext);
 
-				accountOrgs = OrganizationLocalServiceUtil
-				    .getUserOrganizations(user
-				        .getUserId());
-
-				if (!userGroups
-				    .isEmpty()) {
-					for (UserGroup userGroup : userGroups) {
-						if (userGroup
-						    .getName().equals(
-						        PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN) ||
-						    userGroup
-						        .getName().equals(
-						            PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS) ||
-						    userGroup
-						        .getName().equals(
-						            PortletPropsValues.USERMGT_USERGROUP_NAME_EMPLOYEE)) {
-							accountType = userGroup
-							    .getName();
-							break;
-						}
-
+				if (accountBean != null) {
+					accountType = accountBean
+						.getAccountType();
+					if (accountBean
+						.isBusiness()) {
+						business = (Business) accountBean
+							.getAccountInstance();
 					}
-				}
-
-				request
-				    .setAttribute(
-				        org.opencps.util.WebKeys.ACCOUNT_TYPE, accountType);
-
-				session
-				    .setAttribute(
-				        org.opencps.util.WebKeys.ACCOUNT_TYPE, accountType);
-
-				if (accountType
-				    .equals(
-				        PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN)) {
-					citizen = CitizenLocalServiceUtil
-					    .getCitizen(user
-					        .getUserId());
-
-					accountInstance = citizen;
-					
-					ownerUserId = citizen.getMappingUserId();
-
-					dossierDestinationFolder = PortletUtil
-					    .getCitizenDossierDestinationFolder(citizen
-					        .getGroupId(), citizen
-					            .getUserId());
-					request
-					    .setAttribute(
-					        org.opencps.util.WebKeys.CITIZEN_ENTRY, citizen);
-					session
-					    .setAttribute(
-					        org.opencps.util.WebKeys.CITIZEN_ENTRY, citizen);
-					
-					request
-				    	.setAttribute(
-				    		org.opencps.util.WebKeys.ACCOUNT_OWNERUSERID, ownerUserId);
-					session
-					    .setAttribute(
-					        org.opencps.util.WebKeys.ACCOUNT_OWNERUSERID, ownerUserId);
-
-				}
-				else if (accountType
-				    .equals(
-				        PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS)) {
-
-					business = BusinessLocalServiceUtil
-					    .getBusiness(user
-					        .getUserId());
-
-					ownerOrganizationId = business
-					    .getMappingOrganizationId();
-
-					dossierDestinationFolder = PortletUtil
-					    .getBusinessDossierDestinationFolder(business
-					        .getGroupId(), business
-					            .getMappingOrganizationId());
-
-					accountInstance = citizen;
-
-					request
-					    .setAttribute(
-					        org.opencps.util.WebKeys.BUSINESS_ENTRY, business);
-
-					session
-					    .setAttribute(
-					        org.opencps.util.WebKeys.BUSINESS_ENTRY, business);
-					
-					request
-				    	.setAttribute(
-				    		org.opencps.util.WebKeys.ACCOUNT_OWNERORGANIZATIONID, ownerOrganizationId);
-					session
-					    .setAttribute(
-					        org.opencps.util.WebKeys.ACCOUNT_OWNERORGANIZATIONID, ownerOrganizationId);
-				}
-				else if (accountType
-				    .equals(
-				        PortletPropsValues.USERMGT_USERGROUP_NAME_EMPLOYEE)) {
-					employee = EmployeeLocalServiceUtil
-					    .getEmployeeByMappingUserId(themeDisplay
-					        .getScopeGroupId(), user
-					            .getUserId());
-
-					accountInstance = citizen;
-
-					try {
-						WorkingUnit workingUnit = WorkingUnitLocalServiceUtil
-						    .getWorkingUnit(employee
-						        .getWorkingUnitId());
-
-						ownerOrganizationId = workingUnit
-						    .getMappingOrganisationId();
+					else if (accountBean
+						.isCitizen()) {
+						citizen = (Citizen) accountBean
+							.getAccountInstance();
 					}
-					catch (Exception e) {
-
+					else if (accountBean
+						.isEmployee()) {
+						employee = (Employee) accountBean
+							.getAccountInstance();
 					}
 
+					ownerOrganizationId = accountBean
+						.getOwnerOrganizationId();
+					ownerUserId = accountBean
+						.getOwnerUserId();
+					accountFolder = accountBean
+						.getAccountFolder();
+					accountOrgs = accountBean
+						.getAccountOrgs();
+					accountRoles = accountBean
+						.getAccountRoles();
+
 					request
-					    .setAttribute(
-					        org.opencps.util.WebKeys.EMPLOYEE_ENTRY, employee);
+						.setAttribute(org.opencps.util.WebKeys.ACCOUNT_TYPE,
+							accountType);
+					request
+						.setAttribute(org.opencps.util.WebKeys.CITIZEN_ENTRY,
+							citizen);
+					request
+						.setAttribute(org.opencps.util.WebKeys.BUSINESS_ENTRY,
+							business);
+
+					request
+						.setAttribute(org.opencps.util.WebKeys.EMPLOYEE_ENTRY,
+							employee);
+
+					request
+						.setAttribute(org.opencps.util.WebKeys.ACCOUNT_FOLDER,
+							accountFolder);
+
+					request
+						.setAttribute(
+							org.opencps.util.WebKeys.ACCOUNT_OWNERORGANIZATIONID,
+							ownerOrganizationId);
+
+					request
+						.setAttribute(
+							org.opencps.util.WebKeys.ACCOUNT_OWNERUSERID,
+							ownerUserId);
+
+					// Store session
+
 					session
-					    .setAttribute(
-					        org.opencps.util.WebKeys.EMPLOYEE_ENTRY, employee);
+						.setAttribute(org.opencps.util.WebKeys.ACCOUNT_TYPE,
+							accountType);
+					session
+						.setAttribute(org.opencps.util.WebKeys.CITIZEN_ENTRY,
+							citizen);
+					session
+						.setAttribute(org.opencps.util.WebKeys.BUSINESS_ENTRY,
+							business);
+
+					session
+						.setAttribute(org.opencps.util.WebKeys.EMPLOYEE_ENTRY,
+							employee);
+
+					session
+						.setAttribute(org.opencps.util.WebKeys.ACCOUNT_FOLDER,
+							accountFolder);
+
+					session
+						.setAttribute(
+							org.opencps.util.WebKeys.ACCOUNT_OWNERORGANIZATIONID,
+							ownerOrganizationId);
+
+					session
+						.setAttribute(
+							org.opencps.util.WebKeys.ACCOUNT_OWNERUSERID,
+							ownerUserId);
+
+				}
+				else {
+					_log.info(DefineObjectsTag.class.getName() + ": --------------------------------->>>: AccountBean is null");
 				}
 
-				if (Validator
-				    .isNotNull(dossierDestinationFolder)) {
-					System.out.println(dossierDestinationFolder);
-					try {
-						ServiceContext serviceContext = ServiceContextFactory
-						    .getInstance(request);
-						serviceContext
-						    .setAddGroupPermissions(true);
-						serviceContext
-						    .setAddGuestPermissions(true);
-						accountFolder = DLFolderUtil
-						    .getTargetFolder(themeDisplay
-						        .getUserId(), themeDisplay
-						            .getScopeGroupId(),
-						        themeDisplay
-						            .getScopeGroupId(),
-						        false, 0, dossierDestinationFolder,
-						        StringPool.BLANK, false, serviceContext);
-						request
-						    .setAttribute(
-						        org.opencps.util.WebKeys.ACCOUNT_FOLDER,
-						        accountFolder);
-						session
-						    .setAttribute(
-						        org.opencps.util.WebKeys.ACCOUNT_FOLDER,
-						        accountFolder);
-					}
-					catch (Exception e) {
-						// TODO: handle exception
-					}
-				}
 			}
 			catch (Exception e) {
 				_log
-				    .error(e);
+					.error(e);
 			}
 			finally {
 				AccountUtil
-				    .initAccount(
-				        accountInstance, accountType, accountFolder,
-				        accountRoles, accountOrgs, ownerUserId,
-				        ownerOrganizationId);
+					.initAccount(accountInstance, accountType, accountFolder,
+						accountRoles, accountOrgs, ownerUserId,
+						ownerOrganizationId);
 			}
 
 		}

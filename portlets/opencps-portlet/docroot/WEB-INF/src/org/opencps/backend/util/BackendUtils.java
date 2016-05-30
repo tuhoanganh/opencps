@@ -45,7 +45,7 @@ public class BackendUtils {
 	 * @param dossierId
 	 * @return
 	 */
-	public boolean checkPaymentStatus(long dossierId) {
+	public static boolean checkPaymentStatus(long dossierId) {
 		
 		boolean paymentStatus = true;
 		
