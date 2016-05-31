@@ -42,8 +42,12 @@
 <%@page import="java.util.List"%>
 <%@page import="org.opencps.dossiermgt.search.DossierSearchTerms"%>
 <%@page import="org.opencps.dossiermgt.search.DossierNewProcessingSearch"%>
-<liferay-util:include page="/html/portlets/dossiermgt/monitoring/toptabs.jsp" servletContext="<%=application %>" />
-<liferay-util:include page="/html/portlets/dossiermgt/monitoring/toolbar.jsp" servletContext="<%=application %>" />
+
+<div class = "home-search">
+	<liferay-util:include page="/html/portlets/dossiermgt/monitoring/toptabs.jsp" servletContext="<%=application %>" />
+	<liferay-util:include page="/html/portlets/dossiermgt/monitoring/toolbar.jsp" servletContext="<%=application %>" />
+</div>
+
 <%
 	Format dateFormatDate = FastDateFormatFactoryUtil.getDate(locale, timeZone);
 	PortletURL iteratorURL = renderResponse.createRenderURL();

@@ -1,4 +1,5 @@
 
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -18,6 +19,7 @@
  */
 %>
 
+<%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
 <%@page import="com.liferay.portlet.documentlibrary.util.DLUtil"%>
 <%@page import="org.opencps.util.DLFileEntryUtil"%>
 <%@page import="com.liferay.portal.kernel.repository.model.FileEntry"%>
@@ -33,7 +35,9 @@
 <%
 	//DossierFile dossierFile = (DossierFile) request.getAttribute(WebKeys.DOSSIER_FILE_ENTRY);
 
-	DossierPart dossierPart = (DossierPart) request.getAttribute(WebKeys.DOSSIER_PART_ENTRY);
+	//DossierPart dossierPart = (DossierPart) request.getAttribute(WebKeys.DOSSIER_PART_ENTRY);
+	
+	DossierPart dossierPart = null;
 	
 	long dossierId = ParamUtil.getLong(request, DossierDisplayTerms.DOSSIER_ID);
 	
@@ -50,6 +54,12 @@
 	int partType = ParamUtil.getInteger(request, DossierFileDisplayTerms.PART_TYPE);
 	
 	String groupName = ParamUtil.getString(request, DossierFileDisplayTerms.GROUP_NAME);
+	
+	if(dossierPartId > 0){
+		try{
+			dossierPart = DossierPartLocalServiceUtil.getDossierPart(dossierPartId);
+		}catch(Exception e){}
+	}
 	
 	
 	String fileURL = StringPool.BLANK;
@@ -71,6 +81,7 @@
 			<c:choose>
 				<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_SUBMIT%>">
 					<td width="40%" align="right">
+						<c:if test="<%=dossierPart != null && Validator.isNotNull(dossierPart.getFormReport()) && Validator.isNotNull(dossierPart.getFormScript()) %>">
 						<aui:a
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier="<%=String.valueOf(dossierId) %>"
@@ -81,9 +92,10 @@
 							level = "<%=level %>"
 							href="javascript:void(0);" 
 							label="declaration-online" 
-							cssClass="opencps dossiermgt part-file-ctr declaration-online"
+							cssClass="label opencps dossiermgt part-file-ctr declaration-online"
 							onClick='<%=renderResponse.getNamespace() + "declarationOnline(this)" %>'
 						/>
+						</c:if>
 					</td>
 					
 					<td width="40%" align="right">
@@ -101,7 +113,7 @@
 							template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
 							href="javascript:void(0);" 
 							label='<%=fileEntryId <= 0 ? "upload-file" : "view-attachment" %>' 
-							cssClass="opencps dossiermgt part-file-ctr upload-file" 
+							cssClass="label opencps dossiermgt part-file-ctr upload-file" 
 							onClick='<%=renderResponse.getNamespace() + (fileEntryId <= 0 ? "uploadFile(this)" : "viewAttachment(this)") %>'
 						/>
 					</td>
@@ -163,7 +175,7 @@
 							template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
 							href="javascript:void(0);" 
 							label="upload-file" 
-							cssClass="opencps dossiermgt part-file-ctr upload-file" 
+							cssClass="label opencps dossiermgt part-file-ctr upload-file" 
 							onClick='<%=renderResponse.getNamespace() + "uploadFile(this)" %>'
 						/>
 						
@@ -178,7 +190,7 @@
 							level = "<%=level %>"
 							href="javascript:void(0);" 
 							label="taken-from-archive" 
-							cssClass="opencps dossiermgt part-file-ctr taken-from-archive"
+							cssClass="label opencps dossiermgt part-file-ctr taken-from-archive"
 						/>
 					</td>
 					<td width="10%" align="right">
@@ -222,7 +234,7 @@
 							template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
 							href="javascript:void(0);" 
 							label='<%=fileEntryId <= 0 ? "upload-file" : "view-attachment" %>' 
-							cssClass="opencps dossiermgt part-file-ctr upload-file" 
+							cssClass="label opencps dossiermgt part-file-ctr upload-file" 
 							onClick='<%=renderResponse.getNamespace() + (fileEntryId <= 0 ? "uploadFile(this)" : "viewAttachment(this)") %>'
 						/>
 						
@@ -331,7 +343,7 @@
 							template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
 							href="javascript:void(0);" 
 							label='<%=fileEntryId <= 0 ? "upload-file" : "view-attachment" %>' 
-							cssClass="opencps dossiermgt part-file-ctr upload-file" 
+							cssClass="label opencps dossiermgt part-file-ctr upload-file" 
 							onClick='<%=renderResponse.getNamespace() + (fileEntryId <= 0 ? "uploadFile(this)" : "viewAttachment(this)") %>'
 						/>
 						
@@ -346,7 +358,7 @@
 							level = "<%=level %>"
 							href="javascript:void(0);" 
 							label="taken-from-archive" 
-							cssClass="opencps dossiermgt part-file-ctr taken-from-archive"
+							cssClass="label opencps dossiermgt part-file-ctr taken-from-archive"
 						/>
 					</td>
 					<td width="10%" align="right">

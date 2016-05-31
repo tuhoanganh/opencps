@@ -36,6 +36,7 @@
 	HttpServletRequest r = PortalUtil.getHttpServletRequest(renderRequest);
 	String responseCode = PortalUtil.getOriginalServletRequest(r).getParameter("response_code");
 	String trans_id = PortalUtil.getOriginalServletRequest(r).getParameter("trans_id");
+	
 %>
 <style>
 .lookup-result table {

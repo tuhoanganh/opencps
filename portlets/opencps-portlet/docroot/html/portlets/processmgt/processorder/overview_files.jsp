@@ -81,6 +81,7 @@
 			<c:choose>
 				<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_SUBMIT%>">
 					<td width="50%" align="right">
+						<c:if test="<%=dossierPart != null && Validator.isNotNull(dossierPart.getFormReport()) && Validator.isNotNull(dossierPart.getFormScript()) %>">
 						<aui:a 
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier-part="<%=String.valueOf(dossierPartId) %>"
@@ -90,9 +91,10 @@
 							level = "<%=level %>"
 							href="javascript:void(0);" 
 							label="view-form" 
-							cssClass="opencps dossiermgt part-file-ctr view-form"
+							cssClass="label opencps dossiermgt part-file-ctr view-form"
 							onClick='<%=renderResponse.getNamespace() + "viewForm(this)" %>'
 						/>
+						</c:if>
 					</td>
 					
 					<td width="50%" align="right">
@@ -109,7 +111,7 @@
 							template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
 							href="javascript:void(0);" 
 							label="view-attachment" 
-							cssClass="opencps dossiermgt part-file-ctr view-attachment" 
+							cssClass="label opencps dossiermgt part-file-ctr view-attachment" 
 							onClick='<%=renderResponse.getNamespace() + "viewAttachment(this)" %>'
 						/>
 					</td>
@@ -134,7 +136,7 @@
 							template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
 							href="javascript:void(0);" 
 							label="view-attachment" 
-							cssClass="opencps dossiermgt part-file-ctr view-attachment" 
+							cssClass="label opencps dossiermgt part-file-ctr view-attachment" 
 							onClick='<%=renderResponse.getNamespace() + "viewAttachment(this)" %>'
 						/>
 					</td>
@@ -158,7 +160,7 @@
 							template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
 							href="javascript:void(0);" 
 							label="view-attachment" 
-							cssClass="opencps dossiermgt part-file-ctr view-attachment" 
+							cssClass="label opencps dossiermgt part-file-ctr view-attachment" 
 							onClick='<%=renderResponse.getNamespace() + "viewAttachment(this)" %>'
 						/>
 					</td>
@@ -202,7 +204,7 @@
 							template-no="<%=dossierPart != null ? dossierPart.getTemplateFileNo() : StringPool.BLANK %>"
 							href="javascript:void(0);" 
 							label="view-attachment" 
-							cssClass="opencps dossiermgt part-file-ctr view-attachment" 
+							cssClass="label opencps dossiermgt part-file-ctr view-attachment" 
 							onClick='<%=renderResponse.getNamespace() + "viewAttachment(this)" %>'
 						/>
 						

@@ -236,7 +236,7 @@
 											dossier-part-size="<%=dossierParts.size() %>"
 											href="javascript:void(0);" 
 											label="add-private-dossier" 
-											cssClass="opencps dossiermgt part-file-ctr add-private-dossier"
+											cssClass="label opencps dossiermgt part-file-ctr add-private-dossier"
 											onClick='<%=renderResponse.getNamespace() + "addPrivateDossierGroup(this)" %>'
 										/>
 									</span>

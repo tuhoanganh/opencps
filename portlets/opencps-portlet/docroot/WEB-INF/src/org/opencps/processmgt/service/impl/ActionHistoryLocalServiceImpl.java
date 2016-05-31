@@ -190,7 +190,7 @@ public class ActionHistoryLocalServiceImpl
 	    long processOrderId, long processWorkflowId)
 	    throws NoSuchActionHistoryException, SystemException {
 
-		boolean orderByAsc = false;
+		boolean orderByAsc = false;	
 
 		OrderByComparator orderByComparator =
 		    new ActionHistoryCreateDateComparator(orderByAsc);
@@ -219,6 +219,29 @@ public class ActionHistoryLocalServiceImpl
 
 		return actionHistoryFinder
 		    .searchActionHistoryByDossierId(groupId, dossierId);
+	}
+	
+	/**
+	 * @param groupId
+	 * @param processOrderId
+	 * @param start
+	 * @param end
+	 * @return
+	 * @throws SystemException
+	 */
+	public List<ActionHistory> getActionHistoriesByG_PORD(
+		long groupId, long processOrderId, int start, int end) throws SystemException {
+		boolean orderByAsc = false;	
+
+		OrderByComparator orderByComparator =
+		    new ActionHistoryCreateDateComparator(orderByAsc);
+		return actionHistoryPersistence
+						.findByF_ProcessOrderId(groupId, processOrderId, start, end, orderByComparator);
+	}
+	
+	public int counAcionHistoriesByG_PORD (
+			long groupId, long processOrderId) throws SystemException {
+		return actionHistoryPersistence.countByF_ProcessOrderId(groupId, processOrderId);
 	}
 	
 }

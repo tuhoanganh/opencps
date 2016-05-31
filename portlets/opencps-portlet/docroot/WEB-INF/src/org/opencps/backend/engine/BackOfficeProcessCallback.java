@@ -59,17 +59,7 @@ public class BackOfficeProcessCallback implements MessageListener{
         }
     }
     
-    private void doRevice(Message message) {
-    	long processOrderId = GetterUtil.getLong(message.get("_processOrderId"));
-    	int dossierStatus = GetterUtil.getInteger(message.get("_dossierStatus"));
-    	try {
-        	ProcessOrderLocalServiceUtil.updateProcessOrderStatus(processOrderId, dossierStatus);
-        }
-        catch (Exception e) {
-	        _log.error(e);
-        }
-    }
-    
+
     private Log _log = LogFactoryUtil.getLog(BackOfficeProcessCallback.class);
 
 }

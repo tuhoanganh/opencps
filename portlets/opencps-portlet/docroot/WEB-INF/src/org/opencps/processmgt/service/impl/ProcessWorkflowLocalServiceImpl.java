@@ -94,7 +94,7 @@ public class ProcessWorkflowLocalServiceImpl
 	    long processWorkflowId, long preProcessStepId, long postProcessStepId,
 	    String autoEvent, String actionName, boolean assignUser,
 	    long actionUserId, boolean requestPayment, double paymentFee,
-	    String generateReceptionNo, String receptionNoPattern,
+	    boolean generateReceptionNo, String receptionNoPattern,
 	    boolean generateDeadline, String deadlinePattern, boolean isFinishStep, String preCondition, boolean isMultipled,
 	    ServiceContext context)
 	    throws PortalException, SystemException {
@@ -174,7 +174,7 @@ public class ProcessWorkflowLocalServiceImpl
 	    long serviceProcessId, long preProcessStepId, long postProcessStepId,
 	    String autoEvent, String actionName, boolean assignUser,
 	    long actionUserId, boolean requestPayment, double paymentFee,
-	    String generateReceptionNo, String receptionNoPattern,
+	    boolean generateReceptionNo, String receptionNoPattern,
 	    boolean generateDeadline, String deadlinePattern, boolean isFinishStep,
 	    String preCondition, boolean isMultipled, ServiceContext context)
 	    throws PortalException, SystemException {

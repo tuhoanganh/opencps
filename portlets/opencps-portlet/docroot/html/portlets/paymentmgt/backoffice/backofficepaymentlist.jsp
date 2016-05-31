@@ -108,7 +108,15 @@
 					Business owner = BusinessLocalServiceUtil.getBymappingOrganizationId(paymentFile.getOwnerOrganizationId());
 					chuHoSo = Validator.isNotNull(owner)?owner.getName():StringPool.BLANK;
 				}
-				chuHoSo = WorkingUnitLocalServiceUtil.fetchByMappingOrganisationId(themeDisplay.getScopeGroupId(), paymentFile.getGovAgencyOrganizationId()).getName();
+				
+				if (Validator.isNull(chuHoSo)) {
+					try {
+						chuHoSo = WorkingUnitLocalServiceUtil.fetchByMappingOrganisationId(themeDisplay.getScopeGroupId(), paymentFile.getGovAgencyOrganizationId()).getName();
+					} catch (Exception e) {
+						
+					}
+				}
+				
 				// no column
 				row.addText(String.valueOf(row.getPos() + 1));		
 			

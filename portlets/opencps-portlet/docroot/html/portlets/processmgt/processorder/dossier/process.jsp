@@ -18,6 +18,7 @@
  */
 %>
 
+<%@page import="org.opencps.backend.util.BackendUtils"%>
 <%@page import="org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.model.WorkflowOutput"%>
 <%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
@@ -111,7 +112,35 @@
 	
 %>
 
-<aui:row>
+<table class="process-workflow-info">
+  <tr class="odd">
+    <td width="20%"><liferay-ui:message key="step-name"/></td>
+    <td width="30%"><%=processStep != null ? processStep.getStepName() : StringPool.BLANK %></td>
+    <td width="20%"><liferay-ui:message key="assign-to-user"/></td>
+    <td width="30%"><%=processOrder != null ? new ProcessOrderBean().getAssignToUserName(processOrder.getAssignToUserId()) : StringPool.BLANK %></td>
+  </tr>
+  
+  <tr class="even">
+    <td width="20%"><liferay-ui:message key="pre-action-user"/></td>
+    <td width="30%"><%=latestWorkflowActionHistory != null ? new ProcessOrderBean().getAssignToUserName(latestWorkflowActionHistory.getActionUserId()) : StringPool.BLANK %></td>
+    <td width="20%"><liferay-ui:message key="pre-action-date"/></td>
+    <td width="30%"><%=latestWorkflowActionHistory != null ? DateTimeUtil.convertDateToString(latestWorkflowActionHistory.getActionDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) : StringPool.BLANK %></td>
+  </tr>
+  
+  
+  <tr class="odd">
+    <td width="20%"><liferay-ui:message key="pre-action"/></td>
+    <td width="80%" colspan="3"><%=processStep != null ? processStep.getStepName() : StringPool.BLANK %></td>
+  </tr>
+  
+  <tr class="even">
+    <td width="20%"><liferay-ui:message key="pre-action-note"/></td>
+  	<td width="80%" colspan="3"><%=latestWorkflowActionHistory != null ? latestWorkflowActionHistory.getActionNote() : StringPool.BLANK %></td>
+  </tr>
+</table>
+
+
+<%-- <aui:row cssClass="process-workflow-info-row">
 	<aui:col width="20">
 		<liferay-ui:message key="step-name"/>
 	</aui:col>
@@ -127,7 +156,7 @@
 	</aui:col>
 </aui:row>
 
-<aui:row>
+<aui:row cssClass="process-workflow-info-row">
 	<aui:col width="20">
 		<liferay-ui:message key="pre-action-user"/>
 	</aui:col>
@@ -143,24 +172,23 @@
 	</aui:col>
 </aui:row>
 
-<aui:row>
-	<aui:col width="30">
+<aui:row cssClass="process-workflow-info-row">
+	<aui:col width="20">
 		<liferay-ui:message key="pre-action"/>
 	</aui:col>
-	<aui:col width="70">
+	<aui:col width="80">
 		<%=latestWorkflowActionHistory.getActionName() %>
 	</aui:col>
 </aui:row>
 
-<aui:row>
-	<aui:col width="30">
+<aui:row cssClass="process-workflow-info-row">
+	<aui:col width="20">
 		<liferay-ui:message key="pre-action-note"/>
 	</aui:col>
-	<aui:col width="70">
+	<aui:col width="80">
 		<%=latestWorkflowActionHistory != null ? latestWorkflowActionHistory.getActionNote() : StringPool.BLANK %>
 	</aui:col>
-</aui:row>
-
+</aui:row> --%>
 
 <%
 
@@ -323,22 +351,34 @@
 	type="hidden"
 />
 
-<aui:row>
+<aui:row cssClass="process-workflow-action">
 	<%
 		if(postProcessWorkflows != null && !postProcessWorkflows.isEmpty()){
 			for(ProcessWorkflow postProcessWorkflow : postProcessWorkflows){
-				
+				String preCondition = Validator.isNotNull(postProcessWorkflow.getPreCondition()) ? 
+					postProcessWorkflow.getPreCondition() : StringPool.BLANK;
+					
+					boolean showButton = true;
+					
+					if(preCondition.contains(WebKeys.PRE_CONDITION_PAYOK)){
+						if(!BackendUtils.checkPaymentStatus(dossier.getDossierId())){
+							showButton = false;
+						}
+					}
+					
 				%>
-					<aui:button 
-						type="button"
-						name="<%=String.valueOf(postProcessWorkflow.getProcessWorkflowId()) %>"
-						value="<%=postProcessWorkflow.getActionName() %>"
-						process-workflow="<%=String.valueOf(postProcessWorkflow.getProcessWorkflowId()) %>"
-						service-process="<%=String.valueOf(postProcessWorkflow.getServiceProcessId()) %>"
-						process-step="<%=String.valueOf(postProcessWorkflow.getPostProcessStepId()) %>"
-						auto-event="<%=Validator.isNotNull(postProcessWorkflow.getAutoEvent()) ? postProcessWorkflow.getAutoEvent() : StringPool.BLANK %>"
-						onClick='<%=renderResponse.getNamespace() +  "assignToUser(this)"%>'
-					/>
+					<c:if test="<%=showButton %>">
+						<aui:button 
+							type="button"
+							name="<%=String.valueOf(postProcessWorkflow.getProcessWorkflowId()) %>"
+							value="<%=postProcessWorkflow.getActionName() %>"
+							process-workflow="<%=String.valueOf(postProcessWorkflow.getProcessWorkflowId()) %>"
+							service-process="<%=String.valueOf(postProcessWorkflow.getServiceProcessId()) %>"
+							process-step="<%=String.valueOf(postProcessWorkflow.getPostProcessStepId()) %>"
+							auto-event="<%=Validator.isNotNull(postProcessWorkflow.getAutoEvent()) ? postProcessWorkflow.getAutoEvent() : StringPool.BLANK %>"
+							onClick='<%=renderResponse.getNamespace() +  "assignToUser(this)"%>'
+						/>
+					</c:if>
 				<%
 			}
 		}
@@ -477,7 +517,7 @@
 		portletURL.setParameter("processOrderId", processOrderId);
 		portletURL.setParameter("dossierFileId", dossierFileId);
 		portletURL.setParameter("dossierPartId", dossierPartId);
-		<portlet:namespace/>openDossierDialog(portletURL.toString(), '<portlet:namespace />dossierFileId','<%= UnicodeLanguageUtil.get(pageContext, "upload-dossier-file") %>');
+		<portlet:namespace/>openDossierDialog(portletURL.toString(), '<portlet:namespace />dossierFileId','<%= UnicodeLanguageUtil.get(pageContext, "upload-file-result") %>');
 	});
 
 	Liferay.provide(window, '<portlet:namespace/>openDossierDialog', function(uri, id, title) {

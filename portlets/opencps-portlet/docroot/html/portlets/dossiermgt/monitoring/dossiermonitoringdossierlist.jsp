@@ -83,7 +83,7 @@
 		>
 		<%
 			String statusText = "";
-			if (Validator.isNotNull(dossier.getFinishDatetime())) {
+			if (Validator.isNotNull(dossier.getFinishDatetime()) && Validator.isNotNull(dossier.getEstimateDatetime())) {
 				if (dossier.getFinishDatetime().after(dossier.getEstimateDatetime())) {
 					statusText = LanguageUtil.get(pageContext, "status-late");
 				}
@@ -96,11 +96,14 @@
 			}
 			else {
 				Date now = new Date();
-				if (dossier.getEstimateDatetime().before(now)) {
-					statusText = LanguageUtil.get(pageContext, "status-toosoon");
-				}
-				else if (dossier.getEstimateDatetime().after(now)) {
-					statusText = LanguageUtil.get(pageContext, "status-toolate");
+				
+				if (Validator.isNotNull(dossier.getEstimateDatetime())) {
+					if (dossier.getEstimateDatetime().before(now)) {
+						statusText = LanguageUtil.get(pageContext, "status-toosoon");
+					}
+					else if (dossier.getEstimateDatetime().after(now)) {
+						statusText = LanguageUtil.get(pageContext, "status-toolate");
+					}
 				}
 			}
 		%>

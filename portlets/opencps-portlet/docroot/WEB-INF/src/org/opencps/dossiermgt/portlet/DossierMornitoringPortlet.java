@@ -27,10 +27,12 @@ import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
 
 import org.opencps.dossiermgt.model.Dossier;
+import org.opencps.dossiermgt.search.DossierDisplayTerms;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
@@ -45,7 +47,7 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
 public class DossierMornitoringPortlet extends MVCPortlet {
  
 	public void searchAction(ActionRequest request, ActionResponse response) throws PortletException, IOException {
-		String receptionNo = ParamUtil.getString(request, "keywords");
+		String receptionNo = ParamUtil.getString(request, "keywords", StringPool.BLANK);
 		System.out.println("RECEPTION NO: " + receptionNo);
 		Dossier ds = null;
 		try {
@@ -63,7 +65,7 @@ public class DossierMornitoringPortlet extends MVCPortlet {
 		
 		if (ds != null) {
 			redirectURL.setParameter("jspPage", templatePath + "dossiermonitoringresult.jsp");
-			redirectURL.setParameter("dossierId", String.valueOf(ds.getDossierId()));
+			redirectURL.setParameter(DossierDisplayTerms.DOSSIER_ID, String.valueOf(ds.getDossierId()));
 			response.sendRedirect(redirectURL.toString());
 		}
 		else if (Validator.isNotNull(receptionNo) && !"".equals(receptionNo)) {		

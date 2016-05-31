@@ -32,6 +32,7 @@ import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
 import org.opencps.jasperreport.util.JRReportUtil;
 
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 
@@ -72,19 +73,27 @@ public class PreviewReportServlet extends HttpServlet {
 
 			// Validate json string
 
-			JSONFactoryUtil
-			    .createJSONObject(formData);
+			JSONObject jsonObject = JSONFactoryUtil
+						    .createJSONObject(formData);
+			
+			/*JSONObject dataSource = JSONFactoryUtil
+						    .createJSONObject();
+			
+			dataSource.put("opencps", jsonObject);*/
 
 			JRReportUtil
 			    .renderReportHTMLStream(
-			        response, writer, jrxmlTemplate, formData, null);
+			        response, writer, jrxmlTemplate, jsonObject.toString(), null);
 
 		}
 		catch (Exception e) {
 			writer.write("<div class=\"portlet-msg-alert\">" + LanguageUtil.get(request.getLocale(), "error-while-preview-report") + "</div>");
 		}finally {
-			writer.println();
-			writer.close();
+			if(writer != null){
+				writer.println();
+				writer.flush();
+				writer.close();
+			}
 		}
 	}
 

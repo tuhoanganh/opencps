@@ -345,8 +345,7 @@ implements PaymentFileFinder {
 			QueryPos qPos = QueryPos
 			    .getInstance(q);
 
-			qPos
-			    .add(groupId);
+			//qPos.add(groupId);
 			
 			qPos.add(customerId);
 			
@@ -477,8 +476,7 @@ implements PaymentFileFinder {
 			QueryPos qPos = QueryPos
 			    .getInstance(q);
 
-			qPos
-			    .add(groupId);
+			//qPos.add(groupId);
 
 			qPos.add(customerId);
 			
