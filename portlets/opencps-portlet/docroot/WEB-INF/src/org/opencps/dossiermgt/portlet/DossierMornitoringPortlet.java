@@ -48,7 +48,6 @@ public class DossierMornitoringPortlet extends MVCPortlet {
  
 	public void searchAction(ActionRequest request, ActionResponse response) throws PortletException, IOException {
 		String receptionNo = ParamUtil.getString(request, "keywords", StringPool.BLANK);
-		System.out.println("RECEPTION NO: " + receptionNo);
 		Dossier ds = null;
 		try {
 			ds = DossierLocalServiceUtil.getDossierByReceptionNo(receptionNo);

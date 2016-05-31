@@ -128,7 +128,7 @@
 			</td>
 			<td class="col-right">
 				<% if (serviceInfo != null) { %>
-					<%= DictItemUtil.getNameDictItem(serviceInfo.getAdministrationCode())  %>
+					<%= dossier.getGovAgencyName()  %>
 				<% } %>
 			</td>
 		</tr>		

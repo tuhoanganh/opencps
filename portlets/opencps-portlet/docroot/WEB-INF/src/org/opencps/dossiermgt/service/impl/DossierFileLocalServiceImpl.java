@@ -136,12 +136,7 @@ public class DossierFileLocalServiceImpl
                 DossierFile.class);
 
 		DossierFile dossierFile = DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
-		try {
-			indexer.delete(dossierFile);
-		} catch (SearchException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		indexer.delete(dossierFile);
 		
 		dossierFilePersistence
 		    .remove(dossierFileId);

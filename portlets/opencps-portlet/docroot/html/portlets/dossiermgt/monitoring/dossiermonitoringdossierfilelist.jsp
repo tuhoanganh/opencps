@@ -1,3 +1,17 @@
+<%@page import="com.liferay.portal.kernel.search.SearchException"%>
+<%@page import="com.liferay.portal.kernel.exception.SystemException"%>
+<%@page import="com.liferay.portal.kernel.exception.PortalException"%>
+<%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
+<%@page import="com.liferay.portal.kernel.search.Document"%>
+<%@page import="com.liferay.portal.kernel.search.SearchEngineUtil"%>
+<%@page import="com.liferay.portal.kernel.search.Hits"%>
+<%@page import="org.opencps.dossiermgt.search.DossierFileSearchUtil"%>
+<%@page import="com.liferay.portal.kernel.search.BooleanQuery"%>
+<%@page import="com.liferay.portal.kernel.search.SearchContextFactory"%>
+<%@page import="com.liferay.portal.kernel.search.SearchContext"%>
+<%@page import="com.liferay.portal.kernel.search.IndexerRegistryUtil"%>
+<%@page import="com.liferay.portal.kernel.search.Indexer"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="com.liferay.portal.service.OrganizationLocalServiceUtil"%>
 <%@page import="com.liferay.portal.service.UserLocalServiceUtil"%>
 <%@page import="com.liferay.portal.kernel.util.FastDateFormatFactoryUtil"%>
@@ -46,30 +60,52 @@
 	<liferay-ui:search-container-results>
 		<%
 			DossierFileSearchTerms searchTerms = (DossierFileSearchTerms)searchContainer.getSearchTerms();
+			SearchContext searchContext = SearchContextFactory.getInstance(request);
+			searchContext.setKeywords(searchTerms.getKeywords());
+			searchContext.setAttribute("paginationType", "more");
 			
-			String[] keywordArrs = null;
-			
-			if(Validator.isNotNull(searchTerms.getKeywords())){
-				keywordArrs = CustomSQLUtil.keywords(searchTerms.getKeywords());
-			}
-			
-			if (keywordArrs != null) {
-				List<DossierFile> dossierFiles = null;
+				List<DossierFile> dossierFiles = new ArrayList<DossierFile>();
 				Integer totalCount = 0;
 				
+				Indexer indexer = IndexerRegistryUtil.getIndexer(DossierFile.class);
+				_log.info("----KEYWORD----" + searchTerms.getKeywords());
+				searchContext.setStart(searchContainer.getStart());
+				searchContext.setEnd(searchContainer.getEnd());
+				searchContext.setLike(true);
+
 				try {
-					dossierFiles = DossierFileLocalServiceUtil.searchDossierFile(scopeGroupId, searchTerms.getKeywords(), -1, -1, true, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-					totalCount = DossierFileLocalServiceUtil.countDossierFile(scopeGroupId, searchTerms.getKeywords(), -1, -1, true);
-				} catch(Exception e){
-					_log.error(e);
+				    //Hits hits = indexer.search(searchContext);
+				    BooleanQuery query = DossierFileSearchUtil.buildSearchQuery(searchTerms.getKeywords(), searchContext);
+				    Hits hits = SearchEngineUtil.search(searchContext, query);
+					System.out.println("----HITS----" + hits.getLength());
+				    for (int i = 0; i < hits.getDocs().length; i++) {
+				    	Document doc = hits.doc(i);
+
+				        long dossierFileId = GetterUtil
+				                .getLong(doc.get(DossierFileDisplayTerms.DOSSIER_FILE_ID));
+
+				        DossierFile dossierFile = null;
+
+				        try {
+				        	dossierFile = DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
+				        } catch (PortalException pe) {
+				        	_log.error(pe.getLocalizedMessage());
+				        } catch (SystemException se) {
+				            _log.error(se.getLocalizedMessage());
+				        }
+						if (!dossierFiles.contains(dossierFile))
+				        	dossierFiles.add(dossierFile);
+					}		    
+				}
+				catch (SearchException se) {
 				}
 			
+				totalCount = dossierFiles.size();
 				total = totalCount;
 				results = dossierFiles;
 				
 				pageContext.setAttribute("results", results);
 				pageContext.setAttribute("total", total);				
-			}
 		%>
 	</liferay-ui:search-container-results>	
 		<liferay-ui:search-container-row 

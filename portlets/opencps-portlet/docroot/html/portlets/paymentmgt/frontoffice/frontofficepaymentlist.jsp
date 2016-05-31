@@ -1,3 +1,4 @@
+<%@page import="java.text.NumberFormat"%>
 <%@page import="org.opencps.util.AccountUtil"%>
 <%@page import="org.opencps.paymentmgt.util.PaymentMgtUtil"%>
 <%@page import="org.opencps.paymentmgt.service.persistence.PaymentFileUtil"%>
@@ -124,7 +125,7 @@
 				row.addText(paymentFile.getPaymentName());
 				
 				//amount column
-				row.addText(String.valueOf(paymentFile.getAmount()));
+				row.addText(String.valueOf(NumberFormat.getNumberInstance(locale).format(paymentFile.getAmount())));
 				
 				// payment status column
 				String paymentStatusText = "";
