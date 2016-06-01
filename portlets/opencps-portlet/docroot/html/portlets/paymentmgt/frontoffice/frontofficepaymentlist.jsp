@@ -1,3 +1,6 @@
+<%@page import="java.util.Locale"%>
+<%@page import="com.liferay.portal.service.ServiceContextThreadLocal"%>
+<%@page import="com.liferay.portal.service.ServiceContext"%>
 <%@page import="java.text.NumberFormat"%>
 <%@page import="org.opencps.util.AccountUtil"%>
 <%@page import="org.opencps.paymentmgt.util.PaymentMgtUtil"%>
@@ -59,18 +62,18 @@
 			PaymentFileSearchTerms searchTerms = (PaymentFileSearchTerms)searchContainer.getSearchTerms();
 		
 			boolean isCitizen = true;
-			
-			if (AccountUtil.getAccountBean().isBusiness()) {
+			ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
+			if (AccountUtil.getAccountBean(user.getUserId(), scopeGroupId, serviceContext).isBusiness()) {
 				isCitizen = false;
 			}
 			
 			long ownerObjectId = 0;
 			
 			
-			if (AccountUtil.getAccountBean().isCitizen()) {
-				ownerObjectId = AccountUtil.getAccountBean().getOwnerUserId();
-			} else if (AccountUtil.getAccountBean().isBusiness()) {
-				ownerObjectId = AccountUtil.getAccountBean().getOwnerOrganizationId();
+			if (AccountUtil.getAccountBean(user.getUserId(), scopeGroupId, serviceContext).isCitizen()) {
+				ownerObjectId = AccountUtil.getAccountBean(user.getUserId(), scopeGroupId, serviceContext).getOwnerUserId();
+			} else if (AccountUtil.getAccountBean(user.getUserId(), scopeGroupId, serviceContext).isBusiness()) {
+				ownerObjectId = AccountUtil.getAccountBean(user.getUserId(), scopeGroupId, serviceContext).getOwnerOrganizationId();
 			}
 			
 			
@@ -125,7 +128,7 @@
 				row.addText(paymentFile.getPaymentName());
 				
 				//amount column
-				row.addText(String.valueOf(NumberFormat.getNumberInstance(locale).format(paymentFile.getAmount())));
+				row.addText(String.valueOf(NumberFormat.getNumberInstance(new Locale("vi", "VN")).format(paymentFile.getAmount())));
 				
 				// payment status column
 				String paymentStatusText = "";
