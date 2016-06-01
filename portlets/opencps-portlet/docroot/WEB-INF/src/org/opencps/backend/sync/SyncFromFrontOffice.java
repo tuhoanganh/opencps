@@ -198,7 +198,7 @@ public class SyncFromFrontOffice implements MessageListener{
 		}
 
 	}
-    
+
     /**
      * @param dossierId
      * @return
