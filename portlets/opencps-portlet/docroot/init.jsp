@@ -25,6 +25,7 @@
 <%@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme"%>
 <%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui"%>
 <%@ taglib uri="http://liferay.com/tld/util" prefix="liferay-util"%>
+<%@ taglib uri="http://opencps.org/accountmgt" prefix="accountmgt"%>
 
 <%@page import="com.liferay.portal.kernel.util.StringUtil"%>
 <%@page import="com.liferay.portlet.PortletPreferencesFactoryUtil"%>
