@@ -17,6 +17,7 @@
 
 package org.opencps.backend.util;
 
+import java.text.SimpleDateFormat;
 import java.util.Random;
 
 import com.liferay.portal.kernel.util.StringPool;
@@ -27,6 +28,7 @@ import com.liferay.portal.kernel.util.StringPool;
  *
  */
 public class DossierNoGenerator {
+	
 	
 
 	
@@ -44,6 +46,9 @@ public class DossierNoGenerator {
 		    char c = chars[random.nextInt(chars.length)];
 		    sb.append(c);
 		}
+		
+		
+		
 		return sb.toString();
 	}
 }
