@@ -62,13 +62,17 @@
 			PaymentFileSearchTerms searchTerms = (PaymentFileSearchTerms)searchContainer.getSearchTerms();
 		
 			boolean isCitizen = true;
-			ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
-			if (AccountUtil.getAccountBean(user.getUserId(), scopeGroupId, serviceContext).isBusiness()) {
+			
+			if (AccountUtil.getAccountBean().isBusiness()) {
 				isCitizen = false;
 			}
 			
 			long ownerObjectId = 0;
 			
+			ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
+			if (AccountUtil.getAccountBean(user.getUserId(), scopeGroupId, serviceContext).isBusiness()) {
+				isCitizen = false;
+			}
 			
 			if (AccountUtil.getAccountBean(user.getUserId(), scopeGroupId, serviceContext).isCitizen()) {
 				ownerObjectId = AccountUtil.getAccountBean(user.getUserId(), scopeGroupId, serviceContext).getOwnerUserId();

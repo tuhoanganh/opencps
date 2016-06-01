@@ -100,7 +100,6 @@ public class DossierFileIndexer extends BaseIndexer {
 		document.addKeyword(Field.GROUP_ID,
 				getSiteGroupId(dossierFile.getGroupId()));
 		document.addKeyword(Field.SCOPE_GROUP_ID, dossierFile.getGroupId());
-		document.addKeyword(DossierFileDisplayTerms.DOSSIER_FILE_ID, dossierFile.getDossierFileId());
 
 		return document;
 	}
