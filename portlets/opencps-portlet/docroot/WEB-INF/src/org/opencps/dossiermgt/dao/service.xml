@@ -313,12 +313,16 @@
         <column name="displayName" type="String"/>
         <column name="removed" type="int"/>
         <column name="syncStatus" type="int"/>
-        <finder name="D_P" return-type="Collection">
+        <finder name="D_DP" return-type="Collection">
             <finder-column name="dossierId"></finder-column>
             <finder-column name="dossierPartId"></finder-column>
         </finder>
         <finder name="DossierId" return-type="Collection">
             <finder-column name="dossierId"></finder-column>
+        </finder>
+        <finder name="FileGroupInUse" return-type="Collection" where="removed=0">
+            <finder-column name="dossierId"></finder-column>
+            <finder-column name="dossierPartId"></finder-column>
         </finder>
     </entity>
     
@@ -357,19 +361,18 @@
         <column name="original" type="int"/>
         <column name="syncStatus" type="int"/>
         <column name="version" type="int"></column>
-        <finder name="D_P" return-type="DossierFile">
+        <finder name="D_DP" return-type="Collection">
             <finder-column name="dossierId"></finder-column>
             <finder-column name="dossierPartId"></finder-column>
         </finder>
-        <finder name="DossierId" return-type="Collection">
+        <finder name="DossierId" return-type="Collection" where="removed=0">
             <finder-column name="dossierId"></finder-column>
         </finder>
-        <finder name="D_F" return-type="Collection">
+        <finder name="D_GF" return-type="Collection" where="removed=0">
             <finder-column name="dossierId"></finder-column>
             <finder-column name="groupFileId"></finder-column>
         </finder>
-
-        <finder name="D_P_C" return-type="Collection">
+        <finder name="DossierFileInUse" return-type="DossierFile" where="removed=0">
             <finder-column name="dossierId"></finder-column>
             <finder-column name="dossierPartId"></finder-column>
         </finder>
@@ -412,6 +415,7 @@
         <exception>EmptyDossierFile</exception>
         <exception>InvalidDossierObject</exception>
         <exception>CreateDossierFolder</exception>
+        <exception>PermissionDossier</exception>
 	</exceptions>
 
 </service-builder>
