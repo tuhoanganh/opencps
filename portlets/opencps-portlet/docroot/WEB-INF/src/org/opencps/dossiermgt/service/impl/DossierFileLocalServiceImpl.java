@@ -107,7 +107,7 @@ public class DossierFileLocalServiceImpl
 		dossierFile
 		    .setOwnerOrganizationId(ownerOrganizationId);
 		dossierFile
-		    .setUuid(PortalUUIDUtil
+		    .setOid(PortalUUIDUtil
 		        .generate());
 
 		return dossierFilePersistence
