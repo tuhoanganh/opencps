@@ -376,8 +376,8 @@
             <finder-column name="dossierId"></finder-column>
             <finder-column name="dossierPartId"></finder-column>
         </finder>
-
-         <reference entity="DLFileEntry" package-path="com.liferay.portlet.documentlibrary"/>
+		<reference package-path="com.liferay.portlet.documentlibrary" entity="DLApp" />
+        <reference entity="DLFileEntry" package-path="com.liferay.portlet.documentlibrary"/>
     </entity>
 
 	<exceptions>
