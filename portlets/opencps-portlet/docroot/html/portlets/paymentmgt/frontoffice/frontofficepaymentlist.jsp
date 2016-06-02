@@ -63,9 +63,6 @@
 		
 			boolean isCitizen = true;
 			
-			if (AccountUtil.getAccountBean().isBusiness()) {
-				isCitizen = false;
-			}
 			
 			long ownerObjectId = 0;
 			
