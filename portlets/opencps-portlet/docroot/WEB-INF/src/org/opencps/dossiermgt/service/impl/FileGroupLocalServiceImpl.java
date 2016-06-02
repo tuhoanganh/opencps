@@ -47,44 +47,54 @@ public class FileGroupLocalServiceImpl extends FileGroupLocalServiceBaseImpl {
 	 * access the file group local service.
 	 */
 
+	/**
+	 * @param userId
+	 * @param dossierId
+	 * @param dossierPartId
+	 * @param displayName
+	 * @param syncStatus
+	 * @param serviceContext
+	 * @return
+	 * @throws SystemException
+	 */
 	public FileGroup addFileGroup(
-	    long userId, long dossierId, long dossierPartId, String displayName,
-	    int syncStatus, ServiceContext serviceContext)
-	    throws SystemException {
+		long userId, long dossierId, long dossierPartId, String displayName,
+		int syncStatus, ServiceContext serviceContext)
+		throws SystemException {
 
 		long fileGroupId = counterLocalService
-		    .increment(FileGroup.class
-		        .getName());
+			.increment(FileGroup.class
+				.getName());
 		FileGroup fileGroup = fileGroupPersistence
-		    .create(fileGroupId);
+			.create(fileGroupId);
 		Date now = new Date();
 		fileGroup
-		    .setUserId(userId);
+			.setUserId(userId);
 		fileGroup
-		    .setGroupId(serviceContext
-		        .getScopeGroupId());
+			.setGroupId(serviceContext
+				.getScopeGroupId());
 		fileGroup
-		    .setCompanyId(serviceContext
-		        .getCompanyId());
+			.setCompanyId(serviceContext
+				.getCompanyId());
 		fileGroup
-		    .setCreateDate(now);
+			.setCreateDate(now);
 		fileGroup
-		    .setModifiedDate(now);
+			.setModifiedDate(now);
 
 		fileGroup
-		    .setDisplayName(displayName);
+			.setDisplayName(displayName);
 		fileGroup
-		    .setDossierId(dossierId);
+			.setDossierId(dossierId);
 		fileGroup
-		    .setDossierPartId(dossierPartId);
+			.setDossierPartId(dossierPartId);
 		fileGroup
-		    .setSyncStatus(syncStatus);
+			.setSyncStatus(syncStatus);
 		fileGroup
-		    .setUuid(PortalUUIDUtil
-		        .generate());
+			.setUuid(PortalUUIDUtil
+				.generate());
 
 		return fileGroupPersistence
-		    .update(fileGroup);
+			.update(fileGroup);
 	}
 
 	/**
@@ -93,17 +103,37 @@ public class FileGroupLocalServiceImpl extends FileGroupLocalServiceBaseImpl {
 	 * @return
 	 * @throws SystemException
 	 */
-	public List<FileGroup> getFileGroupByD_P(long dossierId, long dossierPartId)
-	    throws SystemException {
+	public List<FileGroup> getFileGroupByD_DP(
+		long dossierId, long dossierPartId)
+		throws SystemException {
 
 		return fileGroupPersistence
-		    .findByD_P(dossierId, dossierPartId);
+			.findByD_DP(dossierId, dossierPartId);
 	}
 
+	/**
+	 * @param dossierId
+	 * @return
+	 * @throws SystemException
+	 */
 	public List<FileGroup> getFileGroupByDossierId(long dossierId)
-	    throws SystemException {
+		throws SystemException {
 
 		return fileGroupPersistence
-		    .findByDossierId(dossierId);
+			.findByDossierId(dossierId);
 	}
+
+	/**
+	 * @param dossierId
+	 * @param dossierPartId
+	 * @return
+	 * @throws SystemException
+	 */
+	public List<FileGroup> getFileGroupInUse(long dossierId, long dossierPartId)
+		throws SystemException {
+
+		return fileGroupPersistence
+			.findByFileGroupInUse(dossierId, dossierPartId);
+	}
+
 }
