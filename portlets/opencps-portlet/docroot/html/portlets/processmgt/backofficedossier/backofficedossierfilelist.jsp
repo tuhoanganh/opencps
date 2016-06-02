@@ -102,10 +102,10 @@
 				String dossierFileTypeText = "";
 				switch (dossierFile.getDossierFileType()) {
 				case DossierMgtUtil.DOSSIERFILETYPE_INPUT:
-					dossierFileTypeText = LanguageUtil.get(pageContext, "dossier-file-type-input");
+					dossierFileTypeText = LanguageUtil.get(pageContext, "dossier-filetype-input");
 					break;
 				case DossierMgtUtil.DOSSIERFILETYPE_OUTPUT:
-					dossierFileTypeText = LanguageUtil.get(pageContext, "dossier-file-type-output");
+					dossierFileTypeText = LanguageUtil.get(pageContext, "dossier-filetype-output");
 					break;
 				default:
 					dossierFileTypeText = "";
