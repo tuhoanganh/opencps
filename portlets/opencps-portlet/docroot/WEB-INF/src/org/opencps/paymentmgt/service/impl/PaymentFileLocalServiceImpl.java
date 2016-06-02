@@ -143,6 +143,9 @@ public class PaymentFileLocalServiceImpl extends PaymentFileLocalServiceBaseImpl
 		return paymentFilePersistence.fetchByGoodCode(groupId, keypayGoodCode);
 	}
 	
+	public PaymentFile getPaymentFileByMerchantResponse(long keypayTransactionId, String keypayGoodCode, double amount) throws SystemException {
+		return paymentFilePersistence.fetchByMerchantResponse(keypayTransactionId, keypayGoodCode, amount);
+	}
 	
 	/**
 	 * @param dossierId

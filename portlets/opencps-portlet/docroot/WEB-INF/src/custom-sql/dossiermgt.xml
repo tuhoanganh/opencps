@@ -220,7 +220,7 @@
 			AND 
 				opencps_dossier_log.requestCommand IN(?)
 			ORDER BY 
-				opencps_dossier.updateDatetime DESC
+				opencps_dossier_log.updateDatetime DESC
 		]]>
 	</sql>
 
