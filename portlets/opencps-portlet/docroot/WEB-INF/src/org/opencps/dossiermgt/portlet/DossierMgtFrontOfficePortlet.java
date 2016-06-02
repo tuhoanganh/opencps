@@ -53,6 +53,8 @@ import org.opencps.dossiermgt.EmptyDossierSubjectIdException;
 import org.opencps.dossiermgt.EmptyDossierSubjectNameException;
 import org.opencps.dossiermgt.EmptyDossierWardCodeException;
 import org.opencps.dossiermgt.InvalidDossierObjectException;
+import org.opencps.dossiermgt.NoSuchDossierException;
+import org.opencps.dossiermgt.NoSuchDossierPartException;
 import org.opencps.dossiermgt.OutOfLengthDossierAddressException;
 import org.opencps.dossiermgt.OutOfLengthDossierContactEmailException;
 import org.opencps.dossiermgt.OutOfLengthDossierContactNameException;
@@ -132,14 +134,21 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
 
-		HttpServletRequest request = PortalUtil
+		/*HttpServletRequest request = PortalUtil
 			.getHttpServletRequest(actionRequest);
 
 		HttpSession session = request
-			.getSession();
+			.getSession();*/
 
 		UploadPortletRequest uploadPortletRequest = PortalUtil
 			.getUploadPortletRequest(actionRequest);
+		
+		AccountBean accountBean = AccountUtil.getAccountBean();
+		
+		Dossier dossier = null;
+		DossierFile dossierFile = null;
+		FileGroup fileGroup = null;
+		DossierPart dossierPart = null;
 
 		boolean updated = false;
 
@@ -160,24 +169,24 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		long size = uploadPortletRequest
 			.getSize(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
 
-		long ownerUserId = GetterUtil
+		/*long ownerUserId = GetterUtil
 			.getLong(session
 				.getAttribute(WebKeys.ACCOUNT_OWNERUSERID));
 		long ownerOrganizationId = GetterUtil
 			.getLong(session
-				.getAttribute(WebKeys.ACCOUNT_OWNERORGANIZATIONID));
+				.getAttribute(WebKeys.ACCOUNT_OWNERORGANIZATIONID));*/
 
-		int dossierFileType = ParamUtil
+		/*int dossierFileType = ParamUtil
 			.getInteger(uploadPortletRequest,
 				DossierFileDisplayTerms.DOSSIER_FILE_TYPE);
 
 		int dossierFileOriginal = ParamUtil
 			.getInteger(uploadPortletRequest,
-				DossierFileDisplayTerms.DOSSIER_FILE_ORIGINAL);
+				DossierFileDisplayTerms.DOSSIER_FILE_ORIGINAL);*/
 
-		String accountType = GetterUtil
+		/*String accountType = GetterUtil
 			.getString(session
-				.getAttribute(WebKeys.ACCOUNT_TYPE));
+				.getAttribute(WebKeys.ACCOUNT_TYPE));*/
 
 		String displayName = ParamUtil
 			.getString(uploadPortletRequest,
@@ -205,8 +214,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		String redirectURL = ParamUtil
 			.getString(uploadPortletRequest, "redirectURL");
 
-		Dossier dossier = null;
-
+		
 		InputStream inputStream = null;
 
 		Date fileDate = DateTimeUtil
@@ -2052,6 +2060,77 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		return JRReportUtil
 			.createReportPDFfFile(jrxmlTemplate, formData, map,
 				outputDestination, fileName);
+	}
+
+	private static boolean validateAccount(
+		ActionRequest actionRequest, ActionResponse actionResponse) {
+
+		AccountBean accountBean = AccountUtil
+			.getAccountBean();
+		if (accountBean == null) {
+			SessionErrors
+				.add(actionRequest, MessageKeys.ACCOUNTMGT_NO_ACCOUNT_INFO);
+			return false;
+		}
+		else if (Validator
+			.isNull(accountBean
+				.getAccountType())) {
+			SessionErrors
+				.add(actionRequest, MessageKeys.ACCOUNTMGT_NO_ACCOUNT_TYPE);
+			return false;
+		}
+		else if (accountBean
+			.getAccountFolder() == null) {
+			SessionErrors
+				.add(actionRequest, MessageKeys.ACCOUNTMGT_NO_ACCOUNT_FOLDER);
+			return false;
+		}
+		else if (accountBean
+			.isCitizen() && accountBean
+				.getOwnerUserId() == 0) {
+			SessionErrors
+				.add(actionRequest,
+					MessageKeys.ACCOUNTMGT_NO_ACCOUNT_OWNERUSERID);
+			return false;
+		}
+		else if (accountBean
+			.isBusiness() && accountBean
+				.getOwnerOrganizationId() == 0) {
+			SessionErrors
+				.add(actionRequest,
+					MessageKeys.ACCOUNTMGT_NO_ACCOUNT_OWNERORGANIZATIONID);
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+	
+	private static void validateAddAttachDossierFile(long dossierId, long dossierPartId, 
+		long fileGroupId, long dossierFileId, String groupName, 
+		String displayName, long size, String sourceFileName, InputStream inputStream, AccountBean accountBean) throws NoSuchDossierException, NoSuchDossierPartException{
+		
+		if(dossierId <= 0){
+			throw new NoSuchDossierException();
+		}
+		
+		try {
+			DossierLocalServiceUtil.getDossier(dossierId);
+		}
+		catch (Exception e) {
+			throw new NoSuchDossierException();
+		}
+		
+		if(dossierPartId < 0){
+			throw new NoSuchDossierPartException();
+		}
+		
+		try {
+			DossierPartLocalServiceUtil.getDossierPart(dossierPartId);
+		}
+		catch (Exception e) {
+			throw new NoSuchDossierPartException();
+		}
 	}
 
 }

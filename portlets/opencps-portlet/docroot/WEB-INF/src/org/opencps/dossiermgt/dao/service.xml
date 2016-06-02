@@ -339,7 +339,7 @@
 		<!-- Other fields -->
         <column name="dossierId" type="long"/>
         
-        <column name="uuid" type="String" />
+        <column name="oid" type="String" />
         <column name="dossierPartId" type="long"/>
         <column name="templateFileNo" type="String"/>
         <column name="groupFileId" type="long"/>
@@ -356,6 +356,7 @@
         <column name="removed" type="int"/>
         <column name="original" type="int"/>
         <column name="syncStatus" type="int"/>
+        <column name="version" type="int"></column>
         <finder name="D_P" return-type="DossierFile">
             <finder-column name="dossierId"></finder-column>
             <finder-column name="dossierPartId"></finder-column>
