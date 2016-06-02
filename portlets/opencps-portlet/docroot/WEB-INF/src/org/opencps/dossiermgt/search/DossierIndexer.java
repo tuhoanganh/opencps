@@ -93,6 +93,7 @@ public class DossierIndexer extends BaseIndexer {
 		document.addDate(Field.MODIFIED_DATE, dossier.getModifiedDate());
 		document.addText(DossierDisplayTerms.CITY_NAME, dossier.getCityName());
 		document.addText(DossierDisplayTerms.EXTERNALREF_NO, dossier.getExternalRefNo());
+		document.addText(DossierDisplayTerms.EXTERNALREF_URL, dossier.getExternalRefUrl());		
 		document.addText(DossierDisplayTerms.GOVAGENCY_NAME, dossier.getGovAgencyName());
 		document.addText(DossierDisplayTerms.SUBJECT_NAME, dossier.getSubjectName());
 		document.addText(DossierDisplayTerms.ADDRESS, dossier.getAddress());
@@ -102,13 +103,14 @@ public class DossierIndexer extends BaseIndexer {
 		document.addText(DossierDisplayTerms.WARD_CODE, dossier.getWardCode());
 		document.addText(DossierDisplayTerms.WARD_NAME, dossier.getWardName());
 		document.addText(DossierDisplayTerms.CONTACT_NAME, dossier.getContactName());
+		document.addText(DossierDisplayTerms.CONTACT_TEL_NO, dossier.getContactTelNo());
+		document.addText(DossierDisplayTerms.CONTACT_EMAIL, dossier.getContactEmail());
+		document.addText(DossierDisplayTerms.NOTE, dossier.getNote());
 		document.addNumber(DossierDisplayTerms.DOSSIER_ID, dossier.getDossierId());
 		
 		document.addKeyword(Field.GROUP_ID,
 				getSiteGroupId(dossier.getGroupId()));
 		document.addKeyword(Field.SCOPE_GROUP_ID, dossier.getGroupId());
-		document.addKeyword(DossierDisplayTerms.DOSSIER_ID, dossier.getDossierId());
-		document.addKeyword(DossierDisplayTerms.USER_ID, dossier.getUserId());
 		
 		return document;
 	}
