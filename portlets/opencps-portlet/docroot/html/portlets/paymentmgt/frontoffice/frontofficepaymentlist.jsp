@@ -63,6 +63,7 @@
 		
 			boolean isCitizen = true;
 						
+			
 			long ownerObjectId = 0;
 			
 			ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
