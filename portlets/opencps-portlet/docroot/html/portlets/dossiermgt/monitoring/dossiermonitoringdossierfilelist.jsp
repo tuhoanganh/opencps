@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.NoSuchOrganizationException"%>
 <%@page import="com.liferay.portal.kernel.search.SearchException"%>
 <%@page import="com.liferay.portal.kernel.exception.SystemException"%>
 <%@page import="com.liferay.portal.kernel.exception.PortalException"%>
@@ -69,8 +70,6 @@
 				
 				Indexer indexer = IndexerRegistryUtil.getIndexer(DossierFile.class);
 				_log.info("----KEYWORD----" + searchTerms.getKeywords());
-				searchContext.setStart(searchContainer.getStart());
-				searchContext.setEnd(searchContainer.getEnd());
 				searchContext.setLike(true);
 
 				try {
@@ -78,6 +77,10 @@
 				    BooleanQuery query = DossierFileSearchUtil.buildSearchQuery(searchTerms.getKeywords(), searchContext);
 				    Hits hits = SearchEngineUtil.search(searchContext, query);
 					System.out.println("----HITS----" + hits.getLength());
+					totalCount = hits.getLength();
+					searchContext.setStart(searchContainer.getStart());
+					searchContext.setEnd(searchContainer.getEnd());
+					hits = SearchEngineUtil.search(searchContext, query);
 				    for (int i = 0; i < hits.getDocs().length; i++) {
 				    	Document doc = hits.doc(i);
 
@@ -100,7 +103,7 @@
 				catch (SearchException se) {
 				}
 			
-				totalCount = dossierFiles.size();
+				//totalCount = dossierFiles.size();
 				total = totalCount;
 				results = dossierFiles;
 				
@@ -134,7 +137,12 @@
 					row.addText(UserLocalServiceUtil.getUser(dossierFile.getOwnerUserId()).getFullName());
 				}
 				else if (Validator.isNotNull(dossierFile.getOwnerOrganizationId())) {
-					row.addText(OrganizationLocalServiceUtil.getOrganization(dossierFile.getOwnerOrganizationId()).getName());
+					try {
+						row.addText(OrganizationLocalServiceUtil.getOrganization(dossierFile.getOwnerOrganizationId()).getName());
+					}
+					catch (NoSuchOrganizationException e) {
+						row.addText("");
+					}
 				}
 				else {
 					row.addText("");

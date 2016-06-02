@@ -73,8 +73,6 @@
 				
 				Indexer indexer = IndexerRegistryUtil.getIndexer(Dossier.class);
 				_log.info("----KEYWORD----" + searchTerms.getKeywords());
-				searchContext.setStart(searchContainer.getStart());
-				searchContext.setEnd(searchContainer.getEnd());
 				searchContext.setLike(true);
 
 				try {
@@ -82,6 +80,10 @@
 				    BooleanQuery query = DossierSearchUtil.buildSearchQuery(searchTerms.getKeywords(), searchContext);
 				    Hits hits = SearchEngineUtil.search(searchContext, query);
 					System.out.println("----HITS----" + hits.getLength());
+					totalCount = hits.getLength();
+					searchContext.setStart(searchContainer.getStart());
+					searchContext.setEnd(searchContainer.getEnd());
+					hits = SearchEngineUtil.search(searchContext, query);
 				    for (int i = 0; i < hits.getDocs().length; i++) {
 				    	Document doc = hits.doc(i);
 
@@ -104,7 +106,7 @@
 				catch (SearchException se) {
 				}
 				
-				totalCount = dossiers.size();
+				//totalCount = dossiers.size();
 				total = totalCount;
 				results = dossiers;
 				
