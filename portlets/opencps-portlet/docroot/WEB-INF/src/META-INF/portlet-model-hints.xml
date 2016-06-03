@@ -450,7 +450,7 @@
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
 		<field name="dossierId" type="long" />
-		<field name="uuid" type="String" />
+		<field name="oid" type="String" />
 		<field name="dossierPartId" type="long" />
 		<field name="templateFileNo" type="String" />
 		<field name="groupFileId" type="long" />
@@ -473,6 +473,7 @@
 		<field name="removed" type="int" />
 		<field name="original" type="int" />
 		<field name="syncStatus" type="int" />
+		<field name="version" type="int" />
 	</model>
 	<model name="org.opencps.dossiermgt.model.DossierLog">
 		<field name="dossierLogId" type="long" />
