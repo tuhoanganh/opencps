@@ -63,5 +63,7 @@ public class MessageKeys {
 	public static final String DOSSIER_UPDATE_SUCCESS = "dossiermgt.update.sucess";
 	public static final String DOSSIER_FILE_DUPLICATE_NAME = "dossiermgt.file.duplicate.name";
 	
-	public static final String PAYMENT_FILE_CONFIRM_BANK_SUCESS = "payment.file.confirm.bank.success";
+	public static final String PAYMENT_FILE_CONFIRM_BANK_SUCCESS = "payment.file.confirm.bank.success";
+	public static final String PAYMENT_FILE_CONFIRM_CASH_SUCCESS = "payment.file.confirm.cash.success";
+	public static final String PAYMENT_FILE_CONFIRM_CASH_ERROR = "payment.file.confirm.cash.error";
 }
