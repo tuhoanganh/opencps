@@ -247,6 +247,11 @@
 	</aui:row>
 	<aui:row>
 		<aui:col>
+			<aui:button cssClass="pull-right" name="view-report-template" value="view-report-template"></aui:button>
+		</aui:col>
+	</aui:row>
+	<aui:row>
+		<aui:col>
 			<aui:input value="<%= c != null ? c.getReportTemplate() : \"\" %>" id="<%= PaymentConfigDisplayTerms.REPORT_TEMPLATE %>" type="textarea" style="width: 98%" name="<%= PaymentConfigDisplayTerms.REPORT_TEMPLATE %>">
 			</aui:input>
 		</aui:col>
