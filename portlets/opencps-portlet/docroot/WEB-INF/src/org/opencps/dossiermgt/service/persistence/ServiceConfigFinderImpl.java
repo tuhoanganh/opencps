@@ -319,8 +319,7 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 			if (Validator
 			    .isNotNull(serviceModes)) {
 				qPos
-				    .add(StringUtil
-				        .merge(serviceModes));
+				    .add(serviceModes);
 			}
 
 			Iterator<Integer> itr = q
@@ -405,8 +404,7 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 			if (Validator
 			    .isNotNull(serviceModes)) {
 				qPos
-				    .add(StringUtil
-				        .merge(serviceModes));
+				    .add(serviceModes);
 			}
 
 			return (List<ServiceConfig>) QueryUtil
