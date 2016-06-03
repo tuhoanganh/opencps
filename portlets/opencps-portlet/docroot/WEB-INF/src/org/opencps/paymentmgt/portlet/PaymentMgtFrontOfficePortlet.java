@@ -270,7 +270,7 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 					paymentFile = PaymentFileLocalServiceUtil.getPaymentFile(paymentFileId);
 					if (paymentFile != null) {
 						paymentFile.setConfirmFileEntryId(fileEntry.getFileEntryId());
-						paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_CONFIRMED);
+						paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_REQUESTED);
 						PaymentFileLocalServiceUtil.updatePaymentFile(paymentFile);
 					}
 				}
@@ -280,7 +280,7 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 
 				SessionMessages.add(
 				    actionRequest,
-				    MessageKeys.PAYMENT_FILE_CONFIRM_BANK_SUCESS);
+				    MessageKeys.PAYMENT_FILE_CONFIRM_BANK_SUCCESS);
 			}
 		}
 		catch (Exception e) {
