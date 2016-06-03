@@ -62,8 +62,7 @@
 			PaymentFileSearchTerms searchTerms = (PaymentFileSearchTerms)searchContainer.getSearchTerms();
 		
 			boolean isCitizen = true;
-			
-			
+
 			long ownerObjectId = 0;
 			
 			ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
