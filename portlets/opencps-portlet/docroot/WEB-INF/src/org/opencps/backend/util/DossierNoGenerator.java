@@ -69,19 +69,19 @@ public class DossierNoGenerator {
 			pattern = sbNoReception.toString();
 			
 			if (pattern.contains(FIX_YEAR_PATTERN_TYPE_1)) {
-				StringUtil.replace(pattern, FIX_YEAR_PATTERN_TYPE_1, strYearTypeOne);
+				pattern = StringUtil.replace(pattern, FIX_YEAR_PATTERN_TYPE_1, strYearTypeOne);
 			}
 			
 			if (StringUtil.contains(pattern, FIX_YEAR_PATTERN_TYPE_2)) {
-				StringUtil.replace(pattern, FIX_YEAR_PATTERN_TYPE_2, strYearTypeTwo);
+				pattern = StringUtil.replace(pattern, FIX_YEAR_PATTERN_TYPE_2, strYearTypeTwo);
 			}
 			
 			if (pattern.contains(FIX_MONTH_PATTERN)) {
-				StringUtil.replace(pattern, FIX_MONTH_PATTERN, strMonth);
+				pattern = StringUtil.replace(pattern, FIX_MONTH_PATTERN, strMonth);
 			}
 			
 			if (pattern.contains(FIX_DAY_PATTERN)) {
-				StringUtil.replace(pattern, FIX_DAY_PATTERN, strDay);
+				pattern = StringUtil.replace(pattern, FIX_DAY_PATTERN, strDay);
 			}
 			
 			noReception = pattern;
