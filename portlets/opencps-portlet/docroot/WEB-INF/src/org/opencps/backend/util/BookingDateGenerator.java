@@ -32,6 +32,8 @@ import com.liferay.portal.kernel.util.StringUtil;
 public class BookingDateGenerator {
 	
 	/**
+	 * Generate Booking date
+	 * 
 	 * @param receiveDate
 	 * @param pattern
 	 * @return
