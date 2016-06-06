@@ -223,3 +223,7 @@ portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/model/
 
 bin/
 portlets/opencps-portlet/.classpath
+portlets/LiferayJSONWebservices-portlet.rar
+portlets/LiferayJSONWebservices-portlet/
+
+portlets/opencps-portlet/*.log

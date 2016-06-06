@@ -164,4 +164,6 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String PRE_CONDITION_ONEGATE = "onegate";
 	
 	public static final String PRE_CONDITION_ONELINE = "oneline";
+	
+	
 }
