@@ -226,3 +226,4 @@ portlets/opencps-portlet/.classpath
 portlets/LiferayJSONWebservices-portlet.rar
 portlets/LiferayJSONWebservices-portlet/
 
+portlets/opencps-portlet/*.log
