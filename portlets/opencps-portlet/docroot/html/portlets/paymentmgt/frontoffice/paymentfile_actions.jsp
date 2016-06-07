@@ -1,3 +1,6 @@
+<%@page import="org.opencps.backend.util.PaymentRequestGenerator"%>
+<%@page import="com.liferay.portal.kernel.util.ListUtil"%>
+<%@page import="java.util.List"%>
 <%@page import="org.opencps.paymentmgt.search.PaymentFileDisplayTerms"%>
 <%@page import="org.opencps.paymentmgt.model.PaymentFile"%>
 <%@page import="org.opencps.util.WebKeys"%>
@@ -20,15 +23,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+
 <%@ include file="../init.jsp"%>
+
 <%
 	ResultRow row =	(ResultRow) request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
 
 	PaymentFile paymentFile = (PaymentFile)row.getObject();
-	boolean isCash = (((paymentFile.getPaymentOptions()) & 1) != 0);
-	boolean isKeypay = (((paymentFile.getPaymentOptions() >>> 1) & 1) != 0);
-	boolean isBank = (((paymentFile.getPaymentOptions() >>> 2) & 1) != 0);
 	
+	List<String> paymentOption = ListUtil.toList(StringUtil.split(paymentFile.getPaymentOptions()));
+	
+	boolean isCash = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_CASH);
+	boolean isKeypay = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_KEYPAY);
+	boolean isBank = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_BANK);
 %>
 
 <portlet:renderURL var="viewPaymentDetail">
@@ -65,7 +72,7 @@
 	url="<%=viewPaymentDetail.toString()%>" />
 
 <liferay-ui:icon image="key" cssClass="view" message="keypay-transaction"
-	url="<%=keypayTransaction.toString()%>" />
+	url="<%=paymentFile.getKeypayUrl()%>" />
 
 <liferay-ui:icon image="post" cssClass="view" message="bank-transaction"
 	url="<%=bankTransaction.toString()%>" />	

@@ -45,33 +45,7 @@ import com.liferay.portal.kernel.util.Validator;
  */
 public class KeypayUrlGenerator {
 	
-	public static void main(String[] args) {
-		List<String> abc = new ArrayList<String>(7);
-		List<String> lsDesc = new ArrayList<String>();
-		
-		lsDesc.add(0, StringPool.BLANK);
-		lsDesc.add(1, StringPool.BLANK);
-		lsDesc.add(2, StringPool.BLANK);
-		lsDesc.add(3, StringPool.BLANK);
-		lsDesc.add(4, StringPool.BLANK);
 
-		String pattern =
-		    "net=100 ship=300 tax=30 bank cash keypay $Thanh toan cho tao cai nay nhe$ $Thong diep 2$ $Thong diep 3$ $Thong diep 4$ $Thong diep 5$";
-		
-		String keypayURL = StringPool.BLANK;
-		
-		try {
-	        keypayURL = generatorKeypayURL(20182, 24787, 501, pattern, 7201);
-
-        }
-        catch (Exception e) {
-	        // TODO: handle exception
-        }
-		
-		System.out.println(keypayURL);
-		
-    }
-	
 	public static String generatorKeypayURL(
 	    long groupId, long govAgencyOrganizationId, long paymentFileId,
 	    String pattern, long dossierId)
@@ -94,8 +68,7 @@ public class KeypayUrlGenerator {
 		    Validator.isNotNull(paymentFile)) {
 			
 			String merchant_trans_id =
-			    GetterUtil.getString(
-			        _genetatorTransactionId(paymentFile), StringPool.BLANK);
+			    Long.toString(_genetatorTransactionId(paymentFile));
 			
 			String merchant_code = paymentConfig.getKeypayMerchantCode();
 

@@ -1,3 +1,6 @@
+<%@page import="org.opencps.backend.util.PaymentRequestGenerator"%>
+<%@page import="com.liferay.portal.kernel.util.ListUtil"%>
+<%@page import="java.util.List"%>
 <%@page import="java.util.Locale"%>
 <%@page import="java.text.NumberFormat"%>
 <%@page import="org.opencps.paymentmgt.util.PaymentMgtUtil"%>
@@ -132,9 +135,11 @@
 				<td class="col-left"><liferay-ui:message key="payment-options"></liferay-ui:message></td>
 				<td class="col-right">
 					<%
-						boolean isCash = (((paymentFile.getPaymentOptions()) & 1) != 0);
-						boolean isKeypay = (((paymentFile.getPaymentOptions() >>> 1) & 1) != 0);
-						boolean isBank = (((paymentFile.getPaymentOptions() >>> 2) & 1) != 0);
+						List<String> paymentOption = ListUtil.toList(StringUtil.split(paymentFile.getPaymentOptions()));
+						
+						boolean isCash = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_CASH);
+						boolean isKeypay = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_KEYPAY);
+						boolean isBank = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_BANK);
 					%>
 					<c:if test="<%= isCash %>">
 						[<liferay-ui:message key="cash"></liferay-ui:message>]&nbsp;
