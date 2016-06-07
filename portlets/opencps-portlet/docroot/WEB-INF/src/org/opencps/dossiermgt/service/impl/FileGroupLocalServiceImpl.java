@@ -20,9 +20,11 @@ package org.opencps.dossiermgt.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.FileGroup;
 import org.opencps.dossiermgt.service.base.FileGroupLocalServiceBaseImpl;
 
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.service.ServiceContext;
@@ -90,11 +92,24 @@ public class FileGroupLocalServiceImpl extends FileGroupLocalServiceBaseImpl {
 		fileGroup
 			.setSyncStatus(syncStatus);
 		fileGroup
-			.setUuid(PortalUUIDUtil
+			.setOId(PortalUUIDUtil
 				.generate());
 
 		return fileGroupPersistence
 			.update(fileGroup);
+	}
+	
+	/**
+	 * @param dossierId
+	 * @param displayName
+	 * @return
+	 * @throws SystemException
+	 */
+	public int countByD_DN(long dossierId, String displayName)
+		throws SystemException {
+
+		return fileGroupPersistence
+			.countByD_DN(dossierId, displayName);
 	}
 
 	/**
@@ -135,5 +150,47 @@ public class FileGroupLocalServiceImpl extends FileGroupLocalServiceBaseImpl {
 		return fileGroupPersistence
 			.findByFileGroupInUse(dossierId, dossierPartId);
 	}
+	
+	
+	/**
+	 * @param dossierId
+	 * @param dossierPartId
+	 * @param fileGroupId
+	 * @throws SystemException 
+	 * @throws PortalException 
+	 */
+	public void deleteFileGroup(
+		long dossierId, long dossierPartId, long fileGroupId)
+		throws PortalException, SystemException {
 
+		DossierFile dossierFile = null;
+
+		FileGroup fileGroup = fileGroupPersistence
+			.findByPrimaryKey(fileGroupId);
+
+		try {
+			dossierFile = dossierFileLocalService
+				.getDossierFileInUseByGroupFileId(dossierId, dossierPartId,
+					fileGroupId);
+
+		}
+		catch (Exception e) {
+		}
+
+		if (dossierFile != null) {
+			dossierFileLocalService
+				.removeDossierFile(dossierFile
+					.getDossierFileId());
+			fileGroup
+				.setModifiedDate(new Date());
+			fileGroup
+				.setRemoved(1);
+			fileGroupPersistence
+				.update(fileGroup);
+		}
+		else {
+			fileGroupPersistence
+				.remove(fileGroup);
+		}
+	}
 }
