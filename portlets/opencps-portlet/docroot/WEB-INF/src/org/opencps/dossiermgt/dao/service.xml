@@ -325,8 +325,8 @@
             <finder-column name="dossierPartId"></finder-column>
         </finder>
         <finder name="D_DN" return-type="FileGroup">
-            <finder-column name="dossierId" comparator="="></finder-column>
-            <finder-column name="displayName" comparator="="></finder-column>
+            <finder-column name="dossierId" comparator="=" arrayable-operator="AND"></finder-column>
+            <finder-column name="displayName" comparator="=" arrayable-operator="AND"></finder-column>
         </finder>
     </entity>
     
@@ -390,14 +390,12 @@
             <finder-column name="dossierPartId"></finder-column>
             <finder-column name="groupFileId"></finder-column>
         </finder>
-		<reference package-path="com.liferay.portlet.documentlibrary" entity="DLApp" />
-        <reference entity="DLFileEntry" package-path="com.liferay.portlet.documentlibrary"/>
-
-		<finder name="TemplateFileNoDossierId" return-type="Collection">
+        <finder name="TemplateFileNoDossierId" return-type="Collection">
             <finder-column name="dossierId"></finder-column>
             <finder-column name="templateFileNo"></finder-column>
         </finder>
-        
+		<reference package-path="com.liferay.portlet.documentlibrary" entity="DLApp" />
+        <reference entity="DLFileEntry" package-path="com.liferay.portlet.documentlibrary"/>
     </entity>
 
 	<exceptions>
