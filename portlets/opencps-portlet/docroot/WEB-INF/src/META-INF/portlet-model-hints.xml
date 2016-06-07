@@ -573,7 +573,7 @@
 		<field name="userId" type="long" />
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
-		<field name="uuid" type="String" />
+		<field name="oId" type="String" />
 		<field name="dossierId" type="long" />
 		<field name="dossierPartId" type="long" />
 		<field name="displayName" type="String" />

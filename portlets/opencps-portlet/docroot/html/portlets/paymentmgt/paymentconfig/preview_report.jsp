@@ -1,5 +1,4 @@
-<%@page import="org.opencps.paymentmgt.search.PaymentConfigDisplayTerms"%>
-<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -18,6 +17,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+<%@page import="org.opencps.paymentmgt.search.PaymentConfigDisplayTerms"%>
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@ include file="../init.jsp"%>
 <%
 	long paymentConfigId = ParamUtil.getLong(request, PaymentConfigDisplayTerms.PAYMENT_CONFIG_ID);

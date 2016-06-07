@@ -1,9 +1,4 @@
-<%@page import="org.opencps.dossiermgt.NoSuchDossierFileException"%>
-<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
-<%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
-<%@page import="java.util.List"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -27,6 +22,12 @@
 <%@page import="org.opencps.dossiermgt.NoSuchDossierException"%>
 <%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
+<%@page import="org.opencps.dossiermgt.NoSuchDossierFileException"%>
+<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
+<%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
+<%@page import="java.util.List"%>
 <%@ include file="../../init.jsp"%>
 
 <%
@@ -46,7 +47,7 @@
 	for (DossierPart part : lsDossierParts) {
 		DossierFile df = null;
 		try {
-			df = DossierFileLocalServiceUtil.getDossierFileByD_P(dossier.getDossierId(), part.getDossierpartId());
+			df = DossierFileLocalServiceUtil.getDossierFileInUse(dossier.getDossierId(), part.getDossierpartId());
 		}
 		catch (NoSuchDossierFileException nsdfe) {
 			
@@ -56,13 +57,13 @@
 	<%= part.getPartName() %>
 </aui:input>
 <%
-		List<DossierFile> files = DossierFileLocalServiceUtil.getDossierFileByDossierAndDossierPart(dossier.getDossierId(), part.getDossierpartId());
-		for (DossierFile f : files) {
-%>
-<aui:input style="margin-left: 10%;" type="checkbox" name="<%= f.getDisplayName() %>" checked="<%= true %>" label="">
-	<span style="margin-left: 10%;"><%= f.getDisplayName() %></span>
-</aui:input>
-<%
+	List<DossierFile> files = DossierFileLocalServiceUtil.getDossierFileByDossierId(dossierId);
+	for (DossierFile f : files) {
+		%>
+			<aui:input style="margin-left: 10%;" type="checkbox" name="<%= f.getDisplayName() %>" checked="<%= true %>" label="">
+				<span style="margin-left: 10%;"><%= f.getDisplayName() %></span>
+			</aui:input>
+		<%
 		}
 	}
 %>

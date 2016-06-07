@@ -312,18 +312,26 @@
 		
 		<!-- Other fields -->
 		
-		<column name="uuid" type="String"/>
+		<column name="oId" type="String"/>
         <column name="dossierId" type="long"/>
         <column name="dossierPartId" type="long"/>
         <column name="displayName" type="String"/>
         <column name="removed" type="int"/>
         <column name="syncStatus" type="int"/>
-        <finder name="D_P" return-type="Collection">
+        <finder name="D_DP" return-type="Collection">
             <finder-column name="dossierId"></finder-column>
             <finder-column name="dossierPartId"></finder-column>
         </finder>
         <finder name="DossierId" return-type="Collection">
             <finder-column name="dossierId"></finder-column>
+        </finder>
+        <finder name="FileGroupInUse" return-type="Collection" where="removed=0">
+            <finder-column name="dossierId"></finder-column>
+            <finder-column name="dossierPartId"></finder-column>
+        </finder>
+        <finder name="D_DN" return-type="FileGroup">
+            <finder-column name="dossierId" comparator="=" arrayable-operator="AND"></finder-column>
+            <finder-column name="displayName" comparator="=" arrayable-operator="AND"></finder-column>
         </finder>
     </entity>
     
@@ -362,24 +370,37 @@
         <column name="original" type="int"/>
         <column name="syncStatus" type="int"/>
         <column name="version" type="int"></column>
-        <finder name="D_P" return-type="DossierFile">
+        <finder name="D_DP" return-type="Collection">
             <finder-column name="dossierId"></finder-column>
             <finder-column name="dossierPartId"></finder-column>
         </finder>
-        <finder name="DossierId" return-type="Collection">
+        <finder name="DossierId" return-type="Collection" where="removed=0">
             <finder-column name="dossierId"></finder-column>
         </finder>
-        <finder name="D_F" return-type="Collection">
+        <finder name="D_GF" return-type="Collection" where="removed=0">
             <finder-column name="dossierId"></finder-column>
             <finder-column name="groupFileId"></finder-column>
         </finder>
-
-        <finder name="D_P_C" return-type="Collection">
+        <finder name="DossierFileInUse" return-type="DossierFile" where="removed=0">
             <finder-column name="dossierId"></finder-column>
             <finder-column name="dossierPartId"></finder-column>
         </finder>
-
-         <reference entity="DLFileEntry" package-path="com.liferay.portlet.documentlibrary"/>
+        <finder name="D_DP_GF" return-type="Collection">
+            <finder-column name="dossierId"></finder-column>
+            <finder-column name="dossierPartId"></finder-column>
+            <finder-column name="groupFileId"></finder-column>
+        </finder>
+        <finder name="DossierFileInUseByGroupFileId" return-type="DossierFile" where="removed=0">
+            <finder-column name="dossierId"></finder-column>
+            <finder-column name="dossierPartId"></finder-column>
+            <finder-column name="groupFileId"></finder-column>
+        </finder>
+        <finder name="TemplateFileNoDossierId" return-type="Collection">
+            <finder-column name="dossierId"></finder-column>
+            <finder-column name="templateFileNo"></finder-column>
+        </finder>
+		<reference package-path="com.liferay.portlet.documentlibrary" entity="DLApp" />
+        <reference entity="DLFileEntry" package-path="com.liferay.portlet.documentlibrary"/>
     </entity>
 
 	<exceptions>
@@ -417,6 +438,10 @@
         <exception>EmptyDossierFile</exception>
         <exception>InvalidDossierObject</exception>
         <exception>CreateDossierFolder</exception>
+        <exception>PermissionDossier</exception>
+        <exception>EmptyFileGroup</exception>
+        <exception>OutOfLengthFIileGroup</exception>
+        <exception>DuplicateFileGroup</exception>
 	</exceptions>
 
 </service-builder>
