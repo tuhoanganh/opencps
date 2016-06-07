@@ -24,7 +24,10 @@ import org.opencps.backend.message.SendToBackOfficeMsg;
 import org.opencps.backend.message.SendToEngineMsg;
 import org.opencps.backend.util.BackendUtils;
 import org.opencps.backend.util.DossierNoGenerator;
+import org.opencps.backend.util.KeypayUrlGenerator;
+import org.opencps.backend.util.PaymentRequestGenerator;
 import org.opencps.dossiermgt.model.Dossier;
+import org.opencps.paymentmgt.model.PaymentFile;
 import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.model.ProcessStep;
@@ -255,16 +258,23 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 				// Update Paying
 				if (processWorkflow.getRequestPayment()) {
-					PaymentFileLocalServiceUtil.addPaymentFile(
+					
+					int totalPayment = PaymentRequestGenerator.getTotalPayment(processWorkflow.getPaymentFee());
+					
+					PaymentFile paymentFile = PaymentFileLocalServiceUtil.addPaymentFile(
 					    toEngineMsg.getDossierId(),
 					    toEngineMsg.getFileGroupId(),
 					    ownerUserId,
 					    ownerOrganizationId,
 					    govAgencyOrganizationId, changeStep.getStepName(),
 					    toEngineMsg.getActionDatetime(),
-					    processWorkflow.getPaymentFee(),
+					    (double)totalPayment,
 					    toEngineMsg.getActionNote(), StringPool.BLANK);
 					
+					String paymentURL =
+					    KeypayUrlGenerator.generatorKeypayURL(
+					    	toEngineMsg.getGroupId(), govAgencyOrganizationId, paymentFile.getPaymentFileId(),
+					    	processWorkflow.getPaymentFee(), toEngineMsg.getDossierId());					
 					
 					toBackOffice.setRequestCommand(WebKeys.DOSSIER_LOG_PAYMENT_REQUEST);
 
