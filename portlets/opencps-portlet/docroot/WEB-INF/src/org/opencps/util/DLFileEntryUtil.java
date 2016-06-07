@@ -19,13 +19,19 @@ package org.opencps.util;
 
 import java.io.InputStream;
 
+import org.opencps.dossiermgt.model.DossierFile;
+import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
+
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
+import com.liferay.portlet.documentlibrary.util.DLUtil;
 
 /**
  * @author trungnt
@@ -92,6 +98,33 @@ public class DLFileEntryUtil {
 			    .error(e);
 		}
 		return fileEntry;
+	}
+	
+	public static String getDossierFileAttachmentURL(
+		long dossierFileId, ThemeDisplay themeDisplay) {
+
+		String url = StringPool.BLANK;
+		try {
+			DossierFile dossierFile = DossierFileLocalServiceUtil
+				.getDossierFile(dossierFileId);
+			long fileEntryId = dossierFile
+				.getFileEntryId();
+			if (fileEntryId > 0) {
+				FileEntry fileEntry = DLFileEntryUtil
+					.getFileEntry(fileEntryId);
+				if (fileEntry != null) {
+					url = DLUtil
+						.getPreviewURL(fileEntry, fileEntry
+							.getFileVersion(), themeDisplay, StringPool.BLANK);
+				}
+
+			}
+		}
+		catch (Exception e) {
+			_log
+				.error(e);
+		}
+		return url;
 	}
 
 	private static Log _log = LogFactoryUtil
