@@ -392,6 +392,12 @@
         </finder>
 		<reference package-path="com.liferay.portlet.documentlibrary" entity="DLApp" />
         <reference entity="DLFileEntry" package-path="com.liferay.portlet.documentlibrary"/>
+
+		<finder name="TemplateFileNoDossierId" return-type="Collection">
+            <finder-column name="dossierId"></finder-column>
+            <finder-column name="templateFileNo"></finder-column>
+        </finder>
+        
     </entity>
 
 	<exceptions>

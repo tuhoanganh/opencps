@@ -62,11 +62,7 @@
 			PaymentFileSearchTerms searchTerms = (PaymentFileSearchTerms)searchContainer.getSearchTerms();
 		
 			boolean isCitizen = true;
-			
-			if (AccountUtil.getAccountBean().isBusiness()) {
-				isCitizen = false;
-			}
-			
+
 			long ownerObjectId = 0;
 			
 			ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
