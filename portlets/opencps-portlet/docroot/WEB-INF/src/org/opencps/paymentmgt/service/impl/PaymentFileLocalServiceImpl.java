@@ -48,6 +48,29 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 public class PaymentFileLocalServiceImpl extends PaymentFileLocalServiceBaseImpl {
 	
 	/**
+	 * @param keypayTransactionId
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public PaymentFile getByTransactionId(long keypayTransactionId)
+	    throws PortalException, SystemException {
+
+		return paymentFilePersistence.fetchByT_I(keypayTransactionId);
+	}
+	
+	/**
+	 * @param keypayGoodCode
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public PaymentFile getByGoodCode(String keypayGoodCode)
+	    throws PortalException, SystemException {
+		return paymentFilePersistence.fetchByG_C(keypayGoodCode);
+	}
+	
+	/**
 	 * @param dossierId
 	 * @return
 	 * @throws PortalException
@@ -174,18 +197,10 @@ public class PaymentFileLocalServiceImpl extends PaymentFileLocalServiceBaseImpl
 
 		Date now = new Date();
 
-		// paymentFile.setUserId(userId);
-
-		// paymentFile.setGroupId(serviceContext.getScopeGroupId());
-
-		// paymentFile.setCompanyId(serviceContext.getCompanyId());
 
 		paymentFile.setCreateDate(now);
 
 		paymentFile.setModifiedDate(now);
-		// paymentFile
-		// .setUuid(PortalUUIDUtil
-		// .generate());
 
 		paymentFile.setDossierId(dossierId);
 		paymentFile.setFileGroupId(fileGroupId);
@@ -197,12 +212,6 @@ public class PaymentFileLocalServiceImpl extends PaymentFileLocalServiceBaseImpl
 		paymentFile.setRequestNote(requestNote);
 		paymentFile.setPlaceInfo(placeInfo);
 		paymentFile.setPaymentStatus(0);
-
-		// govAgencyOrganizationId > 0 insert
-		// paymentFile.setGovAgencyTaxNo(govAgencyTaxNo);
-		// paymentFile.setInvoiceTemplateNo(invoiceTemplateNo);
-		// paymentFile.setInvoiceIssueNo(invoiceIssueNo);
-		// paymentFile.setInvoiceNo(invoiceNo);
 
 		return paymentFilePersistence.update(paymentFile);
 	}

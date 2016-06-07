@@ -143,6 +143,11 @@
 			<finder-column name="dossierTemplateId" />
 		</finder>
 		
+		<finder return-type="ServiceConfig" name="G_S">
+			<finder-column name="groupId" />
+			<finder-column name="serviceInfoId" />
+		</finder>
+		
 		<finder return-type="Collection" name="G_M">
 			<finder-column name="groupId" />
 			<finder-column name="serviceMode"/>

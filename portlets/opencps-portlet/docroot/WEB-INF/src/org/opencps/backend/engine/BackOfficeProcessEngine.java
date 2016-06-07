@@ -33,11 +33,8 @@ import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
 import org.opencps.processmgt.service.ServiceInfoProcessLocalServiceUtil;
-import org.opencps.util.AccountUtil;
 import org.opencps.util.PortletConstants;
 import org.opencps.util.WebKeys;
-
-import sun.swing.AccumulativeRunnable;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -225,13 +222,15 @@ public class BackOfficeProcessEngine implements MessageListener {
 				}
 
 				toBackOffice.setUpdateDatetime(new Date());
+				
 
 				if (Validator.isNull(toEngineMsg.getReceptionNo())) {
-					toBackOffice.setReceptionNo(DossierNoGenerator.noGenarator());
+					toBackOffice.setReceptionNo(DossierNoGenerator.genaratorNoReception(processWorkflow.getReceptionNoPattern()));
 				}
 				else {
 					toBackOffice.setReceptionNo(toEngineMsg.getReceptionNo());
 				}
+				
 				toBackOffice.setReceiveDatetime(new Date());
 
 				toBackOffice.setEstimateDatetime(toEngineMsg.getEstimateDatetime());
@@ -301,6 +300,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 		}
 
 	}
+	
 
 	private Log _log = LogFactoryUtil.getLog(BackOfficeProcessEngine.class);
 

@@ -63,6 +63,7 @@
 				<liferay-ui:message key="action-note"/>
 			</th>
 			<th class="table-last-header">
+				<liferay-ui:message key="estimatedate-status"/>
 			</th>
 		</tr>
 	</thead>
@@ -85,14 +86,17 @@
 				</td>
 				<td>
 					<%
-						Employee employee = EmployeeLocalServiceUtil.getEmployeeByMappingUserId(scopeGroupId, histories.get(i).getActionUserId());
+						Employee employee2 = EmployeeLocalServiceUtil.getEmployeeByMappingUserId(scopeGroupId, histories.get(i).getActionUserId());
 					%>
-					<%= employee.getFullName() %>
+					<%= employee2.getFullName() %>
 				</td>
 				<td>
 					<%= histories.get(i).getActionNote() %>
 				</td>
 				<td>
+					<%
+						
+					%>
 				</td>
 			</tr>
 		<%

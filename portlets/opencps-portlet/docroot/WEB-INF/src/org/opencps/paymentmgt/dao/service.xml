@@ -54,6 +54,14 @@
             <finder-column name="keypayGoodCode"></finder-column>
             <finder-column name="amount"></finder-column>
         </finder>
+        
+        <finder return-type="PaymentFile" name="G_C" unique="true">
+        	<finder-column name="keypayGoodCode"/>
+        </finder>
+        <finder return-type="PaymentFile" name="T_I" unique="true">
+        	<finder-column name="keypayTransactionId"/>
+        </finder>
+        
     </entity>
     <entity name="PaymentConfig" local-service="true" human-name="Payment configuration" table="opencps_payment_config">
         <column name="paymentConfigId" type="long" primary="true"></column>
