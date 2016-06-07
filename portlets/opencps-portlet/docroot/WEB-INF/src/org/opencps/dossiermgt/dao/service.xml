@@ -307,7 +307,7 @@
 		
 		<!-- Other fields -->
 		
-		<column name="uuid" type="String"/>
+		<column name="oId" type="String"/>
         <column name="dossierId" type="long"/>
         <column name="dossierPartId" type="long"/>
         <column name="displayName" type="String"/>
@@ -323,6 +323,10 @@
         <finder name="FileGroupInUse" return-type="Collection" where="removed=0">
             <finder-column name="dossierId"></finder-column>
             <finder-column name="dossierPartId"></finder-column>
+        </finder>
+        <finder name="D_DN" return-type="FileGroup">
+            <finder-column name="dossierId" comparator="="></finder-column>
+            <finder-column name="displayName" comparator="="></finder-column>
         </finder>
     </entity>
     
@@ -376,6 +380,16 @@
             <finder-column name="dossierId"></finder-column>
             <finder-column name="dossierPartId"></finder-column>
         </finder>
+        <finder name="D_DP_GF" return-type="Collection">
+            <finder-column name="dossierId"></finder-column>
+            <finder-column name="dossierPartId"></finder-column>
+            <finder-column name="groupFileId"></finder-column>
+        </finder>
+        <finder name="DossierFileInUseByGroupFileId" return-type="DossierFile" where="removed=0">
+            <finder-column name="dossierId"></finder-column>
+            <finder-column name="dossierPartId"></finder-column>
+            <finder-column name="groupFileId"></finder-column>
+        </finder>
 		<reference package-path="com.liferay.portlet.documentlibrary" entity="DLApp" />
         <reference entity="DLFileEntry" package-path="com.liferay.portlet.documentlibrary"/>
     </entity>
@@ -416,6 +430,9 @@
         <exception>InvalidDossierObject</exception>
         <exception>CreateDossierFolder</exception>
         <exception>PermissionDossier</exception>
+        <exception>EmptyFileGroup</exception>
+        <exception>OutOfLengthFIileGroup</exception>
+        <exception>DuplicateFileGroup</exception>
 	</exceptions>
 
 </service-builder>
