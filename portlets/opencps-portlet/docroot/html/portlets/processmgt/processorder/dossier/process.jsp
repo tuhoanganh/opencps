@@ -241,7 +241,7 @@
 									
 									if(dossier != null){
 										try{
-											dossierFile = DossierFileLocalServiceUtil.getDossierFileByD_P(dossier.getDossierId(), 
+											dossierFile = DossierFileLocalServiceUtil.getDossierFileInUse(dossier.getDossierId(), 
 													dossierPart.getDossierpartId());
 										}catch(Exception e){}
 									}
