@@ -54,15 +54,21 @@ public class KeypayUrlGenerator {
 		lsDesc.add(2, StringPool.BLANK);
 		lsDesc.add(3, StringPool.BLANK);
 		lsDesc.add(4, StringPool.BLANK);
+
+		String pattern =
+		    "net=100 ship=300 tax=30 bank cash keypay $Thanh toan cho tao cai nay nhe$ $Thong diep 2$ $Thong diep 3$ $Thong diep 4$ $Thong diep 5$";
 		
-		String pattern = "net=100 ship=300 tax=30 bank cash keypay $Thanh toan cho tao cai nay nhe$ $da thanh toan $";
+		String keypayURL = StringPool.BLANK;
 		
-		List<String> lsMsg = PaymentRequestGenerator.getMessagePayment(pattern);
+		try {
+	        keypayURL = generatorKeypayURL(20182, 24787, 501, pattern, 7201);
+
+        }
+        catch (Exception e) {
+	        // TODO: handle exception
+        }
 		
-		for (int i = 0; i < lsMsg.size(); i++) {
-			lsDesc.set(1, lsMsg.get(i));
-		}
-		
+		System.out.println(keypayURL);
 		
     }
 	
