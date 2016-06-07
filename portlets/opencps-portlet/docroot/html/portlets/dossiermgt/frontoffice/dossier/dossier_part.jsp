@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -51,17 +50,22 @@
 
 <%@ include file="../../init.jsp"%>
 
-<portlet:renderURL var="updateDossierFileURL" windowState="<%=LiferayWindowState.POP_UP.toString() %>">
-	<portlet:param name="mvcPath" value='<%=templatePath + "upload_dossier_file.jsp" %>'/>
+<portlet:renderURL 
+	var="updateDossierFileURL" 
+	windowState="<%=LiferayWindowState.POP_UP.toString() %>"
+>
+	<portlet:param 
+		name="mvcPath" 
+		value='<%=templatePath + "upload_dossier_file.jsp" %>'
+	/>
 </portlet:renderURL>
-
-<portlet:actionURL var="deleteTempFileURL" name="deleteTempFile">
-	<portlet:param name="fileEntryId" value="<%=String.valueOf(12345) %>"/>
-</portlet:actionURL>
 
 <liferay-ui:error-marker key="errorSection" value="dossier_part" />
 
-<liferay-ui:error exception="<%= EmptyDossierFileException.class %>" message="<%=EmptyDossierFileException.class.getName() %>"/>
+<liferay-ui:error 
+	exception="<%= EmptyDossierFileException.class %>" 
+	message="<%=EmptyDossierFileException.class.getName() %>"
+/>
 
 <%
 	Dossier dossier = (Dossier) request.getAttribute(WebKeys.DOSSIER_ENTRY);
@@ -72,11 +76,11 @@
 	
 	DossierTemplate dossierTemplate = (DossierTemplate) request.getAttribute(WebKeys.DOSSIER_TEMPLATE_ENTRY);
 	
-	String cmd = ParamUtil.getString(request, Constants.CMD);
-	
 	String privateDossierGroup = StringPool.BLANK;
 	
 	List<DossierPart> dossierPartsLevel1 = new ArrayList<DossierPart>();
+	
+	boolean isEditDossier = true;
 	
 	if(dossierTemplate != null){
 		try{
@@ -98,8 +102,9 @@
 				<div class="opencps dossiermgt dossier-part-tree" id='<%= renderResponse.getNamespace() + "tree" + dossierParts.get(0).getDossierpartId()%>'>
 					<c:choose>
 						<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_OPTION ||
-								partType == PortletConstants.DOSSIER_PART_TYPE_SUBMIT || 
-								partType == PortletConstants.DOSSIER_PART_TYPE_OTHER %>">
+							partType == PortletConstants.DOSSIER_PART_TYPE_SUBMIT || 
+							partType == PortletConstants.DOSSIER_PART_TYPE_OTHER %>"
+						>
 							<%
 							for(DossierPart dossierPart : dossierParts){
 								
@@ -111,12 +116,11 @@
 									level = StringUtil.count(treeIndex, StringPool.PERIOD);
 								}
 								
-								
 								DossierFile dossierFile = null;
 								
 								if(dossier != null){
 									try{
-										dossierFile = DossierFileLocalServiceUtil.getDossierFileByD_P(dossier.getDossierId(), 
+										dossierFile = DossierFileLocalServiceUtil.getDossierFileInUse(dossier.getDossierId(), 
 												dossierPart.getDossierpartId());
 										
 									}catch(Exception e){
@@ -126,20 +130,25 @@
 								
 								
 								%>
-									<div 
-										id='<%=renderResponse.getNamespace() + "row-" + dossierPart.getDossierpartId() + StringPool.DASH + index %>' 
-										index="<%=index %>"
-										dossier-part="<%=dossierPart.getDossierpartId() %>"
-										class="opencps dossiermgt dossier-part-row"
-									>
+									<div class='<%="opencps dossiermgt dossier-part-row r-" + index%>'>
 										<span class='<%="level-" + level + " opencps dossiermgt dossier-part"%>'>
 											<span class="row-icon">
-												<i 
-													id='<%="rowcheck" + dossierPart.getDossierpartId() + StringPool.DASH + index %>' 
-													class='<%=dossierFile != null &&  dossierFile.getFileEntryId() > 0 ? "fa fa-check-square-o" : "fa fa-square-o" %>' 
-													aria-hidden="true"
-												>
-												</i>
+												<c:choose>
+													<c:when test="<%=(partType == PortletConstants.DOSSIER_PART_TYPE_OPTION ||
+														partType == PortletConstants.DOSSIER_PART_TYPE_OTHER) && level == 0%>"
+													>
+														<i class="fa fa-dot-circle-o" aria-hidden="true"></i>
+													</c:when>
+													<c:otherwise>
+													<i 
+														id='<%="rowcheck" + dossierPart.getDossierpartId() + StringPool.DASH + index %>' 
+														class='<%=dossierFile != null &&  dossierFile.getFileEntryId() > 0 ? "fa fa-check-square-o" : "fa fa-square-o" %>' 
+														aria-hidden="true"
+													>
+													</i>
+													</c:otherwise>
+												</c:choose>
+												
 											</span>
 											<span class="opencps dossiermgt dossier-part-name">
 												<%=dossierPart.getPartName() %>
@@ -148,7 +157,7 @@
 									
 										<span class="opencps dossiermgt dossier-part-control">
 											<liferay-util:include 
-												page='<%=templatePath + (cmd.equals(Constants.VIEW) ? "overview_files.jsp" : "dossier_file_controls.jsp") %>' 
+												page="/html/common/portlet/dossier_actions.jsp" 
 												servletContext="<%=application %>"
 											>
 												<portlet:param 
@@ -168,16 +177,12 @@
 													value="<%=String.valueOf(dossierFile != null ? dossierFile.getDossierFileId() : 0) %>"
 												/>
 												<portlet:param 
-													name="<%=DossierFileDisplayTerms.INDEX %>" 
-													value="<%=String.valueOf(index) %>"
-												/>
-												<portlet:param 
 													name="<%=DossierFileDisplayTerms.LEVEL %>" 
 													value="<%=String.valueOf(level) %>"
 												/>
 												<portlet:param 
 													name="<%=DossierFileDisplayTerms.GROUP_NAME %>" 
-													value="<%=dossierParts.get(0).getPartName()%>"
+													value="<%=StringPool.BLANK%>"
 												/>
 												<portlet:param 
 													name="<%=DossierFileDisplayTerms.PART_TYPE %>" 
@@ -198,149 +203,89 @@
 							
 								if(dossier != null){
 									try{
-										fileGroups = FileGroupLocalServiceUtil.getFileGroupByDossierId(dossier.getDossierId());
+										fileGroups = FileGroupLocalServiceUtil.getFileGroupByD_DP(dossier.getDossierId(), dossierPartLevel1.getDossierpartId());
 									}catch(Exception e){}
 								}
 								
-								if(fileGroups == null || fileGroups.isEmpty()){
-									privateDossierGroup = dossierParts.get(0).getPartName();
-								}
 								
-								if(fileGroups != null && !fileGroups.isEmpty()){
-									for(FileGroup fileGroup : fileGroups){
-										
-									}
-								}
 							%>
-							<div
-								id='<%=renderResponse.getNamespace() + "row-" + dossierParts.get(0).getDossierpartId() + StringPool.DASH + index %>' 
-								index="<%=index %>"
-								dossier-part-size="<%=dossierParts.size() %>"
-								dossier-part="<%=dossierParts.get(0).getDossierpartId() %>" 
-								class="opencps dossiermgt dossier-part-row root-group"
-							>
-								<span class='<%="level-0 opencps dossiermgt dossier-part"%>'>
+							<div class='<%="opencps dossiermgt dossier-part-row r-" + index%>'>
+								<span class='<%="level-0" + " opencps dossiermgt dossier-part"%>'>
 									<span class="row-icon">
-										<i class="fa fa-minus-square-o" aria-hidden="true"></i>
+										<i class="fa fa-dot-circle-o" aria-hidden="true"></i>
 									</span>
 									<span class="opencps dossiermgt dossier-part-name">
-										<liferay-ui:message key="private-dossier"/>
+										<%=dossierPartLevel1.getPartName() %>
 									</span>
 								</span>
-								<c:if test="<%=!cmd.equals(Constants.VIEW) %>">
-									<span class="opencps dossiermgt dossier-part-control">
+								<span class="opencps dossiermgt dossier-part-control">
+									<c:if test="<%=isEditDossier %>">
 										<aui:a 
-											id="<%=String.valueOf(dossierParts.get(0).getDossierpartId()) %>"
-											dossier-part="<%=String.valueOf(dossierParts.get(0).getDossierpartId()) %>"
-											index="<%=String.valueOf(index) %>"
-											dossier-part-size="<%=dossierParts.size() %>"
+											id="<%=String.valueOf(dossierPartLevel1.getDossierpartId()) %>"
+											dossier="<%=String.valueOf(dossier.getDossierId()) %>"
+											dossier-part="<%=String.valueOf(dossierPartLevel1.getDossierpartId()) %>"
 											href="javascript:void(0);" 
 											label="add-private-dossier" 
-											cssClass="label opencps dossiermgt part-file-ctr add-private-dossier"
-											onClick='<%=renderResponse.getNamespace() + "addPrivateDossierGroup(this)" %>'
+											cssClass="label opencps dossiermgt part-file-ctr add-individual-part-group"
 										/>
-									</span>
-								</c:if>
+									
+									</c:if>
+								</span>
+								<%index++; %>
 							</div>
-							<div 
-								id='<%=renderResponse.getNamespace() + "privateDossierPartGroup" + dossierParts.get(0).getDossierpartId() + StringPool.DASH + index%>' 
-								class="opencps dossiermgt dossier-part-tree"
-							>
-								<%
-								for(DossierPart dossierPart : dossierParts){
-									
-									int level = 1;
-									
-									String treeIndex = dossierPart.getTreeIndex();
-									
-									if(Validator.isNotNull(treeIndex)){
-										level = StringUtil.count(treeIndex, StringPool.PERIOD);
-									}
-									
-									DossierFile dossierFile = null;
-									
-									if(dossier != null){
-										try{
-											dossierFile = DossierFileLocalServiceUtil.getDossierFileByD_P(dossier.getDossierId(), 
-													dossierPart.getDossierpartId());
-										}catch(Exception e){}
-									}
-									
-									%>
-										<div 
-											id='<%=renderResponse.getNamespace() + "row-" + dossierPart.getDossierpartId() + StringPool.DASH + index %>' 
-											index="<%=index %>"
-											dossier-part="<%=dossierPart.getDossierpartId() %>"
-											class="opencps dossiermgt dossier-part-row"
-										>
-											<span class='<%="level-" + level + " opencps dossiermgt dossier-part"%>'>
-												<span class="row-icon">
-													<i 
-														id='<%="rowcheck" + dossierPart.getDossierpartId() + StringPool.DASH + index %>' 
-														class='<%=dossierFile != null &&  dossierFile.getFileEntryId() > 0 ? "fa fa-check-square-o" : "fa fa-square-o" %>'
-														aria-hidden="true">
-													</i>
-												</span>
-												<%
-													String dossierGroup = StringPool.SPACE;
-													if(dossierParts.indexOf(dossierPart) == 0){
-														dossierGroup = StringPool.SPACE +  "dossier-group" + StringPool.SPACE;
-													}
-												%>
-												<span class='<%="opencps dossiermgt" +  dossierGroup + "dossier-part-name" %>'>
-													<%=dossierPart.getPartName() %>
-												</span>
-											</span>
-										
-											<span class="opencps dossiermgt dossier-part-control">
-												<liferay-util:include 
-													page='<%=templatePath + (cmd.equals(Constants.VIEW) ? "overview_files.jsp" : "dossier_file_controls.jsp") %>' 
-													servletContext="<%=application %>"
-												>
-													<portlet:param 
-														name="<%=DossierDisplayTerms.DOSSIER_ID %>" 
-														value="<%=String.valueOf(dossier != null ? dossier.getDossierId() : 0) %>"
-													/>
-													<portlet:param 
-														name="<%=DossierFileDisplayTerms.DOSSIER_PART_ID %>" 
-														value="<%=String.valueOf(dossierPart.getDossierpartId()) %>"
-													/>
-													<portlet:param 
-														name="<%=DossierFileDisplayTerms.FILE_ENTRY_ID %>" 
-														value="<%=String.valueOf(dossierFile != null ? dossierFile.getFileEntryId() : 0) %>"
-													/>
-													<portlet:param 
-														name="<%=DossierFileDisplayTerms.DOSSIER_FILE_ID %>" 
-														value="<%=String.valueOf(dossierFile != null ? dossierFile.getDossierFileId() : 0) %>"
-													/>
-													<portlet:param 
-														name="<%=DossierFileDisplayTerms.INDEX %>" 
-														value="<%=String.valueOf(index) %>"
-													/>
-													<portlet:param 
-														name="<%=DossierFileDisplayTerms.LEVEL %>" 
-														value="<%=String.valueOf(level) %>"
-													/>
-													<portlet:param 
-														name="<%=DossierFileDisplayTerms.GROUP_NAME %>" 
-														value="<%=dossierParts.get(0).getPartName()%>"
-													/>
-													<portlet:param 
-														name="<%=DossierFileDisplayTerms.PART_TYPE %>" 
-														value="<%=String.valueOf(dossierPart.getPartType()) %>"
-													/>
-												</liferay-util:include>
-											</span>
-										</div>
-										
+							<c:choose>
+								<c:when test="<%=fileGroups != null && ! fileGroups.isEmpty() %>">
 									<%
-									index++;
-								}
-								%>
-							</div>
+										for(FileGroup fileGroup : fileGroups){
+											%>
+											<liferay-util:include 
+												page="/html/common/portlet/dossier_individual_part.jsp" 
+												servletContext="<%=pageContext.getServletContext() %>"
+											>
+												<portlet:param 
+													name="<%=DossierDisplayTerms.DOSSIER_ID %>" 
+													value="<%=String.valueOf(dossier != null ? dossier.getDossierId() : 0) %>"
+												/>
+												<portlet:param 
+													name="<%=DossierFileDisplayTerms.DOSSIER_PART_ID %>" 
+													value="<%=String.valueOf(fileGroup.getDossierPartId()) %>"
+												/>
+												
+												<portlet:param 
+													name="<%=DossierDisplayTerms.FILE_GROUP_ID %>" 
+													value="<%=String.valueOf(fileGroup.getFileGroupId()) %>"
+												/>
+												
+												<portlet:param 
+													name="<%=DossierFileDisplayTerms.INDEX %>" 
+													value="<%=String.valueOf(index) %>"
+												/>
+												
+												<portlet:param 
+													name="<%=DossierFileDisplayTerms.GROUP_NAME %>" 
+													value="<%=fileGroup.getDisplayName() %>"
+												/>
+												
+												<portlet:param 
+													name="isEditDossier" 
+													value="<%=String.valueOf(isEditDossier) %>"
+												/>
+											</liferay-util:include>
+											<%
+											index ++;
+										}
+									%>
+								</c:when>
+								
+								<c:otherwise>
+									<!--Nothing to show  -->
+								</c:otherwise>
+							</c:choose>
 						</c:when>
+						<c:otherwise>
+							<!--Nothing to show  -->
+						</c:otherwise>
 					</c:choose>
-					
 				</div>
 				
 			<%
@@ -353,61 +298,152 @@
 %>
 <aui:script>
 	
-	var privateDossierGroup = '<%=privateDossierGroup%>';
-	
-	var tempFileEntryIds = []; 
-	
-	/* $(window).on('beforeunload', function(e) {
-		return "Sure U are?";
-	});
-
-	$(window).on('unload', function(e) {
-		alert(tempFileEntryIds);
-	}); */
-
 	AUI().ready('aui-base','liferay-portlet-url','aui-io', function(A){
 		
-		//reset all uploadDataSchema
+		//Upload buttons
+		var uploadDossierFiles = A.all('.upload-dossier-file');
 		
-		var uploadDataSchemas = A.all('.uploadDataSchema');
-		
-		if(uploadDataSchemas){
-			uploadDataSchemas.each(function(node){
-				node.val('');
+		if(uploadDossierFiles){
+			uploadDossierFiles.each(function(e){
+				e.on('click', function(){
+					var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
+					portletURL.setParameter("mvcPath", "/html/portlets/dossiermgt/frontoffice/modal_dialog.jsp");
+					portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
+					portletURL.setPortletMode("normal");
+					portletURL.setParameter("content", "upload-file");
+					uploadDossierFile(this, portletURL.toString(), '<portlet:namespace/>');
+				});
 			});
 		}
 		
-		//conver to array
-		privateDossierGroup = privateDossierGroup.split(',');
+		//View attachment buttons
+		var viewAttachments = A.all('.view-attachment');
 		
-		var addPrivateDossierCtrs = A.all('.add-private-dossier');
+		if(viewAttachments){
+			viewAttachments.each(function(e){
+				e.on('click', function(){
+					var instance = A.one(e);
+					var dossierFileId = instance.attr('dossier-file');
+					var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.ACTION_PHASE) %>');
+					portletURL.setParameter("javax.portlet.action", "previewAttachmentFile");
+					portletURL.setParameter("dossierFileId", dossierFileId);
+					portletURL.setPortletMode("view");
+					portletURL.setWindowState('<%=WindowState.NORMAL%>');
+					
+					viewDossierAttachment(this, portletURL.toString());
+				});
+			});
+		}
 		
-	});
-	
-	Liferay.provide(window, '<portlet:namespace/>addPrivateDossierGroup', function(e) {
+		//Remove buttons
+		var removeDossierFiles = A.all('.remove-dossier-file');
 		
-		var A = AUI();
+		if(removeDossierFiles){
+			removeDossierFiles.each(function(e){
+				e.on('click', function(){
+					if(confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-remove-dossier-file") %>')){
+						
+						var instance = A.one(this);
+						
+						var dossierFileId = instance.attr('dossier-file');
+						
+						if(parseInt(dossierFileId) > 0){
+							var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.ACTION_PHASE) %>');
+							portletURL.setParameter("javax.portlet.action", "removeAttachmentFile");
+							portletURL.setParameter("dossierFileId", dossierFileId);
+							portletURL.setPortletMode("view");
+							portletURL.setWindowState('<%=WindowState.NORMAL%>');
+							
+							A.io.request(
+								portletURL.toString(),
+								{
+									on: {
+										success: function(event, id, obj) {
+											var response = this.get('responseData');
+											if(response){
+												response = JSON.parse(response);
+												
+												if(response.deleted == true){
+													Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.DOSSIER_MGT_PORTLET %>_');
+												}else{
+													alert('<%= UnicodeLanguageUtil.get(pageContext, "error-while-remove-this-file") %>');
+												}
+											}
+										}
+									}
+								}
+							);
+						}
+					}
+				});
+			});	
+		}
 		
-		var instance = A.one(e);
+		//Add individual part buttons
+		var addIndividualPartGroups = A.all('.add-individual-part-group');
 		
-		var dossierPartId = instance.attr('dossier-part');
-	
-		var size = parseInt(instance.attr('dossier-part-size'));
+		if(addIndividualPartGroups){
+			addIndividualPartGroups.each(function(e){
+				e.on('click', function(){
+					var instance = A.one(e);
+					var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
+					portletURL.setParameter("mvcPath", "/html/portlets/dossiermgt/frontoffice/modal_dialog.jsp");
+					portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
+					portletURL.setPortletMode("normal");
+					portletURL.setParameter("content", "individual");
+					addIndividualPartGroup(this, portletURL.toString(), '<portlet:namespace/>');
+				});
+			});
+		}
 		
-		var index = parseInt(A.one('#<portlet:namespace/>curIndex').val()) + 1;
+		//Remove dossier group
 		
-		var groupNames = privateDossierGroup.toString();
-			
-		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
-		portletURL.setParameter("mvcPath", "/html/portlets/dossiermgt/frontoffice/edit_dossier_part_group.jsp");
-		portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
-		portletURL.setPortletMode("normal");
-		portletURL.setParameter("dossierPartId", dossierPartId);
-		portletURL.setParameter("index", index);
-		portletURL.setParameter("size", size);
-		portletURL.setParameter("groupNames", groupNames);
-			
-		<portlet:namespace/>openDossierDialog(portletURL.toString(), '<portlet:namespace />privateDossierGroup', '<%= UnicodeLanguageUtil.get(pageContext, "add-private-dossier") %>');
+		var removeIndividualGroups = A.all('.remove-individual-group');
+		
+		if(removeIndividualGroups){
+			removeIndividualGroups.each(function(e){
+				e.on('click', function(){
+					if(confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-remove-individual-group") %>')){
+						
+						var instance = A.one(this);
+						
+						var fileGroupId = instance.attr('file-group');
+						var dossierId = instance.attr('dossier');
+						var dossierPartId = instance.attr('dossier-part');
+						
+						if(parseInt(fileGroupId) > 0){
+							var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.ACTION_PHASE) %>');
+							portletURL.setParameter("javax.portlet.action", "removeIndividualGroup");
+							portletURL.setParameter("fileGroupId", fileGroupId);
+							portletURL.setParameter("dossierId", dossierId);
+							portletURL.setParameter("dossierPartId", dossierPartId);
+							portletURL.setPortletMode("view");
+							portletURL.setWindowState('<%=WindowState.NORMAL%>');
+							
+							A.io.request(
+								portletURL.toString(),
+								{
+									on: {
+										success: function(event, id, obj) {
+											var response = this.get('responseData');
+											if(response){
+												response = JSON.parse(response);
+												
+												if(response.deleted == true){
+													Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.DOSSIER_MGT_PORTLET %>_');
+												}else{
+													alert('<%= UnicodeLanguageUtil.get(pageContext, "error-while-remove-this-group") %>');
+												}
+											}
+										}
+									}
+								}
+							);
+						}
+					}
+				});
+			});
+		}
 	});
 	
 	
@@ -435,53 +471,7 @@
 		}
 	});
 	
-	
-	Liferay.provide(window, '<portlet:namespace/>removeFileUpload', function(e) {
-		if(confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-remove-dossier-file") %>')){
-			var A = AUI();
-			
-			var instance = A.one(e);
-			
-			var dossierFileId = instance.attr('dossier-file');
-			
-			if(parseInt(dossierFileId) > 0){
-				var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.ACTION_PHASE) %>');
 
-				portletURL.setParameter("javax.portlet.action", "deleteAttachmentFile");
-				portletURL.setParameter("dossierFileId", dossierFileId);
-				portletURL.setPortletMode("view");
-				portletURL.setWindowState('<%=WindowState.NORMAL%>');
-				
-				A.io.request(
-					portletURL.toString(),
-					{
-						on: {
-							success: function(event, id, obj) {
-								var response = this.get('responseData');
-								if(response){
-									response = JSON.parse(response);
-									
-									if(response.deleted == true){
-										var data = {};
-
-										
-										data['_<%=WebKeys.DOSSIER_MGT_PORTLET  %>_tab'] = '_<%= WebKeys.DOSSIER_MGT_PORTLET %>_dossier_part';
-
-										//Liferay.Portlet.refresh(curPortletBoundaryId, data);
-										Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.DOSSIER_MGT_PORTLET %>_', data);
-									}else{
-										alert('<%= UnicodeLanguageUtil.get(pageContext, "error-while-remove-this-file") %>');
-									}
-								}
-							}
-						}
-					}
-				);
-			}
-			
-		}
-	});
-	
 	
 	Liferay.provide(window, '<portlet:namespace/>declarationOnline', function(e) {
 		
@@ -511,250 +501,7 @@
 		<portlet:namespace/>openDossierDialog(portletURL.toString(), '<portlet:namespace />dynamicForm','<%= UnicodeLanguageUtil.get(pageContext, "declaration-online") %>');
 	});
 
-	
-	Liferay.provide(window, '<portlet:namespace/>uploadFile', function(e) {
-		
-		var A = AUI();
-		
-		var instance = A.one(e);
-		
-		var dossierId = instance.attr('dossier');
-		
-		var dossierPartId = instance.attr('dossier-part');
-		
-		var dossierFileId = instance.attr('dossier-file');
-		
-		var index = instance.attr('index');
-		
-		var groupName = instance.attr('group-name');
-		
-		var fileName = instance.attr('file-name');
-		
-		var level = instance.attr('level');
-		
-		var partType = instance.attr('part-type');
-		
-		var templateFileNo = instance.attr('template-no');
-		
-		var fileUpload = A.one('#<portlet:namespace/>fileUpload' + dossierPartId + '-' + index);
-		
-		if(fileUpload && parseInt(fileUpload.val()) > 0){
-			alert('<%=UnicodeLanguageUtil.get(pageContext, "remove-old-file-before-upload")%>');
-			return;
-		}
-		
-		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
-		portletURL.setParameter("mvcPath", "/html/portlets/dossiermgt/frontoffice/upload_dossier_file.jsp");
-		portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
-		portletURL.setPortletMode("normal");
-		portletURL.setParameter("dossierId", dossierId);
-		portletURL.setParameter("dossierPartId", dossierPartId);
-		portletURL.setParameter("index", index);
-		portletURL.setParameter("level", level);
-		portletURL.setParameter("groupName", groupName);
-		portletURL.setParameter("fileName", fileName);
-		portletURL.setParameter("templateFileNo", templateFileNo);
-		portletURL.setParameter("dossierFileId", dossierFileId);
-		portletURL.setParameter("partType", partType);
-		<portlet:namespace/>openDossierDialog(portletURL.toString(), '<portlet:namespace />dossierFileId','<%= UnicodeLanguageUtil.get(pageContext, "upload-dossier-file") %>');
-	});
 
-	Liferay.provide(window, '<portlet:namespace/>openDossierDialog', function(uri, id, title) {
-		var dossierFileDialog = Liferay.Util.openWindow(
-			{
-				dialog: {
-					cache: false,
-					cssClass: 'opencps-dossiermgt-upload-dossier-file',
-					modal: true,
-					
-				},
-				cache: false,
-				id: id,
-				title: title,
-				uri: uri
-				
-			},function(evt){
-				
-			}
-		);
-	});
-	
-	Liferay.provide(window, '<portlet:namespace/>renderPrivateDossierGroup', function(dossierPartId, index, groupName) {
-		var A = AUI();
-		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
-			portletURL.setParameter("mvcPath", "/html/portlets/dossiermgt/frontoffice/render_private_dossier_part.jsp");
-			portletURL.setWindowState("<%=LiferayWindowState.EXCLUSIVE.toString()%>"); 
-			portletURL.setPortletMode("normal");
-			portletURL.setParameter("dossierPartId", dossierPartId);
-			portletURL.setParameter("index", index);
-			portletURL.setParameter("groupName", groupName);
-			
-		A.io.request(
-			portletURL.toString(),
-			{
-				on: {
-					success: function(event, id, obj) {
-						var response = this.get('responseData');
-						var tree = A.one('#<portlet:namespace />tree' + dossierPartId);
-		
-						if(tree){
-							tree.append(response);
-							privateDossierGroup.push(groupName);
-						}
-					}
-				}
-			}
-		);
-	},['aui-io','liferay-portlet-url']);
-	
-	Liferay.on('getPrivateDossierGroupSchema',function(event) {
-		
-		var A = AUI();
-		
-		var schema = event.responseData;
-		
-		var groupName = schema.groupName;
-		
-		var dossierPartId = schema.dossierPartId;
-		
-		var index = schema.index;
-		
-		var size = schema.size;
-		
-		A.one('#<portlet:namespace/>curIndex').val(parseInt(index) + parseInt(size));
-		
-		<portlet:namespace/>renderPrivateDossierGroup(dossierPartId, index, groupName);
-		
-	},['aui-io']);
-	
-	Liferay.on('getDynamicFormDataSchema',function(event) {
-		
-		var A = AUI();
-		
-		var schema = event.responseData;
-		
-		var dossierPartId = schema.dossierPartId;
-		
-		var index = schema.index;
-		
-		var formData = schema.formData;
-		
-		var uploadDataSchema = A.one('#<portlet:namespace/>uploadDataSchema' + dossierPartId + '-' + index);
-		
-		var data = uploadDataSchema.val();
-		
-		if(data != ''){
-			data = JSON.parse(data);
-			data.formData = formData;
-		}else{
-			var object = new Object();
-			object.formData = formData;
-			data = object;
-		}
-				
-		uploadDataSchema.val(JSON.stringify(data));
-		
-	});
-	
-	Liferay.on('getUploadDataSchema',function(event) {
-		
-		var A = AUI();
-		 
-		var schema = event.responseData;
-		
-		if(schema){
 
-			var index = schema.index;
-			
-			var displayName = schema.displayName;
-			
-			var dossierPartId = schema.dossierPartId;
-			
-			var level = schema.level;
-			
-			var fileEntryId = schema.fileEntryId;
-			
-			var dossierFileId = schema.dossierFileId;
-			
-			var partType = schema.partType;
-			
-			if(partType == '<%=PortletConstants.DOSSIER_PART_TYPE_OTHER%>' && parseInt(level) == 0){
-				var index = parseInt(A.one('#<portlet:namespace/>curIndex').val()) + 1;
-				var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
-					portletURL.setParameter("mvcPath", "/html/portlets/dossiermgt/frontoffice/render_other_dossier_part.jsp");
-					portletURL.setWindowState("<%=LiferayWindowState.EXCLUSIVE.toString()%>"); 
-					portletURL.setPortletMode("normal");
-					portletURL.setParameter("dossierPartId", dossierPartId);
-					portletURL.setParameter("index", index);
-					portletURL.setParameter("displayName", displayName);
-				
-				A.io.request(
-					portletURL.toString(),
-					{
-						on: {
-							success: function(event, id, obj) {
-								var response = this.get('responseData');
-								
-								var tree = A.one('#<portlet:namespace />tree' + dossierPartId);
-								
-								if(tree){
-									tree.append(response);
-								}
-								
-								A.one('#<portlet:namespace/>curIndex').val(index);
-								
-								<portlet:namespace/>rePaintStatus(schema, dossierPartId, dossierFileId, fileEntryId, index);
-							}
-						}
-					}
-				);
-			}
-			
-	
-			if(partType != '<%=PortletConstants.DOSSIER_PART_TYPE_OTHER%>'){
-				
-				<portlet:namespace/>rePaintStatus(schema, dossierPartId, dossierFileId, fileEntryId, index);
-			}			
-		}
-	},['aui-io','liferay-portlet-url']);
-	
-	Liferay.provide(window, '<portlet:namespace/>rePaintStatus', function(schema, dossierPartId, dossierFileId, fileEntryId, index) {
-		var A = AUI();
-		
-		var uploadDataSchema = A.one('#<portlet:namespace/>uploadDataSchema' + dossierPartId + '-' + index);
-		
-		var fileUpload = A.one('#<portlet:namespace/>fileUpload' + dossierPartId + '-' + index);
-		
-		var dossierFile = A.one('#<portlet:namespace/>dossierFile' + dossierPartId + '-' + index);
-		
-		if(fileUpload && parseInt(fileEntryId) > 0){
-			tempFileEntryIds.push(fileEntryId);
-			fileUpload.val(fileEntryId);
-		}
-		
-		if(dossierFile){
-			dossierFile.val(dossierFileId);
-		}
-			 
-		var counterLabel = A.one('.alias-' + dossierPartId + '-' + index);
-			 
-		if(counterLabel){
-			counterLabel.text(1);
-		}
-		
-		if(uploadDataSchema){
-			
-			var rowcheck = A.one('#rowcheck' + dossierPartId + '-' + index);
-			
-			if(uploadDataSchema.val() == ''){
-				uploadDataSchema.val(JSON.stringify(schema));
-			}else{
-				var formData = JSON.parse(uploadDataSchema.val());
-				schema.formData = formData.formData;
-				uploadDataSchema.val(JSON.stringify(schema));
-			}
-			
-			rowcheck.replaceClass('fa-square-o', 'fa-check-square-o');
-		}
-	});
+
 </aui:script>
