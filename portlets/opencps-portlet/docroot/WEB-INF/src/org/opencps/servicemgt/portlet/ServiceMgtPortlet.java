@@ -544,6 +544,7 @@ public class ServiceMgtPortlet extends MVCPortlet {
 			ServiceContext serviceContext =
 			    ServiceContextFactory.getInstance(
 			        DLFileEntry.class.getName(), uploadPortletRequest);
+			
 			serviceContext.setAddGroupPermissions(true);
 			serviceContext.setAddGuestPermissions(true);
 
