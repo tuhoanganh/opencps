@@ -28,14 +28,21 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
+import org.opencps.accountmgt.NoSuchAccountException;
+import org.opencps.accountmgt.NoSuchAccountFolderException;
+import org.opencps.accountmgt.NoSuchAccountOwnOrgIdException;
+import org.opencps.accountmgt.NoSuchAccountOwnUserIdException;
+import org.opencps.accountmgt.NoSuchAccountTypeException;
 import org.opencps.accountmgt.model.Business;
 import org.opencps.accountmgt.model.Citizen;
 import org.opencps.accountmgt.service.BusinessLocalServiceUtil;
 import org.opencps.accountmgt.service.CitizenLocalServiceUtil;
 import org.opencps.backend.message.SendToEngineMsg;
+import org.opencps.dossiermgt.NoSuchDossierException;
+import org.opencps.dossiermgt.NoSuchDossierPartException;
+import org.opencps.dossiermgt.PermissionDossierException;
+import org.opencps.dossiermgt.bean.AccountBean;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.DossierPart;
@@ -59,7 +66,7 @@ import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
 import org.opencps.processmgt.service.ServiceProcessLocalServiceUtil;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
-import org.opencps.util.DLFileEntryUtil;
+import org.opencps.util.AccountUtil;
 import org.opencps.util.DLFolderUtil;
 import org.opencps.util.DateTimeUtil;
 import org.opencps.util.PortletConstants;
@@ -73,7 +80,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
-import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -86,6 +93,8 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.documentlibrary.DuplicateFileException;
+import com.liferay.portlet.documentlibrary.FileSizeException;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
@@ -95,26 +104,33 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
 
 public class ProcessOrderPortlet extends MVCPortlet {
 	
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws IOException
+	 */
 	public void addAttachmentFile(
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
 
-		HttpServletRequest request = PortalUtil
-			.getHttpServletRequest(actionRequest);
-
-		HttpSession session = request
-			.getSession();
+		boolean updated = false;
 
 		UploadPortletRequest uploadPortletRequest = PortalUtil
 			.getUploadPortletRequest(actionRequest);
 
+		AccountBean accountBean = AccountUtil
+			.getAccountBean();
+
+		Dossier dossier = null;
+		DossierFile dossierFile = null;
+		DossierPart dossierPart = null;
+
 		long dossierId = ParamUtil
 			.getLong(uploadPortletRequest, DossierDisplayTerms.DOSSIER_ID);
 
-		/*
-		 * long dossierFileId = ParamUtil .getLong( uploadPortletRequest,
-		 * DossierFileDisplayTerms.DOSSIER_FILE_ID);
-		 */
+		long dossierFileId = ParamUtil
+			.getLong(uploadPortletRequest,
+				DossierFileDisplayTerms.DOSSIER_FILE_ID);
 
 		long dossierPartId = ParamUtil
 			.getLong(uploadPortletRequest,
@@ -125,13 +141,6 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 		long size = uploadPortletRequest
 			.getSize(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
-
-		long ownerUserId = GetterUtil
-			.getLong(session
-				.getAttribute(WebKeys.ACCOUNT_OWNERUSERID));
-		long ownerOrganizationId = GetterUtil
-			.getLong(session
-				.getAttribute(WebKeys.ACCOUNT_OWNERORGANIZATIONID));
 
 		int dossierFileType = ParamUtil
 			.getInteger(uploadPortletRequest,
@@ -160,16 +169,8 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			.concat(PortletConstants.TEMP_RANDOM_SUFFIX).concat(StringUtil
 				.randomString());
 
-		String templateFileNo = ParamUtil
-			.getString(uploadPortletRequest,
-				DossierDisplayTerms.TEMPLATE_FILE_NO);
-
-		/*
-		 * String redirectURL = ParamUtil .getString(uploadPortletRequest,
-		 * "redirectURL");
-		 */
-
-		Dossier dossier = null;
+		String redirectURL = ParamUtil
+			.getString(uploadPortletRequest, "redirectURL");
 
 		InputStream inputStream = null;
 
@@ -177,6 +178,9 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			.convertStringToDate(dossierFileDate);
 
 		try {
+			validateAddAttachDossierFile(dossierId, dossierPartId,
+				dossierFileId, displayName, size, sourceFileName, inputStream,
+				accountBean);
 			ServiceContext serviceContext = ServiceContextFactory
 				.getInstance(uploadPortletRequest);
 			serviceContext
@@ -189,6 +193,14 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			dossier = DossierLocalServiceUtil
 				.getDossier(dossierId);
 
+			if (dossierFileId > 0) {
+				dossierFile = DossierFileLocalServiceUtil
+					.getDossierFile(dossierFileId);
+			}
+
+			dossierPart = DossierPartLocalServiceUtil
+				.getDossierPart(dossierPartId);
+
 			String contentType = uploadPortletRequest
 				.getContentType(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
 
@@ -200,37 +212,97 @@ public class ProcessOrderPortlet extends MVCPortlet {
 						.getCounter(),
 					serviceContext);
 
-			FileEntry fileEntry = DLFileEntryUtil
-				.addFileEntry(serviceContext
-					.getScopeGroupId(), dossierFolder
+			DossierFileLocalServiceUtil
+				.addDossierFile(serviceContext
+					.getUserId(), dossierId, dossierPartId, dossierPart
+						.getTemplateFileNo(),
+					StringPool.BLANK, fileGroupId, 0, accountBean
+						.getOwnerUserId(),
+					accountBean
+						.getOwnerOrganizationId(),
+					displayName, StringPool.BLANK,
+					dossierFile != null ? dossierFile
+						.getFileEntryId() : 0,
+					PortletConstants.DOSSIER_FILE_MARK_UNKNOW, dossierFileType,
+					dossierFileNo, fileDate, dossierFileOriginal,
+					PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
+					dossierFolder
 						.getFolderId(),
 					sourceFileName, contentType, displayName, StringPool.BLANK,
 					StringPool.BLANK, inputStream, size, serviceContext);
 
-			DossierFileLocalServiceUtil
-				.addDossierFile(serviceContext
-					.getUserId(), dossierId, dossierPartId, templateFileNo,
-					fileGroupId, ownerUserId, ownerOrganizationId, displayName,
-					StringPool.BLANK, fileEntry
-						.getFileEntryId(),
-					PortletConstants.DOSSIER_FILE_MARK_UNKNOW, dossierFileType,
-					dossierFileNo, fileDate, dossierFileOriginal,
-					PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
-					serviceContext);
+			updated = true;
 
 		}
 		catch (Exception e) {
+			updated = false;
+			if (e instanceof DuplicateFileException) {
+				SessionErrors
+					.add(actionRequest, DuplicateFileException.class);
+			}
+			else if (e instanceof NoSuchDossierException) {
+				SessionErrors
+					.add(actionRequest, NoSuchDossierException.class);
+			}
+			else if (e instanceof NoSuchDossierPartException) {
+				SessionErrors
+					.add(actionRequest, NoSuchDossierPartException.class);
+			}
+			else if (e instanceof NoSuchAccountException) {
+				SessionErrors
+					.add(actionRequest, NoSuchAccountException.class);
+			}
+			else if (e instanceof NoSuchAccountTypeException) {
+				SessionErrors
+					.add(actionRequest, NoSuchAccountTypeException.class);
+			}
+			else if (e instanceof NoSuchAccountFolderException) {
+				SessionErrors
+					.add(actionRequest, NoSuchAccountFolderException.class);
+			}
+			else if (e instanceof NoSuchAccountOwnUserIdException) {
+				SessionErrors
+					.add(actionRequest, NoSuchAccountOwnUserIdException.class);
+			}
+			else if (e instanceof NoSuchAccountOwnOrgIdException) {
+				SessionErrors
+					.add(actionRequest, NoSuchAccountOwnOrgIdException.class);
+			}
+			else if (e instanceof PermissionDossierException) {
+				SessionErrors
+					.add(actionRequest, PermissionDossierException.class);
+			}
+			else if (e instanceof FileSizeException) {
+				SessionErrors
+					.add(actionRequest, FileSizeException.class);
+			}
+			else {
+				SessionErrors
+					.add(actionRequest, "upload-error");
+
+			}
 			_log
 				.error(e);
 		}
 		finally {
-			/*
-			 * if (Validator .isNotNull(redirectURL)) { actionResponse
-			 * .sendRedirect(redirectURL); }
-			 */
-			actionResponse
-				.setRenderParameter("jspPage",
-					"/html/portlets/processmgt/processorder/upload_dossier_file.jsp");
+			if (updated) {
+				if (Validator
+					.isNotNull(redirectURL)) {
+					actionResponse
+						.sendRedirect(redirectURL);
+				}
+			}
+			else {
+				actionResponse
+					.setRenderParameter("redirectURL", redirectURL);
+				actionResponse
+					.setRenderParameter("content", "upload-file");
+				actionResponse
+					.setRenderParameter("jspPage",
+						"//html/portlets/processmgt/processorder/modal_dialog.jsp");
+
+			}
+
 		}
 	}
 	
@@ -567,6 +639,99 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		        "jspPage",
 		        "/html/portlets/processmgt/processorder/assign_to_user.jsp");
 	}
+	
+	/**
+	 * @param dossierId
+	 * @param dossierPartId
+	 * @param dossierFileId
+	 * @param displayName
+	 * @param size
+	 * @param sourceFileName
+	 * @param inputStream
+	 * @param accountBean
+	 * @throws NoSuchDossierException
+	 * @throws NoSuchDossierPartException
+	 * @throws NoSuchAccountException
+	 * @throws NoSuchAccountTypeException
+	 * @throws NoSuchAccountFolderException
+	 * @throws NoSuchAccountOwnUserIdException
+	 * @throws NoSuchAccountOwnOrgIdException
+	 * @throws PermissionDossierException
+	 * @throws FileSizeException
+	 */
+	private void validateAddAttachDossierFile(
+		long dossierId, long dossierPartId, long dossierFileId,
+		String displayName, long size, String sourceFileName,
+		InputStream inputStream, AccountBean accountBean)
+		throws NoSuchDossierException, NoSuchDossierPartException,
+		NoSuchAccountException, NoSuchAccountTypeException,
+		NoSuchAccountFolderException, NoSuchAccountOwnUserIdException,
+		NoSuchAccountOwnOrgIdException, PermissionDossierException, FileSizeException {
+
+		if (accountBean == null) {
+			throw new NoSuchAccountException();
+		}
+		else if (Validator
+			.isNull(accountBean
+				.getAccountType())) {
+			throw new NoSuchAccountTypeException();
+		}
+		else if (accountBean
+			.getAccountFolder() == null) {
+			throw new NoSuchAccountFolderException();
+		}
+		
+		else if (accountBean
+			.isCitizen() && accountBean
+				.getOwnerUserId() == 0) {
+			throw new NoSuchAccountOwnUserIdException();
+		}
+		
+		else if (accountBean
+			.isBusiness() && accountBean
+				.getOwnerOrganizationId() == 0) {
+			throw new NoSuchAccountOwnOrgIdException();
+		}
+
+		if (dossierId <= 0) {
+			throw new NoSuchDossierException();
+		}
+
+		if (dossierPartId < 0) {
+			throw new NoSuchDossierPartException();
+		}
+
+		Dossier dossier = null;
+
+		try {
+			dossier = DossierLocalServiceUtil
+				.getDossier(dossierId);
+		}
+		catch (Exception e) {
+			throw new NoSuchDossierPartException();
+		}
+
+		if (dossier
+			.getUserId() != accountBean
+				.getOwnerUserId()) {
+			throw new PermissionDossierException();
+		}
+
+		try {
+			DossierPartLocalServiceUtil
+				.getDossierPart(dossierPartId);
+		}
+		catch (Exception e) {
+			throw new NoSuchDossierPartException();
+		}
+		
+		if(size == 0){
+			throw new FileSizeException();
+		}else if(size > 300000000){
+			throw new FileSizeException();
+		}
+	}
+	
 
 	private Log _log = LogFactoryUtil
 	    .getLog(ProcessOrderPortlet.class
