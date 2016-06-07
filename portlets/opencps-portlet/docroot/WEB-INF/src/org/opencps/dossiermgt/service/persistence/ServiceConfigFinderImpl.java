@@ -17,6 +17,7 @@
 
 package org.opencps.dossiermgt.service.persistence;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -30,6 +31,8 @@ import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.Type;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -295,12 +298,18 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 			String sql = CustomSQLUtil
 			    .get(COUNT_SERVICE_CONFIG_BY_SERVICE_MODE_SQL);
 
-			if (Validator
-			    .isNull(serviceModes)) {
-				sql = StringUtil
-				    .replace(
+			if (Validator.isNull(serviceModes)) {
+				sql =
+				    StringUtil.replace(
 				        sql, "AND opencps_service_config.serviceMode IN (?)",
 				        StringPool.BLANK);
+			}
+			else {
+				sql =
+				    StringUtil.replace(
+				        sql, "AND opencps_service_config.serviceMode IN (?)",
+				        "AND opencps_service_config.serviceMode IN (" +
+				            StringUtil.merge(serviceModes) + ")");
 			}
 
 			SQLQuery q = session
@@ -316,11 +325,7 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 
 			qPos
 			    .add(groupId);
-			if (Validator
-			    .isNotNull(serviceModes)) {
-				qPos
-				    .add(serviceModes);
-			}
+
 
 			Iterator<Integer> itr = q
 			    .iterate();
@@ -386,6 +391,11 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 				    .replace(
 				        sql, "AND opencps_service_config.serviceMode IN (?)",
 				        StringPool.BLANK);
+			} else {
+				sql = StringUtil
+							    .replace(
+							        sql, "AND opencps_service_config.serviceMode IN (?)",
+							        "AND opencps_service_config.serviceMode IN ("+ StringUtil.merge(serviceModes) +")");				
 			}
 
 			SQLQuery q = session
@@ -401,11 +411,7 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 
 			qPos
 			    .add(groupId);
-			if (Validator
-			    .isNotNull(serviceModes)) {
-				qPos
-				    .add(serviceModes);
-			}
+
 
 			return (List<ServiceConfig>) QueryUtil
 			    .list(q, getDialect(), start, end);
