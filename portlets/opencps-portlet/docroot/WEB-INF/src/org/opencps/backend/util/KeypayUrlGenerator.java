@@ -101,7 +101,7 @@ public class KeypayUrlGenerator {
 			dossier = _getDossier(dossierId);
 			
 			//TODO : update returnURL keyPay
-			String return_url = Validator.isNotNull(dossier) ? StringPool.BLANK : StringPool.BLANK;
+			String return_url = Validator.isNotNull(dossier) ? dossier.getKeypayRedirectUrl() : StringPool.BLANK;
 			
 			String url_redirect = paymentConfig.getKeypayDomain() + StringPool.QUESTION;
 
