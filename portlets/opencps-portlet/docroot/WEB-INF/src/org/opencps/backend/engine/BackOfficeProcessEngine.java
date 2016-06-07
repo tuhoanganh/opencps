@@ -19,6 +19,7 @@
 package org.opencps.backend.engine;
 
 import java.util.Date;
+import java.util.List;
 
 import org.opencps.backend.message.SendToBackOfficeMsg;
 import org.opencps.backend.message.SendToEngineMsg;
@@ -46,6 +47,7 @@ import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.MessageListenerException;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 /**
@@ -210,10 +212,12 @@ public class BackOfficeProcessEngine implements MessageListener {
 				if (changeStatus.equals(Integer.toString(PortletConstants.DOSSIER_STATUS_WAITING))) {
 					toBackOffice.setRequestCommand(WebKeys.DOSSIER_LOG_RESUBMIT_REQUEST);
 				}
-/*				if (changeStatus.equals(Integer.toString(PortletConstants.DOSSIER_STATUS_PAYING))) {
-					toBackOffice.setRequestCommand(WebKeys.DOSSIER_LOG_PAYMENT_REQUEST);
-				}
-*/				toBackOffice.setActionInfo(processWorkflow.getActionName());
+				/*
+				 * if (changeStatus.equals(Integer.toString(PortletConstants.
+				 * DOSSIER_STATUS_PAYING))) {
+				 * toBackOffice.setRequestCommand(WebKeys
+				 * .DOSSIER_LOG_PAYMENT_REQUEST); }
+				 */toBackOffice.setActionInfo(processWorkflow.getActionName());
 				toBackOffice.setMessageInfo(toEngineMsg.getActionNote());
 				toBackOffice.setSendResult(0);
 
@@ -225,7 +229,6 @@ public class BackOfficeProcessEngine implements MessageListener {
 				}
 
 				toBackOffice.setUpdateDatetime(new Date());
-				
 
 				if (Validator.isNull(toEngineMsg.getReceptionNo())) {
 					toBackOffice.setReceptionNo(DossierNoGenerator.genaratorNoReception(processWorkflow.getReceptionNoPattern()));
@@ -233,7 +236,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 				else {
 					toBackOffice.setReceptionNo(toEngineMsg.getReceptionNo());
 				}
-				
+
 				toBackOffice.setReceiveDatetime(new Date());
 
 				toBackOffice.setEstimateDatetime(toEngineMsg.getEstimateDatetime());
@@ -241,41 +244,50 @@ public class BackOfficeProcessEngine implements MessageListener {
 				if (processWorkflow.getIsFinishStep()) {
 					toBackOffice.setFinishDatetime(new Date());
 				}
-				
-				
+
 				toBackOffice.setProcessWorkflowId(processWorkflowId);
-				
+
 				long ownerUserId = 0;
 				long ownerOrganizationId = 0;
-				
+
 				if (dossier.getOwnerOrganizationId() != 0) {
 					ownerUserId = 0;
 					ownerOrganizationId = dossier.getOwnerOrganizationId();
-				} else {
+				}
+				else {
 					ownerUserId = dossier.getUserId();
 				}
-				
 
 				// Update Paying
 				if (processWorkflow.getRequestPayment()) {
-					
-					int totalPayment = PaymentRequestGenerator.getTotalPayment(processWorkflow.getPaymentFee());
-					
-					PaymentFile paymentFile = PaymentFileLocalServiceUtil.addPaymentFile(
-					    toEngineMsg.getDossierId(),
-					    toEngineMsg.getFileGroupId(),
-					    ownerUserId,
-					    ownerOrganizationId,
-					    govAgencyOrganizationId, changeStep.getStepName(),
-					    toEngineMsg.getActionDatetime(),
-					    (double)totalPayment,
-					    toEngineMsg.getActionNote(), StringPool.BLANK);
-					
-					String paymentURL =
-					    KeypayUrlGenerator.generatorKeypayURL(
-					    	toEngineMsg.getGroupId(), govAgencyOrganizationId, paymentFile.getPaymentFileId(),
-					    	processWorkflow.getPaymentFee(), toEngineMsg.getDossierId());					
-					
+
+					int totalPayment =
+					    PaymentRequestGenerator.getTotalPayment(processWorkflow.getPaymentFee());
+
+					List<String> paymentMethods =
+					    PaymentRequestGenerator.getPaymentMethod(processWorkflow.getPaymentFee());
+
+					String paymentOptions = StringUtil.merge(paymentMethods);
+
+					PaymentFile paymentFile =
+					    PaymentFileLocalServiceUtil.addPaymentFile(
+					        toEngineMsg.getDossierId(),
+					        toEngineMsg.getFileGroupId(), ownerUserId,
+					        ownerOrganizationId, govAgencyOrganizationId,
+					        changeStep.getStepName(),
+					        toEngineMsg.getActionDatetime(),
+					        (double) totalPayment, toEngineMsg.getActionNote(),
+					        StringPool.BLANK, paymentOptions);
+
+					if (paymentMethods.contains(PaymentRequestGenerator.PAY_METHOD_KEYPAY)) {
+						KeypayUrlGenerator.generatorKeypayURL(
+						    processWorkflow.getGroupId(),
+						    govAgencyOrganizationId,
+						    paymentFile.getPaymentFileId(),
+						    processWorkflow.getPaymentFee(),
+						    toEngineMsg.getDossierId());
+					}
+
 					toBackOffice.setRequestCommand(WebKeys.DOSSIER_LOG_PAYMENT_REQUEST);
 
 				}
@@ -289,21 +301,23 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 				MessageBusUtil.sendMessage(
 				    "opencps/backoffice/out/destination", sendToBackOffice);
-				
-			} else {
-				//Send message to backoffice/out/destination
+
+			}
+			else {
+				// Send message to backoffice/out/destination
 				toBackOffice.setProcessOrderId(processOrderId);
 				toBackOffice.setDossierId(toEngineMsg.getDossierId());
 				toBackOffice.setFileGroupId(toEngineMsg.getFileGroupId());
 				toBackOffice.setDossierStatus(Integer.toString(PortletConstants.DOSSIER_STATUS_ERROR));
-				
+
 				Message sendToBackOffice = new Message();
-				
+
 				sendToBackOffice.put("toBackOffice", toBackOffice);
-				
-				MessageBusUtil.sendMessage("opencps/backoffice/out/destination", sendToBackOffice);
+
+				MessageBusUtil.sendMessage(
+				    "opencps/backoffice/out/destination", sendToBackOffice);
 			}
-			
+
 		}
 		catch (Exception e) {
 			_log.error(e);

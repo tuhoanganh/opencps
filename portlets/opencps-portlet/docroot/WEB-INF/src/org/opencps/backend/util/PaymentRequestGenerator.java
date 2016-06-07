@@ -99,6 +99,8 @@ public class PaymentRequestGenerator {
 		return paymentMethods;
 
 	}
+	
+
 
 	/**
 	 * Get payment message

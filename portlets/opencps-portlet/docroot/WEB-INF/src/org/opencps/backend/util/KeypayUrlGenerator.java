@@ -130,7 +130,7 @@ public class KeypayUrlGenerator {
 			//TODO : update returnURL keyPay
 			String return_url = Validator.isNotNull(dossier) ? StringPool.BLANK : StringPool.BLANK;
 			
-			String url_redirect = paymentFile.getKeypayUrl();
+			String url_redirect = paymentConfig.getKeypayDomain() + StringPool.QUESTION;
 
 	        KeyPay keypay = new KeyPay(merchant_trans_id, merchant_code, good_code,
                 net_cost, ship_fee, tax, bank_code, service_code, version, command,
@@ -165,6 +165,15 @@ public class KeypayUrlGenerator {
 	        url_redirect += param + "secure_hash=" + keypay.getSecure_hash();
 
 	        keypayURL = url_redirect;
+	        
+	        try {
+				PaymentFileLocalServiceUtil.updatePaymentFile(
+				    paymentFileId, keypayURL, GetterUtil.getLong(merchant_trans_id,0),
+				    good_code, paymentConfig.getKeypayMerchantCode());
+            }
+            catch (Exception e) {
+	            // TODO: handle exception
+            }
 		}
 		
 		return keypayURL;
