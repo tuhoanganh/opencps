@@ -19,7 +19,7 @@
         <column name="requestDatetime" type="Date"></column>
         <column name="amount" type="double"></column>
         <column name="requestNote" type="String"></column>
-        <column name="paymentOptions" type="int"></column>
+        <column name="paymentOptions" type="String"></column>
         <column name="keypayUrl" type="String"></column>
         <column name="keypayTransactionId" type="long"></column>
         <column name="keypayGoodCode" type="String"></column>

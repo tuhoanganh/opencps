@@ -339,7 +339,9 @@
 		<field name="assignUser" type="boolean" />
 		<field name="actionUserId" type="long" />
 		<field name="requestPayment" type="boolean" />
-		<field name="paymentFee" type="String" />
+		<field name="paymentFee" type="String">
+			<hint name="max-length">300</hint>
+		</field>
 		<field name="generateReceptionNo" type="boolean" />
 		<field name="receptionNoPattern" type="String" />
 		<field name="generateDeadline" type="boolean" />
@@ -443,6 +445,7 @@
 		<field name="finishDatetime" type="Date" />
 		<field name="dossierStatus" type="int" />
 		<field name="dossierSource" type="int" />
+		<field name="keypayRedirectUrl" type="String" />
 	</model>
 	<model name="org.opencps.dossiermgt.model.DossierFile">
 		<field name="dossierFileId" type="long" />
@@ -638,7 +641,7 @@
 		<field name="requestDatetime" type="Date" />
 		<field name="amount" type="double" />
 		<field name="requestNote" type="String" />
-		<field name="paymentOptions" type="int" />
+		<field name="paymentOptions" type="String" />
 		<field name="keypayUrl" type="String" />
 		<field name="keypayTransactionId" type="long">
 			<hint name="max-length">6</hint>

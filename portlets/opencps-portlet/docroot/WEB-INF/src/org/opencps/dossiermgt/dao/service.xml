@@ -206,6 +206,7 @@
         <column name="finishDatetime" type="Date"/>
         <column name="dossierStatus" type="int"/>
         <column name="dossierSource" type="int"/>
+        <column name="keypayRedirectUrl" type="String"/>
         <order by="desc">
             <order-column name="modifiedDate" order-by="desc"></order-column>
         </order>
