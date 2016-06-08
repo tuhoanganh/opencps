@@ -33,7 +33,7 @@ import com.liferay.portal.kernel.util.Validator;
 public class PaymentRequestGenerator {
 	
 	public static void main(String[] args) {
-		String pattern = "net=100 ship=300 tax=30 bank cash keypay $Thanh toan cho tao cai nay nhe$ $da thanh toan $" ;
+		String pattern = "net=100 ship=300 tax=30 bank cash keypay $Thanh toan cho tao cai nay nhe$ $da thanh toan$ $thanh toan di$  $thanh toan di$" ;
 		
 		int totalPayment = getTotalPayment(pattern);
 		
@@ -112,7 +112,7 @@ public class PaymentRequestGenerator {
 		
 		List<String> msgPayments = new ArrayList<String>();
 		
-		pattern = pattern.substring(pattern.indexOf(PAY_MESSAGE), pattern.lastIndexOf(PAY_MESSAGE));
+		pattern = pattern.substring(pattern.indexOf(PAY_MESSAGE), pattern.lastIndexOf(PAY_MESSAGE)+1);
 		
 		String [] splitPattern = StringUtil.split(pattern, PAY_MESSAGE);
 		
