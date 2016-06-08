@@ -1,3 +1,5 @@
+<%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
+<%@page import="com.liferay.portal.model.PortletPreferences"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -18,3 +20,13 @@
 %>
 <%@ include file="/init.jsp" %>
 
+<%
+	PortletPreferences preferences = renderRequest.getPreferences();
+	
+	portletResource = ParamUtil.getString(request, "portletResource");
+	
+	if (Validator.isNotNull(portletResource)) {
+		preferences = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
+	}
+
+%>
