@@ -112,6 +112,7 @@ public class ProcessWorkflowLocalServiceImpl
 			
 			workflow.setPreProcessStepId(preProcessStepId);
 			workflow.setAutoEvent(autoEvent);
+			workflow.setPostProcessStepId(postProcessStepId);
 			workflow.setActionName(actionName);
 			workflow.setAssignUser(assignUser);
 			workflow.setActionUserId(actionUserId);
