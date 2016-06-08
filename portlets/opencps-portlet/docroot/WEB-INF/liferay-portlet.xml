@@ -175,6 +175,7 @@
 	<portlet>
 		<portlet-name>13</portlet-name>
 		<icon>/icon.png</icon>
+		<configuration-action-class>org.opencps.dossiermgt.portlet.ConfigurationImpl</configuration-action-class>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<header-portlet-css>/css/dossiermgt.css</header-portlet-css>
 		<footer-portlet-javascript>

@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.model.PortletPreferences"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,4 +18,5 @@
  */
 %>
 <%@ include file="/init.jsp" %>
+
 
