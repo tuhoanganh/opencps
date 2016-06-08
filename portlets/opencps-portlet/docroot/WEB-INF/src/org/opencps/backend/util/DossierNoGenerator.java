@@ -30,6 +30,15 @@ import com.liferay.portal.kernel.util.StringUtil;
  */
 public class DossierNoGenerator {
 	
+	public static void main(String[] args) {
+		String pattern = "{yy}-{mm}-{dd}-{nnnnnnnnnnn}";
+		
+		String receptionNo = genaratorNoReception(pattern);
+		
+		System.out.println(receptionNo);
+	    
+    }
+	
 	/**
 	 * Generate noReception with pattern
 	 * 
@@ -72,7 +81,7 @@ public class DossierNoGenerator {
 				pattern = StringUtil.replace(pattern, FIX_YEAR_PATTERN_TYPE_1, strYearTypeOne);
 			}
 			
-			if (StringUtil.contains(pattern, FIX_YEAR_PATTERN_TYPE_2)) {
+			if (pattern.contains( FIX_YEAR_PATTERN_TYPE_2)) {
 				pattern = StringUtil.replace(pattern, FIX_YEAR_PATTERN_TYPE_2, strYearTypeTwo);
 			}
 			
