@@ -376,4 +376,16 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 	return "";
 	}
 	
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 */
+	public void updateConfirmPayment(
+	    ActionRequest actionRequest, ActionResponse actionResponse) {
+		
+		long paymentFileId = ParamUtil.getLong(actionRequest, "paymentFileId");
+		
+		
+	}
+
 }
