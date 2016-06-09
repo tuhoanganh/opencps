@@ -73,6 +73,8 @@
 	String p_p_lifecycle = PortalUtil.getOriginalServletRequest(r).getParameter("p_p_id");
 	KeyPay keyPay = new KeyPay(PortalUtil.getOriginalServletRequest(r));
 	
+	long dossierId = GetterUtil.getLong(merchant_trans_id);
+	
 	/*
 	fields.put("command", command);
     fields.put("merchant_trans_id", merchant_trans_id);
@@ -125,7 +127,7 @@
 			System.out.println("----GOOD CODE----" + good_code);
 			Dossier dossier = null;
 			try {
-				dossier = DossierLocalServiceUtil.getDossierByReceptionNo(receptionNo);
+				dossier = DossierLocalServiceUtil.fetchDossier(dossierId);
 				System.out.println("----DOSSIER----" + dossier.getDossierId());
 			}
 			catch (SystemException e) {
@@ -203,7 +205,7 @@
 	</c:when>
 	<c:otherwise>
 		<%
-			String receptionNo = good_code.split("GC_")[1];
+			//String receptionNo = good_code.split("GC_")[1];
 			System.out.println("----RECEPTION NO----" + receptionNo);
 			System.out.println("----GOOD CODE----" + good_code);
 
