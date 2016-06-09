@@ -30,6 +30,5 @@
 	
 	String redirectPaymentURL = preferences.getValue("redirectPaymentURL",StringPool.BLANK);
 	
-	System.out.print(redirectPaymentURL+"$$$$$$$$$");
 %>
 
