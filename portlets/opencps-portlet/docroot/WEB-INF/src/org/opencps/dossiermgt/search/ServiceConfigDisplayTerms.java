@@ -24,6 +24,13 @@ import com.liferay.portal.kernel.util.ParamUtil;
 
 public class ServiceConfigDisplayTerms extends DisplayTerms{
 	
+	public static final String SERVICE_INSTRUCTION = "serviceInstruction";
+	public static final String SERVICE_PORTAL = "servicePortal";
+	public static final String SERVICE_ONEGATE = "serviceOnegate";
+	public static final String SERVICE_BACKOFFICE = "serviceBackoffice";
+	public static final String SERVICE_CITIZEN = "serviceCitizen";
+	public static final String SERVICE_BUSINEES = "serviceBusinees";
+	
 	public static final String SERVICE_ADMINISTRATION = "administrationCode";
 	public static final String SERVICE_CONFIG_SERVICECONFIGID = "serviceConfigId";
 	public static final String SERVICE_CONFIG_SERVICEINFOID = "serviceInfoId";
@@ -55,8 +62,15 @@ public class ServiceConfigDisplayTerms extends DisplayTerms{
 		govAgencyName = ParamUtil.getString(request, SERVICE_CONFIG_GOVAGENCYNAME);
 		domainCode = ParamUtil.getString(request, SERVICE_CONFIG_DOMAINCODE);
 		administrationCode = ParamUtil.getString(request, SERVICE_ADMINISTRATION);
+		serviceInstruction = ParamUtil.getString(request, SERVICE_INSTRUCTION);
 		
 		serviceLevel = ParamUtil.getInteger(request, SERVICE_CONFIG_SERVICELEVEL);
+		
+		servicePortal = ParamUtil.getBoolean(request, SERVICE_PORTAL);
+		serviceOnegate = ParamUtil.getBoolean(request, SERVICE_ONEGATE);
+		serviceBackoffice = ParamUtil.getBoolean(request, SERVICE_BACKOFFICE);
+		serviceCitizen = ParamUtil.getBoolean(request, SERVICE_CITIZEN);
+		serviceBusinees = ParamUtil.getBoolean(request, SERVICE_BUSINEES);
     }
 	
     public long getServiceConfigId() {
