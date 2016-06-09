@@ -23,9 +23,11 @@ import java.util.List;
 
 import org.opencps.dossiermgt.NoSuchDossierFileException;
 import org.opencps.dossiermgt.model.DossierFile;
+import org.opencps.dossiermgt.model.DossierPart;
 import org.opencps.dossiermgt.model.FileGroup;
 import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.base.DossierFileLocalServiceBaseImpl;
+import org.opencps.util.PortletConstants;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -444,8 +446,9 @@ public class DossierFileLocalServiceImpl
 
 		dossierFile
 			.setOwnerOrganizationId(ownerOrganizationId);
-		
-		dossierFile.setTemplateFileNo(templateFileNo);
+
+		dossierFile
+			.setTemplateFileNo(templateFileNo);
 
 		if (fileGroupId > 0) {
 			version = DossierFileLocalServiceUtil
@@ -462,15 +465,24 @@ public class DossierFileLocalServiceImpl
 		DossierFile curVersion = null;
 
 		try {
-			if (fileGroupId > 0) {
-				curVersion = dossierFileLocalService
-					.getDossierFileInUseByGroupFileId(dossierId, dossierPartId,
-						fileGroupId);
+			DossierPart dossierPart = dossierPartLocalService
+				.getDossierPart(dossierPartId);
+
+			if (dossierPart
+				.getPartType() != PortletConstants.DOSSIER_PART_TYPE_OTHER &&
+				dossierPart
+					.getPartType() != PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT) {
+				if (fileGroupId > 0) {
+					curVersion = dossierFileLocalService
+						.getDossierFileInUseByGroupFileId(dossierId,
+							dossierPartId, fileGroupId);
+				}
+				else {
+					curVersion = dossierFileLocalService
+						.getDossierFileInUse(dossierId, dossierPartId);
+				}
 			}
-			else {
-				curVersion = dossierFileLocalService
-					.getDossierFileInUse(dossierId, dossierPartId);
-			}
+
 		}
 		catch (Exception e) {
 		}
