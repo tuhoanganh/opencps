@@ -122,7 +122,7 @@
 			<liferay-ui:message key="keypay-success"></liferay-ui:message>
 		</div>
 		<%
-			String receptionNo = good_code.split("GC_")[1];
+			String receptionNo = good_code;
 			System.out.println("----RECEPTION NO----" + receptionNo);
 			System.out.println("----GOOD CODE----" + good_code);
 			Dossier dossier = null;
@@ -205,7 +205,7 @@
 	</c:when>
 	<c:otherwise>
 		<%
-			//String receptionNo = good_code.split("GC_")[1];
+			String receptionNo = good_code;
 			System.out.println("----RECEPTION NO----" + receptionNo);
 			System.out.println("----GOOD CODE----" + good_code);
 
