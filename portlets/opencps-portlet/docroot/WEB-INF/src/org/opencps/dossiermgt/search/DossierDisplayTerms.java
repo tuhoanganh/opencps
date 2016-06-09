@@ -82,6 +82,7 @@ public class DossierDisplayTerms extends DisplayTerms {
 	public static final String SERVICE_NAME = "serviceName";
 	public static final String SERVICE_NO = "serviceNo";
 	public static final String ACCOUNT_TYPE = "accountType";
+	public static final String REDIRECT_PAYMENT_URL = "redirectPaymentURL";
 
 	public static final String USER_ID = "userId";
 
@@ -606,4 +607,24 @@ public class DossierDisplayTerms extends DisplayTerms {
 	protected Date receiveDatetime;
 	protected Date estimateDatetime;
 	protected Date finishDatetime;
+	
+	protected String redirectPaymentURL;
+
+	
+    /**
+     * @return the redirectPaymentURL
+     */
+    public String getRedirectPaymentURL() {
+    
+    	return redirectPaymentURL;
+    }
+
+	
+    /**
+     * @param redirectPaymentURL the redirectPaymentURL to set
+     */
+    public void setRedirectPaymentURL(String redirectPaymentURL) {
+    
+    	this.redirectPaymentURL = redirectPaymentURL;
+    }
 }

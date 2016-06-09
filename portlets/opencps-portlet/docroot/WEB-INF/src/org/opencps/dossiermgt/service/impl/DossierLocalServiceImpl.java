@@ -99,16 +99,16 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 * @throws PortalException
 	 */
 	public Dossier addDossier(
-		long userId, long ownerOrganizationId, long dossierTemplateId,
-		String templateFileNo, long serviceConfigId, long serviceInfoId,
-		String serviceDomainIndex, long govAgencyOrganizationId,
-		String govAgencyCode, String govAgencyName, int serviceMode,
-		String serviceAdministrationIndex, String cityCode, String cityName,
-		String districtCode, String districtName, String wardName,
-		String wardCode, String subjectName, String subjectId, String address,
-		String contactName, String contactTelNo, String contactEmail,
-		String note, int dossierSource, int dossierStatus, long parentFolderId,
-		ServiceContext serviceContext)
+	    long userId, long ownerOrganizationId, long dossierTemplateId,
+	    String templateFileNo, long serviceConfigId, long serviceInfoId,
+	    String serviceDomainIndex, long govAgencyOrganizationId,
+	    String govAgencyCode, String govAgencyName, int serviceMode,
+	    String serviceAdministrationIndex, String cityCode, String cityName,
+	    String districtCode, String districtName, String wardName,
+	    String wardCode, String subjectName, String subjectId, String address,
+	    String contactName, String contactTelNo, String contactEmail,
+	    String note, int dossierSource, int dossierStatus, long parentFolderId,
+	    String redirectPaymentURL, ServiceContext serviceContext)
 		throws SystemException, PortalException {
 
 		long dossierId = counterLocalService
@@ -199,6 +199,8 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 			.setWardCode(wardCode);
 		dossier
 			.setWardName(wardName);
+		
+		dossier.setKeypayRedirectUrl(redirectPaymentURL);
 
 		dossier = dossierPersistence
 			.update(dossier);
