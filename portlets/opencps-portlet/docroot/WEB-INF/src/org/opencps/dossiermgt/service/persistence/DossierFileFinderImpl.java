@@ -276,7 +276,7 @@ public class DossierFileFinderImpl extends BasePersistenceImpl<DossierFile>
 			if (keywords == null || keywords.length == 0) {
 				sql = StringUtil
 					.replace(sql,
-						"(lower(opencps_dossier_file.displayName) LIKE ? [$AND_OR_NULL_CHECK$])",
+						"AND (lower(opencps_dossier_file.displayName) LIKE ? [$AND_OR_NULL_CHECK$])",
 						StringPool.BLANK);
 
 				sql = StringUtil
@@ -566,7 +566,7 @@ public class DossierFileFinderImpl extends BasePersistenceImpl<DossierFile>
 			if (keywords == null || keywords.length == 0) {
 				sql = StringUtil
 					.replace(sql,
-						"(lower(opencps_dossier_file.displayName) LIKE ? [$AND_OR_NULL_CHECK$])",
+						"AND (lower(opencps_dossier_file.displayName) LIKE ? [$AND_OR_NULL_CHECK$])",
 						StringPool.BLANK);
 
 				sql = StringUtil
