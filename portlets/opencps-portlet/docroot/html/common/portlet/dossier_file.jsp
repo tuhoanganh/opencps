@@ -25,7 +25,7 @@
 
 <liferay-ui:tabs
 	names="upload-file,select-file"
-	refresh="<%= true %>"
+	refresh="<%= false %>"
 	value="<%=tab1 %>"
 >
 	<liferay-ui:section>

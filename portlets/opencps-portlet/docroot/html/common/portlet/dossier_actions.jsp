@@ -140,7 +140,7 @@
 								</c:otherwise>
 							</c:choose>
 						</c:otherwise>
-					</c:choose>remo
+					</c:choose>
 				</td>
 				
 				<td width="10%" align="right">
