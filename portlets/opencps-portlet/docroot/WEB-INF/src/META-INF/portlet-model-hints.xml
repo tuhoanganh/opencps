@@ -445,7 +445,9 @@
 		<field name="finishDatetime" type="Date" />
 		<field name="dossierStatus" type="int" />
 		<field name="dossierSource" type="int" />
-		<field name="keypayRedirectUrl" type="String" />
+		<field name="keypayRedirectUrl" type="String" >
+			<hint name="max-length">1000</hint>
+		</field>
 	</model>
 	<model name="org.opencps.dossiermgt.model.DossierFile">
 		<field name="dossierFileId" type="long" />
