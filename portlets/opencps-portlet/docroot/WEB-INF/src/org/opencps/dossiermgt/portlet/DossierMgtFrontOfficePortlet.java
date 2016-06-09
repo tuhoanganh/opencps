@@ -1231,6 +1231,10 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		String redirectURL = ParamUtil
 			.getString(actionRequest, "redirectURL");
+		
+		String redirectPaymentURL =
+		    ParamUtil.getString(
+		        actionRequest, DossierDisplayTerms.REDIRECT_PAYMENT_URL);
 
 		try {
 			ServiceContext serviceContext = ServiceContextFactory
@@ -1334,7 +1338,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 						PortletConstants.DOSSIER_SOURCE_DIRECT,
 						PortletConstants.DOSSIER_STATUS_NEW,
 						dossierFolder
-							.getFolderId(),
+							.getFolderId(), redirectPaymentURL,
 						serviceContext);
 
 			}
