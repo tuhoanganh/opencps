@@ -99,62 +99,75 @@
 		>
 			<%
 				// no column
-				row.addText(String.valueOf(row.getPos() + 1));
-				
-				//reception no column
-				Dossier dossier = null; 
-				try {
-					dossier = DossierLocalServiceUtil.getDossier(paymentFile.getDossierId());
-				}
-				catch (NoSuchDossierException e) {
+					row.addText(String.valueOf(row.getPos() + 1));
 					
-				}
-				
-				ServiceInfo serviceInfo = null;
-				try {
-					if (dossier != null)
-						serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(dossier.getServiceInfoId());	
-				}
-				catch (NoSuchServiceInfoException e) {
+					//reception no column
+					Dossier dossier = null; 
+					try {
+						dossier = DossierLocalServiceUtil.getDossier(paymentFile.getDossierId());
+					}
+					catch (NoSuchDossierException e) {
+						
+					}
 					
-				}
-				
-				row.addText(Validator.isNotNull(dossier) ? dossier.getReceptionNo() : "");
-				
-				//gov agency name column
-				row.addText(dossier != null ? dossier.getGovAgencyName() : "");
-							
-				//payment name column
-				row.addText(paymentFile.getPaymentName());
-				
-				//amount column
-				row.addText(String.valueOf(NumberFormat.getNumberInstance(new Locale("vi", "VN")).format(paymentFile.getAmount())));
-				
-				// payment status column
-				String paymentStatusText = "";
-				switch (paymentFile.getPaymentStatus()) {
-				case PaymentMgtUtil.PAYMENT_STATUS_ON_PROCESSING:
-					paymentStatusText = LanguageUtil.get(pageContext, "on-processing");
-					break;
-				case PaymentMgtUtil.PAYMENT_STATUS_REQUESTED:
-					paymentStatusText = LanguageUtil.get(pageContext, "requested");
-					break;
-				case PaymentMgtUtil.PAYMENT_STATUS_CONFIRMED:
-					paymentStatusText = LanguageUtil.get(pageContext, "confirmed");
-					break;
-				case PaymentMgtUtil.PAYMENT_STATUS_APPROVED:
-					paymentStatusText = LanguageUtil.get(pageContext, "approved");
-					break;
-				case PaymentMgtUtil.PAYMENT_STATUS_REJECTED:
-					paymentStatusText = LanguageUtil.get(pageContext, "rejected");
-					break;
-				default:
-					paymentStatusText = "";		
-					break;
-				}
-				row.addText(paymentStatusText);
-				
-				row.addJSP("center", SearchEntry.DEFAULT_VALIGN,  "/html/portlets/paymentmgt/frontoffice/paymentfile_actions.jsp", config.getServletContext(), request, response);
+					ServiceInfo serviceInfo = null;
+					try {
+						if (dossier != null)
+							serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(dossier.getServiceInfoId());	
+					}
+					catch (NoSuchServiceInfoException e) {
+						
+					}
+					
+					row.addText(Validator.isNotNull(dossier) ? dossier.getReceptionNo() : "");
+					
+					//gov agency name column
+						row.addText(PaymentMgtUtil.getOwnerPayment(
+						    paymentFile.getOwnerUserId(),
+						    paymentFile.getOwnerOrganizationId()));
+
+						//payment name column
+						row.addText(paymentFile.getPaymentName());
+
+						//amount column
+						row.addText(String.valueOf(NumberFormat.getNumberInstance(
+						    new Locale("vi", "VN")).format(paymentFile.getAmount())));
+
+						// payment status column
+						String paymentStatusText = "";
+						switch (paymentFile.getPaymentStatus()) {
+						case PaymentMgtUtil.PAYMENT_STATUS_ON_PROCESSING:
+							paymentStatusText =
+							    LanguageUtil.get(pageContext, "on-processing");
+							break;
+						case PaymentMgtUtil.PAYMENT_STATUS_REQUESTED:
+							paymentStatusText =
+							    LanguageUtil.get(pageContext, "requested");
+							break;
+						case PaymentMgtUtil.PAYMENT_STATUS_CONFIRMED:
+							paymentStatusText =
+							    LanguageUtil.get(pageContext, "confirmed");
+							break;
+						case PaymentMgtUtil.PAYMENT_STATUS_APPROVED:
+							paymentStatusText =
+							    LanguageUtil.get(pageContext, "approved");
+							break;
+						case PaymentMgtUtil.PAYMENT_STATUS_REJECTED:
+							paymentStatusText =
+							    LanguageUtil.get(pageContext, "rejected");
+							break;
+						default:
+							paymentStatusText = "";
+							break;
+						}
+
+						row.addText(paymentStatusText);
+
+						row.addJSP(
+						    "center",
+						    SearchEntry.DEFAULT_VALIGN,
+						    "/html/portlets/paymentmgt/frontoffice/paymentfile_actions.jsp",
+						    config.getServletContext(), request, response);
 			%>	
 		</liferay-ui:search-container-row> 
 	
