@@ -328,7 +328,6 @@ public class BackOfficeProcessEngine implements MessageListener {
 		catch (Exception e) {
 			_log.error(e);
 		}
-
 	}
 	
 
