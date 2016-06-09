@@ -59,7 +59,12 @@
 			if(isChildDossierPart && fileGroupId > 0){
 				version = DossierFileLocalServiceUtil.countDossierFile(dossierId, childDossierPartId, fileGroupId);
 			}else{
-				version = DossierFileLocalServiceUtil.countDossierFile(dossierId, dossierPartId);
+				if(partType == PortletConstants.DOSSIER_PART_TYPE_OTHER){
+					version = 1;
+				}else{
+					version = DossierFileLocalServiceUtil.countDossierFile(dossierId, dossierPartId);
+				}
+				
 			}
 			
 		}catch(Exception e){}
@@ -73,18 +78,34 @@
 			<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_SUBMIT%>">
 				<td width="80%" align="right">
 					<c:choose>
-						<c:when test="<%=isDynamicForm %>">
+						<c:when test="<%=isDynamicForm && fileEntryId <= 0 %>">
 							<aui:a 
 								id="<%=String.valueOf(dossierPartId) %>"
+								dossier="<%=String.valueOf(dossierId) %>"
 								dossier-part="<%=String.valueOf(isChildDossierPart ? childDossierPartId : dossierPartId) %>"
 								dossier-file="<%=String.valueOf(dossierFileId) %>"
+								file-group="<%=String.valueOf(fileGroupId) %>"
 								group-dossier-part="<%=String.valueOf(groupDossierPartId) %>"
 								group-name="<%=groupName %>"
 								href="javascript:void(0);" 
 								label="declaration-online" 
 								cssClass="opencps dossiermgt part-file-ctr declaration-online"
-								onClick='<%=renderResponse.getNamespace() + "declarationOnline(this)" %>'
 								title="declaration-online"
+							/>
+						</c:when>
+						<c:when test="<%=isDynamicForm && fileEntryId > 0  %>">
+							<aui:a 
+								id="<%=String.valueOf(dossierPartId) %>"
+								dossier="<%=String.valueOf(dossierId) %>"
+								dossier-part="<%=String.valueOf(isChildDossierPart ? childDossierPartId : dossierPartId) %>"
+								dossier-file="<%=String.valueOf(dossierFileId) %>"
+								file-group="<%=String.valueOf(fileGroupId) %>"
+								group-dossier-part="<%=String.valueOf(groupDossierPartId) %>"
+								group-name="<%=groupName %>"
+								href="javascript:void(0);" 
+								label="view-form" 
+								cssClass="opencps dossiermgt part-file-ctr view-form"
+								title="view-form"
 							/>
 						</c:when>
 						<c:otherwise>
@@ -336,18 +357,34 @@
 			<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_RESULT %>">
 				<td width="80%" align="right">
 					<c:choose>
-						<c:when test="<%=isDynamicForm %>">
+						<c:when test="<%=isDynamicForm && fileEntryId <= 0  %>">
 							<aui:a 
 								id="<%=String.valueOf(dossierPartId) %>"
-								dossier-part="<%=String.valueOf(dossierPartId) %>"
+								dossier="<%=String.valueOf(dossierId) %>"
+								dossier-part="<%=String.valueOf(isChildDossierPart ? childDossierPartId : dossierPartId) %>"
 								dossier-file="<%=String.valueOf(dossierFileId) %>"
+								file-group="<%=String.valueOf(fileGroupId) %>"
 								group-dossier-part="<%=String.valueOf(groupDossierPartId) %>"
 								group-name="<%=groupName %>"
 								href="javascript:void(0);" 
 								label="declaration-online" 
 								cssClass="opencps dossiermgt part-file-ctr declaration-online"
-								onClick='<%=renderResponse.getNamespace() + "declarationOnline(this)" %>'
 								title="declaration-online"
+							/>
+						</c:when>
+						<c:when test="<%=isDynamicForm && fileEntryId > 0  %>">
+							<aui:a 
+								id="<%=String.valueOf(dossierPartId) %>"
+								dossier="<%=String.valueOf(dossierId) %>"
+								dossier-part="<%=String.valueOf(isChildDossierPart ? childDossierPartId : dossierPartId) %>"
+								dossier-file="<%=String.valueOf(dossierFileId) %>"
+								file-group="<%=String.valueOf(fileGroupId) %>"
+								group-dossier-part="<%=String.valueOf(groupDossierPartId) %>"
+								group-name="<%=groupName %>"
+								href="javascript:void(0);" 
+								label="view-form" 
+								cssClass="opencps dossiermgt part-file-ctr view-form"
+								title="view-form"
 							/>
 						</c:when>
 						<c:otherwise>

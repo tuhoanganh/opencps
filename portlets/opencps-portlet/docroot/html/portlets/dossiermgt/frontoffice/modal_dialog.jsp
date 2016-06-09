@@ -31,6 +31,14 @@
 	<c:when test='<%=content.equals("individual") %>'>
 		<liferay-util:include page="/html/common/portlet/edit_dossier_individual_part.jsp" servletContext="<%=application %>"/>
 	</c:when>
+	<c:when test='<%=content.equals("declaration-online") %>'>
+		<liferay-util:include page="/html/common/portlet/dossier_dynamic_form.jsp" servletContext="<%=application %>"/>
+	</c:when>
+	<c:when test='<%=content.equals("view-form") %>'>
+		<liferay-util:include page="/html/common/portlet/dossier_dynamic_form.jsp" servletContext="<%=application %>">
+			
+		</liferay-util:include>
+	</c:when>
 </c:choose>
 
 
