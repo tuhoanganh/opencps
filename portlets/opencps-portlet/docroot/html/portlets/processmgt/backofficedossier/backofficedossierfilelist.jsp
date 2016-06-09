@@ -1,3 +1,23 @@
+
+<%
+/**
+ * OpenCPS is the open source Core Public Services software
+ * Copyright (C) 2016-present OpenCPS community
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>
+ */
+%>
+
 <%@page import="org.opencps.accountmgt.service.BusinessLocalServiceUtil"%>
 <%@page import="org.opencps.accountmgt.model.Business"%>
 <%@page import="org.opencps.dossiermgt.NoSuchDossierException"%>
@@ -17,24 +37,7 @@
 <%@page import="org.opencps.dossiermgt.model.DossierFile"%>
 <%@page import="org.opencps.dossiermgt.search.DossierFileSearchTerms"%>
 <%@page import="org.opencps.dossiermgt.search.DossierFileSearch"%>
-<%
-/**
- * OpenCPS is the open source Core Public Services software
- * Copyright (C) 2016-present OpenCPS community
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>
- */
-%>
+
 <%@ include file="../init.jsp"%>
 <liferay-util:include page="/html/portlets/processmgt/backofficedossier/toptabs.jsp" servletContext="<%=application %>" />
 <liferay-util:include page="/html/portlets/processmgt/backofficedossier/toolbar.jsp" servletContext="<%=application %>" />
@@ -99,7 +102,8 @@
 				row.addText(String.valueOf(row.getPos() + 1));
 				
 				// dossier file type column
-				String dossierFileTypeText = "";
+				String dossierFileTypeText = StringPool.BLANK;
+				
 				switch (dossierFile.getDossierFileType()) {
 				case DossierMgtUtil.DOSSIERFILETYPE_INPUT:
 					dossierFileTypeText = LanguageUtil.get(pageContext, "dossier-filetype-input");
@@ -108,7 +112,7 @@
 					dossierFileTypeText = LanguageUtil.get(pageContext, "dossier-filetype-output");
 					break;
 				default:
-					dossierFileTypeText = "";
+					dossierFileTypeText = StringPool.BLANK;
 					break;
 				}
 				row.addText(dossierFileTypeText);
@@ -121,7 +125,7 @@
 					row.addText(dateFormatDate.format(dossierFile.getDossierFileDate()));					
 				}
 				else {
-					row.addText("");
+					row.addText(StringPool.BLANK);
 				}
 				
 				// dossier display name column
@@ -135,7 +139,7 @@
 				catch (NoSuchDossierException e) {
 					
 				}
-				row.addText(dossier != null ? dossier.getReceptionNo() : "");
+				row.addText(dossier != null ? dossier.getReceptionNo() : StringPool.BLANK);
 
 				// owner name column
 				Citizen citizenOwner = null;
@@ -155,7 +159,7 @@
 				catch (SystemException e) {
 					
 				}
-				row.addText(citizenOwner != null ? citizenOwner.getFullName() : (businessOwner != null ? businessOwner.getName() : ""));
+				row.addText(citizenOwner != null ? citizenOwner.getFullName() : (businessOwner != null ? businessOwner.getName() : StringPool.BLANK));
 			%>	
 		</liferay-ui:search-container-row> 
 	

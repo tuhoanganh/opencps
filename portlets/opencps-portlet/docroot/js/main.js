@@ -101,13 +101,41 @@ Liferay.provide(window, 'addIndividualPartGroup', function(e, uri, ns) {
 	openDialog(portletURL.toString(), ns + 'add-individual-part-group', Liferay.Language.get("add-individual-part-group"));
 });
 
-Liferay.provide((window, 'dynamicForm'), function(e, uri, ns){
+Liferay.provide(window, 'dynamicForm', function(e, uri, ns){
 	var A = AUI();
+	
+	var instance = A.one(e);
+	
+	var dossierId = instance.attr('dossier');
+	
+	var dossierPartId = instance.attr('dossier-part');
+	
+	var dossierFileId = instance.attr('dossier-file');
+	
+	var fileGroupId = instance.attr('file-group');
+	
+	var groupDossierPartId = instance.attr('group-dossier-part');
+	
+	var groupName = instance.attr('group-name');
+	
+	//Create render url
+	var portletURL = Liferay.PortletURL.createURL(uri);
+	portletURL.setParameter("dossierId", dossierId);
+	portletURL.setParameter("dossierPartId", dossierPartId);
+	portletURL.setParameter("groupName", groupName);
+	portletURL.setParameter("dossierFileId", dossierFileId);
+	portletURL.setParameter("fileGroupId", fileGroupId);
+	portletURL.setParameter("groupDossierPartId", groupDossierPartId);
+	portletURL.setParameter("modalDialogId", "dossier-dynamic-form");
+	
+	//Open dialog
+	openDialog(portletURL.toString(), ns + 'dossier-dynamic-form', Liferay.Language.get("declaration-online"));
 });
 
 Liferay.provide(window, 'closeDialog', function(id, portletName) {
 	
 	var dialog = Liferay.Util.getWindow(id);
+	alert(id);
 	if(portletName){
 		Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_' + portletName);
 	}
