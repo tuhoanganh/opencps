@@ -286,9 +286,9 @@ public class DossierFileFinderImpl extends BasePersistenceImpl<DossierFile>
 			}
 
 			if (Validator
-				.isName(templateFileNo)) {
+				.isNull(templateFileNo)) {
 				sql = StringUtil
-					.replace(sql, "(opencps_dossier_file.templateFileNo = ?)",
+					.replace(sql, "AND (opencps_dossier_file.templateFileNo = ?)",
 						StringPool.BLANK);
 			}
 
@@ -576,9 +576,9 @@ public class DossierFileFinderImpl extends BasePersistenceImpl<DossierFile>
 			}
 
 			if (Validator
-				.isName(templateFileNo)) {
+				.isNull(templateFileNo)) {
 				sql = StringUtil
-					.replace(sql, "(opencps_dossier_file.templateFileNo = ?)",
+					.replace(sql, "AND (opencps_dossier_file.templateFileNo = ?)",
 						StringPool.BLANK);
 			}
 
