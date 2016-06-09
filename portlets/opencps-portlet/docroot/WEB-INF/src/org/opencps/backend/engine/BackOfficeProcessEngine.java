@@ -233,7 +233,10 @@ public class BackOfficeProcessEngine implements MessageListener {
 				if (Validator.isNull(toEngineMsg.getReceptionNo())) {
 					String pattern = processWorkflow.getReceptionNoPattern();
 					if (Validator.isNotNull(pattern) && StringUtil.trim(pattern).length() != 0) {
+						
 						toBackOffice.setReceptionNo(DossierNoGenerator.genaratorNoReception(pattern)); 
+					} else {
+						toBackOffice.setReceptionNo(dossier.getReceptionNo());
 					}
 				}
 				else {
