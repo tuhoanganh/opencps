@@ -231,7 +231,10 @@ public class BackOfficeProcessEngine implements MessageListener {
 				toBackOffice.setUpdateDatetime(new Date());
 
 				if (Validator.isNull(toEngineMsg.getReceptionNo())) {
-					toBackOffice.setReceptionNo(DossierNoGenerator.genaratorNoReception(processWorkflow.getReceptionNoPattern()));
+					String pattern = processWorkflow.getReceptionNoPattern();
+					if (Validator.isNotNull(pattern) && StringUtil.trim(pattern).length() != 0) {
+						toBackOffice.setReceptionNo(DossierNoGenerator.genaratorNoReception(pattern)); 
+					}
 				}
 				else {
 					toBackOffice.setReceptionNo(toEngineMsg.getReceptionNo());
