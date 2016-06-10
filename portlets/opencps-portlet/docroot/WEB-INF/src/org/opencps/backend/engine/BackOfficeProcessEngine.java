@@ -275,14 +275,20 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 					String paymentOptions = StringUtil.merge(paymentMethods);
 
+					List<String> paymentMessages =
+					    PaymentRequestGenerator.getMessagePayment(processWorkflow.getPaymentFee());
+
+					String paymentName =
+					    (paymentMessages.size() != 0)
+					        ? paymentMessages.get(0) : StringPool.BLANK;
+
 					PaymentFile paymentFile =
 					    PaymentFileLocalServiceUtil.addPaymentFile(
 					        toEngineMsg.getDossierId(),
 					        toEngineMsg.getFileGroupId(), ownerUserId,
 					        ownerOrganizationId, govAgencyOrganizationId,
-					        changeStep.getStepName(),
-					        toEngineMsg.getActionDatetime(),
-					        (double) totalPayment, toEngineMsg.getActionNote(),
+					        paymentName, new Date(),
+					        (double) totalPayment, paymentName,
 					        StringPool.BLANK, paymentOptions);
 
 					if (paymentMethods.contains(PaymentRequestGenerator.PAY_METHOD_KEYPAY)) {
