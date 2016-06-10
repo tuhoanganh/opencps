@@ -82,6 +82,7 @@ public class PortletConstants {
 	public static final int DOSSIER_PART_TYPE_OPTION = 3;
 	public static final int DOSSIER_PART_TYPE_PRIVATE = 4;
 	public static final int DOSSIER_PART_TYPE_RESULT = 5;
+	public static final int DOSSIER_PART_TYPE_MULTIPLE_RESULT = 6;
 	
 	public static final int DOSSIER_FILE_SYNC_STATUS_NOSYNC = 0;
 	public static final int DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC = 1;

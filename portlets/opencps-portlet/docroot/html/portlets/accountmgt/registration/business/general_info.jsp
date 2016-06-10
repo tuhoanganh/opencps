@@ -37,11 +37,7 @@
 <%@ include file="../../init.jsp" %>
 
 <%
-	if(request.getAttribute(WebKeys.BUSINESS_ENTRY) != null){
-		business = (Business) request.getAttribute(WebKeys.BUSINESS_ENTRY);
-	}
-
-	long businessId = business!=null ? business.getBusinessId() : 0L;
+	long businessId = 0;
 	
 	long dictItemTypeId = 0;
 	
@@ -51,7 +47,21 @@
 	
 	boolean isCheckItemDomain = false;
 	
+	if(request.getAttribute(BusinessDisplayTerms.BUSINESS_BUSINESSID) != null && isAdminViewProfile){
+		businessId = (Long) request.getAttribute(BusinessDisplayTerms.BUSINESS_BUSINESSID);
+		if(businessId > 0){
+			try{
+				business = BusinessLocalServiceUtil.fetchBusiness(businessId);
+			}catch(Exception e){
+				//
+			}
+		}
+	}
+	
+	businessId = business!=null ? business.getBusinessId() : 0L;
+	
 	List<DictItem> dictItemDomains = new ArrayList<DictItem>();
+	
 	DictItem dictItemType = null;
 	
 	DictCollection dictCollectionDomain = null;
@@ -98,6 +108,7 @@
 				name="<%=BusinessDisplayTerms.BUSINESS_CREATEDDATE %>" 
 				value="<%=DateTimeUtil.convertDateToString(business.getCreateDate(), DateTimeUtil._VN_DATE_FORMAT) %>"
 				disabled="<%=isAdminViewProfile %>"
+				label="create-date"
 			/>
 		</aui:col>
 		<aui:col width="50">

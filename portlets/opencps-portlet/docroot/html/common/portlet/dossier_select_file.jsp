@@ -46,7 +46,10 @@
 	String templateFileNo = ParamUtil.getString(request, DossierDisplayTerms.TEMPLATE_FILE_NO);
 %>
 
-<liferay-ui:search-container searchContainer="<%= new DossierFileSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" headerNames="<%= headers %>">
+<liferay-ui:search-container 
+	searchContainer="<%= new DossierFileSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" 
+	headerNames="<%= headers %>"
+>
 
 	<liferay-ui:search-container-results>
 		<%

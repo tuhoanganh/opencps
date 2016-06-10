@@ -89,7 +89,7 @@
 								group-name="<%=groupName %>"
 								href="javascript:void(0);" 
 								label="declaration-online" 
-								cssClass="opencps dossiermgt part-file-ctr declaration-online"
+								cssClass="label opencps dossiermgt part-file-ctr declaration-online"
 								title="declaration-online"
 							/>
 						</c:when>
@@ -104,7 +104,7 @@
 								group-name="<%=groupName %>"
 								href="javascript:void(0);" 
 								label="view-form" 
-								cssClass="opencps dossiermgt part-file-ctr view-form"
+								cssClass="label opencps dossiermgt part-file-ctr view-form"
 								title="view-form"
 							/>
 						</c:when>
@@ -120,7 +120,7 @@
 										href="javascript:void(0);" 
 										label="view-attachment" 
 										cssClass="opencps dossiermgt part-file-ctr view-attachment"
-										title="view-attachment"
+										title="label view-attachment"
 									/>
 								</c:when>
 								<c:otherwise>
@@ -134,7 +134,7 @@
 										group-name="<%=groupName %>"
 										href="javascript:void(0);" 
 										label="upload-file" 
-										cssClass="opencps dossiermgt part-file-ctr upload-dossier-file"
+										cssClass="label opencps dossiermgt part-file-ctr upload-dossier-file"
 										title="upload-file"
 									/>
 								</c:otherwise>
@@ -180,7 +180,7 @@
 						group-name="<%=groupName %>"
 						href="javascript:void(0);" 
 						label="upload-file" 
-						cssClass="opencps dossiermgt part-file-ctr upload-dossier-file"
+						cssClass="label opencps dossiermgt part-file-ctr upload-dossier-file"
 						title="upload-file"
 					/>
 					
@@ -205,7 +205,7 @@
 								group-name="<%=groupName %>"
 								href="javascript:void(0);" 
 								label="view-attachment" 
-								cssClass="opencps dossiermgt part-file-ctr view-attachment"
+								cssClass="label opencps dossiermgt part-file-ctr view-attachment"
 								
 								title="view-attachment"
 							/>
@@ -221,7 +221,7 @@
 								group-name="<%=groupName %>"
 								href="javascript:void(0);" 
 								label="upload-file" 
-								cssClass="opencps dossiermgt part-file-ctr upload-dossier-file"
+								cssClass="label opencps dossiermgt part-file-ctr upload-dossier-file"
 								title="upload-file"
 							/>
 						</c:otherwise>
@@ -306,7 +306,7 @@
 								group-name="<%=groupName %>"
 								href="javascript:void(0);" 
 								label="view-attachment" 
-								cssClass="opencps dossiermgt part-file-ctr view-attachment"
+								cssClass="label opencps dossiermgt part-file-ctr view-attachment"
 								
 								title="view-attachment"
 							/>
@@ -322,7 +322,7 @@
 								group-name="<%=groupName %>"
 								href="javascript:void(0);" 
 								label="upload-file" 
-								cssClass="opencps dossiermgt part-file-ctr upload-dossier-file"
+								cssClass="label opencps dossiermgt part-file-ctr upload-dossier-file"
 								title="upload-file"
 							/>
 						</c:otherwise>
@@ -368,7 +368,7 @@
 								group-name="<%=groupName %>"
 								href="javascript:void(0);" 
 								label="declaration-online" 
-								cssClass="opencps dossiermgt part-file-ctr declaration-online"
+								cssClass="label opencps dossiermgt part-file-ctr declaration-online"
 								title="declaration-online"
 							/>
 						</c:when>
@@ -383,7 +383,7 @@
 								group-name="<%=groupName %>"
 								href="javascript:void(0);" 
 								label="view-form" 
-								cssClass="opencps dossiermgt part-file-ctr view-form"
+								cssClass="label opencps dossiermgt part-file-ctr view-form"
 								title="view-form"
 							/>
 						</c:when>
@@ -398,7 +398,7 @@
 										group-name="<%=groupName %>"
 										href="javascript:void(0);" 
 										label="view-attachment" 
-										cssClass="opencps dossiermgt part-file-ctr view-attachment"
+										cssClass="label opencps dossiermgt part-file-ctr view-attachment"
 										
 										title="view-attachment"
 									/>
@@ -414,7 +414,7 @@
 										group-name="<%=groupName %>"
 										href="javascript:void(0);" 
 										label="upload-file" 
-										cssClass="opencps dossiermgt part-file-ctr upload-dossier-file"
+										cssClass="label opencps dossiermgt part-file-ctr upload-dossier-file"
 										title="upload-file"
 									/>
 								</c:otherwise>
