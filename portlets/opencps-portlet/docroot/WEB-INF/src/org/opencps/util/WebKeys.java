@@ -167,5 +167,9 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	
 	public static final String PRE_CONDITION_ONELINE = "oneline";
 	
+	public static final int PAYMENT_METHOD_CASH = 1;
 	
+	public static final int PAYMENT_METHOD_KEYPAY = 2;
+	
+	public static final int PAYMENT_METHOD_BANK = 3;
 }

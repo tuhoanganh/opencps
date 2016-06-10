@@ -86,18 +86,23 @@ public class PaymentMgtUtil {
 
 			int paymentMethod = paymentFile.getPaymentMethod();
 
-			switch (paymentMethod) {
-			case 1:
-				paymentMethodName = "payment-method-cash";
-				break;
-			case 2:
-				paymentMethodName = "payment-method-keypay";
-				break;
-			case 4:
-				paymentMethodName = "payment-method-bank";
-				break;
-			default:
-				break;
+			if (paymentFile.getPaymentStatus() == 1 ||
+			    paymentFile.getPaymentStatus() == 2) {
+
+				switch (paymentMethod) {
+				case 1:
+					paymentMethodName = "payment-method-cash";
+					break;
+				case 2:
+					paymentMethodName = "payment-method-keypay";
+					break;
+				case 4:
+					paymentMethodName = "payment-method-bank";
+					break;
+				default:
+					break;
+				}
+
 			}
 		}
 		catch (Exception e) {

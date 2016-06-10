@@ -1,26 +1,4 @@
-<%@page import="org.opencps.keypay.model.KeyPay"%>
-<%@page import="java.util.Locale"%>
-<%@page import="java.text.NumberFormat"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="org.opencps.paymentmgt.service.PaymentConfigLocalServiceUtil"%>
-<%@page import="org.opencps.paymentmgt.model.PaymentConfig"%>
-<%@page import="org.opencps.keypay.security.HashFunction"%>
-<%@page import="java.util.Map"%>
-<%@page import="org.opencps.paymentmgt.util.PaymentMgtUtil"%>
-<%@page import="org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil"%>
-<%@page import="org.opencps.paymentmgt.model.PaymentFile"%>
-<%@page import="org.opencps.servicemgt.NoSuchServiceInfoException"%>
-<%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
-<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
-<%@page import="org.opencps.datamgt.NoSuchDictItemException"%>
-<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
-<%@page import="org.opencps.datamgt.model.DictItem"%>
-<%@page import="org.opencps.datamgt.NoSuchDictCollectionException"%>
-<%@page import="org.opencps.datamgt.service.DictCollectionLocalServiceUtil"%>
-<%@page import="org.opencps.datamgt.model.DictCollection"%>
-<%@page import="com.liferay.portal.kernel.exception.SystemException"%>
-<%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.model.Dossier"%>
+<%@page import="org.opencps.util.WebKeys"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -39,7 +17,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+
 <%@ include file="../init.jsp"%>
+
 <%
 	HttpServletRequest r = PortalUtil.getHttpServletRequest(renderRequest);
 	String responseCode = PortalUtil.getOriginalServletRequest(r).getParameter("response_code");
@@ -74,36 +54,8 @@
 	KeyPay keyPay = new KeyPay(PortalUtil.getOriginalServletRequest(r));
 	
 	long dossierId = GetterUtil.getLong(merchant_trans_id);
-	
-	/*
-	fields.put("command", command);
-    fields.put("merchant_trans_id", merchant_trans_id);
-    fields.put("merchant_code", merchant_code);
-    fields.put("good_code", good_code);
-    fields.put("net_cost", net_cost);
-    fields.put("ship_fee", ship_fee);
-    fields.put("tax", tax);
-    fields.put("service_code", service_code);
-    fields.put("currency_code", currency_code);
-	fields.put("response_code", response_code);
-	fields.put("bank_code", bank_code);
-	fields.put("desc_1", desc_1);
-	fields.put("desc_2", desc_2);
-	fields.put("desc_3", desc_3);
-	fields.put("desc_4", desc_4);
-	fields.put("desc_5", desc_5);	
-	*/
-%>
-<style>
-.lookup-result table {
-	width: 100%;
-}
 
-.lookup-result tr td {
-	padding: 5px;
-	border: 1px solid #cbcbcb;
-}
-</style>
+%>
 
 <portlet:renderURL var="backURL">
 	<portlet:param name="mvcPath"
@@ -123,12 +75,9 @@
 		</div>
 		<%
 			String receptionNo = good_code;
-			System.out.println("----RECEPTION NO----" + receptionNo);
-			System.out.println("----GOOD CODE----" + good_code);
 			Dossier dossier = null;
 			try {
 				dossier = DossierLocalServiceUtil.fetchDossier(dossierId);
-				System.out.println("----DOSSIER----" + dossier.getDossierId());
 			}
 			catch (SystemException e) {
 				
@@ -143,20 +92,16 @@
 			}
 			PaymentFile paymentFile = null;
 			try {
-				//paymentFile = PaymentFileLocalServiceUtil.getPaymentFileByGoodCode(scopeGroupId, good_code);
 				paymentFile = PaymentFileLocalServiceUtil.getPaymentFileByMerchantResponse(Long.parseLong(merchant_trans_id), good_code, Double.parseDouble(net_cost));
 				if (paymentFile != null) {
 					PaymentConfig paymentConfig = PaymentConfigLocalServiceUtil.getPaymentConfigByGovAgency(scopeGroupId, paymentFile.getGovAgencyOrganizationId());
 					if (paymentConfig != null) {
-						System.out.println("----HASH----" + keyPay.getSecureHashMerchant());
-						System.out.println("----SECURE HASH----" + secure_hash);
 						if (keyPay.checkSecureHash(secure_hash)) {
-							System.out.println("----PAY SUCCESS---");
 							paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_APPROVED);
-							PaymentFileLocalServiceUtil.updatePaymentFile(paymentFile);							
+							paymentFile.setPaymentMethod(WebKeys.PAYMENT_METHOD_KEYPAY);
+							PaymentFileLocalServiceUtil.updatePaymentFile(paymentFile);
 						}
 					}
-					System.out.println("----PAYMENT FILE----" + paymentFile.getAmount());
 				}
 			}
 			catch (SystemException e) {
@@ -206,13 +151,12 @@
 	<c:otherwise>
 		<%
 			String receptionNo = good_code;
-			System.out.println("----RECEPTION NO----" + receptionNo);
-			System.out.println("----GOOD CODE----" + good_code);
 
 			PaymentFile paymentFile = null;
 			try {
 				paymentFile = PaymentFileLocalServiceUtil.getPaymentFileByGoodCode(scopeGroupId, good_code);
 				paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_REJECTED);
+				paymentFile.setPaymentMethod(WebKeys.PAYMENT_METHOD_KEYPAY);
 				PaymentFileLocalServiceUtil.updatePaymentFile(paymentFile);
 			}
 			catch (SystemException e) {
