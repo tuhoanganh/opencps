@@ -40,20 +40,28 @@
 <%@ include file="../../init.jsp" %>
 
 <%
-	
-	if(request.getAttribute(WebKeys.CITIZEN_ENTRY) != null){
-		citizen = (Citizen) request.getAttribute(WebKeys.CITIZEN_ENTRY);	
-	}
+	long citizenId = 0; 
+
+	Citizen citizenFromProfile = null;
 
 	DictCollection dictCollection = null;
-	
-	long citizenId = citizen != null ? citizen.getCitizenId() : 0L;
 	
 	boolean isViewProfile = GetterUtil.get( (Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_VIEW_PROFILE), false);
 	
 	boolean isAdminViewProfile = GetterUtil.get((Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_ADMIN_PROFILE), false);
 	
-	Citizen citizenFromProfile = null;
+	if(request.getAttribute(CitizenDisplayTerms.CITIZEN_ID) != null && isAdminViewProfile){
+		citizenId = (Long) request.getAttribute(CitizenDisplayTerms.CITIZEN_ID);
+		if(citizenId > 0){
+			try{
+				citizen = CitizenLocalServiceUtil.fetchCitizen(citizenId);
+			}catch(Exception e){
+				//
+			}
+		}
+	}
+	
+	citizenId = citizen != null ? citizen.getCitizenId() : 0L;
 	
 	Date defaultBirthDate = citizen != null && citizen.getBirthdate() != null ? 
 		citizen.getBirthdate() : DateTimeUtil.convertStringToDate("01/01/1970");
