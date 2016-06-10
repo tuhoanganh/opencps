@@ -26,7 +26,7 @@
 
 <c:choose>
 	<c:when test='<%=content.equals("upload-file") %>'>
-		<liferay-util:include page="/html/common/portlet/dossier_file.jsp" servletContext="<%=application %>"/>
+		<liferay-util:include page='<%=templatePath + "dossier_file.jsp" %>' servletContext="<%=application %>"/>
 	</c:when>
 	<c:when test='<%=content.equals("individual") %>'>
 		<liferay-util:include page="/html/common/portlet/edit_dossier_individual_part.jsp" servletContext="<%=application %>"/>
@@ -40,5 +40,4 @@
 		</liferay-util:include>
 	</c:when>
 </c:choose>
-
 

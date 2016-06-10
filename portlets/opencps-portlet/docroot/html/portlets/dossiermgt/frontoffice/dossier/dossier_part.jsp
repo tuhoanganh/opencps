@@ -143,7 +143,7 @@
 													<c:when test="<%=(partType == PortletConstants.DOSSIER_PART_TYPE_OPTION ||
 														partType == PortletConstants.DOSSIER_PART_TYPE_OTHER) && level == 0%>"
 													>
-														<i class="fa fa-dot-circle-o" aria-hidden="true"></i>
+														<i class="fa fa-folder-o" aria-hidden="true"></i>
 													</c:when>
 														<c:otherwise>
 														<i 
@@ -289,7 +289,7 @@
 							<div class='<%="opencps dossiermgt dossier-part-row r-" + index%>'>
 								<span class='<%="level-0" + " opencps dossiermgt dossier-part"%>'>
 									<span class="row-icon">
-										<i class="fa fa-dot-circle-o" aria-hidden="true"></i>
+										<i class="fa fa-folder-o" aria-hidden="true"></i>
 									</span>
 									<span class="opencps dossiermgt dossier-part-name">
 										<%=dossierPartLevel1.getPartName() %>
