@@ -80,6 +80,7 @@
 				name="<%=CitizenDisplayTerms.CITIZEN_CREATEDDATE %>" 
 				value="<%=DateTimeUtil.convertDateToString(citizen.getCreateDate(), DateTimeUtil._VN_DATE_FORMAT) %>"
 				disabled="<%=isAdminViewProfile %>"
+				label="create-date"
 			/>
 		</aui:col>
 		<aui:col width="50">
