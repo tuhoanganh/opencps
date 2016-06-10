@@ -144,7 +144,6 @@
 		<column name="serviceBusinees" type="boolean" />
 		<column name="serviceProcessId" type="long" />
 		<column name="domainCode" type="String" />
-		<column name="serviceMode" type="int" />
 
 		<finder return-type="Collection" name="DossierTemplateId">
 			<finder-column name="dossierTemplateId" />
