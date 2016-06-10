@@ -132,10 +132,12 @@ Liferay.provide(window, 'dynamicForm', function(e, uri, ns){
 	openDialog(portletURL.toString(), ns + 'dossier-dynamic-form', Liferay.Language.get("declaration-online"));
 });
 
+
+
 Liferay.provide(window, 'closeDialog', function(id, portletName) {
 	
 	var dialog = Liferay.Util.getWindow(id);
-	alert(id);
+	
 	if(portletName){
 		Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_' + portletName);
 	}

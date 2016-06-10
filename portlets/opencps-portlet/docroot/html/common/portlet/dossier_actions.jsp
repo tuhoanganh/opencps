@@ -119,8 +119,8 @@
 										group-name="<%=groupName %>"
 										href="javascript:void(0);" 
 										label="view-attachment" 
-										cssClass="opencps dossiermgt part-file-ctr view-attachment"
-										title="label view-attachment"
+										cssClass="label opencps dossiermgt part-file-ctr view-attachment"
+										title="view-attachment"
 									/>
 								</c:when>
 								<c:otherwise>
