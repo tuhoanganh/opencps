@@ -19,6 +19,6 @@
 <%@ include file="/init.jsp" %> 
 <%@page import="org.opencps.accountmgt.search.BusinessDisplayTerms"%>
 
-<aui:input type="password" name="<%=BusinessDisplayTerms.CURRENT_PASSWORD %>" />
+<aui:input type="password" name="<%=BusinessDisplayTerms.CURRENT_PASSWORD %>" label="cur-pass"/>
 <aui:input type="password" name="<%=BusinessDisplayTerms.NEW_PASSWORD %>" />
 <aui:input type="password" name="<%=BusinessDisplayTerms.RE_PASSWORD %>" />
