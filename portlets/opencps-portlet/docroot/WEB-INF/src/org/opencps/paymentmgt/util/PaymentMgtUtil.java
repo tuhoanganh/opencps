@@ -16,6 +16,11 @@
 */
 package org.opencps.paymentmgt.util;
 
+import org.opencps.paymentmgt.model.PaymentFile;
+import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
+
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.User;
@@ -38,28 +43,69 @@ public class PaymentMgtUtil {
 	 * @return
 	 */
 	public static String getOwnerPayment(long ownerUserId, long ownerOrgId) {
+
 		String ownerName = StringPool.BLANK;
-		
+
 		if (ownerUserId != 0) {
 			try {
 				User user = UserLocalServiceUtil.fetchUser(ownerUserId);
 				ownerName = user.getFullName();
-            }
-            catch (Exception e) {
-	            // TODO: handle exception
-            }
+			}
+			catch (Exception e) {
+				_log.error(e);
+			}
 		}
-		
+
 		if (ownerOrgId != 0) {
 			try {
-	            Organization org = OrganizationLocalServiceUtil.fetchOrganization(ownerOrgId);
-	            ownerName = org.getName();
-            }
-            catch (Exception e) {
-	            // TODO: handle exception
-            }
+				Organization org =
+				    OrganizationLocalServiceUtil.fetchOrganization(ownerOrgId);
+				ownerName = org.getName();
+			}
+			catch (Exception e) {
+				_log.error(e);
+			}
 		}
-		
+
 		return ownerName;
 	}
+	
+	/**
+	 * @param paymentFileId
+	 * @return
+	 */
+	public static String getPaymentMethod(long paymentFileId) {
+
+		String paymentMethodName = StringPool.BLANK;
+
+		PaymentFile paymentFile = null;
+
+		try {
+			paymentFile =
+			    PaymentFileLocalServiceUtil.fetchPaymentFile(paymentFileId);
+
+			int paymentMethod = paymentFile.getPaymentMethod();
+
+			switch (paymentMethod) {
+			case 1:
+				paymentMethodName = "payment-method-cash";
+				break;
+			case 2:
+				paymentMethodName = "payment-method-keypay";
+				break;
+			case 4:
+				paymentMethodName = "payment-method-bank";
+				break;
+			default:
+				break;
+			}
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
+
+		return paymentMethodName;
+	}
+	
+	public static Log _log = LogFactoryUtil.getLog(PaymentMgtUtil.class);
 }
