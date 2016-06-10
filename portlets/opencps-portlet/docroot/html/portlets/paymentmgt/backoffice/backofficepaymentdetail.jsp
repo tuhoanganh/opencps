@@ -28,16 +28,7 @@
 %>
 <%@ include file="../init.jsp"%>
 
-<style>
-.lookup-result table {
-	width: 100%;
-}
 
-.lookup-result tr td {
-	padding: 5px;
-	border: 1px solid #cbcbcb;
-}
-</style>
 <%
 	Format dateFormatDate = FastDateFormatFactoryUtil.getDate(locale, timeZone);
 	String backRedirect = ParamUtil.getString(request, "redirect");
