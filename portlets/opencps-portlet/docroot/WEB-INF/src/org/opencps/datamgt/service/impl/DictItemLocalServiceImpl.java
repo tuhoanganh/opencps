@@ -221,7 +221,11 @@ public class DictItemLocalServiceImpl extends DictItemLocalServiceBaseImpl {
 		return dictItemPersistence
 			.countByC_N(dictCollectionId, itemNames);
 	}
-
+	
+	public DictItem getDicItemByTreeIndex(String treeIndex)
+					throws NoSuchDictItemException, SystemException {
+		return dictItemPersistence.findByTreeInDexOne(treeIndex);
+	}
 	/**
 	 * <p> Phuong thu xoa DictItem theo dictItemId. Neu DictItem co cap con thi
 	 * khong xoa

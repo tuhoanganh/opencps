@@ -38,12 +38,19 @@ public class ServiceConfigSearchTerm extends ServiceConfigDisplayTerms{
 		govAgencyName = ParamUtil.getString(request, SERVICE_CONFIG_GOVAGENCYNAME);
 		domainCode = ParamUtil.getString(request, SERVICE_CONFIG_DOMAINCODE);
 		administrationCode = ParamUtil.getString(request, SERVICE_ADMINISTRATION);
+		serviceInstruction = ParamUtil.getString(request, SERVICE_INSTRUCTION);
 		
-		serviceMode = ParamUtil.getInteger(request, SERVICE_CONFIG_SERVICEMODE);
+		serviceLevel = ParamUtil.getInteger(request, SERVICE_CONFIG_SERVICELEVEL);
+		
+		servicePortal = ParamUtil.getBoolean(request, SERVICE_PORTAL);
+		serviceOnegate = ParamUtil.getBoolean(request, SERVICE_ONEGATE);
+		serviceBackoffice = ParamUtil.getBoolean(request, SERVICE_BACKOFFICE);
+		serviceCitizen = ParamUtil.getBoolean(request, SERVICE_CITIZEN);
+		serviceBusinees = ParamUtil.getBoolean(request, SERVICE_BUSINEES);
 	}
 	
-    public long getServiceConfigId() {
-    
+	public long getServiceConfigId() {
+	    
     	return serviceConfigId;
     }
 
@@ -148,18 +155,6 @@ public class ServiceConfigSearchTerm extends ServiceConfigDisplayTerms{
     
     	this.govAgencyName = govAgencyName;
     }
-
-	
-    public int getServiceMode() {
-    
-    	return serviceMode;
-    }
-
-	
-    public void setServiceMode(int serviceMode) {
-    
-    	this.serviceMode = serviceMode;
-    }
 	
     public String getDomainCode() {
     
@@ -171,10 +166,93 @@ public class ServiceConfigSearchTerm extends ServiceConfigDisplayTerms{
     
     	this.domainCode = domainCode;
     }
+    
+    
+	public int getServiceLevel() {
+	
+		return serviceLevel;
+	}
 
 	
-    public String getAdministrationCode() {
-    
+	public void setServiceLevel(int serviceLevel) {
+	
+		this.serviceLevel = serviceLevel;
+	}
+
+	
+	public boolean isServicePortal() {
+	
+		return servicePortal;
+	}
+
+	
+	public void setServicePortal(boolean servicePortal) {
+	
+		this.servicePortal = servicePortal;
+	}
+
+	
+	public boolean isServiceOnegate() {
+	
+		return serviceOnegate;
+	}
+
+	
+	public void setServiceOnegate(boolean serviceOnegate) {
+	
+		this.serviceOnegate = serviceOnegate;
+	}
+
+	
+	public boolean isServiceBackoffice() {
+	
+		return serviceBackoffice;
+	}
+
+	
+	public void setServiceBackoffice(boolean serviceBackoffice) {
+	
+		this.serviceBackoffice = serviceBackoffice;
+	}
+
+	
+	public boolean isServiceCitizen() {
+	
+		return serviceCitizen;
+	}
+
+	
+	public void setServiceCitizen(boolean serviceCitizen) {
+	
+		this.serviceCitizen = serviceCitizen;
+	}
+
+	
+	public boolean isServiceBusinees() {
+	
+		return serviceBusinees;
+	}
+
+	
+	public void setServiceBusinees(boolean serviceBusinees) {
+	
+		this.serviceBusinees = serviceBusinees;
+	}
+
+	
+	public String getServiceInstruction() {
+	
+		return serviceInstruction;
+	}
+
+	
+	public void setServiceInstruction(String serviceInstruction) {
+	
+		this.serviceInstruction = serviceInstruction;
+	}
+
+	public String getAdministrationCode() {
+        
     	return administrationCode;
     }
 
@@ -184,6 +262,13 @@ public class ServiceConfigSearchTerm extends ServiceConfigDisplayTerms{
     	this.administrationCode = administrationCode;
     }
 
+	protected int serviceLevel;
+	
+	protected boolean servicePortal;
+	protected boolean serviceOnegate;
+	protected boolean serviceBackoffice;
+	protected boolean serviceCitizen;
+	protected boolean serviceBusinees;
 
 	protected long serviceConfigId;
 	protected long serviceInfoId;
@@ -197,6 +282,5 @@ public class ServiceConfigSearchTerm extends ServiceConfigDisplayTerms{
 	protected String govAgencyName;
 	protected String domainCode;
 	protected String administrationCode;
-	
-	protected int serviceMode;
+	protected String serviceInstruction;
 }

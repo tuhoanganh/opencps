@@ -134,10 +134,17 @@
 		<column name="dossierTemplateId" type="long" />
 		<column name="govAgencyCode" type="String" />
 		<column name="govAgencyName" type="String" />
+		<column name="serviceInstruction" type="String" />
+		<column name="serviceLevel" type="int" />
+		<column name="servicePortal" type="boolean" />
+		<column name="serviceOnegate" type="boolean" />
+		<column name="serviceBackoffice" type="boolean" />
 		<column name="govAgencyOrganizationId" type="long" />
-		<column name="serviceMode" type="int" />
+		<column name="serviceCitizen" type="boolean" />
+		<column name="serviceBusinees" type="boolean" />
 		<column name="serviceProcessId" type="long" />
 		<column name="domainCode" type="String" />
+		<column name="serviceMode" type="int" />
 
 		<finder return-type="Collection" name="DossierTemplateId">
 			<finder-column name="dossierTemplateId" />
