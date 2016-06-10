@@ -38,6 +38,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.OrderByComparatorFactory;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.service.ServiceContext;
 
@@ -246,14 +247,6 @@ public class DossierFileLocalServiceImpl
 
 		Date now = new Date();
 
-		// Add file
-		FileEntry fileEntry = dlAppService
-			.addFileEntry(serviceContext
-				.getScopeGroupId(), folderId, sourceFileName, mimeType,
-				oldDossierFile
-					.getDisplayName(),
-				description, changeLog, is, size, serviceContext);
-
 		dossierFile
 			.setUserId(oldDossierFile
 				.getUserId());
@@ -288,9 +281,7 @@ public class DossierFileLocalServiceImpl
 		dossierFile
 			.setDossierPartId(oldDossierFile
 				.getDossierPartId());
-		dossierFile
-			.setFileEntryId(fileEntry
-				.getFileEntryId());
+
 		dossierFile
 			.setFormData(oldDossierFile
 				.getFormData());
@@ -319,6 +310,20 @@ public class DossierFileLocalServiceImpl
 		dossierFile
 			.setOid(oldDossierFile
 				.getOid());
+
+		// Add file
+		FileEntry fileEntry = dlAppService
+			.addFileEntry(serviceContext
+				.getScopeGroupId(), folderId, sourceFileName, mimeType,
+				oldDossierFile
+					.getDisplayName() + StringPool.DASH + dossierFileId +
+					StringPool.DASH + (oldDossierFile
+						.getVersion() + 1),
+				description, changeLog, is, size, serviceContext);
+
+		dossierFile
+			.setFileEntryId(fileEntry
+				.getFileEntryId());
 
 		dossierFileLocalService
 			.removeDossierFile(oldDossierFile
@@ -400,12 +405,6 @@ public class DossierFileLocalServiceImpl
 				.getFileGroupId();
 		}
 
-		// Add file
-		FileEntry fileEntry = dlAppService
-			.addFileEntry(serviceContext
-				.getScopeGroupId(), folderId, sourceFileName, mimeType,
-				displayName, description, changeLog, is, size, serviceContext);
-
 		dossierFile
 			.setUserId(userId);
 		dossierFile
@@ -432,9 +431,7 @@ public class DossierFileLocalServiceImpl
 			.setDossierId(dossierId);
 		dossierFile
 			.setDossierPartId(dossierPartId);
-		dossierFile
-			.setFileEntryId(fileEntry
-				.getFileEntryId());
+
 		dossierFile
 			.setFormData(formData);
 		dossierFile
@@ -461,6 +458,19 @@ public class DossierFileLocalServiceImpl
 
 		dossierFile
 			.setVersion(version);
+
+		// Add file
+		FileEntry fileEntry = dlAppService
+			.addFileEntry(serviceContext
+				.getScopeGroupId(), folderId, sourceFileName,
+				mimeType,
+				displayName + StringPool.DASH + dossierFileId +
+					StringPool.DASH + version,
+				description, changeLog, is, size, serviceContext);
+
+		dossierFile
+			.setFileEntryId(fileEntry
+				.getFileEntryId());
 
 		DossierFile curVersion = null;
 
@@ -893,7 +903,10 @@ public class DossierFileLocalServiceImpl
 		// Add file
 		FileEntry fileEntry = dlAppService
 			.addFileEntry(serviceContext
-				.getScopeGroupId(), folderId, sourceFileName, mimeType, title,
+				.getScopeGroupId(), folderId, sourceFileName, mimeType,
+				title + StringPool.DASH + dossierFileId + StringPool.DASH +
+					dossierFile
+						.getVersion(),
 				description, changeLog, is, size, serviceContext);
 
 		dossierFile
