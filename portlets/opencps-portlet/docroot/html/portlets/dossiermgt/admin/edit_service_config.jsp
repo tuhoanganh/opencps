@@ -1,3 +1,4 @@
+<%@page import="org.opencps.util.PortletUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -64,6 +65,7 @@
 	long serviceInfoId = serviceConfig != null ? serviceConfig.getServiceInfoId() : 0L;
 	
 	String dictItemServiceDomainId = "0";
+	String dictItemGovAgencyId = "0";
 	
 	String backURL = ParamUtil.getString(request, "backURL"); 
 	
@@ -73,17 +75,29 @@
 		backURL = backRender.toString();
 	}
 	
-	DictCollection dictCollectionServiceDomain = null;
-	DictItem dictItemServiceDomain = null;
 	List<ServiceInfo> serviceInfos = new ArrayList<ServiceInfo>();
-	List<DossierTemplate> dossierTemplates = new ArrayList<DossierTemplate>();
+	List<DossierTemplate> dossierTemplates = new ArrayList<DossierTemplate>();;
+	
+	//govAgencyId as serviceAdmin
+	DictItem govAgencyItem = null;
 		
+	if(Validator.isNotNull(serviceConfig)) {
+		//get GovAgency by GovAgenCyCode
+		govAgencyItem = PortletUtil
+			.getDictItem(PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION ,
+			serviceConfig.getGovAgencyCode(), scopeGroupId);
+		//get Id
+		dictItemGovAgencyId = String.valueOf(govAgencyItem.getDictItemId());
+	}
+	
 	try {
 		//get all ServiceInfo
 		serviceInfos = ServiceInfoLocalServiceUtil.getServiceInfos(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 				
 		//get dossierTemplates
 		dossierTemplates = DossierTemplateLocalServiceUtil.getAll();
+		
+		//get dict collection of service_admin
 		
 		if(serviceConfig != null) {
 			dictItemServiceDomainId = serviceConfig.getDomainCode();
@@ -167,78 +181,123 @@
 	<aui:model-context bean="<%=serviceConfig%>" model="<%=ServiceConfig.class%>" />
 	
 	<aui:row>
-	
-		<datamgt:ddr
-			depthLevel="1" 
-			dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN %>"
-			itemNames="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_DOMAINCODE %>"
-			itemsEmptyOption="true"	
-			selectedItems="<%=dictItemServiceDomainId%>"
-		/>	
+		<aui:col width="50">
+			<datamgt:ddr
+				cssClass="input100"
+				depthLevel="1" 
+				dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN %>"
+				itemNames="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_DOMAINCODE %>"
+				itemsEmptyOption="true"	
+				selectedItems="<%=dictItemServiceDomainId%>"
+			/>	
+		</aui:col>
 	</aui:row>
+	
 	<div id = "<portlet:namespace />responseServiceConfig"></div>
 	
+	<!-- govAgenci -->
 	<aui:row>
-		<aui:select name="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_DOSSIERTEMPLATEID %>">
-			
-					<c:choose>
-					   <c:when test="<%=! tabs1.equals(DossierMgtUtil.TOP_TABS_SERVICE_CONFIG) && dossierTemplateId != 0 %>">
-					       <aui:option value="<%= dossierTemplateId %>">
-					           <%= dossierTemplateFromRenderRequest.getTemplateName() %>
-					       </aui:option>
-					   </c:when>
-					   
-					   <c:when test="<%=Validator.isNotNull(tabs1) && tabs1.equals(DossierMgtUtil.TOP_TABS_SERVICE_CONFIG) %>">
-					       <%
-		                        for(DossierTemplate dossierTemplate : dossierTemplates) {
-		                            %>
-		                                <aui:option value="<%=dossierTemplate.getDossierTemplateId() %>">
-		                                    <%=dossierTemplate.getTemplateName() %>
-		                                </aui:option>
-		                            <%
-		                        }
-		                    %>
-					   </c:when>
-					   
-					   <c:otherwise>
-					       <%
-		                        for(DossierTemplate dossierTemplate : dossierTemplates) {
-		                            %>
-		                                <aui:option value="<%=dossierTemplate.getDossierTemplateId() %>">
-		                                    <%=dossierTemplate.getTemplateName() %>
-		                                </aui:option>
-		                            <%
-		                        }
-		                    %>
-					   </c:otherwise>
-					</c:choose>
-			
-		</aui:select>
+		<aui:col width="50">
+			<datamgt:ddr
+				cssClass="input100"
+				depthLevel="1" 
+				dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION %>"
+				itemNames="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_GOVAGENCYCODE %>"
+				itemsEmptyOption="true"
+				selectedItems="<%=dictItemGovAgencyId%>"
+			/>
+		</aui:col>
 	</aui:row>
 	
-	<div id = "<portlet:namespace />serviceConfigGovNameCode">
-		
-	</div>
-	
 	<aui:row>
-			<aui:select name="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_SERVICEMODE %>">
-				<aui:option value="<%=PortletConstants.SERVICE_CONFIG_INACTIVE %>">
-					<liferay-ui:message key="inactive" />
+		<aui:col width="50">
+			<aui:select name="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_SERVICELEVEL %>" required="true"
+				showEmptyOption="true" cssClass="input100"
+			>
+				<aui:option value="<%=PortletConstants.SERVICE_CONFIG_LEVEL_1 %>">
+					<liferay-ui:message key="level-1" />
 				</aui:option>
 				
-				<aui:option value="<%=PortletConstants.SERVICE_CONFIG_FRONTOFFICE %>">
-					<liferay-ui:message key="front-office" />
+				<aui:option value="<%=PortletConstants.SERVICE_CONFIG_LEVEL_2 %>">
+					<liferay-ui:message key="level-2" />
 				</aui:option>
 			
-				<aui:option value="<%=PortletConstants.SERVICE_CONFIG_BACKOFFICE %>">
-					<liferay-ui:message key="back-office" />
+				<aui:option value="<%=PortletConstants.SERVICE_CONFIG_LEVEL_3 %>">
+					<liferay-ui:message key="level-3" />
 				</aui:option>
 				
-				<aui:option value="<%=PortletConstants.SERVICE_CONFIG_FRONT_BACK_OFFICE %>" >
-					<liferay-ui:message key="front-back-office" />
+				<aui:option value="<%= PortletConstants.SERVICE_CONFIG_LEVEL_4 %>" >
+					<liferay-ui:message key="level-4" />
 				</aui:option>
 			</aui:select>
+		</aui:col>
 	</aui:row>
+	
+	<aui:row>
+		<aui:col width="50">
+			<aui:select name="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_DOSSIERTEMPLATEID %>" cssClass="input100">
+						<c:choose>
+						   <c:when test="<%=! tabs1.equals(DossierMgtUtil.TOP_TABS_SERVICE_CONFIG) && dossierTemplateId != 0 %>">
+						       <aui:option value="<%= dossierTemplateId %>">
+						           <%= dossierTemplateFromRenderRequest.getTemplateName() %>
+						       </aui:option>
+						   </c:when>
+						   
+						   <c:when test="<%=Validator.isNotNull(tabs1) && tabs1.equals(DossierMgtUtil.TOP_TABS_SERVICE_CONFIG) %>">
+						       <%
+			                        for(DossierTemplate dossierTemplate : dossierTemplates) {
+			                            %>
+			                                <aui:option value="<%=dossierTemplate.getDossierTemplateId() %>">
+			                                    <%=dossierTemplate.getTemplateName() %>
+			                                </aui:option>
+			                            <%
+			                        }
+			                    %>
+						   </c:when>
+						   
+						   <c:otherwise>
+						       <%
+			                        for(DossierTemplate dossierTemplate : dossierTemplates) {
+			                            %>
+			                                <aui:option value="<%=dossierTemplate.getDossierTemplateId() %>">
+			                                    <%=dossierTemplate.getTemplateName() %>
+			                                </aui:option>
+			                            <%
+			                        }
+			                    %>
+						   </c:otherwise>
+						</c:choose>
+			</aui:select>
+		</aui:col>
+	</aui:row>
+	
+	<aui:row>
+		<aui:col width="100">
+			<aui:input name="<%= ServiceConfigDisplayTerms.SERVICE_INSTRUCTION%>" cssClass="input100"/>
+		</aui:col>
+	</aui:row>
+	
+	<aui:row>
+		<aui:col width="25">
+			<aui:input type="checkbox" name="<%= ServiceConfigDisplayTerms.SERVICE_PORTAL%>" />
+			<aui:input type="checkbox" name="<%= ServiceConfigDisplayTerms.SERVICE_ONEGATE%>" />
+			<aui:input type="checkbox" name="<%= ServiceConfigDisplayTerms.SERVICE_BACKOFFICE%>" />
+		</aui:col>
+		
+		
+		<aui:col width="25">
+			<aui:input type="checkbox" name="<%= ServiceConfigDisplayTerms.SERVICE_CITIZEN%>" />
+			<aui:input type="checkbox" name="<%= ServiceConfigDisplayTerms.SERVICE_BUSINEES%>" />
+		</aui:col>
+	</aui:row>
+	
+	
+	<!-- comment this, choose in datatitem, no find by service info -->
+	<%-- <div id = "<portlet:namespace />serviceConfigGovNameCode">
+		
+	</div> --%>
+	
+
 	
 	<aui:row>
 		<aui:button name="submit" type="submit" value="submit"/>
@@ -255,7 +314,7 @@ AUI().ready(function(A) {
 		var serviceInfoId = "<%= serviceInfoId %>";
 		
 		if(selectDomainCode){
-			<portlet:namespace />sentServiceInfoId(serviceInfoId);
+			/* <portlet:namespace />sentServiceInfoId(serviceInfoId); */
 			<portlet:namespace />sentDomainCode(selectDomainCode.val());
 			selectDomainCode.on('change', function() {
 				<portlet:namespace />sentDomainCode(selectDomainCode.val());
@@ -301,7 +360,7 @@ AUI().ready(function(A) {
 		
 </aui:script>
 
-<aui:script use = "aui-base">
+<%-- <aui:script use = "aui-base">
 	Liferay.provide(window, '<portlet:namespace/>getval', function(e) {	
 		var A = AUI();		
 		var instance = A.one(e);
@@ -338,7 +397,7 @@ AUI().ready(function(A) {
 				}
 			);
 	},['aui-base','aui-io']);
-</aui:script>
+</aui:script> --%>
 
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.dossiermgt.admin.edit_service_config.jsp");

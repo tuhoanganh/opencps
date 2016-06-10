@@ -16,6 +16,8 @@ package org.opencps.servicemgt.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.opencps.datamgt.model.DictItem;
+import org.opencps.datamgt.service.DictItemLocalServiceUtil;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.service.base.ServiceInfoLocalServiceBaseImpl;
 
@@ -24,6 +26,8 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.ServiceContext;
 import com.sun.xml.internal.ws.util.ServiceFinder;
 
@@ -140,7 +144,10 @@ public class ServiceInfoLocalServiceImpl
 		if (fileTemplateIds.length != 0) {
 			hasTemplateFiles = 1;
 		}
-
+		
+		DictItem dictItemDomain = DictItemLocalServiceUtil.getDictItem(Long.valueOf(domainCode));
+		DictItem dictItemAdmin = DictItemLocalServiceUtil.getDictItem(Long.valueOf(administrationCode));
+		
 		Date now = new Date();
 
 		service = serviceInfoPersistence.create(serviceId);
@@ -150,7 +157,7 @@ public class ServiceInfoLocalServiceImpl
 		service.setUserId(context.getUserId());
 		service.setCreateDate(now);
 		service.setModifiedDate(now);
-
+		
 		service.setServiceNo(serviceNo);
 		service.setServiceName(serviceName);
 		service.setFullName(fullName);
@@ -165,9 +172,9 @@ public class ServiceInfoLocalServiceImpl
 		service.setServiceFee(serviceFee);
 		service.setServiceInstructions(serviceInstructions);
 		service.setAdministrationCode(administrationCode);
-		service.setAdministrationIndex(administrationIndex);
+		service.setAdministrationIndex(dictItemAdmin.getTreeIndex());
 		service.setDomainCode(domainCode);
-		service.setDomainIndex(domainIndex);
+		service.setDomainIndex(dictItemDomain.getTreeIndex());
 		service.setActiveStatus(activeStatus);
 		service.setOnlineUrl(onlineUrl);
 		service.setHasTemplateFiles(hasTemplateFiles);
@@ -261,6 +268,11 @@ public class ServiceInfoLocalServiceImpl
 		if (fileTemplateIds.length != 0) {
 			hasTemplateFiles = 1;
 		}
+		
+		DictItem dictItemDomain = DictItemLocalServiceUtil
+						.getDictItem(Long.valueOf(domainCode));
+		DictItem dictItemAdmin = DictItemLocalServiceUtil
+						.getDictItem(Long.valueOf(administrationCode));
 
 		Date now = new Date();
 
@@ -283,9 +295,9 @@ public class ServiceInfoLocalServiceImpl
 		service.setServiceFee(serviceFee);
 		service.setServiceInstructions(serviceInstructions);
 		service.setAdministrationCode(administrationCode);
-		service.setAdministrationIndex(administrationIndex);
+		service.setAdministrationIndex(dictItemAdmin.getTreeIndex());
 		service.setDomainCode(domainCode);
-		service.setDomainIndex(domainIndex);
+		service.setDomainIndex(dictItemDomain.getTreeIndex());
 		service.setOnlineUrl(onlineUrl);
 		service.setHasTemplateFiles(hasTemplateFiles);
 
@@ -396,6 +408,16 @@ public class ServiceInfoLocalServiceImpl
 		catch (Exception e) {
 			return 0;
 		}
+	}
+	
+	public List<ServiceInfo> getServiceInFosByG_DI (long groupId, 
+		String domainIndex) throws SystemException {
+		
+		String bufferDomainIndex = Validator.isNotNull(domainIndex) ?
+			StringPool.PERCENT + domainIndex + StringPool.PERCENT :
+				StringPool.PERCENT + StringPool.PERCENT;
+		return serviceInfoPersistence.findByG_DI(groupId, bufferDomainIndex);
+		
 	}
 
 }

@@ -249,9 +249,7 @@
 		<field name="domainIndex" type="String" />
 		<field name="activeStatus" type="int" />
 		<field name="hasTemplateFiles" type="int" />
-		<field name="onlineUrl" type="String">
-			<hint name="max-length">1000</hint>
-		</field>
+		<field name="onlineUrl" type="String" />
 	</model>
 	<model name="org.opencps.servicemgt.model.TemplateFile">
 		<field name="templatefileId" type="long" />
@@ -339,9 +337,7 @@
 		<field name="assignUser" type="boolean" />
 		<field name="actionUserId" type="long" />
 		<field name="requestPayment" type="boolean" />
-		<field name="paymentFee" type="String">
-			<hint name="max-length">300</hint>
-		</field>
+		<field name="paymentFee" type="double" />
 		<field name="generateReceptionNo" type="boolean" />
 		<field name="receptionNoPattern" type="String" />
 		<field name="generateDeadline" type="boolean" />
@@ -445,9 +441,7 @@
 		<field name="finishDatetime" type="Date" />
 		<field name="dossierStatus" type="int" />
 		<field name="dossierSource" type="int" />
-		<field name="keypayRedirectUrl" type="String">
-			<hint name="max-length">1000</hint>
-		</field>
+		<field name="keypayRedirectUrl" type="String" />
 	</model>
 	<model name="org.opencps.dossiermgt.model.DossierFile">
 		<field name="dossierFileId" type="long" />
@@ -598,10 +592,19 @@
 		<field name="dossierTemplateId" type="long" />
 		<field name="govAgencyCode" type="String" />
 		<field name="govAgencyName" type="String" />
+		<field name="serviceInstruction" type="String">
+			<hint-collection name="TEXTAREA" />
+		</field>
+		<field name="serviceLevel" type="int" />
+		<field name="servicePortal" type="boolean" />
+		<field name="serviceOnegate" type="boolean" />
+		<field name="serviceBackoffice" type="boolean" />
 		<field name="govAgencyOrganizationId" type="long" />
-		<field name="serviceMode" type="int" />
+		<field name="serviceCitizen" type="boolean" />
+		<field name="serviceBusinees" type="boolean" />
 		<field name="serviceProcessId" type="long" />
 		<field name="domainCode" type="String" />
+		<field name="serviceMode" type="int" />
 	</model>
 	<model name="org.opencps.paymentmgt.model.PaymentConfig">
 		<field name="paymentConfigId" type="long" />
@@ -643,7 +646,7 @@
 		<field name="requestDatetime" type="Date" />
 		<field name="amount" type="double" />
 		<field name="requestNote" type="String" />
-		<field name="paymentOptions" type="String" />
+		<field name="paymentOptions" type="int" />
 		<field name="keypayUrl" type="String" />
 		<field name="keypayTransactionId" type="long">
 			<hint name="max-length">6</hint>
