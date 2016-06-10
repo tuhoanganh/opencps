@@ -369,9 +369,6 @@
 			}
 		}
 	}
-	%>
-		<aui:input name="curIndex" type="hidden" value="<%=index %>"/>
-	<%
 %>
 <aui:script>
 	

@@ -41,6 +41,7 @@ import com.liferay.portal.util.PortalUtil;
 
 
 /**
+ * @author Michael Young
  * @author dunglt
  *
  */
