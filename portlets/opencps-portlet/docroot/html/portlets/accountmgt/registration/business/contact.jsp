@@ -1,3 +1,4 @@
+<%@page import="org.opencps.util.AccountUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -36,17 +37,28 @@
 <%@ include file="../../init.jsp" %>
 
 <%
-	if(request.getAttribute(WebKeys.BUSINESS_ENTRY) != null){
-		business = (Business) request.getAttribute(WebKeys.BUSINESS_ENTRY);
-	}
-
-	long businessId = business!=null ? business.getBusinessId() : 0L;
 
 	boolean isViewProfile = GetterUtil.get( (Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_VIEW_PROFILE), false);
 	
 	boolean isAdminViewProfile = GetterUtil.get((Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_ADMIN_PROFILE), false);
 	
+	long businessId = 0;
+	
+	if(request.getAttribute(BusinessDisplayTerms.BUSINESS_BUSINESSID) != null && isAdminViewProfile){
+		businessId = (Long) request.getAttribute(BusinessDisplayTerms.BUSINESS_BUSINESSID);
+		if(businessId > 0){
+			try{
+				business = BusinessLocalServiceUtil.fetchBusiness(businessId);
+			}catch(Exception e){
+				//
+			}
+		}
+	}
+	
+	businessId = business != null ? business.getBusinessId() : 0L;
+	
 	String selectItems = StringPool.BLANK;
+	
 	String url = StringPool.BLANK;
 	
 	DictItem dictItemCity = null;

@@ -137,17 +137,14 @@ public class AccountMgtPortlet extends MVCPortlet {
 		try {
 
 			if (citizenId > 0) {
-				Citizen citizen = CitizenLocalServiceUtil
-				    .fetchCitizen(citizenId);
+				
 				renderRequest
-				    .setAttribute(WebKeys.CITIZEN_ENTRY, citizen);
+				    .setAttribute(CitizenDisplayTerms.CITIZEN_ID, citizenId);
 			}
 
 			if (businessId > 0) {
-				Business business = BusinessLocalServiceUtil
-				    .fetchBusiness(businessId);
 				renderRequest
-				    .setAttribute(WebKeys.BUSINESS_ENTRY, business);
+				    .setAttribute(BusinessDisplayTerms.BUSINESS_BUSINESSID, businessId);
 			}
 
 			renderRequest
