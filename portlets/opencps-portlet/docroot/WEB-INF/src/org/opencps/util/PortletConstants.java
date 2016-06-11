@@ -45,7 +45,11 @@ public class PortletConstants {
 	public static final int SERVICE_CONFIG_LEVEL_3 = 3;
 	public static final int SERVICE_CONFIG_LEVEL_4 = 4;
 	
-	
+	public static final int SERVICE_CONFIG_INACTIVE = 0;
+	public static final int SERVICE_CONFIG_FRONTOFFICE = 1;
+	public static final int SERVICE_CONFIG_BACKOFFICE = 2;
+	public static final int SERVICE_CONFIG_FRONT_BACK_OFFICE = 3;
+
 	public static enum DestinationRoot {
 			CITIZEN("Citizen"), BUSINESS("Business");
 

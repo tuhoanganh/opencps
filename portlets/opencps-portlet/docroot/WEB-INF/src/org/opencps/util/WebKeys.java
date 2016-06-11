@@ -172,4 +172,8 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final int PAYMENT_METHOD_KEYPAY = 2;
 	
 	public static final int PAYMENT_METHOD_BANK = 3;
+	
+	public static final String REQUEST_COMMAND_CANCEL = "cancel";
+	
+	public static final String REQUEST_COMMAND_REPAIR = "repair";
 }
