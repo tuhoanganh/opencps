@@ -146,7 +146,19 @@
 				<td width="10%" align="right">
 					<span class="dossier-version-counter">
 						<span class="counter-value" title="version">
-							<%=version %>
+							<aui:a 
+								id="<%=String.valueOf(dossierPartId) %>"
+								dossier="<%=String.valueOf(dossierId) %>"
+								dossier-part="<%=String.valueOf(isChildDossierPart ? childDossierPartId : dossierPartId) %>"
+								dossier-file="<%=String.valueOf(dossierFileId) %>"
+								file-group="<%=String.valueOf(fileGroupId) %>"
+								group-dossier-part="<%=String.valueOf(groupDossierPartId) %>"
+								group-name="<%=groupName %>"
+								href="javascript:void(0);" 
+								cssClass="view-version"
+							>
+								<%=version %>
+							</aui:a>
 						</span>
 					</span>
 				</td>
@@ -206,7 +218,6 @@
 								href="javascript:void(0);" 
 								label="view-attachment" 
 								cssClass="label opencps dossiermgt part-file-ctr view-attachment"
-								
 								title="view-attachment"
 							/>
 						</c:when>
@@ -231,7 +242,19 @@
 				<td width="10%" align="right">
 					<span class="dossier-file-counter">
 						<span class="counter-value" title="version">
-							<%=version %>
+							<aui:a 
+								id="<%=String.valueOf(dossierPartId) %>"
+								dossier="<%=String.valueOf(dossierId) %>"
+								dossier-part="<%=String.valueOf(isChildDossierPart ? childDossierPartId : dossierPartId) %>"
+								dossier-file="<%=String.valueOf(dossierFileId) %>"
+								file-group="<%=String.valueOf(fileGroupId) %>"
+								group-dossier-part="<%=String.valueOf(groupDossierPartId) %>"
+								group-name="<%=groupName %>"
+								href="javascript:void(0);" 
+								cssClass="view-version"
+							>
+								<%=version %>
+							</aui:a>
 						</span>
 					</span>
 				</td>
@@ -332,7 +355,19 @@
 				<td width="10%" align="right">
 					<span class="dossier-file-counter">
 						<span class="counter-value" title="version">
-							<%=version %>
+							<aui:a 
+								id="<%=String.valueOf(dossierPartId) %>"
+								dossier="<%=String.valueOf(dossierId) %>"
+								dossier-part="<%=String.valueOf(isChildDossierPart ? childDossierPartId : dossierPartId) %>"
+								dossier-file="<%=String.valueOf(dossierFileId) %>"
+								file-group="<%=String.valueOf(fileGroupId) %>"
+								group-dossier-part="<%=String.valueOf(groupDossierPartId) %>"
+								group-name="<%=groupName %>"
+								href="javascript:void(0);" 
+								cssClass="view-version"
+							>
+								<%=version %>
+							</aui:a>
 						</span>
 					</span>
 				</td>
@@ -425,7 +460,19 @@
 				<td width="10%" align="right">
 					<span class="dossier-file-counter">
 						<span class="counter-value" title="version">
-							<%=version %>
+							<aui:a 
+								id="<%=String.valueOf(dossierPartId) %>"
+								dossier="<%=String.valueOf(dossierId) %>"
+								dossier-part="<%=String.valueOf(isChildDossierPart ? childDossierPartId : dossierPartId) %>"
+								dossier-file="<%=String.valueOf(dossierFileId) %>"
+								file-group="<%=String.valueOf(fileGroupId) %>"
+								group-dossier-part="<%=String.valueOf(groupDossierPartId) %>"
+								group-name="<%=groupName %>"
+								href="javascript:void(0);" 
+								cssClass="view-version"
+							>
+								<%=version %>
+							</aui:a>
 						</span>
 					</span>
 				</td>
