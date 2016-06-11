@@ -17,7 +17,7 @@
  */
 %>
 
-<%@ include file="/init.jsp"%>
+<%@ include file="../init.jsp"%>
 
 <%
 	String tab1 = ParamUtil.getString(request, "tab1", "upload-file");

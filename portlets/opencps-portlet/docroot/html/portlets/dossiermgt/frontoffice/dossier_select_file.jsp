@@ -18,6 +18,11 @@
  */
 %>
 
+<%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
+<%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
+<%@page import="org.opencps.util.WebKeys"%>
+<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
+<%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
 <%@page import="org.opencps.util.MessageKeys"%>
 <%@page import="com.liferay.portlet.documentlibrary.DuplicateFileException"%>
 <%@page import="org.opencps.accountmgt.NoSuchAccountOwnUserIdException"%>
@@ -40,9 +45,18 @@
 <%@page import="org.opencps.dossiermgt.search.DossierFileSearch"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
-<%@ include file="/init.jsp"%>
+<%@ include file="../init.jsp"%>
 
 <%
+
+	boolean success = false;
+	
+	try{
+		success = !SessionMessages.isEmpty(renderRequest) && SessionErrors.isEmpty(renderRequest);
+		
+	}catch(Exception e){
+		
+	}
 	long dossierId = ParamUtil.getLong(request, DossierDisplayTerms.DOSSIER_ID);
 	
 	long dossierPartId = ParamUtil.getLong(request, DossierFileDisplayTerms.DOSSIER_PART_ID);
@@ -72,12 +86,48 @@
 	iteratorURL.setParameter("mvcPath", templatePath + "dossier_file.jsp");
 	iteratorURL.setParameter("tab1", "select-file");
 	
+	iteratorURL.setParameter("dossierId", String.valueOf(dossierId));
+	iteratorURL.setParameter("dossierPartId", String.valueOf(dossierPartId));
+	iteratorURL.setParameter("dossierFileId", String.valueOf(dossierFileId));
+	iteratorURL.setParameter("fileGroupId", String.valueOf(fileGroupId));
+	iteratorURL.setParameter("groupDossierPartId", String.valueOf(groupDossierPartId));
+	iteratorURL.setParameter("groupName", groupName);
+	iteratorURL.setParameter("redirectURL", redirectURL);
+	iteratorURL.setParameter("modalDialogId", modalDialogId);
+
 
 	PortletURL searchURL = renderResponse.createRenderURL();
 	searchURL.setParameter("mvcPath", templatePath + "dossier_file.jsp");
 	searchURL.setParameter("tab1", "select-file");
 	
-	String templateFileNo = ParamUtil.getString(request, DossierDisplayTerms.TEMPLATE_FILE_NO);
+	searchURL.setParameter("dossierId", String.valueOf(dossierId));
+	searchURL.setParameter("dossierPartId", String.valueOf(dossierPartId));
+	searchURL.setParameter("dossierFileId", String.valueOf(dossierFileId));
+	searchURL.setParameter("fileGroupId", String.valueOf(fileGroupId));
+	searchURL.setParameter("groupDossierPartId", String.valueOf(groupDossierPartId));
+	searchURL.setParameter("groupName", groupName);
+	searchURL.setParameter("redirectURL", redirectURL);
+	searchURL.setParameter("modalDialogId", modalDialogId);
+	
+	boolean isSameTemplate = ParamUtil.getBoolean(request, "isSameTemplate", true);
+					
+	String templateFileNo = StringPool.BLANK;
+	
+	templateFileNo = ParamUtil.getString(request, DossierDisplayTerms.TEMPLATE_FILE_NO);
+	
+	String templateFileNoTemp = StringPool.BLANK;
+	
+	try{
+		DossierPart dossierPart = DossierPartLocalServiceUtil.getDossierPart(dossierPartId);
+		if(dossierPart != null && Validator.isNotNull(dossierPart.getTemplateFileNo())){
+			templateFileNoTemp = dossierPart.getTemplateFileNo();
+		}
+	}catch(Exception e){}
+	
+	if(isSameTemplate){
+		templateFileNo = templateFileNoTemp;
+	}
+	
 %>
 
 <liferay-ui:error message="upload-error" key="upload-error"/>
@@ -126,10 +176,9 @@
 />
 
 <aui:nav-bar cssClass="custom-toolbar">
-
 	<aui:nav-bar-search cssClass="pull-right">
 		<div class="form-search">
-			<aui:form action="<%= searchURL %>" method="post" name="fmSearch">
+			<aui:form action="<%= searchURL %>" method="post" name="fmSearch" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "searchDossierFile();" %>'>
 				<aui:row>
 					<aui:col width="50">
 						<aui:input name="isSameTemplate" 
@@ -137,6 +186,7 @@
 							label="search-dossier-file-same-template" 
 							inlineField="<%=true %>"
 							inlineLabel="left"
+							checked="<%=isSameTemplate ? true : false %>"
 						/>
 					</aui:col>
 					<aui:col width="50">
@@ -165,7 +215,7 @@
 			<%
 				DossierFileSearchTerms searchTerms = (DossierFileSearchTerms)searchContainer.getSearchTerms();
 							
-					List<DossierFile> dossierFiles = null;
+					List<DossierFile> dossierFiles = new ArrayList<DossierFile>();
 					int totalCount = 0;
 					try {
 						dossierFiles = DossierFileLocalServiceUtil.searchDossierFile(scopeGroupId, searchTerms.getKeywords(), templateFileNo, 0, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
@@ -188,7 +238,7 @@
 			>
 				<%				
 				    // no column
-					row.addText(String.valueOf(row.getPos() + 1));
+					row.addText(String.valueOf(row.getPos() + 1 + searchContainer.getStart()));
 					
 					// dossier file no column
 					row.addText(dossierFile.getDossierFileNo());
@@ -216,9 +266,50 @@
 	
 </aui:form>
 <aui:script>
+
+	AUI().ready(function(A){
+		
+		var success = '<%=success%>';
+		
+		if(success == 'true'){
+			<portlet:namespace/>closeDialog();
+		}
+	});
+	
 	Liferay.provide(window, '<portlet:namespace/>selectDossierFile', function(id) {
 		var A = AUI();
 		var cloneDossierFile = A.one('#<portlet:namespace/>cloneDossierFileId').val(id);
 		submitForm(document.<portlet:namespace />fmSelectDossierFile);
+	});
+	
+	Liferay.provide(window, '<portlet:namespace/>searchDossierFile', function() {
+		var A = AUI();
+		var templateFileNo = '<%=templateFileNoTemp%>';
+		
+		var isSameTemplate = A.one('#<portlet:namespace/>isSameTemplate').val();
+		alert(isSameTemplate);
+		if(isSameTemplate == 'true'){
+			
+			templateFileNo = '<%=templateFileNoTemp%>';
+			
+		}else{
+			templateFileNo = '';
+		}
+		
+		var portletURL = Liferay.PortletURL.createURL('<%=searchURL.toString()%>');
+		portletURL.setParameter("templateFileNo", templateFileNo);
+		portletURL.setParameter("isSameTemplate", isSameTemplate);
+		
+		var form = A.one('#<portlet:namespace/>fmSearch');
+		form.attr('action', portletURL.toString());
+		
+		submitForm(document.<portlet:namespace />fmSearch);
+	},['liferay-portlet-url']);
+	
+
+	Liferay.provide(window, '<portlet:namespace/>closeDialog', function() {
+		Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.DOSSIER_MGT_PORTLET %>_', []);
+		var dialog = Liferay.Util.getWindow('<portlet:namespace/>' + '<%=modalDialogId%>');
+		dialog.destroy(); // You can try toggle/hide whate
 	});
 </aui:script>
