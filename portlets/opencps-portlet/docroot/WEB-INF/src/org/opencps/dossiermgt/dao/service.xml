@@ -286,7 +286,7 @@
 		
         <column name="dossierId" type="long"/>
         <column name="fileGroupId" type="long"/>
-        <column name="requestCommand" type="String"></column>
+        <column name="requestCommand" type="String"/>
 
         <column name="dossierStatus" type="int"/>
         <column name="actionInfo" type="String"/>
@@ -300,6 +300,10 @@
         </order>
         <finder name="DossierId" return-type="Collection">
             <finder-column name="dossierId"></finder-column>
+        </finder>
+        <finder name="D_RC" return-type="Collection">
+            <finder-column name="dossierId"/>
+            <finder-column name="requestCommand"/>
         </finder>
     </entity>
     
