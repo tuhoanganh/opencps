@@ -132,6 +132,28 @@ Liferay.provide(window, 'dynamicForm', function(e, uri, ns){
 	openDialog(portletURL.toString(), ns + 'dossier-dynamic-form', Liferay.Language.get("declaration-online"));
 });
 
+Liferay.provide(window, 'viewVersion', function(e, uri, ns) {
+	
+	var A = AUI();
+
+	var instance = A.one(e);
+	
+	var dossierId = instance.attr('dossier');
+	
+	var dossierPartId = instance.attr('dossier-part');
+	
+	var dossierFileId = instance.attr('dossier-file');
+	
+	//Create render url
+	var portletURL = Liferay.PortletURL.createURL(uri);
+	portletURL.setParameter("dossierId", dossierId);
+	portletURL.setParameter("dossierPartId", dossierPartId);
+	portletURL.setParameter("dossierFileId", dossierFileId);
+	portletURL.setParameter("modalDialogId", "view-dossier-file-version");
+	
+	//Open dialog
+	openDialog(portletURL.toString(), ns + 'view-dossier-file-version', Liferay.Language.get("view-dossier-file-version"));
+});
 
 
 Liferay.provide(window, 'closeDialog', function(id, portletName) {
