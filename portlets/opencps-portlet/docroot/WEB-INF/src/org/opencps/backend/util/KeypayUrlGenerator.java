@@ -67,8 +67,7 @@ public class KeypayUrlGenerator {
 		if (Validator.isNotNull(paymentConfig) &&
 		    Validator.isNotNull(paymentFile)) {
 			
-			String merchant_trans_id =
-			    Long.toString(_genetatorTransactionId(paymentFile));
+			String merchant_trans_id = Long.toString(_genetatorTransactionId(paymentFile));
 			
 			String merchant_code = paymentConfig.getKeypayMerchantCode();
 
@@ -198,7 +197,7 @@ public class KeypayUrlGenerator {
 	private static long _genetatorTransactionId(PaymentFile paymentFile) {
 
 		if (Validator.isNotNull(paymentFile)) {
-			return paymentFile.getPaymentFileId();
+			return paymentFile.getDossierId();
 		}
 		else {
 			return 0l;

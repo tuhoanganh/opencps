@@ -1,3 +1,4 @@
+<%@page import="com.liferay.util.PwdGenerator"%>
 <%@page import="org.opencps.usermgt.service.WorkingUnitLocalServiceUtil"%>
 <%@page import="org.opencps.usermgt.model.WorkingUnit"%>
 <%@page import="com.liferay.portal.kernel.util.FastDateFormatFactoryUtil"%>
@@ -28,16 +29,7 @@
 %>
 <%@ include file="../init.jsp"%>
 
-<style>
-.lookup-result table {
-	width: 100%;
-}
 
-.lookup-result tr td {
-	padding: 5px;
-	border: 1px solid #cbcbcb;
-}
-</style>
 <%
 	Format dateFormatDate = FastDateFormatFactoryUtil.getDate(locale, timeZone);
 	String backRedirect = ParamUtil.getString(request, "redirect");
@@ -108,7 +100,9 @@
 			<td class="col-right">
 				<%=HtmlUtil.escape(String.valueOf(paymentFile.getAmount())) %>
 			</td>
-		</tr>		
+		</tr>
+		
+		
 		<tr>
 			<td class="col-left">
 				<liferay-ui:message key="ghi-chu-kem-theo"/>

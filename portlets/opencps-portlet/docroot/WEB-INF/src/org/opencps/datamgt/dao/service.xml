@@ -115,6 +115,9 @@
 		</order>
 
 		<!-- Finder methods -->
+		<finder return-type="DictItem" name="TreeInDexOne">
+			<finder-column name="treeIndex" />
+		</finder>
 		<finder name="C_C_I" return-type="DictItem"
 			where="issueStatus = 1">
 			<finder-column name="dictCollectionId" />

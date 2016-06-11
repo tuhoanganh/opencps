@@ -24,6 +24,13 @@ import com.liferay.portal.kernel.util.ParamUtil;
 
 public class ServiceConfigDisplayTerms extends DisplayTerms{
 	
+	public static final String SERVICE_INSTRUCTION = "serviceInstruction";
+	public static final String SERVICE_PORTAL = "servicePortal";
+	public static final String SERVICE_ONEGATE = "serviceOnegate";
+	public static final String SERVICE_BACKOFFICE = "serviceBackoffice";
+	public static final String SERVICE_CITIZEN = "serviceCitizen";
+	public static final String SERVICE_BUSINEES = "serviceBusinees";
+	
 	public static final String SERVICE_ADMINISTRATION = "administrationCode";
 	public static final String SERVICE_CONFIG_SERVICECONFIGID = "serviceConfigId";
 	public static final String SERVICE_CONFIG_SERVICEINFOID = "serviceInfoId";
@@ -37,7 +44,7 @@ public class ServiceConfigDisplayTerms extends DisplayTerms{
 	public static final String SERVICE_CONFIG_GOVAGENCYNAME = "govAgencyName";
 	public static final String SERVICE_CONFIG_DOMAINCODE = "domainCode";
 	
-	public static final String SERVICE_CONFIG_SERVICEMODE = "serviceMode";
+	public static final String SERVICE_CONFIG_SERVICELEVEL = "serviceLevel";
 	
 	public ServiceConfigDisplayTerms(PortletRequest request) {
 
@@ -55,8 +62,15 @@ public class ServiceConfigDisplayTerms extends DisplayTerms{
 		govAgencyName = ParamUtil.getString(request, SERVICE_CONFIG_GOVAGENCYNAME);
 		domainCode = ParamUtil.getString(request, SERVICE_CONFIG_DOMAINCODE);
 		administrationCode = ParamUtil.getString(request, SERVICE_ADMINISTRATION);
+		serviceInstruction = ParamUtil.getString(request, SERVICE_INSTRUCTION);
 		
-		serviceMode = ParamUtil.getInteger(request, SERVICE_CONFIG_SERVICEMODE);
+		serviceLevel = ParamUtil.getInteger(request, SERVICE_CONFIG_SERVICELEVEL);
+		
+		servicePortal = ParamUtil.getBoolean(request, SERVICE_PORTAL);
+		serviceOnegate = ParamUtil.getBoolean(request, SERVICE_ONEGATE);
+		serviceBackoffice = ParamUtil.getBoolean(request, SERVICE_BACKOFFICE);
+		serviceCitizen = ParamUtil.getBoolean(request, SERVICE_CITIZEN);
+		serviceBusinees = ParamUtil.getBoolean(request, SERVICE_BUSINEES);
     }
 	
     public long getServiceConfigId() {
@@ -165,19 +179,6 @@ public class ServiceConfigDisplayTerms extends DisplayTerms{
     
     	this.govAgencyName = govAgencyName;
     }
-
-	
-    public int getServiceMode() {
-    
-    	return serviceMode;
-    }
-
-	
-    public void setServiceMode(int serviceMode) {
-    
-    	this.serviceMode = serviceMode;
-    }
-    
 	
     public String getDomainCode() {
     
@@ -190,7 +191,91 @@ public class ServiceConfigDisplayTerms extends DisplayTerms{
     	this.domainCode = domainCode;
     }
     
-    public String getAdministrationCode() {
+    
+	public int getServiceLevel() {
+	
+		return serviceLevel;
+	}
+
+	
+	public void setServiceLevel(int serviceLevel) {
+	
+		this.serviceLevel = serviceLevel;
+	}
+
+	
+	public boolean isServicePortal() {
+	
+		return servicePortal;
+	}
+
+	
+	public void setServicePortal(boolean servicePortal) {
+	
+		this.servicePortal = servicePortal;
+	}
+
+	
+	public boolean isServiceOnegate() {
+	
+		return serviceOnegate;
+	}
+
+	
+	public void setServiceOnegate(boolean serviceOnegate) {
+	
+		this.serviceOnegate = serviceOnegate;
+	}
+
+	
+	public boolean isServiceBackoffice() {
+	
+		return serviceBackoffice;
+	}
+
+	
+	public void setServiceBackoffice(boolean serviceBackoffice) {
+	
+		this.serviceBackoffice = serviceBackoffice;
+	}
+
+	
+	public boolean isServiceCitizen() {
+	
+		return serviceCitizen;
+	}
+
+	
+	public void setServiceCitizen(boolean serviceCitizen) {
+	
+		this.serviceCitizen = serviceCitizen;
+	}
+
+	
+	public boolean isServiceBusinees() {
+	
+		return serviceBusinees;
+	}
+
+	
+	public void setServiceBusinees(boolean serviceBusinees) {
+	
+		this.serviceBusinees = serviceBusinees;
+	}
+
+	
+	public String getServiceInstruction() {
+	
+		return serviceInstruction;
+	}
+
+	
+	public void setServiceInstruction(String serviceInstruction) {
+	
+		this.serviceInstruction = serviceInstruction;
+	}
+
+	public String getAdministrationCode() {
         
     	return administrationCode;
     }
@@ -201,7 +286,13 @@ public class ServiceConfigDisplayTerms extends DisplayTerms{
     	this.administrationCode = administrationCode;
     }
 
-	protected int serviceMode;
+	protected int serviceLevel;
+	
+	protected boolean servicePortal;
+	protected boolean serviceOnegate;
+	protected boolean serviceBackoffice;
+	protected boolean serviceCitizen;
+	protected boolean serviceBusinees;
 
 	protected long serviceConfigId;
 	protected long serviceInfoId;
@@ -215,5 +306,5 @@ public class ServiceConfigDisplayTerms extends DisplayTerms{
 	protected String govAgencyName;
 	protected String domainCode;
 	protected String administrationCode;
-
+	protected String serviceInstruction;
 }

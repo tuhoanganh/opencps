@@ -130,4 +130,22 @@ public class UserActionMsg {
 	protected long userId;
 	protected Locale locale;
 	protected long processOrderId;
+	
+    /**
+     * @return the noReceptionNo
+     */
+    public String getNoReceptionNo() {
+    
+    	return noReceptionNo;
+    }
+
+	
+    /**
+     * @param noReceptionNo the noReceptionNo to set
+     */
+    public void setNoReceptionNo(String noReceptionNo) {
+    
+    	this.noReceptionNo = noReceptionNo;
+    }
+	protected String noReceptionNo;
 }

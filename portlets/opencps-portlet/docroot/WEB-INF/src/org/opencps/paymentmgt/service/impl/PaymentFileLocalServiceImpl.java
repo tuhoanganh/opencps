@@ -93,33 +93,32 @@ public class PaymentFileLocalServiceImpl extends PaymentFileLocalServiceBaseImpl
 	 *
 	 * Never reference this interface directly. Always use {@link org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil} to access the Payment file local service.
 	 */
-	public PaymentFile addPaymentFile(long userId,
-		long dossierId, long fileGroupId,long ownerUserId, long ownerOrganizationId,long govAgencyOrganizationId, String paymentName,
-		Date requestDatetime,Double amount, String requestNote, String placeInfo, 
-	    ServiceContext serviceContext)
+	public PaymentFile addPaymentFile(
+	    long userId, long dossierId, long fileGroupId, long ownerUserId,
+	    long ownerOrganizationId, long govAgencyOrganizationId,
+	    String paymentName, Date requestDatetime, Double amount,
+	    String requestNote, String placeInfo, ServiceContext serviceContext)
 	    throws SystemException {
 
-		long paymentFileId = counterLocalService
-		    .increment(PaymentFile.class
-		        .getName());
-		PaymentFile paymentFile = paymentFilePersistence
-		    .create(paymentFileId);
+		long paymentFileId =
+		    counterLocalService.increment(PaymentFile.class.getName());
+		PaymentFile paymentFile = paymentFilePersistence.create(paymentFileId);
 
 		Date now = new Date();
 
 		paymentFile.setUserId(userId);
-		
+
 		paymentFile.setGroupId(serviceContext.getScopeGroupId());
-		
+
 		paymentFile.setCompanyId(serviceContext.getCompanyId());
-		
+
 		paymentFile.setCreateDate(now);
-		
+
 		paymentFile.setModifiedDate(now);
-//		paymentFile
-//		    .setUuid(PortalUUIDUtil
-//		        .generate());
-		
+		// paymentFile
+		// .setUuid(PortalUUIDUtil
+		// .generate());
+
 		paymentFile.setDossierId(dossierId);
 		paymentFile.setFileGroupId(fileGroupId);
 		paymentFile.setOwnerUserId(ownerUserId);
@@ -130,38 +129,61 @@ public class PaymentFileLocalServiceImpl extends PaymentFileLocalServiceBaseImpl
 		paymentFile.setRequestNote(requestNote);
 		paymentFile.setPlaceInfo(placeInfo);
 		paymentFile.setPaymentStatus(0);
-		
-		//govAgencyOrganizationId > 0 insert
-//		paymentFile.setGovAgencyTaxNo(govAgencyTaxNo);
-//		paymentFile.setInvoiceTemplateNo(invoiceTemplateNo);
-//		paymentFile.setInvoiceIssueNo(invoiceIssueNo);
-//		paymentFile.setInvoiceNo(invoiceNo);
-        
+		paymentFile.setGovAgencyOrganizationId(govAgencyOrganizationId);
+
+		// govAgencyOrganizationId > 0 insert
+		// paymentFile.setGovAgencyTaxNo(govAgencyTaxNo);
+		// paymentFile.setInvoiceTemplateNo(invoiceTemplateNo);
+		// paymentFile.setInvoiceIssueNo(invoiceIssueNo);
+		// paymentFile.setInvoiceNo(invoiceNo);
 
 		return paymentFilePersistence.update(paymentFile);
 	}
 	
-	public List<PaymentFile> searchPaymentFiles(long groupId, String paymentStatus, String keywords, int start, int end) {
-		return paymentFileFinder.searchPaymentFiles(groupId, paymentStatus, keywords, start, end);
-    }
-	public int countPaymentFiles(long groupId, String paymentStatus, String keywords) {
-		return paymentFileFinder.countPaymentFiles(groupId, paymentStatus, keywords);
-    }
-	
-	public int countCustomerPaymentFile(long groupId, String keyword, boolean isCitizen, long customerId, int paymentStatus) {
-		return paymentFileFinder.countCustomerPaymentFile(groupId, keyword, isCitizen, customerId, paymentStatus);
+	public List<PaymentFile> searchPaymentFiles(
+	    long groupId, String paymentStatus, String keywords, int start, int end) {
+
+		return paymentFileFinder.searchPaymentFiles(
+		    groupId, paymentStatus, keywords, start, end);
 	}
-	
-	public List<PaymentFile> searchCustomerPaymentFile(long groupId, String keyword, boolean isCitizen, long customerId, int paymentStatus, int start, int end, OrderByComparator obc) {
-		return paymentFileFinder.searchCustomerPaymentFile(groupId, keyword, isCitizen, customerId, paymentStatus, start, end, obc);
+
+	public int countPaymentFiles(
+	    long groupId, String paymentStatus, String keywords) {
+
+		return paymentFileFinder.countPaymentFiles(
+		    groupId, paymentStatus, keywords);
 	}
-	
-	public PaymentFile getPaymentFileByGoodCode(long groupId, String keypayGoodCode) throws SystemException {
+
+	public int countCustomerPaymentFile(
+	    long groupId, String keyword, boolean isCitizen, long customerId,
+	    int paymentStatus) {
+
+		return paymentFileFinder.countCustomerPaymentFile(
+		    groupId, keyword, isCitizen, customerId, paymentStatus);
+	}
+
+	public List<PaymentFile> searchCustomerPaymentFile(
+	    long groupId, String keyword, boolean isCitizen, long customerId,
+	    int paymentStatus, int start, int end, OrderByComparator obc) {
+
+		return paymentFileFinder.searchCustomerPaymentFile(
+		    groupId, keyword, isCitizen, customerId, paymentStatus, start, end,
+		    obc);
+	}
+
+	public PaymentFile getPaymentFileByGoodCode(
+	    long groupId, String keypayGoodCode)
+	    throws SystemException {
+
 		return paymentFilePersistence.fetchByGoodCode(groupId, keypayGoodCode);
 	}
-	
-	public PaymentFile getPaymentFileByMerchantResponse(long keypayTransactionId, String keypayGoodCode, double amount) throws SystemException {
-		return paymentFilePersistence.fetchByMerchantResponse(keypayTransactionId, keypayGoodCode, amount);
+
+	public PaymentFile getPaymentFileByMerchantResponse(
+	    long keypayTransactionId, String keypayGoodCode, double amount)
+	    throws SystemException {
+
+		return paymentFilePersistence.fetchByMerchantResponse(
+		    keypayTransactionId, keypayGoodCode, amount);
 	}
 	
 	/**
@@ -191,7 +213,6 @@ public class PaymentFileLocalServiceImpl extends PaymentFileLocalServiceBaseImpl
 
 		Date now = new Date();
 
-
 		paymentFile.setCreateDate(now);
 
 		paymentFile.setModifiedDate(now);
@@ -207,6 +228,7 @@ public class PaymentFileLocalServiceImpl extends PaymentFileLocalServiceBaseImpl
 		paymentFile.setPlaceInfo(placeInfo);
 		paymentFile.setPaymentStatus(0);
 		paymentFile.setPaymentOptions(paymentOptions);
+		paymentFile.setGovAgencyOrganizationId(govAgencyOrganizationId);
 
 		return paymentFilePersistence.update(paymentFile);
 	}

@@ -231,7 +231,13 @@ public class BackOfficeProcessEngine implements MessageListener {
 				toBackOffice.setUpdateDatetime(new Date());
 
 				if (Validator.isNull(toEngineMsg.getReceptionNo())) {
-					toBackOffice.setReceptionNo(DossierNoGenerator.genaratorNoReception(processWorkflow.getReceptionNoPattern()));
+					String pattern = processWorkflow.getReceptionNoPattern();
+					if (Validator.isNotNull(pattern) && StringUtil.trim(pattern).length() != 0) {
+						
+						toBackOffice.setReceptionNo(DossierNoGenerator.genaratorNoReception(pattern)); 
+					} else {
+						toBackOffice.setReceptionNo(dossier.getReceptionNo());
+					}
 				}
 				else {
 					toBackOffice.setReceptionNo(toEngineMsg.getReceptionNo());
@@ -269,14 +275,20 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 					String paymentOptions = StringUtil.merge(paymentMethods);
 
+					List<String> paymentMessages =
+					    PaymentRequestGenerator.getMessagePayment(processWorkflow.getPaymentFee());
+
+					String paymentName =
+					    (paymentMessages.size() != 0)
+					        ? paymentMessages.get(0) : StringPool.BLANK;
+
 					PaymentFile paymentFile =
 					    PaymentFileLocalServiceUtil.addPaymentFile(
 					        toEngineMsg.getDossierId(),
 					        toEngineMsg.getFileGroupId(), ownerUserId,
 					        ownerOrganizationId, govAgencyOrganizationId,
-					        changeStep.getStepName(),
-					        toEngineMsg.getActionDatetime(),
-					        (double) totalPayment, toEngineMsg.getActionNote(),
+					        paymentName, new Date(),
+					        (double) totalPayment, paymentName,
 					        StringPool.BLANK, paymentOptions);
 
 					if (paymentMethods.contains(PaymentRequestGenerator.PAY_METHOD_KEYPAY)) {
@@ -322,7 +334,6 @@ public class BackOfficeProcessEngine implements MessageListener {
 		catch (Exception e) {
 			_log.error(e);
 		}
-
 	}
 	
 
