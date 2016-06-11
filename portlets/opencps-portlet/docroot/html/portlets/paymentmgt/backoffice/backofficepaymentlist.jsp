@@ -1,3 +1,4 @@
+<%@page import="org.opencps.paymentmgt.util.PaymentMgtUtil"%>
 <%@page import="java.util.Locale"%>
 <%@page import="java.text.NumberFormat"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
@@ -132,7 +133,7 @@
 				
 				row.addText(LanguageUtil.get(pageContext, PortletUtil.getPaymentStatusLabel(paymentFile.getPaymentStatus(), locale)));	
 				
-				row.addText(LanguageUtil.get(pageContext, PortletUtil.getPaymentMethodLabel(paymentFile.getPaymentMethod(), locale)));	
+				row.addText(LanguageUtil.get(locale, PaymentMgtUtil.getPaymentMethod(paymentFile.getPaymentFileId())));	
 				
 				row.addJSP("center", SearchEntry.DEFAULT_VALIGN, templatePath + "payment_actions.jsp", config.getServletContext(), request, response);
 			%>	

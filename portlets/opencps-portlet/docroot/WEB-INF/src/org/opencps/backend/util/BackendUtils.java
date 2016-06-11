@@ -17,9 +17,12 @@
 
 package org.opencps.backend.util;
 
+import java.util.List;
+
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.ServiceConfig;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
+import org.opencps.dossiermgt.service.DossierLogLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
 import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
 import org.opencps.processmgt.model.ProcessOrder;
@@ -28,10 +31,14 @@ import org.opencps.processmgt.model.ProcessWorkflow;
 import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
+import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 
@@ -40,6 +47,206 @@ import com.liferay.portal.kernel.util.Validator;
  *
  */
 public class BackendUtils {
+	
+	public static final String PRE_CONDITION_PAYOK = "payok";
+	
+	public static final String PRE_CONDITION_TAG_LABEL = "tag_";
+	
+	public static final String PRE_CONDITION_CANCEL = "cancel";
+	
+	public static final String PRE_CONDITION_SERVICE_ID = "service_";
+	
+	public static final String PRE_CONDITION_ONEGATE = "onegate";
+
+	public static final String PRE_CONDITION_ONELINE = "oneline";
+	
+	public static final String PRE_CONDITION_REPAIR = "repair";
+	
+	/**
+	 * @param pattern
+	 * @return
+	 */
+	public static boolean checkPreCondition(String pattern, long dossierId) {
+
+		boolean validPreCondition = true;
+
+		List<String> lsCondition =
+		    ListUtil.toList(StringUtil.split(pattern, StringPool.SPACE));
+
+		boolean validPayok = true;
+		boolean validCancel = true;
+		boolean validTagLabel = true;
+		boolean validService = true;
+		boolean validOnline = true;
+		boolean validOnegate = true;
+		boolean validRepair = true;
+		
+
+		for (String condition : lsCondition) {
+			if (StringUtil.equalsIgnoreCase(
+			    StringUtil.split(condition, StringPool.UNDERLINE)[0],
+			    PRE_CONDITION_PAYOK)) {
+
+				validPayok = _checkPayOkCondition(dossierId);
+
+				continue;
+			}
+
+			if (StringUtil.equalsIgnoreCase(
+			    StringUtil.split(condition, StringPool.UNDERLINE)[0],
+			    PRE_CONDITION_CANCEL)) {
+
+				validCancel =
+				    _checkRequestCommandlCondition(
+				        dossierId, WebKeys.REQUEST_COMMAND_CANCEL);
+
+				continue;
+			}
+
+			if (StringUtil.equalsIgnoreCase(
+			    StringUtil.split(condition, StringPool.UNDERLINE)[0],
+			    PRE_CONDITION_TAG_LABEL)) {
+
+				validTagLabel = _checkTagLabelCondition();
+
+				continue;
+			}
+
+			if (StringUtil.equalsIgnoreCase(
+			    StringUtil.split(condition, StringPool.UNDERLINE)[0],
+			    PRE_CONDITION_SERVICE_ID)) {
+
+				validService = _checkServiceCondition();
+
+				continue;
+			}
+
+			if (StringUtil.equalsIgnoreCase(
+			    StringUtil.split(condition, StringPool.UNDERLINE)[0],
+			    PRE_CONDITION_ONEGATE)) {
+
+				validOnegate = _checkOnegateCondition();
+
+				continue;
+			}
+
+			if (StringUtil.equalsIgnoreCase(
+			    StringUtil.split(condition, StringPool.UNDERLINE)[0],
+			    PRE_CONDITION_ONELINE)) {
+
+				validOnline = _checkOnlineCondition();
+
+				continue;
+			}
+
+			if (StringUtil.equalsIgnoreCase(
+			    StringUtil.split(condition, StringPool.UNDERLINE)[0],
+			    PRE_CONDITION_REPAIR)) {
+				validRepair =
+				    _checkRequestCommandlCondition(
+				        dossierId, WebKeys.REQUEST_COMMAND_REPAIR);
+			}
+
+		}
+
+		if (validPayok && validCancel && validOnline && validOnegate &&
+		    validTagLabel && validService && validRepair) {
+			validPreCondition = true;
+		}
+		else {
+			validPreCondition = false;
+		}
+		
+		return validPreCondition;
+	}
+	
+
+	
+	private static boolean _checkPayOkCondition(long dossierId) {
+		boolean isCondition = true;
+		
+		int countAllPayment = 0;
+		
+		int countPaymentComplated = 0;
+		
+		try {
+	        countAllPayment = PaymentFileLocalServiceUtil.countAllPaymentFile(dossierId);
+	        
+	        countPaymentComplated = PaymentFileLocalServiceUtil.countPaymentFile(dossierId, 2);
+	        
+	        if (!((countAllPayment - countPaymentComplated) == 0)) {
+	        	isCondition = false;
+	        }
+        }
+        catch (Exception e) {
+        	isCondition = false;
+        }
+
+		return isCondition;
+	}
+	
+	/**
+	 * @param dossierId
+	 * @param requestCommand
+	 * @return
+	 */
+	private static boolean _checkRequestCommandlCondition(
+	    long dossierId, String requestCommand) {
+
+		boolean isCondition = true;
+
+		int countRequestCommand = 0;
+
+		try {
+			countRequestCommand =
+			    DossierLogLocalServiceUtil.countDossierByRequestCommand(
+			        dossierId, requestCommand);
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
+
+		if (countRequestCommand != 0) {
+			isCondition = true;
+		}
+		else {
+			isCondition = false;
+		}
+
+		return isCondition;
+	}
+	
+	/**
+	 * @return
+	 */
+	private static boolean _checkTagLabelCondition() {
+		//TODO: implement here
+		return true;
+	}
+	
+	/**
+	 * @return
+	 */
+	private static boolean _checkServiceCondition() {
+		//TODO: implement here
+		return true;
+	}
+	
+	/**
+	 * @return
+	 */
+	private static boolean _checkOnlineCondition(){
+		//TODO: implement here
+		return true;
+	}
+	
+	/**
+	 * @return
+	 */
+	private static boolean _checkOnegateCondition() {
+		//TODO: implement here
+		return true;
+	}
 	
 	/**
 	 * @param dossierId
