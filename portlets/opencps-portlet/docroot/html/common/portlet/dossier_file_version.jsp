@@ -77,7 +77,7 @@
 	List<DossierFile> dossierFiles = new ArrayList<DossierFile>();
 	int totalCount = 0;
 	
-	if(dossierPart != null && dossierId > 0 && dossierFileId > 0){
+	if(dossierPart != null && dossierId > 0){
 	
 		try{			
 			if(dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_OTHER &&
@@ -85,9 +85,13 @@
 				dossierFiles = DossierFileLocalServiceUtil.getDossierFileByD_DP(dossierId, dossierPartId);
 				totalCount = DossierFileLocalServiceUtil.countDossierFile(dossierId, dossierPartId);
 			}else{
-				totalCount = 1;
-				DossierFile dossierFile = DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
-				dossierFiles.add(dossierFile);
+				
+				if(dossierFileId > 0){
+					totalCount = 1;
+					DossierFile dossierFile = DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
+					dossierFiles.add(dossierFile);
+				}
+				
 			}
 			
 		}catch(Exception e){}
@@ -97,7 +101,7 @@
 <c:choose>
 	<c:when test="<%=totalCount > 0 %>">
 		<liferay-ui:search-container 
-			searchContainer="<%= new DossierFileSearch(renderRequest, iteratorURL) %>" 
+			searchContainer="<%= new DossierFileSearch(renderRequest, 100, iteratorURL) %>" 
 			headerNames="<%= headers %>"
 		>
 		
@@ -152,7 +156,7 @@
 		
 				</liferay-ui:search-container-row> 
 			
-			<%-- <liferay-ui:search-iterator/> --%>
+			<liferay-ui:search-iterator/>
 		</liferay-ui:search-container>
 	</c:when>
 	<c:otherwise>
