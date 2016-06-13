@@ -287,7 +287,7 @@
 		var templateFileNo = '<%=templateFileNoTemp%>';
 		
 		var isSameTemplate = A.one('#<portlet:namespace/>isSameTemplate').val();
-		alert(isSameTemplate);
+		
 		if(isSameTemplate == 'true'){
 			
 			templateFileNo = '<%=templateFileNoTemp%>';
