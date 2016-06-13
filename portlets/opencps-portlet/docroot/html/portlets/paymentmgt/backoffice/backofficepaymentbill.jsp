@@ -27,14 +27,17 @@
 	title="payment-report"
 	backLabel="back"
 />
-<p></p>
+
 <portlet:actionURL name="createReport" var="createReportURL" />
+
 <aui:form name="payForm" action="#">
-<div id="<portlet:namespace />wrapPDF" align="center">
-	<iframe src="" height="200px" width="100%"></iframe>
-</div>
-<aui:button name="back" value="back" href="<%=backRedirect.toString() %>" />
+	<div id="<portlet:namespace />wrapPDF" align="center">
+		<iframe src="" height="200px" width="100%"></iframe>
+	</div>
+
+	<aui:button name="back" value="back" href="<%=backRedirect.toString() %>" />
 </aui:form>
+
 <aui:script>
 AUI().ready(function(A){
 			<portlet:namespace/>createReport(<%= paymentFileId %>);

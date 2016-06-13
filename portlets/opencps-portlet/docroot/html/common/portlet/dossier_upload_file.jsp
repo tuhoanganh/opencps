@@ -122,10 +122,7 @@
 	exception="<%= PermissionDossierException.class %>" 
 	message="<%= PermissionDossierException.class.getName() %>" 
 />
-<liferay-ui:error 
-	exception="<%= PermissionDossierException.class %>" 
-	message="<%= PermissionDossierException.class.getName() %>" 
-/>
+
 <liferay-ui:error 
 	exception="<%= FileSizeException.class %>" 
 	message="<%= FileSizeException.class.getName() %>" 
@@ -214,7 +211,7 @@
 	});
 
 	Liferay.provide(window, '<portlet:namespace/>closeDialog', function() {
-		Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.DOSSIER_MGT_PORTLET %>_');
+		Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id' + '<portlet:namespace/>');
 		var dialog = Liferay.Util.getWindow('<portlet:namespace/>' + '<%=modalDialogId%>');
 		dialog.destroy(); // You can try toggle/hide whate
 	});

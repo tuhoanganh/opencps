@@ -143,7 +143,7 @@
 													<c:when test="<%=(partType == PortletConstants.DOSSIER_PART_TYPE_OPTION ||
 														partType == PortletConstants.DOSSIER_PART_TYPE_OTHER) && level == 0%>"
 													>
-														<i class="fa fa-dot-circle-o" aria-hidden="true"></i>
+														<i class="fa fa-folder-o" aria-hidden="true"></i>
 													</c:when>
 														<c:otherwise>
 														<i 
@@ -289,7 +289,7 @@
 							<div class='<%="opencps dossiermgt dossier-part-row r-" + index%>'>
 								<span class='<%="level-0" + " opencps dossiermgt dossier-part"%>'>
 									<span class="row-icon">
-										<i class="fa fa-dot-circle-o" aria-hidden="true"></i>
+										<i class="fa fa-folder-o" aria-hidden="true"></i>
 									</span>
 									<span class="opencps dossiermgt dossier-part-name">
 										<%=dossierPartLevel1.getPartName() %>
@@ -369,9 +369,6 @@
 			}
 		}
 	}
-	%>
-		<aui:input name="curIndex" type="hidden" value="<%=index %>"/>
-	<%
 %>
 <aui:script>
 	
@@ -552,6 +549,23 @@
 					portletURL.setPortletMode("normal");
 					portletURL.setParameter("content", "declaration-online");
 					dynamicForm(this, portletURL.toString(), '<portlet:namespace/>');
+				});
+			});
+		}
+		
+		//View form
+		var viewVersions = A.all('.view-version');
+		
+		if(viewVersions){
+			viewVersions.each(function(e){
+				e.on('click', function(){
+				
+					var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
+					portletURL.setParameter("mvcPath", "/html/portlets/dossiermgt/frontoffice/modal_dialog.jsp");
+					portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
+					portletURL.setPortletMode("normal");
+					portletURL.setParameter("content", "view-version");
+					viewVersion(this, portletURL.toString(), '<portlet:namespace/>');
 				});
 			});
 		}

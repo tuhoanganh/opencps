@@ -207,14 +207,14 @@
 		<c:when test="<%=citizenId > 0 %>">
 			<aui:input 
 				name="<%=CitizenDisplayTerms.CITIZEN_ID %>" 
-				value="<%=String.valueOf(citizen != null ? citizen.getCitizenId() : 0) %>"
+				value="<%=String.valueOf(citizenId) %>"
 				type="hidden"
 			/>
 		</c:when>
 		<c:otherwise>
 			<aui:input 
 				name="<%=BusinessDisplayTerms.BUSINESS_BUSINESSID %>" 
-				value="<%=String.valueOf(business != null ? business.getBusinessId() : 0) %>"
+				value="<%=String.valueOf(businessId) %>"
 				type="hidden"
 			/>
 		</c:otherwise>

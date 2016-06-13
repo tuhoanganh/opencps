@@ -31,6 +31,8 @@
 
 	PaymentFile paymentFile = (PaymentFile)row.getObject();
 	
+	int paymentStatus = paymentFile.getPaymentStatus();
+	
 	List<String> paymentOption = ListUtil.toList(StringUtil.split(paymentFile.getPaymentOptions()));
 	
 	boolean isCash = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_CASH);
@@ -71,8 +73,11 @@
 <liferay-ui:icon image="view" cssClass="view" message="view"
 	url="<%=viewPaymentDetail.toString()%>" />
 
-<liferay-ui:icon image="key" cssClass="view" message="keypay-transaction"
-	url="<%=paymentFile.getKeypayUrl()%>" />
-
-<liferay-ui:icon image="post" cssClass="view" message="bank-transaction"
-	url="<%=bankTransaction.toString()%>" />	
+<c:if test="<%= paymentStatus == 0 %>">
+	<liferay-ui:icon image="key" cssClass="view" message="keypay-transaction"
+		url="<%=paymentFile.getKeypayUrl()%>" />
+	
+	<liferay-ui:icon image="post" cssClass="view" message="bank-transaction"
+		url="<%=bankTransaction.toString()%>" />	
+</c:if>
+	

@@ -79,16 +79,7 @@
 	String backURL = ParamUtil.getString(request, "backURL");
 	
 %>
-<style>
-.lookup-result table {
-	width: 100%;
-}
 
-.lookup-result tr td {
-	padding: 5px;
-	border: 1px solid #cbcbcb;
-}
-</style>
 
 <liferay-ui:header
 	backURL="<%= backURL %>"
@@ -164,7 +155,7 @@
 			<tr>
 				<td class="col-left"><liferay-ui:message key="place-info"></liferay-ui:message></td>
 				<td class="col-right">
-					<%= paymentFile.getPlaceInfo() %>
+					<%= Validator.isNotNull(paymentFile.getPlaceInfo()) ? paymentFile.getPlaceInfo() : StringPool.BLANK %>
 				</td>
 			</tr>
 			</c:if>

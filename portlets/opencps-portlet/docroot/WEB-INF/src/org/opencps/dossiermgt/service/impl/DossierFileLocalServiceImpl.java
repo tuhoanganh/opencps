@@ -23,9 +23,11 @@ import java.util.List;
 
 import org.opencps.dossiermgt.NoSuchDossierFileException;
 import org.opencps.dossiermgt.model.DossierFile;
+import org.opencps.dossiermgt.model.DossierPart;
 import org.opencps.dossiermgt.model.FileGroup;
 import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.base.DossierFileLocalServiceBaseImpl;
+import org.opencps.util.PortletConstants;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -36,6 +38,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.OrderByComparatorFactory;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.service.ServiceContext;
 
@@ -244,14 +247,6 @@ public class DossierFileLocalServiceImpl
 
 		Date now = new Date();
 
-		// Add file
-		FileEntry fileEntry = dlAppService
-			.addFileEntry(serviceContext
-				.getScopeGroupId(), folderId, sourceFileName, mimeType,
-				oldDossierFile
-					.getDisplayName(),
-				description, changeLog, is, size, serviceContext);
-
 		dossierFile
 			.setUserId(oldDossierFile
 				.getUserId());
@@ -286,9 +281,7 @@ public class DossierFileLocalServiceImpl
 		dossierFile
 			.setDossierPartId(oldDossierFile
 				.getDossierPartId());
-		dossierFile
-			.setFileEntryId(fileEntry
-				.getFileEntryId());
+
 		dossierFile
 			.setFormData(oldDossierFile
 				.getFormData());
@@ -317,6 +310,20 @@ public class DossierFileLocalServiceImpl
 		dossierFile
 			.setOid(oldDossierFile
 				.getOid());
+
+		// Add file
+		FileEntry fileEntry = dlAppService
+			.addFileEntry(serviceContext
+				.getScopeGroupId(), folderId, sourceFileName, mimeType,
+				oldDossierFile
+					.getDisplayName() + StringPool.DASH + dossierFileId +
+					StringPool.DASH + (oldDossierFile
+						.getVersion() + 1),
+				description, changeLog, is, size, serviceContext);
+
+		dossierFile
+			.setFileEntryId(fileEntry
+				.getFileEntryId());
 
 		dossierFileLocalService
 			.removeDossierFile(oldDossierFile
@@ -398,12 +405,6 @@ public class DossierFileLocalServiceImpl
 				.getFileGroupId();
 		}
 
-		// Add file
-		FileEntry fileEntry = dlAppService
-			.addFileEntry(serviceContext
-				.getScopeGroupId(), folderId, sourceFileName, mimeType,
-				displayName, description, changeLog, is, size, serviceContext);
-
 		dossierFile
 			.setUserId(userId);
 		dossierFile
@@ -430,9 +431,7 @@ public class DossierFileLocalServiceImpl
 			.setDossierId(dossierId);
 		dossierFile
 			.setDossierPartId(dossierPartId);
-		dossierFile
-			.setFileEntryId(fileEntry
-				.getFileEntryId());
+
 		dossierFile
 			.setFormData(formData);
 		dossierFile
@@ -444,8 +443,9 @@ public class DossierFileLocalServiceImpl
 
 		dossierFile
 			.setOwnerOrganizationId(ownerOrganizationId);
-		
-		dossierFile.setTemplateFileNo(templateFileNo);
+
+		dossierFile
+			.setTemplateFileNo(templateFileNo);
 
 		if (fileGroupId > 0) {
 			version = DossierFileLocalServiceUtil
@@ -459,18 +459,40 @@ public class DossierFileLocalServiceImpl
 		dossierFile
 			.setVersion(version);
 
+		// Add file
+		FileEntry fileEntry = dlAppService
+			.addFileEntry(serviceContext
+				.getScopeGroupId(), folderId, sourceFileName,
+				mimeType,
+				displayName + StringPool.DASH + dossierFileId +
+					StringPool.DASH + version,
+				description, changeLog, is, size, serviceContext);
+
+		dossierFile
+			.setFileEntryId(fileEntry
+				.getFileEntryId());
+
 		DossierFile curVersion = null;
 
 		try {
-			if (fileGroupId > 0) {
-				curVersion = dossierFileLocalService
-					.getDossierFileInUseByGroupFileId(dossierId, dossierPartId,
-						fileGroupId);
+			DossierPart dossierPart = dossierPartLocalService
+				.getDossierPart(dossierPartId);
+
+			if (dossierPart
+				.getPartType() != PortletConstants.DOSSIER_PART_TYPE_OTHER &&
+				dossierPart
+					.getPartType() != PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT) {
+				if (fileGroupId > 0) {
+					curVersion = dossierFileLocalService
+						.getDossierFileInUseByGroupFileId(dossierId,
+							dossierPartId, fileGroupId);
+				}
+				else {
+					curVersion = dossierFileLocalService
+						.getDossierFileInUse(dossierId, dossierPartId);
+				}
 			}
-			else {
-				curVersion = dossierFileLocalService
-					.getDossierFileInUse(dossierId, dossierPartId);
-			}
+
 		}
 		catch (Exception e) {
 		}
@@ -881,7 +903,10 @@ public class DossierFileLocalServiceImpl
 		// Add file
 		FileEntry fileEntry = dlAppService
 			.addFileEntry(serviceContext
-				.getScopeGroupId(), folderId, sourceFileName, mimeType, title,
+				.getScopeGroupId(), folderId, sourceFileName, mimeType,
+				title + StringPool.DASH + dossierFileId + StringPool.DASH +
+					dossierFile
+						.getVersion(),
 				description, changeLog, is, size, serviceContext);
 
 		dossierFile

@@ -27,6 +27,8 @@ import org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil;
 import org.opencps.util.PortletConstants;
 import org.opencps.util.WebKeys;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.messaging.MessageListener;
@@ -82,7 +84,7 @@ public class SyncFromBackOffice implements MessageListener{
 			    workflowOutputs);
 		}
 		catch (Exception e) {
-			// TODO: handle exception
+			
 		}
 
 		SendToCallbackMsg toCallBack = new SendToCallbackMsg();
@@ -116,5 +118,6 @@ public class SyncFromBackOffice implements MessageListener{
 		return actor;
     }
     
+    private Log _log = LogFactoryUtil.getLog(SyncFromBackOffice.class);
 
 }

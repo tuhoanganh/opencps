@@ -89,7 +89,7 @@
 								group-name="<%=groupName %>"
 								href="javascript:void(0);" 
 								label="declaration-online" 
-								cssClass="opencps dossiermgt part-file-ctr declaration-online"
+								cssClass="label opencps dossiermgt part-file-ctr declaration-online"
 								title="declaration-online"
 							/>
 						</c:when>
@@ -104,7 +104,7 @@
 								group-name="<%=groupName %>"
 								href="javascript:void(0);" 
 								label="view-form" 
-								cssClass="opencps dossiermgt part-file-ctr view-form"
+								cssClass="label opencps dossiermgt part-file-ctr view-form"
 								title="view-form"
 							/>
 						</c:when>
@@ -119,7 +119,7 @@
 										group-name="<%=groupName %>"
 										href="javascript:void(0);" 
 										label="view-attachment" 
-										cssClass="opencps dossiermgt part-file-ctr view-attachment"
+										cssClass="label opencps dossiermgt part-file-ctr view-attachment"
 										title="view-attachment"
 									/>
 								</c:when>
@@ -134,7 +134,7 @@
 										group-name="<%=groupName %>"
 										href="javascript:void(0);" 
 										label="upload-file" 
-										cssClass="opencps dossiermgt part-file-ctr upload-dossier-file"
+										cssClass="label opencps dossiermgt part-file-ctr upload-dossier-file"
 										title="upload-file"
 									/>
 								</c:otherwise>
@@ -146,7 +146,19 @@
 				<td width="10%" align="right">
 					<span class="dossier-version-counter">
 						<span class="counter-value" title="version">
-							<%=version %>
+							<aui:a 
+								id="<%=String.valueOf(dossierPartId) %>"
+								dossier="<%=String.valueOf(dossierId) %>"
+								dossier-part="<%=String.valueOf(isChildDossierPart ? childDossierPartId : dossierPartId) %>"
+								dossier-file="<%=String.valueOf(dossierFileId) %>"
+								file-group="<%=String.valueOf(fileGroupId) %>"
+								group-dossier-part="<%=String.valueOf(groupDossierPartId) %>"
+								group-name="<%=groupName %>"
+								href="javascript:void(0);" 
+								cssClass="view-version"
+							>
+								<%=version %>
+							</aui:a>
 						</span>
 					</span>
 				</td>
@@ -180,7 +192,7 @@
 						group-name="<%=groupName %>"
 						href="javascript:void(0);" 
 						label="upload-file" 
-						cssClass="opencps dossiermgt part-file-ctr upload-dossier-file"
+						cssClass="label opencps dossiermgt part-file-ctr upload-dossier-file"
 						title="upload-file"
 					/>
 					
@@ -205,8 +217,7 @@
 								group-name="<%=groupName %>"
 								href="javascript:void(0);" 
 								label="view-attachment" 
-								cssClass="opencps dossiermgt part-file-ctr view-attachment"
-								
+								cssClass="label opencps dossiermgt part-file-ctr view-attachment"
 								title="view-attachment"
 							/>
 						</c:when>
@@ -221,7 +232,7 @@
 								group-name="<%=groupName %>"
 								href="javascript:void(0);" 
 								label="upload-file" 
-								cssClass="opencps dossiermgt part-file-ctr upload-dossier-file"
+								cssClass="label opencps dossiermgt part-file-ctr upload-dossier-file"
 								title="upload-file"
 							/>
 						</c:otherwise>
@@ -231,7 +242,19 @@
 				<td width="10%" align="right">
 					<span class="dossier-file-counter">
 						<span class="counter-value" title="version">
-							<%=version %>
+							<aui:a 
+								id="<%=String.valueOf(dossierPartId) %>"
+								dossier="<%=String.valueOf(dossierId) %>"
+								dossier-part="<%=String.valueOf(isChildDossierPart ? childDossierPartId : dossierPartId) %>"
+								dossier-file="<%=String.valueOf(dossierFileId) %>"
+								file-group="<%=String.valueOf(fileGroupId) %>"
+								group-dossier-part="<%=String.valueOf(groupDossierPartId) %>"
+								group-name="<%=groupName %>"
+								href="javascript:void(0);" 
+								cssClass="view-version"
+							>
+								<%=version %>
+							</aui:a>
 						</span>
 					</span>
 				</td>
@@ -306,7 +329,7 @@
 								group-name="<%=groupName %>"
 								href="javascript:void(0);" 
 								label="view-attachment" 
-								cssClass="opencps dossiermgt part-file-ctr view-attachment"
+								cssClass="label opencps dossiermgt part-file-ctr view-attachment"
 								
 								title="view-attachment"
 							/>
@@ -322,7 +345,7 @@
 								group-name="<%=groupName %>"
 								href="javascript:void(0);" 
 								label="upload-file" 
-								cssClass="opencps dossiermgt part-file-ctr upload-dossier-file"
+								cssClass="label opencps dossiermgt part-file-ctr upload-dossier-file"
 								title="upload-file"
 							/>
 						</c:otherwise>
@@ -332,7 +355,19 @@
 				<td width="10%" align="right">
 					<span class="dossier-file-counter">
 						<span class="counter-value" title="version">
-							<%=version %>
+							<aui:a 
+								id="<%=String.valueOf(dossierPartId) %>"
+								dossier="<%=String.valueOf(dossierId) %>"
+								dossier-part="<%=String.valueOf(isChildDossierPart ? childDossierPartId : dossierPartId) %>"
+								dossier-file="<%=String.valueOf(dossierFileId) %>"
+								file-group="<%=String.valueOf(fileGroupId) %>"
+								group-dossier-part="<%=String.valueOf(groupDossierPartId) %>"
+								group-name="<%=groupName %>"
+								href="javascript:void(0);" 
+								cssClass="view-version"
+							>
+								<%=version %>
+							</aui:a>
 						</span>
 					</span>
 				</td>
@@ -368,7 +403,7 @@
 								group-name="<%=groupName %>"
 								href="javascript:void(0);" 
 								label="declaration-online" 
-								cssClass="opencps dossiermgt part-file-ctr declaration-online"
+								cssClass="label opencps dossiermgt part-file-ctr declaration-online"
 								title="declaration-online"
 							/>
 						</c:when>
@@ -383,7 +418,7 @@
 								group-name="<%=groupName %>"
 								href="javascript:void(0);" 
 								label="view-form" 
-								cssClass="opencps dossiermgt part-file-ctr view-form"
+								cssClass="label opencps dossiermgt part-file-ctr view-form"
 								title="view-form"
 							/>
 						</c:when>
@@ -398,7 +433,7 @@
 										group-name="<%=groupName %>"
 										href="javascript:void(0);" 
 										label="view-attachment" 
-										cssClass="opencps dossiermgt part-file-ctr view-attachment"
+										cssClass="label opencps dossiermgt part-file-ctr view-attachment"
 										
 										title="view-attachment"
 									/>
@@ -414,7 +449,7 @@
 										group-name="<%=groupName %>"
 										href="javascript:void(0);" 
 										label="upload-file" 
-										cssClass="opencps dossiermgt part-file-ctr upload-dossier-file"
+										cssClass="label opencps dossiermgt part-file-ctr upload-dossier-file"
 										title="upload-file"
 									/>
 								</c:otherwise>
@@ -425,7 +460,19 @@
 				<td width="10%" align="right">
 					<span class="dossier-file-counter">
 						<span class="counter-value" title="version">
-							<%=version %>
+							<aui:a 
+								id="<%=String.valueOf(dossierPartId) %>"
+								dossier="<%=String.valueOf(dossierId) %>"
+								dossier-part="<%=String.valueOf(isChildDossierPart ? childDossierPartId : dossierPartId) %>"
+								dossier-file="<%=String.valueOf(dossierFileId) %>"
+								file-group="<%=String.valueOf(fileGroupId) %>"
+								group-dossier-part="<%=String.valueOf(groupDossierPartId) %>"
+								group-name="<%=groupName %>"
+								href="javascript:void(0);" 
+								cssClass="view-version"
+							>
+								<%=version %>
+							</aui:a>
 						</span>
 					</span>
 				</td>

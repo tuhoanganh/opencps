@@ -1,3 +1,4 @@
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.liferay.portal.service.UserLocalServiceUtil"%>
 <%@page import="org.opencps.util.DateTimeUtil"%>
 <%@page import="org.opencps.processmgt.service.ActionHistoryLocalServiceUtil"%>
@@ -32,6 +33,8 @@
 	
 	List<ActionHistory> actionHistories = new ArrayList<ActionHistory>();
 	
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy/mm/dd | hh:MM:ss");
+	
 %>
 
 	<liferay-ui:search-container 
@@ -59,9 +62,8 @@
 		>
 		
 			<%
-				String date = DateTimeUtil.
-					convertDateToString(actionHistory.getCreateDate(),
-							DateTimeUtil._VN_DATE_FORMAT);
+				String date = sdf.format(actionHistory.getActionDatetime());
+			
 				User userAction = UserLocalServiceUtil
 								.getUser(actionHistory.getActionUserId());
 			%>
