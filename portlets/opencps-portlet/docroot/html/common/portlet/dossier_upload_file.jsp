@@ -122,10 +122,7 @@
 	exception="<%= PermissionDossierException.class %>" 
 	message="<%= PermissionDossierException.class.getName() %>" 
 />
-<liferay-ui:error 
-	exception="<%= PermissionDossierException.class %>" 
-	message="<%= PermissionDossierException.class.getName() %>" 
-/>
+
 <liferay-ui:error 
 	exception="<%= FileSizeException.class %>" 
 	message="<%= FileSizeException.class.getName() %>" 
