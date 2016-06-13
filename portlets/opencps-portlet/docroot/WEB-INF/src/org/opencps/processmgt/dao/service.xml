@@ -211,7 +211,7 @@
 		<column name="esign" type="boolean"/>
 		<column name="postback" type="boolean"/>
 		
-		<finder return-type="Collection" name="P_W_ID">
+		<finder return-type="Collection" name="P_W_ID" where="postback = 1">
 			<finder-column name="processWorkflowId"/>
 		</finder>
 		

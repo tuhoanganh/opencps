@@ -33,7 +33,7 @@
 	
 	List<ActionHistory> actionHistories = new ArrayList<ActionHistory>();
 	
-	SimpleDateFormat sdf = new SimpleDateFormat("yyyy/mm/dd | hh:MM:ss");
+	SimpleDateFormat sdf = new SimpleDateFormat();
 	
 %>
 
@@ -62,8 +62,9 @@
 		>
 		
 			<%
-				String date = sdf.format(actionHistory.getActionDatetime());
-			
+				String date = DateTimeUtil.
+					convertDateToString(actionHistory.getCreateDate(),
+							DateTimeUtil._VN_DATE_FORMAT);
 				User userAction = UserLocalServiceUtil
 								.getUser(actionHistory.getActionUserId());
 			%>
