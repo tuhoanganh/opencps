@@ -90,7 +90,7 @@ public class DefaultLandingPageAction extends Action{
 		}
 	
 		if (_log.isInfoEnabled()) {
-			_log.info(
+			_log.info("Pathhh" +
 				PropsKeys.DEFAULT_LANDING_PAGE_PATH + StringPool.EQUAL + path);
 		}
 	

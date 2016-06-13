@@ -45,7 +45,8 @@
 			<portlet:param name="<%=Constants.CMD %>" value="<%=Constants.ADD %>"/>
 			<portlet:param name="backURL" value="<%=currentURL %>"/>
 		</portlet:renderURL> 
- 		<liferay-ui:icon cssClass="add" image="add" message="add" url="<%=addDossierURL.toString() %>" /> 
+ 		<aui:button type="button" value="choose" href="<%=addDossierURL.toString() %>" cssClass="button-add-front-service"></aui:button>
+ 		<%-- <liferay-ui:icon cssClass="add" image="add" message="add" url="<%=addDossierURL.toString() %>" />  --%>
  	</c:if>
  	  
 <%-- </liferay-ui:icon-menu>  --%>
