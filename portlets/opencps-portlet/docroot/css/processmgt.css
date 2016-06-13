@@ -89,13 +89,15 @@
 .opencps.dossiermgt.dossier-part-control {
     display: table-cell;
     max-width: 255px;
-   line-height: 30px;
+    line-height: 30px;
     vertical-align: top;
     width: 255px;
 }
 
-.opencps.dossiermgt.part-file-ctr.add-private-dossier {
+.opencps.dossiermgt.part-file-ctr.add-individual-part-group {
+	background-color: #698C77 !important;
     padding-left: 0;
+    color: #fff !important;
 }
 
 .label.opencps.dossiermgt.part-file-ctr{
@@ -104,6 +106,30 @@
     float: right;
     margin-left: 5px;
     padding: 5px 3px;
+}
+
+
+.dossier-actions-wraper {
+    width: 100%;
+}
+
+
+.dossier-version-counter{
+	background-color: green;
+    border: 1px solid green;
+    border-radius: 100%;
+    display: block;
+    height: 12px;
+    text-align: center;
+    width: 12px;
+}
+
+.version {
+    color: white;
+    display: block;
+    font-size: 10px;
+    font-weight: bold;
+    line-height: 14px;
 }
 
 .process-workflow-info {
