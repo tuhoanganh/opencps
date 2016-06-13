@@ -17,7 +17,7 @@
  */
 %>
 
-<%@ include file="/init.jsp"%>
+<%@ include file="../init.jsp"%>
 
 <%
 	String tab1 = ParamUtil.getString(request, "tab1", "upload-file");
@@ -37,7 +37,7 @@
 	<liferay-ui:section >
 		
 		<liferay-util:include 
-			page="/html/common/portlet/dossier_select_file.jsp" 
+			page='<%=templatePath + "dossier_select_file.jsp" %>' 
 			servletContext="<%=application %>"
 		/>
 	</liferay-ui:section>

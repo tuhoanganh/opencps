@@ -88,7 +88,7 @@
 										</c:when>
 										
 										<c:otherwise>
-											<i class="fa fa-dot-circle-o" aria-hidden="true"></i>
+											<i class="fa fa-folder-o" aria-hidden="true"></i>
 										</c:otherwise>
 									</c:choose>
 								</span>
