@@ -76,7 +76,7 @@ public class SyncFromBackOffice implements MessageListener{
 			        toBackOffice.getActionInfo(), toBackOffice.getMessageInfo());
 
 			List<WorkflowOutput> workflowOutputs =
-			    WorkflowOutputLocalServiceUtil.getByProcessWF(toBackOffice.getProcessWorkflowId());
+			    WorkflowOutputLocalServiceUtil.getByProcessWFPostback(toBackOffice.getProcessWorkflowId(), true);
 
 			DossierLocalServiceUtil.updateDossierStatus(
 			    0, toBackOffice.getDossierId(),
