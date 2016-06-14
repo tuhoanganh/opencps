@@ -68,6 +68,8 @@
 	
 	ActionHistory latestWorkflowActionHistory = null;
 	
+	boolean isEditDossier = true;
+	
 	try{
 		if(processWorkflow != null){
 			
@@ -246,6 +248,10 @@
 														name="<%=DossierFileDisplayTerms.PART_TYPE %>" 
 														value="<%=String.valueOf(dossierPart.getPartType()) %>"
 													/>
+													<portlet:param 
+														name="isEditDossier" 
+														value="<%=String.valueOf(isEditDossier) %>"
+													/>
 												</liferay-util:include>
 											</span>
 										</div>
@@ -312,6 +318,10 @@
 														<portlet:param 
 															name="<%=DossierFileDisplayTerms.PART_TYPE %>" 
 															value="<%=String.valueOf(partType) %>"
+														/>
+														<portlet:param 
+															name="isEditDossier" 
+															value="<%=String.valueOf(isEditDossier) %>"
 														/>
 													</liferay-util:include>
 												</span>
