@@ -2524,10 +2524,23 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			throw new NoSuchDossierPartException();
 		}
 
-		if (dossier
-			.getUserId() != accountBean
-				.getOwnerUserId()) {
-			throw new PermissionDossierException();
+		if (accountBean
+			.isBusiness()) {
+			if (dossier
+				.getOwnerOrganizationId() != accountBean
+					.getOwnerOrganizationId()) {
+				throw new PermissionDossierException();
+			}
+
+		}
+		else if (accountBean
+			.isCitizen()) {
+			if (dossier
+				.getUserId() != accountBean
+					.getOwnerUserId()) {
+				throw new PermissionDossierException();
+			}
+
 		}
 
 		try {
