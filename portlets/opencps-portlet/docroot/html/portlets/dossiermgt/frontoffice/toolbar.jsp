@@ -36,14 +36,14 @@
 %>
 
 <aui:nav-bar cssClass="custom-toolbar">
-	<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left" >
+	<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left font-pull" >
 		<c:if test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_DOSSIER) && tabs1.equals(DossierMgtUtil.TOP_TABS_DOSSIER)%>">
 			
 			<portlet:renderURL var="addDossierURL" windowState="<%=LiferayWindowState.NORMAL.toString() %>">
 				<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/frontoffice/frontofficeservicelist.jsp"/>
 				<portlet:param name="backURL" value="<%=currentURL %>"/>
 			</portlet:renderURL>
-			<aui:nav-item 
+			<aui:nav-item
 				id="addDictItem" 
 				label="add-dossier" 
 				iconCssClass="icon-plus"  
@@ -52,7 +52,7 @@
 		</c:if>
 	</aui:nav>
 	
-	<aui:nav-bar-search cssClass="pull-right">
+	<aui:nav-bar-search cssClass="pull-right front-custom-select-search">
 		<div class="form-search">
 			<aui:form action="<%= searchURL %>" method="post" name="fm">
 				<c:if test="<%=tabs1.equals(DossierMgtUtil.TOP_TABS_DOSSIER) %>">
@@ -63,6 +63,7 @@
 					<aui:row>
 						<aui:col width="50">
 							<aui:select name="dossierStatus" label="dossier-status" inlineField="<%=true %>" inlineLabel="left">
+								<aui:option><liferay-ui:message key="dossier-status-fill"/></aui:option>
 								<aui:option value="-1"><liferay-ui:message key="all"/></aui:option>
 								<%
 									for(Integer status : PortletUtil.getDossierStatus()){

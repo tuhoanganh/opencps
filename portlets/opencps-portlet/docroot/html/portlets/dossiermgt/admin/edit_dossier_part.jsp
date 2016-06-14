@@ -42,13 +42,14 @@
 	
 	long dossierTemplateId = dossierTemplate != null ? dossierTemplate.getDossierTemplateId() : 0L;
 	long dossierPartId = dossierPart != null ? dossierPart.getDossierpartId() : 0L;
-	int [] dossierType = new int[5];
+	int [] dossierType = new int[6];
 	
 	dossierType[0] = PortletConstants.DOSSIER_TYPE_PAPER_SUBMITED ; 
 	dossierType[1] = PortletConstants.DOSSIER_TYPE_OTHER_PAPERS_GROUP;
 	dossierType[2] = PortletConstants.DOSSIER_TYPE_GROUPS_OPTIONAL; 
 	dossierType[3] = PortletConstants.DOSSIER_TYPE_OWN_RECORDS; 
-	dossierType[4] = PortletConstants.DOSSIER_TYPE_PAPERS_RESULTS;
+	dossierType[4] = PortletConstants.DOSSIER_TYPE_ONE_PAPERS_RESULTS;
+	dossierType[5] = PortletConstants.DOSSIER_TYPE_MULTY_PAPERS_RESULTS;
 	
 	String isAddChilds = ParamUtil.getString(request, "isAddChild");
 	String partListURL = ParamUtil.getString(request, "partListURL");

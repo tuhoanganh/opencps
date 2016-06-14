@@ -631,7 +631,7 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		
 		try {
 	        dossierPartNo = DossierPartLocalServiceUtil
-	        				.getDossierPartByPartNo(partNo);
+	        				.getDossierPartByT_PN(dossierTemplateId, partNo);
 		}
         catch (Exception e) {
 	        // nothing to do

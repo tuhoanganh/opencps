@@ -38,7 +38,8 @@ public class PortletConstants {
 	public static final int DOSSIER_TYPE_OTHER_PAPERS_GROUP = 2;
 	public static final int DOSSIER_TYPE_GROUPS_OPTIONAL = 3;
 	public static final int DOSSIER_TYPE_OWN_RECORDS = 4;
-	public static final int DOSSIER_TYPE_PAPERS_RESULTS = 5;
+	public static final int DOSSIER_TYPE_ONE_PAPERS_RESULTS = 5;
+	public static final int DOSSIER_TYPE_MULTY_PAPERS_RESULTS = 6;
 	
 	public static final int SERVICE_CONFIG_LEVEL_1 = 1;
 	public static final int SERVICE_CONFIG_LEVEL_2 = 2;
@@ -49,7 +50,6 @@ public class PortletConstants {
 	public static final int SERVICE_CONFIG_FRONTOFFICE = 1;
 	public static final int SERVICE_CONFIG_BACKOFFICE = 2;
 	public static final int SERVICE_CONFIG_FRONT_BACK_OFFICE = 3;
-
 	public static enum DestinationRoot {
 			CITIZEN("Citizen"), BUSINESS("Business");
 
