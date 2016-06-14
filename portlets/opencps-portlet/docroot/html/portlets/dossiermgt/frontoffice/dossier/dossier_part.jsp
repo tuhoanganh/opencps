@@ -200,6 +200,10 @@
 													name="<%=DossierFileDisplayTerms.PART_TYPE %>" 
 													value="<%=String.valueOf(dossierPart.getPartType()) %>"
 												/>
+												<portlet:param 
+													name="isEditDossier" 
+													value="<%=String.valueOf(isEditDossier) %>"
+												/>
 											</liferay-util:include>
 										</span>
 									</div>
@@ -265,6 +269,10 @@
 														<portlet:param 
 															name="<%=DossierFileDisplayTerms.PART_TYPE %>" 
 															value="<%=String.valueOf(partType) %>"
+														/>
+														<portlet:param 
+															name="isEditDossier" 
+															value="<%=String.valueOf(isEditDossier) %>"
 														/>
 													</liferay-util:include>
 												</span>

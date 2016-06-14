@@ -64,7 +64,7 @@
 	
 	List<DossierPart> dossierPartsLevel1 = new ArrayList<DossierPart>();
 	
-	boolean isEditDossier = true;
+	boolean isEditDossier = false;
 	
 	if(dossierTemplate != null){
 		try{

@@ -610,9 +610,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
 
-		AccountBean accountBean = AccountUtil
-			.getAccountBean();
-
 		Dossier dossier = null;
 		DossierFile dossierFile = null;
 		DossierPart dossierPart = null;
@@ -641,6 +638,22 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			.getString(actionRequest, "redirectURL");
 
 		try {
+			ServiceContext serviceContext = ServiceContextFactory
+				.getInstance(actionRequest);
+
+			serviceContext
+				.setAddGroupPermissions(true);
+			serviceContext
+				.setAddGuestPermissions(true);
+
+			dossier = DossierLocalServiceUtil
+				.getDossier(dossierId);
+
+			AccountBean accountBean = AccountUtil
+				.getAccountBean(dossier
+					.getUserId(), serviceContext
+						.getScopeGroupId(),
+					serviceContext);
 
 			validateCloneDossierFile(dossierId, dossierPartId,
 				cloneDossierFileId, accountBean);
@@ -653,17 +666,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 			FileEntry fileEntry = DLAppServiceUtil
 				.getFileEntry(fileEntryId);
-
-			ServiceContext serviceContext = ServiceContextFactory
-				.getInstance(actionRequest);
-
-			serviceContext
-				.setAddGroupPermissions(true);
-			serviceContext
-				.setAddGuestPermissions(true);
-
-			dossier = DossierLocalServiceUtil
-				.getDossier(dossierId);
 
 			dossierPart = DossierPartLocalServiceUtil
 				.getDossierPart(dossierPartId);
@@ -788,16 +790,13 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				actionResponse
 					.setRenderParameter("content", "upload-file");
 				actionResponse
-				.setRenderParameter("tab1", "select-file");
+					.setRenderParameter("tab1", "select-file");
 				actionResponse
 					.setRenderParameter("jspPage",
 						"/html/portlets/dossiermgt/frontoffice/modal_dialog.jsp");
 
 			}
 		}
-
-		System.out
-			.println(cloneDossierFileId);
 
 	}
 
