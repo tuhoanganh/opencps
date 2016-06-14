@@ -563,7 +563,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		throws IOException {
 
 		AccountBean accountBean = AccountUtil
-			.getAccountBean();
+			.getAccountBean(actionRequest);
 
 		Dossier dossier = null;
 		DossierFile dossierFile = null;
@@ -763,7 +763,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			.getAttribute(WebKeys.THEME_DISPLAY);
 
 		AccountBean accountBean = AccountUtil
-			.getAccountBean();
+			.getAccountBean(actionRequest);
 
 		long dossierFileId = ParamUtil
 			.getLong(actionRequest, DossierFileDisplayTerms.DOSSIER_FILE_ID);
@@ -1306,7 +1306,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		throws IOException {
 
 		AccountBean accountBean = AccountUtil
-			.getAccountBean();
+			.getAccountBean(actionRequest);
 
 		DossierFile dossierFile = null;
 

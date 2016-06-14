@@ -143,12 +143,12 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	public void addAttachmentFile(
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
+		
+		AccountBean accountBean = AccountUtil
+						.getAccountBean(actionRequest);
 
 		UploadPortletRequest uploadPortletRequest = PortalUtil
 			.getUploadPortletRequest(actionRequest);
-
-		AccountBean accountBean = AccountUtil
-			.getAccountBean();
 
 		Dossier dossier = null;
 		DossierFile dossierFile = null;
@@ -813,7 +813,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			.getAttribute(WebKeys.THEME_DISPLAY);
 
 		AccountBean accountBean = AccountUtil
-			.getAccountBean();
+			.getAccountBean(actionRequest);
 
 		long dossierFileId = ParamUtil
 			.getLong(actionRequest, DossierFileDisplayTerms.DOSSIER_FILE_ID);
@@ -2247,7 +2247,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		throws IOException {
 
 		AccountBean accountBean = AccountUtil
-			.getAccountBean();
+			.getAccountBean(actionRequest);
 
 		DossierFile dossierFile = null;
 
