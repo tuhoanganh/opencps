@@ -2525,12 +2525,13 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			throw new NoSuchDossierPartException();
 		}
 
-		if (dossier
-			.getUserId() != accountBean
-				.getOwnerUserId()) {
-			throw new PermissionDossierException();
-		}
-
+		//TODO: review 
+//		if (dossier
+//			.getUserId() != accountBean
+//				.getOwnerUserId()) {
+//			throw new PermissionDossierException();
+//		}
+//
 		try {
 			DossierPartLocalServiceUtil
 				.getDossierPart(dossierPartId);
