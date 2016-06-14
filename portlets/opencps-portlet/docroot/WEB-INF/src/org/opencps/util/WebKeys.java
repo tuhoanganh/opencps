@@ -176,4 +176,6 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String REQUEST_COMMAND_CANCEL = "cancel";
 	
 	public static final String REQUEST_COMMAND_REPAIR = "repair";
+	
+	public static final String ACCOUNT_BEAN = "accountBean";
 }
