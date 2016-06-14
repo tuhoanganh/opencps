@@ -18,6 +18,10 @@
  */
 %>
 
+<%@page import="javax.portlet.WindowState"%>
+<%@page import="javax.portlet.PortletRequest"%>
+<%@page import="org.opencps.util.WebKeys"%>
+<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
 <%@page import="org.opencps.util.DateTimeUtil"%>
 <%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.model.DossierFile"%>
@@ -57,7 +61,7 @@
 	String headers = StringUtil.merge(headerNames);
 	
 	PortletURL iteratorURL = renderResponse.createRenderURL();
-	iteratorURL.setParameter("mvcPath", templatePath + "dossier_file.jsp");
+	iteratorURL.setParameter("mvcPath", templatePath + "dossier_file_version.jsp");
 	iteratorURL.setParameter("tab1", "select-file");
 	
 	iteratorURL.setParameter("dossierId", String.valueOf(dossierId));
@@ -152,7 +156,7 @@
 						value="<%=String.valueOf(dossierFile.getVersion()) %>"
 					/>
 					
-					<liferay-ui:search-container-column-button href="" name="view" valign="center"/>
+					<liferay-ui:search-container-column-button href='<%="viewAttachment(" + dossierFile.getDossierFileId() + ")" %>' name="view" valign="center" cssClass="view-attachment"/>
 		
 				</liferay-ui:search-container-row> 
 			
@@ -163,4 +167,19 @@
 		<div class="alert alert-info"><liferay-ui:message key="no-dossierfile-were-found"/></div>
 	</c:otherwise>
 </c:choose>
+<aui:script>
+	
+	Liferay.provide(window, 'viewAttachment', function(dossierFileId) {
+		
+		var A = AUI();
+	
+		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.ACTION_PHASE) %>');
+		portletURL.setParameter("javax.portlet.action", "previewAttachmentFile");
+		portletURL.setParameter("dossierFileId", dossierFileId);
+		portletURL.setPortletMode("view");
+		portletURL.setWindowState('<%=WindowState.NORMAL%>');
+		
+		viewDossierAttachment(this, portletURL.toString());
+	},['aui-base','liferay-portlet-url','aui-io']);
 
+</aui:script>
