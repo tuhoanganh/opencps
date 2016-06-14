@@ -122,6 +122,10 @@ public class DossierMgtUtil {
 			partTypeName = LanguageUtil
 			    .get(locale, "papers-results");
 			break;
+		case 6:
+			partTypeName = LanguageUtil
+			    .get(locale, "multy-papers-results");
+			break;
 		default:
 			partTypeName = LanguageUtil
 			    .get(locale, StringPool.BLANK);
