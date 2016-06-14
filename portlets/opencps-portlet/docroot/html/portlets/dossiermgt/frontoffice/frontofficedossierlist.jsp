@@ -37,14 +37,6 @@
 <%@page import="java.util.List"%>
 <%@ include file="../init.jsp"%>
 
-<style>
-	table tbody tr > td:last-child 
-	{
-		width:80px; 
-		vertical-align: middle !important;
-	}
-</style>
-
 <liferay-util:include page='<%=templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
 <liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
 
