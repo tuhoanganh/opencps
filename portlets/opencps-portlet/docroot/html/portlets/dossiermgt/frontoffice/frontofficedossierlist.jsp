@@ -100,6 +100,7 @@
 				
 				//action column
 				row.addJSP("center", SearchEntry.DEFAULT_VALIGN,"/html/portlets/dossiermgt/frontoffice/dossier_actions.jsp", config.getServletContext(), request, response);
+				
 			%>	
 		</liferay-ui:search-container-row> 
 	
