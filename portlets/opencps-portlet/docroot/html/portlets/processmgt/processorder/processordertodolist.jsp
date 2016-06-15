@@ -76,6 +76,7 @@
 				keyProperty="processOrderId"
 			>
 				<%
+					
 					PortletURL processURL = renderResponse.createRenderURL();
 					processURL.setParameter("mvcPath", templatePath + "process_order_detail.jsp");
 					processURL.setParameter(ProcessOrderDisplayTerms.PROCESS_ORDER_ID, String.valueOf(processOrder.getProcessOrderId()));
