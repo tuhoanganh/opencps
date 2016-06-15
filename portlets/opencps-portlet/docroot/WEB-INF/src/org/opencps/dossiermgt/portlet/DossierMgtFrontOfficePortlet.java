@@ -22,7 +22,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.portlet.ActionRequest;
@@ -61,6 +63,7 @@ import org.opencps.dossiermgt.InvalidDossierObjectException;
 import org.opencps.dossiermgt.NoSuchDossierException;
 import org.opencps.dossiermgt.NoSuchDossierFileException;
 import org.opencps.dossiermgt.NoSuchDossierPartException;
+import org.opencps.dossiermgt.NoSuchDossierTemplateException;
 import org.opencps.dossiermgt.OutOfLengthDossierAddressException;
 import org.opencps.dossiermgt.OutOfLengthDossierContactEmailException;
 import org.opencps.dossiermgt.OutOfLengthDossierContactNameException;
@@ -68,6 +71,7 @@ import org.opencps.dossiermgt.OutOfLengthDossierContactTelNoException;
 import org.opencps.dossiermgt.OutOfLengthDossierSubjectIdException;
 import org.opencps.dossiermgt.OutOfLengthDossierSubjectNameException;
 import org.opencps.dossiermgt.PermissionDossierException;
+import org.opencps.dossiermgt.RequiredDossierPartException;
 import org.opencps.dossiermgt.bean.AccountBean;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierFile;
@@ -82,6 +86,7 @@ import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil;
 import org.opencps.dossiermgt.service.FileGroupLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
+import org.opencps.dossiermgt.util.DossierMgtUtil;
 import org.opencps.jasperreport.util.JRReportUtil;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
@@ -2171,6 +2176,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				break;
 			case PortletConstants.DOSSIER_STATUS_NEW:
 
+				validateSubmitDossier(dossierId);
+
 				actionMsg
 					.setAction(WebKeys.ACTION_SUBMIT_VALUE);
 
@@ -2225,6 +2232,21 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		}
 		catch (Exception e) {
+
+			if (e instanceof NoSuchDossierException ||
+				e instanceof NoSuchDossierTemplateException ||
+				e instanceof RequiredDossierPartException) {
+
+				SessionErrors
+					.add(actionRequest, e
+						.getClass());
+			}
+			else {
+				SessionErrors
+					.add(actionRequest,
+						MessageKeys.DOSSIER_SYSTEM_EXCEPTION_OCCURRED);
+			}
+
 			_log
 				.error(e);
 		}
@@ -2802,6 +2824,97 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		}
 	}
 
+	/**
+	 * @param dossierId
+	 * @throws NoSuchDossierException
+	 * @throws NoSuchDossierTemplateException
+	 * @throws RequiredDossierPartException
+	 */
+	public void validateSubmitDossier(long dossierId)
+		throws NoSuchDossierException, NoSuchDossierTemplateException,
+		RequiredDossierPartException {
+
+		if (dossierId <= 0) {
+			throw new NoSuchDossierException();
+		}
+
+		Dossier dossier = null;
+
+		try {
+			dossier = DossierLocalServiceUtil
+				.getDossier(dossierId);
+		}
+		catch (Exception e) {
+		}
+
+		if (dossier == null) {
+			throw new NoSuchDossierException();
+		}
+
+		DossierTemplate dossierTemplate = null;
+
+		try {
+			dossierTemplate = DossierTemplateLocalServiceUtil
+				.getDossierTemplate(dossier
+					.getDossierTemplateId());
+		}
+		catch (Exception e) {
+		}
+
+		if (dossierTemplate == null) {
+			throw new NoSuchDossierTemplateException();
+		}
+
+		List<DossierPart> dossierPartsLevel1 = new ArrayList<DossierPart>();
+
+		try {
+			dossierPartsLevel1 = DossierPartLocalServiceUtil
+				.getDossierPartsByT_P(dossierTemplate
+					.getDossierTemplateId(), 0);
+		}
+		catch (Exception e) {
+
+		}
+
+		boolean requiredFlag = false;
+
+		if (dossierPartsLevel1 != null) {
+			for (DossierPart dossierPartLevel1 : dossierPartsLevel1) {
+				List<DossierPart> dossierParts = DossierMgtUtil
+					.getTreeDossierPart(dossierPartLevel1
+						.getDossierpartId());
+
+				if (requiredFlag) {
+					break;
+				}
+
+				for (DossierPart dossierPart : dossierParts) {
+					if (dossierPart
+						.getRequired()) {
+						DossierFile dossierFile = null;
+						try {
+							dossierFile = DossierFileLocalServiceUtil
+								.getDossierFileInUse(dossierId, dossierPart
+									.getDossierpartId());
+						}
+						catch (Exception e) {
+							// TODO: handle exception
+						}
+
+						if (dossierFile == null) {
+							requiredFlag = true;
+							break;
+						}
+
+					}
+				}
+			}
+		}
+
+		if (requiredFlag) {
+			throw new RequiredDossierPartException();
+		}
+	}
 
 	/**
 	 * @param cityId

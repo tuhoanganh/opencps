@@ -454,6 +454,7 @@
         <exception>EmptyFileGroup</exception>
         <exception>OutOfLengthFIileGroup</exception>
         <exception>DuplicateFileGroup</exception>
+        <exception>RequiredDossierPart</exception>
 	</exceptions>
 
 </service-builder>
