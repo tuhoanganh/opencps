@@ -24,6 +24,8 @@
 
 	TemplateFile templateFile = (TemplateFile) request.getAttribute(WebKeys.SERVICE_TEMPLATE_ENTRY);
 	
+	long templateFileId = templateFile != null ? templateFile.getTemplatefileId() : 0L;
+	
 	String backURL = ParamUtil.getString(request, "backURL");
 	
 	String[] templateSections = new String[] {};
@@ -43,7 +45,9 @@
 	title='<%= (Validator.isNull(templateFile)) ? "add-tempalte" : "update-tempalte" %>'
 />
 
-<portlet:actionURL name="updateTempalteFile" var="updateTempalteFileURL"/>
+<portlet:actionURL name="updateTempalteFile" var="updateTempalteFileURL">
+	<portlet:param name="templateFileId" value="<%=String.valueOf(templateFileId) %>"/>
+</portlet:actionURL>
 
 <liferay-util:buffer var="htmlTop">
 	<c:if test="<%= templateFile != null %>">
