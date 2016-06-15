@@ -426,6 +426,8 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		 * String redirectURL = ParamUtil .getString(actionRequest,
 		 * "redirectURL");
 		 */
+		
+		String backURL = ParamUtil.getString(actionRequest, "backURL");
 
 		long dossierId = ParamUtil
 			.getLong(actionRequest, ProcessOrderDisplayTerms.DOSSIER_ID);
@@ -551,6 +553,8 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		actionResponse
 			.setRenderParameter("jspPage",
 				"/html/portlets/processmgt/processorder/assign_to_user.jsp");
+		actionResponse
+			.setRenderParameter("backURL", backURL);
 	}
 
 	/**

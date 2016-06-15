@@ -1,4 +1,5 @@
 
+<%@page import="org.opencps.backend.util.PaymentRequestGenerator"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -18,6 +19,12 @@
  */
 %>
 
+<%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="org.opencps.util.DateTimeUtil"%>
+<%@page import="org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.model.ProcessWorkflow"%>
+<%@page import="java.util.Date"%>
+<%@page import="org.opencps.backend.util.BookingDateGenerator"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
 <%@page import="org.opencps.processmgt.util.ProcessUtils"%>
@@ -36,6 +43,7 @@
 		
 	}
 	ProcessOrder processOrder = (ProcessOrder) request.getAttribute(WebKeys.PROCESS_ORDER_ENTRY);
+	
 	DossierFile  dossierFile = (DossierFile) request.getAttribute(WebKeys.DOSSIER_FILE_ENTRY);
 
 	long dossierId = ParamUtil.getLong(request, ProcessOrderDisplayTerms.DOSSIER_ID);
@@ -49,6 +57,38 @@
 	String actionNote = ParamUtil.getString(request, ProcessOrderDisplayTerms.ACTION_NOTE);
 	String event = ParamUtil.getString(request, ProcessOrderDisplayTerms.EVENT);
 	String receptionNo = ParamUtil.getString(request, ProcessOrderDisplayTerms.RECEPTION_NO);
+	
+	String strReceiveDate = ParamUtil.getString(request, "receiveDate");
+	
+	String deadlinePattern = ParamUtil.getString(request, "deadlinePattern");
+	
+	String backURL = ParamUtil.getString(request, "backURL");
+	
+	Date receiveDate = null;
+	
+	if(Validator.isNotNull(strReceiveDate)){
+		receiveDate = DateTimeUtil.convertStringToDate(strReceiveDate);
+	}
+	
+	Date estimateDate = null;
+	
+	if(receiveDate != null && Validator.isNotNull(deadlinePattern)){
+		estimateDate = BookingDateGenerator.dateGenerator(receiveDate, deadlinePattern);
+	}
+	
+	PortletUtil.SplitDate spd = null;
+	
+	if(estimateDate != null){
+		spd = new PortletUtil.SplitDate(estimateDate);
+	}
+	
+	ProcessWorkflow processWorkflow = null;
+	
+	if(processWorkflowId > 0){
+		try{
+			processWorkflow = ProcessWorkflowLocalServiceUtil.getProcessWorkflow(processWorkflowId);
+		}catch(Exception e){}
+	}
 %>
 
 <portlet:actionURL var="assignToUserURL" name="assignToUser"/>
@@ -109,6 +149,11 @@
 		value="<%=serviceProcessId %>" 
 		type="hidden"
 	/>
+	<aui:input 
+		name="backURL"
+		value="<%=backURL %>" 
+		type="hidden"
+	/>
 	<aui:select 
 		name="<%=ProcessOrderDisplayTerms.ASSIGN_TO_USER_ID %>" 
 		label="assign-to-next-user" 
@@ -124,11 +169,14 @@
 		%>
 	</aui:select>
 	
-	<aui:input 
-		name="<%=ProcessOrderDisplayTerms.PAYMENTVALUE %>" 
-		label="requirement-to-pay-charges" 
-		type="text"
-	/>
+	<c:if test="<%=processWorkflow != null &&  processWorkflow.isRequestPayment()%>">
+		<aui:input 
+			name="<%=ProcessOrderDisplayTerms.PAYMENTVALUE %>" 
+			label="requirement-to-pay-charges" 
+			type="text"
+			value="<%=Validator.isNotNull(processWorkflow.getPaymentFee()) ? PaymentRequestGenerator.getTotalPayment(processWorkflow.getPaymentFee()) : StringPool.BLANK %>"
+		/>
+	</c:if>
 	
 	<aui:input 
 		name="<%=ProcessOrderDisplayTerms.RECEPTION_NO %>" 
@@ -151,7 +199,10 @@
 		yearParam="<%=ProcessOrderDisplayTerms.ESTIMATE_DATETIME_YEAR %>"
 		formName="fm"
 		autoFocus="<%=true %>"
-		nullable="<%=true %>"
+		dayValue="<%=spd != null ? spd.getDayOfMoth() : 0 %>"
+		monthValue="<%=spd != null ? spd.getMonth() : 0 %>"
+		yearValue="<%=spd != null ? spd.getYear() : 0 %>"
+		nullable="<%=spd == null ? true: false %>"
 	/>
 	
 	<aui:input name="<%=ProcessOrderDisplayTerms.ACTION_NOTE %>" label="action-note" type="textarea"/>
@@ -175,11 +226,15 @@
 		var success = '<%=success%>';
 		
 		if(success == 'true'){
+			var backURL = '<%=backURL%>';
+			var Util = Liferay.Util;
 			<portlet:namespace/>closeDialog();
+			Util.getOpener().Liferay.fire('redirect', {responseData:{backURL:backURL}});
 		}
 	});
 	
 	Liferay.provide(window, '<portlet:namespace/>closeDialog', function() {
+		var backURL = '<%=backURL%>';
 		var dialog = Liferay.Util.getWindow('<portlet:namespace/>assignToUser');
 		dialog.destroy();
 		Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.PROCESS_ORDER_PORTLET %>_');
