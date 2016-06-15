@@ -1,3 +1,4 @@
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.liferay.portal.service.UserLocalServiceUtil"%>
 <%@page import="org.opencps.util.DateTimeUtil"%>
 <%@page import="org.opencps.processmgt.service.ActionHistoryLocalServiceUtil"%>
@@ -31,6 +32,8 @@
 	iteratorURL.setParameter("mvcPath", templatePath + "dossier/history.jsp");
 	
 	List<ActionHistory> actionHistories = new ArrayList<ActionHistory>();
+	
+	SimpleDateFormat sdf = new SimpleDateFormat();
 	
 %>
 

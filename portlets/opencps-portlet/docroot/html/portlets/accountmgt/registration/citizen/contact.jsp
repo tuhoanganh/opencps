@@ -39,9 +39,7 @@
 
 <%
 
-	if(request.getAttribute(WebKeys.CITIZEN_ENTRY) != null){
-		citizen = (Citizen) request.getAttribute(WebKeys.CITIZEN_ENTRY);	
-	}
+	long citizenId = 0;
 
 	DictCollection dictCollection = null;
 	
@@ -53,11 +51,22 @@
 	String selectItems = StringPool.BLANK;
 	String url = StringPool.BLANK;
 	
-	long citizenID = citizen != null ? citizen.getCitizenId() : 0L;
+	citizenId = citizen != null ? citizen.getCitizenId() : 0L;
 	
 	boolean isViewProfile = GetterUtil.get( (Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_VIEW_PROFILE), false);
 	
 	boolean isAdminViewProfile = GetterUtil.get((Boolean) request.getAttribute(WebKeys.ACCOUNTMGT_ADMIN_PROFILE), false);
+	
+	if(request.getAttribute(CitizenDisplayTerms.CITIZEN_ID) != null && isAdminViewProfile){
+		citizenId = (Long) request.getAttribute(CitizenDisplayTerms.CITIZEN_ID);
+		if(citizenId > 0){
+			try{
+				citizen = CitizenLocalServiceUtil.fetchCitizen(citizenId);
+			}catch(Exception e){
+				//
+			}
+		}
+	}
 	
 	try {
 		dictCollection = DictCollectionLocalServiceUtil
@@ -151,7 +160,7 @@
 	
 
 
-<c:if test="<%=isAdminViewProfile && citizenID > 0 %>">
+<c:if test="<%=isAdminViewProfile && citizenId > 0 %>">
 	<a href="<%=url%>"><liferay-ui:message key="url.file.entry"></liferay-ui:message></a>
 </c:if>
 

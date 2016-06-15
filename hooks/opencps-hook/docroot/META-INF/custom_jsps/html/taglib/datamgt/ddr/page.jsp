@@ -66,6 +66,8 @@
 										name='<%=elementName %>' 
 										onchange='<%=themeDisplay.getPortletDisplay().getNamespace() + "renderChildItems(this," + i + ",true)" %>'
 										cssClass='<%=cssClass %>'
+										inlineField="<%=inlineField %>"
+										inlineLabel="<%=inlineLabel %>"
 									>
 										<%
 											if(!itemEmptyOption){
@@ -85,6 +87,8 @@
 								name='<%=elementName %>' 
 								onchange='<%=themeDisplay.getPortletDisplay().getNamespace() + randomInstance + "renderChildItems(this," + i + ",true)" %>'
 								cssClass='<%=cssClass %>'
+								inlineField="<%=inlineField %>"
+								inlineLabel="<%=inlineLabel %>"
 							>
 								<%
 									if(!itemEmptyOption){

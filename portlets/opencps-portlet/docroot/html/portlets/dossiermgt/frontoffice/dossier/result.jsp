@@ -168,7 +168,7 @@
 							for(DossierPart dossierPart : dossierParts){
 								DossierFile dossierFile = null;
 								try{
-									dossierFile = DossierFileLocalServiceUtil.getDossierFileByD_P(dossier.getDossierId(), dossierPart.getDossierpartId());
+									dossierFile = DossierFileLocalServiceUtil.getDossierFileInUse(dossier.getDossierId(), dossierPart.getDossierpartId());
 								}catch(Exception e){
 									continue;
 								}

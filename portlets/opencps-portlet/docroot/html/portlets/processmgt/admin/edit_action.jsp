@@ -181,7 +181,7 @@
 
 	<aui:row>
 		<aui:col width="50">
-			<aui:input name="assignUser" type="checkbox"></aui:input>
+			<aui:input name="assignUser" type="checkbox" checked="<%= (workflow != null) ? workflow.getAssignUser() : false %>"></aui:input>
 			
 			<aui:select name="actionUserId" showEmptyOption="true" label="">
 				<%
@@ -197,7 +197,7 @@
 		<aui:col width="50">
 			<aui:input name="requestPayment" ></aui:input>
 			
-			<aui:input name="paymentFee" label=""></aui:input>
+			<aui:input name="paymentFee"></aui:input>
 		</aui:col>	
 	</aui:row>
 

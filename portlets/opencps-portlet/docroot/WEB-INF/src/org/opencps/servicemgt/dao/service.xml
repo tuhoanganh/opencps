@@ -48,6 +48,11 @@
 		</order>
 
 		<!-- Finder methods -->
+		<finder return-type="Collection" name="G_DI" >
+			<finder-column name="groupId" />
+			<finder-column name="domainIndex" comparator="LIKE" />
+		</finder>
+		
 		<finder name="GroupId" return-type="Collection">
 			<finder-column name="groupId" />
 		</finder>

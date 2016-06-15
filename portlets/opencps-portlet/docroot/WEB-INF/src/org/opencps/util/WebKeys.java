@@ -24,6 +24,8 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String DATA_MANAGEMENT_ADMIN_PORTLET = "1_WAR_opencpsportlet";
 	
 	public static final String DOSSIER_MGT_PORTLET = "13_WAR_opencpsportlet";
+
+	public static final String PAYMENT_MGT_PORTLET = "20_WAR_opencpsportlet";
 	
 	public static final String PROCESS_ORDER_PORTLET = "16_WAR_opencpsportlet";
 
@@ -121,6 +123,8 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	
 	public static final String ACTION_CHANGE_VALUE = "change";
 	
+	public static final String ACTION_REPAIR_VALUE = "repair";
+	
 	public static final String ACTION_PAY_VALUE = "pay";
 	
 	public static final String ACTION_CANCEL_VALUE = "cancel";
@@ -162,4 +166,16 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String PRE_CONDITION_ONEGATE = "onegate";
 	
 	public static final String PRE_CONDITION_ONELINE = "oneline";
+	
+	public static final int PAYMENT_METHOD_CASH = 1;
+	
+	public static final int PAYMENT_METHOD_KEYPAY = 2;
+	
+	public static final int PAYMENT_METHOD_BANK = 3;
+	
+	public static final String REQUEST_COMMAND_CANCEL = "cancel";
+	
+	public static final String REQUEST_COMMAND_REPAIR = "repair";
+	
+	public static final String ACCOUNT_BEAN = "accountBean";
 }

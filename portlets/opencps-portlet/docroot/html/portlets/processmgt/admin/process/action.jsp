@@ -50,6 +50,7 @@
 	<portlet:param name="mvcPath" value='<%= templatePath + "edit_action.jsp" %>'/>
 	<portlet:param name="serviceProcessId" value="<%= Validator.isNotNull(serviceProcess) ? Long.toString(serviceProcess.getServiceProcessId()) : StringPool.BLANK %>"/>
 	<portlet:param name="processWorkflowId" value="<%= Validator.isNotNull(workflow) ? Long.toString(workflow.getProcessWorkflowId()) : StringPool.BLANK %>"/>
+	<portlet:param name="redirectURL" value="<%=currentURL %>"/>
 </liferay-portlet:renderURL>
 
 <aui:button-row>

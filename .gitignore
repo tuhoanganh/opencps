@@ -66,10 +66,6 @@ portlets/opencps-portlet/.classpath
 portlets/opencps-portlet/.settings/org.eclipse.wst.common.component
 portlets/opencps-portlet/.settings/org.eclipse.jdt.ui.prefs
 portlets/opencps-portlet/.tern-project
-portlets/opencps-portlet/build.xml
-portlets/opencps-portlet/ivy.xml
-portlets/opencps-portlet/ivy.xml.MD5
-
 portlets/opencps-portlet/docroot/WEB-INF/.gitignore
 portlets/opencps-portlet/docroot/WEB-INF/classes/
 portlets/opencps-portlet/docroot/WEB-INF/service/
@@ -117,12 +113,11 @@ portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/processmgt/service/pers
 hooks/opencps-hook/.classpath
 hooks/opencps-hook/.gitignore
 hooks/opencps-hook/.settings/
-hooks/opencps-hook/docroot/WEB-INF/classes/
 hooks/opencps-hook/.settings/org.eclipse.jdt.core.prefs
 hooks/opencps-hook/.settings/org.eclipse.wst.common.component
 hooks/opencps-hook/.settings/org.eclipse.wst.common.project.facet.core.prefs.xml
 hooks/opencps-hook/.settings/org.eclipse.wst.common.project.facet.core.xml
-
+hooks/opencps-hook/docroot/WEB-INF/classes/
 portlets/opencps-portlet/.settings/org.eclipse.core.resources.prefs
 
 hooks/opencps-hook/docroot/WEB-INF/classes/content/Language.properties
@@ -227,3 +222,7 @@ portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/model/
 
 bin/
 portlets/opencps-portlet/.classpath
+portlets/LiferayJSONWebservices-portlet.rar
+portlets/LiferayJSONWebservices-portlet/
+
+portlets/opencps-portlet/*.log

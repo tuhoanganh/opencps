@@ -34,6 +34,9 @@
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="org.opencps.util.PortletUtil"%>
 <%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.RequiredDossierPartException"%>
+<%@page import="org.opencps.dossiermgt.NoSuchDossierTemplateException"%>
+<%@page import="org.opencps.dossiermgt.NoSuchDossierException"%>
 <%@page import="java.util.List"%>
 <%@ include file="../init.jsp"%>
 
@@ -50,7 +53,18 @@
 	int totalCount = 0;
 %>
 
-
+<liferay-ui:error 
+	exception="<%= NoSuchDossierException.class %>" 
+	message="<%=NoSuchDossierException.class.getName() %>"
+/>
+<liferay-ui:error 
+	exception="<%= NoSuchDossierTemplateException.class %>" 
+	message="<%=NoSuchDossierTemplateException.class.getName() %>"
+/>
+<liferay-ui:error 
+	exception="<%= RequiredDossierPartException.class %>" 
+	message="<%=RequiredDossierPartException.class.getName() %>"
+/>
 <liferay-ui:search-container searchContainer="<%= new DossierSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
 
 	<liferay-ui:search-container-results>
@@ -100,6 +114,7 @@
 				
 				//action column
 				row.addJSP("center", SearchEntry.DEFAULT_VALIGN,"/html/portlets/dossiermgt/frontoffice/dossier_actions.jsp", config.getServletContext(), request, response);
+				
 			%>	
 		</liferay-ui:search-container-row> 
 	

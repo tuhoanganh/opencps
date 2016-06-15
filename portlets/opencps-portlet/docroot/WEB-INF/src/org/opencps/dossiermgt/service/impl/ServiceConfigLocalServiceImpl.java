@@ -34,7 +34,6 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.service.ServiceContext;
-
 /**
  * The implementation of the service config local service. <p> All custom
  * service methods should be put in this class. Whenever methods are added,
@@ -54,8 +53,10 @@ public class ServiceConfigLocalServiceImpl
 	public ServiceConfig addServiceConfig(
 	    long serviceInfoId, String serviceAdministrationIndex,
 	    String serviceDomainIndex, long dossierTemplateId, String govAgencyCode,
-	    String govAgencyName, int serviceMode, String domainCode, long userId,
-	    ServiceContext serviceContext)
+	    String govAgencyName, int serviceLevel, String domainCode, long userId,
+	    String serviceInstruction, boolean servicePortal,
+	    boolean serviceOnegate, boolean serviceBackoffice, boolean serviceCitizen,
+	    boolean serviceBusinees, ServiceContext serviceContext)
 	    throws PortalException, SystemException {
 
 		ServiceInfo serviceInfo = ServiceInfoLocalServiceUtil
@@ -70,15 +71,14 @@ public class ServiceConfigLocalServiceImpl
 		ServiceConfig serviceConfig = serviceConfigPersistence
 		    .create(serviceConfigId);
 
-		boolean isBackEnd = false;
+		boolean isBackOffice = false;
 
-		if (serviceMode == PortletConstants.SERVICE_CONFIG_BACKOFFICE ||
-		    serviceMode == PortletConstants.SERVICE_CONFIG_FRONT_BACK_OFFICE) {
+		if (serviceBackoffice) {
 			workingUnit = WorkingUnitLocalServiceUtil
 			    .getWorkingUnit(serviceInfo
 			        .getGroupId(), govAgencyCode);
 			if (workingUnit != null) {
-				isBackEnd = true;
+				isBackOffice = true;
 			}
 		}
 
@@ -97,6 +97,12 @@ public class ServiceConfigLocalServiceImpl
 		serviceConfig
 		    .setModifiedDate(currentDate);
 
+		serviceConfig.setServiceInstruction(serviceInstruction);
+		serviceConfig.setServicePortal(servicePortal);
+		serviceConfig.setServiceOnegate(serviceOnegate);
+		serviceConfig.setServiceBackoffice(serviceBackoffice);
+		serviceConfig.setServiceCitizen(serviceCitizen);
+		serviceConfig.setServiceBusinees(serviceBusinees);
 		serviceConfig
 		    .setServiceInfoId(serviceInfoId);
 		serviceConfig
@@ -112,8 +118,8 @@ public class ServiceConfigLocalServiceImpl
 		serviceConfig
 		    .setGovAgencyName(govAgencyName);
 		serviceConfig
-		    .setServiceMode(serviceMode);
-		if (isBackEnd) {
+		    .setServiceLevel(serviceLevel);;
+		if (isBackOffice) {
 			serviceConfig
 			    .setGovAgencyOrganizationId(workingUnit
 			        .getMappingOrganisationId());
@@ -211,11 +217,12 @@ public class ServiceConfigLocalServiceImpl
 	}
 
 	public ServiceConfig updateServiceConfig(
-	    long serviceConfigId, long serviceInfoId,
-	    String serviceAdministrationIndex, String serviceDomainIndex,
-	    long dossierTemplateId, String govAgencyCode, String govAgencyName,
-	    int serviceMode, String domainCode, long userId,
-	    ServiceContext serviceContext)
+	    long serviceConfigId, long serviceInfoId, String serviceAdministrationIndex,
+	    String serviceDomainIndex, long dossierTemplateId, String govAgencyCode,
+	    String govAgencyName, int serviceLevel, String domainCode, long userId,
+	    String serviceInstruction, boolean servicePortal,
+	    boolean serviceOnegate, boolean serviceBackoffice, boolean serviceCitizen,
+	    boolean serviceBusinees, ServiceContext serviceContext)
 	    throws PortalException, SystemException {
 
 		ServiceInfo serviceInfo = ServiceInfoLocalServiceUtil
@@ -226,15 +233,14 @@ public class ServiceConfigLocalServiceImpl
 		ServiceConfig serviceConfig = serviceConfigPersistence
 		    .findByPrimaryKey(serviceConfigId);
 
-		boolean isBackEnd = false;
+		boolean isBackOffice = false;
 
-		if (serviceMode == PortletConstants.SERVICE_CONFIG_BACKOFFICE ||
-		    serviceMode == PortletConstants.SERVICE_CONFIG_FRONT_BACK_OFFICE) {
+		if (serviceBackoffice) {
 			workingUnit = WorkingUnitLocalServiceUtil
 			    .getWorkingUnit(serviceInfo
 			        .getGroupId(), govAgencyCode);
 			if (workingUnit != null) {
-				isBackEnd = true;
+				isBackOffice = true;
 			}
 		}
 
@@ -253,6 +259,12 @@ public class ServiceConfigLocalServiceImpl
 		serviceConfig
 		    .setModifiedDate(currentDate);
 
+		serviceConfig.setServiceInstruction(serviceInstruction);
+		serviceConfig.setServicePortal(servicePortal);
+		serviceConfig.setServiceOnegate(serviceOnegate);
+		serviceConfig.setServiceBackoffice(serviceBackoffice);
+		serviceConfig.setServiceCitizen(serviceCitizen);
+		serviceConfig.setServiceBusinees(serviceBusinees);
 		serviceConfig
 		    .setServiceInfoId(serviceInfoId);
 		serviceConfig
@@ -268,9 +280,8 @@ public class ServiceConfigLocalServiceImpl
 		serviceConfig
 		    .setGovAgencyName(govAgencyName);
 		serviceConfig
-		    .setServiceMode(serviceMode);
-
-		if (isBackEnd) {
+		    .setServiceLevel(serviceLevel);;
+		if (isBackOffice) {
 			serviceConfig
 			    .setGovAgencyOrganizationId(workingUnit
 			        .getMappingOrganisationId());
@@ -279,5 +290,10 @@ public class ServiceConfigLocalServiceImpl
 		return serviceConfigPersistence
 		    .update(serviceConfig);
 
+	}
+	
+	public ServiceConfig getServiceConfigByG_S(long groupId, long serviceInfoId) 
+					throws NoSuchServiceConfigException, SystemException {
+		return serviceConfigPersistence.findByG_S(groupId, serviceInfoId);
 	}
 }

@@ -1,9 +1,4 @@
-<%@page import="org.opencps.dossiermgt.NoSuchDossierFileException"%>
-<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
-<%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
-<%@page import="java.util.List"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -27,6 +22,12 @@
 <%@page import="org.opencps.dossiermgt.NoSuchDossierException"%>
 <%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
+<%@page import="org.opencps.dossiermgt.NoSuchDossierFileException"%>
+<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
+<%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
+<%@page import="java.util.List"%>
 <%@ include file="../../init.jsp"%>
 
 <%
@@ -46,7 +47,7 @@
 	for (DossierPart part : lsDossierParts) {
 		DossierFile df = null;
 		try {
-			df = DossierFileLocalServiceUtil.getDossierFileByD_P(dossier.getDossierId(), part.getDossierpartId());
+			df = DossierFileLocalServiceUtil.getDossierFileInUse(dossier.getDossierId(), part.getDossierpartId());
 		}
 		catch (NoSuchDossierFileException nsdfe) {
 			
@@ -56,13 +57,65 @@
 	<%= part.getPartName() %>
 </aui:input>
 <%
-		List<DossierFile> files = DossierFileLocalServiceUtil.getDossierFileByDossierAndDossierPart(dossier.getDossierId(), part.getDossierpartId());
-		for (DossierFile f : files) {
-%>
-<aui:input style="margin-left: 10%;" type="checkbox" name="<%= f.getDisplayName() %>" checked="<%= true %>" label="">
-	<span style="margin-left: 10%;"><%= f.getDisplayName() %></span>
-</aui:input>
-<%
+	List<DossierFile> files = DossierFileLocalServiceUtil.getDossierFileByDossierId(dossierId);
+	for (DossierFile f : files) {
+		%>
+			<aui:input style="margin-left: 10%;" type="checkbox" name="<%= f.getDisplayName() %>" checked="<%= true %>" label="">
+				<span style="margin-left: 10%;"><%= f.getDisplayName() %></span>
+			</aui:input>
+		<%
 		}
 	}
 %>
+<div id="myTreeView"></div>
+<script type="text/javascript">
+YUI().use(
+		  'aui-tree-view',
+		  function(Y) {
+		    new Y.TreeViewDD(
+		      {
+		        boundingBox: '#myTreeView',
+		        children: [
+		          {
+		            children: [
+		              {label: 'Watermelon', leaf: true, type: 'check'},
+		              {label: 'Apricot', leaf: true, type: 'check'},
+		              {label: 'Pineapple', leaf: true, type: 'check'},
+		              {label: 'Kiwi', leaf: true, type: 'check'},
+		              {label: 'Orange', leaf: true, type: 'check'},
+		              {label: 'Pomegranate', leaf: true, type: 'check'}
+		            ],
+		            expanded: true,
+		            label: 'Checkboxes'
+		          },
+		          {
+		            children: [
+		              {label: 'Watermelon', leaf: true, type: 'radio'},
+		              {label: 'Apricot', leaf: true, type: 'radio'},
+		              {label: 'Pineapple', leaf: true, type: 'radio'},
+		              {label: 'Kiwi', leaf: true, type: 'radio'},
+		              {label: 'Orange', leaf: true, type: 'radio'},
+		              {label: 'Pomegranate', leaf: true, type: 'radio'}
+		            ],
+		            expanded: true,
+		            label: 'Radio'
+		          },
+		          {
+		            children: [
+		              {label: 'Watermelon', leaf: true, type: 'task'},
+		              {label: 'Apricot', leaf: true, type: 'task'},
+		              {label: 'Pineapple', leaf: true,  type: 'task'},
+		              {label: 'Kiwi', leaf: true, type: 'task'},
+		              {label: 'Orange', leaf: true, type: 'task'},
+		              {label: 'Pomegranate', leaf: true,  type: 'task'}
+		            ],
+		            expanded: true,
+		            label: 'Task',
+		            type: 'task'
+		          }
+		        ]
+		      }
+		    ).render();
+		  }
+		);
+</script>

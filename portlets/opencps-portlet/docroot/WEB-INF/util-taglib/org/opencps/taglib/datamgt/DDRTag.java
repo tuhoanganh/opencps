@@ -37,6 +37,33 @@ public class DDRTag extends IncludeTag {
 	private String _displayStyle;
 
 	private long _initDictItemId;
+	
+	private String _inlineLabel;
+	
+	private boolean _inlineField;
+
+	
+	public String getInlineLabel() {
+	
+		return _inlineLabel;
+	}
+
+	
+	public void setInlineLabel(String inlineLabel) {
+	
+		this._inlineLabel = inlineLabel;
+	}
+
+	
+	public boolean getInlineField() {
+	
+		return _inlineField;
+	}
+
+	public void setInlineField(boolean inlineField) {
+	
+		this._inlineField = inlineField;
+	}
 
 	private String _itemNames;
 
@@ -126,7 +153,6 @@ public class DDRTag extends IncludeTag {
 		request
 			.setAttribute("opencps-datamgt:ddr:dictCollectionCode",
 				_dictCollectionCode);
-
 		request
 			.setAttribute("opencps-datamgt:ddr:itemsEmptyOption",
 				_itemsEmptyOption);
@@ -147,6 +173,10 @@ public class DDRTag extends IncludeTag {
 			.setAttribute("opencps-datamgt:ddr:cssClass", _cssClass);
 		request
 			.setAttribute("opencps-datamgt:ddr:displayStyle", _displayStyle);
+		request
+			.setAttribute("opencps-datamgt:ddr:inlineField", _inlineField);
+		request
+			.setAttribute("opencps-datamgt:ddr:inlineLabel", _inlineLabel);
 	}
 
 	public void setCssClass(String _cssClass) {

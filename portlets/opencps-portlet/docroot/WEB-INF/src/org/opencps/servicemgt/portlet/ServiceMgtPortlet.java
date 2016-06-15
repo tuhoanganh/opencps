@@ -10,7 +10,6 @@
  * copy of the GNU Affero General Public License along with this program. If
  * not, see <http://www.gnu.org/licenses/>
  */
-
 package org.opencps.servicemgt.portlet;
 
 import java.io.IOException;
@@ -45,6 +44,7 @@ import org.opencps.servicemgt.search.ServiceDisplayTerms;
 import org.opencps.servicemgt.service.ServiceFileTemplateLocalServiceUtil;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
 import org.opencps.servicemgt.service.TemplateFileLocalServiceUtil;
+import org.opencps.util.ActionKeys;
 import org.opencps.util.DateTimeUtil;
 import org.opencps.util.MessageKeys;
 import org.opencps.util.PortletPropsValues;
@@ -203,7 +203,8 @@ public class ServiceMgtPortlet extends MVCPortlet {
 		SessionMessages.add(
 		    actionRequest, PortalUtil.getPortletId(actionRequest) +
 		        SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_ERROR_MESSAGE);
-
+		String urlOnline = ParamUtil.getString(actionRequest, "urlOnline");
+		String onlineURL = Validator.isNotNull(urlOnline) ? urlOnline : displayTerms.getOnlineUrl();
 		try {
 			ServiceContext serviceContext =
 			    ServiceContextFactory.getInstance(actionRequest);
@@ -232,7 +233,7 @@ public class ServiceMgtPortlet extends MVCPortlet {
 				    displayTerms.getDomainCode(),
 				    displayTerms.getDomainIndex(),
 				    displayTerms.getActiveStatus(),
-				    displayTerms.getOnlineUrl(),
+				    onlineURL,
 				    displayTerms.setFileTemplateIds(actionRequest), serviceContext);
 
 				// Redirect page
@@ -262,7 +263,7 @@ public class ServiceMgtPortlet extends MVCPortlet {
 				    displayTerms.getAdministrationCode(),
 				    displayTerms.getAdministrationIndex(),
 				    displayTerms.getDomainCode(),
-				    displayTerms.getDomainIndex(), displayTerms.getOnlineUrl(),
+				    displayTerms.getDomainIndex(), onlineURL,
 				    displayTerms.setFileTemplateIds(actionRequest), serviceContext);
 				
 				// Redirect page
@@ -301,7 +302,7 @@ public class ServiceMgtPortlet extends MVCPortlet {
 
 		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
 		String returnURL = ParamUtil.getString(actionRequest, "returnURL");
-
+		
 		SessionMessages.add(
 		    actionRequest, PortalUtil.getPortletId(actionRequest) +
 		        SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_ERROR_MESSAGE);
@@ -311,34 +312,40 @@ public class ServiceMgtPortlet extends MVCPortlet {
 			    ServiceContextFactory.getInstance(actionRequest);
 
 			if (templateFileId <= 0) {
-				FileEntry file = updateFileEntry(actionRequest, actionResponse);
 
-				if (Validator.isNotNull(file)) {
 					if (TemplateFileLocalServiceUtil.isDuplicateFileName(
-					    serviceContext.getScopeGroupId(), fileName)) {
-						throw new DuplicateFileNameException();
-
+					    templateFileId, serviceContext.getScopeGroupId(), fileName)) {
+						
 					}
 
 					if (TemplateFileLocalServiceUtil.isDuplicateFileNo(
-					    serviceContext.getScopeGroupId(), fileNo)) {
-						throw new DuplicateFileNoException();
+						templateFileId, serviceContext.getScopeGroupId(), fileNo)) {
+						
 					}
 
 					TemplateFileLocalServiceUtil.addServiceTemplateFile(
-					    file.getFileEntryId(), fileNo, fileName, serviceContext);
+					    fileNo, fileName, actionRequest, actionResponse, 
+					    serviceContext);
 					SessionMessages.add(
 					    actionRequest,
 					    MessageKeys.SERVICE_TEMPLATE_FILE_UPDATE_SUCESS);
-				}
-				else {
-					throw new IOFileUploadException("File upload exception");
-				}
 
 			}
 			else {
+								
+				if (TemplateFileLocalServiceUtil.isDuplicateFileName(
+				    templateFileId, serviceContext.getScopeGroupId(), fileName)) {
+					
+				}
+
+				if (TemplateFileLocalServiceUtil.isDuplicateFileNo(
+					templateFileId, serviceContext.getScopeGroupId(), fileNo)) {
+					
+				}
+				
 				TemplateFileLocalServiceUtil.updateServiceTemplateFile(
-				    templateFileId, fileNo, fileName, serviceContext);
+				    templateFileId, fileNo, fileName,actionRequest,actionResponse,
+				    serviceContext);
 				SessionMessages.add(
 				    actionRequest,
 				    MessageKeys.SERVICE_TEMPLATE_FILE_UPDATE_SUCESS);
@@ -485,244 +492,6 @@ public class ServiceMgtPortlet extends MVCPortlet {
 	 * @return
 	 * @throws Exception
 	 */
-	protected FileEntry updateFileEntry(
-	    ActionRequest actionRequest, ActionResponse actionResponse)
-	    throws Exception {
-
-		UploadPortletRequest uploadPortletRequest =
-		    PortalUtil.getUploadPortletRequest(actionRequest);
-
-		ThemeDisplay themeDisplay =
-		    (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-
-		String cmd = ParamUtil.getString(uploadPortletRequest, Constants.CMD);
-
-		long repositoryId = themeDisplay.getScopeGroupId();
-
-		long folderId = 0;
-
-		Folder folderFile = initFolderService(actionRequest, themeDisplay);
-
-		if (Validator.isNotNull(folderFile)) {
-			folderId = folderFile.getFolderId();
-		}
-
-		String sourceFileName =
-		    uploadPortletRequest.getFileName("uploadedFile");
-		String title = ParamUtil.getString(uploadPortletRequest, "fileName");
-
-		String description =
-		    ParamUtil.getString(uploadPortletRequest, "description");
-		String changeLog =
-		    ParamUtil.getString(uploadPortletRequest, "changeLog");
-
-		if (folderId > 0) {
-			Folder folder = DLAppServiceUtil.getFolder(folderId);
-
-			if (folder.getGroupId() != themeDisplay.getScopeGroupId()) {
-				throw new NoSuchFolderException("{folderId=" + folderId + "}");
-			}
-		}
-
-		InputStream inputStream = null;
-
-		try {
-			String contentType =
-			    uploadPortletRequest.getContentType("uploadedFile");
-
-			long size = uploadPortletRequest.getSize("uploadedFile");
-
-			if ((cmd.equals(Constants.ADD) || cmd.equals(Constants.ADD_DYNAMIC)) &&
-			    (size == 0)) {
-
-				contentType = MimeTypesUtil.getContentType(title);
-			}
-
-			inputStream = uploadPortletRequest.getFileAsStream("uploadedFile");
-
-			ServiceContext serviceContext =
-			    ServiceContextFactory.getInstance(
-			        DLFileEntry.class.getName(), uploadPortletRequest);
-
-			FileEntry fileEntry = null;
-
-			// Add file entry
-
-			fileEntry =
-			    DLAppServiceUtil.addFileEntry(
-			        repositoryId, folderId, sourceFileName, contentType,
-			        sourceFileName, description, changeLog, inputStream, size,
-			        serviceContext);
-
-			AssetPublisherUtil.addAndStoreSelection(
-			    actionRequest, DLFileEntry.class.getName(),
-			    fileEntry.getFileEntryId(), -1);
-
-			AssetPublisherUtil.addRecentFolderId(
-			    actionRequest, DLFileEntry.class.getName(), folderId);
-
-			return fileEntry;
-		}
-		catch (Exception e) {
-			UploadException uploadException =
-			    (UploadException) actionRequest.getAttribute(WebKeys.UPLOAD_EXCEPTION);
-
-			if (uploadException != null) {
-				if (uploadException.isExceededLiferayFileItemSizeLimit()) {
-					throw new LiferayFileItemException();
-				}
-				else if (uploadException.isExceededSizeLimit()) {
-					throw new FileSizeException(uploadException.getCause());
-				}
-			}
-
-			throw e;
-		}
-		finally {
-			StreamUtil.cleanUp(inputStream);
-		}
-	}
-
-	/**
-	 * Create tree folder. Return folder contains template files
-	 * 
-	 * @param actionRequest
-	 * @param themeDisplay
-	 * @return
-	 */
-	public Folder initFolderService(
-	    ActionRequest actionRequest, ThemeDisplay themeDisplay) {
-
-		// Folder contains template service files
-
-		String dateFolderName = DateTimeUtil.getStringDate();
-
-		Folder folder = null;
-
-		try {
-			// Check ROOT folder exist
-
-			long rootFolderId = 0;
-
-			long parentFolderId = 0;
-
-			boolean isRootFolderExist =
-			    isFolderExist(
-			        themeDisplay.getScopeGroupId(), 0, ROOT_FOLDER_NAME);
-
-			ServiceContext serviceContext =
-			    ServiceContextFactory.getInstance(actionRequest);
-
-			if (isRootFolderExist) {
-				Folder rootFolder = null;
-
-				rootFolder =
-				    DLAppServiceUtil.getFolder(
-				        themeDisplay.getScopeGroupId(), 0, ROOT_FOLDER_NAME);
-
-				rootFolderId = rootFolder.getFolderId();
-
-			}
-			else {
-				Folder rootFolder =
-				    DLAppServiceUtil.addFolder(
-				        themeDisplay.getScopeGroupId(), 0, ROOT_FOLDER_NAME,
-				        "All documents of OpenCPS", serviceContext);
-
-				rootFolderId = rootFolder.getFolderId();
-			}
-
-			// Check parent folder exist
-
-			boolean isParentFolderExist =
-			    isFolderExist(
-			        themeDisplay.getScopeGroupId(), rootFolderId,
-			        PARENT_FOLDER_NAME);
-
-			if (isParentFolderExist) {
-
-				Folder parentFolder =
-				    DLAppServiceUtil.getFolder(
-				        themeDisplay.getScopeGroupId(), rootFolderId,
-				        PARENT_FOLDER_NAME);
-
-				parentFolderId = parentFolder.getFolderId();
-
-			}
-			else {
-				Folder parentFolder =
-				    DLAppServiceUtil.addFolder(
-				        themeDisplay.getScopeGroupId(), rootFolderId,
-				        PARENT_FOLDER_NAME,
-				        "All documents of Service Template File",
-				        serviceContext);
-
-				parentFolderId = parentFolder.getFolderId();
-			}
-
-			// Check DateFolder exist
-			boolean isDateFolderExist =
-			    isFolderExist(
-			        themeDisplay.getScopeGroupId(), parentFolderId,
-			        dateFolderName);
-
-			Folder dateFolder = null;
-
-			if (isDateFolderExist) {
-
-				dateFolder =
-				    DLAppServiceUtil.getFolder(
-				        themeDisplay.getScopeGroupId(), parentFolderId,
-				        dateFolderName);
-
-			}
-			else {
-				dateFolder =
-				    DLAppServiceUtil.addFolder(
-				        themeDisplay.getScopeGroupId(),
-				        parentFolderId,
-				        dateFolderName,
-				        "All documents of Service Template File upload in a day",
-				        serviceContext);
-			}
-
-			folder = dateFolder;
-
-		}
-		catch (Exception e) {
-			_log.error(e);
-		}
-
-		return folder;
-	}
-
-	/**
-	 * Check folder exist
-	 * 
-	 * @param scopeGroupId
-	 * @param parentFolderId
-	 * @param folderName
-	 * @return
-	 */
-	public boolean isFolderExist(
-	    long scopeGroupId, long parentFolderId, String folderName) {
-
-		boolean folderExist = false;
-		try {
-
-			DLAppServiceUtil.getFolder(scopeGroupId, parentFolderId, folderName);
-			folderExist = true;
-		}
-		catch (Exception e) {
-
-		}
-
-		return folderExist;
-	}
-
-	private String ROOT_FOLDER_NAME = "OPENCPS";
-
-	private String PARENT_FOLDER_NAME = "templates";
 
 	private static final Log _log =
 	    LogFactoryUtil.getLog(ServiceMgtPortlet.class);

@@ -20,6 +20,7 @@ package org.opencps.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.portlet.ActionRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -43,6 +44,7 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 
 /**
@@ -72,6 +74,8 @@ public class AccountUtil {
 		AccountUtil
 			.setAccountBean(accountBean);
 	}
+	
+	
 
 	/**
 	 * @param request
@@ -155,6 +159,8 @@ public class AccountUtil {
 			.removeAttribute(WebKeys.BUSINESS_ENTRY);
 		session
 			.removeAttribute(WebKeys.EMPLOYEE_ENTRY);
+		session
+			.removeAttribute(WebKeys.ACCOUNT_BEAN);
 
 		request
 			.removeAttribute(WebKeys.ACCOUNT_FOLDER);
@@ -342,8 +348,22 @@ public class AccountUtil {
 	}
 
 	public static AccountBean getAccountBean() {
-
+		
 		return _accountBean;
 	}
+	
+	public static AccountBean getAccountBean(ActionRequest actionRequest) {
+
+		HttpServletRequest request = PortalUtil
+			.getHttpServletRequest(actionRequest);
+		HttpSession session = request
+			.getSession();
+
+		AccountBean accountBean = (AccountBean) session
+			.getAttribute(WebKeys.ACCOUNT_BEAN);
+
+		return accountBean;
+	}
+	
 	private static Log _log = LogFactoryUtil.getLog(AccountUtil.class.getName());
 }

@@ -1,4 +1,5 @@
 
+<%@page import="com.liferay.portal.kernel.util.StringPool"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -32,6 +33,8 @@
 	String name = (String)request.getAttribute("opencps-datamgt:ddr:name");
 	String cssClass = (String)request.getAttribute("opencps-datamgt:ddr:cssClass");
 	String displayStyle = GetterUtil.getString((String)request.getAttribute("opencps-datamgt:ddr:displayStyle"), "horizontal");
+	String inlineLabel = GetterUtil.getString((String)request.getAttribute("opencps-datamgt:ddr:inlineLabel"), StringPool.BLANK);
+	boolean inlineField = GetterUtil.getBoolean(request.getAttribute("opencps-datamgt:ddr:inlineField"), false);
 %>
 
 <%!

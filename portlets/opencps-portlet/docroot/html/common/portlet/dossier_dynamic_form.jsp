@@ -18,6 +18,8 @@
  */
 %>
 
+<%@ include file="/init.jsp"%>
+
 <%@page import="org.opencps.util.PortletPropsValues"%>
 <%@page import="org.opencps.dossiermgt.model.DossierPart"%>
 <%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
@@ -25,7 +27,6 @@
 <%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
-<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.model.DossierFile"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.util.PortletConstants"%>
@@ -33,10 +34,21 @@
 <%@page import="javax.portlet.PortletRequest"%>
 <%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
 <%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
-<%@ include file="../init.jsp"%>
+<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
+<%@page import="org.opencps.accountmgt.model.Business"%>
+<%@page import="org.opencps.dossiermgt.bean.AccountBean"%>
+<%@page import="org.opencps.util.AccountUtil"%>
+<%@page import="org.opencps.accountmgt.service.BusinessLocalServiceUtil"%>
+<%@page import="org.opencps.accountmgt.service.CitizenLocalServiceUtil"%>
+<%@page import="org.opencps.accountmgt.model.Citizen"%>
+<%@page import="org.opencps.backend.util.AutoFillFormData"%>
+<%@page import="org.opencps.backend.util.BackendUtils"%>
+
 
 <%
 	boolean success = false;
+
+	boolean isViewForm = GetterUtil.getBoolean(ParamUtil.getBoolean(request, "isViewForm"), false);
 
 	try{
 		success = !SessionMessages.isEmpty(renderRequest) && SessionErrors.isEmpty(renderRequest);
@@ -50,10 +62,20 @@
 	long dossierId = ParamUtil.getLong(request, DossierDisplayTerms.DOSSIER_ID);
 	
 	long dossierPartId = ParamUtil.getLong(request, DossierFileDisplayTerms.DOSSIER_PART_ID);
-
+	
 	long dossierFileId = ParamUtil.getLong(request, DossierFileDisplayTerms.DOSSIER_FILE_ID);
 	
-	System.out.println(dossierFileId);
+	long fileGroupId = ParamUtil.getLong(request, DossierDisplayTerms.FILE_GROUP_ID);
+	
+	long groupDossierPartId = ParamUtil.getLong(request, "groupDossierPartId");
+
+	String groupName = ParamUtil.getString(request, DossierFileDisplayTerms.GROUP_NAME);
+	
+	String modalDialogId = ParamUtil.getString(request, "modalDialogId");
+	
+	String redirectURL = ParamUtil.getString(request, "redirectURL");
+	
+	String sampleData = StringPool.BLANK;
 	
 	if(primaryKey > 0){
 		dossierFileId = primaryKey;
@@ -64,17 +86,29 @@
 	if(dossierPartId > 0){
 		try{
 			dossierPart = DossierPartLocalServiceUtil.getDossierPart(dossierPartId);
+			sampleData = dossierPart.getSampleData();
 		}catch(Exception e){
 			
 		}
 	}
 	
-	String formData = StringPool.BLANK;
+	AccountBean accBean = AccountUtil.getAccountBean();
+	
+	Citizen ownerCitizen = null;
+	Business ownerBusiness = null;
+	
+	if (accBean.isCitizen()) {
+		ownerCitizen = (Citizen) accBean.getAccountInstance();
+	} else if (accBean.isBusiness()) {
+		ownerBusiness = (Business) accBean.getAccountInstance();
+	} 
+	
+	
+	String formData = AutoFillFormData.dataBinding(sampleData, ownerCitizen, ownerBusiness, dossierId);;
 
 	String alpacaSchema = dossierPart != null && Validator.isNotNull(dossierPart.getFormScript()) ? 
 			dossierPart.getFormScript() : StringPool.BLANK;
-	
-	
+
 	DossierFile dossierFile = null;
 	
 	if(dossierFileId > 0){
@@ -93,8 +127,6 @@
 
 <portlet:actionURL var="updateDynamicFormDataURL" name="updateDynamicFormData"/>
 
-<%-- onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveDynamicFormData();" %>' --%>
-
 <aui:form 
 	name="fm" action="<%=updateDynamicFormDataURL.toString() %>" 
 	method="post"
@@ -104,16 +136,27 @@
 	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_ID %>" type="hidden" value="<%=dossierFile != null ? dossierFile.getDossierFileId() : 0 %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_PART_ID %>" type="hidden" value="<%=dossierPartId %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.FORM_DATA %>" type="hidden" value=""/>
+	<aui:input name="<%=DossierFileDisplayTerms.GROUP_NAME %>" type="hidden" value="<%=groupName %>"/>
+	<aui:input name="<%=DossierDisplayTerms.FILE_GROUP_ID %>" type="hidden" value="<%=fileGroupId%>"/>
+	<aui:input name="groupDossierPartId" type="hidden" value="<%=groupDossierPartId%>"/>
+	
 	<aui:fieldset id="dynamicForm"></aui:fieldset>
 	<aui:fieldset>
-		<c:if test="<%=Validator.isNotNull(alpacaSchema) %>">
-			<aui:button type="button" value="save" name="save" cssClass="saveForm"/>
-			<aui:button type="button" value="preview" name="preview"/>
-		</c:if>
-			
-		<c:if test="<%=dossierFileId > 0%>">
-			<aui:button type="button" value="create-file" name="create-file"/>
-		</c:if>
+		<c:choose>
+			<c:when test="<%=!isViewForm %>">
+				<c:if test="<%=Validator.isNotNull(alpacaSchema) %>">
+					<aui:button type="button" value="save" name="save" cssClass="saveForm"/>
+					
+					
+					<aui:button type="button" value="preview" name="preview"/>
+				</c:if>
+					
+				<c:if test="<%=dossierFileId > 0%>">
+					<aui:button type="button" value="create-file" name="create-file"/>
+				</c:if>
+			</c:when>
+		</c:choose>
+		
 	</aui:fieldset>
 </aui:form>
 
@@ -161,7 +204,7 @@
 		var success = '<%=success%>';
 		
 		if(success == 'true'){
-			Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.DOSSIER_MGT_PORTLET %>_');
+			Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id' + '<portlet:namespace/>');
 		}
 	});
 	
@@ -197,7 +240,9 @@
 						if(fileExportDir == ''){
 							alert('<%= UnicodeLanguageUtil.get(pageContext, "error-while-export-file") %>');
 						}else{
-							<portlet:namespace/>closeDialog();
+							var ns = '<portlet:namespace/>';
+							ns = ns.substring(1, ns.length);
+							closeDialog('<portlet:namespace/>dossier-dynamic-form', ns);
 						}
 					},
 			    	error: function(){
@@ -226,35 +271,4 @@
 		
 	},['aui-io','liferay-portlet-url', 'aui-loading-mask-deprecated']);
 	
-	Liferay.provide(window, '<portlet:namespace/>closeDialog', function() {
-		var dialog = Liferay.Util.getWindow('<portlet:namespace/>dynamicForm');
-		dialog.destroy(); // You can try toggle/hide whate
-		Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.DOSSIER_MGT_PORTLET %>_');
-	});
-	
-	Liferay.provide(window, '<portlet:namespace/>saveDynamicFormData', function() {
-		var A = AUI();
-		var uri = A.one('#<portlet:namespace/>fm').attr('action');
-		var configs = {
-             method: 'POST',
-             form: {
-                 id: '#<portlet:namespace/>fm'
-             },
-             on: {
-             	failure: function(event, id, obj) {
-             		console.log(event);
-				},
-				success: function(event, id, obj) {
-					var response = this.get('responseData');
-					console.log(response);
-					
-				},
-                complete: function(event, id, obj){
-                	console.log(event);
-                }
-             }
-        };
-	            
-	    A.io.request(uri, configs); 
-	},['aui-io']);
 </aui:script>

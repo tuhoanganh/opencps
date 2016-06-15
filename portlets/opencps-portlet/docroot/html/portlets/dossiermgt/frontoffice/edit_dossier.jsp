@@ -64,7 +64,7 @@
 		new String[]{"dossier_info"};
 	
 	String[][] categorySections = {dossierSections};
-
+	
 %>
 <c:choose>
 	<c:when test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) && Validator.isNotNull(accountType) &&
@@ -95,7 +95,8 @@
 		<aui:form name="fm" action="<%=updateDossierURL %>" method="post">
 		
 			<aui:model-context bean="<%= dossier %>" model="<%= Dossier.class %>" />
-			
+			<aui:input name="<%= DossierDisplayTerms.REDIRECT_PAYMENT_URL %>" value="<%= redirectPaymentURL %>" type="hidden"></aui:input>
+
 			<aui:input 
 				name="redirectURL" 
 				type="hidden" 

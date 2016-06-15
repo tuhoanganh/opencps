@@ -93,7 +93,7 @@ public class ProcessWorkflowLocalServiceImpl
 	public ProcessWorkflow updateWorkflow(
 	    long processWorkflowId, long preProcessStepId, long postProcessStepId,
 	    String autoEvent, String actionName, boolean assignUser,
-	    long actionUserId, boolean requestPayment, double paymentFee,
+	    long actionUserId, boolean requestPayment, String paymentFee,
 	    boolean generateReceptionNo, String receptionNoPattern,
 	    boolean generateDeadline, String deadlinePattern, boolean isFinishStep, String preCondition, boolean isMultipled,
 	    ServiceContext context)
@@ -112,6 +112,7 @@ public class ProcessWorkflowLocalServiceImpl
 			
 			workflow.setPreProcessStepId(preProcessStepId);
 			workflow.setAutoEvent(autoEvent);
+			workflow.setPostProcessStepId(postProcessStepId);
 			workflow.setActionName(actionName);
 			workflow.setAssignUser(assignUser);
 			workflow.setActionUserId(actionUserId);
@@ -173,7 +174,7 @@ public class ProcessWorkflowLocalServiceImpl
 	public ProcessWorkflow addWorkflow(
 	    long serviceProcessId, long preProcessStepId, long postProcessStepId,
 	    String autoEvent, String actionName, boolean assignUser,
-	    long actionUserId, boolean requestPayment, double paymentFee,
+	    long actionUserId, boolean requestPayment, String paymentFee,
 	    boolean generateReceptionNo, String receptionNoPattern,
 	    boolean generateDeadline, String deadlinePattern, boolean isFinishStep,
 	    String preCondition, boolean isMultipled, ServiceContext context)

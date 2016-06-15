@@ -1,3 +1,4 @@
+<%@page import="javax.portlet.PortletPreferences"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,4 +18,17 @@
  */
 %>
 <%@ include file="/init.jsp" %>
+
+<%
+	PortletPreferences preferences = renderRequest.getPreferences();
+	
+	portletResource = ParamUtil.getString(request, "portletResource");
+	
+	if (Validator.isNotNull(portletResource)) {
+		preferences = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
+	}
+	
+	String redirectPaymentURL = preferences.getValue("redirectPaymentURL",StringPool.BLANK);
+	
+%>
 

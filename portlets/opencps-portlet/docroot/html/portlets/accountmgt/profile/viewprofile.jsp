@@ -191,7 +191,7 @@
 				
 				<liferay-ui:form-navigator 
 					backURL="<%= currentURL %>"
-					categoryNames= "<%= UserMgtUtil._CITIZEN_CATEGORY_NAMES %>"	
+					categoryNames= "<%= UserMgtUtil._PROFILE_CATEGORY_NAMES %>"	
 					categorySections="<%=categorySections %>" 
 					htmlBottom="<%= htmlBott %>"
 					htmlTop="<%= htmlTop %>"

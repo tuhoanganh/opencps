@@ -55,6 +55,7 @@ public class DossierDisplayTerms extends DisplayTerms {
 	public static final String EXTERNALREF_NO = "externalRefNo";
 	public static final String EXTERNALREF_URL = "externalRefUrl";
 	public static final String SERVICE_DOMAIN_INDEX = "serviceDomainIndex";
+	public static final String SERVICE_DOMAIN_CODE = "serviceDomainCode";
 	public static final String SERVICE_ADMINISTRATION_INDEX =
 	    "serviceAdministrationIndex";
 	public static final String GOVAGENCY_CODE = "govAgencyCode";
@@ -81,6 +82,7 @@ public class DossierDisplayTerms extends DisplayTerms {
 	public static final String SERVICE_NAME = "serviceName";
 	public static final String SERVICE_NO = "serviceNo";
 	public static final String ACCOUNT_TYPE = "accountType";
+	public static final String REDIRECT_PAYMENT_URL = "redirectPaymentURL";
 
 	public static final String USER_ID = "userId";
 
@@ -119,6 +121,9 @@ public class DossierDisplayTerms extends DisplayTerms {
 
 		dossierStatus = ParamUtil
 		    .getInteger(portletRequest, DOSSIER_STATUS, -1);
+
+		serviceDomainCode = ParamUtil
+			    .getString(portletRequest, SERVICE_DOMAIN_CODE);
 
 		userId = ParamUtil
 		    .getLong(portletRequest, USER_ID);
@@ -572,6 +577,15 @@ public class DossierDisplayTerms extends DisplayTerms {
 	protected String externalRefNo;
 	protected String externalRefUrl;
 	protected String serviceDomainIndex;
+	protected String serviceDomainCode;
+	public String getServiceDomainCode() {
+		return serviceDomainCode;
+	}
+
+	public void setServiceDomainCode(String serviceDomainCode) {
+		this.serviceDomainCode = serviceDomainCode;
+	}
+
 	protected String serviceAdministrationIndex;
 	protected String govAgencyCode;
 	protected String govAgencyName;
@@ -593,4 +607,24 @@ public class DossierDisplayTerms extends DisplayTerms {
 	protected Date receiveDatetime;
 	protected Date estimateDatetime;
 	protected Date finishDatetime;
+	
+	protected String redirectPaymentURL;
+
+	
+    /**
+     * @return the redirectPaymentURL
+     */
+    public String getRedirectPaymentURL() {
+    
+    	return redirectPaymentURL;
+    }
+
+	
+    /**
+     * @param redirectPaymentURL the redirectPaymentURL to set
+     */
+    public void setRedirectPaymentURL(String redirectPaymentURL) {
+    
+    	this.redirectPaymentURL = redirectPaymentURL;
+    }
 }

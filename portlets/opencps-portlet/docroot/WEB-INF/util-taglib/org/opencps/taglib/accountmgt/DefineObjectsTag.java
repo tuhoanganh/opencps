@@ -63,6 +63,9 @@ public class DefineObjectsTag extends IncludeTag {
 			.getSession();
 		Object accountInstance = null;
 
+		AccountBean accountBean = (AccountBean) session
+			.getAttribute(org.opencps.util.WebKeys.ACCOUNT_BEAN);
+
 		String accountType = GetterUtil
 			.getString(session
 				.getAttribute(org.opencps.util.WebKeys.ACCOUNT_TYPE));
@@ -98,7 +101,7 @@ public class DefineObjectsTag extends IncludeTag {
 
 		if (themeDisplay
 			.isSignedIn() && Validator
-				.isNull(accountType)) {
+				.isNull(accountBean)) {
 
 			try {
 
@@ -109,7 +112,7 @@ public class DefineObjectsTag extends IncludeTag {
 				ServiceContext serviceContext = ServiceContextFactory
 					.getInstance(request);
 
-				AccountBean accountBean = AccountUtil
+				accountBean = AccountUtil
 					.getAccountBean(themeDisplay
 						.getUserId(), themeDisplay
 							.getScopeGroupId(),
@@ -122,16 +125,19 @@ public class DefineObjectsTag extends IncludeTag {
 						.isBusiness()) {
 						business = (Business) accountBean
 							.getAccountInstance();
+						accountInstance = business;
 					}
 					else if (accountBean
 						.isCitizen()) {
 						citizen = (Citizen) accountBean
 							.getAccountInstance();
+						accountInstance = citizen;
 					}
 					else if (accountBean
 						.isEmployee()) {
 						employee = (Employee) accountBean
 							.getAccountInstance();
+						accountInstance = employee;
 					}
 
 					ownerOrganizationId = accountBean
@@ -205,7 +211,10 @@ public class DefineObjectsTag extends IncludeTag {
 
 				}
 				else {
-					_log.info(DefineObjectsTag.class.getName() + ": --------------------------------->>>: AccountBean is null");
+					_log
+						.info(DefineObjectsTag.class
+							.getName() +
+							": --------------------------------->>>: AccountBean is null");
 				}
 
 			}
@@ -214,10 +223,13 @@ public class DefineObjectsTag extends IncludeTag {
 					.error(e);
 			}
 			finally {
-				AccountUtil
-					.initAccount(accountInstance, accountType, accountFolder,
-						accountRoles, accountOrgs, ownerUserId,
-						ownerOrganizationId);
+				accountBean = new AccountBean(
+					accountInstance, accountType, accountFolder, accountRoles,
+					accountOrgs, ownerUserId, ownerOrganizationId);
+
+				session
+					.setAttribute(org.opencps.util.WebKeys.ACCOUNT_BEAN,
+						accountBean);
 			}
 
 		}

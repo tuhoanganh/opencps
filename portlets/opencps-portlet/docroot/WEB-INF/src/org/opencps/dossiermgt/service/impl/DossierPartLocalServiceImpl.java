@@ -187,4 +187,9 @@ public class DossierPartLocalServiceImpl extends DossierPartLocalServiceBaseImpl
 		long dossierTemplateId, int partType) throws SystemException {
 		return dossierPartPersistence.findByT_T(dossierTemplateId, partType);
 	}
+	
+	public DossierPart getDossierPartByT_PN(long templateId, String partNo) 
+					throws NoSuchDossierPartException, SystemException {
+		return dossierPartPersistence.findByT_PN(templateId, partNo);
+	}
 }

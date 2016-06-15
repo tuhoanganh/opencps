@@ -20,9 +20,11 @@ package org.opencps.dossiermgt.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.FileGroup;
 import org.opencps.dossiermgt.service.base.FileGroupLocalServiceBaseImpl;
 
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.service.ServiceContext;
@@ -47,44 +49,67 @@ public class FileGroupLocalServiceImpl extends FileGroupLocalServiceBaseImpl {
 	 * access the file group local service.
 	 */
 
+	/**
+	 * @param userId
+	 * @param dossierId
+	 * @param dossierPartId
+	 * @param displayName
+	 * @param syncStatus
+	 * @param serviceContext
+	 * @return
+	 * @throws SystemException
+	 */
 	public FileGroup addFileGroup(
-	    long userId, long dossierId, long dossierPartId, String displayName,
-	    int syncStatus, ServiceContext serviceContext)
-	    throws SystemException {
+		long userId, long dossierId, long dossierPartId, String displayName,
+		int syncStatus, ServiceContext serviceContext)
+		throws SystemException {
 
 		long fileGroupId = counterLocalService
-		    .increment(FileGroup.class
-		        .getName());
+			.increment(FileGroup.class
+				.getName());
 		FileGroup fileGroup = fileGroupPersistence
-		    .create(fileGroupId);
+			.create(fileGroupId);
 		Date now = new Date();
 		fileGroup
-		    .setUserId(userId);
+			.setUserId(userId);
 		fileGroup
-		    .setGroupId(serviceContext
-		        .getScopeGroupId());
+			.setGroupId(serviceContext
+				.getScopeGroupId());
 		fileGroup
-		    .setCompanyId(serviceContext
-		        .getCompanyId());
+			.setCompanyId(serviceContext
+				.getCompanyId());
 		fileGroup
-		    .setCreateDate(now);
+			.setCreateDate(now);
 		fileGroup
-		    .setModifiedDate(now);
+			.setModifiedDate(now);
 
 		fileGroup
-		    .setDisplayName(displayName);
+			.setDisplayName(displayName);
 		fileGroup
-		    .setDossierId(dossierId);
+			.setDossierId(dossierId);
 		fileGroup
-		    .setDossierPartId(dossierPartId);
+			.setDossierPartId(dossierPartId);
 		fileGroup
-		    .setSyncStatus(syncStatus);
+			.setSyncStatus(syncStatus);
 		fileGroup
-		    .setUuid(PortalUUIDUtil
-		        .generate());
+			.setOId(PortalUUIDUtil
+				.generate());
 
 		return fileGroupPersistence
-		    .update(fileGroup);
+			.update(fileGroup);
+	}
+	
+	/**
+	 * @param dossierId
+	 * @param displayName
+	 * @return
+	 * @throws SystemException
+	 */
+	public int countByD_DN(long dossierId, String displayName)
+		throws SystemException {
+
+		return fileGroupPersistence
+			.countByD_DN(dossierId, displayName);
 	}
 
 	/**
@@ -93,17 +118,79 @@ public class FileGroupLocalServiceImpl extends FileGroupLocalServiceBaseImpl {
 	 * @return
 	 * @throws SystemException
 	 */
-	public List<FileGroup> getFileGroupByD_P(long dossierId, long dossierPartId)
-	    throws SystemException {
+	public List<FileGroup> getFileGroupByD_DP(
+		long dossierId, long dossierPartId)
+		throws SystemException {
 
 		return fileGroupPersistence
-		    .findByD_P(dossierId, dossierPartId);
+			.findByD_DP(dossierId, dossierPartId);
 	}
 
+	/**
+	 * @param dossierId
+	 * @return
+	 * @throws SystemException
+	 */
 	public List<FileGroup> getFileGroupByDossierId(long dossierId)
-	    throws SystemException {
+		throws SystemException {
 
 		return fileGroupPersistence
-		    .findByDossierId(dossierId);
+			.findByDossierId(dossierId);
+	}
+
+	/**
+	 * @param dossierId
+	 * @param dossierPartId
+	 * @return
+	 * @throws SystemException
+	 */
+	public List<FileGroup> getFileGroupInUse(long dossierId, long dossierPartId)
+		throws SystemException {
+
+		return fileGroupPersistence
+			.findByFileGroupInUse(dossierId, dossierPartId);
+	}
+	
+	
+	/**
+	 * @param dossierId
+	 * @param dossierPartId
+	 * @param fileGroupId
+	 * @throws SystemException 
+	 * @throws PortalException 
+	 */
+	public void deleteFileGroup(
+		long dossierId, long dossierPartId, long fileGroupId)
+		throws PortalException, SystemException {
+
+		DossierFile dossierFile = null;
+
+		FileGroup fileGroup = fileGroupPersistence
+			.findByPrimaryKey(fileGroupId);
+
+		try {
+			dossierFile = dossierFileLocalService
+				.getDossierFileInUseByGroupFileId(dossierId, dossierPartId,
+					fileGroupId);
+
+		}
+		catch (Exception e) {
+		}
+
+		if (dossierFile != null) {
+			dossierFileLocalService
+				.removeDossierFile(dossierFile
+					.getDossierFileId());
+			fileGroup
+				.setModifiedDate(new Date());
+			fileGroup
+				.setRemoved(1);
+			fileGroupPersistence
+				.update(fileGroup);
+		}
+		else {
+			fileGroupPersistence
+				.remove(fileGroup);
+		}
 	}
 }

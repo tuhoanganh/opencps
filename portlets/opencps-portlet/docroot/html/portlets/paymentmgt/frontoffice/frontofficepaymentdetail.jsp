@@ -1,3 +1,8 @@
+<%@page import="org.opencps.backend.util.PaymentRequestGenerator"%>
+<%@page import="com.liferay.portal.kernel.util.ListUtil"%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.Locale"%>
+<%@page import="java.text.NumberFormat"%>
 <%@page import="org.opencps.paymentmgt.util.PaymentMgtUtil"%>
 <%@page import="com.liferay.portlet.documentlibrary.NoSuchFileEntryException"%>
 <%@page import="com.liferay.portlet.documentlibrary.NoSuchFileException"%>
@@ -74,16 +79,7 @@
 	String backURL = ParamUtil.getString(request, "backURL");
 	
 %>
-<style>
-.lookup-result table {
-	width: 100%;
-}
 
-.lookup-result tr td {
-	padding: 5px;
-	border: 1px solid #cbcbcb;
-}
-</style>
 
 <liferay-ui:header
 	backURL="<%= backURL %>"
@@ -120,7 +116,7 @@
 			</tr>
 			<tr>
 				<td class="col-left"><liferay-ui:message key="amount"></liferay-ui:message></td>
-				<td class="col-right"><%= paymentFile.getAmount() %></td>
+				<td class="col-right"><%= NumberFormat.getInstance(new Locale("vi", "VN")).format(paymentFile.getAmount()) %></td>
 			</tr>
 			<tr>
 				<td class="col-left"><liferay-ui:message key="request-note"></liferay-ui:message></td>
@@ -130,9 +126,11 @@
 				<td class="col-left"><liferay-ui:message key="payment-options"></liferay-ui:message></td>
 				<td class="col-right">
 					<%
-						boolean isCash = (((paymentFile.getPaymentOptions()) & 1) != 0);
-						boolean isKeypay = (((paymentFile.getPaymentOptions() >>> 1) & 1) != 0);
-						boolean isBank = (((paymentFile.getPaymentOptions() >>> 2) & 1) != 0);
+						List<String> paymentOption = ListUtil.toList(StringUtil.split(paymentFile.getPaymentOptions()));
+						
+						boolean isCash = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_CASH);
+						boolean isKeypay = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_KEYPAY);
+						boolean isBank = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_BANK);
 					%>
 					<c:if test="<%= isCash %>">
 						[<liferay-ui:message key="cash"></liferay-ui:message>]&nbsp;
@@ -157,7 +155,7 @@
 			<tr>
 				<td class="col-left"><liferay-ui:message key="place-info"></liferay-ui:message></td>
 				<td class="col-right">
-					<%= paymentFile.getPlaceInfo() %>
+					<%= Validator.isNotNull(paymentFile.getPlaceInfo()) ? paymentFile.getPlaceInfo() : StringPool.BLANK %>
 				</td>
 			</tr>
 			</c:if>
@@ -225,7 +223,7 @@
 						}
 					%>
 					<c:if test="<%= dlURL != null %>">
-						<a href="<%= dlURL %>"><liferay-ui:message key="view-confirm-file-entry"></liferay-ui:message></a>
+						<a target="_blank" href="<%= dlURL %>"><liferay-ui:message key="view-confirm-file-entry"></liferay-ui:message></a>
 					</c:if>
 				</td>
 			</tr>			

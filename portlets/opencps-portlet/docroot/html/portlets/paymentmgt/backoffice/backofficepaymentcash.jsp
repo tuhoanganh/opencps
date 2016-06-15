@@ -28,16 +28,6 @@
 %>
 <%@ include file="../init.jsp"%>
 
-<style>
-.lookup-result table {
-	width: 100%;
-}
-
-.lookup-result tr td {
-	padding: 5px;
-	border: 1px solid #cbcbcb;
-}
-</style>
 <%
 	Format dateFormatDate = FastDateFormatFactoryUtil.getDate(locale, timeZone);
 	String backRedirect = ParamUtil.getString(request, "redirect");
@@ -61,68 +51,73 @@
 	title="payment-cash"
 	backLabel="back"
 />
-<p></p>
+
+
 <aui:form name="payForm" action="">
-<div class="lookup-result">
-	<table>
-		<tr>
-			<th><liferay-ui:message key="so-ho-so"/></th>
-			<th><%=HtmlUtil.escape(soHoSo) %></th>
-		</tr>
-		<tr>
-			<td class="col-left">
-				<liferay-ui:message key="thu-tuc-hanh-chinh"/>
-			</td>
-			<td class="col-right">
-				<%=HtmlUtil.escape(coQuanQuanLyHoaDon) %>
-			</td>
-		</tr>		
-		<tr>
-			<td class="col-left">
-				<liferay-ui:message key="co-quan-thuc-hien"/>
-			</td>
-			<td class="col-right">
-				<%=HtmlUtil.escape(paymentFile.getPaymentName()) %>
-			</td>
-		</tr>		
-		<tr>
-			<td class="col-left">
-				<liferay-ui:message key="ten-phi-thanh-toan"/>
-			</td>
-			<td class="col-right">
-				<%=HtmlUtil.escape(paymentFile.getPaymentName()) %>
-			</td>
-		</tr>		
-		<tr>
-			<td class="col-left">
-				<liferay-ui:message key="so-tien"/>
-			</td>
-			<td class="col-right">
-				<%=HtmlUtil.escape(String.valueOf(paymentFile.getAmount())) %>
-			</td>
-		</tr>		
-		<tr>
-			<td class="col-left">
-				<liferay-ui:message key="ghi-chu-kem-theo"/>
-			</td>
-			<td class="col-right">
-				<%=HtmlUtil.escape(paymentFile.getRequestNote()) %>
-			</td>
-		</tr>		
-			
-	</table>
-</div>
+	<aui:input name="paymentFileId" value="<%= paymentFileId %>" type="hidden"></aui:input>
+	<div class="lookup-result">
+		<table>
+			<tr>
+				<th><liferay-ui:message key="so-ho-so"/></th>
+				<th><%=HtmlUtil.escape(soHoSo) %></th>
+			</tr>
+			<tr>
+				<td class="col-left">
+					<liferay-ui:message key="thu-tuc-hanh-chinh"/>
+				</td>
+				<td class="col-right">
+					<%=HtmlUtil.escape(coQuanQuanLyHoaDon) %>
+				</td>
+			</tr>		
+			<tr>
+				<td class="col-left">
+					<liferay-ui:message key="co-quan-thuc-hien"/>
+				</td>
+				<td class="col-right">
+					<%=HtmlUtil.escape(paymentFile.getPaymentName()) %>
+				</td>
+			</tr>		
+			<tr>
+				<td class="col-left">
+					<liferay-ui:message key="ten-phi-thanh-toan"/>
+				</td>
+				<td class="col-right">
+					<%=HtmlUtil.escape(paymentFile.getPaymentName()) %>
+				</td>
+			</tr>		
+			<tr>
+				<td class="col-left">
+					<liferay-ui:message key="so-tien"/>
+				</td>
+				<td class="col-right">
+					<%=HtmlUtil.escape(String.valueOf(paymentFile.getAmount())) %>
+				</td>
+			</tr>		
+			<tr>
+				<td class="col-left">
+					<liferay-ui:message key="ghi-chu-kem-theo"/>
+				</td>
+				<td class="col-right">
+					<%=HtmlUtil.escape(paymentFile.getRequestNote()) %>
+				</td>
+			</tr>		
+				
+		</table>
+	</div>
 	<aui:button-row>
-	<aui:input 
-			name="termsOfUse"
-			type="checkbox" 
-			label="ban-da-thu-thu-so-tien-cua-nguoi-lam-thu-tuc"
+		<aui:input 
+				name="termsOfUse"
+				type="checkbox" 
+				label="ban-da-thu-thu-so-tien-cua-nguoi-lam-thu-tuc"
 		/>
 		<aui:button name="register" type="button" value="dong-y" disabled="true" />
 		<aui:button name="back" value="back" href="<%=backRedirect.toString() %>" />
 	</aui:button-row>
-
+	
 </aui:form>
+
+<liferay-portlet:actionURL name="updateConfirmPayment" var="updateConfirmPaymentURL"></liferay-portlet:actionURL>
+
 <aui:script>
 	AUI().ready(function(A) {
 		var termsOfUseCheckbox = A.one('#<portlet:namespace />termsOfUseCheckbox');
@@ -146,8 +141,13 @@
 		}
 	});
 </aui:script>
+
+
+
 <script type="text/javascript">
 	function paymentFormSubmit() {
-		document.getElementById('<portlet:namespace />payForm').submit();
+		document.<portlet:namespace />payForm.action = '<%= updateConfirmPaymentURL %>';
+		
+		submitForm(document.<portlet:namespace />payForm);
 	}
 </script>

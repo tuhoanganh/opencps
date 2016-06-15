@@ -25,6 +25,8 @@ import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.opencps.datamgt.model.DictItem;
+import org.opencps.datamgt.service.DictItemLocalServiceUtil;
 import org.opencps.dossiermgt.DuplicateDossierPartNumberException;
 import org.opencps.dossiermgt.DuplicateDossierPartSiblingException;
 import org.opencps.dossiermgt.DuplicateDossierTemplateNumberException;
@@ -50,6 +52,8 @@ import org.opencps.dossiermgt.search.ServiceConfigDisplayTerms;
 import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
+import org.opencps.servicemgt.model.ServiceInfo;
+import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
 import org.opencps.usermgt.model.WorkingUnit;
 import org.opencps.usermgt.service.WorkingUnitLocalServiceUtil;
 import org.opencps.util.MessageKeys;
@@ -430,52 +434,95 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		    ParamUtil.getLong(
 		        actionRequest,
 		        ServiceConfigDisplayTerms.SERVICE_CONFIG_DOMAINCODE);
-		String govAgencyCode =
-		    ParamUtil.getString(
+		long govAgencyCodeId =
+		    ParamUtil.getLong(
 		        actionRequest,
 		        ServiceConfigDisplayTerms.SERVICE_CONFIG_GOVAGENCYCODE);
-		String govAgencyName =
-		    ParamUtil.getString(
-		        actionRequest,
-		        ServiceConfigDisplayTerms.SERVICE_CONFIG_GOVAGENCYNAME);
+		
 		String returnURL = ParamUtil.getString(actionRequest, "returnURL");
 		String backURL = ParamUtil.getString(actionRequest, "backURL");
+		String serviceInstruction = ParamUtil.getString(actionRequest, 
+			ServiceConfigDisplayTerms.SERVICE_INSTRUCTION);
 		
-		int serviceMode =
+		int serviceLevel =
 		    ParamUtil.getInteger(
 		        actionRequest,
-		        ServiceConfigDisplayTerms.SERVICE_CONFIG_SERVICEMODE);
+		        ServiceConfigDisplayTerms.SERVICE_CONFIG_SERVICELEVEL);
+		
+		boolean servicePortal = ParamUtil.getBoolean(actionRequest, 
+			ServiceConfigDisplayTerms.SERVICE_PORTAL);
+		boolean serviceOnegate = ParamUtil.getBoolean(actionRequest, 
+			ServiceConfigDisplayTerms.SERVICE_ONEGATE);
+		boolean serviceBackoffice = ParamUtil.getBoolean(actionRequest,
+			ServiceConfigDisplayTerms.SERVICE_BACKOFFICE);
+		boolean serviceCitizen = ParamUtil.getBoolean(actionRequest,
+			ServiceConfigDisplayTerms.SERVICE_CITIZEN);
+		boolean serviceBusinees = ParamUtil.getBoolean(actionRequest,
+			ServiceConfigDisplayTerms.SERVICE_BUSINEES);
+		
+		
 
 		String serviceDomainIndex = StringPool.BLANK;
 		String serviceAdministrationIndex = StringPool.BLANK;
+		String govAgencyCode = StringPool.BLANK;
+		String govAgencyName = StringPool.BLANK;
+		
+		ServiceInfo serviceInfo = null;
+		DictItem dictItemGov = null;
+		
+		ServiceContext serviceContext= null;
+		
+		try {
+			serviceContext = ServiceContextFactory
+						    .getInstance(actionRequest);
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		try {
+			serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(serviceInfoId);
+			serviceAdministrationIndex = serviceInfo.getAdministrationIndex();
+			serviceDomainIndex = serviceInfo.getDomainIndex();
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		try {
+			dictItemGov = DictItemLocalServiceUtil.getDictItem(govAgencyCodeId);
+			govAgencyCode = dictItemGov.getItemCode();
+			govAgencyName = dictItemGov.getItemName(serviceContext.getLocale(), true);
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+		}
 
 		try {
-			
-			ServiceContext serviceContext = ServiceContextFactory
-						    .getInstance(actionRequest);
 			serviceConfigValidate(serviceConfigId, govAgencyCode,
-				govAgencyName, domainCode, serviceContext, serviceMode);
+				govAgencyName, domainCode, serviceContext, serviceBackoffice);
 			
 			if (serviceConfigId == 0) {
-				ServiceConfigLocalServiceUtil.addServiceConfig(
-				    serviceInfoId, serviceAdministrationIndex,
-				    serviceDomainIndex, dossierTemplateId, govAgencyCode,
-				    govAgencyName, serviceMode, String.valueOf(domainCode),
-				    serviceContext.getUserId(), serviceContext);
+				ServiceConfigLocalServiceUtil.addServiceConfig(serviceInfoId, 
+					serviceAdministrationIndex, serviceDomainIndex, 
+					dossierTemplateId, govAgencyCode, govAgencyName, 
+					serviceLevel, String.valueOf(domainCode), serviceContext.getUserId(), serviceInstruction, 
+					servicePortal, serviceOnegate, serviceBackoffice, 
+					serviceCitizen, serviceBusinees, serviceContext);
 			}
 			else {
-				ServiceConfigLocalServiceUtil.updateServiceConfig(
-				    serviceConfigId, serviceInfoId, serviceAdministrationIndex,
-				    serviceDomainIndex, dossierTemplateId, govAgencyCode,
-				    govAgencyName, serviceMode, String.valueOf(domainCode),
-				    serviceContext.getUserId(), serviceContext);
-			}
+				ServiceConfigLocalServiceUtil.updateServiceConfig(serviceConfigId, 
+					serviceInfoId, serviceAdministrationIndex, serviceDomainIndex,
+					dossierTemplateId, govAgencyCode, govAgencyName, serviceLevel,
+					String.valueOf(domainCode), serviceContext.getUserId(), serviceInstruction, servicePortal, 
+					serviceOnegate, serviceBackoffice, serviceCitizen,
+					serviceBusinees, serviceContext);
 			
 			if(Validator.isNotNull(backURL)) {
 				actionResponse.sendRedirect(backURL);
 			}
 		}
-		catch (Exception e) {
+	} catch (Exception e) {
 			if(e instanceof OutOfLengthServiceConfigGovCodeException) {
 				SessionErrors.add(actionRequest, OutOfLengthServiceConfigGovCodeException.class);
 			} 
@@ -520,7 +567,7 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 	 * @throws InvalidInWorkingUnitException
 	 */
 	protected void serviceConfigValidate(long serviceConfigId, String govAgencyCode,
-		String govAgencyName, long domainCode, ServiceContext serviceContext, int serviceMode) 
+		String govAgencyName, long domainCode, ServiceContext serviceContext, boolean serviceBackOffice) 
 						throws OutOfLengthServiceConfigGovCodeException,
 						OutOfLengthServiceConfigGovNameException,
 						InvalidServiceConfigGovCodeException,
@@ -555,8 +602,7 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		else if(domainCode == 0) {
 			throw new InvalidServiceDomainException();
 		}
-		else if(serviceMode == PortletConstants.SERVICE_CONFIG_BACKOFFICE ||
-				serviceMode ==	PortletConstants.SERVICE_CONFIG_FRONT_BACK_OFFICE) {
+		else if(serviceBackOffice) {
 			if(workingUnit == null) {
 				throw new InvalidInWorkingUnitException();
 			}
@@ -585,7 +631,7 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		
 		try {
 	        dossierPartNo = DossierPartLocalServiceUtil
-	        				.getDossierPartByPartNo(partNo);
+	        				.getDossierPartByT_PN(dossierTemplateId, partNo);
 		}
         catch (Exception e) {
 	        // nothing to do
