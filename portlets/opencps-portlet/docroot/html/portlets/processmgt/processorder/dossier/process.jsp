@@ -66,6 +66,8 @@
 	DossierTemplate dossierTemplate = (DossierTemplate) request.getAttribute(WebKeys.DOSSIER_TEMPLATE_ENTRY);
 	ProcessWorkflow processWorkflow = (ProcessWorkflow) request.getAttribute(WebKeys.PROCESS_WORKFLOW_ENTRY);
 	
+	String backURL = ParamUtil.getString(request, "backURL");
+	
 	ActionHistory latestWorkflowActionHistory = null;
 	
 	boolean isEditDossier = true;
@@ -400,7 +402,9 @@
 							process-workflow="<%=String.valueOf(postProcessWorkflow.getProcessWorkflowId()) %>"
 							service-process="<%=String.valueOf(postProcessWorkflow.getServiceProcessId()) %>"
 							process-step="<%=String.valueOf(postProcessWorkflow.getPostProcessStepId()) %>"
+							deadline-pattern="<%=postProcessWorkflow.getDeadlinePattern() %>"
 							auto-event="<%=Validator.isNotNull(postProcessWorkflow.getAutoEvent()) ? postProcessWorkflow.getAutoEvent() : StringPool.BLANK %>"
+							receive-date="<%=Validator.isNotNull(processOrder.getActionDatetime()) ? DateTimeUtil.convertDateToString(processOrder.getActionDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) : StringPool.BLANK %>"
 							onClick='<%=renderResponse.getNamespace() +  "assignToUser(this)"%>'
 						/>
 					</c:if>
@@ -427,6 +431,10 @@
 		
 		var autoEvent = instance.attr('auto-event');
 		
+		var receiveDate = instance.attr('receive-date');
+		
+		var deadlinePattern = instance.attr('deadline-pattern');
+		
 		var dossierId = A.one('#<portlet:namespace/>dossierId').val();
 		
 		var processOrderId = A.one('#<portlet:namespace/>processOrderId').val();
@@ -450,7 +458,10 @@
 		portletURL.setParameter("actionUserId", actionUserId);
 		portletURL.setParameter("fileGroupId", fileGroupId);
 		portletURL.setParameter("receptionNo", receptionNo);
-		
+		portletURL.setParameter("receiveDate", receiveDate);
+		portletURL.setParameter("deadlinePattern", deadlinePattern);
+		portletURL.setParameter("backURL", '<%=backURL%>');
+	
 		openDialog(portletURL.toString(), '<portlet:namespace />assignToUser', '<%= UnicodeLanguageUtil.get(pageContext, "handle") %>');
 	});
 	
@@ -633,6 +644,16 @@ AUI().ready('aui-base','liferay-portlet-url','aui-io', function(A){
 					dynamicForm(this, portletURL.toString(), '<portlet:namespace/>');
 				});
 			});
+		}
+	});
+	
+	Liferay.on('redirect',function(event) {
+		
+		var backURL = event.responseData.backURL;
+		
+		if(backURL){
+	
+			window.location = backURL;
 		}
 	});
 
