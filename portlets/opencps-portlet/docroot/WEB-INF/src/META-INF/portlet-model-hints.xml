@@ -337,7 +337,7 @@
 		<field name="assignUser" type="boolean" />
 		<field name="actionUserId" type="long" />
 		<field name="requestPayment" type="boolean" />
-		<field name="paymentFee" type="double" />
+		<field name="paymentFee" type="String" />
 		<field name="generateReceptionNo" type="boolean" />
 		<field name="receptionNoPattern" type="String" />
 		<field name="generateDeadline" type="boolean" />

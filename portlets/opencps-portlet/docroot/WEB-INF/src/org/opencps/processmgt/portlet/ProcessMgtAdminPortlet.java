@@ -242,7 +242,7 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 				}
 
 				for (WorkflowOutput output : workflowOutputs) {
-					if (output.getWorkflowOutputId() >= 0) {
+					if (output.getWorkflowOutputId() > 0) {
 						WorkflowOutputLocalServiceUtil.updateWorkflowOutput(
 						    output.getWorkflowOutputId(),
 						    output.getDossierPartId(),

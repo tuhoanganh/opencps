@@ -18,6 +18,8 @@
  */
 %>
 
+<%@ include file="/init.jsp"%>
+
 <%@page import="org.opencps.util.PortletPropsValues"%>
 <%@page import="org.opencps.dossiermgt.model.DossierPart"%>
 <%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
@@ -33,7 +35,15 @@
 <%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
 <%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
-<%@ include file="/init.jsp"%>
+<%@page import="org.opencps.accountmgt.model.Business"%>
+<%@page import="org.opencps.dossiermgt.bean.AccountBean"%>
+<%@page import="org.opencps.util.AccountUtil"%>
+<%@page import="org.opencps.accountmgt.service.BusinessLocalServiceUtil"%>
+<%@page import="org.opencps.accountmgt.service.CitizenLocalServiceUtil"%>
+<%@page import="org.opencps.accountmgt.model.Citizen"%>
+<%@page import="org.opencps.backend.util.AutoFillFormData"%>
+<%@page import="org.opencps.backend.util.BackendUtils"%>
+
 
 <%
 	boolean success = false;
@@ -65,6 +75,8 @@
 	
 	String redirectURL = ParamUtil.getString(request, "redirectURL");
 	
+	String sampleData = StringPool.BLANK;
+	
 	if(primaryKey > 0){
 		dossierFileId = primaryKey;
 	}
@@ -74,17 +86,29 @@
 	if(dossierPartId > 0){
 		try{
 			dossierPart = DossierPartLocalServiceUtil.getDossierPart(dossierPartId);
+			sampleData = dossierPart.getSampleData();
 		}catch(Exception e){
 			
 		}
 	}
 	
-	String formData = StringPool.BLANK;
+	AccountBean accBean = AccountUtil.getAccountBean();
+	
+	Citizen ownerCitizen = null;
+	Business ownerBusiness = null;
+	
+	if (accBean.isCitizen()) {
+		ownerCitizen = (Citizen) accBean.getAccountInstance();
+	} else if (accBean.isBusiness()) {
+		ownerBusiness = (Business) accBean.getAccountInstance();
+	} 
+	
+	
+	String formData = AutoFillFormData.dataBinding(sampleData, ownerCitizen, ownerBusiness, dossierId);;
 
 	String alpacaSchema = dossierPart != null && Validator.isNotNull(dossierPart.getFormScript()) ? 
 			dossierPart.getFormScript() : StringPool.BLANK;
-	
-	
+
 	DossierFile dossierFile = null;
 	
 	if(dossierFileId > 0){
