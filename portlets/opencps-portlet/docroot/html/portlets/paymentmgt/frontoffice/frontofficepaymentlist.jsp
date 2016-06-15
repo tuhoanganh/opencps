@@ -85,11 +85,11 @@
 			}catch(Exception e){
 			}
 			
-				total = totalCount;
-				results = paymentFiles;
-				
-				pageContext.setAttribute("results", results);
-				pageContext.setAttribute("total", total);
+			total = totalCount;
+			results = paymentFiles;
+			
+			pageContext.setAttribute("results", results);
+			pageContext.setAttribute("total", total);
 		%>
 	</liferay-ui:search-container-results>	
 		<liferay-ui:search-container-row 
@@ -122,9 +122,9 @@
 					row.addText(Validator.isNotNull(dossier) ? dossier.getReceptionNo() : "");
 					
 					//gov agency name column
-						row.addText(PaymentMgtUtil.getOwnerPayment(
-						    paymentFile.getOwnerUserId(),
-						    paymentFile.getOwnerOrganizationId()));
+					row.addText(PaymentMgtUtil.getOwnerPayment(
+					    paymentFile.getOwnerUserId(),
+					    paymentFile.getOwnerOrganizationId()));
 
 						//payment name column
 						row.addText(paymentFile.getPaymentName());
