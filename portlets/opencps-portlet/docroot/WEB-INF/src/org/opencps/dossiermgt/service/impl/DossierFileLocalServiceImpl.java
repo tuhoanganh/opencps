@@ -922,4 +922,5 @@ public class DossierFileLocalServiceImpl
 		return dossierFilePersistence.fetchByTemplateFileNoDossierId_First(dossierId, templateFileNo, comparator);
 	}
 	
+
 }
