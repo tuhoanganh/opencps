@@ -38,8 +38,9 @@
 %>
 
 <aui:nav-bar cssClass="custom-toolbar">
+
 	<c:if test="<%=!isListServiceConfig %>">
-		<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left" >
+		<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left font-pull" >
 			<c:if test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_DOSSIER) 
 				&& tabs1.equals(DossierMgtUtil.TOP_TABS_DOSSIER)%>">
 				
@@ -58,9 +59,10 @@
 		</aui:nav>
 	</c:if>
 	
-	<aui:nav-bar-search cssClass="pull-right">
+	<aui:nav-bar-search cssClass="pull-right front-custom-select-search">
 		<div class="form-search">
 			<aui:form action="<%= searchURL %>" method="post" name="fm">
+
 				<c:choose>
 					<c:when test="<%=isListServiceConfig %>">
 						<aui:row>
@@ -96,27 +98,29 @@
 						</aui:row>
 					</c:when>
 					<c:otherwise>
+	
 						<c:if test="<%=tabs1.equals(DossierMgtUtil.TOP_TABS_DOSSIER) %>">
-							<%
-								searchURL.setParameter("mvcPath", templatePath + "frontofficedossierlist.jsp");
-								searchURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER);
-							%>
+						<%
+							searchURL.setParameter("mvcPath", templatePath + "frontofficedossierlist.jsp");
+							searchURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER);
+						%>
 							<aui:row>
 								<aui:col width="50">
 									<aui:select name="dossierStatus" label="dossier-status" inlineField="<%=true %>" inlineLabel="left">
+										<aui:option><liferay-ui:message key="dossier-status-fill"/></aui:option>
 										<aui:option value="-1"><liferay-ui:message key="all"/></aui:option>
-										<%
-											for(Integer status : PortletUtil.getDossierStatus()){
-												%>
-													<aui:option 
-														value="<%= status%>"
-														
-													>
-														<%=PortletUtil.getDossierStatusLabel(status, locale) %>
-													</aui:option>
-												<%
-											}
-										%>
+											<%
+												for(Integer status : PortletUtil.getDossierStatus()){
+													%>
+														<aui:option 
+															value="<%= status%>"
+															
+														>
+															<%=PortletUtil.getDossierStatusLabel(status, locale) %>
+														</aui:option>
+													<%
+												}
+											%>
 									</aui:select>
 								</aui:col>
 								<aui:col width="50">

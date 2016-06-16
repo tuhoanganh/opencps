@@ -386,15 +386,11 @@
 					postProcessWorkflow.getPreCondition() : StringPool.BLANK;
 					
 					boolean showButton = true;
-					
-					if(preCondition.contains(WebKeys.PRE_CONDITION_PAYOK)){
-						if(!BackendUtils.checkPaymentStatus(dossier.getDossierId())){
-							showButton = false;
-						}
-					}
+
+					showButton = BackendUtils.checkPreCondition(preCondition, dossier.getDossierId());
 					
 				%>
-					<c:if test="<%=showButton %>">
+					<c:if test="<%= showButton %>">
 						<aui:button 
 							type="button"
 							name="<%=String.valueOf(postProcessWorkflow.getProcessWorkflowId()) %>"

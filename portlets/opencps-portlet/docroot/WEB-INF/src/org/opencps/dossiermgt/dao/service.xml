@@ -95,6 +95,11 @@
 			<finder-column name="partNo" />
 		</finder>
 		
+		<finder return-type="DossierPart" name="T_PN">
+			<finder-column name="dossierTemplateId" />
+			<finder-column name="partNo" />
+		</finder>
+		
 		<finder return-type="Collection" name="T_T">
 			<finder-column name="dossierTemplateId"/>
 			<finder-column name="partType" />

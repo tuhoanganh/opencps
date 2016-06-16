@@ -37,7 +37,7 @@
 	catch (NoSuchDossierException ex) {
 		
 	}
-	List<ActionHistory> histories = ActionHistoryLocalServiceUtil.searchActionHistoryByDossierId(scopeGroupId, dossierId);
+	List<ActionHistory> histories = ActionHistoryLocalServiceUtil.searchActionHistoryByDossierId(0, dossierId);
 	Format dateFormatDate = FastDateFormatFactoryUtil.getDate(locale, timeZone);
 %>
 <c:if test="<%= histories.size() > 0 %>">

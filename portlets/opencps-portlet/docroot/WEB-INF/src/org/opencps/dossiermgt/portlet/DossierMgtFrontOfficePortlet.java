@@ -2546,6 +2546,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			throw new NoSuchDossierPartException();
 		}
 
+
 		if (accountBean
 			.isBusiness()) {
 			if (dossier

@@ -123,4 +123,10 @@ public class WorkflowOutputLocalServiceImpl
 	    throws PortalException, SystemException {
 		return workflowOutputPersistence.findByP_W_ID(processWorkflowId);
 	}
+	
+	public List<WorkflowOutput> getByProcessWFPostback(long processWorkflowId, boolean postback)
+				    throws PortalException, SystemException {
+		return workflowOutputPersistence.findByP_W_ID_PB(processWorkflowId, postback);
+	}
+
 }
