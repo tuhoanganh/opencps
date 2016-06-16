@@ -419,7 +419,7 @@
         </finder>
 	<reference package-path="com.liferay.portlet.documentlibrary" entity="DLApp" />
         <reference entity="DLFileEntry" package-path="com.liferay.portlet.documentlibrary"/>
-    </enity>
+    </entity>
 
 	<exceptions>
 		<exception>OutOfLengthDossierTemplateName</exception>

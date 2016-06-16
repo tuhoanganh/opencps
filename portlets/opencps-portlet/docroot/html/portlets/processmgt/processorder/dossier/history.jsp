@@ -45,12 +45,11 @@
 		>
 		<liferay-ui:search-container-results>
 			<%
-				actionHistories = ActionHistoryLocalServiceUtil
-					.getActionHistoriesByG_PORD(scopeGroupId, processOrderId, 
-						searchContainer.getStart(), searchContainer.getEnd());
+				actionHistories =  ActionHistoryLocalServiceUtil.getActionHistoryByProcessOrderId(processOrderId, searchContainer.getStart(), searchContainer.getEnd());
+				
 				results = actionHistories;
 				total = ActionHistoryLocalServiceUtil
-					.counAcionHistoriesByG_PORD(scopeGroupId, processOrderId);
+					.countActionHistoryByProcessId(processOrderId);
 				pageContext.setAttribute("results", results);
 				pageContext.setAttribute("total", total);
 			%>
@@ -62,11 +61,25 @@
 		>
 		
 			<%
-				String date = DateTimeUtil.
-					convertDateToString(actionHistory.getCreateDate(),
-							DateTimeUtil._VN_DATE_FORMAT);
-				User userAction = UserLocalServiceUtil
-								.getUser(actionHistory.getActionUserId());
+				String date = StringPool.BLANK;
+				
+				if (Validator.isNotNull(actionHistory.getCreateDate())) {
+					date = DateTimeUtil.
+									convertDateToString(actionHistory.getCreateDate(),
+										DateTimeUtil._VN_DATE_FORMAT);
+				}
+				
+				String userActionName = StringPool.BLANK;
+				
+				try {
+					if (Validator.isNotNull(actionHistory.getActionUserId()) || actionHistory.getActionUserId() != 0) {
+						userActionName = UserLocalServiceUtil
+										.getUser(actionHistory.getActionUserId()).getFullName();
+					}
+				} catch (Exception e ) {
+					
+				}
+				
 			%>
 			<liferay-ui:search-container-column-text 
 				name="row-no"
@@ -90,7 +103,7 @@
 			
 			<liferay-ui:search-container-column-text 
 				name="action-user"
-			 	value="<%= userAction.getFullName() %>"
+			 	value="<%= userActionName %>"
 			/>
 			
 			<liferay-ui:search-container-column-text 
