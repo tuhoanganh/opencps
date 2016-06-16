@@ -308,6 +308,11 @@
 			<finder-column name="processOrderId"/>
 		</finder>
 		
+		<finder return-type="Collection" name="ProcessOrderId">
+			<finder-column name="processOrderId"/>
+		</finder>
+		
+		
 	</entity>
 	
 	<entity name="ServiceInfoProcess" local-service="true"
