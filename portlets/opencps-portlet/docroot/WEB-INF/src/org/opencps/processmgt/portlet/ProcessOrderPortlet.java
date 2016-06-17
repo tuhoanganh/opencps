@@ -22,9 +22,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 import javax.portlet.ActionRequest;
@@ -32,6 +30,8 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.opencps.accountmgt.NoSuchAccountException;
@@ -39,10 +39,6 @@ import org.opencps.accountmgt.NoSuchAccountFolderException;
 import org.opencps.accountmgt.NoSuchAccountOwnOrgIdException;
 import org.opencps.accountmgt.NoSuchAccountOwnUserIdException;
 import org.opencps.accountmgt.NoSuchAccountTypeException;
-import org.opencps.accountmgt.model.Business;
-import org.opencps.accountmgt.model.Citizen;
-import org.opencps.accountmgt.service.BusinessLocalServiceUtil;
-import org.opencps.accountmgt.service.CitizenLocalServiceUtil;
 import org.opencps.backend.message.SendToEngineMsg;
 import org.opencps.dossiermgt.DuplicateFileGroupException;
 import org.opencps.dossiermgt.EmptyFileGroupException;
@@ -102,8 +98,6 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.model.User;
-import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -135,6 +129,9 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		throws IOException {
 
 		boolean updated = false;
+		
+		AccountBean accountBean = AccountUtil
+						.getAccountBeanFromAttribute(actionRequest);
 
 		UploadPortletRequest uploadPortletRequest = PortalUtil
 			.getUploadPortletRequest(actionRequest);
@@ -205,12 +202,6 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				.setAddGroupPermissions(true);
 			serviceContext
 				.setAddGuestPermissions(true);
-
-			AccountBean accountBean = AccountUtil
-				.getAccountBean(dossier
-					.getUserId(), serviceContext
-						.getScopeGroupId(),
-					serviceContext);
 
 			validateAddAttachDossierFile(dossierId, dossierPartId,
 				dossierFileId, displayName, size, sourceFileName, inputStream,
@@ -565,10 +556,10 @@ public class ProcessOrderPortlet extends MVCPortlet {
 	public void cloneDossierFile(
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
-
+		
 		AccountBean accountBean = AccountUtil
-			.getAccountBean(actionRequest);
-
+			.getAccountBeanFromAttribute(actionRequest);
+		
 		Dossier dossier = null;
 		DossierFile dossierFile = null;
 		DossierPart dossierPart = null;
@@ -767,7 +758,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			.getAttribute(WebKeys.THEME_DISPLAY);
 
 		AccountBean accountBean = AccountUtil
-			.getAccountBean(actionRequest);
+						.getAccountBeanFromAttribute(actionRequest);
 
 		long dossierFileId = ParamUtil
 			.getLong(actionRequest, DossierFileDisplayTerms.DOSSIER_FILE_ID);
@@ -1166,6 +1157,9 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 		if (processOrderId > 0) {
 			try {
+				ServiceContext serviceContext = ServiceContextFactory
+					.getInstance(renderRequest);
+
 				ProcessOrder processOrder = ProcessOrderLocalServiceUtil
 					.getProcessOrder(processOrderId);
 				ProcessStep processStep = ProcessStepLocalServiceUtil
@@ -1174,6 +1168,12 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				Dossier dossier = DossierLocalServiceUtil
 					.getDossier(processOrder
 						.getDossierId());
+
+				AccountBean accountBean = AccountUtil
+					.getAccountBean(dossier
+						.getUserId(), serviceContext
+							.getScopeGroupId(),
+						serviceContext);
 				ServiceProcess serviceProcess = ServiceProcessLocalServiceUtil
 					.getServiceProcess(processOrder
 						.getServiceProcessId());
@@ -1215,63 +1215,13 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				renderRequest
 					.setAttribute(WebKeys.PROCESS_WORKFLOW_ENTRY,
 						processWorkflow);
-
-				ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest
-					.getAttribute(WebKeys.THEME_DISPLAY);
-
-				String accountType = StringPool.BLANK;
-
-				if (themeDisplay
-					.isSignedIn()) {
-
-					List<UserGroup> userGroups = new ArrayList<UserGroup>();
-
-					User user = themeDisplay
-						.getUser();
-					userGroups = user
-						.getUserGroups();
-
-					if (!userGroups
-						.isEmpty()) {
-						for (UserGroup userGroup : userGroups) {
-							if (userGroup
-								.getName().equals(
-									PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN) ||
-								userGroup
-									.getName().equals(
-										PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS)) {
-								accountType = userGroup
-									.getName();
-								break;
-							}
-
-						}
-					}
-
-					renderRequest
-						.setAttribute(WebKeys.ACCOUNT_TYPE, accountType);
-
-					if (accountType
-						.equals(
-							PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN)) {
-						Citizen citizen = CitizenLocalServiceUtil
-							.getCitizen(user
-								.getUserId());
-						renderRequest
-							.setAttribute(WebKeys.CITIZEN_ENTRY, citizen);
-					}
-					else if (accountType
-						.equals(
-							PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS)) {
-
-						Business business = BusinessLocalServiceUtil
-							.getBusiness(user
-								.getUserId());
-						renderRequest
-							.setAttribute(WebKeys.BUSINESS_ENTRY, business);
-					}
-
-				}
+				
+				HttpServletRequest request = PortalUtil.getHttpServletRequest(renderRequest);
+				
+				ServletContext servletContext = request.getServletContext();
+				
+				servletContext
+					.setAttribute(WebKeys.ACCOUNT_BEAN, accountBean);
 
 				if (dossierFileId > 0) {
 					DossierFile dossierFile = DossierFileLocalServiceUtil
@@ -1310,7 +1260,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		throws IOException {
 
 		AccountBean accountBean = AccountUtil
-			.getAccountBean(actionRequest);
+						.getAccountBeanFromAttribute(actionRequest);
 
 		DossierFile dossierFile = null;
 
