@@ -1329,7 +1329,9 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 		// Default value
 		int dossierFileMark = PortletConstants.DOSSIER_FILE_MARK_UNKNOW;
-		int dossierFileType = PortletConstants.DOSSIER_FILE_TYPE_INPUT;
+		int dossierFileType = ParamUtil
+			.getInteger(actionRequest,
+				DossierFileDisplayTerms.DOSSIER_FILE_TYPE);
 		int syncStatus = PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC;
 		int original = PortletConstants.DOSSIER_FILE_ORIGINAL;
 
