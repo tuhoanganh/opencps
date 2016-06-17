@@ -23,7 +23,6 @@ import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.processmgt.NoSuchProcessOrderException;
 import org.opencps.processmgt.model.ProcessOrder;
-import org.opencps.processmgt.model.ProcessWorkflow;
 import org.opencps.processmgt.service.base.ProcessOrderLocalServiceBaseImpl;
 
 import com.liferay.portal.kernel.exception.PortalException;
