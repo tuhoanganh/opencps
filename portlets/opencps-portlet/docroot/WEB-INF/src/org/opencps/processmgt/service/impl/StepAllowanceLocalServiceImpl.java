@@ -98,6 +98,21 @@ public class StepAllowanceLocalServiceImpl
 	}
 	
 	/**
+	 * @param processStepId
+	 * @param readOnly
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public List<StepAllowance> getByProcessStep(
+		long processStepId, boolean readOnly)
+		throws PortalException, SystemException {
+
+		return stepAllowancePersistence
+			.findByP_S_R_O(processStepId, readOnly);
+	}
+	
+	/**
 	 * Add StepAllowance
 	 * 
 	 * @param processStepId
