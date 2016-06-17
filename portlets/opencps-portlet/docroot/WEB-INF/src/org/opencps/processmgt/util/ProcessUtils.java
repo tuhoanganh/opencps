@@ -22,8 +22,11 @@ import org.opencps.processmgt.model.impl.StepAllowanceImpl;
 import org.opencps.processmgt.model.impl.WorkflowOutputImpl;
 import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
 import org.opencps.processmgt.service.ServiceProcessLocalServiceUtil;
+import org.opencps.processmgt.service.StepAllowanceLocalServiceUtil;
 
-import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -41,21 +44,57 @@ import com.liferay.portal.service.UserLocalServiceUtil;
  */
 public class ProcessUtils {
 	
+	
 	/**
 	 * @param processStepId
+	 * @param state
+	 * <p>state = 1 -> get StepAllowance width readOnly = true</p>
+	 * <p>state = 0 -> get StepAllowance width readOnly = false</p>
+	 * <p>state = -1 -> getAll StepAllowance</p>
 	 * @return
 	 */
-	public static List<User> getAssignUsers(long processStepId) {
+	public static List<User> getAssignUsers(long processStepId, int state) {
 
 		List<User> users = new ArrayList<User>();
 
+		List<StepAllowance> stepAllowances = null;
+
 		try {
-			users =
-			    UserLocalServiceUtil.getUsers(
-			        QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+			if (state == 1) {
+				stepAllowances = StepAllowanceLocalServiceUtil
+					.getByProcessStep(processStepId, true);
+			}
+			else if (state == 0) {
+				stepAllowances = StepAllowanceLocalServiceUtil
+					.getByProcessStep(processStepId, false);
+			}
+			else {
+				stepAllowances = StepAllowanceLocalServiceUtil
+					.getByProcessStep(processStepId);
+			}
+
+			if (stepAllowances != null) {
+				for (StepAllowance stepAllowance : stepAllowances) {
+
+					long roleId = stepAllowance
+						.getRoleId();
+					if (roleId > 0) {
+						List<User> usersTemp = UserLocalServiceUtil
+							.getRoleUsers(roleId);
+						if (usersTemp != null && !usersTemp
+							.isEmpty()) {
+							users
+								.addAll(usersTemp);
+						}
+					}
+				}
+			}
+
+			ListUtil
+				.distinct(users);
 		}
 		catch (Exception e) {
-
+			_log.error(e);
 		}
 
 		return users;
@@ -381,4 +420,6 @@ public class ProcessUtils {
 	public static String[] _PROCESS_ORDER_CATEGORY_NAMES = {
 	    "process-order"
 	};
+	
+	private static Log _log = LogFactoryUtil.getLog(ProcessUtils.class.getName());
 }
