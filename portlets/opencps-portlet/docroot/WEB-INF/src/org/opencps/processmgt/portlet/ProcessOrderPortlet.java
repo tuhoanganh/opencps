@@ -514,6 +514,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		// sendToEngineMsg.setAction(WebKeys.ACTION);
 		sendToEngineMsg
 			.setActionNote(actionNote);
+		sendToEngineMsg.setAssignToUserId(assignToUserId);
 		sendToEngineMsg
 			.setActionUserId(actionUserId);
 		sendToEngineMsg
