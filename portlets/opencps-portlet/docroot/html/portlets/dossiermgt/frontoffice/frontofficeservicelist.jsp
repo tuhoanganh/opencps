@@ -18,13 +18,13 @@
  */
 %>
 
+<%@page import="org.opencps.dossiermgt.bean.ServiceBean"%>
 <%@page import="com.liferay.portal.kernel.dao.search.SearchEntry"%>
 <%@page import="com.liferay.util.dao.orm.CustomSQLUtil"%>
 <%@page import="org.opencps.dossiermgt.search.ServiceSearchTerms"%>
 <%@page import="org.opencps.dossiermgt.search.ServiceSearch"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
-<%@page import="org.opencps.dossiermgt.bean.Service"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="javax.portlet.PortletURL"%>
@@ -43,9 +43,16 @@
 	
 	String backURL = ParamUtil.getString(request, "backURL");
 	
-	List<Service> services =  new ArrayList<Service>();
+	List<ServiceBean> serviceBeans =  new ArrayList<ServiceBean>();
 	
 	List<ServiceConfig> serviceConfigs = new ArrayList<ServiceConfig>();
+	
+	int countAdvance = ServiceConfigLocalServiceUtil.countServiceConfigAdvance(scopeGroupId,
+		StringPool.BLANK, 1, -1,
+		-1, -1, 
+		1, StringPool.BLANK, StringPool.BLANK);
+					
+					
 	
 	int totalCount = 0;
 	
