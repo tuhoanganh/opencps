@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.portlet.ActionRequest;
+import javax.portlet.RenderRequest;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -366,6 +368,60 @@ public class AccountUtil {
 			.getSession();
 
 		AccountBean accountBean = (AccountBean) session
+			.getAttribute(WebKeys.ACCOUNT_BEAN);
+
+		return accountBean;
+	}
+	
+	
+	/**
+	 * @param renderRequest
+	 * @return
+	 */
+	public static AccountBean getAccountBean(RenderRequest renderRequest) {
+
+		HttpServletRequest request = PortalUtil
+			.getHttpServletRequest(renderRequest);
+		HttpSession session = request
+			.getSession();
+
+		AccountBean accountBean = (AccountBean) session
+			.getAttribute(WebKeys.ACCOUNT_BEAN);
+
+		return accountBean;
+	}
+	
+	/**
+	 * @param actionRequest
+	 * @return
+	 */
+	public static AccountBean getAccountBeanFromAttribute(
+		ActionRequest actionRequest) {
+
+		HttpServletRequest request = PortalUtil
+			.getHttpServletRequest(actionRequest);
+
+		ServletContext servletContext = request
+			.getServletContext();
+		AccountBean accountBean = (AccountBean) servletContext
+			.getAttribute(WebKeys.ACCOUNT_BEAN);
+
+		return accountBean;
+	}
+	
+	/**
+	 * @param renderRequest
+	 * @return
+	 */
+	public static AccountBean getAccountBeanFromAttribute(
+		RenderRequest renderRequest) {
+
+		HttpServletRequest request = PortalUtil
+			.getHttpServletRequest(renderRequest);
+
+		ServletContext servletContext = request
+			.getServletContext();
+		AccountBean accountBean = (AccountBean) servletContext
 			.getAttribute(WebKeys.ACCOUNT_BEAN);
 
 		return accountBean;
