@@ -180,14 +180,16 @@ public class BackOfficeProcessEngine implements MessageListener {
 				}
 
 				long changeStepId = processWorkflow.getPostProcessStepId();
-
-				ProcessStep changeStep =
-				    ProcessStepLocalServiceUtil.getProcessStep(changeStepId);
-
 				String changeStatus = StringPool.BLANK;
 
-				if (Validator.isNotNull(changeStep)) {
-					changeStatus = changeStep.getDossierStatus();
+				if (changeStepId != 0 ) {
+					ProcessStep changeStep = 
+					    ProcessStepLocalServiceUtil.getProcessStep(changeStepId);
+					if (Validator.isNotNull(changeStep)) {
+						changeStatus = changeStep.getDossierStatus();
+					}
+				} else {
+					changeStatus = Integer.toString(PortletConstants.DOSSIER_STATUS_DONE);
 				}
 
 				// Update process order to SYSTEM
@@ -217,7 +219,8 @@ public class BackOfficeProcessEngine implements MessageListener {
 				 * DOSSIER_STATUS_PAYING))) {
 				 * toBackOffice.setRequestCommand(WebKeys
 				 * .DOSSIER_LOG_PAYMENT_REQUEST); }
-				 */toBackOffice.setActionInfo(processWorkflow.getActionName());
+				 */
+				toBackOffice.setActionInfo(processWorkflow.getActionName());
 				toBackOffice.setMessageInfo(toEngineMsg.getActionNote());
 				toBackOffice.setSendResult(0);
 

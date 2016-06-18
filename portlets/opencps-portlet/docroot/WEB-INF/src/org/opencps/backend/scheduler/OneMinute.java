@@ -18,8 +18,11 @@
 package org.opencps.backend.scheduler;
 
 import java.util.Date;
+import java.util.Map;
 
+import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.MessageListenerException;
 
@@ -36,8 +39,7 @@ public class OneMinute implements MessageListener{
     @Override
     public void receive(Message message)
         throws MessageListenerException {
-
-	    
+    
     }
 
 }
