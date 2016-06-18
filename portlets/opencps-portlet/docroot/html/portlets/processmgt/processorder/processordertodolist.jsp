@@ -53,7 +53,8 @@
 				ProcessOrderSearchTerms searchTerms = (ProcessOrderSearchTerms)searchContainer.getSearchTerms();
 				
 				long processStepId = searchTerms.getProcessStepId();
-				long actionUserId = themeDisplay.getUserId();
+				
+				long assignToUserId = themeDisplay.getUserId();
 				try{
 					
 					%>
@@ -90,7 +91,6 @@
 					row.addText(processOrder.getStepName(), processURL);	
 					row.addText(processOrder.getAssignToUserName(), processURL);
 					row.addText(Validator.isNotNull(processOrder.getDealine()) ? processOrder.getDealine() : StringPool.DASH, processURL);
-					row.setClassName(processOrder.isReadOnly() ? "readonly" : StringPool.BLANK);
 					row.setClassName((processOrder.isReadOnly() || (processOrder.getAssignToUsesrId() != 0 &&  processOrder.getAssignToUsesrId() != user.getUserId())) ? "readonly" : StringPool.BLANK);
 					//row.setClassHoverName("");
 				%>	
