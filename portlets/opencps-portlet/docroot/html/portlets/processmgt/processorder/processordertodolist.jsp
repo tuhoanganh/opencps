@@ -90,8 +90,8 @@
 					row.addText(processOrder.getStepName(), processURL);	
 					row.addText(processOrder.getAssignToUserName(), processURL);
 					row.addText(Validator.isNotNull(processOrder.getDealine()) ? processOrder.getDealine() : StringPool.DASH, processURL);
+					row.setClassName(processOrder.isReadOnly() ? "readonly" : StringPool.BLANK);
 					row.setClassName((processOrder.isReadOnly() || (processOrder.getAssignToUsesrId() != 0 &&  processOrder.getAssignToUsesrId() != user.getUserId())) ? "readonly" : StringPool.BLANK);
-					
 					//row.setClassHoverName("");
 				%>	
 			</liferay-ui:search-container-row> 
