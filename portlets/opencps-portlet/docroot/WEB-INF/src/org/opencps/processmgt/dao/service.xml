@@ -339,6 +339,28 @@
 		
 		
 	</entity>
+	<entity name="SchedulerJobs" local-service="true"
+		remote-service="true" table="opencps_scheduler_jobs">
+		
+		<!-- PK fields -->
+		
+		<column name="schedulerJobsId" type="long" primary="true" />
+		
+		<column name="createDate" type="Date"/>
+		<column name="modifiedDate" type="Date"/>
+		<column name="dossierId" type="long"/>
+		<column name="fileGroupId" type="long"/>
+		<column name="processWorkflowId" type="long"/>
+		<column name="schedulerType" type="int"/>
+		<column name="shedulerPattern" type="String"/>
+		<column name="status" type="int"/>
+				
+		<!-- Finder methods -->
+		<finder return-type="Collection" name="S_T" >
+			<finder-column name="schedulerType" />
+		</finder>
+
+	</entity>
 	
 	<exceptions>
 		<exception>EmptyProcessNo</exception>
