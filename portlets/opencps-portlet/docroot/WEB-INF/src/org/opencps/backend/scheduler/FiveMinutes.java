@@ -37,7 +37,11 @@ public class FiveMinutes implements MessageListener{
     public void receive(Message message)
         throws MessageListenerException {
 
+	    System.out.println("---5 minute");
 	    
+	    System.out.print(message.get("msg1"));
+	    System.out.print(message.get("msg2"));
+	    System.out.print(message.get("MESSAGE_LISTENER_CLASS_NAME"));
     }
 
 }
