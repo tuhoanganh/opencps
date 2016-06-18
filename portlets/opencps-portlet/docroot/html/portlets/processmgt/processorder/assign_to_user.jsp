@@ -160,7 +160,7 @@
 		showEmptyOption="true"
 	>
 		<%
-			List<User> assignUsers = ProcessUtils.getAssignUsers(processStepId);
+			List<User> assignUsers = ProcessUtils.getAssignUsers(processStepId, 0);
 			for (User userSel : assignUsers) {
 		%>	
 			<aui:option value="<%= userSel.getUserId() %>"><%= userSel.getFullName() %></aui:option>

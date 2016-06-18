@@ -123,9 +123,9 @@
 			<finder-column name="readOnly"/>
 		</finder>
 		
-		<finder return-type="StepAllowance" name="STEP_ROLE">
+		<finder return-type="StepAllowance" name="P_RoleId">
 			<finder-column name="processStepId"/>
-			<finder-column name="readOnly"/>
+			<finder-column name="roleId"/>
 		</finder>
 		<finder return-type="Collection" name="RoleIds">
 			<finder-column name="roleId" arrayable-operator="OR"/>

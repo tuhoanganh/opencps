@@ -66,7 +66,6 @@ public class ServiceBean {
 
 	private long _serviceProcessId;
 
-	
 	private long _userId;
 
 	

@@ -605,6 +605,7 @@
 		<field name="serviceProcessId" type="long" />
 		<field name="domainCode" type="String" />
 		<field name="serviceMode" type="int" />
+		<field name="govAgencyIndex" type="String" />
 	</model>
 	<model name="org.opencps.paymentmgt.model.PaymentConfig">
 		<field name="paymentConfigId" type="long" />
@@ -646,7 +647,7 @@
 		<field name="requestDatetime" type="Date" />
 		<field name="amount" type="double" />
 		<field name="requestNote" type="String" />
-		<field name="paymentOptions" type="int" />
+		<field name="paymentOptions" type="String" />
 		<field name="keypayUrl" type="String" />
 		<field name="keypayTransactionId" type="long">
 			<hint name="max-length">6</hint>

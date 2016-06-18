@@ -14,16 +14,26 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
 
-<%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.processmgt.util.ProcessUtils"%>
+<%@ include file="../init.jsp" %>
 
 <%
-
-	serviceConfigs = ServiceConfigLocalServiceUtil.searchServiceConfigByServiceMode(scopeGroupId, new int[]{PortletConstants.SERVICE_CONFIG_FRONTOFFICE, PortletConstants.SERVICE_CONFIG_FRONT_BACK_OFFICE}, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-
-	totalCount = ServiceConfigLocalServiceUtil.countServiceConfigByServiceMode(scopeGroupId, new int[]{PortletConstants.SERVICE_CONFIG_FRONTOFFICE, PortletConstants.SERVICE_CONFIG_FRONT_BACK_OFFICE});
-
+	long processStepId = ParamUtil.getLong(request, "processStepId");
+	
 %>
+
+<aui:select name="actionUserId" showEmptyOption="true" label="">
+	<%
+		List<User> assignUsers = ProcessUtils.getAssignUsers(processStepId, 0);
+		for (User userSel : assignUsers) {
+		%>	
+			<aui:option value="<%= userSel.getUserId() %>"><%= userSel.getFullName() %></aui:option>
+		<%
+		}
+	%>
+</aui:select>
+

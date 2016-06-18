@@ -1,9 +1,4 @@
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.liferay.portal.service.UserLocalServiceUtil"%>
-<%@page import="org.opencps.util.DateTimeUtil"%>
-<%@page import="org.opencps.processmgt.service.ActionHistoryLocalServiceUtil"%>
-<%@page import="org.opencps.processmgt.model.ActionHistory"%>
-<%@page import="org.opencps.processmgt.model.ProcessOrder"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -22,6 +17,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="com.liferay.portal.service.UserLocalServiceUtil"%>
+<%@page import="org.opencps.util.DateTimeUtil"%>
+<%@page import="org.opencps.processmgt.service.ActionHistoryLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.model.ActionHistory"%>
+<%@page import="org.opencps.processmgt.model.ProcessOrder"%>
 <%@ include file="../../init.jsp"%>
 
 <%

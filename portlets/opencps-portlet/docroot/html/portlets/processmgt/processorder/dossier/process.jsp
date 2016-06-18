@@ -51,9 +51,6 @@
 	<portlet:param name="mvcPath" value='<%=templatePath + "upload_dossier_file.jsp" %>'/>
 </portlet:renderURL>
 
-<portlet:actionURL var="deleteTempFileURL" name="deleteTempFile">
-	<portlet:param name="fileEntryId" value="<%=String.valueOf(12345) %>"/>
-</portlet:actionURL>
 
 <%
 	ProcessOrder processOrder = (ProcessOrder)request.getAttribute(WebKeys.PROCESS_ORDER_ENTRY);
@@ -66,11 +63,30 @@
 	DossierTemplate dossierTemplate = (DossierTemplate) request.getAttribute(WebKeys.DOSSIER_TEMPLATE_ENTRY);
 	ProcessWorkflow processWorkflow = (ProcessWorkflow) request.getAttribute(WebKeys.PROCESS_WORKFLOW_ENTRY);
 	
+	boolean isEditDossier = ParamUtil.getBoolean(request, "isEditDossier");
+	
+	/* if(accountRoles != null && processStep != null){
+		for(int r = 0; r < accountRoles.size(); r++){
+			System.out.println(((Role)accountRoles.get(r)).getName());
+			try{
+				StepAllowance stepAllowance = 
+								StepAllowanceLocalServiceUtil.getStepAllowance(processStep.getProcessStepId(), ((Role)accountRoles.get(r)).getRoleId());
+				
+				if(!stepAllowance.isReadOnly()){
+					isEditDossier = true;
+					break;
+				}
+			}catch(Exception e){
+				continue;
+			}
+		}
+	} */
+	
 	String backURL = ParamUtil.getString(request, "backURL");
 	
 	ActionHistory latestWorkflowActionHistory = null;
 	
-	boolean isEditDossier = true;
+	
 	
 	try{
 		if(processWorkflow != null){
@@ -402,6 +418,7 @@
 							auto-event="<%=Validator.isNotNull(postProcessWorkflow.getAutoEvent()) ? postProcessWorkflow.getAutoEvent() : StringPool.BLANK %>"
 							receive-date="<%=Validator.isNotNull(processOrder.getActionDatetime()) ? DateTimeUtil.convertDateToString(processOrder.getActionDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) : StringPool.BLANK %>"
 							onClick='<%=renderResponse.getNamespace() +  "assignToUser(this)"%>'
+							disabled="<%=!isEditDossier %>"
 						/>
 					</c:if>
 				<%

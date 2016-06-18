@@ -71,7 +71,7 @@
 									depthLevel="1" 
 									dictCollectionCode="<%=ServiceUtil.SERVICE_DOMAIN %>" 
 									name="serviceDomain"
-									itemNames="service-domain"
+									itemNames=""
 									inlineField="<%=true%>"
 									inlineLabel="left"
 								/>
@@ -81,7 +81,7 @@
 									depthLevel="1" 
 									dictCollectionCode="<%=ServiceUtil.SERVICE_ADMINISTRATION %>" 
 									name="govAgency"
-									itemNames="gov-agency"
+									itemNames=""
 									inlineField="<%=true%>"
 									inlineLabel="left"
 								/>
@@ -92,13 +92,11 @@
 									name="keywords"
 									title="keywords"
 									placeholder='<%= LanguageUtil.get(locale, "keywords") %>'
-									
 								/>
 							</aui:col>
 						</aui:row>
 					</c:when>
 					<c:otherwise>
-	
 						<c:if test="<%=tabs1.equals(DossierMgtUtil.TOP_TABS_DOSSIER) %>">
 						<%
 							searchURL.setParameter("mvcPath", templatePath + "frontofficedossierlist.jsp");

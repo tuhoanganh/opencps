@@ -179,6 +179,15 @@ public class DefineObjectsTag extends IncludeTag {
 							org.opencps.util.WebKeys.ACCOUNT_OWNERUSERID,
 							ownerUserId);
 
+					request
+						.setAttribute(org.opencps.util.WebKeys.ACCOUNT_ROLES,
+							accountRoles);
+
+					request
+						.setAttribute(
+							org.opencps.util.WebKeys.ACCOUNT_ORGANIZATION,
+							accountOrgs);
+
 					// Store session
 
 					session
@@ -209,6 +218,15 @@ public class DefineObjectsTag extends IncludeTag {
 							org.opencps.util.WebKeys.ACCOUNT_OWNERUSERID,
 							ownerUserId);
 
+					session
+						.setAttribute(org.opencps.util.WebKeys.ACCOUNT_ROLES,
+							accountRoles);
+
+					session
+						.setAttribute(
+							org.opencps.util.WebKeys.ACCOUNT_ORGANIZATION,
+							accountOrgs);
+
 				}
 				else {
 					_log
@@ -238,6 +256,6 @@ public class DefineObjectsTag extends IncludeTag {
 	}
 
 	private Log _log = LogFactoryUtil
-	    .getLog(DefineObjectsTag.class
-	        .getName());
+		.getLog(DefineObjectsTag.class
+			.getName());
 }
