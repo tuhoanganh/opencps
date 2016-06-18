@@ -125,12 +125,10 @@ public class StepAllowanceLocalServiceImpl
 	public StepAllowance addAllowance(
 	    long processStepId, long roleId, boolean readOnly)
 	    throws PortalException, SystemException {
-		
-		StepAllowance stepAllowance = stepAllowancePersistence.fetchBySTEP_ROLE(processStepId, readOnly);
-		
+
 		long stepAllowanceId = counterLocalService.increment(StepAllowance.class.getName());
 		
-		stepAllowance = stepAllowancePersistence.create(stepAllowanceId);
+		StepAllowance stepAllowance = stepAllowancePersistence.create(stepAllowanceId);
 		
 		if (Validator.isNotNull(stepAllowance)) {
 			
@@ -170,6 +168,19 @@ public class StepAllowanceLocalServiceImpl
 
 		return stepAllowance;
 
+	}
+	
+	/**
+	 * @param processStepId
+	 * @param roleId
+	 * @return
+	 * @throws SystemException
+	 */
+	public StepAllowance getStepAllowance(long processStepId, long roleId)
+		throws SystemException {
+
+		return stepAllowancePersistence
+			.fetchByP_RoleId(processStepId, roleId);
 	}
 	
 	public List<StepAllowance> findByRoleIds(long[] roleId) throws SystemException {
