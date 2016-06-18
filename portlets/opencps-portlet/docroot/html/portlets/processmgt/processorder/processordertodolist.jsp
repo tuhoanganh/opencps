@@ -82,7 +82,7 @@
 					processURL.setParameter("mvcPath", templatePath + "process_order_detail.jsp");
 					processURL.setParameter(ProcessOrderDisplayTerms.PROCESS_ORDER_ID, String.valueOf(processOrder.getProcessOrderId()));
 					processURL.setParameter("backURL", currentURL);
-					processURL.setParameter("isEditDossier", processOrder.isReadOnly()? String.valueOf(false) : String.valueOf(true));
+					processURL.setParameter("isEditDossier", (processOrder.isReadOnly() || (processOrder.getAssignToUsesrId() != 0 &&  processOrder.getAssignToUsesrId() != user.getUserId())) ? String.valueOf(false) : String.valueOf(true));
 				
 					row.addText(processOrder.getReceptionNo(), processURL);
 					row.addText(processOrder.getSubjectName(), processURL);
@@ -90,7 +90,8 @@
 					row.addText(processOrder.getStepName(), processURL);	
 					row.addText(processOrder.getAssignToUserName(), processURL);
 					row.addText(Validator.isNotNull(processOrder.getDealine()) ? processOrder.getDealine() : StringPool.DASH, processURL);
-					row.setClassName(processOrder.isReadOnly() ? "readonly" : StringPool.BLANK);
+					row.setClassName((processOrder.isReadOnly() || (processOrder.getAssignToUsesrId() != 0 &&  processOrder.getAssignToUsesrId() != user.getUserId())) ? "readonly" : StringPool.BLANK);
+					
 					//row.setClassHoverName("");
 				%>	
 			</liferay-ui:search-container-row> 
