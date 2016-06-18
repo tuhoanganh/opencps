@@ -44,6 +44,8 @@ import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroup;
+import com.liferay.portal.service.OrganizationLocalServiceUtil;
+import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
@@ -224,6 +226,11 @@ public class AccountUtil {
 		try {
 			user = UserLocalServiceUtil
 				.getUser(userId);
+			
+			accountRoles = RoleLocalServiceUtil.getUserRoles(user.getUserId());
+			
+			accountOrgs = OrganizationLocalServiceUtil.getUserOrganizations(user.getUserId());
+			
 			List<UserGroup> userGroups = user
 				.getUserGroups();
 			if (userGroups != null) {
