@@ -270,4 +270,17 @@ public class ProcessWorkflowLocalServiceImpl
 		throws SystemException{
 		return processWorkflowPersistence.findByS_PRE_PS_ID(serviceProcessId, preProcessStepId);
 	}
+	
+	/**
+	 * @param preProcessStep
+	 * @param serviceProcessId
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public List<ProcessWorkflow> findInScheduler(
+	    long preProcessStep, long serviceProcessId)
+	    throws PortalException, SystemException {
+		return processWorkflowFinder.findInShcheduler(preProcessStep, serviceProcessId);
+	}
 }

@@ -66,6 +66,19 @@ public class BackendUtils {
 	 * @param pattern
 	 * @return
 	 */
+	public static String buildActionName(String pattern) {
+
+		String actionName = StringPool.BLANK;
+		// TODO: implement here
+		actionName = pattern;
+		return actionName;
+	}
+
+	
+	/**
+	 * @param pattern
+	 * @return
+	 */
 	public static boolean checkPreCondition(String pattern, long dossierId) {
 
 		boolean validPreCondition = true;

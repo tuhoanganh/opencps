@@ -300,5 +300,24 @@
 				opencps_processorder.dossierId=?
 		]]>
 	</sql>
-
+	
+	<sql id="org.opencps.processmgt.service.persistence.ProcessWorkflowFinder.findInScheduler">	
+		<![CDATA[
+			SELECT
+				*
+			FROM
+				opencps_processworkflow
+			WHERE
+				preProcessStepId = ?
+			AND serviceProcessId = ?
+			AND (
+				autoEvent = 'minutely'
+				OR autoEvent = '5-minutely'
+				OR autoEvent = 'hourly'
+				OR autoEvent = 'daily'
+				OR autoEvent = 'weekly'
+			)
+		]]>
+	</sql>
+	
 </custom-sql>
