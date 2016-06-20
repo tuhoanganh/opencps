@@ -147,3 +147,12 @@
 .row-fluid.process-workflow-action {
     padding-top: 10px;
 }
+
+.searchcontainer-content .readonly{
+	background-color: #acacac !important;
+}
+
+.searchcontainer-content .readonly td {
+    background-color: transparent !important;
+    color: white;
+}

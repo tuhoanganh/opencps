@@ -37,7 +37,6 @@
 
 <%
 	String tabs1 = ParamUtil.getString(request, "tabs1", ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS);
-	PortletURL searchURL = renderResponse.createRenderURL();
 	
 	List<ProcessOrderBean> processOrderBeans = new ArrayList<ProcessOrderBean>();
 	
@@ -46,11 +45,23 @@
 	}catch(Exception e){}
 %>
 
+<liferay-portlet:renderURL varImpl="searchURL" portletName="<%=WebKeys.PROCESS_ORDER_PORTLET %>">
+	<liferay-portlet:param name="tabs1" value="<%=tabs1 %>"/>
+	<c:choose>
+		<c:when test="<%=tabs1.equals(ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS) %>">
+			<liferay-portlet:param name="mvcPath" value='<%=templatePath +  "processordertodolist.jsp"%>'/>
+		</c:when>
+		<c:otherwise>
+			<liferay-portlet:param name="mvcPath" value='<%=templatePath +  "processorderjustfinishedlist.jsp"%>'/>
+		</c:otherwise>
+	</c:choose>
+</liferay-portlet:renderURL>
+
 <aui:nav-bar cssClass="custom-toolbar">
 	<aui:nav id="toolbarContainer" cssClass="nav-button-container  nav-display-style-buttons pull-left" >
 		<c:if test="<%=ProcessOrderPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ASSIGN_PROCESS_ORDER) && tabs1.equals(ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS)%>">
 			<portlet:renderURL var="processDossierURL" windowState="<%=LiferayWindowState.NORMAL.toString() %>">
-				<portlet:param name="mvcPath" value="/html/portlets/processmgt/processorder/processordertodolist.jsp"/>
+				<portlet:param name="mvcPath" value='<%=templatePath + "processordertodolist.jsp" %>'/>
 				<portlet:param name="backURL" value="<%=currentURL %>"/>
 			</portlet:renderURL>
 			<aui:nav-item 
@@ -66,6 +77,7 @@
 	<aui:nav-bar-search cssClass="pull-right">
 		<div class="form-search">
 			<aui:form action="<%= searchURL %>" method="post" name="fmSearch">
+			<liferay-portlet:renderURLParams varImpl="searchURL" />
 				<aui:row>
 					<aui:col width="100">
 						<aui:select 
@@ -130,10 +142,19 @@
 		
 		var instance = A.one(e);
 		
-		var processStepId = instance.attr(instance.val());
+		var processStepId = instance.val();
+		
+		var fmSearch = A.one('#<portlet:namespace/>fmSearch');
+		
+		var action = fmSearch.attr('action');
+		
+		var portletURL = Liferay.PortletURL.createURL(action);
+		portletURL.setParameter("processStepId", processStepId);
+		
+		fmSearch.setAttribute('action', portletURL.toString());
 		
 		submitForm(document.<portlet:namespace />fmSearch);
-	});
+	},['liferay-portlet-url']);
 </aui:script>
 
 <%!
