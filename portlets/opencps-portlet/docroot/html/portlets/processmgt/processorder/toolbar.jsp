@@ -37,11 +37,24 @@
 
 <%
 	String tabs1 = ParamUtil.getString(request, "tabs1", ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS);
+
+	List<ProcessOrderBean> processOrderServices = new ArrayList<ProcessOrderBean>();
 	
 	List<ProcessOrderBean> processOrderBeans = new ArrayList<ProcessOrderBean>();
 	
+	long serviceInfoId = ParamUtil.getLong(request, "serviceInfoId");
+	
+	long processStepId = ParamUtil.getLong(request, "processStepId");
+	
 	try{
-		processOrderBeans = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getUserProcessStep(themeDisplay.getUserId());
+		
+		processOrderServices = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getProcessOrderServiceByUser(themeDisplay.getUserId());
+		
+		if(serviceInfoId > 0){
+			processOrderBeans = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getUserProcessStep(themeDisplay.getUserId(), serviceInfoId);
+		}
+		
+		
 	}catch(Exception e){}
 %>
 
@@ -59,7 +72,9 @@
 
 <aui:nav-bar cssClass="custom-toolbar">
 	<aui:nav id="toolbarContainer" cssClass="nav-button-container  nav-display-style-buttons pull-left" >
-		<c:if test="<%=ProcessOrderPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ASSIGN_PROCESS_ORDER) && tabs1.equals(ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS)%>">
+		<c:if test="<%=ProcessOrderPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ASSIGN_PROCESS_ORDER) && 
+			tabs1.equals(ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS) &&
+			serviceInfoId > 0 && processStepId > 0%>">
 			<portlet:renderURL var="processDossierURL" windowState="<%=LiferayWindowState.NORMAL.toString() %>">
 				<portlet:param name="mvcPath" value='<%=templatePath + "processordertodolist.jsp" %>'/>
 				<portlet:param name="backURL" value="<%=currentURL %>"/>
@@ -79,10 +94,36 @@
 			<aui:form action="<%= searchURL %>" method="post" name="fmSearch">
 			<liferay-portlet:renderURLParams varImpl="searchURL" />
 				<aui:row>
-					<aui:col width="100">
+					<aui:col width="50">
+						<aui:select 
+							name="serviceInfoId" 
+							label="<%=StringPool.BLANK %>" 
+							inlineField="<%=true %>" 
+							inlineLabel="left"
+							onChange='<%=renderResponse.getNamespace() + "searchByProcecssOrderService(this)"%>'
+							
+						>
+							<aui:option value="0" title="service-info"><liferay-ui:message key="service-info"/></aui:option>
+							<%
+							
+								if(processOrderServices != null){
+									for(ProcessOrderBean processOrderService : processOrderServices){
+										%>
+											<aui:option title="<%=processOrderService.getServiceName()%>" value="<%= processOrderService.getServiceInfoId()%>">
+												<%=StringUtil.shorten(processOrderService.getServiceName(), 50) %>
+											</aui:option>
+										<%
+									}
+								}
+								
+							%>
+						</aui:select>
+					</aui:col>
+				
+					<aui:col width="50">
 						<aui:select 
 							name="dossierStatus" 
-							label="step-name" 
+							label="<%=StringPool.BLANK %>" 
 							inlineField="<%=true %>" 
 							inlineLabel="left"
 							onChange='<%=renderResponse.getNamespace() + "searchByProcecssStep(this)"%>'
@@ -117,28 +158,41 @@
 		var processOrderIds = Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, '<portlet:namespace />allRowIds');
 		
 		processOrderIds = processOrderIds.split(",");
-	
-		if(processOrderIds.length > 1){
-			alert('<%= UnicodeLanguageUtil.get(pageContext, "multiple-process-order-handle-is-developing") %>');
-			return;
-		}else if(processOrderIds.length == 0){
+		
+		console.log(processOrderIds);
+		
+		console.log(processOrderIds.length);
+		
+		console.log(processOrderIds);
+		
+		if(processOrderIds != ''){
+			if(processOrderIds.length > 1){
+				alert('<%= UnicodeLanguageUtil.get(pageContext, "multiple-process-order-handle-is-developing") %>');
+				return;
+			}else if(processOrderIds.length == 0){
+				alert('<%= UnicodeLanguageUtil.get(pageContext, "you-need-select-any-process-order-to-process") %>');
+				return;
+			}else{
+				var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
+				portletURL.setParameter("mvcPath", "/html/portlets/processmgt/processorder/process_order_detail.jsp");
+				portletURL.setWindowState("<%=LiferayWindowState.NORMAL.toString()%>"); 
+				portletURL.setPortletMode("normal");
+			
+				portletURL.setParameter("processOrderId", processOrderIds[0]);
+				portletURL.setParameter("backURL", currentURL);
+				window.location.href = portletURL.toString();
+			}
+		}else{
 			alert('<%= UnicodeLanguageUtil.get(pageContext, "you-need-select-any-process-order-to-process") %>');
 			return;
-		}else{
-			var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
-			portletURL.setParameter("mvcPath", "/html/portlets/processmgt/processorder/process_order_detail.jsp");
-			portletURL.setWindowState("<%=LiferayWindowState.NORMAL.toString()%>"); 
-			portletURL.setPortletMode("normal");
-		
-			portletURL.setParameter("processOrderId", processOrderIds[0]);
-			portletURL.setParameter("backURL", currentURL);
-			window.location.href = portletURL.toString();
 		}
 	});
 	
 	Liferay.provide(window, '<portlet:namespace/>searchByProcecssStep', function(e) {
 		
 		var A = AUI();
+		
+		var serviceInfoId = '<%=serviceInfoId%>';
 		
 		var instance = A.one(e);
 		
@@ -149,6 +203,30 @@
 		var action = fmSearch.attr('action');
 		
 		var portletURL = Liferay.PortletURL.createURL(action);
+		portletURL.setParameter("serviceInfoId", serviceInfoId);
+		portletURL.setParameter("processStepId", processStepId);
+		
+		fmSearch.setAttribute('action', portletURL.toString());
+		
+		submitForm(document.<portlet:namespace />fmSearch);
+	},['liferay-portlet-url']);
+	
+	Liferay.provide(window, '<portlet:namespace/>searchByProcecssOrderService', function(e) {
+		
+		var A = AUI();
+		
+		var processStepId = 0;
+		
+		var instance = A.one(e);
+		
+		var serviceInfoId = instance.val();
+		
+		var fmSearch = A.one('#<portlet:namespace/>fmSearch');
+		
+		var action = fmSearch.attr('action');
+		
+		var portletURL = Liferay.PortletURL.createURL(action);
+		portletURL.setParameter("serviceInfoId", serviceInfoId);
 		portletURL.setParameter("processStepId", processStepId);
 		
 		fmSearch.setAttribute('action', portletURL.toString());
