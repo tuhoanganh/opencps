@@ -54,11 +54,10 @@
 				
 				long processStepId = searchTerms.getProcessStepId();
 				
-				long assignToUserId = themeDisplay.getUserId();
 				try{
 					
 					%>
-						<%@include file="/html/portlets/processmgt/processorder/process_order_search_results.jspf" %>
+						<%@include file="/html/portlets/processmgt/processorder/processorder_justfinished_searchresults.jspf" %>
 					<%
 				}catch(Exception e){
 					_log.error(e);
@@ -83,7 +82,7 @@
 					processURL.setParameter("mvcPath", templatePath + "process_order_detail.jsp");
 					processURL.setParameter(ProcessOrderDisplayTerms.PROCESS_ORDER_ID, String.valueOf(processOrder.getProcessOrderId()));
 					processURL.setParameter("backURL", currentURL);
-					processURL.setParameter("isEditDossier", (processOrder.isReadOnly() || (processOrder.getAssignToUsesrId() != 0 &&  processOrder.getAssignToUsesrId() != user.getUserId())) ? String.valueOf(false) : String.valueOf(true));
+					processURL.setParameter("isEditDossier", String.valueOf(false));
 				
 					row.addText(processOrder.getReceptionNo(), processURL);
 					row.addText(processOrder.getSubjectName(), processURL);
@@ -91,7 +90,7 @@
 					row.addText(processOrder.getStepName(), processURL);	
 					row.addText(processOrder.getAssignToUserName(), processURL);
 					row.addText(Validator.isNotNull(processOrder.getDealine()) ? processOrder.getDealine() : StringPool.DASH, processURL);
-					row.setClassName((processOrder.isReadOnly() || (processOrder.getAssignToUsesrId() != 0 &&  processOrder.getAssignToUsesrId() != user.getUserId())) ? "readonly" : StringPool.BLANK);
+				
 					//row.setClassHoverName("");
 				%>	
 			</liferay-ui:search-container-row> 
@@ -100,5 +99,5 @@
 	</liferay-ui:search-container>
 </aui:form>
 <%!
-	private Log _log = LogFactoryUtil.getLog("html.portlets.processmgt.processorder.processordertodolist.jsp");
+	private Log _log = LogFactoryUtil.getLog("html.portlets.processmgt.processorder.processorderjustfinishedlist.jsp");
 %>
