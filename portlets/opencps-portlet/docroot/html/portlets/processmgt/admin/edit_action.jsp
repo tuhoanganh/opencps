@@ -1,19 +1,4 @@
-<%@page import="org.opencps.util.PortletConstants"%>
-<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
-<%@page import="org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil"%>
-<%@page import="org.opencps.processmgt.model.impl.WorkflowOutputImpl"%>
-<%@page import="org.opencps.processmgt.model.WorkflowOutput"%>
-<%@page import="org.opencps.processmgt.service.StepAllowanceLocalServiceUtil"%>
-<%@page import="org.opencps.processmgt.model.ProcessWorkflow"%>
-<%@page import="org.opencps.processmgt.util.ProcessUtils"%>
-<%@page import="com.liferay.portal.kernel.process.ProcessUtil"%>
-<%@page import="com.liferay.portal.model.Role"%>
-<%@page import="org.opencps.processmgt.model.impl.StepAllowanceImpl"%>
-<%@page import="java.util.Collections"%>
-<%@page import="org.opencps.processmgt.model.StepAllowance"%>
-<%@page import="org.opencps.processmgt.model.ServiceProcess"%>
-<%@page import="org.opencps.servicemgt.search.ServiceDisplayTerms"%>
-<%@page import="org.opencps.processmgt.model.ProcessStep"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -32,7 +17,22 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
-
+<%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
+<%@page import="org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.model.impl.WorkflowOutputImpl"%>
+<%@page import="org.opencps.processmgt.model.WorkflowOutput"%>
+<%@page import="org.opencps.processmgt.service.StepAllowanceLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.model.ProcessWorkflow"%>
+<%@page import="org.opencps.processmgt.util.ProcessUtils"%>
+<%@page import="com.liferay.portal.kernel.process.ProcessUtil"%>
+<%@page import="com.liferay.portal.model.Role"%>
+<%@page import="org.opencps.processmgt.model.impl.StepAllowanceImpl"%>
+<%@page import="java.util.Collections"%>
+<%@page import="org.opencps.processmgt.model.StepAllowance"%>
+<%@page import="org.opencps.processmgt.model.ServiceProcess"%>
+<%@page import="org.opencps.servicemgt.search.ServiceDisplayTerms"%>
+<%@page import="org.opencps.processmgt.model.ProcessStep"%>
 <%@ include file="../init.jsp" %>
 
 <%
@@ -103,6 +103,9 @@
 %>
 
 <portlet:actionURL name="updateAction" var="updateActionURL"/>
+<portlet:renderURL var="getAssignUsersURL" windowState="<%=LiferayWindowState.EXCLUSIVE.toString() %>">
+	<portlet:param name="mvcPath" value='<%=templatePath + "assign_users.jsp" %>'/>
+</portlet:renderURL>
 
 <aui:form name="actionFm" method="POST" action="<%= updateActionURL %>">
 
@@ -182,17 +185,11 @@
 	<aui:row>
 		<aui:col width="50">
 			<aui:input name="assignUser" type="checkbox" checked="<%= (workflow != null) ? workflow.getAssignUser() : false %>"></aui:input>
-			
+			<div id='<%=renderResponse.getNamespace() + "actionUserBoundary"%>'>
 			<aui:select name="actionUserId" showEmptyOption="true" label="">
-				<%
-					List<User> assignUsers = ProcessUtils.getAssignUsers(0);
-					for (User userSel : assignUsers) {
-				%>	
-					<aui:option value="<%= userSel.getUserId() %>"><%= userSel.getFullName() %></aui:option>
-				<%
-					}
-				%>
+				
 			</aui:select>
+			</div>
 		</aui:col>
 		<aui:col width="50">
 			<aui:input name="requestPayment" ></aui:input>
@@ -258,6 +255,46 @@
 				namespace: '<portlet:namespace />'
 			}
 		).render();
+		
+		AUI().ready('aui-base','liferay-portlet-url','aui-io', function(A){
+			var postProcessStep = A.one('#<portlet:namespace/>postProcessStepId');
+			
+			if(postProcessStep){
+				<portlet:namespace/>getAssignUsers(postProcessStep.val());
+				postProcessStep.on('change', function(){
+					var postProcessStepId = postProcessStep.val();
+					<portlet:namespace/>getAssignUsers(postProcessStepId);
+				});
+			}
+		});
+		
+		Liferay.provide(window, '<portlet:namespace/>getAssignUsers', function(postProcessStepId) {
+
+			var A = AUI();
+			var actionUserBoundary = A.one('#<portlet:namespace/>actionUserBoundary');
+			var url = '<%= getAssignUsersURL.toString() %>';
+			if(parseInt(postProcessStepId) > 0){
+				A.io.request(
+					url,
+					{
+						dataType: 'json',
+						data: {
+							<portlet:namespace/>processStepId: postProcessStepId
+						},
+						on: {
+							success: function(event, id, obj) {
+								var instance = this;
+								var res = instance.get('responseData');
+								actionUserBoundary.empty();
+								actionUserBoundary.append(res);
+							},
+						    error: function(){}
+						}
+					}
+				);
+			}
+			
+		},['aui-base','liferay-portlet-url','aui-io']);
 	</aui:script>
 
 	<aui:button-row>

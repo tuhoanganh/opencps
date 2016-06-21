@@ -150,6 +150,7 @@
 		<column name="serviceProcessId" type="long" />
 		<column name="domainCode" type="String" />
 		<column name="serviceMode" type="int"/>
+        <column name="govAgencyIndex" type="String"></column>
 
 		<finder return-type="Collection" name="DossierTemplateId">
 			<finder-column name="dossierTemplateId" />
@@ -402,6 +403,7 @@
             <finder-column name="dossierId"></finder-column>
             <finder-column name="dossierPartId"></finder-column>
         </finder>
+
         <finder name="D_DP_GF" return-type="Collection">
             <finder-column name="dossierId"></finder-column>
             <finder-column name="dossierPartId"></finder-column>
@@ -416,7 +418,7 @@
             <finder-column name="dossierId"></finder-column>
             <finder-column name="templateFileNo"></finder-column>
         </finder>
-		<reference package-path="com.liferay.portlet.documentlibrary" entity="DLApp" />
+	<reference package-path="com.liferay.portlet.documentlibrary" entity="DLApp" />
         <reference entity="DLFileEntry" package-path="com.liferay.portlet.documentlibrary"/>
     </entity>
 

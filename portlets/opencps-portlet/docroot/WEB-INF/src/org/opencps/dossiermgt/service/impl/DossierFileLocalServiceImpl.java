@@ -921,4 +921,6 @@ public class DossierFileLocalServiceImpl
 		OrderByComparator comparator = orderByComparatorFactory.create("DossierFile", "modifiedDate", true);
 		return dossierFilePersistence.fetchByTemplateFileNoDossierId_First(dossierId, templateFileNo, comparator);
 	}
+	
+
 }

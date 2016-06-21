@@ -178,4 +178,14 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String REQUEST_COMMAND_REPAIR = "repair";
 	
 	public static final String ACCOUNT_BEAN = "accountBean";
+	
+	public static final String AUTO_EVENT_SUBMIT = "submit";
+	public static final String AUTO_EVENT_ONEGATE = "onegate";
+	public static final String AUTO_EVENT_REPAIR = "repair";
+	public static final String AUTO_EVENT_CHANGE = "change";
+	public static final String AUTO_EVENT_MINUTELY = "minutely";
+	public static final String AUTO_EVENT_5_MINUTELY = "5-minutely";
+	public static final String AUTO_EVENT_HOURLY = "hourly";
+	public static final String AUTO_EVENT_DAILY = "daily";
+	public static final String AUTO_EVENT_WEEKLY = "weekly";
 }

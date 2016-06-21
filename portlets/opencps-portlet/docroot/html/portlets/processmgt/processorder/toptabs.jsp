@@ -46,7 +46,7 @@
 	if (PortletPermissionUtil.contains(permissionChecker, plid, portletDisplay.getId(), ActionKeys.VIEW) && 
 			ProcessOrderPermission.contains(permissionChecker, scopeGroupId, ActionKeys.VIEW)) {
 		PortletURL vieFinishedProcessOrderURL = renderResponse.createRenderURL();
-		vieFinishedProcessOrderURL.setParameter("mvcPath", templatePath + "processordertodolist.jsp");
+		vieFinishedProcessOrderURL.setParameter("mvcPath", templatePath + "processorderjustfinishedlist.jsp");
 		vieFinishedProcessOrderURL.setParameter("tabs1", ProcessUtils.TOP_TABS_PROCESS_ORDER_FINISHED_PROCESSING);
 		urls.add(vieFinishedProcessOrderURL.toString());
 	}

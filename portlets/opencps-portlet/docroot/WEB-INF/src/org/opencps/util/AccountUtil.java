@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.portlet.ActionRequest;
+import javax.portlet.RenderRequest;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -42,6 +44,8 @@ import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroup;
+import com.liferay.portal.service.OrganizationLocalServiceUtil;
+import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
@@ -51,8 +55,9 @@ import com.liferay.portlet.documentlibrary.model.DLFolder;
  * @author trungnt
  */
 public class AccountUtil {
+
 	private static AccountBean _accountBean;
-	
+
 	/**
 	 * @param accountInstance
 	 * @param accountType
@@ -74,8 +79,6 @@ public class AccountUtil {
 		AccountUtil
 			.setAccountBean(accountBean);
 	}
-	
-	
 
 	/**
 	 * @param request
@@ -191,8 +194,6 @@ public class AccountUtil {
 		// System.gc();
 	}
 
-	
-
 	/**
 	 * @param userId
 	 * @param groupId
@@ -225,6 +226,11 @@ public class AccountUtil {
 		try {
 			user = UserLocalServiceUtil
 				.getUser(userId);
+			
+			accountRoles = RoleLocalServiceUtil.getUserRoles(user.getUserId());
+			
+			accountOrgs = OrganizationLocalServiceUtil.getUserOrganizations(user.getUserId());
+			
 			List<UserGroup> userGroups = user
 				.getUserGroups();
 			if (userGroups != null) {
@@ -340,18 +346,27 @@ public class AccountUtil {
 
 		return accountBean;
 	}
-	
-	
-	public static void setAccountBean(AccountBean accountBean) {
 
-		_accountBean = accountBean;
+
+	/**
+	 * @param request
+	 * @return
+	 */
+	public static AccountBean getAccountBean(HttpServletRequest request) {
+
+		HttpSession session = request
+			.getSession();
+
+		AccountBean accountBean = (AccountBean) session
+			.getAttribute(WebKeys.ACCOUNT_BEAN);
+
+		return accountBean;
 	}
 
-	public static AccountBean getAccountBean() {
-		
-		return _accountBean;
-	}
-	
+	/**
+	 * @param actionRequest
+	 * @return
+	 */
 	public static AccountBean getAccountBean(ActionRequest actionRequest) {
 
 		HttpServletRequest request = PortalUtil
@@ -365,5 +380,71 @@ public class AccountUtil {
 		return accountBean;
 	}
 	
-	private static Log _log = LogFactoryUtil.getLog(AccountUtil.class.getName());
+	
+	/**
+	 * @param renderRequest
+	 * @return
+	 */
+	public static AccountBean getAccountBean(RenderRequest renderRequest) {
+
+		HttpServletRequest request = PortalUtil
+			.getHttpServletRequest(renderRequest);
+		HttpSession session = request
+			.getSession();
+
+		AccountBean accountBean = (AccountBean) session
+			.getAttribute(WebKeys.ACCOUNT_BEAN);
+
+		return accountBean;
+	}
+	
+	/**
+	 * @param actionRequest
+	 * @return
+	 */
+	public static AccountBean getAccountBeanFromAttribute(
+		ActionRequest actionRequest) {
+
+		HttpServletRequest request = PortalUtil
+			.getHttpServletRequest(actionRequest);
+
+		ServletContext servletContext = request
+			.getServletContext();
+		AccountBean accountBean = (AccountBean) servletContext
+			.getAttribute(WebKeys.ACCOUNT_BEAN);
+
+		return accountBean;
+	}
+	
+	/**
+	 * @param renderRequest
+	 * @return
+	 */
+	public static AccountBean getAccountBeanFromAttribute(
+		RenderRequest renderRequest) {
+
+		HttpServletRequest request = PortalUtil
+			.getHttpServletRequest(renderRequest);
+
+		ServletContext servletContext = request
+			.getServletContext();
+		AccountBean accountBean = (AccountBean) servletContext
+			.getAttribute(WebKeys.ACCOUNT_BEAN);
+
+		return accountBean;
+	}
+	
+	public static void setAccountBean(AccountBean accountBean) {
+
+		_accountBean = accountBean;
+	}
+
+	public static AccountBean getAccountBean() {
+
+		return _accountBean;
+	}
+
+	private static Log _log = LogFactoryUtil
+		.getLog(AccountUtil.class
+			.getName());
 }

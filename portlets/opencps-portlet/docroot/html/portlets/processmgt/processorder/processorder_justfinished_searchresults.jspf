@@ -1,3 +1,5 @@
+
+<%
 /**
  * OpenCPS is the open source Core Public Services software
  * Copyright (C) 2016-present OpenCPS community
@@ -12,31 +14,14 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-package org.opencps.backend.scheduler;
-
-import java.util.Date;
-
-import com.liferay.portal.kernel.messaging.Message;
-import com.liferay.portal.kernel.messaging.MessageListener;
-import com.liferay.portal.kernel.messaging.MessageListenerException;
+%>
 
 
-/**
- * @author khoavd
- *
- */
-public class FiveMinutes implements MessageListener{
-
-	/* (non-Javadoc)
-     * @see com.liferay.portal.kernel.messaging.MessageListener#receive(com.liferay.portal.kernel.messaging.Message)
-     */
-    @Override
-    public void receive(Message message)
-        throws MessageListenerException {
-
-    }
-
-}
+<%
+	totalCount = ProcessOrderLocalServiceUtil.countProcessOrderJustFinished(processStepId, themeDisplay.getUserId());
+	processOrders = ProcessOrderLocalServiceUtil.searchProcessOrderJustFinished(processStepId, themeDisplay.getUserId(), 
+		searchContainer.getStart(), searchContainer.getEnd(), 
+		searchContainer.getOrderByComparator());
+%>

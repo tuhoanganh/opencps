@@ -123,9 +123,9 @@
 			<finder-column name="readOnly"/>
 		</finder>
 		
-		<finder return-type="StepAllowance" name="STEP_ROLE">
+		<finder return-type="StepAllowance" name="P_RoleId">
 			<finder-column name="processStepId"/>
-			<finder-column name="readOnly"/>
+			<finder-column name="roleId"/>
 		</finder>
 		<finder return-type="Collection" name="RoleIds">
 			<finder-column name="roleId" arrayable-operator="OR"/>
@@ -308,6 +308,11 @@
 			<finder-column name="processOrderId"/>
 		</finder>
 		
+		<finder return-type="Collection" name="ProcessOrderId">
+			<finder-column name="processOrderId"/>
+		</finder>
+		
+		
 	</entity>
 	
 	<entity name="ServiceInfoProcess" local-service="true"
@@ -333,6 +338,28 @@
 		</finder>
 		
 		
+	</entity>
+	<entity name="SchedulerJobs" local-service="true"
+		remote-service="true" table="opencps_scheduler_jobs">
+		
+		<!-- PK fields -->
+		
+		<column name="schedulerJobsId" type="long" primary="true" />
+		
+		<column name="createDate" type="Date"/>
+		<column name="modifiedDate" type="Date"/>
+		<column name="dossierId" type="long"/>
+		<column name="fileGroupId" type="long"/>
+		<column name="processWorkflowId" type="long"/>
+		<column name="schedulerType" type="int"/>
+		<column name="shedulerPattern" type="String"/>
+		<column name="status" type="int"/>
+				
+		<!-- Finder methods -->
+		<finder return-type="Collection" name="S_T" >
+			<finder-column name="schedulerType" />
+		</finder>
+
 	</entity>
 	
 	<exceptions>
