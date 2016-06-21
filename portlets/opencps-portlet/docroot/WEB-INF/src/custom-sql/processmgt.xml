@@ -429,4 +429,46 @@
 		]]>
 	</sql>
 	
+	<sql id="org.opencps.processmgt.service.persistence.ProcessOrderFinder.getProcessOrderServiceJustFinishedByUser">	
+		<![CDATA[
+			SELECT 
+				DISTINCT
+				opencps_processorder.serviceInfoId, 
+				opencps_serviceinfo.serviceName
+			FROM 
+				opencps_processorder
+			INNER JOIN
+				opencps_serviceinfo 
+			ON 
+				opencps_processorder.serviceInfoId = opencps_serviceinfo.serviceinfoId
+			WHERE
+				opencps_processorder.actionUserId = ?
+			ORDER BY opencps_serviceinfo.serviceName ASC
+		]]>
+	</sql>
+	
+	
+	<sql id="org.opencps.processmgt.service.persistence.ProcessOrderFinder.getUserProcessStepJustFinished">	
+		<![CDATA[
+			SELECT 
+				DISTINCT
+                opencps_processstep.processStepId, 
+				opencps_processstep.stepName
+			FROM 
+				opencps_processorder
+			INNER JOIN
+				opencps_serviceinfo 
+			ON 
+				opencps_processorder.serviceInfoId = opencps_serviceinfo.serviceinfoId
+			AND opencps_processorder.serviceInfoId = ?
+			
+			INNER JOIN
+				opencps_processstep
+			ON
+				opencps_processorder.processStepId = opencps_processstep.processStepId
+			WHERE
+				opencps_processorder.actionUserId = ?
+		]]>
+	</sql>
+	
 </custom-sql>
