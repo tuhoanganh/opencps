@@ -310,6 +310,16 @@ public class ProcessOrderLocalServiceImpl
 		return processOrderFinder
 			.getProcessOrderServiceByUser(loginUserId);
 	}
+	
+	/**
+	 * @param loginUserId
+	 * @return
+	 */
+	public List getProcessOrderServiceJustFinishedByUser(long loginUserId) {
+		
+		return processOrderFinder
+			.getProcessOrderServiceJustFinishedByUser(loginUserId);
+	}
 
 	/**
 	 * @param loginUserId
@@ -320,6 +330,18 @@ public class ProcessOrderLocalServiceImpl
 
 		return processOrderFinder
 			.getUserProcessStep(loginUserId, serviceInfoId);
+	}
+	
+	/**
+	 * @param loginUserId
+	 * @param serviceInfoId
+	 * @return
+	 */
+	public List getUserProcessStepJustFinished(
+		long loginUserId, long serviceInfoId) {
+
+		return processOrderFinder
+			.getUserProcessStepJustFinished(loginUserId, serviceInfoId);
 	}
 
 	/**
