@@ -200,7 +200,7 @@
 		]]>
 	</sql>	
 	
-	<sql id="org.opencps.dossiermgt.service.persistence.DossierFileFinder.searchDossierFile">	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierFileFinder.searchDossierFile">
 		<![CDATA[
 			SELECT
 				*
@@ -227,7 +227,7 @@
 		]]>
 	</sql>	
 	
-	<sql id="org.opencps.dossiermgt.service.persistence.DossierLogFinder.findRequiredProcessDossier">	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierLogFinder.findRequiredProcessDossier">
 		<![CDATA[
 			SELECT
 				*
@@ -238,7 +238,45 @@
 			AND 
 				opencps_dossier_log.actor IN(?)
 			AND 
-				opencps_dossier_log.requestCommand IN(?)
+				(lower(opencps_dossier_file.displayName) LIKE ? [$AND_OR_NULL_CHECK$])
+			ORDER BY 
+				opencps_dossier_log.updateDatetime DESC
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierLogFinder.searchAdminLog">	
+		<![CDATA[
+			SELECT
+				*
+			FROM
+				opencps_dossier_log
+			WHERE
+			1 = 1
+			AND
+				opencps_dossier_log.level = ?
+			AND 
+				opencps_dossier_log.updateDatetime BETWEEN  ? AND ?
+			AND 
+				(lower(opencps_dossier_log.dossierStatus) LIKE ? [$AND_OR_NULL_CHECK$]) 
+			ORDER BY 
+				opencps_dossier_log.updateDatetime DESC
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierLogFinder.countAdminLog">	
+		<![CDATA[
+			SELECT
+				count(*) AS COUNT_VALUE
+			FROM
+				opencps_dossier_log
+			WHERE
+			1 = 1
+			AND
+				opencps_dossier_log.level = ?
+			AND 
+				opencps_dossier_log.updateDatetime BETWEEN  ? AND ?
+			AND 
+				(lower(opencps_dossier_log.dossierStatus) LIKE ? [$AND_OR_NULL_CHECK$]) 
 			ORDER BY 
 				opencps_dossier_log.updateDatetime DESC
 		]]>

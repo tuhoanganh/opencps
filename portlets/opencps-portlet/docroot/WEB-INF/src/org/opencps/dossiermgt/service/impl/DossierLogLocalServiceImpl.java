@@ -173,5 +173,29 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 	public int countDossierByRequestCommand(long dossierId, String requestCommand) throws PortalException, SystemException {
 		return dossierLogPersistence.countByD_RC(dossierId, requestCommand);
 	}
-
+	
+	public List<DossierLog> getAllDossierLog (int start, int end) throws SystemException {
+		boolean orderByAsc = true;
+		DossierLogUpdateDatetimeComparator comparator = new DossierLogUpdateDatetimeComparator(orderByAsc);
+		return dossierLogPersistence.findAll(start, end, comparator);
+	}
+	
+	public int CountAllDossierLog () throws SystemException {
+		return dossierLogPersistence.countAll();
+	}
+	
+	public List<DossierLog> searchAdminLog(Date fromUpdateDatetime , 
+		Date toUpdateDatetime, int level, String dossierStatus, int start, int end) {
+		
+		return dossierLogFinder.searchAdminLog(fromUpdateDatetime, toUpdateDatetime, 
+			level, dossierStatus, start, end);
+		
+	}
+	
+	public int countAnminLog(Date fromUpdateDatetime , 
+		Date toUpdateDatetime, int level, String dossierStatus) {
+		
+		return dossierLogFinder.countAdminLog(fromUpdateDatetime, 
+			toUpdateDatetime, level, dossierStatus);
+	}
 }
