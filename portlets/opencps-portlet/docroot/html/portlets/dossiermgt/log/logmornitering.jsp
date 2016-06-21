@@ -93,17 +93,31 @@
 		</aui:col>
 		
 		<aui:col width="25">
-			<datamgt:ddr 
+			<%-- <datamgt:ddr 
 				depthLevel="1" 
 				dictCollectionCode="DOSSIER_STATUS"
 				itemNames="dossierStatus"
 				itemsEmptyOption="true"	
-			/>	
+			/>	 --%>
+			<aui:select name="dossierStatus">
+				<aui:option value="<%= -1 %>"></aui:option>
+				<%
+					for(int stt : PortletUtil.getDossierStatus()) {
+						%>
+							<aui:option value="<%=stt %>">
+								<liferay-ui:message key="<%= PortletUtil.getActionInfoByKey(stt, themeDisplay.getLocale()) %>"/>
+							</aui:option>
+						<%
+					}
+				%>
+			</aui:select>
+			
 		</aui:col>
 	</aui:row>
 	
 	<aui:input  name="isAutoLoad" type="checkbox"/>
 	<aui:button name="seach" value="search"/>
+	</br>
 	</br>
 	<div id="<portlet:namespace />loadSearchLog" ></div>
 
@@ -135,7 +149,7 @@
 					setInterval((function(){
 						<portlet:namespace />sentParamToSearch(fromDateInp.val(), toDateInp.val(), levelInp.val(), dossierStatusInp.val(),
 								todayInp.val(), tomonthInp.val(), toyearInp.val(), fromdayInp.val(), frommonthInp.val(), fromyearInp.val(), currentURL);
-					}), 30000);
+					}), 60000);
 				}
 			});
 			

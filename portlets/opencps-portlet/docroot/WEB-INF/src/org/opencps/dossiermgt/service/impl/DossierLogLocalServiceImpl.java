@@ -185,7 +185,7 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 	}
 	
 	public List<DossierLog> searchAdminLog(Date fromUpdateDatetime , 
-		Date toUpdateDatetime, int level, String dossierStatus, int start, int end) {
+		Date toUpdateDatetime, int level, int dossierStatus, int start, int end) {
 		
 		return dossierLogFinder.searchAdminLog(fromUpdateDatetime, toUpdateDatetime, 
 			level, dossierStatus, start, end);
@@ -193,7 +193,7 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 	}
 	
 	public int countAnminLog(Date fromUpdateDatetime , 
-		Date toUpdateDatetime, int level, String dossierStatus) {
+		Date toUpdateDatetime, int level, int dossierStatus) {
 		
 		return dossierLogFinder.countAdminLog(fromUpdateDatetime, 
 			toUpdateDatetime, level, dossierStatus);

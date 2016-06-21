@@ -847,7 +847,7 @@
 			<mime-type>text/html</mime-type>
 			<portlet-mode>view</portlet-mode>
 		</supports>
-		<resource-bundle>content.Language</resource-bundle>
+		<resource-bundle>content.Language_24</resource-bundle>
 		<portlet-info>
 			<title>Log Mornitoring</title>
 			<short-title>Log Mornitoring</short-title>
@@ -881,7 +881,7 @@
 			<mime-type>text/html</mime-type>
 			<portlet-mode>view</portlet-mode>
 		</supports>
-		<resource-bundle>content.Language</resource-bundle>
+		<resource-bundle>content.Language_25</resource-bundle>
 		<portlet-info>
 			<title>Dossier Top List</title>
 			<short-title>Dossier Top List</short-title>

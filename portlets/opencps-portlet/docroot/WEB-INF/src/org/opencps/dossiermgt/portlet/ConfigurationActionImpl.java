@@ -22,10 +22,14 @@ package org.opencps.dossiermgt.portlet;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletConfig;
+import javax.portlet.PortletPreferences;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
 import com.liferay.portal.kernel.portlet.ConfigurationAction;
+import com.liferay.portal.kernel.servlet.SessionMessages;
+import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portlet.PortletPreferencesFactoryUtil;
 
 
 /**
@@ -39,10 +43,20 @@ public class ConfigurationActionImpl implements ConfigurationAction{
 	 */
 	@Override
 	public void processAction(
-		PortletConfig arg0, ActionRequest arg1, ActionResponse arg2)
+		PortletConfig portletConfig, ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
-
-		// TODO Auto-generated method stub
+		int status = ParamUtil.getInteger(actionRequest, "status");
+		
+		String portletResource =
+					    ParamUtil.getString(actionRequest, "portletResource");
+		
+		PortletPreferences preferences =
+					    PortletPreferencesFactoryUtil.getPortletSetup(
+					        actionRequest, portletResource);
+		preferences.setValue("status", String.valueOf(status));
+		preferences.store();
+		
+		SessionMessages.add(actionRequest, "potlet-config-saved");
 		
 	}
 
@@ -55,7 +69,7 @@ public class ConfigurationActionImpl implements ConfigurationAction{
 		throws Exception {
 
 		// TODO Auto-generated method stub
-		return null;
+		return "/html/portlets/dossiermgt/toplist/configuration.jsp";
 	}
 
 }

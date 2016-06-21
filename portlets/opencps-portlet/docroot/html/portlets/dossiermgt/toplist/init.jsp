@@ -18,3 +18,15 @@
 %>
 <%@ include file="/init.jsp" %>
 <%@page import="javax.portlet.PortletPreferences"%>
+
+<%
+	PortletPreferences preferences = renderRequest.getPreferences();
+	
+	portletResource = ParamUtil.getString(request, "portletResource");
+	
+	if (Validator.isNotNull(portletResource)) {
+		preferences = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
+	}
+	
+	String status = preferences.getValue("status", "1");
+%>

@@ -56,9 +56,9 @@ public class DossierLogFinderImpl extends BasePersistenceImpl<DossierLog>
 					DossierLogFinder.class.getName() + ".countAdminLog";
 	
 	public List<DossierLog> searchAdminLog (Date fromUpdateDatetime , 
-		Date toUpdateDatetime, int level, String dossierStatus, int start, int end) {
-		
-		String[] keywords = null;
+		Date toUpdateDatetime, int level, int dossierStatus, int start, int end) {
+		boolean andOperator = false;
+		/*String[] keywords = null;
 		boolean andOperator = false;
 		if (Validator
 			.isNotNull(dossierStatus)) {
@@ -67,15 +67,15 @@ public class DossierLogFinderImpl extends BasePersistenceImpl<DossierLog>
 		}
 		else {
 			andOperator = true;
-		}
+		}*/
 		
-		return searchAdminLog(fromUpdateDatetime, toUpdateDatetime, level, keywords,
+		return searchAdminLog(fromUpdateDatetime, toUpdateDatetime, level, dossierStatus,
 			start, end, andOperator);
 		
 	}
 	//search Log for Admin
 	private List<DossierLog> searchAdminLog (Date fromUpdateDatetime , 
-		Date toUpdateDatetime, int level, String [] dossierStatus, int start, int end, boolean andOperator) {
+		Date toUpdateDatetime, int level, int dossierStatus, int start, int end, boolean andOperator) {
 		Session session = null;
 		Timestamp fromUpdateTime_TS = CalendarUtil.getTimestamp(fromUpdateDatetime); 
 		Timestamp toUpdateTime_TS = CalendarUtil.getTimestamp(toUpdateDatetime); 
@@ -83,14 +83,10 @@ public class DossierLogFinderImpl extends BasePersistenceImpl<DossierLog>
 			 
 			session = openSession();
 			 String sql = CustomSQLUtil.get(SEARCH_ADMIN_LOG);
-			 if(dossierStatus == null || dossierStatus.length == 0) {
+			 if(dossierStatus == -1) {
 				 sql = StringUtil.replace(sql, 
-					 "AND (lower(opencps_dossier_log.dossierStatus) LIKE ? [$AND_OR_NULL_CHECK$])",
+					 "AND opencps_dossier_log.dossierStatus = ?",
 					 StringPool.BLANK);
-			 } else {
-				 sql = CustomSQLUtil.replaceKeywords(sql, 
-					 "lower(opencps_dossier_log.dossierStatus)", StringPool.LIKE,
-					 true, dossierStatus);
 			 }
 			 
 			 if(Validator.isNull(fromUpdateDatetime) || Validator.isNull(toUpdateDatetime)) {
@@ -123,12 +119,12 @@ public class DossierLogFinderImpl extends BasePersistenceImpl<DossierLog>
 				 qPos.add(toUpdateTime_TS);
 			 }
 			 
-			 if(dossierStatus != null && dossierStatus.length > 0) {
+			 if(dossierStatus != -1) {
 				 qPos
-					.add(dossierStatus,2);
+					.add(dossierStatus);
+			 }
 				return (List<DossierLog>) QueryUtil
 								.list(q, getDialect(), start, end);
-			 }
 		 }
 		catch (Exception e) {
 			_log.error(e);
@@ -140,8 +136,9 @@ public class DossierLogFinderImpl extends BasePersistenceImpl<DossierLog>
 	}
 	
 	public int countAdminLog(Date fromUpdateDatetime , 
-		Date toUpdateDatetime, int level, String dossierStatus) {
-		String[] keywords = null;
+		Date toUpdateDatetime, int level, int dossierStatus) {
+		boolean andOperator = false;
+		/*String[] keywords = null;
 		boolean andOperator = false;
 		if (Validator
 			.isNotNull(dossierStatus)) {
@@ -150,27 +147,23 @@ public class DossierLogFinderImpl extends BasePersistenceImpl<DossierLog>
 		}
 		else {
 			andOperator = true;
-		}
+		}*/
 		
-		return countAdminLog(fromUpdateDatetime, toUpdateDatetime, level, keywords, andOperator);
+		return countAdminLog(fromUpdateDatetime, toUpdateDatetime, level, dossierStatus, andOperator);
 	}
 	//count log for admin 
 	private int countAdminLog(Date fromUpdateDatetime , 
-		Date toUpdateDatetime, int level, String [] dossierStatus, boolean andOperator) {
+		Date toUpdateDatetime, int level, int dossierStatus, boolean andOperator) {
 		Timestamp fromUpdateTime_TS = CalendarUtil.getTimestamp(fromUpdateDatetime); 
 		Timestamp toUpdateTime_TS = CalendarUtil.getTimestamp(toUpdateDatetime); 
 		Session session = null;
 		 try {
 			session = openSession();
 			 String sql = CustomSQLUtil.get(COUNT_ADMIN_LOG);
-			 if(dossierStatus == null || dossierStatus.length == 0) {
+			 if(dossierStatus == -1) {
 				 sql = StringUtil.replace(sql, 
-					 "AND (lower(opencps_dossier_log.dossierStatus) LIKE ? [$AND_OR_NULL_CHECK$])",
+					 "AND opencps_dossier_log.dossierStatus = ?",
 					 StringPool.BLANK);
-			 } else {
-				 sql = CustomSQLUtil.replaceKeywords(sql, 
-					 "lower(opencps_dossier_log.dossierStatus)", StringPool.LIKE,
-					 true, dossierStatus);
 			 }
 			 
 			 if(Validator.isNull(fromUpdateDatetime) || Validator.isNull(toUpdateDatetime)) {
@@ -204,9 +197,10 @@ public class DossierLogFinderImpl extends BasePersistenceImpl<DossierLog>
 				 qPos.add(toUpdateTime_TS);
 			 }
 			 
-			 if(dossierStatus != null && dossierStatus.length > 0) {
+			 if(dossierStatus != -1) {
 				 qPos
-					.add(dossierStatus,2);
+					.add(dossierStatus);
+			 }
 				Iterator<Integer> itr = q.iterate();
 							if (itr
 								.hasNext()) {
@@ -220,7 +214,7 @@ public class DossierLogFinderImpl extends BasePersistenceImpl<DossierLog>
 							}
 
 							return 0;
-			 }
+			 
 		 }
 		catch (Exception e) {
 			_log.error(e);

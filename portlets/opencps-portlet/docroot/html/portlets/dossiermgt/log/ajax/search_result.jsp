@@ -1,4 +1,6 @@
 
+<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -32,7 +34,7 @@
 <%
 	int totalCount = 0;
 	int level = ParamUtil.getInteger(request, "levelReq");
-	String status = ParamUtil.getString(request, "statusReq");
+	int statuss = ParamUtil.getInteger(request, "statusReq");
 	Date fromDate =ParamUtil.getDate(request, "fromDateReq", DateTimeUtil.getDateTimeFormat(DateTimeUtil._VN_DATE_FORMAT));
 	Date toDate =  ParamUtil.getDate(request, "toDateReq", DateTimeUtil.getDateTimeFormat(DateTimeUtil._VN_DATE_FORMAT));
 	//sdf.parse(ParamUtil.getString(request, "toDateReq"));
@@ -51,14 +53,13 @@
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", "/html/portlets/dossiermgt/log/ajax/search_result.jsp");
 	iteratorURL.setParameter("levelReq", String.valueOf(level));
-	iteratorURL.setParameter("statusReq", status);
+	iteratorURL.setParameter("statusReq", String.valueOf(statuss));
 	iteratorURL.setParameter("fromDateReq", DateTimeUtil.convertDateToString(fromDate, DateTimeUtil._VN_DATE_FORMAT));
 	iteratorURL.setParameter("toDateReq", DateTimeUtil.convertDateToString(toDate, DateTimeUtil._VN_DATE_FORMAT));
 	iteratorURL.setParameter("currentURL", backURL);
 	iteratorURL.setWindowState(LiferayWindowState.NORMAL);
 	
 %>
-
 <liferay-ui:header
 	backURL="<%= backURL %>"
 	title="result"
@@ -74,21 +75,26 @@
 			<%
 				dossierLogs = DossierLogLocalServiceUtil.searchAdminLog(
 					fromDate, toDate, 
-					level, status, searchContainer.getStart(), searchContainer.getEnd());
-			results = dossierLogs;
-			totalCount = DossierLogLocalServiceUtil.countAnminLog(null, null, level, status);			
-			total = totalCount;
-			pageContext.setAttribute("results", results);
-			pageContext.setAttribute("total", total);
+					level, statuss, searchContainer.getStart(), searchContainer.getEnd());
+				results = dossierLogs;
+				totalCount = DossierLogLocalServiceUtil.countAnminLog(fromDate, toDate, level, statuss);			
+				total = totalCount;
+				pageContext.setAttribute("results", results);
+				pageContext.setAttribute("total", total);
 			%>
 		</liferay-ui:search-container-results>
+		
 		<liferay-ui:search-container-row 
 			className="org.opencps.dossiermgt.model.DossierLog" 
 			modelVar="dossierLog" 
 			keyProperty="dossierLogId"
 		>
+			<%
+				String syncStatusName = LanguageUtil.get(portletConfig ,themeDisplay.getLocale(), DossierMgtUtil.getSynchStatus(dossierLog.getSyncStatus(), themeDisplay.getLocale()));
+				String statusName = LanguageUtil.get(portletConfig ,themeDisplay.getLocale(), PortletUtil.getActionInfoByKey(dossierLog.getDossierStatus(), themeDisplay.getLocale()));
+			%>
 			<liferay-ui:search-container-column-text 
-				name="no" value="<%=String.valueOf(row.getPos()+1) %>"
+				name="row-no" value="<%=String.valueOf(row.getPos()+1) %>"
 			/>
 			
 			<liferay-ui:search-container-column-text 
@@ -96,20 +102,20 @@
 			/>
 			
 			<liferay-ui:search-container-column-text 
-				name="dossierId" value="<%=String.valueOf(dossierLog.getDossierId()) %>"
+				name="dossier-id" value="<%=String.valueOf(dossierLog.getDossierId()) %>"
 			/>
 			
 			<liferay-ui:search-container-column-text 
-				name="action" value="<%=String.valueOf(dossierLog.getSyncStatus()) %>"
+				name="action" value="<%=dossierLog.getActionInfo() %>"
 			/>	
 			<liferay-ui:search-container-column-text 
-				name="no" value="<%=String.valueOf(row.getPos()+1) %>"
+				name="sync-status" value="<%=syncStatusName%>"
 			/>	
 			<liferay-ui:search-container-column-text 
-				name="no" value="<%=String.valueOf(row.getPos()+1) %>"
+				name="status" value="<%=statusName%>"
 			/>	
 			<liferay-ui:search-container-column-text 
-				name="no" value="<%=String.valueOf(row.getPos()+1) %>"
+				name="level" value="<%=String.valueOf(dossierLog.getLevel()) %>"
 			/>	
 		</liferay-ui:search-container-row>
 		<liferay-ui:search-iterator/>

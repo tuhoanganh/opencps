@@ -257,7 +257,7 @@
 			AND 
 				opencps_dossier_log.updateDatetime BETWEEN  ? AND ?
 			AND 
-				(lower(opencps_dossier_log.dossierStatus) LIKE ? [$AND_OR_NULL_CHECK$]) 
+				opencps_dossier_log.dossierStatus = ? 
 			ORDER BY 
 				opencps_dossier_log.updateDatetime DESC
 		]]>
@@ -276,7 +276,7 @@
 			AND 
 				opencps_dossier_log.updateDatetime BETWEEN  ? AND ?
 			AND 
-				(lower(opencps_dossier_log.dossierStatus) LIKE ? [$AND_OR_NULL_CHECK$]) 
+				opencps_dossier_log.dossierStatus = ? 
 			ORDER BY 
 				opencps_dossier_log.updateDatetime DESC
 		]]>
