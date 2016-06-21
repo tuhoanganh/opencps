@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -40,7 +39,7 @@
 
 	List<ProcessOrderBean> processOrderServices = new ArrayList<ProcessOrderBean>();
 	
-	List<ProcessOrderBean> processOrderBeans = new ArrayList<ProcessOrderBean>();
+	List<ProcessOrderBean> processOrderSteps = new ArrayList<ProcessOrderBean>();
 	
 	long serviceInfoId = ParamUtil.getLong(request, "serviceInfoId");
 	
@@ -48,11 +47,18 @@
 	
 	try{
 		
-		processOrderServices = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getProcessOrderServiceByUser(themeDisplay.getUserId());
-		
-		if(serviceInfoId > 0){
-			processOrderBeans = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getUserProcessStep(themeDisplay.getUserId(), serviceInfoId);
+		if(tabs1.equals(ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS)){
+			processOrderServices = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getProcessOrderServiceByUser(themeDisplay.getUserId());
+			if(serviceInfoId > 0){
+				processOrderSteps = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getUserProcessStep(themeDisplay.getUserId(), serviceInfoId);
+			}
+		}else{
+			processOrderServices = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getProcessOrderServiceJustFinishedByUser(themeDisplay.getUserId());
+			if(serviceInfoId > 0){
+				processOrderSteps = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getUserProcessStepJustFinished(themeDisplay.getUserId(), serviceInfoId);
+			}
 		}
+		
 		
 		
 	}catch(Exception e){}
@@ -103,7 +109,7 @@
 							onChange='<%=renderResponse.getNamespace() + "searchByProcecssOrderService(this)"%>'
 							
 						>
-							<aui:option value="0" title="service-info"><liferay-ui:message key="service-info"/></aui:option>
+							<aui:option value="0" title="service-info"><liferay-ui:message key="filter-service-info"/></aui:option>
 							<%
 							
 								if(processOrderServices != null){
@@ -128,13 +134,13 @@
 							inlineLabel="left"
 							onChange='<%=renderResponse.getNamespace() + "searchByProcecssStep(this)"%>'
 						>
-							<aui:option value="0"><liferay-ui:message key="all"/></aui:option>
+							<aui:option value="0"><liferay-ui:message key="filter-process-step"/></aui:option>
 							<%
 							
-								if(processOrderBeans != null){
-									for(ProcessOrderBean processOrderBean : processOrderBeans){
+								if(processOrderSteps != null){
+									for(ProcessOrderBean processOrderStep : processOrderSteps){
 										%>
-											<aui:option value="<%= processOrderBean.getProcessStepId()%>"><%=processOrderBean.getStepName() %></aui:option>
+											<aui:option value="<%= processOrderStep.getProcessStepId()%>"><%=processOrderStep.getStepName() %></aui:option>
 										<%
 									}
 								}
@@ -158,12 +164,6 @@
 		var processOrderIds = Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, '<portlet:namespace />allRowIds');
 		
 		processOrderIds = processOrderIds.split(",");
-		
-		console.log(processOrderIds);
-		
-		console.log(processOrderIds.length);
-		
-		console.log(processOrderIds);
 		
 		if(processOrderIds != ''){
 			if(processOrderIds.length > 1){
