@@ -17,7 +17,6 @@
 
 package org.opencps.backend.scheduler;
 
-import java.util.Date;
 
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageListener;
