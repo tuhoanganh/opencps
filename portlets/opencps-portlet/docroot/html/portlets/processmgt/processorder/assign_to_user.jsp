@@ -1,5 +1,7 @@
 
-<%@page import="org.opencps.backend.util.PaymentRequestGenerator"%>
+<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.model.WorkflowOutput"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -19,6 +21,7 @@
  */
 %>
 
+<%@page import="org.opencps.backend.util.PaymentRequestGenerator"%>
 <%@page import="org.opencps.util.PortletUtil"%>
 <%@page import="org.opencps.util.DateTimeUtil"%>
 <%@page import="org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil"%>
@@ -84,11 +87,17 @@
 	
 	ProcessWorkflow processWorkflow = null;
 	
+	List<WorkflowOutput> workflowOutputs = new ArrayList<WorkflowOutput>();
+	
 	if(processWorkflowId > 0){
 		try{
 			processWorkflow = ProcessWorkflowLocalServiceUtil.getProcessWorkflow(processWorkflowId);
-		}catch(Exception e){}
+			workflowOutputs = WorkflowOutputLocalServiceUtil.getProcessByE_S_ID_PB(processWorkflowId, true);
+		}catch(Exception e){};
 	}
+	
+	
+	
 %>
 
 <portlet:actionURL var="assignToUserURL" name="assignToUser"/>
@@ -190,7 +199,29 @@
 	>
 		<liferay-ui:message key="return-date"/>
 	</label>
-		
+	
+	<c:if test="<%=workflowOutputs != null && !workflowOutputs.isEmpty() %>">
+		<aui:select name="esignDossierFiles" multiple="<%=true %>" label="esign-dossier-files">
+			<%
+				for(WorkflowOutput workflowOutput : workflowOutputs){
+					long dossierPartId = workflowOutput.getDossierPartId();
+					DossierFile dossierFileInUse = null;
+					try{
+						dossierFileInUse = DossierFileLocalServiceUtil.getDossierFileInUse(dossierId, dossierPartId);
+					}catch(Exception e){
+						continue;
+					}
+					
+					if(dossierFileInUse != null && dossierFileInUse.getFileEntryId() > 0){
+						%>
+							<aui:option value="<%=dossierFileInUse.getDossierFileId() %>"><%=dossierFileInUse.getDisplayName()%></aui:option>
+						<%
+					}
+				}
+			%>
+		</aui:select>
+	</c:if>
+	
 	<liferay-ui:input-date
 		dayParam="<%=ProcessOrderDisplayTerms.ESTIMATE_DATETIME_DAY %>"
 		disabled="<%= false %>"
@@ -207,7 +238,7 @@
 	
 	<aui:input name="<%=ProcessOrderDisplayTerms.ACTION_NOTE %>" label="action-note" type="textarea"/>
 	
-	<aui:input name="signature" type="checkbox" label="apcept-signature"/>
+	<%-- <aui:input name="signature" type="checkbox" label="apcept-signature"/> --%>
 	<aui:button type="submit" value="submit" name="submit"/>
 	<aui:button type="button" value="cancel" name="cancel"/>
 </aui:form>

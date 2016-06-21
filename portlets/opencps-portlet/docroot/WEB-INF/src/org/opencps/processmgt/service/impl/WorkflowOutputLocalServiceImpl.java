@@ -41,7 +41,7 @@ import com.liferay.portal.kernel.util.Validator;
  * @see org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil
  */
 public class WorkflowOutputLocalServiceImpl
-	extends WorkflowOutputLocalServiceBaseImpl {
+	extends WorkflowOutputLocalServiceBaseImpl{
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -59,24 +59,33 @@ public class WorkflowOutputLocalServiceImpl
 	 * @throws PortalException
 	 * @throws SystemException
 	 */
-	public WorkflowOutput updateWorkflowOutput(long workflowOutputId,
-	    long dossierPartId, long processWorkflowId, boolean required, boolean esign, boolean postback)
-	    throws PortalException, SystemException {
-		
+	public WorkflowOutput updateWorkflowOutput(
+		long workflowOutputId, long dossierPartId, long processWorkflowId,
+		boolean required, boolean esign, boolean postback)
+		throws PortalException, SystemException {
+
 		WorkflowOutput output = null;
-		
-		output = workflowOutputPersistence.fetchByPrimaryKey(workflowOutputId);
-		
-		if (Validator.isNotNull(output)) {
-			output.setDossierPartId(dossierPartId);
-			output.setProcessWorkflowId(processWorkflowId);
-			output.setEsign(esign);
-			output.setPostback(postback);
-			output.setRequired(required);
-			
-			workflowOutputPersistence.update(output);
+
+		output = workflowOutputPersistence
+			.fetchByPrimaryKey(workflowOutputId);
+
+		if (Validator
+			.isNotNull(output)) {
+			output
+				.setDossierPartId(dossierPartId);
+			output
+				.setProcessWorkflowId(processWorkflowId);
+			output
+				.setEsign(esign);
+			output
+				.setPostback(postback);
+			output
+				.setRequired(required);
+
+			workflowOutputPersistence
+				.update(output);
 		}
-		
+
 		return output;
 	}
 	
@@ -91,25 +100,36 @@ public class WorkflowOutputLocalServiceImpl
 	 * @throws SystemException
 	 */
 	public WorkflowOutput addWorkflowOutput(
-	    long dossierPartId, long processWorkflowId, boolean required, boolean esign, boolean postback)
-	    throws PortalException, SystemException {
-		
+		long dossierPartId, long processWorkflowId, boolean required,
+		boolean esign, boolean postback)
+		throws PortalException, SystemException {
+
 		WorkflowOutput output = null;
-		
-		long workflowOutputId = counterLocalService.increment(WorkflowOutput.class.getName());
-		
-		output = workflowOutputPersistence.create(workflowOutputId);
-		
-		if (Validator.isNotNull(output)) {
-			output.setDossierPartId(dossierPartId);
-			output.setProcessWorkflowId(processWorkflowId);
-			output.setEsign(esign);
-			output.setPostback(postback);
-			output.setRequired(required);
-			
-			workflowOutputPersistence.update(output);
+
+		long workflowOutputId = counterLocalService
+			.increment(WorkflowOutput.class
+				.getName());
+
+		output = workflowOutputPersistence
+			.create(workflowOutputId);
+
+		if (Validator
+			.isNotNull(output)) {
+			output
+				.setDossierPartId(dossierPartId);
+			output
+				.setProcessWorkflowId(processWorkflowId);
+			output
+				.setEsign(esign);
+			output
+				.setPostback(postback);
+			output
+				.setRequired(required);
+
+			workflowOutputPersistence
+				.update(output);
 		}
-		
+
 		return output;
 	}
 	
@@ -120,13 +140,39 @@ public class WorkflowOutputLocalServiceImpl
 	 * @throws SystemException
 	 */
 	public List<WorkflowOutput> getByProcessWF(long processWorkflowId)
-	    throws PortalException, SystemException {
-		return workflowOutputPersistence.findByP_W_ID(processWorkflowId);
+		throws PortalException, SystemException {
+
+		return workflowOutputPersistence
+			.findByP_W_ID(processWorkflowId);
 	}
 	
-	public List<WorkflowOutput> getByProcessWFPostback(long processWorkflowId, boolean postback)
-				    throws PortalException, SystemException {
-		return workflowOutputPersistence.findByP_W_ID_PB(processWorkflowId, postback);
-	}
+	/**
+	 * @param processWorkflowId
+	 * @param postback
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public List<WorkflowOutput> getByProcessWFPostback(
+		long processWorkflowId, boolean postback)
+		throws PortalException, SystemException {
 
+		return workflowOutputPersistence
+			.findByP_W_ID_PB(processWorkflowId, postback);
+	}
+	
+	/**
+	 * @param processWorkflowId
+	 * @param esign
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public List<WorkflowOutput> getProcessByE_S_ID_PB(
+		long processWorkflowId, boolean esign)
+		throws PortalException, SystemException {
+
+		return workflowOutputPersistence
+			.findByE_S_ID_PB(processWorkflowId, esign);
+	}
 }
