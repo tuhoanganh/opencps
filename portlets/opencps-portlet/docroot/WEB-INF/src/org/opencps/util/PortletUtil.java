@@ -509,7 +509,63 @@ public class PortletUtil {
 		}
 		return dictItem;
 	}
+	public static String getActionInfoByKey(int status, Locale locale) {
 
+		String actionInfo = StringPool.BLANK;
+		switch (status) {
+		case 0:
+			actionInfo = LanguageUtil
+			    .get(locale, "new-stt");
+			break;
+		case 1:
+			actionInfo = LanguageUtil
+			    .get(locale, "receiving-stt");
+			break;
+		case 2:
+			actionInfo = LanguageUtil
+			    .get(locale, "waiting-stt");
+			break;
+		case 3:
+			actionInfo = LanguageUtil
+			    .get(locale, "paying-stt");
+			break;
+		case 4:
+			actionInfo = LanguageUtil
+			    .get(locale, "denied-stt");
+			break;
+		case 5:
+			actionInfo = LanguageUtil
+			    .get(locale, "received-stt");
+			break;
+		case 6:
+			actionInfo = LanguageUtil
+			    .get(locale, "processing-stt");
+			break;
+		case 7:
+			actionInfo = LanguageUtil
+			    .get(locale, "canceled-stt");
+			break;
+		case 8:
+			actionInfo = LanguageUtil
+			    .get(locale, "done-stt");
+			break;
+		case 9:
+			actionInfo = LanguageUtil
+			    .get(locale, "archived-stt");
+			break;
+		case 10:
+			actionInfo = LanguageUtil
+			    .get(locale, "system-stt");
+			break;
+		case 11:
+			actionInfo = LanguageUtil
+			    .get(locale, "error-stt");
+			break;
+		default:
+			break;
+		}
+		return actionInfo;
+	}
 	public static String getActionInfo(int status, Locale locale) {
 
 		String actionInfo = StringPool.BLANK;
