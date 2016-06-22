@@ -17,6 +17,7 @@
 
 package org.opencps.dossiermgt.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.opencps.util.PortletPropsValues;
@@ -28,7 +29,12 @@ import com.liferay.portlet.documentlibrary.model.DLFolder;
 /**
  * @author trungnt
  */
-public class AccountBean {
+public class AccountBean implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public AccountBean(
 		Object accountInstance, String accountType, DLFolder accountFolder,

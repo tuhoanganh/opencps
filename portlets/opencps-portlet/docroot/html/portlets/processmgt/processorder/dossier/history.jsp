@@ -1,9 +1,4 @@
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.liferay.portal.service.UserLocalServiceUtil"%>
-<%@page import="org.opencps.util.DateTimeUtil"%>
-<%@page import="org.opencps.processmgt.service.ActionHistoryLocalServiceUtil"%>
-<%@page import="org.opencps.processmgt.model.ActionHistory"%>
-<%@page import="org.opencps.processmgt.model.ProcessOrder"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -22,6 +17,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="com.liferay.portal.service.UserLocalServiceUtil"%>
+<%@page import="org.opencps.util.DateTimeUtil"%>
+<%@page import="org.opencps.processmgt.service.ActionHistoryLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.model.ActionHistory"%>
+<%@page import="org.opencps.processmgt.model.ProcessOrder"%>
 <%@ include file="../../init.jsp"%>
 
 <%
@@ -45,12 +46,11 @@
 		>
 		<liferay-ui:search-container-results>
 			<%
-				actionHistories = ActionHistoryLocalServiceUtil
-					.getActionHistoriesByG_PORD(scopeGroupId, processOrderId, 
-						searchContainer.getStart(), searchContainer.getEnd());
+				actionHistories =  ActionHistoryLocalServiceUtil.getActionHistoryByProcessOrderId(processOrderId, searchContainer.getStart(), searchContainer.getEnd());
+				
 				results = actionHistories;
 				total = ActionHistoryLocalServiceUtil
-					.counAcionHistoriesByG_PORD(scopeGroupId, processOrderId);
+					.countActionHistoryByProcessId(processOrderId);
 				pageContext.setAttribute("results", results);
 				pageContext.setAttribute("total", total);
 			%>
@@ -62,11 +62,25 @@
 		>
 		
 			<%
-				String date = DateTimeUtil.
-					convertDateToString(actionHistory.getCreateDate(),
-							DateTimeUtil._VN_DATE_FORMAT);
-				User userAction = UserLocalServiceUtil
-								.getUser(actionHistory.getActionUserId());
+				String date = StringPool.BLANK;
+				
+				if (Validator.isNotNull(actionHistory.getCreateDate())) {
+					date = DateTimeUtil.
+									convertDateToString(actionHistory.getCreateDate(),
+										DateTimeUtil._VN_DATE_FORMAT);
+				}
+				
+				String userActionName = StringPool.BLANK;
+				
+				try {
+					if (Validator.isNotNull(actionHistory.getActionUserId()) || actionHistory.getActionUserId() != 0) {
+						userActionName = UserLocalServiceUtil
+										.getUser(actionHistory.getActionUserId()).getFullName();
+					}
+				} catch (Exception e ) {
+					
+				}
+				
 			%>
 			<liferay-ui:search-container-column-text 
 				name="row-no"
@@ -90,7 +104,7 @@
 			
 			<liferay-ui:search-container-column-text 
 				name="action-user"
-			 	value="<%= userAction.getFullName() %>"
+			 	value="<%= userActionName %>"
 			/>
 			
 			<liferay-ui:search-container-column-text 

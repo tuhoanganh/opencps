@@ -397,6 +397,16 @@ public class ProcessOrderBean {
 	public void setActionUserName(String _actionUserName) {
 		this._actionUserName = _actionUserName;
 	}
+	
+	public boolean isReadOnly() {
+	
+		return _readOnly;
+	}
+
+	public void setReadOnly(boolean readOnly) {
+	
+		this._readOnly = readOnly;
+	}
 
 	private long _processOrderId;
 	private long _companyId;
@@ -431,6 +441,8 @@ public class ProcessOrderBean {
 	private String _assignToUserName;
 	private String _actionUserName;
 	private String _dealine;
+
+	private boolean _readOnly;
 
 	private Log _log = LogFactoryUtil
 	    .getLog(ProcessOrderBean.class

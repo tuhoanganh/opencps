@@ -42,72 +42,80 @@ import com.liferay.util.dao.orm.CustomSQLUtil;
 /**
  * @author trungnt
  */
-/**
- * @author trungnt
- *
- */
 public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
-    implements ProcessOrderFinder {
+	implements ProcessOrderFinder {
 
 	public final static String SQL_PROCESS_ORDER_FINDER =
-					ProcessOrderFinder.class
-	        .getName() + ".searchProcessOrder";
+		ProcessOrderFinder.class
+			.getName() + ".searchProcessOrder";
 	public final static String SQL_PROCESS_ORDER_COUNT =
-					ProcessOrderFinder.class
-	        .getName() + ".countProcessOrder";
-	
-	public final static String SQL_USER_PROCESS_STEP =
-					ProcessOrderFinder.class
-	        .getName() + ".getUserProcessStep";
+		ProcessOrderFinder.class
+			.getName() + ".countProcessOrder";
 
-	public int countProcessOrder(long processStepId, long loginUserId, long actionUserId) {
+	public final static String SQL_PROCESS_ORDER_JUST_FINISHED_FINDER =
+		ProcessOrderFinder.class
+			.getName() + ".searchProcessOrderJustFinished";
+	public final static String SQL_PROCESS_ORDER_JUST_FINISHED_COUNT =
+		ProcessOrderFinder.class
+			.getName() + ".countProcessOrderJustFinished";
+
+	public final static String SQL_USER_PROCESS_STEP = ProcessOrderFinder.class
+		.getName() + ".getUserProcessStep";
+
+	/**
+	 * @param processStepId
+	 * @param loginUserId
+	 * @param assignToUserId
+	 * @return
+	 */
+	public int countProcessOrder(
+		long processStepId, long loginUserId, long assignToUserId) {
 
 		Session session = null;
 		try {
 			session = openSession();
 
 			String sql = CustomSQLUtil
-			    .get(SQL_PROCESS_ORDER_COUNT);
+				.get(SQL_PROCESS_ORDER_COUNT);
 
 			if (processStepId <= 0) {
 				sql = StringUtil
-				    .replace(
-				        sql, "AND opencps_processstep.processStepId = ?",
-				        StringPool.BLANK);
+					.replace(sql, "AND opencps_processstep.processStepId = ?",
+						StringPool.BLANK);
 			}
 
 			SQLQuery q = session
-			    .createSQLQuery(sql);
+				.createSQLQuery(sql);
 			q
-			    .setCacheable(false);
+				.setCacheable(false);
 
 			q
-			    .addScalar(COUNT_COLUMN_NAME, Type.INTEGER);
+				.addScalar(COUNT_COLUMN_NAME, Type.INTEGER);
 
 			QueryPos qPos = QueryPos
-			    .getInstance(q);
+				.getInstance(q);
 
 			if (processStepId > 0) {
 				qPos
-				    .add(processStepId);
+					.add(processStepId);
 			}
 
 			qPos
-			    .add(loginUserId);
+				.add(loginUserId);
 			qPos
-			    .add(actionUserId);
+				.add(assignToUserId);
 
 			Iterator<Integer> itr = q
-			    .iterate();
+				.iterate();
 
 			if (itr
-			    .hasNext()) {
+				.hasNext()) {
 				Integer count = itr
-				    .next();
+					.next();
 
 				if (count != null) {
 					return count
-					    .intValue();
+						.intValue();
 				}
 			}
 
@@ -115,7 +123,7 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 		}
 		catch (Exception e) {
 			_log
-			    .error(e);
+				.error(e);
 		}
 		finally {
 			closeSession(session);
@@ -125,85 +133,163 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 
 	}
 	
-	public List searchProcessOrder(
-
-	    long processStepId, long loginUserId, long actionUserId, int start, int end,
-	    OrderByComparator orderByComparator) {
+	/**
+	 * @param processStepId
+	 * @param actionUserId
+	 * @return
+	 */
+	public int countProcessOrderJustFinished(
+		long processStepId, long actionUserId) {
 
 		Session session = null;
 		try {
 			session = openSession();
 
 			String sql = CustomSQLUtil
-			    .get(SQL_PROCESS_ORDER_FINDER);
+				.get(SQL_PROCESS_ORDER_JUST_FINISHED_COUNT);
 
 			if (processStepId <= 0) {
 				sql = StringUtil
-				    .replace(
-				        sql, "AND opencps_processstep.processStepId = ?",
-				        StringPool.BLANK);
+					.replace(sql, "AND opencps_processstep.processStepId = ?",
+						StringPool.BLANK);
 			}
 
 			SQLQuery q = session
-			    .createSQLQuery(sql);
+				.createSQLQuery(sql);
+			q
+				.setCacheable(false);
 
 			q
-			    .setCacheable(false);
-
-			q
-			    .addEntity("ProcessOrder", ProcessOrderImpl.class);
-
-			q
-			    .addScalar("serviceConfigId", Type.LONG);
-			q
-			    .addScalar("subjectId", Type.STRING);
-			q
-			    .addScalar("subjectName", Type.STRING);
-			q
-			    .addScalar("receptionNo", Type.STRING);
-			q
-			    .addScalar("serviceName", Type.STRING);
-			q
-			    .addScalar("stepName", Type.STRING);
-			q
-			    .addScalar("sequenceNo", Type.STRING);
-			q
-			    .addScalar("daysDuration", Type.INTEGER);
-			q
-			    .addScalar("referenceDossierPartId", Type.LONG);
+				.addScalar(COUNT_COLUMN_NAME, Type.INTEGER);
 
 			QueryPos qPos = QueryPos
-			    .getInstance(q);
+				.getInstance(q);
 
 			if (processStepId > 0) {
 				qPos
-				    .add(processStepId);
+					.add(processStepId);
 			}
 
 			qPos
-			    .add(loginUserId);
-			qPos
-			    .add(actionUserId);
+				.add(actionUserId);
 
-			Iterator<Object[]> itr = (Iterator<Object[]>) QueryUtil
-			    .list(q, getDialect(), start, end).iterator();
-
-			List<ProcessOrderBean> processOrderBeans =
-			    new ArrayList<ProcessOrderBean>();
+			Iterator<Integer> itr = q
+				.iterate();
 
 			if (itr
-			    .hasNext()) {
+				.hasNext()) {
+				Integer count = itr
+					.next();
+
+				if (count != null) {
+					return count
+						.intValue();
+				}
+			}
+
+			return 0;
+		}
+		catch (Exception e) {
+			_log
+				.error(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		return 0;
+
+	}
+
+	/**
+	 * @param processStepId
+	 * @param loginUserId
+	 * @param actionUserId
+	 * @param start
+	 * @param end
+	 * @param orderByComparator
+	 * @return
+	 */
+	public List searchProcessOrder(
+
+		long processStepId, long loginUserId, long assignToUserId, int start,
+		int end, OrderByComparator orderByComparator) {
+
+		Session session = null;
+		try {
+			session = openSession();
+
+			String sql = CustomSQLUtil
+				.get(SQL_PROCESS_ORDER_FINDER);
+
+			if (processStepId <= 0) {
+				sql = StringUtil
+					.replace(sql, "AND opencps_processstep.processStepId = ?",
+						StringPool.BLANK);
+			}
+
+			SQLQuery q = session
+				.createSQLQuery(sql);
+
+			q
+				.setCacheable(false);
+
+			q
+				.addEntity("ProcessOrder", ProcessOrderImpl.class);
+
+			q
+				.addScalar("serviceConfigId", Type.LONG);
+			q
+				.addScalar("subjectId", Type.STRING);
+			q
+				.addScalar("subjectName", Type.STRING);
+			q
+				.addScalar("receptionNo", Type.STRING);
+			q
+				.addScalar("serviceName", Type.STRING);
+			q
+				.addScalar("stepName", Type.STRING);
+			q
+				.addScalar("sequenceNo", Type.STRING);
+			q
+				.addScalar("daysDuration", Type.INTEGER);
+			q
+				.addScalar("referenceDossierPartId", Type.LONG);
+			q
+				.addScalar("readOnly", Type.BOOLEAN);
+
+			QueryPos qPos = QueryPos
+				.getInstance(q);
+
+			if (processStepId > 0) {
+				qPos
+					.add(processStepId);
+			}
+
+			qPos
+				.add(loginUserId);
+			qPos
+				.add(assignToUserId);
+
+			Iterator<Object[]> itr = (Iterator<Object[]>) QueryUtil
+				.list(q, getDialect(), start, end).iterator();
+
+			List<ProcessOrderBean> processOrderBeans =
+				new ArrayList<ProcessOrderBean>();
+
+			if (itr
+				.hasNext()) {
 				while (itr
-				    .hasNext()) {
+					.hasNext()) {
 					ProcessOrderBean processOrderBean = new ProcessOrderBean();
 
 					Object[] objects = itr
-					    .next();
+						.next();
 
 					ProcessOrder processOrder = (ProcessOrder) objects[0];
 
 					long serviceConfigId = GetterUtil
-					    .getLong(objects[1]);
+						.getLong(objects[1]);
 					String subjectId = (String) objects[2];
 					String subjectName = (String) objects[3];
 					String receptionNo = (String) objects[4];
@@ -211,83 +297,88 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 					String stepName = (String) objects[6];
 					String sequenceNo = (String) objects[7];
 					int daysDuration = GetterUtil
-					    .getInteger(objects[8]);
+						.getInteger(objects[8]);
 					long referenceDossierPartId = GetterUtil
-					    .getLong(objects[9]);
+						.getLong(objects[9]);
+
+					boolean readOnly = GetterUtil
+						.getBoolean(objects[10]);
 
 					processOrderBean
-					    .setActionDatetime(processOrder
-					        .getActionDatetime());
+						.setActionDatetime(processOrder
+							.getActionDatetime());
 					processOrderBean
-					    .setActionUserId(processOrder
-					        .getActionUserId());
+						.setActionUserId(processOrder
+							.getActionUserId());
 					processOrderBean
-					    .setAssignToUserId(processOrder
-					        .getAssignToUserId());
+						.setAssignToUserId(processOrder
+							.getAssignToUserId());
 					// processOrderBean.setAssignToUserName(assignToUserName);
 					processOrderBean
-					    .setCompanyId(processOrder
-					        .getCompanyId());
+						.setCompanyId(processOrder
+							.getCompanyId());
 					processOrderBean
-					    .setDaysDuration(daysDuration);
+						.setDaysDuration(daysDuration);
 					// processOrderBean.setDealine(dealine);
 					processOrderBean
-					    .setDossierId(processOrder
-					        .getDossierId());
+						.setDossierId(processOrder
+							.getDossierId());
 					processOrderBean
-					    .setDossierStatus(processOrder
-					        .getDossierStatus());
+						.setDossierStatus(processOrder
+							.getDossierStatus());
 					processOrderBean
-					    .setDossierTemplateId(processOrder
-					        .getDossierTemplateId());
+						.setDossierTemplateId(processOrder
+							.getDossierTemplateId());
 					processOrderBean
-					    .setFileGroupId(processOrder
-					        .getFileGroupId());
+						.setFileGroupId(processOrder
+							.getFileGroupId());
 					processOrderBean
-					    .setGovAgencyCode(processOrder
-					        .getGovAgencyCode());
+						.setGovAgencyCode(processOrder
+							.getGovAgencyCode());
 					processOrderBean
-					    .setGovAgencyName(processOrder
-					        .getGovAgencyName());
+						.setGovAgencyName(processOrder
+							.getGovAgencyName());
 					processOrderBean
-					    .setGovAgencyOrganizationId(processOrder
-					        .getGovAgencyOrganizationId());
+						.setGovAgencyOrganizationId(processOrder
+							.getGovAgencyOrganizationId());
 					processOrderBean
-					    .setGroupId(processOrder
-					        .getGroupId());
+						.setGroupId(processOrder
+							.getGroupId());
 					processOrderBean
-					    .setProcessOrderId(processOrder
-					        .getProcessOrderId());
+						.setProcessOrderId(processOrder
+							.getProcessOrderId());
 					processOrderBean
-					    .setProcessStepId(processStepId);
+						.setProcessStepId(processStepId);
 					processOrderBean
-					    .setReceptionNo(receptionNo);
+						.setReceptionNo(receptionNo);
 					processOrderBean
-					    .setReferenceDossierPartId(referenceDossierPartId);
+						.setReferenceDossierPartId(referenceDossierPartId);
 					processOrderBean
-					    .setSequenceNo(sequenceNo);
+						.setSequenceNo(sequenceNo);
 					processOrderBean
-					    .setServiceConfigId(serviceConfigId);
+						.setServiceConfigId(serviceConfigId);
 					processOrderBean
-					    .setServiceInfoId(processOrder
-					        .getServiceInfoId());
+						.setServiceInfoId(processOrder
+							.getServiceInfoId());
 					processOrderBean
-					    .setServiceName(serviceName);
+						.setServiceName(serviceName);
 					processOrderBean
-					    .setServiceProcessId(processOrder
-					        .getServiceProcessId());
+						.setServiceProcessId(processOrder
+							.getServiceProcessId());
 					processOrderBean
-					    .setStepName(stepName);
+						.setStepName(stepName);
 					processOrderBean
-					    .setSubjectId(subjectId);
+						.setSubjectId(subjectId);
 					processOrderBean
-					    .setSubjectName(subjectName);
+						.setSubjectName(subjectName);
 					processOrderBean
-					    .setUserId(processOrder
-					        .getUserId());
+						.setUserId(processOrder
+							.getUserId());
+					processOrderBean
+						.setReadOnly(readOnly);
 
 					processOrderBeans
-					    .add(processOrderBean);
+						.add(processOrderBean);
 				}
 			}
 
@@ -295,7 +386,7 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 		}
 		catch (Exception e) {
 			_log
-			    .error(e);
+				.error(e);
 		}
 		finally {
 			closeSession(session);
@@ -305,69 +396,174 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 
 	}
 	
-	
 	/**
-	 * @param longinUserId
+	 * @param processStepId
+	 * @param actionUserId
+	 * @param start
+	 * @param end
+	 * @param orderByComparator
 	 * @return
 	 */
-	public List getUserProcessStep(
+	public List searchProcessOrderJustFinished(
 
-	    long longinUserId) {
+		long processStepId, long actionUserId, int start, int end,
+		OrderByComparator orderByComparator) {
 
 		Session session = null;
 		try {
 			session = openSession();
 
 			String sql = CustomSQLUtil
-			    .get(SQL_USER_PROCESS_STEP);
+				.get(SQL_PROCESS_ORDER_JUST_FINISHED_FINDER);
+
+			if (processStepId <= 0) {
+				sql = StringUtil
+					.replace(sql, "AND opencps_processstep.processStepId = ?",
+						StringPool.BLANK);
+			}
 
 			SQLQuery q = session
-			    .createSQLQuery(sql);
+				.createSQLQuery(sql);
 
 			q
-			    .setCacheable(false);
+				.setCacheable(false);
 
 			q
-			    .addScalar("processStepId", Type.LONG);
+				.addEntity("ProcessOrder", ProcessOrderImpl.class);
+
 			q
-			    .addScalar("stepName", Type.STRING);
+				.addScalar("serviceConfigId", Type.LONG);
+			q
+				.addScalar("subjectId", Type.STRING);
+			q
+				.addScalar("subjectName", Type.STRING);
+			q
+				.addScalar("receptionNo", Type.STRING);
+			q
+				.addScalar("serviceName", Type.STRING);
+			q
+				.addScalar("stepName", Type.STRING);
+			q
+				.addScalar("sequenceNo", Type.STRING);
+			q
+				.addScalar("daysDuration", Type.INTEGER);
+			q
+				.addScalar("referenceDossierPartId", Type.LONG);
 
 			QueryPos qPos = QueryPos
-			    .getInstance(q);
+				.getInstance(q);
+
+			if (processStepId > 0) {
+				qPos
+					.add(processStepId);
+			}
 
 			qPos
-			    .add(longinUserId);
-			qPos
-			    .add(longinUserId);
+				.add(actionUserId);
 
 			Iterator<Object[]> itr = (Iterator<Object[]>) QueryUtil
-			    .list(
-			        q, getDialect(), QueryUtil.ALL_POS,
-			        QueryUtil.ALL_POS).iterator();
+				.list(q, getDialect(), start, end).iterator();
 
 			List<ProcessOrderBean> processOrderBeans =
-			    new ArrayList<ProcessOrderBean>();
+				new ArrayList<ProcessOrderBean>();
 
 			if (itr
-			    .hasNext()) {
+				.hasNext()) {
 				while (itr
-				    .hasNext()) {
+					.hasNext()) {
 					ProcessOrderBean processOrderBean = new ProcessOrderBean();
 
 					Object[] objects = itr
-					    .next();
+						.next();
 
-					long processStepId = GetterUtil
-					    .getLong(objects[0]);
-					String processStepName = (String) objects[1];
+					ProcessOrder processOrder = (ProcessOrder) objects[0];
+
+					long serviceConfigId = GetterUtil
+						.getLong(objects[1]);
+					String subjectId = (String) objects[2];
+					String subjectName = (String) objects[3];
+					String receptionNo = (String) objects[4];
+					String serviceName = (String) objects[5];
+					String stepName = (String) objects[6];
+					String sequenceNo = (String) objects[7];
+					int daysDuration = GetterUtil
+						.getInteger(objects[8]);
+					long referenceDossierPartId = GetterUtil
+						.getLong(objects[9]);
 
 					processOrderBean
-					    .setProcessStepId(processStepId);
+						.setActionDatetime(processOrder
+							.getActionDatetime());
 					processOrderBean
-					    .setStepName(processStepName);
+						.setActionUserId(processOrder
+							.getActionUserId());
+					processOrderBean
+						.setAssignToUserId(processOrder
+							.getAssignToUserId());
+					// processOrderBean.setAssignToUserName(assignToUserName);
+					processOrderBean
+						.setCompanyId(processOrder
+							.getCompanyId());
+					processOrderBean
+						.setDaysDuration(daysDuration);
+					// processOrderBean.setDealine(dealine);
+					processOrderBean
+						.setDossierId(processOrder
+							.getDossierId());
+					processOrderBean
+						.setDossierStatus(processOrder
+							.getDossierStatus());
+					processOrderBean
+						.setDossierTemplateId(processOrder
+							.getDossierTemplateId());
+					processOrderBean
+						.setFileGroupId(processOrder
+							.getFileGroupId());
+					processOrderBean
+						.setGovAgencyCode(processOrder
+							.getGovAgencyCode());
+					processOrderBean
+						.setGovAgencyName(processOrder
+							.getGovAgencyName());
+					processOrderBean
+						.setGovAgencyOrganizationId(processOrder
+							.getGovAgencyOrganizationId());
+					processOrderBean
+						.setGroupId(processOrder
+							.getGroupId());
+					processOrderBean
+						.setProcessOrderId(processOrder
+							.getProcessOrderId());
+					processOrderBean
+						.setProcessStepId(processStepId);
+					processOrderBean
+						.setReceptionNo(receptionNo);
+					processOrderBean
+						.setReferenceDossierPartId(referenceDossierPartId);
+					processOrderBean
+						.setSequenceNo(sequenceNo);
+					processOrderBean
+						.setServiceConfigId(serviceConfigId);
+					processOrderBean
+						.setServiceInfoId(processOrder
+							.getServiceInfoId());
+					processOrderBean
+						.setServiceName(serviceName);
+					processOrderBean
+						.setServiceProcessId(processOrder
+							.getServiceProcessId());
+					processOrderBean
+						.setStepName(stepName);
+					processOrderBean
+						.setSubjectId(subjectId);
+					processOrderBean
+						.setSubjectName(subjectName);
+					processOrderBean
+						.setUserId(processOrder
+							.getUserId());
 
 					processOrderBeans
-					    .add(processOrderBean);
+						.add(processOrderBean);
 				}
 			}
 
@@ -375,7 +571,85 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 		}
 		catch (Exception e) {
 			_log
-			    .error(e);
+				.error(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		return null;
+
+	}
+
+	/**
+	 * @param longinUserId
+	 * @return
+	 */
+	public List getUserProcessStep(
+
+		long longinUserId) {
+
+		Session session = null;
+		try {
+			session = openSession();
+
+			String sql = CustomSQLUtil
+				.get(SQL_USER_PROCESS_STEP);
+
+			SQLQuery q = session
+				.createSQLQuery(sql);
+
+			q
+				.setCacheable(false);
+
+			q
+				.addScalar("processStepId", Type.LONG);
+			q
+				.addScalar("stepName", Type.STRING);
+
+			QueryPos qPos = QueryPos
+				.getInstance(q);
+
+			qPos
+				.add(longinUserId);
+			qPos
+				.add(longinUserId);
+
+			Iterator<Object[]> itr = (Iterator<Object[]>) QueryUtil
+				.list(q, getDialect(), QueryUtil.ALL_POS,
+					QueryUtil.ALL_POS).iterator();
+
+			List<ProcessOrderBean> processOrderBeans =
+				new ArrayList<ProcessOrderBean>();
+
+			if (itr
+				.hasNext()) {
+				while (itr
+					.hasNext()) {
+					ProcessOrderBean processOrderBean = new ProcessOrderBean();
+
+					Object[] objects = itr
+						.next();
+
+					long processStepId = GetterUtil
+						.getLong(objects[0]);
+					String processStepName = (String) objects[1];
+
+					processOrderBean
+						.setProcessStepId(processStepId);
+					processOrderBean
+						.setStepName(processStepName);
+
+					processOrderBeans
+						.add(processOrderBean);
+				}
+			}
+
+			return processOrderBeans;
+		}
+		catch (Exception e) {
+			_log
+				.error(e);
 		}
 		finally {
 			closeSession(session);
@@ -384,5 +658,7 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 		return null;
 	}
 
-	private Log _log = LogFactoryUtil.getLog(ProcessOrderFinderImpl.class.getName());
+	private Log _log = LogFactoryUtil
+		.getLog(ProcessOrderFinderImpl.class
+			.getName());
 }

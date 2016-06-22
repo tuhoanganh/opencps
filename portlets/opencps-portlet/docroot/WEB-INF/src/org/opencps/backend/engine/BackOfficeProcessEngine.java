@@ -18,6 +18,7 @@
 
 package org.opencps.backend.engine;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -36,6 +37,7 @@ import org.opencps.processmgt.model.ProcessWorkflow;
 import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
+import org.opencps.processmgt.service.SchedulerJobsLocalServiceUtil;
 import org.opencps.processmgt.service.ServiceInfoProcessLocalServiceUtil;
 import org.opencps.util.PortletConstants;
 import org.opencps.util.WebKeys;
@@ -113,11 +115,11 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 		String actionName = StringPool.BLANK;
 		String stepName = StringPool.BLANK;
-
+		ProcessOrder processOrder = null;
 		try {
 			if (Validator.isNull(processOrderId)) {
 
-				ProcessOrder processOrder =
+				processOrder =
 				    BackendUtils.getProcessOrder(
 				        toEngineMsg.getDossierId(),
 				        toEngineMsg.getFileGroupId());
@@ -145,7 +147,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 			}
 			else {
 				// Find process order by processOrderId
-				ProcessOrder processOrder =
+				processOrder =
 				    ProcessOrderLocalServiceUtil.fetchProcessOrder(processOrderId);
 
 				processOrderId = processOrder.getProcessOrderId();
@@ -167,7 +169,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 			}
 
-			// To Workflow
+			// Do Workflow
 
 			if (Validator.isNotNull(processWorkflow)) {
 				actionName = processWorkflow.getActionName();
@@ -180,14 +182,24 @@ public class BackOfficeProcessEngine implements MessageListener {
 				}
 
 				long changeStepId = processWorkflow.getPostProcessStepId();
-
-				ProcessStep changeStep =
-				    ProcessStepLocalServiceUtil.getProcessStep(changeStepId);
-
 				String changeStatus = StringPool.BLANK;
 
-				if (Validator.isNotNull(changeStep)) {
-					changeStatus = changeStep.getDossierStatus();
+				if (changeStepId != 0 ) {
+					ProcessStep changeStep = 
+					    ProcessStepLocalServiceUtil.getProcessStep(changeStepId);
+					
+					if (Validator.isNotNull(changeStep)) {
+						changeStatus = changeStep.getDossierStatus();
+						
+						//Get AutoEvent of change step
+						_updateSchedulerJob(
+						    processStepId, serviceProcessId,
+						    processOrder.getDossierId(),
+						    processOrder.getFileGroupId());
+					}
+					
+				} else {
+					changeStatus = Integer.toString(PortletConstants.DOSSIER_STATUS_DONE);
 				}
 
 				// Update process order to SYSTEM
@@ -212,12 +224,8 @@ public class BackOfficeProcessEngine implements MessageListener {
 				if (changeStatus.equals(Integer.toString(PortletConstants.DOSSIER_STATUS_WAITING))) {
 					toBackOffice.setRequestCommand(WebKeys.DOSSIER_LOG_RESUBMIT_REQUEST);
 				}
-				/*
-				 * if (changeStatus.equals(Integer.toString(PortletConstants.
-				 * DOSSIER_STATUS_PAYING))) {
-				 * toBackOffice.setRequestCommand(WebKeys
-				 * .DOSSIER_LOG_PAYMENT_REQUEST); }
-				 */toBackOffice.setActionInfo(processWorkflow.getActionName());
+
+				toBackOffice.setActionInfo(processWorkflow.getActionName());
 				toBackOffice.setMessageInfo(toEngineMsg.getActionNote());
 				toBackOffice.setSendResult(0);
 
@@ -336,6 +344,75 @@ public class BackOfficeProcessEngine implements MessageListener {
 		}
 	}
 	
+	/**
+	 * @param processStepId
+	 * @param serviceProcessId
+	 * @param dossierId
+	 * @param fileGroupId
+	 */
+	private void _updateSchedulerJob(
+	    long processStepId, long serviceProcessId, long dossierId,
+	    long fileGroupId) {
+
+		List<ProcessWorkflow> ls = new ArrayList<ProcessWorkflow>();
+
+		try {
+			ls =
+			    ProcessWorkflowLocalServiceUtil.findInScheduler(
+			        processStepId, serviceProcessId);
+
+			for (ProcessWorkflow processWorkflow : ls) {
+				SchedulerJobsLocalServiceUtil.addScheduler(
+				    dossierId, fileGroupId,
+				    processWorkflow.getProcessWorkflowId(),
+				    _getSchedulerType(processWorkflow.getAutoEvent()), 0,
+				    processWorkflow.getPreCondition());
+			}
+
+		}
+		catch (Exception e) {
+
+		}
+	}
+
+	/**
+	 * @param autoEvent
+	 * @return
+	 */
+	private int _getSchedulerType(String autoEvent) {
+
+		int type = 0;
+
+		switch (autoEvent) {
+		case WebKeys.AUTO_EVENT_MINUTELY:
+			type = 1;
+
+			break;
+		case WebKeys.AUTO_EVENT_5_MINUTELY:
+			type = 2;
+
+			break;
+		case WebKeys.AUTO_EVENT_HOURLY:
+			type = 3;
+
+			break;
+		case WebKeys.AUTO_EVENT_DAILY:
+			type = 4;
+
+			break;
+
+		case WebKeys.AUTO_EVENT_WEEKLY:
+			type = 5;
+
+			break;
+
+		default:
+			break;
+		}
+		
+		return type;
+		
+	}
 
 	private Log _log = LogFactoryUtil.getLog(BackOfficeProcessEngine.class);
 

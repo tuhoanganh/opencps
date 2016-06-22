@@ -200,7 +200,7 @@
 		]]>
 	</sql>	
 	
-	<sql id="org.opencps.dossiermgt.service.persistence.DossierFileFinder.searchDossierFile">	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierFileFinder.searchDossierFile">
 		<![CDATA[
 			SELECT
 				*
@@ -227,7 +227,7 @@
 		]]>
 	</sql>	
 	
-	<sql id="org.opencps.dossiermgt.service.persistence.DossierLogFinder.findRequiredProcessDossier">	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierLogFinder.findRequiredProcessDossier">
 		<![CDATA[
 			SELECT
 				*
@@ -238,7 +238,45 @@
 			AND 
 				opencps_dossier_log.actor IN(?)
 			AND 
-				opencps_dossier_log.requestCommand IN(?)
+				(lower(opencps_dossier_file.displayName) LIKE ? [$AND_OR_NULL_CHECK$])
+			ORDER BY 
+				opencps_dossier_log.updateDatetime DESC
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierLogFinder.searchAdminLog">	
+		<![CDATA[
+			SELECT
+				*
+			FROM
+				opencps_dossier_log
+			WHERE
+			1 = 1
+			AND
+				opencps_dossier_log.level = ?
+			AND 
+				opencps_dossier_log.updateDatetime BETWEEN  ? AND ?
+			AND 
+				opencps_dossier_log.dossierStatus = ? 
+			ORDER BY 
+				opencps_dossier_log.updateDatetime DESC
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierLogFinder.countAdminLog">	
+		<![CDATA[
+			SELECT
+				count(*) AS COUNT_VALUE
+			FROM
+				opencps_dossier_log
+			WHERE
+			1 = 1
+			AND
+				opencps_dossier_log.level = ?
+			AND 
+				opencps_dossier_log.updateDatetime BETWEEN  ? AND ?
+			AND 
+				opencps_dossier_log.dossierStatus = ? 
 			ORDER BY 
 				opencps_dossier_log.updateDatetime DESC
 		]]>
@@ -283,5 +321,94 @@
 				opencps_dossier_file.modifiedDate DESC, opencps_dossier_file.displayName ASC
 		]]>
 	</sql>
+	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierFileFinder.searchDossierFileByG_K_T_R">	
+		<![CDATA[
+			SELECT
+				*
+			FROM
+				opencps_dossier_file
+			WHERE
+				(opencps_dossier_file.groupId = ?)
+			AND 
+				(opencps_dossier_file.removed = ?)
+			AND
+				(lower(opencps_dossier_file.displayName) LIKE ? [$AND_OR_NULL_CHECK$])
+			OR 
+				(lower(opencps_dossier_file.dossierFileNo) LIKE ? [$AND_OR_NULL_CHECK$])
+			AND 
+				(opencps_dossier_file.templateFileNo = ?)
+			ORDER BY 
+				opencps_dossier_file.modifiedDate DESC, opencps_dossier_file.displayName ASC
+		]]>
+	</sql>
+	
+	
+	<sql id="org.opencps.dossiermgt.service.persistence.ServiceConfigFinder.countServiceConfigAdvance">	
+		<![CDATA[
+			SELECT
+				count(*) AS COUNT_VALUE
+			FROM
+				opencps_service_config
+			INNER JOIN
+				opencps_serviceinfo
+			ON
+				opencps_service_config.serviceInfoId = opencps_serviceinfo.serviceInfoId
+			WHERE
+				groupId = ?
+			AND 
+				opencps_service_config.servicePortal = ?
+			AND 
+				opencps_service_config.serviceOnegate = ?
+			AND 
+				opencps_service_config.serviceBackoffice = ?
+			AND 
+				opencps_service_config.serviceCitizen = ?
+			AND 
+				opencps_service_config.serviceBusinees = ?
+			AND
+				(opencps_service_config.serviceDomainIndex LIKE ? OR opencps_service_config.serviceDomainIndex = ?)
+			AND 
+				(opencps_service_config.govAgencyIndex LIKE ? OR opencps_service_config.govAgencyIndex = ?)
+			AND 
+				(lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))
+		]]>
+	</sql>
 
+
+	<sql id="org.opencps.dossiermgt.service.persistence.ServiceConfigFinder.searchServiceConfigAdvance">	
+		<![CDATA[
+			SELECT
+				opencps_service_config.*,
+				opencps_serviceinfo.serviceName,
+				opencps_serviceinfo.fullName,
+				opencps_serviceinfo.serviceNo
+			FROM
+				opencps_service_config
+			INNER JOIN
+				opencps_serviceinfo
+			ON
+				opencps_service_config.serviceInfoId = opencps_serviceinfo.serviceInfoId
+			WHERE
+				groupId = ?
+			AND 
+				opencps_service_config.servicePortal = ?
+			AND 
+				opencps_service_config.serviceOnegate = ?
+			AND 
+				opencps_service_config.serviceBackoffice = ?
+			AND 
+				opencps_service_config.serviceCitizen = ?
+			AND 
+				opencps_service_config.serviceBusinees = ?
+			AND
+				(opencps_service_config.serviceDomainIndex LIKE ? OR opencps_service_config.serviceDomainIndex = ?)
+			AND 
+				(opencps_service_config.govAgencyIndex LIKE ? OR opencps_service_config.govAgencyIndex = ?)
+			AND 
+				(lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))
+			ORDER BY
+				opencps_service_config.govAgencyName ASC, opencps_serviceinfo.serviceName ASC
+		]]>
+	</sql>
 </custom-sql>

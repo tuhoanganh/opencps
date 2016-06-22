@@ -122,3 +122,12 @@
     font-weight: bold;
     line-height: 14px;
 }
+
+.searchcontainer-content .readonly{
+	background-color: #acacac !important;
+}
+
+.searchcontainer-content .readonly td {
+    background-color: transparent !important;
+    color: white;
+}

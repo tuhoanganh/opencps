@@ -150,6 +150,7 @@
 		<column name="serviceProcessId" type="long" />
 		<column name="domainCode" type="String" />
 		<column name="serviceMode" type="int"/>
+        <column name="govAgencyIndex" type="String"></column>
 
 		<finder return-type="Collection" name="DossierTemplateId">
 			<finder-column name="dossierTemplateId" />
@@ -419,7 +420,7 @@
         </finder>
 	<reference package-path="com.liferay.portlet.documentlibrary" entity="DLApp" />
         <reference entity="DLFileEntry" package-path="com.liferay.portlet.documentlibrary"/>
-    </enity>
+    </entity>
 
 	<exceptions>
 		<exception>OutOfLengthDossierTemplateName</exception>

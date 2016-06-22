@@ -1,5 +1,4 @@
 
-<%@page import="org.opencps.util.PortletUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -19,6 +18,7 @@
  */
 %>
 
+<%@page import="org.opencps.util.PortletUtil"%>
 <%@page import="org.opencps.util.DateTimeUtil"%>
 <%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
 <%@page import="org.opencps.dossiermgt.model.Dossier"%>
@@ -127,7 +127,7 @@
 			<liferay-ui:message key="dossier-status"/>
 		</td>
 		<td >
-			<%=dossier != null ? dossier.getDossierStatus() :  StringPool.BLANK %>
+			<%=dossier != null ? PortletUtil.getDossierStatusLabel(dossier.getDossierStatus(), locale) :  StringPool.BLANK %>
 		</td>
 	</tr>
 	<tr>
@@ -147,130 +147,3 @@
 		</td>
 	</tr>
 </table>
-
-
-<%-- <aui:row>
-	<aui:col width="30">
-		<liferay-ui:message key="dossier-no"/>
-	</aui:col>
-	<aui:col width="70">
-		<%=dossier != null ? dossier.getReceptionNo() :  StringPool.BLANK %>
-	</aui:col>
-</aui:row>
-
-<aui:row>
-	<aui:col width="30">
-		<liferay-ui:message key="service-name"/>
-	</aui:col>
-	<aui:col width="70">
-		<%=serviceInfo != null ? serviceInfo.getServiceName() :  StringPool.BLANK %>
-	</aui:col>
-</aui:row>
-
-<aui:row>
-	<aui:col width="30">
-		<liferay-ui:message key="subject-name"/>
-	</aui:col>
-	<aui:col width="70">
-		<%=dossier != null ? dossier.getSubjectName() :  StringPool.BLANK %>
-	</aui:col>
-</aui:row>
-
-<aui:row>
-	<aui:col width="30">
-		<liferay-ui:message key="address"/>
-	</aui:col>
-	<aui:col width="70">
-		<%=dossier != null ? dossier.getAddress() :  StringPool.BLANK %>
-	</aui:col>
-</aui:row>
-
-<aui:row>
-	<aui:col width="30">
-		<liferay-ui:message key="contact-name"/>
-	</aui:col>
-	<aui:col width="70">
-		<%=dossier != null && Validator.isNotNull(dossier.getContactName()) ? dossier.getContactName() :  StringPool.BLANK %>
-	</aui:col>
-</aui:row>
-
-<aui:row>
-	<aui:col width="30">
-		<liferay-ui:message key="contact-tel-no"/>
-	</aui:col>
-	<aui:col width="70">
-		<%=dossier != null && Validator.isNotNull(dossier.getContactTelNo()) ? dossier.getContactTelNo() :  StringPool.BLANK %>
-	</aui:col>
-</aui:row>
-
-<aui:row>
-	<aui:col width="30">
-		<liferay-ui:message key="email"/>
-	</aui:col>
-	<aui:col width="70">
-		<%=dossier != null && Validator.isNotNull(dossier.getContactEmail()) ? dossier.getContactEmail() :  StringPool.BLANK %>
-	</aui:col>
-</aui:row>
-
-<aui:row>
-	<aui:col width="30">
-		<liferay-ui:message key="reception-date"/>
-	</aui:col>
-	<aui:col width="70">
-		<%=processOrder != null ? DateTimeUtil.convertDateToString(processOrder.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT) :  StringPool.BLANK %>
-	</aui:col>
-</aui:row>
-
-<aui:row>
-	<aui:col width="30">
-		<liferay-ui:message key="reception-no"/>
-	</aui:col>
-	<aui:col width="70">
-		<%=dossier != null &&  Validator.isNotNull(dossier.getReceptionNo())? dossier.getReceptionNo() :  StringPool.BLANK %>
-	</aui:col>
-</aui:row>
-
-<aui:row>
-	<aui:col width="30">
-		<liferay-ui:message key="estimate-date"/>
-	</aui:col>
-	<aui:col width="70">
-		<%=StringPool.BLANK %>
-	</aui:col>
-</aui:row>
-
-<aui:row>
-	<aui:col width="30">
-		<liferay-ui:message key="complate-date"/>
-	</aui:col>
-	<aui:col width="70">
-		<%=StringPool.BLANK %>
-	</aui:col>
-</aui:row>
-
-<aui:row>
-	<aui:col width="30">
-		<liferay-ui:message key="dossier-status"/>
-	</aui:col>
-	<aui:col width="70">
-		<%=dossier != null ? PortletUtil.getDossierStatusLabel(dossier.getDossierStatus(), locale) :  StringPool.BLANK %>
-	</aui:col>
-</aui:row>
-
-<aui:row>
-	<aui:col width="30">
-		<liferay-ui:message key="modified-date"/>
-	</aui:col>
-	<aui:col width="70">
-		<%=processOrder != null ? DateTimeUtil.convertDateToString(processOrder.getModifiedDate(), DateTimeUtil._VN_DATE_TIME_FORMAT) :  StringPool.BLANK %>
-	</aui:col>
-</aui:row>
-
-<aui:row>
-	<aui:col width="30">
-		<liferay-ui:message key="note"/>
-	</aui:col>
-	<aui:col width="70">
-		<%=processOrder != null && Validator.isNotNull(processOrder.getActionNote()) ? processOrder.getActionNote() : StringPool.BLANK%>
-	</aui:col>
-</aui:row> --%>

@@ -81,12 +81,14 @@
 				<c:if 
 					test="<%=DossierTemplatePermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_DOSSIER_TEMPLATE)%>"
 				>
+				<div class="custom-button-dossier-temp">
 					<aui:nav-item 
 						id="addDossierTemplate" 
 						label="add-dossier-template" 
 						iconCssClass="icon-plus"  
 						href="<%=editDossierTemplateURL %>"
 					/>
+				</div>
 				</c:if>
 				
 			</c:when>
@@ -105,12 +107,14 @@
 				<c:if 
 						test="<%=DossierPartPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_DOSSIER_PART)%>"
 				>
+				<div class="custom-button-dossier-temp">
 					<aui:nav-item 
 						id="addDossierPart" 
 						label="add-dossier-part" 
 						iconCssClass="icon-plus"  
 						href="<%=editDossierPartURL %>"
 					/>
+				</div>
 				</c:if>
 			</c:when>
 			
@@ -130,18 +134,20 @@
 				</portlet:renderURL>
 				
 					<c:if test="<%= ServiceConfigPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_SERVICE_CONFIG) %>">
-						<aui:nav-item 
-							id="addServiceConfig" 
-							label="add-service-config" 
-							iconCssClass="icon-plus"  
-							href="<%=editServiceConfigURL %>"
-						/>
+						<div class="custom-button-service-config">
+							<aui:nav-item 
+								id="addServiceConfig" 
+								label="add-service-config" 
+								iconCssClass="icon-plus"  
+								href="<%=editServiceConfigURL %>"
+							/>
+						</div>
 					</c:if>
 			</c:when>
 		</c:choose>
 	</aui:nav>
 	
-	<aui:nav-bar-search cssClass="pull-right">
+	<aui:nav-bar-search cssClass="pull-right custom-service-config">
 		<div class="form-search">
 			<aui:form action="<%= searchURL %>" method="post" name="fm">
 				<div class="toolbar_search_input">
@@ -150,25 +156,28 @@
 						<c:when test="<%= tabs1.contentEquals(DossierMgtUtil.TOP_TABS_DOSSIER_TEMPLATE) %>">
 								
 								<aui:row>
-									<aui:col width="45">
-										<label>
-											<liferay-ui:message key="keywords"/>
-										</label>
+									<aui:col width="100">
+									<div class = "custom-input-search">
 										<liferay-ui:input-search 
 											id="keywords1"
 											name="keywords"
 											title="keywords"
 											placeholder='<%= LanguageUtil.get(locale, "name") %>' 
 										/>
+									</div>
 									</aui:col>
 								</aui:row>
 								
 						</c:when>
 						<c:when test="<%= tabs1.contentEquals(DossierMgtUtil.TOP_TABS_SERVICE_CONFIG) %>">
+							
 							<aui:row>
 									<aui:col width="30">
-
-										<aui:select name="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_GOVAGENCYCODE %>">
+										<label>
+											<liferay-ui:message key="gov-agency-code" />
+										</label>
+										<aui:select name="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_GOVAGENCYCODE %>" 
+										label="">
 										  
 										  <aui:option value="<%=StringPool.BLANK %>">
 										      <liferay-ui:message key="fill-by-service-admin" />
@@ -200,14 +209,17 @@
 										<label>
 											<liferay-ui:message key="keywords"/>
 										</label>
-										<liferay-ui:input-search 
-											id="keywords1"
-											name="keywords"
-											title="keywords"
-											placeholder='<%= LanguageUtil.get(locale, "name") %>' 
-										/>
+										<div class = "custom-input-search">
+											<liferay-ui:input-search 
+												id="keywords1"
+												name="keywords"
+												title="keywords"
+												placeholder='<%= LanguageUtil.get(locale, "name") %>' 
+											/>
+										</div>
 									</aui:col>
 								</aui:row>
+								
 						</c:when>
 					</c:choose>
 				</div>

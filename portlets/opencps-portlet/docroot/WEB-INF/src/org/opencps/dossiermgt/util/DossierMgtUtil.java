@@ -134,6 +134,35 @@ public class DossierMgtUtil {
 
 		return partTypeName;
 	}
+	
+	public static String getSynchStatus(int synchStatus, Locale locale) {
+
+		String synchStatusName = StringPool.BLANK;
+		switch (synchStatus) {
+		case 0:
+			synchStatusName = LanguageUtil
+			    .get(locale, "no-need-to-synch");
+			break;
+		case 1:
+			synchStatusName = LanguageUtil
+			    .get(locale, "need-to-synch");
+			break;
+		case 2:
+			synchStatusName = LanguageUtil
+			    .get(locale, "synch-success");
+			break;
+		case 3:
+			synchStatusName = LanguageUtil
+			    .get(locale, "synch-error");
+			break;
+		default:
+			synchStatusName = LanguageUtil
+			    .get(locale, StringPool.BLANK);
+			break;
+		}
+
+		return synchStatusName;
+	}
 
 	/**
 	 * @param mode

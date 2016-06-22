@@ -37,7 +37,6 @@ public class FiveMinutes implements MessageListener{
     public void receive(Message message)
         throws MessageListenerException {
 
-	    
     }
 
 }

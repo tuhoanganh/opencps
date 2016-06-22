@@ -27,6 +27,7 @@ import org.opencps.processmgt.model.ActionHistory;
 import org.opencps.processmgt.service.base.ActionHistoryLocalServiceBaseImpl;
 import org.opencps.processmgt.util.comparator.ActionHistoryCreateDateComparator;
 
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.service.ServiceContext;
@@ -244,4 +245,16 @@ public class ActionHistoryLocalServiceImpl
 		return actionHistoryPersistence.countByF_ProcessOrderId(groupId, processOrderId);
 	}
 	
+	
+	public List<ActionHistory> getActionHistoryByProcessOrderId(
+	    long processId, int start, int end)
+	    throws PortalException, SystemException {
+
+		return actionHistoryPersistence.findByProcessOrderId(
+		    processId, start, end);
+	}
+	
+	public int countActionHistoryByProcessId(long processId) throws PortalException, SystemException {
+		return actionHistoryPersistence.countByProcessOrderId(processId);
+	}
 }
