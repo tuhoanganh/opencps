@@ -40,18 +40,19 @@
 	
 	int totalCount = 0;
 	
-	RowChecker rowChecker = new RowChecker(liferayPortletResponse);
+	//RowChecker rowChecker = new RowChecker(liferayPortletResponse);
 %>
 <aui:form name="fm">
 	<liferay-ui:search-container 
 		searchContainer="<%= new ProcessOrderSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>"
-		rowChecker="<%=rowChecker%>"
 	>
 	
 		<liferay-ui:search-container-results>
 			<%
 				ProcessOrderSearchTerms searchTerms = (ProcessOrderSearchTerms)searchContainer.getSearchTerms();
 				
+				long serviceInfoId = searchTerms.getServiceInfoId();
+			
 				long processStepId = searchTerms.getProcessStepId();
 				
 				try{

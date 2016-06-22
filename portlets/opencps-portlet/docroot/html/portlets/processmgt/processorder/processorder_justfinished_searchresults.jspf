@@ -20,8 +20,8 @@
 
 
 <%
-	totalCount = ProcessOrderLocalServiceUtil.countProcessOrderJustFinished(processStepId, themeDisplay.getUserId());
-	processOrders = ProcessOrderLocalServiceUtil.searchProcessOrderJustFinished(processStepId, themeDisplay.getUserId(), 
+	totalCount = ProcessOrderLocalServiceUtil.countProcessOrderJustFinished(serviceInfoId, processStepId, themeDisplay.getUserId());
+	processOrders = ProcessOrderLocalServiceUtil.searchProcessOrderJustFinished(serviceInfoId, processStepId, themeDisplay.getUserId(), 
 		searchContainer.getStart(), searchContainer.getEnd(), 
 		searchContainer.getOrderByComparator());
 %>
