@@ -235,6 +235,26 @@
 		</footer-portlet-javascript>
 		<css-class-wrapper>22-portlet</css-class-wrapper>
 	</portlet>
+	<portlet>
+		<portlet-name>24</portlet-name>
+		<icon>/icon.png</icon>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>log-mornitoring-portlet</css-class-wrapper>
+	</portlet>
+	<portlet>
+		<portlet-name>25</portlet-name>
+		<icon>/icon.png</icon>
+		<configuration-action-class>org.opencps.dossiermgt.portlet.ConfigurationActionImpl</configuration-action-class>
+		<instanceable>true</instanceable>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>dossier-top-list-portlet</css-class-wrapper>
+	</portlet>
 	<role-mapper>
 		<role-name>administrator</role-name>
 		<role-link>Administrator</role-link>

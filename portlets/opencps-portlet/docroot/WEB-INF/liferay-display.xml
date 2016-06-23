@@ -21,14 +21,18 @@
 	</category>	
 
 	<category name="org.opencps.frontoffice">
-		<portlet id="3"/>
+		<portlet id="3" />
 		<portlet id="5" />
 		<portlet id="6" />
 		<portlet id="10" />
 		<portlet id="11" />
 		<portlet id="13" />
-		<portlet id="14"/>
-		<portlet id="19"/>
-		<portlet id="20"/>
+		<portlet id="14" />
+		<portlet id="19" />
+		<portlet id="20" />
+		<portlet id="25"></portlet>
+	</category>
+	<category name="org.opencps.admin">
+		<portlet id="24"></portlet>
 	</category>
 </display>

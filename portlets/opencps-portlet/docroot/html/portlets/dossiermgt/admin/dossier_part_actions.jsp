@@ -65,8 +65,7 @@
 			<liferay-ui:icon image="edit" message="edit"
 				url="<%=updateDossierPartURL.toString()%>" />
 			
-			<c:if test="<%= dossierPart.getPartType() == PortletConstants.DOSSIER_TYPE_OTHER_PAPERS_GROUP
-							|| dossierPart.getPartType() == PortletConstants.DOSSIER_TYPE_GROUPS_OPTIONAL 
+			<c:if test="<%= dossierPart.getPartType() == PortletConstants.DOSSIER_TYPE_GROUPS_OPTIONAL
 							|| dossierPart.getPartType() == PortletConstants.DOSSIER_TYPE_OWN_RECORDS %>">
 				<%
 					updateDossierPartChildsURL.setParameter("isAddChild", "isAddChild");
