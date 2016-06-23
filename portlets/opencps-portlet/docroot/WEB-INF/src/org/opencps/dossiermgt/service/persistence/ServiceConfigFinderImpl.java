@@ -14,7 +14,6 @@
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>
 */
-
 package org.opencps.dossiermgt.service.persistence;
 
 import java.util.ArrayList;
@@ -47,6 +46,10 @@ import com.liferay.util.dao.orm.CustomSQLUtil;
 public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 	implements ServiceConfigFinder {
 
+	public static final String COUNT_SERVICE_CONFIG_ADVANCE_SQL =
+		ServiceConfigFinder.class
+			.getName() + ".countServiceConfigAdvance";
+
 	public static final String COUNT_SERVICE_CONFIG_BY_SERVICE_MODE_SQL =
 		ServiceConfigFinder.class
 			.getName() + ".countServiceConfigByServiceMode";
@@ -54,10 +57,6 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 	public static final String COUNT_SERVICE_CONFIG_SQL =
 		ServiceConfigFinder.class
 			.getName() + ".countServiceConfig";
-
-	public static final String COUNT_SERVICE_CONFIG_ADVANCE_SQL =
-		ServiceConfigFinder.class
-			.getName() + ".countServiceConfigAdvance";
 
 	public static final String SEARCH_SERVICE_CONFIG_ADVANCE_SQL =
 		ServiceConfigFinder.class
@@ -178,288 +177,6 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 		return 0;
 	}
 
-	/**
-	 * @param groupId
-	 * @param keywords
-	 * @param govAgencyCode
-	 * @param domainCode
-	 * @param andOperator
-	 * @param start
-	 * @param end
-	 * @return
-	 */
-	private List<ServiceConfig> _searchServiceConfig(
-		long groupId, String[] keywords, String govAgencyCode,
-		String domainCode, boolean andOperator, int start, int end) {
-
-		keywords = CustomSQLUtil
-			.keywords(keywords);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-			// get sql command from sql xml
-			String sql = CustomSQLUtil
-				.get(SEARCH_SERVICE_CONFIG_SQL);
-
-			sql = CustomSQLUtil
-				.replaceKeywords(sql,
-					"lower(opencps_service_config.govAgencyName",
-					StringPool.LIKE, true, keywords);
-
-			sql = CustomSQLUtil
-				.replaceAndOperator(sql, andOperator);
-
-			// remove condition query
-			if (govAgencyCode
-				.equals(StringPool.BLANK)) {
-				sql = StringUtil
-					.replace(sql,
-						"AND (opencps_service_config.govAgencyCode = ?)",
-						StringPool.BLANK);
-			}
-
-			if (domainCode
-				.equals("0") || domainCode
-					.equals(StringPool.BLANK)) {
-				sql = StringUtil
-					.replace(sql, "AND (opencps_service_config.domainCode = ?)",
-						StringPool.BLANK);
-			}
-
-			SQLQuery q = session
-				.createSQLQuery(sql);
-
-			q
-				.setCacheable(false);
-			q
-				.addEntity("ServiceConfig", ServiceConfigImpl.class);
-
-			QueryPos qPos = QueryPos
-				.getInstance(q);
-
-			qPos
-				.add(groupId);
-			qPos
-				.add(keywords, 2);
-
-			if (!govAgencyCode
-				.equals(StringPool.BLANK)) {
-				qPos
-					.add(govAgencyCode);
-			}
-
-			if (!domainCode
-				.equals(StringPool.BLANK) && !domainCode
-					.equals("0")) {
-				qPos
-					.add(domainCode);
-			}
-
-			return (List<ServiceConfig>) QueryUtil
-				.list(q, getDialect(), start, end);
-		}
-		catch (Exception e) {
-			_log
-				.error(e);
-		}
-		finally {
-			session
-				.close();
-		}
-
-		return null;
-	}
-
-	public int countServiceConfig(
-		long groupId, String keywords, String govAgencyCode,
-		String domainCode) {
-
-		String[] names = null;
-		boolean andOperator = false;
-
-		if (Validator
-			.isNotNull(keywords)) {
-			names = CustomSQLUtil
-				.keywords(keywords);
-		}
-		else {
-			andOperator = true;
-		}
-
-		return _countServiceConfig(groupId, names, govAgencyCode, domainCode,
-			andOperator);
-	}
-
-	public int countServiceConfigByServiceMode(
-		long groupId, int[] serviceModes) {
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			String sql = CustomSQLUtil
-				.get(COUNT_SERVICE_CONFIG_BY_SERVICE_MODE_SQL);
-
-			if (Validator
-				.isNull(serviceModes)) {
-				sql = StringUtil
-					.replace(sql,
-						"AND opencps_service_config.serviceMode IN (?)",
-						StringPool.BLANK);
-			}
-			else {
-				sql = StringUtil
-					.replace(sql,
-						"AND opencps_service_config.serviceMode IN (?)",
-						"AND opencps_service_config.serviceMode IN (" +
-							StringUtil
-								.merge(serviceModes) +
-							")");
-			}
-
-			SQLQuery q = session
-				.createSQLQuery(sql);
-
-			q
-				.setCacheable(false);
-			q
-				.addScalar(COUNT_COLUMN_NAME, Type.INTEGER);
-
-			QueryPos qPos = QueryPos
-				.getInstance(q);
-
-			qPos
-				.add(groupId);
-
-			Iterator<Integer> itr = q
-				.iterate();
-
-			if (itr
-				.hasNext()) {
-				Integer count = itr
-					.next();
-
-				if (count != null) {
-					return count
-						.intValue();
-				}
-			}
-
-		}
-		catch (Exception e) {
-			_log
-				.error(e);
-		}
-		finally {
-			session
-				.close();
-		}
-		return 0;
-	}
-
-	public List<ServiceConfig> searchServiceConfig(
-		long groupId, String keywords, String govAgencyCode, String domainCode,
-		int start, int end) {
-
-		String[] names = null;
-		boolean andOperator = false;
-
-		if (Validator
-			.isNotNull(keywords)) {
-			names = CustomSQLUtil
-				.keywords(keywords);
-		}
-		else {
-			andOperator = true;
-		}
-
-		return _searchServiceConfig(groupId, names, govAgencyCode, domainCode,
-			andOperator, start, end);
-	}
-
-	public List<ServiceConfig> searchServiceConfigByServiceMode(
-		long groupId, int[] serviceModes, int start, int end,
-		OrderByComparator orderByComparator) {
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			String sql = CustomSQLUtil
-				.get(SEARCH_SERVICE_CONFIG_BY_SERVICE_MODE_SQL);
-
-			if (Validator
-				.isNull(serviceModes)) {
-				sql = StringUtil
-					.replace(sql,
-						"AND opencps_service_config.serviceMode IN (?)",
-						StringPool.BLANK);
-			}
-			else {
-				sql = StringUtil
-					.replace(sql,
-						"AND opencps_service_config.serviceMode IN (?)",
-						"AND opencps_service_config.serviceMode IN (" +
-							StringUtil
-								.merge(serviceModes) +
-							")");
-			}
-
-			SQLQuery q = session
-				.createSQLQuery(sql);
-
-			q
-				.setCacheable(false);
-			q
-				.addEntity("ServiceConfig", ServiceConfigImpl.class);
-
-			QueryPos qPos = QueryPos
-				.getInstance(q);
-
-			qPos
-				.add(groupId);
-
-			return (List<ServiceConfig>) QueryUtil
-				.list(q, getDialect(), start, end);
-		}
-		catch (Exception e) {
-			_log
-				.error(e);
-		}
-		finally {
-			session
-				.close();
-		}
-
-		return null;
-	}
-	
-	
-	public int countServiceConfigAdvance(long groupId, String keyword, int servicePortal, int serviceOnegate,
-		int serviceBackoffice, int serviceCitizen, int serviceBusinees,
-		String serviceDomainIndex, String govAgencyIndex) {
-
-		String[] keywords = null;
-		boolean andOperator = false;
-
-		if (Validator
-			.isNotNull(keyword)) {
-			keywords = CustomSQLUtil
-				.keywords(keyword);
-		}
-		else {
-			andOperator = true;
-		}
-
-		return _countServiceConfigAdvance(groupId, keywords,  servicePortal,  serviceOnegate,
-			 serviceBackoffice,  serviceCitizen,  serviceBusinees,
-			 serviceDomainIndex,  govAgencyIndex, andOperator);
-	}
-	
 	private int _countServiceConfigAdvance(
 		long groupId, String[] keywords, int servicePortal, int serviceOnegate,
 		int serviceBackoffice, int serviceCitizen, int serviceBusinees,
@@ -478,6 +195,12 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 					.replaceKeywords(sql,
 						"AND (lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))",
 						StringPool.LIKE, true, keywords);
+			}
+			else {
+				sql = StringUtil
+					.replace(sql,
+						"AND (lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))",
+						StringPool.BLANK);
 			}
 			sql = CustomSQLUtil
 				.replaceAndOperator(sql, andOperator);
@@ -694,41 +417,96 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 
 	/**
 	 * @param groupId
-	 * @param keyword
-	 * @param servicePortal
-	 * @param serviceOnegate
-	 * @param serviceBackoffice
-	 * @param serviceCitizen
-	 * @param serviceBusinees
-	 * @param serviceDomainIndex
-	 * @param govAgencyIndex
+	 * @param keywords
+	 * @param govAgencyCode
+	 * @param domainCode
+	 * @param andOperator
 	 * @param start
 	 * @param end
-	 * @param orderByComparator
 	 * @return
 	 */
-	public List searchServiceConfigAdvance(
-		long groupId, String keyword, int servicePortal, int serviceOnegate,
-		int serviceBackoffice, int serviceCitizen, int serviceBusinees,
-		String serviceDomainIndex, String govAgencyIndex, int start, int end,
-		OrderByComparator orderByComparator) {
+	private List<ServiceConfig> _searchServiceConfig(
+		long groupId, String[] keywords, String govAgencyCode,
+		String domainCode, boolean andOperator, int start, int end) {
 
-		String[] keywords = null;
-		boolean andOperator = false;
+		keywords = CustomSQLUtil
+			.keywords(keywords);
 
-		if (Validator
-			.isNotNull(keyword)) {
-			keywords = CustomSQLUtil
-				.keywords(keyword);
+		Session session = null;
+
+		try {
+			session = openSession();
+			// get sql command from sql xml
+			String sql = CustomSQLUtil
+				.get(SEARCH_SERVICE_CONFIG_SQL);
+
+			sql = CustomSQLUtil
+				.replaceKeywords(sql,
+					"lower(opencps_service_config.govAgencyName",
+					StringPool.LIKE, true, keywords);
+
+			sql = CustomSQLUtil
+				.replaceAndOperator(sql, andOperator);
+
+			// remove condition query
+			if (govAgencyCode
+				.equals(StringPool.BLANK)) {
+				sql = StringUtil
+					.replace(sql,
+						"AND (opencps_service_config.govAgencyCode = ?)",
+						StringPool.BLANK);
+			}
+
+			if (domainCode
+				.equals("0") || domainCode
+					.equals(StringPool.BLANK)) {
+				sql = StringUtil
+					.replace(sql, "AND (opencps_service_config.domainCode = ?)",
+						StringPool.BLANK);
+			}
+
+			SQLQuery q = session
+				.createSQLQuery(sql);
+
+			q
+				.setCacheable(false);
+			q
+				.addEntity("ServiceConfig", ServiceConfigImpl.class);
+
+			QueryPos qPos = QueryPos
+				.getInstance(q);
+
+			qPos
+				.add(groupId);
+			qPos
+				.add(keywords, 2);
+
+			if (!govAgencyCode
+				.equals(StringPool.BLANK)) {
+				qPos
+					.add(govAgencyCode);
+			}
+
+			if (!domainCode
+				.equals(StringPool.BLANK) && !domainCode
+					.equals("0")) {
+				qPos
+					.add(domainCode);
+			}
+
+			return (List<ServiceConfig>) QueryUtil
+				.list(q, getDialect(), start, end);
 		}
-		else {
-			andOperator = true;
+		catch (Exception e) {
+			_log
+				.error(e);
+		}
+		finally {
+			session
+				.close();
 		}
 
-		return _searchServiceConfigAdvance(groupId, keywords, servicePortal,
-			serviceOnegate, serviceBackoffice, serviceCitizen, serviceBusinees,
-			serviceDomainIndex, govAgencyIndex, start, end, orderByComparator,
-			andOperator);
+		return null;
 	}
 
 	/**
@@ -765,6 +543,12 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 					.replaceKeywords(sql,
 						"AND (lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))",
 						StringPool.LIKE, true, keywords);
+			}
+			else {
+				sql = StringUtil
+					.replace(sql,
+						"AND (lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))",
+						StringPool.BLANK);
 			}
 			sql = CustomSQLUtil
 				.replaceAndOperator(sql, andOperator);
@@ -1043,13 +827,241 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 					serviceBean
 						.setUserId(serviceConfig
 							.getUserId());
-					
-					serviceBeans.add(serviceBean);
+
+					serviceBeans
+						.add(serviceBean);
 
 				}
 			}
 
 			return serviceBeans;
+		}
+		catch (Exception e) {
+			_log
+				.error(e);
+		}
+		finally {
+			session
+				.close();
+		}
+
+		return null;
+	}
+
+	public int countServiceConfig(
+		long groupId, String keywords, String govAgencyCode,
+		String domainCode) {
+
+		String[] names = null;
+		boolean andOperator = false;
+
+		if (Validator
+			.isNotNull(keywords)) {
+			names = CustomSQLUtil
+				.keywords(keywords);
+		}
+		else {
+			andOperator = true;
+		}
+
+		return _countServiceConfig(groupId, names, govAgencyCode, domainCode,
+			andOperator);
+	}
+
+	public int countServiceConfigAdvance(
+		long groupId, String keyword, int servicePortal, int serviceOnegate,
+		int serviceBackoffice, int serviceCitizen, int serviceBusinees,
+		String serviceDomainIndex, String govAgencyIndex) {
+
+		String[] keywords = null;
+		boolean andOperator = false;
+
+		if (Validator
+			.isNotNull(keyword)) {
+			keywords = CustomSQLUtil
+				.keywords(keyword);
+		}
+		else {
+			andOperator = true;
+		}
+
+		return _countServiceConfigAdvance(groupId, keywords, servicePortal,
+			serviceOnegate, serviceBackoffice, serviceCitizen, serviceBusinees,
+			serviceDomainIndex, govAgencyIndex, andOperator);
+	}
+
+	public int countServiceConfigByServiceMode(
+		long groupId, int[] serviceModes) {
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			String sql = CustomSQLUtil
+				.get(COUNT_SERVICE_CONFIG_BY_SERVICE_MODE_SQL);
+
+			if (Validator
+				.isNull(serviceModes)) {
+				sql = StringUtil
+					.replace(sql,
+						"AND opencps_service_config.serviceMode IN (?)",
+						StringPool.BLANK);
+			}
+			else {
+				sql = StringUtil
+					.replace(sql,
+						"AND opencps_service_config.serviceMode IN (?)",
+						"AND opencps_service_config.serviceMode IN (" +
+							StringUtil
+								.merge(serviceModes) +
+							")");
+			}
+
+			SQLQuery q = session
+				.createSQLQuery(sql);
+
+			q
+				.setCacheable(false);
+			q
+				.addScalar(COUNT_COLUMN_NAME, Type.INTEGER);
+
+			QueryPos qPos = QueryPos
+				.getInstance(q);
+
+			qPos
+				.add(groupId);
+
+			Iterator<Integer> itr = q
+				.iterate();
+
+			if (itr
+				.hasNext()) {
+				Integer count = itr
+					.next();
+
+				if (count != null) {
+					return count
+						.intValue();
+				}
+			}
+
+		}
+		catch (Exception e) {
+			_log
+				.error(e);
+		}
+		finally {
+			session
+				.close();
+		}
+		return 0;
+	}
+
+	public List<ServiceConfig> searchServiceConfig(
+		long groupId, String keywords, String govAgencyCode, String domainCode,
+		int start, int end) {
+
+		String[] names = null;
+		boolean andOperator = false;
+
+		if (Validator
+			.isNotNull(keywords)) {
+			names = CustomSQLUtil
+				.keywords(keywords);
+		}
+		else {
+			andOperator = true;
+		}
+
+		return _searchServiceConfig(groupId, names, govAgencyCode, domainCode,
+			andOperator, start, end);
+	}
+
+	/**
+	 * @param groupId
+	 * @param keyword
+	 * @param servicePortal
+	 * @param serviceOnegate
+	 * @param serviceBackoffice
+	 * @param serviceCitizen
+	 * @param serviceBusinees
+	 * @param serviceDomainIndex
+	 * @param govAgencyIndex
+	 * @param start
+	 * @param end
+	 * @param orderByComparator
+	 * @return
+	 */
+	public List searchServiceConfigAdvance(
+		long groupId, String keyword, int servicePortal, int serviceOnegate,
+		int serviceBackoffice, int serviceCitizen, int serviceBusinees,
+		String serviceDomainIndex, String govAgencyIndex, int start, int end,
+		OrderByComparator orderByComparator) {
+
+		String[] keywords = null;
+		boolean andOperator = false;
+
+		if (Validator
+			.isNotNull(keyword)) {
+			keywords = CustomSQLUtil
+				.keywords(keyword);
+		}
+		else {
+			andOperator = true;
+		}
+
+		return _searchServiceConfigAdvance(groupId, keywords, servicePortal,
+			serviceOnegate, serviceBackoffice, serviceCitizen, serviceBusinees,
+			serviceDomainIndex, govAgencyIndex, start, end, orderByComparator,
+			andOperator);
+	}
+
+	public List<ServiceConfig> searchServiceConfigByServiceMode(
+		long groupId, int[] serviceModes, int start, int end,
+		OrderByComparator orderByComparator) {
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			String sql = CustomSQLUtil
+				.get(SEARCH_SERVICE_CONFIG_BY_SERVICE_MODE_SQL);
+
+			if (Validator
+				.isNull(serviceModes)) {
+				sql = StringUtil
+					.replace(sql,
+						"AND opencps_service_config.serviceMode IN (?)",
+						StringPool.BLANK);
+			}
+			else {
+				sql = StringUtil
+					.replace(sql,
+						"AND opencps_service_config.serviceMode IN (?)",
+						"AND opencps_service_config.serviceMode IN (" +
+							StringUtil
+								.merge(serviceModes) +
+							")");
+			}
+
+			SQLQuery q = session
+				.createSQLQuery(sql);
+
+			q
+				.setCacheable(false);
+			q
+				.addEntity("ServiceConfig", ServiceConfigImpl.class);
+
+			QueryPos qPos = QueryPos
+				.getInstance(q);
+
+			qPos
+				.add(groupId);
+
+			return (List<ServiceConfig>) QueryUtil
+				.list(q, getDialect(), start, end);
 		}
 		catch (Exception e) {
 			_log
