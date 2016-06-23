@@ -66,27 +66,31 @@
 				<c:choose>
 					<c:when test="<%=isListServiceConfig %>">
 						<aui:row>
-							<aui:col width="33">
+							<aui:col width="30">
 								<datamgt:ddr 
 									depthLevel="1" 
 									dictCollectionCode="<%=ServiceUtil.SERVICE_DOMAIN %>" 
 									name="serviceDomain"
-									itemNames=""
 									inlineField="<%=true%>"
 									inlineLabel="left"
+									showLabel="<%=false%>"
+									emptyOptionLabels="filter-by-service-domain"
+									itemsEmptyOption="true"
 								/>
 							</aui:col>
-							<aui:col width="33">
+							<aui:col width="30">
 								<datamgt:ddr 
 									depthLevel="1" 
 									dictCollectionCode="<%=ServiceUtil.SERVICE_ADMINISTRATION %>" 
 									name="govAgency"
-									itemNames=""
 									inlineField="<%=true%>"
 									inlineLabel="left"
+									showLabel="<%=false%>"
+									emptyOptionLabels="filter-by-gov-agency"
+									itemsEmptyOption="true"
 								/>
 							</aui:col>
-							<aui:col width="33">
+							<aui:col width="30">
 								<liferay-ui:input-search 
 									id="keywords1"
 									name="keywords"
