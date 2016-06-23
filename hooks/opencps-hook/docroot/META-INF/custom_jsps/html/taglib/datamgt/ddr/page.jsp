@@ -42,6 +42,8 @@
 					
 					String elementName = name + i;
 					
+					String emptyOptionLabel = StringPool.BLANK;
+					
 					long selectedItem = 0;
 					
 					boolean itemEmptyOption = false;
@@ -58,6 +60,10 @@
 						itemEmptyOption = itemsEmptyOption[i - 1];
 					}
 					
+					if(emptyOptionLabels != null && emptyOptionLabels.length >= i){
+						emptyOptionLabel =  emptyOptionLabels[i - 1];
+					}
+					
 					if(!isHorizontal){
 						%>
 							<aui:row>
@@ -68,11 +74,12 @@
 										cssClass='<%=cssClass %>'
 										inlineField="<%=inlineField %>"
 										inlineLabel="<%=inlineLabel %>"
+										label="<%=showLabel ? elementName : StringPool.BLANK %>"
 									>
 										<%
 											if(!itemEmptyOption){
 												%>
-													<aui:option value="0"></aui:option>
+													<aui:option value="0"><%=emptyOptionLabel %></aui:option>
 												<%
 											}
 										%>
@@ -89,11 +96,12 @@
 								cssClass='<%=cssClass %>'
 								inlineField="<%=inlineField %>"
 								inlineLabel="<%=inlineLabel %>"
+								label="<%=showLabel ? elementName : StringPool.BLANK %>"
 							>
 								<%
 									if(!itemEmptyOption){
 										%>
-											<aui:option value="0"></aui:option>
+											<aui:option value="0"><%=emptyOptionLabel %></aui:option>
 										<%
 									}
 								%>
@@ -120,9 +128,13 @@
 	
 	var strItemEmptyOption = '<%=StringUtil.merge(itemsEmptyOption) %>';
 	
+	var strEmptyOptionLabel = '<%=StringUtil.merge(emptyOptionLabels) %>';
+	
 	var selectItems<%=randomInstance %> = strSelectItems.split(",");
 	
 	var itemsEmptyOption = strItemEmptyOption.split(",");
+	
+	var emptyOptionLabels = strEmptyOptionLabel.split(",");
 	
 	var rootDictItemsContainer =  null;
 	
@@ -183,18 +195,22 @@
 	
 	Liferay.provide(window, '<portlet:namespace/><%=randomInstance %>renderDataItems', function(objs, boundingBox, level, clearChild) {
 		
-		var labelName = boundingBox.one('label').text().trim();
-		
 		var itemName = '';
 		
 		var opts = '';
 		
+		var emptyOptionLabel = '';
+		
 		if(itemsEmptyOption.length >= parseInt(level)){
 			itemEmptyOption = itemsEmptyOption[parseInt(level) - 1];
 		}
+		
+		if(emptyOptionLabels.length >= parseInt(level)){
+			emptyOptionLabel = emptyOptionLabels[parseInt(level) - 1];
+		}
 			
 		if(itemEmptyOption == 'true'){
-			opts += '<option value="0"></option>'
+			opts += '<option value="0">' + Liferay.Language.get(emptyOptionLabel) +'</option>'
 		}
 
 		for(var i = 0; i < objs.length; i++){
