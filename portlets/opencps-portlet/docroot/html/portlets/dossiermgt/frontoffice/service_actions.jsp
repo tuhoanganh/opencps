@@ -1,6 +1,5 @@
-<%@page import="com.liferay.portal.kernel.util.Constants"%>
-<%@page import="org.opencps.util.PortletConstants"%>
-<%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
+
+<%@page import="org.opencps.dossiermgt.bean.ServiceBean"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -19,6 +18,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+<%@page import="com.liferay.portal.kernel.util.Constants"%>
+<%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%@page import="com.liferay.portal.kernel.dao.search.ResultRow"%>
@@ -33,7 +35,7 @@
  
 <%
 	ResultRow row = (ResultRow)request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
-	ServiceConfig service = (ServiceConfig) row.getObject();
+	ServiceBean service = (ServiceBean) row.getObject();
 %> 
 
 			
