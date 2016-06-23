@@ -317,7 +317,7 @@
 			ON
 				opencps_service_config.serviceInfoId = opencps_serviceinfo.serviceInfoId
 			WHERE
-				groupId = ?
+				opencps_service_config.groupId = ?
 			AND 
 				opencps_service_config.servicePortal = ?
 			AND 
@@ -352,7 +352,7 @@
 			ON
 				opencps_service_config.serviceInfoId = opencps_serviceinfo.serviceInfoId
 			WHERE
-				groupId = ?
+				opencps_service_config.groupId = ?
 			AND 
 				opencps_service_config.servicePortal = ?
 			AND 
