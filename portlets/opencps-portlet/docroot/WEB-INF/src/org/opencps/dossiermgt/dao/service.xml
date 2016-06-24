@@ -161,6 +161,12 @@
 			<finder-column name="serviceInfoId" />
 		</finder>
 		
+		<finder return-type="ServiceConfig" name="G_S_A">
+			<finder-column name="groupId" />
+			<finder-column name="serviceInfoId" />
+			<finder-column name="serviceAdministrationIndex" />
+		</finder>
+		
 		<finder return-type="Collection" name="G_M">
 			<finder-column name="groupId" />
 			<finder-column name="serviceMode"/>

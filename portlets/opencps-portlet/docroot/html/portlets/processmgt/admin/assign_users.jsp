@@ -1,4 +1,6 @@
 
+<%@page import="org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.model.ProcessWorkflow"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -23,9 +25,17 @@
 
 <%
 	long processStepId = ParamUtil.getLong(request, "processStepId");
+	long workflowId = ParamUtil.getLong(request, "workflowId"); 
+	
+	ProcessWorkflow workflow = null;
+	try {
+		workflow = ProcessWorkflowLocalServiceUtil.getProcessWorkflow(workflowId);
+	} catch(Exception e) {
+		//nothing to do
+	}
 	
 %>
-
+<aui:model-context bean="<%= workflow %>" model="<%= ProcessWorkflow.class %>" />
 <aui:select name="actionUserId" showEmptyOption="true" label="">
 	<%
 		List<User> assignUsers = ProcessUtils.getAssignUsers(processStepId, 0);
