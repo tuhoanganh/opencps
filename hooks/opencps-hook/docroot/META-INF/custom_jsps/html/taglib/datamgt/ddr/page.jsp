@@ -134,7 +134,7 @@
 	
 	var itemsEmptyOption = strItemEmptyOption.split(",");
 	
-	var emptyOptionLabels = strEmptyOptionLabel.split(",");
+	var emptyOptionLabels<%=randomInstance %> = strEmptyOptionLabel.split(",");
 	
 	var rootDictItemsContainer =  null;
 	
@@ -205,8 +205,8 @@
 			itemEmptyOption = itemsEmptyOption[parseInt(level) - 1];
 		}
 		
-		if(emptyOptionLabels.length >= parseInt(level)){
-			emptyOptionLabel = emptyOptionLabels[parseInt(level) - 1];
+		if(emptyOptionLabels<%=randomInstance %>.length >= parseInt(level)){
+			emptyOptionLabel = emptyOptionLabels<%=randomInstance %>[parseInt(level) - 1];
 		}
 			
 		if(itemEmptyOption == 'true'){
