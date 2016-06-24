@@ -60,7 +60,7 @@
 	<aui:button name="addStep" href="<%= editStepInlineURL.toString() %>" value="add-step-inline" ></aui:button>
 </aui:button-row>
 
-<liferay-ui:search-container searchContainer="<%= new StepSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
+<liferay-ui:search-container searchContainer="<%= new StepSearch(renderRequest, ITEM_PERPAGE, iteratorURL) %>">
 		
 	<liferay-ui:search-container-results>
 		<%
@@ -108,6 +108,9 @@
 
 </liferay-ui:search-container>
 
+<%!
+	private int ITEM_PERPAGE = 100;
+%>
 
 <aui:script use="liferay-util-window">
 	Liferay.provide(window, 'showDialog', function(action) {
