@@ -1,4 +1,5 @@
 
+<%@page import="org.opencps.servicemgt.util.ServiceUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -44,15 +45,6 @@
 	String backURL = ParamUtil.getString(request, "backURL");
 	
 	List<ServiceBean> serviceBeans =  new ArrayList<ServiceBean>();
-	
-	List<ServiceConfig> serviceConfigs = new ArrayList<ServiceConfig>();
-	
-	int countAdvance = ServiceConfigLocalServiceUtil.countServiceConfigAdvance(scopeGroupId,
-		StringPool.BLANK, 1, -1,
-		-1, -1, 
-		1, StringPool.BLANK, StringPool.BLANK);
-					
-					
 	
 	int totalCount = 0;
 	
@@ -122,13 +114,30 @@
 		<%
 			ServiceSearchTerms searchTerms = (ServiceSearchTerms)searchContainer.getSearchTerms();
 		
-			String[] itemNames = null;
+		
+			long serviceDomainId = ParamUtil.getLong(request, "serviceDomainId");
 			
-			if(Validator.isNotNull(searchTerms.getKeywords())){
-				itemNames = CustomSQLUtil.keywords(searchTerms.getKeywords());
-			}
-			
+			long govAgencyId = ParamUtil.getLong(request, "govAgencyId");
+	
+			DictItem domainItem = null;
+			DictItem govAgencygovItem = null;
+		
 			try{
+				if(serviceDomainId > 0){
+					domainItem = DictItemLocalServiceUtil.getDictItem(serviceDomainId);
+				}
+				
+				if(govAgencyId > 0){
+					govAgencygovItem = DictItemLocalServiceUtil.getDictItem(serviceDomainId);
+				}
+
+				if(domainItem != null){
+					searchTerms.setServiceDomainIndex(domainItem.getTreeIndex());
+				}
+				
+				if(govAgencygovItem != null){
+					searchTerms.setGovAgencyIndex(govAgencygovItem.getTreeIndex());
+				}
 				
 				%>
 					<%@include file="/html/portlets/dossiermgt/frontoffice/service_search_results.jspf" %>
@@ -138,44 +147,40 @@
 			}
 		
 			total = totalCount;
-			results = serviceConfigs;
+			results = serviceBeans;
 			
 			pageContext.setAttribute("results", results);
 			pageContext.setAttribute("total", total);
+			
 		%>
 	</liferay-ui:search-container-results>	
 		<liferay-ui:search-container-row 
-			className="org.opencps.dossiermgt.model.ServiceConfig" 
-			modelVar="serviceConfig" 
+			className="org.opencps.dossiermgt.bean.ServiceBean" 
+			modelVar="serviceBean" 
 			keyProperty="serviceConfigId"
 		>
 			<%
-				ServiceInfo serviceInfo = null;
-			
-				try{
-					serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(serviceConfig.getServiceInfoId());
-				}catch(Exception e){
-					
-				}
 				
 				//id column
-				row.addText(String.valueOf(row.getPos() + 1));
+				row.addText(String.valueOf(row.getPos() + 1) + searchContainer.getStart());
 
-				row.addText(serviceInfo != null ? serviceInfo.getServiceName() : StringPool.BLANK);
+				row.addText(Validator.isNotNull(serviceBean.getServiceName()) ? serviceBean.getServiceName() : StringPool.BLANK);
 				
 				DictItem dictItem = null;
-				String domainCode = StringPool.DASH;
+				String domainName = StringPool.DASH;
 				
 				try{
-					dictItem = DictItemLocalServiceUtil.getDictItem(GetterUtil.getLong(serviceConfig.getDomainCode()));
-					domainCode = dictItem.getItemName(locale);
+					dictItem = DictItemLocalServiceUtil.getDictItem(GetterUtil.getLong(serviceBean.getDomainCode()));
+					domainName = dictItem.getItemName(locale);
 				}catch(Exception e){
 					
 				}
 				
-				row.addText(domainCode);
+				row.addText(domainName);
 				
-				row.addText(serviceConfig.getGovAgencyName());
+				row.addText(serviceBean.getGovAgencyName());
+				
+				row.addText(String.valueOf(serviceBean.getLevel()));
 				
 				//action column
 				row.addJSP("center", SearchEntry.DEFAULT_VALIGN,"/html/portlets/dossiermgt/frontoffice/service_actions.jsp", config.getServletContext(), request, response);

@@ -29,46 +29,32 @@ public class ServiceSearchTerms extends ServiceDisplayTerms {
 
 	public ServiceSearchTerms(PortletRequest portletRequest) {
 		super(
-		    portletRequest);
+			portletRequest);
 
 		serviceName = DAOParamUtil
-		    .getString(portletRequest, SERVICE_NAME);
+			.getString(portletRequest, SERVICE_NAME);
 
 		serviceConfigId = ParamUtil
-		    .getLong(portletRequest, SERVICE_CONFIG_ID);
+			.getLong(portletRequest, SERVICE_CONFIG_ID);
 
 		serviceInfoId = ParamUtil
-		    .getLong(portletRequest, SERVICE_INFO_ID);
+			.getLong(portletRequest, SERVICE_INFO_ID);
 
 		domainCode = DAOParamUtil
-		    .getString(portletRequest, DOMAIN_CODE);
+			.getString(portletRequest, DOMAIN_CODE);
 
 		govAgencyName = DAOParamUtil
-		    .getString(portletRequest, GOVAGENCY_NAME);
+			.getString(portletRequest, GOVAGENCY_NAME);
 
 		govAgencyCode = DAOParamUtil
-		    .getString(portletRequest, GOVAGENCY_CODE);
+			.getString(portletRequest, GOVAGENCY_CODE);
 
-	}
+		govAgencyIndex = DAOParamUtil
+			.getString(portletRequest, GOVAGENCY_INDEX);
 
-	public long getServiceConfigId() {
+		serviceDomainIndex = DAOParamUtil
+			.getString(portletRequest, SERVICE_DOMAIN_INDEX);
 
-		return serviceConfigId;
-	}
-
-	public void setServiceConfigId(long serviceConfigId) {
-
-		this.serviceConfigId = serviceConfigId;
-	}
-
-	public long getServiceInfoId() {
-
-		return serviceInfoId;
-	}
-
-	public void setServiceInfoId(long serviceInfoId) {
-
-		this.serviceInfoId = serviceInfoId;
 	}
 
 	public String getDomainCode() {
@@ -76,19 +62,14 @@ public class ServiceSearchTerms extends ServiceDisplayTerms {
 		return domainCode;
 	}
 
-	public void setDomainCode(String domainCode) {
-
-		this.domainCode = domainCode;
-	}
-
 	public String getGovAgencyCode() {
 
 		return govAgencyCode;
 	}
 
-	public void setGovAgencyCode(String govAgencyCode) {
+	public String getGovAgencyIndex() {
 
-		this.govAgencyCode = govAgencyCode;
+		return govAgencyIndex;
 	}
 
 	public String getGovAgencyName() {
@@ -96,9 +77,19 @@ public class ServiceSearchTerms extends ServiceDisplayTerms {
 		return govAgencyName;
 	}
 
-	public void setGovAgencyName(String govAgencyName) {
+	public long getServiceConfigId() {
 
-		this.govAgencyName = govAgencyName;
+		return serviceConfigId;
+	}
+
+	public String getServiceDomainIndex() {
+
+		return serviceDomainIndex;
+	}
+
+	public long getServiceInfoId() {
+
+		return serviceInfoId;
 	}
 
 	public String getServiceName() {
@@ -106,15 +97,53 @@ public class ServiceSearchTerms extends ServiceDisplayTerms {
 		return serviceName;
 	}
 
+	public void setDomainCode(String domainCode) {
+
+		this.domainCode = domainCode;
+	}
+	public void setGovAgencyCode(String govAgencyCode) {
+
+		this.govAgencyCode = govAgencyCode;
+	}
+	public void setGovAgencyIndex(String govAgencyIndex) {
+
+		this.govAgencyIndex = govAgencyIndex;
+	}
+	public void setGovAgencyName(String govAgencyName) {
+
+		this.govAgencyName = govAgencyName;
+	}
+	public void setServiceConfigId(long serviceConfigId) {
+
+		this.serviceConfigId = serviceConfigId;
+	}
+	public void setServiceDomainIndex(String serviceDomainIndex) {
+
+		this.serviceDomainIndex = serviceDomainIndex;
+	}
+
+	public void setServiceInfoId(long serviceInfoId) {
+
+		this.serviceInfoId = serviceInfoId;
+	}
 	public void setServiceName(String serviceName) {
 
 		this.serviceName = serviceName;
 	}
+	
+	protected String domainCode;
+
+	protected String govAgencyCode;
+
+	protected String govAgencyIndex;
+
+	protected String govAgencyName;
 
 	protected long serviceConfigId;
+
+	protected String serviceDomainIndex;
+
 	protected long serviceInfoId;
-	protected String domainCode;
-	protected String govAgencyCode;
-	protected String govAgencyName;
+
 	protected String serviceName;
 }
