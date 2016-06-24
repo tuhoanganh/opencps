@@ -87,7 +87,7 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 		String domainCode, boolean andOperator) {
 
 		keywords = CustomSQLUtil
-			.keywords(keywords);
+			.keywords(keywords, false);
 
 		Session session = null;
 
@@ -177,6 +177,19 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 		return 0;
 	}
 
+	/**
+	 * @param groupId
+	 * @param keywords
+	 * @param servicePortal
+	 * @param serviceOnegate
+	 * @param serviceBackoffice
+	 * @param serviceCitizen
+	 * @param serviceBusinees
+	 * @param serviceDomainIndex
+	 * @param govAgencyIndex
+	 * @param andOperator
+	 * @return
+	 */
 	private int _countServiceConfigAdvance(
 		long groupId, String[] keywords, int servicePortal, int serviceOnegate,
 		int serviceBackoffice, int serviceCitizen, int serviceBusinees,
@@ -193,18 +206,16 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 			if (keywords != null && keywords.length > 0) {
 				sql = CustomSQLUtil
 					.replaceKeywords(sql,
-						"AND (lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))",
+						"lower(opencps_serviceinfo.serviceName)",
 						StringPool.LIKE, true, keywords);
 			}
 			else {
 				sql = StringUtil
 					.replace(sql,
-						"AND (lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))",
+						"AND ((lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))",
 						StringPool.BLANK);
 			}
-			sql = CustomSQLUtil
-				.replaceAndOperator(sql, andOperator);
-
+			
 			if (servicePortal != 1 && servicePortal != 0) {
 
 				sql = StringUtil
@@ -262,14 +273,13 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 					serviceDomainIndex = serviceDomainIndex
 						.substring(0, serviceDomainIndex
 							.indexOf(StringPool.PERIOD) + 1);
-
-				}
-				else {
 					sql = StringUtil
 						.replace(sql,
 							"AND (opencps_service_config.serviceDomainIndex LIKE ? OR opencps_service_config.serviceDomainIndex = ?)",
-							"AND (opencps_service_config.serviceDomainIndex = ?)");
+							"AND (opencps_service_config.serviceDomainIndex LIKE ?");
+
 				}
+
 			}
 
 			if (Validator
@@ -286,14 +296,18 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 						.substring(0, govAgencyIndex
 							.indexOf(StringPool.PERIOD) + 1);
 
-				}
-				else {
 					sql = StringUtil
 						.replace(sql,
 							"AND (opencps_service_config.govAgencyIndex LIKE ? OR opencps_service_config.govAgencyIndex = ?)",
-							"AND (opencps_service_config.govAgencyIndex = ?)");
+							"AND (opencps_service_config.govAgencyIndex LIKE ?");
+
 				}
+
 			}
+			
+			sql = CustomSQLUtil
+							.replaceAndOperator(sql, andOperator);
+
 
 			SQLQuery q = session
 				.createSQLQuery(sql);
@@ -308,6 +322,12 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 
 			qPos
 				.add(groupId);
+
+			if (keywords != null && keywords.length > 0) {
+				qPos
+					.add(keywords, 2);
+
+			}
 
 			if (servicePortal == 1) {
 				qPos
@@ -359,12 +379,13 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 					.contains(serviceDomainIndex, StringPool.PERIOD)) {
 				qPos
 					.add(serviceDomainIndex + StringPool.PERCENT);
-				qPos
-					.add(serviceDomainIndex);
+
 			}
 			else if (Validator
 				.isNotNull(serviceDomainIndex) && !StringUtil
 					.contains(serviceDomainIndex, StringPool.PERIOD)) {
+				qPos
+					.add(serviceDomainIndex + StringPool.PERCENT);
 				qPos
 					.add(serviceDomainIndex);
 			}
@@ -374,21 +395,17 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 					.contains(govAgencyIndex, StringPool.PERIOD)) {
 				qPos
 					.add(govAgencyIndex + StringPool.PERCENT);
-				qPos
-					.add(govAgencyIndex);
+
 			}
 			else if (Validator
 				.isNotNull(govAgencyIndex) && !StringUtil
 					.contains(govAgencyIndex, StringPool.PERIOD)) {
 				qPos
+					.add(govAgencyIndex + StringPool.PERCENT);
+				qPos
 					.add(govAgencyIndex);
 			}
 
-			if (keywords != null && keywords.length > 0) {
-				qPos
-					.add(keywords, 2);
-
-			}
 			Iterator<Integer> itr = q
 				.iterate();
 
@@ -430,7 +447,7 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 		String domainCode, boolean andOperator, int start, int end) {
 
 		keywords = CustomSQLUtil
-			.keywords(keywords);
+			.keywords(keywords, false);
 
 		Session session = null;
 
@@ -442,7 +459,7 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 
 			sql = CustomSQLUtil
 				.replaceKeywords(sql,
-					"lower(opencps_service_config.govAgencyName",
+					"lower(opencps_service_config.govAgencyName)",
 					StringPool.LIKE, true, keywords);
 
 			sql = CustomSQLUtil
@@ -541,18 +558,16 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 			if (keywords != null && keywords.length > 0) {
 				sql = CustomSQLUtil
 					.replaceKeywords(sql,
-						"AND (lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))",
+						"lower(opencps_serviceinfo.serviceName)",
 						StringPool.LIKE, true, keywords);
 			}
 			else {
 				sql = StringUtil
 					.replace(sql,
-						"AND (lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))",
+						"AND ((lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))",
 						StringPool.BLANK);
 			}
-			sql = CustomSQLUtil
-				.replaceAndOperator(sql, andOperator);
-
+			
 			if (servicePortal != 1 && servicePortal != 0) {
 
 				sql = StringUtil
@@ -611,13 +626,13 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 						.substring(0, serviceDomainIndex
 							.indexOf(StringPool.PERIOD) + 1);
 
-				}
-				else {
 					sql = StringUtil
 						.replace(sql,
 							"AND (opencps_service_config.serviceDomainIndex LIKE ? OR opencps_service_config.serviceDomainIndex = ?)",
-							"AND (opencps_service_config.serviceDomainIndex = ?)");
+							"AND (opencps_service_config.serviceDomainIndex LIKE ?");
+
 				}
+
 			}
 
 			if (Validator
@@ -634,14 +649,18 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 						.substring(0, govAgencyIndex
 							.indexOf(StringPool.PERIOD) + 1);
 
-				}
-				else {
 					sql = StringUtil
 						.replace(sql,
 							"AND (opencps_service_config.govAgencyIndex LIKE ? OR opencps_service_config.govAgencyIndex = ?)",
-							"AND (opencps_service_config.govAgencyIndex = ?)");
+							"AND (opencps_service_config.govAgencyIndex LIKE ?");
+
 				}
+
 			}
+			
+			sql = CustomSQLUtil
+							.replaceAndOperator(sql, andOperator);
+
 
 			SQLQuery q = session
 				.createSQLQuery(sql);
@@ -663,6 +682,12 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 
 			qPos
 				.add(groupId);
+
+			if (keywords != null && keywords.length > 0) {
+				qPos
+					.add(keywords, 2);
+
+			}
 
 			if (servicePortal == 1) {
 				qPos
@@ -714,12 +739,13 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 					.contains(serviceDomainIndex, StringPool.PERIOD)) {
 				qPos
 					.add(serviceDomainIndex + StringPool.PERCENT);
-				qPos
-					.add(serviceDomainIndex);
+
 			}
 			else if (Validator
 				.isNotNull(serviceDomainIndex) && !StringUtil
 					.contains(serviceDomainIndex, StringPool.PERIOD)) {
+				qPos
+					.add(serviceDomainIndex + StringPool.PERCENT);
 				qPos
 					.add(serviceDomainIndex);
 			}
@@ -729,20 +755,15 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 					.contains(govAgencyIndex, StringPool.PERIOD)) {
 				qPos
 					.add(govAgencyIndex + StringPool.PERCENT);
-				qPos
-					.add(govAgencyIndex);
+
 			}
 			else if (Validator
 				.isNotNull(govAgencyIndex) && !StringUtil
 					.contains(govAgencyIndex, StringPool.PERIOD)) {
 				qPos
-					.add(govAgencyIndex);
-			}
-
-			if (keywords != null && keywords.length > 0) {
+					.add(govAgencyIndex + StringPool.PERCENT);
 				qPos
-					.add(keywords, 2);
-
+					.add(govAgencyIndex);
 			}
 
 			Iterator<Object[]> itr = (Iterator<Object[]>) QueryUtil
@@ -773,6 +794,15 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 							.getDossierTemplateId());
 					serviceBean
 						.setFullName(fullName);
+
+					serviceBean
+						.setDomainCode(serviceConfig
+							.getDomainCode());
+
+					serviceBean
+						.setLevel(serviceConfig
+							.getServiceLevel());
+
 					serviceBean
 						.setGovAgencyCode(serviceConfig
 							.getGovAgencyCode());
