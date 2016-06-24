@@ -57,7 +57,7 @@
 	<aui:button name="addAction" href="<%= editActionURL %>" value="add-action" ></aui:button>
 </aui:button-row>
 
-<liferay-ui:search-container searchContainer="<%= new WorkflowSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
+<liferay-ui:search-container searchContainer="<%= new WorkflowSearch(renderRequest, ITEM_PERPAGE, iteratorURL) %>">
 		
 	<liferay-ui:search-container-results>
 		<%
@@ -103,6 +103,10 @@
 	<liferay-ui:search-iterator/>
 
 </liferay-ui:search-container>
+
+<%!
+	private int ITEM_PERPAGE = 100;
+%>
 
 <aui:script use="liferay-util-window">
 	Liferay.provide(window, 'addAction', function(action) {
