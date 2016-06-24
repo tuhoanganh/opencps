@@ -218,6 +218,10 @@
 			<finder-column name="processWorkflowId"/>
 			<finder-column name="postback"/>
 		</finder>
+		<finder return-type="Collection" name="E_S_ID_PB">
+			<finder-column name="processWorkflowId"/>
+			<finder-column name="esign"/>
+		</finder>
 		
 	</entity>
 

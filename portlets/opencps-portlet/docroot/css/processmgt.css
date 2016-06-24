@@ -156,3 +156,7 @@
     background-color: transparent !important;
     color: white;
 }
+
+.searchcontainer-content .readonly td input{
+    display: none !important;
+}

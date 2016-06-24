@@ -45,31 +45,49 @@ import com.liferay.util.dao.orm.CustomSQLUtil;
 public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 	implements ProcessOrderFinder {
 
-	public final static String SQL_PROCESS_ORDER_FINDER =
-		ProcessOrderFinder.class
-			.getName() + ".searchProcessOrder";
 	public final static String SQL_PROCESS_ORDER_COUNT =
 		ProcessOrderFinder.class
 			.getName() + ".countProcessOrder";
-
-	public final static String SQL_PROCESS_ORDER_JUST_FINISHED_FINDER =
+	public final static String SQL_PROCESS_ORDER_FINDER =
 		ProcessOrderFinder.class
-			.getName() + ".searchProcessOrderJustFinished";
+			.getName() + ".searchProcessOrder";
+
 	public final static String SQL_PROCESS_ORDER_JUST_FINISHED_COUNT =
 		ProcessOrderFinder.class
 			.getName() + ".countProcessOrderJustFinished";
+	public final static String SQL_PROCESS_ORDER_JUST_FINISHED_FINDER =
+		ProcessOrderFinder.class
+			.getName() + ".searchProcessOrderJustFinished";
+
+	public final static String SQL_USER_PROCESS_SERVICE =
+		ProcessOrderFinder.class
+			.getName() + ".getProcessOrderServiceByUser";
+
+	public final static String SQL_USER_PROCESS_SERVICE_JUST_FINISHED =
+		ProcessOrderFinder.class
+			.getName() + ".getProcessOrderServiceJustFinishedByUser";
 
 	public final static String SQL_USER_PROCESS_STEP = ProcessOrderFinder.class
 		.getName() + ".getUserProcessStep";
 
+	public final static String SQL_USER_PROCESS_STEP_JUST_FINISHED =
+		ProcessOrderFinder.class
+			.getName() + ".getUserProcessStepJustFinished";
+
+	private Log _log = LogFactoryUtil
+		.getLog(ProcessOrderFinderImpl.class
+			.getName());
+
 	/**
+	 * @param serviceInfoId
 	 * @param processStepId
 	 * @param loginUserId
 	 * @param assignToUserId
 	 * @return
 	 */
 	public int countProcessOrder(
-		long processStepId, long loginUserId, long assignToUserId) {
+		long serviceInfoId, long processStepId, long loginUserId,
+		long assignToUserId) {
 
 		Session session = null;
 		try {
@@ -77,6 +95,12 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 
 			String sql = CustomSQLUtil
 				.get(SQL_PROCESS_ORDER_COUNT);
+
+			if (serviceInfoId <= 0) {
+				sql = StringUtil
+					.replace(sql, "AND opencps_processorder.serviceInfoId = ?",
+						StringPool.BLANK);
+			}
 
 			if (processStepId <= 0) {
 				sql = StringUtil
@@ -94,6 +118,11 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 
 			QueryPos qPos = QueryPos
 				.getInstance(q);
+
+			if (serviceInfoId > 0) {
+				qPos
+					.add(serviceInfoId);
+			}
 
 			if (processStepId > 0) {
 				qPos
@@ -132,14 +161,15 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 		return 0;
 
 	}
-	
+
 	/**
+	 * @param serviceInfoId
 	 * @param processStepId
 	 * @param actionUserId
 	 * @return
 	 */
 	public int countProcessOrderJustFinished(
-		long processStepId, long actionUserId) {
+		long serviceInfoId, long processStepId, long actionUserId) {
 
 		Session session = null;
 		try {
@@ -147,6 +177,12 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 
 			String sql = CustomSQLUtil
 				.get(SQL_PROCESS_ORDER_JUST_FINISHED_COUNT);
+
+			if (serviceInfoId <= 0) {
+				sql = StringUtil
+					.replace(sql, "AND opencps_processorder.serviceInfoId = ?",
+						StringPool.BLANK);
+			}
 
 			if (processStepId <= 0) {
 				sql = StringUtil
@@ -164,6 +200,11 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 
 			QueryPos qPos = QueryPos
 				.getInstance(q);
+
+			if (serviceInfoId > 0) {
+				qPos
+					.add(serviceInfoId);
+			}
 
 			if (processStepId > 0) {
 				qPos
@@ -202,15 +243,345 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 	}
 
 	/**
+	 * @param longinUserId
+	 * @return
+	 */
+	public List getProcessOrderServiceByUser(
+
+		long loginUserId) {
+
+		Session session = null;
+		try {
+			session = openSession();
+
+			String sql = CustomSQLUtil
+				.get(SQL_USER_PROCESS_SERVICE);
+
+			SQLQuery q = session
+				.createSQLQuery(sql);
+
+			q
+				.setCacheable(false);
+
+			q
+				.addScalar("serviceInfoId", Type.LONG);
+			q
+				.addScalar("serviceName", Type.STRING);
+
+			QueryPos qPos = QueryPos
+				.getInstance(q);
+
+			qPos
+				.add(loginUserId);
+			qPos
+				.add(loginUserId);
+
+			Iterator<Object[]> itr = (Iterator<Object[]>) QueryUtil
+				.list(q, getDialect(), QueryUtil.ALL_POS,
+					QueryUtil.ALL_POS).iterator();
+
+			List<ProcessOrderBean> processOrderBeans =
+				new ArrayList<ProcessOrderBean>();
+
+			if (itr
+				.hasNext()) {
+				while (itr
+					.hasNext()) {
+					ProcessOrderBean processOrderBean = new ProcessOrderBean();
+
+					Object[] objects = itr
+						.next();
+
+					long serviceInfoId = GetterUtil
+						.getLong(objects[0]);
+					String serviceName = (String) objects[1];
+
+					processOrderBean
+						.setServiceInfoId(serviceInfoId);
+					processOrderBean
+						.setServiceName(serviceName);
+
+					processOrderBeans
+						.add(processOrderBean);
+				}
+			}
+
+			return processOrderBeans;
+		}
+		catch (Exception e) {
+			_log
+				.error(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		return null;
+	}
+
+	/**
+	 * @param longinUserId
+	 * @return
+	 */
+	public List getProcessOrderServiceJustFinishedByUser(
+
+		long loginUserId) {
+
+		Session session = null;
+		try {
+			session = openSession();
+
+			String sql = CustomSQLUtil
+				.get(SQL_USER_PROCESS_SERVICE_JUST_FINISHED);
+
+			SQLQuery q = session
+				.createSQLQuery(sql);
+
+			q
+				.setCacheable(false);
+
+			q
+				.addScalar("serviceInfoId", Type.LONG);
+			q
+				.addScalar("serviceName", Type.STRING);
+
+			QueryPos qPos = QueryPos
+				.getInstance(q);
+
+			qPos
+				.add(loginUserId);
+			Iterator<Object[]> itr = (Iterator<Object[]>) QueryUtil
+				.list(q, getDialect(), QueryUtil.ALL_POS,
+					QueryUtil.ALL_POS).iterator();
+
+			List<ProcessOrderBean> processOrderBeans =
+				new ArrayList<ProcessOrderBean>();
+
+			if (itr
+				.hasNext()) {
+				while (itr
+					.hasNext()) {
+					ProcessOrderBean processOrderBean = new ProcessOrderBean();
+
+					Object[] objects = itr
+						.next();
+
+					long serviceInfoId = GetterUtil
+						.getLong(objects[0]);
+					String serviceName = (String) objects[1];
+
+					processOrderBean
+						.setServiceInfoId(serviceInfoId);
+					processOrderBean
+						.setServiceName(serviceName);
+
+					processOrderBeans
+						.add(processOrderBean);
+				}
+			}
+
+			return processOrderBeans;
+		}
+		catch (Exception e) {
+			_log
+				.error(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		return null;
+	}
+
+	/**
+	 * @param loginUserId
+	 * @param serviceInfoId
+	 * @return
+	 */
+	public List getUserProcessStep(
+
+		long loginUserId, long serviceInfoId) {
+
+		Session session = null;
+		try {
+			session = openSession();
+
+			String sql = CustomSQLUtil
+				.get(SQL_USER_PROCESS_STEP);
+
+			if (serviceInfoId <= 0) {
+				sql = StringUtil
+					.replace(sql, "AND opencps_processorder.serviceInfoId = ?",
+						StringPool.BLANK);
+
+			}
+
+			SQLQuery q = session
+				.createSQLQuery(sql);
+
+			q
+				.setCacheable(false);
+
+			q
+				.addScalar("processStepId", Type.LONG);
+			q
+				.addScalar("stepName", Type.STRING);
+
+			QueryPos qPos = QueryPos
+				.getInstance(q);
+
+			if (serviceInfoId > 0) {
+				qPos
+					.add(serviceInfoId);
+			}
+
+			qPos
+				.add(loginUserId);
+			qPos
+				.add(loginUserId);
+
+			Iterator<Object[]> itr = (Iterator<Object[]>) QueryUtil
+				.list(q, getDialect(), QueryUtil.ALL_POS,
+					QueryUtil.ALL_POS).iterator();
+
+			List<ProcessOrderBean> processOrderBeans =
+				new ArrayList<ProcessOrderBean>();
+
+			if (itr
+				.hasNext()) {
+				while (itr
+					.hasNext()) {
+					ProcessOrderBean processOrderBean = new ProcessOrderBean();
+
+					Object[] objects = itr
+						.next();
+
+					long processStepId = GetterUtil
+						.getLong(objects[0]);
+					String processStepName = (String) objects[1];
+
+					processOrderBean
+						.setProcessStepId(processStepId);
+					processOrderBean
+						.setStepName(processStepName);
+
+					processOrderBeans
+						.add(processOrderBean);
+				}
+			}
+
+			return processOrderBeans;
+		}
+		catch (Exception e) {
+			_log
+				.error(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		return null;
+	}
+
+	/**
+	 * @param loginUserId
+	 * @param serviceInfoId
+	 * @return
+	 */
+	public List getUserProcessStepJustFinished(
+
+		long loginUserId, long serviceInfoId) {
+
+		Session session = null;
+		try {
+			session = openSession();
+
+			String sql = CustomSQLUtil
+				.get(SQL_USER_PROCESS_STEP_JUST_FINISHED);
+
+			if (serviceInfoId <= 0) {
+				sql = StringUtil
+					.replace(sql, "AND opencps_processorder.serviceInfoId = ?",
+						StringPool.BLANK);
+
+			}
+
+			SQLQuery q = session
+				.createSQLQuery(sql);
+
+			q
+				.setCacheable(false);
+
+			q
+				.addScalar("processStepId", Type.LONG);
+			q
+				.addScalar("stepName", Type.STRING);
+
+			QueryPos qPos = QueryPos
+				.getInstance(q);
+
+			if (serviceInfoId > 0) {
+				qPos
+					.add(serviceInfoId);
+			}
+
+			qPos
+				.add(loginUserId);
+
+			Iterator<Object[]> itr = (Iterator<Object[]>) QueryUtil
+				.list(q, getDialect(), QueryUtil.ALL_POS,
+					QueryUtil.ALL_POS).iterator();
+
+			List<ProcessOrderBean> processOrderBeans =
+				new ArrayList<ProcessOrderBean>();
+
+			if (itr
+				.hasNext()) {
+				while (itr
+					.hasNext()) {
+					ProcessOrderBean processOrderBean = new ProcessOrderBean();
+
+					Object[] objects = itr
+						.next();
+
+					long processStepId = GetterUtil
+						.getLong(objects[0]);
+					String processStepName = (String) objects[1];
+
+					processOrderBean
+						.setProcessStepId(processStepId);
+					processOrderBean
+						.setStepName(processStepName);
+
+					processOrderBeans
+						.add(processOrderBean);
+				}
+			}
+
+			return processOrderBeans;
+		}
+		catch (Exception e) {
+			_log
+				.error(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		return null;
+	}
+
+	/**
+	 * @param serviceInfoId
 	 * @param processStepId
 	 * @param loginUserId
-	 * @param actionUserId
+	 * @param assignToUserId
 	 * @param start
 	 * @param end
 	 * @param orderByComparator
 	 * @return
 	 */
-	public List searchProcessOrder(
+	public List searchProcessOrder(long serviceInfoId,
 
 		long processStepId, long loginUserId, long assignToUserId, int start,
 		int end, OrderByComparator orderByComparator) {
@@ -221,6 +592,12 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 
 			String sql = CustomSQLUtil
 				.get(SQL_PROCESS_ORDER_FINDER);
+
+			if (serviceInfoId <= 0) {
+				sql = StringUtil
+					.replace(sql, "AND opencps_processorder.serviceInfoId = ?",
+						StringPool.BLANK);
+			}
 
 			if (processStepId <= 0) {
 				sql = StringUtil
@@ -260,6 +637,11 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 
 			QueryPos qPos = QueryPos
 				.getInstance(q);
+
+			if (serviceInfoId > 0) {
+				qPos
+					.add(serviceInfoId);
+			}
 
 			if (processStepId > 0) {
 				qPos
@@ -395,8 +777,9 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 		return null;
 
 	}
-	
+
 	/**
+	 * @param serviceInfoId
 	 * @param processStepId
 	 * @param actionUserId
 	 * @param start
@@ -406,8 +789,8 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 	 */
 	public List searchProcessOrderJustFinished(
 
-		long processStepId, long actionUserId, int start, int end,
-		OrderByComparator orderByComparator) {
+		long serviceInfoId, long processStepId, long actionUserId, int start,
+		int end, OrderByComparator orderByComparator) {
 
 		Session session = null;
 		try {
@@ -415,6 +798,12 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 
 			String sql = CustomSQLUtil
 				.get(SQL_PROCESS_ORDER_JUST_FINISHED_FINDER);
+
+			if (serviceInfoId <= 0) {
+				sql = StringUtil
+					.replace(sql, "AND opencps_processorder.serviceInfoId = ?",
+						StringPool.BLANK);
+			}
 
 			if (processStepId <= 0) {
 				sql = StringUtil
@@ -452,6 +841,11 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 
 			QueryPos qPos = QueryPos
 				.getInstance(q);
+
+			if (serviceInfoId > 0) {
+				qPos
+					.add(serviceInfoId);
+			}
 
 			if (processStepId > 0) {
 				qPos
@@ -580,85 +974,4 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 		return null;
 
 	}
-
-	/**
-	 * @param longinUserId
-	 * @return
-	 */
-	public List getUserProcessStep(
-
-		long longinUserId) {
-
-		Session session = null;
-		try {
-			session = openSession();
-
-			String sql = CustomSQLUtil
-				.get(SQL_USER_PROCESS_STEP);
-
-			SQLQuery q = session
-				.createSQLQuery(sql);
-
-			q
-				.setCacheable(false);
-
-			q
-				.addScalar("processStepId", Type.LONG);
-			q
-				.addScalar("stepName", Type.STRING);
-
-			QueryPos qPos = QueryPos
-				.getInstance(q);
-
-			qPos
-				.add(longinUserId);
-			qPos
-				.add(longinUserId);
-
-			Iterator<Object[]> itr = (Iterator<Object[]>) QueryUtil
-				.list(q, getDialect(), QueryUtil.ALL_POS,
-					QueryUtil.ALL_POS).iterator();
-
-			List<ProcessOrderBean> processOrderBeans =
-				new ArrayList<ProcessOrderBean>();
-
-			if (itr
-				.hasNext()) {
-				while (itr
-					.hasNext()) {
-					ProcessOrderBean processOrderBean = new ProcessOrderBean();
-
-					Object[] objects = itr
-						.next();
-
-					long processStepId = GetterUtil
-						.getLong(objects[0]);
-					String processStepName = (String) objects[1];
-
-					processOrderBean
-						.setProcessStepId(processStepId);
-					processOrderBean
-						.setStepName(processStepName);
-
-					processOrderBeans
-						.add(processOrderBean);
-				}
-			}
-
-			return processOrderBeans;
-		}
-		catch (Exception e) {
-			_log
-				.error(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		return null;
-	}
-
-	private Log _log = LogFactoryUtil
-		.getLog(ProcessOrderFinderImpl.class
-			.getName());
 }

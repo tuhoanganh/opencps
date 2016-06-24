@@ -255,29 +255,36 @@ public class ProcessOrderLocalServiceImpl
 			.update(processOrder);
 	}
 
+
 	/**
+	 * @param serviceInfoId
 	 * @param processStepId
 	 * @param loginUserId
 	 * @param actionUserId
 	 * @return
 	 */
 	public int countProcessOrder(
-		long processStepId, long loginUserId, long actionUserId) {
+		long serviceInfoId, long processStepId, long loginUserId,
+		long actionUserId) {
 
 		return processOrderFinder
-			.countProcessOrder(processStepId, loginUserId, actionUserId);
+			.countProcessOrder(serviceInfoId, processStepId, loginUserId,
+				actionUserId);
 	}
 
+
 	/**
+	 * @param serviceInfoId
 	 * @param processStepId
 	 * @param actionUserId
 	 * @return
 	 */
 	public int countProcessOrderJustFinished(
-		long processStepId, long actionUserId) {
+		long serviceInfoId, long processStepId, long actionUserId) {
 
 		return processOrderFinder
-			.countProcessOrderJustFinished(processStepId, actionUserId);
+			.countProcessOrderJustFinished(serviceInfoId, processStepId,
+				actionUserId);
 	}
 
 	/**
@@ -293,15 +300,48 @@ public class ProcessOrderLocalServiceImpl
 		return processOrderPersistence
 			.findByD_F(dossierId, fileGroupId);
 	}
-
+	
 	/**
-	 * @param actionUserId
+	 * @param loginUserId
 	 * @return
 	 */
-	public List getUserProcessStep(long actionUserId) {
+	public List getProcessOrderServiceByUser(long loginUserId) {
 
 		return processOrderFinder
-			.getUserProcessStep(actionUserId);
+			.getProcessOrderServiceByUser(loginUserId);
+	}
+	
+	/**
+	 * @param loginUserId
+	 * @return
+	 */
+	public List getProcessOrderServiceJustFinishedByUser(long loginUserId) {
+		
+		return processOrderFinder
+			.getProcessOrderServiceJustFinishedByUser(loginUserId);
+	}
+
+	/**
+	 * @param loginUserId
+	 * @param serviceInfoId
+	 * @return
+	 */
+	public List getUserProcessStep(long loginUserId, long serviceInfoId) {
+
+		return processOrderFinder
+			.getUserProcessStep(loginUserId, serviceInfoId);
+	}
+	
+	/**
+	 * @param loginUserId
+	 * @param serviceInfoId
+	 * @return
+	 */
+	public List getUserProcessStepJustFinished(
+		long loginUserId, long serviceInfoId) {
+
+		return processOrderFinder
+			.getUserProcessStepJustFinished(loginUserId, serviceInfoId);
 	}
 
 	/**
@@ -478,7 +518,9 @@ public class ProcessOrderLocalServiceImpl
 		return order;
 	}
 
+	
 	/**
+	 * @param serviceInfoId
 	 * @param processStepId
 	 * @param loginUserId
 	 * @param actionUserId
@@ -488,15 +530,18 @@ public class ProcessOrderLocalServiceImpl
 	 * @return
 	 */
 	public List searchProcessOrder(
-		long processStepId, long loginUserId, long actionUserId, int start,
-		int end, OrderByComparator orderByComparator) {
+		long serviceInfoId, long processStepId, long loginUserId,
+		long actionUserId, int start, int end,
+		OrderByComparator orderByComparator) {
 
 		return processOrderFinder
-			.searchProcessOrder(processStepId, loginUserId, actionUserId, start,
-				end, orderByComparator);
+			.searchProcessOrder(serviceInfoId, processStepId, loginUserId,
+				actionUserId, start, end, orderByComparator);
 	}
 
+	
 	/**
+	 * @param serviceInfoId
 	 * @param processStepId
 	 * @param actionUserId
 	 * @param start
@@ -505,12 +550,12 @@ public class ProcessOrderLocalServiceImpl
 	 * @return
 	 */
 	public List searchProcessOrderJustFinished(
-		long processStepId, long actionUserId, int start, int end,
-		OrderByComparator orderByComparator) {
+		long serviceInfoId, long processStepId, long actionUserId, int start,
+		int end, OrderByComparator orderByComparator) {
 
 		return processOrderFinder
-			.searchProcessOrderJustFinished(processStepId, actionUserId, start,
-				end, orderByComparator);
+			.searchProcessOrderJustFinished(serviceInfoId, processStepId,
+				actionUserId, start, end, orderByComparator);
 	}
 
 	/**

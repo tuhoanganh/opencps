@@ -27,7 +27,7 @@
 <%
 	ServiceInfo serviceInfo = (ServiceInfo) request.getAttribute(WebKeys.SERVICE_ENTRY);
 	long serviceInfoId = (serviceInfo != null) ? serviceInfo.getServiceinfoId() : 0L;
-	long frontServicePlid = PortalUtil.getPlidFromPortletId(scopeGroupId, true,  WebKeys.DOSSIER_MGT_PORTLET);
+	long submitOnlinePlid = PortalUtil.getPlidFromPortletId(scopeGroupId, true,  WebKeys.P26_SUBMIT_ONLINE);
 	
 	ServiceConfig serviceConfig = null;
 	
@@ -40,12 +40,12 @@
 %>
 <liferay-portlet:renderURL 
 		var="servieOnlinePopURL" 
-		portletName="<%=WebKeys.DOSSIER_MGT_PORTLET %>"
-		plid="<%=frontServicePlid %>"
+		portletName="<%=WebKeys.P26_SUBMIT_ONLINE %>"
+		plid="<%=submitOnlinePlid %>"
 		portletMode="VIEW"
 	>
-		<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/frontoffice/edit_dossier.jsp"/>
-		<portlet:param name="<%=DossierDisplayTerms.SERVICE_CONFIG_ID %>" value="<%=(serviceConfig != null) ? String.valueOf(serviceConfig.getServiceConfigId()) : String.valueOf(0) %>"/>
+		<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/submit/dossier_submit_online.jsp"/>
+		<portlet:param name="serviceinfoId" value="<%=String.valueOf(serviceInfoId) %>"/>
 </liferay-portlet:renderURL>
 
 
@@ -96,7 +96,7 @@
 <aui:row>
 	<aui:col width="100">
 		<c:choose>
-			<c:when test="<%=Validator.isNotNull(serviceConfig) && Validator.isNotNull(serviceInfo) && Validator.isNull(serviceInfo.getOnlineUrl())%>">
+			<c:when test="<%=Validator.isNotNull(serviceInfo) && Validator.isNull(serviceInfo.getOnlineUrl())%>">
 				<aui:input cssClass="input100" name="urlOnline" type="text" value="<%=servieOnlinePopURL.toString() %>"/>
 			</c:when>
 			<c:otherwise>

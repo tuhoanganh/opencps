@@ -108,21 +108,7 @@ public class SchedulerJobsLocalServiceImpl
 
 	}
 	
-	/**
-	 * @param schedulerJobs
-	 * @param status
-	 * @return
-	 * @throws PortalException
-	 * @throws SystemException
-	 */
-	public SchedulerJobs updateScheduler(SchedulerJobs schedulerJobs, int status)
-	    throws PortalException, SystemException {
-		
-		long schedulerJobsId = schedulerJobs.getPrimaryKey();
-		
-		return updateScheduler(schedulerJobsId, status);
-		
-	}
+
 	
 	/**
 	 * @param schedulerType
