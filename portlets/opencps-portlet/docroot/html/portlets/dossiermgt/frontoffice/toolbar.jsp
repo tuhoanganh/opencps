@@ -35,6 +35,19 @@
 	PortletURL searchURL = renderResponse.createRenderURL();
 	
 	boolean isListServiceConfig = ParamUtil.getBoolean(request, "isListServiceConfig", false);
+	
+	if(isListServiceConfig && tabs1.equals(DossierMgtUtil.TOP_TABS_DOSSIER)){
+		searchURL.setParameter("mvcPath", templatePath + "frontofficeservicelist.jsp");
+		searchURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER);
+		searchURL.setParameter("isListServiceConfig", String.valueOf(true));
+	}else if(!isListServiceConfig && tabs1.equals(DossierMgtUtil.TOP_TABS_DOSSIER)){
+		searchURL.setParameter("mvcPath", templatePath + "frontofficedossierlist.jsp");
+		searchURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER);
+	}
+	
+	long serviceDomainId = ParamUtil.getLong(request, "serviceDomainId");
+	
+	long govAgencyId = ParamUtil.getLong(request, "govAgencyId");
 %>
 
 <aui:nav-bar cssClass="custom-toolbar">
@@ -61,10 +74,11 @@
 	
 	<aui:nav-bar-search cssClass="pull-right front-custom-select-search">
 		<div class="form-search">
-			<aui:form action="<%= searchURL %>" method="post" name="fm">
+			<aui:form action="<%= searchURL %>" method="post" name="fmSearch" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "doSearch();" %>'>
 
 				<c:choose>
 					<c:when test="<%=isListServiceConfig %>">
+						
 						<aui:row>
 							<aui:col width="30">
 								<datamgt:ddr 
@@ -76,6 +90,8 @@
 									showLabel="<%=false%>"
 									emptyOptionLabels="filter-by-service-domain"
 									itemsEmptyOption="true"
+									itemNames="serviceDomainId"
+									selectedItems="<%=String.valueOf(serviceDomainId)%>"
 								/>
 							</aui:col>
 							<aui:col width="30">
@@ -88,6 +104,8 @@
 									showLabel="<%=false%>"
 									emptyOptionLabels="filter-by-gov-agency"
 									itemsEmptyOption="true"
+									itemNames="govAgencyId"
+									selectedItems="<%=String.valueOf(govAgencyId)%>"
 								/>
 							</aui:col>
 							<aui:col width="30">
@@ -102,10 +120,7 @@
 					</c:when>
 					<c:otherwise>
 						<c:if test="<%=tabs1.equals(DossierMgtUtil.TOP_TABS_DOSSIER) %>">
-						<%
-							searchURL.setParameter("mvcPath", templatePath + "frontofficedossierlist.jsp");
-							searchURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER);
-						%>
+				
 							<aui:row>
 								<aui:col width="50">
 									<aui:select name="dossierStatus" label="dossier-status" inlineField="<%=true %>" inlineLabel="left">
@@ -141,6 +156,31 @@
 		</div>
 	</aui:nav-bar-search>
 </aui:nav-bar>
+
+<aui:script use="liferay-util-list-fields,liferay-portlet-url">
+
+	Liferay.provide(window, '<portlet:namespace/>doSearch', function() {
+		
+		var A = AUI();
+		
+		var serviceDomainId = A.one('#<portlet:namespace/>serviceDomainId').val();
+		
+		var govAgencyId = A.one('#<portlet:namespace/>govAgencyId').val();
+
+		var fmSearch = A.one('#<portlet:namespace/>fmSearch');
+		
+		var action = fmSearch.attr('action');
+		
+		var portletURL = Liferay.PortletURL.createURL(action);
+		portletURL.setParameter("serviceDomainId", serviceDomainId);
+		portletURL.setParameter("govAgencyId", govAgencyId);
+		
+		fmSearch.setAttribute('action', portletURL.toString());
+		
+		submitForm(document.<portlet:namespace />fmSearch);
+	},['liferay-portlet-url']);
+</aui:script>
+
 
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.dossiermgt.frontoffice.toolbar.jsp");
