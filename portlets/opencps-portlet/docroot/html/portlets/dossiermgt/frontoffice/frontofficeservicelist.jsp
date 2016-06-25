@@ -66,7 +66,7 @@
 	<liferay-ui:search-container-results>
 		<%
 			try{
-				serviceBeansRecent = ServiceConfigLocalServiceUtil.getServiceConfigRecent(scopeGroupId, themeDisplay.getUserId(), 1, -1, -1, citizen != null ? 1 : 0, business != null ? 1 :0, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
+				serviceBeansRecent = ServiceConfigLocalServiceUtil.getServiceConfigRecent(scopeGroupId, themeDisplay.getUserId(), 1, -1, -1, citizen != null ? 1 : -1, business != null ? 1 :-1, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
 				
 			}catch(Exception e){}
 			total = serviceBeansRecent.size();
