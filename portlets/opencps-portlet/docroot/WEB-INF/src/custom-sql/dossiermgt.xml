@@ -413,4 +413,55 @@
 				opencps_service_config.govAgencyName ASC, opencps_serviceinfo.serviceName ASC
 		]]>
 	</sql>
+	
+	
+	<sql id="org.opencps.dossiermgt.service.persistence.ServiceConfigFinder.searchServiceConfigRecent">	
+		<![CDATA[
+			SELECT
+				opencps_service_config.*,
+				opencps_serviceinfo.serviceName,
+				opencps_serviceinfo.fullName,
+				opencps_serviceinfo.serviceNo
+			FROM
+				opencps_service_config
+			INNER JOIN
+				opencps_serviceinfo
+			ON
+				opencps_service_config.serviceInfoId = opencps_serviceinfo.serviceInfoId
+			WHERE
+				opencps_service_config.groupId = ?
+			
+			AND 
+				opencps_service_config.servicePortal = ?
+			AND 
+				opencps_service_config.serviceOnegate = ?
+			AND 
+				opencps_service_config.serviceBackoffice = ?
+			AND 
+				opencps_service_config.serviceCitizen = ?
+			AND 
+				opencps_service_config.serviceBusinees = ?
+				
+			AND opencps_service_config.serviceInfoId IN
+			(
+				SELECT 
+					recent.serviceInfoId
+				FROM
+					(
+						SELECT
+							opencps_dossier.serviceInfoId, 
+							count(*) as total,
+							opencps_dossier.userId
+						FROM 
+							opencps_dossier
+						WHERE
+							opencps_dossier.userId = ?
+						GROUP BY
+							opencps_dossier.serviceInfoId, 
+							opencps_dossier.userId
+						ORDER BY total DESC
+					) AS recent
+			)
+		]]>
+	</sql>
 </custom-sql>
