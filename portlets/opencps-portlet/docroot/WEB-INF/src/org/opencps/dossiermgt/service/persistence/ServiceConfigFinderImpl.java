@@ -61,6 +61,10 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 	public static final String SEARCH_SERVICE_CONFIG_ADVANCE_SQL =
 		ServiceConfigFinder.class
 			.getName() + ".searchServiceConfigAdvance";
+	
+	public static final String SEARCH_SERVICE_CONFIG_RECENT_SQL =
+					ServiceConfigFinder.class
+						.getName() + ".searchServiceConfigRecent";
 
 	public static final String SEARCH_SERVICE_CONFIG_BY_SERVICE_MODE_SQL =
 		ServiceConfigFinder.class
@@ -1092,6 +1096,257 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 
 			return (List<ServiceConfig>) QueryUtil
 				.list(q, getDialect(), start, end);
+		}
+		catch (Exception e) {
+			_log
+				.error(e);
+		}
+		finally {
+			session
+				.close();
+		}
+
+		return null;
+	}
+	
+	
+	/**
+	 * @param groupId
+	 * @param userId
+	 * @param servicePortal
+	 * @param serviceOnegate
+	 * @param serviceBackoffice
+	 * @param serviceCitizen
+	 * @param serviceBusinees
+	 * @param start
+	 * @param end
+	 * @param orderByComparator
+	 * @return
+	 */
+	public List getServiceConfigRecent(
+		long groupId, long userId, int servicePortal, int serviceOnegate,
+		int serviceBackoffice, int serviceCitizen, int serviceBusinees,
+		int start, int end, OrderByComparator orderByComparator) {
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			String sql = CustomSQLUtil
+				.get(SEARCH_SERVICE_CONFIG_RECENT_SQL);
+
+			if (servicePortal != 1 && servicePortal != 0) {
+
+				sql = StringUtil
+					.replace(sql,
+						"AND opencps_service_config.servicePortal = ?",
+						StringPool.BLANK);
+
+			}
+
+			if (serviceOnegate != 1 && serviceOnegate != 0) {
+
+				sql = StringUtil
+					.replace(sql,
+						"AND opencps_service_config.serviceOnegate = ?",
+						StringPool.BLANK);
+
+			}
+
+			if (serviceBackoffice != 1 && serviceBackoffice != 0) {
+
+				sql = StringUtil
+					.replace(sql,
+						"AND opencps_service_config.serviceBackoffice = ?",
+						StringPool.BLANK);
+
+			}
+			if (serviceCitizen != 1 && serviceCitizen != 0) {
+
+				sql = StringUtil
+					.replace(sql,
+						"AND opencps_service_config.serviceCitizen = ?",
+						StringPool.BLANK);
+
+			}
+
+			if (serviceBusinees != 1 && serviceBusinees != 0) {
+
+				sql = StringUtil
+					.replace(sql,
+						"AND opencps_service_config.serviceBusinees = ?",
+						StringPool.BLANK);
+
+			}
+
+			SQLQuery q = session
+				.createSQLQuery(sql);
+
+			q
+				.setCacheable(false);
+
+			q
+				.addEntity("ServiceConfig", ServiceConfigImpl.class);
+			q
+				.addScalar("serviceName", Type.STRING);
+			q
+				.addScalar("fullName", Type.STRING);
+			q
+				.addScalar("serviceNo", Type.STRING);
+
+			QueryPos qPos = QueryPos
+				.getInstance(q);
+
+			qPos
+				.add(groupId);
+
+			if (servicePortal == 1) {
+				qPos
+					.add(true);
+			}
+			else if (servicePortal == 0) {
+				qPos
+					.add(false);
+			}
+
+			if (serviceOnegate == 1) {
+				qPos
+					.add(true);
+			}
+			else if (serviceOnegate == 0) {
+				qPos
+					.add(false);
+			}
+
+			if (serviceBackoffice == 1) {
+				qPos
+					.add(true);
+			}
+			else if (serviceBackoffice == 0) {
+				qPos
+					.add(false);
+			}
+
+			if (serviceCitizen == 1) {
+				qPos
+					.add(true);
+			}
+			else if (serviceCitizen == 0) {
+				qPos
+					.add(false);
+			}
+
+			if (serviceBusinees == 1) {
+				qPos
+					.add(true);
+			}
+			else if (serviceBusinees == 0) {
+				qPos
+					.add(false);
+			}
+
+			qPos
+				.add(userId);
+
+			Iterator<Object[]> itr = (Iterator<Object[]>) QueryUtil
+				.list(q, getDialect(), start, end).iterator();
+
+			List<ServiceBean> serviceBeans = new ArrayList<ServiceBean>();
+
+			if (itr
+				.hasNext()) {
+				while (itr
+					.hasNext()) {
+					ServiceBean serviceBean = new ServiceBean();
+
+					Object[] objects = itr
+						.next();
+
+					ServiceConfig serviceConfig = (ServiceConfig) objects[0];
+
+					String serviceName = (String) objects[1];
+					String fullName = (String) objects[2];
+					String serviceNo = (String) objects[3];
+
+					serviceBean
+						.setCompanyId(serviceConfig
+							.getCompanyId());
+					serviceBean
+						.setDossierTemplateId(serviceConfig
+							.getDossierTemplateId());
+					serviceBean
+						.setFullName(fullName);
+
+					serviceBean
+						.setDomainCode(serviceConfig
+							.getDomainCode());
+
+					serviceBean
+						.setLevel(serviceConfig
+							.getServiceLevel());
+
+					serviceBean
+						.setGovAgencyCode(serviceConfig
+							.getGovAgencyCode());
+					serviceBean
+						.setGovAgencyIndex(serviceConfig
+							.getGovAgencyIndex());
+					serviceBean
+						.setGovAgencyName(serviceConfig
+							.getGovAgencyName());
+					serviceBean
+						.setGovAgencyOrganizationId(serviceConfig
+							.getGovAgencyOrganizationId());
+					serviceBean
+						.setGroupId(groupId);
+					serviceBean
+						.setServiceAdministrationIndex(serviceConfig
+							.getServiceAdministrationIndex());
+					serviceBean
+						.setServiceBackoffice(serviceConfig
+							.getServiceBackoffice());
+					serviceBean
+						.setServiceBusinees(serviceConfig
+							.getServiceBusinees());
+
+					serviceBean
+						.setServiceCitizen(serviceConfig
+							.getServiceCitizen());
+					serviceBean
+						.setServiceConfigId(serviceConfig
+							.getServiceConfigId());
+
+					serviceBean
+						.setServiceInfoId(serviceConfig
+							.getServiceInfoId());
+					serviceBean
+						.setServiceLevel(serviceConfig
+							.getServiceLevel());
+					serviceBean
+						.setServiceName(serviceName);
+					serviceBean
+						.setServiceNo(serviceNo);
+					serviceBean
+						.setServiceOnegate(serviceConfig
+							.getServiceOnegate());
+					serviceBean
+						.setServicePortal(serviceConfig
+							.getServicePortal());
+					serviceBean
+						.setServiceProcessId(serviceConfig
+							.getServiceProcessId());
+					serviceBean
+						.setUserId(serviceConfig
+							.getUserId());
+
+					serviceBeans
+						.add(serviceBean);
+
+				}
+			}
+
+			return serviceBeans;
 		}
 		catch (Exception e) {
 			_log

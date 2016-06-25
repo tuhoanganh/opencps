@@ -46,6 +46,8 @@
 	
 	List<ServiceBean> serviceBeans =  new ArrayList<ServiceBean>();
 	
+	List<ServiceBean> serviceBeansRecent =  new ArrayList<ServiceBean>();
+	
 	int totalCount = 0;
 	
 %>
@@ -54,49 +56,54 @@
 	title="service-list"
 />
 
+<h5>
+	<liferay-ui:message key="service-recent"/>
+</h5>
 
-<%-- <liferay-ui:search-container searchContainer="<%= new ServiceSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
+
+<liferay-ui:search-container searchContainer="<%= new ServiceSearch(renderRequest, 5, iteratorURL) %>">
 
 	<liferay-ui:search-container-results>
 		<%
-			ServiceSearchTerms searchTerms = (ServiceSearchTerms)searchContainer.getSearchTerms();
-		
-			String[] itemNames = null;
-			
-			
-			if(Validator.isNotNull(searchTerms.getKeywords())){
-				itemNames = CustomSQLUtil.keywords(searchTerms.getKeywords());
-			}
-			
 			try{
+				serviceBeansRecent = ServiceConfigLocalServiceUtil.getServiceConfigRecent(scopeGroupId, themeDisplay.getUserId(), 1, -1, -1, citizen != null ? 1 : -1, business != null ? 1 :-1, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
 				
-				%>
-					<%@include file="/html/portlets/dossiermgt/frontoffice/service_search_results.jspf" %>
-				<%
-			}catch(Exception e){
-				_log.error(e);
-			}
-		
-			total = 0;
-			results = services;
+			}catch(Exception e){}
+			total = serviceBeansRecent.size();
+			results = serviceBeansRecent;
 			
 			pageContext.setAttribute("results", results);
 			pageContext.setAttribute("total", total);
+			
 		%>
 	</liferay-ui:search-container-results>	
 		<liferay-ui:search-container-row 
-			className="org.opencps.dossiermgt.bean.Service" 
-			modelVar="service" 
+			className="org.opencps.dossiermgt.bean.ServiceBean" 
+			modelVar="serviceBean" 
 			keyProperty="serviceConfigId"
 		>
 			<%
-
+				
 				//id column
-				row.addText(String.valueOf(row.getPos() + 1));
+				row.addText(String.valueOf(row.getPos() + 1 + searchContainer.getStart()));
 
-				row.addText(service.getServiceName());
-				row.addText(service.getDomainCode());
-				row.addText(service.getGovAgencyName());
+				row.addText(Validator.isNotNull(serviceBean.getServiceName()) ? serviceBean.getServiceName() : StringPool.BLANK);
+				
+				DictItem dictItem = null;
+				String domainName = StringPool.DASH;
+				
+				try{
+					dictItem = DictItemLocalServiceUtil.getDictItem(GetterUtil.getLong(serviceBean.getDomainCode()));
+					domainName = dictItem.getItemName(locale);
+				}catch(Exception e){
+					
+				}
+				
+				row.addText(domainName);
+				
+				row.addText(serviceBean.getGovAgencyName());
+				
+				row.addText(String.valueOf(serviceBean.getLevel()));
 				
 				//action column
 				row.addJSP("center", SearchEntry.DEFAULT_VALIGN,"/html/portlets/dossiermgt/frontoffice/service_actions.jsp", config.getServletContext(), request, response);
@@ -104,7 +111,7 @@
 		</liferay-ui:search-container-row> 
 	
 	<liferay-ui:search-iterator/>
-</liferay-ui:search-container> --%>
+</liferay-ui:search-container>
 
 <liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
 
@@ -162,7 +169,7 @@
 			<%
 				
 				//id column
-				row.addText(String.valueOf(row.getPos() + 1) + searchContainer.getStart());
+				row.addText(String.valueOf(row.getPos() + 1 + searchContainer.getStart()));
 
 				row.addText(Validator.isNotNull(serviceBean.getServiceName()) ? serviceBean.getServiceName() : StringPool.BLANK);
 				

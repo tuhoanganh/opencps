@@ -122,16 +122,29 @@
 						<c:if test="<%=tabs1.equals(DossierMgtUtil.TOP_TABS_DOSSIER) %>">
 				
 							<aui:row>
-								<aui:col width="50">
-									<aui:select name="dossierStatus" label="dossier-status" inlineField="<%=true %>" inlineLabel="left">
-										<aui:option><liferay-ui:message key="dossier-status-fill"/></aui:option>
+								<aui:col width="30">
+									<datamgt:ddr 
+										depthLevel="1" 
+										dictCollectionCode="<%=ServiceUtil.SERVICE_DOMAIN %>" 
+										name="serviceDomain"
+										inlineField="<%=true%>"
+										inlineLabel="left"
+										showLabel="<%=false%>"
+										emptyOptionLabels="filter-by-service-domain"
+										itemsEmptyOption="true"
+										itemNames="serviceDomainId"
+										selectedItems="<%=String.valueOf(serviceDomainId)%>"
+									/>
+								</aui:col>
+								<aui:col width="30">
+									<aui:select name="dossierStatus" label="<%=StringPool.BLANK %>" inlineField="<%=true %>" inlineLabel="left">
+										<aui:option><liferay-ui:message key="dossier-status"/></aui:option>
 										<aui:option value="-1"><liferay-ui:message key="all"/></aui:option>
 											<%
 												for(Integer status : PortletUtil.getDossierStatus()){
 													%>
 														<aui:option 
 															value="<%= status%>"
-															
 														>
 															<%=PortletUtil.getDossierStatusLabel(status, locale) %>
 														</aui:option>
@@ -140,7 +153,7 @@
 											%>
 									</aui:select>
 								</aui:col>
-								<aui:col width="50">
+								<aui:col width="30">
 									<liferay-ui:input-search 
 										id="keywords1"
 										name="keywords"
