@@ -282,6 +282,30 @@ public class ServiceConfigLocalServiceImpl
 				serviceBusinees, serviceDomainIndex, govAgencyIndex, start, end,
 				orderByComparator);
 	}
+	
+	/**
+	 * @param groupId
+	 * @param userId
+	 * @param servicePortal
+	 * @param serviceOnegate
+	 * @param serviceBackoffice
+	 * @param serviceCitizen
+	 * @param serviceBusinees
+	 * @param start
+	 * @param end
+	 * @param orderByComparator
+	 * @return
+	 */
+	public List getServiceConfigRecent(
+		long groupId, long userId, int servicePortal, int serviceOnegate,
+		int serviceBackoffice, int serviceCitizen, int serviceBusinees,
+		int start, int end, OrderByComparator orderByComparator) {
+
+		return serviceConfigFinder
+			.getServiceConfigRecent(groupId, userId, servicePortal,
+				serviceOnegate, serviceBackoffice, serviceCitizen,
+				serviceBusinees, start, end, orderByComparator);
+	}
 
 	/**
 	 * @param start
