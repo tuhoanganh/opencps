@@ -306,10 +306,13 @@ public class ServiceMgtPortlet extends MVCPortlet {
 		SessionMessages.add(
 		    actionRequest, PortalUtil.getPortletId(actionRequest) +
 		        SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_ERROR_MESSAGE);
+		
 
 		try {
 			ServiceContext serviceContext =
 			    ServiceContextFactory.getInstance(actionRequest);
+			
+			serviceContext.setAddGuestPermissions(true);
 
 			if (templateFileId <= 0) {
 
