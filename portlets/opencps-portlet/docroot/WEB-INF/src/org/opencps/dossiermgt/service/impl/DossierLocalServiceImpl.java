@@ -31,6 +31,7 @@ import org.opencps.dossiermgt.model.FileGroup;
 import org.opencps.dossiermgt.service.base.DossierLocalServiceBaseImpl;
 import org.opencps.processmgt.model.WorkflowOutput;
 import org.opencps.servicemgt.model.ServiceInfo;
+import org.opencps.util.DLFolderUtil;
 import org.opencps.util.PortletConstants;
 import org.opencps.util.PortletUtil;
 
@@ -43,6 +44,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portlet.documentlibrary.model.DLFolder;
 
 /**
  * The implementation of the dossier local service. <p> All custom service
@@ -99,16 +101,16 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 * @throws PortalException
 	 */
 	public Dossier addDossier(
-	    long userId, long ownerOrganizationId, long dossierTemplateId,
-	    String templateFileNo, long serviceConfigId, long serviceInfoId,
-	    String serviceDomainIndex, long govAgencyOrganizationId,
-	    String govAgencyCode, String govAgencyName, int serviceMode,
-	    String serviceAdministrationIndex, String cityCode, String cityName,
-	    String districtCode, String districtName, String wardName,
-	    String wardCode, String subjectName, String subjectId, String address,
-	    String contactName, String contactTelNo, String contactEmail,
-	    String note, int dossierSource, int dossierStatus, long parentFolderId,
-	    String redirectPaymentURL, ServiceContext serviceContext)
+		long userId, long ownerOrganizationId, long dossierTemplateId,
+		String templateFileNo, long serviceConfigId, long serviceInfoId,
+		String serviceDomainIndex, long govAgencyOrganizationId,
+		String govAgencyCode, String govAgencyName, int serviceMode,
+		String serviceAdministrationIndex, String cityCode, String cityName,
+		String districtCode, String districtName, String wardName,
+		String wardCode, String subjectName, String subjectId, String address,
+		String contactName, String contactTelNo, String contactEmail,
+		String note, int dossierSource, int dossierStatus, long parentFolderId,
+		String redirectPaymentURL, ServiceContext serviceContext)
 		throws SystemException, PortalException {
 
 		long dossierId = counterLocalService
@@ -193,14 +195,15 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		dossier
 			.setSubjectName(subjectName);
 		dossier
-			.setUuid(PortalUUIDUtil
+			.setOid(PortalUUIDUtil
 				.generate());
 		dossier
 			.setWardCode(wardCode);
 		dossier
 			.setWardName(wardName);
-		
-		dossier.setKeypayRedirectUrl(redirectPaymentURL);
+
+		dossier
+			.setKeypayRedirectUrl(redirectPaymentURL);
 
 		dossier = dossierPersistence
 			.update(dossier);
@@ -246,7 +249,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 				dossier
 					.getDossierId(),
 				dossier
-					.getUuid(),
+					.getOid(),
 				classTypeId, serviceContext
 					.getAssetCategoryIds(),
 				serviceContext
@@ -301,7 +304,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		return dossierFinder
 			.countDossierByKeywordDomainAndStatus(groupId, keyword, domainCode,
 				dossierStatus);
-	}
+	};
 
 	/**
 	 * @param groupId
@@ -314,6 +317,88 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 
 		return dossierPersistence
 			.countByG_DS(groupId, dossierStatus);
+	}
+
+	/**
+	 * @param groupId
+	 * @param userId
+	 * @param keyword
+	 * @param serviceDomainTreeIndex
+	 * @param dossierStatus
+	 * @return
+	 */
+	public int countDossierByUser(
+		long groupId, long userId, String keyword,
+		String serviceDomainTreeIndex, int dossierStatus) {
+
+		return dossierFinder
+			.countDossierByUser(groupId, userId, keyword,
+				serviceDomainTreeIndex, dossierStatus);
+	}
+
+	/**
+	 * @param dossierId
+	 * @param accountFolder
+	 * @throws NoSuchDossierException
+	 * @throws SystemException
+	 * @throws PortalException
+	 */
+	public void deleteDossierByDossierId(long dossierId, DLFolder accountFolder)
+		throws NoSuchDossierException, SystemException, PortalException {
+
+		Dossier dossier = dossierPersistence
+			.findByPrimaryKey(dossierId);
+		List<FileGroup> fileGroups = fileGroupLocalService
+			.getFileGroupByDossierId(dossierId);
+		List<DossierFile> dossierFiles = dossierFileLocalService
+			.getDossierFileByDossierId(dossierId);
+
+		if (dossierFiles != null) {
+			for (DossierFile dossierFile : dossierFiles) {
+				dossierFileLocalService
+					.deleteDossierFile(dossierFile);
+			}
+		}
+
+		if (fileGroups != null) {
+			for (FileGroup fileGroup : fileGroups) {
+
+				fileGroupLocalService
+					.deleteFileGroup(fileGroup);
+
+			}
+		}
+
+		Indexer indexer = IndexerRegistryUtil
+			.nullSafeGetIndexer(Dossier.class);
+
+		indexer
+			.delete(dossier);
+
+		int counter = dossier
+			.getCounter();
+
+		DLFolder dlFolder = null;
+
+		try {
+			dlFolder = DLFolderUtil
+				.getFolder(dossier
+					.getGroupId(), accountFolder
+						.getFolderId(),
+					String
+						.valueOf(counter));
+
+			if (dlFolder != null) {
+				dlFolderLocalService
+					.deleteDLFolder(dlFolder);
+			}
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		dossierPersistence
+			.remove(dossier);
 	}
 
 	/**
@@ -461,6 +546,27 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	}
 
 	/**
+	 * @param groupId
+	 * @param userId
+	 * @param keyword
+	 * @param serviceDomainTreeIndex
+	 * @param dossierStatus
+	 * @param start
+	 * @param end
+	 * @param obc
+	 * @return
+	 */
+	public List getDossierByUser(
+		long groupId, long userId, String keyword,
+		String serviceDomainTreeIndex, int dossierStatus, int start, int end,
+		OrderByComparator obc) {
+
+		return dossierFinder
+			.searchDossierByUser(groupId, userId, keyword,
+				serviceDomainTreeIndex, dossierStatus, start, end, obc);
+	}
+
+	/**
 	 * @param dossierStatus
 	 * @param userId
 	 * @param govAgencyOrganizationId
@@ -603,7 +709,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		dossier
 			.setSubjectName(subjectName);
 		dossier
-			.setUuid(PortalUUIDUtil
+			.setOid(PortalUUIDUtil
 				.generate());
 		dossier
 			.setWardCode(wardCode);

@@ -33,82 +33,60 @@ public class ServiceDisplayTerms extends DisplayTerms {
 
 	public static final String CREATE_DATE = "createDate";
 
+	public static final String DOMAIN_CODE = "domainCode";
+
+	public static final String GOVAGENCY_INDEX = "govAgencyIndex";
+
+	public static final String GOVAGENCY_CODE = "govAgencyCode";
+
+	public static final String GOVAGENCY_NAME = "govAgencyName";
+
 	public static final String GROUP_ID = "groupId";
 
 	public static final String MODIFIED_DATE = "modifiedDate";
 
 	public static final String SERVICE_CONFIG_ID = "serviceConfigId";
-	
+
+	public static final String SERVICE_DOMAIN_INDEX = "serviceDomainIndex";
+
 	public static final String SERVICE_INFO_ID = "serviceInfoId";
-	
-	public static final String GOVAGENCY_CODE = "govAgencyCode";
-	
-	public static final String GOVAGENCY_NAME = "govAgencyName";
-	
+
 	public static final String SERVICE_NAME = "serviceName";
-	
-	public static final String DOMAIN_CODE = "domainCode";
 
 	public static final String USER_ID = "userId";
 
 	public ServiceDisplayTerms(PortletRequest portletRequest) {
 		super(
-		    portletRequest);
-		
+			portletRequest);
+
 		govAgencyCode = ParamUtil
-					    .getString(portletRequest, GOVAGENCY_CODE);
+			.getString(portletRequest, GOVAGENCY_CODE);
 
 		govAgencyName = ParamUtil
-		    .getString(portletRequest, GOVAGENCY_NAME);
-		
+			.getString(portletRequest, GOVAGENCY_NAME);
+
 		serviceInfoId = ParamUtil
-					    .getLong(portletRequest, SERVICE_INFO_ID);
-		
+			.getLong(portletRequest, SERVICE_INFO_ID);
+
 		serviceConfigId = ParamUtil
-					    .getLong(portletRequest, SERVICE_CONFIG_ID);
-		
+			.getLong(portletRequest, SERVICE_CONFIG_ID);
+
 		serviceName = ParamUtil
-					    .getString(portletRequest, SERVICE_NAME);
-		
+			.getString(portletRequest, SERVICE_NAME);
+
 		domainCode = ParamUtil
-					    .getString(portletRequest, DOMAIN_CODE);
-		
+			.getString(portletRequest, DOMAIN_CODE);
+
+		serviceDomainIndex = ParamUtil
+			.getString(portletRequest, SERVICE_DOMAIN_INDEX);
+
+		govAgencyIndex = ParamUtil
+			.getString(portletRequest, GOVAGENCY_INDEX);
+
 		userId = ParamUtil
-		    .getLong(portletRequest, USER_ID);
+			.getLong(portletRequest, USER_ID);
 
 		groupId = setGroupId(portletRequest);
-	}
-
-	public long setGroupId(PortletRequest portletRequest) {
-
-		groupId = ParamUtil
-		    .getLong(portletRequest, GROUP_ID);
-
-		if (groupId != 0) {
-			return groupId;
-		}
-
-		ThemeDisplay themeDisplay = (ThemeDisplay) portletRequest
-		    .getAttribute(WebKeys.THEME_DISPLAY);
-
-		return themeDisplay
-		    .getScopeGroupId();
-	}
-
-	public long getGroupId() {
-
-		return groupId;
-	}
-
-	public String getServiceName() {
-	
-		return serviceName;
-	}
-
-	
-	public void setServiceName(String serviceName) {
-	
-		this.serviceName = serviceName;
 	}
 
 	public long getCompanyId() {
@@ -116,50 +94,19 @@ public class ServiceDisplayTerms extends DisplayTerms {
 		return companyId;
 	}
 
-	public void setCompanyId(long companyId) {
+	public String getDomainCode() {
 
-		this.companyId = companyId;
+		return domainCode;
 	}
-
-	public long getUserId() {
-
-		return userId;
-	}
-
-	public void setUserId(long userId) {
-
-		this.userId = userId;
-	}
-
-	public long getServiceConfigId() {
-
-		return serviceConfigId;
-	}
-
-	public void setServiceConfigId(long serviceConfigId) {
-
-		this.serviceConfigId = serviceConfigId;
-	}
-
-	public long getServiceInfoId() {
-
-		return serviceInfoId;
-	}
-
-	public void setServiceInfoId(long serviceInfoId) {
-
-		this.serviceInfoId = serviceInfoId;
-	}
-
 
 	public String getGovAgencyCode() {
 
 		return govAgencyCode;
 	}
 
-	public void setGovAgencyCode(String govAgencyCode) {
+	public String getGovAgencyIndex() {
 
-		this.govAgencyCode = govAgencyCode;
+		return govAgencyIndex;
 	}
 
 	public String getGovAgencyName() {
@@ -167,30 +114,112 @@ public class ServiceDisplayTerms extends DisplayTerms {
 		return govAgencyName;
 	}
 
+	public long getGroupId() {
+
+		return groupId;
+	}
+
+	public long getServiceConfigId() {
+
+		return serviceConfigId;
+	}
+
+	public String getServiceDomainIndex() {
+
+		return serviceDomainIndex;
+	}
+
+	public long getServiceInfoId() {
+
+		return serviceInfoId;
+	}
+
+	public String getServiceName() {
+
+		return serviceName;
+	}
+
+	public long getUserId() {
+
+		return userId;
+	}
+
+	public void setCompanyId(long companyId) {
+
+		this.companyId = companyId;
+	}
+	public void setDomainCode(String domainCode) {
+
+		this.domainCode = domainCode;
+	}
+	public void setGovAgencyCode(String govAgencyCode) {
+
+		this.govAgencyCode = govAgencyCode;
+	}
+	public void setGovAgencyIndex(String govAgencyIndex) {
+
+		this.govAgencyIndex = govAgencyIndex;
+	}
 	public void setGovAgencyName(String govAgencyName) {
 
 		this.govAgencyName = govAgencyName;
 	}
-	
-	public String getDomainCode() {
-	
-		return domainCode;
-	}
+	public long setGroupId(PortletRequest portletRequest) {
 
-	public void setDomainCode(String domainCode) {
-	
-		this.domainCode = domainCode;
+		groupId = ParamUtil
+			.getLong(portletRequest, GROUP_ID);
+
+		if (groupId != 0) {
+			return groupId;
+		}
+
+		ThemeDisplay themeDisplay = (ThemeDisplay) portletRequest
+			.getAttribute(WebKeys.THEME_DISPLAY);
+
+		return themeDisplay
+			.getScopeGroupId();
 	}
+	public void setServiceConfigId(long serviceConfigId) {
+
+		this.serviceConfigId = serviceConfigId;
+	}
+	public void setServiceDomainIndex(String serviceDomainIndex) {
+
+		this.serviceDomainIndex = serviceDomainIndex;
+	}
+	public void setServiceInfoId(long serviceInfoId) {
+
+		this.serviceInfoId = serviceInfoId;
+	}
+	public void setServiceName(String serviceName) {
+
+		this.serviceName = serviceName;
+	}
+	public void setUserId(long userId) {
+
+		this.userId = userId;
+	}
+	
+	protected long companyId;
+
+	protected String domainCode;
+
+	protected String govAgencyCode;
+
+	protected String govAgencyIndex;
+
+	protected String govAgencyName;
 
 	protected long groupId;
-	protected long companyId;
-	protected long userId;
 
 	protected long serviceConfigId;
+
+	protected String serviceDomainIndex;
+
 	protected long serviceInfoId;
-	protected String domainCode;
-	protected String govAgencyCode;
-	protected String govAgencyName;
+
 	protected String serviceName;
-	
+
+	protected long userId;
+
 }

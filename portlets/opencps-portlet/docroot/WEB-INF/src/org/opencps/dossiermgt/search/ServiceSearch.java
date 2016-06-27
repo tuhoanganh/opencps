@@ -39,10 +39,11 @@ public class ServiceSearch extends SearchContainer<ServiceConfig> {
 	static List<String> headerNames = new ArrayList<String>();
 	static Map<String, String> orderableHeaders = new HashMap<String, String>();
 	static {
-		headerNames.add("no");
+		headerNames.add("#");
 		headerNames.add("service-name");
 		headerNames.add("domain-code");
 		headerNames.add("gov-agency-name");
+		headerNames.add("level");
 		headerNames.add("action");
 
 		orderableHeaders

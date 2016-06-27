@@ -17,6 +17,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+
+<%@page import="org.opencps.dossiermgt.bean.DossierBean"%>
 <%@page import="com.liferay.portal.kernel.util.Constants"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.dossiermgt.model.Dossier"%>
@@ -34,7 +36,9 @@
 <%
 	ServiceConfig serviceConfig = (ServiceConfig)request.getAttribute(WebKeys.SERVICE_CONFIG_ENTRY);
 	ResultRow row = (ResultRow)request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
-	Dossier dossier = (Dossier) row.getObject();
+	DossierBean dossierBean = (DossierBean) row.getObject();
+	
+	Dossier dossier = dossierBean.getDossier();
 %> 
 
 			
@@ -43,6 +47,7 @@
 		<portlet:param name="mvcPath" value='<%=templatePath + "edit_dossier.jsp" %>'/>
 		<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
 		<portlet:param name="<%=Constants.CMD %>" value="<%=Constants.VIEW %>"/>
+		<portlet:param name="isEditDossier" value="<%=String.valueOf(false) %>"/>
 		<portlet:param name="backURL" value="<%=currentURL %>"/>
 	</portlet:renderURL> 
 	<liferay-ui:icon 
@@ -59,6 +64,7 @@
 					<portlet:param name="mvcPath" value='<%=templatePath + "edit_dossier.jsp" %>'/>
 					<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
 					<portlet:param name="backURL" value="<%=currentURL %>"/>
+					<portlet:param name="isEditDossier" value="<%=String.valueOf(true) %>"/>
 				</portlet:renderURL> 
 		 		<liferay-ui:icon 
 		 			cssClass="search-container-action edit" 
@@ -95,7 +101,7 @@
 		 		</c:if>
 		 	</c:if>
 		 	
-		 	<c:if test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE) %>">
+		 	<c:if test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE) && dossier.getDossierStatus() == PortletConstants.DOSSIER_STATUS_NEW %>">
 		 		<portlet:actionURL var="deleteDossierURL" name="deleteDossier" >
 					<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
 					<portlet:param name="redirectURL" value="<%=currentURL %>"/>
@@ -105,7 +111,7 @@
 					cssClass="search-container-action delete"
 					confirmation="are-you-sure-delete-entry" 
 					message="delete"  
-					url="javascript:void(alert('Chức năng này hiện đang tạm khóa'))" 
+					url="<%=deleteDossierURL.toString() %>" 
 				/>
 		 	</c:if>
  		</c:when>

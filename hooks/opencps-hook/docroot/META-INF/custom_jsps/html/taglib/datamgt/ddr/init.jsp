@@ -1,5 +1,4 @@
 
-<%@page import="com.liferay.portal.kernel.util.StringPool"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -18,6 +17,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+
+<%@page import="com.liferay.portal.kernel.util.StringPool"%>
 <%@page import="com.liferay.portal.kernel.util.StringUtil"%>
 <%@ taglib uri="http://liferay.com/tld/aui" prefix="aui"%>
 <%@ include file="/html/taglib/taglib-init.jsp" %>
@@ -27,9 +28,12 @@
 	long initDictItemId = (Long)request.getAttribute("opencps-datamgt:ddr:initDictItemId");
 	int depthLevel = (Integer)request.getAttribute("opencps-datamgt:ddr:depthLevel");
 	String[] itemNames = StringUtil.split((String)request.getAttribute("opencps-datamgt:ddr:itemNames"));
+	boolean showLabel = GetterUtil.getBoolean(request.getAttribute("opencps-datamgt:ddr:showLabel"), true);
 	long[] selectedItems = StringUtil.split((String)request.getAttribute("opencps-datamgt:ddr:selectedItems"), 0L);
 	boolean[] itemsEmptyOption = StringUtil.split((String)request.getAttribute("opencps-datamgt:ddr:itemsEmptyOption"), false);
 	String renderMode = (String)request.getAttribute("opencps-datamgt:ddr:renderMode");
+	String[] emptyOptionLabels = StringUtil.split((String)request.getAttribute("opencps-datamgt:ddr:emptyOptionLabels"));
+	System.out.println(emptyOptionLabels.length);
 	String name = (String)request.getAttribute("opencps-datamgt:ddr:name");
 	String cssClass = (String)request.getAttribute("opencps-datamgt:ddr:cssClass");
 	String displayStyle = GetterUtil.getString((String)request.getAttribute("opencps-datamgt:ddr:displayStyle"), "horizontal");
