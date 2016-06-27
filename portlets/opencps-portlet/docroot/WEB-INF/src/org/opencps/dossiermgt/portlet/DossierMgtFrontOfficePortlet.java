@@ -1680,9 +1680,11 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	/**
 	 * @param actionRequest
 	 * @param actionResponse
+	 * @throws IOException
 	 */
 	public void updateDossier(
-		ActionRequest actionRequest, ActionResponse actionResponse) {
+		ActionRequest actionRequest, ActionResponse actionResponse)
+		throws IOException {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest
 			.getAttribute(WebKeys.THEME_DISPLAY);
@@ -1754,11 +1756,19 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		String note = ParamUtil
 			.getString(actionRequest, DossierDisplayTerms.NOTE);
 
+		String backURL = ParamUtil
+			.getString(actionRequest, "backURL");
+
 		String redirectURL = ParamUtil
 			.getString(actionRequest, "redirectURL");
 
 		String redirectPaymentURL = ParamUtil
 			.getString(request, DossierDisplayTerms.REDIRECT_PAYMENT_URL);
+
+		boolean isEditDossier = ParamUtil
+			.getBoolean(request, "isEditDossier");
+
+		boolean update = false;
 
 		try {
 			ServiceContext serviceContext = ServiceContextFactory
@@ -1883,8 +1893,11 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 			SessionMessages
 				.add(actionRequest, MessageKeys.DOSSIER_UPDATE_SUCCESS);
+
+			update = true;
 		}
 		catch (Exception e) {
+			update = false;
 			if (e instanceof EmptyDossierCityCodeException ||
 				e instanceof EmptyDossierDistrictCodeException ||
 				e instanceof EmptyDossierWardCodeException ||
@@ -1917,25 +1930,44 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		}
 		finally {
+			/*
+			 * actionRequest .setAttribute(WebKeys.DOSSIER_ENTRY, dossier);
+			 */
 
-			actionRequest
-				.setAttribute(WebKeys.DOSSIER_ENTRY, dossier);
+			if (update) {
+				if (Validator
+					.isNotNull(redirectURL)) {
 
-			actionResponse
-				.setRenderParameter("backURL", redirectURL);
+					actionResponse
+						.sendRedirect(
+							redirectURL + "&_" + WebKeys.DOSSIER_MGT_PORTLET +
+								"_dossierId=" + dossier
+									.getDossierId());
 
-			actionResponse
-				.setRenderParameter(DossierDisplayTerms.SERVICE_CONFIG_ID,
-					String
-						.valueOf(serviceConfigId));
-			actionResponse
-				.setRenderParameter(DossierDisplayTerms.DOSSIER_ID, String
-					.valueOf(dossier != null ? dossier
-						.getDossierId() : 0));
+				}
+			}
+			else {
 
-			actionResponse
-				.setRenderParameter("mvcPath",
-					"/html/portlets/dossiermgt/frontoffice/edit_dossier.jsp");
+				actionResponse
+					.setRenderParameter("backURL", backURL);
+
+				actionResponse
+					.setRenderParameter(DossierDisplayTerms.SERVICE_CONFIG_ID,
+						String
+							.valueOf(serviceConfigId));
+				actionResponse
+					.setRenderParameter(DossierDisplayTerms.DOSSIER_ID, String
+						.valueOf(dossier != null ? dossier
+							.getDossierId() : 0));
+
+				actionResponse
+					.setRenderParameter("isEditDossier", String
+						.valueOf(isEditDossier));
+
+				actionResponse
+					.setRenderParameter("mvcPath",
+						"/html/portlets/dossiermgt/frontoffice/edit_dossier.jsp");
+			}
 
 		}
 	}
