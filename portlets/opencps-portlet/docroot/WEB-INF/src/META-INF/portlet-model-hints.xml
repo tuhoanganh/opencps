@@ -396,7 +396,7 @@
 		<field name="userId" type="long" />
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
-		<field name="uuid" type="String" />
+		<field name="oid" type="String" />
 		<field name="externalRefNo" type="String" />
 		<field name="externalRefUrl" type="String">
 			<hint-collection name="URL" />
@@ -455,6 +455,7 @@
 		<field name="dossierStatus" type="int" />
 		<field name="dossierSource" type="int" />
 		<field name="keypayRedirectUrl" type="String" />
+		<field name="delayStatus" type="int" />
 	</model>
 	<model name="org.opencps.dossiermgt.model.DossierFile">
 		<field name="dossierFileId" type="long" />

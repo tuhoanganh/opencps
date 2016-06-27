@@ -148,9 +148,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	public void addAttachmentFile(
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
-		
+
 		AccountBean accountBean = AccountUtil
-						.getAccountBean(actionRequest);
+			.getAccountBean(actionRequest);
 
 		UploadPortletRequest uploadPortletRequest = PortalUtil
 			.getUploadPortletRequest(actionRequest);
@@ -605,7 +605,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			}
 		}
 	}
-	
+
 	/**
 	 * @param actionRequest
 	 * @param actionResponse
@@ -1040,11 +1040,84 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 	}
 
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws IOException
+	 */
 	public void deleteDossier(
-		ActionRequest actionRequest, ActionResponse actionResponse) {
+		ActionRequest actionRequest, ActionResponse actionResponse)
+		throws IOException {
 
 		long dossierId = ParamUtil
 			.getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
+
+		int dossierStatus = ParamUtil
+			.getInteger(actionRequest, DossierDisplayTerms.DOSSIER_STATUS);
+
+		String redirectURL = ParamUtil
+			.getString(actionRequest, "redirectURL");
+
+		AccountBean accountBean = AccountUtil
+			.getAccountBean(actionRequest);
+
+		try {
+			if (dossierStatus == PortletConstants.DOSSIER_STATUS_NEW) {
+				validateDeleteDossier(dossierId, accountBean);
+				DLFolder accountFolder = accountBean
+					.getAccountFolder();
+
+				DossierLocalServiceUtil
+					.deleteDossierByDossierId(dossierId, accountFolder);
+			}
+
+		}
+		catch (Exception e) {
+			if (e instanceof NoSuchDossierException) {
+				SessionErrors
+					.add(actionRequest, NoSuchDossierException.class);
+			}
+
+			else if (e instanceof NoSuchAccountException) {
+				SessionErrors
+					.add(actionRequest, NoSuchAccountException.class);
+			}
+			else if (e instanceof NoSuchAccountTypeException) {
+				SessionErrors
+					.add(actionRequest, NoSuchAccountTypeException.class);
+			}
+			else if (e instanceof NoSuchAccountFolderException) {
+				SessionErrors
+					.add(actionRequest, NoSuchAccountFolderException.class);
+			}
+			else if (e instanceof NoSuchAccountOwnUserIdException) {
+				SessionErrors
+					.add(actionRequest, NoSuchAccountOwnUserIdException.class);
+			}
+			else if (e instanceof NoSuchAccountOwnOrgIdException) {
+				SessionErrors
+					.add(actionRequest, NoSuchAccountOwnOrgIdException.class);
+			}
+			else if (e instanceof PermissionDossierException) {
+				SessionErrors
+					.add(actionRequest, PermissionDossierException.class);
+			}
+			else {
+				SessionErrors
+					.add(actionRequest, PortalException.class);
+			}
+
+			_log
+				.error(e);
+		}
+		finally {
+			if (Validator
+				.isNotNull(redirectURL)) {
+				actionResponse
+					.sendRedirect(redirectURL);
+			}
+		}
+
 	}
 
 	/**
@@ -1406,7 +1479,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			else {
 
 				DossierFileLocalServiceUtil
-					.deleteDossierFile(dossierFileId, dossierFile.getFileEntryId());
+					.deleteDossierFile(dossierFileId, dossierFile
+						.getFileEntryId());
 
 			}
 
@@ -1682,8 +1756,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		String redirectURL = ParamUtil
 			.getString(actionRequest, "redirectURL");
-		
-		String redirectPaymentURL = ParamUtil.getString(request, DossierDisplayTerms.REDIRECT_PAYMENT_URL);
+
+		String redirectPaymentURL = ParamUtil
+			.getString(request, DossierDisplayTerms.REDIRECT_PAYMENT_URL);
 
 		try {
 			ServiceContext serviceContext = ServiceContextFactory
@@ -1786,8 +1861,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 						PortletConstants.DOSSIER_SOURCE_DIRECT,
 						PortletConstants.DOSSIER_STATUS_NEW, dossierFolder
 							.getFolderId(),
-							redirectPaymentURL,
-						serviceContext);
+						redirectPaymentURL, serviceContext);
 
 			}
 			else {
@@ -2546,7 +2620,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			throw new NoSuchDossierPartException();
 		}
 
-
 		if (accountBean
 			.isBusiness()) {
 			if (dossier
@@ -2609,6 +2682,43 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		if (dossierFile == null) {
 			throw new NoSuchDossierFileException();
+		}
+	}
+
+	/**
+	 * @param dossierId
+	 * @param accountBean
+	 * @throws NoSuchAccountTypeException
+	 * @throws NoSuchAccountException
+	 * @throws NoSuchAccountFolderException
+	 * @throws NoSuchAccountOwnUserIdException
+	 * @throws NoSuchAccountOwnOrgIdException
+	 * @throws NoSuchDossierException
+	 */
+	private void validateDeleteDossier(long dossierId, AccountBean accountBean)
+		throws NoSuchAccountTypeException, NoSuchAccountException,
+		NoSuchAccountFolderException, NoSuchAccountOwnUserIdException,
+		NoSuchAccountOwnOrgIdException, NoSuchDossierException {
+
+		validateAccount(accountBean);
+
+		if (dossierId <= 0) {
+			throw new NoSuchDossierException();
+		}
+
+		if (dossierId > 0) {
+			Dossier dossier = null;
+
+			try {
+				dossier = DossierLocalServiceUtil
+					.getDossier(dossierId);
+			}
+			catch (Exception e) {
+			}
+
+			if (dossier == null) {
+				throw new NoSuchDossierException();
+			}
 		}
 	}
 
@@ -2730,7 +2840,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			throw new FileSizeException();
 		}
 	}
-	
+
 	/**
 	 * @param dossierId
 	 * @param dossierPartId
@@ -2745,8 +2855,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	 * @throws NoSuchAccountOwnOrgIdException
 	 * @throws PermissionDossierException
 	 * @throws FileSizeException
-	 * @throws NoSuchDossierFileException 
-	 * @throws NoSuchFileEntryException 
+	 * @throws NoSuchDossierFileException
+	 * @throws NoSuchFileEntryException
 	 */
 	private void validateCloneDossierFile(
 		long dossierId, long dossierPartId, long dossierFileId,
@@ -2758,24 +2868,27 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		NoSuchDossierFileException, NoSuchFileEntryException {
 
 		validateAccount(accountBean);
-		
-		if(dossierFileId <= 0){
+
+		if (dossierFileId <= 0) {
 			throw new NoSuchDossierFileException();
 		}
-		
+
 		DossierFile dossierFile = null;
-		
-		try{
-			dossierFile = DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
-		}catch(Exception e){
-			
+
+		try {
+			dossierFile = DossierFileLocalServiceUtil
+				.getDossierFile(dossierFileId);
 		}
-		
-		if(dossierFile == null){
+		catch (Exception e) {
+
+		}
+
+		if (dossierFile == null) {
 			throw new NoSuchDossierFileException();
 		}
-		
-		if(dossierFile.getFileEntryId() <= 0){
+
+		if (dossierFile
+			.getFileEntryId() <= 0) {
 			throw new NoSuchFileEntryException();
 		}
 

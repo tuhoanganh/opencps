@@ -22,8 +22,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.opencps.datamgt.NoSuchDictCollectionException;
 import org.opencps.datamgt.NoSuchDictItemException;
 import org.opencps.datamgt.NoSuchDictVersionException;
+import org.opencps.datamgt.model.DictCollection;
 import org.opencps.datamgt.model.DictItem;
 import org.opencps.datamgt.model.DictVersion;
 import org.opencps.datamgt.service.base.DictItemLocalServiceBaseImpl;
@@ -221,11 +223,7 @@ public class DictItemLocalServiceImpl extends DictItemLocalServiceBaseImpl {
 		return dictItemPersistence
 			.countByC_N(dictCollectionId, itemNames);
 	}
-	
-	public DictItem getDicItemByTreeIndex(String treeIndex)
-					throws NoSuchDictItemException, SystemException {
-		return dictItemPersistence.findByTreeInDexOne(treeIndex);
-	}
+
 	/**
 	 * <p> Phuong thu xoa DictItem theo dictItemId. Neu DictItem co cap con thi
 	 * khong xoa
@@ -248,6 +246,13 @@ public class DictItemLocalServiceImpl extends DictItemLocalServiceBaseImpl {
 			dictItemPersistence
 				.remove(dictItemId);
 		}
+	}
+
+	public DictItem getDicItemByTreeIndex(String treeIndex)
+		throws NoSuchDictItemException, SystemException {
+
+		return dictItemPersistence
+			.findByTreeInDexOne(treeIndex);
 	}
 
 	/**
@@ -289,6 +294,40 @@ public class DictItemLocalServiceImpl extends DictItemLocalServiceBaseImpl {
 			.findByC_C_I(dictCollectionId, itemCode);
 	}
 
+	/**
+	 * @param groupId
+	 * @param dictCollectionCode
+	 * @param itemCode
+	 * @return
+	 * @throws NoSuchDictItemException
+	 * @throws SystemException
+	 * @throws NoSuchDictCollectionException
+	 */
+	public DictItem getDictItemInuseByItemCode(
+		long groupId, String dictCollectionCode, String itemCode)
+		throws NoSuchDictItemException, SystemException,
+		NoSuchDictCollectionException {
+
+		DictCollection dictCollection = dictCollectionLocalService
+			.getDictCollection(groupId, dictCollectionCode);
+
+		if (dictCollection != null) {
+			return dictItemPersistence
+				.findByC_C_I(dictCollection
+					.getDictCollectionId(), itemCode);
+		}
+		else {
+			return null;
+		}
+
+	}
+
+	/**
+	 * @param dictCollectionId
+	 * @param itemName
+	 * @return
+	 * @throws SystemException
+	 */
 	public List<DictItem> getDictItems(long dictCollectionId, String itemName)
 		throws SystemException {
 
@@ -296,6 +335,15 @@ public class DictItemLocalServiceImpl extends DictItemLocalServiceBaseImpl {
 			.findByC_N(dictCollectionId, itemName);
 	}
 
+	/**
+	 * @param dictCollectionId
+	 * @param itemNames
+	 * @param start
+	 * @param end
+	 * @param obc
+	 * @return
+	 * @throws SystemException
+	 */
 	public List<DictItem> getDictItems(
 		long dictCollectionId, String[] itemNames, int start, int end,
 		OrderByComparator obc)
@@ -305,6 +353,11 @@ public class DictItemLocalServiceImpl extends DictItemLocalServiceBaseImpl {
 			.findByC_N(dictCollectionId, itemNames, start, end, obc);
 	}
 
+	/**
+	 * @param dictCollectionId
+	 * @return
+	 * @throws SystemException
+	 */
 	public List<DictItem> getDictItemsByDictCollectionId(long dictCollectionId)
 		throws SystemException {
 
@@ -312,6 +365,14 @@ public class DictItemLocalServiceImpl extends DictItemLocalServiceBaseImpl {
 			.findByDictCollectionId(dictCollectionId);
 	}
 
+	/**
+	 * @param dictCollectionId
+	 * @param start
+	 * @param end
+	 * @param obc
+	 * @return
+	 * @throws SystemException
+	 */
 	public List<DictItem> getDictItemsByDictCollectionId(
 		long dictCollectionId, int start, int end, OrderByComparator obc)
 		throws SystemException {
@@ -320,6 +381,23 @@ public class DictItemLocalServiceImpl extends DictItemLocalServiceBaseImpl {
 			.findByDictCollectionId(dictCollectionId, start, end, obc);
 	}
 
+	/**
+	 * @param dictVersionId
+	 * @return
+	 * @throws SystemException
+	 */
+	public List<DictItem> getDictItemsByDictVersionId(long dictVersionId)
+		throws SystemException {
+
+		return dictItemPersistence
+			.findByDictVersionId(dictVersionId);
+	}
+
+	/**
+	 * @param parentItemId
+	 * @return
+	 * @throws SystemException
+	 */
 	public List<DictItem> getDictItemsByParentItemId(long parentItemId)
 		throws SystemException {
 
@@ -327,6 +405,14 @@ public class DictItemLocalServiceImpl extends DictItemLocalServiceBaseImpl {
 			.findByParentItemId(parentItemId);
 	}
 
+	/**
+	 * @param parentItemId
+	 * @param start
+	 * @param end
+	 * @param obc
+	 * @return
+	 * @throws SystemException
+	 */
 	public List<DictItem> getDictItemsByParentItemId(
 		long parentItemId, int start, int end, OrderByComparator obc)
 		throws SystemException {
@@ -335,13 +421,11 @@ public class DictItemLocalServiceImpl extends DictItemLocalServiceBaseImpl {
 			.findByParentItemId(parentItemId, start, end, obc);
 	}
 
-	public List<DictItem> getDictItemsByDictVersionId(long dictVersionId)
-		throws SystemException {
-
-		return dictItemPersistence
-			.findByDictVersionId(dictVersionId);
-	}
-
+	/**
+	 * @param dictCollectionId
+	 * @return
+	 * @throws SystemException
+	 */
 	public List<DictItem> getDictItemsInUseByDictCollectionId(
 		long dictCollectionId)
 		throws SystemException {
@@ -350,6 +434,12 @@ public class DictItemLocalServiceImpl extends DictItemLocalServiceBaseImpl {
 			.findByD_I(dictCollectionId);
 	}
 
+	/**
+	 * @param dictCollectionId
+	 * @param parentItemId
+	 * @return
+	 * @throws SystemException
+	 */
 	public List<DictItem> getDictItemsInUseByDictCollectionIdAndParentItemId(
 		long dictCollectionId, long parentItemId)
 		throws SystemException {
@@ -359,6 +449,13 @@ public class DictItemLocalServiceImpl extends DictItemLocalServiceBaseImpl {
 				parentItemId);
 	}
 
+	/**
+	 * @param dictItemId
+	 * @param dictParentItemId
+	 * @return
+	 * @throws NoSuchDictItemException
+	 * @throws SystemException
+	 */
 	protected String getTreeIndex(long dictItemId, long dictParentItemId)
 		throws NoSuchDictItemException, SystemException {
 

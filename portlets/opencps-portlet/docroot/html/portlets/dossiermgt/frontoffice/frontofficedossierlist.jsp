@@ -17,6 +17,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+
+<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
+<%@page import="org.opencps.datamgt.model.DictItem"%>
+<%@page import="org.opencps.dossiermgt.bean.DossierBean"%>
 <%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
 <%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
@@ -71,9 +75,23 @@
 		<%
 			DossierSearchTerms searchTerms = (DossierSearchTerms)searchContainer.getSearchTerms();
 			
-			int dossierStatus = searchTerms.getDossierStatus();
+			int dossierStatus = ParamUtil.getInteger(request, "dossierStatus");
+			
+			searchTerms.setDossierStatus(dossierStatus);
+			
+			long serviceDomainId = ParamUtil.getLong(request, "serviceDomainId");
+		
+			DictItem domainItem = null;
+		
 			
 			try{
+				if(serviceDomainId > 0){
+					domainItem = DictItemLocalServiceUtil.getDictItem(serviceDomainId);
+				}
+
+				if(domainItem != null){
+					searchTerms.setServiceDomainIndex(domainItem.getTreeIndex());
+				}
 				
 				%>
 					<%@include file="/html/portlets/dossiermgt/frontoffice/dosier_search_results.jspf" %>
@@ -90,28 +108,23 @@
 		%>
 	</liferay-ui:search-container-results>	
 		<liferay-ui:search-container-row 
-			className="org.opencps.dossiermgt.model.Dossier" 
-			modelVar="dossier" 
+			className="org.opencps.dossiermgt.bean.DossierBean" 
+			modelVar="dossierBean" 
 			keyProperty="dossierId"
 		>
 			<%
 
+				Dossier dossier = dossierBean.getDossier();
 				//id column
-				row.addText(String.valueOf(dossier.getDossierId()));
-				row.addText(DateTimeUtil.convertDateToString(dossier.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT));
-				ServiceInfo serviceInfo = null;
-				String serviceName = StringPool.DASH;
-				try{
-					serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(dossier.getServiceInfoId());
-					serviceName = serviceInfo.getServiceName();
-				}catch(Exception e){}
-				row.addText(serviceName);
+				row.addText(String.valueOf(row.getPos() + 1 + searchContainer.getStart()));
+				//row.addText(DateTimeUtil.convertDateToString(dossier.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT));
+				
+				row.addText(dossierBean.getServiceName());
 				row.addText(dossier.getGovAgencyName());
 				row.addText(PortletUtil.getDossierStatusLabel(dossier.getDossierStatus(), locale));
-				row.addText(DateTimeUtil.convertDateToString(dossier.getReceiveDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT));
-				
+				row.addText(Validator.isNotNull(dossier.getReceiveDatetime()) ? DateTimeUtil.convertDateToString(dossier.getReceiveDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT): StringPool.DASH);
 				row.addText(dossier.getReceptionNo());
-				
+				row.addText(Validator.isNotNull(dossier.getFinishDatetime()) ? DateTimeUtil.convertDateToString(dossier.getFinishDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT): StringPool.DASH);
 				//action column
 				row.addJSP("center", SearchEntry.DEFAULT_VALIGN,"/html/portlets/dossiermgt/frontoffice/dossier_actions.jsp", config.getServletContext(), request, response);
 				

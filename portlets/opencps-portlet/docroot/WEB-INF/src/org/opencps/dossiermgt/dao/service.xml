@@ -191,7 +191,7 @@
 		
 		<!-- Other fields -->
 		
-        <column name="uuid" type="String"/>
+        <column type="String" name="oid"/>
         <column name="externalRefNo" type="String"/>
         <column name="externalRefUrl" type="String"/>
         <column name="ownerOrganizationId" type="long"/>
@@ -226,6 +226,7 @@
         <column name="dossierStatus" type="int"/>
         <column name="dossierSource" type="int"/>
         <column name="keypayRedirectUrl" type="String"/>
+        <column name="delayStatus" type="int"></column>
         <order by="desc">
             <order-column name="modifiedDate" order-by="desc"></order-column>
         </order>

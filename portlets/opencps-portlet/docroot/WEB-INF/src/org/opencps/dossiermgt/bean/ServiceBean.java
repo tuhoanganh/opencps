@@ -25,6 +25,8 @@ public class ServiceBean {
 	
 	
 	private long _companyId;
+	
+	private String _domainCode;
 
 	private long _dossierTemplateId;
 
@@ -39,6 +41,8 @@ public class ServiceBean {
 	private long _govAgencyOrganizationId;
 
 	private long _groupId;
+	
+	private int _level;
 
 	private String _serviceAdministrationIndex;
 
@@ -75,6 +79,18 @@ public class ServiceBean {
 	}
 
 	
+	public String getDomainCode() {
+	
+		return _domainCode;
+	}
+
+	
+	public void setDomainCode(String domainCode) {
+	
+		this._domainCode = domainCode;
+	}
+
+
 	public long getDossierTemplateId() {
 	
 		return _dossierTemplateId;
@@ -115,8 +131,19 @@ public class ServiceBean {
 	
 		return _groupId;
 	}
-
 	
+
+	public int getLevel() {
+	
+		return _level;
+	}
+	
+	public void setLevel(int level) {
+	
+		this._level = level;
+	}
+
+
 	public String getServiceAdministrationIndex() {
 	
 		return _serviceAdministrationIndex;

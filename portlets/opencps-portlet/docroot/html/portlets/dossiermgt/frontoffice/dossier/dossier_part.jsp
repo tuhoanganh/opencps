@@ -80,7 +80,7 @@
 	
 	List<DossierPart> dossierPartsLevel1 = new ArrayList<DossierPart>();
 	
-	boolean isEditDossier = true;
+	boolean isEditDossier = ParamUtil.getBoolean(request, "isEditDossier");
 	
 	if(dossierTemplate != null){
 		try{
