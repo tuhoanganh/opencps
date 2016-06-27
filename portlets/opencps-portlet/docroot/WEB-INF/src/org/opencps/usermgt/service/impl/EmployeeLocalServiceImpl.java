@@ -33,6 +33,7 @@ import org.opencps.util.PortletUtil;
 import org.opencps.util.WebKeys;
 
 import com.liferay.counter.service.CounterLocalServiceUtil;
+import com.liferay.portal.UserReminderQueryException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
@@ -53,6 +54,7 @@ import com.liferay.portal.model.Website;
 import com.liferay.portal.service.ContactLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserServiceUtil;
 import com.liferay.portlet.announcements.model.AnnouncementsDelivery;
 
@@ -503,6 +505,16 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 				organizationIds = new long[]{
 						workingUnit.getMappingOrganisationId()};
 			}
+			
+			// delete all mapping user with multiply roles
+			List<Role> roles = new ArrayList<Role>();
+			roles = RoleLocalServiceUtil.getUserRoles(employee.getMappingUserId());
+			
+			if(!roles.isEmpty()) {
+				
+				RoleLocalServiceUtil.deleteUserRoles(userId, roles);
+			}
+			// add new roles after delete
 			Role defaultRole = null;
 			try {
 				 defaultRole = RoleLocalServiceUtil
