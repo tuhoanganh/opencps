@@ -65,6 +65,7 @@
 	
 	String[][] categorySections = {dossierSections};
 	
+	boolean isEditDossier = ParamUtil.getBoolean(request, "isEditDossier");
 %>
 <c:choose>
 	<c:when test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) && Validator.isNotNull(accountType) &&
@@ -96,11 +97,23 @@
 		
 			<aui:model-context bean="<%= dossier %>" model="<%= Dossier.class %>" />
 			<aui:input name="<%= DossierDisplayTerms.REDIRECT_PAYMENT_URL %>" value="<%= redirectPaymentURL %>" type="hidden"></aui:input>
+			
+			<aui:input 
+				name="backURL" 
+				type="hidden" 
+				value="<%= backURL%>"
+			/>
 
 			<aui:input 
 				name="redirectURL" 
 				type="hidden" 
-				value="<%= backURL%>"
+				value="<%= currentURL%>"
+			/>
+			
+			<aui:input 
+				name="isEditDossier" 
+				type="hidden" 
+				value="<%= isEditDossier%>"
 			/>
 			
 			<aui:input 
