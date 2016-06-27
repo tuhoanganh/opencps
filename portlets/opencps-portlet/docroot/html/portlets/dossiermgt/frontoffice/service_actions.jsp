@@ -1,5 +1,4 @@
 
-<%@page import="org.opencps.dossiermgt.bean.ServiceBean"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -18,6 +17,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+
+<%@page import="org.opencps.dossiermgt.bean.ServiceBean"%>
 <%@page import="com.liferay.portal.kernel.util.Constants"%>
 <%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
@@ -46,6 +47,7 @@
 			<portlet:param name="<%=DossierDisplayTerms.SERVICE_CONFIG_ID %>" value="<%=String.valueOf(service.getServiceConfigId()) %>"/>
 			<portlet:param name="<%=Constants.CMD %>" value="<%=Constants.ADD %>"/>
 			<portlet:param name="backURL" value="<%=currentURL %>"/>
+			<portlet:param name="isEditDossier" value="<%=String.valueOf(true) %>"/>
 		</portlet:renderURL> 
  		<aui:button type="button" value="choose" href="<%=addDossierURL.toString() %>" cssClass="button-add-front-service"></aui:button>
  		<%-- <liferay-ui:icon cssClass="add" image="add" message="add" url="<%=addDossierURL.toString() %>" />  --%>
