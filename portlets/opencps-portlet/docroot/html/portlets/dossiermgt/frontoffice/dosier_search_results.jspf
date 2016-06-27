@@ -20,9 +20,7 @@
 
 
 <%
-	totalCount = DossierLocalServiceUtil.countDossier(scopeGroupId, 
-			StringPool.BLANK, dossierStatus);
-	dossiers = DossierLocalServiceUtil.getDossier(scopeGroupId, keyword, 
-			dossierStatus, searchContainer.getStart(), searchContainer.getEnd(), 
+	totalCount = DossierLocalServiceUtil.countDossierByUser(scopeGroupId, themeDisplay.getUserId(), searchTerms.getKeywords(), searchTerms.getServiceDomainIndex(), dossierStatus);
+	dossiers = DossierLocalServiceUtil.getDossierByUser(scopeGroupId, themeDisplay.getUserId(), searchTerms.getKeywords(), searchTerms.getServiceDomainIndex(), dossierStatus, searchContainer.getStart(), searchContainer.getEnd(), 
 			searchContainer.getOrderByComparator());
 %>
