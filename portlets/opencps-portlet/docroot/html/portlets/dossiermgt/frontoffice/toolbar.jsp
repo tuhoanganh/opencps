@@ -31,7 +31,14 @@
 <%@ include file="../init.jsp"%>
 
 <%
+	long serviceDomainId = ParamUtil.getLong(request, "serviceDomainId");
+	
+	long govAgencyId = ParamUtil.getLong(request, "govAgencyId");
+	
+	int dossierStatus = ParamUtil.getInteger(request, "dossierStatus");
+	
 	String tabs1 = ParamUtil.getString(request, "tabs1", DossierMgtUtil.TOP_TABS_DOSSIER);
+	
 	PortletURL searchURL = renderResponse.createRenderURL();
 	
 	boolean isListServiceConfig = ParamUtil.getBoolean(request, "isListServiceConfig", false);
@@ -45,11 +52,7 @@
 		searchURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER);
 	}
 	
-	long serviceDomainId = ParamUtil.getLong(request, "serviceDomainId");
 	
-	long govAgencyId = ParamUtil.getLong(request, "govAgencyId");
-	
-	int dossierStatus = ParamUtil.getInteger(request, "dossierStatus");
 %>
 
 <aui:nav-bar cssClass="custom-toolbar">

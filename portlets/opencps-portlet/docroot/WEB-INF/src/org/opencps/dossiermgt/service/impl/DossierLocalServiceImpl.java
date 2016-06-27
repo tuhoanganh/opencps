@@ -120,9 +120,9 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		Dossier dossier = dossierPersistence
 			.create(dossierId);
 
-		int count = dossierLocalService
-			.countByGroupId(serviceContext
-				.getScopeGroupId());
+		int count = dossierPersistence
+			.countByG_U(serviceContext
+				.getScopeGroupId(), userId);
 
 		int dossierNo = count + 1;
 
@@ -205,6 +205,14 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		dossier
 			.setKeypayRedirectUrl(redirectPaymentURL);
 
+		dlFolderLocalService
+			.addFolder(userId, serviceContext
+				.getScopeGroupId(), serviceContext
+					.getScopeGroupId(),
+				false, parentFolderId, String
+					.valueOf(dossierNo),
+				StringPool.BLANK, false, serviceContext);
+
 		dossier = dossierPersistence
 			.update(dossier);
 
@@ -231,14 +239,6 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 						serviceContext
 							.getLocale()),
 				now, PortletConstants.DOSSIER_LOG_NORMAL, serviceContext);
-
-		dlFolderLocalService
-			.addFolder(userId, serviceContext
-				.getScopeGroupId(), serviceContext
-					.getScopeGroupId(),
-				false, parentFolderId, String
-					.valueOf(dossierNo),
-				StringPool.BLANK, false, serviceContext);
 
 		long classTypeId = 0;
 
