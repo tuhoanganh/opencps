@@ -48,6 +48,8 @@
 	long serviceDomainId = ParamUtil.getLong(request, "serviceDomainId");
 	
 	long govAgencyId = ParamUtil.getLong(request, "govAgencyId");
+	
+	int dossierStatus = ParamUtil.getInteger(request, "dossierStatus");
 %>
 
 <aui:nav-bar cssClass="custom-toolbar">
@@ -139,12 +141,13 @@
 								<aui:col width="30">
 									<aui:select name="dossierStatus" label="<%=StringPool.BLANK %>" inlineField="<%=true %>" inlineLabel="left">
 										<aui:option><liferay-ui:message key="dossier-status"/></aui:option>
-										<aui:option value="-1"><liferay-ui:message key="all"/></aui:option>
+										<aui:option value="-1" selected="<%=dossierStatus == -1%>"><liferay-ui:message key="all"/></aui:option>
 											<%
 												for(Integer status : PortletUtil.getDossierStatus()){
 													%>
 														<aui:option 
 															value="<%= status%>"
+															selected="<%=dossierStatus == status%>"
 														>
 															<%=PortletUtil.getDossierStatusLabel(status, locale) %>
 														</aui:option>
@@ -176,9 +179,19 @@
 		
 		var A = AUI();
 		
+		var isListServiceConfig = '<%=isListServiceConfig%>'
+		
 		var serviceDomainId = A.one('#<portlet:namespace/>serviceDomainId').val();
 		
-		var govAgencyId = A.one('#<portlet:namespace/>govAgencyId').val();
+		var govAgencyId;
+		
+		var dossierStatus;
+		
+		if(isListServiceConfig == 'true'){
+			govAgencyId = A.one('#<portlet:namespace/>govAgencyId').val();
+		}else{
+			dossierStatus = A.one('#<portlet:namespace/>dossierStatus').val();
+		} 
 
 		var fmSearch = A.one('#<portlet:namespace/>fmSearch');
 		
@@ -186,7 +199,12 @@
 		
 		var portletURL = Liferay.PortletURL.createURL(action);
 		portletURL.setParameter("serviceDomainId", serviceDomainId);
-		portletURL.setParameter("govAgencyId", govAgencyId);
+		
+		if(isListServiceConfig == 'true'){
+			portletURL.setParameter("govAgencyId", govAgencyId);
+		}else{
+			portletURL.setParameter("dossierStatus", dossierStatus);
+		} 
 		
 		fmSearch.setAttribute('action', portletURL.toString());
 		
