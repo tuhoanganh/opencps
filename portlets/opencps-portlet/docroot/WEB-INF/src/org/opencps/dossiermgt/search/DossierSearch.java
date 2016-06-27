@@ -43,13 +43,14 @@ public class DossierSearch extends SearchContainer<Dossier> {
 	static List<String> headerNames = new ArrayList<String>();
 	static Map<String, String> orderableHeaders = new HashMap<String, String>();
 	static {
-		headerNames.add("no");
-		headerNames.add("create-date");
+		headerNames.add("#");
+		//headerNames.add("create-date");
 		headerNames.add("service-name");
 		headerNames.add("gov-agency-name");
 		headerNames.add("dossier-status");
 		headerNames.add("receive-datetime");
 		headerNames.add("reception-no");
+		headerNames.add("finish-date");
 		headerNames.add("action");
 
 		orderableHeaders
