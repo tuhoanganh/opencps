@@ -14,6 +14,7 @@
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>
 */
+
 package org.opencps.dossiermgt.service.persistence;
 
 import java.util.ArrayList;
@@ -61,10 +62,10 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 	public static final String SEARCH_SERVICE_CONFIG_ADVANCE_SQL =
 		ServiceConfigFinder.class
 			.getName() + ".searchServiceConfigAdvance";
-	
+
 	public static final String SEARCH_SERVICE_CONFIG_RECENT_SQL =
-					ServiceConfigFinder.class
-						.getName() + ".searchServiceConfigRecent";
+		ServiceConfigFinder.class
+			.getName() + ".searchServiceConfigRecent";
 
 	public static final String SEARCH_SERVICE_CONFIG_BY_SERVICE_MODE_SQL =
 		ServiceConfigFinder.class
@@ -219,7 +220,7 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 						"AND ((lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))",
 						StringPool.BLANK);
 			}
-			
+
 			if (servicePortal != 1 && servicePortal != 0) {
 
 				sql = StringUtil
@@ -308,10 +309,9 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 				}
 
 			}
-			
-			sql = CustomSQLUtil
-							.replaceAndOperator(sql, andOperator);
 
+			sql = CustomSQLUtil
+				.replaceAndOperator(sql, andOperator);
 
 			SQLQuery q = session
 				.createSQLQuery(sql);
@@ -389,7 +389,8 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 				.isNotNull(serviceDomainIndex) && !StringUtil
 					.contains(serviceDomainIndex, StringPool.PERIOD)) {
 				qPos
-					.add(serviceDomainIndex + StringPool.PERCENT);
+					.add(serviceDomainIndex + StringPool.PERIOD +
+						StringPool.PERCENT);
 				qPos
 					.add(serviceDomainIndex);
 			}
@@ -405,7 +406,8 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 				.isNotNull(govAgencyIndex) && !StringUtil
 					.contains(govAgencyIndex, StringPool.PERIOD)) {
 				qPos
-					.add(govAgencyIndex + StringPool.PERCENT);
+					.add(govAgencyIndex + StringPool.PERIOD +
+						StringPool.PERCENT);
 				qPos
 					.add(govAgencyIndex);
 			}
@@ -571,7 +573,7 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 						"AND ((lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))",
 						StringPool.BLANK);
 			}
-			
+
 			if (servicePortal != 1 && servicePortal != 0) {
 
 				sql = StringUtil
@@ -661,10 +663,9 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 				}
 
 			}
-			
-			sql = CustomSQLUtil
-							.replaceAndOperator(sql, andOperator);
 
+			sql = CustomSQLUtil
+				.replaceAndOperator(sql, andOperator);
 
 			SQLQuery q = session
 				.createSQLQuery(sql);
@@ -749,7 +750,8 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 				.isNotNull(serviceDomainIndex) && !StringUtil
 					.contains(serviceDomainIndex, StringPool.PERIOD)) {
 				qPos
-					.add(serviceDomainIndex + StringPool.PERCENT);
+					.add(serviceDomainIndex + StringPool.PERIOD +
+						StringPool.PERCENT);
 				qPos
 					.add(serviceDomainIndex);
 			}
@@ -765,7 +767,8 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 				.isNotNull(govAgencyIndex) && !StringUtil
 					.contains(govAgencyIndex, StringPool.PERIOD)) {
 				qPos
-					.add(govAgencyIndex + StringPool.PERCENT);
+					.add(govAgencyIndex + StringPool.PERIOD +
+						StringPool.PERCENT);
 				qPos
 					.add(govAgencyIndex);
 			}
@@ -1108,8 +1111,7 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 
 		return null;
 	}
-	
-	
+
 	/**
 	 * @param groupId
 	 * @param userId

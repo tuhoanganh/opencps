@@ -394,7 +394,7 @@
 		<field name="userId" type="long" />
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
-		<field name="uuid" type="String" />
+		<field name="oid" type="String" />
 		<field name="externalRefNo" type="String" />
 		<field name="externalRefUrl" type="String">
 			<hint-collection name="URL" />
