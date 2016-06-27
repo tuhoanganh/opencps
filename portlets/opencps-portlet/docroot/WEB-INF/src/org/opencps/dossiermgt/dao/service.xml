@@ -185,7 +185,7 @@
 		
 		<!-- Other fields -->
 		
-        <column name="uuid" type="String"/>
+        <column type="String" name="oid"/>
         <column name="externalRefNo" type="String"/>
         <column name="externalRefUrl" type="String"/>
         <column name="ownerOrganizationId" type="long"/>
