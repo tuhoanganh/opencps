@@ -1,5 +1,4 @@
 
-<%@page import="org.opencps.servicemgt.util.ServiceUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -19,6 +18,7 @@
  */
 %>
 
+<%@page import="org.opencps.servicemgt.util.ServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.bean.ServiceBean"%>
 <%@page import="com.liferay.portal.kernel.dao.search.SearchEntry"%>
 <%@page import="com.liferay.util.dao.orm.CustomSQLUtil"%>
