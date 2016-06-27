@@ -266,7 +266,7 @@ public class AccountUtil {
 				dossierDestinationFolder = PortletUtil
 					.getCitizenDossierDestinationFolder(citizen
 						.getGroupId(), citizen
-							.getUserId());
+							.getMappingUserId());
 
 			}
 			else if (accountType
