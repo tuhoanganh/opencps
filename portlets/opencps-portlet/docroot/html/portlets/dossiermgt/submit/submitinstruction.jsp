@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -72,7 +73,7 @@
 	>
 		<% 
 			int level = 0;
-			String levelName = "under-level-3";
+			String levelName = StringPool.BLANK;
 			ServiceConfig serviceConfig = null;
 			try {
 				serviceConfig = ServiceConfigLocalServiceUtil
@@ -112,10 +113,20 @@
 			value="<%=DictItemUtil.getNameDictItem(service.getAdministrationCode())%>"
 		/>
 		
-		<liferay-ui:search-container-column-text 
-			name="level" 
-			value="<%=levelName %>"
-		/>
+		<c:choose>
+			<c:when test="<%=levelName.equals(StringPool.BLANK) %>">
+				<liferay-ui:search-container-column-text 
+					name="level" 
+					value='<%=LanguageUtil.get(portletConfig ,themeDisplay.getLocale(), "under-level-3") %>'
+				/>
+			</c:when>
+			<c:otherwise>
+				<liferay-ui:search-container-column-text 
+					name="level" 
+					value="<%=levelName %>"
+				/>
+			</c:otherwise>
+		</c:choose>
 		
 		<liferay-ui:search-container-column-button 
 			name="description"
