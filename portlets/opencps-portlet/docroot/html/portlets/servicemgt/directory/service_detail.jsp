@@ -1,4 +1,5 @@
 
+<%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -26,7 +27,13 @@
 <%@ include file="../init.jsp" %>
 
 <%
-	ServiceInfo serviceInfo = (ServiceInfo) request.getAttribute(WebKeys.SERVICE_ENTRY);
+	long serviceinfoId = ParamUtil.getLong(request, "serviceinfoId");
+	ServiceInfo serviceInfo = null;
+	try {
+		serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(serviceinfoId);
+	} catch (Exception e) {
+		//nothing to do
+	}
 	
 	String backURL = ParamUtil.getString(request, "backURL");
 	
