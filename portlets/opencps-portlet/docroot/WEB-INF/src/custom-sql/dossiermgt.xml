@@ -509,5 +509,82 @@
 		]]>
 	</sql>
 	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierFileFinder.countDossierFileAdvance">	
+		<![CDATA[
+			SELECT
+				count(*) AS COUNT_VALUE
+			FROM
+				opencps_dossier_file
+			INNER JOIN
+				opencps_dossier 
+			ON
+				opencps_dossier_file.dossierId = opencps_dossier.dossierId
+			INNER JOIN
+				opencps_dossierpart 
+			ON
+				opencps_dossier_file.dossierPartId = opencps_dossierpart.dossierpartId
+			AND
+				opencps_dossierpart.dossierpartId = ?
+			WHERE
+				(opencps_dossier_file.groupId = ?)
+			AND 
+				(opencps_dossier_file.removed = ?)
+			AND
+				(lower(opencps_dossier_file.displayName) LIKE ? [$AND_OR_NULL_CHECK$])
+			OR 
+				(lower(opencps_dossier_file.dossierFileNo) LIKE ? [$AND_OR_NULL_CHECK$])
+			AND 
+				(opencps_dossier_file.templateFileNo = ?)
+			AND 
+				(opencps_dossier_file.original = ?)
+			AND 
+				(opencps_dossier_file.ownerUserId = ?)
+			AND 
+				(opencps_dossier_file.ownerOrganizationId = ?)
+			AND 
+				(opencps_dossier_file.fileEntryId > 0)
+		]]>
+	</sql>
 	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierFileFinder.searchDossierFileAdvance">	
+		<![CDATA[
+			SELECT
+				opencps_dossier_file.*,
+				opencps_dossier.serviceInfoId,
+				opencps_dossier.receptionNo,
+				opencps_dossierpart.partType
+			FROM
+				opencps_dossier_file
+			INNER JOIN
+				opencps_dossier 
+			ON
+				opencps_dossier_file.dossierId = opencps_dossier.dossierId
+			INNER JOIN
+				opencps_dossierpart 
+			ON
+				opencps_dossier_file.dossierPartId = opencps_dossierpart.dossierpartId
+			AND
+				opencps_dossierpart.dossierpartId = ?
+			WHERE
+				(opencps_dossier_file.groupId = ?)
+			AND 
+				(opencps_dossier_file.removed = ?)
+			AND
+				(lower(opencps_dossier_file.displayName) LIKE ? [$AND_OR_NULL_CHECK$])
+			OR 
+				(lower(opencps_dossier_file.dossierFileNo) LIKE ? [$AND_OR_NULL_CHECK$])
+			AND 
+				(opencps_dossier_file.templateFileNo = ?)
+			AND 
+				(opencps_dossier_file.original = ?)
+			AND 
+				(opencps_dossier_file.ownerUserId = ?)
+			AND 
+				(opencps_dossier_file.ownerOrganizationId = ?)
+			AND 
+				(opencps_dossier_file.fileEntryId > 0)
+			ORDER BY 
+				opencps_dossier.dossierId DESC, opencps_dossier_file.modifiedDate DESC, opencps_dossier_file.displayName ASC
+		]]>
+	</sql>
 </custom-sql>
