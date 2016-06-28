@@ -41,8 +41,8 @@
 	headerNames.add("dossier-file-date");
 	headerNames.add("display-name");
 	headerNames.add("dossier-name");
-	headerNames.add("dossier-type");
-	headerNames.add("original");
+	headerNames.add("dossier-file-type");
+	headerNames.add("original-file");
 	
 	String headers = StringUtil.merge(headerNames);
 	
