@@ -298,6 +298,10 @@
 				(lower(opencps_dossier_file.dossierFileNo) LIKE ? [$AND_OR_NULL_CHECK$])
 			AND 
 				(opencps_dossier_file.templateFileNo = ?)
+			AND 
+				(opencps_dossier_file.ownerUserId = ?)
+			AND 
+				(opencps_dossier_file.ownerOrganizationId = ?)
 		]]>
 	</sql>
 	
@@ -317,32 +321,14 @@
 				(lower(opencps_dossier_file.dossierFileNo) LIKE ? [$AND_OR_NULL_CHECK$])
 			AND 
 				(opencps_dossier_file.templateFileNo = ?)
+			AND 
+				(opencps_dossier_file.ownerUserId = ?)
+			AND 
+				(opencps_dossier_file.ownerOrganizationId = ?)
 			ORDER BY 
 				opencps_dossier_file.modifiedDate DESC, opencps_dossier_file.displayName ASC
 		]]>
 	</sql>
-	
-	<sql id="org.opencps.dossiermgt.service.persistence.DossierFileFinder.searchDossierFileByG_K_T_R">	
-		<![CDATA[
-			SELECT
-				*
-			FROM
-				opencps_dossier_file
-			WHERE
-				(opencps_dossier_file.groupId = ?)
-			AND 
-				(opencps_dossier_file.removed = ?)
-			AND
-				(lower(opencps_dossier_file.displayName) LIKE ? [$AND_OR_NULL_CHECK$])
-			OR 
-				(lower(opencps_dossier_file.dossierFileNo) LIKE ? [$AND_OR_NULL_CHECK$])
-			AND 
-				(opencps_dossier_file.templateFileNo = ?)
-			ORDER BY 
-				opencps_dossier_file.modifiedDate DESC, opencps_dossier_file.displayName ASC
-		]]>
-	</sql>
-	
 	
 	<sql id="org.opencps.dossiermgt.service.persistence.ServiceConfigFinder.countServiceConfigAdvance">	
 		<![CDATA[
@@ -522,4 +508,6 @@
 			ORDER BY opencps_dossier.modifiedDate DESC
 		]]>
 	</sql>
+	
+	
 </custom-sql>

@@ -43,7 +43,6 @@ import org.opencps.dossiermgt.util.DossierMgtUtil;
 
 /**
  * @author trungnt
- *
  */
 public class DossierFileFinderImpl extends BasePersistenceImpl<DossierFile>
 	implements DossierFileFinder {
@@ -223,7 +222,8 @@ public class DossierFileFinderImpl extends BasePersistenceImpl<DossierFile>
 	 * @return
 	 */
 	public int countDossierFile(
-		long groupId, String keyword, String templateFileNo, int removed) {
+		long groupId, long ownerUserId, long ownerOrganizationId,
+		String keyword, String templateFileNo, int removed) {
 
 		String[] keywords = null;
 
@@ -237,8 +237,8 @@ public class DossierFileFinderImpl extends BasePersistenceImpl<DossierFile>
 			andOperator = true;
 		}
 
-		return countDossierFile(groupId, keywords, templateFileNo, removed,
-			andOperator);
+		return countDossierFile(groupId, ownerUserId, ownerOrganizationId,
+			keywords, templateFileNo, removed, andOperator);
 	}
 
 	/**
@@ -250,7 +250,8 @@ public class DossierFileFinderImpl extends BasePersistenceImpl<DossierFile>
 	 * @return
 	 */
 	private int countDossierFile(
-		long groupId, String[] keywords, String templateFileNo, int removed,
+		long groupId, long ownerUserId, long ownerOrganizationId,
+		String[] keywords, String templateFileNo, int removed,
 		boolean andOperator) {
 
 		Session session = null;
@@ -288,7 +289,21 @@ public class DossierFileFinderImpl extends BasePersistenceImpl<DossierFile>
 			if (Validator
 				.isNull(templateFileNo)) {
 				sql = StringUtil
-					.replace(sql, "AND (opencps_dossier_file.templateFileNo = ?)",
+					.replace(sql,
+						"AND (opencps_dossier_file.templateFileNo = ?)",
+						StringPool.BLANK);
+			}
+
+			if (ownerUserId <= 0) {
+				sql = StringUtil
+					.replace(sql, "AND (opencps_dossier_file.ownerUserId = ?)",
+						StringPool.BLANK);
+			}
+
+			if (ownerOrganizationId <= 0) {
+				sql = StringUtil
+					.replace(sql,
+						"AND (opencps_dossier_file.ownerOrganizationId = ?)",
 						StringPool.BLANK);
 			}
 
@@ -322,6 +337,17 @@ public class DossierFileFinderImpl extends BasePersistenceImpl<DossierFile>
 				qPos
 					.add(templateFileNo);
 			}
+
+			if (ownerUserId > 0) {
+				qPos
+					.add(ownerUserId);
+			}
+
+			if (ownerOrganizationId > 0) {
+				qPos
+					.add(ownerOrganizationId);
+			}
+
 			Iterator<Integer> itr = q
 				.iterate();
 
@@ -510,8 +536,9 @@ public class DossierFileFinderImpl extends BasePersistenceImpl<DossierFile>
 	}
 
 	public List<DossierFile> searchDossierFile(
-		long groupId, String keyword, String templateFileNo, int removed,
-		int start, int end, OrderByComparator obc) {
+		long groupId, long ownerUserId, long ownerOrganizationId,
+		String keyword, String templateFileNo, int removed, int start, int end,
+		OrderByComparator obc) {
 
 		String[] keywords = null;
 		boolean andOperator = false;
@@ -524,8 +551,8 @@ public class DossierFileFinderImpl extends BasePersistenceImpl<DossierFile>
 			andOperator = true;
 		}
 
-		return searchDossierFile(groupId, keywords, templateFileNo, removed,
-			start, end, obc, andOperator);
+		return searchDossierFile(groupId, ownerUserId, ownerOrganizationId,
+			keywords, templateFileNo, removed, start, end, obc, andOperator);
 	}
 
 	/**
@@ -540,8 +567,9 @@ public class DossierFileFinderImpl extends BasePersistenceImpl<DossierFile>
 	 * @return
 	 */
 	private List<DossierFile> searchDossierFile(
-		long groupId, String[] keywords, String templateFileNo, int removed,
-		int start, int end, OrderByComparator obc, boolean andOperator) {
+		long groupId, long ownerUserId, long ownerOrganizationId,
+		String[] keywords, String templateFileNo, int removed, int start,
+		int end, OrderByComparator obc, boolean andOperator) {
 
 		Session session = null;
 
@@ -578,7 +606,21 @@ public class DossierFileFinderImpl extends BasePersistenceImpl<DossierFile>
 			if (Validator
 				.isNull(templateFileNo)) {
 				sql = StringUtil
-					.replace(sql, "AND (opencps_dossier_file.templateFileNo = ?)",
+					.replace(sql,
+						"AND (opencps_dossier_file.templateFileNo = ?)",
+						StringPool.BLANK);
+			}
+
+			if (ownerUserId <= 0) {
+				sql = StringUtil
+					.replace(sql, "AND (opencps_dossier_file.ownerUserId = ?)",
+						StringPool.BLANK);
+			}
+
+			if (ownerOrganizationId <= 0) {
+				sql = StringUtil
+					.replace(sql,
+						"AND (opencps_dossier_file.ownerOrganizationId = ?)",
 						StringPool.BLANK);
 			}
 
@@ -611,6 +653,17 @@ public class DossierFileFinderImpl extends BasePersistenceImpl<DossierFile>
 				qPos
 					.add(templateFileNo);
 			}
+
+			if (ownerUserId > 0) {
+				qPos
+					.add(ownerUserId);
+			}
+
+			if (ownerOrganizationId > 0) {
+				qPos
+					.add(ownerOrganizationId);
+			}
+
 			return (List<DossierFile>) QueryUtil
 				.list(q, getDialect(), start, end);
 		}

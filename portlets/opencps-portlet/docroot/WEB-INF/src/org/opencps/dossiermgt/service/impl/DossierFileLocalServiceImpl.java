@@ -157,8 +157,9 @@ public class DossierFileLocalServiceImpl
 
 		dossierFile
 			.setOwnerOrganizationId(ownerOrganizationId);
-		
-		dossierFile.setTemplateFileNo(templateFileNo);
+
+		dossierFile
+			.setTemplateFileNo(templateFileNo);
 
 		if (fileGroupId > 0) {
 			version = DossierFileLocalServiceUtil
@@ -204,7 +205,7 @@ public class DossierFileLocalServiceImpl
 
 		dossierFile = dossierFilePersistence
 			.update(dossierFile);
-		
+
 		Indexer indexer = IndexerRegistryUtil
 			.nullSafeGetIndexer(DossierFile.class);
 
@@ -213,8 +214,7 @@ public class DossierFileLocalServiceImpl
 
 		return dossierFile;
 	}
-	
-	
+
 	/**
 	 * @param oldDossierFileId
 	 * @param folderId
@@ -549,7 +549,7 @@ public class DossierFileLocalServiceImpl
 		return dossierFilePersistence
 			.countByD_DP_GF(dossierId, dossierPartId, groupFileId);
 	}
-	
+
 	/**
 	 * @param groupId
 	 * @param keyword
@@ -559,11 +559,13 @@ public class DossierFileLocalServiceImpl
 	 * @throws SystemException
 	 */
 	public int countDossierFile(
-		long groupId, String keyword, String templateFileNo, int removed)
+		long groupId, long ownerUserId, long ownerOrganizationId,
+		String keyword, String templateFileNo, int removed)
 		throws SystemException {
 
 		return dossierFileFinder
-			.countDossierFile(groupId, keyword, templateFileNo, removed);
+			.countDossierFile(groupId, ownerUserId, ownerOrganizationId,
+				keyword, templateFileNo, removed);
 	}
 
 	/**
@@ -714,7 +716,7 @@ public class DossierFileLocalServiceImpl
 			.findByDossierFileInUseByGroupFileId(dossierId, dossierPartId,
 				groupFileId);
 	}
-	
+
 	/**
 	 * @param groupId
 	 * @param keyword
@@ -727,13 +729,14 @@ public class DossierFileLocalServiceImpl
 	 * @throws SystemException
 	 */
 	public List<DossierFile> searchDossierFile(
-		long groupId, String keyword, String templateFileNo, int removed,
-		int start, int end, OrderByComparator obc)
+		long groupId, long ownerUserId, long ownerOrganizationId,
+		String keyword, String templateFileNo, int removed, int start, int end,
+		OrderByComparator obc)
 		throws SystemException {
 
 		return dossierFileFinder
-			.searchDossierFile(groupId, keyword, templateFileNo, removed, start,
-				end, obc);
+			.searchDossierFile(groupId, ownerUserId, ownerOrganizationId,
+				keyword, templateFileNo, removed, start, end, obc);
 	}
 
 	/**
@@ -802,7 +805,6 @@ public class DossierFileLocalServiceImpl
 		return dossierFile;
 	}
 
-	
 	/**
 	 * @param dossierFileId
 	 * @param userId
@@ -871,7 +873,7 @@ public class DossierFileLocalServiceImpl
 		return dossierFilePersistence
 			.update(dossierFile);
 	}
-	
+
 	/**
 	 * @param dossierFileId
 	 * @param folderId
@@ -915,12 +917,19 @@ public class DossierFileLocalServiceImpl
 		return dossierFilePersistence
 			.update(dossierFile);
 	}
-	
-	public DossierFile fetchByTemplateFileNoDossierId_First(long dossierId, String templateFileNo) throws SystemException {
-		OrderByComparatorFactory orderByComparatorFactory = OrderByComparatorFactoryUtil.getOrderByComparatorFactory();
-		OrderByComparator comparator = orderByComparatorFactory.create("DossierFile", "modifiedDate", true);
-		return dossierFilePersistence.fetchByTemplateFileNoDossierId_First(dossierId, templateFileNo, comparator);
+
+	public DossierFile fetchByTemplateFileNoDossierId_First(
+		long dossierId, String templateFileNo)
+		throws SystemException {
+
+		OrderByComparatorFactory orderByComparatorFactory =
+			OrderByComparatorFactoryUtil
+				.getOrderByComparatorFactory();
+		OrderByComparator comparator = orderByComparatorFactory
+			.create("DossierFile", "modifiedDate", true);
+		return dossierFilePersistence
+			.fetchByTemplateFileNoDossierId_First(dossierId, templateFileNo,
+				comparator);
 	}
-	
 
 }
