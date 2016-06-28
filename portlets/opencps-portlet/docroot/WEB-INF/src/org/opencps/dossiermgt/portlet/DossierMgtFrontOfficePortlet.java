@@ -125,6 +125,7 @@ import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.DuplicateFileException;
+import com.liferay.portlet.documentlibrary.DuplicateFolderNameException;
 import com.liferay.portlet.documentlibrary.FileSizeException;
 import com.liferay.portlet.documentlibrary.NoSuchFileEntryException;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
@@ -1823,7 +1824,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				.getDictItem(districtId);
 			DictItem ward = DictItemLocalServiceUtil
 				.getDictItem(wardId);
-
+			
 			if (city != null) {
 				cityCode = city
 					.getItemCode();
@@ -1913,7 +1914,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				e instanceof OutOfLengthDossierContactTelNoException ||
 				e instanceof EmptyDossierContactNameException ||
 				e instanceof OutOfLengthDossierAddressException ||
-				e instanceof EmptyDossierFileException) {
+				e instanceof EmptyDossierFileException ||
+				e instanceof DuplicateFolderNameException) {
 
 				SessionErrors
 					.add(actionRequest, e

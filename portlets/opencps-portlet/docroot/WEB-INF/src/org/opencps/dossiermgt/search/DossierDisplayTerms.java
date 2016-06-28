@@ -120,7 +120,7 @@ public class DossierDisplayTerms extends DisplayTerms {
 		    .getString(portletRequest, RECEPTION_NO);
 
 		dossierStatus = ParamUtil
-		    .getInteger(portletRequest, DOSSIER_STATUS, -1);
+		    .getInteger(portletRequest, DOSSIER_STATUS, 0);
 
 		serviceDomainCode = ParamUtil
 			    .getString(portletRequest, SERVICE_DOMAIN_CODE);
