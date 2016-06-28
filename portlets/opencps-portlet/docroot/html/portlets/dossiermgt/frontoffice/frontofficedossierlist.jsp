@@ -48,10 +48,9 @@
 <liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
 
 <%
-	int dossierStatus = ParamUtil.getInteger(request, "dossierStatus");
+	int dossierStatus = ParamUtil.getInteger(request, "dossierStatus", 0);
 	
 	long serviceDomainId = ParamUtil.getLong(request, "serviceDomainId");
-
 
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "frontofficedossierlist.jsp");

@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portlet.documentlibrary.DuplicateFolderNameException"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -45,7 +46,7 @@
 <%@ include file="../../init.jsp"%>
 
 <%
-	
+
 	Dossier dossier = (Dossier) request.getAttribute(WebKeys.DOSSIER_ENTRY);
 
 	ServiceConfig serviceConfig = (ServiceConfig) request.getAttribute(WebKeys.SERVICE_CONFIG_ENTRY);
@@ -121,6 +122,12 @@
 	exception="<%= InvalidDossierObjectException.class %>" 
 	message="<%=InvalidDossierObjectException.class.getName() %>"
 />
+
+<liferay-ui:error 
+	exception="<%= DuplicateFolderNameException.class %>" 
+	message="<%=DuplicateFolderNameException.class.getName() %>"
+/>
+
 
 <aui:row>
 	<aui:col width="70">
