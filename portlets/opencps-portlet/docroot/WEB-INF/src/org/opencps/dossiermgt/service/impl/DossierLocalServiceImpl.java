@@ -211,7 +211,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 			folder = DLFolderUtil
 				.getFolder(serviceContext
 					.getScopeGroupId(), parentFolderId, String
-						.valueOf(count));
+						.valueOf(dossierNo));
 		}
 		catch (Exception e) {
 			// TODO: handle exception

@@ -40,6 +40,8 @@
 	
 	ProcessWorkflow workflow = (ProcessWorkflow) request.getAttribute(WebKeys.WORKFLOW_ENTRY);
 	
+	long workflowId = workflow != null ? workflow.getProcessWorkflowId() : 0;
+	
 	ServiceProcess serviceProcess = (ServiceProcess) request.getAttribute(WebKeys.SERVICE_PROCESS_ENTRY);
 	long dossierTemplateId = 0;
 
@@ -258,17 +260,17 @@
 		
 		AUI().ready('aui-base','liferay-portlet-url','aui-io', function(A){
 			var postProcessStep = A.one('#<portlet:namespace/>postProcessStepId');
-			
+			var workflowIdReq = '<%=workflowId%>';
 			if(postProcessStep){
-				<portlet:namespace/>getAssignUsers(postProcessStep.val());
+				<portlet:namespace/>getAssignUsers(postProcessStep.val(), workflowIdReq);
 				postProcessStep.on('change', function(){
 					var postProcessStepId = postProcessStep.val();
-					<portlet:namespace/>getAssignUsers(postProcessStepId);
+					<portlet:namespace/>getAssignUsers(postProcessStepId, workflowIdReq);
 				});
 			}
 		});
 		
-		Liferay.provide(window, '<portlet:namespace/>getAssignUsers', function(postProcessStepId) {
+		Liferay.provide(window, '<portlet:namespace/>getAssignUsers', function(postProcessStepId, workflowIdReq) {
 
 			var A = AUI();
 			var actionUserBoundary = A.one('#<portlet:namespace/>actionUserBoundary');
@@ -279,7 +281,8 @@
 					{
 						dataType: 'json',
 						data: {
-							<portlet:namespace/>processStepId: postProcessStepId
+							'<portlet:namespace/>processStepId': postProcessStepId,
+							'<portlet:namespace/>workflowId': workflowIdReq
 						},
 						on: {
 							success: function(event, id, obj) {

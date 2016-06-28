@@ -78,7 +78,7 @@
 				}
 				
 				try {
-					serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(dossier.getServiceConfigId());
+					serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(dossier.getServiceInfoId());
 					serviceName = serviceInfo.getFullName();
 				} catch (Exception e) {
 					//nothing to do

@@ -28,7 +28,9 @@ import org.opencps.usermgt.model.WorkingUnit;
 import org.opencps.usermgt.service.base.EmployeeLocalServiceBaseImpl;
 import org.opencps.util.DateTimeUtil;
 import org.opencps.util.PortletConstants;
+import org.opencps.util.PortletPropsValues;
 import org.opencps.util.PortletUtil;
+import org.opencps.util.WebKeys;
 
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -39,14 +41,17 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Address;
 import com.liferay.portal.model.Contact;
 import com.liferay.portal.model.EmailAddress;
 import com.liferay.portal.model.Phone;
+import com.liferay.portal.model.Role;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.Website;
 import com.liferay.portal.service.ContactLocalServiceUtil;
+import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserServiceUtil;
 import com.liferay.portlet.announcements.model.AnnouncementsDelivery;
@@ -149,11 +154,27 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 		User user = null;
 		roleIds.add(jobPos.getMappingRoleId());
 		long [] listRoles = null;	
-		
+		Role defaultRole = null;
+		try {
+			 defaultRole = RoleLocalServiceUtil
+							.getRole(serviceContext.getCompanyId(),WebKeys.EMPLOYEE_ROLE_NAME );
+		}
+		catch (Exception e) {
+			_log.info("role OPCS_EMPLOYEE null");
+		}
 		if(!roleIds.isEmpty()) {
-			listRoles = new long[roleIds.size()];		
+			listRoles = new long[roleIds.size() + 1];
+			
+			if(Validator.isNotNull(defaultRole)) {
+				listRoles[roleIds.size()] = defaultRole.getRoleId();
+			}
+			
 			for(int i = 0; i < roleIds.size(); i++) {
 				listRoles[i] = roleIds.get(i);
+			}
+		} else {
+			if(Validator.isNotNull(defaultRole)) {
+				listRoles= new long[]{defaultRole.getRoleId()};
 			}
 		}
 		
@@ -482,14 +503,28 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 				organizationIds = new long[]{
 						workingUnit.getMappingOrganisationId()};
 			}
-			
+			Role defaultRole = null;
+			try {
+				 defaultRole = RoleLocalServiceUtil
+								.getRole(serviceContext.getCompanyId(),WebKeys.EMPLOYEE_ROLE_NAME );
+			}
+			catch (Exception e) {
+				_log.info("role OPCS_EMPLOYEE null");
+			}
 			roleIds.add(jobPos.getMappingRoleId());
 			long [] listRoles = null;	
 			
 			if(!roleIds.isEmpty()) {
-				listRoles = new long[roleIds.size()];		
+				listRoles = new long[roleIds.size() + 1];
+				if(Validator.isNotNull(defaultRole)) {
+					listRoles[roleIds.size()] = defaultRole.getRoleId();
+				}
 				for(int i = 0; i < roleIds.size(); i++) {
 					listRoles[i] = roleIds.get(i);
+				}
+			} else {
+				if(Validator.isNotNull(defaultRole)) {
+					listRoles = new long[]{defaultRole.getRoleId()};
 				}
 			}
 			
