@@ -570,6 +570,29 @@ public class DossierFileLocalServiceImpl
 
 	/**
 	 * @param groupId
+	 * @param ownerUserId
+	 * @param ownerOrganizationId
+	 * @param keyword
+	 * @param templateFileNo
+	 * @param removed
+	 * @param partType
+	 * @param original
+	 * @return
+	 * @throws SystemException
+	 */
+	public int countDossierFileAdvance(
+		long groupId, long ownerUserId, long ownerOrganizationId,
+		String keyword, String templateFileNo, int removed, int partType,
+		int original)
+		throws SystemException {
+
+		return dossierFileFinder
+			.countDossierFileAdvance(groupId, ownerUserId, ownerOrganizationId,
+				keyword, templateFileNo, removed, partType, original);
+	}
+
+	/**
+	 * @param groupId
 	 * @param keyword
 	 * @param dossierTemplateId
 	 * @param fileEntryId
@@ -759,6 +782,33 @@ public class DossierFileLocalServiceImpl
 		return dossierFileFinder
 			.searchDossierFile(groupId, keyword, dossierTemplateId, fileEntryId,
 				onlyViewFileResult, start, end, obc);
+	}
+
+	/**
+	 * @param groupId
+	 * @param ownerUserId
+	 * @param ownerOrganizationId
+	 * @param keyword
+	 * @param templateFileNo
+	 * @param removed
+	 * @param partType
+	 * @param original
+	 * @param start
+	 * @param end
+	 * @param obc
+	 * @return
+	 * @throws SystemException
+	 */
+	public List searchDossierFileAdvance(
+		long groupId, long ownerUserId, long ownerOrganizationId,
+		String keyword, String templateFileNo, int removed, int partType,
+		int original, int start, int end, OrderByComparator obc)
+		throws SystemException {
+
+		return dossierFileFinder
+			.searchDossierFileAdvance(groupId, ownerUserId, ownerOrganizationId,
+				keyword, templateFileNo, removed, partType, original, start,
+				end, obc);
 	}
 
 	/**
