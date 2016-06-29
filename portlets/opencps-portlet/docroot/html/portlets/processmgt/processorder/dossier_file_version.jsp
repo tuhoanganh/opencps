@@ -127,7 +127,7 @@
 					<liferay-ui:search-container-column-text 
 						title="#"
 						name="#"
-						value=""
+						value="<%=String.valueOf(row.getPos() + searchContainer.getStart()) %>"
 					/>
 					<liferay-ui:search-container-column-text 
 						title="create-date"
