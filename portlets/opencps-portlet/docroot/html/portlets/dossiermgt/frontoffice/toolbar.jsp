@@ -35,8 +35,8 @@
 	
 	long govAgencyId = ParamUtil.getLong(request, "govAgencyId");
 	
-	int dossierStatus = ParamUtil.getInteger(request, "dossierStatus");
-	
+	int dossierStatus = ParamUtil.getInteger(request, "dossierStatus", 0);
+
 	String tabs1 = ParamUtil.getString(request, "tabs1", DossierMgtUtil.TOP_TABS_DOSSIER);
 	
 	PortletURL searchURL = renderResponse.createRenderURL();
@@ -125,7 +125,6 @@
 					</c:when>
 					<c:otherwise>
 						<c:if test="<%=tabs1.equals(DossierMgtUtil.TOP_TABS_DOSSIER) %>">
-				
 							<aui:row>
 								<aui:col width="30">
 									<datamgt:ddr 

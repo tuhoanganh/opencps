@@ -218,8 +218,8 @@
 					List<DossierFile> dossierFiles = new ArrayList<DossierFile>();
 					int totalCount = 0;
 					try {
-						dossierFiles = DossierFileLocalServiceUtil.searchDossierFile(scopeGroupId, searchTerms.getKeywords(), templateFileNo, 0, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-						totalCount = DossierFileLocalServiceUtil.countDossierFile(scopeGroupId, searchTerms.getKeywords(), templateFileNo, 0);
+						dossierFiles = DossierFileLocalServiceUtil.searchDossierFile(scopeGroupId, citizen != null ? citizen.getMappingUserId() : 0, business != null ? business.getMappingOrganizationId() : 0, searchTerms.getKeywords(), templateFileNo, 0, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
+						totalCount = DossierFileLocalServiceUtil.countDossierFile(scopeGroupId, citizen != null ? citizen.getMappingUserId() : 0, business != null ? business.getMappingOrganizationId() : 0, searchTerms.getKeywords(), templateFileNo, 0);
 					} catch(Exception e){
 						
 					}
