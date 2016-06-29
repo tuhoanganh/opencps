@@ -749,10 +749,6 @@ public class PortletUtil {
 			statusLabel = LanguageUtil
 				.get(locale, "on-processing");
 			break;
-		case PaymentMgtUtil.PAYMENT_STATUS_REQUESTED:
-			statusLabel = LanguageUtil
-				.get(locale, "requested");
-			break;
 		case PaymentMgtUtil.PAYMENT_STATUS_CONFIRMED:
 			statusLabel = LanguageUtil
 				.get(locale, "confirmed");
