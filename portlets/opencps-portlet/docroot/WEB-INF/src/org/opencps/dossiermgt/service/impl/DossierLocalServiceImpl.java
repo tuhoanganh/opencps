@@ -205,13 +205,27 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		dossier
 			.setKeypayRedirectUrl(redirectPaymentURL);
 
-		dlFolderLocalService
-			.addFolder(userId, serviceContext
-				.getScopeGroupId(), serviceContext
-					.getScopeGroupId(),
-				false, parentFolderId, String
-					.valueOf(dossierNo),
-				StringPool.BLANK, false, serviceContext);
+		DLFolder folder = null;
+
+		try {
+			folder = DLFolderUtil
+				.getFolder(serviceContext
+					.getScopeGroupId(), parentFolderId, String
+						.valueOf(dossierNo));
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		if (folder == null) {
+			dlFolderLocalService
+				.addFolder(userId, serviceContext
+					.getScopeGroupId(), serviceContext
+						.getScopeGroupId(),
+					false, parentFolderId, String
+						.valueOf(dossierNo),
+					StringPool.BLANK, false, serviceContext);
+		}
 
 		dossier = dossierPersistence
 			.update(dossier);
