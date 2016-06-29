@@ -194,11 +194,7 @@
 		type="text"
 	/>
 	
-	<label class="control-label custom-lebel" 
-		for='<portlet:namespace/><%="deadline" %>'
-	>
-		<liferay-ui:message key="return-date"/>
-	</label>
+	
 	
 	<c:if test="<%=workflowOutputs != null && !workflowOutputs.isEmpty() %>">
 		<aui:select name="esignDossierFiles" multiple="<%=true %>" label="esign-dossier-files">
@@ -221,6 +217,12 @@
 			%>
 		</aui:select>
 	</c:if>
+	
+	<label class="control-label custom-lebel" 
+		for='<portlet:namespace/><%="deadline" %>'
+	>
+		<liferay-ui:message key="return-date"/>
+	</label>
 	
 	<liferay-ui:input-date
 		dayParam="<%=ProcessOrderDisplayTerms.ESTIMATE_DATETIME_DAY %>"
