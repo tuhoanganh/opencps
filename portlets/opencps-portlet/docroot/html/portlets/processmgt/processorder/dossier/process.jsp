@@ -658,6 +658,23 @@ AUI().ready('aui-base','liferay-portlet-url','aui-io', function(A){
 				});
 			});
 		}
+		
+		//View form
+		var viewVersions = A.all('.view-version');
+		
+		if(viewVersions){
+			viewVersions.each(function(e){
+				e.on('click', function(){
+				
+					var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
+					portletURL.setParameter("mvcPath", "/html/portlets/processmgt/processorder/modal_dialog.jsp");
+					portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
+					portletURL.setPortletMode("normal");
+					portletURL.setParameter("content", "view-version");
+					viewVersion(this, portletURL.toString(), '<portlet:namespace/>');
+				});
+			});
+		}
 	});
 	
 	Liferay.on('redirect',function(event) {
