@@ -318,7 +318,7 @@ public class DossierFileLocalServiceImpl
 				oldDossierFile
 					.getDisplayName() + StringPool.DASH + dossierFileId +
 					StringPool.DASH + (oldDossierFile
-						.getVersion() + 1),
+						.getVersion() + 1 + StringPool.DASH + System.currentTimeMillis()),
 				description, changeLog, is, size, serviceContext);
 
 		dossierFile
@@ -465,7 +465,7 @@ public class DossierFileLocalServiceImpl
 				.getScopeGroupId(), folderId, sourceFileName,
 				mimeType,
 				displayName + StringPool.DASH + dossierFileId +
-					StringPool.DASH + version,
+					StringPool.DASH + version + StringPool.DASH + System.currentTimeMillis(),
 				description, changeLog, is, size, serviceContext);
 
 		dossierFile
@@ -958,7 +958,7 @@ public class DossierFileLocalServiceImpl
 				.getScopeGroupId(), folderId, sourceFileName, mimeType,
 				title + StringPool.DASH + dossierFileId + StringPool.DASH +
 					dossierFile
-						.getVersion(),
+						.getVersion() + StringPool.DASH + System.currentTimeMillis(),
 				description, changeLog, is, size, serviceContext);
 
 		dossierFile
