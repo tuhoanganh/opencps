@@ -35,9 +35,10 @@
 		<liferay-util:include page="/html/common/portlet/dossier_dynamic_form.jsp" servletContext="<%=application %>"/>
 	</c:when>
 	<c:when test='<%=content.equals("view-form") %>'>
-		<liferay-util:include page='<%=templatePath + "dossier_dynamic_form.jsp" %>' servletContext="<%=application %>">
-			
-		</liferay-util:include>
+		<liferay-util:include page='<%=templatePath + "dossier_dynamic_form.jsp" %>' servletContext="<%=application %>"/>
+	</c:when>
+	<c:when test='<%=content.equals("view-version") %>'>
+		<liferay-util:include  page='<%=templatePath + "dossier_file_version.jsp" %>' servletContext="<%=application %>"/>
 	</c:when>
 </c:choose>
 

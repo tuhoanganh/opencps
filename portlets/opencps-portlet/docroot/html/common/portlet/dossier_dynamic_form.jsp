@@ -122,7 +122,13 @@
 			formData = dossierFile.getFormData();
 		}
 	}
-
+	
+	String portleName = WebKeys.DOSSIER_MGT_PORTLET;
+	
+	if(renderResponse.getNamespace().equals(StringPool.UNDERLINE + WebKeys.PROCESS_ORDER_PORTLET + StringPool.UNDERLINE)){
+		portleName = WebKeys.PROCESS_ORDER_PORTLET;
+	}
+	
 %>
 
 <portlet:actionURL var="updateDynamicFormDataURL" name="updateDynamicFormData"/>
@@ -138,7 +144,7 @@
 	<aui:input name="<%=DossierFileDisplayTerms.FORM_DATA %>" type="hidden" value=""/>
 	<aui:input name="<%=DossierFileDisplayTerms.GROUP_NAME %>" type="hidden" value="<%=groupName %>"/>
 	<aui:input name="<%=DossierDisplayTerms.FILE_GROUP_ID %>" type="hidden" value="<%=fileGroupId%>"/>
-	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_TYPE %>" type="hidden" value="<%=String.valueOf(renderResponse.getNamespace().contains(WebKeys.DOSSIER_MGT_PORTLET) ? PortletConstants.DOSSIER_FILE_TYPE_INPUT : PortletConstants.DOSSIER_FILE_TYPE_OUTPUT) %>"/>
+	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_TYPE %>" type="hidden" value="<%=String.valueOf(renderResponse.getNamespace().equals(StringPool.UNDERLINE + WebKeys.DOSSIER_MGT_PORTLET + StringPool.UNDERLINE) ? PortletConstants.DOSSIER_FILE_TYPE_INPUT : PortletConstants.DOSSIER_FILE_TYPE_OUTPUT) %>"/>
 	<aui:input name="groupDossierPartId" type="hidden" value="<%=groupDossierPartId%>"/>
 	
 	<aui:fieldset id="dynamicForm"></aui:fieldset>
@@ -211,7 +217,7 @@
 	
 	Liferay.provide(window, '<portlet:namespace/>createReport', function(dossierFileId) {
 		var A = AUI();
-		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.ACTION_PHASE) %>');
+		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, portleName, themeDisplay.getPlid(), PortletRequest.ACTION_PHASE) %>');
 		portletURL.setParameter("javax.portlet.action", "createReport");
 		portletURL.setWindowState('<%=WindowState.NORMAL%>');
 		var loadingMask = new A.LoadingMask(
