@@ -17,6 +17,7 @@
 
 package org.opencps.util;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,6 +27,8 @@ import java.util.Locale;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.ResourceRequest;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.opencps.datamgt.model.DictCollection;
@@ -56,9 +59,9 @@ public class PortletUtil {
 			_midName = StringPool.BLANK;
 
 			if (Validator
-			    .isNotNull(fullName)) {
+				.isNotNull(fullName)) {
 				String[] splitNames = StringUtil
-				    .split(fullName, StringPool.SPACE);
+					.split(fullName, StringPool.SPACE);
 				if (splitNames != null && splitNames.length > 0) {
 					_lastName = splitNames[0];
 
@@ -70,11 +73,11 @@ public class PortletUtil {
 						}
 					}
 					this
-					    .setLastName(_lastName);
+						.setLastName(_lastName);
 					this
-					    .setFirstName(_firstName);
+						.setFirstName(_firstName);
 					this
-					    .setMidName(_midName);
+						.setMidName(_midName);
 				}
 			}
 		}
@@ -120,30 +123,30 @@ public class PortletUtil {
 
 			if (date != null) {
 				Calendar calendar = Calendar
-				    .getInstance();
+					.getInstance();
 				calendar
-				    .setTime(date);
+					.setTime(date);
 
 				_miniSecond = calendar
-				    .get(Calendar.MILLISECOND);
+					.get(Calendar.MILLISECOND);
 				_second = calendar
-				    .get(Calendar.SECOND);
+					.get(Calendar.SECOND);
 				_minute = calendar
-				    .get(Calendar.MINUTE);
+					.get(Calendar.MINUTE);
 				_hour = calendar
-				    .get(Calendar.HOUR);
+					.get(Calendar.HOUR);
 				_dayOfMoth = calendar
-				    .get(Calendar.DAY_OF_MONTH);
+					.get(Calendar.DAY_OF_MONTH);
 				_dayOfYear = calendar
-				    .get(Calendar.DAY_OF_YEAR);
+					.get(Calendar.DAY_OF_YEAR);
 				_weekOfMonth = calendar
-				    .get(Calendar.WEEK_OF_MONTH);
+					.get(Calendar.WEEK_OF_MONTH);
 				_weekOfYear = calendar
-				    .get(Calendar.WEEK_OF_YEAR);
+					.get(Calendar.WEEK_OF_YEAR);
 				_month = calendar
-				    .get(Calendar.MONTH);
+					.get(Calendar.MONTH);
 				_year = calendar
-				    .get(Calendar.YEAR);
+					.get(Calendar.YEAR);
 			}
 		}
 
@@ -276,15 +279,15 @@ public class PortletUtil {
 		switch (value) {
 		case 0:
 			genderLabel = LanguageUtil
-			    .get(locale, "female");
+				.get(locale, "female");
 			break;
 		case 1:
 			genderLabel = LanguageUtil
-			    .get(locale, "male");
+				.get(locale, "male");
 			break;
 		default:
 			genderLabel = LanguageUtil
-			    .get(locale, "male");
+				.get(locale, "male");
 			break;
 		}
 
@@ -298,23 +301,23 @@ public class PortletUtil {
 		switch (value) {
 		case 0:
 			accountStatus = LanguageUtil
-			    .get(locale, "registered");
+				.get(locale, "registered");
 			break;
 		case 1:
 			accountStatus = LanguageUtil
-			    .get(locale, "confirmed");
+				.get(locale, "confirmed");
 			break;
 		case 2:
 			accountStatus = LanguageUtil
-			    .get(locale, "approved");
+				.get(locale, "approved");
 			break;
 		case 3:
 			accountStatus = LanguageUtil
-			    .get(locale, "locked");
+				.get(locale, "locked");
 			break;
 		default:
 			accountStatus = LanguageUtil
-			    .get(locale, "");
+				.get(locale, "");
 			break;
 
 		}
@@ -354,19 +357,19 @@ public class PortletUtil {
 		switch (value) {
 		case 0:
 			leaderLabel = LanguageUtil
-			    .get(locale, "normal");
+				.get(locale, "normal");
 			break;
 		case 1:
 			leaderLabel = LanguageUtil
-			    .get(locale, "leader");
+				.get(locale, "leader");
 			break;
 		case 2:
 			leaderLabel = LanguageUtil
-			    .get(locale, "deputy");
+				.get(locale, "deputy");
 			break;
 		default:
 			leaderLabel = LanguageUtil
-			    .get(locale, "normal");
+				.get(locale, "normal");
 			break;
 		}
 
@@ -380,55 +383,55 @@ public class PortletUtil {
 		switch (value) {
 		case 0:
 			statusLabel = LanguageUtil
-			    .get(locale, "new");
+				.get(locale, "new");
 			break;
 		case 1:
 			statusLabel = LanguageUtil
-			    .get(locale, "receiving");
+				.get(locale, "receiving");
 			break;
 		case 2:
 			statusLabel = LanguageUtil
-			    .get(locale, "waiting");
+				.get(locale, "waiting");
 			break;
 		case 3:
 			statusLabel = LanguageUtil
-			    .get(locale, "paying");
+				.get(locale, "paying");
 			break;
 		case 4:
 			statusLabel = LanguageUtil
-			    .get(locale, "denied");
+				.get(locale, "denied");
 			break;
 		case 5:
 			statusLabel = LanguageUtil
-			    .get(locale, "received");
+				.get(locale, "received");
 			break;
 		case 6:
 			statusLabel = LanguageUtil
-			    .get(locale, "processing");
+				.get(locale, "processing");
 			break;
 		case 7:
 			statusLabel = LanguageUtil
-			    .get(locale, "canceled");
+				.get(locale, "canceled");
 			break;
 		case 8:
 			statusLabel = LanguageUtil
-			    .get(locale, "done");
+				.get(locale, "done");
 			break;
 		case 9:
 			statusLabel = LanguageUtil
-			    .get(locale, "archived");
+				.get(locale, "archived");
 			break;
 		case 10:
 			statusLabel = LanguageUtil
-			    .get(locale, "system");
+				.get(locale, "system");
 			break;
 		case 11:
 			statusLabel = LanguageUtil
-			    .get(locale, "error");
+				.get(locale, "error");
 			break;
 		default:
 			statusLabel = LanguageUtil
-			    .get(locale, "new");
+				.get(locale, "new");
 			break;
 		}
 
@@ -440,29 +443,29 @@ public class PortletUtil {
 		List<Integer> dossierStatus = new ArrayList<Integer>();
 
 		dossierStatus
-		    .add(PortletConstants.DOSSIER_STATUS_NEW);
+			.add(PortletConstants.DOSSIER_STATUS_NEW);
 		dossierStatus
-		    .add(PortletConstants.DOSSIER_STATUS_RECEIVING);
+			.add(PortletConstants.DOSSIER_STATUS_RECEIVING);
 		dossierStatus
-		    .add(PortletConstants.DOSSIER_STATUS_WAITING);
+			.add(PortletConstants.DOSSIER_STATUS_WAITING);
 		dossierStatus
-		    .add(PortletConstants.DOSSIER_STATUS_PAYING);
+			.add(PortletConstants.DOSSIER_STATUS_PAYING);
 		dossierStatus
-		    .add(PortletConstants.DOSSIER_STATUS_DENIED);
+			.add(PortletConstants.DOSSIER_STATUS_DENIED);
 		dossierStatus
-		    .add(PortletConstants.DOSSIER_STATUS_RECEIVED);
+			.add(PortletConstants.DOSSIER_STATUS_RECEIVED);
 		dossierStatus
-		    .add(PortletConstants.DOSSIER_STATUS_PROCESSING);
+			.add(PortletConstants.DOSSIER_STATUS_PROCESSING);
 		dossierStatus
-		    .add(PortletConstants.DOSSIER_STATUS_CANCELED);
+			.add(PortletConstants.DOSSIER_STATUS_CANCELED);
 		dossierStatus
-		    .add(PortletConstants.DOSSIER_STATUS_DONE);
+			.add(PortletConstants.DOSSIER_STATUS_DONE);
 		dossierStatus
-		    .add(PortletConstants.DOSSIER_STATUS_ARCHIVED);
+			.add(PortletConstants.DOSSIER_STATUS_ARCHIVED);
 		dossierStatus
-		    .add(PortletConstants.DOSSIER_STATUS_SYSTEM);
+			.add(PortletConstants.DOSSIER_STATUS_SYSTEM);
 		dossierStatus
-		    .add(PortletConstants.DOSSIER_STATUS_ERROR);
+			.add(PortletConstants.DOSSIER_STATUS_ERROR);
 
 		return dossierStatus;
 	}
@@ -470,236 +473,238 @@ public class PortletUtil {
 	public static String getDestinationFolder(String[] folderNames) {
 
 		return StringUtil
-		    .merge(folderNames, StringPool.FORWARD_SLASH);
+			.merge(folderNames, StringPool.FORWARD_SLASH);
 	}
 
 	public static String getCitizenDossierDestinationFolder(
-	    long groupId, long userId) {
+		long groupId, long userId) {
 
 		return String
-		    .valueOf(groupId) + StringPool.SLASH +
-		    "opencps/dossierfiles/citizen" + StringPool.SLASH + String
-		        .valueOf(userId);
+			.valueOf(groupId) + StringPool.SLASH +
+			"opencps/dossierfiles/citizen" + StringPool.SLASH + String
+				.valueOf(userId);
 	}
 
 	public static String getBusinessDossierDestinationFolder(
-	    long groupId, long orgId) {
+		long groupId, long orgId) {
 
 		return String
-		    .valueOf(groupId) + StringPool.SLASH +
-		    "opencps/dossierfiles/business" + StringPool.SLASH + String
-		        .valueOf(orgId);
+			.valueOf(groupId) + StringPool.SLASH +
+			"opencps/dossierfiles/business" + StringPool.SLASH + String
+				.valueOf(orgId);
 	}
 
 	public static DictItem getDictItem(
-	    String collectionCode, String itemCode, long groupId) {
+		String collectionCode, String itemCode, long groupId) {
 
 		DictCollection dictCollection = null;
 		DictItem dictItem = null;
 
 		try {
 			dictCollection = DictCollectionLocalServiceUtil
-			    .getDictCollection(groupId, collectionCode);
+				.getDictCollection(groupId, collectionCode);
 			dictItem = DictItemLocalServiceUtil
-			    .getDictItemInuseByItemCode(dictCollection
-			        .getDictCollectionId(), itemCode);
+				.getDictItemInuseByItemCode(dictCollection
+					.getDictCollectionId(), itemCode);
 		}
 		catch (Exception e) {
 			// TODO: nothing
 		}
 		return dictItem;
 	}
+
 	public static String getActionInfoByKey(int status, Locale locale) {
 
 		String actionInfo = StringPool.BLANK;
 		switch (status) {
 		case 0:
 			actionInfo = LanguageUtil
-			    .get(locale, "new-stt");
+				.get(locale, "new-stt");
 			break;
 		case 1:
 			actionInfo = LanguageUtil
-			    .get(locale, "receiving-stt");
+				.get(locale, "receiving-stt");
 			break;
 		case 2:
 			actionInfo = LanguageUtil
-			    .get(locale, "waiting-stt");
+				.get(locale, "waiting-stt");
 			break;
 		case 3:
 			actionInfo = LanguageUtil
-			    .get(locale, "paying-stt");
+				.get(locale, "paying-stt");
 			break;
 		case 4:
 			actionInfo = LanguageUtil
-			    .get(locale, "denied-stt");
+				.get(locale, "denied-stt");
 			break;
 		case 5:
 			actionInfo = LanguageUtil
-			    .get(locale, "received-stt");
+				.get(locale, "received-stt");
 			break;
 		case 6:
 			actionInfo = LanguageUtil
-			    .get(locale, "processing-stt");
+				.get(locale, "processing-stt");
 			break;
 		case 7:
 			actionInfo = LanguageUtil
-			    .get(locale, "canceled-stt");
+				.get(locale, "canceled-stt");
 			break;
 		case 8:
 			actionInfo = LanguageUtil
-			    .get(locale, "done-stt");
+				.get(locale, "done-stt");
 			break;
 		case 9:
 			actionInfo = LanguageUtil
-			    .get(locale, "archived-stt");
+				.get(locale, "archived-stt");
 			break;
 		case 10:
 			actionInfo = LanguageUtil
-			    .get(locale, "system-stt");
+				.get(locale, "system-stt");
 			break;
 		case 11:
 			actionInfo = LanguageUtil
-			    .get(locale, "error-stt");
+				.get(locale, "error-stt");
 			break;
 		default:
 			break;
 		}
 		return actionInfo;
 	}
+
 	public static String getActionInfo(int status, Locale locale) {
 
 		String actionInfo = StringPool.BLANK;
 		switch (status) {
 		case 0:
 			actionInfo = LanguageUtil
-			    .get(locale, "new", "Create new");
+				.get(locale, "new", "Create new");
 			break;
 		case 1:
 			actionInfo = LanguageUtil
-			    .get(locale, "receiving", "Receiving");
+				.get(locale, "receiving", "Receiving");
 			break;
 		case 2:
 			actionInfo = LanguageUtil
-			    .get(locale, "waiting", "Waiting");
+				.get(locale, "waiting", "Waiting");
 			break;
 		case 3:
 			actionInfo = LanguageUtil
-			    .get(locale, "paying", "Paying");
+				.get(locale, "paying", "Paying");
 			break;
 		case 4:
 			actionInfo = LanguageUtil
-			    .get(locale, "denied", "Denied");
+				.get(locale, "denied", "Denied");
 			break;
 		case 5:
 			actionInfo = LanguageUtil
-			    .get(locale, "received", "Received");
+				.get(locale, "received", "Received");
 			break;
 		case 6:
 			actionInfo = LanguageUtil
-			    .get(locale, "processing", "Processing");
+				.get(locale, "processing", "Processing");
 			break;
 		case 7:
 			actionInfo = LanguageUtil
-			    .get(locale, "canceled", "Canceled");
+				.get(locale, "canceled", "Canceled");
 			break;
 		case 8:
 			actionInfo = LanguageUtil
-			    .get(locale, "done", "Done");
+				.get(locale, "done", "Done");
 			break;
 		case 9:
 			actionInfo = LanguageUtil
-			    .get(locale, "archived", "Archived");
+				.get(locale, "archived", "Archived");
 			break;
 		case 10:
 			actionInfo = LanguageUtil
-			    .get(locale, "system", "System");
+				.get(locale, "system", "System");
 			break;
 		case 11:
 			actionInfo = LanguageUtil
-			    .get(locale, "error", "Error");
+				.get(locale, "error", "Error");
 			break;
 		default:
 			break;
 		}
 		return actionInfo;
 	}
-	
+
 	public static String getMessageInfo(int status, Locale locale) {
 
 		String messageInfo = StringPool.BLANK;
 		switch (status) {
 		case 0:
 			messageInfo = LanguageUtil
-			    .get(locale, "new-msg", "Create new");
+				.get(locale, "new-msg", "Create new");
 			break;
 		case 1:
 			messageInfo = LanguageUtil
-			    .get(locale, "receiving-msg", "Receiving");
+				.get(locale, "receiving-msg", "Receiving");
 			break;
 		case 2:
 			messageInfo = LanguageUtil
-			    .get(locale, "waiting-msg", "Waiting");
+				.get(locale, "waiting-msg", "Waiting");
 			break;
 		case 3:
 			messageInfo = LanguageUtil
-			    .get(locale, "paying-msg", "Paying");
+				.get(locale, "paying-msg", "Paying");
 			break;
 		case 4:
 			messageInfo = LanguageUtil
-			    .get(locale, "denied-msg", "Denied");
+				.get(locale, "denied-msg", "Denied");
 			break;
 		case 5:
 			messageInfo = LanguageUtil
-			    .get(locale, "received-msg", "Received");
+				.get(locale, "received-msg", "Received");
 			break;
 		case 6:
 			messageInfo = LanguageUtil
-			    .get(locale, "processing-msg", "Processing");
+				.get(locale, "processing-msg", "Processing");
 			break;
 		case 7:
 			messageInfo = LanguageUtil
-			    .get(locale, "canceled-msg", "Canceled");
+				.get(locale, "canceled-msg", "Canceled");
 			break;
 		case 8:
 			messageInfo = LanguageUtil
-			    .get(locale, "done-msg", "Done");
+				.get(locale, "done-msg", "Done");
 			break;
 		case 9:
 			messageInfo = LanguageUtil
-			    .get(locale, "archived-msg", "Archived");
+				.get(locale, "archived-msg", "Archived");
 			break;
 		case 10:
 			messageInfo = LanguageUtil
-			    .get(locale, "system-msg", "System");
+				.get(locale, "system-msg", "System");
 			break;
 		case 11:
 			messageInfo = LanguageUtil
-			    .get(locale, "error-msg", "Error");
+				.get(locale, "error-msg", "Error");
 			break;
 		default:
 			break;
 		}
 		return messageInfo;
 	}
-	
+
 	public static void writeJSON(
-	    ActionRequest actionRequest, ActionResponse actionResponse, Object json)
-	    throws IOException {
+		ActionRequest actionRequest, ActionResponse actionResponse, Object json)
+		throws IOException {
 
 		HttpServletResponse response = PortalUtil
-		    .getHttpServletResponse(actionResponse);
+			.getHttpServletResponse(actionResponse);
 
 		response
-		    .setContentType(ContentTypes.APPLICATION_JSON);
+			.setContentType(ContentTypes.APPLICATION_JSON);
 
 		ServletResponseUtil
-		    .write(response, json
-		        .toString());
+			.write(response, json
+				.toString());
 		response
-		    .flushBuffer();
+			.flushBuffer();
 
 	}
-	
+
 	public static String getPaymentMethodLabel(int value, Locale locale) {
 
 		String statusLabel = StringPool.BLANK;
@@ -707,34 +712,34 @@ public class PortletUtil {
 		switch (value) {
 		case 1:
 			statusLabel = LanguageUtil
-			    .get(locale, "cash");
+				.get(locale, "cash");
 			break;
 		case 2:
 			statusLabel = LanguageUtil
-			    .get(locale, "keypay");
+				.get(locale, "keypay");
 			break;
 		case 4:
 			statusLabel = LanguageUtil
-			    .get(locale, "chuyen-khoan");
+				.get(locale, "chuyen-khoan");
 			break;
 		default:
 			statusLabel = LanguageUtil
-			    .get(locale, "cash");
+				.get(locale, "cash");
 			break;
 		}
 
 		return statusLabel;
 	}
-	
+
 	public static String getEmployeeDestinationFolder(
-	    long groupId, long userId) {
+		long groupId, long userId) {
 
 		return String
-		    .valueOf(groupId) + StringPool.SLASH +
-		    "opencps/processmgtfiles/employee" + StringPool.SLASH + String
-		        .valueOf(userId);
+			.valueOf(groupId) + StringPool.SLASH +
+			"opencps/processmgtfiles/employee" + StringPool.SLASH + String
+				.valueOf(userId);
 	}
-	
+
 	public static String getPaymentStatusLabel(int value, Locale locale) {
 
 		String statusLabel = StringPool.BLANK;
@@ -742,29 +747,57 @@ public class PortletUtil {
 		switch (value) {
 		case PaymentMgtUtil.PAYMENT_STATUS_ON_PROCESSING:
 			statusLabel = LanguageUtil
-			    .get(locale, "on-processing");
+				.get(locale, "on-processing");
 			break;
 		case PaymentMgtUtil.PAYMENT_STATUS_REQUESTED:
 			statusLabel = LanguageUtil
-			    .get(locale, "requested");
+				.get(locale, "requested");
 			break;
 		case PaymentMgtUtil.PAYMENT_STATUS_CONFIRMED:
 			statusLabel = LanguageUtil
-			    .get(locale, "confirmed");
+				.get(locale, "confirmed");
 			break;
 		case PaymentMgtUtil.PAYMENT_STATUS_APPROVED:
 			statusLabel = LanguageUtil
-			    .get(locale, "approved");
+				.get(locale, "approved");
 			break;
 		case PaymentMgtUtil.PAYMENT_STATUS_REJECTED:
 			statusLabel = LanguageUtil
-		    .get(locale, "rejected");			
+				.get(locale, "rejected");
 		default:
 			statusLabel = LanguageUtil
-			    .get(locale, "on-processing");
+				.get(locale, "on-processing");
 			break;
 		}
 
 		return statusLabel;
+	}
+
+	public static String getTemplateReportFilePath(ResourceRequest request) {
+
+		return request
+			.getPortletSession().getPortletContext().getRealPath("/").replace(
+				"/", File.separator).replace(File.separator + ".", "");
+
+	}
+
+	public static String getTemplateReportFilePath(HttpServletRequest request) {
+
+		return request
+			.getSession().getServletContext().getRealPath("/").replace("/",
+				File.separator).replace(File.separator + ".", "");
+
+	}
+
+	public static String getTemplateReportFilePath(
+		ActionRequest actionRequest) {
+
+		HttpServletRequest request = PortalUtil
+			.getHttpServletRequest(actionRequest);
+
+		return request
+			.getSession().getServletContext().getRealPath("/").replace("/",
+				File.separator).replace(File.separator + ".", "");
+
 	}
 }
