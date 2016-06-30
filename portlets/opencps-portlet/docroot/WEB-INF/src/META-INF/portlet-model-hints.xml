@@ -489,6 +489,7 @@
 		<field name="original" type="int" />
 		<field name="syncStatus" type="int" />
 		<field name="version" type="int" />
+		<field name="signed" type="boolean" />
 	</model>
 	<model name="org.opencps.dossiermgt.model.DossierLog">
 		<field name="dossierLogId" type="long" />
