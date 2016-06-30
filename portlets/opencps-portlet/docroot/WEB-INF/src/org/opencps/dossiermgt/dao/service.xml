@@ -399,6 +399,7 @@
         <column name="original" type="int"/>
         <column name="syncStatus" type="int"/>
         <column name="version" type="int"></column>
+        <column name="isSigned" type="boolean"></column>
         <finder name="D_DP" return-type="Collection">
             <finder-column name="dossierId"></finder-column>
             <finder-column name="dossierPartId"></finder-column>
