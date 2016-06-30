@@ -281,6 +281,10 @@ public class PortletPropsValues {
 	    PortletProps
 	        .get(PortletPropsKeys.OPENCPS_SERVLET_PREVIEW_DOSSIER_FORM_URL);
 	
+	public static final String OPENCPS_SERVLET_VERIFY_SIGN_DOCUMENT_URL =
+				    PortletProps
+				        .get(PortletPropsKeys.OPENCPS_SERVLET_VERIFY_SIGN_DOCUMENT_URL);
+	
 	// KeyPay
 	public static final String OPENCPS_KEYPAY_CURRENT_LOCATE =
 				    PortletProps.get(PortletPropsKeys.OPENCPS_KEYPAY_CURRENT_LOCATE);

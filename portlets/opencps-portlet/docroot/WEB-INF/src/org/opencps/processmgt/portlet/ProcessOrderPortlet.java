@@ -61,6 +61,8 @@ import org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil;
 import org.opencps.dossiermgt.service.FileGroupLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
 import org.opencps.jasperreport.util.JRReportUtil;
+import org.opencps.pki.Helper;
+import org.opencps.pki.PdfSigner;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.model.ProcessStep;
 import org.opencps.processmgt.model.ProcessWorkflow;
@@ -72,17 +74,21 @@ import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
 import org.opencps.processmgt.service.ServiceProcessLocalServiceUtil;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
+import org.opencps.usermgt.model.Employee;
 import org.opencps.util.AccountUtil;
 import org.opencps.util.DLFileEntryUtil;
 import org.opencps.util.DLFolderUtil;
 import org.opencps.util.DateTimeUtil;
 import org.opencps.util.MessageKeys;
+import org.opencps.util.PDFUtil;
 import org.opencps.util.PortletConstants;
 import org.opencps.util.PortletPropsValues;
 import org.opencps.util.PortletUtil;
+import org.opencps.util.SignatureUtil;
 import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
@@ -92,11 +98,11 @@ import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
+import com.liferay.portal.kernel.util.Base64;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
@@ -105,8 +111,10 @@ import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.DuplicateFileException;
 import com.liferay.portlet.documentlibrary.FileSizeException;
 import com.liferay.portlet.documentlibrary.NoSuchFileEntryException;
+import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
+import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 /**
@@ -129,9 +137,9 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		throws IOException {
 
 		boolean updated = false;
-		
+
 		AccountBean accountBean = AccountUtil
-						.getAccountBeanFromAttribute(actionRequest);
+			.getAccountBeanFromAttribute(actionRequest);
 
 		UploadPortletRequest uploadPortletRequest = PortalUtil
 			.getUploadPortletRequest(actionRequest);
@@ -180,9 +188,11 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		String sourceFileName = uploadPortletRequest
 			.getFileName(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
 
-		sourceFileName = sourceFileName
-			.concat(PortletConstants.TEMP_RANDOM_SUFFIX).concat(StringUtil
-				.randomString());
+		/*
+		 * sourceFileName = sourceFileName
+		 * .concat(PortletConstants.TEMP_RANDOM_SUFFIX).concat(StringUtil
+		 * .randomString());
+		 */
 
 		String redirectURL = ParamUtil
 			.getString(uploadPortletRequest, "redirectURL");
@@ -321,7 +331,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 		}
 	}
-	
+
 	/**
 	 * @param actionRequest
 	 * @param actionResponse
@@ -417,8 +427,9 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		 * String redirectURL = ParamUtil .getString(actionRequest,
 		 * "redirectURL");
 		 */
-		
-		String backURL = ParamUtil.getString(actionRequest, "backURL");
+
+		String backURL = ParamUtil
+			.getString(actionRequest, "backURL");
 
 		long dossierId = ParamUtil
 			.getLong(actionRequest, ProcessOrderDisplayTerms.DOSSIER_ID);
@@ -514,7 +525,8 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		// sendToEngineMsg.setAction(WebKeys.ACTION);
 		sendToEngineMsg
 			.setActionNote(actionNote);
-		sendToEngineMsg.setAssignToUserId(assignToUserId);
+		sendToEngineMsg
+			.setAssignToUserId(assignToUserId);
 		sendToEngineMsg
 			.setActionUserId(actionUserId);
 		sendToEngineMsg
@@ -557,10 +569,10 @@ public class ProcessOrderPortlet extends MVCPortlet {
 	public void cloneDossierFile(
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
-		
+
 		AccountBean accountBean = AccountUtil
 			.getAccountBeanFromAttribute(actionRequest);
-		
+
 		Dossier dossier = null;
 		DossierFile dossierFile = null;
 		DossierPart dossierPart = null;
@@ -747,6 +759,56 @@ public class ProcessOrderPortlet extends MVCPortlet {
 	}
 
 	/**
+	 * @param accountBean
+	 * @param dossierId
+	 * @param dossierFileId
+	 * @param dossierPartId
+	 * @param sourceFileName
+	 * @param is
+	 * @param size
+	 * @param serviceContext
+	 * @return
+	 */
+	protected DossierFile addSignatureFile(
+		AccountBean accountBean, long dossierId, long dossierFileId,
+		long dossierPartId, String sourceFileName, InputStream is, long size,
+		ServiceContext serviceContext) {
+
+		DossierFile dossierFile = null;
+
+		DossierFile signDossierFile = null;
+
+		try {
+
+			dossierFile = DossierFileLocalServiceUtil
+				.getDossierFile(dossierFileId);
+
+			FileEntry fileEntry = DLAppServiceUtil
+				.getFileEntry(dossierFile
+					.getFileEntryId());
+
+			signDossierFile = DossierFileLocalServiceUtil
+				.addSignDossierFile(dossierFileId, true, fileEntry
+					.getFolderId(), sourceFileName, fileEntry
+						.getMimeType(),
+					fileEntry
+						.getTitle() + "signed",
+					fileEntry
+						.getDescription(),
+					StringPool.BLANK, is, size, serviceContext);
+
+		}
+		catch (Exception e) {
+
+			_log
+				.error(e);
+
+		}
+
+		return signDossierFile;
+	}
+
+	/**
 	 * @param actionRequest
 	 * @param actionResponse
 	 * @throws IOException
@@ -759,7 +821,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			.getAttribute(WebKeys.THEME_DISPLAY);
 
 		AccountBean accountBean = AccountUtil
-						.getAccountBeanFromAttribute(actionRequest);
+			.getAccountBeanFromAttribute(actionRequest);
 
 		long dossierFileId = ParamUtil
 			.getLong(actionRequest, DossierFileDisplayTerms.DOSSIER_FILE_ID);
@@ -974,6 +1036,303 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				.writeJSON(actionRequest, actionResponse, jsonObject);
 		}
 
+	}
+
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 */
+	public void hashMultipleFile(
+		ActionRequest actionRequest, ActionResponse actionResponse) {
+
+		long[] dossierFileIds = ParamUtil
+			.getLongValues(actionRequest, "dossierFileIds");
+
+		if (dossierFileIds != null && dossierFileIds.length > 0) {
+			try {
+				for (int i = 0; i < dossierFileIds.length; i++) {
+					DossierFile dossierFile = DossierFileLocalServiceUtil
+						.getDossierFile(dossierFileIds[i]);
+					String tempFilePath = PDFUtil
+						.saveAsPdf(PortletUtil
+							.getTempFolderPath(actionRequest), dossierFile
+								.getFileEntryId());
+					System.out
+						.println(tempFilePath);
+				}
+			}
+			catch (Exception e) {
+				// TODO: handle exception
+			}
+
+		}
+	}
+
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws IOException
+	 */
+	public void hashSingleFile(
+		ActionRequest actionRequest, ActionResponse actionResponse)
+		throws IOException {
+
+		JSONObject data = null;
+
+		long dossierFileId = ParamUtil
+			.getLong(actionRequest, "dossierFileId");
+
+		try {
+
+			DossierFile dossierFile = DossierFileLocalServiceUtil
+				.getDossierFile(dossierFileId);
+
+			data = computerHash(actionRequest, dossierFile);
+
+		}
+		catch (Exception e) {
+			_log
+				.error(e);
+		}
+		finally {
+			PortletUtil
+				.writeJSON(actionRequest, actionResponse, data);
+		}
+	}
+
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 */
+	public void signature(
+		ActionRequest actionRequest, ActionResponse actionResponse) {
+
+		AccountBean accountBean = AccountUtil
+			.getAccountBean(actionRequest);
+
+		String signature = ParamUtil
+			.getString(actionRequest, "signature");
+		/*
+		 * String certificate = ParamUtil .getString(actionRequest,
+		 * "certificate");
+		 */
+		String jsonResource = ParamUtil
+			.getString(actionRequest, "resources");
+
+		File inputFile = null;
+
+		File hashFile = null;
+
+		File signFile = null;
+
+		String inputFilePath = StringPool.BLANK;
+
+		String outputFilePath = StringPool.BLANK;
+
+		String hashFileTempPath = StringPool.BLANK;
+
+		String certPath = StringPool.BLANK;
+
+		String imagePath = StringPool.BLANK;
+
+		String signatureFieldName = StringPool.BLANK;
+
+		try {
+			JSONObject resources = JSONFactoryUtil
+				.createJSONObject(jsonResource);
+
+			ServiceContext serviceContext = ServiceContextFactory
+				.getInstance(actionRequest);
+			serviceContext
+				.setAddGroupPermissions(true);
+			serviceContext
+				.setAddGuestPermissions(true);
+
+			inputFilePath = resources
+				.getString("inputFilePath");
+
+			outputFilePath = resources
+				.getString("outputFilePath");
+
+			hashFileTempPath = resources
+				.getString("hashFileTempPath");
+
+			certPath = resources
+				.getString("certPath");
+
+			imagePath = resources
+				.getString("imagePath");
+
+			signatureFieldName = resources
+				.getString("signatureFieldName");
+
+			long dossierFileId = resources
+				.getLong("dossierFileId");
+			long dossierId = resources
+				.getLong("dossierFileId");
+			long dossierPartId = resources
+				.getLong("dossierPartId");
+
+			PdfSigner pdfSigner = SignatureUtil
+				.getPdfSigner(inputFilePath, certPath, hashFileTempPath,
+					outputFilePath, false, imagePath);
+
+			pdfSigner
+				.setSignatureFieldName(signatureFieldName);
+			pdfSigner
+				.sign(Base64
+					.decode(signature));
+
+			signFile = new File(outputFilePath);
+
+			inputFile = new File(inputFilePath);
+
+			hashFile = new File(hashFileTempPath);
+
+			InputStream is = new FileInputStream(signFile);
+
+			DossierFile dossierFile = addSignatureFile(accountBean, dossierId,
+				dossierFileId, dossierPartId, signFile
+					.getName(),
+				is, signFile
+					.length(),
+				serviceContext);
+			if (is != null) {
+				is
+					.close();
+			}
+
+		}
+		catch (Exception e) {
+			_log
+				.error(e);
+		}
+		finally {
+			if (signFile != null && signFile
+				.exists()) {
+				signFile
+					.delete();
+			}
+
+			if (inputFile != null && inputFile
+				.exists()) {
+				inputFile
+					.delete();
+			}
+
+			if (hashFile != null && hashFile
+				.exists()) {
+				hashFile
+					.delete();
+			}
+		}
+	}
+
+	/**
+	 * @param actionRequest
+	 * @param dossierFile
+	 * @return
+	 */
+	protected JSONObject computerHash(
+		ActionRequest actionRequest, DossierFile dossierFile) {
+
+		JSONObject data = JSONFactoryUtil
+			.createJSONObject();
+
+		JSONObject resources = JSONFactoryUtil
+			.createJSONObject();
+
+		AccountBean accountBean = AccountUtil
+			.getAccountBean(actionRequest);
+
+		String tempFolderPath = PortletUtil
+			.getTempFolderPath(actionRequest);
+
+		String imageFolderPath = PortletUtil
+			.getResourceFolderPath(actionRequest);
+
+		String certFolderPath = PortletUtil
+			.getResourceFolderPath(actionRequest);
+
+		String employeeEmail = ((Employee) accountBean
+			.getAccountInstance())
+				.getEmail();
+
+		boolean isVisible = false;
+
+		String inputFilePath = StringPool.BLANK;
+
+		String outputFilePath = StringPool.BLANK;
+
+		String hashFileTempPath = StringPool.BLANK;
+
+		try {
+			outputFilePath =
+				tempFolderPath + "signed" + StringPool.DASH + dossierFile
+					.getDisplayName() + StringPool.DASH + System
+						.currentTimeMillis() +
+					".pdf";
+
+			hashFileTempPath =
+				tempFolderPath + "hash" + StringPool.DASH + dossierFile
+					.getDisplayName() + StringPool.DASH + System
+						.currentTimeMillis() +
+					".pdf";
+
+			String certPath = certFolderPath + "/" + employeeEmail + ".cer";
+
+			String imagePath = imageFolderPath + "/" + employeeEmail + ".png";
+
+			inputFilePath = PDFUtil
+				.saveAsPdf(tempFolderPath, dossierFile
+					.getFileEntryId());
+
+			PdfSigner pdfSigner = SignatureUtil
+				.getPdfSigner(inputFilePath, certPath, hashFileTempPath,
+					outputFilePath, isVisible, imagePath);
+
+			byte[] hash = pdfSigner
+				.computeHash(0, 0, 144, 80);
+			String hashHex = Helper
+				.binToHex(hash);
+
+			data
+				.put("hashHex", hashHex);
+
+			resources
+				.put("inputFilePath", inputFilePath);
+			resources
+				.put("dossierFileId", dossierFile
+					.getDossierFileId());
+			resources
+				.put("dossierId", dossierFile
+					.getDossierId());
+			resources
+				.put("dossierPartId", dossierFile
+					.getDossierPartId());
+			resources
+				.put("outputFilePath", outputFilePath);
+			resources
+				.put("hashFileTempPath", hashFileTempPath);
+			resources
+				.put("certPath", certPath);
+			resources
+				.put("imagePath", imagePath);
+
+			resources
+				.put("signatureFieldName", pdfSigner
+					.getSignatureFieldName());
+
+			data
+				.put("resources", resources);
+
+		}
+		catch (Exception e) {
+			_log
+				.error(e);
+		}
+
+		return data;
 	}
 
 	/**
@@ -1216,11 +1575,13 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				renderRequest
 					.setAttribute(WebKeys.PROCESS_WORKFLOW_ENTRY,
 						processWorkflow);
-				
-				HttpServletRequest request = PortalUtil.getHttpServletRequest(renderRequest);
-				
-				ServletContext servletContext = request.getServletContext();
-				
+
+				HttpServletRequest request = PortalUtil
+					.getHttpServletRequest(renderRequest);
+
+				ServletContext servletContext = request
+					.getServletContext();
+
 				servletContext
 					.setAttribute(WebKeys.ACCOUNT_BEAN, accountBean);
 
@@ -1261,7 +1622,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		throws IOException {
 
 		AccountBean accountBean = AccountUtil
-						.getAccountBeanFromAttribute(actionRequest);
+			.getAccountBeanFromAttribute(actionRequest);
 
 		DossierFile dossierFile = null;
 

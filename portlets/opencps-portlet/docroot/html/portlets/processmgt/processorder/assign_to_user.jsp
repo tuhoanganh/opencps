@@ -1,4 +1,6 @@
 
+<%@page import="org.opencps.util.PortletPropsValues"%>
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -18,6 +20,8 @@
  */
 %>
 
+<%@page import="javax.portlet.PortletRequest"%>
+<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
 <%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.model.WorkflowOutput"%>
@@ -96,7 +100,7 @@
 		}catch(Exception e){};
 	}
 	
-	
+	boolean esign = false;
 	
 %>
 
@@ -200,28 +204,6 @@
 		<liferay-ui:message key="return-date"/>
 	</label>
 	
-	<c:if test="<%=workflowOutputs != null && !workflowOutputs.isEmpty() %>">
-		<aui:select name="esignDossierFiles" multiple="<%=true %>" label="esign-dossier-files">
-			<%
-				for(WorkflowOutput workflowOutput : workflowOutputs){
-					long dossierPartId = workflowOutput.getDossierPartId();
-					DossierFile dossierFileInUse = null;
-					try{
-						dossierFileInUse = DossierFileLocalServiceUtil.getDossierFileInUse(dossierId, dossierPartId);
-					}catch(Exception e){
-						continue;
-					}
-					
-					if(dossierFileInUse != null && dossierFileInUse.getFileEntryId() > 0){
-						%>
-							<aui:option value="<%=dossierFileInUse.getDossierFileId() %>"><%=dossierFileInUse.getDisplayName()%></aui:option>
-						<%
-					}
-				}
-			%>
-		</aui:select>
-	</c:if>
-	
 	<liferay-ui:input-date
 		dayParam="<%=ProcessOrderDisplayTerms.ESTIMATE_DATETIME_DAY %>"
 		disabled="<%= false %>"
@@ -236,17 +218,98 @@
 		nullable="<%=spd == null ? true: false %>"
 	/>
 	
+	
+	
 	<aui:input name="<%=ProcessOrderDisplayTerms.ACTION_NOTE %>" label="action-note" type="textarea"/>
 	
-	<%-- <aui:input name="signature" type="checkbox" label="apcept-signature"/> --%>
+	<c:if test="<%=workflowOutputs != null && !workflowOutputs.isEmpty() %>">
+	
+		<label class="control-label custom-lebel" >
+			
+			<liferay-ui:message key="esign-dossier-files"/>
+		</label>
+		<div class="signature-file-list">
+			<table>
+				<%
+					for(WorkflowOutput workflowOutput : workflowOutputs){
+						long dossierPartId = workflowOutput.getDossierPartId();
+						DossierFile dossierFileInUse = null;
+						try{
+							dossierFileInUse = DossierFileLocalServiceUtil.getDossierFileInUse(dossierId, dossierPartId);
+						}catch(Exception e){
+							continue;
+						}
+						
+						if(dossierFileInUse != null && dossierFileInUse.getFileEntryId() > 0){
+							esign = true;
+							%>
+								<tr>
+									<td class="file-name" width="80%">
+										<%=dossierFileInUse.getDisplayName()%>
+									</td>
+									<td class="signature-status" width="10%">
+										<c:choose>
+											<c:when test="<%=dossierFileInUse.isSigned() %>">
+												<i class="fa fa-check-square-o" aria-hidden="true" title="signed"></i>
+											</c:when>
+											<c:otherwise>
+												<i class="fa fa-square-o" aria-hidden="true" ></i>
+											</c:otherwise>
+										</c:choose>
+									</td>
+									<td class="signature-verify" width="10%">
+										<c:if test="<%=dossierFileInUse.isSigned() %>">
+											<aui:a href="javascript:void(0);" onClick='<%="javavscript:" + renderResponse.getNamespace() + "verifySign(this)" %>' title="check-sign" dossier-file="<%=dossierFileInUse.getDossierFileId() %>">
+												<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+											</aui:a>
+										</c:if>
+									</td>
+								</tr>
+								
+							<%
+						}
+					}
+				%>
+			</table>
+		</div>
+		<div style="display:none">
+			<aui:select name="esignDossierFiles" multiple="<%=true %>" label="esign-dossier-files">
+				<%
+					for(WorkflowOutput workflowOutput : workflowOutputs){
+						long dossierPartId = workflowOutput.getDossierPartId();
+						DossierFile dossierFileInUse = null;
+						try{
+							dossierFileInUse = DossierFileLocalServiceUtil.getDossierFileInUse(dossierId, dossierPartId);
+						}catch(Exception e){
+							continue;
+						}
+						
+						if(dossierFileInUse != null && dossierFileInUse.getFileEntryId() > 0){
+							esign = true;
+							%>
+								<aui:option value="<%=dossierFileInUse.getDossierFileId() %>"><%=dossierFileInUse.getDisplayName()%></aui:option>
+							<%
+						}
+					}
+				%>
+			</aui:select>
+		</div>
+	</c:if>
+
 	<aui:button type="submit" value="submit" name="submit"/>
+	<c:if test="<%=esign %>">
+		<aui:button type="button" value="esign" name="esign"/>
+	</c:if>
 	<aui:button type="button" value="cancel" name="cancel"/>
+	<div id="myProgressBar" class="aui-progress-warning"></div>
 </aui:form>
 
 <aui:script>
 	AUI().ready(function(A){
 
 		var cancelButton = A.one('#<portlet:namespace/>cancel');
+		
+		var esign = A.one('#<portlet:namespace/>esign');
 		
 		if(cancelButton){
 			cancelButton.on('click', function(){
@@ -262,6 +325,13 @@
 			<portlet:namespace/>closeDialog();
 			Util.getOpener().Liferay.fire('redirect', {responseData:{backURL:backURL}});
 		}
+		
+		if(esign){
+			esign.on('click', function(){
+				<portlet:namespace/>esign();
+			});
+		}
+		
 	});
 	
 	Liferay.provide(window, '<portlet:namespace/>closeDialog', function() {
@@ -270,4 +340,135 @@
 		dialog.destroy();
 		Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.PROCESS_ORDER_PORTLET %>_');
 	});
+	
+	Liferay.provide(window, '<portlet:namespace/>verifySign', function(e) {
+		var A = AUI();
+		var instance = A.one(e);
+		var dossierFileId = instance.attr('dossier-file');
+		
+		var uri = '<%=PortletPropsValues.OPENCPS_SERVLET_VERIFY_SIGN_DOCUMENT_URL%>' + dossierFileId;
+		
+		var loadingMask = new A.LoadingMask(
+			{
+				'strings.loading': '<%= UnicodeLanguageUtil.get(pageContext, "Verify signature ...") %>',
+				target: A.one('#<portlet:namespace/>fm')
+			}
+		);
+		
+		loadingMask.show();
+		
+		openDialog(uri, '<portlet:namespace />verifySignature','<%= UnicodeLanguageUtil.get(pageContext, "verify") %>');
+		
+		loadingMask.hide();
+	},['aui-io','liferay-portlet-url', 'aui-loading-mask-deprecated']);
+	
+	Liferay.provide(window, '<portlet:namespace/>esign', function() {
+		
+		var A = AUI();
+		
+		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.ACTION_PHASE) %>');
+		portletURL.setParameter("javax.portlet.action", "hashSingleFile");
+		portletURL.setWindowState('<%=WindowState.NORMAL%>');
+		
+		var esignDossierFiles = A.one('#<portlet:namespace/>esignDossierFiles');
+		
+		var dossierFileIds = [];
+		
+
+		var loadingMask = new A.LoadingMask(
+			{
+				'strings.loading': '<%= UnicodeLanguageUtil.get(pageContext, "esign...") %>',
+				target: A.one('#<portlet:namespace/>fm')
+			}
+		);
+		
+		console.log(loadingMask);
+		
+		console.log(loadingMask._attrs.strings.value.loading);
+		
+		console.log(loadingMask.getAttrs());
+		
+		var strings = {strings : {loading: 'xxx...'}};
+		
+		loadingMask.setAttrs(strings);
+
+		//loadingMask.reset();
+		
+		console.log(loadingMask.getAttrs());
+
+		loadingMask.show();
+	
+		
+		if(esignDossierFiles){
+			var childs = esignDossierFiles._node.children;
+			if(childs.length > 0){
+				for(var i = 0; i < childs.length; i++){
+					var option = A.one(childs[i]);
+					dossierFileIds.push(option.attr('value'));
+					
+					A.io.request(
+						portletURL.toString(),
+						
+						{
+						    dataType : 'json',
+						   	sync: true,
+						    data:{    	
+						    	<portlet:namespace/>dossierFileId : option.attr('value'),
+						    },   
+						    on: {
+						        success: function(event, id, obj) {
+									var instance = this;
+									var res = instance.get('responseData');
+									
+									<portlet:namespace/>signature(res.hashHex, res.resources);
+								},
+						    	error: function(){
+						    	
+						    	}
+							}
+						}
+					);
+				}			
+			}
+		}
+		
+		loadingMask.hide();
+	},['aui-io','liferay-portlet-url', 'aui-loading-mask-deprecated']);
+	
+	Liferay.provide(window, '<portlet:namespace/>signature', function(hex, resources) {
+		
+		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.ACTION_PHASE) %>');
+		portletURL.setParameter("javax.portlet.action", "signature");
+		portletURL.setWindowState('<%=WindowState.NORMAL%>');
+		
+		$.sign({
+		    hash: {
+		        type: 'sha512',
+		        hex: hex
+		    },
+		    document: {
+		    	resources: resources
+		    },
+		    'backend': 'bcy',
+		    beforeSign: function(signer, hash) {
+		        // do something
+		    },
+		    afterSign: function(signer, signature) {
+		        $.ajax({
+			   type: "POST",
+		            url : portletURL.toString(),
+			    async: false,
+		            data : {
+		                <portlet:namespace/>signature: signature.value,
+		                <portlet:namespace/>certificate: signature.certificate,
+		                <portlet:namespace/>resources: JSON.stringify(signer.options.document.resources)
+		            }
+		        });
+		    },
+		    onError: function(signer, error) {
+		        // do something
+		    }
+		});
+	}, ['aui-io','liferay-portlet-url']);
+	
 </aui:script>
