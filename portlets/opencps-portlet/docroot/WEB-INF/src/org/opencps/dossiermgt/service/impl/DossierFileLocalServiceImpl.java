@@ -621,7 +621,7 @@ public class DossierFileLocalServiceImpl
 			.setOid(oldDossierFile
 				.getOid());
 		
-		dossierFile.setIsSigned(isSigned);
+		dossierFile.setSigned(isSigned);
 
 		// Add file
 		FileEntry fileEntry = dlAppService
