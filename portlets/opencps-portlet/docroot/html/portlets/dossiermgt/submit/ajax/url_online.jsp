@@ -39,7 +39,7 @@
 		//nothing to do
 	}
 	
-	long frontServicePlid = PortalUtil.getPlidFromPortletId(scopeGroupId, true,  WebKeys.DOSSIER_MGT_PORTLET);
+	long frontServicePlid = PortalUtil.getPlidFromPortletId(scopeGroupId, WebKeys.DOSSIER_MGT_PORTLET);
 
 %>
 
