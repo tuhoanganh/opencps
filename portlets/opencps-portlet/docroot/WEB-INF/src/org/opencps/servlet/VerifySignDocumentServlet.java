@@ -21,8 +21,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.security.KeyFactory;
 import java.security.KeyStore;
+import java.security.Security;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -94,19 +94,21 @@ public class VerifySignDocumentServlet extends HttpServlet {
 						.getFileEntryId());
 
 			PdfVerifier verifier = new PdfVerifier();
+			
 
 			FileInputStream is = new FileInputStream(PortletUtil
-				.getResourceFolderPath(request) + "opencps.jks");
+				.getResourceFolderPath(request) + "opencps-ks.jks");
 
 			// FileInputStream is = new FileInputStream(new File(pdfSigned));
 			
-			
-			KeyStore keystore = KeyStore
-				.getInstance(KeyStore.getDefaultType());
-			
+			/*Security
+			.addProvider(new BouncyCastleProvider());*/
+			KeyStore keystore = verifier.loadKeyStore(PortletUtil
+				.getResourceFolderPath(request) + "opencps-ks.jks", "fds@2016");
+		/*	KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
 			keystore
-				.load(is, "changeit"
-					.toCharArray());
+				.load(is, "fds@2016"
+					.toCharArray());*/
 			
 			Boolean isVerify = verifier
 				.verifySignature(pdfSignedFilePath, keystore);
