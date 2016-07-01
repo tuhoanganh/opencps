@@ -31,6 +31,11 @@
       	<servlet-name>PreviewReportServlet</servlet-name>
      	<servlet-class>org.opencps.servlet.PreviewReportServlet</servlet-class>
   	</servlet>
+  	<servlet>
+      	<servlet-name>VerifySignServlet</servlet-name>
+     	<servlet-class>org.opencps.servlet.VerifySignDocumentServlet</servlet-class>
+  	</servlet>
+  	
 	<servlet-mapping>
     	<servlet-name>VerifyEmailServlet</servlet-name>
       	<url-pattern>/verify/*</url-pattern>
@@ -39,6 +44,11 @@
 	<servlet-mapping>
 		<servlet-name>PreviewReportServlet</servlet-name>
 		<url-pattern>/preview/report/*</url-pattern>
+	</servlet-mapping>  
+	
+	<servlet-mapping>
+		<servlet-name>VerifySignServlet</servlet-name>
+		<url-pattern>/verify-sign/*</url-pattern>
 	</servlet-mapping>  
 	
 	

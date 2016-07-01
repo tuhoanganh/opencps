@@ -770,7 +770,7 @@ public class PortletUtil {
 		return statusLabel;
 	}
 
-	public static String getTemplateReportFilePath(ResourceRequest request) {
+	public static String getContextPath(ResourceRequest request) {
 
 		return request
 			.getPortletSession().getPortletContext().getRealPath("/").replace(
@@ -778,7 +778,7 @@ public class PortletUtil {
 
 	}
 
-	public static String getTemplateReportFilePath(HttpServletRequest request) {
+	public static String getContextPath(HttpServletRequest request) {
 
 		return request
 			.getSession().getServletContext().getRealPath("/").replace("/",
@@ -786,8 +786,7 @@ public class PortletUtil {
 
 	}
 
-	public static String getTemplateReportFilePath(
-		ActionRequest actionRequest) {
+	public static String getContextPath(ActionRequest actionRequest) {
 
 		HttpServletRequest request = PortalUtil
 			.getHttpServletRequest(actionRequest);
@@ -796,5 +795,36 @@ public class PortletUtil {
 			.getSession().getServletContext().getRealPath("/").replace("/",
 				File.separator).replace(File.separator + ".", "");
 
+	}
+
+	public static String getTempFolderPath(ActionRequest actionRequest) {
+
+		return getContextPath(actionRequest) + "temp/";
+	}
+
+	public static String getTempFolderPath(HttpServletRequest request) {
+
+		return getContextPath(request) + "temp/";
+	}
+
+	public static String getTempFolderPath(ResourceRequest resourceRequest) {
+
+		return getContextPath(resourceRequest) + "temp/";
+	}
+
+	public static String getResourceFolderPath(ActionRequest actionRequest) {
+
+		return getContextPath(actionRequest) + "resources/";
+	}
+
+	public static String getResourceFolderPath(HttpServletRequest request) {
+
+		return getContextPath(request) + "resources/";
+	}
+
+	public static String getResourceFolderPath(
+		ResourceRequest resourceRequest) {
+
+		return getContextPath(resourceRequest) + "resources/";
 	}
 }

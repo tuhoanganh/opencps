@@ -122,6 +122,8 @@ public class PortletPropsKeys {
 	
 	public static final String OPENCPS_SERVLET_PREVIEW_DOSSIER_FORM_URL = "opencps.servlet.preview.dossier.form.url";
 	
+	public static final String OPENCPS_SERVLET_VERIFY_SIGN_DOCUMENT_URL = "opencps.servlet.verify.sign.document.url";
+	
 	//KeyPay
 	public static final String OPENCPS_KEYPAY_CURRENT_LOCATE = "opencps.keypay.current.locale";
 	public static final String OPENCPS_KEYPAY_COUNTRY_CODE = "opencps.keypay.country.code";

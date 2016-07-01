@@ -209,9 +209,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		String sourceFileName = uploadPortletRequest
 			.getFileName(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
 
-		sourceFileName = sourceFileName
+		/*sourceFileName = sourceFileName
 			.concat(PortletConstants.TEMP_RANDOM_SUFFIX).concat(StringUtil
-				.randomString());
+				.randomString());*/
 
 		String redirectURL = ParamUtil
 			.getString(uploadPortletRequest, "redirectURL");
