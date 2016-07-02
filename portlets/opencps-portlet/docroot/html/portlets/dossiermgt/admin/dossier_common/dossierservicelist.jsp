@@ -1,4 +1,3 @@
-<%@page import="org.opencps.dossiermgt.search.DossierTemplateDisplayTerms"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -26,7 +25,7 @@
 <%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.dossiermgt.permissions.ServiceConfigPermission"%>
-
+<%@page import="org.opencps.dossiermgt.search.DossierTemplateDisplayTerms"%>
 <%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.search.ServiceConfigSearchTerm"%>
 <%@page import="org.opencps.dossiermgt.search.ServiceConfigSearch"%>
