@@ -1,3 +1,4 @@
+<%@page import="org.opencps.dossiermgt.search.DossierTemplateDisplayTerms"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -38,7 +39,7 @@
 
 <%
 	DossierTemplate dossierTemplate = (DossierTemplate) request.getAttribute(WebKeys.DOSSIER_TEMPLATE_ENTRY);
-
+	
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "dossier_common/dossierpartlist.jsp");
 	iteratorURL.setParameter("tabs1", DossierMgtUtil.SERVICE_CONFIG_TOOLBAR);
@@ -66,9 +67,15 @@
 	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
 %>
 
+<portlet:renderURL var="editServiceConfigURL" >
+	<portlet:param name="mvcPath" value='<%= templatePath + "edit_service_config.jsp" %>'/>
+	<portlet:param name="redirectURL" value="<%=currentURL %>"/>
+	<portlet:param name="<%=DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DOSSIERTEMPLATEID %>" value="<%=String.valueOf(dossierTemplateId) %>"/>
+</portlet:renderURL>
 
 <c:if test="<%=ServiceConfigPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_SERVICE_CONFIG) %>">
-		<div id="<portlet:namespace/>toolbarResponse"></div>
+		<%-- <div id="<portlet:namespace/>toolbarResponse"></div> --%>
+		<aui:button href="<%= editServiceConfigURL.toString() %>" value="add-service-config"/>
 </c:if>
 
 <liferay-ui:search-container searchContainer="<%= new ServiceConfigSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" 

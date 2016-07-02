@@ -44,7 +44,7 @@
 	String tabs1 = ParamUtil.getString(request, "tabs1", DossierMgtUtil.TOP_TABS_DOSSIER_TEMPLATE);
 	PortletURL searchURL = renderResponse.createRenderURL();
 	
-	Long dossierTemplateId = (Long) session.getAttribute(DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DOSSIERTEMPLATEID);
+	/* Long dossierTemplateId = (Long) session.getAttribute(DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DOSSIERTEMPLATEID); */
 	DictCollection dictCollectionServiceAdmin = null;
 	List<DictItem> dictItemsServiceAdmin = new ArrayList<DictItem>();
 	String currURL = ParamUtil.getString(request, "currURL");
@@ -92,7 +92,7 @@
 				</c:if>
 				
 			</c:when>
-			<c:when test="<%=tabs1.contentEquals(DossierMgtUtil.DOSSIER_PART_TOOLBAR) %>">
+			<%-- <c:when test="<%=tabs1.contentEquals(DossierMgtUtil.DOSSIER_PART_TOOLBAR) %>">
 				<%
 					searchURL.setParameter("mvcPath", templatePath + "dossier_common/dossierpartlist.jsp");
 					searchURL.setParameter("tabs1", DossierMgtUtil.DOSSIER_PART_TOOLBAR);
@@ -116,10 +116,10 @@
 					/>
 				</div>
 				</c:if>
-			</c:when>
+			</c:when> --%>
 			
 			 <c:when test="<%= tabs1.contentEquals(DossierMgtUtil.TOP_TABS_SERVICE_CONFIG) 
-			 	|| tabs1.contentEquals(DossierMgtUtil.SERVICE_CONFIG_TOOLBAR)
+			 	/* || tabs1.contentEquals(DossierMgtUtil.SERVICE_CONFIG_TOOLBAR )*/
 			 %>">
 				<%
 					searchURL.setParameter("mvcPath", templatePath + "serviceconfiglist.jsp");
@@ -129,7 +129,7 @@
 					<portlet:param name="mvcPath" value='<%= templatePath + "edit_service_config.jsp" %>'/>
 					<portlet:param name="redirectURL" value="<%=currentURL %>"/>
 					<portlet:param name="tabs1" value="<%= tabs1 %>"/>
-					<portlet:param name="<%=DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DOSSIERTEMPLATEID %>" value="<%=String.valueOf(dossierTemplateId) %>"/>
+					<portlet:param name="<%=DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DOSSIERTEMPLATEID %>" value="<%=String.valueOf(0) %>"/>
 				
 				</portlet:renderURL>
 				
