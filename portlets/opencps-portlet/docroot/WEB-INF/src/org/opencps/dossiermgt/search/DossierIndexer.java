@@ -40,6 +40,7 @@ import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchEngineUtil;
 import com.liferay.portal.kernel.search.Summary;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.security.permission.PermissionChecker;
 
 /**
@@ -86,26 +87,59 @@ public class DossierIndexer extends BaseIndexer {
 
 		Document document = getBaseModelDocument(PORTLET_ID, dossier);
 		
-		Field field = new Field(DossierDisplayTerms.RECEPTION_NO, dossier.getReceptionNo());
-		field.setBoost(5);
-		document.add(field);
-		
-		document.addDate(Field.MODIFIED_DATE, dossier.getModifiedDate());
-		document.addText(DossierDisplayTerms.CITY_NAME, dossier.getCityName());
-		document.addText(DossierDisplayTerms.EXTERNALREF_NO, dossier.getExternalRefNo());
-		document.addText(DossierDisplayTerms.EXTERNALREF_URL, dossier.getExternalRefUrl());		
-		document.addText(DossierDisplayTerms.GOVAGENCY_NAME, dossier.getGovAgencyName());
-		document.addText(DossierDisplayTerms.SUBJECT_NAME, dossier.getSubjectName());
-		document.addText(DossierDisplayTerms.ADDRESS, dossier.getAddress());
-		document.addText(DossierDisplayTerms.CITY_CODE, dossier.getCityCode());
-		document.addText(DossierDisplayTerms.DISTRICT_CODE, dossier.getDistrictCode());
-		document.addText(DossierDisplayTerms.DISTRICT_NAME, dossier.getDistrictName());
-		document.addText(DossierDisplayTerms.WARD_CODE, dossier.getWardCode());
-		document.addText(DossierDisplayTerms.WARD_NAME, dossier.getWardName());
-		document.addText(DossierDisplayTerms.CONTACT_NAME, dossier.getContactName());
-		document.addText(DossierDisplayTerms.CONTACT_TEL_NO, dossier.getContactTelNo());
-		document.addText(DossierDisplayTerms.CONTACT_EMAIL, dossier.getContactEmail());
-		document.addText(DossierDisplayTerms.NOTE, dossier.getNote());
+		if (dossier.getReceptionNo() != null && !Validator.isBlank(dossier.getReceptionNo())) {
+			Field field = new Field(DossierDisplayTerms.RECEPTION_NO, dossier.getReceptionNo());
+			field.setBoost(5);
+			document.add(field);			
+		}
+		if (dossier.getModifiedDate() != null) {
+			document.addDate(Field.MODIFIED_DATE, dossier.getModifiedDate());			
+		}
+		if (dossier.getCityName() != null && !Validator.isBlank(dossier.getCityName())) {
+			document.addText(DossierDisplayTerms.CITY_NAME, dossier.getCityName().toLowerCase().split("\\s+"));			
+		}
+		if (dossier.getExternalRefNo() != null && !Validator.isBlank(dossier.getExternalRefNo())) {
+			document.addText(DossierDisplayTerms.EXTERNALREF_NO, dossier.getExternalRefNo());			
+		}
+		if (dossier.getExternalRefUrl() != null && !Validator.isBlank(dossier.getExternalRefUrl())) {
+			document.addText(DossierDisplayTerms.EXTERNALREF_URL, dossier.getExternalRefUrl());					
+		}
+		if (dossier.getGovAgencyName() != null && !Validator.isBlank(dossier.getGovAgencyName())) {
+			document.addText(DossierDisplayTerms.GOVAGENCY_NAME, dossier.getGovAgencyName().toLowerCase().split("\\s+"));			
+		}
+		if (dossier.getSubjectName() != null && !Validator.isBlank(dossier.getSubjectName())) {
+			document.addText(DossierDisplayTerms.SUBJECT_NAME, dossier.getSubjectName().toLowerCase().split("\\s+"));			
+		}
+		if (dossier.getAddress() != null && !Validator.isBlank(dossier.getAddress())) {
+			document.addText(DossierDisplayTerms.ADDRESS, dossier.getAddress().toLowerCase().split("\\s+"));			
+		}
+		if (dossier.getCityCode() != null && !Validator.isBlank(dossier.getCityCode())) {
+			document.addText(DossierDisplayTerms.CITY_CODE, dossier.getCityCode());			
+		}
+		if (dossier.getDistrictCode() != null && !Validator.isBlank(dossier.getDistrictCode())) {
+			document.addText(DossierDisplayTerms.DISTRICT_CODE, dossier.getDistrictCode());			
+		}
+		if (dossier.getDistrictName() != null && !Validator.isBlank(dossier.getDistrictName())) {
+			document.addText(DossierDisplayTerms.DISTRICT_NAME, dossier.getDistrictName().toLowerCase().split("\\s+"));			
+		}
+		if (dossier.getWardCode() != null && !Validator.isBlank(dossier.getWardCode())) {
+			document.addText(DossierDisplayTerms.WARD_CODE, dossier.getWardCode());			
+		}
+		if (dossier.getWardName() != null && !Validator.isBlank(dossier.getWardName())) {
+			document.addText(DossierDisplayTerms.WARD_NAME, dossier.getWardName().toLowerCase().split("\\s+"));			
+		}
+		if (dossier.getContactName() != null && !Validator.isBlank(dossier.getContactName())) {
+			document.addText(DossierDisplayTerms.CONTACT_NAME, dossier.getContactName().toLowerCase().split("\\s+"));			
+		}
+		if (dossier.getContactTelNo() != null && !Validator.isBlank(dossier.getContactTelNo())) {
+			document.addText(DossierDisplayTerms.CONTACT_TEL_NO, dossier.getContactTelNo());			
+		}
+		if (dossier.getContactEmail() != null && !Validator.isBlank(dossier.getContactEmail())) {
+			document.addText(DossierDisplayTerms.CONTACT_EMAIL, dossier.getContactEmail());			
+		}
+		if (dossier.getNote() != null && !Validator.isBlank(dossier.getNote())) {
+			document.addText(DossierDisplayTerms.NOTE, dossier.getNote().toLowerCase().split("\\s+"));			
+		}
 		document.addNumber(DossierDisplayTerms.DOSSIER_ID, dossier.getDossierId());
 		
 		document.addKeyword(Field.GROUP_ID,
