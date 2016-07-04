@@ -60,25 +60,26 @@ public class PortletUtil {
 
 			if (Validator
 				.isNotNull(fullName)) {
-				String[] splitNames = StringUtil
-					.split(fullName, StringPool.SPACE);
-				if (splitNames != null && splitNames.length > 0) {
-					_lastName = splitNames[0];
 
-					_firstName = splitNames[splitNames.length - 1];
+				// Comment by TrungNT. Only set first name equal fullName
 
-					if (splitNames.length >= 3) {
-						for (int i = 1; i < splitNames.length - 1; i++) {
-							_midName += splitNames[i] + StringPool.SPACE;
-						}
-					}
-					this
-						.setLastName(_lastName);
-					this
-						.setFirstName(_firstName);
-					this
-						.setMidName(_midName);
-				}
+				/*
+				 * String[] splitNames = StringUtil .split(fullName,
+				 * StringPool.SPACE); if (splitNames != null &&
+				 * splitNames.length > 0) { _lastName = splitNames[0];
+				 * _firstName = splitNames[splitNames.length - 1]; if
+				 * (splitNames.length >= 3) { for (int i = 1; i <
+				 * splitNames.length - 1; i++) { _midName += splitNames[i] +
+				 * StringPool.SPACE; } } this .setLastName(_lastName); this
+				 * .setFirstName(_firstName); this .setMidName(_midName); }
+				 */
+
+				this
+					.setLastName(StringPool.BLANK);
+				this
+					.setFirstName(fullName);
+				this
+					.setMidName(StringPool.BLANK);
 			}
 		}
 
