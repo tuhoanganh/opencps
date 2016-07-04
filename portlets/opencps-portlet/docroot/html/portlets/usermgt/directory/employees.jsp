@@ -1,5 +1,4 @@
-<%@page import="com.liferay.portal.kernel.dao.search.DisplayTerms"%>
-<%@page import="javax.mail.search.SearchTerm"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -18,6 +17,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+<%@page import="com.liferay.portal.kernel.dao.search.DisplayTerms"%>
+<%@page import="javax.mail.search.SearchTerm"%>
 <%@page import="org.opencps.usermgt.search.EmployeeSearch"%>
 <%@page import="com.liferay.portal.kernel.dao.search.SearchContainer"%>
 <%@page import="java.util.ArrayList"%>

@@ -1,18 +1,4 @@
 
-<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
-<%@page import="org.opencps.util.PortletConstants"%>
-<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
-<%@page import="org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
-<%@page import="org.opencps.processmgt.util.ProcessMgtUtil"%>
-<%@page import="org.opencps.processmgt.search.ProcessDisplayTerms"%>
-<%@page import="org.opencps.servicemgt.util.ServiceUtil"%>
-<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
-<%@page import="org.opencps.datamgt.service.DictCollectionLocalServiceUtil"%>
-<%@page import="org.opencps.datamgt.model.DictItem"%>
-<%@page import="org.opencps.datamgt.model.DictCollection"%>
-<%@page import="javax.portlet.PortletURL"%>
-<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -32,8 +18,23 @@
  */
 %>
 
+<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
+<%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
+<%@page import="org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
+<%@page import="org.opencps.processmgt.util.ProcessMgtUtil"%>
+<%@page import="org.opencps.processmgt.search.ProcessDisplayTerms"%>
+<%@page import="org.opencps.servicemgt.util.ServiceUtil"%>
+<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
+<%@page import="org.opencps.datamgt.service.DictCollectionLocalServiceUtil"%>
+<%@page import="org.opencps.datamgt.model.DictItem"%>
+<%@page import="org.opencps.datamgt.model.DictCollection"%>
+<%@page import="javax.portlet.PortletURL"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
+
 <%@ include file="../init.jsp"%>
 
 <%
@@ -46,6 +47,7 @@
 	<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left" >
 		
 	</aui:nav>
+	
 	<c:choose>
 		<c:when test="<%= tabs1.equals(ProcessMgtUtil.TOP_TABS_DOSSIERLIST)%>">
 			<%
@@ -54,7 +56,8 @@
 				request.setAttribute(ProcessDisplayTerms.PROCESS_ADMINISTRATIONCODE, administrationCode);
 						
 				int domainCode = ParamUtil.getInteger(request, DossierDisplayTerms.SERVICE_DOMAIN_CODE, 0);
-				int dossierStatus = ParamUtil.getInteger(request, DossierDisplayTerms.DOSSIER_STATUS, -1);	
+				
+				String dossierStatus = ParamUtil.getString(request, DossierDisplayTerms.DOSSIER_STATUS, StringPool.BLANK);	
 				
 				request.setAttribute(DossierDisplayTerms.SERVICE_DOMAIN_CODE, domainCode);
 				request.setAttribute(DossierDisplayTerms.DOSSIER_STATUS, dossierStatus);
@@ -106,7 +109,7 @@
 												<liferay-ui:message key="filter-by-dossier-status"></liferay-ui:message>
 											</aui:option>
 											<c:choose>
-												<c:when test="<%= dossierStatus == PortletConstants.DOSSIER_STATUS_NEW %>">
+												<c:when test="<%= dossierStatus.equals(PortletConstants.DOSSIER_STATUS_NEW) %>">
 													<aui:option selected="<%= true %>" value="<%= PortletConstants.DOSSIER_STATUS_NEW %>"><liferay-ui:message key="dossier-status-new"></liferay-ui:message></aui:option>
 												</c:when>
 												<c:otherwise>
@@ -114,7 +117,7 @@
 												</c:otherwise>
 											</c:choose>
 											<c:choose>
-												<c:when test="<%= dossierStatus == PortletConstants.DOSSIER_STATUS_RECEIVING %>">
+												<c:when test="<%= dossierStatus.equals(PortletConstants.DOSSIER_STATUS_RECEIVING) %>">
 													<aui:option selected="<%= true %>" value="<%= PortletConstants.DOSSIER_STATUS_RECEIVING %>"><liferay-ui:message key="dossier-status-receiving"></liferay-ui:message></aui:option>
 												</c:when>
 												<c:otherwise>
@@ -122,7 +125,7 @@
 												</c:otherwise>
 											</c:choose>
 											<c:choose>
-												<c:when test="<%= dossierStatus == PortletConstants.DOSSIER_STATUS_WAITING %>">
+												<c:when test="<%= dossierStatus.equals(PortletConstants.DOSSIER_STATUS_WAITING) %>">
 													<aui:option selected="<%= true %>" value="<%= PortletConstants.DOSSIER_STATUS_WAITING %>"><liferay-ui:message key="dossier-status-waiting"></liferay-ui:message></aui:option>
 												</c:when>
 												<c:otherwise>
@@ -130,7 +133,7 @@
 												</c:otherwise>
 											</c:choose>
 											<c:choose>
-												<c:when test="<%= dossierStatus == PortletConstants.DOSSIER_STATUS_PAYING %>">
+												<c:when test="<%= dossierStatus.equals(PortletConstants.DOSSIER_STATUS_PAYING) %>">
 													<aui:option selected="<%= true %>" value="<%= PortletConstants.DOSSIER_STATUS_PAYING %>"><liferay-ui:message key="dossier-status-paying"></liferay-ui:message></aui:option>
 												</c:when>
 												<c:otherwise>
@@ -138,7 +141,7 @@
 												</c:otherwise>
 											</c:choose>
 											<c:choose>
-												<c:when test="<%= dossierStatus == PortletConstants.DOSSIER_STATUS_PROCESSING %>">
+												<c:when test="<%= dossierStatus.equals(PortletConstants.DOSSIER_STATUS_PROCESSING) %>">
 													<aui:option selected="<%= true %>" value="<%= PortletConstants.DOSSIER_STATUS_PROCESSING %>"><liferay-ui:message key="dossier-status-processing"></liferay-ui:message></aui:option>
 												</c:when>
 												<c:otherwise>
@@ -146,7 +149,7 @@
 												</c:otherwise>
 											</c:choose>
 											<c:choose>
-												<c:when test="<%= dossierStatus == PortletConstants.DOSSIER_STATUS_DONE %>">
+												<c:when test="<%= dossierStatus.equals(PortletConstants.DOSSIER_STATUS_DONE) %>">
 													<aui:option selected="<%= true %>" value="<%= PortletConstants.DOSSIER_STATUS_DONE %>"><liferay-ui:message key="dossier-status-done"></liferay-ui:message></aui:option>
 												</c:when>
 												<c:otherwise>
@@ -154,7 +157,7 @@
 												</c:otherwise>
 											</c:choose>
 											<c:choose>
-												<c:when test="<%= dossierStatus == PortletConstants.DOSSIER_STATUS_SYSTEM %>">
+												<c:when test="<%= dossierStatus.equals(PortletConstants.DOSSIER_STATUS_SYSTEM) %>">
 													<aui:option selected="<%= true %>" value="<%= PortletConstants.DOSSIER_STATUS_SYSTEM %>"><liferay-ui:message key="dossier-status-system"></liferay-ui:message></aui:option>
 												</c:when>
 												<c:otherwise>
@@ -162,7 +165,7 @@
 												</c:otherwise>
 											</c:choose>
 											<c:choose>
-												<c:when test="<%= dossierStatus == PortletConstants.DOSSIER_STATUS_ERROR %>">
+												<c:when test="<%= dossierStatus.equals(PortletConstants.DOSSIER_STATUS_ERROR) %>">
 													<aui:option selected="<%= true %>" value="<%= PortletConstants.DOSSIER_STATUS_ERROR %>"><liferay-ui:message key="dossier-status-error"></liferay-ui:message></aui:option>
 												</c:when>
 												<c:otherwise>
@@ -208,12 +211,12 @@
 												for (DossierTemplate template : lsTemplates) {
 													if (dossierTemplateId == template.getDossierTemplateId()) {
 											%>
-											<aui:option selected="true" value="<%= template.getDossierTemplateId() %>"><%= template.getTemplateName() %></aui:option>
+														<aui:option selected="true" value="<%= template.getDossierTemplateId() %>"><%= template.getTemplateName() %></aui:option>
 											<%
 													}
 													else {
 											%>
-											<aui:option selected="false" value="<%= template.getDossierTemplateId() %>"><%= template.getTemplateName() %></aui:option>
+														<aui:option selected="false" value="<%= template.getDossierTemplateId() %>"><%= template.getTemplateName() %></aui:option>
 											<% 
 													}
 												}

@@ -1,3 +1,4 @@
+<%@page import="org.opencps.util.PortletConstants"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -28,5 +29,5 @@
 		preferences = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
 	}
 	
-	String status = preferences.getValue("status", "1");
+	String status = preferences.getValue("status", PortletConstants.DOSSIER_STATUS_NEW);
 %>

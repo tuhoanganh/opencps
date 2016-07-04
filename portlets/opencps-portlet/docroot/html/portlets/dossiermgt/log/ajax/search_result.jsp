@@ -1,6 +1,4 @@
 
-<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
-<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -19,7 +17,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-<%@ include file="../../init.jsp"%>
+
+<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="org.opencps.util.PortletUtil"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
@@ -31,10 +31,12 @@
 <%@page import="org.opencps.util.DateTimeUtil"%>
 <%@page import="java.util.Date"%>
 <%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
+<%@ include file="../../init.jsp"%>
+
 <%
 	int totalCount = 0;
 	int level = ParamUtil.getInteger(request, "levelReq");
-	int statuss = ParamUtil.getInteger(request, "statusReq");
+	String status = ParamUtil.getString(request, "statusReq");
 	Date fromDate =ParamUtil.getDate(request, "fromDateReq", DateTimeUtil.getDateTimeFormat(DateTimeUtil._VN_DATE_FORMAT));
 	Date toDate =  ParamUtil.getDate(request, "toDateReq", DateTimeUtil.getDateTimeFormat(DateTimeUtil._VN_DATE_FORMAT));
 	//sdf.parse(ParamUtil.getString(request, "toDateReq"));
@@ -75,9 +77,9 @@
 			<%
 				dossierLogs = DossierLogLocalServiceUtil.searchAdminLog(
 					fromDate, toDate, 
-					level, statuss, searchContainer.getStart(), searchContainer.getEnd());
+					level, status, searchContainer.getStart(), searchContainer.getEnd());
 				results = dossierLogs;
-				totalCount = DossierLogLocalServiceUtil.countAnminLog(fromDate, toDate, level, statuss);			
+				totalCount = DossierLogLocalServiceUtil.countAnminLog(fromDate, toDate, level, status);			
 				total = totalCount;
 				pageContext.setAttribute("results", results);
 				pageContext.setAttribute("total", total);

@@ -315,8 +315,8 @@ public class BackendUtils {
 		return govAgencyOrgId;
 	}
 	
-	public static int getDossierStatus(long dossierId, long fileGroupId) {
-		int status = 0;
+	public static String getDossierStatus(long dossierId, long fileGroupId) {
+		String status = StringPool.BLANK;
 		
 		try {
 	        Dossier dossier = DossierLocalServiceUtil.fetchDossier(dossierId);

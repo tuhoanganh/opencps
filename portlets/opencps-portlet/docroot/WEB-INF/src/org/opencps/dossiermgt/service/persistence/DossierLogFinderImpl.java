@@ -43,189 +43,148 @@ import com.liferay.util.dao.orm.CustomSQLUtil;
  * @author trungnt
  */
 public class DossierLogFinderImpl extends BasePersistenceImpl<DossierLog>
-    implements DossierLogFinder {
+	implements DossierLogFinder {
+
+	public static final String COUNT_ADMIN_LOG = DossierLogFinder.class
+		.getName() + ".countAdminLog";
 
 	public static final String FIND_REQUIRED_PROCESS_DOSSIER =
-	    DossierLogFinder.class
-	        .getName() + ".findRequiredProcessDossier";
-	
-	public static final String SEARCH_ADMIN_LOG = 
-		DossierLogFinder.class.getName() + ".searchAdminLog";
-	
-	public static final String COUNT_ADMIN_LOG = 
-					DossierLogFinder.class.getName() + ".countAdminLog";
-	
-	public List<DossierLog> searchAdminLog (Date fromUpdateDatetime , 
-		Date toUpdateDatetime, int level, int dossierStatus, int start, int end) {
+		DossierLogFinder.class
+			.getName() + ".findRequiredProcessDossier";
+
+	public static final String SEARCH_ADMIN_LOG = DossierLogFinder.class
+		.getName() + ".searchAdminLog";
+
+	private Log _log = LogFactoryUtil
+		.getLog(DossierLogFinder.class
+			.getName());
+
+	/**
+	 * @param fromUpdateDatetime
+	 * @param toUpdateDatetime
+	 * @param level
+	 * @param dossierStatus
+	 * @return
+	 */
+	public int countAdminLog(
+		Date fromUpdateDatetime, Date toUpdateDatetime, int level,
+		String dossierStatus) {
+
 		boolean andOperator = false;
-		/*String[] keywords = null;
-		boolean andOperator = false;
-		if (Validator
-			.isNotNull(dossierStatus)) {
-			keywords = CustomSQLUtil
-				.keywords(dossierStatus);
-		}
-		else {
-			andOperator = true;
-		}*/
-		
-		return searchAdminLog(fromUpdateDatetime, toUpdateDatetime, level, dossierStatus,
-			start, end, andOperator);
-		
+
+		return countAdminLog(fromUpdateDatetime, toUpdateDatetime, level,
+			dossierStatus, andOperator);
 	}
-	//search Log for Admin
-	private List<DossierLog> searchAdminLog (Date fromUpdateDatetime , 
-		Date toUpdateDatetime, int level, int dossierStatus, int start, int end, boolean andOperator) {
+
+	// count log for admin
+	/**
+	 * @param fromUpdateDatetime
+	 * @param toUpdateDatetime
+	 * @param level
+	 * @param dossierStatus
+	 * @param andOperator
+	 * @return
+	 */
+	private int countAdminLog(
+		Date fromUpdateDatetime, Date toUpdateDatetime, int level,
+		String dossierStatus, boolean andOperator) {
+
+		Timestamp fromUpdateTime_TS = CalendarUtil
+			.getTimestamp(fromUpdateDatetime);
+		Timestamp toUpdateTime_TS = CalendarUtil
+			.getTimestamp(toUpdateDatetime);
 		Session session = null;
-		Timestamp fromUpdateTime_TS = CalendarUtil.getTimestamp(fromUpdateDatetime); 
-		Timestamp toUpdateTime_TS = CalendarUtil.getTimestamp(toUpdateDatetime); 
 		try {
-			 
 			session = openSession();
-			 String sql = CustomSQLUtil.get(SEARCH_ADMIN_LOG);
-			 if(dossierStatus == -1) {
-				 sql = StringUtil.replace(sql, 
-					 "AND opencps_dossier_log.dossierStatus = ?",
-					 StringPool.BLANK);
-			 }
-			 
-			 if(Validator.isNull(fromUpdateDatetime) || Validator.isNull(toUpdateDatetime)) {
-				 sql = StringUtil.replace(sql, 
-					 "AND opencps_dossier_log.updateDatetime BETWEEN  ? AND ?",
-					 StringPool.BLANK);
-			 } 
-			 
-			 if(level == -1) {
-				 sql = StringUtil.replace(sql, 
-					 "AND opencps_dossier_log.level = ?", StringPool.BLANK);
-			 }
-			 
-			 sql = CustomSQLUtil
-								.replaceAndOperator(sql, andOperator);
-			 
-			 SQLQuery q = session.createSQLQuery(sql);
-			 q.setCacheable(false);
-			 q.addEntity("DossierLog", DossierLogImpl.class);
+			String sql = CustomSQLUtil
+				.get(COUNT_ADMIN_LOG);
+			if (Validator.isNull(dossierStatus)) {
+				sql = StringUtil
+					.replace(sql, "AND opencps_dossier_log.dossierStatus = ?",
+						StringPool.BLANK);
+			}
 
-			 QueryPos qPos = QueryPos
-			    .getInstance(q);
-			
-			 if(level != -1) {
-				 qPos.add(level);
-			 }
-			 
-			 if(Validator.isNotNull(fromUpdateDatetime) && Validator.isNotNull(fromUpdateDatetime)) {
-				 qPos.add(fromUpdateTime_TS);
-				 qPos.add(toUpdateTime_TS);
-			 }
-			 
-			 if(dossierStatus != -1) {
-				 qPos
+			if (Validator
+				.isNull(fromUpdateDatetime) || Validator
+					.isNull(toUpdateDatetime)) {
+				sql = StringUtil
+					.replace(sql,
+						"AND opencps_dossier_log.updateDatetime BETWEEN  ? AND ?",
+						StringPool.BLANK);
+			}
+
+			if (level == -1) {
+				sql = StringUtil
+					.replace(sql, "AND opencps_dossier_log.level = ?",
+						StringPool.BLANK);
+			}
+
+			sql = CustomSQLUtil
+				.replaceAndOperator(sql, andOperator);
+
+			SQLQuery q = session
+				.createSQLQuery(sql);
+
+			q
+				.setCacheable(false);
+			q
+				.addScalar(COUNT_COLUMN_NAME, Type.INTEGER);
+
+			QueryPos qPos = QueryPos
+				.getInstance(q);
+
+			if (level != -1) {
+				qPos
+					.add(level);
+			}
+
+			if (Validator
+				.isNotNull(fromUpdateDatetime) && Validator
+					.isNotNull(fromUpdateDatetime)) {
+				qPos
+					.add(fromUpdateTime_TS);
+				qPos
+					.add(toUpdateTime_TS);
+			}
+
+			if (Validator.isNotNull(dossierStatus)) {
+				qPos
 					.add(dossierStatus);
-			 }
-				return (List<DossierLog>) QueryUtil
-								.list(q, getDialect(), start, end);
-		 }
-		catch (Exception e) {
-			_log.error(e);
-		} finally {
-			closeSession(session);
+			}
+			Iterator<Integer> itr = q
+				.iterate();
+			if (itr
+				.hasNext()) {
+				Integer count = itr
+					.next();
+
+				if (count != null) {
+					return count
+						.intValue();
+				}
+			}
+
+			return 0;
+
 		}
-		
-		return null;
-	}
-	
-	public int countAdminLog(Date fromUpdateDatetime , 
-		Date toUpdateDatetime, int level, int dossierStatus) {
-		boolean andOperator = false;
-		/*String[] keywords = null;
-		boolean andOperator = false;
-		if (Validator
-			.isNotNull(dossierStatus)) {
-			keywords = CustomSQLUtil
-				.keywords(dossierStatus);
-		}
-		else {
-			andOperator = true;
-		}*/
-		
-		return countAdminLog(fromUpdateDatetime, toUpdateDatetime, level, dossierStatus, andOperator);
-	}
-	//count log for admin 
-	private int countAdminLog(Date fromUpdateDatetime , 
-		Date toUpdateDatetime, int level, int dossierStatus, boolean andOperator) {
-		Timestamp fromUpdateTime_TS = CalendarUtil.getTimestamp(fromUpdateDatetime); 
-		Timestamp toUpdateTime_TS = CalendarUtil.getTimestamp(toUpdateDatetime); 
-		Session session = null;
-		 try {
-			session = openSession();
-			 String sql = CustomSQLUtil.get(COUNT_ADMIN_LOG);
-			 if(dossierStatus == -1) {
-				 sql = StringUtil.replace(sql, 
-					 "AND opencps_dossier_log.dossierStatus = ?",
-					 StringPool.BLANK);
-			 }
-			 
-			 if(Validator.isNull(fromUpdateDatetime) || Validator.isNull(toUpdateDatetime)) {
-				 sql = StringUtil.replace(sql, 
-					 "AND opencps_dossier_log.updateDatetime BETWEEN  ? AND ?",
-					 StringPool.BLANK);
-			 } 
-			 
-			 if(level == -1) {
-				 sql = StringUtil.replace(sql, 
-					 "AND opencps_dossier_log.level = ?", StringPool.BLANK);
-			 }
-			 
-			 sql = CustomSQLUtil
-								.replaceAndOperator(sql, andOperator);
-			 
-			 SQLQuery q = session.createSQLQuery(sql);
-			 
-			 q.setCacheable(false);
-			 q.addScalar(COUNT_COLUMN_NAME, Type.INTEGER);
-
-			 QueryPos qPos = QueryPos
-			    .getInstance(q);
-			 
-			 if(level != -1) {
-				 qPos.add(level);
-			 }
-			 
-			 if(Validator.isNotNull(fromUpdateDatetime) && Validator.isNotNull(fromUpdateDatetime)) {
-				 qPos.add(fromUpdateTime_TS);
-				 qPos.add(toUpdateTime_TS);
-			 }
-			 
-			 if(dossierStatus != -1) {
-				 qPos
-					.add(dossierStatus);
-			 }
-				Iterator<Integer> itr = q.iterate();
-							if (itr
-								.hasNext()) {
-								Integer count = itr
-									.next();
-
-								if (count != null) {
-									return count
-										.intValue();
-								}
-							}
-
-							return 0;
-			 
-		 }
 		catch (Exception e) {
-			_log.error(e);
-		} finally {
+			_log
+				.error(e);
+		}
+		finally {
 			closeSession(session);
 		}
 		return 0;
 	}
 
+	/**
+	 * @param dossierId
+	 * @param actors
+	 * @param requestCommands
+	 * @return
+	 */
 	public List<DossierLog> findRequiredProcessDossier(
-	    long dossierId, String[] actors, String[] requestCommands) {
+		long dossierId, String[] actors, String[] requestCommands) {
 
 		Session session = null;
 
@@ -233,55 +192,54 @@ public class DossierLogFinderImpl extends BasePersistenceImpl<DossierLog>
 			session = openSession();
 
 			String sql = CustomSQLUtil
-			    .get(FIND_REQUIRED_PROCESS_DOSSIER);
+				.get(FIND_REQUIRED_PROCESS_DOSSIER);
 
 			if (actors == null || actors.length == 0) {
 				sql = StringUtil
-				    .replace(
-				        sql, "AND opencps_dossier_log.actor IN(?)",
-				        StringPool.BLANK);
+					.replace(sql, "AND opencps_dossier_log.actor IN(?)",
+						StringPool.BLANK);
 
 			}
 
 			if (requestCommands == null || requestCommands.length == 0) {
 				sql = StringUtil
-				    .replace(
-				        sql, "AND opencps_dossier_log.requestCommand IN(?)",
-				        StringPool.BLANK);
+					.replace(sql,
+						"AND opencps_dossier_log.requestCommand IN(?)",
+						StringPool.BLANK);
 
 			}
 
 			SQLQuery q = session
-			    .createSQLQuery(sql);
+				.createSQLQuery(sql);
 
 			q
-			    .addEntity("DossierLog", DossierLogImpl.class);
+				.addEntity("DossierLog", DossierLogImpl.class);
 
 			QueryPos qPos = QueryPos
-			    .getInstance(q);
+				.getInstance(q);
 
 			qPos
-			    .add(dossierId);
+				.add(dossierId);
 
 			if (actors != null && actors.length > 0) {
 				qPos
-				    .add(StringUtil
-				        .merge(actors));
+					.add(StringUtil
+						.merge(actors));
 
 			}
 			if (requestCommands != null && requestCommands.length > 0) {
 				qPos
-				    .add(StringUtil
-				        .merge(requestCommands));
+					.add(StringUtil
+						.merge(requestCommands));
 
 			}
 
 			return (List<DossierLog>) QueryUtil
-			    .list(q, getDialect(), QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+				.list(q, getDialect(), QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 		}
 		catch (Exception e) {
 			_log
-			    .error(e);
+				.error(e);
 		}
 		finally {
 			closeSession(session);
@@ -290,7 +248,116 @@ public class DossierLogFinderImpl extends BasePersistenceImpl<DossierLog>
 		return null;
 	}
 
-	private Log _log = LogFactoryUtil
-	    .getLog(DossierLogFinder.class
-	        .getName());
+	/**
+	 * @param fromUpdateDatetime
+	 * @param toUpdateDatetime
+	 * @param level
+	 * @param dossierStatus
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	public List<DossierLog> searchAdminLog(
+		Date fromUpdateDatetime, Date toUpdateDatetime, int level,
+		String dossierStatus, int start, int end) {
+
+		boolean andOperator = false;
+
+		return searchAdminLog(fromUpdateDatetime, toUpdateDatetime, level,
+			dossierStatus, start, end, andOperator);
+
+	}
+
+	// search Log for Admin
+	/**
+	 * @param fromUpdateDatetime
+	 * @param toUpdateDatetime
+	 * @param level
+	 * @param dossierStatus
+	 * @param start
+	 * @param end
+	 * @param andOperator
+	 * @return
+	 */
+	private List<DossierLog> searchAdminLog(
+		Date fromUpdateDatetime, Date toUpdateDatetime, int level,
+		String dossierStatus, int start, int end, boolean andOperator) {
+
+		Session session = null;
+		Timestamp fromUpdateTime_TS = CalendarUtil
+			.getTimestamp(fromUpdateDatetime);
+		Timestamp toUpdateTime_TS = CalendarUtil
+			.getTimestamp(toUpdateDatetime);
+		try {
+
+			session = openSession();
+			String sql = CustomSQLUtil
+				.get(SEARCH_ADMIN_LOG);
+			if (Validator
+				.isNull(dossierStatus)) {
+				sql = StringUtil
+					.replace(sql, "AND opencps_dossier_log.dossierStatus = ?",
+						StringPool.BLANK);
+			}
+
+			if (Validator
+				.isNull(fromUpdateDatetime) || Validator
+					.isNull(toUpdateDatetime)) {
+				sql = StringUtil
+					.replace(sql,
+						"AND opencps_dossier_log.updateDatetime BETWEEN  ? AND ?",
+						StringPool.BLANK);
+			}
+
+			if (level == -1) {
+				sql = StringUtil
+					.replace(sql, "AND opencps_dossier_log.level = ?",
+						StringPool.BLANK);
+			}
+
+			sql = CustomSQLUtil
+				.replaceAndOperator(sql, andOperator);
+
+			SQLQuery q = session
+				.createSQLQuery(sql);
+			q
+				.setCacheable(false);
+			q
+				.addEntity("DossierLog", DossierLogImpl.class);
+
+			QueryPos qPos = QueryPos
+				.getInstance(q);
+
+			if (level != -1) {
+				qPos
+					.add(level);
+			}
+
+			if (Validator
+				.isNotNull(fromUpdateDatetime) && Validator
+					.isNotNull(fromUpdateDatetime)) {
+				qPos
+					.add(fromUpdateTime_TS);
+				qPos
+					.add(toUpdateTime_TS);
+			}
+
+			if (Validator
+				.isNotNull(dossierStatus)) {
+				qPos
+					.add(dossierStatus);
+			}
+			return (List<DossierLog>) QueryUtil
+				.list(q, getDialect(), start, end);
+		}
+		catch (Exception e) {
+			_log
+				.error(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		return null;
+	}
 }

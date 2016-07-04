@@ -1,3 +1,4 @@
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -16,7 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
+<%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="org.opencps.servicemgt.util.ServiceUtil"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
@@ -35,7 +36,7 @@
 	
 	long govAgencyId = ParamUtil.getLong(request, "govAgencyId");
 	
-	int dossierStatus = ParamUtil.getInteger(request, "dossierStatus", 0);
+	String dossierStatus = ParamUtil.getString(request, "dossierStatus", PortletConstants.DOSSIER_STATUS_NEW);
 
 	String tabs1 = ParamUtil.getString(request, "tabs1", DossierMgtUtil.TOP_TABS_DOSSIER);
 	
@@ -143,13 +144,13 @@
 								<aui:col width="30">
 									<aui:select name="dossierStatus" label="<%=StringPool.BLANK %>" inlineField="<%=true %>" inlineLabel="left">
 										<aui:option><liferay-ui:message key="dossier-status"/></aui:option>
-										<aui:option value="-1" selected="<%=dossierStatus == -1%>"><liferay-ui:message key="all"/></aui:option>
+										<aui:option value="<%=StringPool.BLANK %>" selected="<%=dossierStatus.equals(StringPool.BLANK)%>"><liferay-ui:message key="all"/></aui:option>
 											<%
-												for(Integer status : PortletUtil.getDossierStatus()){
+												for(String status : PortletUtil.getDossierStatus()){
 													%>
 														<aui:option 
 															value="<%= status%>"
-															selected="<%=dossierStatus == status%>"
+															selected="<%=dossierStatus.equals(status)%>"
 														>
 															<%=PortletUtil.getDossierStatusLabel(status, locale) %>
 														</aui:option>

@@ -22,9 +22,11 @@ import java.util.Date;
 import javax.portlet.PortletRequest;
 
 import org.opencps.util.DateTimeUtil;
+import org.opencps.util.PortletConstants;
 
 import com.liferay.portal.kernel.dao.search.DisplayTerms;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplay;
 
@@ -50,14 +52,14 @@ public class DossierDisplayTerms extends DisplayTerms {
 	public static final String DOSSIER_TEMPLATE_ID = "dossierTemplateId";
 	public static final String TEMPLATE_FILE_NO = "templateFileNo";
 	public static final String GOVAGENCY_ORGANIZATION_ID =
-	    "govAgencyOrganizationId";
+		"govAgencyOrganizationId";
 	public static final String SUBJECT_ID = "subjectId";
 	public static final String EXTERNALREF_NO = "externalRefNo";
 	public static final String EXTERNALREF_URL = "externalRefUrl";
 	public static final String SERVICE_DOMAIN_INDEX = "serviceDomainIndex";
 	public static final String SERVICE_DOMAIN_CODE = "serviceDomainCode";
 	public static final String SERVICE_ADMINISTRATION_INDEX =
-	    "serviceAdministrationIndex";
+		"serviceAdministrationIndex";
 	public static final String GOVAGENCY_CODE = "govAgencyCode";
 	public static final String GOVAGENCY_NAME = "govAgencyName";
 	public static final String SUBJECT_NAME = "subjectName";
@@ -88,45 +90,46 @@ public class DossierDisplayTerms extends DisplayTerms {
 
 	public DossierDisplayTerms(PortletRequest portletRequest) {
 		super(
-		    portletRequest);
+			portletRequest);
 
 		createDate = ParamUtil
-		    .getDate(portletRequest, CREATE_DATE, DateTimeUtil
-		        .getDateTimeFormat(DateTimeUtil._VN_DATE_TIME_FORMAT));
+			.getDate(portletRequest, CREATE_DATE, DateTimeUtil
+				.getDateTimeFormat(DateTimeUtil._VN_DATE_TIME_FORMAT));
 
 		dossierId = ParamUtil
-		    .getLong(portletRequest, DOSSIER_ID, 0L);
+			.getLong(portletRequest, DOSSIER_ID, 0L);
 
 		govAgencyName = ParamUtil
-		    .getString(portletRequest, GOVAGENCY_NAME);
+			.getString(portletRequest, GOVAGENCY_NAME);
 
 		modifiedDate = ParamUtil
-		    .getDate(portletRequest, MODIFIED_DATE, DateTimeUtil
-		        .getDateTimeFormat(DateTimeUtil._VN_DATE_TIME_FORMAT));
+			.getDate(portletRequest, MODIFIED_DATE, DateTimeUtil
+				.getDateTimeFormat(DateTimeUtil._VN_DATE_TIME_FORMAT));
 
 		serviceInfoId = ParamUtil
-		    .getLong(portletRequest, SERVICE_INFO_ID);
+			.getLong(portletRequest, SERVICE_INFO_ID);
 
 		serviceName = ParamUtil
-		    .getString(portletRequest, SERVICE_NAME);
-		
+			.getString(portletRequest, SERVICE_NAME);
+
 		serviceNo = ParamUtil
-					    .getString(portletRequest, SERVICE_NO);
+			.getString(portletRequest, SERVICE_NO);
 
 		receiveDatetime = ParamUtil
-		    .getDate(portletRequest, RECEIVE_DATETIME, DateTimeUtil
-		        .getDateTimeFormat(DateTimeUtil._VN_DATE_TIME_FORMAT));
+			.getDate(portletRequest, RECEIVE_DATETIME, DateTimeUtil
+				.getDateTimeFormat(DateTimeUtil._VN_DATE_TIME_FORMAT));
 		receptionNo = ParamUtil
-		    .getString(portletRequest, RECEPTION_NO);
+			.getString(portletRequest, RECEPTION_NO);
 
 		dossierStatus = ParamUtil
-		    .getInteger(portletRequest, DOSSIER_STATUS, 0);
+			.getString(portletRequest, DOSSIER_STATUS,
+				PortletConstants.DOSSIER_STATUS_NEW);
 
 		serviceDomainCode = ParamUtil
-			    .getString(portletRequest, SERVICE_DOMAIN_CODE);
+			.getString(portletRequest, SERVICE_DOMAIN_CODE);
 
 		userId = ParamUtil
-		    .getLong(portletRequest, USER_ID);
+			.getLong(portletRequest, USER_ID);
 
 		groupId = setGroupId(portletRequest);
 	}
@@ -134,17 +137,17 @@ public class DossierDisplayTerms extends DisplayTerms {
 	public long setGroupId(PortletRequest portletRequest) {
 
 		groupId = ParamUtil
-		    .getLong(portletRequest, GROUP_ID);
+			.getLong(portletRequest, GROUP_ID);
 
 		if (groupId != 0) {
 			return groupId;
 		}
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) portletRequest
-		    .getAttribute(WebKeys.THEME_DISPLAY);
+			.getAttribute(WebKeys.THEME_DISPLAY);
 
 		return themeDisplay
-		    .getScopeGroupId();
+			.getScopeGroupId();
 	}
 
 	public long getGroupId() {
@@ -192,12 +195,12 @@ public class DossierDisplayTerms extends DisplayTerms {
 		this.serviceName = serviceName;
 	}
 
-	public int getDossierStatus() {
+	public String getDossierStatus() {
 
 		return dossierStatus;
 	}
 
-	public void setDossierStatus(int dossierStatus) {
+	public void setDossierStatus(String dossierStatus) {
 
 		this.dossierStatus = dossierStatus;
 	}
@@ -338,7 +341,7 @@ public class DossierDisplayTerms extends DisplayTerms {
 	}
 
 	public void setServiceAdministrationIndex(
-	    String serviceAdministrationIndex) {
+		String serviceAdministrationIndex) {
 
 		this.serviceAdministrationIndex = serviceAdministrationIndex;
 	}
@@ -542,21 +545,20 @@ public class DossierDisplayTerms extends DisplayTerms {
 
 		this.finishDatetime = finishDatetime;
 	}
-	
-	
+
 	public String getServiceNo() {
-	
+
 		return serviceNo;
 	}
 
 	public void setServiceNo(String serviceNo) {
-	
+
 		this.serviceNo = serviceNo;
 	}
 
 	protected int serviceMode;
 	protected int counter;
-	protected int dossierStatus;
+	protected String dossierStatus;
 	protected int dossierSource;
 
 	protected long dossierId;
@@ -578,11 +580,14 @@ public class DossierDisplayTerms extends DisplayTerms {
 	protected String externalRefUrl;
 	protected String serviceDomainIndex;
 	protected String serviceDomainCode;
+
 	public String getServiceDomainCode() {
+
 		return serviceDomainCode;
 	}
 
 	public void setServiceDomainCode(String serviceDomainCode) {
+
 		this.serviceDomainCode = serviceDomainCode;
 	}
 
@@ -607,24 +612,23 @@ public class DossierDisplayTerms extends DisplayTerms {
 	protected Date receiveDatetime;
 	protected Date estimateDatetime;
 	protected Date finishDatetime;
-	
+
 	protected String redirectPaymentURL;
 
-	
-    /**
-     * @return the redirectPaymentURL
-     */
-    public String getRedirectPaymentURL() {
-    
-    	return redirectPaymentURL;
-    }
+	/**
+	 * @return the redirectPaymentURL
+	 */
+	public String getRedirectPaymentURL() {
 
-	
-    /**
-     * @param redirectPaymentURL the redirectPaymentURL to set
-     */
-    public void setRedirectPaymentURL(String redirectPaymentURL) {
-    
-    	this.redirectPaymentURL = redirectPaymentURL;
-    }
+		return redirectPaymentURL;
+	}
+
+	/**
+	 * @param redirectPaymentURL
+	 *            the redirectPaymentURL to set
+	 */
+	public void setRedirectPaymentURL(String redirectPaymentURL) {
+
+		this.redirectPaymentURL = redirectPaymentURL;
+	}
 }

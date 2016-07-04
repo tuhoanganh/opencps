@@ -1,3 +1,9 @@
+
+<%@page import="javax.portlet.PortletURL"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
+<%@page import="java.util.List"%>
+<%@page import="org.opencps.util.WebKeys"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,12 +23,14 @@
  */
 %>
 
-<%@ include file="../../init.jsp" %>
 <%@page import="org.opencps.util.DictItemUtil"%>
 <%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.service.ServiceInfoProcessLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.model.ServiceInfoProcess"%>
+<%@page import="org.opencps.processmgt.model.ServiceProcess"%>
+<%@page import="com.liferay.portal.kernel.util.Validator"%>
 
+<%@ include file="../init.jsp" %>
 <%
 	ServiceProcess serviceProcess = (ServiceProcess) request.getAttribute(WebKeys.SERVICE_PROCESS_ENTRY);
 	

@@ -376,56 +376,60 @@ public class PortletUtil {
 		return leaderLabel;
 	}
 
-	public static String getDossierStatusLabel(int value, Locale locale) {
+	public static String getDossierStatusLabel(String value, Locale locale) {
 
 		String statusLabel = StringPool.BLANK;
 
 		switch (value) {
-		case 0:
+		case PortletConstants.DOSSIER_STATUS_NEW:
 			statusLabel = LanguageUtil
 				.get(locale, "new");
 			break;
-		case 1:
+		case PortletConstants.DOSSIER_STATUS_RECEIVING:
 			statusLabel = LanguageUtil
 				.get(locale, "receiving");
 			break;
-		case 2:
+		case PortletConstants.DOSSIER_STATUS_WAITING:
 			statusLabel = LanguageUtil
 				.get(locale, "waiting");
 			break;
-		case 3:
+		case PortletConstants.DOSSIER_STATUS_PAYING:
 			statusLabel = LanguageUtil
 				.get(locale, "paying");
 			break;
-		case 4:
+		case PortletConstants.DOSSIER_STATUS_DENIED:
 			statusLabel = LanguageUtil
 				.get(locale, "denied");
 			break;
-		case 5:
+		case PortletConstants.DOSSIER_STATUS_RECEIVED:
 			statusLabel = LanguageUtil
 				.get(locale, "received");
 			break;
-		case 6:
+		case PortletConstants.DOSSIER_STATUS_PROCESSING:
 			statusLabel = LanguageUtil
 				.get(locale, "processing");
 			break;
-		case 7:
+		case PortletConstants.DOSSIER_STATUS_CANCELED:
 			statusLabel = LanguageUtil
 				.get(locale, "canceled");
 			break;
-		case 8:
+		case PortletConstants.DOSSIER_STATUS_DONE:
 			statusLabel = LanguageUtil
 				.get(locale, "done");
 			break;
-		case 9:
+		case PortletConstants.DOSSIER_STATUS_ARCHIVED:
 			statusLabel = LanguageUtil
 				.get(locale, "archived");
 			break;
-		case 10:
+		case PortletConstants.DOSSIER_STATUS_SYSTEM:
 			statusLabel = LanguageUtil
 				.get(locale, "system");
 			break;
-		case 11:
+		case PortletConstants.DOSSIER_STATUS_ENDED:
+			statusLabel = LanguageUtil
+				.get(locale, "Ended");
+			break;
+		case PortletConstants.DOSSIER_STATUS_ERROR:
 			statusLabel = LanguageUtil
 				.get(locale, "error");
 			break;
@@ -438,10 +442,9 @@ public class PortletUtil {
 		return statusLabel;
 	}
 
-	public static List<Integer> getDossierStatus() {
+	public static List<String> getDossierStatus() {
 
-		List<Integer> dossierStatus = new ArrayList<Integer>();
-
+		List<String> dossierStatus = new ArrayList<String>();
 		dossierStatus
 			.add(PortletConstants.DOSSIER_STATUS_NEW);
 		dossierStatus
@@ -466,7 +469,6 @@ public class PortletUtil {
 			.add(PortletConstants.DOSSIER_STATUS_SYSTEM);
 		dossierStatus
 			.add(PortletConstants.DOSSIER_STATUS_ERROR);
-
 		return dossierStatus;
 	}
 
@@ -513,55 +515,59 @@ public class PortletUtil {
 		return dictItem;
 	}
 
-	public static String getActionInfoByKey(int status, Locale locale) {
+	public static String getActionInfoByKey(String status, Locale locale) {
 
 		String actionInfo = StringPool.BLANK;
 		switch (status) {
-		case 0:
+		case PortletConstants.DOSSIER_STATUS_NEW:
 			actionInfo = LanguageUtil
 				.get(locale, "new-stt");
 			break;
-		case 1:
+		case PortletConstants.DOSSIER_STATUS_RECEIVING:
 			actionInfo = LanguageUtil
 				.get(locale, "receiving-stt");
 			break;
-		case 2:
+		case PortletConstants.DOSSIER_STATUS_WAITING:
 			actionInfo = LanguageUtil
 				.get(locale, "waiting-stt");
 			break;
-		case 3:
+		case PortletConstants.DOSSIER_STATUS_PAYING:
 			actionInfo = LanguageUtil
 				.get(locale, "paying-stt");
 			break;
-		case 4:
+		case PortletConstants.DOSSIER_STATUS_DENIED:
 			actionInfo = LanguageUtil
 				.get(locale, "denied-stt");
 			break;
-		case 5:
+		case PortletConstants.DOSSIER_STATUS_RECEIVED:
 			actionInfo = LanguageUtil
 				.get(locale, "received-stt");
 			break;
-		case 6:
+		case PortletConstants.DOSSIER_STATUS_PROCESSING:
 			actionInfo = LanguageUtil
 				.get(locale, "processing-stt");
 			break;
-		case 7:
+		case PortletConstants.DOSSIER_STATUS_CANCELED:
 			actionInfo = LanguageUtil
 				.get(locale, "canceled-stt");
 			break;
-		case 8:
+		case PortletConstants.DOSSIER_STATUS_DONE:
 			actionInfo = LanguageUtil
 				.get(locale, "done-stt");
 			break;
-		case 9:
+		case PortletConstants.DOSSIER_STATUS_ARCHIVED:
 			actionInfo = LanguageUtil
 				.get(locale, "archived-stt");
 			break;
-		case 10:
+		case PortletConstants.DOSSIER_STATUS_SYSTEM:
 			actionInfo = LanguageUtil
 				.get(locale, "system-stt");
 			break;
-		case 11:
+		case PortletConstants.DOSSIER_STATUS_ENDED:
+			actionInfo = LanguageUtil
+				.get(locale, "ended-stt");
+			break;
+		case PortletConstants.DOSSIER_STATUS_ERROR:
 			actionInfo = LanguageUtil
 				.get(locale, "error-stt");
 			break;
@@ -571,55 +577,59 @@ public class PortletUtil {
 		return actionInfo;
 	}
 
-	public static String getActionInfo(int status, Locale locale) {
+	public static String getActionInfo(String status, Locale locale) {
 
 		String actionInfo = StringPool.BLANK;
 		switch (status) {
-		case 0:
+		case PortletConstants.DOSSIER_STATUS_NEW:
 			actionInfo = LanguageUtil
 				.get(locale, "new", "Create new");
 			break;
-		case 1:
+		case PortletConstants.DOSSIER_STATUS_RECEIVING:
 			actionInfo = LanguageUtil
 				.get(locale, "receiving", "Receiving");
 			break;
-		case 2:
+		case PortletConstants.DOSSIER_STATUS_WAITING:
 			actionInfo = LanguageUtil
 				.get(locale, "waiting", "Waiting");
 			break;
-		case 3:
+		case PortletConstants.DOSSIER_STATUS_PAYING:
 			actionInfo = LanguageUtil
 				.get(locale, "paying", "Paying");
 			break;
-		case 4:
+		case PortletConstants.DOSSIER_STATUS_DENIED:
 			actionInfo = LanguageUtil
 				.get(locale, "denied", "Denied");
 			break;
-		case 5:
+		case PortletConstants.DOSSIER_STATUS_RECEIVED:
 			actionInfo = LanguageUtil
 				.get(locale, "received", "Received");
 			break;
-		case 6:
+		case PortletConstants.DOSSIER_STATUS_PROCESSING:
 			actionInfo = LanguageUtil
 				.get(locale, "processing", "Processing");
 			break;
-		case 7:
+		case PortletConstants.DOSSIER_STATUS_CANCELED:
 			actionInfo = LanguageUtil
 				.get(locale, "canceled", "Canceled");
 			break;
-		case 8:
+		case PortletConstants.DOSSIER_STATUS_DONE:
 			actionInfo = LanguageUtil
 				.get(locale, "done", "Done");
 			break;
-		case 9:
+		case PortletConstants.DOSSIER_STATUS_ARCHIVED:
 			actionInfo = LanguageUtil
 				.get(locale, "archived", "Archived");
 			break;
-		case 10:
+		case PortletConstants.DOSSIER_STATUS_SYSTEM:
 			actionInfo = LanguageUtil
 				.get(locale, "system", "System");
 			break;
-		case 11:
+		case PortletConstants.DOSSIER_STATUS_ENDED:
+			actionInfo = LanguageUtil
+				.get(locale, "ended", "Ended");
+			break;
+		case PortletConstants.DOSSIER_STATUS_ERROR:
 			actionInfo = LanguageUtil
 				.get(locale, "error", "Error");
 			break;
@@ -629,55 +639,59 @@ public class PortletUtil {
 		return actionInfo;
 	}
 
-	public static String getMessageInfo(int status, Locale locale) {
+	public static String getMessageInfo(String status, Locale locale) {
 
 		String messageInfo = StringPool.BLANK;
 		switch (status) {
-		case 0:
+		case PortletConstants.DOSSIER_STATUS_NEW:
 			messageInfo = LanguageUtil
 				.get(locale, "new-msg", "Create new");
 			break;
-		case 1:
+		case PortletConstants.DOSSIER_STATUS_RECEIVING:
 			messageInfo = LanguageUtil
 				.get(locale, "receiving-msg", "Receiving");
 			break;
-		case 2:
+		case PortletConstants.DOSSIER_STATUS_WAITING:
 			messageInfo = LanguageUtil
 				.get(locale, "waiting-msg", "Waiting");
 			break;
-		case 3:
+		case PortletConstants.DOSSIER_STATUS_PAYING:
 			messageInfo = LanguageUtil
 				.get(locale, "paying-msg", "Paying");
 			break;
-		case 4:
+		case PortletConstants.DOSSIER_STATUS_DENIED:
 			messageInfo = LanguageUtil
 				.get(locale, "denied-msg", "Denied");
 			break;
-		case 5:
+		case PortletConstants.DOSSIER_STATUS_RECEIVED:
 			messageInfo = LanguageUtil
 				.get(locale, "received-msg", "Received");
 			break;
-		case 6:
+		case PortletConstants.DOSSIER_STATUS_PROCESSING:
 			messageInfo = LanguageUtil
 				.get(locale, "processing-msg", "Processing");
 			break;
-		case 7:
+		case PortletConstants.DOSSIER_STATUS_CANCELED:
 			messageInfo = LanguageUtil
 				.get(locale, "canceled-msg", "Canceled");
 			break;
-		case 8:
+		case PortletConstants.DOSSIER_STATUS_DONE:
 			messageInfo = LanguageUtil
 				.get(locale, "done-msg", "Done");
 			break;
-		case 9:
+		case PortletConstants.DOSSIER_STATUS_ARCHIVED:
 			messageInfo = LanguageUtil
 				.get(locale, "archived-msg", "Archived");
 			break;
-		case 10:
+		case PortletConstants.DOSSIER_STATUS_SYSTEM:
 			messageInfo = LanguageUtil
 				.get(locale, "system-msg", "System");
 			break;
-		case 11:
+		case PortletConstants.DOSSIER_STATUS_ENDED:
+			messageInfo = LanguageUtil
+				.get(locale, "ended-msg", "Ended");
+			break;
+		case PortletConstants.DOSSIER_STATUS_ERROR:
 			messageInfo = LanguageUtil
 				.get(locale, "error-msg", "Error");
 			break;

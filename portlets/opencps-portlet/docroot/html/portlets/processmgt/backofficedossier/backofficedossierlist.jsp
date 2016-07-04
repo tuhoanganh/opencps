@@ -1,19 +1,3 @@
-<%@page import="java.util.Date"%>
-<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
-<%@page import="org.opencps.util.PortletConstants"%>
-<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
-<%@page import="org.opencps.dossiermgt.util.PortletKeys"%>
-<%@page import="org.opencps.dossiermgt.search.DossierBackOfficeSearch"%>
-<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
-<%@page import="org.opencps.datamgt.model.DictItem"%>
-<%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
-<%@page import="com.liferay.portal.kernel.util.FastDateFormatFactoryUtil"%>
-<%@page import="java.text.Format"%>
-<%@page import="org.opencps.dossiermgt.search.DossierSearch"%>
-<%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.search.DossierSearchTerms"%>
-<%@page import="org.opencps.processmgt.search.ProcessDisplayTerms"%>
-<%@page import="org.opencps.processmgt.util.ProcessMgtUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -32,9 +16,34 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
+<%@page import="java.util.Date"%>
+<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
+<%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
+<%@page import="org.opencps.dossiermgt.util.PortletKeys"%>
+<%@page import="org.opencps.dossiermgt.search.DossierBackOfficeSearch"%>
+<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
+<%@page import="org.opencps.datamgt.model.DictItem"%>
+<%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
+<%@page import="com.liferay.portal.kernel.util.FastDateFormatFactoryUtil"%>
+<%@page import="java.text.Format"%>
+<%@page import="org.opencps.dossiermgt.search.DossierSearch"%>
+<%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.search.DossierSearchTerms"%>
+<%@page import="org.opencps.processmgt.search.ProcessDisplayTerms"%>
+<%@page import="org.opencps.processmgt.util.ProcessMgtUtil"%>
+
 <%@ include file="../init.jsp"%>
-<liferay-util:include page="/html/portlets/processmgt/backofficedossier/toptabs.jsp" servletContext="<%=application %>" />
-<liferay-util:include page="/html/portlets/processmgt/backofficedossier/toolbar.jsp" servletContext="<%=application %>" />
+
+<liferay-util:include 
+	page="/html/portlets/processmgt/backofficedossier/toptabs.jsp" 
+	servletContext="<%=application %>" 
+/>
+<liferay-util:include 
+	page="/html/portlets/processmgt/backofficedossier/toolbar.jsp" 
+	servletContext="<%=application %>" 
+/>
+
 <%
 	String backURL = ParamUtil.getString(request, "backURL");
 	User mappingUser = (User)request.getAttribute(WebKeys.USER_MAPPING_ENTRY);
@@ -58,11 +67,8 @@
 	headerNames.add("process-status");
 	
 	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
-	Format dateFormatDate = FastDateFormatFactoryUtil.getDate(locale, timeZone);
-	Integer dossierStatusInt = -1;
-	if (!"".equals(dossierStatus)) {
-		dossierStatusInt = Integer.parseInt(dossierStatus);	
-	}
+	Format dateFormatDate = FastDateFormatFactoryUtil.getDate(locale, timeZone); 
+	
 %>
 
 <liferay-ui:search-container searchContainer="<%= new DossierBackOfficeSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" 
@@ -73,10 +79,10 @@
 			DossierSearchTerms searchTerms = (DossierSearchTerms) searchContainer.getSearchTerms();
 						
 			total =  DossierLocalServiceUtil.countDossierByKeywordDomainAndStatus(scopeGroupId, searchTerms.getKeywords(), 
-					domainCode, dossierStatusInt);
+					domainCode, dossierStatus);
 
 			results = DossierLocalServiceUtil.searchDossierByKeywordDomainAndStatus(scopeGroupId, searchTerms.getKeywords(), 
-					domainCode, dossierStatusInt, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
+					domainCode, dossierStatus, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
 			
 			pageContext.setAttribute("results", results);
 			pageContext.setAttribute("total", total);
