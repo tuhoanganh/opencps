@@ -224,12 +224,12 @@ public class ProcessOrderBean {
 		this._assignToUserId = assignToUserId;
 	}
 
-	public int getDossierStatus() {
+	public String getDossierStatus() {
 
 		return _dossierStatus;
 	}
 
-	public void setDossierStatus(int dossierStatus) {
+	public void setDossierStatus(String dossierStatus) {
 
 		this._dossierStatus = dossierStatus;
 	}
@@ -424,7 +424,7 @@ public class ProcessOrderBean {
 	private long _actionUserId;
 	private Date _actionDatetime;
 	private long _assignToUserId;
-	private int _dossierStatus;
+	private String _dossierStatus;
 	
 	private long _serviceConfigId;
 	private String _subjectId;

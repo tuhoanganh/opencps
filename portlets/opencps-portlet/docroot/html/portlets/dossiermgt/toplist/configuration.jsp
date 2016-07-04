@@ -16,14 +16,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-<%@ include file="init.jsp" %>
+
 <%@page import="org.opencps.util.PortletUtil"%>
+<%@ include file="init.jsp" %>
+
+
 <liferay-ui:success key="potlet-config-saved" message="portlet-configuration-have-been-successfully-saved" />
 <liferay-portlet:actionURL var="configurationActionURL" portletConfiguration="true"/>
 <aui:form action="<%=configurationActionURL%>" method="post" name="configurationForm">
 	<aui:select name="status" id="status">
 		<%
-			for(int stt : PortletUtil.getDossierStatus()) {
+			for(String stt : PortletUtil.getDossierStatus()) {
 				%>
 					<aui:option value="<%=stt %>">
 						<liferay-ui:message key="<%= PortletUtil.getActionInfoByKey(stt, themeDisplay.getLocale()) %>"/>

@@ -1,14 +1,4 @@
-<%@page import="org.opencps.util.DateTimeUtil"%>
-<%@page import="com.liferay.portal.model.User"%>
-<%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
-<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
-<%@page import="com.liferay.portal.service.UserLocalServiceUtil"%>
-<%@page import="com.liferay.portal.kernel.util.ContextPathUtil"%>
-<%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
-<%@page import="javax.portlet.PortletURL"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="org.opencps.dossiermgt.model.Dossier"%>
-<%@page import="java.util.List"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -27,12 +17,23 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+<%@page import="org.opencps.util.DateTimeUtil"%>
+<%@page import="com.liferay.portal.model.User"%>
+<%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
+<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
+<%@page import="com.liferay.portal.service.UserLocalServiceUtil"%>
+<%@page import="com.liferay.portal.kernel.util.ContextPathUtil"%>
+<%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
+<%@page import="javax.portlet.PortletURL"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.opencps.dossiermgt.model.Dossier"%>
+<%@page import="java.util.List"%>
 <%@ include file="init.jsp" %>
 
 <%
 	List<Dossier> dossiers = new ArrayList<Dossier>();
 	int totalCount = 0;
-	int statusInt = Integer.valueOf(status);
+
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", "/html/portlets/dossiermgt/toplist/toplist.jsp");
 %>
@@ -46,8 +47,8 @@
 		<liferay-ui:search-container-results>
 			<%
 				dossiers = DossierLocalServiceUtil.getDossierByStatus(scopeGroupId,
-					statusInt, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-				totalCount = DossierLocalServiceUtil.countDossierByStatus(scopeGroupId, statusInt);
+					status, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
+				totalCount = DossierLocalServiceUtil.countDossierByStatus(scopeGroupId, status);
 				
 				results = dossiers;
 				total = totalCount;

@@ -1,8 +1,4 @@
-<%@page import="java.text.DateFormat"%>
-<%@page import="org.opencps.util.DateTimeUtil"%>
-<%@page import="org.opencps.util.PortletUtil"%>
-<%@page import="java.util.Date"%>
-<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -21,7 +17,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+<%@page import="java.text.DateFormat"%>
+<%@page import="org.opencps.util.DateTimeUtil"%>
+<%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="java.util.Date"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@ include file="../init.jsp"%>
+
 <%
 	Date defautDate = DateTimeUtil.convertStringToDate("01/01/1970");
 	PortletUtil.SplitDate spd = new PortletUtil.SplitDate(defautDate);
@@ -100,9 +102,9 @@
 				itemsEmptyOption="true"	
 			/>	 --%>
 			<aui:select name="dossierStatus">
-				<aui:option value="<%= -1 %>"></aui:option>
+				<aui:option value="<%= StringPool.BLANK %>"></aui:option>
 				<%
-					for(int stt : PortletUtil.getDossierStatus()) {
+					for(String stt : PortletUtil.getDossierStatus()) {
 						%>
 							<aui:option value="<%=stt %>">
 								<liferay-ui:message key="<%= PortletUtil.getActionInfoByKey(stt, themeDisplay.getLocale()) %>"/>

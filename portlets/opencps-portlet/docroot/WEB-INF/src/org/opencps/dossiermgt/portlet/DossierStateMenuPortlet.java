@@ -63,7 +63,7 @@ public class DossierStateMenuPortlet extends MVCPortlet {
         
 		long counterVal = 0;
 		
-		for (Integer item : PortletUtil.getDossierStatus()){
+		for (String item : PortletUtil.getDossierStatus()){
 		
 			counterVal = DossierLocalServiceUtil.countDossier(groupId, 
 				StringPool.BLANK, item);

@@ -106,7 +106,7 @@ public class PortletConstants {
 	
 	public static final int DOSSIER_FILE_REMOVED = 1;
 	
-	public static final int DOSSIER_STATUS_NEW = 0;
+	/*public static final int DOSSIER_STATUS_NEW = 0;
 	public static final int DOSSIER_STATUS_RECEIVING = 1;
 	public static final int DOSSIER_STATUS_WAITING = 2;
 	public static final int DOSSIER_STATUS_PAYING = 3;
@@ -117,8 +117,21 @@ public class PortletConstants {
 	public static final int DOSSIER_STATUS_DONE = 8;
 	public static final int DOSSIER_STATUS_ARCHIVED = 9;
 	public static final int DOSSIER_STATUS_SYSTEM = 10;
-	public static final int DOSSIER_STATUS_ERROR = 11;
-
+	public static final int DOSSIER_STATUS_ERROR = 11;*/
+	
+	public static final String DOSSIER_STATUS_NEW = "new";
+	public static final String DOSSIER_STATUS_RECEIVING = "receiving";
+	public static final String DOSSIER_STATUS_WAITING = "waiting";
+	public static final String DOSSIER_STATUS_PAYING = "paying";
+	public static final String DOSSIER_STATUS_DENIED = "denied";
+	public static final String DOSSIER_STATUS_RECEIVED = "received";
+	public static final String DOSSIER_STATUS_PROCESSING = "processing";
+	public static final String DOSSIER_STATUS_CANCELED = "canceled";
+	public static final String DOSSIER_STATUS_DONE = "done";
+	public static final String DOSSIER_STATUS_ARCHIVED = "archived";
+	public static final String DOSSIER_STATUS_SYSTEM = "system";
+	public static final String DOSSIER_STATUS_ENDED = "ended";
+	public static final String DOSSIER_STATUS_ERROR = "error";
 	
 	public static final int DOSSIER_LOG_NORMAL = 0;
 	public static final int DOSSIER_LOG_WARNING = 2;

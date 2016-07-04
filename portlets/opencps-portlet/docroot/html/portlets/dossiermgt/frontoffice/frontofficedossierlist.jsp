@@ -48,7 +48,7 @@
 <liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
 
 <%
-	int dossierStatus = ParamUtil.getInteger(request, "dossierStatus", 0);
+	String dossierStatus = ParamUtil.getString(request, "dossierStatus", StringPool.BLANK);
 	
 	long serviceDomainId = ParamUtil.getLong(request, "serviceDomainId");
 

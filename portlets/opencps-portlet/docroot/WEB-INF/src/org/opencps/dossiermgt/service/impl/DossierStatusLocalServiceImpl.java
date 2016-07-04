@@ -42,13 +42,13 @@ import com.liferay.portal.service.ServiceContext;
  * @see org.opencps.dossiermgt.service.DossierStatusLocalServiceUtil
  */
 public class DossierStatusLocalServiceImpl
-    extends DossierStatusLocalServiceBaseImpl {
+	extends DossierStatusLocalServiceBaseImpl {
 	/*
 	 * NOTE FOR DEVELOPERS: Never reference this interface directly. Always use
 	 * {@link org.opencps.dossiermgt.service.DossierStatusLocalServiceUtil} to
 	 * access the dossier status local service.
 	 */
-	
+
 	/**
 	 * @param dossierId
 	 * @param fileGroupId
@@ -57,91 +57,127 @@ public class DossierStatusLocalServiceImpl
 	 * @throws SystemException
 	 */
 	public DossierStatus getStatus(long dossierId, long fileGroupId)
-	    throws PortalException, SystemException {
-		return dossierStatusPersistence.fetchByD_FG(dossierId, fileGroupId);
+		throws PortalException, SystemException {
+
+		return dossierStatusPersistence
+			.fetchByD_FG(dossierId, fileGroupId);
 	}
 
+	/**
+	 * @param userId
+	 * @param dossierId
+	 * @param fileGroupId
+	 * @param status
+	 * @param actionInfo
+	 * @param messageInfo
+	 * @param updateDatetime
+	 * @param syncStatus
+	 * @param serviceContext
+	 * @return
+	 * @throws SystemException
+	 */
 	public DossierStatus addDossierStatus(
-	    long userId, long dossierId, long fileGroupId, int status,
-	    String actionInfo, String messageInfo, Date updateDatetime,
-	    int syncStatus, ServiceContext serviceContext)
-	    throws SystemException {
+		long userId, long dossierId, long fileGroupId, String status,
+		String actionInfo, String messageInfo, Date updateDatetime,
+		int syncStatus, ServiceContext serviceContext)
+		throws SystemException {
 
 		long dossierStatusId = counterLocalService
-		    .increment(DossierStatus.class
-		        .getName());
+			.increment(DossierStatus.class
+				.getName());
 
 		DossierStatus dossierStatus = dossierStatusPersistence
-		    .create(dossierStatusId);
+			.create(dossierStatusId);
 
 		Date now = new Date();
 
 		dossierStatus
-		    .setUserId(userId);
+			.setUserId(userId);
 		dossierStatus
-		    .setGroupId(serviceContext
-		        .getScopeGroupId());
+			.setGroupId(serviceContext
+				.getScopeGroupId());
 		dossierStatus
-		    .setCompanyId(serviceContext
-		        .getCompanyId());
+			.setCompanyId(serviceContext
+				.getCompanyId());
 		dossierStatus
-		    .setCreateDate(now);
+			.setCreateDate(now);
 		dossierStatus
-		    .setModifiedDate(now);
+			.setModifiedDate(now);
 
 		dossierStatus
-		    .setDossierId(dossierId);
+			.setDossierId(dossierId);
 		dossierStatus
-		    .setFileGroupId(fileGroupId);
+			.setFileGroupId(fileGroupId);
 		dossierStatus
-		    .setDossierStatus(status);
+			.setDossierStatus(status);
 		dossierStatus
-		    .setActionInfo(actionInfo);
+			.setActionInfo(actionInfo);
 		dossierStatus
-		    .setMessageInfo(messageInfo);
+			.setMessageInfo(messageInfo);
 		dossierStatus
-		    .setUpdateDatetime(updateDatetime);
+			.setUpdateDatetime(updateDatetime);
 		dossierStatus
-		    .setSyncStatus(syncStatus);
+			.setSyncStatus(syncStatus);
 
 		return dossierStatusPersistence
-		    .update(dossierStatus);
+			.update(dossierStatus);
 	}
 
+	/**
+	 * @param dossierId
+	 * @return
+	 * @throws NoSuchDossierStatusException
+	 * @throws SystemException
+	 */
 	public DossierStatus getDossierStatus(long dossierId)
-	    throws NoSuchDossierStatusException, SystemException {
+		throws NoSuchDossierStatusException, SystemException {
 
 		return dossierStatusPersistence
-		    .findByDossierId(dossierId);
+			.findByDossierId(dossierId);
 	}
 
+	/**
+	 * @param dossierStatusId
+	 * @param userId
+	 * @param dossierId
+	 * @param fileGroupId
+	 * @param status
+	 * @param actionInfo
+	 * @param messageInfo
+	 * @param updateDatetime
+	 * @param syncStatus
+	 * @param serviceContext
+	 * @return
+	 * @throws SystemException
+	 * @throws NoSuchDossierStatusException
+	 */
 	public DossierStatus updateDossierStatus(
-	    long dossierStatusId, long userId, long dossierId, long fileGroupId,
-	    int status, String actionInfo, String messageInfo, Date updateDatetime,
-	    int syncStatus, ServiceContext serviceContext)
-	    throws SystemException, NoSuchDossierStatusException {
+		long dossierStatusId, long userId, long dossierId, long fileGroupId,
+		String status, String actionInfo, String messageInfo,
+		Date updateDatetime, int syncStatus, ServiceContext serviceContext)
+		throws SystemException, NoSuchDossierStatusException {
 
 		DossierStatus dossierStatus = dossierStatusPersistence
-		    .findByPrimaryKey(dossierStatusId);
+			.findByPrimaryKey(dossierStatusId);
 
 		Date now = new Date();
 
 		dossierStatus
-		    .setUserId(userId);
+			.setUserId(userId);
 		dossierStatus
-		    .setModifiedDate(now);
+			.setModifiedDate(now);
 		dossierStatus
-		    .setDossierStatus(status);
+			.setDossierStatus(status);
 		dossierStatus
-		    .setActionInfo(actionInfo);
+			.setActionInfo(actionInfo);
 		dossierStatus
-		    .setMessageInfo(messageInfo);
+			.setMessageInfo(messageInfo);
 		dossierStatus
-		    .setUpdateDatetime(updateDatetime);
+			.setUpdateDatetime(updateDatetime);
 		dossierStatus
-		    .setSyncStatus(syncStatus);
+			.setSyncStatus(syncStatus);
 
 		return dossierStatusPersistence
-		    .update(dossierStatus);
+			.update(dossierStatus);
 	}
 }

@@ -1,6 +1,4 @@
-<%@page import="org.opencps.util.PortletUtil"%>
-<%@page import="org.opencps.util.DictItemUtil"%>
-<%@page import="org.opencps.processmgt.util.ProcessUtils"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -19,7 +17,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
-
+<%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="org.opencps.util.DictItemUtil"%>
+<%@page import="org.opencps.processmgt.util.ProcessUtils"%>
 <%@ include file="../../init.jsp" %>
 
 <%
@@ -91,7 +91,7 @@
 			row.addText(step.getStepName());
 			
 			// step name
-			row.addText(PortletUtil.getDossierStatusLabel(GetterUtil.getInteger(step.getDossierStatus()), locale));
+			row.addText(PortletUtil.getDossierStatusLabel(step.getDossierStatus(), locale));
 			
 			// step duration
 			row.addText(Integer.toString(step.getDaysDuration()));

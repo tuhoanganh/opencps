@@ -1,6 +1,4 @@
-<%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
-<%@page import="com.liferay.portal.kernel.util.GroupThreadLocal"%>
-<%@page import="org.opencps.processmgt.util.ProcessOrderUtils"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -18,27 +16,31 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
-<<<<<<< HEAD
-%>
-=======
+
 %>
 
+<%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
+<%@page import="com.liferay.portal.kernel.util.GroupThreadLocal"%>
+<%@page import="org.opencps.processmgt.util.ProcessOrderUtils"%>
 <%@ include file="../init.jsp" %>
 
 <%
 	long[] roleIds = user.getRoleIds();
-	String active = PortalUtil.getOriginalServletRequest(request).getParameter("_"+WebKeys.PROCESS_ORDER_PORTLET+"_"+ProcessOrderDisplayTerms.PROCESS_STEP_ID);
+	String active = PortalUtil.getOriginalServletRequest(request).getParameter("_" + WebKeys.PROCESS_ORDER_PORTLET + "_"+ ProcessOrderDisplayTerms.PROCESS_STEP_ID);
 	boolean counter = true;
 %>
 <liferay-portlet:renderURL var="renderURL" portletName="<%=WebKeys.PROCESS_ORDER_PORTLET %>">
 	<portlet:param name="mvcPath" value="/html/portlets/processmgt/processorder/processordertodolist.jsp"/>
 </liferay-portlet:renderURL>
-<liferay-portlet:actionURL  var="menuCounterUrl" name="menuCounterAction" >
-</liferay-portlet:actionURL>
+
+<liferay-portlet:actionURL  var="menuCounterUrl" name="menuCounterAction"/>
+
 <%=ProcessOrderUtils.generateMenuBuocXuLy(renderRequest, roleIds, active, counter, renderURL.toString())  %>
+
 <aui:script use="io,aui-loading-mask">
 	menu_left_count('<%=menuCounterUrl.toString() %>');
 </aui:script>
+
 <script type="text/javascript">
 function openCPS_menu_submit(renderURL, stepId) {
 	var A = AUI();
@@ -114,4 +116,4 @@ function menu_left_count(url) {
 	left: 34px !important;
 }
 </style>
->>>>>>> center_repo/master
+
