@@ -30,6 +30,7 @@
 <%@page import="java.util.List"%>
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="org.opencps.util.ActionKeys"%>
+<%@page import="org.opencps.dossiermgt.search.DossierTemplateDisplayTerms"%>
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 <%@ include file="../../init.jsp"%>
 <%
@@ -64,13 +65,20 @@
 					
 %>
 
+<portlet:renderURL var="editDossierPartURL">
+	<portlet:param name="mvcPath" value='<%= templatePath + "edit_dossier_part.jsp" %>'/>
+	<portlet:param name="backURL" value="<%=currentURL %>"/> 
+	<portlet:param name="<%=DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DOSSIERTEMPLATEID %>" value="<%=String.valueOf(dossierTemplateId) %>"/>
+</portlet:renderURL>
+
 <liferay-ui:error
 	key="<%= MessageKeys.DOSSIER_PART_DELETE_ERROR %>"
 	message="<%= MessageKeys.DOSSIER_PART_DELETE_ERROR %>"
  />
 
 <c:if test="<%=DossierPartPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_DOSSIER_PART) %>">
-	<div id="<portlet:namespace/>toolbarResponse"></div>
+	<%-- <div id="<portlet:namespace/>toolbarResponse"></div> --%>
+	<aui:button href="<%= editDossierPartURL.toString() %>" value="add-dossier-part"/>
 </c:if>
 
 <liferay-ui:search-container searchContainer="<%= new DossierPartSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" 
@@ -108,5 +116,5 @@
 		%>
 		
 	</liferay-ui:search-container-row>
-	<liferay-ui:search-iterator/>
+	<liferay-ui:search-iterator paginate="<%=false %>"/>
 </liferay-ui:search-container>

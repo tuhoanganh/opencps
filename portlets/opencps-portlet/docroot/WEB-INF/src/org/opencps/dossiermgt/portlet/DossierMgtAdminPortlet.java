@@ -317,7 +317,6 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 					        actionRequest,
 					        DossierPartDisplayTerms.DOSSIERPART_FORMREPORT);
 		
-		String returnURL = ParamUtil.getString(actionRequest, "returnURL");
 		String currentURL = ParamUtil.getString(actionRequest, "currentURL");
 		String backURL = ParamUtil.getString(actionRequest, "backURL");
 		
@@ -362,9 +361,7 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 
 			}
 			
-			if(Validator.isNotNull(returnURL)) {
-				actionResponse.sendRedirect(returnURL);
-			} else if(Validator.isNotNull(backURL)) {
+			if(Validator.isNotNull(backURL)) {
 				actionResponse.sendRedirect(backURL);
 			}
 		}
