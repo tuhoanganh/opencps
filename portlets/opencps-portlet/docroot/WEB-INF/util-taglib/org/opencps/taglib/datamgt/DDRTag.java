@@ -56,6 +56,8 @@ public class DDRTag extends IncludeTag {
 
 	private boolean _showLabel;
 
+	private String _optionValueType;
+
 	@Override
 	protected void cleanUp() {
 
@@ -72,6 +74,7 @@ public class DDRTag extends IncludeTag {
 		_displayStyle = "horizontal";
 		_itemsEmptyOption = null;
 		_showLabel = true;
+		_optionValueType = "id";
 	}
 
 	public String getCssClass() {
@@ -150,6 +153,16 @@ public class DDRTag extends IncludeTag {
 		return _showLabel;
 	}
 
+	public String getOptionValueType() {
+
+		return _optionValueType;
+	}
+
+	public void setOptionValueType(String optionValueType) {
+
+		this._optionValueType = optionValueType;
+	}
+
 	@Override
 	protected void setAttributes(HttpServletRequest request) {
 
@@ -185,6 +198,9 @@ public class DDRTag extends IncludeTag {
 		request
 			.setAttribute("opencps-datamgt:ddr:emptyOptionLabels",
 				_emptyOptionLabels);
+		request
+			.setAttribute("opencps-datamgt:ddr:optionValueType",
+				_optionValueType);
 	}
 
 	public void setCssClass(String _cssClass) {
