@@ -79,18 +79,30 @@
 		keyProperty="processWorkflowId"
 	>
 		<%
+		
+			String preName = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "start-step");
+			
+			String postName = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "end-step");
+			
+			if(!ProcessUtils.getPreProcessStepName(processWorkflow.getPreProcessStepId()).equals(StringPool.BLANK)) {
+				preName = ProcessUtils.getPreProcessStepName(processWorkflow.getPreProcessStepId());
+			}
+			
+			if(!ProcessUtils.getPostProcessStepName(processWorkflow.getPostProcessStepId()).equals(StringPool.BLANK)) {
+				postName = ProcessUtils.getPostProcessStepName(processWorkflow.getPostProcessStepId());
+			}
 			// no column
 			row.addText(String.valueOf(row.getPos() + 1));
 		
 			
 			// Pre StepName
-			row.addText(ProcessUtils.getProcessStepName(processWorkflow.getPreProcessStepId()));
+			row.addText(preName);
 
 			// workflow name
 			row.addText(processWorkflow.getActionName());
 
 			// Post StepName
-			row.addText(ProcessUtils.getProcessStepName(processWorkflow.getPostProcessStepId()));
+			row.addText(postName);
 			
 			if(isPermission) {
 				//action column
