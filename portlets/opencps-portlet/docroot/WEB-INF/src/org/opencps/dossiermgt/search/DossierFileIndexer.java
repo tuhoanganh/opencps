@@ -40,6 +40,7 @@ import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchEngineUtil;
 import com.liferay.portal.kernel.search.Summary;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.security.permission.PermissionChecker;
 
 /**
@@ -86,16 +87,24 @@ public class DossierFileIndexer extends BaseIndexer {
 
 		Document document = getBaseModelDocument(PORTLET_ID, dossierFile);
 
-		Field field = new Field(DossierFileDisplayTerms.DISPLAY_NAME,
-				dossierFile.getDisplayName());
-		field.setBoost(5);
-		document.add(field);
+		if (dossierFile.getDisplayName() != null && !Validator.isBlank(dossierFile.getDisplayName())) {
+			Field field = new Field(DossierFileDisplayTerms.DISPLAY_NAME,
+					dossierFile.getDisplayName().toLowerCase().split("\\s+"));
+			field.setBoost(5);
+			document.add(field);			
+		}
 
-		document.addDate(Field.MODIFIED_DATE, dossierFile.getModifiedDate());
-		document.addText(DossierFileDisplayTerms.FORM_DATA,
-				dossierFile.getFormData());
-		document.addText(DossierFileDisplayTerms.DOSSIER_FILE_NO,
-				dossierFile.getDossierFileNo());
+		if (dossierFile.getModifiedDate() != null) {
+			document.addDate(Field.MODIFIED_DATE, dossierFile.getModifiedDate());			
+		}
+		if (dossierFile.getFormData() != null && !Validator.isBlank(dossierFile.getFormData())) {
+			document.addText(DossierFileDisplayTerms.FORM_DATA,
+					dossierFile.getFormData().toLowerCase().split("\\s+"));			
+		}
+		if (dossierFile.getDossierFileNo() != null && !Validator.isBlank(dossierFile.getDossierFileNo())) {
+			document.addText(DossierFileDisplayTerms.DOSSIER_FILE_NO,
+					dossierFile.getDossierFileNo());			
+		}
 		document.addNumber(DossierFileDisplayTerms.DOSSIER_FILE_ID, dossierFile.getDossierFileId());
 		document.addKeyword(Field.GROUP_ID,
 				getSiteGroupId(dossierFile.getGroupId()));

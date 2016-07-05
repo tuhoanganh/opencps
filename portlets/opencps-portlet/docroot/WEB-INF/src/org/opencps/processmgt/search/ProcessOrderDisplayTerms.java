@@ -97,7 +97,7 @@ public class ProcessOrderDisplayTerms extends DisplayTerms {
 		govAgencyName = ParamUtil
 		    .getString(portletRequest, GOV_AGENCY_NAME);
 		dossierStatus = ParamUtil
-		    .getInteger(portletRequest, DOSSIER_STATUS);
+		    .getString(portletRequest, DOSSIER_STATUS);
 		receptionNo = ParamUtil
 		    .getString(portletRequest, RECEPTION_NO);
 		serviceName = ParamUtil
@@ -238,12 +238,12 @@ public class ProcessOrderDisplayTerms extends DisplayTerms {
 		this.govAgencyName = govAgencyName;
 	}
 
-	public int getDossierStatus() {
+	public String getDossierStatus() {
 
 		return dossierStatus;
 	}
 
-	public void setDossierStatus(int dossierStatus) {
+	public void setDossierStatus(String dossierStatus) {
 
 		this.dossierStatus = dossierStatus;
 	}
@@ -308,7 +308,7 @@ public class ProcessOrderDisplayTerms extends DisplayTerms {
 	protected long processStepId;
 	protected long actionUserId;
 	protected long userId;
-	protected int dossierStatus;
+	protected String dossierStatus;
 	protected Date actionDatetime;
 	protected String actionNote;
 	protected String govAgencyCode;

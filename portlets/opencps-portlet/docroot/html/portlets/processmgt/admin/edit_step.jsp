@@ -1,19 +1,4 @@
-<%@page import="org.opencps.util.PortletUtil"%>
-<%@page import="org.opencps.processmgt.model.impl.ProcessStepDossierPartImpl"%>
-<%@page import="org.opencps.processmgt.service.ProcessStepDossierPartLocalServiceUtil"%>
-<%@page import="org.opencps.processmgt.model.ProcessStepDossierPart"%>
-<%@page import="org.opencps.processmgt.service.StepAllowanceLocalServiceUtil"%>
-<%@page import="org.opencps.util.PortletConstants"%>
-<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
-<%@page import="org.opencps.processmgt.util.ProcessUtils"%>
-<%@page import="com.liferay.portal.kernel.process.ProcessUtil"%>
-<%@page import="com.liferay.portal.model.Role"%>
-<%@page import="org.opencps.processmgt.model.impl.StepAllowanceImpl"%>
-<%@page import="java.util.Collections"%>
-<%@page import="org.opencps.processmgt.model.StepAllowance"%>
-<%@page import="org.opencps.processmgt.model.ServiceProcess"%>
-<%@page import="org.opencps.servicemgt.search.ServiceDisplayTerms"%>
-<%@page import="org.opencps.processmgt.model.ProcessStep"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -32,7 +17,22 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
-
+<%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="org.opencps.processmgt.model.impl.ProcessStepDossierPartImpl"%>
+<%@page import="org.opencps.processmgt.service.ProcessStepDossierPartLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.model.ProcessStepDossierPart"%>
+<%@page import="org.opencps.processmgt.service.StepAllowanceLocalServiceUtil"%>
+<%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
+<%@page import="org.opencps.processmgt.util.ProcessUtils"%>
+<%@page import="com.liferay.portal.kernel.process.ProcessUtil"%>
+<%@page import="com.liferay.portal.model.Role"%>
+<%@page import="org.opencps.processmgt.model.impl.StepAllowanceImpl"%>
+<%@page import="java.util.Collections"%>
+<%@page import="org.opencps.processmgt.model.StepAllowance"%>
+<%@page import="org.opencps.processmgt.model.ServiceProcess"%>
+<%@page import="org.opencps.servicemgt.search.ServiceDisplayTerms"%>
+<%@page import="org.opencps.processmgt.model.ProcessStep"%>
 <%@ include file="../init.jsp" %>
 
 <%
@@ -169,9 +169,9 @@
 	<aui:row>
 		<aui:col width="70">
 			<aui:select name="dossierStatus" label="" inlineField="<%=true %>" inlineLabel="left">
-				<aui:option value="-1"><liferay-ui:message key="all"/></aui:option>
+				<aui:option value="<%=StringPool.BLANK %>"><liferay-ui:message key="all"/></aui:option>
 				<%
-					for(Integer status : PortletUtil.getDossierStatus()){
+					for(String status : PortletUtil.getDossierStatus()){
 						%>
 							<aui:option value="<%= status%>"><%=PortletUtil.getDossierStatusLabel(status, locale) %></aui:option>
 						<%

@@ -182,6 +182,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 				}
 
 				long changeStepId = processWorkflow.getPostProcessStepId();
+				
 				String changeStatus = StringPool.BLANK;
 
 				if (changeStepId != 0 ) {
@@ -199,7 +200,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 					}
 					
 				} else {
-					changeStatus = Integer.toString(PortletConstants.DOSSIER_STATUS_DONE);
+					changeStatus = PortletConstants.DOSSIER_STATUS_DONE;
 				}
 
 				// Update process order to SYSTEM
@@ -221,7 +222,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 				toBackOffice.setFileGroupId(toEngineMsg.getFileGroupId());
 				toBackOffice.setDossierStatus(changeStatus);
 
-				if (changeStatus.equals(Integer.toString(PortletConstants.DOSSIER_STATUS_WAITING))) {
+				if (changeStatus.equals(PortletConstants.DOSSIER_STATUS_WAITING)) {
 					toBackOffice.setRequestCommand(WebKeys.DOSSIER_LOG_RESUBMIT_REQUEST);
 				}
 
@@ -229,7 +230,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 				toBackOffice.setMessageInfo(toEngineMsg.getActionNote());
 				toBackOffice.setSendResult(0);
 
-				if (changeStatus.equals(Integer.toString(PortletConstants.DOSSIER_STATUS_PAYING))) {
+				if (changeStatus.equals(PortletConstants.DOSSIER_STATUS_PAYING)) {
 					toBackOffice.setRequestPayment(1);
 				}
 				else {
@@ -328,7 +329,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 				toBackOffice.setProcessOrderId(processOrderId);
 				toBackOffice.setDossierId(toEngineMsg.getDossierId());
 				toBackOffice.setFileGroupId(toEngineMsg.getFileGroupId());
-				toBackOffice.setDossierStatus(Integer.toString(PortletConstants.DOSSIER_STATUS_ERROR));
+				toBackOffice.setDossierStatus(PortletConstants.DOSSIER_STATUS_ERROR);
 
 				Message sendToBackOffice = new Message();
 

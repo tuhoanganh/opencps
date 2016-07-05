@@ -223,7 +223,7 @@
         <column name="receptionNo" type="String"/>
         <column name="estimateDatetime" type="Date"/>
         <column name="finishDatetime" type="Date"/>
-        <column name="dossierStatus" type="int"/>
+        <column name="dossierStatus" type="String"/>
         <column name="dossierSource" type="int"/>
         <column name="keypayRedirectUrl" type="String"/>
         <column name="delayStatus" type="int"></column>
@@ -267,7 +267,7 @@
 		
         <column name="dossierId" type="long"/>
         <column name="fileGroupId" type="long"/>
-        <column name="dossierStatus" type="int"/>
+        <column name="dossierStatus" type="String"/>
         <column name="actionInfo" type="String"/>
         <column name="messageInfo" type="String"/>
         <column name="updateDatetime" type="Date"/>
@@ -306,7 +306,7 @@
         <column name="fileGroupId" type="long"/>
         <column name="requestCommand" type="String"/>
 
-        <column name="dossierStatus" type="int"/>
+        <column name="dossierStatus" type="String"/>
         <column name="actionInfo" type="String"/>
         <column name="messageInfo" type="String"/>
         <column name="updateDatetime" type="Date"/>

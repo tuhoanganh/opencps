@@ -161,7 +161,10 @@
 
 	<aui:row>
 		<aui:col width="50">
-			<aui:select name="preProcessStepId" showEmptyOption="true">
+			<aui:select name="preProcessStepId">
+				<aui:option value="<%= 0 %>">
+					<liferay-ui:message key="start-step" />
+				</aui:option>
 				<%
 					for (ProcessStep step : stepAll) {
 				%>
@@ -172,7 +175,10 @@
 			</aui:select>
 		</aui:col>
 		<aui:col width="50">
-			<aui:select name="postProcessStepId" showEmptyOption="true" >
+			<aui:select name="postProcessStepId">
+				<aui:option value="<%= 0 %>">
+					<liferay-ui:message key="end-step" />
+				</aui:option>
 				<%
 					for (ProcessStep step : stepAll) {
 				%>

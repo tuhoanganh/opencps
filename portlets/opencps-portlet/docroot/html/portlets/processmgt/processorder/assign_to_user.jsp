@@ -1,6 +1,4 @@
 
-<%@page import="org.opencps.util.PortletPropsValues"%>
-<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -20,6 +18,8 @@
  */
 %>
 
+<%@page import="org.opencps.util.PortletPropsValues"%>
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@page import="javax.portlet.PortletRequest"%>
 <%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
 <%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>

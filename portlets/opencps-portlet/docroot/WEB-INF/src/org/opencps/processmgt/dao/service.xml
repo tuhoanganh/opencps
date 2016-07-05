@@ -256,7 +256,7 @@
 		<column name="actionNote" type="String"/>
 		<column name="assignToUserId" type="long"/>
 		<column name="processWorkflowId" type="long"/>
-		<column name="dossierStatus" type="int"/>
+		<column name="dossierStatus" type="String"/>
 		<column name="errorInfo" type="String"/>
         <finder name="D_F" return-type="ProcessOrder">
             <finder-column name="dossierId"></finder-column>

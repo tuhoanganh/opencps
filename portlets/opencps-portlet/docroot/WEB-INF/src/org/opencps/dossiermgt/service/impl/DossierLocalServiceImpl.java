@@ -109,8 +109,9 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		String districtCode, String districtName, String wardName,
 		String wardCode, String subjectName, String subjectId, String address,
 		String contactName, String contactTelNo, String contactEmail,
-		String note, int dossierSource, int dossierStatus, long parentFolderId,
-		String redirectPaymentURL, ServiceContext serviceContext)
+		String note, int dossierSource, String dossierStatus,
+		long parentFolderId, String redirectPaymentURL,
+		ServiceContext serviceContext)
 		throws SystemException, PortalException {
 
 		long dossierId = counterLocalService
@@ -299,7 +300,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 * @param dossierStatus
 	 * @return
 	 */
-	public int countDossier(long groupId, String keyword, int dossierStatus) {
+	public int countDossier(long groupId, String keyword, String dossierStatus) {
 
 		return dossierFinder
 			.countDossier(groupId, keyword, dossierStatus);
@@ -313,7 +314,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 * @return
 	 */
 	public int countDossierByKeywordDomainAndStatus(
-		long groupId, String keyword, String domainCode, int dossierStatus) {
+		long groupId, String keyword, String domainCode, String dossierStatus) {
 
 		return dossierFinder
 			.countDossierByKeywordDomainAndStatus(groupId, keyword, domainCode,
@@ -326,7 +327,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 * @return
 	 * @throws SystemException
 	 */
-	public int countDossierByStatus(long groupId, int dossierStatus)
+	public int countDossierByStatus(long groupId, String dossierStatus)
 		throws SystemException {
 
 		return dossierPersistence
@@ -343,7 +344,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 */
 	public int countDossierByUser(
 		long groupId, long userId, String keyword,
-		String serviceDomainTreeIndex, int dossierStatus) {
+		String serviceDomainTreeIndex, String dossierStatus) {
 
 		return dossierFinder
 			.countDossierByUser(groupId, userId, keyword,
@@ -484,7 +485,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 */
 	protected Dossier getDossier(
 		Dossier dossier, long userId, long govAgencyOrganizationId,
-		int status) {
+		String status) {
 
 		dossier
 			.setUserId(userId);
@@ -510,7 +511,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 * @return
 	 */
 	public List<Dossier> getDossier(
-		long groupId, String keyword, int dossierStatus, int start, int end,
+		long groupId, String keyword, String dossierStatus, int start, int end,
 		OrderByComparator obc) {
 
 		return dossierFinder
@@ -551,7 +552,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 * @throws SystemException
 	 */
 	public List<Dossier> getDossierByStatus(
-		long groupId, int dossierStatus, int start, int end,
+		long groupId, String dossierStatus, int start, int end,
 		OrderByComparator obc)
 		throws SystemException {
 
@@ -572,7 +573,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 */
 	public List getDossierByUser(
 		long groupId, long userId, String keyword,
-		String serviceDomainTreeIndex, int dossierStatus, int start, int end,
+		String serviceDomainTreeIndex, String dossierStatus, int start, int end,
 		OrderByComparator obc) {
 
 		return dossierFinder
@@ -611,7 +612,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 * @return
 	 */
 	public List<Dossier> searchDossierByKeywordDomainAndStatus(
-		long groupId, String keyword, String domainCode, int dossierStatus,
+		long groupId, String keyword, String domainCode, String dossierStatus,
 		int start, int end, OrderByComparator obc) {
 
 		return dossierFinder
@@ -830,10 +831,10 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 * @return
 	 */
 	public boolean updateDossierStatus(
-		long dossierId, long fileGroupId, int dossierStatus, String receptionNo,
-		Date estimateDatetime, Date receiveDatetime, Date finishDatetime,
-		String actor, String requestCommand, String actionInfo,
-		String messageInfo) {
+		long dossierId, long fileGroupId, String dossierStatus,
+		String receptionNo, Date estimateDatetime, Date receiveDatetime,
+		Date finishDatetime, String actor, String requestCommand,
+		String actionInfo, String messageInfo) {
 
 		boolean result = false;
 		try {
@@ -854,13 +855,16 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 
 			int level = 0;
 			if (dossier
-				.getDossierStatus() == PortletConstants.DOSSIER_STATUS_ERROR) {
+				.getDossierStatus().equals(
+					PortletConstants.DOSSIER_STATUS_ERROR)) {
 				level = 2;
 			}
 			else if (dossier
-				.getDossierStatus() == PortletConstants.DOSSIER_STATUS_WAITING ||
+				.getDossierStatus().equals(
+					PortletConstants.DOSSIER_STATUS_WAITING) ||
 				dossier
-					.getDossierStatus() == PortletConstants.DOSSIER_STATUS_PAYING) {
+					.getDossierStatus().equals(
+						PortletConstants.DOSSIER_STATUS_PAYING)) {
 				level = 1;
 			}
 			dossierLogLocalService
@@ -899,16 +903,16 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 * @throws PortalException
 	 */
 	public Dossier updateDossierStatus(
-		long userId, long dossierId, long govAgencyOrganizationId, int status,
-		int syncStatus, long fileGroupId, int level, Locale locale)
+		long userId, long dossierId, long govAgencyOrganizationId,
+		String status, int syncStatus, long fileGroupId, int level,
+		Locale locale)
 		throws SystemException, NoSuchDossierStatusException, PortalException {
 
 		Date now = new Date();
 
 		Dossier dossier = dossierPersistence
 			.findByPrimaryKey(dossierId);
-		dossier =
-			getDossier(dossier, userId, govAgencyOrganizationId, syncStatus);
+		dossier = getDossier(dossier, userId, govAgencyOrganizationId, status);
 		/*
 		 * DossierStatus dossierStatus = dossierStatusLocalService
 		 * .getDossierStatus(dossierId); dossierStatus = getDossierStatus(
@@ -963,7 +967,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 				.getGroupId(), dossier
 					.getCompanyId(),
 				dossierId, fileGroupId, status, PortletUtil
-					.getAccountStatus(status, locale),
+					.getActionInfo(status, locale),
 				PortletUtil
 					.getMessageInfo(status, locale),
 				now, level);
@@ -996,7 +1000,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	public void updateDossierStatus(
 		long userId, long groupId, long companyId, long dossierId,
 		long fileGroupId, String receptionNo, Date estimateDatetime,
-		Date receiveDatetime, Date finishDatetime, int dossierStatus,
+		Date receiveDatetime, Date finishDatetime, String dossierStatus,
 		String actionInfo, String messageInfo)
 		throws PortalException, SystemException {
 
@@ -1021,7 +1025,8 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 
 		dossierLogLocalService
 			.addDossierLog(userId, groupId, companyId, dossierId, fileGroupId,
-				2, actionInfo, messageInfo, new Date(), 1);
+				PortletConstants.DOSSIER_STATUS_WAITING, actionInfo,
+				messageInfo, new Date(), 1);
 	}
 
 }
