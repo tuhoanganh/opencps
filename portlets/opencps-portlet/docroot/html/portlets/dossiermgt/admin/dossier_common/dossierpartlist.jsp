@@ -87,7 +87,7 @@
 		<%
 			
 			dossierParts = DossierPartLocalServiceUtil.getDossierParts(
-					dossierTemplateId);
+					dossierTemplateId, searchContainer.getStart(), searchContainer.getEnd());
 									
 			totalCount = DossierPartLocalServiceUtil.CountByTempalteId(dossierTemplateId);
 			
