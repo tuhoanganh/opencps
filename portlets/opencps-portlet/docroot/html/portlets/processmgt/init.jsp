@@ -43,7 +43,6 @@
 <%@page import="org.opencps.processmgt.permissions.ProcessPermission"%>
 <%@page import="com.liferay.portal.kernel.dao.search.SearchEntry"%>
 <%@page import="org.opencps.processmgt.service.ProcessStepLocalServiceUtil"%>
-<%@page import="com.sun.org.apache.xpath.internal.patterns.StepPattern"%>
 <%@page import="org.opencps.processmgt.search.StepSearchTerms"%>
 <%@page import="org.opencps.processmgt.search.StepSearch"%>
 <%@page import="org.opencps.processmgt.model.ServiceProcess"%>
