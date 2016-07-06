@@ -42,7 +42,7 @@
 %>
 
 <c:choose>
-	<c:when test="<%=dossier != null && dossier.getDossierStatus() != PortletConstants.DOSSIER_STATUS_NEW %>">
+	<c:when test="<%=dossier != null && !dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_NEW) %>">
 		<%
 			String[] actors = new String[]{WebKeys.ACTOR_ACTION_CITIZEN};
 			String[] requestCommands = new String[]{WebKeys.ACTION_RESUBMIT_VALUE, WebKeys.ACTION_PAY_VALUE};
