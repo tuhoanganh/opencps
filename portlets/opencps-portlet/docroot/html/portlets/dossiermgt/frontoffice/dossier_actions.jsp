@@ -57,8 +57,8 @@
 		url="<%=viewDossierURL.toString() %>" 
 	/>
  	<c:choose>
- 		<c:when test="<%=dossier.getDossierStatus() == PortletConstants.DOSSIER_STATUS_NEW || 
- 			dossier.getDossierStatus() == PortletConstants.DOSSIER_STATUS_WAITING%>">
+ 		<c:when test="<%=dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_NEW) || 
+ 			dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_WAITING)%>">
  			<c:if test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) %>">
 		 		<portlet:renderURL var="updateDossierURL">
 					<portlet:param name="mvcPath" value='<%=templatePath + "edit_dossier.jsp" %>'/>
@@ -72,7 +72,7 @@
 		 			message="edit" 
 		 			url="<%=updateDossierURL.toString() %>" 
 		 		/>
-		 		<c:if test="<%=dossier.getDossierStatus() == PortletConstants.DOSSIER_STATUS_NEW %>">
+		 		<c:if test="<%=dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_NEW) %>">
 			 		<portlet:actionURL var="updateDossierStatusURL" name="updateDossierStatus">
 						<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
 						<portlet:param name="<%=DossierDisplayTerms.DOSSIER_STATUS %>" value="<%=String.valueOf(PortletConstants.DOSSIER_STATUS_NEW) %>"/>
@@ -86,7 +86,7 @@
 			 		/> 
 		 		</c:if>
 		 		
-		 		<c:if test="<%=dossier.getDossierStatus() == PortletConstants.DOSSIER_STATUS_WAITING %>">
+		 		<c:if test="<%=dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_WAITING) %>">
 			 		<portlet:actionURL var="updateDossierStatusURL" name="updateDossierStatus">
 						<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
 						<portlet:param name="<%=DossierDisplayTerms.DOSSIER_STATUS %>" value="<%=String.valueOf(PortletConstants.DOSSIER_STATUS_WAITING) %>"/>

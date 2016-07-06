@@ -136,7 +136,12 @@
 	
 	var emptyOptionLabels<%=randomInstance %> = strEmptyOptionLabel.split(",");
 	
+	var optionValueType = '<%=optionValueType %>';
+	
 	var rootDictItemsContainer =  null;
+	
+	var dictCollectionId;
+	
 	
 	AUI().ready('aui-base','liferay-portlet-url','aui-io', function(A){
 	
@@ -159,7 +164,7 @@
 				},function(obj) {
 					
 					if(obj){
-						var dictCollectionId = obj.dictCollectionId;
+						dictCollectionId = obj.dictCollectionId;
 						
 						<portlet:namespace/><%=randomInstance %>renderRootDataItemsByCollection(dictCollectionId);
 					}
@@ -210,7 +215,11 @@
 		}
 			
 		if(itemEmptyOption == 'true'){
-			opts += '<option value="0">' + Liferay.Language.get(emptyOptionLabel) +'</option>'
+			if(optionValueType ==='code'){
+				opts += '<option value="">' + Liferay.Language.get(emptyOptionLabel) +'</option>'
+			}else{
+				opts += '<option value="0">' + Liferay.Language.get(emptyOptionLabel) +'</option>'
+			}
 		}
 
 		for(var i = 0; i < objs.length; i++){
@@ -257,9 +266,18 @@
 			}
 		
 			if(parseInt(opt.dictItemId) == selectedItem && clearChild == false){
-				opts += '<option value="' + opt.dictItemId + '" selected="selected">' + itemName + '</option>'
+				if(optionValueType ==='code'){
+					opts += '<option value="' + opt.itemCode + '" selected="selected">' + itemName + '</option>'
+				}else{
+					opts += '<option value="' + opt.dictItemId + '" selected="selected">' + itemName + '</option>'
+				}
+				
 			}else{
-				opts += '<option value="' + opt.dictItemId + '">' + itemName + '</option>'
+				if(optionValueType ==='code'){
+					opts += '<option value="' + opt.itemCode + '">' + itemName + '</option>'
+				}else{
+					opts += '<option value="' + opt.dictItemId + '">' + itemName + '</option>'
+				}
 			}
 		}
 		
@@ -284,44 +302,82 @@
 		
 		var level = parentLevel + 1;
 		
-		var parentItemId = parent.val();
+		var parentItem = parent.val();
 		
 		var boundingBox = null;
 		
 		if(level <= depthLevel){
 			boundingBox = A.one('#<portlet:namespace/>col_<%=randomInstance %>' + level);
-			
-			if(parentItemId != 0){
-				Liferay.Service(
-				  '/opencps-portlet.dictitem/get-dictitems-by-parentId',
-				  {
-				    parentItemId: parentItemId
-				  },
-				  function(objs) {
-					  if(objs.length > 0){
-					  	 <portlet:namespace/><%=randomInstance %>renderDataItems(objs, boundingBox, level, clearChild);
-					  }else{
-					  	for(var childLevel = level; childLevel <= depthLevel; childLevel++){
-					  	
-							var childBoundingBox = A.one('#<portlet:namespace/>col_<%=randomInstance %>' + childLevel);
-							
-							console.log(childBoundingBox);
-							
-							if(childBoundingBox){
-								childBoundingBox.one('select').empty();
+			var data = null;
+			if(optionValueType ==='id'){
+				if(parentItem != 0){
+					Liferay.Service(
+					  '/opencps-portlet.dictitem/get-dictitems-by-parentId',
+					  {
+					    parentItemId: parentItem
+					  },
+					  function(objs) {
+						  if(objs.length > 0){
+						  	data = objs;
+						  }
+						  
+						  if(data != null){
+							<portlet:namespace/><%=randomInstance %>renderDataItems(objs, boundingBox, level, clearChild);
+						  }else{
+							for(var childLevel = level; childLevel <= depthLevel; childLevel++){
+								var childBoundingBox = A.one('#<portlet:namespace/>col_<%=randomInstance %>' + childLevel);
+								
+								if(childBoundingBox){
+									childBoundingBox.one('select').empty();
+								}
 							}
+						  }
+					});
+				}
+			}else{
+				if(parentItem != ''){
+					var itemId = 0;
+					
+					Liferay.Service(
+					  '/opencps-portlet.dictitem/get-dictitem-inuse-by-code',
+					  {
+					    dictCollectionId: dictCollectionId,
+					    itemCode: parentItem
+					  },
+					  function(obj) {
+					  	
+					    itemId = obj.dictItemId;
+					    
+						if(parseInt(itemId) > 0){
+							Liferay.Service(
+						  '/opencps-portlet.dictitem/get-dictitems-by-parentId',
+						  {
+						    parentItemId: itemId,
+						  },
+						  
+						  function(objs) {
+							  if(objs.length > 0){
+							  	 data = objs;
+							  }
+							  
+							  if(data != null){
+								<portlet:namespace/><%=randomInstance %>renderDataItems(objs, boundingBox, level, clearChild);
+							  }else{
+								for(var childLevel = level; childLevel <= depthLevel; childLevel++){
+									var childBoundingBox = A.one('#<portlet:namespace/>col_<%=randomInstance %>' + childLevel);
+									
+									if(childBoundingBox){
+										childBoundingBox.one('select').empty();
+									}
+								}
+							  }
+						  });
 						}
 					  }
-				  });
-			}else{
-				
-				for(var childLevel = level; childLevel <= depthLevel; childLevel++){
-					var childBoundingBox = A.one('#<portlet:namespace/>col_<%=randomInstance %>' + childLevel);
-					
-					if(childBoundingBox){
-						childBoundingBox.one('select').empty();
-					}
+					);
 				}
+				
+				
 			}
 		}
 	});

@@ -59,6 +59,16 @@ public class DictItemServiceImpl extends DictItemServiceBaseImpl {
 			.getDictItem(dictItemId);
 	}
 
+	@JSONWebService(value = "get-dictitem-inuse-by-code")
+	@AccessControlled(guestAccessEnabled = true)
+	public DictItem getDictItemInuseByItemCode(
+		long dictCollectionId, String itemCode)
+		throws SystemException, PortalException {
+
+		return dictItemLocalService
+			.getDictItemInuseByItemCode(dictCollectionId, itemCode);
+	}
+
 	@JSONWebService(value = "get-dictitems-by-parentId")
 	@AccessControlled(guestAccessEnabled = true)
 	public List<DictItem> getDictItemsByParentItemId(long parentItemId)
@@ -87,21 +97,26 @@ public class DictItemServiceImpl extends DictItemServiceBaseImpl {
 			.getDictItemsInUseByDictCollectionIdAndParentItemId(
 				dictCollectionId, parentItemId);
 	}
-	
+
 	@JSONWebService(value = "get-dictitems-inuse-by-dictcollectionId_parentItemId_datasource")
 	@AccessControlled(guestAccessEnabled = true)
 	public JSONObject getDictItemsInUseByDictCollectionIdAndParentItemIdDataSource(
-	    long dictCollectionId, long parentItemId)
-	    throws SystemException {
+		long dictCollectionId, long parentItemId)
+		throws SystemException {
 
-		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
-		List<DictItem> result =
-		    dictItemLocalService.getDictItemsInUseByDictCollectionIdAndParentItemId(
-		        dictCollectionId, parentItemId);
+		JSONObject jsonObject = JSONFactoryUtil
+			.createJSONObject();
+		List<DictItem> result = dictItemLocalService
+			.getDictItemsInUseByDictCollectionIdAndParentItemId(
+				dictCollectionId, parentItemId);
 		for (DictItem dictItem : result) {
-			jsonObject.put(
-			    String.valueOf(dictItem.getDictItemId()),
-			    dictItem.getItemName(Locale.getDefault()));
+			jsonObject
+				.put(String
+					.valueOf(dictItem
+						.getDictItemId()),
+					dictItem
+						.getItemName(Locale
+							.getDefault()));
 		}
 		return jsonObject;
 	}
