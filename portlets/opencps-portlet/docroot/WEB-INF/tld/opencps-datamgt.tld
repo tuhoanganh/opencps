@@ -35,7 +35,7 @@
 			<name>selectedItems</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
-			<type>java.util.String</type>
+			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
 			<description><![CDATA[]]></description>
