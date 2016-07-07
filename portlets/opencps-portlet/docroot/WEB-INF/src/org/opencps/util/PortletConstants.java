@@ -33,23 +33,24 @@ public class PortletConstants {
 	public static final int ACCOUNT_STATUS_CONFIRMED = 1;
 	public static final int ACCOUNT_STATUS_APPROVED = 2;
 	public static final int ACCOUNT_STATUS_LOCKED = 3;
-	
+
 	public static final int DOSSIER_TYPE_PAPER_SUBMITED = 1;
 	public static final int DOSSIER_TYPE_OTHER_PAPERS_GROUP = 2;
 	public static final int DOSSIER_TYPE_GROUPS_OPTIONAL = 3;
 	public static final int DOSSIER_TYPE_OWN_RECORDS = 4;
 	public static final int DOSSIER_TYPE_ONE_PAPERS_RESULTS = 5;
 	public static final int DOSSIER_TYPE_MULTY_PAPERS_RESULTS = 6;
-	
+
 	public static final int SERVICE_CONFIG_LEVEL_1 = 1;
 	public static final int SERVICE_CONFIG_LEVEL_2 = 2;
 	public static final int SERVICE_CONFIG_LEVEL_3 = 3;
 	public static final int SERVICE_CONFIG_LEVEL_4 = 4;
-	
+
 	public static final int SERVICE_CONFIG_INACTIVE = 0;
 	public static final int SERVICE_CONFIG_FRONTOFFICE = 1;
 	public static final int SERVICE_CONFIG_BACKOFFICE = 2;
 	public static final int SERVICE_CONFIG_FRONT_BACK_OFFICE = 3;
+
 	public static enum DestinationRoot {
 			CITIZEN("Citizen"), BUSINESS("Business");
 
@@ -68,14 +69,14 @@ public class PortletConstants {
 		public String toString() {
 
 			return this
-			    .getValue();
+				.getValue();
 		}
 
 		public static DestinationRoot getEnum(String value) {
 
 			for (DestinationRoot v : values())
 				if (v
-				    .getValue().equalsIgnoreCase(value))
+					.getValue().equalsIgnoreCase(value))
 					return v;
 			throw new IllegalArgumentException();
 		}
@@ -87,38 +88,38 @@ public class PortletConstants {
 	public static final int DOSSIER_PART_TYPE_PRIVATE = 4;
 	public static final int DOSSIER_PART_TYPE_RESULT = 5;
 	public static final int DOSSIER_PART_TYPE_MULTIPLE_RESULT = 6;
-	
+
 	public static final int DOSSIER_FILE_SYNC_STATUS_NOSYNC = 0;
 	public static final int DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC = 1;
 	public static final int DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS = 2;
 	public static final int DOSSIER_FILE_SYNC_STATUS_SYNCERROR = 3;
-	
+
 	public static final int DOSSIER_FILE_TYPE_INPUT = 1;
 	public static final int DOSSIER_FILE_TYPE_OUTPUT = 2;
-	
+
 	public static final int DOSSIER_FILE_MARK_UNKNOW = 0;
 	public static final int DOSSIER_FILE_MARK_ORIGINAL = 1;
 	public static final int DOSSIER_FILE_MARK_NOTARIZED = 2;
 	public static final int DOSSIER_FILE_MARK_SCAN = 3;
-	
+
 	public static final int DOSSIER_FILE_ORIGINAL = 0;
 	public static final int DOSSIER_FILE_DOSSIERRESULT = 1;
-	
+
 	public static final int DOSSIER_FILE_REMOVED = 1;
-	
-	/*public static final int DOSSIER_STATUS_NEW = 0;
-	public static final int DOSSIER_STATUS_RECEIVING = 1;
-	public static final int DOSSIER_STATUS_WAITING = 2;
-	public static final int DOSSIER_STATUS_PAYING = 3;
-	public static final int DOSSIER_STATUS_DENIED = 4;
-	public static final int DOSSIER_STATUS_RECEIVED = 5;
-	public static final int DOSSIER_STATUS_PROCESSING = 6;
-	public static final int DOSSIER_STATUS_CANCELED = 7;
-	public static final int DOSSIER_STATUS_DONE = 8;
-	public static final int DOSSIER_STATUS_ARCHIVED = 9;
-	public static final int DOSSIER_STATUS_SYSTEM = 10;
-	public static final int DOSSIER_STATUS_ERROR = 11;*/
-	
+
+	/*
+	 * public static final int DOSSIER_STATUS_NEW = 0; public static final int
+	 * DOSSIER_STATUS_RECEIVING = 1; public static final int
+	 * DOSSIER_STATUS_WAITING = 2; public static final int DOSSIER_STATUS_PAYING
+	 * = 3; public static final int DOSSIER_STATUS_DENIED = 4; public static
+	 * final int DOSSIER_STATUS_RECEIVED = 5; public static final int
+	 * DOSSIER_STATUS_PROCESSING = 6; public static final int
+	 * DOSSIER_STATUS_CANCELED = 7; public static final int DOSSIER_STATUS_DONE
+	 * = 8; public static final int DOSSIER_STATUS_ARCHIVED = 9; public static
+	 * final int DOSSIER_STATUS_SYSTEM = 10; public static final int
+	 * DOSSIER_STATUS_ERROR = 11;
+	 */
+
 	public static final String DOSSIER_STATUS_NEW = "new";
 	public static final String DOSSIER_STATUS_RECEIVING = "receiving";
 	public static final String DOSSIER_STATUS_WAITING = "waiting";
@@ -132,19 +133,25 @@ public class PortletConstants {
 	public static final String DOSSIER_STATUS_SYSTEM = "system";
 	public static final String DOSSIER_STATUS_ENDED = "ended";
 	public static final String DOSSIER_STATUS_ERROR = "error";
-	
+
 	public static final int DOSSIER_LOG_NORMAL = 0;
 	public static final int DOSSIER_LOG_WARNING = 2;
 	public static final int DOSSIER_LOG_ERROR = 3;
-	
+
 	public static final int DOSSIER_SOURCE_DIRECT = 0;
 	public static final int DOSSIER_SOURCE_INDIRECT = 1;
 	
-	public static enum AlpacaArguments{
-		data,schema,options,view,render,postRender,error,connector;
+	public static final int DOSSIER_DELAY_STATUS_UNEXPIRED = 0;
+	public static final int DOSSIER_DELAY_STATUS_EXPIRED = 1;
+	public static final int DOSSIER_DELAY_STATUS_ONTIME = 2;
+	public static final int DOSSIER_DELAY_STATUS_LATE = 3;
+
+	public static enum AlpacaArguments {
+			data, schema, options, view, render, postRender, error, connector;
 	}
-	
+
 	public static final String TEMP_RANDOM_SUFFIX = "--tempRandomSuffix--";
-	
-	public static final String UNKNOW_ALPACA_SCHEMA = "{\"schema\": {\"title\":\"No Dynamic Form\",\"description\":\"Can not load alpaca scheme\",\"type\":\"object\"}}";
+
+	public static final String UNKNOW_ALPACA_SCHEMA =
+		"{\"schema\": {\"title\":\"No Dynamic Form\",\"description\":\"Can not load alpaca scheme\",\"type\":\"object\"}}";
 }
