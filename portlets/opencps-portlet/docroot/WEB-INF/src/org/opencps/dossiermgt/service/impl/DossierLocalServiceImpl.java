@@ -300,7 +300,8 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 * @param dossierStatus
 	 * @return
 	 */
-	public int countDossier(long groupId, String keyword, String dossierStatus) {
+	public int countDossier(
+		long groupId, String keyword, String dossierStatus) {
 
 		return dossierFinder
 			.countDossier(groupId, keyword, dossierStatus);
@@ -516,6 +517,32 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 
 		return dossierFinder
 			.searchDossier(groupId, keyword, dossierStatus, start, end, obc);
+	}
+
+	/**
+	 * @param delayStatus
+	 * @return
+	 * @throws SystemException
+	 */
+	public List<Dossier> getDossierByDelayStatus(int delayStatus)
+		throws SystemException {
+
+		return dossierPersistence
+			.findByDelayStatus(delayStatus);
+	}
+
+	/**
+	 * @param delayStatus
+	 * @param dossierStatus
+	 * @return
+	 * @throws SystemException
+	 */
+	public List<Dossier> getDossierByDelayStatusAndNotDossierStatus(
+		int delayStatus, String dossierStatus)
+		throws SystemException {
+
+		return dossierPersistence
+			.findByDelayStatusAndNotDossierStatus(delayStatus, dossierStatus);
 	}
 
 	/**
