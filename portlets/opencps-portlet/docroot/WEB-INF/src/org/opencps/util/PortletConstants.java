@@ -1,19 +1,19 @@
 /**
-* OpenCPS is the open source Core Public Services software
-* Copyright (C) 2016-present OpenCPS community
+ * OpenCPS is the open source Core Public Services software
+ * Copyright (C) 2016-present OpenCPS community
 
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
 
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-* You should have received a copy of the GNU Affero General Public License
-* along with this program. If not, see <http://www.gnu.org/licenses/>
-*/
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>
+ */
 
 package org.opencps.util;
 
@@ -52,11 +52,12 @@ public class PortletConstants {
 	public static final int SERVICE_CONFIG_FRONT_BACK_OFFICE = 3;
 
 	public static enum DestinationRoot {
-			CITIZEN("Citizen"), BUSINESS("Business");
+		CITIZEN("Citizen"), BUSINESS("Business");
 
 		private String value;
 
 		DestinationRoot(String value) {
+
 			this.value = value;
 		}
 
@@ -68,15 +69,13 @@ public class PortletConstants {
 		@Override
 		public String toString() {
 
-			return this
-				.getValue();
+			return this.getValue();
 		}
 
 		public static DestinationRoot getEnum(String value) {
 
 			for (DestinationRoot v : values())
-				if (v
-					.getValue().equalsIgnoreCase(value))
+				if (v.getValue().equalsIgnoreCase(value))
 					return v;
 			throw new IllegalArgumentException();
 		}
@@ -140,14 +139,19 @@ public class PortletConstants {
 
 	public static final int DOSSIER_SOURCE_DIRECT = 0;
 	public static final int DOSSIER_SOURCE_INDIRECT = 1;
-	
+
 	public static final int DOSSIER_DELAY_STATUS_UNEXPIRED = 0;
 	public static final int DOSSIER_DELAY_STATUS_EXPIRED = 1;
 	public static final int DOSSIER_DELAY_STATUS_ONTIME = 2;
 	public static final int DOSSIER_DELAY_STATUS_LATE = 3;
 
+	public static final String JMS_CONNECTION_FACTORY = "ConnectionFactory";
+
+	public static final String JMS_REMOTE_CONNECTION_FACTORY =
+		"jms/RemoteConnectionFactory";
+
 	public static enum AlpacaArguments {
-			data, schema, options, view, render, postRender, error, connector;
+		data, schema, options, view, render, postRender, error, connector;
 	}
 
 	public static final String TEMP_RANDOM_SUFFIX = "--tempRandomSuffix--";
