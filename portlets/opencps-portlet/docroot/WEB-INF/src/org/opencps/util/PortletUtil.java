@@ -757,24 +757,31 @@ public class PortletUtil {
 				StringPool.BLANK));
 
 		try {
-			JSONObject jmsObject = JSONFactoryUtil.createJSONObject(jmsJson);
-			JSONObject lookupObject = jmsObject.getJSONObject(code);
+			JSONObject jmsConfigObject =
+				JSONFactoryUtil.createJSONObject(jmsJson);
+			JSONObject lookupConfigObject = jmsConfigObject.getJSONObject(code);
+
+			JSONObject serverConfigObject =
+				lookupConfigObject.getJSONObject(remote ? "remote" : "local");
+
 			JSONObject channelObject =
-				lookupObject.getJSONObject(WebKeys.JMS_CHANNEL);
+				serverConfigObject.getJSONObject(WebKeys.JMS_CHANNEL);
 
 			String providerURL =
-				lookupObject.getString(WebKeys.JMS_PROVIDER_URL);
+				serverConfigObject.getString(WebKeys.JMS_PROVIDER_URL);
 
 			if (remote && Validator.isNotNull(providerURL)) {
 				providerURL = "remote://" + providerURL;
 			}
 
 			String providerPort =
-				lookupObject.getString(WebKeys.JMS_PROVIDER_PORT);
+				serverConfigObject.getString(WebKeys.JMS_PROVIDER_PORT);
 
-			String userName = lookupObject.getString(WebKeys.JMS_USERNAME);
+			String userName =
+				serverConfigObject.getString(WebKeys.JMS_USERNAME);
 
-			String passWord = lookupObject.getString(WebKeys.JMS_PASSWORD);
+			String passWord =
+				serverConfigObject.getString(WebKeys.JMS_PASSWORD);
 
 			String channel = channelObject.getString(channelName);
 
