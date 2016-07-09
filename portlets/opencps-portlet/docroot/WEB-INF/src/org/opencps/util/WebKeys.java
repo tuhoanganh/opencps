@@ -210,6 +210,8 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String EMPLOYEE_ROLE_NAME = "OCPS_EMPLOYE";
 	public static final String CITIZEN_BUSINESS_ROLE_NAME = "OCPS_CITIZEN";
 
+	public static final String JMS_CONFIGURATION = "JMS_CONFIGURATION";
+	public static final String JMS_CHANNEL = "JMS_CHANNEL";
 	public static final String JMS_PROVIDER_URL = "JMS_PROVIDER_URL";
 	public static final String JMS_PROVIDER_PORT = "JMS_PROVIDER_PORT";
 	public static final String JMS_USERNAME = "JMS_USERNAME";
