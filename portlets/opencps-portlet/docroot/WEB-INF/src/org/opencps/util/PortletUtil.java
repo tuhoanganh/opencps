@@ -41,7 +41,12 @@ import org.opencps.datamgt.service.DictItemLocalServiceUtil;
 import org.opencps.paymentmgt.util.PaymentMgtUtil;
 
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -738,41 +743,61 @@ public class PortletUtil {
 	}
 
 	public static Properties getJMSContextProperties(
-		long companyId, String code, boolean remote)
+		long companyId, String code, boolean remote, String channelName)
 		throws SystemException {
+
+		Properties properties = new Properties();
 
 		PortletPreferences preferences =
 			PrefsPropsUtil.getPreferences(companyId, true);
 
-		String providerURL =
+		String jmsJson =
 			GetterUtil.getString(preferences.getValue(code +
-				StringPool.UNDERLINE + WebKeys.JMS_PROVIDER_URL,
+				StringPool.UNDERLINE + WebKeys.JMS_CONFIGURATION,
 				StringPool.BLANK));
 
-		if (remote && Validator.isNotNull(providerURL)) {
-			providerURL = "remote://" + providerURL;
+		try {
+			JSONObject jmsObject = JSONFactoryUtil.createJSONObject(jmsJson);
+			JSONObject lookupObject = jmsObject.getJSONObject(code);
+			JSONObject channelObject =
+				lookupObject.getJSONObject(WebKeys.JMS_CHANNEL);
+
+			String providerURL =
+				lookupObject.getString(WebKeys.JMS_PROVIDER_URL);
+
+			if (remote && Validator.isNotNull(providerURL)) {
+				providerURL = "remote://" + providerURL;
+			}
+
+			String providerPort =
+				lookupObject.getString(WebKeys.JMS_PROVIDER_PORT);
+
+			String userName = lookupObject.getString(WebKeys.JMS_USERNAME);
+
+			String passWord = lookupObject.getString(WebKeys.JMS_PASSWORD);
+
+			String channel = channelObject.getString(channelName);
+
+			properties.put(
+				Context.INITIAL_CONTEXT_FACTORY,
+				org.jboss.naming.remote.client.InitialContextFactory.class.getName());
+
+			properties.put(Context.PROVIDER_URL, providerURL +
+				StringPool.COLON + providerPort);
+
+			properties.put(Context.SECURITY_PRINCIPAL, userName);
+			properties.put(Context.SECURITY_CREDENTIALS, passWord);
+
+			properties.put(WebKeys.JMS_DESTINATION, channel);
+
+		}
+		catch (JSONException e) {
+			_log.error(e);
 		}
 
-		String providerPort =
-			GetterUtil.getString(preferences.getValue(code +
-				StringPool.UNDERLINE + WebKeys.JMS_PROVIDER_PORT,
-				StringPool.BLANK));
-
-		String userName =
-			GetterUtil.getString(preferences.getValue(code +
-				StringPool.UNDERLINE + WebKeys.JMS_USERNAME, StringPool.BLANK));
-		String passWord =
-			GetterUtil.getString(preferences.getValue(code +
-				StringPool.UNDERLINE + WebKeys.JMS_PASSWORD, StringPool.BLANK));
-
-		Properties properties = new Properties();
-		properties.put(
-			Context.INITIAL_CONTEXT_FACTORY,
-			org.jboss.naming.remote.client.InitialContextFactory.class.getName());
-		properties.put(Context.PROVIDER_URL, providerURL + StringPool.COLON +
-			providerPort);
-		properties.put(Context.SECURITY_PRINCIPAL, userName);
-		properties.put(Context.SECURITY_CREDENTIALS, passWord);
 		return properties;
 	}
+
+	private static Log _log =
+		LogFactoryUtil.getLog(PortletUtil.class.getName());
 }

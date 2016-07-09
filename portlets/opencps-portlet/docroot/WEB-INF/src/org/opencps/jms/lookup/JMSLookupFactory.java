@@ -51,10 +51,11 @@ public class JMSLookupFactory {
 	 * @throws SystemException
 	 * @throws Exception
 	 */
-	public JMSLookupFactory(long companyId, String code, boolean remote)
+	public JMSLookupFactory(
+		long companyId, String code, boolean remote, String channelName)
 		throws NamingException, SystemException, Exception {
 
-		init(companyId, code, remote);
+		init(companyId, code, remote, channelName);
 	}
 
 	/**
@@ -65,11 +66,13 @@ public class JMSLookupFactory {
 	 * @throws NamingException
 	 * @throws JMSException
 	 */
-	protected void init(long companyId, String code, boolean remote)
+	protected void init(
+		long companyId, String code, boolean remote, String channelName)
 		throws SystemException, NamingException, JMSException {
 
 		Properties properties =
-			PortletUtil.getJMSContextProperties(companyId, code, remote);
+			PortletUtil.getJMSContextProperties(companyId, code, remote,
+				channelName);
 
 		Context context = new InitialContext(properties);
 
