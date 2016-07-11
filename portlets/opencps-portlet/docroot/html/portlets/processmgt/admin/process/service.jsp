@@ -1,3 +1,5 @@
+<%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -28,7 +30,7 @@
 	
 	long serviceProcessId = Validator.isNotNull(serviceProcess) ? serviceProcess.getServiceProcessId() : 0L;
 	
-	List<ServiceInfo> serviceInfos = new ArrayList<ServiceInfo>();
+	List<ServiceConfig> serviceConfigs = new ArrayList<ServiceConfig>();
 	List<ServiceInfoProcess> serviceInfoProcesses = new ArrayList<ServiceInfoProcess>();
 	
 	PortletURL iteratorURL = renderResponse.createRenderURL();
@@ -56,35 +58,46 @@
 <liferay-ui:search-container 
 		emptyResultsMessage="no-service-were-found"
 		iteratorURL="<%=iteratorURL %>"
-		delta="<%=20 %>"
+		delta="<%=100 %>"
 		deltaConfigurable="true"
 >
 	<liferay-ui:search-container-results>
 		<%
 			try {
 				for(ServiceInfoProcess serviceInfoProcess : serviceInfoProcesses) {
-					serviceInfos.add(ServiceInfoLocalServiceUtil.getServiceInfo(serviceInfoProcess.getServiceinfoId()));
+					serviceConfigs.add(ServiceConfigLocalServiceUtil.getServiceConfig(serviceInfoProcess.getServiceinfoId()));
 				}
 			} catch (Exception e) {
 				
 			}
 		
-		results = serviceInfos;
-		total = serviceInfos.size();
+		results = serviceConfigs;
+		total = serviceConfigs.size();
 		pageContext.setAttribute("results", results);
 		pageContext.setAttribute("total", total);
 		%>
 	</liferay-ui:search-container-results>
 	
 	<liferay-ui:search-container-row 
-		className="org.opencps.servicemgt.model.ServiceInfo" 
-		modelVar="service" 
-		keyProperty="serviceinfoId"
+		className="org.opencps.dossiermgt.model.ServiceConfig" 
+		modelVar="serviceConfig" 
+		keyProperty="serviceConfigId"
 	>
+		<%
+			ServiceInfo service = null;
+			long serviceId = 0;
+			
+			try {
+				service = ServiceInfoLocalServiceUtil.getServiceInfo(serviceConfig.getServiceInfoId());
+				serviceId = service.getServiceinfoId();
+			} catch(Exception e) {
+				
+			}
+		%>
 	
 		<portlet:actionURL var="deteleRelaSeInfoAndProcessURL" name="deteleRelaSeInfoAndProcess" >
 			<portlet:param name="serviceProcessId" value="<%=String.valueOf(serviceProcessId) %>"/>
-			<portlet:param name="serviceInfoId" value="<%=String.valueOf(service.getServiceinfoId()) %>"/>
+			<portlet:param name="serviceConfigId" value="<%=String.valueOf(serviceConfig.getServiceConfigId()) %>"/>
 			<portlet:param name="backURL" value="<%=currentURL %>"/>
 		</portlet:actionURL>
 		
@@ -109,7 +122,7 @@
 			name="delete" 
 		/>
 	</liferay-ui:search-container-row>
-	<liferay-ui:search-iterator/>
+	<liferay-ui:search-iterator paginate="false"/>
 </liferay-ui:search-container>
 
 <aui:script use="liferay-util-window">

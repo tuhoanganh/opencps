@@ -33,20 +33,13 @@
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath +
 					"serviceinfolist_choose/serviceinfolist.jsp");
-	try {
-		if(serviceProcessId > 0) {
-			serviceConfigs = ServiceConfigLocalServiceUtil.getServiceConfigs(serviceProcess.getDossierTemplateId());
-		}
-	} catch (Exception e) {
-		
-	}
 
 %>
 
 <liferay-ui:search-container 
 		emptyResultsMessage="no-service-were-found"
 		iteratorURL="<%=iteratorURL %>"
-		delta="<%=20 %>"
+		delta="<%=100 %>"
 		deltaConfigurable="true"
 		rowChecker="<%=new RowChecker(renderResponse)%>"
 >
@@ -54,14 +47,13 @@
 	
 		<%
 			try {
-				for(ServiceConfig serviceConfig : serviceConfigs) {
-					serviceInfos.add(ServiceInfoLocalServiceUtil.getServiceInfo(serviceConfig.getServiceInfoId()));
+				if(serviceProcessId > 0) {
+					serviceConfigs = ServiceConfigLocalServiceUtil.getServiceConfigs(serviceProcess.getDossierTemplateId());
 				}
 			} catch (Exception e) {
 				
 			}
-			
-			results = serviceInfos;
+			results = serviceConfigs;
 			total = serviceConfigs.size();
 			pageContext.setAttribute("results", results);
 			pageContext.setAttribute("total", total);
@@ -69,14 +61,24 @@
 	</liferay-ui:search-container-results>
 	
 	<liferay-ui:search-container-row 
-		className="org.opencps.servicemgt.model.ServiceInfo" 
-		modelVar="service" 
-		keyProperty="serviceinfoId"
+		className="org.opencps.dossiermgt.model.ServiceConfig" 
+		modelVar="serviceConfig" 
+		keyProperty="serviceConfigId"
 	>
-	
+		<%
+			ServiceInfo service = null;
+			long serviceId = 0;
+			
+			try {
+				service = ServiceInfoLocalServiceUtil.getServiceInfo(serviceConfig.getServiceInfoId());
+				serviceId = service.getServiceinfoId();
+			} catch(Exception e) {
+				
+			}
+		%>
 		<portlet:actionURL var="deteleRelaSeInfoAndTempFileURL" name="deteleRelaSeInfoAndTempFile" >
 			<portlet:param name="templateFileId" value="<%=String.valueOf(serviceProcessId) %>"/>
-			<portlet:param name="serviceInfoId" value="<%=String.valueOf(service.getServiceinfoId()) %>"/>
+			<portlet:param name="serviceInfoId" value="<%=String.valueOf(serviceId) %>"/>
 			<portlet:param name="backURL" value="<%=currentURL %>"/>
 		</portlet:actionURL>
 		
@@ -90,5 +92,5 @@
 				name="service-administration" value="<%=DictItemUtil.getNameDictItem(service.getAdministrationCode()) %>"
 			/>
 	</liferay-ui:search-container-row>
-<liferay-ui:search-iterator/>
+<liferay-ui:search-iterator paginate="false"/>
 </liferay-ui:search-container>

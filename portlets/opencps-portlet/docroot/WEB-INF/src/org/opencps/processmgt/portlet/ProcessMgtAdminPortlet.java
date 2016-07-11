@@ -27,6 +27,9 @@ import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.opencps.dossiermgt.model.ServiceConfig;
+import org.opencps.dossiermgt.model.impl.ServiceConfigImpl;
+import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
 import org.opencps.processmgt.model.ProcessStep;
 import org.opencps.processmgt.model.ProcessStepDossierPart;
 import org.opencps.processmgt.model.ProcessWorkflow;
@@ -72,10 +75,23 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 	public void deteleRelaSeInfoAndProcess (ActionRequest actionRequest, ActionResponse actionResponse) 
 					throws SystemException, IOException {
 		long serviceProcessId = ParamUtil.getLong(actionRequest, "serviceProcessId");
-		long serviceInfoId = ParamUtil.getLong(actionRequest, "serviceInfoId");
+		long serviceConfigId = ParamUtil.getLong(actionRequest, "serviceConfigId");
 		String backURL = ParamUtil.getString(actionRequest, "backURL");
 		
-		ServiceInfoProcessLocalServiceUtil.deleteServiceInfoProcess(serviceProcessId, serviceInfoId);
+		ServiceConfig serviceConfig = null;
+		
+		try {
+			serviceConfig = ServiceConfigLocalServiceUtil.getServiceConfig(serviceConfigId);
+			//remove process id from serviceconfig
+			serviceConfig.setServiceProcessId(0);
+			ServiceConfigLocalServiceUtil.updateServiceConfig(serviceConfig);
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		ServiceInfoProcessLocalServiceUtil.deleteServiceInfoProcess(serviceProcessId, serviceConfigId);
+		
 		if(Validator.isNotNull(backURL)) {
 			actionResponse.sendRedirect(backURL);
 		}
@@ -88,11 +104,26 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 	 */
 	public void chooseServiceInfoFromProcess(ActionRequest actionRequest, ActionResponse actionResponse) throws SystemException, IOException {
 		long serviceProcessId = ParamUtil.getLong(actionRequest, "serviceProcessId");
-		long [] serviceinfoIds = ParamUtil
+		long [] serviceConfigIds = ParamUtil
 					    .getLongValues(actionRequest, "rowIds");
 		String backURL = ParamUtil.getString(actionRequest, "backURL");
 		
-		ServiceInfoProcessLocalServiceUtil.addProcessServiceInfos(serviceProcessId, serviceinfoIds);
+		
+		if(serviceConfigIds.length > 0) {
+			for(int index = 0; index < serviceConfigIds.length; index ++) {
+				try {
+					ServiceConfig serviceConfig = new ServiceConfigImpl();
+					serviceConfig = ServiceConfigLocalServiceUtil.getServiceConfig(serviceConfigIds[index]);
+					serviceConfig.setServiceProcessId(serviceProcessId);
+					ServiceConfigLocalServiceUtil.updateServiceConfig(serviceConfig);
+				}
+				catch (Exception e) {
+					_log.error(e);
+				}
+			}
+		}
+		
+		ServiceInfoProcessLocalServiceUtil.addProcessServiceInfos(serviceProcessId, serviceConfigIds);
 	
 		if(Validator.isNotNull(backURL)) {
 			actionResponse.sendRedirect(backURL);
