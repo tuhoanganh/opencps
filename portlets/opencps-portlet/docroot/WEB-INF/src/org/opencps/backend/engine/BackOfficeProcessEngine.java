@@ -322,7 +322,8 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 				MessageBusUtil.sendMessage(
 				    "opencps/backoffice/out/destination", sendToBackOffice);
-
+				
+				
 			}
 			else {
 				// Send message to backoffice/out/destination
