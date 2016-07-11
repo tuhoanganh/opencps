@@ -35,7 +35,7 @@
 			<name>selectedItems</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
-			<type>java.util.String</type>
+			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
 			<description><![CDATA[]]></description>
@@ -103,6 +103,13 @@
 		<attribute>
 			<description><![CDATA[String of text value. etc: label1,label2,label3]]></description>
 			<name>emptyOptionLabels</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<description><![CDATA[String of text value. id or code: default is id]]></description>
+			<name>optionValueType</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>

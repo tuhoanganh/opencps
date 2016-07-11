@@ -55,7 +55,7 @@
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", "/html/portlets/dossiermgt/log/ajax/search_result.jsp");
 	iteratorURL.setParameter("levelReq", String.valueOf(level));
-	iteratorURL.setParameter("statusReq", String.valueOf(statuss));
+	iteratorURL.setParameter("statusReq", String.valueOf(status));
 	iteratorURL.setParameter("fromDateReq", DateTimeUtil.convertDateToString(fromDate, DateTimeUtil._VN_DATE_FORMAT));
 	iteratorURL.setParameter("toDateReq", DateTimeUtil.convertDateToString(toDate, DateTimeUtil._VN_DATE_FORMAT));
 	iteratorURL.setParameter("currentURL", backURL);

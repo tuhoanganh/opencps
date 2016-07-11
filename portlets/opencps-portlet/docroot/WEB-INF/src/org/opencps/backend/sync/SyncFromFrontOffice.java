@@ -240,8 +240,8 @@ public class SyncFromFrontOffice implements MessageListener{
         }
     	
     	if (Validator.isNotNull(status)) {
-			if (status.getDossierStatus() == PortletConstants.DOSSIER_STATUS_NEW ||
-			    status.getDossierStatus() == PortletConstants.DOSSIER_STATUS_WAITING) {
+			if (status.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_NEW) ||
+			    status.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_WAITING)) {
 				isValidatorStatus = true;
 			}
     	}
