@@ -1,4 +1,4 @@
-<%@page import="com.sun.xml.internal.bind.v2.util.EditDistance"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software

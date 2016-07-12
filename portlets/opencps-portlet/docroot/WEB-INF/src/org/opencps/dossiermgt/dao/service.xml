@@ -244,6 +244,13 @@
             <finder-column name="groupId"></finder-column>
             <finder-column name="userId"></finder-column>
         </finder>
+        <finder name="DelayStatus" return-type="Collection">
+            <finder-column name="delayStatus"></finder-column>
+        </finder>
+        <finder name="DelayStatusAndNotDossierStatus" return-type="Collection">
+            <finder-column name="delayStatus" comparator="=" arrayable-operator="AND"></finder-column>
+            <finder-column name="dossierStatus" comparator="!=" arrayable-operator="AND"></finder-column>
+        </finder>
         <reference entity="DLFileEntry" package-path="com.liferay.portlet.documentlibrary"/>
         <reference package-path="com.liferay.portlet.documentlibrary" entity="DLFolder" />
         <reference package-path="com.liferay.portlet.asset" entity="AssetEntry" />
