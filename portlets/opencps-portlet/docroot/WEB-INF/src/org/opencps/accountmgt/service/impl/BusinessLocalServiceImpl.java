@@ -802,9 +802,18 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 	}
 	
 	public Business getBymappingOrganizationId(long mappingOrganizationId) throws SystemException {
-		return null;
-		//return businessPersistence.fetchBymappingOrganizationId(mappingOrganizationId);
+
+		return businessPersistence.fetchBymappingOrganizationId(mappingOrganizationId);
     }
+	
+	/*don't know getBymappingOrganizationId have been used or not, 
+	instead  that to use bellow function for finding on payment module*/
+	
+	public Business getByMappingOrganizationId(long mappingOrganizationId) 
+					throws SystemException, NoSuchBusinessException {
+		return businessPersistence.findBymappingOrganizationId(mappingOrganizationId);
+    }
+	
 	private Log _log = LogFactoryUtil
 	    .getLog(BusinessLocalServiceImpl.class
 	        .getName());
