@@ -382,15 +382,15 @@
 			}
 		);
 		
-		console.log(loadingMask);
+		//console.log(loadingMask);
 		
-		console.log(loadingMask._attrs.strings.value.loading);
+		//console.log(loadingMask._attrs.strings.value.loading);
 		
-		console.log(loadingMask.getAttrs());
+		//console.log(loadingMask.getAttrs());
 		
-		var strings = {strings : {loading: 'xxx...'}};
+		//var strings = {strings : {loading: 'xxx...'}};
 		
-		loadingMask.setAttrs(strings);
+		//loadingMask.setAttrs(strings);
 
 		//loadingMask.reset();
 		
@@ -419,7 +419,7 @@
 						        success: function(event, id, obj) {
 									var instance = this;
 									var res = instance.get('responseData');
-									
+									console.log(res);
 									<portlet:namespace/>signature(res.hashHex, res.resources);
 								},
 						    	error: function(){
@@ -454,9 +454,10 @@
 		        // do something
 		    },
 		    afterSign: function(signer, signature) {
+		    	console.log(signature);
 		        $.ajax({
 			   type: "POST",
-		            url : portletURL.toString(),
+		        url : portletURL.toString(),
 			    async: false,
 		            data : {
 		                <portlet:namespace/>signature: signature.value,
