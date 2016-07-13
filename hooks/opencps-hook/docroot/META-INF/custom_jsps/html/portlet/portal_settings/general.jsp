@@ -67,15 +67,15 @@ String defaultLogoutPagePath = PrefsPropsUtil.getString(company.getCompanyId(), 
 <aui:row>
 	<aui:col width="<%= 50 %>">
 		<aui:input bean="<%= company %>" helpMessage="home-url-help" label="home-url" model="<%= Company.class %>" name="homeURL" />
+		<aui:input helpMessage="default-landing-page-help" label="default-landing-page" name='<%= "settings--" + PropsKeys.DEFAULT_LANDING_PAGE_PATH + "--" %>' type="text" value="<%= defaultLandingPagePath %>" />
+		<aui:input helpMessage="default-logout-page-help" label="default-logout-page" name='<%= "settings--" + PropsKeys.DEFAULT_LOGOUT_PAGE_PATH + "--" %>' type="text" value="<%= defaultLogoutPagePath %>" />
 	</aui:col>
 	<aui:col width="<%= 50 %>">
-		<aui:input helpMessage="default-landing-page-help" label="default-landing-page" name='<%= "settings--" + PropsKeys.DEFAULT_LANDING_PAGE_PATH + "--" %>' type="text" value="<%= defaultLandingPagePath %>" />
+		
 		<aui:input helpMessage="default-landing-page-help" label="default-landing-page-citizen" name='<%= "settings--" + "default.landing.page.path.citizen" + "--" %>' type="text" value="<%= defaultLandingPagePath %>" />
 		<aui:input helpMessage="default-landing-page-help" label="default-landing-page-business" name='<%= "settings--" + "default.landing.page.path.business" + "--" %>' type="text" value="<%= defaultLandingPagePath %>" />
 		<aui:input helpMessage="default-landing-page-help" label="default-landing-page-employee" name='<%= "settings--" + "default.landing.page.path.employee" + "--" %>' type="text" value="<%= defaultLandingPagePath %>" />
 
-		<aui:input helpMessage="default-logout-page-help" label="default-logout-page" name='<%= "settings--" + PropsKeys.DEFAULT_LOGOUT_PAGE_PATH + "--" %>' type="text" value="<%= defaultLogoutPagePath %>" />
-		
 	</aui:col>
 </aui:row>
 

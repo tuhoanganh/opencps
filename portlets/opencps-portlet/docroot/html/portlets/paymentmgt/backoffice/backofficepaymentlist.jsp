@@ -102,22 +102,34 @@
 			keyProperty="paymentFileId"
 		>
 			<%				
-				soHoSo = DossierLocalServiceUtil.fetchDossier(paymentFile.getDossierId()).getReceptionNo();
-				
-				if(paymentFile.getOwnerUserId() > 0){
-					Citizen owner = CitizenLocalServiceUtil.getByMappingUserId(paymentFile.getOwnerUserId());
-					chuHoSo = Validator.isNotNull(owner)?owner.getFullName():StringPool.BLANK;
-				}else{
-					Business owner = BusinessLocalServiceUtil.getBymappingOrganizationId(paymentFile.getOwnerOrganizationId());
-					chuHoSo = Validator.isNotNull(owner)?owner.getName():StringPool.BLANK;
+				 
+				Dossier doss = null;
+				try {
+					doss = DossierLocalServiceUtil.fetchDossier(paymentFile.getDossierId());
+					soHoSo =  doss.getReceptionNo();
+				} catch (Exception e) {
+					//nothing to do
 				}
 				
-				if (Validator.isNull(chuHoSo)) {
+				if(paymentFile.getOwnerUserId() > 0){
+					Citizen owner = null;
+					
 					try {
-						chuHoSo = WorkingUnitLocalServiceUtil.fetchByMappingOrganisationId(themeDisplay.getScopeGroupId(), paymentFile.getGovAgencyOrganizationId()).getName();
+						owner = CitizenLocalServiceUtil.getByMappingUserId(paymentFile.getOwnerUserId());
+						chuHoSo = owner.getFullName();
 					} catch (Exception e) {
 						
 					}
+				} else {
+					Business owner = null;
+					
+					try {
+						owner = BusinessLocalServiceUtil.getBymappingOrganizationId(paymentFile.getOwnerOrganizationId());
+						chuHoSo = owner.getName();
+					} catch (Exception e) {
+						
+					}
+					
 				}
 				
 				// no column
