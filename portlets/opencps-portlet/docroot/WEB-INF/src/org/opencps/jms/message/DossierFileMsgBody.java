@@ -17,38 +17,27 @@
 
 package org.opencps.jms.message;
 
-import java.io.InputStream;
 import java.io.Serializable;
 
 import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.DossierPart;
 import org.opencps.dossiermgt.model.FileGroup;
 
-import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 
 /**
  * @author trungnt
  */
 public class DossierFileMsgBody implements Serializable {
 
+	public byte[] getBytes() {
+
+		return _bytes;
+	}
+
 	public DossierFile getDossierFile() {
 
 		return _dossierFile;
-	}
-
-	public void setDossierFile(DossierFile dossierFile) {
-
-		this._dossierFile = dossierFile;
-	}
-
-	public FileGroup getFileGroup() {
-
-		return _fileGroup;
-	}
-
-	public void setFileGroup(FileGroup fileGroup) {
-
-		this._fileGroup = fileGroup;
 	}
 
 	public DossierPart getDossierPart() {
@@ -56,41 +45,96 @@ public class DossierFileMsgBody implements Serializable {
 		return _dossierPart;
 	}
 
+	public String getExtension() {
+
+		return _extension;
+	}
+
+	public String getFileDescription() {
+
+		return _fileDescription;
+	}
+
+	public FileGroup getFileGroup() {
+
+		return _fileGroup;
+	}
+
+	public String getFileName() {
+
+		return _fileName;
+	}
+
+	public String getFileTitle() {
+
+		return _fileTitle;
+	}
+
+	public String getMimeType() {
+
+		return _mimeType;
+	}
+
+	public void setBytes(byte[] bytes) {
+
+		this._bytes = bytes;
+	}
+
+	public void setDossierFile(DossierFile dossierFile) {
+
+		this._dossierFile = dossierFile;
+	}
+
 	public void setDossierPart(DossierPart dossierPart) {
 
 		this._dossierPart = dossierPart;
 	}
 
-	public FileEntry getFileEntry() {
+	public void setExtension(String extension) {
 
-		return _fileEntry;
+		this._extension = extension;
 	}
 
-	public void setFileEntry(FileEntry fileEntry) {
+	public void setFileDescription(String fileDescription) {
 
-		this._fileEntry = fileEntry;
-	}
-	
-
-	public byte[] getBytes() {
-	
-		return _bytes;
+		this._fileDescription = fileDescription;
 	}
 
-	public void setBytes(byte[] bytes) {
-	
-		this._bytes = bytes;
+	public void setFileGroup(FileGroup fileGroup) {
+
+		this._fileGroup = fileGroup;
 	}
 
+	public void setFileName(String fileName) {
 
+		this._fileName = fileName;
+	}
+
+	public void setFileTitle(String fileTitle) {
+
+		this._fileTitle = fileTitle;
+	}
+
+	public void setMimeType(String mimeType) {
+
+		this._mimeType = mimeType;
+	}
+
+	private byte[] _bytes;
 
 	private DossierFile _dossierFile;
-	
-	private FileGroup _fileGroup;
-	
+
 	private DossierPart _dossierPart;
-	
-	private FileEntry _fileEntry;
-	
-	private byte[] _bytes;
+
+	private FileGroup _fileGroup;
+
+	private String _extension;
+
+	private String _fileDescription;
+
+	private String _fileName;
+
+	private String _fileTitle;
+
+	private String _mimeType;
 }
