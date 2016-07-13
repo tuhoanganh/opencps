@@ -93,6 +93,7 @@ import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
 import org.opencps.dossiermgt.util.DossierMgtUtil;
 import org.opencps.jasperreport.util.JRReportUtil;
 import org.opencps.jms.context.JMSContext;
+import org.opencps.jms.message.DossierFileMsgBody;
 import org.opencps.jms.message.DossierMsgBody;
 import org.opencps.jms.util.JMSMessageBodyUtil;
 import org.opencps.jms.util.JMSMessageUtil;
@@ -117,6 +118,7 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
@@ -1971,6 +1973,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
 
+		Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
+
 		try {
 			ServiceContext serviceContext =
 				ServiceContextFactory.getInstance(actionRequest);
@@ -2048,23 +2052,18 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 			JMSContext context =
 				JMSMessageUtil.createProducer(serviceContext.getCompanyId(),
-					"123", true, "submitDossier");
+					dossier.getGovAgencyCode(), true, "submitDossier");
 
 			BytesMessage bytesMessage =
 				JMSMessageUtil.createByteMessage(context);
 
 			DossierMsgBody dossierMsgBody =
-				JMSMessageBodyUtil.getDossierMsgBody(dossierId);
+				JMSMessageBodyUtil.getDossierMsgBody(dossier);
 
 			byte[] sender =
 				JMSMessageUtil.convertObjectToByteArray(dossierMsgBody);
 
 			bytesMessage.writeBytes(sender);
-
-			_log.info("Begin send message: ------------------------------------------------------------ ");
-
-			_log.info("Message length----------------------------------------------------- " +
-				sender.length);
 
 			context.getMessageProducer().send(bytesMessage);
 
@@ -2094,61 +2093,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				actionResponse.sendRedirect(redirectURL);
 			}
 		}
-	}
-
-	public void TestConsumer(
-		ActionRequest actionRequest, ActionResponse actionResponse) {
-
-		try {
-			ServiceContext serviceContext =
-				ServiceContextFactory.getInstance(actionRequest);
-
-			JMSContext context =
-				JMSMessageUtil.createConsumer(serviceContext.getCompanyId(),
-					"123", true, "submitDossier");
-			_log.info("Begin get message: ------------------------------------------------------------ ");
-			javax.jms.Message message = context.getMessageConsumer().receive();
-
-			if (message != null) {
-				_log.info("Message: ------------------------------------------------------------ ");
-				if (message instanceof TextMessage) {
-					_log.info("TextMessage: ------------------------------------------------------------ ");
-					_log.info(((TextMessage) message).getText());
-				}
-				else if (message instanceof ObjectMessage) {
-					_log.info("ObjectMessage: ------------------------------------------------------------ ");
-					_log.info(((ObjectMessage) message).getClass().getName());
-				}
-				else if (message instanceof BytesMessage) {
-					BytesMessage bytesMessage = (BytesMessage) message;
-
-					_log.info("BytesMessage: ------------------------------------------------------------ ");
-					_log.info(((BytesMessage) message).getBodyLength());
-
-					byte[] result =
-						new byte[(int) bytesMessage.getBodyLength()];
-					bytesMessage.readBytes(result);
-					Object object =
-						JMSMessageUtil.convertByteArrayToObject(result);
-					DossierMsgBody dossierMsgBody = (DossierMsgBody) object;
-					_log.info(dossierMsgBody.getServiceInfo().getServiceName());
-				}
-				else if (message instanceof StreamMessage) {
-					_log.info("StreamMessage: ------------------------------------------------------------ ");
-					_log.info(((StreamMessage) message).getJMSMessageID());
-				}
-			}
-			else {
-				_log.info("No Message: ------------------------------------------------------------ ");
-			}
-
-			context.destroy();
-
-		}
-		catch (Exception e) {
-			_log.error(e);
-		}
-
 	}
 
 	/**
@@ -2891,5 +2835,61 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		if (contactEmail.trim().length() > PortletPropsValues.DOSSIERMGT_DOSSIER_CONTACT_EMAIL_LENGTH) {
 			throw new OutOfLengthDossierContactEmailException();
 		}
+	}
+	
+	public void TestConsumer(
+		ActionRequest actionRequest, ActionResponse actionResponse) {
+
+		try {
+			ServiceContext serviceContext =
+				ServiceContextFactory.getInstance(actionRequest);
+
+			JMSContext context =
+				JMSMessageUtil.createConsumer(serviceContext.getCompanyId(),
+					"111", true, "submitDossier");
+
+			javax.jms.Message message = context.getMessageConsumer().receive();
+
+			if (message != null) {
+				if (message instanceof TextMessage) {
+					_log.info("*******************TextMessage*******************");
+					_log.info(((TextMessage) message).getText());
+				}
+				else if (message instanceof ObjectMessage) {
+					_log.info("*******************ObjectMessage*******************");
+					_log.info(((ObjectMessage) message).getClass().getName());
+				}
+				else if (message instanceof BytesMessage) {
+					BytesMessage bytesMessage = (BytesMessage) message;
+
+					_log.info("*******************BytesMessage*******************");
+					_log.info(((BytesMessage) message).getBodyLength());
+
+					byte[] result =
+						new byte[(int) bytesMessage.getBodyLength()];
+
+					bytesMessage.readBytes(result);
+
+					Object object =
+						JMSMessageUtil.convertByteArrayToObject(result);
+
+					DossierMsgBody dossierMsgBody = (DossierMsgBody) object;
+
+				}
+				else if (message instanceof StreamMessage) {
+					_log.info("*******************StreamMessage*******************");
+				}
+			}
+			else {
+				_log.info("*******************Null Message*******************");
+			}
+
+			context.destroy();
+
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
+
 	}
 }
