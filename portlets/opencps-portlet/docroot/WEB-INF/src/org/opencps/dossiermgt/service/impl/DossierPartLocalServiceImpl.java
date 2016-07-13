@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.opencps.dossiermgt.NoSuchDossierPartException;
+import org.opencps.dossiermgt.comparator.DossierPartSiblingComparator;
 import org.opencps.dossiermgt.model.DossierPart;
 import org.opencps.dossiermgt.service.base.DossierPartLocalServiceBaseImpl;
 
@@ -147,6 +148,19 @@ public class DossierPartLocalServiceImpl extends DossierPartLocalServiceBaseImpl
 	public List<DossierPart> getDossierParts (long dossierTemplateId)
 					throws SystemException {
 		return dossierPartPersistence.findByDossierTemplateId(dossierTemplateId);
+	} 
+	
+	
+	public List<DossierPart> getDossierParts (long dossierTemplateId, int start, int end)
+					throws SystemException {
+		
+		boolean orderByAsc = true;
+		
+		DossierPartSiblingComparator 
+			orderComparator = new DossierPartSiblingComparator(orderByAsc);
+		
+		return dossierPartPersistence
+						.findByDossierTemplateId(dossierTemplateId, start, end, orderComparator);
 	} 
 	
 	public List<DossierPart> getDossierPartsByParentId(long parentId) throws SystemException {
