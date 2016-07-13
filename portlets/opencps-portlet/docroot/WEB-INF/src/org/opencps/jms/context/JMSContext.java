@@ -15,19 +15,24 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 
-package org.opencps.jms.lookup;
+package org.opencps.jms.context;
 
 import java.util.Properties;
 
+import javax.jms.BytesMessage;
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
 import javax.jms.JMSException;
+import javax.jms.MapMessage;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageProducer;
+import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.jms.QueueBrowser;
 import javax.jms.Session;
+import javax.jms.StreamMessage;
+import javax.jms.TextMessage;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -41,7 +46,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 /**
  * @author trungnt
  */
-public class JMSLookupFactory {
+public class JMSContext {
 
 	/**
 	 * @param companyId
@@ -51,11 +56,159 @@ public class JMSLookupFactory {
 	 * @throws SystemException
 	 * @throws Exception
 	 */
-	public JMSLookupFactory(
+	public JMSContext(
 		long companyId, String code, boolean remote, String channelName)
 		throws NamingException, SystemException, Exception {
 
 		init(companyId, code, remote, channelName);
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public void createConsumer()
+		throws Exception {
+
+		MessageConsumer consumer = _session.createConsumer(_destination);
+
+		setMessageConsumer(consumer);
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public void createByteMessage()
+		throws Exception {
+
+		BytesMessage bytesMessage = _session.createBytesMessage();
+		setBytesMessage(bytesMessage);
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public void createMapMessage()
+		throws Exception {
+
+		MapMessage mapMessage = _session.createMapMessage();
+		setMapMessage(mapMessage);
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public void createObjectMessage()
+		throws Exception {
+
+		ObjectMessage objectMessage = _session.createObjectMessage();
+		setObjectMessage(objectMessage);
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public void createProducer()
+		throws Exception {
+
+		MessageProducer producer = _session.createProducer(_destination);
+		setMessageProducer(producer);
+
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public void createQueue()
+		throws Exception {
+
+		Queue queue =
+			(Queue) _context.lookup(_properties.getProperty(WebKeys.JMS_DESTINATION));
+
+		setQueue(queue);
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public void createQueueBrowser()
+		throws Exception {
+
+		createQueue();
+		QueueBrowser queueBrowser = _session.createBrowser(_queue);
+
+		setQueueBrowser(queueBrowser);
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public void createStreamMessage()
+		throws Exception {
+
+		StreamMessage streamMessage = _session.createStreamMessage();
+		setStreamMessage(streamMessage);
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public void createTextMessage()
+		throws Exception {
+
+		TextMessage textMessage = _session.createTextMessage();
+		setTextMessage(textMessage);
+	}
+
+	/**
+	 * @throws JMSException
+	 * @throws NamingException
+	 */
+	public void destroy()
+		throws JMSException, NamingException {
+
+		stop();
+
+		if (_connection != null) {
+			_connection.close();;
+		}
+
+		if (_context != null) {
+			_context.close();;
+		}
+
+		_destination = null;
+		_connectionFactory = null;
+
+		if (_messageConsumer != null) {
+			_messageConsumer.close();
+		}
+
+		if (_messageProducer != null) {
+			_messageProducer.close();
+		}
+
+		if (_queueBrowser != null) {
+			_queueBrowser.close();
+		}
+
+		if (_session != null) {
+			_session.close();
+		}
+
+		_bytesMessage = null;
+
+		_objectMessage = null;
+
+		_streamMessage = null;
+
+		_textMessage = null;
+
+		_properties = null;
+
+		_queue = null;
+
+		_mapMessage = null;
+
 	}
 
 	/**
@@ -102,96 +255,9 @@ public class JMSLookupFactory {
 	}
 
 	/**
-	 * @throws Exception
-	 */
-	protected void createConsumer()
-		throws Exception {
-
-		MessageConsumer consumer = _session.createConsumer(_destination);
-
-		setMessageConsumer(consumer);
-	}
-
-	/**
-	 * @throws Exception
-	 */
-	protected void createProducer()
-		throws Exception {
-
-		MessageProducer producer = _session.createProducer(_destination);
-		setMessageProducer(producer);
-
-	}
-
-	/**
-	 * @throws Exception
-	 */
-	protected void createQueue()
-		throws Exception {
-
-		Queue queue =
-			(Queue) _context.lookup(_properties.getProperty(WebKeys.JMS_DESTINATION));
-
-		setQueue(queue);
-	}
-
-	/**
-	 * @throws Exception
-	 */
-	protected void createQueueBrowser()
-		throws Exception {
-
-		createQueue();
-		QueueBrowser queueBrowser = _session.createBrowser(_queue);
-
-		setQueueBrowser(queueBrowser);
-	}
-
-	/**
-	 * @throws JMSException
-	 * @throws NamingException
-	 */
-	protected void destroy()
-		throws JMSException, NamingException {
-
-		stop();
-
-		if (_connection != null) {
-			_connection.close();;
-		}
-
-		if (_context != null) {
-			_context.close();;
-		}
-
-		_destination = null;
-		_connectionFactory = null;
-
-		if (_messageConsumer != null) {
-			_messageConsumer.close();
-		}
-
-		if (_messageProducer != null) {
-			_messageProducer.close();
-		}
-
-		_properties = null;
-		_queue = null;
-
-		if (_queueBrowser != null) {
-			_queueBrowser.close();
-		}
-
-		if (_session != null) {
-			_session.close();
-		}
-
-	}
-
-	/**
 	 * @throws JMSException
 	 */
-	protected void start()
+	public void start()
 		throws JMSException {
 
 		if (_connection != null) {
@@ -203,7 +269,7 @@ public class JMSLookupFactory {
 	/**
 	 * @throws JMSException
 	 */
-	protected void stop()
+	public void stop()
 		throws JMSException {
 
 		if (_connection != null) {
@@ -212,14 +278,19 @@ public class JMSLookupFactory {
 
 	}
 
-	public ConnectionFactory getConnectionFactory() {
+	public BytesMessage getBytesMessage() {
 
-		return _connectionFactory;
+		return _bytesMessage;
 	}
 
 	public Connection getConnection() {
 
 		return _connection;
+	}
+
+	public ConnectionFactory getConnectionFactory() {
+
+		return _connectionFactory;
 	}
 
 	public Context getContext() {
@@ -232,6 +303,11 @@ public class JMSLookupFactory {
 		return _destination;
 	}
 
+	public MapMessage getMapMessage() {
+
+		return _mapMessage;
+	}
+
 	public MessageConsumer getMessageConsumer() {
 
 		return _messageConsumer;
@@ -240,6 +316,16 @@ public class JMSLookupFactory {
 	public MessageProducer getMessageProducer() {
 
 		return _messageProducer;
+	}
+
+	public ObjectMessage getObjectMessage() {
+
+		return _objectMessage;
+	}
+
+	public Properties getProperties() {
+
+		return _properties;
 	}
 
 	public Queue getQueue() {
@@ -257,19 +343,19 @@ public class JMSLookupFactory {
 		return _session;
 	}
 
-	public Properties getProperties() {
+	public void setBytesMessage(BytesMessage bytesMessage) {
 
-		return _properties;
-	}
-
-	public void setConnectionFactory(ConnectionFactory connectionFactory) {
-
-		this._connectionFactory = connectionFactory;
+		this._bytesMessage = bytesMessage;
 	}
 
 	public void setConnection(Connection connection) {
 
 		this._connection = connection;
+	}
+
+	public void setConnectionFactory(ConnectionFactory connectionFactory) {
+
+		this._connectionFactory = connectionFactory;
 	}
 
 	public void setContext(Context context) {
@@ -282,6 +368,11 @@ public class JMSLookupFactory {
 		this._destination = destination;
 	}
 
+	public void setMapMessage(MapMessage mapMessage) {
+
+		this._mapMessage = mapMessage;
+	}
+
 	public void setMessageConsumer(MessageConsumer messageConsumer) {
 
 		this._messageConsumer = messageConsumer;
@@ -290,6 +381,16 @@ public class JMSLookupFactory {
 	public void setMessageProducer(MessageProducer messageProducer) {
 
 		this._messageProducer = messageProducer;
+	}
+
+	public void setObjectMessage(ObjectMessage objectMessage) {
+
+		this._objectMessage = objectMessage;
+	}
+
+	public void setProperties(Properties properties) {
+
+		this._properties = properties;
 	}
 
 	public void setQueue(Queue queue) {
@@ -307,22 +408,45 @@ public class JMSLookupFactory {
 		this._session = session;
 	}
 
-	public void setProperties(Properties properties) {
+	public StreamMessage getStreamMessage() {
 
-		this._properties = properties;
+		return _streamMessage;
 	}
 
-	private ConnectionFactory _connectionFactory;
+	public void setStreamMessage(StreamMessage streamMessage) {
+
+		this._streamMessage = streamMessage;
+	}
+
+	public TextMessage getTextMessage() {
+
+		return _textMessage;
+	}
+
+	public void setTextMessage(TextMessage textMessage) {
+
+		this._textMessage = textMessage;
+	}
+
+	private BytesMessage _bytesMessage;
 
 	private Connection _connection;
+
+	private ConnectionFactory _connectionFactory;
 
 	private Context _context;
 
 	private Destination _destination;
 
+	private MapMessage _mapMessage;
+
 	private MessageConsumer _messageConsumer;
 
 	private MessageProducer _messageProducer;
+
+	private ObjectMessage _objectMessage;
+
+	private Properties _properties;
 
 	private Queue _queue;
 
@@ -330,6 +454,7 @@ public class JMSLookupFactory {
 
 	private Session _session;
 
-	private Properties _properties;
+	private StreamMessage _streamMessage;
 
+	private TextMessage _textMessage;
 }
