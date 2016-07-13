@@ -752,38 +752,56 @@ public class PortletUtil {
 			PrefsPropsUtil.getPreferences(companyId, true);
 
 		String jmsJson =
-			GetterUtil.getString(preferences.getValue(code +
-				StringPool.UNDERLINE + WebKeys.JMS_CONFIGURATION,
+			GetterUtil.getString(preferences.getValue(WebKeys.JMS_CONFIGURATION,
 				StringPool.BLANK));
+		
+		_log.info("(PortletUtil.getJMSContextProperties) - jmsJson: --------------------- " + jmsJson);
 
 		try {
 			JSONObject jmsConfigObject =
 				JSONFactoryUtil.createJSONObject(jmsJson);
+			
+			_log.info("(PortletUtil.getJMSContextProperties) - jmsConfigObject: --------------------- " + jmsConfigObject.toString());
 			JSONObject lookupConfigObject = jmsConfigObject.getJSONObject(code);
-
+			_log.info("(PortletUtil.getJMSContextProperties) - lookupConfigObject: --------------------- " + lookupConfigObject.toString());
 			JSONObject serverConfigObject =
 				lookupConfigObject.getJSONObject(remote ? "remote" : "local");
-
+			_log.info("(PortletUtil.getJMSContextProperties) - serverConfigObject: --------------------- " + serverConfigObject.toString());
 			JSONObject channelObject =
 				serverConfigObject.getJSONObject(WebKeys.JMS_CHANNEL);
-
+			_log.info("(PortletUtil.getJMSContextProperties) - channelObject: --------------------- " + channelObject.toString());
 			String providerURL =
 				serverConfigObject.getString(WebKeys.JMS_PROVIDER_URL);
-
+			_log.info("(PortletUtil.getJMSContextProperties) - providerURL: --------------------- " + providerURL.toString());
 			if (remote && Validator.isNotNull(providerURL)) {
 				providerURL = "remote://" + providerURL;
 			}
 
 			String providerPort =
 				serverConfigObject.getString(WebKeys.JMS_PROVIDER_PORT);
+			
+			_log.info("(PortletUtil.getJMSContextProperties) - providerPort: --------------------- " + providerPort.toString());
 
 			String userName =
 				serverConfigObject.getString(WebKeys.JMS_USERNAME);
+			
+			_log.info("(PortletUtil.getJMSContextProperties) - userName: --------------------- " + userName.toString());
 
 			String passWord =
 				serverConfigObject.getString(WebKeys.JMS_PASSWORD);
+			
+			_log.info("(PortletUtil.getJMSContextProperties) - passWord: --------------------- " + passWord.toString());
+			
+			_log.info("(PortletUtil.getJMSContextProperties) - channelName: --------------------- " + channelName.toString());
 
 			String channel = channelObject.getString(channelName);
+			
+			_log.info("(PortletUtil.getJMSContextProperties) - channel: --------------------- " + channel);
+			
+			_log.info("(PortletUtil.getJMSContextProperties) - providerURL: --------------------- " + providerURL);
+			_log.info("(PortletUtil.getJMSContextProperties) - userName: --------------------- " + userName);
+			_log.info("(PortletUtil.getJMSContextProperties) - passWord: --------------------- " + passWord);
+			_log.info("(PortletUtil.getJMSContextProperties) - channel: --------------------- " + channel);
 
 			properties.put(
 				Context.INITIAL_CONTEXT_FACTORY,
