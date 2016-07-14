@@ -15,38 +15,28 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 
-package org.opencps.jms.context;
+package org.opencps.jms.business;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
+import org.opencps.dossiermgt.model.Dossier;
+import org.opencps.jms.message.SubmitDossierMessage;
+import org.opencps.jms.message.body.DossierMsgBody;
 
 /**
  * @author trungnt
  */
-public class JMSContextFactory {
+public class SubmitDossier {
 
-	/**
-	 * @param companyId
-	 * @param code
-	 * @param remote
-	 * @param channelName
-	 * @return
-	 */
-	public static JMSContext getInstance(
-		long companyId, String code, boolean remote, String channelName) {
+	public Dossier createDossier(SubmitDossierMessage submitDossierMessage) {
 
-		JMSContext lookup = null;
-		try {
-			lookup = new JMSContext(companyId, code, remote, channelName);
-		}
-		catch (Exception e) {
-			_log.error(e);
-		}
+		DossierMsgBody dossierMsgBody =
+			submitDossierMessage.getDossierMsgBody();
+		
+		
 
-		return lookup;
-
+		return null;
 	}
 
-	private static Log _log =
-		LogFactoryUtil.getLog(JMSContextFactory.class.getName());
+	public void sendToBackend() {
+
+	}
 }

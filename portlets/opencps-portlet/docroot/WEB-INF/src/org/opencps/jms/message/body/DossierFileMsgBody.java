@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 
-package org.opencps.jms.message;
+package org.opencps.jms.message.body;
 
 import java.io.Serializable;
 
@@ -23,12 +23,12 @@ import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.DossierPart;
 import org.opencps.dossiermgt.model.FileGroup;
 
-import com.liferay.portlet.documentlibrary.model.DLFileEntry;
-
 /**
  * @author trungnt
  */
 public class DossierFileMsgBody implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	public byte[] getBytes() {
 

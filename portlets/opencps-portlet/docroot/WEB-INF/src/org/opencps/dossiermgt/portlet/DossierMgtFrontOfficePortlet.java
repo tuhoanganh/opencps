@@ -93,8 +93,7 @@ import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
 import org.opencps.dossiermgt.util.DossierMgtUtil;
 import org.opencps.jasperreport.util.JRReportUtil;
 import org.opencps.jms.context.JMSContext;
-import org.opencps.jms.message.DossierFileMsgBody;
-import org.opencps.jms.message.DossierMsgBody;
+import org.opencps.jms.message.body.DossierMsgBody;
 import org.opencps.jms.util.JMSMessageBodyUtil;
 import org.opencps.jms.util.JMSMessageUtil;
 import org.opencps.processmgt.model.ProcessOrder;
@@ -2050,7 +2049,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				break;
 			}
 
-			JMSContext context =
+			/*JMSContext context =
 				JMSMessageUtil.createProducer(serviceContext.getCompanyId(),
 					dossier.getGovAgencyCode(), true, "submitDossier");
 
@@ -2064,13 +2063,12 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				JMSMessageUtil.convertObjectToByteArray(dossierMsgBody);
 
 			bytesMessage.writeBytes(sender);
-
+cps12345
 			context.getMessageProducer().send(bytesMessage);
 
-			context.destroy();
+			context.destroy();*/
 
-			// MessageBusUtil.sendMessage("opencps/frontoffice/out/destination",
-			// message);
+			MessageBusUtil.sendMessage("opencps/frontoffice/out/destination",	message);
 
 		}
 		catch (Exception e) {

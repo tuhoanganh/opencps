@@ -63,6 +63,7 @@ import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
 import org.opencps.jasperreport.util.JRReportUtil;
 import org.opencps.pki.HashAlgorithm;
 import org.opencps.pki.Helper;
+import org.opencps.pki.PdfPkcs7Signer;
 import org.opencps.pki.PdfSigner;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.model.ProcessStep;
@@ -1016,15 +1017,16 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			long dossierId = resources.getLong("dossierFileId");
 			long dossierPartId = resources.getLong("dossierPartId");
 
-			PdfSigner pdfSigner =
-				SignatureUtil.getPdfSigner(inputFilePath, certPath,
+			PdfPkcs7Signer pdfSigner =
+				SignatureUtil.getPdfPkcs7Signer(inputFilePath, certPath,
 					hashFileTempPath, outputFilePath, false, imagePath);
 
 			pdfSigner.setHashAlgorithm(HashAlgorithm.SHA1);
 			pdfSigner.setSignatureFieldName(signatureFieldName);
-			
-			System.out.println("signature: ----------------------------------------- " + signature);
-			
+
+			_log.info("********************Signature******************** " +
+				signature);
+
 			pdfSigner.sign(Base64.decode(signature));
 
 			signFile = new File(outputFilePath);
@@ -1113,8 +1115,8 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			inputFilePath =
 				PDFUtil.saveAsPdf(tempFolderPath, dossierFile.getFileEntryId());
 
-			PdfSigner pdfSigner =
-				SignatureUtil.getPdfSigner(inputFilePath, certPath,
+			PdfPkcs7Signer pdfSigner =
+				SignatureUtil.getPdfPkcs7Signer(inputFilePath, certPath,
 					hashFileTempPath, outputFilePath, isVisible, imagePath);
 
 			System.out.println("inputFilePath: " + inputFilePath);

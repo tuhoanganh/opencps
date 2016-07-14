@@ -176,9 +176,6 @@ public class JMSContext {
 			_context.close();;
 		}
 
-		_destination = null;
-		_connectionFactory = null;
-
 		if (_messageConsumer != null) {
 			_messageConsumer.close();
 		}
@@ -194,6 +191,10 @@ public class JMSContext {
 		if (_session != null) {
 			_session.close();
 		}
+
+		_destination = null;
+
+		_connectionFactory = null;
 
 		_bytesMessage = null;
 
@@ -269,7 +270,7 @@ public class JMSContext {
 	/**
 	 * @throws JMSException
 	 */
-	public void stop()
+	protected void stop()
 		throws JMSException {
 
 		if (_connection != null) {
