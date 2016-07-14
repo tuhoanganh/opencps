@@ -1022,6 +1022,9 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 			pdfSigner.setHashAlgorithm(HashAlgorithm.SHA1);
 			pdfSigner.setSignatureFieldName(signatureFieldName);
+			
+			System.out.println("signature: ----------------------------------------- " + signature);
+			
 			pdfSigner.sign(Base64.decode(signature));
 
 			signFile = new File(outputFilePath);
