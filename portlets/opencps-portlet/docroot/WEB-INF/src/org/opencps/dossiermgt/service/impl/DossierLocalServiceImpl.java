@@ -281,6 +281,162 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 
 		return dossier;
 	}
+	
+	
+	public Dossier synDossier(Dossier synDossier, ServiceContext serviceContext)
+		throws SystemException, PortalException {
+
+		long dossierId = counterLocalService
+			.increment(Dossier.class
+				.getName());
+
+		Dossier dossier = dossierPersistence
+			.create(dossierId);
+
+		int dossierNo = synDossier.getCounter();
+
+		Date now = new Date();
+
+		serviceContext
+			.setAddGroupPermissions(true);
+		serviceContext
+			.setAddGuestPermissions(true);
+/*
+		dossier
+			.setUserId(userId);*/
+		dossier
+			.setGroupId(serviceContext
+				.getScopeGroupId());
+		dossier
+			.setCompanyId(serviceContext
+				.getCompanyId());
+		dossier
+			.setCreateDate(now);
+		dossier
+			.setModifiedDate(now);
+
+		dossier
+			.setAddress(synDossier.getAddress());
+		dossier
+			.setCityCode(synDossier.getCityCode());
+		dossier
+			.setCityName(synDossier.getCityName());
+		dossier
+			.setContactEmail(synDossier.getContactEmail());
+		dossier
+			.setContactName(synDossier.getContactName());
+		dossier
+			.setContactTelNo(synDossier.getContactTelNo());
+		dossier
+			.setCounter(dossierNo);
+		dossier
+			.setDistrictCode(synDossier.getDistrictCode());
+		dossier
+			.setDistrictName(synDossier.getDistrictName());
+		dossier
+			.setDossierSource(synDossier.getDossierSource());
+		dossier
+			.setDossierStatus(synDossier.getDossierStatus());
+		dossier
+			.setDossierTemplateId(synDossier.getDossierTemplateId());
+		dossier
+			.setGovAgencyCode(synDossier.getGovAgencyCode());
+		dossier
+			.setGovAgencyName(synDossier.getGovAgencyName());
+		dossier
+			.setGovAgencyOrganizationId(synDossier.getGovAgencyOrganizationId());
+		dossier
+			.setNote(synDossier.getNote());
+		dossier
+			.setOwnerOrganizationId(synDossier.getOwnerOrganizationId());//?
+		dossier
+			.setServiceAdministrationIndex(synDossier.getServiceAdministrationIndex());
+		dossier
+			.setServiceConfigId(synDossier.getServiceConfigId());
+		dossier
+			.setServiceDomainIndex(synDossier.getServiceDomainIndex());
+		dossier
+			.setServiceInfoId(synDossier.getServiceInfoId());
+		dossier
+			.setServiceMode(synDossier.getServiceMode());
+		dossier
+			.setSubjectId(synDossier.getSubjectId());
+		dossier
+			.setSubjectName(synDossier.getSubjectName());
+		dossier
+			.setOid(synDossier.getOid());
+		dossier
+			.setWardCode(synDossier.getWardCode());
+		dossier
+			.setWardName(synDossier.getWardName());
+
+		dossier
+			.setKeypayRedirectUrl(synDossier.getKeypayRedirectUrl());
+
+		DLFolder folder = null;
+/*
+		try {
+			folder = DLFolderUtil
+				.getFolder(serviceContext
+					.getScopeGroupId(), parentFolderId, String
+						.valueOf(dossierNo));
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		if (folder == null) {
+			dlFolderLocalService
+				.addFolder(userId, serviceContext
+					.getScopeGroupId(), serviceContext
+						.getScopeGroupId(),
+					false, parentFolderId, String
+						.valueOf(dossierNo),
+					StringPool.BLANK, false, serviceContext);
+		}
+*/
+		dossier = dossierPersistence
+			.update(dossier);
+
+		
+		/*dossierLogLocalService
+			.addDossierLog(userId, dossierId, 0,
+				PortletConstants.DOSSIER_STATUS_NEW, PortletUtil
+					.getActionInfo(PortletConstants.DOSSIER_STATUS_NEW,
+						serviceContext
+							.getLocale()),
+				PortletUtil
+					.getMessageInfo(PortletConstants.DOSSIER_STATUS_NEW,
+						serviceContext
+							.getLocale()),
+				now, PortletConstants.DOSSIER_LOG_NORMAL, serviceContext);*/
+
+		long classTypeId = 0;
+
+		/*assetEntryLocalService
+			.updateEntry(userId, serviceContext
+				.getScopeGroupId(), ServiceInfo.class
+					.getName(),
+				dossier
+					.getDossierId(),
+				dossier
+					.getOid(),
+				classTypeId, serviceContext
+					.getAssetCategoryIds(),
+				serviceContext
+					.getAssetTagNames(),
+				false, now, null, null, ContentTypes.TEXT_HTML, dossier
+					.getSubjectName(),
+				StringPool.BLANK, StringPool.BLANK, null, null, 0, 0, 0, false);*/
+
+		Indexer indexer = IndexerRegistryUtil
+			.nullSafeGetIndexer(Dossier.class);
+
+		indexer
+			.reindex(dossier);
+
+		return dossier;
+	}
 
 	/**
 	 * @param groupId

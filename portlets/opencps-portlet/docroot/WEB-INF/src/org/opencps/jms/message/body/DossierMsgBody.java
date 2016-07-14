@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 
-package org.opencps.jms.message;
+package org.opencps.jms.message.body;
 
 import java.io.Serializable;
 import java.util.List;
@@ -30,6 +30,7 @@ import org.opencps.servicemgt.model.ServiceInfo;
  */
 public class DossierMsgBody implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
 	
 	public Dossier getDossier() {
 	
