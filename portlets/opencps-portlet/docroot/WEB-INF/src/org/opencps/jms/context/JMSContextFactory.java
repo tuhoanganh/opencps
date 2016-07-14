@@ -25,6 +25,13 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
  */
 public class JMSContextFactory {
 
+	/**
+	 * @param companyId
+	 * @param code
+	 * @param remote
+	 * @param channelName
+	 * @return
+	 */
 	public static JMSContext getInstance(
 		long companyId, String code, boolean remote, String channelName) {
 

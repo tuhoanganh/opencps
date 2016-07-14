@@ -30,6 +30,7 @@ import org.opencps.servicemgt.model.ServiceInfo;
  */
 public class DossierMsgBody implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
 	
 	public Dossier getDossier() {
 	
