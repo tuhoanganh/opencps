@@ -117,6 +117,7 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
@@ -2048,7 +2049,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				break;
 			}
 
-			JMSContext context =
+			/*JMSContext context =
 				JMSMessageUtil.createProducer(serviceContext.getCompanyId(),
 					dossier.getGovAgencyCode(), true, "submitDossier");
 
@@ -2062,13 +2063,12 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				JMSMessageUtil.convertObjectToByteArray(dossierMsgBody);
 
 			bytesMessage.writeBytes(sender);
-
+cps12345
 			context.getMessageProducer().send(bytesMessage);
 
-			context.destroy();
+			context.destroy();*/
 
-			// MessageBusUtil.sendMessage("opencps/frontoffice/out/destination",
-			// message);
+			MessageBusUtil.sendMessage("opencps/frontoffice/out/destination",	message);
 
 		}
 		catch (Exception e) {
