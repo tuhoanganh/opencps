@@ -19,6 +19,7 @@ package org.opencps.jms.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInput;
@@ -222,19 +223,22 @@ public class JMSMessageUtil {
 		throws IOException {
 
 		ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+
 		ObjectInput in = null;
 		Object object = null;
 		try {
 			in = new ObjectInputStream(bis);
-			object = in.readObject();
 
+			object = in.readObject();
 		}
 		catch (Exception e) {
 			_log.error(e);
 		}
 		finally {
+
 			bis.close();
 			if (in != null) {
+
 				in.close();
 			}
 		}
@@ -260,6 +264,30 @@ public class JMSMessageUtil {
 		output.close();
 		inputStream.close();
 		return bytes;
+	}
+
+	/**
+	 * @param bytes
+	 * @param path
+	 * @throws IOException
+	 */
+	public static void byteArrayToFile(byte[] bytes, String path)
+		throws IOException {
+
+		FileOutputStream stream = null;
+		try {
+			stream = new FileOutputStream(path);
+			stream.write(bytes);
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
+		finally {
+			if (stream != null) {
+				stream.flush();
+				stream.close();
+			}
+		}
 	}
 
 	private static Log _log =
