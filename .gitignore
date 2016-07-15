@@ -226,3 +226,6 @@ portlets/LiferayJSONWebservices-portlet.rar
 portlets/LiferayJSONWebservices-portlet/
 
 portlets/opencps-portlet/*.log
+build.binhth.properties
+build.trungdk.properties
+.gitignore
