@@ -123,6 +123,9 @@
 	enctype="multipart/form-data"
 	onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "registerAccount();" %>'
 >
+
+	<aui:input name="citizenRegStep_cfg" value="<%=citizenRegStep_cfg %>" type="hidden"></aui:input>
+	
 	<liferay-util:include 
 		page="/html/portlets/accountmgt/registration/citizen/general_info.jsp" 
 		servletContext="<%=application %>" 
