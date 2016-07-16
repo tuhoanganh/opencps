@@ -44,8 +44,8 @@
 <c:choose>
 	<c:when test="<%=dossier != null && !dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_NEW) %>">
 		<%
-			String[] actors = new String[]{WebKeys.ACTOR_ACTION_CITIZEN};
-			String[] requestCommands = new String[]{WebKeys.ACTION_RESUBMIT_VALUE, WebKeys.ACTION_PAY_VALUE};
+			String[] actors = new String[]{WebKeys.ACTOR_ACTION_EMPLOYEE};
+			String[] requestCommands = new String[]{WebKeys.DOSSIER_LOG_RESUBMIT_REQUEST, WebKeys.DOSSIER_LOG_PAYMENT_REQUEST};
 			List<DossierLog> dossierLogs = DossierLogLocalServiceUtil.findRequiredProcessDossier(dossier.getDossierId(), actors, requestCommands);
 			List<DossierPart> dossierPartsLevel1 = new ArrayList<DossierPart>();
 			
