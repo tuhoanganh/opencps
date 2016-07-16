@@ -93,6 +93,7 @@ import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
 import org.opencps.dossiermgt.util.DossierMgtUtil;
 import org.opencps.jasperreport.util.JRReportUtil;
 import org.opencps.jms.context.JMSContext;
+import org.opencps.jms.message.SubmitDossierMessage;
 import org.opencps.jms.message.body.DossierMsgBody;
 import org.opencps.jms.util.JMSMessageBodyUtil;
 import org.opencps.jms.util.JMSMessageUtil;
@@ -2053,22 +2054,13 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				JMSMessageUtil.createProducer(serviceContext.getCompanyId(),
 					dossier.getGovAgencyCode(), true, "submitDossier");
 
-			BytesMessage bytesMessage =
-				JMSMessageUtil.createByteMessage(context);
+			SubmitDossierMessage submitDossierMessage =
+				new SubmitDossierMessage(context);
 
-			DossierMsgBody dossierMsgBody =
-				JMSMessageBodyUtil.getDossierMsgBody(dossier);
+			submitDossierMessage.sendMessage(dossierId);*/
 
-			byte[] sender =
-				JMSMessageUtil.convertObjectToByteArray(dossierMsgBody);
-
-			bytesMessage.writeBytes(sender);
-cps12345
-			context.getMessageProducer().send(bytesMessage);
-
-			context.destroy();*/
-
-			MessageBusUtil.sendMessage("opencps/frontoffice/out/destination",	message);
+			MessageBusUtil.sendMessage("opencps/frontoffice/out/destination",
+				message);
 
 		}
 		catch (Exception e) {
@@ -2834,7 +2826,7 @@ cps12345
 			throw new OutOfLengthDossierContactEmailException();
 		}
 	}
-	
+
 	public void TestConsumer(
 		ActionRequest actionRequest, ActionResponse actionResponse) {
 
@@ -2846,43 +2838,33 @@ cps12345
 				JMSMessageUtil.createConsumer(serviceContext.getCompanyId(),
 					"111", true, "submitDossier");
 
-			javax.jms.Message message = context.getMessageConsumer().receive();
+			SubmitDossierMessage submitDossierMessage =
+				new SubmitDossierMessage(context);
+			submitDossierMessage.receiveMessage();
 
-			if (message != null) {
-				if (message instanceof TextMessage) {
-					_log.info("*******************TextMessage*******************");
-					_log.info(((TextMessage) message).getText());
-				}
-				else if (message instanceof ObjectMessage) {
-					_log.info("*******************ObjectMessage*******************");
-					_log.info(((ObjectMessage) message).getClass().getName());
-				}
-				else if (message instanceof BytesMessage) {
-					BytesMessage bytesMessage = (BytesMessage) message;
-
-					_log.info("*******************BytesMessage*******************");
-					_log.info(((BytesMessage) message).getBodyLength());
-
-					byte[] result =
-						new byte[(int) bytesMessage.getBodyLength()];
-
-					bytesMessage.readBytes(result);
-
-					Object object =
-						JMSMessageUtil.convertByteArrayToObject(result);
-
-					DossierMsgBody dossierMsgBody = (DossierMsgBody) object;
-
-				}
-				else if (message instanceof StreamMessage) {
-					_log.info("*******************StreamMessage*******************");
-				}
-			}
-			else {
-				_log.info("*******************Null Message*******************");
-			}
-
-			context.destroy();
+			/*
+			 * javax.jms.Message message =
+			 * context.getMessageConsumer().receive(); if (message != null) { if
+			 * (message instanceof TextMessage) {
+			 * _log.info("*******************TextMessage*******************");
+			 * _log.info(((TextMessage) message).getText()); } else if (message
+			 * instanceof ObjectMessage) {
+			 * _log.info("*******************ObjectMessage*******************");
+			 * _log.info(((ObjectMessage) message).getClass().getName()); } else
+			 * if (message instanceof BytesMessage) { BytesMessage bytesMessage
+			 * = (BytesMessage) message;
+			 * _log.info("*******************BytesMessage*******************");
+			 * _log.info(((BytesMessage) message).getBodyLength()); byte[]
+			 * result = new byte[(int) bytesMessage.getBodyLength()];
+			 * bytesMessage.readBytes(result); Object object =
+			 * JMSMessageUtil.convertByteArrayToObject(result); DossierMsgBody
+			 * dossierMsgBody = (DossierMsgBody) object; } else if (message
+			 * instanceof StreamMessage) {
+			 * _log.info("*******************StreamMessage*******************");
+			 * } } else {
+			 * _log.info("*******************Null Message*******************");
+			 * } context.destroy();
+			 */
 
 		}
 		catch (Exception e) {
