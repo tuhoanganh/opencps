@@ -227,7 +227,7 @@
 		]]>
 	</sql>	
 	
-	<sql id="org.opencps.dossiermgt.service.persistence.DossierLogFinder.findRequiredProcessDossier">
+	<!-- <sql id="org.opencps.dossiermgt.service.persistence.DossierLogFinder.findRequiredProcessDossier">
 		<![CDATA[
 			SELECT
 				*
@@ -239,6 +239,23 @@
 				opencps_dossier_log.actor IN(?)
 			AND 
 				(lower(opencps_dossier_file.displayName) LIKE ? [$AND_OR_NULL_CHECK$])
+			ORDER BY 
+				opencps_dossier_log.updateDatetime DESC
+		]]>
+	</sql> -->
+	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierLogFinder.findRequiredProcessDossier">
+		<![CDATA[
+			SELECT
+				*
+			FROM
+				opencps_dossier_log
+			WHERE
+				opencps_dossier_log.dossierId = ?
+			AND 
+				opencps_dossier_log.actor IN(?)
+			AND 
+				AND opencps_dossier_log.requestCommand IN(?)
 			ORDER BY 
 				opencps_dossier_log.updateDatetime DESC
 		]]>
