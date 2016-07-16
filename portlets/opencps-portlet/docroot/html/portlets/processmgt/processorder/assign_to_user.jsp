@@ -394,7 +394,7 @@
 
 		//loadingMask.reset();
 		
-		console.log(loadingMask.getAttrs());
+		//console.log(loadingMask.getAttrs());
 
 		loadingMask.show();
 	
@@ -419,7 +419,7 @@
 						        success: function(event, id, obj) {
 									var instance = this;
 									var res = instance.get('responseData');
-									console.log(res);
+									//console.log(res);
 									<portlet:namespace/>signature(res.hashHex, res.resources);
 								},
 						    	error: function(){
@@ -454,15 +454,17 @@
 		        // do something
 		    },
 		    afterSign: function(signer, signature) {
-		    	console.log(signature);
-		        $.ajax({
-			   type: "POST",
-		        url : portletURL.toString(),
-			    async: false,
+		    	//console.log(signature);
+		       $.ajax({
+			   		type: "POST",
+		       		url : portletURL.toString(),
+			   		async: false,
 		            data : {
 		                <portlet:namespace/>signature: signature.value,
 		                <portlet:namespace/>certificate: signature.certificate,
 		                <portlet:namespace/>resources: JSON.stringify(signer.options.document.resources)
+		            },success: function(data){
+		            	console.log(data);
 		            }
 		        });
 		    },
