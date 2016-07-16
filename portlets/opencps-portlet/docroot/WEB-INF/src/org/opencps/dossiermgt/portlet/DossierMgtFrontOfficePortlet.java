@@ -27,10 +27,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.jms.BytesMessage;
-import javax.jms.ObjectMessage;
-import javax.jms.StreamMessage;
-import javax.jms.TextMessage;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
@@ -94,8 +90,6 @@ import org.opencps.dossiermgt.util.DossierMgtUtil;
 import org.opencps.jasperreport.util.JRReportUtil;
 import org.opencps.jms.context.JMSContext;
 import org.opencps.jms.message.SubmitDossierMessage;
-import org.opencps.jms.message.body.DossierMsgBody;
-import org.opencps.jms.util.JMSMessageBodyUtil;
 import org.opencps.jms.util.JMSMessageUtil;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
@@ -1963,9 +1957,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			ParamUtil.getLong(actionRequest,
 				DossierFileDisplayTerms.DOSSIER_FILE_DATE);
 
-		long govAgencyOrganizationId =
+		/*long govAgencyOrganizationId =
 			ParamUtil.getLong(actionRequest,
-				DossierDisplayTerms.GOVAGENCY_ORGANIZATION_ID);
+				DossierDisplayTerms.GOVAGENCY_ORGANIZATION_ID);*/
 
 		String dossierStatus =
 			ParamUtil.getString(actionRequest,
@@ -1973,7 +1967,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
 
-		Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
+		// Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
 
 		try {
 			ServiceContext serviceContext =
@@ -1982,6 +1976,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			UserActionMsg actionMsg = new UserActionMsg();
 
 			Message message = new Message();
+
 			switch (dossierStatus) {
 			case PortletConstants.DOSSIER_STATUS_WAITING:
 
@@ -1994,24 +1989,14 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				actionMsg.setLocale(serviceContext.getLocale());
 
 				actionMsg.setUserId(serviceContext.getUserId());
+				
+				actionMsg.setGroupId(serviceContext.getScopeGroupId());
 
 				ProcessOrder processOrder =
 					ProcessOrderLocalServiceUtil.getProcessOrder(dossierId,
 						fileGroupId);
 
 				actionMsg.setProcessOrderId(processOrder.getProcessOrderId());
-
-				message.put("action", "resubmit");
-				message.put("dossierId", dossierId);
-				message.put("fileGroupId", fileGroupId);
-				message.put("level", PortletConstants.DOSSIER_LOG_NORMAL);
-				message.put("locale", serviceContext.getLocale());
-
-				message.put("groupId", serviceContext.getScopeGroupId());
-
-				message.put("govAgencyOrganizationId", govAgencyOrganizationId);
-
-				message.put("userId", serviceContext.getUserId());
 
 				message.put("msgToEngine", actionMsg);
 
@@ -2029,18 +2014,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				actionMsg.setLocale(serviceContext.getLocale());
 
 				actionMsg.setUserId(serviceContext.getUserId());
-
-				message.put("action", "submit");
-				message.put("dossierId", dossierId);
-				message.put("fileGroupId", fileGroupId);
-				message.put("level", PortletConstants.DOSSIER_LOG_NORMAL);
-				message.put("locale", serviceContext.getLocale());
-
-				message.put("groupId", serviceContext.getScopeGroupId());
-
-				message.put("govAgencyOrganizationId", govAgencyOrganizationId);
-
-				message.put("userId", serviceContext.getUserId());
+				
+				actionMsg.setGroupId(serviceContext.getScopeGroupId());
 
 				message.put("msgToEngine", actionMsg);
 
@@ -2050,14 +2025,14 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				break;
 			}
 
-			/*JMSContext context =
-				JMSMessageUtil.createProducer(serviceContext.getCompanyId(),
-					dossier.getGovAgencyCode(), true, "submitDossier");
-
-			SubmitDossierMessage submitDossierMessage =
-				new SubmitDossierMessage(context);
-
-			submitDossierMessage.sendMessage(dossierId);*/
+			/*
+			 * JMSContext context =
+			 * JMSMessageUtil.createProducer(serviceContext.getCompanyId(),
+			 * dossier.getGovAgencyCode(), true, "submitDossier");
+			 * SubmitDossierMessage submitDossierMessage = new
+			 * SubmitDossierMessage(context);
+			 * submitDossierMessage.sendMessage(dossierId);
+			 */
 
 			MessageBusUtil.sendMessage("opencps/frontoffice/out/destination",
 				message);
