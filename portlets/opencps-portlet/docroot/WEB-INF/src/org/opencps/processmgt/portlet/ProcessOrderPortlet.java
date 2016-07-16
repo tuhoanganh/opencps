@@ -387,7 +387,8 @@ public class ProcessOrderPortlet extends MVCPortlet {
 	 * @throws IOException
 	 */
 	public void assignToUser(
-		ActionRequest actionRequest, ActionResponse actionResponse) throws IOException {
+		ActionRequest actionRequest, ActionResponse actionResponse)
+		throws IOException {
 
 		Dossier dossier = null;
 
@@ -508,8 +509,9 @@ public class ProcessOrderPortlet extends MVCPortlet {
 					"/html/portlets/processmgt/processorder/assign_to_user.jsp");
 				actionResponse.setRenderParameter("backURL", backURL);
 
-			}else{
-				if(Validator.isNotNull(redirectURL)){
+			}
+			else {
+				if (Validator.isNotNull(redirectURL)) {
 					actionResponse.sendRedirect(redirectURL);
 				}
 			}
@@ -1932,7 +1934,10 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				DossierPartLocalServiceUtil.getDossierPartsByT_P_PT(
 					dossierTemplate.getDossierTemplateId(), 0,
 					PortletConstants.DOSSIER_PART_TYPE_RESULT);
+
 			if (lstTmp1 != null) {
+				_log.info("************************************************************lstTmp1************************************************************ " +
+					lstTmp1.size());
 				dossierPartsLevel1.addAll(lstTmp1);
 			}
 		}
@@ -1945,11 +1950,16 @@ public class ProcessOrderPortlet extends MVCPortlet {
 					dossierTemplate.getDossierTemplateId(), 0,
 					PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT);
 			if (lstTmp2 != null) {
+				_log.info("************************************************************lstTmp2************************************************************ " +
+					lstTmp2.size());
 				dossierPartsLevel1.addAll(lstTmp2);
 			}
 		}
 		catch (Exception e) {
 		}
+
+		_log.info("************************************************************dossierPartsLevel1************************************************************ " +
+			dossierPartsLevel1.size());
 
 		boolean requiredFlag = false;
 
