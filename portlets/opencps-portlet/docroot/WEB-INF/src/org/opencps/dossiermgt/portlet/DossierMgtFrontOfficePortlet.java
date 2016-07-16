@@ -1957,9 +1957,10 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			ParamUtil.getLong(actionRequest,
 				DossierFileDisplayTerms.DOSSIER_FILE_DATE);
 
-		/*long govAgencyOrganizationId =
-			ParamUtil.getLong(actionRequest,
-				DossierDisplayTerms.GOVAGENCY_ORGANIZATION_ID);*/
+		/*
+		 * long govAgencyOrganizationId = ParamUtil.getLong(actionRequest,
+		 * DossierDisplayTerms.GOVAGENCY_ORGANIZATION_ID);
+		 */
 
 		String dossierStatus =
 			ParamUtil.getString(actionRequest,
@@ -1989,7 +1990,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				actionMsg.setLocale(serviceContext.getLocale());
 
 				actionMsg.setUserId(serviceContext.getUserId());
-				
+
 				actionMsg.setGroupId(serviceContext.getScopeGroupId());
 
 				ProcessOrder processOrder =
@@ -2014,7 +2015,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				actionMsg.setLocale(serviceContext.getLocale());
 
 				actionMsg.setUserId(serviceContext.getUserId());
-				
+
 				actionMsg.setGroupId(serviceContext.getScopeGroupId());
 
 				message.put("msgToEngine", actionMsg);
@@ -2668,7 +2669,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				}
 
 				for (DossierPart dossierPart : dossierParts) {
-					if (dossierPart.getRequired()) {
+					if (dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_RESULT &&
+						dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT &&
+						dossierPart.getRequired()) {
 						DossierFile dossierFile = null;
 						try {
 							dossierFile =
