@@ -186,8 +186,8 @@ public class DossierLogFinderImpl extends BasePersistenceImpl<DossierLog>
 					StringUtil.replace(
 						sql,
 						"AND opencps_dossier_log.actor IN (?)",
-						"AND opencps_dossier_log.actor IN ('" +
-							StringUtil.merge(actors) + "')");
+						"AND opencps_dossier_log.actor IN (" +
+							StringUtil.merge(actors) + ")");
 			}
 
 			if (requestCommands == null || requestCommands.length == 0) {
@@ -201,8 +201,8 @@ public class DossierLogFinderImpl extends BasePersistenceImpl<DossierLog>
 				sql =
 					StringUtil.replace(sql,
 						"AND opencps_dossier_log.requestCommand IN (?)",
-						"AND opencps_dossier_log.requestCommand IN ('" +
-							StringUtil.merge(requestCommands) + "')");
+						"AND opencps_dossier_log.requestCommand IN (" +
+							StringUtil.merge(requestCommands) + ")");
 			}
 
 			SQLQuery q = session.createSQLQuery(sql);

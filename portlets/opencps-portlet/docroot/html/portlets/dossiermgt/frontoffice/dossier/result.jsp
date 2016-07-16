@@ -44,8 +44,8 @@
 <c:choose>
 	<c:when test="<%=dossier != null && !dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_NEW) %>">
 		<%
-			String[] actors = new String[]{WebKeys.ACTOR_ACTION_EMPLOYEE};
-			String[] requestCommands = new String[]{WebKeys.DOSSIER_LOG_RESUBMIT_REQUEST, WebKeys.DOSSIER_LOG_PAYMENT_REQUEST};
+			String[] actors = new String[]{StringPool.APOSTROPHE + WebKeys.ACTOR_ACTION_EMPLOYEE + StringPool.APOSTROPHE};
+			String[] requestCommands = new String[]{StringPool.APOSTROPHE + WebKeys.DOSSIER_LOG_RESUBMIT_REQUEST + StringPool.APOSTROPHE, StringPool.APOSTROPHE + WebKeys.DOSSIER_LOG_PAYMENT_REQUEST + StringPool.APOSTROPHE};
 			List<DossierLog> dossierLogs = DossierLogLocalServiceUtil.findRequiredProcessDossier(dossier.getDossierId(), actors, requestCommands);
 			List<DossierPart> dossierPartsLevel1 = new ArrayList<DossierPart>();
 			
@@ -122,9 +122,11 @@
 		<c:if test="<%=dossierLogs != null && !dossierLogs.isEmpty() %>">
 			<aui:row>
 				<label>
-					<liferay-ui:message key="required-process"/>
+					<b>
+						<liferay-ui:message key="required-process"/>
+					</b>
 				</label>
-				<table>
+				<table width="100%" border="1">
 					<tr>
 						<td width="10%"><liferay-ui:message key="number-order"/></td>
 						<td width="30%"><liferay-ui:message key="datetime"/></td>
@@ -136,7 +138,7 @@
 							%>
 								<tr>
 									<td>
-										<%=dossierLogs.indexOf(dossierLog) %>
+										<%=dossierLogs.indexOf(dossierLog) + 1 %>
 									</td>
 									<td>
 										<%=dossierLog.getUserUuid() != null ? 
@@ -145,7 +147,7 @@
 										%>
 									</td>
 									<td>
-										<%=dossierLog.getRequestCommand() %>
+										<liferay-ui:message key="<%=dossierLog.getRequestCommand() %>"/>
 									</td>
 									<td>
 										<%=dossierLog.getMessageInfo() %>
@@ -160,6 +162,12 @@
 		<%
 		if(dossierPartsLevel1 != null){
 			%>
+			<aui:row>
+				<label>
+					<b>
+						<liferay-ui:message key="dossier-file-result"/>
+					</b>
+				</label>
 				<table width="100%" border="1">
 					<tr>
 						<td width="10%" bordercolor="#ccc"><liferay-ui:message key="number-order"/></td>
@@ -225,6 +233,7 @@
 					}
 					%>
 				</table>
+			</aui:row>
 			<%
 		}
 		%>
