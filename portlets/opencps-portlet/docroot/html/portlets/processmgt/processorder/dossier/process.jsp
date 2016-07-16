@@ -610,6 +610,7 @@ AUI().ready('aui-base','liferay-portlet-url','aui-io', function(A){
 												response = JSON.parse(response);
 												
 												if(response.deleted == true){
+													setCookie('dossierId','1');
 													Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.PROCESS_ORDER_PORTLET %>_');
 												}else{
 													alert('<%= UnicodeLanguageUtil.get(pageContext, "error-while-remove-this-group") %>');

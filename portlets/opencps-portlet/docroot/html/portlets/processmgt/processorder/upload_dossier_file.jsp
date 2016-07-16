@@ -179,6 +179,7 @@
 	
 	
 	Liferay.provide(window, '<portlet:namespace/>closeDialog', function() {
+		setCookie('dossierId','1');
 		var dialog = Liferay.Util.getWindow('<portlet:namespace/>dossierFileId');
 		dialog.destroy();
 		Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.PROCESS_ORDER_PORTLET %>_');
