@@ -253,9 +253,9 @@
 			WHERE
 				opencps_dossier_log.dossierId = ?
 			AND 
-				opencps_dossier_log.actor IN(?)
+				opencps_dossier_log.actor IN (?)
 			AND 
-				AND opencps_dossier_log.requestCommand IN(?)
+				opencps_dossier_log.requestCommand IN (?)
 			ORDER BY 
 				opencps_dossier_log.updateDatetime DESC
 		]]>
