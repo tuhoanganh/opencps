@@ -22,7 +22,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.portlet.ActionRequest;
@@ -45,7 +47,9 @@ import org.opencps.dossiermgt.EmptyFileGroupException;
 import org.opencps.dossiermgt.NoSuchDossierException;
 import org.opencps.dossiermgt.NoSuchDossierFileException;
 import org.opencps.dossiermgt.NoSuchDossierPartException;
+import org.opencps.dossiermgt.NoSuchDossierTemplateException;
 import org.opencps.dossiermgt.PermissionDossierException;
+import org.opencps.dossiermgt.RequiredDossierPartException;
 import org.opencps.dossiermgt.bean.AccountBean;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierFile;
@@ -60,6 +64,7 @@ import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil;
 import org.opencps.dossiermgt.service.FileGroupLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
+import org.opencps.dossiermgt.util.DossierMgtUtil;
 import org.opencps.jasperreport.util.JRReportUtil;
 import org.opencps.pki.HashAlgorithm;
 import org.opencps.pki.Helper;
@@ -450,59 +455,75 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		Dossier dossier = null;
 
 		try {
+
 			dossier = DossierLocalServiceUtil.getDossier(dossierId);
+
+			validateAssignTask(dossier.getDossierId());
+
+			Message message = new Message();
+			message.put(ProcessOrderDisplayTerms.EVENT, event);
+			message.put(ProcessOrderDisplayTerms.ACTION_NOTE, actionNote);
+			message.put(ProcessOrderDisplayTerms.PROCESS_STEP_ID, processStepId);
+			message.put(ProcessOrderDisplayTerms.ASSIGN_TO_USER_ID,
+				assignToUserId);
+			message.put(ProcessOrderDisplayTerms.SERVICE_PROCESS_ID,
+				serviceProcessId);
+			message.put(ProcessOrderDisplayTerms.PAYMENTVALUE, paymentValue);
+
+			message.put(ProcessOrderDisplayTerms.PROCESS_WORKFLOW_ID,
+				processWorkflowId);
+
+			message.put(ProcessOrderDisplayTerms.ACTION_USER_ID, actionUserId);
+
+			message.put(ProcessOrderDisplayTerms.PROCESS_ORDER_ID,
+				processOrderId);
+			message.put(ProcessOrderDisplayTerms.FILE_GROUP_ID, fileGroupId);
+			message.put(ProcessOrderDisplayTerms.DOSSIER_ID, dossierId);
+			message.put(ProcessOrderDisplayTerms.ESTIMATE_DATETIME, deadline);
+
+			message.put(ProcessOrderDisplayTerms.SIGNATURE, signature);
+
+			message.put(ProcessOrderDisplayTerms.GROUP_ID, groupId);
+
+			message.put(ProcessOrderDisplayTerms.COMPANY_ID, companyId);
+
+			SendToEngineMsg sendToEngineMsg = new SendToEngineMsg();
+
+			// sendToEngineMsg.setAction(WebKeys.ACTION);
+			sendToEngineMsg.setActionNote(actionNote);
+			sendToEngineMsg.setAssignToUserId(assignToUserId);
+			sendToEngineMsg.setActionUserId(actionUserId);
+			sendToEngineMsg.setDossierId(dossierId);
+			sendToEngineMsg.setEstimateDatetime(deadline);
+			sendToEngineMsg.setFileGroupId(fileGroupId);
+			sendToEngineMsg.setPaymentValue(GetterUtil.getDouble(paymentValue));
+			sendToEngineMsg.setProcessOrderId(processOrderId);
+			sendToEngineMsg.setProcessWorkflowId(processWorkflowId);
+			sendToEngineMsg.setReceptionNo(Validator.isNotNull(dossier.getReceptionNo())
+				? dossier.getReceptionNo() : StringPool.BLANK);
+			sendToEngineMsg.setSignature(signature ? 1 : 0);
+			message.put("msgToEngine", sendToEngineMsg);
+			MessageBusUtil.sendMessage("opencps/backoffice/engine/destination",
+				message);
+
+			actionResponse.setRenderParameter("jspPage",
+				"/html/portlets/processmgt/processorder/assign_to_user.jsp");
+			actionResponse.setRenderParameter("backURL", backURL);
 		}
 		catch (Exception e) {
+			if (e instanceof NoSuchDossierException ||
+				e instanceof NoSuchDossierTemplateException ||
+				e instanceof RequiredDossierPartException) {
+
+				SessionErrors.add(actionRequest, e.getClass());
+			}
+			else {
+				SessionErrors.add(actionRequest,
+					MessageKeys.DOSSIER_SYSTEM_EXCEPTION_OCCURRED);
+			}
+
 			_log.error(e);
 		}
-
-		Message message = new Message();
-		message.put(ProcessOrderDisplayTerms.EVENT, event);
-		message.put(ProcessOrderDisplayTerms.ACTION_NOTE, actionNote);
-		message.put(ProcessOrderDisplayTerms.PROCESS_STEP_ID, processStepId);
-		message.put(ProcessOrderDisplayTerms.ASSIGN_TO_USER_ID, assignToUserId);
-		message.put(ProcessOrderDisplayTerms.SERVICE_PROCESS_ID,
-			serviceProcessId);
-		message.put(ProcessOrderDisplayTerms.PAYMENTVALUE, paymentValue);
-
-		message.put(ProcessOrderDisplayTerms.PROCESS_WORKFLOW_ID,
-			processWorkflowId);
-
-		message.put(ProcessOrderDisplayTerms.ACTION_USER_ID, actionUserId);
-
-		message.put(ProcessOrderDisplayTerms.PROCESS_ORDER_ID, processOrderId);
-		message.put(ProcessOrderDisplayTerms.FILE_GROUP_ID, fileGroupId);
-		message.put(ProcessOrderDisplayTerms.DOSSIER_ID, dossierId);
-		message.put(ProcessOrderDisplayTerms.ESTIMATE_DATETIME, deadline);
-
-		message.put(ProcessOrderDisplayTerms.SIGNATURE, signature);
-
-		message.put(ProcessOrderDisplayTerms.GROUP_ID, groupId);
-
-		message.put(ProcessOrderDisplayTerms.COMPANY_ID, companyId);
-
-		SendToEngineMsg sendToEngineMsg = new SendToEngineMsg();
-
-		// sendToEngineMsg.setAction(WebKeys.ACTION);
-		sendToEngineMsg.setActionNote(actionNote);
-		sendToEngineMsg.setAssignToUserId(assignToUserId);
-		sendToEngineMsg.setActionUserId(actionUserId);
-		sendToEngineMsg.setDossierId(dossierId);
-		sendToEngineMsg.setEstimateDatetime(deadline);
-		sendToEngineMsg.setFileGroupId(fileGroupId);
-		sendToEngineMsg.setPaymentValue(GetterUtil.getDouble(paymentValue));
-		sendToEngineMsg.setProcessOrderId(processOrderId);
-		sendToEngineMsg.setProcessWorkflowId(processWorkflowId);
-		sendToEngineMsg.setReceptionNo(Validator.isNotNull(dossier.getReceptionNo())
-			? dossier.getReceptionNo() : StringPool.BLANK);
-		sendToEngineMsg.setSignature(signature ? 1 : 0);
-		message.put("msgToEngine", sendToEngineMsg);
-		MessageBusUtil.sendMessage("opencps/backoffice/engine/destination",
-			message);
-
-		actionResponse.setRenderParameter("jspPage",
-			"/html/portlets/processmgt/processorder/assign_to_user.jsp");
-		actionResponse.setRenderParameter("backURL", backURL);
 	}
 
 	/**
@@ -1872,6 +1893,109 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		}
 		catch (Exception e) {
 			throw new NoSuchDossierPartException();
+		}
+	}
+
+	/**
+	 * @param dossierId
+	 * @throws NoSuchDossierException
+	 * @throws NoSuchDossierTemplateException
+	 * @throws RequiredDossierPartException
+	 */
+	public void validateAssignTask(long dossierId)
+		throws NoSuchDossierException, NoSuchDossierTemplateException,
+		RequiredDossierPartException {
+
+		if (dossierId <= 0) {
+			throw new NoSuchDossierException();
+		}
+
+		Dossier dossier = null;
+
+		try {
+			dossier = DossierLocalServiceUtil.getDossier(dossierId);
+		}
+		catch (Exception e) {
+		}
+
+		if (dossier == null) {
+			throw new NoSuchDossierException();
+		}
+
+		DossierTemplate dossierTemplate = null;
+
+		try {
+			dossierTemplate =
+				DossierTemplateLocalServiceUtil.getDossierTemplate(dossier.getDossierTemplateId());
+		}
+		catch (Exception e) {
+		}
+
+		if (dossierTemplate == null) {
+			throw new NoSuchDossierTemplateException();
+		}
+
+		List<DossierPart> dossierPartsLevel1 = new ArrayList<DossierPart>();
+
+		try {
+			List<DossierPart> lstTmp1 =
+				DossierPartLocalServiceUtil.getDossierPartsByT_P_PT(
+					dossierTemplate.getDossierTemplateId(), 0,
+					PortletConstants.DOSSIER_PART_TYPE_RESULT);
+			if (lstTmp1 != null) {
+				dossierPartsLevel1.addAll(lstTmp1);
+			}
+		}
+		catch (Exception e) {
+		}
+
+		try {
+			List<DossierPart> lstTmp2 =
+				DossierPartLocalServiceUtil.getDossierPartsByT_P_PT(
+					dossierTemplate.getDossierTemplateId(), 0,
+					PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT);
+			if (lstTmp2 != null) {
+				dossierPartsLevel1.addAll(lstTmp2);
+			}
+		}
+		catch (Exception e) {
+		}
+
+		boolean requiredFlag = false;
+
+		if (dossierPartsLevel1 != null) {
+			for (DossierPart dossierPartLevel1 : dossierPartsLevel1) {
+				List<DossierPart> dossierParts =
+					DossierMgtUtil.getTreeDossierPart(dossierPartLevel1.getDossierpartId());
+
+				if (requiredFlag) {
+					break;
+				}
+
+				for (DossierPart dossierPart : dossierParts) {
+					if (dossierPart.getRequired()) {
+						DossierFile dossierFile = null;
+						try {
+							dossierFile =
+								DossierFileLocalServiceUtil.getDossierFileInUse(
+									dossierId, dossierPart.getDossierpartId());
+						}
+						catch (Exception e) {
+							// TODO: handle exception
+						}
+
+						if (dossierFile == null) {
+							requiredFlag = true;
+							break;
+						}
+
+					}
+				}
+			}
+		}
+
+		if (requiredFlag) {
+			throw new RequiredDossierPartException();
 		}
 	}
 }
