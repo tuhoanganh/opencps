@@ -69,7 +69,6 @@ import org.opencps.jasperreport.util.JRReportUtil;
 import org.opencps.pki.HashAlgorithm;
 import org.opencps.pki.Helper;
 import org.opencps.pki.PdfPkcs7Signer;
-import org.opencps.pki.PdfSigner;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.model.ProcessStep;
 import org.opencps.processmgt.model.ProcessWorkflow;
@@ -95,7 +94,6 @@ import org.opencps.util.SignatureUtil;
 import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
@@ -118,10 +116,8 @@ import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.DuplicateFileException;
 import com.liferay.portlet.documentlibrary.FileSizeException;
 import com.liferay.portlet.documentlibrary.NoSuchFileEntryException;
-import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
-import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 /**
@@ -385,8 +381,16 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		}
 	}
 
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws IOException
+	 */
 	public void assignToUser(
-		ActionRequest actionRequest, ActionResponse actionResponse) {
+		ActionRequest actionRequest, ActionResponse actionResponse)
+		throws IOException {
+
+		Dossier dossier = null;
 
 		long assignToUserId =
 			ParamUtil.getLong(actionRequest,
@@ -400,10 +404,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			ParamUtil.getString(actionRequest,
 				ProcessOrderDisplayTerms.ESTIMATE_DATETIME);
 
-		/*
-		 * String redirectURL = ParamUtil .getString(actionRequest,
-		 * "redirectURL");
-		 */
+		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
 
 		String backURL = ParamUtil.getString(actionRequest, "backURL");
 
@@ -430,12 +431,12 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		long processWorkflowId =
 			ParamUtil.getLong(actionRequest,
 				ProcessOrderDisplayTerms.PROCESS_WORKFLOW_ID);
-		long serviceProcessId =
-			ParamUtil.getLong(actionRequest,
-				ProcessOrderDisplayTerms.SERVICE_PROCESS_ID);
-		long processStepId =
-			ParamUtil.getLong(actionRequest,
-				ProcessOrderDisplayTerms.PROCESS_STEP_ID);
+		/*
+		 * long serviceProcessId = ParamUtil.getLong(actionRequest,
+		 * ProcessOrderDisplayTerms.SERVICE_PROCESS_ID); long processStepId =
+		 * ParamUtil.getLong(actionRequest,
+		 * ProcessOrderDisplayTerms.PROCESS_STEP_ID);
+		 */
 
 		String actionNote =
 			ParamUtil.getString(actionRequest,
@@ -447,12 +448,13 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			ParamUtil.getBoolean(actionRequest,
 				ProcessOrderDisplayTerms.SIGNATURE);
 
+		boolean sending = false;
+
 		Date deadline = null;
+
 		if (Validator.isNotNull(estimateDatetime)) {
 			deadline = DateTimeUtil.convertStringToDate(estimateDatetime);
 		}
-
-		Dossier dossier = null;
 
 		try {
 
@@ -461,36 +463,14 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			validateAssignTask(dossier.getDossierId());
 
 			Message message = new Message();
-			message.put(ProcessOrderDisplayTerms.EVENT, event);
-			message.put(ProcessOrderDisplayTerms.ACTION_NOTE, actionNote);
-			message.put(ProcessOrderDisplayTerms.PROCESS_STEP_ID, processStepId);
-			message.put(ProcessOrderDisplayTerms.ASSIGN_TO_USER_ID,
-				assignToUserId);
-			message.put(ProcessOrderDisplayTerms.SERVICE_PROCESS_ID,
-				serviceProcessId);
-			message.put(ProcessOrderDisplayTerms.PAYMENTVALUE, paymentValue);
-
-			message.put(ProcessOrderDisplayTerms.PROCESS_WORKFLOW_ID,
-				processWorkflowId);
-
-			message.put(ProcessOrderDisplayTerms.ACTION_USER_ID, actionUserId);
-
-			message.put(ProcessOrderDisplayTerms.PROCESS_ORDER_ID,
-				processOrderId);
-			message.put(ProcessOrderDisplayTerms.FILE_GROUP_ID, fileGroupId);
-			message.put(ProcessOrderDisplayTerms.DOSSIER_ID, dossierId);
-			message.put(ProcessOrderDisplayTerms.ESTIMATE_DATETIME, deadline);
-
-			message.put(ProcessOrderDisplayTerms.SIGNATURE, signature);
-
-			message.put(ProcessOrderDisplayTerms.GROUP_ID, groupId);
-
-			message.put(ProcessOrderDisplayTerms.COMPANY_ID, companyId);
 
 			SendToEngineMsg sendToEngineMsg = new SendToEngineMsg();
 
 			// sendToEngineMsg.setAction(WebKeys.ACTION);
 			sendToEngineMsg.setActionNote(actionNote);
+			sendToEngineMsg.setEvent(event);
+			sendToEngineMsg.setGroupId(groupId);
+			sendToEngineMsg.setCompanyId(companyId);
 			sendToEngineMsg.setAssignToUserId(assignToUserId);
 			sendToEngineMsg.setActionUserId(actionUserId);
 			sendToEngineMsg.setDossierId(dossierId);
@@ -506,11 +486,10 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			MessageBusUtil.sendMessage("opencps/backoffice/engine/destination",
 				message);
 
-			actionResponse.setRenderParameter("jspPage",
-				"/html/portlets/processmgt/processorder/assign_to_user.jsp");
-			actionResponse.setRenderParameter("backURL", backURL);
+			sending = true;
 		}
 		catch (Exception e) {
+			sending = false;
 			if (e instanceof NoSuchDossierException ||
 				e instanceof NoSuchDossierTemplateException ||
 				e instanceof RequiredDossierPartException) {
@@ -523,6 +502,19 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			}
 
 			_log.error(e);
+		}
+		finally {
+			if (sending) {
+				actionResponse.setRenderParameter("jspPage",
+					"/html/portlets/processmgt/processorder/assign_to_user.jsp");
+				actionResponse.setRenderParameter("backURL", backURL);
+
+			}
+			else {
+				if (Validator.isNotNull(redirectURL)) {
+					actionResponse.sendRedirect(redirectURL);
+				}
+			}
 		}
 	}
 
@@ -1942,7 +1934,10 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				DossierPartLocalServiceUtil.getDossierPartsByT_P_PT(
 					dossierTemplate.getDossierTemplateId(), 0,
 					PortletConstants.DOSSIER_PART_TYPE_RESULT);
+
 			if (lstTmp1 != null) {
+				_log.info("************************************************************lstTmp1************************************************************ " +
+					lstTmp1.size());
 				dossierPartsLevel1.addAll(lstTmp1);
 			}
 		}
@@ -1955,11 +1950,16 @@ public class ProcessOrderPortlet extends MVCPortlet {
 					dossierTemplate.getDossierTemplateId(), 0,
 					PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT);
 			if (lstTmp2 != null) {
+				_log.info("************************************************************lstTmp2************************************************************ " +
+					lstTmp2.size());
 				dossierPartsLevel1.addAll(lstTmp2);
 			}
 		}
 		catch (Exception e) {
 		}
+
+		_log.info("************************************************************dossierPartsLevel1************************************************************ " +
+			dossierPartsLevel1.size());
 
 		boolean requiredFlag = false;
 
