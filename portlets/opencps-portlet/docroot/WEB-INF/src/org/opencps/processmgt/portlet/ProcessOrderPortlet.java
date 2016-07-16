@@ -1967,13 +1967,19 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			for (DossierPart dossierPartLevel1 : dossierPartsLevel1) {
 				List<DossierPart> dossierParts =
 					DossierMgtUtil.getTreeDossierPart(dossierPartLevel1.getDossierpartId());
-
+				_log.info("************************************************************dossierParts************************************************************ " +
+					dossierParts.size());
 				if (requiredFlag) {
 					break;
 				}
 
 				for (DossierPart dossierPart : dossierParts) {
-					if (dossierPart.getRequired()) {
+					_log.info("************************************************************dossierPart.getPartType()************************************************************ " +
+						dossierPart.getPartType());
+					_log.info("************************************************************dossierPart.isRequired()************************************************************ " +
+						dossierPart.isRequired());
+					if ((dossierPart.getPartType() == PortletConstants.DOSSIER_PART_TYPE_RESULT || dossierPart.getPartType() == PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT) &&
+						dossierPart.getRequired()) {
 						DossierFile dossierFile = null;
 						try {
 							dossierFile =
