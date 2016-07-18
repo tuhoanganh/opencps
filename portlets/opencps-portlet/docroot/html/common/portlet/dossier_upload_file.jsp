@@ -214,7 +214,7 @@
 	Liferay.provide(window, '<portlet:namespace/>closeDialog', function() {
 		var data = {
 			'conserveHash': true
-		}
+		};
 		
 		Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id' + '<portlet:namespace/>', data);
 		var dialog = Liferay.Util.getWindow('<portlet:namespace/>' + '<%=modalDialogId%>');

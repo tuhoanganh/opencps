@@ -213,7 +213,8 @@
 		if(success == 'true'){
 			var data = {
 				'conserveHash': true
-			}
+			};
+			
 			Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id' + '<portlet:namespace/>', data);
 		}
 	});
