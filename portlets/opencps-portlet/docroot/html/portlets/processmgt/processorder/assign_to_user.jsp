@@ -354,7 +354,10 @@
 		var backURL = '<%=backURL%>';
 		var dialog = Liferay.Util.getWindow('<portlet:namespace/>assignToUser');
 		dialog.destroy();
-		Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.PROCESS_ORDER_PORTLET %>_');
+		var data = {
+			'conserveHash': true
+		};
+		Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.PROCESS_ORDER_PORTLET %>_', data);
 	});
 	
 	Liferay.provide(window, '<portlet:namespace/>verifySign', function(e) {
