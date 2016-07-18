@@ -205,7 +205,7 @@
 	</c:when>
 	
 	<c:otherwise>
-		<div class="portlet-msg-alert"><liferay-ui:message key="your-account-not-nauthorized-update-dossier"/></div>
+		<div class="portlet-msg-alert"><liferay-ui:message key="your-account-not-authorized-update-dossier"/></div>
 	</c:otherwise>
  
 </c:choose>
