@@ -5,7 +5,7 @@ Liferay.provide(window, 'openDialog', function(uri, id, title) {
 				cache: false,
 				cssClass: 'opencps-dialog',
 				modal: true,
-				
+				width: $(window).width() * 0.8
 			},
 			cache: false,
 			id: id,
@@ -157,11 +157,37 @@ Liferay.provide(window, 'viewVersion', function(e, uri, ns) {
 
 
 Liferay.provide(window, 'closeDialog', function(id, portletName) {
+	setCookie('dossierId','1');
 	
 	var dialog = Liferay.Util.getWindow(id);
 	
 	if(portletName){
+		var data = {
+			'conserveHash': true
+		};
 		Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_' + portletName);
 	}
 	dialog.destroy();
 });
+
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length,c.length);
+        }
+    }
+    return "";
+} 
+function setCookie(cname, cvalue) {
+    var d = new Date();
+    d.setTime(d.getTime() + (1*24*60*60*1000));
+    var expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + "; " + expires;
+} 

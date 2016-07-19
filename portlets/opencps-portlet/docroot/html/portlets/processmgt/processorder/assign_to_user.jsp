@@ -18,6 +18,7 @@
  */
 %>
 
+<%@page import="org.opencps.processmgt.NoSuchWorkflowOutputException"%>
 <%@page import="org.opencps.util.PortletPropsValues"%>
 <%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@page import="javax.portlet.PortletRequest"%>
@@ -112,8 +113,8 @@
 	message="<%=NoSuchDossierException.class.getName() %>"
 />
 <liferay-ui:error 
-	exception="<%= NoSuchDossierTemplateException.class %>" 
-	message="<%=NoSuchDossierTemplateException.class.getName() %>"
+	exception="<%= NoSuchWorkflowOutputException.class %>" 
+	message="<%=NoSuchWorkflowOutputException.class.getName() %>"
 />
 <liferay-ui:error 
 	exception="<%= RequiredDossierPartException.class %>" 
@@ -128,6 +129,7 @@
 		value="<%=currentURL %>" 
 		type="hidden"
 	/>
+
 	<aui:input 
 		name="<%=ProcessOrderDisplayTerms.PROCESS_STEP_ID %>" 
 		value="<%=processStepId %>" 
@@ -354,7 +356,10 @@
 		var backURL = '<%=backURL%>';
 		var dialog = Liferay.Util.getWindow('<portlet:namespace/>assignToUser');
 		dialog.destroy();
-		Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.PROCESS_ORDER_PORTLET %>_');
+		var data = {
+			'conserveHash': true
+		};
+		Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.PROCESS_ORDER_PORTLET %>_', data);
 	});
 	
 	Liferay.provide(window, '<portlet:namespace/>verifySign', function(e) {

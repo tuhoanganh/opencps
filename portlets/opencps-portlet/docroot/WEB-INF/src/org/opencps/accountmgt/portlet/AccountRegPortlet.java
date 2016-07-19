@@ -249,6 +249,13 @@ public class AccountRegPortlet extends MVCPortlet {
 					    business.getUuid(), mappingUser, email,
 					    PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS,
 					    serviceContext);
+					//check reg cfg
+					int step = ParamUtil.getInteger(actionRequest, "businessRegStep_cfg");
+					if(step == 2){
+						BusinessLocalServiceUtil
+					    .updateStatus(business.getBusinessId(), serviceContext
+					        .getUserId(), 2);
+					}
 				}
 			}
 			else {
@@ -458,6 +465,13 @@ public class AccountRegPortlet extends MVCPortlet {
 					    citizen.getUuid(), mappingUser, email,
 					    PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN,
 					    serviceContext);
+					//check reg cfg
+					int step = ParamUtil.getInteger(actionRequest, "citizenRegStep_cfg");
+					if(step == 2){
+						CitizenLocalServiceUtil
+					    .updateStatus(citizen.getCitizenId(), serviceContext
+					        .getUserId(), 2);
+					}
 				}
 
 			}
@@ -511,6 +525,7 @@ public class AccountRegPortlet extends MVCPortlet {
 				SessionErrors.add(
 					actionRequest,
 				    MessageKeys.ACCOUNT_SYSTEM_EXCEPTION_OCCURRED);
+				_log.error(e);
 			}
 			if (Validator.isNotNull(currentURL)) {
 				actionResponse.sendRedirect(currentURL);
@@ -542,7 +557,7 @@ public class AccountRegPortlet extends MVCPortlet {
 		if (citizenId == 0 && citizen != null) {
 			throw new DuplicateCitizenEmailException();
 		}
-		if (citizenId > 0 && citizen.getCitizenId() != citizenId) {
+		if (citizenId > 0 && citizen != null && citizen.getCitizenId() != citizenId) {
 			throw new DuplicateCitizenEmailException();
 		}
 
@@ -570,7 +585,8 @@ public class AccountRegPortlet extends MVCPortlet {
 		else if(size > PortletPropsValues.ACCOUNTMGT_FILE_SIZE) {
 			throw new OutOfSizeFileUploadException();
 		}
-		else if(!isFileType(sourceFileName)) {
+		else if(Validator.isNotNull(sourceFileName) && !isFileType(sourceFileName)) {
+			System.out.println("go  hereeeeeeeee");
 			throw new FileTypeFailException();
 		}
 
@@ -646,7 +662,7 @@ public class AccountRegPortlet extends MVCPortlet {
 		else if(size > PortletPropsValues.ACCOUNTMGT_FILE_SIZE) {
 			throw new OutOfSizeFileUploadException();
 		}
-		else if(!isFileType(sourceFileName)) {
+		else if(Validator.isNotNull(sourceFileName) && !isFileType(sourceFileName)) {
 			throw new FileTypeFailException();
 		}
 	}
