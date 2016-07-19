@@ -127,6 +127,17 @@
 				</simple>
 			</trigger>
 		</scheduler-entry>
+		
+		<scheduler-entry>
+			<scheduler-event-listener-class>org.opencps.backend.scheduler.JMSRecevieQueue</scheduler-event-listener-class>
+			<trigger>
+				<simple>
+					<simple-trigger-value>1</simple-trigger-value>
+					<time-unit>minute</time-unit>
+				</simple>
+			</trigger>
+		</scheduler-entry>
+		
 		<action-url-redirect>true</action-url-redirect>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>
@@ -177,6 +188,15 @@
 		<portlet-name>13</portlet-name>
 		<icon>/icon.png</icon>
 		<configuration-action-class>org.opencps.dossiermgt.portlet.ConfigurationImpl</configuration-action-class>
+		<scheduler-entry>
+			<scheduler-event-listener-class>org.opencps.dossiermgt.scheduler.DelayStatus</scheduler-event-listener-class>
+			<trigger>
+				<simple>
+					<simple-trigger-value>2</simple-trigger-value>
+					<time-unit>minute</time-unit>
+				</simple>
+			</trigger>
+		</scheduler-entry>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<header-portlet-css>/css/dossiermgt.css</header-portlet-css>
 		<footer-portlet-javascript>

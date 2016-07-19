@@ -39,6 +39,7 @@
 	String displayStyle = GetterUtil.getString((String)request.getAttribute("opencps-datamgt:ddr:displayStyle"), "horizontal");
 	String inlineLabel = GetterUtil.getString((String)request.getAttribute("opencps-datamgt:ddr:inlineLabel"), StringPool.BLANK);
 	boolean inlineField = GetterUtil.getBoolean(request.getAttribute("opencps-datamgt:ddr:inlineField"), false);
+	String optionValueType = GetterUtil.getString((String)request.getAttribute("opencps-datamgt:ddr:optionValueType"), "id");
 %>
 
 <%!

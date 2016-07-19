@@ -25,6 +25,7 @@ import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.processmgt.NoSuchProcessOrderException;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.service.base.ProcessOrderLocalServiceBaseImpl;
+import org.opencps.util.PortletConstants;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -76,7 +77,7 @@ public class ProcessOrderLocalServiceImpl
 		long dossierId, long fileGroupId, long serviceProcessId,
 		long processStepId, long processWorkflowId, long actionUserId,
 		Date actionDatetime, String stepName, String actionName,
-		String actionNote, long assignToUserId, int dossierStatus,
+		String actionNote, long assignToUserId, String dossierStatus,
 		int daysDoing, int daysDelay, ServiceContext serviceContext)
 		throws SystemException, PortalException {
 
@@ -177,7 +178,7 @@ public class ProcessOrderLocalServiceImpl
 		long userId, long dossierId, long fileGroupId, long serviceProcessId,
 		long processStepId, long processWorkflowId, long actionUserId,
 		Date actionDatetime, String stepName, String actionName,
-		String actionNote, long assignToUserId, int dossierStatus,
+		String actionNote, long assignToUserId, String dossierStatus,
 		int daysDoing, int daysDelay)
 		throws SystemException, PortalException {
 
@@ -249,12 +250,12 @@ public class ProcessOrderLocalServiceImpl
 				.getGroupId(), dossier
 					.getCompanyId(),
 				processOrderId, processWorkflowId, actionDatetime, stepName,
-				actionName, actionNote, actionUserId, daysDoing, daysDelay, 1);
+				actionName, actionNote, actionUserId, daysDoing, daysDelay,
+				PortletConstants.DOSSIER_STATUS_RECEIVING);
 
 		return processOrderPersistence
 			.update(processOrder);
 	}
-
 
 	/**
 	 * @param serviceInfoId
@@ -271,7 +272,6 @@ public class ProcessOrderLocalServiceImpl
 			.countProcessOrder(serviceInfoId, processStepId, loginUserId,
 				actionUserId);
 	}
-
 
 	/**
 	 * @param serviceInfoId
@@ -300,7 +300,7 @@ public class ProcessOrderLocalServiceImpl
 		return processOrderPersistence
 			.findByD_F(dossierId, fileGroupId);
 	}
-	
+
 	/**
 	 * @param loginUserId
 	 * @return
@@ -310,13 +310,13 @@ public class ProcessOrderLocalServiceImpl
 		return processOrderFinder
 			.getProcessOrderServiceByUser(loginUserId);
 	}
-	
+
 	/**
 	 * @param loginUserId
 	 * @return
 	 */
 	public List getProcessOrderServiceJustFinishedByUser(long loginUserId) {
-		
+
 		return processOrderFinder
 			.getProcessOrderServiceJustFinishedByUser(loginUserId);
 	}
@@ -331,7 +331,7 @@ public class ProcessOrderLocalServiceImpl
 		return processOrderFinder
 			.getUserProcessStep(loginUserId, serviceInfoId);
 	}
-	
+
 	/**
 	 * @param loginUserId
 	 * @param serviceInfoId
@@ -464,7 +464,7 @@ public class ProcessOrderLocalServiceImpl
 		long govAgencyOrganizationId, long serviceProcessId, long dossierId,
 		long fileGroupId, long processWorkflowId, Date actionDatetime,
 		String stepName, String actionName, String actionNote,
-		long actionUserId, int daysDoing, int daysDelay, int dossierStatus)
+		long actionUserId, int daysDoing, int daysDelay, String dossierStatus)
 		throws PortalException, SystemException {
 
 		ProcessOrder order = null;
@@ -518,7 +518,6 @@ public class ProcessOrderLocalServiceImpl
 		return order;
 	}
 
-	
 	/**
 	 * @param serviceInfoId
 	 * @param processStepId
@@ -539,7 +538,6 @@ public class ProcessOrderLocalServiceImpl
 				actionUserId, start, end, orderByComparator);
 	}
 
-	
 	/**
 	 * @param serviceInfoId
 	 * @param processStepId
@@ -641,7 +639,7 @@ public class ProcessOrderLocalServiceImpl
 		long processOrderId, long processStepId, long processWorkflowId,
 		long actionUserId, Date actionDatetime, String actionNote,
 		long assignToUserId, String stepName, String actionName, int daysDoing,
-		int daysDelay, int dossierStatus)
+		int daysDelay, String dossierStatus)
 		throws NoSuchProcessOrderException, SystemException {
 
 		ProcessOrder processOrder = processOrderPersistence
@@ -688,7 +686,7 @@ public class ProcessOrderLocalServiceImpl
 	 * @throws SystemException
 	 */
 	public ProcessOrder updateProcessOrderStatus(
-		long processOrderId, int dossierStatus)
+		long processOrderId, String dossierStatus)
 		throws NoSuchProcessOrderException, SystemException {
 
 		ProcessOrder processOrder = processOrderPersistence

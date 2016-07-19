@@ -1,4 +1,3 @@
-<%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -18,6 +17,7 @@
  */
 %>
 <%@ include file="../init.jsp"%>
+<%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
 <%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
@@ -122,7 +122,7 @@
 		>	
 	</liferay-ui:form-navigator>
 </aui:form>
-<aui:script>
+<%-- <aui:script>
 	
 	AUI().ready('liferay-portlet-url',function(A) {	
 		var dossierPartLink = A.one('#<portlet:namespace />dossierpartlistLink');
@@ -185,4 +185,4 @@ Liferay.provide(window, '<portlet:namespace/>sentToolBarSignal', function(tbSign
 			}
 		);
 	},['aui-base','aui-io']);
-</aui:script>
+</aui:script> --%>

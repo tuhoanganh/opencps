@@ -48,7 +48,7 @@
 <liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
 
 <%
-	int dossierStatus = ParamUtil.getInteger(request, "dossierStatus", 0);
+	String dossierStatus = ParamUtil.getString(request, "dossierStatus", StringPool.BLANK);
 	
 	long serviceDomainId = ParamUtil.getLong(request, "serviceDomainId");
 
@@ -75,6 +75,11 @@
 	exception="<%= RequiredDossierPartException.class %>" 
 	message="<%=RequiredDossierPartException.class.getName() %>"
 />
+
+<%-- <portlet:actionURL var="TestConsumerURL" name="TestConsumer"/>
+
+<aui:button href="<%= TestConsumerURL.toString()%>" name="TestConsumer" value="TestConsumer"/> --%>
+
 <liferay-ui:search-container searchContainer="<%= new DossierSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
 
 	<liferay-ui:search-container-results>

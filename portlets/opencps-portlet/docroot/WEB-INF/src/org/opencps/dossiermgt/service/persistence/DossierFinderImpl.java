@@ -76,7 +76,8 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 	 * @param dossierStatus
 	 * @return
 	 */
-	public int countDossier(long groupId, String keyword, int dossierStatus) {
+	public int countDossier(
+		long groupId, String keyword, String dossierStatus) {
 
 		String[] keywords = null;
 
@@ -102,7 +103,7 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 	 * @return
 	 */
 	private int countDossier(
-		long groupId, String[] keywords, int dossierStatus,
+		long groupId, String[] keywords, String dossierStatus,
 		boolean andOperator) {
 
 		Session session = null;
@@ -156,7 +157,8 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 						StringPool.BLANK);
 			}
 
-			if (dossierStatus < 0) {
+			if (Validator
+				.isNull(dossierStatus)) {
 				sql = StringUtil
 					.replace(sql, "AND (opencps_dossier.dossierStatus = ?)",
 						StringPool.BLANK);
@@ -188,7 +190,8 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 					.add(keywords, 2);
 			}
 
-			if (dossierStatus >= 0) {
+			if (Validator
+				.isNotNull(dossierStatus)) {
 				qPos
 					.add(dossierStatus);
 			}
@@ -229,7 +232,7 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 	 * @return
 	 */
 	public int countDossierByKeywordDomainAndStatus(
-		long groupId, String keyword, String domainCode, int dossierStatus) {
+		long groupId, String keyword, String domainCode, String dossierStatus) {
 
 		String[] keywords = null;
 
@@ -257,8 +260,8 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 	 * @return
 	 */
 	private int countDossierByKeywordDomainAndStatus(
-		long groupId, String[] keywords, String domainCode, int dossierStatus,
-		boolean andOperator) {
+		long groupId, String[] keywords, String domainCode,
+		String dossierStatus, boolean andOperator) {
 
 		Session session = null;
 
@@ -312,7 +315,8 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 			}
 			else {
 			}
-			if (dossierStatus < 0) {
+			if (Validator
+				.isNull(dossierStatus)) {
 				sql = StringUtil
 					.replace(sql, "AND (opencps_dossier.dossierStatus = ?)",
 						StringPool.BLANK);
@@ -342,7 +346,8 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 					.add(keywords, 2);
 			}
 
-			if (dossierStatus >= 0) {
+			if (Validator
+				.isNotNull(dossierStatus)) {
 				qPos
 					.add(dossierStatus);
 			}
@@ -393,7 +398,7 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 	 */
 	public int countDossierByUser(
 		long groupId, long userId, String keyword,
-		String serviceDomainTreeIndex, int dossierStatus) {
+		String serviceDomainTreeIndex, String dossierStatus) {
 
 		String[] keywords = null;
 
@@ -423,7 +428,8 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 	 */
 	private int countDossierByUser(
 		long groupId, long userId, String[] keywords,
-		String serviceDomainTreeIndex, int dossierStatus, boolean andOperator) {
+		String serviceDomainTreeIndex, String dossierStatus,
+		boolean andOperator) {
 
 		Session session = null;
 
@@ -483,7 +489,8 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 
 			}
 
-			if (dossierStatus < 0) {
+			if (Validator
+				.isNull(dossierStatus)) {
 				sql = StringUtil
 					.replace(sql, "AND (opencps_dossier.dossierStatus = ?)",
 						StringPool.BLANK);
@@ -535,7 +542,8 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 					.add(keywords, 2);
 			}
 
-			if (dossierStatus >= 0) {
+			if (Validator
+				.isNotNull(dossierStatus)) {
 				qPos
 					.add(dossierStatus);
 			}
@@ -578,7 +586,7 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 	 * @return
 	 */
 	public List<Dossier> searchDossier(
-		long groupId, String keyword, int dossierStatus, int start, int end,
+		long groupId, String keyword, String dossierStatus, int start, int end,
 		OrderByComparator obc) {
 
 		String[] keywords = null;
@@ -606,8 +614,8 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 	 * @return
 	 */
 	private List<Dossier> searchDossier(
-		long groupId, String[] keywords, int dossierStatus, boolean andOperator,
-		int start, int end, OrderByComparator obc) {
+		long groupId, String[] keywords, String dossierStatus,
+		boolean andOperator, int start, int end, OrderByComparator obc) {
 
 		Session session = null;
 
@@ -660,7 +668,8 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 						StringPool.BLANK);
 			}
 
-			if (dossierStatus < 0) {
+			if (Validator
+				.isNull(dossierStatus)) {
 				sql = StringUtil
 					.replace(sql, "AND (opencps_dossier.dossierStatus = ?)",
 						StringPool.BLANK);
@@ -692,7 +701,8 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 					.add(keywords, 2);
 			}
 
-			if (dossierStatus >= 0) {
+			if (Validator
+				.isNotNull(dossierStatus)) {
 				qPos
 					.add(dossierStatus);
 			}
@@ -722,7 +732,7 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 	 * @return
 	 */
 	public List<Dossier> searchDossierByKeywordDomainAndStatus(
-		long groupId, String keyword, String domainCode, int dossierStatus,
+		long groupId, String keyword, String domainCode, String dossierStatus,
 		int start, int end, OrderByComparator obc) {
 
 		boolean andOperator = false;
@@ -751,8 +761,9 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 	 * @return
 	 */
 	private List<Dossier> searchDossierByKeywordDomainAndStatus(
-		long groupId, String[] keywords, String domainCode, int dossierStatus,
-		int start, int end, OrderByComparator obc, boolean andOperator) {
+		long groupId, String[] keywords, String domainCode,
+		String dossierStatus, int start, int end, OrderByComparator obc,
+		boolean andOperator) {
 
 		Session session = null;
 
@@ -803,7 +814,8 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 			}
 			else {
 			}
-			if (dossierStatus < 0) {
+			if (Validator
+				.isNull(dossierStatus)) {
 				sql = StringUtil
 					.replace(sql, "AND (opencps_dossier.dossierStatus = ?)",
 						StringPool.BLANK);
@@ -831,7 +843,8 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 					.add(keywords, 2);
 			}
 
-			if (dossierStatus >= 0) {
+			if (Validator
+				.isNotNull(dossierStatus)) {
 				qPos
 					.add(dossierStatus);
 			}
@@ -877,7 +890,7 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 	 */
 	public List searchDossierByUser(
 		long groupId, long userId, String keyword,
-		String serviceDomainTreeIndex, int dossierStatus, int start, int end,
+		String serviceDomainTreeIndex, String dossierStatus, int start, int end,
 		OrderByComparator obc) {
 
 		String[] keywords = null;
@@ -909,8 +922,8 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 	 */
 	private List<DossierBean> searchDossierByUser(
 		long groupId, long userId, String[] keywords,
-		String serviceDomainTreeIndex, int dossierStatus, boolean andOperator,
-		int start, int end, OrderByComparator obc) {
+		String serviceDomainTreeIndex, String dossierStatus,
+		boolean andOperator, int start, int end, OrderByComparator obc) {
 
 		Session session = null;
 
@@ -970,7 +983,8 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 
 			}
 
-			if (dossierStatus < 0) {
+			if (Validator
+				.isNull(dossierStatus)) {
 				sql = StringUtil
 					.replace(sql, "AND (opencps_dossier.dossierStatus = ?)",
 						StringPool.BLANK);
@@ -1024,7 +1038,8 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 					.add(keywords, 2);
 			}
 
-			if (dossierStatus >= 0) {
+			if (Validator
+				.isNotNull(dossierStatus)) {
 				qPos
 					.add(dossierStatus);
 			}

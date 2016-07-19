@@ -67,7 +67,7 @@ public class SyncFromBackOffice implements MessageListener{
 			statusUpdate =
 			    DossierLocalServiceUtil.updateDossierStatus(
 			        toBackOffice.getDossierId(), toBackOffice.getFileGroupId(),
-			        Integer.parseInt(toBackOffice.getDossierStatus()),
+			        toBackOffice.getDossierStatus(),
 			        toBackOffice.getReceptionNo(),
 			        toBackOffice.getEstimateDatetime(),
 			        toBackOffice.getReceiveDatetime(),
@@ -91,7 +91,7 @@ public class SyncFromBackOffice implements MessageListener{
 
 		toCallBack.setProcessOrderId(toBackOffice.getProcessOrderId());
 		toCallBack.setSyncStatus(statusUpdate ? "ok" : "error");
-		toCallBack.setDossierStatus(Integer.parseInt(toBackOffice.getDossierStatus()));
+		toCallBack.setDossierStatus(toBackOffice.getDossierStatus());
 		Message sendToCallBack = new Message();
 
 		sendToCallBack.put("toCallback", toCallBack);

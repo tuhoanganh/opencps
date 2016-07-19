@@ -167,6 +167,12 @@
 			<finder-column name="serviceAdministrationIndex" />
 		</finder>
 		
+		<finder return-type="ServiceConfig" name="G_S_G">
+			<finder-column name="groupId" />
+			<finder-column name="serviceInfoId" />
+			<finder-column name="govAgencyCode" />
+		</finder>
+		
 		<finder return-type="Collection" name="G_M">
 			<finder-column name="groupId" />
 			<finder-column name="serviceMode"/>
@@ -223,7 +229,7 @@
         <column name="receptionNo" type="String"/>
         <column name="estimateDatetime" type="Date"/>
         <column name="finishDatetime" type="Date"/>
-        <column name="dossierStatus" type="int"/>
+        <column name="dossierStatus" type="String"/>
         <column name="dossierSource" type="int"/>
         <column name="keypayRedirectUrl" type="String"/>
         <column name="delayStatus" type="int"></column>
@@ -243,6 +249,13 @@
         <finder name="G_U" return-type="Collection">
             <finder-column name="groupId"></finder-column>
             <finder-column name="userId"></finder-column>
+        </finder>
+        <finder name="DelayStatus" return-type="Collection">
+            <finder-column name="delayStatus"></finder-column>
+        </finder>
+        <finder name="DelayStatusAndNotDossierStatus" return-type="Collection">
+            <finder-column name="delayStatus" comparator="=" arrayable-operator="AND"></finder-column>
+            <finder-column name="dossierStatus" comparator="!=" arrayable-operator="AND"></finder-column>
         </finder>
         <reference entity="DLFileEntry" package-path="com.liferay.portlet.documentlibrary"/>
         <reference package-path="com.liferay.portlet.documentlibrary" entity="DLFolder" />
@@ -267,7 +280,7 @@
 		
         <column name="dossierId" type="long"/>
         <column name="fileGroupId" type="long"/>
-        <column name="dossierStatus" type="int"/>
+        <column name="dossierStatus" type="String"/>
         <column name="actionInfo" type="String"/>
         <column name="messageInfo" type="String"/>
         <column name="updateDatetime" type="Date"/>
@@ -306,7 +319,7 @@
         <column name="fileGroupId" type="long"/>
         <column name="requestCommand" type="String"/>
 
-        <column name="dossierStatus" type="int"/>
+        <column name="dossierStatus" type="String"/>
         <column name="actionInfo" type="String"/>
         <column name="messageInfo" type="String"/>
         <column name="updateDatetime" type="Date"/>
@@ -447,6 +460,7 @@
 
 		<exception>OutOfLengthServiceConfigGovName</exception>
 		<exception>OutOfLengthServiceConfigGovCode</exception>
+		<exception>DuplicateServiceConfigGovCodeAndServiceInFo</exception>
 
 		<exception>InvalidServiceConfigGovName</exception>
 		<exception>InvalidServiceConfigGovCode</exception>

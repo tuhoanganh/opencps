@@ -30,6 +30,7 @@ import org.opencps.datamgt.service.DictItemLocalServiceUtil;
 import org.opencps.dossiermgt.DuplicateDossierPartNumberException;
 import org.opencps.dossiermgt.DuplicateDossierPartSiblingException;
 import org.opencps.dossiermgt.DuplicateDossierTemplateNumberException;
+import org.opencps.dossiermgt.DuplicateServiceConfigGovCodeAndServiceInFoException;
 import org.opencps.dossiermgt.InvalidInWorkingUnitException;
 import org.opencps.dossiermgt.InvalidServiceConfigGovCodeException;
 import org.opencps.dossiermgt.InvalidServiceConfigGovNameException;
@@ -317,7 +318,6 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 					        actionRequest,
 					        DossierPartDisplayTerms.DOSSIERPART_FORMREPORT);
 		
-		String returnURL = ParamUtil.getString(actionRequest, "returnURL");
 		String currentURL = ParamUtil.getString(actionRequest, "currentURL");
 		String backURL = ParamUtil.getString(actionRequest, "backURL");
 		
@@ -362,9 +362,7 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 
 			}
 			
-			if(Validator.isNotNull(returnURL)) {
-				actionResponse.sendRedirect(returnURL);
-			} else if(Validator.isNotNull(backURL)) {
+			if(Validator.isNotNull(backURL)) {
 				actionResponse.sendRedirect(backURL);
 			}
 		}
@@ -488,7 +486,6 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		catch (Exception e) {
 			// TODO: handle exception
 		}
-		
 		try {
 			dictItemGov = DictItemLocalServiceUtil.getDictItem(govAgencyCodeId);
 			govAgencyCode = dictItemGov.getItemCode();
@@ -500,7 +497,7 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 
 		try {
 			serviceConfigValidate(serviceConfigId, govAgencyCode,
-				govAgencyName, domainCode, serviceContext, serviceBackoffice);
+				govAgencyName, domainCode, serviceContext, serviceBackoffice, serviceInfoId);
 			
 			if (serviceConfigId == 0) {
 				ServiceConfigLocalServiceUtil.addServiceConfig(serviceInfoId, 
@@ -541,6 +538,9 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 			else if(e instanceof InvalidInWorkingUnitException) {
 				SessionErrors.add(actionRequest, InvalidInWorkingUnitException.class);
 			} 
+			else if (e instanceof DuplicateServiceConfigGovCodeAndServiceInFoException) {
+				SessionErrors.add(actionRequest, DuplicateServiceConfigGovCodeAndServiceInFoException.class);
+			}
 			else {
 				SessionErrors.add(actionRequest, MessageKeys.DOSSIER_SYSTEM_EXCEPTION_OCCURRED);
 			}
@@ -565,16 +565,28 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 	 * @throws InvalidServiceConfigGovNameException
 	 * @throws InvalidServiceDomainException
 	 * @throws InvalidInWorkingUnitException
+	 * @throws DuplicateServiceConfigGovCodeAndServiceInFoException 
 	 */
 	protected void serviceConfigValidate(long serviceConfigId, String govAgencyCode,
-		String govAgencyName, long domainCode, ServiceContext serviceContext, boolean serviceBackOffice) 
+		String govAgencyName, long domainCode, ServiceContext serviceContext,
+		boolean serviceBackOffice, long serviceInfoId) 
 						throws OutOfLengthServiceConfigGovCodeException,
 						OutOfLengthServiceConfigGovNameException,
 						InvalidServiceConfigGovCodeException,
 						InvalidServiceConfigGovNameException,
-						InvalidServiceDomainException, InvalidInWorkingUnitException {
+						InvalidServiceDomainException, InvalidInWorkingUnitException,
+						DuplicateServiceConfigGovCodeAndServiceInFoException {
 		
 		WorkingUnit workingUnit = null;
+		ServiceConfig serviceConfig = null;
+		try {
+			serviceConfig = ServiceConfigLocalServiceUtil
+							.getServiceConfigByG_S_G(serviceContext.getScopeGroupId(),
+								serviceInfoId, govAgencyCode);
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+		}
 		
 		try {
 	        workingUnit = WorkingUnitLocalServiceUtil
@@ -602,11 +614,22 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		else if(domainCode == 0) {
 			throw new InvalidServiceDomainException();
 		}
+		//add new
+		else if(serviceConfigId==0 && Validator.isNotNull(serviceConfig)) {
+			_log.info("go here add");
+			throw new DuplicateServiceConfigGovCodeAndServiceInFoException();
+		} 
+		//update
+		else if(serviceConfigId != 0 && Validator.isNotNull(serviceConfig) &&
+						serviceConfigId != serviceConfig.getServiceConfigId()) {
+			throw new DuplicateServiceConfigGovCodeAndServiceInFoException();
+		}
 		else if(serviceBackOffice) {
 			if(workingUnit == null) {
 				throw new InvalidInWorkingUnitException();
 			}
-		}
+		} 
+		
 		
 	}
 	

@@ -52,15 +52,7 @@
 	dossierType[5] = PortletConstants.DOSSIER_TYPE_MULTY_PAPERS_RESULTS;
 	
 	String isAddChilds = ParamUtil.getString(request, "isAddChild");
-	String partListURL = ParamUtil.getString(request, "partListURL");
 	String backURL = ParamUtil.getString(request, "backURL");
-	String back = StringPool.BLANK;
-	
-	if(Validator.isNotNull(partListURL)) {
-		back = partListURL;
-	} else {
-		back = backURL;
-	}
 	
 	try {
 		if(dossierPart != null) {
@@ -76,7 +68,7 @@
 %>
 
 <liferay-ui:header
-	backURL="<%= back %>"
+	backURL="<%= backURL %>"
 	title="update-dossier"
 	backLabel="back"
 />
@@ -119,7 +111,6 @@
 	/>
 	
 	<portlet:param name="currentURL" value="<%=currentURL %>"/>
-	<portlet:param name="returnURL" value="<%=partListURL %>"/>
 	<portlet:param name="isAddChilds" value="<%=isAddChilds %>"/>
 	<portlet:param name="backURL" value="<%=backURL %>"/>
 </portlet:actionURL>

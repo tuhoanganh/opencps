@@ -110,6 +110,9 @@ public class SyncFromFrontOffice implements MessageListener{
 						engineMsg.setDossierId(userActionMgs.getDossierId());
 						engineMsg.setFileGroupId(userActionMgs.getFileGroupId());
 						engineMsg.setEvent(WebKeys.ACTION_SUBMIT_VALUE);
+						engineMsg.setGroupId(userActionMgs.getGroupId());
+						
+						_log.info("-------------------->>>" + userActionMgs.getGroupId());
 
 						msgToEngine.put("msgToEngine", engineMsg);
 
@@ -240,8 +243,8 @@ public class SyncFromFrontOffice implements MessageListener{
         }
     	
     	if (Validator.isNotNull(status)) {
-			if (status.getDossierStatus() == PortletConstants.DOSSIER_STATUS_NEW ||
-			    status.getDossierStatus() == PortletConstants.DOSSIER_STATUS_WAITING) {
+			if (status.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_NEW) ||
+			    status.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_WAITING)) {
 				isValidatorStatus = true;
 			}
     	}

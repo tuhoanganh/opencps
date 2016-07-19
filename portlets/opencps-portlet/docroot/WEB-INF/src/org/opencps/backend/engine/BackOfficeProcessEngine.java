@@ -29,6 +29,8 @@ import org.opencps.backend.util.DossierNoGenerator;
 import org.opencps.backend.util.KeypayUrlGenerator;
 import org.opencps.backend.util.PaymentRequestGenerator;
 import org.opencps.dossiermgt.model.Dossier;
+import org.opencps.dossiermgt.model.ServiceConfig;
+import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
 import org.opencps.paymentmgt.model.PaymentFile;
 import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
 import org.opencps.processmgt.model.ProcessOrder;
@@ -94,11 +96,17 @@ public class BackOfficeProcessEngine implements MessageListener {
 			govAgencyCode = dossier.getGovAgencyCode();
 			govAgencyName = dossier.getGovAgencyName();
 			govAgencyOrganizationId = dossier.getGovAgencyOrganizationId();
+			
+			
 
 			try {
-				serviceProcessId =
-				    ServiceInfoProcessLocalServiceUtil.getServiceInfo(
+				ServiceConfig serviceConfig = ServiceConfigLocalServiceUtil.getServiceConfigByG_S_G(toEngineMsg.getGroupId(), serviceInfoId, govAgencyCode);
+				serviceProcessId = serviceConfig.getServiceProcessId();
+/*				    ServiceInfoProcessLocalServiceUtil.getServiceInfo(
 				        serviceInfoId).getServiceProcessId();
+				  
+*/			
+				_log.info("---------->>" + toEngineMsg.getGroupId());
 			}
 			catch (Exception e) {
 				_log.error(e);
@@ -182,6 +190,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 				}
 
 				long changeStepId = processWorkflow.getPostProcessStepId();
+				
 				String changeStatus = StringPool.BLANK;
 
 				if (changeStepId != 0 ) {
@@ -199,7 +208,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 					}
 					
 				} else {
-					changeStatus = Integer.toString(PortletConstants.DOSSIER_STATUS_DONE);
+					changeStatus = PortletConstants.DOSSIER_STATUS_DONE;
 				}
 
 				// Update process order to SYSTEM
@@ -221,7 +230,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 				toBackOffice.setFileGroupId(toEngineMsg.getFileGroupId());
 				toBackOffice.setDossierStatus(changeStatus);
 
-				if (changeStatus.equals(Integer.toString(PortletConstants.DOSSIER_STATUS_WAITING))) {
+				if (changeStatus.equals(PortletConstants.DOSSIER_STATUS_WAITING)) {
 					toBackOffice.setRequestCommand(WebKeys.DOSSIER_LOG_RESUBMIT_REQUEST);
 				}
 
@@ -229,7 +238,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 				toBackOffice.setMessageInfo(toEngineMsg.getActionNote());
 				toBackOffice.setSendResult(0);
 
-				if (changeStatus.equals(Integer.toString(PortletConstants.DOSSIER_STATUS_PAYING))) {
+				if (changeStatus.equals(PortletConstants.DOSSIER_STATUS_PAYING)) {
 					toBackOffice.setRequestPayment(1);
 				}
 				else {
@@ -321,14 +330,15 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 				MessageBusUtil.sendMessage(
 				    "opencps/backoffice/out/destination", sendToBackOffice);
-
+				
+				
 			}
 			else {
 				// Send message to backoffice/out/destination
 				toBackOffice.setProcessOrderId(processOrderId);
 				toBackOffice.setDossierId(toEngineMsg.getDossierId());
 				toBackOffice.setFileGroupId(toEngineMsg.getFileGroupId());
-				toBackOffice.setDossierStatus(Integer.toString(PortletConstants.DOSSIER_STATUS_ERROR));
+				toBackOffice.setDossierStatus(PortletConstants.DOSSIER_STATUS_ERROR);
 
 				Message sendToBackOffice = new Message();
 

@@ -59,7 +59,7 @@ public class SendToCallbackMsg {
     /**
      * @return the dossierStatus
      */
-    public int getDossierStatus() {
+    public String getDossierStatus() {
     
     	return dossierStatus;
     }
@@ -68,11 +68,11 @@ public class SendToCallbackMsg {
     /**
      * @param dossierStatus the dossierStatus to set
      */
-    public void setDossierStatus(int dossierStatus) {
+    public void setDossierStatus(String dossierStatus) {
     
     	this.dossierStatus = dossierStatus;
     }
 	protected long processOrderId;
 	protected String syncStatus;
-	protected int dossierStatus;
+	protected String dossierStatus;
 }

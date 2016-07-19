@@ -1,3 +1,4 @@
+<%@page import="org.opencps.dossiermgt.DuplicateServiceConfigGovCodeAndServiceInFoException"%>
 <%@page import="org.opencps.util.PortletUtil"%>
 <%
 /**
@@ -150,6 +151,11 @@
 	message="<%= MessageKeys.DOSSIER_SYSTEM_EXCEPTION_OCCURRED %>"
 />
 
+<liferay-ui:error 
+	exception="<%= DuplicateServiceConfigGovCodeAndServiceInFoException.class%>"
+	message="<%= DuplicateServiceConfigGovCodeAndServiceInFoException.class.getName() %>"
+/>
+
 <portlet:renderURL 
 	var="renderToDictItemServiceAdmin" 
 	windowState="<%=LiferayWindowState.EXCLUSIVE.toString() %>" 
@@ -282,16 +288,16 @@
 			<aui:input type="checkbox" name="<%= ServiceConfigDisplayTerms.SERVICE_PORTAL%>" 
 				checked="<%=Validator.isNotNull(serviceConfig) ? (serviceConfig.getServicePortal()) : false %>"/>
 			<aui:input type="checkbox" name="<%= ServiceConfigDisplayTerms.SERVICE_ONEGATE%>" 
-				checked="<%=Validator.isNotNull(serviceConfig) ? (serviceConfig.getServiceOnegate()) : false %>"/>/>
+				checked="<%=Validator.isNotNull(serviceConfig) ? (serviceConfig.getServiceOnegate()) : false %>"/>
 			<aui:input type="checkbox" name="<%= ServiceConfigDisplayTerms.SERVICE_BACKOFFICE%>" 
-				checked="<%=Validator.isNotNull(serviceConfig) ? (serviceConfig.getServiceBackoffice()) : false %>"/>/>
+				checked="<%=Validator.isNotNull(serviceConfig) ? (serviceConfig.getServiceBackoffice()) : false %>"/>
 		</aui:col>
 		
 		<aui:col width="25">
 			<aui:input type="checkbox" name="<%= ServiceConfigDisplayTerms.SERVICE_CITIZEN%>" 
 				checked="<%=Validator.isNotNull(serviceConfig) ? (serviceConfig.getServiceCitizen()) : false %>"/>
 			<aui:input type="checkbox" name="<%= ServiceConfigDisplayTerms.SERVICE_BUSINEES%>" 
-				checked="<%=Validator.isNotNull(serviceConfig) ? (serviceConfig.getServiceBusinees()) : false %>"/>/>
+				checked="<%=Validator.isNotNull(serviceConfig) ? (serviceConfig.getServiceBusinees()) : false %>"/>
 		</aui:col>
 	</aui:row>
 	

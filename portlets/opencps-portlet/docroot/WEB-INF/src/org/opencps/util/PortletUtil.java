@@ -1,19 +1,19 @@
 /**
-* OpenCPS is the open source Core Public Services software
-* Copyright (C) 2016-present OpenCPS community
+ * OpenCPS is the open source Core Public Services software
+ * Copyright (C) 2016-present OpenCPS community
 
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
 
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-* You should have received a copy of the GNU Affero General Public License
-* along with this program. If not, see <http://www.gnu.org/licenses/>
-*/
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>
+ */
 
 package org.opencps.util;
 
@@ -24,9 +24,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 
+import javax.naming.Context;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletPreferences;
 import javax.portlet.ResourceRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,9 +40,17 @@ import org.opencps.datamgt.service.DictCollectionLocalServiceUtil;
 import org.opencps.datamgt.service.DictItemLocalServiceUtil;
 import org.opencps.paymentmgt.util.PaymentMgtUtil;
 
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -58,27 +69,24 @@ public class PortletUtil {
 			_lastName = StringPool.BLANK;
 			_midName = StringPool.BLANK;
 
-			if (Validator
-				.isNotNull(fullName)) {
-				String[] splitNames = StringUtil
-					.split(fullName, StringPool.SPACE);
-				if (splitNames != null && splitNames.length > 0) {
-					_lastName = splitNames[0];
+			if (Validator.isNotNull(fullName)) {
 
-					_firstName = splitNames[splitNames.length - 1];
+				// Comment by TrungNT. Only set first name equal fullName
 
-					if (splitNames.length >= 3) {
-						for (int i = 1; i < splitNames.length - 1; i++) {
-							_midName += splitNames[i] + StringPool.SPACE;
-						}
-					}
-					this
-						.setLastName(_lastName);
-					this
-						.setFirstName(_firstName);
-					this
-						.setMidName(_midName);
-				}
+				/*
+				 * String[] splitNames = StringUtil .split(fullName,
+				 * StringPool.SPACE); if (splitNames != null &&
+				 * splitNames.length > 0) { _lastName = splitNames[0];
+				 * _firstName = splitNames[splitNames.length - 1]; if
+				 * (splitNames.length >= 3) { for (int i = 1; i <
+				 * splitNames.length - 1; i++) { _midName += splitNames[i] +
+				 * StringPool.SPACE; } } this .setLastName(_lastName); this
+				 * .setFirstName(_firstName); this .setMidName(_midName); }
+				 */
+
+				this.setLastName(StringPool.BLANK);
+				this.setFirstName(fullName);
+				this.setMidName(StringPool.BLANK);
 			}
 		}
 
@@ -122,31 +130,19 @@ public class PortletUtil {
 		public SplitDate(Date date) {
 
 			if (date != null) {
-				Calendar calendar = Calendar
-					.getInstance();
-				calendar
-					.setTime(date);
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(date);
 
-				_miniSecond = calendar
-					.get(Calendar.MILLISECOND);
-				_second = calendar
-					.get(Calendar.SECOND);
-				_minute = calendar
-					.get(Calendar.MINUTE);
-				_hour = calendar
-					.get(Calendar.HOUR);
-				_dayOfMoth = calendar
-					.get(Calendar.DAY_OF_MONTH);
-				_dayOfYear = calendar
-					.get(Calendar.DAY_OF_YEAR);
-				_weekOfMonth = calendar
-					.get(Calendar.WEEK_OF_MONTH);
-				_weekOfYear = calendar
-					.get(Calendar.WEEK_OF_YEAR);
-				_month = calendar
-					.get(Calendar.MONTH);
-				_year = calendar
-					.get(Calendar.YEAR);
+				_miniSecond = calendar.get(Calendar.MILLISECOND);
+				_second = calendar.get(Calendar.SECOND);
+				_minute = calendar.get(Calendar.MINUTE);
+				_hour = calendar.get(Calendar.HOUR);
+				_dayOfMoth = calendar.get(Calendar.DAY_OF_MONTH);
+				_dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
+				_weekOfMonth = calendar.get(Calendar.WEEK_OF_MONTH);
+				_weekOfYear = calendar.get(Calendar.WEEK_OF_YEAR);
+				_month = calendar.get(Calendar.MONTH);
+				_year = calendar.get(Calendar.YEAR);
 			}
 		}
 
@@ -278,16 +274,13 @@ public class PortletUtil {
 
 		switch (value) {
 		case 0:
-			genderLabel = LanguageUtil
-				.get(locale, "female");
+			genderLabel = LanguageUtil.get(locale, "female");
 			break;
 		case 1:
-			genderLabel = LanguageUtil
-				.get(locale, "male");
+			genderLabel = LanguageUtil.get(locale, "male");
 			break;
 		default:
-			genderLabel = LanguageUtil
-				.get(locale, "male");
+			genderLabel = LanguageUtil.get(locale, "male");
 			break;
 		}
 
@@ -300,24 +293,19 @@ public class PortletUtil {
 
 		switch (value) {
 		case 0:
-			accountStatus = LanguageUtil
-				.get(locale, "registered");
+			accountStatus = LanguageUtil.get(locale, "registered");
 			break;
 		case 1:
-			accountStatus = LanguageUtil
-				.get(locale, "confirmed");
+			accountStatus = LanguageUtil.get(locale, "confirmed");
 			break;
 		case 2:
-			accountStatus = LanguageUtil
-				.get(locale, "approved");
+			accountStatus = LanguageUtil.get(locale, "approved");
 			break;
 		case 3:
-			accountStatus = LanguageUtil
-				.get(locale, "locked");
+			accountStatus = LanguageUtil.get(locale, "locked");
 			break;
 		default:
-			accountStatus = LanguageUtil
-				.get(locale, "");
+			accountStatus = LanguageUtil.get(locale, "");
 			break;
 
 		}
@@ -356,142 +344,120 @@ public class PortletUtil {
 
 		switch (value) {
 		case 0:
-			leaderLabel = LanguageUtil
-				.get(locale, "normal");
+			leaderLabel = LanguageUtil.get(locale, "normal");
 			break;
 		case 1:
-			leaderLabel = LanguageUtil
-				.get(locale, "leader");
+			leaderLabel = LanguageUtil.get(locale, "leader");
 			break;
 		case 2:
-			leaderLabel = LanguageUtil
-				.get(locale, "deputy");
+			leaderLabel = LanguageUtil.get(locale, "deputy");
 			break;
 		default:
-			leaderLabel = LanguageUtil
-				.get(locale, "normal");
+			leaderLabel = LanguageUtil.get(locale, "normal");
 			break;
 		}
 
 		return leaderLabel;
 	}
 
-	public static String getDossierStatusLabel(int value, Locale locale) {
+	public static String getDossierStatusLabel(String value, Locale locale) {
 
 		String statusLabel = StringPool.BLANK;
 
 		switch (value) {
-		case 0:
-			statusLabel = LanguageUtil
-				.get(locale, "new");
+		case PortletConstants.DOSSIER_STATUS_NEW:
+			statusLabel = LanguageUtil.get(locale, "new");
 			break;
-		case 1:
-			statusLabel = LanguageUtil
-				.get(locale, "receiving");
+		case PortletConstants.DOSSIER_STATUS_RECEIVING:
+			statusLabel = LanguageUtil.get(locale, "receiving");
 			break;
-		case 2:
-			statusLabel = LanguageUtil
-				.get(locale, "waiting");
+		case PortletConstants.DOSSIER_STATUS_WAITING:
+			statusLabel = LanguageUtil.get(locale, "waiting");
 			break;
-		case 3:
-			statusLabel = LanguageUtil
-				.get(locale, "paying");
+		case PortletConstants.DOSSIER_STATUS_PAYING:
+			statusLabel = LanguageUtil.get(locale, "paying");
 			break;
-		case 4:
-			statusLabel = LanguageUtil
-				.get(locale, "denied");
+		case PortletConstants.DOSSIER_STATUS_DENIED:
+			statusLabel = LanguageUtil.get(locale, "denied");
 			break;
-		case 5:
-			statusLabel = LanguageUtil
-				.get(locale, "received");
+		case PortletConstants.DOSSIER_STATUS_RECEIVED:
+			statusLabel = LanguageUtil.get(locale, "received");
 			break;
-		case 6:
-			statusLabel = LanguageUtil
-				.get(locale, "processing");
+		case PortletConstants.DOSSIER_STATUS_PROCESSING:
+			statusLabel = LanguageUtil.get(locale, "processing");
 			break;
-		case 7:
-			statusLabel = LanguageUtil
-				.get(locale, "canceled");
+		case PortletConstants.DOSSIER_STATUS_CANCELED:
+			statusLabel = LanguageUtil.get(locale, "canceled");
 			break;
-		case 8:
-			statusLabel = LanguageUtil
-				.get(locale, "done");
+		case PortletConstants.DOSSIER_STATUS_DONE:
+			statusLabel = LanguageUtil.get(locale, "done");
 			break;
-		case 9:
-			statusLabel = LanguageUtil
-				.get(locale, "archived");
+		case PortletConstants.DOSSIER_STATUS_ARCHIVED:
+			statusLabel = LanguageUtil.get(locale, "archived");
 			break;
-		case 10:
-			statusLabel = LanguageUtil
-				.get(locale, "system");
+		case PortletConstants.DOSSIER_STATUS_SYSTEM:
+			statusLabel = LanguageUtil.get(locale, "system");
 			break;
-		case 11:
-			statusLabel = LanguageUtil
-				.get(locale, "error");
+		case PortletConstants.DOSSIER_STATUS_ENDED:
+			statusLabel = LanguageUtil.get(locale, "Ended");
+			break;
+		case PortletConstants.DOSSIER_STATUS_ERROR:
+			statusLabel = LanguageUtil.get(locale, "error");
 			break;
 		default:
-			statusLabel = LanguageUtil
-				.get(locale, "new");
+			statusLabel = LanguageUtil.get(locale, "new");
 			break;
 		}
 
 		return statusLabel;
 	}
 
-	public static List<Integer> getDossierStatus() {
+	public static List<String> getDossierStatus() {
 
-		List<Integer> dossierStatus = new ArrayList<Integer>();
-
-		dossierStatus
-			.add(PortletConstants.DOSSIER_STATUS_NEW);
-		dossierStatus
-			.add(PortletConstants.DOSSIER_STATUS_RECEIVING);
-		dossierStatus
-			.add(PortletConstants.DOSSIER_STATUS_WAITING);
-		dossierStatus
-			.add(PortletConstants.DOSSIER_STATUS_PAYING);
-		dossierStatus
-			.add(PortletConstants.DOSSIER_STATUS_DENIED);
-		dossierStatus
-			.add(PortletConstants.DOSSIER_STATUS_RECEIVED);
-		dossierStatus
-			.add(PortletConstants.DOSSIER_STATUS_PROCESSING);
-		dossierStatus
-			.add(PortletConstants.DOSSIER_STATUS_CANCELED);
-		dossierStatus
-			.add(PortletConstants.DOSSIER_STATUS_DONE);
-		dossierStatus
-			.add(PortletConstants.DOSSIER_STATUS_ARCHIVED);
-		dossierStatus
-			.add(PortletConstants.DOSSIER_STATUS_SYSTEM);
-		dossierStatus
-			.add(PortletConstants.DOSSIER_STATUS_ERROR);
-
+		List<String> dossierStatus = new ArrayList<String>();
+		dossierStatus.add(PortletConstants.DOSSIER_STATUS_NEW);
+		dossierStatus.add(PortletConstants.DOSSIER_STATUS_RECEIVING);
+		dossierStatus.add(PortletConstants.DOSSIER_STATUS_WAITING);
+		dossierStatus.add(PortletConstants.DOSSIER_STATUS_PAYING);
+		dossierStatus.add(PortletConstants.DOSSIER_STATUS_DENIED);
+		dossierStatus.add(PortletConstants.DOSSIER_STATUS_RECEIVED);
+		dossierStatus.add(PortletConstants.DOSSIER_STATUS_PROCESSING);
+		dossierStatus.add(PortletConstants.DOSSIER_STATUS_CANCELED);
+		dossierStatus.add(PortletConstants.DOSSIER_STATUS_DONE);
+		dossierStatus.add(PortletConstants.DOSSIER_STATUS_ARCHIVED);
+		dossierStatus.add(PortletConstants.DOSSIER_STATUS_SYSTEM);
+		dossierStatus.add(PortletConstants.DOSSIER_STATUS_ERROR);
 		return dossierStatus;
 	}
 
 	public static String getDestinationFolder(String[] folderNames) {
 
-		return StringUtil
-			.merge(folderNames, StringPool.FORWARD_SLASH);
+		return StringUtil.merge(folderNames, StringPool.FORWARD_SLASH);
 	}
 
 	public static String getCitizenDossierDestinationFolder(
 		long groupId, long userId) {
 
-		return String
-			.valueOf(groupId) + StringPool.SLASH +
-			"opencps/dossierfiles/citizen" + StringPool.SLASH + String
-				.valueOf(userId);
+		return String.valueOf(groupId) + StringPool.SLASH +
+			"opencps/dossierfiles/citizen" + StringPool.SLASH +
+			String.valueOf(userId);
 	}
 
 	public static String getBusinessDossierDestinationFolder(
 		long groupId, long orgId) {
 
-		return String
-			.valueOf(groupId) + StringPool.SLASH +
-			"opencps/dossierfiles/business" + StringPool.SLASH + String
-				.valueOf(orgId);
+		return String.valueOf(groupId) + StringPool.SLASH +
+			"opencps/dossierfiles/business" + StringPool.SLASH +
+			String.valueOf(orgId);
+	}
+
+	public static String getDossierDestinationFolder(
+		long groupId, int year, int month, int day, String oid) {
+
+		return String.valueOf(groupId) + StringPool.SLASH + "Dossiers" +
+			StringPool.SLASH + String.valueOf(year) + StringPool.SLASH +
+			String.valueOf(month) + StringPool.SLASH + String.valueOf(day) +
+			StringPool.SLASH + oid;
 	}
 
 	public static DictItem getDictItem(
@@ -501,11 +467,12 @@ public class PortletUtil {
 		DictItem dictItem = null;
 
 		try {
-			dictCollection = DictCollectionLocalServiceUtil
-				.getDictCollection(groupId, collectionCode);
-			dictItem = DictItemLocalServiceUtil
-				.getDictItemInuseByItemCode(dictCollection
-					.getDictCollectionId(), itemCode);
+			dictCollection =
+				DictCollectionLocalServiceUtil.getDictCollection(groupId,
+					collectionCode);
+			dictItem =
+				DictItemLocalServiceUtil.getDictItemInuseByItemCode(
+					dictCollection.getDictCollectionId(), itemCode);
 		}
 		catch (Exception e) {
 			// TODO: nothing
@@ -513,57 +480,48 @@ public class PortletUtil {
 		return dictItem;
 	}
 
-	public static String getActionInfoByKey(int status, Locale locale) {
+	public static String getActionInfoByKey(String status, Locale locale) {
 
 		String actionInfo = StringPool.BLANK;
 		switch (status) {
-		case 0:
-			actionInfo = LanguageUtil
-				.get(locale, "new-stt");
+		case PortletConstants.DOSSIER_STATUS_NEW:
+			actionInfo = LanguageUtil.get(locale, "new-stt");
 			break;
-		case 1:
-			actionInfo = LanguageUtil
-				.get(locale, "receiving-stt");
+		case PortletConstants.DOSSIER_STATUS_RECEIVING:
+			actionInfo = LanguageUtil.get(locale, "receiving-stt");
 			break;
-		case 2:
-			actionInfo = LanguageUtil
-				.get(locale, "waiting-stt");
+		case PortletConstants.DOSSIER_STATUS_WAITING:
+			actionInfo = LanguageUtil.get(locale, "waiting-stt");
 			break;
-		case 3:
-			actionInfo = LanguageUtil
-				.get(locale, "paying-stt");
+		case PortletConstants.DOSSIER_STATUS_PAYING:
+			actionInfo = LanguageUtil.get(locale, "paying-stt");
 			break;
-		case 4:
-			actionInfo = LanguageUtil
-				.get(locale, "denied-stt");
+		case PortletConstants.DOSSIER_STATUS_DENIED:
+			actionInfo = LanguageUtil.get(locale, "denied-stt");
 			break;
-		case 5:
-			actionInfo = LanguageUtil
-				.get(locale, "received-stt");
+		case PortletConstants.DOSSIER_STATUS_RECEIVED:
+			actionInfo = LanguageUtil.get(locale, "received-stt");
 			break;
-		case 6:
-			actionInfo = LanguageUtil
-				.get(locale, "processing-stt");
+		case PortletConstants.DOSSIER_STATUS_PROCESSING:
+			actionInfo = LanguageUtil.get(locale, "processing-stt");
 			break;
-		case 7:
-			actionInfo = LanguageUtil
-				.get(locale, "canceled-stt");
+		case PortletConstants.DOSSIER_STATUS_CANCELED:
+			actionInfo = LanguageUtil.get(locale, "canceled-stt");
 			break;
-		case 8:
-			actionInfo = LanguageUtil
-				.get(locale, "done-stt");
+		case PortletConstants.DOSSIER_STATUS_DONE:
+			actionInfo = LanguageUtil.get(locale, "done-stt");
 			break;
-		case 9:
-			actionInfo = LanguageUtil
-				.get(locale, "archived-stt");
+		case PortletConstants.DOSSIER_STATUS_ARCHIVED:
+			actionInfo = LanguageUtil.get(locale, "archived-stt");
 			break;
-		case 10:
-			actionInfo = LanguageUtil
-				.get(locale, "system-stt");
+		case PortletConstants.DOSSIER_STATUS_SYSTEM:
+			actionInfo = LanguageUtil.get(locale, "system-stt");
 			break;
-		case 11:
-			actionInfo = LanguageUtil
-				.get(locale, "error-stt");
+		case PortletConstants.DOSSIER_STATUS_ENDED:
+			actionInfo = LanguageUtil.get(locale, "ended-stt");
+			break;
+		case PortletConstants.DOSSIER_STATUS_ERROR:
+			actionInfo = LanguageUtil.get(locale, "error-stt");
 			break;
 		default:
 			break;
@@ -571,57 +529,48 @@ public class PortletUtil {
 		return actionInfo;
 	}
 
-	public static String getActionInfo(int status, Locale locale) {
+	public static String getActionInfo(String status, Locale locale) {
 
 		String actionInfo = StringPool.BLANK;
 		switch (status) {
-		case 0:
-			actionInfo = LanguageUtil
-				.get(locale, "new", "Create new");
+		case PortletConstants.DOSSIER_STATUS_NEW:
+			actionInfo = LanguageUtil.get(locale, "new", "Create new");
 			break;
-		case 1:
-			actionInfo = LanguageUtil
-				.get(locale, "receiving", "Receiving");
+		case PortletConstants.DOSSIER_STATUS_RECEIVING:
+			actionInfo = LanguageUtil.get(locale, "receiving", "Receiving");
 			break;
-		case 2:
-			actionInfo = LanguageUtil
-				.get(locale, "waiting", "Waiting");
+		case PortletConstants.DOSSIER_STATUS_WAITING:
+			actionInfo = LanguageUtil.get(locale, "waiting", "Waiting");
 			break;
-		case 3:
-			actionInfo = LanguageUtil
-				.get(locale, "paying", "Paying");
+		case PortletConstants.DOSSIER_STATUS_PAYING:
+			actionInfo = LanguageUtil.get(locale, "paying", "Paying");
 			break;
-		case 4:
-			actionInfo = LanguageUtil
-				.get(locale, "denied", "Denied");
+		case PortletConstants.DOSSIER_STATUS_DENIED:
+			actionInfo = LanguageUtil.get(locale, "denied", "Denied");
 			break;
-		case 5:
-			actionInfo = LanguageUtil
-				.get(locale, "received", "Received");
+		case PortletConstants.DOSSIER_STATUS_RECEIVED:
+			actionInfo = LanguageUtil.get(locale, "received", "Received");
 			break;
-		case 6:
-			actionInfo = LanguageUtil
-				.get(locale, "processing", "Processing");
+		case PortletConstants.DOSSIER_STATUS_PROCESSING:
+			actionInfo = LanguageUtil.get(locale, "processing", "Processing");
 			break;
-		case 7:
-			actionInfo = LanguageUtil
-				.get(locale, "canceled", "Canceled");
+		case PortletConstants.DOSSIER_STATUS_CANCELED:
+			actionInfo = LanguageUtil.get(locale, "canceled", "Canceled");
 			break;
-		case 8:
-			actionInfo = LanguageUtil
-				.get(locale, "done", "Done");
+		case PortletConstants.DOSSIER_STATUS_DONE:
+			actionInfo = LanguageUtil.get(locale, "done", "Done");
 			break;
-		case 9:
-			actionInfo = LanguageUtil
-				.get(locale, "archived", "Archived");
+		case PortletConstants.DOSSIER_STATUS_ARCHIVED:
+			actionInfo = LanguageUtil.get(locale, "archived", "Archived");
 			break;
-		case 10:
-			actionInfo = LanguageUtil
-				.get(locale, "system", "System");
+		case PortletConstants.DOSSIER_STATUS_SYSTEM:
+			actionInfo = LanguageUtil.get(locale, "system", "System");
 			break;
-		case 11:
-			actionInfo = LanguageUtil
-				.get(locale, "error", "Error");
+		case PortletConstants.DOSSIER_STATUS_ENDED:
+			actionInfo = LanguageUtil.get(locale, "ended", "Ended");
+			break;
+		case PortletConstants.DOSSIER_STATUS_ERROR:
+			actionInfo = LanguageUtil.get(locale, "error", "Error");
 			break;
 		default:
 			break;
@@ -629,57 +578,50 @@ public class PortletUtil {
 		return actionInfo;
 	}
 
-	public static String getMessageInfo(int status, Locale locale) {
+	public static String getMessageInfo(String status, Locale locale) {
 
 		String messageInfo = StringPool.BLANK;
 		switch (status) {
-		case 0:
-			messageInfo = LanguageUtil
-				.get(locale, "new-msg", "Create new");
+		case PortletConstants.DOSSIER_STATUS_NEW:
+			messageInfo = LanguageUtil.get(locale, "new-msg", "Create new");
 			break;
-		case 1:
-			messageInfo = LanguageUtil
-				.get(locale, "receiving-msg", "Receiving");
+		case PortletConstants.DOSSIER_STATUS_RECEIVING:
+			messageInfo =
+				LanguageUtil.get(locale, "receiving-msg", "Receiving");
 			break;
-		case 2:
-			messageInfo = LanguageUtil
-				.get(locale, "waiting-msg", "Waiting");
+		case PortletConstants.DOSSIER_STATUS_WAITING:
+			messageInfo = LanguageUtil.get(locale, "waiting-msg", "Waiting");
 			break;
-		case 3:
-			messageInfo = LanguageUtil
-				.get(locale, "paying-msg", "Paying");
+		case PortletConstants.DOSSIER_STATUS_PAYING:
+			messageInfo = LanguageUtil.get(locale, "paying-msg", "Paying");
 			break;
-		case 4:
-			messageInfo = LanguageUtil
-				.get(locale, "denied-msg", "Denied");
+		case PortletConstants.DOSSIER_STATUS_DENIED:
+			messageInfo = LanguageUtil.get(locale, "denied-msg", "Denied");
 			break;
-		case 5:
-			messageInfo = LanguageUtil
-				.get(locale, "received-msg", "Received");
+		case PortletConstants.DOSSIER_STATUS_RECEIVED:
+			messageInfo = LanguageUtil.get(locale, "received-msg", "Received");
 			break;
-		case 6:
-			messageInfo = LanguageUtil
-				.get(locale, "processing-msg", "Processing");
+		case PortletConstants.DOSSIER_STATUS_PROCESSING:
+			messageInfo =
+				LanguageUtil.get(locale, "processing-msg", "Processing");
 			break;
-		case 7:
-			messageInfo = LanguageUtil
-				.get(locale, "canceled-msg", "Canceled");
+		case PortletConstants.DOSSIER_STATUS_CANCELED:
+			messageInfo = LanguageUtil.get(locale, "canceled-msg", "Canceled");
 			break;
-		case 8:
-			messageInfo = LanguageUtil
-				.get(locale, "done-msg", "Done");
+		case PortletConstants.DOSSIER_STATUS_DONE:
+			messageInfo = LanguageUtil.get(locale, "done-msg", "Done");
 			break;
-		case 9:
-			messageInfo = LanguageUtil
-				.get(locale, "archived-msg", "Archived");
+		case PortletConstants.DOSSIER_STATUS_ARCHIVED:
+			messageInfo = LanguageUtil.get(locale, "archived-msg", "Archived");
 			break;
-		case 10:
-			messageInfo = LanguageUtil
-				.get(locale, "system-msg", "System");
+		case PortletConstants.DOSSIER_STATUS_SYSTEM:
+			messageInfo = LanguageUtil.get(locale, "system-msg", "System");
 			break;
-		case 11:
-			messageInfo = LanguageUtil
-				.get(locale, "error-msg", "Error");
+		case PortletConstants.DOSSIER_STATUS_ENDED:
+			messageInfo = LanguageUtil.get(locale, "ended-msg", "Ended");
+			break;
+		case PortletConstants.DOSSIER_STATUS_ERROR:
+			messageInfo = LanguageUtil.get(locale, "error-msg", "Error");
 			break;
 		default:
 			break;
@@ -691,17 +633,13 @@ public class PortletUtil {
 		ActionRequest actionRequest, ActionResponse actionResponse, Object json)
 		throws IOException {
 
-		HttpServletResponse response = PortalUtil
-			.getHttpServletResponse(actionResponse);
+		HttpServletResponse response =
+			PortalUtil.getHttpServletResponse(actionResponse);
 
-		response
-			.setContentType(ContentTypes.APPLICATION_JSON);
+		response.setContentType(ContentTypes.APPLICATION_JSON);
 
-		ServletResponseUtil
-			.write(response, json
-				.toString());
-		response
-			.flushBuffer();
+		ServletResponseUtil.write(response, json.toString());
+		response.flushBuffer();
 
 	}
 
@@ -711,33 +649,27 @@ public class PortletUtil {
 
 		switch (value) {
 		case 1:
-			statusLabel = LanguageUtil
-				.get(locale, "cash");
+			statusLabel = LanguageUtil.get(locale, "cash");
 			break;
 		case 2:
-			statusLabel = LanguageUtil
-				.get(locale, "keypay");
+			statusLabel = LanguageUtil.get(locale, "keypay");
 			break;
 		case 4:
-			statusLabel = LanguageUtil
-				.get(locale, "chuyen-khoan");
+			statusLabel = LanguageUtil.get(locale, "chuyen-khoan");
 			break;
 		default:
-			statusLabel = LanguageUtil
-				.get(locale, "cash");
+			statusLabel = LanguageUtil.get(locale, "cash");
 			break;
 		}
 
 		return statusLabel;
 	}
 
-	public static String getEmployeeDestinationFolder(
-		long groupId, long userId) {
+	public static String getEmployeeDestinationFolder(long groupId, long userId) {
 
-		return String
-			.valueOf(groupId) + StringPool.SLASH +
-			"opencps/processmgtfiles/employee" + StringPool.SLASH + String
-				.valueOf(userId);
+		return String.valueOf(groupId) + StringPool.SLASH +
+			"opencps/processmgtfiles/employee" + StringPool.SLASH +
+			String.valueOf(userId);
 	}
 
 	public static String getPaymentStatusLabel(int value, Locale locale) {
@@ -747,23 +679,18 @@ public class PortletUtil {
 		switch (value) {
 
 		case PaymentMgtUtil.PAYMENT_STATUS_REQUESTED:
-			statusLabel = LanguageUtil
-				.get(locale, "requested");
+			statusLabel = LanguageUtil.get(locale, "requested");
 			break;
 		case PaymentMgtUtil.PAYMENT_STATUS_CONFIRMED:
-			statusLabel = LanguageUtil
-				.get(locale, "confirmed");
+			statusLabel = LanguageUtil.get(locale, "confirmed");
 			break;
 		case PaymentMgtUtil.PAYMENT_STATUS_APPROVED:
-			statusLabel = LanguageUtil
-				.get(locale, "approved");
+			statusLabel = LanguageUtil.get(locale, "approved");
 			break;
 		case PaymentMgtUtil.PAYMENT_STATUS_REJECTED:
-			statusLabel = LanguageUtil
-				.get(locale, "rejected");
+			statusLabel = LanguageUtil.get(locale, "rejected");
 		default:
-			statusLabel = LanguageUtil
-				.get(locale, "on-processing");
+			statusLabel = LanguageUtil.get(locale, "on-processing");
 			break;
 		}
 
@@ -772,28 +699,25 @@ public class PortletUtil {
 
 	public static String getContextPath(ResourceRequest request) {
 
-		return request
-			.getPortletSession().getPortletContext().getRealPath("/").replace(
-				"/", File.separator).replace(File.separator + ".", "");
+		return request.getPortletSession().getPortletContext().getRealPath("/").replace(
+			"/", File.separator).replace(File.separator + ".", "");
 
 	}
 
 	public static String getContextPath(HttpServletRequest request) {
 
-		return request
-			.getSession().getServletContext().getRealPath("/").replace("/",
-				File.separator).replace(File.separator + ".", "");
+		return request.getSession().getServletContext().getRealPath("/").replace(
+			"/", File.separator).replace(File.separator + ".", "");
 
 	}
 
 	public static String getContextPath(ActionRequest actionRequest) {
 
-		HttpServletRequest request = PortalUtil
-			.getHttpServletRequest(actionRequest);
+		HttpServletRequest request =
+			PortalUtil.getHttpServletRequest(actionRequest);
 
-		return request
-			.getSession().getServletContext().getRealPath("/").replace("/",
-				File.separator).replace(File.separator + ".", "");
+		return request.getSession().getServletContext().getRealPath("/").replace(
+			"/", File.separator).replace(File.separator + ".", "");
 
 	}
 
@@ -822,9 +746,125 @@ public class PortletUtil {
 		return getContextPath(request) + "resources/";
 	}
 
-	public static String getResourceFolderPath(
-		ResourceRequest resourceRequest) {
+	public static String getResourceFolderPath(ResourceRequest resourceRequest) {
 
 		return getContextPath(resourceRequest) + "resources/";
 	}
+
+	public static Properties getJMSContextProperties(
+		long companyId, String code, boolean remote, String channelName)
+		throws SystemException {
+
+		Properties properties = new Properties();
+
+		PortletPreferences preferences =
+			PrefsPropsUtil.getPreferences(companyId, true);
+
+		String jmsJson =
+			GetterUtil.getString(preferences.getValue(
+				WebKeys.JMS_CONFIGURATION, StringPool.BLANK));
+
+		_log.info("(PortletUtil.getJMSContextProperties) - jmsJson: --------------------- " +
+			jmsJson);
+
+		try {
+			JSONObject jmsConfigObject =
+				JSONFactoryUtil.createJSONObject(jmsJson);
+
+			_log.info("(PortletUtil.getJMSContextProperties) - jmsConfigObject:************************** " +
+				jmsConfigObject.toString());
+			JSONObject lookupConfigObject = jmsConfigObject.getJSONObject(code);
+			_log.info("(PortletUtil.getJMSContextProperties) - lookupConfigObject:************************** " +
+				lookupConfigObject.toString());
+			JSONObject serverConfigObject =
+				lookupConfigObject.getJSONObject(remote ? "remote" : "local");
+			_log.info("(PortletUtil.getJMSContextProperties) - serverConfigObject:************************** " +
+				serverConfigObject.toString());
+			JSONObject channelObject =
+				serverConfigObject.getJSONObject(WebKeys.JMS_CHANNEL);
+			_log.info("(PortletUtil.getJMSContextProperties) - channelObject:************************** " +
+				channelObject.toString());
+			String providerURL =
+				serverConfigObject.getString(WebKeys.JMS_PROVIDER_URL);
+			_log.info("(PortletUtil.getJMSContextProperties) - providerURL:************************** " +
+				providerURL.toString());
+			if (remote && Validator.isNotNull(providerURL)) {
+				providerURL = "remote://" + providerURL;
+			}
+
+			String providerPort =
+				serverConfigObject.getString(WebKeys.JMS_PROVIDER_PORT);
+
+			_log.info("(PortletUtil.getJMSContextProperties) - providerPort:************************** " +
+				providerPort.toString());
+
+			String userName =
+				serverConfigObject.getString(WebKeys.JMS_USERNAME);
+
+			_log.info("(PortletUtil.getJMSContextProperties) - userName:************************** " +
+				userName.toString());
+
+			String passWord =
+				serverConfigObject.getString(WebKeys.JMS_PASSWORD);
+
+			_log.info("(PortletUtil.getJMSContextProperties) - passWord:************************** " +
+				passWord.toString());
+
+			String syncCompanyId =
+				serverConfigObject.getString(WebKeys.JMS_COMPANY_ID);
+
+			_log.info("(PortletUtil.getJMSContextProperties) - syncCompanyId:************************** " +
+				syncCompanyId);
+			String syncGroupId =
+				serverConfigObject.getString(WebKeys.JMS_GROUP_ID);
+			_log.info("(PortletUtil.getJMSContextProperties) - syncGroupId:************************** " +
+				syncGroupId);
+			String syncUserId =
+				serverConfigObject.getString(WebKeys.JMS_USER_ID);
+
+			_log.info("(PortletUtil.getJMSContextProperties) - syncUserId:************************** " +
+				syncUserId);
+
+			_log.info("(PortletUtil.getJMSContextProperties) - channelName:************************** " +
+				channelName.toString());
+
+			String channel = channelObject.getString(channelName);
+
+			_log.info("(PortletUtil.getJMSContextProperties) - channel:************************** " +
+				channel);
+
+			_log.info("(PortletUtil.getJMSContextProperties) - providerURL:************************** " +
+				providerURL);
+			_log.info("(PortletUtil.getJMSContextProperties) - userName:************************** " +
+				userName);
+			_log.info("(PortletUtil.getJMSContextProperties) - passWord:************************** " +
+				passWord);
+			_log.info("(PortletUtil.getJMSContextProperties) - channel:************************** " +
+				channel);
+
+			properties.put(
+				Context.INITIAL_CONTEXT_FACTORY,
+				org.jboss.naming.remote.client.InitialContextFactory.class.getName());
+
+			properties.put(Context.PROVIDER_URL, providerURL +
+				StringPool.COLON + providerPort);
+
+			properties.put(Context.SECURITY_PRINCIPAL, userName);
+			properties.put(Context.SECURITY_CREDENTIALS, passWord);
+
+			properties.put(WebKeys.JMS_DESTINATION, channel);
+			properties.put(WebKeys.JMS_COMPANY_ID, syncCompanyId);
+			properties.put(WebKeys.JMS_GROUP_ID, syncGroupId);
+			properties.put(WebKeys.JMS_USER_ID, syncUserId);
+
+		}
+		catch (JSONException e) {
+			_log.error(e);
+		}
+
+		return properties;
+	}
+
+	private static Log _log =
+		LogFactoryUtil.getLog(PortletUtil.class.getName());
 }

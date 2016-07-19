@@ -392,7 +392,27 @@ public class ProcessUtils {
 	 * @param processStepId
 	 * @return
 	 */
-	public static String getProcessStepName(long processStepId) {
+	public static String getPreProcessStepName(long processStepId) {
+
+		String stepName = StringPool.BLANK;
+
+		ProcessStep step = null;
+
+		try {
+			step = ProcessStepLocalServiceUtil.fetchProcessStep(processStepId);
+		}
+		catch (Exception e) {
+			return stepName;
+		}
+
+		if (Validator.isNotNull(step)) {
+			stepName = step.getStepName();
+		}
+
+		return stepName;
+	}
+	
+	public static String getPostProcessStepName(long processStepId) {
 
 		String stepName = StringPool.BLANK;
 

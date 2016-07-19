@@ -18,6 +18,7 @@
 package org.opencps.processmgt.portlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -27,6 +28,10 @@ import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.opencps.dossiermgt.model.ServiceConfig;
+import org.opencps.dossiermgt.model.impl.ServiceConfigImpl;
+import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
+import org.opencps.processmgt.NoSuchServiceProcessException;
 import org.opencps.processmgt.model.ProcessStep;
 import org.opencps.processmgt.model.ProcessStepDossierPart;
 import org.opencps.processmgt.model.ProcessWorkflow;
@@ -41,6 +46,7 @@ import org.opencps.processmgt.service.ServiceInfoProcessLocalServiceUtil;
 import org.opencps.processmgt.service.ServiceProcessLocalServiceUtil;
 import org.opencps.processmgt.service.StepAllowanceLocalServiceUtil;
 import org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil;
+import org.opencps.processmgt.util.ProcessMgtUtil;
 import org.opencps.processmgt.util.ProcessUtils;
 import org.opencps.util.WebKeys;
 
@@ -50,6 +56,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBus;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
+import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -72,10 +79,23 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 	public void deteleRelaSeInfoAndProcess (ActionRequest actionRequest, ActionResponse actionResponse) 
 					throws SystemException, IOException {
 		long serviceProcessId = ParamUtil.getLong(actionRequest, "serviceProcessId");
-		long serviceInfoId = ParamUtil.getLong(actionRequest, "serviceInfoId");
+		long serviceConfigId = ParamUtil.getLong(actionRequest, "serviceConfigId");
 		String backURL = ParamUtil.getString(actionRequest, "backURL");
 		
-		ServiceInfoProcessLocalServiceUtil.deleteServiceInfoProcess(serviceProcessId, serviceInfoId);
+		ServiceConfig serviceConfig = null;
+		
+		try {
+			serviceConfig = ServiceConfigLocalServiceUtil.getServiceConfig(serviceConfigId);
+			//remove process id from serviceconfig
+			serviceConfig.setServiceProcessId(0);
+			ServiceConfigLocalServiceUtil.updateServiceConfig(serviceConfig);
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		ServiceInfoProcessLocalServiceUtil.deleteServiceInfoProcess(serviceProcessId, serviceConfigId);
+		
 		if(Validator.isNotNull(backURL)) {
 			actionResponse.sendRedirect(backURL);
 		}
@@ -88,11 +108,26 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 	 */
 	public void chooseServiceInfoFromProcess(ActionRequest actionRequest, ActionResponse actionResponse) throws SystemException, IOException {
 		long serviceProcessId = ParamUtil.getLong(actionRequest, "serviceProcessId");
-		long [] serviceinfoIds = ParamUtil
+		long [] serviceConfigIds = ParamUtil
 					    .getLongValues(actionRequest, "rowIds");
 		String backURL = ParamUtil.getString(actionRequest, "backURL");
 		
-		ServiceInfoProcessLocalServiceUtil.addProcessServiceInfos(serviceProcessId, serviceinfoIds);
+		
+		if(serviceConfigIds.length > 0) {
+			for(int index = 0; index < serviceConfigIds.length; index ++) {
+				try {
+					ServiceConfig serviceConfig = new ServiceConfigImpl();
+					serviceConfig = ServiceConfigLocalServiceUtil.getServiceConfig(serviceConfigIds[index]);
+					serviceConfig.setServiceProcessId(serviceProcessId);
+					ServiceConfigLocalServiceUtil.updateServiceConfig(serviceConfig);
+				}
+				catch (Exception e) {
+					_log.error(e);
+				}
+			}
+		}
+		
+		ServiceInfoProcessLocalServiceUtil.addProcessServiceInfos(serviceProcessId, serviceConfigIds);
 	
 		if(Validator.isNotNull(backURL)) {
 			actionResponse.sendRedirect(backURL);
@@ -614,6 +649,65 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 			}
 		}
 
+	}
+	
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws NoSuchServiceProcessException
+	 * @throws SystemException
+	 * @throws IOException
+	 */
+	public void deleteProcess(ActionRequest actionRequest, ActionResponse actionResponse)
+					throws NoSuchServiceProcessException, SystemException, IOException {
+		long serviceProcessId = ParamUtil.getLong(actionRequest, "serviceProcessId");
+		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
+		
+		List<ProcessStep> processSteps = new ArrayList<ProcessStep>();
+		List<ServiceInfoProcess> infoProcesses = new ArrayList<ServiceInfoProcess>();
+		List<ProcessWorkflow> processWorkflows = new ArrayList<ProcessWorkflow>();
+		
+		try {
+			processSteps = ProcessStepLocalServiceUtil.getStepByProcess(serviceProcessId);
+		}
+		catch (Exception e) {
+		}
+		
+		try {
+			infoProcesses = ServiceInfoProcessLocalServiceUtil
+							.getServiceInfoProcessByProcessId(serviceProcessId); 
+		}
+		catch (Exception e) {
+		}
+		
+		try {
+			processWorkflows = ProcessWorkflowLocalServiceUtil
+							.getWorkFlowByProcess(serviceProcessId);
+		}
+		catch (Exception e) {
+		}
+		
+		if(processSteps.isEmpty() && infoProcesses.isEmpty() && processWorkflows.isEmpty()) {
+			ServiceProcessLocalServiceUtil.deleteProcess(serviceProcessId);
+			
+			SessionMessages.add(actionRequest, ProcessMgtUtil.DEL_PROCESS_SUCC);
+		} 
+		
+		else if(!processSteps.isEmpty()) {
+			SessionErrors.add(actionRequest, ProcessMgtUtil.DELERR_EXIST_STEP);
+		} 
+		
+		else if(!infoProcesses.isEmpty()) {
+			SessionErrors.add(actionRequest, ProcessMgtUtil.DELERR_EXIST_SERVICE_CONFIG);
+		}
+		
+		else if(!processWorkflows.isEmpty()) {
+			SessionErrors.add(actionRequest, ProcessMgtUtil.DELERR_EXIST_WORKFLOW);
+		}
+		
+		if(Validator.isNotNull(redirectURL)) {
+			actionResponse.sendRedirect(redirectURL);
+		}
 	}
 
 	@Override
