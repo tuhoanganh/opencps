@@ -9,6 +9,9 @@
 
 
 
+
+
+/*aaaaa*/
 /* body {
     background-color: #f2f2f2;
     display: table;
@@ -363,14 +366,14 @@ footer > p:nth-child(2) {
 }
 
 
---- Khung chứa, tạm coi tương đương .portlet ----
+--- Khung chá»©a, táº¡m coi tÆ°Æ¡ng Ä‘Æ°Æ¡ng .portlet ----
 
 .box {}
 
 .box .box_content {}
 
 
----- Class tướng ứng cho layout có menu phụ hay không ----
+---- Class tÆ°á»›ng á»©ng cho layout cÃ³ menu phá»¥ hay khÃ´ng ----
 
 .main.one_col {}
 
@@ -382,7 +385,7 @@ footer > p:nth-child(2) {
 }
 
 
----- Các cột tự định nghĩa ----
+---- CÃ¡c cá»™t tá»± Ä‘á»‹nh nghÄ©a ----
 
 .col {
     float: left;
@@ -433,7 +436,7 @@ footer > p:nth-child(2) {
 }
 
 
----- Khu lựa chọn các khung select, datetime ... ----
+---- Khu lá»±a chá»�n cÃ¡c khung select, datetime ... ----
 
 .condition_box {
     overflow: hidden;
