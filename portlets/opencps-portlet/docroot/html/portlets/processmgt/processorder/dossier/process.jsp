@@ -638,7 +638,8 @@ AUI().ready('aui-base','liferay-portlet-url','aui-io', function(A){
 													var data = {
 														'conserveHash': true
 													};
-													Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.PROCESS_ORDER_PORTLET %>_');
+
+													Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.PROCESS_ORDER_PORTLET %>_', data);
 												}else{
 													alert('<%= UnicodeLanguageUtil.get(pageContext, "error-while-remove-this-group") %>');
 												}
