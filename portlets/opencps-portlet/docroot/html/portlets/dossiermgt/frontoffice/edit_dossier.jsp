@@ -198,8 +198,8 @@
 				htmlTop="<%= htmlTop %>"
 				jspPath='<%=templatePath + "dossier/" %>'
 				showButtons="<%=(cmd.equals(Constants.VIEW) || 
-					(dossier != null && !dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_NEW)) 
-					&& !dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_WAITING)) ? false : true %>"
+					(dossier != null && !dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_NEW) 
+					&& !dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_WAITING))) ? false : true %>"
 			/>
 		</aui:form>
 	</c:when>
