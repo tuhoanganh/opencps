@@ -1968,7 +1968,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
 
-		// Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
+		Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
 
 		try {
 			ServiceContext serviceContext =
@@ -2026,17 +2026,17 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				break;
 			}
 
-			/*
-			 * JMSContext context =
-			 * JMSMessageUtil.createProducer(serviceContext.getCompanyId(),
-			 * dossier.getGovAgencyCode(), true, "submitDossier");
-			 * SubmitDossierMessage submitDossierMessage = new
-			 * SubmitDossierMessage(context);
-			 * submitDossierMessage.sendMessage(dossierId);
-			 */
+			
+			 JMSContext context =
+			 JMSMessageUtil.createProducer(serviceContext.getCompanyId(),
+			 dossier.getGovAgencyCode(), true, WebKeys.JMS_QUEUE_OPENCPS.toLowerCase());
+			 SubmitDossierMessage submitDossierMessage = new
+			  SubmitDossierMessage(context);
+			 submitDossierMessage.sendMessage(dossierId);
+			 
 
-			MessageBusUtil.sendMessage("opencps/frontoffice/out/destination",
-				message);
+			/*MessageBusUtil.sendMessage("opencps/frontoffice/out/destination",
+				message);*/
 
 		}
 		catch (Exception e) {
@@ -2814,7 +2814,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 			JMSContext context =
 				JMSMessageUtil.createConsumer(serviceContext.getCompanyId(),
-					"111", true, "submitDossier");
+					"111", true, WebKeys.JMS_QUEUE_OPENCPS.toLowerCase());
 
 			SubmitDossierMessage submitDossierMessage =
 				new SubmitDossierMessage(context);
