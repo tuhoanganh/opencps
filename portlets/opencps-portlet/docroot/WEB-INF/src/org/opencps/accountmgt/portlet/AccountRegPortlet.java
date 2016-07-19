@@ -249,6 +249,13 @@ public class AccountRegPortlet extends MVCPortlet {
 					    business.getUuid(), mappingUser, email,
 					    PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS,
 					    serviceContext);
+					//check reg cfg
+					int step = ParamUtil.getInteger(actionRequest, "businessRegStep_cfg");
+					if(step == 2){
+						BusinessLocalServiceUtil
+					    .updateStatus(business.getBusinessId(), serviceContext
+					        .getUserId(), 2);
+					}
 				}
 			}
 			else {
@@ -458,6 +465,13 @@ public class AccountRegPortlet extends MVCPortlet {
 					    citizen.getUuid(), mappingUser, email,
 					    PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN,
 					    serviceContext);
+					//check reg cfg
+					int step = ParamUtil.getInteger(actionRequest, "citizenRegStep_cfg");
+					if(step == 2){
+						CitizenLocalServiceUtil
+					    .updateStatus(citizen.getCitizenId(), serviceContext
+					        .getUserId(), 2);
+					}
 				}
 
 			}

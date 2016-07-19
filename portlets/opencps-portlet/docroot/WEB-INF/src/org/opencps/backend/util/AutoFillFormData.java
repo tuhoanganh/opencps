@@ -30,8 +30,10 @@ import org.opencps.accountmgt.model.Citizen;
 import org.opencps.datamgt.service.DictItemLocalServiceUtil;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierFile;
+import org.opencps.dossiermgt.model.FileGroup;
 import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
+import org.opencps.dossiermgt.service.FileGroupLocalServiceUtil;
 
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -121,6 +123,9 @@ public class AutoFillFormData {
 	 	}
 		
 		try {
+			if(Validator.isNull(sampleData)){
+				sampleData = "{}";
+			}
 			JSONObject jsonSampleData = JSONFactoryUtil.createJSONObject(sampleData);
 			Map<String, Object> jsonMap = jsonToMap(jsonSampleData);
 			for (Map.Entry<String, Object> entry : jsonMap.entrySet()) {
@@ -163,6 +168,26 @@ public class AutoFillFormData {
 								e.printStackTrace();
 							}
 						}
+					}else if(value.equals("_thanhPhanHoSoCon")){
+						if(dossierId > 0){
+							try {
+								List<FileGroup> fileGroups = FileGroupLocalServiceUtil.getFileGroupByDossierId(dossierId);
+								JSONArray arrays = JSONFactoryUtil.createJSONArray();
+								JSONObject obJsonObject = null;
+								int i = 0;
+								for (FileGroup fileGroup : fileGroups) {
+									i++;
+									obJsonObject = JSONFactoryUtil.createJSONObject();
+									obJsonObject.put("stt", i);
+									obJsonObject.put("tenSanPham", fileGroup.getDisplayName());
+									arrays.put(obJsonObject);
+								}
+								jsonMap.put(entry.getKey(), arrays);
+							} catch (SystemException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
 					}
 					
 				}else if(value.startsWith("#") && value.contains("@")){
@@ -175,7 +200,50 @@ public class AutoFillFormData {
 						if(Validator.isNotNull(dossierFile) && Validator.isNotNull(dossierFile.getFormData())){
 							JSONObject jsonOtherData = JSONFactoryUtil.createJSONObject(dossierFile.getFormData());
 							Map<String, Object> jsonOtherMap = jsonToMap(jsonOtherData);
-							jsonMap.put(entry.getKey(), String.valueOf(jsonOtherMap.get(variable)));
+							String myCHK = StringPool.BLANK;
+								if(variable.contains(":")){
+									String[] variableMuti = variable.split(":");
+									for (String string : variableMuti) {
+										myCHK += ", " + jsonOtherMap.get(string).toString();
+									}
+									myCHK = myCHK.replaceFirst(", ", "");
+								}else{
+									myCHK = jsonOtherMap.get(variable.replaceAll("_ok", "").replaceAll("_fail", "")).toString();
+								}
+							
+							if(myCHK.startsWith("[{")){
+								JSONArray orignJsonArray = (JSONArray)jsonOtherMap.get(variable.replaceAll("_ok", "").replaceAll("_fail", ""));
+								if(!variable.contains("_ok") && !variable.contains("_fail")){
+									jsonMap.put(entry.getKey(), orignJsonArray);
+								}else{
+									JSONArray orignJsonArrayOk = JSONFactoryUtil.createJSONArray();
+									JSONArray orignJsonArrayFail = JSONFactoryUtil.createJSONArray();
+									for (int i = 0; i < orignJsonArray.length(); i++) {
+										JSONObject childObj = orignJsonArray.getJSONObject(i);
+										String ketQuaTD = StringPool.BLANK;
+										try {
+											ketQuaTD = childObj.getString("ketQua");
+										} catch (Exception e) {
+											// TODO: handle exception
+										}
+										
+										childObj.put("stt", i+1);
+										if(ketQuaTD.equalsIgnoreCase("0")){
+											orignJsonArrayFail.put(childObj);
+										}else{
+											orignJsonArrayOk.put(childObj);
+										}
+									}
+									if(variable.contains("_ok")){
+										jsonMap.put(entry.getKey(), orignJsonArrayOk);
+									}else if(variable.contains("_fail")){
+										jsonMap.put(entry.getKey(), orignJsonArrayFail);
+									}
+								}
+								
+							}else{
+								jsonMap.put(entry.getKey(), myCHK.toString());
+							}
 						}
 					} catch (SystemException e) {
 						// TODO Auto-generated catch block
@@ -186,7 +254,6 @@ public class AutoFillFormData {
 			
 			jsonSampleData = JSONFactoryUtil.createJSONObject();
 			for (Map.Entry<String, Object> entry : jsonMap.entrySet()) {
-//				System.out.println(entry.getKey() + ": " + entry.getValue());
 				jsonSampleData.put(entry.getKey(), entry.getValue()+"");
 			}
 			
@@ -253,12 +320,12 @@ public class AutoFillFormData {
             String key = keysItr.next();
             Object value = null;
             if(Validator.isNotNull(object.getJSONArray(key))) {
-                value = toList((JSONArray) object.getJSONArray(key));
+                value = (JSONArray) object.getJSONArray(key);
                 map.put(key, value);
             }
 
             else if(Validator.isNotNull(object.getJSONObject(key))) {
-                value = toMap((JSONObject) object.getJSONObject(key));
+                value = (JSONObject) object.getJSONObject(key);
                 map.put(key, value);
             }
             
