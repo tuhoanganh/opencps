@@ -61,7 +61,7 @@ portlets/create.sh
 themes/
 
 .project
-
+portlets/opencps-portlet/.project
 portlets/opencps-portlet/.classpath
 portlets/opencps-portlet/.settings/org.eclipse.wst.common.component
 portlets/opencps-portlet/.settings/org.eclipse.jdt.ui.prefs
