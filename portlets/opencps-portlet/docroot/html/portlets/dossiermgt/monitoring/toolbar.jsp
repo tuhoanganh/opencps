@@ -19,16 +19,25 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
+<%@ taglib prefix="opencps-ui" uri="/WEB-INF/tld/opencps-ui.tld"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@ include file="../init.jsp"%>
 
 <%
 	String tabs1 = ParamUtil.getString(request, "tabs1", DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_SEARCH);
+
+	PortletURL viewMonitoringSearchURL = renderResponse.createRenderURL();
+	viewMonitoringSearchURL.setParameter("mvcPath", templatePath + "dossiermonitoringsearch.jsp");
+	viewMonitoringSearchURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_SEARCH);
+	
 	PortletURL dossierFileSearchUrl = renderResponse.createRenderURL();
 	dossierFileSearchUrl.setParameter("mvcPath", templatePath + "dossiermonitoringdossierfilelist.jsp");
 	dossierFileSearchUrl.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_DOSSIER_FILE_LIST);
+	
+	PortletURL viewMonitoringServiceURL = renderResponse.createRenderURL();
+	viewMonitoringServiceURL.setParameter("mvcPath", templatePath + "dossiermonitoringservice.jsp");
+	viewMonitoringServiceURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_SERVICE);
 %>
 
 <portlet:actionURL name="searchAction" var="searchUrl"></portlet:actionURL>
@@ -41,6 +50,11 @@
 }
 -->
 </style>
+
+<%
+	String keySelect = DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_SEARCH + "," + DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_DOSSIER_FILE_LIST + "," + DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_SERVICE;
+	String urlSelect = viewMonitoringSearchURL + "," + dossierFileSearchUrl + "," + viewMonitoringServiceURL;
+%>
 <aui:nav-bar cssClass="custom-toolbar">
 	<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left" >
 		
@@ -49,19 +63,22 @@
 		<c:when test="<%= tabs1.equals(DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_SEARCH) %>">
 			<aui:nav-bar-search cssClass="pull-left" style="width: 98%">
 				<div class="form-search">
-					<aui:form action="<%= searchUrl %>" method="post" name="fm">
+					<aui:form action="#" method="post" name="fm">
 						<div class="toolbar_search_input" style="width: 98%">
 							<aui:row>
 								<aui:col>
 									<label>
 										<liferay-ui:message key="keywords"/>
 									</label>
-									<liferay-ui:input-search										
+									<opencps-ui:input-search 
 										id="keywords"
 										name="keywords"
 										cssClass="keywordinput input-append"
 										title='<%= LanguageUtil.get(portletConfig, locale, "keywords") %>'
 										placeholder="<%= LanguageUtil.get(pageContext, \"dossier-search-keywords\") %>" 
+										keySelect="<%=keySelect %>"
+										urlSelect="<%=urlSelect %>"
+										currentTab="<%=tabs1 %>"
 									/>
 								</aui:col>
 							</aui:row>
@@ -80,12 +97,15 @@
 									<label>
 										<liferay-ui:message key="keywords"/>
 									</label>
-									<liferay-ui:input-search
+									<opencps-ui:input-search 
 										id="keywords"
 										name="keywords"
 										cssClass="keywordinput input-append"
 										title='<%= LanguageUtil.get(portletConfig, locale, "keywords") %>'
-										placeholder="<%= LanguageUtil.get(pageContext, \"dossier-file-search-keywords\") %>" 
+										placeholder="<%= LanguageUtil.get(pageContext, \"dossier-search-keywords\") %>" 
+										keySelect="<%=keySelect %>"
+										urlSelect="<%=urlSelect %>"
+										currentTab="<%=tabs1 %>"
 									/>
 								</aui:col>
 							</aui:row>
@@ -104,12 +124,15 @@
 									<label>
 										<liferay-ui:message key="keywords"/>
 									</label>
-									<liferay-ui:input-search
+									<opencps-ui:input-search 
 										id="keywords"
 										name="keywords"
 										cssClass="keywordinput input-append"
 										title='<%= LanguageUtil.get(portletConfig, locale, "keywords") %>'
-										placeholder="<%= LanguageUtil.get(pageContext, \"service-search-keywords\") %>" 
+										placeholder="<%= LanguageUtil.get(pageContext, \"dossier-search-keywords\") %>" 
+										keySelect="<%=keySelect %>"
+										urlSelect="<%=urlSelect %>"
+										currentTab="<%=tabs1 %>"
 									/>
 								</aui:col>
 							</aui:row>
