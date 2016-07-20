@@ -35,7 +35,6 @@ import javax.jms.TextMessage;
 
 import org.opencps.jms.context.JMSContext;
 import org.opencps.jms.context.JMSContextFactory;
-import org.opencps.jms.context.JMSLocalContext;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -63,52 +62,22 @@ public class JMSMessageUtil {
 
 	}
 
-
 	/**
 	 * @param companyId
 	 * @param code
 	 * @param remote
 	 * @param channelName
-	 * @param lookup
 	 * @return
 	 */
 	public static JMSContext createConsumer(
-		long companyId, String code, boolean remote, String channelName,
-		String lookup) {
+		long companyId, String code, boolean remote, String channelName) {
 
 		JMSContext context = null;
 		try {
 			context =
-				JMSContextFactory.getInstance(
-					companyId, code, remote, channelName, lookup);
+				JMSContextFactory.getInstance(companyId, code, remote,
+					channelName);
 			context.createConsumer();
-			context.start();
-
-		}
-		catch (Exception e) {
-			_log.error(e);
-		}
-
-		return context;
-	}
-
-	
-
-	/**
-	 * @param companyId
-	 * @param channelName
-	 * @param lookup
-	 * @return
-	 */
-	public static JMSLocalContext createQueueReceiver(
-		long companyId, String channelName, String lookup) {
-
-		JMSLocalContext context = null;
-
-		try {
-			context =
-				JMSContextFactory.getInstance(companyId, channelName, lookup);
-			context.createQueueReceiver();
 			context.start();
 
 		}
@@ -163,14 +132,13 @@ public class JMSMessageUtil {
 	 * @return
 	 */
 	public static JMSContext createProducer(
-		long companyId, String code, boolean remote, String channelName,
-		String lookup) {
+		long companyId, String code, boolean remote, String channelName) {
 
 		JMSContext context = null;
 		try {
 			context =
-				JMSContextFactory.getInstance(
-					companyId, code, remote, channelName, lookup);
+				JMSContextFactory.getInstance(companyId, code, remote,
+					channelName);
 			context.createProducer();
 			context.start();
 

@@ -25,7 +25,6 @@ import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.jms.SyncServiceContext;
 import org.opencps.jms.business.SubmitDossier;
 import org.opencps.jms.context.JMSContext;
-import org.opencps.jms.context.JMSLocalContext;
 import org.opencps.jms.message.body.DossierMsgBody;
 import org.opencps.jms.util.JMSMessageBodyUtil;
 import org.opencps.jms.util.JMSMessageUtil;
@@ -46,17 +45,6 @@ public class SubmitDossierMessage {
 
 	}
 
-	public SubmitDossierMessage(JMSLocalContext context) {
-
-		this.setLocalContext(context);
-
-	}
-
-	/**
-	 * @param dossierId
-	 * @throws JMSException
-	 * @throws NamingException
-	 */
 	public void sendMessage(long dossierId)
 		throws JMSException, NamingException {
 
@@ -182,156 +170,6 @@ public class SubmitDossierMessage {
 		}
 	}
 
-	/**
-	 * @throws JMSException
-	 * @throws NamingException
-	 */
-	public void receiveLocalMessage()
-		throws JMSException, NamingException {
-
-		try {
-			BytesMessage bytesMessage =
-				(BytesMessage) _localContext.getQueueReceiver().receive();
-
-			byte[] result = new byte[(int) bytesMessage.getBodyLength()];
-
-			bytesMessage.readBytes(result);
-
-			Object object = JMSMessageUtil.convertByteArrayToObject(result);
-
-			DossierMsgBody dossierMsgBody = (DossierMsgBody) object;
-
-			setDossierMsgBody(dossierMsgBody);
-
-			SubmitDossier submitDossier = new SubmitDossier();
-
-			submitDossier.syncDossier(dossierMsgBody);
-
-		}
-		catch (Exception e) {
-			_log.error(e);
-		}
-		finally {
-			_context.destroy();
-		}
-	}
-
-	/**
-	 * @param bytesMessage
-	 * @throws JMSException
-	 * @throws NamingException
-	 */
-	public void receiveMessage(BytesMessage bytesMessage)
-		throws JMSException, NamingException {
-
-		try {
-
-			byte[] result = new byte[(int) bytesMessage.getBodyLength()];
-
-			bytesMessage.readBytes(result);
-
-			Object object = JMSMessageUtil.convertByteArrayToObject(result);
-
-			DossierMsgBody dossierMsgBody = (DossierMsgBody) object;
-
-			setDossierMsgBody(dossierMsgBody);
-
-			SubmitDossier submitDossier = new SubmitDossier();
-
-			submitDossier.syncDossier(dossierMsgBody);
-
-		}
-		catch (Exception e) {
-			_log.error(e);
-		}
-		finally {
-			_context.destroy();
-		}
-	}
-
-	/**
-	 * @param bytesMessage
-	 * @throws JMSException
-	 * @throws NamingException
-	 */
-	public void receiveLocalMessage(BytesMessage bytesMessage)
-		throws JMSException, NamingException {
-
-		try {
-
-			byte[] result = new byte[(int) bytesMessage.getBodyLength()];
-
-			bytesMessage.readBytes(result);
-
-			Object object = JMSMessageUtil.convertByteArrayToObject(result);
-
-			DossierMsgBody dossierMsgBody = (DossierMsgBody) object;
-
-			setDossierMsgBody(dossierMsgBody);
-
-			SubmitDossier submitDossier = new SubmitDossier();
-
-			submitDossier.syncDossier(dossierMsgBody);
-
-		}
-		catch (Exception e) {
-			_log.error(e);
-		}
-		finally {
-			_localContext.destroy();
-		}
-	}
-
-	/**
-	 * @param dossierMsgBody
-	 * @throws JMSException
-	 * @throws NamingException
-	 */
-	public void receiveMessage(DossierMsgBody dossierMsgBody)
-		throws JMSException, NamingException {
-
-		try {
-
-			setDossierMsgBody(dossierMsgBody);
-
-			SubmitDossier submitDossier = new SubmitDossier();
-
-			submitDossier.syncDossier(dossierMsgBody);
-
-		}
-		catch (Exception e) {
-			_log.error(e);
-		}
-		finally {
-			_context.destroy();
-		}
-	}
-
-	/**
-	 * @param dossierMsgBody
-	 * @throws JMSException
-	 * @throws NamingException
-	 */
-	public void receiveLocalMessage(DossierMsgBody dossierMsgBody)
-		throws JMSException, NamingException {
-
-		try {
-
-			setDossierMsgBody(dossierMsgBody);
-
-			SubmitDossier submitDossier = new SubmitDossier();
-
-			submitDossier.syncDossier(dossierMsgBody);
-
-		}
-		catch (Exception e) {
-			_log.error(e);
-		}
-		finally {
-			_localContext.destroy();
-		}
-	}
-
 	public JMSContext getContext() {
 
 		return _context;
@@ -363,19 +201,7 @@ public class SubmitDossierMessage {
 		this._serviceContextMsgBody = serviceContextMsgBody;
 	}
 
-	public JMSLocalContext getLocalContext() {
-
-		return _localContext;
-	}
-
-	public void setLocalContext(JMSLocalContext localContext) {
-
-		this._localContext = localContext;
-	}
-
 	private JMSContext _context;
-
-	private JMSLocalContext _localContext;
 
 	private DossierMsgBody _dossierMsgBody;
 
