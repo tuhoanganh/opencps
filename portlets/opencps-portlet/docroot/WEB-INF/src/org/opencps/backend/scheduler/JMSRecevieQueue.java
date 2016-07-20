@@ -17,144 +17,126 @@
 
 package org.opencps.backend.scheduler;
 
-import java.util.Enumeration;
-import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javax.jms.BytesMessage;
-import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
-import javax.jms.Destination;
-import javax.jms.JMSException;
-import javax.jms.MessageConsumer;
-import javax.jms.Queue;
-import javax.jms.QueueBrowser;
-import javax.jms.Session;
+import javax.jms.ObjectMessage;
+import javax.jms.StreamMessage;
 import javax.jms.TextMessage;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 
+import org.opencps.jms.context.JMSContext;
+import org.opencps.jms.message.SubmitDossierMessage;
+import org.opencps.jms.message.body.DossierMsgBody;
+import org.opencps.jms.util.JMSMessageUtil;
+import org.opencps.util.PortletUtil;
+import org.opencps.util.WebKeys;
+
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.MessageListenerException;
-
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.util.PortalUtil;
 
 /**
  * @author khoavd
- *
  */
-public class JMSRecevieQueue implements MessageListener{
-	/* (non-Javadoc)
-	 * @see com.liferay.portal.kernel.messaging.MessageListener#receive(com.liferay.portal.kernel.messaging.Message)
-	 */
-	
-    private static final String DEFAULT_CONNECTION_FACTORY = "jms/RemoteConnectionFactory";
-    private static final String DEFAULT_DESTINATION = "java:/jms/queue/demoQueue";
-    private static final String DEFAULT_USERNAME = "user1";
-    private static final String DEFAULT_PASSWORD = "fds@123456";
-    private static final String INITIAL_CONTEXT_FACTORY = "org.jboss.naming.remote.client.InitialContextFactory";
-    private static final String PROVIDER_URL = "remote://localhost:4447";
-    private static final Logger _log = Logger.getLogger(JMSRecevieQueue.class.getName());
+public class JMSRecevieQueue implements MessageListener {
 
-	
 	@Override
-	public void receive(Message message)
-	    throws MessageListenerException {
-	
-        ConnectionFactory connectionFactory = null;
-        Connection connection = null;
-        Session session = null;
-        //MessageProducer producer = null;
-        MessageConsumer consumer = null;
-        Destination destination = null;
-        TextMessage textMessage = null;
-        BytesMessage bytesMessage = null;
-        Context context = null;
+	public void receive(Message message1)
+		throws MessageListenerException {
 
-        try {
-            // Set up the context for the JNDI lookup
-            final Properties env = new Properties();
-            env.put(Context.INITIAL_CONTEXT_FACTORY, INITIAL_CONTEXT_FACTORY);
-            env.put(Context.PROVIDER_URL, System.getProperty(Context.PROVIDER_URL, PROVIDER_URL));
-            env.put(Context.SECURITY_PRINCIPAL, System.getProperty("username", DEFAULT_USERNAME));
-            env.put(Context.SECURITY_CREDENTIALS, System.getProperty("password", DEFAULT_PASSWORD));
-            context = new InitialContext(env);
+		long[] companyIds = PortalUtil.getCompanyIds();
 
-            // Perform the JNDI lookups
-            String connectionFactoryString = System.getProperty("connection.factory", DEFAULT_CONNECTION_FACTORY);
-            _log.log(Level.INFO, "Attempting to acquire connection factory \"{0}\"", connectionFactoryString);
-            connectionFactory = (ConnectionFactory) context.lookup(connectionFactoryString);
+		_log.info("********************************************************CompanyIds Length*********************************************** " +
+			companyIds.length);
 
-            _log.log(Level.INFO, "Found connection factory \"{0}\" in JNDI", connectionFactoryString);
+		long companyId = 0;
 
-            String destinationString = System.getProperty("destination", DEFAULT_DESTINATION);
+		if (companyIds != null && companyIds.length > 0) {
+			for (int i = 0; i < companyIds.length; i++) {
+				if (PortletUtil.checkJMSConfig(companyIds[i])) {
+					companyId = companyIds[i];
+					_log.info("********************************************************companyId*********************************************** " +
+						companyId);
+					break;
+				}
+			}
+		}
 
-            Queue queue = (Queue) context.lookup(destinationString);
-            _log.log(Level.INFO, "Attempting to acquire destination \"{0}\"", destinationString);
-            destination = (Destination) context.lookup(destinationString);
-            _log.log(Level.INFO, "Found destination \"{0}\" in JNDI", destinationString);
+		if (companyId > 0) {
+			_log.info("Start create connection to JMS Queue..................");
+			JMSContext context =
+				JMSMessageUtil.createConsumer(
+					companyId, StringPool.BLANK, true,
+					WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "local");
+			try {
+				int messageInQueue = context.countMessageInQueue();
+				int receiveNumber = messageInQueue <= 50 ? messageInQueue : 50;
 
-            // Create the JMS connection, session, producer, and consumer
-            connection = connectionFactory.createConnection(System.getProperty("username", DEFAULT_USERNAME), System.getProperty("password", DEFAULT_PASSWORD));
-            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+				_log.info("********************************************************Queue Size*********************************************** " +
+					messageInQueue);
 
-            QueueBrowser browser = session.createBrowser(queue);
+				int count = 1;
+				while (count <= receiveNumber) {
 
-            int count = 0;
-            Enumeration<?> messages = browser.getEnumeration();
-            while (messages.hasMoreElements()) {
-            	 javax.jms.Message browsedMsg = ( javax.jms.Message) messages.nextElement();
-                System.out.println(browsedMsg.getJMSMessageID());
-                count++;
-            }
-            System.out.println("org.opencps.web.controler.ReceiveAction.receive(): Queue size: " + count);
+					javax.jms.Message jsmMessage =
+						context.getMessageConsumer().receive();
+					if (jsmMessage != null) {
+						if (jsmMessage instanceof TextMessage) {
+							_log.info("*******************TextMessage*******************");
+							_log.info(((TextMessage) jsmMessage).getText());
+						}
+						else if (jsmMessage instanceof ObjectMessage) {
+							_log.info("*******************ObjectMessage*******************");
+							_log.info(((ObjectMessage) jsmMessage).getClass().getName());
+						}
+						else if (jsmMessage instanceof BytesMessage) {
+							BytesMessage bytesMessage =
+								(BytesMessage) jsmMessage;
+							_log.info("*******************BytesMessage*******************");
+							_log.info(((BytesMessage) jsmMessage).getBodyLength());
+							byte[] result =
+								new byte[(int) bytesMessage.getBodyLength()];
+							bytesMessage.readBytes(result);
+							Object object =
+								JMSMessageUtil.convertByteArrayToObject(result);
+							if (object instanceof DossierMsgBody) {
+								DossierMsgBody dossierMsgBody =
+									(DossierMsgBody) object;
+								SubmitDossierMessage submitDossierMessage =
+									new SubmitDossierMessage(context);
+								submitDossierMessage.receiveLocalMessage(dossierMsgBody);
+							}
+						}
+						else if (jsmMessage instanceof StreamMessage) {
+							_log.info("*******************StreamMessage*******************");
+						}
+					}
+					else {
+						_log.info("*******************Null Message*******************");
+					}
 
-            browser.close();
+					count++;
+				}
+			}
+			catch (Exception e) {
+				_log.error(e);
+			}
+			finally {
+				try {
+					context.destroy();
+				}
+				catch (Exception e) {
+					_log.error(e);
+				}
 
-            consumer = session.createConsumer(destination);
-            // consumer = session.createConsumer(destination);
-            connection.start();
-
-            while (true) {
-            	 javax.jms.Message m = consumer.receive();
-                if (m != null) {
-                    if (m instanceof TextMessage) {
-                        textMessage = (TextMessage) m;
-                        System.out.println("Reading message: "
-                                + textMessage.getText());
-                    } else {
-                        System.out.println("Object message!...");
-
-                    }
-                }
-            }
-
-        } catch (Exception e) {
-            _log.severe(e.getMessage());
-
-        } finally {
-            if (context != null) {
-                try {
-	                context.close();
-                }
-                catch (NamingException e) {
-	                e.printStackTrace();
-                }
-            }
-
-            // closing the connection takes care of the session, producer, and consumer
-            if (connection != null) {
-	                try {
-	                    connection.close();
-                    }
-                    catch (JMSException e) {
-	                    // TODO Auto-generated catch block
-	                    e.printStackTrace();
-                    }
-            }
-        }
+			}
+		}
+		else {
+			_log.info("Cannot create connection to JMS Queue..................");
+		}
 	}
-	   
+
+	private Log _log = LogFactoryUtil.getLog(JMSRecevieQueue.class.getName());
 }

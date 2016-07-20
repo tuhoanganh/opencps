@@ -33,17 +33,41 @@ public class JMSContextFactory {
 	 * @return
 	 */
 	public static JMSContext getInstance(
-		long companyId, String code, boolean remote, String channelName) {
+		long companyId, String code, boolean remote, String channelName,
+		String lookup) {
 
-		JMSContext lookup = null;
+		JMSContext context = null;
 		try {
-			lookup = new JMSContext(companyId, code, remote, channelName);
+			context =
+				new JMSContext(companyId, code, remote, channelName, lookup);
 		}
 		catch (Exception e) {
 			_log.error(e);
 		}
 
-		return lookup;
+		return context;
+
+	}
+
+	
+	/**
+	 * @param companyId
+	 * @param channelName
+	 * @param lookup
+	 * @return
+	 */
+	public static JMSLocalContext getInstance(
+		long companyId, String channelName, String lookup) {
+
+		JMSLocalContext context = null;
+		try {
+			context = new JMSLocalContext(companyId, channelName, lookup);
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
+
+		return context;
 
 	}
 
