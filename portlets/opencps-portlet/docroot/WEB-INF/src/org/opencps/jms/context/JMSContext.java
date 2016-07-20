@@ -17,6 +17,7 @@
 
 package org.opencps.jms.context;
 
+import java.util.Enumeration;
 import java.util.Properties;
 
 import javax.jms.BytesMessage;
@@ -57,10 +58,27 @@ public class JMSContext {
 	 * @throws Exception
 	 */
 	public JMSContext(
-		long companyId, String code, boolean remote, String channelName)
+		long companyId, String code, boolean remote, String channelName,
+		String lookup)
 		throws NamingException, SystemException, Exception {
 
-		init(companyId, code, remote, channelName);
+		init(companyId, code, remote, channelName, lookup);
+	}
+
+	/**
+	 * @return
+	 * @throws Exception
+	 */
+	public int countMessageInQueue()
+		throws Exception {
+		createQueueBrowser();
+		int count = 0;
+		Enumeration<?> messages = _queueBrowser.getEnumeration();
+		while (messages.hasMoreElements()) {
+			messages.nextElement();
+			count++;
+		}
+		return count;
 	}
 
 	/**
@@ -221,12 +239,13 @@ public class JMSContext {
 	 * @throws JMSException
 	 */
 	protected void init(
-		long companyId, String code, boolean remote, String channelName)
+		long companyId, String code, boolean remote, String channelName,
+		String configKey)
 		throws SystemException, NamingException, JMSException {
 
 		Properties properties =
-			PortletUtil.getJMSContextProperties(companyId, code, remote,
-				channelName);
+			PortletUtil.getJMSContextProperties(
+				companyId, code, remote, channelName, configKey);
 
 		Context context = new InitialContext(properties);
 
