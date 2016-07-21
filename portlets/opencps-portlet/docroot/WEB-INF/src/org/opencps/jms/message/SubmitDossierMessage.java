@@ -354,13 +354,13 @@ public class SubmitDossierMessage {
 
 	public SyncServiceContext getServiceContextMsgBody() {
 
-		return _serviceContextMsgBody;
+		return _serviceContext;
 	}
 
 	public void setServiceContextMsgBody(
 		SyncServiceContext serviceContextMsgBody) {
 
-		this._serviceContextMsgBody = serviceContextMsgBody;
+		this._serviceContext = serviceContextMsgBody;
 	}
 
 	public JMSLocalContext getLocalContext() {
@@ -379,7 +379,7 @@ public class SubmitDossierMessage {
 
 	private DossierMsgBody _dossierMsgBody;
 
-	private SyncServiceContext _serviceContextMsgBody;
+	private SyncServiceContext _serviceContext;
 
 	private Log _log =
 		LogFactoryUtil.getLog(SubmitDossierMessage.class.getName());
