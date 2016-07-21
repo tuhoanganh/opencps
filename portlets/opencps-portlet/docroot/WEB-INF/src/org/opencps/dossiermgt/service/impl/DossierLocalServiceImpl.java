@@ -980,6 +980,65 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	}
 
 	/**
+	 * @param oid
+	 * @param fileGroupId
+	 * @param dossierStatus
+	 * @param receptionNo
+	 * @param estimateDatetime
+	 * @param receiveDatetime
+	 * @param finishDatetime
+	 * @param actor
+	 * @param requestCommand
+	 * @param actionInfo
+	 * @param messageInfo
+	 * @return
+	 */
+	public boolean updateDossierStatus(
+		String oid, long fileGroupId, String dossierStatus, String receptionNo,
+		Date estimateDatetime, Date receiveDatetime, Date finishDatetime,
+		String actor, String requestCommand, String actionInfo,
+		String messageInfo) {
+
+		boolean result = false;
+		try {
+
+			Dossier dossier = dossierPersistence.findByOID(oid);
+			dossier.setReceptionNo(receptionNo);
+			dossier.setEstimateDatetime(estimateDatetime);
+			dossier.setReceiveDatetime(receiveDatetime);
+			dossier.setFinishDatetime(finishDatetime);
+
+			dossier.setDossierStatus(dossierStatus);
+
+			int level = 0;
+			if (dossier.getDossierStatus().equals(
+				PortletConstants.DOSSIER_STATUS_ERROR)) {
+				level = 2;
+			}
+			else if (dossier.getDossierStatus().equals(
+				PortletConstants.DOSSIER_STATUS_WAITING) ||
+				dossier.getDossierStatus().equals(
+					PortletConstants.DOSSIER_STATUS_PAYING)) {
+				level = 1;
+			}
+			dossierLogLocalService.addDossierLog(
+				dossier.getUserId(), dossier.getGroupId(),
+				dossier.getCompanyId(), dossier.getDossierId(), fileGroupId,
+				dossierStatus, actor, requestCommand, actionInfo, messageInfo,
+				level);
+
+			dossierPersistence.update(dossier);
+
+			result = true;
+		}
+		catch (Exception e) {
+			result = false;
+		}
+
+		return result;
+	}
+
+	/**
 	 * @param userId
 	 * @param dossierId
 	 * @param govAgencyOrganizationId

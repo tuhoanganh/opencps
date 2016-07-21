@@ -257,6 +257,9 @@
             <finder-column name="delayStatus" comparator="=" arrayable-operator="AND"></finder-column>
             <finder-column name="dossierStatus" comparator="!=" arrayable-operator="AND"></finder-column>
         </finder>
+        <finder name="OID" return-type="Dossier">
+            <finder-column name="oid"></finder-column>
+        </finder>
         <reference entity="DLFileEntry" package-path="com.liferay.portlet.documentlibrary"/>
         <reference package-path="com.liferay.portlet.documentlibrary" entity="DLFolder" />
         <reference package-path="com.liferay.portlet.asset" entity="AssetEntry" />
