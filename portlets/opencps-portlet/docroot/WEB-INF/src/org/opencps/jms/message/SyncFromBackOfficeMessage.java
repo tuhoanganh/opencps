@@ -18,6 +18,7 @@
 package org.opencps.jms.message;
 
 import org.opencps.jms.SyncServiceContext;
+import org.opencps.jms.business.SyncFromBackOffice;
 import org.opencps.jms.context.JMSContext;
 import org.opencps.jms.context.JMSLocalContext;
 import org.opencps.jms.message.body.SyncFromBackOfficeMsgBody;
@@ -26,6 +27,16 @@ import org.opencps.jms.message.body.SyncFromBackOfficeMsgBody;
  * @author trungnt
  */
 public class SyncFromBackOfficeMessage {
+
+	public void receiveLocalMessage(
+		SyncFromBackOfficeMsgBody syncFromBackOfficeMsgBody) {
+
+		setSyncFromBackOfficeMsgBody(syncFromBackOfficeMsgBody);
+
+		SyncFromBackOffice syncFromBackOffice = new SyncFromBackOffice();
+
+		syncFromBackOffice.syncDossier(syncFromBackOfficeMsgBody);
+	}
 
 	public SyncFromBackOfficeMessage(JMSContext context) {
 
