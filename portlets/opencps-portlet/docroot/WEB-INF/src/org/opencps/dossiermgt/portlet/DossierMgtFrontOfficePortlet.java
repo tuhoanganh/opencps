@@ -1989,7 +1989,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
 
-		//Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
+		Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
 
 		try {
 			ServiceContext serviceContext =
@@ -2014,11 +2014,15 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 				actionMsg.setGroupId(serviceContext.getScopeGroupId());
 
+				actionMsg.setCompanyId(dossier.getCompanyId());
+
 				ProcessOrder processOrder =
 					ProcessOrderLocalServiceUtil.getProcessOrder(
 						dossierId, fileGroupId);
 
 				actionMsg.setProcessOrderId(processOrder.getProcessOrderId());
+
+				actionMsg.setGovAgencyCode(dossier.getGovAgencyCode());
 
 				message.put("msgToEngine", actionMsg);
 
@@ -2038,6 +2042,10 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				actionMsg.setUserId(serviceContext.getUserId());
 
 				actionMsg.setGroupId(serviceContext.getScopeGroupId());
+
+				actionMsg.setGovAgencyCode(dossier.getGovAgencyCode());
+
+				actionMsg.setCompanyId(dossier.getCompanyId());
 
 				message.put("msgToEngine", actionMsg);
 
