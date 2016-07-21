@@ -32,7 +32,6 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -2015,11 +2014,15 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 				actionMsg.setGroupId(serviceContext.getScopeGroupId());
 
+				actionMsg.setCompanyId(dossier.getCompanyId());
+
 				ProcessOrder processOrder =
 					ProcessOrderLocalServiceUtil.getProcessOrder(
 						dossierId, fileGroupId);
 
 				actionMsg.setProcessOrderId(processOrder.getProcessOrderId());
+
+				actionMsg.setGovAgencyCode(dossier.getGovAgencyCode());
 
 				message.put("msgToEngine", actionMsg);
 
@@ -2039,6 +2042,10 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				actionMsg.setUserId(serviceContext.getUserId());
 
 				actionMsg.setGroupId(serviceContext.getScopeGroupId());
+
+				actionMsg.setGovAgencyCode(dossier.getGovAgencyCode());
+
+				actionMsg.setCompanyId(dossier.getCompanyId());
 
 				message.put("msgToEngine", actionMsg);
 

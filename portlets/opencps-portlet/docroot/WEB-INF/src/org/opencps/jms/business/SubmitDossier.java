@@ -20,6 +20,7 @@ package org.opencps.jms.business;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.opencps.backend.message.SendToEngineMsg;
 import org.opencps.backend.message.UserActionMsg;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierFile;
@@ -34,6 +35,7 @@ import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
@@ -87,11 +89,11 @@ public class SubmitDossier {
 				DossierFile syncDossierFile =
 					dossierFileMsgBody.getDossierFile();
 
-				syncDossierFiles.put(syncDossierFile,
-					dossierFileMsgBody.getDossierPart());
+				syncDossierFiles.put(
+					syncDossierFile, dossierFileMsgBody.getDossierPart());
 
-				data.put(syncDossierFile.getOid(),
-					dossierFileMsgBody.getBytes());
+				data.put(
+					syncDossierFile.getOid(), dossierFileMsgBody.getBytes());
 
 				DLFileEntry dlFileEntry =
 					DLFileEntryLocalServiceUtil.createDLFileEntry(syncDossierFile.getFileEntryId());
@@ -127,13 +129,14 @@ public class SubmitDossier {
 			syncDossierTemplate != null && serviceContext != null) {
 			try {
 				dossier =
-					DossierLocalServiceUtil.syncDossier(syncDossier,
-						syncDossierFiles, syncFileGroups,
+					DossierLocalServiceUtil.syncDossier(
+						syncDossier, syncDossierFiles, syncFileGroups,
 						syncFileGroupDossierParts, syncDLFileEntries, data,
 						syncDossierTemplate, serviceContext);
 
-				sendToBackend(dossier.getDossierId(),
-					dossier.getDossierStatus(), serviceContext);
+				sendToBackend(
+					dossier.getDossierId(), dossier.getDossierStatus(),
+					serviceContext);
 
 			}
 			catch (Exception e) {
@@ -148,24 +151,29 @@ public class SubmitDossier {
 	protected void sendToBackend(
 		long dossierId, String dossierStatus, ServiceContext serviceContext) {
 
-		UserActionMsg actionMsg = new UserActionMsg();
+		Message message = new Message();
+
+		SendToEngineMsg engineMsg = new SendToEngineMsg();
+
 		switch (dossierStatus) {
 
 		case PortletConstants.DOSSIER_STATUS_NEW:
 
-			actionMsg.setAction(WebKeys.ACTION_SUBMIT_VALUE);
+			engineMsg.setAction(WebKeys.ACTION_SUBMIT_VALUE);
 
-			actionMsg.setDossierId(dossierId);
+			engineMsg.setDossierId(dossierId);
 
-			actionMsg.setFileGroupId(0);
+			engineMsg.setFileGroupId(0);
 
-			actionMsg.setLocale(serviceContext.getLocale());
+			engineMsg.setCompanyId(serviceContext.getCompanyId());
 
-			actionMsg.setUserId(serviceContext.getUserId());
-			
-			actionMsg.setGroupId(serviceContext.getScopeGroupId());
-			
-			actionMsg.setUserId(serviceContext.getUserId());
+			engineMsg.setEvent(WebKeys.ACTION_SUBMIT_VALUE);
+
+			engineMsg.setUserId(serviceContext.getUserId());
+
+			engineMsg.setGroupId(serviceContext.getScopeGroupId());
+
+			engineMsg.setUserId(serviceContext.getUserId());
 
 			break;
 
@@ -173,8 +181,10 @@ public class SubmitDossier {
 			break;
 		}
 
-		MessageBusUtil.sendMessage("opencps/backoffice/engine/destination",
-			actionMsg);
+		message.put("msgToEngine", engineMsg);
+
+		MessageBusUtil.sendMessage(
+			"opencps/backoffice/engine/destination", message);
 
 	}
 
