@@ -45,14 +45,9 @@ import com.liferay.portal.util.PortalUtil;
 public class JMSRecevieQueue implements MessageListener {
 
 	@Override
-	public void receive(Message message1)
+	public void receive(Message message)
 		throws MessageListenerException {
-    	Map<String, Object> map = message1.getValues();
-    	for (Map.Entry<String, Object> entry : map.entrySet())
-    	{
-    	    System.out.println(entry.getKey() + "/" + entry.getValue());
-    	 
-    	}
+
 		long[] companyIds = PortalUtil.getCompanyIds();
 
 		_log.info("********************************************************CompanyIds Length*********************************************** " +

@@ -42,6 +42,9 @@ public class SyncServiceContext {
 		serviceContext.setUuid(PortalUUIDUtil.generate());
 		serviceContext.setCreateDate(now);
 		serviceContext.setModifiedDate(now);
+		serviceContext.setDeriveDefaultPermissions(true);
+		//serviceContext.getRequest().get
+		
 		this.setServiceContext(serviceContext);
 	}
 

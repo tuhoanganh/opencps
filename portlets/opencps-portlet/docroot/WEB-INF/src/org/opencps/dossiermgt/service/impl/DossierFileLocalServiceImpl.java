@@ -40,10 +40,17 @@ import com.liferay.portal.kernel.util.OrderByComparatorFactory;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
+import com.liferay.portal.model.User;
+import com.liferay.portal.security.permission.PermissionChecker;
+import com.liferay.portal.security.permission.PermissionCheckerFactoryUtil;
+import com.liferay.portal.security.permission.PermissionThreadLocal;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.DLAppService;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
+import com.liferay.portlet.documentlibrary.util.DL;
 
 /**
  * The implementation of the dossier file local service. <p> All custom service
@@ -112,8 +119,9 @@ public class DossierFileLocalServiceImpl
 		// Add new FileGroup
 		if (Validator.isNotNull(groupName) && fileGroupId == 0) {
 			FileGroup fileGroup =
-				fileGroupLocalService.addFileGroup(ownerUserId, dossierId,
-					dossierPartId, groupName, syncStatus, serviceContext);
+				fileGroupLocalService.addFileGroup(
+					ownerUserId, dossierId, dossierPartId, groupName,
+					syncStatus, serviceContext);
 
 			fileGroupId = fileGroup.getFileGroupId();
 		}
@@ -142,13 +150,13 @@ public class DossierFileLocalServiceImpl
 
 		if (fileGroupId > 0) {
 			version =
-				DossierFileLocalServiceUtil.countDossierFile(dossierId,
-					dossierPartId, fileGroupId) + 1;
+				DossierFileLocalServiceUtil.countDossierFile(
+					dossierId, dossierPartId, fileGroupId) + 1;
 		}
 		else {
 			version =
-				DossierFileLocalServiceUtil.countDossierFile(dossierId,
-					dossierPartId) + 1;
+				DossierFileLocalServiceUtil.countDossierFile(
+					dossierId, dossierPartId) + 1;
 		}
 
 		dossierFile.setVersion(version);
@@ -163,8 +171,8 @@ public class DossierFileLocalServiceImpl
 			}
 			else {
 				curVersion =
-					dossierFileLocalService.getDossierFileInUse(dossierId,
-						dossierPartId);
+					dossierFileLocalService.getDossierFileInUse(
+						dossierId, dossierPartId);
 			}
 		}
 		catch (Exception e) {
@@ -326,8 +334,9 @@ public class DossierFileLocalServiceImpl
 		if (Validator.isNotNull(groupName) && fileGroupId == 0 &&
 			groupDossierPartId > 0) {
 			FileGroup fileGroup =
-				fileGroupLocalService.addFileGroup(ownerUserId, dossierId,
-					groupDossierPartId, groupName, syncStatus, serviceContext);
+				fileGroupLocalService.addFileGroup(
+					ownerUserId, dossierId, groupDossierPartId, groupName,
+					syncStatus, serviceContext);
 
 			fileGroupId = fileGroup.getFileGroupId();
 		}
@@ -356,24 +365,28 @@ public class DossierFileLocalServiceImpl
 
 		if (fileGroupId > 0) {
 			version =
-				DossierFileLocalServiceUtil.countDossierFile(dossierId,
-					dossierPartId, fileGroupId) + 1;
+				DossierFileLocalServiceUtil.countDossierFile(
+					dossierId, dossierPartId, fileGroupId) + 1;
 		}
 		else {
 			version =
-				DossierFileLocalServiceUtil.countDossierFile(dossierId,
-					dossierPartId) + 1;
+				DossierFileLocalServiceUtil.countDossierFile(
+					dossierId, dossierPartId) + 1;
 		}
 
 		dossierFile.setVersion(version);
 
 		// Add file
 		FileEntry fileEntry =
-			dlAppService.addFileEntry(serviceContext.getScopeGroupId(),
-				folderId, sourceFileName, mimeType, displayName +
-					StringPool.DASH + dossierFileId + StringPool.DASH +
-					version + StringPool.DASH + System.currentTimeMillis(),
-				description, changeLog, is, size, serviceContext);
+			dlAppService.addFileEntry(
+				serviceContext.getScopeGroupId(),
+				folderId,
+				sourceFileName,
+				mimeType,
+				displayName + StringPool.DASH + dossierFileId +
+					StringPool.DASH + version + StringPool.DASH +
+					System.currentTimeMillis(), description, changeLog, is,
+				size, serviceContext);
 
 		dossierFile.setFileEntryId(fileEntry.getFileEntryId());
 
@@ -392,8 +405,8 @@ public class DossierFileLocalServiceImpl
 				}
 				else {
 					curVersion =
-						dossierFileLocalService.getDossierFileInUse(dossierId,
-							dossierPartId);
+						dossierFileLocalService.getDossierFileInUse(
+							dossierId, dossierPartId);
 				}
 			}
 
@@ -422,11 +435,11 @@ public class DossierFileLocalServiceImpl
 		long userId, long dossierId, long dossierPartId, String templateFileNo,
 		String groupName, long fileGroupId, long groupDossierPartId,
 		long ownerUserId, long ownerOrganizationId, String displayName,
-		String formData, int dossierFileMark,
-		int dossierFileType, String dossierFileNo, Date dossierFileDate,
-		int original, int syncStatus, long folderId, String sourceFileName,
-		String mimeType, String title, String description, String changeLog,
-		byte[] bytes, ServiceContext serviceContext)
+		String formData, int dossierFileMark, int dossierFileType,
+		String dossierFileNo, Date dossierFileDate, int original,
+		int syncStatus, long folderId, String sourceFileName, String mimeType,
+		String title, String description, String changeLog, byte[] bytes,
+		ServiceContext serviceContext)
 		throws SystemException, PortalException {
 
 		long dossierFileId =
@@ -441,8 +454,9 @@ public class DossierFileLocalServiceImpl
 		if (Validator.isNotNull(groupName) && fileGroupId == 0 &&
 			groupDossierPartId > 0) {
 			FileGroup fileGroup =
-				fileGroupLocalService.addFileGroup(ownerUserId, dossierId,
-					groupDossierPartId, groupName, syncStatus, serviceContext);
+				fileGroupLocalService.addFileGroup(
+					ownerUserId, dossierId, groupDossierPartId, groupName,
+					syncStatus, serviceContext);
 
 			fileGroupId = fileGroup.getFileGroupId();
 		}
@@ -471,24 +485,42 @@ public class DossierFileLocalServiceImpl
 
 		if (fileGroupId > 0) {
 			version =
-				DossierFileLocalServiceUtil.countDossierFile(dossierId,
-					dossierPartId, fileGroupId) + 1;
+				DossierFileLocalServiceUtil.countDossierFile(
+					dossierId, dossierPartId, fileGroupId) + 1;
 		}
 		else {
 			version =
-				DossierFileLocalServiceUtil.countDossierFile(dossierId,
-					dossierPartId) + 1;
+				DossierFileLocalServiceUtil.countDossierFile(
+					dossierId, dossierPartId) + 1;
 		}
 
 		dossierFile.setVersion(version);
 
 		// Add file
+
+		User user = UserLocalServiceUtil.getUser(serviceContext.getUserId());
+
+		PermissionChecker permissionChecker;
+
+		try {
+			permissionChecker = PermissionCheckerFactoryUtil.create(user);
+			PermissionThreadLocal.setPermissionChecker(permissionChecker);
+		}
+		catch (Exception e) {
+		}
+
 		FileEntry fileEntry =
-			dlAppService.addFileEntry(serviceContext.getScopeGroupId(),
-				folderId, sourceFileName, mimeType, displayName +
-					StringPool.DASH + dossierFileId + StringPool.DASH +
-					version + StringPool.DASH + System.currentTimeMillis(),
-				description, changeLog, bytes, serviceContext);
+			dlAppLocalService.addFileEntry(
+				serviceContext.getUserId(), serviceContext.getScopeGroupId(),
+				folderId, sourceFileName, mimeType, title, description,
+				changeLog, bytes, serviceContext);
+		/*
+		 * FileEntry fileEntry = dlAppServiceUtil.addFileEntry(
+		 * serviceContext.getScopeGroupId(), folderId, sourceFileName, mimeType,
+		 * displayName + StringPool.DASH + dossierFileId + StringPool.DASH +
+		 * version + StringPool.DASH + System.currentTimeMillis(), description,
+		 * changeLog, bytes, serviceContext);
+		 */
 
 		dossierFile.setFileEntryId(fileEntry.getFileEntryId());
 
@@ -507,8 +539,8 @@ public class DossierFileLocalServiceImpl
 				}
 				else {
 					curVersion =
-						dossierFileLocalService.getDossierFileInUse(dossierId,
-							dossierPartId);
+						dossierFileLocalService.getDossierFileInUse(
+							dossierId, dossierPartId);
 				}
 			}
 
@@ -643,8 +675,8 @@ public class DossierFileLocalServiceImpl
 		long dossierId, long dossierPartId, long groupFileId)
 		throws SystemException {
 
-		return dossierFilePersistence.countByD_DP_GF(dossierId, dossierPartId,
-			groupFileId);
+		return dossierFilePersistence.countByD_DP_GF(
+			dossierId, dossierPartId, groupFileId);
 	}
 
 	/**
@@ -660,8 +692,9 @@ public class DossierFileLocalServiceImpl
 		String keyword, String templateFileNo, int removed)
 		throws SystemException {
 
-		return dossierFileFinder.countDossierFile(groupId, ownerUserId,
-			ownerOrganizationId, keyword, templateFileNo, removed);
+		return dossierFileFinder.countDossierFile(
+			groupId, ownerUserId, ownerOrganizationId, keyword, templateFileNo,
+			removed);
 	}
 
 	/**
@@ -682,9 +715,9 @@ public class DossierFileLocalServiceImpl
 		int original)
 		throws SystemException {
 
-		return dossierFileFinder.countDossierFileAdvance(groupId, ownerUserId,
-			ownerOrganizationId, keyword, templateFileNo, removed, partType,
-			original);
+		return dossierFileFinder.countDossierFileAdvance(
+			groupId, ownerUserId, ownerOrganizationId, keyword, templateFileNo,
+			removed, partType, original);
 	}
 
 	/**
@@ -701,8 +734,9 @@ public class DossierFileLocalServiceImpl
 		boolean onlyViewFileResult)
 		throws SystemException {
 
-		return dossierFileFinder.countDossierFile(groupId, keyword,
-			dossierTemplateId, fileEntryId, onlyViewFileResult);
+		return dossierFileFinder.countDossierFile(
+			groupId, keyword, dossierTemplateId, fileEntryId,
+			onlyViewFileResult);
 	}
 
 	/**
@@ -804,8 +838,8 @@ public class DossierFileLocalServiceImpl
 	public DossierFile getDossierFileInUse(long dossierId, long dossierPartId)
 		throws NoSuchDossierFileException, SystemException {
 
-		return dossierFilePersistence.findByDossierFileInUse(dossierId,
-			dossierPartId);
+		return dossierFilePersistence.findByDossierFileInUse(
+			dossierId, dossierPartId);
 	}
 
 	/**
@@ -841,9 +875,9 @@ public class DossierFileLocalServiceImpl
 		OrderByComparator obc)
 		throws SystemException {
 
-		return dossierFileFinder.searchDossierFile(groupId, ownerUserId,
-			ownerOrganizationId, keyword, templateFileNo, removed, start, end,
-			obc);
+		return dossierFileFinder.searchDossierFile(
+			groupId, ownerUserId, ownerOrganizationId, keyword, templateFileNo,
+			removed, start, end, obc);
 	}
 
 	/**
@@ -863,8 +897,9 @@ public class DossierFileLocalServiceImpl
 		boolean onlyViewFileResult, int start, int end, OrderByComparator obc)
 		throws SystemException {
 
-		return dossierFileFinder.searchDossierFile(groupId, keyword,
-			dossierTemplateId, fileEntryId, onlyViewFileResult, start, end, obc);
+		return dossierFileFinder.searchDossierFile(
+			groupId, keyword, dossierTemplateId, fileEntryId,
+			onlyViewFileResult, start, end, obc);
 	}
 
 	/**
@@ -888,9 +923,9 @@ public class DossierFileLocalServiceImpl
 		int original, int start, int end, OrderByComparator obc)
 		throws SystemException {
 
-		return dossierFileFinder.searchDossierFileAdvance(groupId, ownerUserId,
-			ownerOrganizationId, keyword, templateFileNo, removed, partType,
-			original, start, end, obc);
+		return dossierFileFinder.searchDossierFileAdvance(
+			groupId, ownerUserId, ownerOrganizationId, keyword, templateFileNo,
+			removed, partType, original, start, end, obc);
 	}
 
 	/**
@@ -1013,9 +1048,10 @@ public class DossierFileLocalServiceImpl
 		dossierFile.setModifiedDate(now);
 		// Add file
 		FileEntry fileEntry =
-			dlAppService.addFileEntry(serviceContext.getScopeGroupId(),
-				folderId, sourceFileName, mimeType, title + StringPool.DASH +
-					dossierFileId + StringPool.DASH + dossierFile.getVersion() +
+			dlAppService.addFileEntry(
+				serviceContext.getScopeGroupId(), folderId, sourceFileName,
+				mimeType, title + StringPool.DASH + dossierFileId +
+					StringPool.DASH + dossierFile.getVersion() +
 					StringPool.DASH + System.currentTimeMillis(), description,
 				changeLog, is, size, serviceContext);
 
