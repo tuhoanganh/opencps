@@ -162,6 +162,10 @@ public class SubmitDossier {
 			actionMsg.setLocale(serviceContext.getLocale());
 
 			actionMsg.setUserId(serviceContext.getUserId());
+			
+			actionMsg.setGroupId(serviceContext.getScopeGroupId());
+			
+			actionMsg.setUserId(serviceContext.getUserId());
 
 			break;
 
@@ -169,7 +173,7 @@ public class SubmitDossier {
 			break;
 		}
 
-		MessageBusUtil.sendMessage("opencps/frontoffice/out/destination",
+		MessageBusUtil.sendMessage("opencps/backoffice/engine/destination",
 			actionMsg);
 
 	}
