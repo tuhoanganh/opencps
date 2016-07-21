@@ -17,13 +17,11 @@
 
 package org.opencps.jms.business;
 
-import java.util.List;
-
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.jms.message.body.SyncFromBackOfficeMsgBody;
-import org.opencps.processmgt.model.WorkflowOutput;
-import org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil;
-import org.opencps.util.PortletConstants;
+
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 
 /**
  * @author trungnt
@@ -34,32 +32,41 @@ public class SyncFromBackOffice {
 
 		boolean statusUpdate = false;
 
-		//String actor = _getActor(toBackOffice.getRequestCommand());
-
 		try {
-			/*statusUpdate =
+			statusUpdate =
 				DossierLocalServiceUtil.updateDossierStatus(
-					toBackOffice.getDossierId(), toBackOffice.getFileGroupId(),
-					toBackOffice.getDossierStatus(),
-					toBackOffice.getReceptionNo(),
-					toBackOffice.getEstimateDatetime(),
-					toBackOffice.getReceiveDatetime(),
-					toBackOffice.getFinishDatetime(), actor,
-					toBackOffice.getRequestCommand(),
-					toBackOffice.getActionInfo(), toBackOffice.getMessageInfo());
+					syncFromBackOfficeMsgBody.getOid(),
+					syncFromBackOfficeMsgBody.getFileGroupId(),
+					syncFromBackOfficeMsgBody.getDossierStatus(),
+					syncFromBackOfficeMsgBody.getReceptionNo(),
+					syncFromBackOfficeMsgBody.getEstimateDatetime(),
+					syncFromBackOfficeMsgBody.getReceiveDatetime(),
+					syncFromBackOfficeMsgBody.getFinishDatetime(),
+					syncFromBackOfficeMsgBody.getActor(),
+					syncFromBackOfficeMsgBody.getRequestCommand(),
+					syncFromBackOfficeMsgBody.getActionInfo(),
+					syncFromBackOfficeMsgBody.getMessageInfo());
 
-			List<WorkflowOutput> workflowOutputs =
-				WorkflowOutputLocalServiceUtil.getByProcessWFPostback(
-					toBackOffice.getProcessWorkflowId(), true);
+			_log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " +
+				statusUpdate);
 
-			DossierLocalServiceUtil.updateDossierStatus(
-				0, toBackOffice.getDossierId(),
-				PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS,
-				workflowOutputs);*/
+			/*
+			 * List<WorkflowOutput> workflowOutputs =
+			 * WorkflowOutputLocalServiceUtil.getByProcessWFPostback(
+			 * toBackOffice.getProcessWorkflowId(), true);
+			 * DossierLocalServiceUtil.updateDossierStatus( 0,
+			 * toBackOffice.getDossierId(),
+			 * PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS,
+			 * workflowOutputs);
+			 */
+
 		}
 		catch (Exception e) {
-
+			_log.error(e);
 		}
 
 	}
+
+	private Log _log =
+		LogFactoryUtil.getLog(SyncFromBackOffice.class.getName());
 }
