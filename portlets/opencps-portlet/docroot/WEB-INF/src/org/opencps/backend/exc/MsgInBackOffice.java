@@ -20,7 +20,7 @@ package org.opencps.backend.exc;
 
 /**
  * @author khoavd
- *
+ * 
  */
 public class MsgInBackOffice {
 

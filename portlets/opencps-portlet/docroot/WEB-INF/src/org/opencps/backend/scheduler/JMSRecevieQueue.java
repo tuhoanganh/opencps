@@ -48,12 +48,6 @@ public class JMSRecevieQueue implements MessageListener {
 	public void receive(Message message)
 		throws MessageListenerException {
 
-		Map<String, Object> map = message.getValues();
-		for (Map.Entry<String, Object> entry : map.entrySet()) {
-			System.out.println(entry.getKey() + "/******/" + entry.getValue());
-
-		}
-
 		long[] companyIds = PortalUtil.getCompanyIds();
 
 		_log.info("********************************************************CompanyIds Length*********************************************** " +
@@ -147,4 +141,5 @@ public class JMSRecevieQueue implements MessageListener {
 	}
 
 	private Log _log = LogFactoryUtil.getLog(JMSRecevieQueue.class.getName());
+	
 }
