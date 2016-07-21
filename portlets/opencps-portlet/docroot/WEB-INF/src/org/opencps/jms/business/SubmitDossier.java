@@ -29,8 +29,6 @@ import org.opencps.dossiermgt.model.FileGroup;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.jms.message.body.DossierFileMsgBody;
 import org.opencps.jms.message.body.DossierMsgBody;
-import org.opencps.processmgt.model.ProcessOrder;
-import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
 import org.opencps.util.PortletConstants;
 import org.opencps.util.WebKeys;
 
