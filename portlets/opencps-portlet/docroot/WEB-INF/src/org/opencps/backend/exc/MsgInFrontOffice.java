@@ -17,11 +17,30 @@
 
 package org.opencps.backend.exc;
 
+import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageListener;
+import com.liferay.portal.kernel.messaging.MessageListenerException;
+
 
 /**
  * @author khoavd
  *
  */
-public class MsgInFrontOffice {
+public class MsgInFrontOffice implements MessageListener{
+
+	/* (non-Javadoc)
+     * @see com.liferay.portal.kernel.messaging.MessageListener#receive(com.liferay.portal.kernel.messaging.Message)
+     */
+    @Override
+    public void receive(Message message)
+        throws MessageListenerException {
+
+	    _doReceive(message);
+    }
+    
+    private void _doReceive(Message message) {
+    	System.out.println("doRevice msgInFrontOffice");
+    }
+	
 
 }
