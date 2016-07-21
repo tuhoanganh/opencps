@@ -18,8 +18,12 @@
 package org.opencps.backend.exc;
 
 import org.opencps.backend.message.UserActionMsg;
+import org.opencps.dossiermgt.model.Dossier;
+import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.jms.context.JMSContext;
 import org.opencps.jms.message.SubmitDossierMessage;
+import org.opencps.jms.message.SyncFromBackOfficeMessage;
+import org.opencps.jms.message.body.SyncFromBackOfficeMsgBody;
 import org.opencps.jms.util.JMSMessageUtil;
 import org.opencps.util.WebKeys;
 
@@ -39,31 +43,32 @@ public class MsgOutFrontOffice implements MessageListener{
 	/* (non-Javadoc)
      * @see com.liferay.portal.kernel.messaging.MessageListener#receive(com.liferay.portal.kernel.messaging.Message)
      */
-    @Override
-    public void receive(Message message)
-        throws MessageListenerException {
-    	try {
-        	
-    		System.out.println("DONE MSGOUT_FO >>>>>>>>>>>");
-        	
-    		UserActionMsg userActionMgs =
-    					    (UserActionMsg) message.get("msgToEngine");
-    		
-    		JMSContext context =
-    		    JMSMessageUtil.createProducer(
-    		    	userActionMgs.getCompanyId(), userActionMgs.getGovAgencyCode(),
-    		        true, WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "remote");
-    		SubmitDossierMessage submitDossierMessage =
-    		    new SubmitDossierMessage(context);
-    		submitDossierMessage.sendMessage(userActionMgs.getDossierId());
+	@Override
+	public void receive(Message message)
+	    throws MessageListenerException {
 
-        }
-        catch (Exception e) {
-	        _log.error(e);
-        }
-	    
-    }
-    
-    private Log _log = LogFactoryUtil.getLog(MsgInFrontOffice.class);
+		try {
+
+			System.out.println("DONE MSGOUT_FO »»»»»>");
+	          
+	        UserActionMsg userActionMgs =
+	                  (UserActionMsg) message.get("msgToEngine");
+	        
+	        JMSContext context =
+	            JMSMessageUtil.createProducer(
+	              userActionMgs.getCompanyId(), userActionMgs.getGovAgencyCode(),
+	                true, WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "remote");
+	        SubmitDossierMessage submitDossierMessage =
+	            new SubmitDossierMessage(context);
+	        submitDossierMessage.sendMessage(userActionMgs.getDossierId());			
+
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
+
+	}
+
+	private Log _log = LogFactoryUtil.getLog(MsgInFrontOffice.class);
 
 }

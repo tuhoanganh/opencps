@@ -17,11 +17,23 @@
 
 package org.opencps.jms.message;
 
+import javax.jms.BytesMessage;
+import javax.jms.JMSException;
+import javax.naming.NamingException;
+
 import org.opencps.jms.SyncServiceContext;
 import org.opencps.jms.business.SyncFromBackOffice;
 import org.opencps.jms.context.JMSContext;
 import org.opencps.jms.context.JMSLocalContext;
+import org.opencps.jms.message.body.DossierMsgBody;
 import org.opencps.jms.message.body.SyncFromBackOfficeMsgBody;
+import org.opencps.jms.util.JMSMessageBodyUtil;
+import org.opencps.jms.util.JMSMessageUtil;
+import org.opencps.util.WebKeys;
+
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 
 /**
  * @author trungnt
@@ -88,6 +100,51 @@ public class SyncFromBackOfficeMessage {
 
 		this._serviceContext = serviceContext;
 	}
+	
+	public void sendMessage(SyncFromBackOfficeMsgBody msgBody) throws JMSException, NamingException {
+
+		try {
+			BytesMessage bytesMessage =
+				JMSMessageUtil.createByteMessage(_context);
+
+			long companyId =
+				GetterUtil.getLong(_context.getProperties().getProperty(
+					WebKeys.JMS_COMPANY_ID));
+			long groupId =
+				GetterUtil.getLong(
+					_context.getProperties().getProperty(WebKeys.JMS_GROUP_ID),
+					0L);
+			long userId =
+				GetterUtil.getLong(
+					_context.getProperties().getProperty(WebKeys.JMS_USER_ID),
+					0L);
+
+			if (companyId > 0 && groupId > 0 && userId > 0) {
+				SyncServiceContext syncServiceContext =
+					new SyncServiceContext(
+						companyId, groupId, userId, true, true);
+				
+				//Importance
+/*				DossierMsgBody dossierMsgBody =
+					JMSMessageBodyUtil.getDossierMsgBody(dossier);*/
+				msgBody.setServiceContext(syncServiceContext.getServiceContext());
+				
+				byte[] sender =
+					JMSMessageUtil.convertObjectToByteArray(msgBody);
+
+				bytesMessage.writeBytes(sender);
+				
+				_context.getMessageProducer().send(bytesMessage);
+			}
+
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
+		finally {
+			_context.destroy();
+		}
+	}
 
 	private JMSContext _context;
 
@@ -96,4 +153,7 @@ public class SyncFromBackOfficeMessage {
 	private SyncFromBackOfficeMsgBody _syncFromBackOfficeMsgBody;
 
 	private SyncServiceContext _serviceContext;
+	
+	
+	private Log _log = LogFactoryUtil.getLog(SyncFromBackOfficeMessage.class);
 }
