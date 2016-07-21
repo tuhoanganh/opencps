@@ -132,6 +132,43 @@ public class UserActionMsg {
 	protected long processOrderId;
 	
     /**
+     * @return the companyId
+     */
+    public long getCompanyId() {
+    
+    	return companyId;
+    }
+
+	
+    /**
+     * @param companyId the companyId to set
+     */
+    public void setCompanyId(long companyId) {
+    
+    	this.companyId = companyId;
+    }
+
+	
+    /**
+     * @return the govAgencyCode
+     */
+    public String getGovAgencyCode() {
+    
+    	return govAgencyCode;
+    }
+
+	
+    /**
+     * @param govAgencyCode the govAgencyCode to set
+     */
+    public void setGovAgencyCode(String govAgencyCode) {
+    
+    	this.govAgencyCode = govAgencyCode;
+    }
+	protected long companyId;
+	protected String govAgencyCode;
+	
+    /**
      * @return the groupId
      */
     public long getGroupId() {

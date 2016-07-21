@@ -36,7 +36,8 @@ public class MsgOutBackOffice implements MessageListener{
         throws MessageListenerException {
 
 	    // TODO Auto-generated method stub
-	    
+    	System.out.println("DONE MSGOUT_BO");
+
     }
 
 }

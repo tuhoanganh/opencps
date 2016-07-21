@@ -24,8 +24,10 @@ import org.opencps.backend.message.UserActionMsg;
 import org.opencps.backend.util.BackendUtils;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierStatus;
+import org.opencps.dossiermgt.model.ServiceConfig;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierStatusLocalServiceUtil;
+import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
 import org.opencps.util.PortletConstants;
 import org.opencps.util.WebKeys;
 
@@ -71,7 +73,7 @@ public class SyncFromFrontOffice implements MessageListener{
 
 		long dosserId = userActionMgs.getDossierId();
 
-		boolean trustServiceMode = true;//_checkServiceMode(dosserId);
+		boolean trustServiceMode = _checkServiceMode(dosserId);
 
 		if (trustServiceMode) {
 			try {
@@ -206,28 +208,29 @@ public class SyncFromFrontOffice implements MessageListener{
      * @param dossierId
      * @return
      */
-    private boolean _checkServiceMode(long dossierId) {
-    	boolean trustServiceMode = false;
-    	
-    	int serviceMode = 0;
-    	
-    	try {
-	        Dossier dossier = DossierLocalServiceUtil.fetchDossier(dossierId);
-	        
-	        if (Validator.isNotNull(dossier)) {
-	        	serviceMode = dossier.getServiceMode();
-	        }
-        }
-        catch (Exception e) {
-        }
-    	
-    	if (serviceMode == 3) {
-    		trustServiceMode = true;
-    	}
-    	
-    	return trustServiceMode;
-    }
-    
+	private boolean _checkServiceMode(long dossierId) {
+
+		boolean trustServiceMode = true;
+
+		try {
+			Dossier dossier = DossierLocalServiceUtil.fetchDossier(dossierId);
+
+			long serviceConfigId = dossier.getServiceConfigId();
+
+			ServiceConfig serviceConfig =
+			    ServiceConfigLocalServiceUtil.fetchServiceConfig(serviceConfigId);
+			
+			if (serviceConfig.getServicePortal()) {
+				trustServiceMode = false;
+			} 
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
+
+		return trustServiceMode;
+	}
+
     private boolean _checkStatus(long dossierId, long fileGroupId) {
     	
     	boolean isValidatorStatus = false;

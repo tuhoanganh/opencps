@@ -17,6 +17,14 @@
 
 package org.opencps.backend.exc;
 
+import org.opencps.backend.message.UserActionMsg;
+import org.opencps.jms.context.JMSContext;
+import org.opencps.jms.message.SubmitDossierMessage;
+import org.opencps.jms.util.JMSMessageUtil;
+import org.opencps.util.WebKeys;
+
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.MessageListenerException;
@@ -34,9 +42,28 @@ public class MsgOutFrontOffice implements MessageListener{
     @Override
     public void receive(Message message)
         throws MessageListenerException {
+    	try {
+        	
+    		System.out.println("DONE MSGOUT_FO >>>>>>>>>>>");
+        	
+    		UserActionMsg userActionMgs =
+    					    (UserActionMsg) message.get("msgToEngine");
+    		
+    		JMSContext context =
+    		    JMSMessageUtil.createProducer(
+    		    	userActionMgs.getCompanyId(), userActionMgs.getGovAgencyCode(),
+    		        true, WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "remote");
+    		SubmitDossierMessage submitDossierMessage =
+    		    new SubmitDossierMessage(context);
+    		submitDossierMessage.sendMessage(userActionMgs.getDossierId());
 
-	    // TODO Auto-generated method stub
+        }
+        catch (Exception e) {
+	        _log.error(e);
+        }
 	    
     }
+    
+    private Log _log = LogFactoryUtil.getLog(MsgInFrontOffice.class);
 
 }
