@@ -32,6 +32,7 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -2054,7 +2055,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			SubmitDossierMessage submitDossierMessage =
 				new SubmitDossierMessage(context);
 			submitDossierMessage.sendMessage(dossierId);
-
+			
 			/*
 			 * MessageBusUtil.sendMessage("opencps/frontoffice/out/destination",
 			 * message);

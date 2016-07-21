@@ -17,6 +17,8 @@
 
 package org.opencps.backend.scheduler;
 
+import java.util.Map;
+
 import javax.jms.BytesMessage;
 import javax.jms.ObjectMessage;
 import javax.jms.StreamMessage;
@@ -43,8 +45,14 @@ import com.liferay.portal.util.PortalUtil;
 public class JMSRecevieQueue implements MessageListener {
 
 	@Override
-	public void receive(Message message1)
+	public void receive(Message message)
 		throws MessageListenerException {
+
+		Map<String, Object> map = message.getValues();
+		for (Map.Entry<String, Object> entry : map.entrySet()) {
+			System.out.println(entry.getKey() + "/******/" + entry.getValue());
+
+		}
 
 		long[] companyIds = PortalUtil.getCompanyIds();
 
