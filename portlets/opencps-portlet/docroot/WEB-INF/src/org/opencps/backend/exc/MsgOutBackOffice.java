@@ -17,6 +17,18 @@
 
 package org.opencps.backend.exc;
 
+import org.opencps.backend.message.SendToBackOfficeMsg;
+import org.opencps.dossiermgt.model.Dossier;
+import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
+import org.opencps.jms.context.JMSContext;
+import org.opencps.jms.message.SubmitDossierMessage;
+import org.opencps.jms.message.SyncFromBackOfficeMessage;
+import org.opencps.jms.message.body.SyncFromBackOfficeMsgBody;
+import org.opencps.jms.util.JMSMessageUtil;
+import org.opencps.util.WebKeys;
+
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.MessageListenerException;
@@ -32,12 +44,40 @@ public class MsgOutBackOffice implements MessageListener{
      * @see com.liferay.portal.kernel.messaging.MessageListener#receive(com.liferay.portal.kernel.messaging.Message)
      */
     @Override
-    public void receive(Message message)
-        throws MessageListenerException {
+	public void receive(Message message)
+	    throws MessageListenerException {
 
-	    // TODO Auto-generated method stub
-    	System.out.println("DONE MSGOUT_BO");
+		try {
+			System.out.println("DONE MSGOUT_BO");
+
+			SendToBackOfficeMsg toBackOffice =
+			    (SendToBackOfficeMsg) message.get("toBackOffice");
+			Dossier dossier =
+			    DossierLocalServiceUtil.fetchDossier(toBackOffice.getDossierId());
+
+			JMSContext context =
+			    JMSMessageUtil.createProducer(
+			        toBackOffice.getCompanyId(),
+			        toBackOffice.getGovAgencyCode(), true,
+			        WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "remote");
+
+			SyncFromBackOfficeMessage syncFromBackoffice =
+			    new SyncFromBackOfficeMessage(context);
+
+			SyncFromBackOfficeMsgBody msgBody = new SyncFromBackOfficeMsgBody();
+
+			msgBody.setOid(dossier.getOid());
+			msgBody.setDossierStatus(toBackOffice.getDossierStatus());
+
+			syncFromBackoffice.sendMessage(msgBody);
+
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
 
     }
+    
+    private Log _log = LogFactoryUtil.getLog(MsgOutBackOffice.class);
 
 }
