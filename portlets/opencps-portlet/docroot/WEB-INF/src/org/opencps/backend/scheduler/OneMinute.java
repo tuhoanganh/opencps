@@ -19,6 +19,7 @@ package org.opencps.backend.scheduler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.opencps.processmgt.model.SchedulerJobs;
 import org.opencps.processmgt.service.SchedulerJobsLocalServiceUtil;
@@ -55,6 +56,12 @@ public class OneMinute implements MessageListener{
 		catch (Exception e) {
 			_log.error(e);
 		}*/
+    	Map<String, Object> map = message.getValues();
+    	for (Map.Entry<String, Object> entry : map.entrySet())
+    	{
+    	    System.out.println(entry.getKey() + "/" + entry.getValue());
+    	 
+    	}
 	}
 
 	private Log _log = LogFactoryUtil.getLog(OneMinute.class);
