@@ -2048,18 +2048,17 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				break;
 			}
 
-			JMSContext context =
-				JMSMessageUtil.createProducer(
-					serviceContext.getCompanyId(), dossier.getGovAgencyCode(),
-					true, WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "remote");
-			SubmitDossierMessage submitDossierMessage =
-				new SubmitDossierMessage(context);
-			submitDossierMessage.sendMessage(dossierId);
-			
 			/*
-			 * MessageBusUtil.sendMessage("opencps/frontoffice/out/destination",
-			 * message);
+			 * JMSContext context = JMSMessageUtil.createProducer(
+			 * serviceContext.getCompanyId(), dossier.getGovAgencyCode(), true,
+			 * WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "remote");
+			 * SubmitDossierMessage submitDossierMessage = new
+			 * SubmitDossierMessage(context);
+			 * submitDossierMessage.sendMessage(dossierId);
 			 */
+
+			MessageBusUtil.sendMessage(
+				"opencps/frontoffice/out/destination", message);
 
 		}
 		catch (Exception e) {
