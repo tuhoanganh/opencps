@@ -28,13 +28,11 @@ import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
 import org.opencps.jms.context.JMSContext;
-import org.opencps.jms.message.SubmitDossierMessage;
 import org.opencps.jms.message.SyncFromBackOfficeMessage;
 import org.opencps.jms.message.body.DossierFileMsgBody;
 import org.opencps.jms.message.body.SyncFromBackOfficeMsgBody;
 import org.opencps.jms.util.JMSMessageBodyUtil;
 import org.opencps.jms.util.JMSMessageUtil;
-import org.opencps.processmgt.NoSuchWorkflowOutputException;
 import org.opencps.processmgt.model.WorkflowOutput;
 import org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil;
 import org.opencps.util.WebKeys;
@@ -71,7 +69,6 @@ public class MsgOutBackOffice implements MessageListener{
 			List<WorkflowOutput> workflowOutputs =
 						    WorkflowOutputLocalServiceUtil.getByProcessWFPostback(toBackOffice.getProcessWorkflowId(), true);
 			
-			_log.info("##############>> + workflowOutputs" + workflowOutputs.size() + "ProcessID="  + toBackOffice.getProcessWorkflowId());
 			
 			List<DossierFile> dossierFiles = new ArrayList<DossierFile>();
 			

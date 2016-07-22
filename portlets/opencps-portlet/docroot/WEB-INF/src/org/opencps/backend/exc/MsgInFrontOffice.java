@@ -22,11 +22,8 @@ import javax.jms.ObjectMessage;
 import javax.jms.StreamMessage;
 import javax.jms.TextMessage;
 
-import org.opencps.backend.message.UserActionMsg;
 import org.opencps.jms.context.JMSContext;
-import org.opencps.jms.message.SubmitDossierMessage;
 import org.opencps.jms.message.SyncFromBackOfficeMessage;
-import org.opencps.jms.message.body.DossierMsgBody;
 import org.opencps.jms.message.body.SyncFromBackOfficeMsgBody;
 import org.opencps.jms.util.JMSMessageUtil;
 import org.opencps.util.PortletUtil;
@@ -60,12 +57,10 @@ public class MsgInFrontOffice implements MessageListener {
 
 	private void _doReceive(Message message) {
 
-		System.out.println("**doRevice msgInFrontOffice");
+		System.out.println("**DO msgInFrontOffice");
 
 		long[] companyIds = PortalUtil.getCompanyIds();
 
-		_log.info("********************************************************CompanyIds Length*********************************************** " +
-			companyIds.length);
 
 		long companyId = 0;
 
@@ -73,15 +68,12 @@ public class MsgInFrontOffice implements MessageListener {
 			for (int i = 0; i < companyIds.length; i++) {
 				if (PortletUtil.checkJMSConfig(companyIds[i])) {
 					companyId = companyIds[i];
-					_log.info("********************************************************companyId*********************************************** " +
-						companyId);
 					break;
 				}
 			}
 		}
 
 		if (companyId > 0) {
-			_log.info("Start create connection to JMS Queue..................");
 			JMSContext context =
 				JMSMessageUtil.createConsumer(
 					companyId, StringPool.BLANK, true,
@@ -102,18 +94,13 @@ public class MsgInFrontOffice implements MessageListener {
 						context.getMessageConsumer().receive(1000);
 					if (jsmMessage != null) {
 						if (jsmMessage instanceof TextMessage) {
-							_log.info("*******************TextMessage*******************");
-							_log.info(((TextMessage) jsmMessage).getText());
 						}
 						else if (jsmMessage instanceof ObjectMessage) {
-							_log.info("*******************ObjectMessage*******************");
-							_log.info(((ObjectMessage) jsmMessage).getClass().getName());
 						}
 						else if (jsmMessage instanceof BytesMessage) {
 							BytesMessage bytesMessage =
 								(BytesMessage) jsmMessage;
 							_log.info("*******************BytesMessage*******************");
-							_log.info(((BytesMessage) jsmMessage).getBodyLength());
 							byte[] result =
 								new byte[(int) bytesMessage.getBodyLength()];
 							bytesMessage.readBytes(result);
@@ -129,11 +116,9 @@ public class MsgInFrontOffice implements MessageListener {
 							}
 						}
 						else if (jsmMessage instanceof StreamMessage) {
-							_log.info("*******************StreamMessage*******************");
 						}
 					}
 					else {
-						_log.info("*******************Null Message*******************");
 					}
 
 					count++;
