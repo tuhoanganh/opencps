@@ -41,14 +41,23 @@
 	
 	String[][] categorySections = {processOrderSections};
 %>
-<div class="ocps-header-history">
+<div class="ocps-custom-header">
+	<label class="opcps-label">
+		<liferay-ui:message key="process-order" />
+	</label>
+	<span class="ocps-span">
+		<a href="<%=backURL %>"><liferay-ui:message key="back"/></a>
+	</span>
+</div>
+
+<%-- <div class="ocps-header-history">
 <liferay-ui:header
 	backURL="<%= backURL %>"
 	title="process-order"
 />
-</div>
+</div> --%>
 <portlet:actionURL var="updateProcessOrderURL" name="updateDossier"/>
-<div class="ocps-history-bound-navigator">
+<div class="ocps-history-process-bound-navigator">
 <liferay-util:buffer var="htmlTop">
 	<c:if test="<%= processOrder != null %>">
 		<div class="form-navigator-topper dossier-info">

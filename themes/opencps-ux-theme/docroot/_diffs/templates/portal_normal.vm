@@ -31,8 +31,8 @@
             <div class="hotline">
                 Đường dây nóng<br/><span>1900 0311</span>
             </div>
-            <a href="$sign_in_url" class="btn-dn">Đăng nhập</a>
-            <a href="$register_url" class="btn-dk">Đăng ký</a>
+            <a href="$sign_in_url" class="btn-dn">#language ("login-key")</a>
+            <a href="$register_url" class="btn-dk">#language ("register-key")</a>
 		</div>
 	</header>
 	
@@ -62,35 +62,35 @@
                 <p>Copyright © 2016 - OpenCPS v1.3</p>
             </div>
             <div class="danhmuc">
-                <p class="title">Danh mục</p>
+                <p class="title">#language ("danhmuc-key")</p>
                 <ul>
-                    <li><a href="">Trang chủ</a></li>
-                    <li><a href="">Thông báo</a></li>
-                    <li><a href="">Văn bản pháp luật</a></li>
-                    <li><a href="">Thủ tục hành chính</a></li>
+                    <li><a href="">#language ("home-page-key")</a></li>
+                    <li><a href="">#language ("notifier-key")</a></li>
+                    <li><a href="">#language ("van-ban-phap-luat-key")</a></li>
+                    <li><a href="">#language ("serviceinfo-key")</a></li>
                 </ul>
             </div>
             <div class="huongdan">
-                <p class="title">Hướng dẫn</p>
+                <p class="title">#language ("conduct-key")</p>
                 <ul>
-                    <li><a href="">Đăng ký tài khoản</a></li>
-                    <li><a href="">Đăng nhập hệ thống</a></li>
-                    <li><a href="">Nộp hồ sơ trực tuyến</a></li>
-                    <li><a href="">Tra cứu kết quả</a></li>
-                    <li><a href="">Cán bộ xử lý hồ sơ</a></li>
+                    <li><a href="">#language ("account-register-key")</a></li>
+                    <li><a href="">#language ("system-login-key")</a></li>
+                    <li><a href="">#language ("nop-hstt-key")</a></li>
+                    <li><a href="">#language ("tracuu-ketqua-key")</a></li>
+                    <li><a href="">#language ("cbxl-nophs-key")</a></li>
                 </ul>
             </div>
             <div class="lienhehotro">
-                <p class="title">Liên hệ hỗ trợ</p>
-                <p class="diachi">Tòa nhà VAPA, số 2,<br/>đường Tôn Thất Thuyết</p>
+                <p class="title">#language ("lienhehotro-key")</p>
+                <p class="diachi">#language ("nhavapa-key")<br/>#language ("tonthatthuyet-street-key")</p>
                 <p class="mail">opencps@gmail.com</p>
                 <p class="phone">1900 0311</p>
             </div>
             <div class="lienketwebsite">
-                <p class="title">Liên kết website</p>
+                <p class="title">#language ("lienketwebsite-key")</p>
                 <div class="select">
                     <select>
-                        <option>Chọn liên kết website</option>
+                        <option>#language ("chon-lienketwebsite-key")</option>
                     </select>
                 </div>
             </div>

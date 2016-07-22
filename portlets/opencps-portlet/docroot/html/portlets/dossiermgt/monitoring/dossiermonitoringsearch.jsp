@@ -52,7 +52,8 @@
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "dossiermonitoringsearch.jsp");	
 %>
-
+	<h2><liferay-ui:message key="beautiful-life"/></h2>
+	<p><liferay-ui:message key="slogan-key"/></p>
 <c:if test="<%= false %>">
 
 	<aui:row>
