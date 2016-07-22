@@ -102,6 +102,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 			
 
 			try {
+				
 				ServiceConfig serviceConfig = ServiceConfigLocalServiceUtil.getServiceConfigByG_S_G(toEngineMsg.getGroupId(), serviceInfoId, govAgencyCode);
 				serviceProcessId = serviceConfig.getServiceProcessId();
 /*				    ServiceInfoProcessLocalServiceUtil.getServiceInfo(

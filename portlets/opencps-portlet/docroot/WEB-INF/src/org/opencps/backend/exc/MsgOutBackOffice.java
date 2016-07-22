@@ -71,31 +71,29 @@ public class MsgOutBackOffice implements MessageListener{
 			List<WorkflowOutput> workflowOutputs =
 						    WorkflowOutputLocalServiceUtil.getByProcessWFPostback(toBackOffice.getProcessWorkflowId(), true);
 			
+			_log.info("##############>> + workflowOutputs" + workflowOutputs.size() + "ProcessID="  + toBackOffice.getProcessWorkflowId());
+			
 			List<DossierFile> dossierFiles = new ArrayList<DossierFile>();
 			
-			//Check file return
-			if (workflowOutputs != null && !workflowOutputs.isEmpty()) {
-				for (WorkflowOutput workflowOutput : workflowOutputs) {
-					if (workflowOutput.getRequired()) {
+			// Check file return
+			for (WorkflowOutput workflowOutput : workflowOutputs) {
+				if (workflowOutput.getRequired()) {
 
-						DossierFile dossierFile = null;
-						try {
-							DossierPart dossierPart =
-								DossierPartLocalServiceUtil.getDossierPart(workflowOutput.getDossierPartId());
-							dossierFile =
-								DossierFileLocalServiceUtil.getDossierFileInUse(
-									toBackOffice.getDossierId(), dossierPart.getDossierpartId());
-							
-							dossierFiles.add(dossierFile);
-						}
-						catch (Exception e) {
-						}
+					DossierFile dossierFile = null;
+					try {
+						DossierPart dossierPart =
+						    DossierPartLocalServiceUtil.getDossierPart(workflowOutput.getDossierPartId());
+						dossierFile =
+						    DossierFileLocalServiceUtil.getDossierFileInUse(
+						        toBackOffice.getDossierId(),
+						        dossierPart.getDossierpartId());
 
+						dossierFiles.add(dossierFile);
 					}
+					catch (Exception e) {
+					}
+
 				}
-			}
-			else {
-				throw new NoSuchWorkflowOutputException();
 			}
 			
 			List<DossierFileMsgBody> lstDossierFileMsgBody =

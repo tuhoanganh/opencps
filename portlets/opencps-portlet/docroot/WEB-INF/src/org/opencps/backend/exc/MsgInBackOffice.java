@@ -78,7 +78,6 @@ public class MsgInBackOffice implements MessageListener{
 				JMSMessageUtil.createConsumer(
 					companyId, StringPool.BLANK, true,
 					WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "local");
-			System.out.println("$$$$$"+context);
 			try {
 				int messageInQueue = context.countMessageInQueue();
 				int receiveNumber = messageInQueue <= 50 ? messageInQueue : 50;
@@ -87,7 +86,7 @@ public class MsgInBackOffice implements MessageListener{
 					messageInQueue);
 
 				int count = 1;
-				while (count <= receiveNumber) {
+				while (count <= 1) {
 
 					javax.jms.Message jsmMessage =
 						context.getMessageConsumer().receive();
