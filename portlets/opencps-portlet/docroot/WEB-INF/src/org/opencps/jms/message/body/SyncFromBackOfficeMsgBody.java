@@ -17,6 +17,7 @@
 
 package org.opencps.jms.message.body;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -27,9 +28,14 @@ import com.liferay.portal.service.ServiceContext;
 /**
  * @author trungnt
  */
-public class SyncFromBackOfficeMsgBody {
+public class SyncFromBackOfficeMsgBody implements Serializable{
 	
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public String getActionInfo() {
 	
 		return _actionInfo;
