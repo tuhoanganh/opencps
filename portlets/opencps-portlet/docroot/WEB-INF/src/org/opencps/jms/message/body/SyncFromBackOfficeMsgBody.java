@@ -20,6 +20,8 @@ package org.opencps.jms.message.body;
 import java.util.Date;
 import java.util.List;
 
+import org.opencps.paymentmgt.model.PaymentFile;
+
 import com.liferay.portal.service.ServiceContext;
 
 /**
@@ -195,6 +197,22 @@ public class SyncFromBackOfficeMsgBody {
 	
 		this._serviceContext = serviceContext;
 	}
+	
+    /**
+     * @return the _paymentFile
+     */
+    public PaymentFile getPaymentFile() {
+    
+    	return _paymentFile;
+    }
+
+    /**
+     * @param _paymentFile the _paymentFile to set
+     */
+    public void setPaymentFile(PaymentFile _paymentFile) {
+    
+    	this._paymentFile = _paymentFile;
+    }
 
 	private String _actionInfo;
 	
@@ -223,4 +241,6 @@ public class SyncFromBackOfficeMsgBody {
 	private String _requestCommand;
 	
 	private ServiceContext _serviceContext;
+	
+	private PaymentFile _paymentFile;
 }

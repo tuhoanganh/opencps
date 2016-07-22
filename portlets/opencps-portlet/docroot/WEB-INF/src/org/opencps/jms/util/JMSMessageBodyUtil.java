@@ -145,28 +145,54 @@ public class JMSMessageBodyUtil {
 			List<DossierFile> dossierFiles =
 				DossierFileLocalServiceUtil.getDossierFileByDossierId(dossier.getDossierId());
 
-			List<DossierFileMsgBody> dossierFileMsgBodies =
-				new ArrayList<DossierFileMsgBody>();
+			List<DossierFileMsgBody> dossierFileMsgBodies = getDossierFileMsgBody(dossierFiles);
+
+			dossierMsgBody.setDossier(dossier);
+			dossierMsgBody.setDossierTemplate(dossierTemplate);
+			dossierMsgBody.setLstDossierFileMsgBody(dossierFileMsgBodies);
+			dossierMsgBody.setServiceConfig(serviceConfig);
+			dossierMsgBody.setServiceInfo(serviceInfo);
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
+
+		return dossierMsgBody;
+	}
+	
+	
+	/**
+	 * @param dossierFiles
+	 * @return
+	 */
+	public static List<DossierFileMsgBody> getDossierFileMsgBody(
+	    List<DossierFile> dossierFiles) {
+
+		List<DossierFileMsgBody> dossierFileMsgBodies =
+		    new ArrayList<DossierFileMsgBody>();
+
+		try {
+
 			if (dossierFiles != null) {
 				for (DossierFile dossierFile : dossierFiles) {
 					DossierFileMsgBody dossierFileMsgBody =
-						new DossierFileMsgBody();
+					    new DossierFileMsgBody();
 
 					if (dossierFile.getGroupFileId() > 0) {
 						FileGroup fileGroup =
-							FileGroupLocalServiceUtil.getFileGroup(dossierFile.getGroupFileId());
+						    FileGroupLocalServiceUtil.getFileGroup(dossierFile.getGroupFileId());
 						dossierFileMsgBody.setFileGroup(fileGroup);
 						DossierPart fileGroupDossierPart =
-							DossierPartLocalServiceUtil.getDossierPart(fileGroup.getDossierPartId());
+						    DossierPartLocalServiceUtil.getDossierPart(fileGroup.getDossierPartId());
 						dossierFileMsgBody.setFileGroupDossierPart(fileGroupDossierPart);
 					}
 
 					DossierPart dossierPart =
-						DossierPartLocalServiceUtil.getDossierPart(dossierFile.getDossierPartId());
+					    DossierPartLocalServiceUtil.getDossierPart(dossierFile.getDossierPartId());
 
 					if (dossierFile.getFileEntryId() > 0) {
 						DLFileEntry dlFileEntry =
-							DLFileEntryUtil.getDLFileEntry(dossierFile.getFileEntryId());
+						    DLFileEntryUtil.getDLFileEntry(dossierFile.getFileEntryId());
 						dossierFileMsgBody.setFileDescription(dlFileEntry.getDescription());
 						dossierFileMsgBody.setExtension(dlFileEntry.getExtension());
 						dossierFileMsgBody.setFileName(dlFileEntry.getName());
@@ -174,7 +200,7 @@ public class JMSMessageBodyUtil {
 						dossierFileMsgBody.setMimeType(dlFileEntry.getMimeType());
 
 						byte[] bytes =
-							JMSMessageUtil.convertInputStreamToByteArray(dlFileEntry.getContentStream());
+						    JMSMessageUtil.convertInputStreamToByteArray(dlFileEntry.getContentStream());
 
 						dossierFileMsgBody.setBytes(bytes);
 
@@ -188,17 +214,13 @@ public class JMSMessageBodyUtil {
 				}
 			}
 
-			dossierMsgBody.setDossier(dossier);
-			dossierMsgBody.setDossierTemplate(dossierTemplate);
-			dossierMsgBody.setLstDossierFileMsgBody(dossierFileMsgBodies);
-			dossierMsgBody.setServiceConfig(serviceConfig);
-			dossierMsgBody.setServiceInfo(serviceInfo);
 		}
 		catch (Exception e) {
-			_log.error(e);
+			// TODO: handle exception
 		}
 
-		return dossierMsgBody;
+		return dossierFileMsgBodies;
+
 	}
 
 	private static Log _log =

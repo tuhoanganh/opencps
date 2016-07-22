@@ -17,14 +17,26 @@
 
 package org.opencps.backend.exc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.opencps.backend.message.SendToBackOfficeMsg;
 import org.opencps.dossiermgt.model.Dossier;
+import org.opencps.dossiermgt.model.DossierFile;
+import org.opencps.dossiermgt.model.DossierPart;
+import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
+import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
 import org.opencps.jms.context.JMSContext;
 import org.opencps.jms.message.SubmitDossierMessage;
 import org.opencps.jms.message.SyncFromBackOfficeMessage;
+import org.opencps.jms.message.body.DossierFileMsgBody;
 import org.opencps.jms.message.body.SyncFromBackOfficeMsgBody;
+import org.opencps.jms.util.JMSMessageBodyUtil;
 import org.opencps.jms.util.JMSMessageUtil;
+import org.opencps.processmgt.NoSuchWorkflowOutputException;
+import org.opencps.processmgt.model.WorkflowOutput;
+import org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil;
 import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.log.Log;
@@ -52,8 +64,42 @@ public class MsgOutBackOffice implements MessageListener{
 
 			SendToBackOfficeMsg toBackOffice =
 			    (SendToBackOfficeMsg) message.get("toBackOffice");
+			
 			Dossier dossier =
 			    DossierLocalServiceUtil.fetchDossier(toBackOffice.getDossierId());
+			
+			List<WorkflowOutput> workflowOutputs =
+						    WorkflowOutputLocalServiceUtil.getByProcessWFPostback(toBackOffice.getProcessWorkflowId(), true);
+			
+			List<DossierFile> dossierFiles = new ArrayList<DossierFile>();
+			
+			//Check file return
+			if (workflowOutputs != null && !workflowOutputs.isEmpty()) {
+				for (WorkflowOutput workflowOutput : workflowOutputs) {
+					if (workflowOutput.getRequired()) {
+
+						DossierFile dossierFile = null;
+						try {
+							DossierPart dossierPart =
+								DossierPartLocalServiceUtil.getDossierPart(workflowOutput.getDossierPartId());
+							dossierFile =
+								DossierFileLocalServiceUtil.getDossierFileInUse(
+									toBackOffice.getDossierId(), dossierPart.getDossierpartId());
+							
+							dossierFiles.add(dossierFile);
+						}
+						catch (Exception e) {
+						}
+
+					}
+				}
+			}
+			else {
+				throw new NoSuchWorkflowOutputException();
+			}
+			
+			List<DossierFileMsgBody> lstDossierFileMsgBody =
+			    JMSMessageBodyUtil.getDossierFileMsgBody(dossierFiles);
 
 			JMSContext context =
 			    JMSMessageUtil.createProducer(
@@ -68,6 +114,8 @@ public class MsgOutBackOffice implements MessageListener{
 
 			msgBody.setOid(dossier.getOid());
 			msgBody.setDossierStatus(toBackOffice.getDossierStatus());
+			msgBody.setLstDossierFileMsgBody(lstDossierFileMsgBody);
+			msgBody.setPaymentFile(toBackOffice.getPaymentFile());
 
 			syncFromBackoffice.sendMessage(msgBody);
 
