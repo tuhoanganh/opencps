@@ -21,16 +21,16 @@ import javax.jms.BytesMessage;
 import javax.jms.JMSException;
 import javax.naming.NamingException;
 
+import org.opencps.dossiermgt.NoSuchDossierException;
 import org.opencps.jms.SyncServiceContext;
 import org.opencps.jms.business.SyncFromBackOffice;
 import org.opencps.jms.context.JMSContext;
 import org.opencps.jms.context.JMSLocalContext;
-import org.opencps.jms.message.body.DossierMsgBody;
 import org.opencps.jms.message.body.SyncFromBackOfficeMsgBody;
-import org.opencps.jms.util.JMSMessageBodyUtil;
 import org.opencps.jms.util.JMSMessageUtil;
 import org.opencps.util.WebKeys;
 
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -40,16 +40,6 @@ import com.liferay.portal.kernel.util.GetterUtil;
  */
 public class SyncFromBackOfficeMessage {
 
-	public void receiveLocalMessage(
-		SyncFromBackOfficeMsgBody syncFromBackOfficeMsgBody) {
-
-		setSyncFromBackOfficeMsgBody(syncFromBackOfficeMsgBody);
-
-		SyncFromBackOffice syncFromBackOffice = new SyncFromBackOffice();
-
-		syncFromBackOffice.syncDossier(syncFromBackOfficeMsgBody);
-	}
-
 	public SyncFromBackOfficeMessage(JMSContext context) {
 
 		this.setContext(context);
@@ -58,6 +48,37 @@ public class SyncFromBackOfficeMessage {
 	public SyncFromBackOfficeMessage(JMSLocalContext context) {
 
 		this.setLocalContext(context);
+	}
+
+	/**
+	 * @param syncFromBackOfficeMsgBody
+	 * @throws NamingException
+	 * @throws JMSException
+	 */
+	public void receiveLocalMessage(
+		SyncFromBackOfficeMsgBody syncFromBackOfficeMsgBody)
+		throws JMSException, NamingException {
+
+		setSyncFromBackOfficeMsgBody(syncFromBackOfficeMsgBody);
+
+		SyncFromBackOffice syncFromBackOffice = new SyncFromBackOffice();
+
+		try {
+			syncFromBackOffice.syncDossier(syncFromBackOfficeMsgBody);
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
+		finally {
+			if (_context != null) {
+				_context.destroy();
+			}
+
+			if (_localContext != null) {
+				_localContext.destroy();
+			}
+		}
+
 	}
 
 	public JMSContext getContext() {
@@ -100,8 +121,9 @@ public class SyncFromBackOfficeMessage {
 
 		this._serviceContext = serviceContext;
 	}
-	
-	public void sendMessage(SyncFromBackOfficeMsgBody msgBody) throws JMSException, NamingException {
+
+	public void sendMessage(SyncFromBackOfficeMsgBody msgBody)
+		throws JMSException, NamingException {
 
 		try {
 			BytesMessage bytesMessage =
@@ -123,17 +145,19 @@ public class SyncFromBackOfficeMessage {
 				SyncServiceContext syncServiceContext =
 					new SyncServiceContext(
 						companyId, groupId, userId, true, true);
-				
-				//Importance
-/*				DossierMsgBody dossierMsgBody =
-					JMSMessageBodyUtil.getDossierMsgBody(dossier);*/
+
+				// Importance
+				/*
+				 * DossierMsgBody dossierMsgBody =
+				 * JMSMessageBodyUtil.getDossierMsgBody(dossier);
+				 */
 				msgBody.setServiceContext(syncServiceContext.getServiceContext());
-				
+
 				byte[] sender =
 					JMSMessageUtil.convertObjectToByteArray(msgBody);
 
 				bytesMessage.writeBytes(sender);
-				
+
 				_context.getMessageProducer().send(bytesMessage);
 			}
 
@@ -153,7 +177,6 @@ public class SyncFromBackOfficeMessage {
 	private SyncFromBackOfficeMsgBody _syncFromBackOfficeMsgBody;
 
 	private SyncServiceContext _serviceContext;
-	
-	
+
 	private Log _log = LogFactoryUtil.getLog(SyncFromBackOfficeMessage.class);
 }

@@ -17,56 +17,36 @@
 
 package org.opencps.jms.business;
 
+import org.opencps.dossiermgt.NoSuchDossierException;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.jms.message.body.SyncFromBackOfficeMsgBody;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.exception.SystemException;
 
 /**
  * @author trungnt
  */
 public class SyncFromBackOffice {
 
-	public void syncDossier(SyncFromBackOfficeMsgBody syncFromBackOfficeMsgBody) {
+	/**
+	 * @param syncFromBackOfficeMsgBody
+	 * @throws SystemException
+	 * @throws NoSuchDossierException
+	 */
+	public void syncDossier(SyncFromBackOfficeMsgBody syncFromBackOfficeMsgBody)
+		throws NoSuchDossierException, SystemException {
 
-		boolean statusUpdate = false;
-
-		try {
-			statusUpdate =
-				DossierLocalServiceUtil.updateDossierStatus(
-					syncFromBackOfficeMsgBody.getOid(),
-					syncFromBackOfficeMsgBody.getFileGroupId(),
-					syncFromBackOfficeMsgBody.getDossierStatus(),
-					syncFromBackOfficeMsgBody.getReceptionNo(),
-					syncFromBackOfficeMsgBody.getEstimateDatetime(),
-					syncFromBackOfficeMsgBody.getReceiveDatetime(),
-					syncFromBackOfficeMsgBody.getFinishDatetime(),
-					syncFromBackOfficeMsgBody.getActor(),
-					syncFromBackOfficeMsgBody.getRequestCommand(),
-					syncFromBackOfficeMsgBody.getActionInfo(),
-					syncFromBackOfficeMsgBody.getMessageInfo());
-
-			_log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " +
-				statusUpdate);
-
-			/*
-			 * List<WorkflowOutput> workflowOutputs =
-			 * WorkflowOutputLocalServiceUtil.getByProcessWFPostback(
-			 * toBackOffice.getProcessWorkflowId(), true);
-			 * DossierLocalServiceUtil.updateDossierStatus( 0,
-			 * toBackOffice.getDossierId(),
-			 * PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS,
-			 * workflowOutputs);
-			 */
-
-		}
-		catch (Exception e) {
-			_log.error(e);
-		}
-
+		/*DossierLocalServiceUtil.updateDossierStatus(
+			syncFromBackOfficeMsgBody.getOid(),
+			syncFromBackOfficeMsgBody.getFileGroupId(),
+			syncFromBackOfficeMsgBody.getDossierStatus(),
+			syncFromBackOfficeMsgBody.getReceptionNo(),
+			syncFromBackOfficeMsgBody.getEstimateDatetime(),
+			syncFromBackOfficeMsgBody.getReceiveDatetime(),
+			syncFromBackOfficeMsgBody.getFinishDatetime(),
+			syncFromBackOfficeMsgBody.getActor(),
+			syncFromBackOfficeMsgBody.getRequestCommand(),
+			syncFromBackOfficeMsgBody.getActionInfo(),
+			syncFromBackOfficeMsgBody.getMessageInfo());*/
 	}
-
-	private Log _log =
-		LogFactoryUtil.getLog(SyncFromBackOffice.class.getName());
 }

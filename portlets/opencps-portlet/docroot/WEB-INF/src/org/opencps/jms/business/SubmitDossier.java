@@ -32,8 +32,8 @@ import org.opencps.jms.message.body.DossierMsgBody;
 import org.opencps.util.PortletConstants;
 import org.opencps.util.WebKeys;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.service.ServiceContext;
@@ -48,8 +48,11 @@ public class SubmitDossier {
 	/**
 	 * @param submitDossierMessage
 	 * @return
+	 * @throws SystemException
+	 * @throws PortalException
 	 */
-	public Dossier syncDossier(DossierMsgBody dossierMsgBody) {
+	public Dossier syncDossier(DossierMsgBody dossierMsgBody)
+		throws PortalException, SystemException {
 
 		Dossier dossier = null;
 
@@ -126,22 +129,15 @@ public class SubmitDossier {
 		if (syncDossier != null && syncDossierFiles != null &&
 			syncDLFileEntries != null && data != null &&
 			syncDossierTemplate != null && serviceContext != null) {
-			try {
-				dossier =
-					DossierLocalServiceUtil.syncDossier(
-						syncDossier, syncDossierFiles, syncFileGroups,
-						syncFileGroupDossierParts, syncDLFileEntries, data,
-						syncDossierTemplate, serviceContext);
+			dossier =
+				DossierLocalServiceUtil.syncDossier(
+					syncDossier, syncDossierFiles, syncFileGroups,
+					syncFileGroupDossierParts, syncDLFileEntries, data,
+					syncDossierTemplate, serviceContext);
 
-				sendToBackend(
-					dossier.getDossierId(), dossier.getDossierStatus(),
-					serviceContext);
-
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-
+			sendToBackend(
+				dossier.getDossierId(), dossier.getDossierStatus(),
+				serviceContext);
 		}
 
 		return dossier;
@@ -186,6 +182,4 @@ public class SubmitDossier {
 			"opencps/backoffice/engine/destination", message);
 
 	}
-
-	private Log _log = LogFactoryUtil.getLog(SubmitDossier.class.getClass());
 }
