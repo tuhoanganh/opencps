@@ -54,5 +54,4 @@
 
 <aui:model-context bean="<%= serviceInfo %>" model="<%= ServiceInfo.class %>"/>
 <div>
-
 </div>

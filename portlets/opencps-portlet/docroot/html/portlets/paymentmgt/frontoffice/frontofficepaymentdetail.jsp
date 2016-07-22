@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
 <%@page import="org.opencps.backend.util.PaymentRequestGenerator"%>
 <%@page import="com.liferay.portal.kernel.util.ListUtil"%>
 <%@page import="java.util.List"%>
@@ -79,161 +80,140 @@
 	String backURL = ParamUtil.getString(request, "backURL");
 	
 %>
-
+<style>
+.payment-ld .content{
+	display: flex;
+}
+</style>
 
 <liferay-ui:header
 	backURL="<%= backURL %>"
 	title="payment-request"
 	backLabel="back"
 />
-<div class="lookup-result">
+<div class="payment-ld">
+			<div class="content" >
+                <div class="box100">
 <c:choose>
 	<c:when test="<%= paymentFile != null %>">
-		<table>
-			<tr style="background: #fae5d3;">
-				<td class="col-left"><liferay-ui:message key="reception-no"></liferay-ui:message></td>
-				<td class="col-right"><%= dossier != null ? dossier.getReceptionNo() : "" %></td>
-			</tr>
-			<tr>
-				<td class="col-left"><liferay-ui:message key="service-name"></liferay-ui:message></td>
-				<td class="col-right"><%= serviceInfo != null ? serviceInfo.getServiceName() : "" %></td>
-			</tr>
-			<tr>
-				<td class="col-left"><liferay-ui:message key="payment-name"></liferay-ui:message></td>
-				<td class="col-right"><%= paymentFile != null ? paymentFile.getPaymentName() : "" %></td>
-			</tr>
-			<tr>
-				<td class="col-left"><liferay-ui:message key="administration-name"></liferay-ui:message></td>
-				<td class="col-right">
-					<c:if test="<%= dossier != null %>">
-						<%= dossier.getGovAgencyName() %>
-					</c:if>
-				</td>
-			</tr>
-			<tr>
-				<td class="col-left"><liferay-ui:message key="request-datetime"></liferay-ui:message></td>
-				<td class="col-right"><%= Validator.isNotNull(paymentFile.getRequestDatetime()) ? DateTimeUtil.convertDateToString(paymentFile.getRequestDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) : "" %></td>
-			</tr>
-			<tr>
-				<td class="col-left"><liferay-ui:message key="amount"></liferay-ui:message></td>
-				<td class="col-right"><%= NumberFormat.getInstance(new Locale("vi", "VN")).format(paymentFile.getAmount()) %></td>
-			</tr>
-			<tr>
-				<td class="col-left"><liferay-ui:message key="request-note"></liferay-ui:message></td>
-				<td class="col-right"><%= Validator.isNotNull(paymentFile.getRequestNote()) ? paymentFile.getRequestNote() : "" %></td>
-			</tr>
-			<tr>
-				<td class="col-left"><liferay-ui:message key="payment-options"></liferay-ui:message></td>
-				<td class="col-right">
-					<%
-						List<String> paymentOption = ListUtil.toList(StringUtil.split(paymentFile.getPaymentOptions()));
-						
-						boolean isCash = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_CASH);
-						boolean isKeypay = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_KEYPAY);
-						boolean isBank = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_BANK);
-					%>
-					<c:if test="<%= isCash %>">
-						[<liferay-ui:message key="cash"></liferay-ui:message>]&nbsp;
-					</c:if>
-					<c:if test="<%= isKeypay %>">
-						[<liferay-ui:message key="keypay"></liferay-ui:message>]&nbsp;
-					</c:if>
-					<c:if test="<%= isBank %>">
-						[<liferay-ui:message key="bank"></liferay-ui:message>]
-					</c:if>
-				</td>
-			</tr>
-			<c:if test="<%= isBank %>">
-			<tr>
-				<td class="col-left"><liferay-ui:message key="bank-info"></liferay-ui:message></td>
-				<td class="col-right">
-					<%= paymentFile.getBankInfo() %>
-				</td>
-			</tr>
-			</c:if>
-			<c:if test="<%= isCash %>">
-			<tr>
-				<td class="col-left"><liferay-ui:message key="place-info"></liferay-ui:message></td>
-				<td class="col-right">
-					<%= Validator.isNotNull(paymentFile.getPlaceInfo()) ? paymentFile.getPlaceInfo() : StringPool.BLANK %>
-				</td>
-			</tr>
-			</c:if>
-			<tr>
-				<td class="col-left"><liferay-ui:message key="payment-status-detail"></liferay-ui:message></td>
-				<td class="col-right">
-					<c:if test="<%= paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_REQUESTED %>">
-						<liferay-ui:message key="requested"></liferay-ui:message>
-					</c:if>
-					<c:if test="<%= paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_CONFIRMED %>">
-						<liferay-ui:message key="confirmed"></liferay-ui:message>
-					</c:if>
-					<c:if test="<%= paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_APPROVED %>">
-						<liferay-ui:message key="approved"></liferay-ui:message>
-					</c:if>
-					<c:if test="<%= paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_REJECTED %>">
-						<liferay-ui:message key="rejected"></liferay-ui:message>
-					</c:if>
-				</td>
-			</tr>			
-			<tr>
-				<td class="col-left"><liferay-ui:message key="payment-method"></liferay-ui:message></td>
-				<td class="col-right">
-					<c:if test="<%= paymentFile.getPaymentMethod() == 1 %>">
-						<liferay-ui:message key="cash"></liferay-ui:message>
-					</c:if>
-					<c:if test="<%= paymentFile.getPaymentMethod() == 2 %>">
-						<liferay-ui:message key="keypay"></liferay-ui:message>
-					</c:if>
-					<c:if test="<%= paymentFile.getPaymentMethod() == 3 %>">
-						<liferay-ui:message key="bank"></liferay-ui:message>
-					</c:if>
-				</td>
-			</tr>			
-			<tr>
-				<td class="col-left"><liferay-ui:message key="confirm-datetime"></liferay-ui:message></td>
-				<td class="col-right">
-					<%= Validator.isNotNull(paymentFile.getConfirmDatetime()) ? DateTimeUtil.convertDateToString(paymentFile.getConfirmDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) : ""  %>
-				</td>
-			</tr>			
-			<tr>
-				<td class="col-left"><liferay-ui:message key="confirm-file-entry-id"></liferay-ui:message></td>
-				<td class="col-right">
-					<%
-						FileEntry fileEntry = null;
-						try {
-							fileEntry = DLAppServiceUtil.getFileEntry(paymentFile.getConfirmFileEntryId());
-						}
-						catch (NoSuchFileEntryException e) {
-							
-						}
-						String dlURL = null;
-						if (fileEntry != null) {
-							FileVersion fileVersion = fileEntry.getFileVersion();
-							 
-							String queryString = "";							 
-							boolean appendFileEntryVersion = true;
-							 
-							boolean useAbsoluteURL = true;
-							 
-							dlURL = DLUtil.getPreviewURL(fileEntry, fileVersion, themeDisplay, queryString, appendFileEntryVersion, useAbsoluteURL);							
-						}
-					%>
-					<c:if test="<%= dlURL != null %>">
-						<a target="_blank" href="<%= dlURL %>"><liferay-ui:message key="view-confirm-file-entry"></liferay-ui:message></a>
-					</c:if>
-				</td>
-			</tr>			
-			<tr>
-				<td class="col-left"><liferay-ui:message key="approve-datetime"></liferay-ui:message></td>
-				<td class="col-right">
-					<%= Validator.isNotNull(paymentFile.getApproveDatetime()) ? DateTimeUtil.convertDateToString(paymentFile.getApproveDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) : ""  %>
-				</td>
-			</tr>			
-		</table>
+		
+                    <div class="box50">
+                        <div>
+                            <p><span><liferay-ui:message key="reception-no"></liferay-ui:message>:</span><%= dossier != null ? dossier.getReceptionNo() : "" %></p>
+                        </div>
+                        <div>
+                            <p><span><liferay-ui:message key="payment-name"></liferay-ui:message>:</span> <%= paymentFile != null ? paymentFile.getPaymentName() : "" %></p>
+                        </div>
+                        <div>
+                            <p><span><liferay-ui:message key="service-name"></liferay-ui:message>:</span> <span><%= serviceInfo != null ? serviceInfo.getServiceName() : "" %></span></p>
+                        </div>
+                        <div>
+                            <p><span><liferay-ui:message key="administration-name"></liferay-ui:message>:</span> <%= dossier != null? dossier.getGovAgencyName() : ""%></p>
+                        </div>
+                        <div>
+                             <p><span><liferay-ui:message key="payment-name"></liferay-ui:message>:</span> <%= paymentFile != null ? paymentFile.getPaymentName() : "" %></p>
+                        </div>
+                        <div>
+                            <p><span><liferay-ui:message key="ngay-yeu-cau"></liferay-ui:message>:</span> <%=paymentFile != null ? HtmlUtil.escape(DateTimeUtil.convertDateToString(paymentFile.getRequestDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT)):"" %></p>
+                        </div>
+                        <div>
+                            <p><span><liferay-ui:message key="amount"></liferay-ui:message>: </span> <span class="black"><%= NumberFormat.getInstance(new Locale("vi", "VN")).format(paymentFile.getAmount()) %> <liferay-ui:message key="vnd"></liferay-ui:message></span></p>
+                        </div>
+                    </div>
+                    <div class="box50">
+                        <div>
+                            <p><span><liferay-ui:message key="request-note"></liferay-ui:message>:</span> <%= Validator.isNotNull(paymentFile.getRequestNote()) ? paymentFile.getRequestNote() : "" %></p>
+                        </div>
+                        <div>
+                            <p><span><liferay-ui:message key="payment-options"></liferay-ui:message>:</span> 
+                            	<%
+									List<String> paymentOption = ListUtil.toList(StringUtil.split(paymentFile.getPaymentOptions()));
+									
+									boolean isCash = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_CASH);
+									boolean isKeypay = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_KEYPAY);
+									boolean isBank = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_BANK);
+								%>
+									<c:if test="<%= isCash %>">
+										[ <liferay-ui:message key="cash"></liferay-ui:message> ]&nbsp;
+									</c:if>
+									<c:if test="<%= isKeypay %>">
+										[ <liferay-ui:message key="keypay"></liferay-ui:message> ]&nbsp;
+									</c:if>
+									<c:if test="<%= isBank %>">
+										[ <liferay-ui:message key="bank"></liferay-ui:message> ]
+									</c:if>
+							</p>
+                        </div>
+                        <div>
+                            <p><span><liferay-ui:message key="payment-status-detail"></liferay-ui:message>:</span> 
+								<c:if test="<%= paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_REQUESTED %>">
+									<liferay-ui:message key="requested"></liferay-ui:message>
+								</c:if>
+								<c:if test="<%= paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_CONFIRMED %>">
+									<liferay-ui:message key="confirmed"></liferay-ui:message>
+								</c:if>
+								<c:if test="<%= paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_APPROVED %>">
+									<liferay-ui:message key="approved"></liferay-ui:message>
+								</c:if>
+								<c:if test="<%= paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_REJECTED %>">
+									<liferay-ui:message key="rejected"></liferay-ui:message>
+								</c:if>
+							</p>
+                        </div>
+                        <div>
+                            <p><span><liferay-ui:message key="payment-method"></liferay-ui:message>:</span> 
+								<c:if test="<%= paymentFile.getPaymentMethod() == 1 %>">
+									<liferay-ui:message key="cash"></liferay-ui:message>
+								</c:if>
+								<c:if test="<%= paymentFile.getPaymentMethod() == 2 %>">
+									<liferay-ui:message key="keypay"></liferay-ui:message>
+								</c:if>
+								<c:if test="<%= paymentFile.getPaymentMethod() == 3 %>">
+									<liferay-ui:message key="bank"></liferay-ui:message>
+								</c:if>
+							</p>
+                        </div>
+                        <div>
+                            <p><span><liferay-ui:message key="request-datetime"></liferay-ui:message>:</span> <%= Validator.isNotNull(paymentFile.getRequestDatetime()) ? DateTimeUtil.convertDateToString(paymentFile.getRequestDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) : "" %></p>
+                        </div>
+                        <div>
+                            <p><span><liferay-ui:message key="confirm-file-entry-id"></liferay-ui:message>:</span> 
+                            
+	                            <%
+									FileEntry fileEntry = null;
+									try {
+										fileEntry = DLAppServiceUtil.getFileEntry(paymentFile.getConfirmFileEntryId());
+									}
+									catch (NoSuchFileEntryException e) {
+										
+									}
+									String dlURL = null;
+									if (fileEntry != null) {
+										FileVersion fileVersion = fileEntry.getFileVersion();
+										 
+										String queryString = "";							 
+										boolean appendFileEntryVersion = true;
+										 
+										boolean useAbsoluteURL = true;
+										 
+										dlURL = DLUtil.getPreviewURL(fileEntry, fileVersion, themeDisplay, queryString, appendFileEntryVersion, useAbsoluteURL);							
+									}
+								%>
+								<c:if test="<%= dlURL != null %>">
+									<a target="_blank"  class="text-underline" href="<%= dlURL %>"><liferay-ui:message key="view-confirm-file-entry"></liferay-ui:message></a>
+								</c:if>
+						</p>
+                        </div>
+                        <div>
+                            <p><span><liferay-ui:message key="confirm-datetime"></liferay-ui:message>:</span> <%= Validator.isNotNull(paymentFile.getConfirmDatetime()) ? DateTimeUtil.convertDateToString(paymentFile.getConfirmDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) : ""  %></p>
+                        </div>
+                    </div>
+            
 	</c:when>
 	<c:otherwise>
 	
 	</c:otherwise>
 </c:choose>
-</div>
+    </div>
+            </div>
+		</div>

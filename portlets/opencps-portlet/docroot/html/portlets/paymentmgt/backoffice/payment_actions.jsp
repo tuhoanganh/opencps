@@ -42,7 +42,7 @@
 	detailURL.setParameter("redirect", currentURL);
 %>
 
-	<a href="<%=detailURL.toString() %>" ><liferay-ui:message key="detail" ></liferay-ui:message></a> | 
+	<a class="button" href="<%=detailURL.toString() %>" ><liferay-ui:message key="detail" ></liferay-ui:message></a> <br/>
 
 <c:choose>
 	<c:when test="<%=rowPay.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_ON_PROCESSING ||
@@ -50,21 +50,21 @@
 		<%
 			detailURL.setParameter("mvcPath", templatePath + "backofficepaymentcash.jsp");
 		%>
-		<a href="<%=detailURL.toString() %>" ><liferay-ui:message key="thu-phi" ></liferay-ui:message></a>
+		<a class="button" href="<%=detailURL.toString() %>" ><liferay-ui:message key="thu-phi" ></liferay-ui:message></a>
 	</c:when>
 	
 	<c:when test="<%=rowPay.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_CONFIRMED %>">
 		<%
 			detailURL.setParameter("mvcPath", templatePath + "backofficepaymentconfirm.jsp");
 		%>
-		<a href="<%=detailURL.toString() %>" ><liferay-ui:message key="xac-nhan" ></liferay-ui:message></a>
+		<a class="button" href="<%=detailURL.toString() %>" ><liferay-ui:message key="xac-nhan" ></liferay-ui:message></a>
 	</c:when>
 	
 	<c:when test="<%=rowPay.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_APPROVED %>">
 		<%
 			detailURL.setParameter("mvcPath", templatePath + "backofficepaymentbill.jsp");
 		%>
-		<a href="<%=detailURL.toString() %>" ><liferay-ui:message key="in-bien-lai" ></liferay-ui:message></a>
+		<a class="button" href="<%=detailURL.toString() %>" ><liferay-ui:message key="in-bien-lai" ></liferay-ui:message></a>
 	</c:when>
 	
 </c:choose>

@@ -19,28 +19,35 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
+<%@ taglib prefix="opencps-ui" uri="/WEB-INF/tld/opencps-ui.tld"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@ include file="../init.jsp"%>
 
 <%
 	String tabs1 = ParamUtil.getString(request, "tabs1", DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_SEARCH);
+
+	PortletURL viewMonitoringSearchURL = renderResponse.createRenderURL();
+	viewMonitoringSearchURL.setParameter("mvcPath", templatePath + "dossiermonitoringsearch.jsp");
+	viewMonitoringSearchURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_SEARCH);
+	
 	PortletURL dossierFileSearchUrl = renderResponse.createRenderURL();
 	dossierFileSearchUrl.setParameter("mvcPath", templatePath + "dossiermonitoringdossierfilelist.jsp");
 	dossierFileSearchUrl.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_DOSSIER_FILE_LIST);
+	
+	PortletURL viewMonitoringServiceURL = renderResponse.createRenderURL();
+	viewMonitoringServiceURL.setParameter("mvcPath", templatePath + "dossiermonitoringservice.jsp");
+	viewMonitoringServiceURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_SERVICE);
 %>
 
 <portlet:actionURL name="searchAction" var="searchUrl"></portlet:actionURL>
 
 <portlet:actionURL name="searchServiceAction" var="serviceUrl"></portlet:actionURL>
-<style>
-<!--
-.keywordinput {
-	width: 80%
-}
--->
-</style>
+
+<%
+	String keySelect = DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_SEARCH + "," + DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_DOSSIER_FILE_LIST + "," + DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_SERVICE;
+	String urlSelect = viewMonitoringSearchURL + "," + dossierFileSearchUrl + "," + viewMonitoringServiceURL;
+%>
 <aui:nav-bar cssClass="custom-toolbar">
 	<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left" >
 		
@@ -56,12 +63,15 @@
 									<label>
 										<liferay-ui:message key="keywords"/>
 									</label>
-									<liferay-ui:input-search										
+									<opencps-ui:input-search 
 										id="keywords"
 										name="keywords"
-										cssClass="keywordinput input-append"
+										cssClass="input-append"
 										title='<%= LanguageUtil.get(portletConfig, locale, "keywords") %>'
 										placeholder="<%= LanguageUtil.get(pageContext, \"dossier-search-keywords\") %>" 
+										keySelect="<%=keySelect %>"
+										urlSelect="<%=urlSelect %>"
+										currentTab="<%=tabs1 %>"
 									/>
 								</aui:col>
 							</aui:row>
@@ -80,12 +90,15 @@
 									<label>
 										<liferay-ui:message key="keywords"/>
 									</label>
-									<liferay-ui:input-search
+									<opencps-ui:input-search 
 										id="keywords"
 										name="keywords"
-										cssClass="keywordinput input-append"
+										cssClass="input-append"
 										title='<%= LanguageUtil.get(portletConfig, locale, "keywords") %>'
-										placeholder="<%= LanguageUtil.get(pageContext, \"dossier-file-search-keywords\") %>" 
+										placeholder="<%= LanguageUtil.get(pageContext, \"dossier-search-keywords\") %>" 
+										keySelect="<%=keySelect %>"
+										urlSelect="<%=urlSelect %>"
+										currentTab="<%=tabs1 %>"
 									/>
 								</aui:col>
 							</aui:row>
@@ -104,12 +117,15 @@
 									<label>
 										<liferay-ui:message key="keywords"/>
 									</label>
-									<liferay-ui:input-search
+									<opencps-ui:input-search 
 										id="keywords"
 										name="keywords"
-										cssClass="keywordinput input-append"
+										cssClass="input-append"
 										title='<%= LanguageUtil.get(portletConfig, locale, "keywords") %>'
-										placeholder="<%= LanguageUtil.get(pageContext, \"service-search-keywords\") %>" 
+										placeholder="<%= LanguageUtil.get(pageContext, \"dossier-search-keywords\") %>" 
+										keySelect="<%=keySelect %>"
+										urlSelect="<%=urlSelect %>"
+										currentTab="<%=tabs1 %>"
 									/>
 								</aui:col>
 							</aui:row>
