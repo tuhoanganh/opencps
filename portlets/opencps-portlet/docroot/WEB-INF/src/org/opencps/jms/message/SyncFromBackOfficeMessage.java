@@ -63,8 +63,10 @@ public class SyncFromBackOfficeMessage {
 
 		SyncFromBackOffice syncFromBackOffice = new SyncFromBackOffice();
 
+		_log.info("******************** ReceiveLocalMessage **************************");
+
 		try {
-			syncFromBackOffice.syncDossier(syncFromBackOfficeMsgBody);
+			syncFromBackOffice.syncDossierStatus(syncFromBackOfficeMsgBody);
 		}
 		catch (Exception e) {
 			_log.error(e);

@@ -29,6 +29,7 @@ import org.opencps.dossiermgt.model.FileGroup;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.jms.message.body.DossierFileMsgBody;
 import org.opencps.jms.message.body.DossierMsgBody;
+import org.opencps.jms.util.JMSMessageBodyUtil.AnalyzeDossierFile;
 import org.opencps.util.PortletConstants;
 import org.opencps.util.WebKeys;
 
@@ -77,53 +78,15 @@ public class SubmitDossier {
 			dossierMsgBody.getLstDossierFileMsgBody();
 
 		if (dossierFileMsgBodies != null) {
-			syncDossierFiles = new LinkedHashMap<DossierFile, DossierPart>();
+			AnalyzeDossierFile analyzeDossierFile =
+				new AnalyzeDossierFile(dossierFileMsgBodies);
 
-			syncDLFileEntries = new LinkedHashMap<String, DLFileEntry>();
-
-			data = new LinkedHashMap<String, byte[]>();
-
-			syncFileGroups = new LinkedHashMap<String, FileGroup>();
-
-			syncFileGroupDossierParts = new LinkedHashMap<Long, DossierPart>();
-
-			for (DossierFileMsgBody dossierFileMsgBody : dossierFileMsgBodies) {
-				DossierFile syncDossierFile =
-					dossierFileMsgBody.getDossierFile();
-
-				syncDossierFiles.put(
-					syncDossierFile, dossierFileMsgBody.getDossierPart());
-
-				data.put(
-					syncDossierFile.getOid(), dossierFileMsgBody.getBytes());
-
-				DLFileEntry dlFileEntry =
-					DLFileEntryLocalServiceUtil.createDLFileEntry(syncDossierFile.getFileEntryId());
-
-				dlFileEntry.setDescription(dossierFileMsgBody.getFileDescription());
-
-				dlFileEntry.setTitle(dossierFileMsgBody.getFileTitle());
-
-				dlFileEntry.setMimeType(dossierFileMsgBody.getMimeType());
-
-				dlFileEntry.setExtension(dossierFileMsgBody.getExtension());
-
-				dlFileEntry.setName(dossierFileMsgBody.getFileName());
-
-				syncDLFileEntries.put(syncDossierFile.getOid(), dlFileEntry);
-
-				FileGroup syncFileGroup = dossierFileMsgBody.getFileGroup();
-
-				if (syncFileGroup != null) {
-
-					syncFileGroups.put(syncDossierFile.getOid(), syncFileGroup);
-
-					syncFileGroupDossierParts.put(
-						syncFileGroup.getFileGroupId(),
-						dossierFileMsgBody.getFileGroupDossierPart());
-				}
-
-			}
+			syncDossierFiles = analyzeDossierFile.getSyncDossierFiles();
+			syncFileGroups = analyzeDossierFile.getSyncFileGroups();
+			syncFileGroupDossierParts =
+				analyzeDossierFile.getSyncFileGroupDossierParts();
+			syncDLFileEntries = analyzeDossierFile.getSyncDLFileEntries();
+			data = analyzeDossierFile.getData();
 		}
 
 		if (syncDossier != null && syncDossierFiles != null &&
