@@ -9,8 +9,9 @@
 
 /*---------- Menu ----------*/
 .opencps-theme nav {height: 50px; background-color: #0acaf4; background-image: url(../images/frame_1/bg_menu.png); color: white; font-family: 'Roboto-Bold'; margin-bottom: 0 !important; text-transform: uppercase; overflow: hidden;}
-.opencps-theme nav ul {width: 1170px; margin: auto;}
+.opencps-theme nav ul {width: 1170px; margin: auto; height: 50px; overflow: hidden;}
 .opencps-theme nav ul > li {float: left;}
+.opencps-theme nav ul > li ul {display: none;}
 .opencps-theme nav ul > li > a {line-height: 50px; padding: 15px 30px;}
 .opencps-theme nav ul > li > a img {display: none;}
 .opencps-theme nav ul > li.selected > a, nav ul > li:hover > a {background-color: #0090ff}

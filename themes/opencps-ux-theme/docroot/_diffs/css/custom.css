@@ -1,19 +1,42 @@
+/* This file allows you to override default styles in one central location for easier upgrade and maintenance. */
+
 @import url(font_face.css);
 @import url(controls.css);
 @import url(support.css);
 @import url(font-awesome.min.css);
-@import url(portlets/p_10.css);
-@import url(portlets/p_13.css);
+
+/*vtduy_cmc */
+@import url(portlets/portlet_login.css);
+@import url(portlets/portlet_register.css);
+@import url(portlets/portlet_accountInfo.css);
+@import url(portlets/portlet_history.css);
+
+@import url(portlets/portlet_hung_custom.css);
 @import url(portlets/binhth.css);
+
+@import url(button-custom.css);
+
+/*end*/
+@import url(custom_frame_1.css);
+@import url(header_style_1.css);
+
+/* custom css theme ngoai cung*/
+.opencps-theme {
+	height: initial;
+	background-color: #f5f5f5;
+}
+.portlet-body{
+	background-color: #f5f5f5;
+}
+#main-content{
+	margin: 0!important;
+}
+#hrefFm{
+	margin: 0!important;
+}
+.opencps-theme .fake_textarea {height: 90px; border: 1px solid #acacac; border-radius: 5px; background-color: white; padding: 0 10px; overflow-y: auto;}
 
 .aui .dockbar.navbar-static-top .collapse .nav-account-controls{
 	float: right;
 }
 
-
-@import url(custom_frame_1.css);
-@import url(header_style_1.css);
-@import url(portlets/binhth.css);
-
-@import url(custom_frame_1.css);
-@import url(header_style_1.css);
