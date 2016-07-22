@@ -53,6 +53,10 @@ public class PreviewReportServlet extends HttpServlet {
 
 		long dossierFileId = ParamUtil
 		    .getLong(request, "dossierFileId");
+		
+		//fix encoding preview html
+		response.setCharacterEncoding("utf-8");
+		
 		PrintWriter writer = response
 		    .getWriter();
 

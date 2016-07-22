@@ -59,8 +59,13 @@
 	String soHoSo = StringPool.BLANK;
 	String chuHoSo = StringPool.BLANK;
 %>
+<div class="payment-ld">
+<div class="content">
 <aui:form name="payForm" action="#">
-<liferay-ui:search-container searchContainer="<%= new PaymentFileSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
+<div class="opcs-serviceinfo-list-label">
+  <p><liferay-ui:message key="danh-sach-ho-so-thu-phi" /></p>
+</div>
+<liferay-ui:search-container id="paymentList" searchContainer="<%= new PaymentFileSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
 
 	<liferay-ui:search-container-results>
 		<%
@@ -73,7 +78,7 @@
 			}
 			List<PaymentFile> dossierFiles = null;
 			Integer totalCount = 0;
-			if (keywordArrs != null || Validator.isNotNull(paymentStatus)) {
+			if (keywordArrs != null || !paymentStatus.equalsIgnoreCase("-1")) {
 				try {
 					dossierFiles = PaymentFileLocalServiceUtil.searchPaymentFiles(themeDisplay.getScopeGroupId(), paymentStatus, keywords, searchContainer.getStart(), searchContainer.getEnd());
 					totalCount = PaymentFileLocalServiceUtil.countPaymentFiles(themeDisplay.getScopeGroupId(), paymentStatus, keywords);
@@ -89,6 +94,7 @@
 					_log.error(e);
 				}
 			}
+			System.out.println(paymentStatus);
 			total = totalCount;
 			results = dossierFiles;
 			
@@ -131,35 +137,66 @@
 					}
 					
 				}
+				String paymentMothodLabel = StringPool.BLANK;
+				if(paymentFile.getPaymentStatus() == 3){
+					paymentMothodLabel = LanguageUtil.get(pageContext, PortletUtil.getPaymentMethodLabel(paymentFile.getPaymentMethod(), locale)); 
+				}
+				PortletURL detailURLXem = renderResponse.createRenderURL();
+				detailURLXem.setParameter("mvcPath", templatePath + "backofficepaymentdetail.jsp");
+				detailURLXem.setParameter("paymentFileId", String.valueOf(paymentFile.getPaymentFileId()));
+				detailURLXem.setParameter("redirect", currentURL);
+				
+				String classColor = "chothanhtoan";
+				if(paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_ON_PROCESSING ||
+						paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_REQUESTED || paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_REJECTED){
+					classColor = "chothanhtoan";
+				}else if(paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_CONFIRMED){
+					classColor = "datiepnhan";
+				}else if(paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_APPROVED){
+					classColor = "hoanthanh";
+				}
 				
 				// no column
 				row.addText(String.valueOf(row.getPos() + 1));		
 			
-				row.addText(String.valueOf(soHoSo));
+				row.addText("<p><b style=\"margin-left: -20px; padding-right: 20px;\" class=\"mamau "+classColor+"\"></b><span style=\"width: 95px; display: inline-block;\">"+LanguageUtil.get(pageContext, "reception-no")+":</span> "+soHoSo+"</p><p><span>"+LanguageUtil.get(pageContext, "payment-name")+":</span> "+paymentFile.getPaymentName()+" <a href=\""+detailURLXem.toString()+"\" class=\"chitiet\">"+LanguageUtil.get(pageContext, "xem-detail")+"</a></p><p><span>"+LanguageUtil.get(pageContext, "subject-name")+":</span>"+chuHoSo+"</p>");
 				
-				row.addText(String.valueOf(chuHoSo));	
-				
-				row.addText(String.valueOf(paymentFile.getPaymentName()));	
-				
-				row.addText(String.valueOf(NumberFormat.getInstance(new Locale("vi", "VN")).format(paymentFile.getAmount())));	
-				
-				row.addText(LanguageUtil.get(pageContext, PortletUtil.getPaymentStatusLabel(paymentFile.getPaymentStatus(), locale)));	
-				if(paymentFile.getPaymentStatus() == 3){
-					row.addText(LanguageUtil.get(pageContext, PortletUtil.getPaymentMethodLabel(paymentFile.getPaymentMethod(), locale))); 
-				}else{
-					row.addText(""); 
-				}
-				
+				row.addText("<p><span>"+LanguageUtil.get(pageContext, "payment-status")+":</span> <span class=\""+classColor+"\">"+LanguageUtil.get(pageContext, PortletUtil.getPaymentStatusLabel(paymentFile.getPaymentStatus(), locale))+"</span></p><p><span>"+LanguageUtil.get(pageContext, "amount")+":</span> <span class=\"sotien\">"+String.valueOf(NumberFormat.getInstance(new Locale("vi", "VN")).format(paymentFile.getAmount()))+"</span></p><p><span>"+LanguageUtil.get(pageContext, "payment-method")+":</span>"+paymentMothodLabel+"</p>");	
 				
 				row.addJSP("center", SearchEntry.DEFAULT_VALIGN, templatePath + "payment_actions.jsp", config.getServletContext(), request, response);
+				
 			%>	
+			
+			<liferay-ui:search-container-column-text>
+				
+			</liferay-ui:search-container-column-text>
 		</liferay-ui:search-container-row> 
 	
 	<liferay-ui:search-iterator/>
 </liferay-ui:search-container>
 
 </aui:form>
-
+</div>
+</div>
+<style>
+.table.payment tr td:nth-child(2){
+   max-width: 600px;
+}
+.table.payment tr td:nth-child(3){
+   max-width: 300px;
+}
+.table.payment tr td:nth-child(4){
+   width: 190px;
+}
+</style>
+<aui:script>
+    AUI().ready(function(A) {
+    	var allTable = A.all(".table-striped");
+    	allTable.each(function (taskNode) {
+			taskNode.addClass('payment');
+	    });
+    });
+</aui:script>
 <%!
 	private Log _log = LogFactoryUtil.getLog(".html.portlets.paymentmgt.backoffice.backofficepaymentlist.jsp");
 %>
