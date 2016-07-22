@@ -85,7 +85,7 @@ public class MsgInFrontOffice implements MessageListener {
 			JMSContext context =
 				JMSMessageUtil.createConsumer(
 					companyId, StringPool.BLANK, true,
-					WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "local");
+					WebKeys.JMS_QUEUE_OPENCPS_FRONTOFFICE.toLowerCase(), "local");
 			try {
 				int messageInQueue = context.countMessageInQueue();
 				int receiveNumber = messageInQueue <= 50 ? messageInQueue : 50;
