@@ -2066,7 +2066,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 			// Neu gui truc tuyen thi can thoi gian de dong bo trang thai nen
 			// Se tam chuyen sang trang thai system
-			if (serviceConfig.isServicePortal()) {
+			/*if (serviceConfig.isServicePortal()) {
 				boolean result =
 					DossierLocalServiceUtil.updateDossierStatus(
 						dossierId, fileGroupId,
@@ -2087,7 +2087,22 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			else {
 				MessageBusUtil.sendMessage(
 					"opencps/frontoffice/out/destination", message);
-			}
+			}*/
+			
+			DossierLocalServiceUtil.updateDossierStatus(
+				dossierId, fileGroupId,
+				PortletConstants.DOSSIER_STATUS_SYSTEM,
+				WebKeys.ACTOR_ACTION_CITIZEN, StringPool.BLANK,
+				PortletUtil.getActionInfo(
+					PortletConstants.DOSSIER_STATUS_SYSTEM,
+					actionRequest.getLocale()),
+				PortletUtil.getMessageInfo(
+					PortletConstants.DOSSIER_STATUS_SYSTEM,
+					actionRequest.getLocale()),
+				PortletConstants.DOSSIER_LOG_NORMAL);
+			
+			MessageBusUtil.sendMessage(
+				"opencps/frontoffice/out/destination", message);
 
 		}
 		catch (Exception e) {
