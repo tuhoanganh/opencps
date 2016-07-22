@@ -54,6 +54,8 @@ public class MsgOutFrontOffice implements MessageListener{
 	        UserActionMsg userActionMgs =
 	                  (UserActionMsg) message.get("msgToEngine");
 	        
+	        _log.info("**************************userActionMgs.getDossierId() " + userActionMgs.getDossierId());
+	        
 	        JMSContext context =
 	            JMSMessageUtil.createProducer(
 	              userActionMgs.getCompanyId(), userActionMgs.getGovAgencyCode(),

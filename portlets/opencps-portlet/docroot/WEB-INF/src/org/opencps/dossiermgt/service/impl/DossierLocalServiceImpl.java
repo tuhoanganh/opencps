@@ -178,19 +178,22 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 			folder =
 				DLFolderUtil.getFolder(
 					serviceContext.getScopeGroupId(), parentFolderId,
-					String.valueOf(dossierNo));
+					dossier.getOid());
 		}
 		catch (Exception e) {
 			// TODO: handle exception
 		}
 
 		if (folder == null) {
-			dlFolderLocalService.addFolder(
-				userId, serviceContext.getScopeGroupId(),
-				serviceContext.getScopeGroupId(), false, parentFolderId,
-				String.valueOf(dossierNo), StringPool.BLANK, false,
-				serviceContext);
+			folder =
+				dlFolderLocalService.addFolder(
+					userId, serviceContext.getScopeGroupId(),
+					serviceContext.getScopeGroupId(), false, parentFolderId,
+					dossier.getOid(), StringPool.BLANK, false, serviceContext);
+
 		}
+
+		dossier.setFolderId(folder.getFolderId());
 
 		dossier = dossierPersistence.update(dossier);
 
@@ -494,6 +497,61 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 
 		return dossierFinder.countDossierByUser(
 			groupId, userId, keyword, serviceDomainTreeIndex, dossierStatus);
+	}
+
+	/**
+	 * @param dossierId
+	 * @param accountFolder
+	 * @throws NoSuchDossierException
+	 * @throws SystemException
+	 * @throws PortalException
+	 */
+	public void deleteDossierByDossierId(long dossierId)
+		throws NoSuchDossierException, SystemException, PortalException {
+
+		Dossier dossier = dossierPersistence.findByPrimaryKey(dossierId);
+		List<FileGroup> fileGroups =
+			fileGroupLocalService.getFileGroupByDossierId(dossierId);
+		List<DossierFile> dossierFiles =
+			dossierFileLocalService.getDossierFileByDossierId(dossierId);
+
+		if (dossierFiles != null) {
+			for (DossierFile dossierFile : dossierFiles) {
+				dossierFileLocalService.deleteDossierFile(dossierFile);
+			}
+		}
+
+		if (fileGroups != null) {
+			for (FileGroup fileGroup : fileGroups) {
+
+				fileGroupLocalService.deleteFileGroup(fileGroup);
+
+			}
+		}
+
+		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(Dossier.class);
+
+		indexer.delete(dossier);
+
+		int counter = dossier.getCounter();
+
+		DLFolder dlFolder = null;
+
+		try {
+			dlFolder =
+				DLFolderUtil.getFolder(
+					dossier.getGroupId(), dossier.getFolderId(),
+					String.valueOf(counter));
+
+			if (dlFolder != null) {
+				dlFolderLocalService.deleteDLFolder(dlFolder);
+			}
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		dossierPersistence.remove(dossier);
 	}
 
 	/**
@@ -871,6 +929,40 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 			}
 		}
 
+	}
+
+	public boolean updateDossierStatus(
+		long dossierId, long fileGroupId, String dossierStatus, String actor,
+		String requestCommand, String actionInfo, String messageInfo, int level) {
+
+		boolean result = false;
+		try {
+
+			Dossier dossier = dossierPersistence.findByPrimaryKey(dossierId);
+
+			if (dossier.getDossierStatus().equals(
+				PortletConstants.DOSSIER_STATUS_WAITING) ||
+				dossier.getDossierStatus().equals(
+					PortletConstants.DOSSIER_STATUS_PAYING)) {
+				dossier.setDossierStatus(dossierStatus);
+
+				dossierLogLocalService.addDossierLog(
+					dossier.getUserId(), dossier.getGroupId(),
+					dossier.getCompanyId(), dossierId, fileGroupId,
+					dossierStatus, actor, requestCommand, actionInfo,
+					messageInfo, level);
+
+				dossierPersistence.update(dossier);
+
+				result = true;
+			}
+
+		}
+		catch (Exception e) {
+			result = false;
+		}
+
+		return result;
 	}
 
 	/**

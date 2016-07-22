@@ -87,17 +87,19 @@ public class MsgInFrontOffice implements MessageListener {
 					companyId, StringPool.BLANK, true,
 					WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "local");
 			try {
-				int messageInQueue = context.countMessageInQueue();
-				int receiveNumber = messageInQueue <= 50 ? messageInQueue : 50;
+				//int messageInQueue = context.countMessageInQueue();
+				//int receiveNumber = messageInQueue <= 50 ? messageInQueue : 50;
+				
+				int receiveNumber = 50;
 
-				_log.info("********************************************************Queue Size*********************************************** " +
-					messageInQueue);
+				/*_log.info("********************************************************Queue Size*********************************************** " +
+					messageInQueue);*/
 
 				int count = 1;
 				while (count <= receiveNumber) {
 
 					javax.jms.Message jsmMessage =
-						context.getMessageConsumer().receive();
+						context.getMessageConsumer().receive(1000);
 					if (jsmMessage != null) {
 						if (jsmMessage instanceof TextMessage) {
 							_log.info("*******************TextMessage*******************");
