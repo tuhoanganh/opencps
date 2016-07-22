@@ -458,6 +458,7 @@
 		<field name="dossierSource" type="int" />
 		<field name="keypayRedirectUrl" type="String" />
 		<field name="delayStatus" type="int" />
+		<field name="folderId" type="long" />
 	</model>
 	<model name="org.opencps.dossiermgt.model.DossierFile">
 		<field name="dossierFileId" type="long" />

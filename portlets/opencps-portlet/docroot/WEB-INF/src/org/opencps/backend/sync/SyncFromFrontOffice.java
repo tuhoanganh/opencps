@@ -65,9 +65,13 @@ public class SyncFromFrontOffice implements MessageListener{
 	 * @param message
 	 */
 	private void _doReceiveDossier(Message message) {
+		
+		_log.info("*****************************************SyncFromFrontOffice*******************************8");
 
 		UserActionMsg userActionMgs =
 		    (UserActionMsg) message.get("msgToEngine");
+
+		_log.info("*****************************************SyncFromFrontOffice*" + userActionMgs.getDossierId());
 
 		String action = userActionMgs.getAction();
 
