@@ -30,13 +30,17 @@
 		cssClass="nav-display-style-buttons pull-left">
 
 	</aui:nav>
-	<aui:nav-bar-search cssClass="pull-left" style="width: 98%">
+	<aui:nav-bar-search cssClass="pull-left" style="width: 100%">
 		<div class="form-search">
 			<aui:form action="<%= searchUrl %>" method="post" name="fm">
-				<div class="toolbar_search_input" style="width: 98%">
+				<div class="toolbar_search_input">
 					<aui:row>
+						<aui:col width="30">
+						
+						</aui:col>
 						<aui:col width="35">
-							<aui:select name="paymentStatus" label="">
+							<div class="select">
+							<aui:select name="paymentStatus" cssClass="select" label="">
 								<aui:option value="-1">
 									<liferay-ui:message key="all-status"></liferay-ui:message>
 								</aui:option>
@@ -52,9 +56,10 @@
 								<aui:option value="<%= PaymentMgtUtil.PAYMENT_STATUS_REJECTED %>">
 									<liferay-ui:message key="rejected"></liferay-ui:message>
 								</aui:option>
-							</aui:select>							
+							</aui:select>	
+							</div>						
 						</aui:col>
-						<aui:col width="65">
+						<aui:col width="35">
 							<label> <liferay-ui:message key="keywords" />
 							</label>
 							<liferay-ui:input-search id="keywords" name="keywords"
