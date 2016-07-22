@@ -214,7 +214,7 @@
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/portlets/accountmgt/profile/viewprofile.jsp</value>
+			<value>/html/portlets/accountmgt/profile/viewprofile-ux.jsp</value>
 		</init-param>
 		<init-param>
 			<name>template-path</name>

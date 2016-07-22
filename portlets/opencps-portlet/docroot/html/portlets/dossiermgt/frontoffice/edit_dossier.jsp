@@ -67,15 +67,18 @@
 	
 	boolean isEditDossier = ParamUtil.getBoolean(request, "isEditDossier");
 %>
+
+<div class="ocps-header-history">
+	<liferay-ui:header
+		backURL="<%= backURL %>"
+		title='<%= (dossier == null) ? "add-dossier" : (cmd.equals(Constants.VIEW) ? "view-dossier" : "update-dossier") %>'
+	/>
+</div>
+<div class="ocps-history-bound-navigator">
 <c:choose>
 	<c:when test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) && Validator.isNotNull(accountType) &&
 				(accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN) ||
 				accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS)) %>">
-		<liferay-ui:header
-			backURL="<%= backURL %>"
-			title='<%= (dossier == null) ? "add-dossier" : (cmd.equals(Constants.VIEW) ? "view-dossier" : "update-dossier") %>'
-		/>
-		
 		<portlet:actionURL var="updateDossierURL" name="updateDossier"/>
 		
 		<liferay-util:buffer var="htmlTop">
@@ -203,12 +206,12 @@
 			/>
 		</aui:form>
 	</c:when>
-	
 	<c:otherwise>
 		<div class="portlet-msg-alert"><liferay-ui:message key="your-account-not-authorized-update-dossier"/></div>
 	</c:otherwise>
  
 </c:choose>
+</div>
 
 <aui:script>
 	
