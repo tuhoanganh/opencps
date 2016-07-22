@@ -233,10 +233,10 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			String contentType =
 				uploadPortletRequest.getContentType(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
 
-			DLFolder dossierFolder =
+			/*DLFolder dossierFolder =
 				DLFolderUtil.getDossierFolder(
 					serviceContext.getScopeGroupId(), dossier.getUserId(),
-					dossier.getCounter(), serviceContext);
+					dossier.getCounter(), serviceContext);*/
 
 			DossierFileLocalServiceUtil.addDossierFile(
 				serviceContext.getUserId(), dossierId, dossierPartId,
@@ -248,7 +248,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				PortletConstants.DOSSIER_FILE_MARK_UNKNOW, dossierFileType,
 				dossierFileNo, fileDate, dossierFileOriginal,
 				PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
-				dossierFolder.getFolderId(), sourceFileName, contentType,
+				dossier.getFolderId(), sourceFileName, contentType,
 				displayName, StringPool.BLANK, StringPool.BLANK, inputStream,
 				size, serviceContext);
 
@@ -591,7 +591,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			dossierPart =
 				DossierPartLocalServiceUtil.getDossierPart(dossierPartId);
 
-			DLFolder accountFolder = accountBean.getAccountFolder();
+			/*DLFolder accountFolder = accountBean.getAccountFolder();
 
 			DLFolder dossierFolder =
 				DLFolderUtil.addFolder(
@@ -600,7 +600,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 					serviceContext.getScopeGroupId(), false,
 					accountFolder.getFolderId(),
 					String.valueOf(dossier.getCounter()), StringPool.BLANK,
-					false, serviceContext);
+					false, serviceContext);*/
 
 			DossierFileLocalServiceUtil.addDossierFile(
 				serviceContext.getUserId(), dossierId, dossierPartId,
@@ -614,7 +614,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				dossierFile.getDossierFileNo(),
 				dossierFile.getDossierFileDate(), dossierFile.getOriginal(),
 				PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
-				dossierFolder.getFolderId(), fileEntry.getTitle() +
+				dossier.getFolderId(), fileEntry.getTitle() +
 					StringPool.PERIOD + fileEntry.getExtension(),
 				fileEntry.getMimeType(), fileEntry.getTitle(),
 				StringPool.BLANK, StringPool.BLANK,
@@ -743,8 +743,8 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
 
-		ThemeDisplay themeDisplay =
-			(ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		/*ThemeDisplay themeDisplay =
+			(ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);*/
 
 		AccountBean accountBean =
 			AccountUtil.getAccountBeanFromAttribute(actionRequest);
@@ -783,16 +783,16 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				DossierLocalServiceUtil.getDossier(dossierFile.getDossierId());
 
 			// Get account folder
-			DLFolder accountForlder = accountBean.getAccountFolder();
+			//DLFolder accountForlder = accountBean.getAccountFolder();
 
 			// Get dossier folder
-			DLFolder dosserFolder =
+			/*DLFolder dosserFolder =
 				DLFolderUtil.addFolder(
 					themeDisplay.getUserId(), themeDisplay.getScopeGroupId(),
 					themeDisplay.getScopeGroupId(), false,
 					accountForlder.getFolderId(),
 					String.valueOf(dossier.getCounter()), StringPool.BLANK,
-					false, serviceContext);
+					false, serviceContext);*/
 
 			String formData = dossierFile.getFormData();
 			String jrxmlTemplate = dossierPart.getFormReport();
@@ -826,7 +826,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 					if (dossierFile.getFileEntryId() > 0) {
 						DossierFileLocalServiceUtil.addDossierFile(
 							dossierFile.getDossierFileId(),
-							dosserFolder.getFolderId(), sourceFileName,
+							dossier.getFolderId(), sourceFileName,
 							mimeType, dossierFile.getDisplayName(),
 							StringPool.BLANK, StringPool.BLANK, inputStream,
 							file.length(), serviceContext);
@@ -834,7 +834,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 					else {
 						// Update version 1
 						DossierFileLocalServiceUtil.updateDossierFile(
-							dossierFileId, dosserFolder.getFolderId(),
+							dossierFileId, dossier.getFolderId(),
 							sourceFileName, mimeType,
 							dossierFile.getDisplayName(), StringPool.BLANK,
 							StringPool.BLANK, inputStream, file.length(),
