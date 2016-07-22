@@ -322,12 +322,13 @@ public class BackOfficeProcessEngine implements MessageListener {
 					}
 
 					toBackOffice.setRequestCommand(WebKeys.DOSSIER_LOG_PAYMENT_REQUEST);
-
+					toBackOffice.setPaymentFile(paymentFile);
+					
 				}
 				else {
 					toBackOffice.setRequestPayment(0);
 				}
-
+				
 				Message sendToBackOffice = new Message();
 
 				sendToBackOffice.put("toBackOffice", toBackOffice);
