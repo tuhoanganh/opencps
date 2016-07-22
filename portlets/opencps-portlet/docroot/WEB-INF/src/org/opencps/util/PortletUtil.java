@@ -452,6 +452,14 @@ public class PortletUtil {
 	}
 
 	public static String getDossierDestinationFolder(
+		long groupId, int year, int month, int day) {
+
+		return String.valueOf(groupId) + StringPool.SLASH + "Dossiers" +
+			StringPool.SLASH + String.valueOf(year) + StringPool.SLASH +
+			String.valueOf(month) + StringPool.SLASH + String.valueOf(day);
+	}
+
+	public static String getDossierDestinationFolder(
 		long groupId, int year, int month, int day, String oid) {
 
 		return String.valueOf(groupId) + StringPool.SLASH + "Dossiers" +
@@ -773,7 +781,8 @@ public class PortletUtil {
 	}
 
 	public static Properties getJMSContextProperties(
-		long companyId, String code, boolean remote, String channelName, String lookup)
+		long companyId, String code, boolean remote, String channelName,
+		String lookup)
 		throws SystemException {
 
 		Properties properties = new Properties();
@@ -798,8 +807,7 @@ public class PortletUtil {
 				jmsJSONObject.toString());
 
 			// Get lookup configuration
-			JSONObject lookupObject =
-				jmsJSONObject.getJSONObject(lookup);
+			JSONObject lookupObject = jmsJSONObject.getJSONObject(lookup);
 
 			_log.info("(PortletUtil.getJMSContextProperties) - lookupObject: " +
 				lookupObject.toString());
