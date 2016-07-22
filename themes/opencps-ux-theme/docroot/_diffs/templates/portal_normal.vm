@@ -12,9 +12,9 @@
 	$theme.include($top_head_include)
 	
 	<link rel="shortcut icon" type="image/png" href="$images_folder/custom/favicon.png"/>
-	
 	<script type="text/javascript" src="$javascript_folder/bootstrap.js" ></script>
-	<script type="text/javascript" src="$javascript_folder/jquery-1.11.3.js" ></script>
+  	<script type="text/javascript" src="$javascript_folder/jquery-1.11.3.js" ></script>
+
 </head>
 
 <body class="$css_class opencps-theme">
@@ -29,10 +29,10 @@
 		<div class="header container align-middle">
             <a href="" class="logo"></a>
             <div class="hotline">
-                Đường dây nóng<br/><span>1900 0311</span>
+                Ä�Æ°á»�ng dÃ¢y nÃ³ng<br/><span>1900 0311</span>
             </div>
-            <a href="$sign_in_url" class="btn-dn">Đăng nhập</a>
-            <a href="$register_url" class="btn-dk">Đăng ký</a>
+            <a href="$sign_in_url" class="btn-dn">Ä�Äƒng nháº­p</a>
+            <a href="$register_url" class="btn-dk">Ä�Äƒng kÃ½</a>
 		</div>
 	</header>
 	
@@ -59,38 +59,42 @@
 	<footer>
 		<div class="footer">
             <div class="logo">
+<<<<<<< HEAD
+                <p>Copyright Â© 2016 - OpenCPS v1.2</p>
+=======
                 <p>Copyright © 2016 - OpenCPS v1.3</p>
+>>>>>>> 93947ddc8a049a6fbd3c62d8ab70e34dc3f70cdb
             </div>
             <div class="danhmuc">
-                <p class="title">Danh mục</p>
+                <p class="title">Danh má»¥c</p>
                 <ul>
-                    <li><a href="">Trang chủ</a></li>
-                    <li><a href="">Thông báo</a></li>
-                    <li><a href="">Văn bản pháp luật</a></li>
-                    <li><a href="">Thủ tục hành chính</a></li>
+                    <li><a href="">Trang chá»§</a></li>
+                    <li><a href="">ThÃ´ng bÃ¡o</a></li>
+                    <li><a href="">VÄƒn báº£n phÃ¡p luáº­t</a></li>
+                    <li><a href="">Thá»§ tá»¥c hÃ nh chÃ­nh</a></li>
                 </ul>
             </div>
             <div class="huongdan">
-                <p class="title">Hướng dẫn</p>
+                <p class="title">HÆ°á»›ng dáº«n</p>
                 <ul>
-                    <li><a href="">Đăng ký tài khoản</a></li>
-                    <li><a href="">Đăng nhập hệ thống</a></li>
-                    <li><a href="">Nộp hồ sơ trực tuyến</a></li>
-                    <li><a href="">Tra cứu kết quả</a></li>
-                    <li><a href="">Cán bộ xử lý hồ sơ</a></li>
+                    <li><a href="">Ä�Äƒng kÃ½ tÃ i khoáº£n</a></li>
+                    <li><a href="">Ä�Äƒng nháº­p há»‡ thá»‘ng</a></li>
+                    <li><a href="">Ná»™p há»“ sÆ¡ trá»±c tuyáº¿n</a></li>
+                    <li><a href="">Tra cá»©u káº¿t quáº£</a></li>
+                    <li><a href="">CÃ¡n bá»™ xá»­ lÃ½ há»“ sÆ¡</a></li>
                 </ul>
             </div>
             <div class="lienhehotro">
-                <p class="title">Liên hệ hỗ trợ</p>
-                <p class="diachi">Tòa nhà VAPA, số 2,<br/>đường Tôn Thất Thuyết</p>
+                <p class="title">LiÃªn há»‡ há»— trá»£</p>
+                <p class="diachi">TÃ²a nhÃ  VAPA, sá»‘ 2,<br/>Ä‘Æ°á»�ng TÃ´n Tháº¥t Thuyáº¿t</p>
                 <p class="mail">opencps@gmail.com</p>
                 <p class="phone">1900 0311</p>
             </div>
             <div class="lienketwebsite">
-                <p class="title">Liên kết website</p>
+                <p class="title">LiÃªn káº¿t website</p>
                 <div class="select">
                     <select>
-                        <option>Chọn liên kết website</option>
+                        <option>Chá»�n liÃªn káº¿t website</option>
                     </select>
                 </div>
             </div>

@@ -56,13 +56,14 @@ footer .footer .lienketwebsite select {background: transparent none; color: #7d9
 
 /* Search bar */
 .opencps-theme .home_bg #column-1 {
-	width: 100%;
+	width: 1170px;
 	height: 475px;
 }
 .opencps-theme .home_bg #column-1 .portlet-body {
 	position: relative;
 	margin-top: 140px;
 	height: 195px;
+	background: transparent;
 }
 .opencps-theme .home_bg #column-1 .portlet-body > h2 {
 	position: absolute;
@@ -74,6 +75,8 @@ footer .footer .lienketwebsite select {background: transparent none; color: #7d9
 	font-family: 'Roboto-Black';
 	font-weight: normal;
 	color: white;
+	text-align: center;
+	width: 700px;
 }
 .opencps-theme .home_bg #column-1 .portlet-body > p {
 	position: absolute;
@@ -87,7 +90,7 @@ footer .footer .lienketwebsite select {background: transparent none; color: #7d9
 .opencps-theme .home-search {
 	position: absolute;
 	height: 100px;
-	width:560px;
+	width:700px;
 	top: 105px;
 	left: 50%;
 	transform: translateX(-50%);
@@ -101,7 +104,7 @@ footer .footer .lienketwebsite select {background: transparent none; color: #7d9
 	top:0;
 }
 .opencps-theme .home-search .nav.nav-tabs {
-	border-bottom: 0
+	border-bottom: 0;
 }
 .opencps-theme .home-search .nav.nav-tabs li a {
 	background: #edebec;
@@ -126,11 +129,19 @@ footer .footer .lienketwebsite select {background: transparent none; color: #7d9
 .opencps-theme .home-search .navbar-inner label {
 	display: none;
 }
-.opencps-theme .home-search .input-append input[type="text"].search-query {
-	border-radius: 5px 0 0 5px;
-	height: 50px;
-	width: 500px;
-	border-right: 0; 
+.opencps-theme .payment.payment_search .input-append > button, 
+.opencps-theme .payment.payment_search .input-append > button:hover, 
+.opencps-theme .payment.payment_search .input-append > button:focus {
+	border-left: 0;
+    box-shadow: none;
+    text-indent: -9999px;
+    width: 90px;
+    height: 60px;
+    border-radius: 0 20px 20px 0!important;
+    position: relative;
+    background: none #0090ff;
+    border-color: #0090ff;
+    margin-bottom: 0 !important;
 }
 .opencps-theme .home-search .input-append > button.btn {
 	text-indent: -9999px;

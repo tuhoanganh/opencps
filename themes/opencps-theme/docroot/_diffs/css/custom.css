@@ -7,6 +7,15 @@
 @import url(portlets/p_10.css);
 @import url(portlets/p_13.css);
 <<<<<<< HEAD
+
+@import url(custom_frame_1.css);
+@import url(header_style_1.css);
+
+
+
+
+=======
+<<<<<<< HEAD
 body {
 =======
 @import url(portlets/binhth.css);
@@ -1413,3 +1422,4 @@ footer > p:nth-child(2) {
 /*
 	--end---
 */
+>>>>>>> 93947ddc8a049a6fbd3c62d8ab70e34dc3f70cdb
