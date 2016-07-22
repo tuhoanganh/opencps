@@ -221,5 +221,6 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String JMS_GROUP_ID = "JMS_GROUP_ID";
 	public static final String JMS_USER_ID = "JMS_USER_ID";
 	public static final String JMS_QUEUE_OPENCPS = "OPENCPS";
+	public static final String JMS_QUEUE_OPENCPS_FRONTOFFICE = "OPENCPS_FRONTOFFICE";
 
 }

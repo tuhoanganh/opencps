@@ -18,12 +18,8 @@
 package org.opencps.backend.exc;
 
 import org.opencps.backend.message.UserActionMsg;
-import org.opencps.dossiermgt.model.Dossier;
-import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.jms.context.JMSContext;
 import org.opencps.jms.message.SubmitDossierMessage;
-import org.opencps.jms.message.SyncFromBackOfficeMessage;
-import org.opencps.jms.message.body.SyncFromBackOfficeMsgBody;
 import org.opencps.jms.util.JMSMessageUtil;
 import org.opencps.util.WebKeys;
 
@@ -54,7 +50,6 @@ public class MsgOutFrontOffice implements MessageListener{
 	        UserActionMsg userActionMgs =
 	                  (UserActionMsg) message.get("msgToEngine");
 	        
-	        _log.info("**************************userActionMgs.getDossierId() " + userActionMgs.getDossierId());
 	        
 	        JMSContext context =
 	            JMSMessageUtil.createProducer(

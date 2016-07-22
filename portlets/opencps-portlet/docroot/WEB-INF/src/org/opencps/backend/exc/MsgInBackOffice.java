@@ -56,55 +56,42 @@ public class MsgInBackOffice implements MessageListener{
     	
 		long[] companyIds = PortalUtil.getCompanyIds();
 
-		_log.info("********************************************************CompanyIds Length*********************************************** " +
-			companyIds.length);
-
 		long companyId = 0;
 
 		if (companyIds != null && companyIds.length > 0) {
 			for (int i = 0; i < companyIds.length; i++) {
 				if (PortletUtil.checkJMSConfig(companyIds[i])) {
 					companyId = companyIds[i];
-					_log.info("********************************************************companyId*********************************************** " +
-						companyId);
+
 					break;
 				}
 			}
 		}
 
 		if (companyId > 0) {
-			_log.info("Start create connection to JMS Queue..................");
 			JMSContext context =
 				JMSMessageUtil.createConsumer(
 					companyId, StringPool.BLANK, true,
 					WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "local");
-			System.out.println("$$$$$"+context);
 			try {
-				int messageInQueue = context.countMessageInQueue();
+/*				int messageInQueue = context.countMessageInQueue();
 				int receiveNumber = messageInQueue <= 50 ? messageInQueue : 50;
-
-				_log.info("********************************************************Queue Size*********************************************** " +
-					messageInQueue);
+*/
 
 				int count = 1;
-				while (count <= receiveNumber) {
+				while (count <= 10) {
 
 					javax.jms.Message jsmMessage =
-						context.getMessageConsumer().receive();
+						context.getMessageConsumer().receive(1000);
 					if (jsmMessage != null) {
 						if (jsmMessage instanceof TextMessage) {
-							_log.info("*******************TextMessage*******************");
-							_log.info(((TextMessage) jsmMessage).getText());
+
 						}
 						else if (jsmMessage instanceof ObjectMessage) {
-							_log.info("*******************ObjectMessage*******************");
-							_log.info(((ObjectMessage) jsmMessage).getClass().getName());
 						}
 						else if (jsmMessage instanceof BytesMessage) {
 							BytesMessage bytesMessage =
 								(BytesMessage) jsmMessage;
-							_log.info("*******************BytesMessage*******************");
-							_log.info(((BytesMessage) jsmMessage).getBodyLength());
 							byte[] result =
 								new byte[(int) bytesMessage.getBodyLength()];
 							bytesMessage.readBytes(result);
@@ -119,11 +106,8 @@ public class MsgInBackOffice implements MessageListener{
 							}
 						}
 						else if (jsmMessage instanceof StreamMessage) {
-							_log.info("*******************StreamMessage*******************");
+
 						}
-					}
-					else {
-						_log.info("*******************Null Message*******************");
 					}
 
 					count++;
@@ -141,9 +125,6 @@ public class MsgInBackOffice implements MessageListener{
 				}
 
 			}
-		}
-		else {
-			_log.info("Cannot create connection to JMS Queue..................");
 		}
 
     }

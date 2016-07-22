@@ -56,7 +56,7 @@
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "frontofficepaymentlist.jsp");
 %>
-<liferay-ui:search-container searchContainer="<%= new PaymentFileFrontOfficeSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
+<liferay-ui:search-container  searchContainer="<%= new PaymentFileFrontOfficeSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
 
 	<liferay-ui:search-container-results>
 		<%
