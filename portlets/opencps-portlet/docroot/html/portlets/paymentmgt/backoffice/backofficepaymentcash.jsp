@@ -61,71 +61,43 @@
     backLabel="back"
 />
 
-
+<div class="payment-ld">
+<div class="content">
 <aui:form name="payForm" action="">
+<div class="box100">
+                    <div>
+                        <p><span><liferay-ui:message key="so-ho-so"/>:</span> <%=HtmlUtil.escape(soHoSo) %></p>
+                    </div>
+                    <div>
+                        <p><span><liferay-ui:message key="thu-tuc-hanh-chinh"/>:</span> <span><%=HtmlUtil.escape(serviceInfo.getServiceName()) %></span></p>
+                    </div>
+                    <div>
+                        <p><span> <liferay-ui:message key="co-quan-thuc-hien"/>:</span>  <%=HtmlUtil.escape(coQuanQuanLyHoaDon) %></p>
+                    </div>
+                    <div>
+                        <p><span> <liferay-ui:message key="ten-phi-thanh-toan"/>:</span> <%=HtmlUtil.escape(paymentFile.getPaymentName()) %></p>
+                    </div>
+                    <div>
+                        <p><span><liferay-ui:message key="so-tien"/>: </span> <span class="red"><%=HtmlUtil.escape(df2.format(Double.valueOf(paymentFile.getAmount())).toString()) %> <liferay-ui:message key="vnd"/></span></p>
+                    </div>
+                    <div>
+                        <p><span><liferay-ui:message key="ghi-chu-kem-theo"/>:</span> <%=HtmlUtil.escape(paymentFile.getRequestNote()) %></p>
+                    </div>
+                    <div>
+                        <aui:input 
+			                name="termsOfUse"
+			                type="checkbox" 
+			                label="ban-da-thu-thu-so-tien-cua-nguoi-lam-thu-tuc"
+			        	/>
+                        <aui:button name="register" type="button" value="dong-y" disabled="true" />
+                    </div>
+                </div>
     <aui:input name="<%=PaymentFileDisplayTerms.PAYMENT_FILE_ID %>" value="<%= paymentFileId %>" type="hidden"></aui:input>
     <aui:input type="hidden" name="confirmHopLeHidden" value="1" />
-    <div class="lookup-result">
-       <table>
-	        <tr style="background: rgb(250, 229, 211) none repeat scroll 0% 0%; text-align: left;">
-	            <th style="padding: 6px; border: 1px solid lightgray;"><liferay-ui:message key="so-ho-so"/></th>
-	            <th style="padding: 6px; border: 1px solid lightgray;"><%=HtmlUtil.escape(soHoSo) %></th>
-	        </tr>
-	        <tr>
-	            <td class="col-left">
-	                <liferay-ui:message key="thu-tuc-hanh-chinh"/>
-	            </td>
-	            <td class="col-right">
-	                <%=HtmlUtil.escape(serviceInfo.getServiceName()) %>
-	            </td>
-	        </tr>       
-	        <tr>
-	            <td class="col-left">
-	                <liferay-ui:message key="co-quan-thuc-hien"/>
-	            </td>
-	            <td class="col-right">
-	                <%=HtmlUtil.escape(coQuanQuanLyHoaDon) %>
-	            </td>
-	        </tr>       
-	        <tr>
-	            <td class="col-left">
-	                <liferay-ui:message key="ten-phi-thanh-toan"/>
-	            </td>
-	            <td class="col-right">
-	                <%=HtmlUtil.escape(paymentFile.getPaymentName()) %>
-	            </td>
-	        </tr>     
-            <tr>
-                <td class="col-left">
-                    <liferay-ui:message key="so-tien"/>
-                </td>
-                 <td class="col-right">
-                <%=HtmlUtil.escape(df2.format(Double.valueOf(paymentFile.getAmount())).toString()) %>
-            </td>
-            </tr>       
-            <tr>
-                <td class="col-left">
-                    <liferay-ui:message key="ghi-chu-kem-theo"/>
-                </td>
-                <td class="col-right">
-                    <%=HtmlUtil.escape(paymentFile.getRequestNote()) %>
-                </td>
-            </tr>       
-                
-        </table>
-    </div>
-    <aui:button-row>
-        <aui:input 
-                name="termsOfUse"
-                type="checkbox" 
-                label="ban-da-thu-thu-so-tien-cua-nguoi-lam-thu-tuc"
-        />
-        <aui:button name="register" type="button" value="dong-y" disabled="true" />
-        <aui:button name="back" value="back" href="<%=backRedirect.toString() %>" />
-    </aui:button-row>
-    
+	                
 </aui:form>
-
+</div>
+</div>
 <liferay-portlet:actionURL name="updateConfirmPaymentCash" var="updateConfirmPaymentCashURL"></liferay-portlet:actionURL>
 
 <aui:script>

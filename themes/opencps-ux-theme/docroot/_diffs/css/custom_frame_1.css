@@ -132,18 +132,20 @@ footer .footer .lienketwebsite select {background: transparent none; color: #7d9
 	width: 500px;
 	border-right: 0; 
 }
-.opencps-theme .home-search .input-append button.btn {
-	border-left: 0;
-	box-shadow: none;
+.opencps-theme .home-search .input-append > button.btn {
 	text-indent: -9999px;
-	width: 50px;
-	height: 50px;
-	border-radius: 0 5px 5px 0 !important;
 	position: relative;
-	background: none #0090ff;
-	border-color: #0090ff;
+	height: 60px;
+	background: none #0074cd;
+	box-shadow: none;
+	border-radius: 0 20px 20px 0 !important;
+	text-shadow: none;
+	width: 90px;
+	color: white;
+	border: 1px solid #0074cd;
+	margin-left: -3px;
 }
-.opencps-theme .home-search .input-append button.btn:before {
+.opencps-theme .home-search .input-append > button.btn:before {
 	content: "\f002";
 	font-family: FontAwesome;
 	position: absolute;
@@ -152,7 +154,7 @@ footer .footer .lienketwebsite select {background: transparent none; color: #7d9
 	left: 50%;
 	text-indent: 0;
 	transform: translate(-50%, -50%);
-	font-size: 20px;
+	font-size: 26px;
 }
 
 /* Sub menu */

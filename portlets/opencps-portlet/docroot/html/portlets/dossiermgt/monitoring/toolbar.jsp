@@ -43,13 +43,6 @@
 <portlet:actionURL name="searchAction" var="searchUrl"></portlet:actionURL>
 
 <portlet:actionURL name="searchServiceAction" var="serviceUrl"></portlet:actionURL>
-<style>
-<!--
-.keywordinput {
-	width: 80%
-}
--->
-</style>
 
 <%
 	String keySelect = DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_SEARCH + "," + DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_DOSSIER_FILE_LIST + "," + DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_SERVICE;
@@ -63,7 +56,7 @@
 		<c:when test="<%= tabs1.equals(DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_SEARCH) %>">
 			<aui:nav-bar-search cssClass="pull-left" style="width: 98%">
 				<div class="form-search">
-					<aui:form action="#" method="post" name="fm">
+					<aui:form action="<%= searchUrl %>" method="post" name="fm">
 						<div class="toolbar_search_input" style="width: 98%">
 							<aui:row>
 								<aui:col>
@@ -73,7 +66,7 @@
 									<opencps-ui:input-search 
 										id="keywords"
 										name="keywords"
-										cssClass="keywordinput input-append"
+										cssClass="input-append"
 										title='<%= LanguageUtil.get(portletConfig, locale, "keywords") %>'
 										placeholder="<%= LanguageUtil.get(pageContext, \"dossier-search-keywords\") %>" 
 										keySelect="<%=keySelect %>"
@@ -100,7 +93,7 @@
 									<opencps-ui:input-search 
 										id="keywords"
 										name="keywords"
-										cssClass="keywordinput input-append"
+										cssClass="input-append"
 										title='<%= LanguageUtil.get(portletConfig, locale, "keywords") %>'
 										placeholder="<%= LanguageUtil.get(pageContext, \"dossier-search-keywords\") %>" 
 										keySelect="<%=keySelect %>"
@@ -127,7 +120,7 @@
 									<opencps-ui:input-search 
 										id="keywords"
 										name="keywords"
-										cssClass="keywordinput input-append"
+										cssClass="input-append"
 										title='<%= LanguageUtil.get(portletConfig, locale, "keywords") %>'
 										placeholder="<%= LanguageUtil.get(pageContext, \"dossier-search-keywords\") %>" 
 										keySelect="<%=keySelect %>"

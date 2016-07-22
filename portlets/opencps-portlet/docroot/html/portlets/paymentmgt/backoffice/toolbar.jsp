@@ -30,28 +30,36 @@
 		cssClass="nav-display-style-buttons pull-left">
 
 	</aui:nav>
-	<aui:nav-bar-search cssClass="pull-left" style="width: 98%">
+	<aui:nav-bar-search cssClass="pull-left" style="width: 100%">
 		<div class="form-search">
 			<aui:form action="<%= searchUrl %>" method="post" name="fm">
-				<div class="toolbar_search_input" style="width: 98%">
+				<div class="toolbar_search_input">
 					<aui:row>
-						<aui:col width="35">
-							<aui:select name="paymentStatus" label="">
-								<aui:option value="<%= PaymentMgtUtil.PAYMENT_STATUS_REQUESTED %>">
-									<liferay-ui:message key="requested"></liferay-ui:message>
-								</aui:option>
-								<aui:option value="<%= PaymentMgtUtil.PAYMENT_STATUS_CONFIRMED %>">
-									<liferay-ui:message key="confirmed"></liferay-ui:message>
-								</aui:option>
-								<aui:option value="<%= PaymentMgtUtil.PAYMENT_STATUS_APPROVED %>">
-									<liferay-ui:message key="approved"></liferay-ui:message>
-								</aui:option>
-								<aui:option value="<%= PaymentMgtUtil.PAYMENT_STATUS_REJECTED %>">
-									<liferay-ui:message key="rejected"></liferay-ui:message>
-								</aui:option>
-							</aui:select>							
+						<aui:col width="30">
+						
 						</aui:col>
-						<aui:col width="65">
+						<aui:col width="35">
+							<div class="select">
+								<aui:select name="paymentStatus" label="">
+									<aui:option value="-1">
+										<liferay-ui:message key="loc-trang-thai-thanh-toan"></liferay-ui:message>
+									</aui:option>
+									<aui:option value="<%= PaymentMgtUtil.PAYMENT_STATUS_REQUESTED %>">
+										<liferay-ui:message key="requested"></liferay-ui:message>
+									</aui:option>
+									<aui:option value="<%= PaymentMgtUtil.PAYMENT_STATUS_CONFIRMED %>">
+										<liferay-ui:message key="confirmed"></liferay-ui:message>
+									</aui:option>
+									<aui:option value="<%= PaymentMgtUtil.PAYMENT_STATUS_APPROVED %>">
+										<liferay-ui:message key="approved"></liferay-ui:message>
+									</aui:option>
+									<aui:option value="<%= PaymentMgtUtil.PAYMENT_STATUS_REJECTED %>">
+										<liferay-ui:message key="rejected"></liferay-ui:message>
+									</aui:option>
+								</aui:select>	
+							</div>						
+						</aui:col>
+						<aui:col width="35">
 							<label> <liferay-ui:message key="keywords" />
 							</label>
 							<liferay-ui:input-search id="keywords" name="keywords"
