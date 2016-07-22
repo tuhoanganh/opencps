@@ -96,7 +96,13 @@ public class SubmitDossierMessage {
 			_log.error(e);
 		}
 		finally {
-			_context.destroy();
+			if (_context != null) {
+				_context.destroy();
+			}
+
+			if (_localContext != null) {
+				_localContext.destroy();
+			}
 		}
 	}
 

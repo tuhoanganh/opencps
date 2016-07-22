@@ -29,11 +29,12 @@ import org.opencps.dossiermgt.model.FileGroup;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.jms.message.body.DossierFileMsgBody;
 import org.opencps.jms.message.body.DossierMsgBody;
+import org.opencps.jms.util.JMSMessageBodyUtil.AnalyzeDossierFile;
 import org.opencps.util.PortletConstants;
 import org.opencps.util.WebKeys;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.service.ServiceContext;
@@ -48,8 +49,11 @@ public class SubmitDossier {
 	/**
 	 * @param submitDossierMessage
 	 * @return
+	 * @throws SystemException
+	 * @throws PortalException
 	 */
-	public Dossier syncDossier(DossierMsgBody dossierMsgBody) {
+	public Dossier syncDossier(DossierMsgBody dossierMsgBody)
+		throws PortalException, SystemException {
 
 		Dossier dossier = null;
 
@@ -74,74 +78,29 @@ public class SubmitDossier {
 			dossierMsgBody.getLstDossierFileMsgBody();
 
 		if (dossierFileMsgBodies != null) {
-			syncDossierFiles = new LinkedHashMap<DossierFile, DossierPart>();
+			AnalyzeDossierFile analyzeDossierFile =
+				new AnalyzeDossierFile(dossierFileMsgBodies);
 
-			syncDLFileEntries = new LinkedHashMap<String, DLFileEntry>();
-
-			data = new LinkedHashMap<String, byte[]>();
-
-			syncFileGroups = new LinkedHashMap<String, FileGroup>();
-
-			syncFileGroupDossierParts = new LinkedHashMap<Long, DossierPart>();
-
-			for (DossierFileMsgBody dossierFileMsgBody : dossierFileMsgBodies) {
-				DossierFile syncDossierFile =
-					dossierFileMsgBody.getDossierFile();
-
-				syncDossierFiles.put(
-					syncDossierFile, dossierFileMsgBody.getDossierPart());
-
-				data.put(
-					syncDossierFile.getOid(), dossierFileMsgBody.getBytes());
-
-				DLFileEntry dlFileEntry =
-					DLFileEntryLocalServiceUtil.createDLFileEntry(syncDossierFile.getFileEntryId());
-
-				dlFileEntry.setDescription(dossierFileMsgBody.getFileDescription());
-
-				dlFileEntry.setTitle(dossierFileMsgBody.getFileTitle());
-
-				dlFileEntry.setMimeType(dossierFileMsgBody.getMimeType());
-
-				dlFileEntry.setExtension(dossierFileMsgBody.getExtension());
-
-				dlFileEntry.setName(dossierFileMsgBody.getFileName());
-
-				syncDLFileEntries.put(syncDossierFile.getOid(), dlFileEntry);
-
-				FileGroup syncFileGroup = dossierFileMsgBody.getFileGroup();
-
-				if (syncFileGroup != null) {
-
-					syncFileGroups.put(syncDossierFile.getOid(), syncFileGroup);
-
-					syncFileGroupDossierParts.put(
-						syncFileGroup.getFileGroupId(),
-						dossierFileMsgBody.getFileGroupDossierPart());
-				}
-
-			}
+			syncDossierFiles = analyzeDossierFile.getSyncDossierFiles();
+			syncFileGroups = analyzeDossierFile.getSyncFileGroups();
+			syncFileGroupDossierParts =
+				analyzeDossierFile.getSyncFileGroupDossierParts();
+			syncDLFileEntries = analyzeDossierFile.getSyncDLFileEntries();
+			data = analyzeDossierFile.getData();
 		}
 
 		if (syncDossier != null && syncDossierFiles != null &&
 			syncDLFileEntries != null && data != null &&
 			syncDossierTemplate != null && serviceContext != null) {
-			try {
-				dossier =
-					DossierLocalServiceUtil.syncDossier(
-						syncDossier, syncDossierFiles, syncFileGroups,
-						syncFileGroupDossierParts, syncDLFileEntries, data,
-						syncDossierTemplate, serviceContext);
+			dossier =
+				DossierLocalServiceUtil.syncDossier(
+					syncDossier, syncDossierFiles, syncFileGroups,
+					syncFileGroupDossierParts, syncDLFileEntries, data,
+					syncDossierTemplate, serviceContext);
 
-				sendToBackend(
-					dossier.getDossierId(), dossier.getDossierStatus(),
-					serviceContext);
-
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-
+			sendToBackend(
+				dossier.getDossierId(), dossier.getDossierStatus(),
+				serviceContext);
 		}
 
 		return dossier;
@@ -186,6 +145,4 @@ public class SubmitDossier {
 			"opencps/backoffice/engine/destination", message);
 
 	}
-
-	private Log _log = LogFactoryUtil.getLog(SubmitDossier.class.getClass());
 }
