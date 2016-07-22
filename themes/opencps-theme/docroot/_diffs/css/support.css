@@ -121,10 +121,8 @@
 /*--------------------
 		ALIGN-EQUAL
 --------------------*/
-.row-eq-height {display: flex; flex-flow: row wrap;}
-.align-middle {display: flex; align-items: center;}
-.align-center {display: flex; justify-content: center;}
-.center_all {display: flex; align-items: center; justify-content: center}
+.row-eq-height {display: -webkit-box; display: -webkit-flex; display: -ms-flexbox; display: flex; flex-wrap: wrap;}
+.align-center {display: -ms-flexbox; display: -webkit-flex; display: flex; -ms-flex-align: center; -webkit-align-items: center; -webkit-box-align: center; align-items: center;}
 
 
 
@@ -133,7 +131,7 @@
 /*--------------------
 		ANOTHER
 --------------------*/
-* {margin: 0; padding: 0; box-sizing: border-box;}
+* {margin: 0; padding: 0}
 html, body {height: 100%; min-height: 100%}
 a {text-decoration: none !important; color: inherit !important}
 a:hover {color: inherit !important;}

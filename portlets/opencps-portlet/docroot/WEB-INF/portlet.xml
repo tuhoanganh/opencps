@@ -178,6 +178,10 @@
 			<name>template-path</name>
 			<value>/html/portlets/accountmgt/registration/</value>
 		</init-param>
+		<init-param>
+        	<name>config-template</name>
+        	<value>/html/portlets/accountmgt/registration/configuration.jsp</value>
+    	</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
 			<mime-type>text/html</mime-type>
@@ -210,7 +214,7 @@
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/portlets/accountmgt/profile/viewprofile.jsp</value>
+			<value>/html/portlets/accountmgt/profile/viewprofile-ux.jsp</value>
 		</init-param>
 		<init-param>
 			<name>template-path</name>

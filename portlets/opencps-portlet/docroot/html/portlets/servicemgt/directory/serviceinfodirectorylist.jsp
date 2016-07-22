@@ -32,10 +32,12 @@
 	List<String> headerNames = new ArrayList<String>();
 	
 	headerNames.add("no");
-	headerNames.add("service-no");
+	/* headerNames.add("service-no"); */
 	headerNames.add("service-name");
-	headerNames.add("service-domain");
+	/* headerNames.add("service-domain");
 	headerNames.add("service-administrator");
+	 */
+	headerNames.add("service-bound-data");
 	
 	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
 	
@@ -50,7 +52,11 @@
 	
 	request.setAttribute(ServiceDisplayTerms.SERVICE_DOMAINCODE, domainCode);
 %>
+<div class="ocps-bound-service-infodirect">
 
+<div class="opcs-serviceinfo-list-label">
+	<p><liferay-ui:message key="serviceinfo-list"/></p>
+</div>
 <aui:nav-bar cssClass="custom-toolbar">
 	<aui:nav-bar-search cssClass="pull-right">
 		<div class="form-search">
@@ -132,17 +138,20 @@
 				// no column
 				row.addText(String.valueOf(row.getPos() + 1), viewURL);
 			
-				// service no
+				/* // service no
 				row.addText(service.getServiceNo(), viewURL);
-				
+				 */
 				// service name
 				row.addText(service.getServiceName(), viewURL);
 				
-				// service domain
+				/* // service domain
 				row.addText(DictItemUtil.getNameDictItem(service.getDomainCode()) , viewURL);
 				
 				// service admin
-				row.addText(DictItemUtil.getNameDictItem(service.getAdministrationCode()), viewURL);
+				row.addText(DictItemUtil.getNameDictItem(service.getAdministrationCode()), viewURL); */
+				
+				//use addJSP to use UX(User eXperience) theme
+				row.addJSP("center", SearchEntry.DEFAULT_VALIGN,  templatePath + "service_directory_bound_data.jsp", config.getServletContext(), request, response);
 			}
 		%>	
 	
@@ -151,7 +160,7 @@
 	<liferay-ui:search-iterator/>
 
 </liferay-ui:search-container>
-
+</div>
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.servicemgt.directory.serviceinfo.jsp");
 %>

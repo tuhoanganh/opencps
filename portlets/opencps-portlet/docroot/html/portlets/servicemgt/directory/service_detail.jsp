@@ -38,172 +38,186 @@
 	String backURL = ParamUtil.getString(request, "backURL");
 	
 %>
-
-<liferay-ui:header
-	backURL="<%= backURL %>"
-	title="service"
-/>
-
-<c:if test="<%= Validator.isNotNull(serviceInfo) %>">
-	<div class="service-detail-wrapper">
-		<table>
-			<tr>
-				<td class="col-left">
-					<liferay-ui:message key="service-no"/>
-				</td>
-				<td class="col-right">
-					<%= serviceInfo.getServiceNo() %>
-				</td>
-			</tr>
-			<tr>
-				<td class="col-left">
-					<liferay-ui:message key="service-name"/>
-				</td>
-				<td class="col-right">
-					<%= serviceInfo.getServiceName() %>
-				</td>
-			</tr>
-			<tr>
-				<td class="col-left">
-					<liferay-ui:message key="service-process"/>
-				</td>
-				<td class="col-right">
-					<%= serviceInfo.getServiceProcess() %>
-				</td>
-			</tr>
-			<tr>
-				<td class="col-left">
-					<liferay-ui:message key="service-method"/>
-				</td>
-				<td class="col-right">
-					<%= serviceInfo.getServiceMethod() %>
-				</td>
-			</tr>
-			<tr>
-				<td class="col-left">
-				<liferay-ui:message key="service-dossier"/>
-					
-				</td>
-				<td class="col-right">
-					<%= serviceInfo.getServiceDossier() %>	
-				</td>
-			</tr>
-			<tr>
-				<td class="col-left">
-					<liferay-ui:message key="service-condition"/>
-				</td>
-				<td class="col-right">
-					<%= serviceInfo.getServiceCondition() %>
-				</td>
-			</tr>
-			<tr>
-				<td class="col-left">
-					<liferay-ui:message key="service-duration"/>
-				</td>
-				<td class="col-right">
-					<%= serviceInfo.getServiceDuration() %>
-				</td>
-			</tr>
-			<tr>
-				<td class="col-left">
-					<liferay-ui:message key="service-actors"/>
-				</td>
-				<td class="col-right">
-					<%= serviceInfo.getServiceActors() %>
-				</td>
-			</tr>
-			<tr>
-				<td class="col-left">
-					<liferay-ui:message key="service-fee"/>
-				</td>
-				<td class="col-right">
-					<%= serviceInfo.getServiceFee() %>
-				</td>
-			</tr>
-			<tr>
-				<td class="col-left">
-					<liferay-ui:message key="service-results"/>
-				</td>
-				<td class="col-right">
-					<%= serviceInfo.getServiceResults() %>
-				</td>
-			</tr>
-			<tr>
-				<td class="col-left">
-					<liferay-ui:message key="service-records"/>
-				</td>
-				<td class="col-right">
-					<%= serviceInfo.getServiceRecords() %>
-				</td>
-			</tr>
-			<tr>
-				<td class="col-left">
-					<liferay-ui:message key="service-instructions"/>
-				</td>
-				<td class="col-right">
-					<%= serviceInfo.getServiceInstructions() %>
-				</td>
-			</tr>
-			<tr>
-				<td class="col-left">
-					<liferay-ui:message key="status"/>
-				</td>
-				<td class="col-right">
-					<%
-						int status = serviceInfo.getActiveStatus(); 
-					%>
-					<c:choose>
-						<c:when test="<%=status == 0 %>">
-							<liferay-ui:message key="service-private"/>
-						</c:when>
+<div class="ocps-service-detal-bound-all">
+	<div class="ocps-custom-header">
+		<label class="opcps-label">
+			<liferay-ui:message key="service-detail" />
+		</label>
+		<span class="ocps-span">
+			<a href="<%=backURL %>"><liferay-ui:message key="back"/></a>
+		</span>
+	</div>
+	
+	<div class="ocps-hide-header">
+		<liferay-ui:header
+			backURL="<%= backURL %>"
+			title="service"
+		/>
+	</div>
+	
+	
+	
+	<c:if test="<%= Validator.isNotNull(serviceInfo) %>">
+		<div class="service-detail-wrapper">
+			<table>
+				<tr>
+					<td class="col-left">
+						<liferay-ui:message key="service-no"/>
+					</td>
+					<td class="col-right">
+						<%= serviceInfo.getServiceNo() %>
+					</td>
+				</tr>
+				<tr>
+					<td class="col-left">
+						<liferay-ui:message key="service-name"/>
+					</td>
+					<td class="col-right">
+						<%= serviceInfo.getServiceName() %>
+					</td>
+				</tr>
+				<tr>
+					<td class="col-left">
+						<liferay-ui:message key="service-process"/>
+					</td>
+					<td class="col-right">
+						<%= serviceInfo.getServiceProcess() %>
+					</td>
+				</tr>
+				<tr>
+					<td class="col-left">
+						<liferay-ui:message key="service-method"/>
+					</td>
+					<td class="col-right">
+						<%= serviceInfo.getServiceMethod() %>
+					</td>
+				</tr>
+				<tr>
+					<td class="col-left">
+					<liferay-ui:message key="service-dossier"/>
 						
-						<c:when test="<%=status == 1 %>">
-							<liferay-ui:message key="service-public"/>
-						</c:when>
-						<c:when test="<%=status == 2 %>">
-							<liferay-ui:message key="service-outdate"/>
-						</c:when>
-					</c:choose>
-					
-				</td>
-			</tr>
-			<tr>
-				<td class="col-left">
-					<liferay-ui:message key="template_info"/>
-				</td>
-				<td class="col-right">
-					
-					<%
-						List<TemplateFile> templates = new ArrayList<TemplateFile>();
-					
-						if (Validator.isNotNull(serviceInfo)) {
-							templates = TemplateFileLocalServiceUtil.getServiceTemplateFiles(serviceInfo.getServiceinfoId());
-						}
-					%>
-					<ul>
+					</td>
+					<td class="col-right">
+						<%= serviceInfo.getServiceDossier() %>	
+					</td>
+				</tr>
+				<tr>
+					<td class="col-left">
+						<liferay-ui:message key="service-condition"/>
+					</td>
+					<td class="col-right">
+						<%= serviceInfo.getServiceCondition() %>
+					</td>
+				</tr>
+				<tr>
+					<td class="col-left">
+						<liferay-ui:message key="service-duration"/>
+					</td>
+					<td class="col-right">
+						<%= serviceInfo.getServiceDuration() %>
+					</td>
+				</tr>
+				<tr>
+					<td class="col-left">
+						<liferay-ui:message key="service-actors"/>
+					</td>
+					<td class="col-right">
+						<%= serviceInfo.getServiceActors() %>
+					</td>
+				</tr>
+				<tr>
+					<td class="col-left">
+						<liferay-ui:message key="service-fee"/>
+					</td>
+					<td class="col-right">
+						<%= serviceInfo.getServiceFee() %>
+					</td>
+				</tr>
+				<tr>
+					<td class="col-left">
+						<liferay-ui:message key="service-results"/>
+					</td>
+					<td class="col-right">
+						<%= serviceInfo.getServiceResults() %>
+					</td>
+				</tr>
+				<tr>
+					<td class="col-left">
+						<liferay-ui:message key="service-records"/>
+					</td>
+					<td class="col-right">
+						<%= serviceInfo.getServiceRecords() %>
+					</td>
+				</tr>
+				<tr>
+					<td class="col-left">
+						<liferay-ui:message key="service-instructions"/>
+					</td>
+					<td class="col-right">
+						<%= serviceInfo.getServiceInstructions() %>
+					</td>
+				</tr>
+				<tr>
+					<td class="col-left">
+						<liferay-ui:message key="status"/>
+					</td>
+					<td class="col-right">
 						<%
-							for (TemplateFile tf : templates) {
+							int status = serviceInfo.getActiveStatus(); 
 						%>
-							<li> <a href="<%= ServiceUtil.getDLFileURL(tf.getFileEntryId()) %>"> <%= tf.getFileName() %> </a></li>
-						<%		
+						<c:choose>
+							<c:when test="<%=status == 0 %>">
+								<liferay-ui:message key="service-private"/>
+							</c:when>
+							
+							<c:when test="<%=status == 1 %>">
+								<liferay-ui:message key="service-public"/>
+							</c:when>
+							<c:when test="<%=status == 2 %>">
+								<liferay-ui:message key="service-outdate"/>
+							</c:when>
+						</c:choose>
+						
+					</td>
+				</tr>
+				<tr>
+					<td class="col-left">
+						<liferay-ui:message key="template_info"/>
+					</td>
+					<td class="col-right">
+						
+						<%
+							List<TemplateFile> templates = new ArrayList<TemplateFile>();
+						
+							if (Validator.isNotNull(serviceInfo)) {
+								templates = TemplateFileLocalServiceUtil.getServiceTemplateFiles(serviceInfo.getServiceinfoId());
 							}
 						%>
-					</ul>
-					
-				</td>
-			</tr>
-			<tr>
-				<td class="col-left">
-					<liferay-ui:message key="online-url"/>
-				</td>
-				<td class="col-right">
-					<ul>
-						<li>
-							<a href="<%= serviceInfo.getOnlineUrl()%>"><span style="color:blue"><%= serviceInfo.getOnlineUrl()%></span> </a>
-						</li>
-					</ul>
-				</td>
-			</tr>
-		</table>
-	</div>
-</c:if>
+						<ul>
+							<%
+								for (TemplateFile tf : templates) {
+							%>
+								<li> <a href="<%= ServiceUtil.getDLFileURL(tf.getFileEntryId()) %>"> <%= tf.getFileName() %> </a></li>
+							<%		
+								}
+							%>
+						</ul>
+						
+					</td>
+				</tr>
+				<tr>
+					<td class="col-left">
+						<liferay-ui:message key="online-url"/>
+					</td>
+					<td class="col-right">
+						<ul>
+							<li>
+								<a href="<%= serviceInfo.getOnlineUrl()%>"><span style="color:blue"><%= serviceInfo.getOnlineUrl()%></span> </a>
+							</li>
+						</ul>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</c:if>
+</div>
