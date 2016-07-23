@@ -68,12 +68,21 @@
 	boolean isEditDossier = ParamUtil.getBoolean(request, "isEditDossier");
 %>
 
-<div class="ocps-header-history">
+<div class="ocps-custom-header">
+	<label class="opcps-label">
+		<liferay-ui:message key='<%=(dossier == null) ? "add-dossier" : (cmd.equals(Constants.VIEW) ? "view-dossier" : "update-dossier") %>' />
+	</label>
+	<span class="ocps-span">
+		<a href="<%=backURL %>"><liferay-ui:message key="back"/></a>
+	</span>
+</div>
+
+<%-- <div class="ocps-header-history">
 	<liferay-ui:header
 		backURL="<%= backURL %>"
 		title='<%= (dossier == null) ? "add-dossier" : (cmd.equals(Constants.VIEW) ? "view-dossier" : "update-dossier") %>'
 	/>
-</div>
+</div> --%>
 <div class="ocps-history-bound-navigator">
 <c:choose>
 	<c:when test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) && Validator.isNotNull(accountType) &&
