@@ -318,7 +318,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 				splitDate.getMonth(), splitDate.getDayOfMoth(),
 				syncDossier.getOid());
 
-		System.out.println("Folder Destination////////////////// " +
+		System.out.println("SyncDossier Folder Destination////////////////// " +
 			dossierFolderDestination);
 
 		DLFolder folder =
@@ -368,7 +368,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 				}
 
 				if (bytes != null && syncDLFileEntry != null) {
-					System.out.println("//////////////Add Dossier File//////////////////");
+					System.out.println("SyncDossier Add Dossier File//////////////////");
 
 					dossierFileLocalService.addDossierFile(
 						serviceContext.getUserId(),
@@ -1014,9 +1014,9 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 */
 	public boolean updateDossierStatus(
 		long dossierId, long fileGroupId, String dossierStatus,
-		String receptionNo, Date submitDatetime, Date estimateDatetime, Date receiveDatetime,
-		Date finishDatetime, String actor, String requestCommand,
-		String actionInfo, String messageInfo) {
+		String receptionNo, Date submitDatetime, Date estimateDatetime,
+		Date receiveDatetime, Date finishDatetime, String actor,
+		String requestCommand, String actionInfo, String messageInfo) {
 
 		boolean result = false;
 		try {
@@ -1024,15 +1024,15 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 			Dossier dossier = dossierPersistence.findByPrimaryKey(dossierId);
 			dossier.setReceptionNo(receptionNo);
 			dossier.setEstimateDatetime(estimateDatetime);
-			
+
 			if (Validator.isNull(dossier.getReceiveDatetime())) {
 				dossier.setReceiveDatetime(receiveDatetime);
 			}
-			
+
 			if (Validator.isNull(dossier.getSubmitDatetime())) {
 				dossier.setSubmitDatetime(submitDatetime);
 			}
-			
+
 			dossier.setFinishDatetime(finishDatetime);
 
 			dossier.setDossierStatus(dossierStatus);
@@ -1128,18 +1128,13 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 
 		String folderName = dossier.getOid();
 
-		/*
-		 * String folderName = StringUtil.replace(syncDossier.getOid(),
-		 * StringPool.DASH, StringPool.UNDERLINE);
-		 */
-
 		String dossierFolderDestination =
 			PortletUtil.getDossierDestinationFolder(
 				serviceContext.getScopeGroupId(), splitDate.getYear(),
 				splitDate.getMonth(), splitDate.getDayOfMoth(), folderName);
 
-		System.out.println(dossierFolderDestination +
-			"*************************************");
+		System.out.println("SyncDossierStatus Folder Destination////////////////// " +
+			dossierFolderDestination);
 
 		DLFolder folder =
 			DLFolderUtil.getTargetFolder(
@@ -1188,7 +1183,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 				}
 
 				if (bytes != null && syncDLFileEntry != null) {
-					System.out.println("*************************************addDossierFile*************************************");
+					System.out.println("SyncDossierStatus Add Dossier File//////////////////");
 
 					dossierFileLocalService.addDossierFile(
 						serviceContext.getUserId(),
@@ -1217,6 +1212,19 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 						bytes, serviceContext);
 				}
 			}
+		}
+
+		if (paymentFile != null) {
+			System.out.println("SyncDossierStatus Add Payment File//////////////////");
+
+			paymentFileLocalService.addPaymentFile(
+				dossier.getDossierId(), paymentFile.getFileGroupId(),
+				dossier.getUserId(), dossier.getOwnerOrganizationId(),
+				paymentFile.getGovAgencyOrganizationId(),
+				paymentFile.getPaymentName(), paymentFile.getRequestDatetime(),
+				paymentFile.getAmount(), paymentFile.getRequestNote(),
+				paymentFile.getPlaceInfo(), paymentFile.getPaymentOptions());
+
 		}
 
 		dossierLogLocalService.addDossierLog(
