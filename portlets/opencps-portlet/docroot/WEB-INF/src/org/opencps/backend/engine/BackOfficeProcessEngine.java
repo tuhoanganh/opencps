@@ -40,7 +40,6 @@ import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
 import org.opencps.processmgt.service.SchedulerJobsLocalServiceUtil;
-import org.opencps.processmgt.service.ServiceInfoProcessLocalServiceUtil;
 import org.opencps.util.PortletConstants;
 import org.opencps.util.WebKeys;
 
@@ -75,13 +74,14 @@ public class BackOfficeProcessEngine implements MessageListener {
 	}
 	
 	private void _doRecevie(Message message) {
+		Date now = new Date();
 
 		SendToEngineMsg toEngineMsg =
 		    (SendToEngineMsg) message.get("msgToEngine");
 
 		SendToBackOfficeMsg toBackOffice = new SendToBackOfficeMsg();
 		
-		Date now = new Date();
+		toBackOffice.setSubmitDateTime(now);
 		
 		Dossier dossier = BackendUtils.getDossier(toEngineMsg.getDossierId());
 
@@ -99,17 +99,10 @@ public class BackOfficeProcessEngine implements MessageListener {
 			govAgencyName = dossier.getGovAgencyName();
 			govAgencyOrganizationId = dossier.getGovAgencyOrganizationId();
 			
-			
-
 			try {
 				
 				ServiceConfig serviceConfig = ServiceConfigLocalServiceUtil.getServiceConfigByG_S_G(toEngineMsg.getGroupId(), serviceInfoId, govAgencyCode);
 				serviceProcessId = serviceConfig.getServiceProcessId();
-/*				    ServiceInfoProcessLocalServiceUtil.getServiceInfo(
-				        serviceInfoId).getServiceProcessId();
-				  
-*/			
-				_log.info("---------->>" + toEngineMsg.getGroupId());
 			}
 			catch (Exception e) {
 				_log.error(e);

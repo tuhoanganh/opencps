@@ -66,12 +66,10 @@ public class SyncFromFrontOffice implements MessageListener{
 	 */
 	private void _doReceiveDossier(Message message) {
 		
-		_log.info("*****************************************SyncFromFrontOffice*******************************8");
 
 		UserActionMsg userActionMgs =
 		    (UserActionMsg) message.get("msgToEngine");
 
-		_log.info("*****************************************SyncFromFrontOffice*" + userActionMgs.getDossierId());
 
 		String action = userActionMgs.getAction();
 
@@ -175,6 +173,7 @@ public class SyncFromFrontOffice implements MessageListener{
 					    userActionMgs.getDossierId(),
 					    userActionMgs.getFileGroupId(),
 					    dossier.getDossierStatus(), dossier.getReceptionNo(),
+					    dossier.getSubmitDatetime(),
 					    dossier.getEstimateDatetime(),
 					    dossier.getReceiveDatetime(),
 					    dossier.getFinishDatetime(),
@@ -191,6 +190,7 @@ public class SyncFromFrontOffice implements MessageListener{
 					    userActionMgs.getDossierId(),
 					    userActionMgs.getFileGroupId(),
 					    dossier.getDossierStatus(), dossier.getReceptionNo(),
+					    dossier.getSubmitDatetime(),
 					    dossier.getEstimateDatetime(),
 					    dossier.getReceiveDatetime(),
 					    dossier.getFinishDatetime(),
