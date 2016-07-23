@@ -127,15 +127,7 @@ public class MsgInFrontOffice implements MessageListener {
 			catch (Exception e) {
 				_log.error(e);
 			}
-			finally {
-				try {
-					context.destroy();
-				}
-				catch (Exception e) {
-					_log.error(e);
-				}
-
-			}
+			
 		}
 		else {
 			_log.info("Cannot create connection to JMS Queue..................");
