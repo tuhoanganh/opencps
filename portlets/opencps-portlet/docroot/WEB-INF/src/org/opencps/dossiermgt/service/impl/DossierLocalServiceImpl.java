@@ -172,17 +172,10 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 
 		dossier.setKeypayRedirectUrl(redirectPaymentURL);
 
-		DLFolder folder = null;
-
-		try {
-			folder =
-				DLFolderUtil.getFolder(
-					serviceContext.getScopeGroupId(), parentFolderId,
-					dossier.getOid());
-		}
-		catch (Exception e) {
-			// TODO: handle exception
-		}
+		DLFolder folder =
+			DLFolderUtil.getFolder(
+				serviceContext.getScopeGroupId(), parentFolderId,
+				dossier.getOid());
 
 		if (folder == null) {
 			folder =
@@ -311,8 +304,6 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 
 		SplitDate splitDate = PortletUtil.splitDate(now);
 
-		String folderName = syncDossier.getOid();
-
 		/*
 		 * String folderName = StringUtil.replace(syncDossier.getOid(),
 		 * StringPool.DASH, StringPool.UNDERLINE);
@@ -321,10 +312,11 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		String dossierFolderDestination =
 			PortletUtil.getDossierDestinationFolder(
 				serviceContext.getScopeGroupId(), splitDate.getYear(),
-				splitDate.getMonth(), splitDate.getDayOfMoth(), folderName);
+				splitDate.getMonth(), splitDate.getDayOfMoth(),
+				syncDossier.getOid());
 
-		System.out.println(dossierFolderDestination +
-			"*************************************");
+		System.out.println("Folder Destination////////////////// " +
+			dossierFolderDestination);
 
 		DLFolder folder =
 			DLFolderUtil.getTargetFolder(
@@ -373,7 +365,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 				}
 
 				if (bytes != null && syncDLFileEntry != null) {
-					System.out.println("*************************************addDossierFile*************************************");
+					System.out.println("//////////////Add Dossier File//////////////////");
 
 					dossierFileLocalService.addDossierFile(
 						serviceContext.getUserId(),
