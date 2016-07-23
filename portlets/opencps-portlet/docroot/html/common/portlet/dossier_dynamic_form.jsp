@@ -128,6 +128,8 @@
 		if(dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT && 
 						dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_RESULT){
 			isViewForm = true;
+		}else{
+			isViewForm = false;
 		}
 	}
 	
