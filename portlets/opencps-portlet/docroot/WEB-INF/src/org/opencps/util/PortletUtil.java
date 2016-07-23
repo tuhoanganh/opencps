@@ -795,7 +795,8 @@ public class PortletUtil {
 			GetterUtil.getString(preferences.getValue(
 				WebKeys.JMS_CONFIGURATION, StringPool.BLANK));
 
-		_log.info("(PortletUtil.getJMSContextProperties) - jmsJson: " + jmsJSON);
+		// _log.info("(PortletUtil.getJMSContextProperties) - jmsJson: " +
+		// jmsJSON);
 
 		try {
 
@@ -803,22 +804,29 @@ public class PortletUtil {
 			JSONObject jmsJSONObject =
 				JSONFactoryUtil.createJSONObject(jmsJSON);
 
-			/*_log.info("(PortletUtil.getJMSContextProperties) - jmsJSONObject: " +
-				jmsJSONObject.toString());*/
+			/*
+			 * _log.info("(PortletUtil.getJMSContextProperties) - jmsJSONObject: "
+			 * + jmsJSONObject.toString());
+			 */
 
 			// Get lookup configuration
 			JSONObject lookupObject = jmsJSONObject.getJSONObject(lookup);
 
-			/*_log.info("(PortletUtil.getJMSContextProperties) - lookupObject: " +
-				lookupObject.toString());*/
+			/*
+			 * _log.info("(PortletUtil.getJMSContextProperties) - lookupObject: "
+			 * + lookupObject.toString());
+			 */
 
 			JSONObject jsmServerCnfObject = null;
 
 			if (remote && lookup.equals("remote")) {
 				// Get jms remote server by gov agency code
 				jsmServerCnfObject = lookupObject.getJSONObject(code);
-				/*_log.info("(PortletUtil.getJMSContextProperties) - jsmServerCnfObject: " +
-					jsmServerCnfObject.toString());*/
+				/*
+				 * _log.info(
+				 * "(PortletUtil.getJMSContextProperties) - jsmServerCnfObject: "
+				 * + jsmServerCnfObject.toString());
+				 */
 			}
 			else {
 				// Local server
@@ -829,13 +837,18 @@ public class PortletUtil {
 			if (jsmServerCnfObject != null) {
 				JSONObject channelObject =
 					jsmServerCnfObject.getJSONObject(WebKeys.JMS_CHANNEL);
-				/*_log.info("(PortletUtil.getJMSContextProperties) - channelObject: " +
-					channelObject.toString());*/
+				/*
+				 * _log.info(
+				 * "(PortletUtil.getJMSContextProperties) - channelObject: " +
+				 * channelObject.toString());
+				 */
 
 				String providerURL =
 					jsmServerCnfObject.getString(WebKeys.JMS_PROVIDER_URL);
-				/*_log.info("(PortletUtil.getJMSContextProperties) - providerURL: " +
-					providerURL.toString());*/
+				/*
+				 * _log.info("(PortletUtil.getJMSContextProperties) - providerURL: "
+				 * + providerURL.toString());
+				 */
 				if (remote && Validator.isNotNull(providerURL)) {
 					providerURL = "remote://" + providerURL;
 				}
@@ -843,46 +856,60 @@ public class PortletUtil {
 				String providerPort =
 					jsmServerCnfObject.getString(WebKeys.JMS_PROVIDER_PORT);
 
-				/*_log.info("(PortletUtil.getJMSContextProperties) - providerPort:* " +
-					providerPort.toString());*/
+				/*
+				 * _log.info(
+				 * "(PortletUtil.getJMSContextProperties) - providerPort:* " +
+				 * providerPort.toString());
+				 */
 
 				String userName =
 					jsmServerCnfObject.getString(WebKeys.JMS_USERNAME);
 
-				/*_log.info("(PortletUtil.getJMSContextProperties) - userName: " +
-					userName.toString());*/
+				/*
+				 * _log.info("(PortletUtil.getJMSContextProperties) - userName: "
+				 * + userName.toString());
+				 */
 
 				String passWord =
 					jsmServerCnfObject.getString(WebKeys.JMS_PASSWORD);
 
-				/*_log.info("(PortletUtil.getJMSContextProperties) - password:" +
-					passWord.toString());*/
+				/*
+				 * _log.info("(PortletUtil.getJMSContextProperties) - password:"
+				 * + passWord.toString());
+				 */
 
 				String syncCompanyId =
 					jsmServerCnfObject.getString(WebKeys.JMS_COMPANY_ID);
 
-				/*_log.info("(PortletUtil.getJMSContextProperties) - syncCompanyId: " +
-					syncCompanyId);*/
+				/*
+				 * _log.info(
+				 * "(PortletUtil.getJMSContextProperties) - syncCompanyId: " +
+				 * syncCompanyId);
+				 */
 				String syncGroupId =
 					jsmServerCnfObject.getString(WebKeys.JMS_GROUP_ID);
-				/*_log.info("(PortletUtil.getJMSContextProperties) - syncGroupId: " +
-					syncGroupId);*/
+				/*
+				 * _log.info("(PortletUtil.getJMSContextProperties) - syncGroupId: "
+				 * + syncGroupId);
+				 */
 				String syncUserId =
 					jsmServerCnfObject.getString(WebKeys.JMS_USER_ID);
 
-				/*_log.info("(PortletUtil.getJMSContextProperties) - syncUserId: " +
-					syncUserId);
-
-				_log.info("(PortletUtil.getJMSContextProperties) - channelName: " +
-					channelName.toString());*/
+				/*
+				 * _log.info("(PortletUtil.getJMSContextProperties) - syncUserId: "
+				 * + syncUserId);
+				 * _log.info("(PortletUtil.getJMSContextProperties) - channelName: "
+				 * + channelName.toString());
+				 */
 
 				String channel = channelObject.getString(channelName);
 
-				/*_log.info("(PortletUtil.getJMSContextProperties) - channel: " +
-					channel);
-
-				_log.info("(PortletUtil.getJMSContextProperties) - providerURL: " +
-					providerURL);*/
+				/*
+				 * _log.info("(PortletUtil.getJMSContextProperties) - channel: "
+				 * + channel);
+				 * _log.info("(PortletUtil.getJMSContextProperties) - providerURL: "
+				 * + providerURL);
+				 */
 
 				properties.put(
 					Context.INITIAL_CONTEXT_FACTORY,

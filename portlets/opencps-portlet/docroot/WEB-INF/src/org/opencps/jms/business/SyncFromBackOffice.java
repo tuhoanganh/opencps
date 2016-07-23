@@ -20,10 +20,8 @@ package org.opencps.jms.business;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.opencps.dossiermgt.NoSuchDossierException;
 import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.DossierPart;
-import org.opencps.dossiermgt.model.DossierTemplate;
 import org.opencps.dossiermgt.model.FileGroup;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.jms.message.body.DossierFileMsgBody;
@@ -45,7 +43,8 @@ public class SyncFromBackOffice {
 	 * @throws SystemException
 	 * @throws PortalException
 	 */
-	public void syncDossierStatus(SyncFromBackOfficeMsgBody syncFromBackOfficeMsgBody)
+	public void syncDossierStatus(
+		SyncFromBackOfficeMsgBody syncFromBackOfficeMsgBody)
 		throws SystemException, PortalException {
 
 		ServiceContext serviceContext =
@@ -89,6 +88,6 @@ public class SyncFromBackOffice {
 			syncFromBackOfficeMsgBody.getActionInfo(),
 			syncFromBackOfficeMsgBody.getMessageInfo(), syncDossierFiles,
 			syncFileGroups, syncFileGroupDossierParts, syncDLFileEntries, data,
-			null, serviceContext);
+			syncFromBackOfficeMsgBody.getPaymentFile(), serviceContext);
 	}
 }
