@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.opencps.dossiermgt.NoSuchDossierException;
 import org.opencps.dossiermgt.NoSuchDossierStatusException;
 import org.opencps.dossiermgt.model.Dossier;
@@ -47,6 +49,7 @@ import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
@@ -1011,7 +1014,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 */
 	public boolean updateDossierStatus(
 		long dossierId, long fileGroupId, String dossierStatus,
-		String receptionNo, Date estimateDatetime, Date receiveDatetime,
+		String receptionNo, Date submitDatetime, Date estimateDatetime, Date receiveDatetime,
 		Date finishDatetime, String actor, String requestCommand,
 		String actionInfo, String messageInfo) {
 
@@ -1021,7 +1024,15 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 			Dossier dossier = dossierPersistence.findByPrimaryKey(dossierId);
 			dossier.setReceptionNo(receptionNo);
 			dossier.setEstimateDatetime(estimateDatetime);
-			dossier.setReceiveDatetime(receiveDatetime);
+			
+			if (Validator.isNull(dossier.getReceiveDatetime())) {
+				dossier.setReceiveDatetime(receiveDatetime);
+			}
+			
+			if (Validator.isNull(dossier.getSubmitDatetime())) {
+				dossier.setSubmitDatetime(submitDatetime);
+			}
+			
 			dossier.setFinishDatetime(finishDatetime);
 
 			dossier.setDossierStatus(dossierStatus);

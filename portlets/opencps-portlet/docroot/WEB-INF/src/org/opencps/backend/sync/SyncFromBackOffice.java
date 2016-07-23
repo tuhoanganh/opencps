@@ -70,6 +70,7 @@ public class SyncFromBackOffice implements MessageListener{
 			        toBackOffice.getDossierStatus(),
 			        toBackOffice.getReceptionNo(),
 			        toBackOffice.getEstimateDatetime(),
+			        toBackOffice.getSubmitDateTime(),
 			        toBackOffice.getReceiveDatetime(),
 			        toBackOffice.getFinishDatetime(), actor,
 			        toBackOffice.getRequestCommand(),
