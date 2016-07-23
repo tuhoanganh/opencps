@@ -58,23 +58,22 @@ import com.liferay.portal.kernel.util.Validator;
  */
 public class BackOfficeProcessEngine implements MessageListener {
 
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * com.liferay.portal.kernel.messaging.MessageListener#receive(com.liferay
-	 * .portal.kernel.messaging.Message)
-	 */
+
 	@Override
 	public void receive(Message message)
 	    throws MessageListenerException {
 
-		//doReceive(message);
-		//activeEngine(message);
 		_doRecevie(message);
 	}
 	
 	private void _doRecevie(Message message) {
+		
 		Date now = new Date();
+		String actionName = StringPool.BLANK;
+		String stepName = StringPool.BLANK;
+		ProcessOrder processOrder = null;
+		long curStepId = 0;
+		long processStepId = 0;
 
 		SendToEngineMsg toEngineMsg =
 		    (SendToEngineMsg) message.get("msgToEngine");
@@ -109,17 +108,12 @@ public class BackOfficeProcessEngine implements MessageListener {
 			}
 		}
 
-		long curStepId = 0;
 
 		long processWorkflowId = toEngineMsg.getProcessWorkflowId();
 
 		long processOrderId = toEngineMsg.getProcessOrderId();
 
-		long processStepId = 0;
 
-		String actionName = StringPool.BLANK;
-		String stepName = StringPool.BLANK;
-		ProcessOrder processOrder = null;
 		try {
 			if (Validator.isNull(processOrderId)) {
 

@@ -34,34 +34,33 @@ import com.liferay.portal.kernel.util.GetterUtil;
  */
 public class BackOfficeProcessCallback implements MessageListener{
 
-	/* (non-Javadoc)
-     * @see com.liferay.portal.kernel.messaging.MessageListener#receive(com.liferay.portal.kernel.messaging.Message)
-     */
+
     @Override
     public void receive(Message message)
         throws MessageListenerException {
 
-	    //Run doRevice
-    	
     	_doRecevie(message);
 	    
     }
     
-    private void _doRecevie(Message message) {
-    	
-    	SendToCallbackMsg msgToCalback = (SendToCallbackMsg) message.get("toCallback");
-    	
-    	try {
+	/**
+	 * @param message
+	 */
+	private void _doRecevie(Message message) {
+
+		SendToCallbackMsg msgToCalback =
+		    (SendToCallbackMsg) message.get("toCallback");
+
+		try {
 			ProcessOrderLocalServiceUtil.updateProcessOrderStatus(
 			    msgToCalback.getProcessOrderId(),
 			    msgToCalback.getDossierStatus());
-        }
-        catch (Exception e) {
-	        // TODO: handle exception
-        }
-    }
-    
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
+	}
 
-    private Log _log = LogFactoryUtil.getLog(BackOfficeProcessCallback.class);
+	private Log _log = LogFactoryUtil.getLog(BackOfficeProcessCallback.class);
 
 }
