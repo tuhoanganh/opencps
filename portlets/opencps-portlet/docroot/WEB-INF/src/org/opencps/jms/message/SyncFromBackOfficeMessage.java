@@ -21,7 +21,6 @@ import javax.jms.BytesMessage;
 import javax.jms.JMSException;
 import javax.naming.NamingException;
 
-import org.opencps.dossiermgt.NoSuchDossierException;
 import org.opencps.jms.SyncServiceContext;
 import org.opencps.jms.business.SyncFromBackOffice;
 import org.opencps.jms.context.JMSContext;
@@ -30,7 +29,6 @@ import org.opencps.jms.message.body.SyncFromBackOfficeMsgBody;
 import org.opencps.jms.util.JMSMessageUtil;
 import org.opencps.util.WebKeys;
 
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -63,7 +61,7 @@ public class SyncFromBackOfficeMessage {
 
 		SyncFromBackOffice syncFromBackOffice = new SyncFromBackOffice();
 
-		_log.info("******************** ReceiveLocalMessage **************************");
+		_log.info("SyncFromBackOfficeMessage ReceiveLocalMessage//////////////////////////");
 
 		try {
 			syncFromBackOffice.syncDossierStatus(syncFromBackOfficeMsgBody);
@@ -159,10 +157,10 @@ public class SyncFromBackOfficeMessage {
 					JMSMessageUtil.convertObjectToByteArray(msgBody);
 
 				bytesMessage.writeBytes(sender);
-				_log.info("Chuan bi gui ?????????????????????????????????????????????????????????");
+				_log.info("SyncFromBackOfficeMessage Send Message////////////////////////////////");
 				_context.getMessageProducer().send(bytesMessage);
-				_log.info("Gui xong roi <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-				
+				_log.info("SyncFromBackOfficeMessage Finish Send Message////////////////////////////////");
+
 			}
 
 		}
