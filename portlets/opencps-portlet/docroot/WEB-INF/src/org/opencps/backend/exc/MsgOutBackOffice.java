@@ -100,7 +100,7 @@ public class MsgOutBackOffice implements MessageListener{
 			    JMSMessageUtil.createProducer(
 			        toBackOffice.getCompanyId(),
 			        toBackOffice.getGovAgencyCode(), true,
-			        WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "remote");
+			        WebKeys.JMS_QUEUE_OPENCPS_FRONTOFFICE.toLowerCase(), "remote");
 
 			SyncFromBackOfficeMessage syncFromBackoffice =
 			    new SyncFromBackOfficeMessage(context);

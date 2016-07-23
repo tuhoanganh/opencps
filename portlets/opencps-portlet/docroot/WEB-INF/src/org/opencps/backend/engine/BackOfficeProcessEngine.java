@@ -81,8 +81,8 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 		SendToBackOfficeMsg toBackOffice = new SendToBackOfficeMsg();
 		
-		_log.info("&&&&&&&&&&&&&&&&&&&" + toEngineMsg.getDossierId());
-
+		Date now = new Date();
+		
 		Dossier dossier = BackendUtils.getDossier(toEngineMsg.getDossierId());
 
 		long serviceInfoId = 0;
