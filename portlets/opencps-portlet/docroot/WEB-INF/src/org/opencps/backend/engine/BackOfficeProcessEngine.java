@@ -81,7 +81,8 @@ public class BackOfficeProcessEngine implements MessageListener {
 		SendToBackOfficeMsg toBackOffice = new SendToBackOfficeMsg();
 		
 		toBackOffice.setSubmitDateTime(now);
-		
+		toBackOffice.setReceiveDatetime(now);
+
 		Dossier dossier = BackendUtils.getDossier(toEngineMsg.getDossierId());
 
 		long serviceInfoId = 0;
@@ -250,7 +251,6 @@ public class BackOfficeProcessEngine implements MessageListener {
 					toBackOffice.setReceptionNo(toEngineMsg.getReceptionNo());
 				}
 
-				toBackOffice.setReceiveDatetime(new Date());
 
 				toBackOffice.setEstimateDatetime(toEngineMsg.getEstimateDatetime());
 

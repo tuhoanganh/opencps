@@ -101,6 +101,8 @@ public class MsgOutBackOffice implements MessageListener{
 			        toBackOffice.getCompanyId(),
 			        toBackOffice.getGovAgencyCode(), true,
 			        WebKeys.JMS_QUEUE_OPENCPS_FRONTOFFICE.toLowerCase(), "remote");
+			
+			_log.info("Create context done");
 
 			SyncFromBackOfficeMessage syncFromBackoffice =
 			    new SyncFromBackOfficeMessage(context);
@@ -110,7 +112,12 @@ public class MsgOutBackOffice implements MessageListener{
 			msgBody.setOid(dossier.getOid());
 			msgBody.setDossierStatus(toBackOffice.getDossierStatus());
 			msgBody.setLstDossierFileMsgBody(lstDossierFileMsgBody);
+			msgBody.setReceiveDatetime(toBackOffice.getReceiveDatetime());
+			msgBody.setSubmitDateTime(toBackOffice.getSubmitDateTime());
+			msgBody.setEstimateDatetime(toBackOffice.getEstimateDatetime());
 			msgBody.setPaymentFile(toBackOffice.getPaymentFile());
+			
+			_log.info("SetPaymentFine");
 
 			syncFromBackoffice.sendMessage(msgBody);
 
