@@ -106,7 +106,7 @@ public class DLFolderUtil {
 					groupId, parentFolderId, name);
 		}
 		catch (Exception e) {
-			_log.info(e);
+			_log.warn(e.getMessage());
 		}
 
 		return dlFolder;
