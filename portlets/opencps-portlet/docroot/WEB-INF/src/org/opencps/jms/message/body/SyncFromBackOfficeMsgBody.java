@@ -220,6 +220,25 @@ public class SyncFromBackOfficeMsgBody implements Serializable{
     	this._paymentFile = _paymentFile;
     }
 
+	
+    /**
+     * @return the _submitDateTime
+     */
+    public Date getSubmitDateTime() {
+    
+    	return _submitDateTime;
+    }
+
+
+	
+    /**
+     * @param _submitDateTime the _submitDateTime to set
+     */
+    public void setSubmitDateTime(Date _submitDateTime) {
+    
+    	this._submitDateTime = _submitDateTime;
+    }
+
 	private String _actionInfo;
 	
 	private String _actor;
@@ -249,4 +268,6 @@ public class SyncFromBackOfficeMsgBody implements Serializable{
 	private ServiceContext _serviceContext;
 	
 	private PaymentFile _paymentFile;
+	
+	private Date _submitDateTime;
 }
