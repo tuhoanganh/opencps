@@ -31,6 +31,7 @@ import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.jms.QueueBrowser;
+import javax.jms.QueueSession;
 import javax.jms.Session;
 import javax.jms.StreamMessage;
 import javax.jms.TextMessage;
@@ -71,6 +72,7 @@ public class JMSContext {
 	 */
 	public int countMessageInQueue()
 		throws Exception {
+
 		createQueueBrowser();
 		int count = 0;
 		Enumeration<?> messages = _queueBrowser.getEnumeration();
@@ -258,7 +260,7 @@ public class JMSContext {
 			connectionFactory.createConnection(
 				properties.getProperty(Context.SECURITY_PRINCIPAL),
 				properties.getProperty(Context.SECURITY_CREDENTIALS));
-
+		
 		Destination destination =
 			(Destination) context.lookup(properties.getProperty(WebKeys.JMS_DESTINATION));
 
@@ -448,6 +450,16 @@ public class JMSContext {
 		this._textMessage = textMessage;
 	}
 
+	public QueueSession getQueueSession() {
+
+		return _queueSession;
+	}
+
+	public void setQueueSession(QueueSession queueSession) {
+
+		this._queueSession = queueSession;
+	}
+
 	private BytesMessage _bytesMessage;
 
 	private Connection _connection;
@@ -477,4 +489,6 @@ public class JMSContext {
 	private StreamMessage _streamMessage;
 
 	private TextMessage _textMessage;
+
+	private QueueSession _queueSession;
 }

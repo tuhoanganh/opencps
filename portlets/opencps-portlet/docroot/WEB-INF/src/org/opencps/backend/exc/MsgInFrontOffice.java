@@ -17,14 +17,11 @@
 
 package org.opencps.backend.exc;
 
-import javax.jms.BytesMessage;
-import javax.jms.ObjectMessage;
-import javax.jms.StreamMessage;
-import javax.jms.TextMessage;
+import javax.jms.JMSException;
+import javax.naming.NamingException;
 
 import org.opencps.jms.context.JMSContext;
-import org.opencps.jms.message.SyncFromBackOfficeMessage;
-import org.opencps.jms.message.body.SyncFromBackOfficeMsgBody;
+import org.opencps.jms.util.JMSMessageBodyUtil;
 import org.opencps.jms.util.JMSMessageUtil;
 import org.opencps.util.PortletUtil;
 import org.opencps.util.WebKeys;
@@ -57,10 +54,9 @@ public class MsgInFrontOffice implements MessageListener {
 
 	private void _doReceive(Message message) {
 
-		System.out.println("**DO msgInFrontOffice");
+		System.out.println("MsgInFrontOffice/////////////////////////////////");
 
 		long[] companyIds = PortalUtil.getCompanyIds();
-
 
 		long companyId = 0;
 
@@ -77,46 +73,21 @@ public class MsgInFrontOffice implements MessageListener {
 			JMSContext context =
 				JMSMessageUtil.createConsumer(
 					companyId, StringPool.BLANK, true,
-					WebKeys.JMS_QUEUE_OPENCPS_FRONTOFFICE.toLowerCase(), "local");
+					WebKeys.JMS_QUEUE_OPENCPS_FRONTOFFICE.toLowerCase(),
+					"local");
 			try {
-				//int messageInQueue = context.countMessageInQueue();
-				//int receiveNumber = messageInQueue <= 50 ? messageInQueue : 50;
-				
-				int receiveNumber = 50;
 
-				/*_log.info("********************************************************Queue Size*********************************************** " +
-					messageInQueue);*/
+				int receiveNumber = 10;
 
 				int count = 1;
+
 				while (count <= receiveNumber) {
-
+					_log.info("Start receive message/////////////////////////////////////");
 					javax.jms.Message jsmMessage =
-						context.getMessageConsumer().receive(1000);
+						context.getMessageConsumer().receive(3000);
+					_log.info("Received message/////////////////////////////////////");
 					if (jsmMessage != null) {
-						if (jsmMessage instanceof TextMessage) {
-						}
-						else if (jsmMessage instanceof ObjectMessage) {
-						}
-						else if (jsmMessage instanceof BytesMessage) {
-							BytesMessage bytesMessage =
-								(BytesMessage) jsmMessage;
-							_log.info("*******************BytesMessage*******************");
-							byte[] result =
-								new byte[(int) bytesMessage.getBodyLength()];
-							bytesMessage.readBytes(result);
-							Object object =
-								JMSMessageUtil.convertByteArrayToObject(result);
-							if (object instanceof SyncFromBackOfficeMsgBody) {
-								SyncFromBackOfficeMsgBody syncFromBackOfficeMsgBody =
-									(SyncFromBackOfficeMsgBody) object;
-								SyncFromBackOfficeMessage syncFromBackOfficeMessage =
-									new SyncFromBackOfficeMessage(context);
-								syncFromBackOfficeMessage.receiveLocalMessage(syncFromBackOfficeMsgBody);
-
-							}
-						}
-						else if (jsmMessage instanceof StreamMessage) {
-						}
+						JMSMessageBodyUtil.receiveMessage(context, jsmMessage);
 					}
 					else {
 					}
@@ -127,7 +98,18 @@ public class MsgInFrontOffice implements MessageListener {
 			catch (Exception e) {
 				_log.error(e);
 			}
-			
+			finally {
+				try {
+					context.destroy();
+				}
+				catch (JMSException e) {
+					_log.error(e);
+				}
+				catch (NamingException e) {
+					_log.error(e);
+				}
+			}
+
 		}
 		else {
 			_log.info("Cannot create connection to JMS Queue..................");
