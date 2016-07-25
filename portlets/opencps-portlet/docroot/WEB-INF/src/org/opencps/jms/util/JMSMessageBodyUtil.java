@@ -95,7 +95,7 @@ public class JMSMessageBodyUtil {
 
 				syncFromBackOfficeMessage.receiveLocalMessage(syncFromBackOfficeMsgBody);
 			}
-			else if (object instanceof DossierFileMsgBody) {
+			else if (object instanceof DossierMsgBody) {
 				DossierMsgBody dossierMsgBody = (DossierMsgBody) object;
 
 				SubmitDossierMessage submitDossierMessage =
