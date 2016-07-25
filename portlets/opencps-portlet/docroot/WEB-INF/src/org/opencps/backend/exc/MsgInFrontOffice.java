@@ -91,7 +91,7 @@ public class MsgInFrontOffice implements MessageListener {
 				while (count <= receiveNumber) {
 
 					javax.jms.Message jsmMessage =
-						context.getMessageConsumer().receive(1000);
+						context.getMessageConsumer().receive(1000*60);
 					if (jsmMessage != null) {
 						if (jsmMessage instanceof TextMessage) {
 						}
