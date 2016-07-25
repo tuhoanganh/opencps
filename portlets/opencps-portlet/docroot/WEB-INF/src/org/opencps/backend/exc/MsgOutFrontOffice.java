@@ -45,18 +45,19 @@ public class MsgOutFrontOffice implements MessageListener{
 
 		try {
 
-			System.out.println("DONE MSGOUT_FO »»»»»>");
+			System.out.println("DONE MSGOUT_FO///////////////////////////////");
 	          
 	        UserActionMsg userActionMgs =
 	                  (UserActionMsg) message.get("msgToEngine");
-	        
 	        
 	        JMSContext context =
 	            JMSMessageUtil.createProducer(
 	              userActionMgs.getCompanyId(), userActionMgs.getGovAgencyCode(),
 	                true, WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "remote");
+	        
 	        SubmitDossierMessage submitDossierMessage =
 	            new SubmitDossierMessage(context);
+	        
 	        submitDossierMessage.sendMessage(userActionMgs.getDossierId());			
 
 		}

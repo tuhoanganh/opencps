@@ -17,9 +17,18 @@
 
 package org.opencps.jms.util;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+
+import javax.jms.BytesMessage;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.ObjectMessage;
+import javax.jms.StreamMessage;
+import javax.jms.TextMessage;
+import javax.naming.NamingException;
 
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierFile;
@@ -33,8 +42,12 @@ import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil;
 import org.opencps.dossiermgt.service.FileGroupLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
+import org.opencps.jms.context.JMSContext;
+import org.opencps.jms.message.SubmitDossierMessage;
+import org.opencps.jms.message.SyncFromBackOfficeMessage;
 import org.opencps.jms.message.body.DossierFileMsgBody;
 import org.opencps.jms.message.body.DossierMsgBody;
+import org.opencps.jms.message.body.SyncFromBackOfficeMsgBody;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
 import org.opencps.util.DLFileEntryUtil;
@@ -49,6 +62,49 @@ import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
  * @author trungnt
  */
 public class JMSMessageBodyUtil {
+
+	public synchronized static void receiveMessage(
+		JMSContext context, Message jsmMessage)
+		throws JMSException, IOException, NamingException {
+
+		if (jsmMessage instanceof TextMessage) {
+
+		}
+		else if (jsmMessage instanceof ObjectMessage) {
+		}
+		else if (jsmMessage instanceof BytesMessage) {
+			BytesMessage bytesMessage = (BytesMessage) jsmMessage;
+			
+			_log.info("BytesMessage/////////////////////////////////////");
+			
+			byte[] result = new byte[(int) bytesMessage.getBodyLength()];
+			
+			bytesMessage.readBytes(result);
+
+			Object object = JMSMessageUtil.convertByteArrayToObject(result);
+
+			if (object instanceof SyncFromBackOfficeMsgBody) {
+
+				SyncFromBackOfficeMsgBody syncFromBackOfficeMsgBody =
+					(SyncFromBackOfficeMsgBody) object;
+
+				SyncFromBackOfficeMessage syncFromBackOfficeMessage =
+					new SyncFromBackOfficeMessage(context);
+
+				syncFromBackOfficeMessage.receiveLocalMessage(syncFromBackOfficeMsgBody);
+			}
+			else if (object instanceof DossierFileMsgBody) {
+				DossierMsgBody dossierMsgBody = (DossierMsgBody) object;
+
+				SubmitDossierMessage submitDossierMessage =
+					new SubmitDossierMessage(context);
+
+				submitDossierMessage.receiveLocalMessage(dossierMsgBody);
+			}
+		}
+		else if (jsmMessage instanceof StreamMessage) {
+		}
+	}
 
 	/**
 	 * @param dossierId
