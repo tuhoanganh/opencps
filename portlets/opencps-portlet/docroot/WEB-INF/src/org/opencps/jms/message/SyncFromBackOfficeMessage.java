@@ -53,7 +53,7 @@ public class SyncFromBackOfficeMessage {
 	 * @throws NamingException
 	 * @throws JMSException
 	 */
-	public void receiveLocalMessage(
+	public synchronized void receiveLocalMessage(
 		SyncFromBackOfficeMsgBody syncFromBackOfficeMsgBody)
 		throws JMSException, NamingException {
 
@@ -68,15 +68,6 @@ public class SyncFromBackOfficeMessage {
 		}
 		catch (Exception e) {
 			_log.error(e);
-		}
-		finally {
-			if (_context != null) {
-				_context.destroy();
-			}
-
-			if (_localContext != null) {
-				_localContext.destroy();
-			}
 		}
 
 	}
@@ -166,9 +157,6 @@ public class SyncFromBackOfficeMessage {
 		}
 		catch (Exception e) {
 			_log.error(e);
-		}
-		finally {
-			_context.destroy();
 		}
 	}
 

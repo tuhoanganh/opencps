@@ -17,14 +17,8 @@
 
 package org.opencps.backend.exc;
 
-import javax.jms.BytesMessage;
-import javax.jms.ObjectMessage;
-import javax.jms.StreamMessage;
-import javax.jms.TextMessage;
-
 import org.opencps.jms.context.JMSContext;
-import org.opencps.jms.message.SubmitDossierMessage;
-import org.opencps.jms.message.body.DossierMsgBody;
+import org.opencps.jms.util.JMSMessageBodyUtil;
 import org.opencps.jms.util.JMSMessageUtil;
 import org.opencps.util.PortletUtil;
 import org.opencps.util.WebKeys;
@@ -37,23 +31,22 @@ import com.liferay.portal.kernel.messaging.MessageListenerException;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.util.PortalUtil;
 
-
 /**
  * @author khoavd
- * 
  */
-public class MsgInBackOffice implements MessageListener{
-    @Override
-    public void receive(Message message)
-        throws MessageListenerException {
+public class MsgInBackOffice implements MessageListener {
 
-	    _doReceive(message);
-    }
-    
-    private void _doReceive(Message message) {
-    	System.out.println("**doRevice msgInBackOffice");
-    	
-    	
+	@Override
+	public void receive(Message message)
+		throws MessageListenerException {
+
+		_doReceive(message);
+	}
+
+	private void _doReceive(Message message) {
+
+		System.out.println("**doRevice msgInBackOffice");
+
 		long[] companyIds = PortalUtil.getCompanyIds();
 
 		long companyId = 0;
@@ -74,40 +67,15 @@ public class MsgInBackOffice implements MessageListener{
 					companyId, StringPool.BLANK, true,
 					WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "local");
 			try {
-/*				int messageInQueue = context.countMessageInQueue();
-				int receiveNumber = messageInQueue <= 50 ? messageInQueue : 50;
-*/
 
 				int count = 1;
+
 				while (count <= 10) {
 
 					javax.jms.Message jsmMessage =
 						context.getMessageConsumer().receive(1000*60);
 					if (jsmMessage != null) {
-						if (jsmMessage instanceof TextMessage) {
-
-						}
-						else if (jsmMessage instanceof ObjectMessage) {
-						}
-						else if (jsmMessage instanceof BytesMessage) {
-							BytesMessage bytesMessage =
-								(BytesMessage) jsmMessage;
-							byte[] result =
-								new byte[(int) bytesMessage.getBodyLength()];
-							bytesMessage.readBytes(result);
-							Object object =
-								JMSMessageUtil.convertByteArrayToObject(result);
-							if (object instanceof DossierMsgBody) {
-								DossierMsgBody dossierMsgBody =
-									(DossierMsgBody) object;
-								SubmitDossierMessage submitDossierMessage =
-									new SubmitDossierMessage(context);
-								submitDossierMessage.receiveLocalMessage(dossierMsgBody);
-							}
-						}
-						else if (jsmMessage instanceof StreamMessage) {
-
-						}
+						JMSMessageBodyUtil.receiveMessage(context, jsmMessage);
 					}
 
 					count++;
@@ -127,7 +95,7 @@ public class MsgInBackOffice implements MessageListener{
 			}
 		}
 
-    }
-    
-    private Log _log = LogFactoryUtil.getLog(MsgInBackOffice.class);
+	}
+
+	private Log _log = LogFactoryUtil.getLog(MsgInBackOffice.class);
 }
