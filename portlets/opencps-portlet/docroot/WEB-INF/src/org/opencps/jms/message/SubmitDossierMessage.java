@@ -31,6 +31,8 @@ import org.opencps.jms.util.JMSMessageBodyUtil;
 import org.opencps.jms.util.JMSMessageUtil;
 import org.opencps.util.WebKeys;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -317,25 +319,18 @@ public class SubmitDossierMessage {
 	 * @param dossierMsgBody
 	 * @throws JMSException
 	 * @throws NamingException
+	 * @throws SystemException
+	 * @throws PortalException
 	 */
 	public void receiveLocalMessage(DossierMsgBody dossierMsgBody)
-		throws JMSException, NamingException {
+		throws JMSException, NamingException, PortalException, SystemException {
 
-		try {
+		setDossierMsgBody(dossierMsgBody);
 
-			setDossierMsgBody(dossierMsgBody);
+		SubmitDossier submitDossier = new SubmitDossier();
 
-			SubmitDossier submitDossier = new SubmitDossier();
+		submitDossier.syncDossier(dossierMsgBody);
 
-			submitDossier.syncDossier(dossierMsgBody);
-
-		}
-		catch (Exception e) {
-			_log.error(e);
-		}
-		finally {
-			_localContext.destroy();
-		}
 	}
 
 	public JMSContext getContext() {
