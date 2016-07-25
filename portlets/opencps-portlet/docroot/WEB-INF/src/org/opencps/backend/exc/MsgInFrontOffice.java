@@ -101,6 +101,7 @@ public class MsgInFrontOffice implements MessageListener {
 			finally {
 				try {
 					context.destroy();
+					_log.info("Destroy Received message/////////////////////////////////////");
 				}
 				catch (JMSException e) {
 					_log.error(e);

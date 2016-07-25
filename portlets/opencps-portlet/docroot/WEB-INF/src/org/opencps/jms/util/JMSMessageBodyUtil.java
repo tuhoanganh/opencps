@@ -52,6 +52,8 @@ import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
 import org.opencps.util.DLFileEntryUtil;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -65,7 +67,7 @@ public class JMSMessageBodyUtil {
 
 	public synchronized static void receiveMessage(
 		JMSContext context, Message jsmMessage)
-		throws JMSException, IOException, NamingException {
+		throws JMSException, IOException, NamingException, PortalException, SystemException {
 
 		if (jsmMessage instanceof TextMessage) {
 
@@ -93,7 +95,7 @@ public class JMSMessageBodyUtil {
 
 				syncFromBackOfficeMessage.receiveLocalMessage(syncFromBackOfficeMsgBody);
 			}
-			else if (object instanceof DossierFileMsgBody) {
+			else if (object instanceof DossierMsgBody) {
 				DossierMsgBody dossierMsgBody = (DossierMsgBody) object;
 
 				SubmitDossierMessage submitDossierMessage =
