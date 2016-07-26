@@ -97,7 +97,7 @@ public class JMSMessageBodyUtil {
 			}
 			else if (object instanceof DossierMsgBody) {
 				DossierMsgBody dossierMsgBody = (DossierMsgBody) object;
-
+				_log.info("Msg is Dossier x");
 				SubmitDossierMessage submitDossierMessage =
 					new SubmitDossierMessage(context);
 
@@ -105,6 +105,9 @@ public class JMSMessageBodyUtil {
 			}
 		}
 		else if (jsmMessage instanceof StreamMessage) {
+		} else {
+			_log.info("Cha la cai eo gi Xs");
+
 		}
 	}
 

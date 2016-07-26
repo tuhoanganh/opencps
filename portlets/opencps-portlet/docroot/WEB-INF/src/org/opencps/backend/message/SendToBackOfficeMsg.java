@@ -18,6 +18,7 @@
 
 package org.opencps.backend.message;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.opencps.paymentmgt.model.PaymentFile;
@@ -25,7 +26,8 @@ import org.opencps.paymentmgt.model.PaymentFile;
 /**
  * @author khoavd
  */
-public class SendToBackOfficeMsg {
+public class SendToBackOfficeMsg{
+	
 
 	/**
 	 * @return the processOrderId

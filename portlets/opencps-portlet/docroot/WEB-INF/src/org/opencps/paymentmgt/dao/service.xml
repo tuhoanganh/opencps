@@ -37,7 +37,7 @@
         <column name="invoiceTemplateNo" type="String"></column>
         <column name="invoiceIssueNo" type="String"></column>
         <column name="invoiceNo" type="String"></column>
-        <column name='syncStatus' type="int"></column>
+        <column name="syncStatus" type="int"></column>
         <column name="oid" type="String"/>
         <finder name="GoodCode" return-type="PaymentFile">
             <finder-column name="groupId"></finder-column>
