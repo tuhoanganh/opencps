@@ -97,15 +97,7 @@ public class SubmitDossierMessage {
 		catch (Exception e) {
 			_log.error(e);
 		}
-		finally {
-			if (_context != null) {
-				_context.destroy();
-			}
 
-			if (_localContext != null) {
-				_localContext.destroy();
-			}
-		}
 	}
 
 	/**
@@ -151,9 +143,7 @@ public class SubmitDossierMessage {
 		catch (Exception e) {
 			_log.error(e);
 		}
-		finally {
-			_context.destroy();
-		}
+
 	}
 
 	/**
@@ -185,9 +175,7 @@ public class SubmitDossierMessage {
 		catch (Exception e) {
 			_log.error(e);
 		}
-		finally {
-			_context.destroy();
-		}
+
 	}
 
 	/**
@@ -219,9 +207,7 @@ public class SubmitDossierMessage {
 		catch (Exception e) {
 			_log.error(e);
 		}
-		finally {
-			_context.destroy();
-		}
+
 	}
 
 	/**
@@ -252,9 +238,7 @@ public class SubmitDossierMessage {
 		catch (Exception e) {
 			_log.error(e);
 		}
-		finally {
-			_context.destroy();
-		}
+
 	}
 
 	/**
@@ -285,9 +269,6 @@ public class SubmitDossierMessage {
 		catch (Exception e) {
 			_log.error(e);
 		}
-		finally {
-			_localContext.destroy();
-		}
 	}
 
 	/**
@@ -309,9 +290,6 @@ public class SubmitDossierMessage {
 		}
 		catch (Exception e) {
 			_log.error(e);
-		}
-		finally {
-			_context.destroy();
 		}
 	}
 
