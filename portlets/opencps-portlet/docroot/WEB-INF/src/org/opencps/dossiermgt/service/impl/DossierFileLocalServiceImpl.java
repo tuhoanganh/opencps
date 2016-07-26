@@ -143,7 +143,7 @@ public class DossierFileLocalServiceImpl
 		dossierFile.setGroupFileId(fileGroupId);
 		dossierFile.setOriginal(original);
 		dossierFile.setOwnerUserId(ownerUserId);
-
+		dossierFile.setSyncStatus(syncStatus);
 		dossierFile.setOwnerOrganizationId(ownerOrganizationId);
 
 		dossierFile.setTemplateFileNo(templateFileNo);
@@ -353,7 +353,7 @@ public class DossierFileLocalServiceImpl
 		dossierFile.setDossierFileType(dossierFileType);
 		dossierFile.setDossierId(dossierId);
 		dossierFile.setDossierPartId(dossierPartId);
-
+		dossierFile.setSyncStatus(syncStatus);
 		dossierFile.setFormData(formData);
 		dossierFile.setGroupFileId(fileGroupId);
 		dossierFile.setOriginal(original);
@@ -431,6 +431,9 @@ public class DossierFileLocalServiceImpl
 		return dossierFile;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.opencps.dossiermgt.service.DossierFileLocalService#addDossierFile(long, long, long, java.lang.String, java.lang.String, long, long, long, long, java.lang.String, java.lang.String, int, int, java.lang.String, java.util.Date, int, int, long, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, byte[], com.liferay.portal.service.ServiceContext)
+	 */
 	public DossierFile addDossierFile(
 		long userId, long dossierId, long dossierPartId, String templateFileNo,
 		String groupName, long fileGroupId, long groupDossierPartId,
@@ -473,7 +476,7 @@ public class DossierFileLocalServiceImpl
 		dossierFile.setDossierFileType(dossierFileType);
 		dossierFile.setDossierId(dossierId);
 		dossierFile.setDossierPartId(dossierPartId);
-
+		dossierFile.setSyncStatus(syncStatus);
 		dossierFile.setFormData(formData);
 		dossierFile.setGroupFileId(fileGroupId);
 		dossierFile.setOriginal(original);
