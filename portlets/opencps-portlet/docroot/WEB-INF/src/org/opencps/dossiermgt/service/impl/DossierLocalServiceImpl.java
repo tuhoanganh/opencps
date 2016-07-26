@@ -431,6 +431,159 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	}
 
 	/**
+	 * @param syncDossier
+	 * @param syncDossierFiles
+	 * @param syncFileGroups
+	 * @param syncFileGroupDossierParts
+	 * @param syncDLFileEntries
+	 * @param data
+	 * @param syncDossierTemplate
+	 * @param serviceContext
+	 * @return
+	 * @throws SystemException
+	 * @throws PortalException
+	 */
+	public Dossier syncReSubmitDossier(
+		Dossier syncDossier,
+		LinkedHashMap<DossierFile, DossierPart> syncDossierFiles,
+		LinkedHashMap<String, FileGroup> syncFileGroups,
+		LinkedHashMap<Long, DossierPart> syncFileGroupDossierParts,
+		LinkedHashMap<String, DLFileEntry> syncDLFileEntries,
+		LinkedHashMap<String, byte[]> data,
+		DossierTemplate syncDossierTemplate, ServiceContext serviceContext)
+		throws SystemException, PortalException {
+
+		// Finder dossier by OID
+		Dossier dossier = dossierPersistence.findByOID(syncDossier.getOid());
+
+		// Finder dossierTemplate by TemplateNo
+		DossierTemplate dossierTemplate =
+			dossierTemplateLocalService.getDossierTemplate(syncDossierTemplate.getTemplateNo());
+
+		Date now = new Date();
+		dossier.setModifiedDate(now);
+
+		dossier.setAddress(syncDossier.getAddress());
+		dossier.setCityCode(syncDossier.getCityCode());
+		dossier.setCityName(syncDossier.getCityName());
+		dossier.setContactEmail(syncDossier.getContactEmail());
+		dossier.setContactName(syncDossier.getContactName());
+		dossier.setContactTelNo(syncDossier.getContactTelNo());
+		dossier.setDistrictCode(syncDossier.getDistrictCode());
+		dossier.setDistrictName(syncDossier.getDistrictName());
+		dossier.setDossierSource(syncDossier.getDossierSource());
+		dossier.setDossierStatus(syncDossier.getDossierStatus());
+		dossier.setNote(syncDossier.getNote());
+		dossier.setSubjectId(syncDossier.getSubjectId());
+		dossier.setSubjectName(syncDossier.getSubjectName());
+		dossier.setWardCode(syncDossier.getWardCode());
+		dossier.setWardName(syncDossier.getWardName());
+
+		DLFolder folder = dlFolderLocalService.getFolder(dossier.getFolderId());
+
+		if (syncDossierFiles != null) {
+			for (Map.Entry<DossierFile, DossierPart> entry : syncDossierFiles.entrySet()) {
+				DossierFile syncDossierFile = entry.getKey();
+				DossierPart syncDossierPart = entry.getValue();
+				// Finder DossierPart in current system
+				DossierPart dossierPart =
+					dossierPartLocalService.getDossierPartByT_PN(
+						dossierTemplate.getDossierTemplateId(),
+						syncDossierPart.getPartNo());
+
+				byte[] bytes = null;
+
+				if (data.containsKey(syncDossierFile.getOid())) {
+					bytes = data.get(syncDossierFile.getOid());
+				}
+
+				FileGroup syncFileGroup = null;
+				DossierPart groupDossierPart = null;
+				DLFileEntry syncDLFileEntry = null;
+
+				if (syncFileGroups.containsKey(syncDossierFile.getOid())) {
+					syncFileGroup =
+						syncFileGroups.get(syncDossierFile.getOid());
+				}
+
+				if (syncFileGroup != null) {
+					DossierPart synFileGroupDossierPath =
+						syncFileGroupDossierParts.get(syncFileGroup.getFileGroupId());
+					groupDossierPart =
+						dossierPartLocalService.getDossierPartByT_PN(
+							dossierTemplate.getDossierTemplateId(),
+							synFileGroupDossierPath.getPartNo());
+				}
+
+				if (syncDLFileEntries.containsKey(syncDossierFile.getOid())) {
+					syncDLFileEntry =
+						syncDLFileEntries.get(syncDossierFile.getOid());
+				}
+
+				if (bytes != null && syncDLFileEntry != null) {
+					System.out.println("SyncDossier Add Dossier File//////////////////");
+
+					dossierFileLocalService.addDossierFile(
+						serviceContext.getUserId(),
+						dossier.getDossierId(),
+						dossierPart.getDossierpartId(),
+						dossierTemplate.getTemplateNo(),
+						syncFileGroup != null
+							? syncFileGroup.getDisplayName() : StringPool.BLANK,
+						syncFileGroup != null
+							? syncFileGroup.getFileGroupId() : 0,
+						groupDossierPart != null
+							? groupDossierPart.getDossierpartId() : 0, 0, 0,
+						syncDossierFile.getDisplayName(),
+						syncDossierFile.getFormData(),
+						syncDossierFile.getDossierFileMark(),
+						syncDossierFile.getDossierFileType(),
+						syncDossierFile.getDossierFileNo(),
+						syncDossierFile.getDossierFileDate(),
+						syncDossierFile.getOriginal(),
+						syncDossierFile.getSyncStatus(), folder.getFolderId(),
+						syncDLFileEntry.getName() + StringPool.PERIOD +
+							syncDLFileEntry.getExtension(),
+						syncDLFileEntry.getMimeType(),
+						syncDLFileEntry.getTitle(),
+						syncDLFileEntry.getDescription(), StringPool.BLANK,
+						bytes, serviceContext);
+				}
+			}
+		}
+
+		dossierLogLocalService.addDossierLog(
+			serviceContext.getUserId(),
+			dossier.getDossierId(),
+			0,
+			PortletConstants.DOSSIER_STATUS_NEW,
+			PortletUtil.getActionInfo(
+				PortletConstants.DOSSIER_STATUS_NEW, serviceContext.getLocale()),
+			PortletUtil.getMessageInfo(
+				PortletConstants.DOSSIER_STATUS_NEW, serviceContext.getLocale()),
+			now, PortletConstants.DOSSIER_LOG_NORMAL, serviceContext);
+
+		dossier = dossierPersistence.update(dossier);
+
+		long classTypeId = 0;
+
+		assetEntryLocalService.updateEntry(
+			serviceContext.getUserId(), serviceContext.getScopeGroupId(),
+			ServiceInfo.class.getName(), dossier.getDossierId(),
+			dossier.getOid(), classTypeId,
+			serviceContext.getAssetCategoryIds(),
+			serviceContext.getAssetTagNames(), false, now, null, null,
+			ContentTypes.TEXT_HTML, dossier.getSubjectName(), StringPool.BLANK,
+			StringPool.BLANK, null, null, 0, 0, 0, false);
+
+		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(Dossier.class);
+
+		indexer.reindex(dossier);
+
+		return dossier;
+	}
+
+	/**
 	 * @param groupId
 	 * @return
 	 * @throws SystemException
