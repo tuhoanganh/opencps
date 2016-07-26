@@ -47,7 +47,10 @@ import org.opencps.jms.message.SubmitDossierMessage;
 import org.opencps.jms.message.SyncFromBackOfficeMessage;
 import org.opencps.jms.message.body.DossierFileMsgBody;
 import org.opencps.jms.message.body.DossierMsgBody;
+import org.opencps.jms.message.body.PaymentFileMsgBody;
 import org.opencps.jms.message.body.SyncFromBackOfficeMsgBody;
+import org.opencps.paymentmgt.model.PaymentFile;
+import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
 import org.opencps.util.DLFileEntryUtil;
@@ -97,16 +100,20 @@ public class JMSMessageBodyUtil {
 			}
 			else if (object instanceof DossierMsgBody) {
 				DossierMsgBody dossierMsgBody = (DossierMsgBody) object;
-
+				_log.info("Msg is Dossier x");
 				SubmitDossierMessage submitDossierMessage =
 					new SubmitDossierMessage(context);
 
 				submitDossierMessage.receiveLocalMessage(dossierMsgBody);
-			}
+			} 
 		}
 		else if (jsmMessage instanceof StreamMessage) {
+		} else {
+			_log.info("Cha la cai eo gi Xs");
+
 		}
 	}
+	
 
 	/**
 	 * @param dossierId
@@ -414,6 +421,24 @@ public class JMSMessageBodyUtil {
 		protected LinkedHashMap<String, DLFileEntry> _syncDLFileEntries;
 
 		protected LinkedHashMap<String, byte[]> _data;
+	}
+	
+	/**
+	 * @param paymentFileId
+	 * @return
+	 */
+	public static PaymentFileMsgBody getPaymentFile(long paymentFileId) {
+		PaymentFileMsgBody paymentFileBody = new PaymentFileMsgBody();
+		
+		try {
+	        PaymentFile paymentFile = PaymentFileLocalServiceUtil.fetchPaymentFile(paymentFileId);
+	        
+        }
+        catch (Exception e) {
+        	_log.error(e);
+        }
+		
+		return paymentFileBody;
 	}
 
 	private static Log _log =

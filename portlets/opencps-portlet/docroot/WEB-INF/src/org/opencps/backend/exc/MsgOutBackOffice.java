@@ -35,6 +35,7 @@ import org.opencps.jms.util.JMSMessageBodyUtil;
 import org.opencps.jms.util.JMSMessageUtil;
 import org.opencps.processmgt.model.WorkflowOutput;
 import org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil;
+import org.opencps.util.PortletConstants;
 import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.log.Log;
@@ -58,7 +59,7 @@ public class MsgOutBackOffice implements MessageListener{
 	    throws MessageListenerException {
 
 		try {
-			System.out.println("DONE MSGOUT_BO");
+			System.out.println("GOTO -> MSGOUT_BO");
 
 			SendToBackOfficeMsg toBackOffice =
 			    (SendToBackOfficeMsg) message.get("toBackOffice");
@@ -69,12 +70,12 @@ public class MsgOutBackOffice implements MessageListener{
 			List<WorkflowOutput> workflowOutputs =
 						    WorkflowOutputLocalServiceUtil.getByProcessWFPostback(toBackOffice.getProcessWorkflowId(), true);
 			
+			_log.info(">WORKFLOW OUTPUT SIZE " + workflowOutputs.size());
 			
 			List<DossierFile> dossierFiles = new ArrayList<DossierFile>();
 			
 			// Check file return
 			for (WorkflowOutput workflowOutput : workflowOutputs) {
-				if (workflowOutput.getRequired()) {
 
 					DossierFile dossierFile = null;
 					try {
@@ -84,15 +85,16 @@ public class MsgOutBackOffice implements MessageListener{
 						    DossierFileLocalServiceUtil.getDossierFileInUse(
 						        toBackOffice.getDossierId(),
 						        dossierPart.getDossierpartId());
+						
+						_log.info(">Get dossierFiles" + dossierFile.getDisplayName() + ">>>>>>>>>>>>>>>>>>>>>....");
 
+						dossierFile.setSyncStatus(PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS);
 						dossierFiles.add(dossierFile);
 					}
 					catch (Exception e) {
+						_log.error(e);
 					}
-
-				}
 			}
-			
 			List<DossierFileMsgBody> lstDossierFileMsgBody =
 			    JMSMessageBodyUtil.getDossierFileMsgBody(dossierFiles);
 
@@ -102,7 +104,7 @@ public class MsgOutBackOffice implements MessageListener{
 			        toBackOffice.getGovAgencyCode(), true,
 			        WebKeys.JMS_QUEUE_OPENCPS_FRONTOFFICE.toLowerCase(), "remote");
 			
-			_log.info("Create context done");
+			_log.info(">Dossifile SIZE " + lstDossierFileMsgBody.size());
 
 			SyncFromBackOfficeMessage syncFromBackoffice =
 			    new SyncFromBackOfficeMessage(context);
@@ -110,6 +112,8 @@ public class MsgOutBackOffice implements MessageListener{
 			SyncFromBackOfficeMsgBody msgBody = new SyncFromBackOfficeMsgBody();
 
 			msgBody.setOid(dossier.getOid());
+			msgBody.setReceptionNo(dossier.getReceptionNo());
+			msgBody.setFinishDatetime(dossier.getFinishDatetime());
 			msgBody.setDossierStatus(toBackOffice.getDossierStatus());
 			msgBody.setLstDossierFileMsgBody(lstDossierFileMsgBody);
 			msgBody.setReceiveDatetime(toBackOffice.getReceiveDatetime());
@@ -117,8 +121,6 @@ public class MsgOutBackOffice implements MessageListener{
 			msgBody.setEstimateDatetime(toBackOffice.getEstimateDatetime());
 			msgBody.setPaymentFile(toBackOffice.getPaymentFile());
 			
-			_log.info("SetPaymentFine");
-
 			syncFromBackoffice.sendMessage(msgBody);
 
 		}
