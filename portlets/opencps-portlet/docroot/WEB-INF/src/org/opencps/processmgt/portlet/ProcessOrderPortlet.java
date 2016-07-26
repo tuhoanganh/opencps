@@ -32,8 +32,6 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.opencps.accountmgt.NoSuchAccountException;
@@ -85,7 +83,6 @@ import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
 import org.opencps.usermgt.model.Employee;
 import org.opencps.util.AccountUtil;
 import org.opencps.util.DLFileEntryUtil;
-import org.opencps.util.DLFolderUtil;
 import org.opencps.util.DateTimeUtil;
 import org.opencps.util.MessageKeys;
 import org.opencps.util.PDFUtil;
@@ -119,7 +116,6 @@ import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.DuplicateFileException;
 import com.liferay.portlet.documentlibrary.FileSizeException;
 import com.liferay.portlet.documentlibrary.NoSuchFileEntryException;
-import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
@@ -143,8 +139,12 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 		boolean updated = false;
 
-		AccountBean accountBean =
-			AccountUtil.getAccountBeanFromAttribute(actionRequest);
+		/*
+		 * AccountBean accountBean =
+		 * AccountUtil.getAccountBeanFromAttribute(actionRequest);
+		 */
+
+		AccountBean accountBean = AccountUtil.getAccountBean(actionRequest);
 
 		UploadPortletRequest uploadPortletRequest =
 			PortalUtil.getUploadPortletRequest(actionRequest);
@@ -542,8 +542,10 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
 
-		AccountBean accountBean =
-			AccountUtil.getAccountBeanFromAttribute(actionRequest);
+		/*AccountBean accountBean =
+			AccountUtil.getAccountBeanFromAttribute(actionRequest);*/
+		
+		AccountBean accountBean = AccountUtil.getAccountBean(actionRequest);
 
 		Dossier dossier = null;
 		DossierFile dossierFile = null;
@@ -755,8 +757,10 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		 * actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		 */
 
-		AccountBean accountBean =
-			AccountUtil.getAccountBeanFromAttribute(actionRequest);
+		/*AccountBean accountBean =
+			AccountUtil.getAccountBeanFromAttribute(actionRequest);*/
+		
+		AccountBean accountBean = AccountUtil.getAccountBean(actionRequest);
 
 		long dossierFileId =
 			ParamUtil.getLong(
@@ -1450,8 +1454,10 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
 
-		AccountBean accountBean =
-			AccountUtil.getAccountBeanFromAttribute(actionRequest);
+		/*AccountBean accountBean =
+			AccountUtil.getAccountBeanFromAttribute(actionRequest);*/
+		
+		AccountBean accountBean = AccountUtil.getAccountBean(actionRequest);
 
 		DossierFile dossierFile = null;
 
