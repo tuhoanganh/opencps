@@ -95,6 +95,7 @@ import org.opencps.util.PortletUtil;
 import org.opencps.util.SignatureUtil;
 import org.opencps.util.WebKeys;
 
+import com.liferay.portal.RolePermissionsException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -233,10 +234,11 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			String contentType =
 				uploadPortletRequest.getContentType(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
 
-			/*DLFolder dossierFolder =
-				DLFolderUtil.getDossierFolder(
-					serviceContext.getScopeGroupId(), dossier.getUserId(),
-					dossier.getCounter(), serviceContext);*/
+			/*
+			 * DLFolder dossierFolder = DLFolderUtil.getDossierFolder(
+			 * serviceContext.getScopeGroupId(), dossier.getUserId(),
+			 * dossier.getCounter(), serviceContext);
+			 */
 
 			DossierFileLocalServiceUtil.addDossierFile(
 				serviceContext.getUserId(), dossierId, dossierPartId,
@@ -292,6 +294,9 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			}
 			else if (e instanceof FileSizeException) {
 				SessionErrors.add(actionRequest, FileSizeException.class);
+			}
+			else if (e instanceof RolePermissionsException) {
+				SessionErrors.add(actionRequest, RolePermissionsException.class);
 			}
 			else {
 				SessionErrors.add(actionRequest, "upload-error");
@@ -591,16 +596,15 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			dossierPart =
 				DossierPartLocalServiceUtil.getDossierPart(dossierPartId);
 
-			/*DLFolder accountFolder = accountBean.getAccountFolder();
-
-			DLFolder dossierFolder =
-				DLFolderUtil.addFolder(
-					serviceContext.getUserId(),
-					serviceContext.getScopeGroupId(),
-					serviceContext.getScopeGroupId(), false,
-					accountFolder.getFolderId(),
-					String.valueOf(dossier.getCounter()), StringPool.BLANK,
-					false, serviceContext);*/
+			/*
+			 * DLFolder accountFolder = accountBean.getAccountFolder(); DLFolder
+			 * dossierFolder = DLFolderUtil.addFolder(
+			 * serviceContext.getUserId(), serviceContext.getScopeGroupId(),
+			 * serviceContext.getScopeGroupId(), false,
+			 * accountFolder.getFolderId(),
+			 * String.valueOf(dossier.getCounter()), StringPool.BLANK, false,
+			 * serviceContext);
+			 */
 
 			DossierFileLocalServiceUtil.addDossierFile(
 				serviceContext.getUserId(), dossierId, dossierPartId,
@@ -661,6 +665,9 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			}
 			else if (e instanceof NoSuchFileEntryException) {
 				SessionErrors.add(actionRequest, NoSuchFileEntryException.class);
+			}
+			else if (e instanceof RolePermissionsException) {
+				SessionErrors.add(actionRequest, RolePermissionsException.class);
 			}
 			else {
 				SessionErrors.add(actionRequest, "upload-error");
@@ -743,8 +750,10 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
 
-		/*ThemeDisplay themeDisplay =
-			(ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);*/
+		/*
+		 * ThemeDisplay themeDisplay = (ThemeDisplay)
+		 * actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		 */
 
 		AccountBean accountBean =
 			AccountUtil.getAccountBeanFromAttribute(actionRequest);
@@ -783,16 +792,17 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				DossierLocalServiceUtil.getDossier(dossierFile.getDossierId());
 
 			// Get account folder
-			//DLFolder accountForlder = accountBean.getAccountFolder();
+			// DLFolder accountForlder = accountBean.getAccountFolder();
 
 			// Get dossier folder
-			/*DLFolder dosserFolder =
-				DLFolderUtil.addFolder(
-					themeDisplay.getUserId(), themeDisplay.getScopeGroupId(),
-					themeDisplay.getScopeGroupId(), false,
-					accountForlder.getFolderId(),
-					String.valueOf(dossier.getCounter()), StringPool.BLANK,
-					false, serviceContext);*/
+			/*
+			 * DLFolder dosserFolder = DLFolderUtil.addFolder(
+			 * themeDisplay.getUserId(), themeDisplay.getScopeGroupId(),
+			 * themeDisplay.getScopeGroupId(), false,
+			 * accountForlder.getFolderId(),
+			 * String.valueOf(dossier.getCounter()), StringPool.BLANK, false,
+			 * serviceContext);
+			 */
 
 			String formData = dossierFile.getFormData();
 			String jrxmlTemplate = dossierPart.getFormReport();
@@ -826,10 +836,10 @@ public class ProcessOrderPortlet extends MVCPortlet {
 					if (dossierFile.getFileEntryId() > 0) {
 						DossierFileLocalServiceUtil.addDossierFile(
 							dossierFile.getDossierFileId(),
-							dossier.getFolderId(), sourceFileName,
-							mimeType, dossierFile.getDisplayName(),
-							StringPool.BLANK, StringPool.BLANK, inputStream,
-							file.length(), serviceContext);
+							dossier.getFolderId(), sourceFileName, mimeType,
+							dossierFile.getDisplayName(), StringPool.BLANK,
+							StringPool.BLANK, inputStream, file.length(),
+							serviceContext);
 					}
 					else {
 						// Update version 1
@@ -873,6 +883,9 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			}
 			else if (e instanceof DuplicateFileException) {
 				SessionErrors.add(actionRequest, DuplicateFileException.class);
+			}
+			else if (e instanceof RolePermissionsException) {
+				SessionErrors.add(actionRequest, RolePermissionsException.class);
 			}
 			else {
 				SessionErrors.add(actionRequest, PortalException.class);
@@ -1347,8 +1360,10 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 		if (processOrderId > 0) {
 			try {
-				ServiceContext serviceContext =
-					ServiceContextFactory.getInstance(renderRequest);
+				/*
+				 * ServiceContext serviceContext =
+				 * ServiceContextFactory.getInstance(renderRequest);
+				 */
 
 				ProcessOrder processOrder =
 					ProcessOrderLocalServiceUtil.getProcessOrder(processOrderId);
@@ -1357,10 +1372,11 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				Dossier dossier =
 					DossierLocalServiceUtil.getDossier(processOrder.getDossierId());
 
-				AccountBean accountBean =
-					AccountUtil.getAccountBean(
-						dossier.getUserId(), serviceContext.getScopeGroupId(),
-						serviceContext);
+				/*
+				 * AccountBean accountBean = AccountUtil.getAccountBean(
+				 * dossier.getUserId(), serviceContext.getScopeGroupId(),
+				 * serviceContext);
+				 */
 				ServiceProcess serviceProcess =
 					ServiceProcessLocalServiceUtil.getServiceProcess(processOrder.getServiceProcessId());
 				ServiceInfo serviceInfo =
@@ -1392,12 +1408,13 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				renderRequest.setAttribute(
 					WebKeys.PROCESS_WORKFLOW_ENTRY, processWorkflow);
 
-				HttpServletRequest request =
-					PortalUtil.getHttpServletRequest(renderRequest);
-
-				ServletContext servletContext = request.getServletContext();
-
-				servletContext.setAttribute(WebKeys.ACCOUNT_BEAN, accountBean);
+				/*
+				 * HttpServletRequest request =
+				 * PortalUtil.getHttpServletRequest(renderRequest);
+				 * ServletContext servletContext = request.getServletContext();
+				 * servletContext.setAttribute(WebKeys.ACCOUNT_BEAN,
+				 * accountBean);
+				 */
 
 				if (dossierFileId > 0) {
 					DossierFile dossierFile =
@@ -1619,11 +1636,14 @@ public class ProcessOrderPortlet extends MVCPortlet {
 	 * @throws NoSuchAccountFolderException
 	 * @throws NoSuchAccountOwnUserIdException
 	 * @throws NoSuchAccountOwnOrgIdException
+	 * @throws RolePermissionsException
+	 * @throws PermissionDossierException
 	 */
 	private void validateAccount(AccountBean accountBean)
 		throws NoSuchAccountTypeException, NoSuchAccountException,
 		NoSuchAccountFolderException, NoSuchAccountOwnUserIdException,
-		NoSuchAccountOwnOrgIdException {
+		NoSuchAccountOwnOrgIdException, RolePermissionsException,
+		PermissionDossierException {
 
 		if (accountBean == null) {
 			throw new NoSuchAccountException();
@@ -1631,17 +1651,12 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		else if (Validator.isNull(accountBean.getAccountType())) {
 			throw new NoSuchAccountTypeException();
 		}
-		else if (accountBean.getAccountFolder() == null) {
-			throw new NoSuchAccountFolderException();
+		else if (!accountBean.getAccountType().equals(
+			PortletPropsValues.USERMGT_USERGROUP_NAME_EMPLOYEE)) {
+			throw new RolePermissionsException();
 		}
-
-		else if (accountBean.isCitizen() && accountBean.getOwnerUserId() == 0) {
-			throw new NoSuchAccountOwnUserIdException();
-		}
-
-		else if (accountBean.isBusiness() &&
-			accountBean.getOwnerOrganizationId() == 0) {
-			throw new NoSuchAccountOwnOrgIdException();
+		else if (!accountBean.isEmployee()) {
+			throw new PermissionDossierException();
 		}
 	}
 
@@ -1663,6 +1678,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 	 * @throws NoSuchAccountOwnOrgIdException
 	 * @throws PermissionDossierException
 	 * @throws FileSizeException
+	 * @throws RolePermissionsException
 	 */
 	private void validateAddAttachDossierFile(
 		long dossierId, long dossierPartId, long dossierFileId,
@@ -1670,9 +1686,11 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		InputStream inputStream, AccountBean accountBean)
 		throws NoSuchDossierException, NoSuchDossierPartException,
 		NoSuchAccountException, NoSuchAccountTypeException,
-		NoSuchAccountFolderException, NoSuchAccountOwnUserIdException,
+
 		NoSuchAccountOwnOrgIdException, PermissionDossierException,
-		FileSizeException {
+		FileSizeException, RolePermissionsException,
+		NoSuchAccountFolderException, NoSuchAccountOwnUserIdException,
+		RolePermissionsException {
 
 		validateAccount(accountBean);
 
@@ -1682,28 +1700,6 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 		if (dossierPartId < 0) {
 			throw new NoSuchDossierPartException();
-		}
-
-		Dossier dossier = null;
-
-		try {
-			dossier = DossierLocalServiceUtil.getDossier(dossierId);
-		}
-		catch (Exception e) {
-			throw new NoSuchDossierPartException();
-		}
-
-		if (accountBean.isBusiness()) {
-			if (dossier.getOwnerOrganizationId() != accountBean.getOwnerOrganizationId()) {
-				throw new PermissionDossierException();
-			}
-
-		}
-		else if (accountBean.isCitizen()) {
-			if (dossier.getUserId() != accountBean.getOwnerUserId()) {
-				throw new PermissionDossierException();
-			}
-
 		}
 
 		try {
@@ -1737,6 +1733,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 	 * @throws FileSizeException
 	 * @throws NoSuchDossierFileException
 	 * @throws NoSuchFileEntryException
+	 * @throws RolePermissionsException
 	 */
 	private void validateCloneDossierFile(
 		long dossierId, long dossierPartId, long dossierFileId,
@@ -1745,7 +1742,8 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		NoSuchAccountException, NoSuchAccountTypeException,
 		NoSuchAccountFolderException, NoSuchAccountOwnUserIdException,
 		NoSuchAccountOwnOrgIdException, PermissionDossierException,
-		NoSuchDossierFileException, NoSuchFileEntryException {
+		NoSuchDossierFileException, NoSuchFileEntryException,
+		RolePermissionsException, RolePermissionsException {
 
 		validateAccount(accountBean);
 
@@ -1779,28 +1777,6 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			throw new NoSuchDossierPartException();
 		}
 
-		Dossier dossier = null;
-
-		try {
-			dossier = DossierLocalServiceUtil.getDossier(dossierId);
-		}
-		catch (Exception e) {
-			throw new NoSuchDossierPartException();
-		}
-
-		if (accountBean.isBusiness()) {
-			if (dossier.getOwnerOrganizationId() != accountBean.getOwnerOrganizationId()) {
-				throw new PermissionDossierException();
-			}
-
-		}
-		else if (accountBean.isCitizen()) {
-			if (dossier.getUserId() != accountBean.getOwnerUserId()) {
-				throw new PermissionDossierException();
-			}
-
-		}
-
 		try {
 			DossierPartLocalServiceUtil.getDossierPart(dossierPartId);
 		}
@@ -1818,12 +1794,15 @@ public class ProcessOrderPortlet extends MVCPortlet {
 	 * @throws NoSuchAccountOwnUserIdException
 	 * @throws NoSuchAccountOwnOrgIdException
 	 * @throws NoSuchDossierFileException
+	 * @throws RolePermissionsException
+	 * @throws PermissionDossierException
 	 */
 	private void validateCreateDynamicForm(
 		long dossierFileId, AccountBean accountBean)
 		throws NoSuchAccountTypeException, NoSuchAccountException,
 		NoSuchAccountFolderException, NoSuchAccountOwnUserIdException,
-		NoSuchAccountOwnOrgIdException, NoSuchDossierFileException {
+		NoSuchAccountOwnOrgIdException, NoSuchDossierFileException,
+		RolePermissionsException, PermissionDossierException {
 
 		validateAccount(accountBean);
 
@@ -1858,13 +1837,15 @@ public class ProcessOrderPortlet extends MVCPortlet {
 	 * @throws NoSuchDossierException
 	 * @throws NoSuchDossierPartException
 	 * @throws PermissionDossierException
+	 * @throws RolePermissionsException
 	 */
 	private void validateDynamicFormData(
 		long dossierId, long dossierPartId, AccountBean accountBean)
 		throws NoSuchAccountTypeException, NoSuchAccountException,
 		NoSuchAccountFolderException, NoSuchAccountOwnUserIdException,
 		NoSuchAccountOwnOrgIdException, NoSuchDossierException,
-		NoSuchDossierPartException, PermissionDossierException {
+		NoSuchDossierPartException, PermissionDossierException,
+		RolePermissionsException {
 
 		validateAccount(accountBean);
 		if (dossierId <= 0) {
@@ -1873,28 +1854,6 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 		if (dossierPartId < 0) {
 			throw new NoSuchDossierPartException();
-		}
-
-		Dossier dossier = null;
-
-		try {
-			dossier = DossierLocalServiceUtil.getDossier(dossierId);
-		}
-		catch (Exception e) {
-			throw new NoSuchDossierPartException();
-		}
-
-		if (accountBean.isBusiness()) {
-			if (dossier.getOwnerOrganizationId() != accountBean.getOwnerOrganizationId()) {
-				throw new PermissionDossierException();
-			}
-
-		}
-		else if (accountBean.isCitizen()) {
-			if (dossier.getUserId() != accountBean.getOwnerUserId()) {
-				throw new PermissionDossierException();
-			}
-
 		}
 
 		try {

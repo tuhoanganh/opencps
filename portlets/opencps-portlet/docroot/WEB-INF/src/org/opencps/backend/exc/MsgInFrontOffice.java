@@ -77,15 +77,15 @@ public class MsgInFrontOffice implements MessageListener {
 					"local");
 			try {
 
-				int receiveNumber = 10;
+				int receiveNumber = 50;
 
 				int count = 1;
 
 				while (count <= receiveNumber) {
-					_log.info("Start receive message/////////////////////////////////////");
+					//_log.info("Start receive message/////////////////////////////////////");
 					javax.jms.Message jsmMessage =
-						context.getMessageConsumer().receive(3000);
-					_log.info("Received message/////////////////////////////////////");
+						context.getMessageConsumer().receive(1000);
+					//_log.info("Received message/////////////////////////////////////");
 					if (jsmMessage != null) {
 						JMSMessageBodyUtil.receiveMessage(context, jsmMessage);
 					}
