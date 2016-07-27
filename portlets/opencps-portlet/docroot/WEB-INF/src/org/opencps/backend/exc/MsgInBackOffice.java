@@ -17,7 +17,7 @@
 
 package org.opencps.backend.exc;
 
-import org.opencps.jms.context.JMSContext;
+import org.opencps.jms.context.JMSHornetqContext;
 import org.opencps.jms.util.JMSMessageBodyUtil;
 import org.opencps.jms.util.JMSMessageUtil;
 import org.opencps.util.PortletUtil;
@@ -45,7 +45,7 @@ public class MsgInBackOffice implements MessageListener {
 
 	private void _doReceive(Message message) {
 
-		System.out.println("**doRevice msgInBackOffice");
+		System.out.println("doRevice MsgInBackOffice/////////////////////////");
 
 		long[] companyIds = PortalUtil.getCompanyIds();
 
@@ -62,10 +62,17 @@ public class MsgInBackOffice implements MessageListener {
 		}
 
 		if (companyId > 0) {
-			JMSContext context =
-				JMSMessageUtil.createConsumer(
+			/*
+			 * JMSContext context = JMSMessageUtil.createConsumer( companyId,
+			 * StringPool.BLANK, true, WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(),
+			 * WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "local", "jmscore");
+			 */
+
+			JMSHornetqContext context =
+				JMSMessageUtil.createHornetqConsumer(
 					companyId, StringPool.BLANK, true,
-					WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "local");
+					WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(),
+					WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "local", "hornetq");
 			try {
 
 				int count = 1;
@@ -73,7 +80,7 @@ public class MsgInBackOffice implements MessageListener {
 				while (count <= 50) {
 
 					javax.jms.Message jsmMessage =
-						context.getMessageConsumer().receive(1000*60);
+						context.getMessageConsumer().receive(1000 * 60);
 					if (jsmMessage != null) {
 						JMSMessageBodyUtil.receiveMessage(context, jsmMessage);
 					}

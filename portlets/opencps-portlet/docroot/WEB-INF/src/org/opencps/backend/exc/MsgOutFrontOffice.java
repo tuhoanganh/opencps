@@ -17,8 +17,11 @@
 
 package org.opencps.backend.exc;
 
+import javax.jms.JMSException;
+import javax.naming.NamingException;
+
 import org.opencps.backend.message.UserActionMsg;
-import org.opencps.jms.context.JMSContext;
+import org.opencps.jms.context.JMSHornetqContext;
 import org.opencps.jms.message.SubmitDossierMessage;
 import org.opencps.jms.util.JMSMessageUtil;
 import org.opencps.util.WebKeys;
@@ -29,40 +32,59 @@ import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.MessageListenerException;
 
-
 /**
  * @author khoavd
- *
  */
-public class MsgOutFrontOffice implements MessageListener{
+public class MsgOutFrontOffice implements MessageListener {
 
-	/* (non-Javadoc)
-     * @see com.liferay.portal.kernel.messaging.MessageListener#receive(com.liferay.portal.kernel.messaging.Message)
-     */
 	@Override
 	public void receive(Message message)
-	    throws MessageListenerException {
+		throws MessageListenerException {
 
+		JMSHornetqContext context = null;
 		try {
 
 			System.out.println("DONE MSGOUT_FO///////////////////////////////");
-	          
-	        UserActionMsg userActionMgs =
-	                  (UserActionMsg) message.get("msgToEngine");
-	        
-	        JMSContext context =
-	            JMSMessageUtil.createProducer(
-	              userActionMgs.getCompanyId(), userActionMgs.getGovAgencyCode(),
-	                true, WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "remote");
-	        
-	        SubmitDossierMessage submitDossierMessage =
-	            new SubmitDossierMessage(context);
-	        
-	        submitDossierMessage.sendMessage(userActionMgs.getDossierId());			
+
+			UserActionMsg userActionMgs =
+				(UserActionMsg) message.get("msgToEngine");
+
+			/*
+			 * JMSContext context = JMSMessageUtil.createProducer(
+			 * userActionMgs.getCompanyId(), userActionMgs.getGovAgencyCode(),
+			 * true, WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(),
+			 * WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "remote", "jmscore");
+			 */
+
+			context =
+				JMSMessageUtil.createHornetqProducer(
+					userActionMgs.getCompanyId(),
+					userActionMgs.getGovAgencyCode(), true,
+					WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(),
+					WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "remote",
+					"hornetq");
+
+			SubmitDossierMessage submitDossierMessage =
+				new SubmitDossierMessage(context);
+
+			submitDossierMessage.sendMessageByHornetq(userActionMgs.getDossierId());
 
 		}
 		catch (Exception e) {
 			_log.error(e);
+		}
+		finally {
+			if (context != null) {
+				try {
+					context.destroy();
+				}
+				catch (JMSException e) {
+					_log.error(e);
+				}
+				catch (NamingException e) {
+					_log.error(e);
+				}
+			}
 		}
 
 	}
