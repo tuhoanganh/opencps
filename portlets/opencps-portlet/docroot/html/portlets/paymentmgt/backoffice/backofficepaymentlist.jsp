@@ -65,7 +65,7 @@
 <div class="opcs-serviceinfo-list-label">
   <p><liferay-ui:message key="danh-sach-ho-so-thu-phi" /></p>
 </div>
-<liferay-ui:search-container id="paymentList" searchContainer="<%= new PaymentFileSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
+<liferay-ui:search-container searchContainer="<%= new PaymentFileSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
 
 	<liferay-ui:search-container-results>
 		<%
@@ -168,6 +168,7 @@
 			%>	
 			
 			<liferay-ui:search-container-column-text>
+				
 				
 			</liferay-ui:search-container-column-text>
 		</liferay-ui:search-container-row> 

@@ -19,6 +19,9 @@
 <%@ include file="../init.jsp"%>
 <%@page import="org.opencps.util.PortletPropsValues"%>
 <%@page import="org.opencps.datamgt.search.DictItemSearch"%>
+
+<div class="ocps-serviceinfo-list">
+
 <liferay-util:include page='<%= templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
 
 <liferay-util:include page='<%= templatePath + "toolbar.jsp"%>' servletContext="<%=application %>" />
@@ -71,3 +74,4 @@
 		</liferay-ui:search-container-row>
 <liferay-ui:search-iterator/>
 </liferay-ui:search-container>
+</div>

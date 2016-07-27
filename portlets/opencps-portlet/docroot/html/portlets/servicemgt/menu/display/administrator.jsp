@@ -45,9 +45,9 @@
 				<i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
 				<a href="<%= filter.toString() %>">
 					<%= di.getItemName(locale) %> 
-					<span class="badge">
-						<%= ServiceInfoLocalServiceUtil.countServiceInAdmin(scopeGroupId,
-							Long.toString(di.getDictItemId()), 1) %>
+					<span > <!-- class="badge" -->
+						(<%= ServiceInfoLocalServiceUtil.countServiceInAdmin(scopeGroupId,
+							Long.toString(di.getDictItemId()), 1) %>)
 					</span>	
 				</a>
 			</li>

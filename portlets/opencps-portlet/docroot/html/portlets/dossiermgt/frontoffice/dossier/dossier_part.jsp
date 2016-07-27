@@ -66,7 +66,7 @@
 	exception="<%= EmptyDossierFileException.class %>" 
 	message="<%=EmptyDossierFileException.class.getName() %>"
 />
-
+<div class="ocps-dossier-process">
 <%
 	Dossier dossier = (Dossier) request.getAttribute(WebKeys.DOSSIER_ENTRY);
 
@@ -378,6 +378,7 @@
 		}
 	}
 %>
+</div>
 <aui:script>
 	
 	AUI().ready('aui-base','liferay-portlet-url','aui-io', function(A){

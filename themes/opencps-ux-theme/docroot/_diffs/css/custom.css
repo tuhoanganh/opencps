@@ -10,6 +10,10 @@
 @import url(portlets/portlet_register.css);
 @import url(portlets/portlet_accountInfo.css);
 @import url(portlets/portlet_history.css);
+@import url(portlets/portlet_dossier_info.css);
+@import url(portlets/portlet_dossier_content.css);
+@import url(portlets/portlet_popup.css);
+
 
 @import url(portlets/portlet_hung_custom.css);
 @import url(portlets/binhth.css);
@@ -17,6 +21,12 @@
 @import url(button-custom.css);
 
 /*end*/
+
+/*----anh huong*/
+@import url(portlets/portlet_13_fileinfo.css);
+/*end*/
+
+
 @import url(custom_frame_1.css);
 @import url(header_style_1.css);
 

@@ -50,7 +50,7 @@
 
 <%@ include file="../../init.jsp"%>
 
-
+<div class="ocps-dossier-content">
 <%
 	Dossier dossier = (Dossier) request.getAttribute(WebKeys.DOSSIER_ENTRY);
 
@@ -362,4 +362,4 @@
 		}
 	}
 %>
-
+</div>

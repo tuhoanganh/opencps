@@ -33,6 +33,7 @@
 	ServiceInfo serviceInfo = (ServiceInfo)request.getAttribute(WebKeys.SERVICE_INFO_ENTRY);
 	ServiceConfig serviceConfig = (ServiceConfig)request.getAttribute(WebKeys.SERVICE_CONFIG_ENTRY);
 %>
+<div class="ocps-dossier-info">
 <table class="table table-bordered dossier-info-table">
 	<tr>
 		<td width="150">
@@ -147,3 +148,4 @@
 		</td>
 	</tr>
 </table>
+</div>

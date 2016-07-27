@@ -32,6 +32,16 @@
 								<a aria-labelledby="layout_$nav_child.getLayoutId()" href="$nav_child.getURL()" $nav_child.getTarget() role="menuitem">$nav_child.getName()</a>
 							</li>
 						#end
+						
+						#if($UserPages)
+				            #foreach ($UserPage in $UserPages)
+				                #if($layoutPermission.contains($permissionChecker, $UserPage , "VIEW"))
+				                    <li>
+				                    <a href="$UserPage.getRegularURL($request)" $UserPage.getTarget()><span>$UserPage.getName($locale)</span></a>
+				                    </li>
+				                #end
+				            #end
+				        #end
 					</ul>
 				#end
 			</li>
