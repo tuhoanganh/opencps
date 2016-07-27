@@ -70,7 +70,7 @@
 								<aui:col id='<%="col_" + randomInstance + i %>' cssClass='<%=cssClass + "_" + i %>' width="<%=colWidth %>">
 									<aui:select 
 										name='<%=elementName %>' 
-										onchange='<%=themeDisplay.getPortletDisplay().getNamespace() + "renderChildItems(this," + i + ",true)" %>'
+										onchange='<%=themeDisplay.getPortletDisplay().getNamespace() + randomInstance +"renderChildItems(this," + i + ",true)" %>'
 										cssClass='<%=cssClass %>'
 										inlineField="<%=inlineField %>"
 										inlineLabel="<%=inlineLabel %>"
