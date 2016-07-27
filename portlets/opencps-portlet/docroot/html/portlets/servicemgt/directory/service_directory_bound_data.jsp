@@ -1,5 +1,3 @@
-<%@page import="org.opencps.util.DictItemUtil"%>
-<%@page import="com.liferay.portal.kernel.dao.search.ResultRow"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -18,12 +16,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
 <%@ include file="../init.jsp" %>
-
+<%@page import="org.opencps.util.DictItemUtil"%>
+<%@page import="com.liferay.portal.kernel.dao.search.ResultRow"%>
 <%
 	ResultRow row = (ResultRow) request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
  	ServiceInfo info = (ServiceInfo) row.getObject();
+ 	
+ 	PortletURL viewURL = renderResponse.createRenderURL();
+	viewURL.setParameter("mvcPath", templatePath + "service_detail.jsp");
+	viewURL.setParameter("serviceinfoId", String.valueOf(info.getServiceinfoId()));
+	viewURL.setParameter("backURL", currentURL);
 %>
 
 <div class="ocps-searh-bound-data">
@@ -31,27 +34,27 @@
 		<span class="ocps-searh-bound-data-chirld-span">
 			<liferay-ui:message key="service-no" />
 		</span>
-		<label class="ocps-searh-bound-data-chirld-label">
+		<a class="ocps-searh-bound-data-chirld-label" href="<%=viewURL.toString()%>">
 			<%=info.getServiceNo() %>
-		</label>
+		</a>
 	</p>
 	
 	<p class="ocps-searh-bound-data-chirld-p">
 		<span class="ocps-searh-bound-data-chirld-span">
 			<liferay-ui:message key="service-domain" />
 		</span>
-		<label class="ocps-searh-bound-data-chirld-label">
+		<a class="ocps-searh-bound-data-chirld-label" href="<%=viewURL.toString()%>">
 			<%= DictItemUtil.getNameDictItem(info.getDomainCode()) %>
-		</label>
+		</a>
 	</p>
 	
 	<p class="ocps-searh-bound-data-chirld-p">
 		<span class="ocps-searh-bound-data-chirld-span">
 			<liferay-ui:message key="service-administrator" />
 		</span>
-		<label class="ocps-searh-bound-data-chirld-label">
+		<a class="ocps-searh-bound-data-chirld-label" href="<%=viewURL.toString()%>">
 			<%=DictItemUtil.getNameDictItem(info.getAdministrationCode()) %>
-		</label>
+		</a>
 	</p>
 	
 </div>

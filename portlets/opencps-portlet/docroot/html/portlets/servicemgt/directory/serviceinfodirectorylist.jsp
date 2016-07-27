@@ -141,8 +141,8 @@
 				/* // service no
 				row.addText(service.getServiceNo(), viewURL);
 				 */
-				// service name
-				row.addText(service.getServiceName(), viewURL);
+				/* // service name
+				row.addText(service.getServiceName(), viewURL); */
 				
 				/* // service domain
 				row.addText(DictItemUtil.getNameDictItem(service.getDomainCode()) , viewURL);
@@ -151,6 +151,7 @@
 				row.addText(DictItemUtil.getNameDictItem(service.getAdministrationCode()), viewURL); */
 				
 				//use addJSP to use UX(User eXperience) theme
+				row.addJSP("center", SearchEntry.DEFAULT_VALIGN,  templatePath + "service_directory_bound_data-col2.jsp", config.getServletContext(), request, response);
 				row.addJSP("center", SearchEntry.DEFAULT_VALIGN,  templatePath + "service_directory_bound_data.jsp", config.getServletContext(), request, response);
 			}
 		%>	

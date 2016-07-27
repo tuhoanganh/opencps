@@ -1,0 +1,142 @@
+
+/*--- Login ---*/
+
+.ux-sign-in-wrapper .input-prepend{
+	width: 100%!Important;
+	background-color: #ffffff!Important;
+}
+
+.ux-sign-in-wrapper .input-prepend .control-group {
+	width: calc(100% - 40px)!Important;
+	float: right!Important;
+	margin-bottom: 0px!Important;
+}
+.ux-sign-in-wrapper .control-group .control-label {
+	display: none!important;
+}
+
+.ux-sign-in-wrapper .clearable{
+	height: 41px!Important;
+	width: 100%!Important;
+	border-left: 0!Important;
+	border-radius: 0 4px 4px 0!Important;
+}
+.ux-sign-in-wrapper .clearable:FOCUS{
+	box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 6px rgba(82,168,236,0.6)!Important;
+}
+.ux-sign-in-wrapper .password:FOCUS{
+	box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 6px rgba(82,168,236,0.6)!Important;
+}
+.ux-sign-in-wrapper .password{
+	height: 41px!Important;
+	width: 100%!Important;
+	border-left: 0!Important;
+	border-radius: 0 4px 4px 0!Important;
+}
+.ux-sign-in-wrapper .digital-signature{
+	height: 41px!Important;
+	width: 100%!Important;
+	border-left: 0!Important;
+	border-radius: 0 4px 4px 0!Important;
+}
+.ux-sign-in-wrapper .add-on{
+	float: left!Important;
+	line-height: 30px!Important;
+	color: #0090ff!Important;
+	background: transparent!Important;
+	height: 41px!Important;
+	width: 40px!Important;
+	border-right: 0!Important;
+}
+.ux-sign-in-wrapper .forgot-password{
+	color: #0090ff;
+}
+.ux-sign-in-wrapper .button-holder {
+	    margin-top: 0px;
+}
+.btn-primary{
+	height: 41px!Important;;
+} 
+.ux-sign-in-wrapper .btn-signature-signin{
+	width: 100%!Important;
+	height: 41px;	
+}
+.ux-sign-in-wrapper .btn-fb-signin{
+	width: 100%!Important;
+	height: 41px;
+	margin-bottom: 15px!Important;
+} 
+
+.ux-sign-in-wrapper .sign-in-label{
+	font-size: 16px;
+    font-family: 'Roboto-Bold';
+    text-transform: uppercase;
+    margin: 0 0 15px;
+    text-align: center;
+}
+
+.ux-sign-in-wrapper .success{
+	    border-color : #ccc!Important;
+	    color: #333333!Important;
+}
+
+.ux-sign-in-wrapper .success-field{
+		 border-color : #ccc!Important;
+	    color: #333333!Important;
+}
+
+.ux-sign-in-wrapper .error{
+	 border-color : #ccc!Important;
+	    color: #333333!Important;
+}
+
+
+.ux-sign-in-wrapper .error-field{
+	 border-color : #ccc!Important;
+	    color: #333333!Important;
+}
+
+.ux-sign-in-wrapper .text-label{   
+	background: white;
+    position: relative;
+    padding: 0 20px;
+    bottom: 10px;
+    }
+
+.ux-sign-in-wrapper .split{
+    text-align: center;
+    height: 1px;
+    background-color: #e1e1e1;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+.ux-sign-in-wrapper {display: flex; justify-content: center;}
+
+.default-sign-in, .advance-signin {width: 370px; float: left; background-color: white; border-radius: 8px; -webkit-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); padding: 30px 25px}
+.default-sign-in .title {color: #0090ff;font-size: 18px; font-family: 'Roboto-Bold'; text-transform: uppercase; float: left; margin: 0 0 20px}
+.default-sign-in .create-account {float: right;color: #0090ff;}
+.default-sign-in .fieldset  {margin-top: 14%;}
+.default-sign-in > p {color: #0090ff}
+.default-sign-in button, .side_login button {width: 100%; background: #0090ff; border-radius: 20px; color: white; text-transform: uppercase; font-family: 'Roboto-Medium'; border: 0; padding: 10px; margin-bottom: 15px}
+
+.advance-signin {margin-left: 25px}
+.advance-signin .title {font-size: 16px; font-family: 'Roboto-Bold'; text-transform: uppercase; margin: 0 0 15px; text-align: center;}
+.advance-signin .or {position: relative; text-align: center}
+.advance-signin .or span {background: white; position: relative; padding: 0 20px}
+.advance-signin .or:before {content: ""; position: absolute; width: 100%; height: 1px; background-color: #e1e1e1; left: 0; top: 50%}
+.advance-signin button:last-child {margin-bottom: 0}
+
+.input-prepend {clear: both; width: 100%}
+.input-prepend input {height: 41px; border-left: 0; width: calc(100% - 40px)}
+.input-prepend .add-on {height: 41px; width: 40px; line-height: 30px; color: #0090ff; background: transparent}
+.fb{
+	position: relative!important;
+}
+
+.fa-facebook{
+	top: 13px;
+    margin-left: 18px;
+	color:white!Important;
+	position: absolute;
+    margin-left: 18px;
+}

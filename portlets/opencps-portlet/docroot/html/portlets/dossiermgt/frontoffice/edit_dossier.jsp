@@ -68,26 +68,24 @@
 	boolean isEditDossier = ParamUtil.getBoolean(request, "isEditDossier");
 %>
 
-<div class="ocps-custom-header">
-	<label class="opcps-label">
-		<liferay-ui:message key='<%=(dossier == null) ? "add-dossier" : (cmd.equals(Constants.VIEW) ? "view-dossier" : "update-dossier") %>' />
-	</label>
-	<span class="ocps-span">
-		<a href="<%=backURL %>"><liferay-ui:message key="back"/></a>
-	</span>
-</div>
-
-<%-- <div class="ocps-header-history">
-	<liferay-ui:header
-		backURL="<%= backURL %>"
-		title='<%= (dossier == null) ? "add-dossier" : (cmd.equals(Constants.VIEW) ? "view-dossier" : "update-dossier") %>'
-	/>
-</div> --%>
-<div class="ocps-history-bound-navigator">
 <c:choose>
 	<c:when test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) && Validator.isNotNull(accountType) &&
 				(accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN) ||
 				accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS)) %>">
+		<%-- <liferay-ui:header
+			backURL="<%= backURL %>"
+			title='<%= (dossier == null) ? "add-dossier" : (cmd.equals(Constants.VIEW) ? "view-dossier" : "update-dossier") %>'
+		/> --%>
+		
+		<div class="ocps-custom-header">
+		 <label class="opcps-label">
+		  <liferay-ui:message key='<%= (dossier == null) ? "add-dossier" : (cmd.equals(Constants.VIEW) ? "view-dossier" : "update-dossier") %>' />
+		 </label>
+		 <span class="ocps-span">
+		  <a href="<%=backURL %>"><liferay-ui:message key="back"/></a>
+		 </span>
+		</div>
+		
 		<portlet:actionURL var="updateDossierURL" name="updateDossier"/>
 		
 		<liferay-util:buffer var="htmlTop">
@@ -105,6 +103,7 @@
 		
 		</liferay-util:buffer>
 		
+		<div class="file_detail ocps-history-process-bound-navigator">
 		<aui:form name="fm" action="<%=updateDossierURL %>" method="post">
 		
 			<aui:model-context bean="<%= dossier %>" model="<%= Dossier.class %>" />
@@ -209,40 +208,18 @@
 				htmlBottom="<%= htmlBottom %>"
 				htmlTop="<%= htmlTop %>"
 				jspPath='<%=templatePath + "dossier/" %>'
-				showButtons="<%=(cmd.equals(Constants.VIEW) || 
-					(dossier != null && !dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_NEW) 
-					&& !dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_WAITING))) ? false : true %>"
+				showButtons="<%=(cmd.equals(Constants.VIEW) || (dossier != null && dossier.getDossierStatus()  != PortletConstants.DOSSIER_STATUS_NEW)) ? false : true %>"
 			/>
+	
 		</aui:form>
+		</div>
 	</c:when>
+	
 	<c:otherwise>
-		<div class="portlet-msg-alert"><liferay-ui:message key="your-account-not-authorized-update-dossier"/></div>
+		<div class="portlet-msg-alert"><liferay-ui:message key="your-account-not-nauthorized-update-dossier"/></div>
 	</c:otherwise>
  
 </c:choose>
-</div>
-
-<aui:script>
-	
-	AUI().ready(function(A){
-		var varDossierId = A.one("#<portlet:namespace/>dossierId").val();
-		if(getCookie('dossierId') != ''){
-			var allFormNav = A.all(".form-navigator-content .tab-pane");
-			allFormNav.each(function (taskNode) {
-            	taskNode.removeClass('active');
-            	A.one("#"+taskNode.attr('id')+"Tab").removeClass('tab-selected').removeClass('tab-focused').removeClass('active');
-				if(taskNode.attr('id') == '_<%= WebKeys.DOSSIER_MGT_PORTLET %>_dossier_part'){
-					taskNode.addClass('active');
-					A.one("#"+taskNode.attr('id')+"Tab").addClass('tab-selected').addClass('active');
-				}
-            });
-			setCookie('dossierId','');
-		}else{
-			setCookie('dossierId','');
-		}
-	});
-</aui:script>
-
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.dossiermgt.frontoffice.edit_dossier.jsp");
 %>

@@ -24,6 +24,7 @@
 	iteratorURL.setParameter("mvcPath", templatePath + "servicetemplatefilelist.jsp");
 	iteratorURL.setParameter("tabs1", ServiceUtil.TOP_TABS_TEMPLATE);
 %>
+<div class="ocps-serviceinfo-list">
 
 <liferay-util:include page='<%= templatePath + "toptabs.jsp"%>' servletContext="<%=application %>" />
 <liferay-util:include page='<%= templatePath + "toolbar.jsp"%>' servletContext="<%=application %>" />
@@ -78,7 +79,7 @@
 	<liferay-ui:search-iterator/>
 
 </liferay-ui:search-container>
-
+</div>
 
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.servicemgt.admin.servicetemplate.jsp");

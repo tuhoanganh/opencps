@@ -29,10 +29,10 @@
  	<c:if test="<%= ServiceTemplatePermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) %>">
  		<portlet:renderURL var="updateServiceURL">
 			<portlet:param name="<%= ServiceDisplayTerms.SERVICE_ID %>" value="<%=String.valueOf(service.getServiceinfoId()) %>"/>
-			<portlet:param name="mvcPath" value='<%= templatePath + "edit_service.jsp" %>'/>
+			<portlet:param name="mvcPath" value='<%= templatePath + "edit_service-ux.jsp" %>'/>
 			<portlet:param name="redirectURL" value="<%= currentURL %>"/>
 		</portlet:renderURL> 
-		<liferay-ui:icon cssClass="edit" image="edit" url="<%= updateServiceURL.toString() %>" />
+		<liferay-ui:icon cssClass="edit" image="edit" url="<%= updateServiceURL.toString() %>" label="edit" />
  	</c:if>
 
  	<c:if test="<%= ServiceTemplatePermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE) %>">
@@ -40,6 +40,6 @@
 			<portlet:param name="<%= ServiceDisplayTerms.SERVICE_ID %>" value="<%=String.valueOf(service.getServiceinfoId()) %>"/>
 			<portlet:param name="redirectURL" value="<%=currentURL %>"/>
 		</portlet:actionURL> 
-		<liferay-ui:icon-delete cssClass="delete" image="delete" confirmation="are-you-sure-delete-entry" message="delete" url="<%= deleteServiceURL.toString() %>" />
+		<liferay-ui:icon-delete cssClass="delete" image="delete" confirmation="are-you-sure-delete-entry" message="delete" url="<%= deleteServiceURL.toString() %>" label="delete"/>
  	</c:if>
 <%-- </liferay-ui:icon-menu>  --%>

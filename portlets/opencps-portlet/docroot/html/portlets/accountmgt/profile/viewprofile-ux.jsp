@@ -57,7 +57,7 @@
 	DictItem dictItemDistrict = null;
 	DictItem dictItemWard = null;
 	
-	if(accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN)) {
+	if(Validator.isNotNull(accountType) && accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN)) {
 		if(Validator.isNotNull(citizen)) {
 			try {
 				dlFileEntry = DLFileEntryLocalServiceUtil.getDLFileEntry(citizen.getAttachFile());
@@ -85,7 +85,7 @@
 			
 		
 		}
-	} else if(accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS)) {
+	} else if(Validator.isNotNull(accountType) && accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS)) {
 		
 		if(Validator.isNotNull(business)) {
 			try {
@@ -141,10 +141,10 @@
 		                            <!-- <button>lưu thay đổi</button> -->
 		                            <a href="" class="fixing"><i class="fa fa-times" aria-hidden="true"></i></a>
 		                        </div>
-		                        <div>
-		                            <p><span><liferay-ui:message key="email"/></span> <label>********</label></p>
+		                        <%-- <div>
+		                            <p><span><liferay-ui:message key="pass-words"/></span> <label>********</label></p>
 		                            <a href="" class="fix"><liferay-ui:message key="edit"/></a>
-		                        </div>
+		                        </div> --%>
 		                        <div>
 		                            <p><span><liferay-ui:message key="birth-date"/></span> <label><%=birthDate %></label></p>
 		                            <a href="" class="fix"><liferay-ui:message key="edit"/></a>
@@ -216,13 +216,13 @@
 		                        </div>
 		                        <div>
 		                            <p>
-		                                <span class="fix_topleft">Lĩnh vực hoạt động:</span>
+		                                <span class="fix_topleft"><liferay-ui:message key="business-domain"/></span>
+		                                	<label class="box_scroll">
 		                                <%
 		                                	if(businessDomains.isEmpty()) {
-		                                		
+		                                		//nothing to do
 		                                	} else {
 		                                		%>
-		                                			<label class="box_scroll">
 					                                    <%
 					                                    	for(BusinessDomain businessDomain : businessDomains) {
 					                                    		%>
