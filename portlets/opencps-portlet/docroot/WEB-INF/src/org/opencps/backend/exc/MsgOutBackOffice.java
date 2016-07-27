@@ -20,6 +20,9 @@ package org.opencps.backend.exc;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jms.JMSException;
+import javax.naming.NamingException;
+
 import org.opencps.backend.message.SendToBackOfficeMsg;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierFile;
@@ -27,7 +30,7 @@ import org.opencps.dossiermgt.model.DossierPart;
 import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
-import org.opencps.jms.context.JMSContext;
+import org.opencps.jms.context.JMSHornetqContext;
 import org.opencps.jms.message.SyncFromBackOfficeMessage;
 import org.opencps.jms.message.body.DossierFileMsgBody;
 import org.opencps.jms.message.body.SyncFromBackOfficeMsgBody;
@@ -44,70 +47,76 @@ import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.MessageListenerException;
 
-
 /**
  * @author khoavd
- *
  */
-public class MsgOutBackOffice implements MessageListener{
+public class MsgOutBackOffice implements MessageListener {
 
-	/* (non-Javadoc)
-     * @see com.liferay.portal.kernel.messaging.MessageListener#receive(com.liferay.portal.kernel.messaging.Message)
-     */
-    @Override
+	@Override
 	public void receive(Message message)
-	    throws MessageListenerException {
+		throws MessageListenerException {
+
+		JMSHornetqContext context = null;
 
 		try {
 			System.out.println("GOTO -> MSGOUT_BO");
 
 			SendToBackOfficeMsg toBackOffice =
-			    (SendToBackOfficeMsg) message.get("toBackOffice");
-			
+				(SendToBackOfficeMsg) message.get("toBackOffice");
+
 			Dossier dossier =
-			    DossierLocalServiceUtil.fetchDossier(toBackOffice.getDossierId());
-			
+				DossierLocalServiceUtil.fetchDossier(toBackOffice.getDossierId());
+
 			List<WorkflowOutput> workflowOutputs =
-						    WorkflowOutputLocalServiceUtil.getByProcessWFPostback(toBackOffice.getProcessWorkflowId(), true);
-			
+				WorkflowOutputLocalServiceUtil.getByProcessWFPostback(
+					toBackOffice.getProcessWorkflowId(), true);
+
 			_log.info(">WORKFLOW OUTPUT SIZE " + workflowOutputs.size());
-			
+
 			List<DossierFile> dossierFiles = new ArrayList<DossierFile>();
-			
+
 			// Check file return
 			for (WorkflowOutput workflowOutput : workflowOutputs) {
 
-					DossierFile dossierFile = null;
-					try {
-						DossierPart dossierPart =
-						    DossierPartLocalServiceUtil.getDossierPart(workflowOutput.getDossierPartId());
-						dossierFile =
-						    DossierFileLocalServiceUtil.getDossierFileInUse(
-						        toBackOffice.getDossierId(),
-						        dossierPart.getDossierpartId());
-						
-						_log.info(">Get dossierFiles" + dossierFile.getDisplayName() + ">>>>>>>>>>>>>>>>>>>>>....");
+				DossierFile dossierFile = null;
+				try {
+					DossierPart dossierPart =
+						DossierPartLocalServiceUtil.getDossierPart(workflowOutput.getDossierPartId());
+					dossierFile =
+						DossierFileLocalServiceUtil.getDossierFileInUse(
+							toBackOffice.getDossierId(),
+							dossierPart.getDossierpartId());
 
-						dossierFile.setSyncStatus(PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS);
-						dossierFiles.add(dossierFile);
-					}
-					catch (Exception e) {
-						_log.error(e);
-					}
+					dossierFile.setSyncStatus(PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS);
+					dossierFiles.add(dossierFile);
+				}
+				catch (Exception e) {
+					_log.error(e);
+				}
 			}
 			List<DossierFileMsgBody> lstDossierFileMsgBody =
-			    JMSMessageBodyUtil.getDossierFileMsgBody(dossierFiles);
+				JMSMessageBodyUtil.getDossierFileMsgBody(dossierFiles);
 
-			JMSContext context =
-			    JMSMessageUtil.createProducer(
-			        toBackOffice.getCompanyId(),
-			        toBackOffice.getGovAgencyCode(), true,
-			        WebKeys.JMS_QUEUE_OPENCPS_FRONTOFFICE.toLowerCase(), "remote");
-			
+			/*
+			 * JMSContext context = JMSMessageUtil.createProducer(
+			 * toBackOffice.getCompanyId(), toBackOffice.getGovAgencyCode(),
+			 * true, WebKeys.JMS_QUEUE_OPENCPS_FRONTOFFICE.toLowerCase(),
+			 * WebKeys.JMS_QUEUE_OPENCPS_FRONTOFFICE.toLowerCase(), "remote",
+			 * "jmscore");
+			 */
+
+			context =
+				JMSMessageUtil.createHornetqProducer(
+					toBackOffice.getCompanyId(),
+					toBackOffice.getGovAgencyCode(), true,
+					WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(),
+					WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "remote",
+					"hornetq");
+
 			_log.info(">Dossifile SIZE " + lstDossierFileMsgBody.size());
 
 			SyncFromBackOfficeMessage syncFromBackoffice =
-			    new SyncFromBackOfficeMessage(context);
+				new SyncFromBackOfficeMessage(context);
 
 			SyncFromBackOfficeMsgBody msgBody = new SyncFromBackOfficeMsgBody();
 
@@ -120,16 +129,29 @@ public class MsgOutBackOffice implements MessageListener{
 			msgBody.setSubmitDateTime(toBackOffice.getSubmitDateTime());
 			msgBody.setEstimateDatetime(toBackOffice.getEstimateDatetime());
 			msgBody.setPaymentFile(toBackOffice.getPaymentFile());
-			
-			syncFromBackoffice.sendMessage(msgBody);
+
+			syncFromBackoffice.sendMessageByHornetq(msgBody);
 
 		}
 		catch (Exception e) {
 			_log.error(e);
 		}
+		finally {
+			if (context != null) {
+				try {
+					context.destroy();
+				}
+				catch (JMSException e) {
+					_log.error(e);
+				}
+				catch (NamingException e) {
+					_log.error(e);
+				}
+			}
+		}
 
-    }
-    
-    private Log _log = LogFactoryUtil.getLog(MsgOutBackOffice.class);
+	}
+
+	private Log _log = LogFactoryUtil.getLog(MsgOutBackOffice.class);
 
 }

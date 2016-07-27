@@ -24,6 +24,7 @@ import javax.naming.NamingException;
 import org.opencps.jms.SyncServiceContext;
 import org.opencps.jms.business.SyncFromBackOffice;
 import org.opencps.jms.context.JMSContext;
+import org.opencps.jms.context.JMSHornetqContext;
 import org.opencps.jms.context.JMSLocalContext;
 import org.opencps.jms.message.body.SyncFromBackOfficeMsgBody;
 import org.opencps.jms.util.JMSMessageUtil;
@@ -46,6 +47,11 @@ public class SyncFromBackOfficeMessage {
 	public SyncFromBackOfficeMessage(JMSLocalContext context) {
 
 		this.setLocalContext(context);
+	}
+
+	public SyncFromBackOfficeMessage(JMSHornetqContext context) {
+
+		this.setHornetqContext(context);
 	}
 
 	/**
@@ -113,6 +119,21 @@ public class SyncFromBackOfficeMessage {
 		this._serviceContext = serviceContext;
 	}
 
+	public JMSHornetqContext getHornetqContext() {
+
+		return _hornetqContext;
+	}
+
+	public void setHornetqContext(JMSHornetqContext hornetqContext) {
+
+		this._hornetqContext = hornetqContext;
+	}
+
+	/**
+	 * @param msgBody
+	 * @throws JMSException
+	 * @throws NamingException
+	 */
 	public void sendMessage(SyncFromBackOfficeMsgBody msgBody)
 		throws JMSException, NamingException {
 
@@ -137,11 +158,48 @@ public class SyncFromBackOfficeMessage {
 					new SyncServiceContext(
 						companyId, groupId, userId, true, true);
 
-				// Importance
-				/*
-				 * DossierMsgBody dossierMsgBody =
-				 * JMSMessageBodyUtil.getDossierMsgBody(dossier);
-				 */
+				msgBody.setServiceContext(syncServiceContext.getServiceContext());
+
+				byte[] sender =
+					JMSMessageUtil.convertObjectToByteArray(msgBody);
+
+				bytesMessage.writeBytes(sender);
+				_log.info("SyncFromBackOfficeMessage Send Message////////////////////////////////");
+				_context.getMessageProducer().send(bytesMessage);
+				_log.info("SyncFromBackOfficeMessage Finish Send Message////////////////////////////////");
+
+			}
+
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
+	}
+
+	public void sendMessageByHornetq(SyncFromBackOfficeMsgBody msgBody)
+		throws JMSException, NamingException {
+
+		try {
+			BytesMessage bytesMessage =
+				JMSMessageUtil.createByteMessage(_hornetqContext);
+
+			long companyId =
+				GetterUtil.getLong(_hornetqContext.getProperties().getProperty(
+					WebKeys.JMS_COMPANY_ID));
+			long groupId =
+				GetterUtil.getLong(
+					_hornetqContext.getProperties().getProperty(
+						WebKeys.JMS_GROUP_ID), 0L);
+			long userId =
+				GetterUtil.getLong(
+					_hornetqContext.getProperties().getProperty(
+						WebKeys.JMS_USER_ID), 0L);
+
+			if (companyId > 0 && groupId > 0 && userId > 0) {
+				SyncServiceContext syncServiceContext =
+					new SyncServiceContext(
+						companyId, groupId, userId, true, true);
+
 				msgBody.setServiceContext(syncServiceContext.getServiceContext());
 
 				byte[] sender =
@@ -161,6 +219,8 @@ public class SyncFromBackOfficeMessage {
 	}
 
 	private JMSContext _context;
+
+	private JMSHornetqContext _hornetqContext;
 
 	private JMSLocalContext _localContext;
 

@@ -35,7 +35,8 @@ import javax.jms.TextMessage;
 
 import org.opencps.jms.context.JMSContext;
 import org.opencps.jms.context.JMSContextFactory;
-import org.opencps.jms.context.JMSLocalContext;
+import org.opencps.jms.context.JMSHornetqContext;
+import org.opencps.jms.context.JMSHornetqContextFactory;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -63,6 +64,23 @@ public class JMSMessageUtil {
 
 	}
 
+	/**
+	 * @param context
+	 * @return
+	 */
+	public static BytesMessage createByteMessage(JMSHornetqContext context) {
+
+		try {
+			context.createByteMessage();
+			return context.getBytesMessage();
+
+		}
+		catch (Exception e) {
+			_log.error(e);
+			return null;
+		}
+
+	}
 
 	/**
 	 * @param companyId
@@ -74,13 +92,14 @@ public class JMSMessageUtil {
 	 */
 	public static JMSContext createConsumer(
 		long companyId, String code, boolean remote, String channelName,
-		String lookup) {
+		String queueName, String lookup, String mom) {
 
 		JMSContext context = null;
 		try {
 			context =
 				JMSContextFactory.getInstance(
-					companyId, code, remote, channelName, lookup);
+					companyId, code, remote, channelName, queueName, lookup,
+					mom);
 			context.createConsumer();
 			context.start();
 
@@ -92,23 +111,27 @@ public class JMSMessageUtil {
 		return context;
 	}
 
-	
-
 	/**
 	 * @param companyId
+	 * @param code
+	 * @param remote
 	 * @param channelName
+	 * @param queueName
 	 * @param lookup
+	 * @param mom
 	 * @return
 	 */
-	public static JMSLocalContext createQueueReceiver(
-		long companyId, String channelName, String lookup) {
+	public static JMSHornetqContext createHornetqConsumer(
+		long companyId, String code, boolean remote, String channelName,
+		String queueName, String lookup, String mom) {
 
-		JMSLocalContext context = null;
-
+		JMSHornetqContext context = null;
 		try {
 			context =
-				JMSContextFactory.getInstance(companyId, channelName, lookup);
-			context.createQueueReceiver();
+				JMSHornetqContextFactory.getInstance(
+					companyId, code, remote, channelName, queueName, lookup,
+					mom);
+			context.createConsumer();
 			context.start();
 
 		}
@@ -141,7 +164,43 @@ public class JMSMessageUtil {
 	 * @param context
 	 * @return
 	 */
+	public static MapMessage createMapMessage(JMSHornetqContext context) {
+
+		try {
+			context.createMapMessage();
+			return context.getMapMessage();
+
+		}
+		catch (Exception e) {
+			_log.error(e);
+			return null;
+		}
+
+	}
+
+	/**
+	 * @param context
+	 * @return
+	 */
 	public static ObjectMessage createObjectMessage(JMSContext context) {
+
+		try {
+			context.createObjectMessage();
+			return context.getObjectMessage();
+
+		}
+		catch (Exception e) {
+			_log.error(e);
+			return null;
+		}
+
+	}
+
+	/**
+	 * @param context
+	 * @return
+	 */
+	public static ObjectMessage createObjectMessage(JMSHornetqContext context) {
 
 		try {
 			context.createObjectMessage();
@@ -164,13 +223,45 @@ public class JMSMessageUtil {
 	 */
 	public static JMSContext createProducer(
 		long companyId, String code, boolean remote, String channelName,
-		String lookup) {
+		String queueName, String lookup, String mom) {
 
 		JMSContext context = null;
 		try {
 			context =
 				JMSContextFactory.getInstance(
-					companyId, code, remote, channelName, lookup);
+					companyId, code, remote, channelName, queueName, lookup,
+					mom);
+			context.createProducer();
+			context.start();
+
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
+
+		return context;
+	}
+
+	/**
+	 * @param companyId
+	 * @param code
+	 * @param remote
+	 * @param channelName
+	 * @param queueName
+	 * @param lookup
+	 * @param mom
+	 * @return
+	 */
+	public static JMSHornetqContext createHornetqProducer(
+		long companyId, String code, boolean remote, String channelName,
+		String queueName, String lookup, String mom) {
+
+		JMSHornetqContext context = null;
+		try {
+			context =
+				JMSHornetqContextFactory.getInstance(
+					companyId, code, remote, channelName, queueName, lookup,
+					mom);
 			context.createProducer();
 			context.start();
 
@@ -198,11 +289,47 @@ public class JMSMessageUtil {
 		}
 
 	}
+	
+	/**
+	 * @param context
+	 * @return
+	 */
+	public static StreamMessage createStreamMessage(JMSHornetqContext context) {
+
+		try {
+			context.createStreamMessage();
+			return context.getStreamMessage();
+
+		}
+		catch (Exception e) {
+			_log.error(e);
+			return null;
+		}
+
+	}
 
 	/**
 	 * @param context
 	 */
 	public static TextMessage createTextMessage(JMSContext context) {
+
+		try {
+			context.createTextMessage();
+			return context.getTextMessage();
+
+		}
+		catch (Exception e) {
+			_log.error(e);
+			return null;
+		}
+
+	}
+	
+	/**
+	 * @param context
+	 * @return
+	 */
+	public static TextMessage createTextMessage(JMSHornetqContext context) {
 
 		try {
 			context.createTextMessage();
