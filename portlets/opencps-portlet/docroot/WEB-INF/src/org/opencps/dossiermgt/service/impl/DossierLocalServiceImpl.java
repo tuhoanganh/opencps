@@ -23,8 +23,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.validation.Valid;
-
 import org.opencps.dossiermgt.NoSuchDossierException;
 import org.opencps.dossiermgt.NoSuchDossierStatusException;
 import org.opencps.dossiermgt.model.Dossier;
@@ -527,31 +525,57 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 				if (bytes != null && syncDLFileEntry != null) {
 					System.out.println("SyncDossier Add Dossier File//////////////////");
 
-					dossierFileLocalService.addDossierFile(
-						serviceContext.getUserId(),
-						dossier.getDossierId(),
-						dossierPart.getDossierpartId(),
-						dossierTemplate.getTemplateNo(),
-						syncFileGroup != null
-							? syncFileGroup.getDisplayName() : StringPool.BLANK,
-						syncFileGroup != null
-							? syncFileGroup.getFileGroupId() : 0,
-						groupDossierPart != null
-							? groupDossierPart.getDossierpartId() : 0, 0, 0,
-						syncDossierFile.getDisplayName(),
-						syncDossierFile.getFormData(),
-						syncDossierFile.getDossierFileMark(),
-						syncDossierFile.getDossierFileType(),
-						syncDossierFile.getDossierFileNo(),
-						syncDossierFile.getDossierFileDate(),
-						syncDossierFile.getOriginal(),
-						syncDossierFile.getSyncStatus(), folder.getFolderId(),
-						syncDLFileEntry.getName() + StringPool.PERIOD +
-							syncDLFileEntry.getExtension(),
-						syncDLFileEntry.getMimeType(),
-						syncDLFileEntry.getTitle(),
-						syncDLFileEntry.getDescription(), StringPool.BLANK,
-						bytes, serviceContext);
+					DossierFile oldDossierFile = null;
+
+					try {
+						oldDossierFile =
+							dossierFileLocalService.getByOid(syncDossierFile.getOid());
+					}
+					catch (Exception e) {
+						// TODO: handle exception
+					}
+
+					if (oldDossierFile != null) {
+						dossierFileLocalService.addDossierFile(
+							oldDossierFile.getDossierFileId(),
+							folder.getFolderId(),
+							syncDLFileEntry.getName() + StringPool.PERIOD +
+								syncDLFileEntry.getExtension(),
+							syncDLFileEntry.getMimeType(),
+							syncDLFileEntry.getTitle(),
+							syncDLFileEntry.getDescription(), StringPool.BLANK,
+							bytes, serviceContext);
+					}
+					else {
+						dossierFileLocalService.addDossierFile(
+							serviceContext.getUserId(),
+							dossier.getDossierId(),
+							dossierPart.getDossierpartId(),
+							dossierTemplate.getTemplateNo(),
+							syncFileGroup != null
+								? syncFileGroup.getDisplayName()
+								: StringPool.BLANK,
+							syncFileGroup != null
+								? syncFileGroup.getFileGroupId() : 0,
+							groupDossierPart != null
+								? groupDossierPart.getDossierpartId() : 0, 0,
+							0, syncDossierFile.getDisplayName(),
+							syncDossierFile.getFormData(),
+							syncDossierFile.getDossierFileMark(),
+							syncDossierFile.getDossierFileType(),
+							syncDossierFile.getDossierFileNo(),
+							syncDossierFile.getDossierFileDate(),
+							syncDossierFile.getOriginal(),
+							syncDossierFile.getSyncStatus(),
+							folder.getFolderId(),
+							syncDLFileEntry.getName() + StringPool.PERIOD +
+								syncDLFileEntry.getExtension(),
+							syncDLFileEntry.getMimeType(),
+							syncDLFileEntry.getTitle(),
+							syncDLFileEntry.getDescription(), StringPool.BLANK,
+							bytes, serviceContext);
+					}
+
 				}
 			}
 		}
@@ -1509,10 +1533,12 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 			new Date(), 1);
 	}
 
-	public Dossier getByoid(String oid) throws SystemException {
+	public Dossier getByoid(String oid)
+		throws SystemException {
+
 		return dossierPersistence.fetchByOID(oid);
 	}
-	
+
 	/**
 	 * @param dossiertype
 	 * @param organizationcode
@@ -1524,17 +1550,13 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 * @return
 	 */
 	public int countDossierForRemoteService(
-		String dossiertype,
-		String organizationcode,
-		String processStepId,
-		String status,
-		String fromdate,
-		String todate,
-		int documentyear,
-		String customername
-		) {
+		String dossiertype, String organizationcode, String processStepId,
+		String status, String fromdate, String todate, int documentyear,
+		String customername) {
 
-		return dossierFinder.countDossierForRemoteService(dossiertype, organizationcode, processStepId, status, fromdate, todate, documentyear, customername);
+		return dossierFinder.countDossierForRemoteService(
+			dossiertype, organizationcode, processStepId, status, fromdate,
+			todate, documentyear, customername);
 	}
 
 	/**
@@ -1548,32 +1570,29 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 * @return
 	 */
 	public List<Dossier> searchDossierForRemoteService(
-		String dossiertype,
-		String organizationcode,
-		String processStepId,
-		String status,
-		String fromdate,
-		String todate,
-		int documentyear,
-		String customername,		
-		int start, int end) {
+		String dossiertype, String organizationcode, String processStepId,
+		String status, String fromdate, String todate, int documentyear,
+		String customername, int start, int end) {
 
-		return dossierFinder
-			.searchDossierForRemoteService(dossiertype, organizationcode, processStepId, status, fromdate, todate, documentyear, customername, start, end);
+		return dossierFinder.searchDossierForRemoteService(
+			dossiertype, organizationcode, processStepId, status, fromdate,
+			todate, documentyear, customername, start, end);
 	}
-	
+
 	/**
 	 * @param username
 	 * @return
 	 */
-	public int countDossierByUserAssignProcessOrder(
-		String username
-		) throws NoSuchUserException {
-		
+	public int countDossierByUserAssignProcessOrder(String username)
+		throws NoSuchUserException {
+
 		long userId = -1;
-		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
+		ServiceContext serviceContext =
+			ServiceContextThreadLocal.getServiceContext();
 		try {
-			User user = UserLocalServiceUtil.getUserByScreenName(serviceContext.getCompanyId(), username);
+			User user =
+				UserLocalServiceUtil.getUserByScreenName(
+					serviceContext.getCompanyId(), username);
 			if (user != null) {
 				userId = user.getUserId();
 			}
@@ -1581,7 +1600,8 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		catch (PortalException e) {
 			// TODO Auto-generated catch block
 			throw new NoSuchUserException();
-		} catch (SystemException e) {
+		}
+		catch (SystemException e) {
 			// TODO Auto-generated catch block
 			throw new NoSuchUserException();
 		}
@@ -1593,13 +1613,16 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 * @return
 	 */
 	public List<Dossier> searchDossierByUserAssignProcessOrder(
-		String username,
-		int start, int end) throws NoSuchUserException {
+		String username, int start, int end)
+		throws NoSuchUserException {
 
 		long userId = -1;
-		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
+		ServiceContext serviceContext =
+			ServiceContextThreadLocal.getServiceContext();
 		try {
-			User user = UserLocalServiceUtil.getUserByScreenName(serviceContext.getCompanyId(), username);
+			User user =
+				UserLocalServiceUtil.getUserByScreenName(
+					serviceContext.getCompanyId(), username);
 			if (user != null) {
 				userId = user.getUserId();
 			}
@@ -1607,14 +1630,15 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		catch (PortalException e) {
 			// TODO Auto-generated catch block
 			throw new NoSuchUserException();
-		} catch (SystemException e) {
+		}
+		catch (SystemException e) {
 			// TODO Auto-generated catch block
 			throw new NoSuchUserException();
-		}		
-		return dossierFinder
-			.searchDossierByUserAssignByProcessOrder(userId, start, end);
+		}
+		return dossierFinder.searchDossierByUserAssignByProcessOrder(
+			userId, start, end);
 	}
-	
+
 	/**
 	 * @param processNo
 	 * @param stepNo
@@ -1622,24 +1646,25 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 * @return
 	 */
 	public int countDossierByP_S_U(
-		String processNo,
-		String stepNo,
-		String username
-		) {
-		
+		String processNo, String stepNo, String username) {
+
 		long userId = -1;
-		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
+		ServiceContext serviceContext =
+			ServiceContextThreadLocal.getServiceContext();
 		try {
-			User user = UserLocalServiceUtil.getUserByScreenName(serviceContext.getCompanyId(), username);
+			User user =
+				UserLocalServiceUtil.getUserByScreenName(
+					serviceContext.getCompanyId(), username);
 			if (user != null) {
 				userId = user.getUserId();
 			}
 		}
 		catch (PortalException e) {
 			// TODO Auto-generated catch block
-		} catch (SystemException e) {
+		}
+		catch (SystemException e) {
 			// TODO Auto-generated catch block
-			
+
 		}
 		return dossierFinder.countDossierByP_S_U(processNo, stepNo, userId);
 	}
@@ -1651,30 +1676,31 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 * @return
 	 */
 	public List<Dossier> searchDossierByP_S_U(
-		String processNo,
-		String stepNo,
-		String username,
-		int start, int end) {
+		String processNo, String stepNo, String username, int start, int end) {
 
 		long userId = -1;
-		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
+		ServiceContext serviceContext =
+			ServiceContextThreadLocal.getServiceContext();
 		try {
-			User user = UserLocalServiceUtil.getUserByScreenName(serviceContext.getCompanyId(), username);
+			User user =
+				UserLocalServiceUtil.getUserByScreenName(
+					serviceContext.getCompanyId(), username);
 			if (user != null) {
 				userId = user.getUserId();
 			}
 		}
 		catch (PortalException e) {
 			// TODO Auto-generated catch block
-			
-		} catch (SystemException e) {
+
+		}
+		catch (SystemException e) {
 			// TODO Auto-generated catch block
-			
-		}		
-		return dossierFinder
-			.searchDossierByP_S_U(processNo, stepNo, userId, start, end);
+
+		}
+		return dossierFinder.searchDossierByP_S_U(
+			processNo, stepNo, userId, start, end);
 	}
-	
+
 	/**
 	 * @param processNo
 	 * @param stepName
@@ -1682,24 +1708,25 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 * @return
 	 */
 	public int countDossierByP_SN_U(
-		String processNo,
-		String stepName,
-		String username
-		) {
-		
+		String processNo, String stepName, String username) {
+
 		long userId = -1;
-		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
+		ServiceContext serviceContext =
+			ServiceContextThreadLocal.getServiceContext();
 		try {
-			User user = UserLocalServiceUtil.getUserByScreenName(serviceContext.getCompanyId(), username);
+			User user =
+				UserLocalServiceUtil.getUserByScreenName(
+					serviceContext.getCompanyId(), username);
 			if (user != null) {
 				userId = user.getUserId();
 			}
 		}
 		catch (PortalException e) {
 			// TODO Auto-generated catch block
-		} catch (SystemException e) {
+		}
+		catch (SystemException e) {
 			// TODO Auto-generated catch block
-			
+
 		}
 		return dossierFinder.countDossierByP_SN_U(processNo, stepName, userId);
 	}
@@ -1711,28 +1738,29 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 * @return
 	 */
 	public List<Dossier> searchDossierByP_SN_U(
-		String processNo,
-		String stepName,
-		String username,
-		int start, int end) {
+		String processNo, String stepName, String username, int start, int end) {
 
 		long userId = -1;
-		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
+		ServiceContext serviceContext =
+			ServiceContextThreadLocal.getServiceContext();
 		try {
-			User user = UserLocalServiceUtil.getUserByScreenName(serviceContext.getCompanyId(), username);
+			User user =
+				UserLocalServiceUtil.getUserByScreenName(
+					serviceContext.getCompanyId(), username);
 			if (user != null) {
 				userId = user.getUserId();
 			}
 		}
 		catch (PortalException e) {
 			// TODO Auto-generated catch block
-			
-		} catch (SystemException e) {
+
+		}
+		catch (SystemException e) {
 			// TODO Auto-generated catch block
-			
-		}		
-		return dossierFinder
-			.searchDossierByP_SN_U(processNo, stepName, userId, start, end);
+
+		}
+		return dossierFinder.searchDossierByP_SN_U(
+			processNo, stepName, userId, start, end);
 	}
 
 	/**
@@ -1744,32 +1772,33 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 * @return
 	 */
 	public int countDossierByDS_RD_SN_U(
-		String dossierStatus,
-		String serviceNo,
-		String fromDate,
-		String toDate,
-		String username
-		) {
-		
+		String dossierStatus, String serviceNo, String fromDate, String toDate,
+		String username) {
+
 		long userId = -1;
-		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
+		ServiceContext serviceContext =
+			ServiceContextThreadLocal.getServiceContext();
 		try {
-			User user = UserLocalServiceUtil.getUserByScreenName(serviceContext.getCompanyId(), username);
+			User user =
+				UserLocalServiceUtil.getUserByScreenName(
+					serviceContext.getCompanyId(), username);
 			if (user != null) {
 				userId = user.getUserId();
 			}
 		}
 		catch (PortalException e) {
 			// TODO Auto-generated catch block
-		} catch (SystemException e) {
+		}
+		catch (SystemException e) {
 			// TODO Auto-generated catch block
-			
+
 		}
 		if (Validator.isNull(username) || username.length() <= 0) {
 			userId = -1;
 		}
-		
-		return dossierFinder.countDossierByDS_RD_SN_U(userId, dossierStatus, serviceNo, fromDate, toDate);
+
+		return dossierFinder.countDossierByDS_RD_SN_U(
+			userId, dossierStatus, serviceNo, fromDate, toDate);
 	}
 
 	/**
@@ -1781,35 +1810,35 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 * @return
 	 */
 	public List<Dossier> searchDossierByDS_RD_SN_U(
-			String dossierStatus,
-			String serviceNo,
-			String fromDate,
-			String toDate,
-			String username,
-		int start, int end) {
+		String dossierStatus, String serviceNo, String fromDate, String toDate,
+		String username, int start, int end) {
 
 		long userId = -1;
-		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
+		ServiceContext serviceContext =
+			ServiceContextThreadLocal.getServiceContext();
 		try {
-			User user = UserLocalServiceUtil.getUserByScreenName(serviceContext.getCompanyId(), username);
+			User user =
+				UserLocalServiceUtil.getUserByScreenName(
+					serviceContext.getCompanyId(), username);
 			if (user != null) {
 				userId = user.getUserId();
 			}
 		}
 		catch (PortalException e) {
 			// TODO Auto-generated catch block
-			
-		} catch (SystemException e) {
+
+		}
+		catch (SystemException e) {
 			// TODO Auto-generated catch block
-			
-		}		
+
+		}
 		if (Validator.isNull(username) || username.length() <= 0) {
 			userId = -1;
 		}
-		return dossierFinder
-			.searchDossierByDS_RD_SN_U(dossierStatus, serviceNo, fromDate, toDate, userId, start, end);
+		return dossierFinder.searchDossierByDS_RD_SN_U(
+			dossierStatus, serviceNo, fromDate, toDate, userId, start, end);
 	}
-	
+
 	/**
 	 * @param processNo
 	 * @param processStepNo
@@ -1817,19 +1846,20 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 * @return
 	 */
 	public int countDossierByP_PS_U(
-		String processNo,
-		String processStepNo,
-		String username
-		) throws NoSuchUserException {
-		
+		String processNo, String processStepNo, String username)
+		throws NoSuchUserException {
+
 		long userId = -1;
-		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
+		ServiceContext serviceContext =
+			ServiceContextThreadLocal.getServiceContext();
 		try {
 			if (Validator.isNull(username) || username.length() <= 0) {
 				userId = -1;
 			}
 			else {
-				User user = UserLocalServiceUtil.getUserByScreenName(serviceContext.getCompanyId(), username);
+				User user =
+					UserLocalServiceUtil.getUserByScreenName(
+						serviceContext.getCompanyId(), username);
 				if (user != null) {
 					userId = user.getUserId();
 				}
@@ -1838,11 +1868,13 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		catch (PortalException e) {
 			// TODO Auto-generated catch block
 			throw new NoSuchUserException();
-		} catch (SystemException e) {
+		}
+		catch (SystemException e) {
 			// TODO Auto-generated catch block
 			throw new NoSuchUserException();
 		}
-		return dossierFinder.countDossierByP_PS_U(processNo, processStepNo, userId);
+		return dossierFinder.countDossierByP_PS_U(
+			processNo, processStepNo, userId);
 	}
 
 	/**
@@ -1852,19 +1884,21 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 * @return
 	 */
 	public List<Dossier> searchDossierByP_PS_U(
-		String processNo,
-		String processStepNo,
-		String username,
-		int start, int end) throws NoSuchUserException {
+		String processNo, String processStepNo, String username, int start,
+		int end)
+		throws NoSuchUserException {
 
 		long userId = -1;
-		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
+		ServiceContext serviceContext =
+			ServiceContextThreadLocal.getServiceContext();
 		try {
 			if (Validator.isNull(username) || username.length() <= 0) {
 				userId = -1;
 			}
 			else {
-				User user = UserLocalServiceUtil.getUserByScreenName(serviceContext.getCompanyId(), username);
+				User user =
+					UserLocalServiceUtil.getUserByScreenName(
+						serviceContext.getCompanyId(), username);
 				if (user != null) {
 					userId = user.getUserId();
 				}
@@ -1873,11 +1907,12 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		catch (PortalException e) {
 			// TODO Auto-generated catch block
 			throw new NoSuchUserException();
-		} catch (SystemException e) {
+		}
+		catch (SystemException e) {
 			// TODO Auto-generated catch block
 			throw new NoSuchUserException();
-		}		
-		return dossierFinder
-			.searchDossierByP_PS_U(processNo, processStepNo, userId, start, end);
-} 	
+		}
+		return dossierFinder.searchDossierByP_PS_U(
+			processNo, processStepNo, userId, start, end);
+	}
 }
