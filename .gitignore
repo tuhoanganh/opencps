@@ -267,4 +267,4 @@ portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/api/service/base/ApiSer
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/api/service/base/ApiServiceServiceClpInvoker.java
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/api/service/http/ApiServiceServiceSoap.java
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/api/service/persistence/ApiServicePersistenceImpl.java
-
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/api/service/persistence/ApiServicePersistenceImpl.java 
