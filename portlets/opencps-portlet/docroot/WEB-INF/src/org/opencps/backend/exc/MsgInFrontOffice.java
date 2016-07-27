@@ -49,7 +49,7 @@ public class MsgInFrontOffice implements MessageListener {
 	public void receive(Message message)
 		throws MessageListenerException {
 		
-		//_doReceive(message);
+		_doReceive(message);
 	}
 
 	private void _doReceive(Message message) {

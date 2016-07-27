@@ -19,6 +19,8 @@ package org.opencps.jms.message.body;
 
 import java.util.Date;
 
+import com.liferay.portal.service.ServiceContext;
+
 
 /**
  * @author khoavd
@@ -217,6 +219,23 @@ public class PaymentFileMsgBody {
     
     	this.syncStatus = syncStatus;
     }
+	
+    /**
+     * @return the serviceContext
+     */
+    public ServiceContext getServiceContext() {
+    
+    	return serviceContext;
+    }
+
+	
+    /**
+     * @param serviceContext the serviceContext to set
+     */
+    public void setServiceContext(ServiceContext serviceContext) {
+    
+    	this.serviceContext = serviceContext;
+    }
 	private int paymentMethod;
 	private Date confirmDatetime;
 	private byte [] confirmFileEntry;
@@ -229,4 +248,5 @@ public class PaymentFileMsgBody {
 	private String invoiceIssueNo;
 	private String invoiceNo;
 	private int syncStatus;
+	private ServiceContext serviceContext;
 }

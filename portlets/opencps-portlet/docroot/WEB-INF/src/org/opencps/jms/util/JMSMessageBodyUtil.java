@@ -19,6 +19,7 @@ package org.opencps.jms.util;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -59,6 +60,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
@@ -227,6 +229,43 @@ public class JMSMessageBodyUtil {
 		}
 
 		return dossierMsgBody;
+	}
+	
+	/**
+	 * @param paymentFile
+	 * @return
+	 */
+	public static PaymentFileMsgBody getPaymentFileMsgBody(PaymentFile paymentFile) {
+		PaymentFileMsgBody paymentFileMsgBody = new PaymentFileMsgBody();
+		
+		try {
+			paymentFileMsgBody.setPaymentMethod(paymentFile.getPaymentMethod());
+			paymentFileMsgBody.setConfirmDatetime(paymentFile.getConfirmDatetime());
+			paymentFileMsgBody.setConfirmNote(StringPool.BLANK);
+			paymentFileMsgBody.setApproveDatetime(paymentFile.getApproveDatetime());
+			paymentFileMsgBody.setAccountUserName(paymentFile.getAccountUserName());
+			paymentFileMsgBody.setApproveNote(paymentFile.getApproveNote());
+			paymentFileMsgBody.setGovAgencyTaxNo(paymentFile.getGovAgencyTaxNo());
+			paymentFileMsgBody.setInvoiceTemplateNo(paymentFile.getInvoiceTemplateNo());
+			paymentFileMsgBody.setInvoiceIssueNo(paymentFile.getInvoiceIssueNo());
+			paymentFileMsgBody.setInvoiceNo(paymentFile.getInvoiceNo());
+			paymentFileMsgBody.setSyncStatus(paymentFile.getSyncStatus());
+			
+			if (paymentFile.getConfirmFileEntryId() != 0) {
+				DLFileEntry dlFileEntry =
+								DLFileEntryUtil.getDLFileEntry(paymentFile.getConfirmFileEntryId());
+				
+				byte [] confirmFileEntry = JMSMessageUtil.convertInputStreamToByteArray(dlFileEntry.getContentStream());
+				
+				paymentFileMsgBody.setConfirmFileEntry(confirmFileEntry);
+			}
+
+        }
+        catch (Exception e) {
+        	_log.error(e);
+        }
+		
+		return paymentFileMsgBody;
 	}
 
 	/**

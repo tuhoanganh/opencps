@@ -25,182 +25,204 @@ import java.util.Locale;
  *
  */
 public class UserActionMsg {
-    /**
-     * @return the action
-     */
-    public String getAction() {
-    
-    	return action;
-    }
-	
-    /**
-     * @param action the action to set
-     */
-    public void setAction(String action) {
-    
-    	this.action = action;
-    }
-	
-    /**
-     * @return the dossierId
-     */
-    public long getDossierId() {
-    
-    	return dossierId;
-    }
-	
-    /**
-     * @param dossierId the dossierId to set
-     */
-    public void setDossierId(long dossierId) {
-    
-    	this.dossierId = dossierId;
-    }
-	
-    /**
-     * @return the fileGroupId
-     */
-    public long getFileGroupId() {
-    
-    	return fileGroupId;
-    }
-	
-    /**
-     * @param fileGroupId the fileGroupId to set
-     */
-    public void setFileGroupId(long fileGroupId) {
-    
-    	this.fileGroupId = fileGroupId;
-    }
-	
-    /**
-     * @return the userId
-     */
-    public long getUserId() {
-    
-    	return userId;
-    }
 
-	
-    /**
-     * @param userId the userId to set
-     */
-    public void setUserId(long userId) {
-    
-    	this.userId = userId;
-    }
+	/**
+	 * @return the action
+	 */
+	public String getAction() {
 
-	
-    /**
-     * @return the locale
-     */
-    public Locale getLocale() {
-    
-    	return locale;
-    }
+		return action;
+	}
 
-	
-    /**
-     * @param locale the locale to set
-     */
-    public void setLocale(Locale locale) {
-    
-    	this.locale = locale;
-    }
-	
-    /**
-     * @return the processOrderId
-     */
-    public long getProcessOrderId() {
-    
-    	return processOrderId;
-    }
+	/**
+	 * @param action
+	 *            the action to set
+	 */
+	public void setAction(String action) {
 
-	
-    /**
-     * @param processOrderId the processOrderId to set
-     */
-    public void setProcessOrderId(long processOrderId) {
-    
-    	this.processOrderId = processOrderId;
-    }
+		this.action = action;
+	}
+
+	/**
+	 * @return the dossierId
+	 */
+	public long getDossierId() {
+
+		return dossierId;
+	}
+
+	/**
+	 * @param dossierId
+	 *            the dossierId to set
+	 */
+	public void setDossierId(long dossierId) {
+
+		this.dossierId = dossierId;
+	}
+
+	/**
+	 * @return the fileGroupId
+	 */
+	public long getFileGroupId() {
+
+		return fileGroupId;
+	}
+
+	/**
+	 * @param fileGroupId
+	 *            the fileGroupId to set
+	 */
+	public void setFileGroupId(long fileGroupId) {
+
+		this.fileGroupId = fileGroupId;
+	}
+
+	/**
+	 * @return the userId
+	 */
+	public long getUserId() {
+
+		return userId;
+	}
+
+	/**
+	 * @param userId
+	 *            the userId to set
+	 */
+	public void setUserId(long userId) {
+
+		this.userId = userId;
+	}
+
+	/**
+	 * @return the locale
+	 */
+	public Locale getLocale() {
+
+		return locale;
+	}
+
+	/**
+	 * @param locale
+	 *            the locale to set
+	 */
+	public void setLocale(Locale locale) {
+
+		this.locale = locale;
+	}
+
+	/**
+	 * @return the processOrderId
+	 */
+	public long getProcessOrderId() {
+
+		return processOrderId;
+	}
+
+	/**
+	 * @param processOrderId
+	 *            the processOrderId to set
+	 */
+	public void setProcessOrderId(long processOrderId) {
+
+		this.processOrderId = processOrderId;
+	}
+
+	/**
+	 * @return the companyId
+	 */
+	public long getCompanyId() {
+
+		return companyId;
+	}
+
+	/**
+	 * @param companyId
+	 *            the companyId to set
+	 */
+	public void setCompanyId(long companyId) {
+
+		this.companyId = companyId;
+	}
+
+	/**
+	 * @return the govAgencyCode
+	 */
+	public String getGovAgencyCode() {
+
+		return govAgencyCode;
+	}
+
+	/**
+	 * @param govAgencyCode
+	 *            the govAgencyCode to set
+	 */
+	public void setGovAgencyCode(String govAgencyCode) {
+
+		this.govAgencyCode = govAgencyCode;
+	}
+
+	/**
+	 * @return the groupId
+	 */
+	public long getGroupId() {
+
+		return groupId;
+	}
+
+	/**
+	 * @param groupId
+	 *            the groupId to set
+	 */
+	public void setGroupId(long groupId) {
+
+		this.groupId = groupId;
+	}
+
+	/**
+	 * @return the noReceptionNo
+	 */
+	public String getNoReceptionNo() {
+
+		return noReceptionNo;
+	}
+
+	/**
+	 * @param noReceptionNo
+	 *            the noReceptionNo to set
+	 */
+	public void setNoReceptionNo(String noReceptionNo) {
+
+		this.noReceptionNo = noReceptionNo;
+	}
+
+	/**
+	 * @return the paymentFileId
+	 */
+	public long getPaymentFileId() {
+
+		return paymentFileId;
+	}
+
+	/**
+	 * @param paymentFileId
+	 *            the paymentFileId to set
+	 */
+	public void setPaymentFileId(long paymentFileId) {
+
+		this.paymentFileId = paymentFileId;
+	}
+
+	protected long paymentFileId;
+	protected String noReceptionNo;
+	protected long groupId;
+	protected long companyId;
+	protected String govAgencyCode;
 	protected String action;
 	protected long dossierId;
 	protected long fileGroupId;
 	protected long userId;
 	protected Locale locale;
 	protected long processOrderId;
-	
-    /**
-     * @return the companyId
-     */
-    public long getCompanyId() {
-    
-    	return companyId;
-    }
 
-	
-    /**
-     * @param companyId the companyId to set
-     */
-    public void setCompanyId(long companyId) {
-    
-    	this.companyId = companyId;
-    }
-
-	
-    /**
-     * @return the govAgencyCode
-     */
-    public String getGovAgencyCode() {
-    
-    	return govAgencyCode;
-    }
-
-	
-    /**
-     * @param govAgencyCode the govAgencyCode to set
-     */
-    public void setGovAgencyCode(String govAgencyCode) {
-    
-    	this.govAgencyCode = govAgencyCode;
-    }
-	protected long companyId;
-	protected String govAgencyCode;
-	
-    /**
-     * @return the groupId
-     */
-    public long getGroupId() {
-    
-    	return groupId;
-    }
-
-	
-    /**
-     * @param groupId the groupId to set
-     */
-    public void setGroupId(long groupId) {
-    
-    	this.groupId = groupId;
-    }
-	protected long groupId;
-	
-    /**
-     * @return the noReceptionNo
-     */
-    public String getNoReceptionNo() {
-    
-    	return noReceptionNo;
-    }
-
-	
-    /**
-     * @param noReceptionNo the noReceptionNo to set
-     */
-    public void setNoReceptionNo(String noReceptionNo) {
-    
-    	this.noReceptionNo = noReceptionNo;
-    }
-	protected String noReceptionNo;
 }

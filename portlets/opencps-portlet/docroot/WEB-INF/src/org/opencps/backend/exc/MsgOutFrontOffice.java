@@ -20,7 +20,10 @@ package org.opencps.backend.exc;
 import org.opencps.backend.message.UserActionMsg;
 import org.opencps.jms.context.JMSContext;
 import org.opencps.jms.message.SubmitDossierMessage;
+import org.opencps.jms.message.SubmitPaymentFileMessage;
 import org.opencps.jms.util.JMSMessageUtil;
+import org.opencps.paymentmgt.model.PaymentFile;
+import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
 import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.log.Log;
@@ -46,19 +49,40 @@ public class MsgOutFrontOffice implements MessageListener{
 		try {
 
 			System.out.println("DONE MSGOUT_FO///////////////////////////////");
-	          
-	        UserActionMsg userActionMgs =
-	                  (UserActionMsg) message.get("msgToEngine");
-	        
-	        JMSContext context =
-	            JMSMessageUtil.createProducer(
-	              userActionMgs.getCompanyId(), userActionMgs.getGovAgencyCode(),
-	                true, WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "remote");
-	        
-	        SubmitDossierMessage submitDossierMessage =
-	            new SubmitDossierMessage(context);
-	        
-	        submitDossierMessage.sendMessage(userActionMgs.getDossierId());			
+
+			UserActionMsg userActionMgs =
+			    (UserActionMsg) message.get("msgToEngine");
+
+			PaymentFile paymentFile = null;
+
+			if (userActionMgs.getPaymentFileId() != 0) {
+				paymentFile =
+				    PaymentFileLocalServiceUtil.getPaymentFile(userActionMgs.getPaymentFileId());
+			}
+
+			String actionEvent = userActionMgs.getAction();
+
+			JMSContext context =
+			    JMSMessageUtil.createProducer(
+			        userActionMgs.getCompanyId(),
+			        userActionMgs.getGovAgencyCode(), true,
+			        WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "remote");
+
+			if (actionEvent.contentEquals(WebKeys.ACTION_PAY_VALUE)) {
+
+				SubmitPaymentFileMessage submitPaymentFileMsg =
+				    new SubmitPaymentFileMessage(context);
+
+				submitPaymentFileMsg.sendMessage(paymentFile);
+
+			}
+			else {
+				SubmitDossierMessage submitDossierMessage =
+				    new SubmitDossierMessage(context);
+
+				submitDossierMessage.sendMessage(userActionMgs.getDossierId());
+
+			}
 
 		}
 		catch (Exception e) {
