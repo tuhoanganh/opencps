@@ -165,7 +165,7 @@
 		<column name="isFinishStep" type="boolean"/>
 		<column name="preCondition" type="String"/>
 		<column name="isMultipled" type="boolean"/>
-		
+		<column name="actionCode" type="String"></column>		
 		<finder return-type="Collection" name="S_P_ID">
 			<finder-column name="serviceProcessId"/>
 		</finder>
@@ -193,6 +193,14 @@
 			<finder-column name="preProcessStepId"/>
 		</finder>
 
+        <finder name="ActionCode" return-type="ProcessWorkflow">
+            <finder-column name="actionCode"></finder-column>
+        </finder>
+        <finder name="S_PreP_AN" return-type="ProcessWorkflow">
+            <finder-column name="serviceProcessId"></finder-column>
+            <finder-column name="preProcessStepId"></finder-column>
+            <finder-column name="actionName"></finder-column>
+		</finder>
 	</entity>
 
 	<entity name="WorkflowOutput" local-service="true" remote-service="true"
