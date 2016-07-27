@@ -401,22 +401,22 @@
 	width: 70px;
 }
 /* Table Thu tuc hanh chinh */
-.opencps-theme .ocps-serviceinfo-list .ocps-serviceinfo-search table {
+.opencps-theme .ocps-serviceinfo-list table {
 	border: 0;
 }
-.opencps-theme .ocps-serviceinfo-list .ocps-serviceinfo-search table thead {
+.opencps-theme .ocps-serviceinfo-list table thead {
 	display: none;
 }
-.opencps-theme .ocps-serviceinfo-list .ocps-serviceinfo-search table td {
+.opencps-theme .ocps-serviceinfo-list table td {
 	background: none #fff;
 	border: 0;
 	border-bottom: 1px solid #e1e1e1;
 	position: relative;
 }
-.opencps-theme .ocps-serviceinfo-list .ocps-serviceinfo-search table tr:first-child td {
+.opencps-theme .ocps-serviceinfo-list table tr:first-child td {
 	border-top: 1px solid #e1e1e1;
 }
-.opencps-theme .ocps-serviceinfo-list .ocps-serviceinfo-search table td:after {
+.opencps-theme .ocps-serviceinfo-list table td:after {
 	content: "";
 	border-right: 1px solid #e1e1e1;
 	width: 1px;
@@ -425,47 +425,48 @@
 	right: 0;
 	top: 15px;
 }
-.opencps-theme .ocps-serviceinfo-list .ocps-serviceinfo-search table td:first-child:after, 
-.opencps-theme .ocps-serviceinfo-list .ocps-serviceinfo-search table td:last-child:after {
+.opencps-theme .ocps-serviceinfo-list table td:first-child:after, 
+.opencps-theme .ocps-serviceinfo-list table td:last-child:after {
 	border: 0;
 }
-.opencps-theme .ocps-serviceinfo-list .ocps-serviceinfo-search table td.table-cell {
+.opencps-theme .ocps-serviceinfo-list table td.table-cell {
 	padding: 20px 30px;
 }
-.opencps-theme .ocps-serviceinfo-list .ocps-serviceinfo-search table td.table-cell.first {
+.opencps-theme .ocps-serviceinfo-list table td.table-cell.first {
 	text-align: right;
 	font-family: 'Roboto-Bold';
 	padding: 20px 0;
 	width: 40px;
 }
-.opencps-theme .ocps-serviceinfo-list .ocps-serviceinfo-search table td.table-cell .ocps-searh-bound-data p span {
+.opencps-theme .ocps-serviceinfo-list table td.table-cell .ocps-searh-bound-data p span {
 	font-family: 'Roboto-Bold';
 	display: inline-block;
 	width: 125px;
 }
-.opencps-theme .ocps-serviceinfo-list .ocps-serviceinfo-search table td.table-cell .ocps-searh-bound-data p a {
+.opencps-theme .ocps-serviceinfo-list table td.table-cell .ocps-searh-bound-data p a,
+.opencps-theme .ocps-serviceinfo-list table td.table-cell .ocps-searh-bound-data p > i {
 	display: flex;
 }
-.opencps-theme .ocps-serviceinfo-list .ocps-serviceinfo-search table td:nth-child(3) {
+.opencps-theme .ocps-serviceinfo-list table td:nth-child(3) {
 	width: 280px;
 }
-.opencps-theme .ocps-serviceinfo-list .ocps-serviceinfo-search table td:last-child {
+.opencps-theme .ocps-serviceinfo-list table td:last-child {
 	width: 150px;
 }
-.opencps-theme .ocps-serviceinfo-list .ocps-serviceinfo-search table td:last-child a img {
+.opencps-theme .ocps-serviceinfo-list table td:last-child a img {
 	display: none;
 }
-.opencps-theme .ocps-serviceinfo-list .ocps-serviceinfo-search table td:last-child a {
+.opencps-theme .ocps-serviceinfo-list table td:last-child a {
 	width: 100%;
     display: block;
     height: 30px;
     border-radius: 20px;
 }
-.opencps-theme .ocps-serviceinfo-list .ocps-serviceinfo-search table td:last-child .edit a {
+.opencps-theme .ocps-serviceinfo-list table td:last-child .edit a {
 	background-color: #0090ff;
 	margin: 25% 0;
 }
-.opencps-theme .ocps-serviceinfo-list .ocps-serviceinfo-search table td:last-child .delete a {
+.opencps-theme .ocps-serviceinfo-list table td:last-child .delete a {
 	background-color: #ff5558;
 }
 
