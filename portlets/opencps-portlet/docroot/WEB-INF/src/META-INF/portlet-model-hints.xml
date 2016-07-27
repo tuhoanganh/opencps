@@ -349,6 +349,7 @@
 		<field name="isFinishStep" type="boolean" />
 		<field name="preCondition" type="String" />
 		<field name="isMultipled" type="boolean" />
+		<field name="actionCode" type="String" />
 	</model>
 	<model name="org.opencps.processmgt.model.SchedulerJobs">
 		<field name="schedulerJobsId" type="long" />
@@ -689,5 +690,21 @@
 		<field name="invoiceNo" type="String" />
 		<field name="syncStatus" type="int" />
 		<field name="oid" type="String" />
+	</model>
+	<model name="org.opencps.api.model.ApiService">
+		<field name="apiLogId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="oid" type="String" />
+		<field name="apiCode" type="String" />
+		<field name="ipAddress" type="String" />
+		<field name="httpAgent" type="String" />
+		<field name="params" type="String">
+			<hint name="max-length">4000</hint>
+		</field>
+		<field name="status" type="String" />
 	</model>
 </model-hints>

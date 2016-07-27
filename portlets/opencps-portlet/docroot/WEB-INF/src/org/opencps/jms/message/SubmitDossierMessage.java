@@ -25,6 +25,7 @@ import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.jms.SyncServiceContext;
 import org.opencps.jms.business.SubmitDossier;
 import org.opencps.jms.context.JMSContext;
+import org.opencps.jms.context.JMSHornetqContext;
 import org.opencps.jms.context.JMSLocalContext;
 import org.opencps.jms.message.body.DossierMsgBody;
 import org.opencps.jms.util.JMSMessageBodyUtil;
@@ -52,6 +53,11 @@ public class SubmitDossierMessage {
 
 		this.setLocalContext(context);
 
+	}
+
+	public SubmitDossierMessage(JMSHornetqContext context) {
+
+		this.setHornetqContext(context);
 	}
 
 	/**
@@ -91,6 +97,52 @@ public class SubmitDossierMessage {
 				bytesMessage.writeBytes(sender);
 
 				_context.getMessageProducer().send(bytesMessage);
+			}
+
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
+
+	}
+
+	/**
+	 * @param dossierId
+	 * @throws JMSException
+	 * @throws NamingException
+	 */
+	public void sendMessageByHornetq(long dossierId)
+		throws JMSException, NamingException {
+
+		try {
+			BytesMessage bytesMessage =
+				JMSMessageUtil.createByteMessage(_hornetqContext);
+
+			long companyId =
+				GetterUtil.getLong(_hornetqContext.getProperties().getProperty(
+					WebKeys.JMS_COMPANY_ID));
+			long groupId =
+				GetterUtil.getLong(
+					_hornetqContext.getProperties().getProperty(
+						WebKeys.JMS_GROUP_ID), 0L);
+			long userId =
+				GetterUtil.getLong(
+					_hornetqContext.getProperties().getProperty(
+						WebKeys.JMS_USER_ID), 0L);
+
+			if (companyId > 0 && groupId > 0 && userId > 0) {
+				SyncServiceContext syncServiceContext =
+					new SyncServiceContext(
+						companyId, groupId, userId, true, true);
+				DossierMsgBody dossierMsgBody =
+					JMSMessageBodyUtil.getDossierMsgBody(dossierId);
+				dossierMsgBody.setServiceContext(syncServiceContext.getServiceContext());
+				byte[] sender =
+					JMSMessageUtil.convertObjectToByteArray(dossierMsgBody);
+
+				bytesMessage.writeBytes(sender);
+
+				_hornetqContext.getMessageProducer().send(bytesMessage);
 			}
 
 		}
@@ -147,6 +199,52 @@ public class SubmitDossierMessage {
 	}
 
 	/**
+	 * @param dossier
+	 * @throws JMSException
+	 * @throws NamingException
+	 */
+	public void sendMessageByHornetq(Dossier dossier)
+		throws JMSException, NamingException {
+
+		try {
+			BytesMessage bytesMessage =
+				JMSMessageUtil.createByteMessage(_hornetqContext);
+
+			long companyId =
+				GetterUtil.getLong(_hornetqContext.getProperties().getProperty(
+					WebKeys.JMS_COMPANY_ID));
+			long groupId =
+				GetterUtil.getLong(
+					_hornetqContext.getProperties().getProperty(
+						WebKeys.JMS_GROUP_ID), 0L);
+			long userId =
+				GetterUtil.getLong(
+					_hornetqContext.getProperties().getProperty(
+						WebKeys.JMS_USER_ID), 0L);
+
+			if (companyId > 0 && groupId > 0 && userId > 0) {
+				SyncServiceContext syncServiceContext =
+					new SyncServiceContext(
+						companyId, groupId, userId, true, true);
+				DossierMsgBody dossierMsgBody =
+					JMSMessageBodyUtil.getDossierMsgBody(dossier);
+				dossierMsgBody.setServiceContext(syncServiceContext.getServiceContext());
+				byte[] sender =
+					JMSMessageUtil.convertObjectToByteArray(dossierMsgBody);
+
+				bytesMessage.writeBytes(sender);
+
+				_hornetqContext.getMessageProducer().send(bytesMessage);
+			}
+
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
+
+	}
+
+	/**
 	 * @throws JMSException
 	 * @throws NamingException
 	 */
@@ -156,6 +254,38 @@ public class SubmitDossierMessage {
 		try {
 			BytesMessage bytesMessage =
 				(BytesMessage) _context.getMessageConsumer().receive();
+
+			byte[] result = new byte[(int) bytesMessage.getBodyLength()];
+
+			bytesMessage.readBytes(result);
+
+			Object object = JMSMessageUtil.convertByteArrayToObject(result);
+
+			DossierMsgBody dossierMsgBody = (DossierMsgBody) object;
+
+			setDossierMsgBody(dossierMsgBody);
+
+			SubmitDossier submitDossier = new SubmitDossier();
+
+			submitDossier.syncDossier(dossierMsgBody);
+
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
+
+	}
+
+	/**
+	 * @throws JMSException
+	 * @throws NamingException
+	 */
+	public void receiveMessageByHornetq()
+		throws JMSException, NamingException {
+
+		try {
+			BytesMessage bytesMessage =
+				(BytesMessage) _hornetqContext.getMessageConsumer().receive();
 
 			byte[] result = new byte[(int) bytesMessage.getBodyLength()];
 
@@ -351,6 +481,18 @@ public class SubmitDossierMessage {
 
 		this._localContext = localContext;
 	}
+
+	public JMSHornetqContext getHornetqContext() {
+
+		return _hornetqContext;
+	}
+
+	public void setHornetqContext(JMSHornetqContext hornetqContext) {
+
+		this._hornetqContext = hornetqContext;
+	}
+
+	private JMSHornetqContext _hornetqContext;
 
 	private JMSContext _context;
 

@@ -114,6 +114,17 @@
             <finder-column name="parentId"></finder-column>
             <finder-column name="partType"></finder-column>
         </finder>
+        
+        <finder return-type="Collection" name="F_FORM_ONLINE" where=" ( formScript != '' ) ">
+			<finder-column name="dossierTemplateId" />
+			<finder-column name="parentId" />
+			<finder-column name="groupId" />
+			<finder-column name="partType" />
+		</finder>
+        <finder name="TFN_PN" return-type="DossierPart">
+            <finder-column name="templateFileNo"></finder-column>
+            <finder-column name="partNo"></finder-column>
+        </finder>
 	</entity>
 
 	<entity name="ServiceConfig" local-service="true"
@@ -448,6 +459,10 @@
             <finder-column name="dossierId"></finder-column>
             <finder-column name="templateFileNo"></finder-column>
         </finder>
+        <finder name="Oid" return-type="DossierFile">
+            <finder-column name="oid"></finder-column>
+        </finder>
+        
 	<reference package-path="com.liferay.portlet.documentlibrary" entity="DLApp" />
         <reference entity="DLFileEntry" package-path="com.liferay.portlet.documentlibrary"/>
     </entity>

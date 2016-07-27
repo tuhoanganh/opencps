@@ -23,23 +23,26 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 /**
  * @author trungnt
  */
-public class JMSContextFactory {
+public class JMSHornetqContextFactory {
 
 	/**
 	 * @param companyId
 	 * @param code
 	 * @param remote
 	 * @param channelName
+	 * @param queueName
+	 * @param lookup
+	 * @param mom
 	 * @return
 	 */
-	public static JMSContext getInstance(
+	public static JMSHornetqContext getInstance(
 		long companyId, String code, boolean remote, String channelName,
 		String queueName, String lookup, String mom) {
 
-		JMSContext context = null;
+		JMSHornetqContext context = null;
 		try {
 			context =
-				new JMSContext(
+				new JMSHornetqContext(
 					companyId, code, remote, channelName, queueName, lookup,
 					mom);
 		}
@@ -52,5 +55,5 @@ public class JMSContextFactory {
 	}
 
 	private static Log _log =
-		LogFactoryUtil.getLog(JMSContextFactory.class.getName());
+		LogFactoryUtil.getLog(JMSHornetqContextFactory.class.getName());
 }

@@ -20,7 +20,7 @@ package org.opencps.backend.exc;
 import javax.jms.JMSException;
 import javax.naming.NamingException;
 
-import org.opencps.jms.context.JMSContext;
+import org.opencps.jms.context.JMSHornetqContext;
 import org.opencps.jms.util.JMSMessageBodyUtil;
 import org.opencps.jms.util.JMSMessageUtil;
 import org.opencps.util.PortletUtil;
@@ -48,7 +48,7 @@ public class MsgInFrontOffice implements MessageListener {
 	@Override
 	public void receive(Message message)
 		throws MessageListenerException {
-		
+
 		_doReceive(message);
 	}
 
@@ -70,11 +70,20 @@ public class MsgInFrontOffice implements MessageListener {
 		}
 
 		if (companyId > 0) {
-			JMSContext context =
-				JMSMessageUtil.createConsumer(
+			/*
+			 * JMSContext context = JMSMessageUtil.createConsumer( companyId,
+			 * StringPool.BLANK, true,
+			 * WebKeys.JMS_QUEUE_OPENCPS_FRONTOFFICE.toLowerCase(),
+			 * WebKeys.JMS_QUEUE_OPENCPS_FRONTOFFICE.toLowerCase(), "local",
+			 * "jmscore");
+			 */
+
+			JMSHornetqContext context =
+				JMSMessageUtil.createHornetqConsumer(
 					companyId, StringPool.BLANK, true,
 					WebKeys.JMS_QUEUE_OPENCPS_FRONTOFFICE.toLowerCase(),
-					"local");
+					WebKeys.JMS_QUEUE_OPENCPS_FRONTOFFICE.toLowerCase(),
+					"local", "hornetq");
 			try {
 
 				int receiveNumber = 50;
@@ -82,10 +91,10 @@ public class MsgInFrontOffice implements MessageListener {
 				int count = 1;
 
 				while (count <= receiveNumber) {
-					//_log.info("Start receive message/////////////////////////////////////");
+					// _log.info("Start receive message/////////////////////////////////////");
 					javax.jms.Message jsmMessage =
 						context.getMessageConsumer().receive(1000);
-					//_log.info("Received message/////////////////////////////////////");
+					// _log.info("Received message/////////////////////////////////////");
 					if (jsmMessage != null) {
 						JMSMessageBodyUtil.receiveMessage(context, jsmMessage);
 					}

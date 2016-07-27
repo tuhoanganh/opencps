@@ -17,13 +17,13 @@
 
 package org.opencps.backend.exc;
 
+import javax.jms.JMSException;
+import javax.naming.NamingException;
+
 import org.opencps.backend.message.UserActionMsg;
-import org.opencps.jms.context.JMSContext;
+import org.opencps.jms.context.JMSHornetqContext;
 import org.opencps.jms.message.SubmitDossierMessage;
-import org.opencps.jms.message.SubmitPaymentFileMessage;
 import org.opencps.jms.util.JMSMessageUtil;
-import org.opencps.paymentmgt.model.PaymentFile;
-import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
 import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.log.Log;
@@ -32,20 +32,16 @@ import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.MessageListenerException;
 
-
 /**
  * @author khoavd
- *
  */
-public class MsgOutFrontOffice implements MessageListener{
+public class MsgOutFrontOffice implements MessageListener {
 
-	/* (non-Javadoc)
-     * @see com.liferay.portal.kernel.messaging.MessageListener#receive(com.liferay.portal.kernel.messaging.Message)
-     */
 	@Override
 	public void receive(Message message)
 	    throws MessageListenerException {
 
+		JMSHornetqContext context = null;
 		try {
 
 			System.out.println("DONE MSGOUT_FO///////////////////////////////");
@@ -53,40 +49,42 @@ public class MsgOutFrontOffice implements MessageListener{
 			UserActionMsg userActionMgs =
 			    (UserActionMsg) message.get("msgToEngine");
 
-			PaymentFile paymentFile = null;
+			/*
+			 * JMSContext context = JMSMessageUtil.createProducer(
+			 * userActionMgs.getCompanyId(), userActionMgs.getGovAgencyCode(),
+			 * true, WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(),
+			 * WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "remote", "jmscore");
+			 */
 
-			if (userActionMgs.getPaymentFileId() != 0) {
-				paymentFile =
-				    PaymentFileLocalServiceUtil.getPaymentFile(userActionMgs.getPaymentFileId());
-			}
-
-			String actionEvent = userActionMgs.getAction();
-
-			JMSContext context =
-			    JMSMessageUtil.createProducer(
+			context =
+			    JMSMessageUtil.createHornetqProducer(
 			        userActionMgs.getCompanyId(),
 			        userActionMgs.getGovAgencyCode(), true,
-			        WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "remote");
+			        WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(),
+			        WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "remote",
+			        "hornetq");
 
-			if (actionEvent.contentEquals(WebKeys.ACTION_PAY_VALUE)) {
+			SubmitDossierMessage submitDossierMessage =
+			    new SubmitDossierMessage(context);
 
-				SubmitPaymentFileMessage submitPaymentFileMsg =
-				    new SubmitPaymentFileMessage(context);
-
-				submitPaymentFileMsg.sendMessage(paymentFile);
-
-			}
-			else {
-				SubmitDossierMessage submitDossierMessage =
-				    new SubmitDossierMessage(context);
-
-				submitDossierMessage.sendMessage(userActionMgs.getDossierId());
-
-			}
+			submitDossierMessage.sendMessageByHornetq(userActionMgs.getDossierId());
 
 		}
 		catch (Exception e) {
 			_log.error(e);
+		}
+		finally {
+			if (context != null) {
+				try {
+					context.destroy();
+				}
+				catch (JMSException e) {
+					_log.error(e);
+				}
+				catch (NamingException e) {
+					_log.error(e);
+				}
+			}
 		}
 
 	}
