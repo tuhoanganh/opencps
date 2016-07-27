@@ -59,25 +59,22 @@ public class JMSRecevieQueue implements MessageListener {
 			for (int i = 0; i < companyIds.length; i++) {
 				if (PortletUtil.checkJMSConfig(companyIds[i])) {
 					companyId = companyIds[i];
-					_log.info("********************************************************companyId*********************************************** " +
-						companyId);
+
 					break;
 				}
 			}
 		}
 
 		if (companyId > 0) {
-			_log.info("Start create connection to JMS Queue..................");
+
 			JMSContext context =
 				JMSMessageUtil.createConsumer(
 					companyId, StringPool.BLANK, true,
-					WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "local");
+					WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(),
+					WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "local", "jmscore");
 			try {
 				int messageInQueue = context.countMessageInQueue();
 				int receiveNumber = messageInQueue <= 50 ? messageInQueue : 50;
-
-				_log.info("********************************************************Queue Size*********************************************** " +
-					messageInQueue);
 
 				int count = 1;
 				while (count <= receiveNumber) {
@@ -141,5 +138,5 @@ public class JMSRecevieQueue implements MessageListener {
 	}
 
 	private Log _log = LogFactoryUtil.getLog(JMSRecevieQueue.class.getName());
-	
+
 }

@@ -50,20 +50,25 @@ import com.liferay.portal.kernel.exception.SystemException;
  */
 public class JMSContext {
 
+
 	/**
 	 * @param companyId
 	 * @param code
 	 * @param remote
+	 * @param channelName
+	 * @param queueName
+	 * @param lookup
+	 * @param mom
 	 * @throws NamingException
 	 * @throws SystemException
 	 * @throws Exception
 	 */
 	public JMSContext(
 		long companyId, String code, boolean remote, String channelName,
-		String lookup)
+		String queueName, String lookup, String mom)
 		throws NamingException, SystemException, Exception {
 
-		init(companyId, code, remote, channelName, lookup);
+		init(companyId, code, remote, channelName, queueName, lookup, mom);
 	}
 
 	/**
@@ -232,22 +237,27 @@ public class JMSContext {
 
 	}
 
+
 	/**
 	 * @param companyId
 	 * @param code
 	 * @param remote
+	 * @param channelName
+	 * @param queueName
+	 * @param lookup
+	 * @param mom
 	 * @throws SystemException
 	 * @throws NamingException
 	 * @throws JMSException
 	 */
 	protected void init(
 		long companyId, String code, boolean remote, String channelName,
-		String configKey)
+		String queueName, String lookup, String mom)
 		throws SystemException, NamingException, JMSException {
 
 		Properties properties =
 			PortletUtil.getJMSContextProperties(
-				companyId, code, remote, channelName, configKey);
+				companyId, code, remote, channelName, queueName, lookup, mom);
 
 		Context context = new InitialContext(properties);
 
@@ -260,7 +270,7 @@ public class JMSContext {
 			connectionFactory.createConnection(
 				properties.getProperty(Context.SECURITY_PRINCIPAL),
 				properties.getProperty(Context.SECURITY_CREDENTIALS));
-		
+
 		Destination destination =
 			(Destination) context.lookup(properties.getProperty(WebKeys.JMS_DESTINATION));
 

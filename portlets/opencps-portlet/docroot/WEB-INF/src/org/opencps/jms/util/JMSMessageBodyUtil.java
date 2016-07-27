@@ -43,6 +43,7 @@ import org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil;
 import org.opencps.dossiermgt.service.FileGroupLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
 import org.opencps.jms.context.JMSContext;
+import org.opencps.jms.context.JMSHornetqContext;
 import org.opencps.jms.message.SubmitDossierMessage;
 import org.opencps.jms.message.SyncFromBackOfficeMessage;
 import org.opencps.jms.message.body.DossierFileMsgBody;
@@ -70,7 +71,8 @@ public class JMSMessageBodyUtil {
 
 	public synchronized static void receiveMessage(
 		JMSContext context, Message jsmMessage)
-		throws JMSException, IOException, NamingException, PortalException, SystemException {
+		throws JMSException, IOException, NamingException, PortalException,
+		SystemException {
 
 		if (jsmMessage instanceof TextMessage) {
 
@@ -79,11 +81,11 @@ public class JMSMessageBodyUtil {
 		}
 		else if (jsmMessage instanceof BytesMessage) {
 			BytesMessage bytesMessage = (BytesMessage) jsmMessage;
-			
+
 			_log.info("BytesMessage/////////////////////////////////////");
-			
+
 			byte[] result = new byte[(int) bytesMessage.getBodyLength()];
-			
+
 			bytesMessage.readBytes(result);
 
 			Object object = JMSMessageUtil.convertByteArrayToObject(result);
@@ -105,15 +107,63 @@ public class JMSMessageBodyUtil {
 					new SubmitDossierMessage(context);
 
 				submitDossierMessage.receiveLocalMessage(dossierMsgBody);
-			} 
+			}
 		}
 		else if (jsmMessage instanceof StreamMessage) {
-		} else {
-			_log.info("Cha la cai eo gi Xs");
+		}
+		else {
+			_log.info("No message...");
 
 		}
 	}
-	
+
+	public synchronized static void receiveMessage(
+		JMSHornetqContext context, Message jsmMessage)
+		throws JMSException, IOException, NamingException, PortalException,
+		SystemException {
+
+		if (jsmMessage instanceof TextMessage) {
+
+		}
+		else if (jsmMessage instanceof ObjectMessage) {
+		}
+		else if (jsmMessage instanceof BytesMessage) {
+			BytesMessage bytesMessage = (BytesMessage) jsmMessage;
+
+			_log.info("BytesMessage/////////////////////////////////////");
+
+			byte[] result = new byte[(int) bytesMessage.getBodyLength()];
+
+			bytesMessage.readBytes(result);
+
+			Object object = JMSMessageUtil.convertByteArrayToObject(result);
+
+			if (object instanceof SyncFromBackOfficeMsgBody) {
+
+				SyncFromBackOfficeMsgBody syncFromBackOfficeMsgBody =
+					(SyncFromBackOfficeMsgBody) object;
+
+				SyncFromBackOfficeMessage syncFromBackOfficeMessage =
+					new SyncFromBackOfficeMessage(context);
+
+				syncFromBackOfficeMessage.receiveLocalMessage(syncFromBackOfficeMsgBody);
+			}
+			else if (object instanceof DossierMsgBody) {
+				DossierMsgBody dossierMsgBody = (DossierMsgBody) object;
+				_log.info("Msg is Dossier x");
+				SubmitDossierMessage submitDossierMessage =
+					new SubmitDossierMessage(context);
+
+				submitDossierMessage.receiveLocalMessage(dossierMsgBody);
+			}
+		}
+		else if (jsmMessage instanceof StreamMessage) {
+		}
+		else {
+			_log.info("No message...");
+
+		}
+	}
 
 	/**
 	 * @param dossierId
@@ -422,22 +472,24 @@ public class JMSMessageBodyUtil {
 
 		protected LinkedHashMap<String, byte[]> _data;
 	}
-	
+
 	/**
 	 * @param paymentFileId
 	 * @return
 	 */
 	public static PaymentFileMsgBody getPaymentFile(long paymentFileId) {
+
 		PaymentFileMsgBody paymentFileBody = new PaymentFileMsgBody();
-		
+
 		try {
-	        PaymentFile paymentFile = PaymentFileLocalServiceUtil.fetchPaymentFile(paymentFileId);
-	        
-        }
-        catch (Exception e) {
-        	_log.error(e);
-        }
-		
+			PaymentFile paymentFile =
+				PaymentFileLocalServiceUtil.fetchPaymentFile(paymentFileId);
+
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
+
 		return paymentFileBody;
 	}
 

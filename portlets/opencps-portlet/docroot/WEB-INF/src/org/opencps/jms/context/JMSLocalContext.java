@@ -44,7 +44,6 @@ import org.opencps.util.PortletConstants;
 import org.opencps.util.PortletUtil;
 import org.opencps.util.WebKeys;
 
-import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.StringKeySerializer;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringPool;
 
@@ -53,18 +52,23 @@ import com.liferay.portal.kernel.util.StringPool;
  */
 public class JMSLocalContext {
 
+	
 	/**
 	 * @param companyId
-	 * @param code
-	 * @param remote
+	 * @param channelName
+	 * @param queueName
+	 * @param lookup
+	 * @param mom
 	 * @throws NamingException
 	 * @throws SystemException
 	 * @throws Exception
 	 */
-	public JMSLocalContext(long companyId, String channelName, String lookup)
+	public JMSLocalContext(
+		long companyId, String channelName, String queueName, String lookup,
+		String mom)
 		throws NamingException, SystemException, Exception {
 
-		init(companyId, channelName, lookup);
+		init(companyId, channelName, queueName, lookup, mom);
 	}
 
 	/**
@@ -229,12 +233,15 @@ public class JMSLocalContext {
 	 * @throws NamingException
 	 * @throws JMSException
 	 */
-	protected void init(long companyId, String channelName, String configKey)
+	protected void init(
+		long companyId, String channelName, String queueName, String lookup,
+		String mom)
 		throws SystemException, NamingException, JMSException {
 
 		Properties properties =
 			PortletUtil.getJMSContextProperties(
-				companyId, StringPool.BLANK, false, channelName, configKey);
+				companyId, StringPool.BLANK, false, channelName, queueName,
+				lookup, mom);
 
 		Context context = new InitialContext();
 
