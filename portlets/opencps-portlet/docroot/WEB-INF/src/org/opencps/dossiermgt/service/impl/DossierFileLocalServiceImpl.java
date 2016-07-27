@@ -1073,5 +1073,9 @@ public class DossierFileLocalServiceImpl
 		return dossierFilePersistence.fetchByTemplateFileNoDossierId_First(
 			dossierId, templateFileNo, comparator);
 	}
-
+	public DossierFile getByOid(
+			String oid)
+			throws SystemException {
+		return dossierFilePersistence.fetchByOid(oid);
+	}
 }
