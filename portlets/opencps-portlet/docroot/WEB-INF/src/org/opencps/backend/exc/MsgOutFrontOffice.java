@@ -39,7 +39,7 @@ public class MsgOutFrontOffice implements MessageListener {
 
 	@Override
 	public void receive(Message message)
-		throws MessageListenerException {
+	    throws MessageListenerException {
 
 		JMSHornetqContext context = null;
 		try {
@@ -47,7 +47,7 @@ public class MsgOutFrontOffice implements MessageListener {
 			System.out.println("DONE MSGOUT_FO///////////////////////////////");
 
 			UserActionMsg userActionMgs =
-				(UserActionMsg) message.get("msgToEngine");
+			    (UserActionMsg) message.get("msgToEngine");
 
 			/*
 			 * JMSContext context = JMSMessageUtil.createProducer(
@@ -57,15 +57,15 @@ public class MsgOutFrontOffice implements MessageListener {
 			 */
 
 			context =
-				JMSMessageUtil.createHornetqProducer(
-					userActionMgs.getCompanyId(),
-					userActionMgs.getGovAgencyCode(), true,
-					WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(),
-					WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "remote",
-					"hornetq");
+			    JMSMessageUtil.createHornetqProducer(
+			        userActionMgs.getCompanyId(),
+			        userActionMgs.getGovAgencyCode(), true,
+			        WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(),
+			        WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "remote",
+			        "hornetq");
 
 			SubmitDossierMessage submitDossierMessage =
-				new SubmitDossierMessage(context);
+			    new SubmitDossierMessage(context);
 
 			submitDossierMessage.sendMessageByHornetq(userActionMgs.getDossierId());
 
