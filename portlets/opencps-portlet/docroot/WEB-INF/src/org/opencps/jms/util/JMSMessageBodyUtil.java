@@ -19,7 +19,6 @@ package org.opencps.jms.util;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -56,6 +55,7 @@ import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
 import org.opencps.util.DLFileEntryUtil;
+import org.opencps.util.PortletConstants;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -152,7 +152,7 @@ public class JMSMessageBodyUtil {
 			}
 			else if (object instanceof DossierMsgBody) {
 				DossierMsgBody dossierMsgBody = (DossierMsgBody) object;
-				_log.info("Msg is Dossier x");
+
 				SubmitDossierMessage submitDossierMessage =
 					new SubmitDossierMessage(context);
 
@@ -186,7 +186,9 @@ public class JMSMessageBodyUtil {
 				ServiceInfoLocalServiceUtil.getServiceInfo(dossier.getServiceInfoId());
 
 			List<DossierFile> dossierFiles =
-				DossierFileLocalServiceUtil.getDossierFileByDossierId(dossierId);
+				DossierFileLocalServiceUtil.getDossierFileByD_S_R(
+					dossierId,
+					PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC, 0);
 
 			List<DossierFileMsgBody> dossierFileMsgBodies =
 				new ArrayList<DossierFileMsgBody>();
@@ -263,7 +265,9 @@ public class JMSMessageBodyUtil {
 				ServiceInfoLocalServiceUtil.getServiceInfo(dossier.getServiceInfoId());
 
 			List<DossierFile> dossierFiles =
-				DossierFileLocalServiceUtil.getDossierFileByDossierId(dossier.getDossierId());
+				DossierFileLocalServiceUtil.getDossierFileByD_S_R(
+					dossier.getDossierId(),
+					PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC, 0);
 
 			List<DossierFileMsgBody> dossierFileMsgBodies =
 				getDossierFileMsgBody(dossierFiles);
@@ -280,14 +284,16 @@ public class JMSMessageBodyUtil {
 
 		return dossierMsgBody;
 	}
-	
+
 	/**
 	 * @param paymentFile
 	 * @return
 	 */
-	public static PaymentFileMsgBody getPaymentFileMsgBody(PaymentFile paymentFile) {
+	public static PaymentFileMsgBody getPaymentFileMsgBody(
+		PaymentFile paymentFile) {
+
 		PaymentFileMsgBody paymentFileMsgBody = new PaymentFileMsgBody();
-		
+
 		try {
 			paymentFileMsgBody.setPaymentMethod(paymentFile.getPaymentMethod());
 			paymentFileMsgBody.setConfirmDatetime(paymentFile.getConfirmDatetime());
@@ -300,21 +306,22 @@ public class JMSMessageBodyUtil {
 			paymentFileMsgBody.setInvoiceIssueNo(paymentFile.getInvoiceIssueNo());
 			paymentFileMsgBody.setInvoiceNo(paymentFile.getInvoiceNo());
 			paymentFileMsgBody.setSyncStatus(paymentFile.getSyncStatus());
-			
+
 			if (paymentFile.getConfirmFileEntryId() != 0) {
 				DLFileEntry dlFileEntry =
-								DLFileEntryUtil.getDLFileEntry(paymentFile.getConfirmFileEntryId());
-				
-				byte [] confirmFileEntry = JMSMessageUtil.convertInputStreamToByteArray(dlFileEntry.getContentStream());
-				
+					DLFileEntryUtil.getDLFileEntry(paymentFile.getConfirmFileEntryId());
+
+				byte[] confirmFileEntry =
+					JMSMessageUtil.convertInputStreamToByteArray(dlFileEntry.getContentStream());
+
 				paymentFileMsgBody.setConfirmFileEntry(confirmFileEntry);
 			}
 
-        }
-        catch (Exception e) {
-        	_log.error(e);
-        }
-		
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
+
 		return paymentFileMsgBody;
 	}
 
