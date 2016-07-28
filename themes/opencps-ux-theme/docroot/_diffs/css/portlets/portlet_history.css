@@ -1,4 +1,75 @@
+.ocps-history-process-bound-navigator{
+	margin: 25px auto 0;
+    width: 100%;
+    background-color: white;
+    border-radius: 8px;
+    -webkit-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2);
+    box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2);
+    display: flex;
+}
+.ocps-history-process-bound-navigator .form-navigator-content{
+	width: 70%;
+}
+.ocps-history-process-bound-navigator .form-navigator-content{
+	border-right: 1px solid #ccc;
+}
+.ocps-history-process-bound-navigator .ocps-title-detail{
+    padding-top: 20px;
+    padding-right: 30px;
+    padding-left: 30px;
+	
+}
+.ocps-history-process-bound-navigator .table-bordered .ocps-searh-bound-data .ocps-searh-bound-data-chirld-p span{
+	margin-left: 30px;
+}
+/* .ocps-history-process-bound-navigator .table-bordered .ocps-searh-bound-data .ocps-searh-bound-data-chirld-p .ocps-searh-bound-data-chirld-label{
+	display: inline-block;
+    width: 60%;
+}
+ */
+.ocps-history-process-bound-navigator .ocps-title-detail .service-reception-label{
+	font-family: 'Roboto-Bold';
+	width: 25%;
+    float: left;
+}
+.ocps-history-process-bound-navigator .ocps-title-detail .service-reception-no{
+    width: 75%;
+    float: right;
+    min-height: 15px;
+}
+.ocps-history-process-bound-navigator .ocps-title-detail .service-name-label{
+	font-family: 'Roboto-Bold';
+	width: 25%;
+    float: left;
+}
+.ocps-history-process-bound-navigator .ocps-title-detail .service-service-name{
+	margin-left: 25%;
+    /* width: 75%;
+    float: right; */
+}
 
+.ocps-history-process-bound-navigator form{
+	margin-bottom: 0;
+}
+
+.ocps-history-process-bound-navigator .bound-search-container-history table td.first .ocps-searh-bound-data .ocps-searh-bound-data-chirld-p:FIRST-CHILD span:BEFORE {
+	content: "\f111";
+    font: normal normal normal 14px/1 FontAwesome;
+    color: #0690fb;
+    margin-right: 16px;
+    margin-left: -30px;
+}
+
+
+.ocps-history-process-bound-navigator .bound-search-container-history{
+    padding-bottom: 20px;
+    padding-right: 30px;
+    padding-left: 30px;
+}
+
+.ocps-history-process-bound-navigator .table-columns{
+	display: none;
+}
 .ocps-history-bound-navigator{
 	margin: 25px auto 0;
     width: 100%;
@@ -99,18 +170,17 @@
     text-transform: uppercase;
     position: absolute;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%);
     margin: 0;
 }
 
 .opencps-theme .ocps-custom-header .ocps-span {
-	font: normal normal normal 14px/1 FontAwesome;
-	float: none;
-	margin-left: 0;
-	line-height: 20px;
-	min-height: auto;
+	 font: normal normal normal 14px/1 FontAwesome;
+	 float: none;
+	 margin-left: 0;
+	 line-height: 20px;
+	 min-height: auto;
 }
-
 .ocps-custom-header .ocps-span :BEFORE {
 	content: "\f177";
 }
