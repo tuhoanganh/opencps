@@ -207,7 +207,9 @@ public class SyncFromBackOfficeMessage {
 
 				bytesMessage.writeBytes(sender);
 				_log.info("SyncFromBackOfficeMessage Send Message////////////////////////////////");
-				_context.getMessageProducer().send(bytesMessage);
+				
+				_hornetqContext.getMessageProducer().send(bytesMessage);
+				
 				_log.info("SyncFromBackOfficeMessage Finish Send Message////////////////////////////////");
 
 			}

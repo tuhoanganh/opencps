@@ -80,7 +80,7 @@ public class MsgInBackOffice implements MessageListener {
 				while (count <= 50) {
 
 					javax.jms.Message jsmMessage =
-						context.getMessageConsumer().receive(1000 * 60);
+						context.getMessageConsumer().receive(1000);
 					if (jsmMessage != null) {
 						JMSMessageBodyUtil.receiveMessage(context, jsmMessage);
 					}
