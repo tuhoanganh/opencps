@@ -17,7 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
 <%@page import="org.opencps.datamgt.model.DictItem"%>
 <%@page import="org.opencps.dossiermgt.bean.DossierBean"%>
@@ -43,6 +43,97 @@
 <%@page import="org.opencps.dossiermgt.NoSuchDossierException"%>
 <%@page import="java.util.List"%>
 <%@ include file="../init.jsp"%>
+
+<style>
+<!--
+/* Table Thu tuc hanh chinh */
+.opencps-theme .ocps-serviceinfo-list table {
+	border: 0;
+}
+.opencps-theme .ocps-serviceinfo-list table thead {
+	display: none;
+}
+.opencps-theme .ocps-serviceinfo-list table td {
+	background: none #fff;
+	border: 0;
+	border-bottom: 1px solid #e1e1e1;
+	position: relative;
+}
+.opencps-theme .ocps-serviceinfo-list table tr:first-child td {
+	border-top: 1px solid #e1e1e1;
+}
+.opencps-theme .ocps-serviceinfo-list table td:after {
+	content: "";
+	border-right: 1px solid #e1e1e1;
+	width: 1px;
+	height: calc(100% - 30px);
+	position: absolute;
+	right: 0;
+	top: 15px;
+}
+.opencps-theme .ocps-serviceinfo-list table td:first-child:after, 
+.opencps-theme .ocps-serviceinfo-list table td:last-child:after {
+	border: 0;
+}
+
+.opencps-theme .ocps-serviceinfo-list table td.table-cell .ocps-searh-bound-data p span {
+	font-family: 'Roboto-Bold';
+	display: inline-block;
+	width: 125px;
+}
+.opencps-theme .ocps-serviceinfo-list table td.table-cell .ocps-searh-bound-data p a,
+.opencps-theme .ocps-serviceinfo-list table td.table-cell .ocps-searh-bound-data p > i {
+	display: flex;
+}
+
+.opencps-theme .ocps-serviceinfo-list table td:last-child a img {
+	display: none;
+}
+.opencps-theme .ocps-serviceinfo-list table td:last-child a {
+	width: 100%;
+    display: block;
+    height: 30px;
+    border-radius: 20px;
+}
+.opencps-theme .ocps-serviceinfo-list table td:last-child .edit a {
+	background-color: #0090ff;
+	margin: 25% 0;
+}
+.opencps-theme .ocps-serviceinfo-list table td:last-child .delete a {
+	background-color: #ff5558;
+}
+
+
+.opencps-theme .serviceinfo-list-main table td:nth-child(3) {
+	width: 450px !important;
+}
+.opencps-theme .serviceinfo-list-main table td:last-child {
+	width: 100px !important;
+}
+
+.opencps-theme .serviceinfo-list-main table td.table-cell {
+	padding: 15px 15px !important;
+}
+.opencps-theme .serviceinfo-list-main table td.table-cell.first {
+	text-align: right;
+	font-family: 'Roboto-Bold';
+	width: 2px !important;
+	padding: 0px !important;
+}
+
+.opencps-theme .ocps-serviceinfo-list .titleBold {
+	font-family: 'Roboto-Bold';
+}
+
+.opencps-theme .ocps-serviceinfo-list .error {
+	color: red;
+	font-weight: bold;
+}
+
+</style>
+
+
+<div class="ocps-serviceinfo-list serviceinfo-list-main">
 
 <liferay-util:include page='<%=templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
 <liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
@@ -119,20 +210,40 @@
 			modelVar="dossierBean" 
 			keyProperty="dossierId"
 		>
+		
+			
 			<%
-
+			
+				String createDate =  LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "create-date");
+				String serviceName =  LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "service-name");
+				String govAgencyName =  LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "gov-agency-name");
+				String dosStatus =  LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "dossier-status");
+				String receiveDatetime =  LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "receive-datetime");
+				String finishDate =  LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "finish-date");
+				String receptionNo =  LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "reception-no");
 				Dossier dossier = dossierBean.getDossier();
-				//id column
-				row.addText(String.valueOf(row.getPos() + 1 + searchContainer.getStart()));
-				//row.addText(DateTimeUtil.convertDateToString(dossier.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT));
 				
-				row.addText(dossierBean.getServiceName());
-				row.addText(dossier.getGovAgencyName());
-				row.addText(PortletUtil.getDossierStatusLabel(dossier.getDossierStatus(), locale));
-				row.addText(Validator.isNotNull(dossier.getReceiveDatetime()) ? DateTimeUtil.convertDateToString(dossier.getReceiveDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT): StringPool.DASH);
-				row.addText(dossier.getReceptionNo());
-				row.addText(Validator.isNotNull(dossier.getFinishDatetime()) ? DateTimeUtil.convertDateToString(dossier.getFinishDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT): StringPool.DASH);
-				//action column
+				
+				 String cssStatus = dossier.getDossierStatus();
+				 String table = "<div class='row-fluid'><div class='span1'><i class='fa fa-circle sx10 " + cssStatus +"'></i></div><div class='span2 titleBold'>" + receptionNo + "</div><div class='span9'>" + dossier.getReceptionNo() + "</div></div>";
+				 table = table + "<div class='row-fluid'><div class='span1'></div><div class='span2 titleBold'>" + serviceName + "</div><div class='span9'>" + dossierBean.getServiceName() + "</div></div>";
+				 table = table + "<div class='row-fluid'><div class='span1'></div><div class='span2 titleBold'>" + govAgencyName + "</div><div class='span9'>" + dossier.getGovAgencyName() + "</div></div>";
+
+				 String sReceiveDate = Validator.isNotNull(dossier.getReceiveDatetime()) ? DateTimeUtil.convertDateToString(dossier.getReceiveDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT): StringPool.DASH;
+				 String sFinishDate = Validator.isNotNull(dossier.getFinishDatetime()) ? DateTimeUtil.convertDateToString(dossier.getFinishDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT): StringPool.DASH;
+				 String status = PortletUtil.getDossierStatusLabel(dossier.getDossierStatus(), locale);
+				 
+				 String table1 = "<div class='row-fluid'><div width=\"5px\"></div><div class='span5 titleBold'>" + createDate + "</div><div class='span6'>" + dossier.getCreateDate() + "</div></div>";
+				 table1 = table1 +"<div class='row-fluid'><div width=\"5px\"></div><div class='span5 titleBold'>" + receiveDatetime + "</div><div class='span6'>" + sReceiveDate + "</div></div>";
+				  
+				 table1 = table1 + "<div class='row-fluid'><div width=\"5px\"></div><div class='span5 titleBold'>" + finishDate + "</div><div class='span6'>" + sFinishDate + "</div></div>";
+				 table1 = table1 + "<div class='row-fluid'><div width=\"5px\"></div><div class='span5 titleBold'>" + dosStatus + "</div><div class='span6 " + cssStatus +"'>" + status + "</div></div>";
+				 
+				
+				//id column
+				row.addText("");
+				row.addText(table);
+				row.addText(table1);
 				row.addJSP("center", SearchEntry.DEFAULT_VALIGN,"/html/portlets/dossiermgt/frontoffice/dossier_actions.jsp", config.getServletContext(), request, response);
 				
 			%>	
@@ -140,7 +251,7 @@
 	
 	<liferay-ui:search-iterator/>
 </liferay-ui:search-container>
-
+</div>
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.dossiermgt.frontoffice.frontofficedossierlist.jsp");
 %>

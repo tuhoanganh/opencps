@@ -100,6 +100,7 @@ html, body{
     line-height: 60px;
     margin-bottom: 0;
     text-transform: uppercase;
+    margin-top: 12px;
 }
 .portlet_13_ML15 {
     font-size: 16px;
@@ -142,4 +143,32 @@ html, body{
 }
 .blue {
     color: #0690fb !important;
+}
+
+/************************************/
+
+.opencps-theme .serviceinfo-list-main table td:nth-child(3) {
+	width: 450px !important;
+}
+.opencps-theme .serviceinfo-list-main table td:last-child {
+	width: 100px !important;
+}
+
+.opencps-theme .serviceinfo-list-main table td.table-cell {
+	padding: 15px 15px !important;
+}
+.opencps-theme .serviceinfo-list-main table td.table-cell.first {
+	text-align: right;
+	font-family: 'Roboto-Bold';
+	width: 2px !important;
+	padding: 0px !important;
+}
+
+.opencps-theme .ocps-serviceinfo-list .titleBold {
+	font-family: 'Roboto-Bold';
+}
+
+.opencps-theme .ocps-serviceinfo-list .error {
+	color: red;
+	font-weight: bold;
 }
