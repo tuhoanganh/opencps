@@ -951,12 +951,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		try {
 			if (dossierStatus.equals(PortletConstants.DOSSIER_STATUS_NEW)) {
 				validateDeleteDossier(dossierId, accountBean);
-				// DLFolder accountFolder = accountBean.getAccountFolder();
-
-				/*
-				 * DossierLocalServiceUtil.deleteDossierByDossierId( dossierId,
-				 * accountFolder);
-				 */
 
 				DossierLocalServiceUtil.deleteDossierByDossierId(dossierId);
 			}
