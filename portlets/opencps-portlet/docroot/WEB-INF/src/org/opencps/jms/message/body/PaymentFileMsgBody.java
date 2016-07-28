@@ -331,6 +331,46 @@ public class PaymentFileMsgBody {
 
 		this.mimeType = mimeType;
 	}
+	
+
+	
+    /**
+     * @return the oid
+     */
+    public String getOid() {
+    
+    	return oid;
+    }
+
+	
+    /**
+     * @param oid the oid to set
+     */
+    public void setOid(String oid) {
+    
+    	this.oid = oid;
+    }
+
+
+	
+    /**
+     * @return the typeUpdate
+     */
+    public String getTypeUpdate() {
+    
+    	return typeUpdate;
+    }
+
+	
+    /**
+     * @param typeUpdate the typeUpdate to set
+     */
+    public void setTypeUpdate(String typeUpdate) {
+    
+    	this.typeUpdate = typeUpdate;
+    }
+
+
 	private int paymentMethod;
 	private Date confirmDatetime;
 	private byte[] confirmFileEntry;
@@ -354,5 +394,9 @@ public class PaymentFileMsgBody {
 	private String fileTitle;
 
 	private String mimeType;
+	
+	private String oid;
+	
+	private String typeUpdate;
 
 }

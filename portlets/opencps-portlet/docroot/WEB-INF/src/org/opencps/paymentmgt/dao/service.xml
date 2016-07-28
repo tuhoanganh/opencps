@@ -64,6 +64,10 @@
         	<finder-column name="keypayTransactionId"/>
         </finder>
         
+        <finder return-type="PaymentFile" name="OID">
+        	<finder-column name="oid"/>
+        </finder>
+        
     </entity>
     <entity name="PaymentConfig" local-service="true" human-name="Payment configuration" table="opencps_payment_config">
         <column name="paymentConfigId" type="long" primary="true"></column>

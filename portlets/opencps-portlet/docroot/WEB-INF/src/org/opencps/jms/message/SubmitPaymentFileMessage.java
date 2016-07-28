@@ -22,6 +22,8 @@ import javax.jms.JMSException;
 import javax.naming.NamingException;
 
 import org.opencps.jms.SyncServiceContext;
+import org.opencps.jms.business.SubmitDossier;
+import org.opencps.jms.business.SubmitPaymentFile;
 import org.opencps.jms.context.JMSContext;
 import org.opencps.jms.context.JMSHornetqContext;
 import org.opencps.jms.context.JMSLocalContext;
@@ -55,15 +57,24 @@ public class SubmitPaymentFileMessage {
 		this.setHornetqContext(hornetqContext);
 	}
 	
-	public void sendHornetMessage(PaymentFile paymentFile) throws JMSException, NamingException {
+	public void sendHornetMessage(PaymentFile paymentFile)
+	    throws JMSException, NamingException {
+
 		try {
-	        BytesMessage bytesMessage = JMSMessageUtil.createByteMessage(_hornetqContext);
-	        long companyId = GetterUtil.getLong(_hornetqContext.getProperties().getProperty(WebKeys.JMS_COMPANY_ID));
-	        
-	        long groupId = GetterUtil.getLong(_hornetqContext.getProperties().getProperty(WebKeys.JMS_GROUP_ID));
-	        
-	        long userId = GetterUtil.getLong(_hornetqContext.getProperties().getProperty(WebKeys.JMS_USER_ID));
-	        
+			BytesMessage bytesMessage =
+			    JMSMessageUtil.createByteMessage(_hornetqContext);
+			long companyId =
+			    GetterUtil.getLong(_hornetqContext.getProperties().getProperty(
+			        WebKeys.JMS_COMPANY_ID));
+
+			long groupId =
+			    GetterUtil.getLong(_hornetqContext.getProperties().getProperty(
+			        WebKeys.JMS_GROUP_ID));
+
+			long userId =
+			    GetterUtil.getLong(_hornetqContext.getProperties().getProperty(
+			        WebKeys.JMS_USER_ID));
+
 			if (companyId > 0 && groupId > 0 && userId > 0) {
 				SyncServiceContext syncServiceContext =
 				    new SyncServiceContext(
@@ -81,10 +92,34 @@ public class SubmitPaymentFileMessage {
 
 				_hornetqContext.getMessageProducer().send(bytesMessage);
 			}
-        }
-        catch (Exception e) {
-	        _log.error(e);
-        }
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
+	}
+
+	public void receiveMessageByHornetq()
+	    throws JMSException, NamingException {
+
+		try {
+			BytesMessage bytesMessage =
+			    (BytesMessage) _hornetqContext.getMessageConsumer().receive();
+
+			byte[] result = new byte[(int) bytesMessage.getBodyLength()];
+
+			bytesMessage.readBytes(result);
+
+			Object object = JMSMessageUtil.convertByteArrayToObject(result);
+			
+			PaymentFileMsgBody paymentFileBody = (PaymentFileMsgBody) object;
+			
+			
+
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
+
 	}
 	
 	public void sendMessage(PaymentFile paymentFile)
@@ -128,6 +163,14 @@ public class SubmitPaymentFileMessage {
 		catch (Exception e) {
 			_log.error(e);
 		}
+	}
+	
+	public void reviceLocalMessage(PaymentFileMsgBody body) {
+		setPaymentFileMsgBody(body);
+		
+		SubmitPaymentFile submitPayment = new SubmitPaymentFile();
+		
+		submitPayment.syncPaymentFile(body);
 	}
 	
 	public void reviceMessage()

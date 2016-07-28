@@ -45,6 +45,7 @@ import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
 import org.opencps.jms.context.JMSContext;
 import org.opencps.jms.context.JMSHornetqContext;
 import org.opencps.jms.message.SubmitDossierMessage;
+import org.opencps.jms.message.SubmitPaymentFileMessage;
 import org.opencps.jms.message.SyncFromBackOfficeMessage;
 import org.opencps.jms.message.body.DossierFileMsgBody;
 import org.opencps.jms.message.body.DossierMsgBody;
@@ -157,6 +158,15 @@ public class JMSMessageBodyUtil {
 					new SubmitDossierMessage(context);
 
 				submitDossierMessage.receiveLocalMessage(dossierMsgBody);
+			} else if (object instanceof PaymentFileMsgBody) {
+				_log.info("////// POKEMON GO > PaymentFileMgsBody");
+				
+				PaymentFileMsgBody paymentMsgBody = (PaymentFileMsgBody) object;
+				
+				SubmitPaymentFileMessage submitPaymentFileMessage = new SubmitPaymentFileMessage(context);
+				
+				submitPaymentFileMessage.reviceLocalMessage(paymentMsgBody);
+				
 			}
 		}
 		else if (jsmMessage instanceof StreamMessage) {
@@ -306,6 +316,7 @@ public class JMSMessageBodyUtil {
 			paymentFileMsgBody.setInvoiceIssueNo(paymentFile.getInvoiceIssueNo());
 			paymentFileMsgBody.setInvoiceNo(paymentFile.getInvoiceNo());
 			paymentFileMsgBody.setSyncStatus(paymentFile.getSyncStatus());
+			paymentFileMsgBody.setOid(paymentFile.getOid());
 
 			if (paymentFile.getConfirmFileEntryId() != 0) {
 				DLFileEntry dlFileEntry =
