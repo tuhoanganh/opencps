@@ -215,7 +215,7 @@ public class SyncFromFrontOffice implements MessageListener{
      */
 	private boolean _checkServiceMode(long dossierId) {
 
-		boolean trustServiceMode = true;
+		boolean trustServiceMode = false;
 
 		try {
 			Dossier dossier = DossierLocalServiceUtil.fetchDossier(dossierId);
@@ -226,7 +226,7 @@ public class SyncFromFrontOffice implements MessageListener{
 			    ServiceConfigLocalServiceUtil.fetchServiceConfig(serviceConfigId);
 			
 			if (serviceConfig.getServicePortal()) {
-				trustServiceMode = false;
+				trustServiceMode = true;
 			} 
 		}
 		catch (Exception e) {
