@@ -493,19 +493,20 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 */
 	public void deleteDossierByDossierId(long dossierId)
 		throws NoSuchDossierException, SystemException, PortalException {
-
+		
 		Dossier dossier = dossierPersistence.findByPrimaryKey(dossierId);
+	
 		List<FileGroup> fileGroups =
 			fileGroupLocalService.getFileGroupByDossierId(dossierId);
 		List<DossierFile> dossierFiles =
 			dossierFileLocalService.getDossierFileByDossierId(dossierId);
-
+		
 		if (dossierFiles != null) {
 			for (DossierFile dossierFile : dossierFiles) {
 				dossierFileLocalService.deleteDossierFile(dossierFile);
 			}
 		}
-
+		
 		if (fileGroups != null) {
 			for (FileGroup fileGroup : fileGroups) {
 
@@ -513,20 +514,15 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 
 			}
 		}
-
+		
 		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(Dossier.class);
 
 		indexer.delete(dossier);
 
-		int counter = dossier.getCounter();
-
 		DLFolder dlFolder = null;
 
 		try {
-			dlFolder =
-				DLFolderUtil.getFolder(
-					dossier.getGroupId(), dossier.getFolderId(),
-					String.valueOf(counter));
+			dlFolder = dlFolderLocalService.getDLFolder(dossier.getFolderId());
 
 			if (dlFolder != null) {
 				dlFolderLocalService.deleteDLFolder(dlFolder);
@@ -535,7 +531,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		catch (Exception e) {
 			// TODO: handle exception
 		}
-
+		
 		dossierPersistence.remove(dossier);
 	}
 
