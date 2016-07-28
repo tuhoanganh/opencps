@@ -256,16 +256,16 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			String contentType =
 				uploadPortletRequest.getContentType(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
 
-			//DLFolder accountFolder = accountBean.getAccountFolder();
+			// DLFolder accountFolder = accountBean.getAccountFolder();
 
-			/*DLFolder dossierFolder =
-				DLFolderUtil.addFolder(
-					serviceContext.getUserId(),
-					serviceContext.getScopeGroupId(),
-					serviceContext.getScopeGroupId(), false,
-					accountFolder.getFolderId(),
-					String.valueOf(dossier.getCounter()), StringPool.BLANK,
-					false, serviceContext);*/
+			/*
+			 * DLFolder dossierFolder = DLFolderUtil.addFolder(
+			 * serviceContext.getUserId(), serviceContext.getScopeGroupId(),
+			 * serviceContext.getScopeGroupId(), false,
+			 * accountFolder.getFolderId(),
+			 * String.valueOf(dossier.getCounter()), StringPool.BLANK, false,
+			 * serviceContext);
+			 */
 
 			DossierFileLocalServiceUtil.addDossierFile(
 				serviceContext.getUserId(), dossierId, dossierPartId,
@@ -632,16 +632,16 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			dossierPart =
 				DossierPartLocalServiceUtil.getDossierPart(dossierPartId);
 
-			//DLFolder accountFolder = accountBean.getAccountFolder();
+			// DLFolder accountFolder = accountBean.getAccountFolder();
 
-			/*DLFolder dossierFolder =
-				DLFolderUtil.addFolder(
-					serviceContext.getUserId(),
-					serviceContext.getScopeGroupId(),
-					serviceContext.getScopeGroupId(), false,
-					accountFolder.getFolderId(),
-					String.valueOf(dossier.getCounter()), StringPool.BLANK,
-					false, serviceContext);*/
+			/*
+			 * DLFolder dossierFolder = DLFolderUtil.addFolder(
+			 * serviceContext.getUserId(), serviceContext.getScopeGroupId(),
+			 * serviceContext.getScopeGroupId(), false,
+			 * accountFolder.getFolderId(),
+			 * String.valueOf(dossier.getCounter()), StringPool.BLANK, false,
+			 * serviceContext);
+			 */
 
 			DossierFileLocalServiceUtil.addDossierFile(
 				serviceContext.getUserId(), dossierId, dossierPartId,
@@ -738,8 +738,10 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
 
-		/*ThemeDisplay themeDisplay =
-			(ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);*/
+		/*
+		 * ThemeDisplay themeDisplay = (ThemeDisplay)
+		 * actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		 */
 
 		AccountBean accountBean = AccountUtil.getAccountBean(actionRequest);
 
@@ -777,16 +779,17 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				DossierLocalServiceUtil.getDossier(dossierFile.getDossierId());
 
 			// Get account folder
-			//DLFolder accountForlder = accountBean.getAccountFolder();
+			// DLFolder accountForlder = accountBean.getAccountFolder();
 
 			// Get dossier folder
-			/*DLFolder dosserFolder =
-				DLFolderUtil.addFolder(
-					themeDisplay.getUserId(), themeDisplay.getScopeGroupId(),
-					themeDisplay.getScopeGroupId(), false,
-					accountForlder.getFolderId(),
-					String.valueOf(dossier.getCounter()), StringPool.BLANK,
-					false, serviceContext);*/
+			/*
+			 * DLFolder dosserFolder = DLFolderUtil.addFolder(
+			 * themeDisplay.getUserId(), themeDisplay.getScopeGroupId(),
+			 * themeDisplay.getScopeGroupId(), false,
+			 * accountForlder.getFolderId(),
+			 * String.valueOf(dossier.getCounter()), StringPool.BLANK, false,
+			 * serviceContext);
+			 */
 
 			String formData = dossierFile.getFormData();
 			String jrxmlTemplate = dossierPart.getFormReport();
@@ -820,10 +823,10 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 					if (dossierFile.getFileEntryId() > 0) {
 						DossierFileLocalServiceUtil.addDossierFile(
 							dossierFile.getDossierFileId(),
-							dossier.getFolderId(), sourceFileName,
-							mimeType, dossierFile.getDisplayName(),
-							StringPool.BLANK, StringPool.BLANK, inputStream,
-							file.length(), serviceContext);
+							dossier.getFolderId(), sourceFileName, mimeType,
+							dossierFile.getDisplayName(), StringPool.BLANK,
+							StringPool.BLANK, inputStream, file.length(),
+							serviceContext);
 					}
 					else {
 						// Update version 1
@@ -948,11 +951,13 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		try {
 			if (dossierStatus.equals(PortletConstants.DOSSIER_STATUS_NEW)) {
 				validateDeleteDossier(dossierId, accountBean);
-				//DLFolder accountFolder = accountBean.getAccountFolder();
+				// DLFolder accountFolder = accountBean.getAccountFolder();
 
-				/*DossierLocalServiceUtil.deleteDossierByDossierId(
-					dossierId, accountFolder);*/
-				
+				/*
+				 * DossierLocalServiceUtil.deleteDossierByDossierId( dossierId,
+				 * accountFolder);
+				 */
+
 				DossierLocalServiceUtil.deleteDossierByDossierId(dossierId);
 			}
 
@@ -1534,8 +1539,11 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		long govAgencyOrganizationId =
 			ParamUtil.getLong(
 				actionRequest, DossierDisplayTerms.GOVAGENCY_ORGANIZATION_ID);
-		/*long ownerUserId =
-			GetterUtil.getLong(session.getAttribute(WebKeys.ACCOUNT_OWNERUSERID));*/
+		/*
+		 * long ownerUserId =
+		 * GetterUtil.getLong(session.getAttribute(WebKeys.ACCOUNT_OWNERUSERID
+		 * ));
+		 */
 		long ownerOrganizationId =
 			GetterUtil.getLong(session.getAttribute(WebKeys.ACCOUNT_OWNERORGANIZATIONID));
 
@@ -1601,16 +1609,18 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 			String dossierDestinationFolder = StringPool.BLANK;
 
-			/*if (accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN)) {
-				dossierDestinationFolder =
-					PortletUtil.getCitizenDossierDestinationFolder(
-						serviceContext.getScopeGroupId(), ownerUserId);
-			}
-			else if (accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS)) {
-				dossierDestinationFolder =
-					PortletUtil.getBusinessDossierDestinationFolder(
-						serviceContext.getScopeGroupId(), ownerOrganizationId);
-			}*/
+			/*
+			 * if
+			 * (accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN
+			 * )) { dossierDestinationFolder =
+			 * PortletUtil.getCitizenDossierDestinationFolder(
+			 * serviceContext.getScopeGroupId(), ownerUserId); } else if
+			 * (accountType
+			 * .equals(PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS)) {
+			 * dossierDestinationFolder =
+			 * PortletUtil.getBusinessDossierDestinationFolder(
+			 * serviceContext.getScopeGroupId(), ownerOrganizationId); }
+			 */
 
 			SplitDate splitDate = PortletUtil.splitDate(new Date());
 
@@ -2064,45 +2074,19 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				break;
 			}
 
-			// Neu gui truc tuyen thi can thoi gian de dong bo trang thai nen
-			// Se tam chuyen sang trang thai system
-			/*if (serviceConfig.isServicePortal()) {
-				boolean result =
-					DossierLocalServiceUtil.updateDossierStatus(
-						dossierId, fileGroupId,
-						PortletConstants.DOSSIER_STATUS_SYSTEM,
-						WebKeys.ACTOR_ACTION_CITIZEN, StringPool.BLANK,
-						PortletUtil.getActionInfo(
-							PortletConstants.DOSSIER_STATUS_SYSTEM,
-							actionRequest.getLocale()),
-						PortletUtil.getMessageInfo(
-							PortletConstants.DOSSIER_STATUS_SYSTEM,
-							actionRequest.getLocale()),
-						PortletConstants.DOSSIER_LOG_NORMAL);
-				if (result) {
-					MessageBusUtil.sendMessage(
-						"opencps/frontoffice/out/destination", message);
-				}
-			}
-			else {
-				MessageBusUtil.sendMessage(
-					"opencps/frontoffice/out/destination", message);
-			}*/
-			
+			MessageBusUtil.sendMessage(
+				"opencps/frontoffice/out/destination", message);
+
 			DossierLocalServiceUtil.updateDossierStatus(
-				dossierId, fileGroupId,
-				PortletConstants.DOSSIER_STATUS_SYSTEM,
+				dossierId, fileGroupId, PortletConstants.DOSSIER_STATUS_SYSTEM,
 				WebKeys.ACTOR_ACTION_CITIZEN, StringPool.BLANK,
 				PortletUtil.getActionInfo(
 					PortletConstants.DOSSIER_STATUS_SYSTEM,
-					actionRequest.getLocale()),
-				PortletUtil.getMessageInfo(
+					actionRequest.getLocale()), PortletUtil.getMessageInfo(
 					PortletConstants.DOSSIER_STATUS_SYSTEM,
 					actionRequest.getLocale()),
+				PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC,
 				PortletConstants.DOSSIER_LOG_NORMAL);
-			
-			MessageBusUtil.sendMessage(
-				"opencps/frontoffice/out/destination", message);
 
 		}
 		catch (Exception e) {
