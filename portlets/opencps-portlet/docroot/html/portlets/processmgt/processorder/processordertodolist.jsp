@@ -88,14 +88,40 @@
 					processURL.setParameter("backURL", currentURL);
 					processURL.setParameter("isEditDossier", (processOrder.isReadOnly() || (processOrder.getAssignToUsesrId() != 0 &&  processOrder.getAssignToUsesrId() != user.getUserId())) ? String.valueOf(false) : String.valueOf(true));
 					
-					row.addText(processOrder.getReceptionNo(), processURL);
+					
+					String receptionNo = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "reception-no");
+					String subjectName = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "subject-name");
+					String serviceName = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "service-name");
+					String processStep = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "process-step");
+					String assignUser = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "assign-to-user");
+					String deadline = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "dealine");
+					String actionButt = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "action");
+					
+					String deadlineVal = Validator.isNotNull(processOrder.getDealine()) ? processOrder.getDealine() : StringPool.DASH;
+					
+					String hrefFix = "location.href='" + processURL.toString()+"'";
+					
+					String s1 = "<div class=\"ocps-searh-bound-data1\"><p class=\"ocps-searh-bound-data1-chirld-p1\"><span class=\"ocps-searh-bound-data1-chirld-span1\">" + receptionNo + "</span><a class=\"ocps-searh-bound-data1-chirld-label1\" href=\""+ processURL + " \"> "+ processOrder.getReceptionNo() + "</a></p>";
+					s1 = s1 + "<p class=\"ocps-searh-bound-data1-chirld-p1\"><span class=\"ocps-searh-bound-data1-chirld-span1\">"+ serviceName +"</span><a class=\"ocps-searh-bound-data1-chirld-label1\" href=\""+processURL+"\"> "+ processOrder.getServiceName() + "</a></p></div>";
+					
+					
+					String s2 = "<div class=\"ocps-searh-bound-data1\"><p class=\"ocps-searh-bound-data1-chirld-p1\"><span class=\"ocps-searh-bound-data1-chirld-span1\">" + subjectName + "</span><a class=\"ocps-searh-bound-data1-chirld-label1\" href=\""+ processURL + " \"> "+ processOrder.getSubjectName() + "</a></p>";
+					s2 = s2 + "<p class=\"ocps-searh-bound-data1-chirld-p1\"><span class=\"ocps-searh-bound-data1-chirld-span1\">" + assignUser + "</span><a class=\"ocps-searh-bound-data1-chirld-label1\" href=\""+ processURL + "\"> "+ processOrder.getAssignToUserName() + "</a></p>";
+					s2 = s2 + "<p class=\"ocps-searh-bound-data1-chirld-p1\"><span class=\"ocps-searh-bound-data1-chirld-span1\">" + processStep + "</span><a class=\"ocps-searh-bound-data1-chirld-label1\" href=\""+ processURL + "\"> "+ processOrder.getStepName() + "</a></p>";
+					s2 = s2 + "<p class=\"ocps-searh-bound-data1-chirld-p1\"><span class=\"ocps-searh-bound-data1-chirld-span1\">"+ deadline +"</span><a class=\"ocps-searh-bound-data1-chirld-label1\" href=\""+processURL+"\"> "+ deadlineVal + "</a></p></div>";
+					
+					row.addText(s1);
+					row.addText(s2);
+					row.addButton(actionButt, hrefFix);
+					/* row.addText(processOrder.getReceptionNo(), processURL);
 					row.addText(processOrder.getSubjectName(), processURL);
 					row.addText(processOrder.getServiceName(), processURL);	
 					row.addText(processOrder.getStepName(), processURL);	
 					row.addText(processOrder.getAssignToUserName(), processURL);
 
-					row.addText(Validator.isNotNull(processOrder.getDealine()) ? processOrder.getDealine() : StringPool.DASH, processURL);
+					row.addText(Validator.isNotNull(processOrder.getDealine()) ? processOrder.getDealine() : StringPool.DASH, processURL); */
 					row.setClassName((processOrder.isReadOnly() || (processOrder.getAssignToUsesrId() != 0 &&  processOrder.getAssignToUsesrId() != user.getUserId())) ? "readonly" : StringPool.BLANK);
+					
 					//row.setClassHoverName("");
 				%>	
 			</liferay-ui:search-container-row> 
