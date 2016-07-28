@@ -171,7 +171,7 @@ public class JMSMessageBodyUtil {
 	 * @param dossierId
 	 * @return
 	 */
-	public static DossierMsgBody getDossierMsgBody(long dossierId) {
+	public static DossierMsgBody getDossierMsgBody(long dossierId, long fileGroupId) {
 
 		DossierMsgBody dossierMsgBody = new DossierMsgBody();
 
