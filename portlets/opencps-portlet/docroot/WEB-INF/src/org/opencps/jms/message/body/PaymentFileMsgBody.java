@@ -21,224 +21,319 @@ import java.util.Date;
 
 import com.liferay.portal.service.ServiceContext;
 
-
 /**
  * @author khoavd
- *
  */
 public class PaymentFileMsgBody {
-	
-    /**
-     * @return the paymentMethod
-     */
-    public int getPaymentMethod() {
-    
-    	return paymentMethod;
-    }
-	
-    /**
-     * @param paymentMethod the paymentMethod to set
-     */
-    public void setPaymentMethod(int paymentMethod) {
-    
-    	this.paymentMethod = paymentMethod;
-    }
-	
-    /**
-     * @return the confirmDatetime
-     */
-    public Date getConfirmDatetime() {
-    
-    	return confirmDatetime;
-    }
-	
-    /**
-     * @param confirmDatetime the confirmDatetime to set
-     */
-    public void setConfirmDatetime(Date confirmDatetime) {
-    
-    	this.confirmDatetime = confirmDatetime;
-    }
-	
-    /**
-     * @return the confirmFileEntry
-     */
-    public byte[] getConfirmFileEntry() {
-    
-    	return confirmFileEntry;
-    }
-	
-    /**
-     * @param confirmFileEntry the confirmFileEntry to set
-     */
-    public void setConfirmFileEntry(byte[] confirmFileEntry) {
-    
-    	this.confirmFileEntry = confirmFileEntry;
-    }
-	
-    /**
-     * @return the confirmNote
-     */
-    public String getConfirmNote() {
-    
-    	return confirmNote;
-    }
-	
-    /**
-     * @param confirmNote the confirmNote to set
-     */
-    public void setConfirmNote(String confirmNote) {
-    
-    	this.confirmNote = confirmNote;
-    }
-	
-    /**
-     * @return the approveDatetime
-     */
-    public Date getApproveDatetime() {
-    
-    	return approveDatetime;
-    }
-	
-    /**
-     * @param approveDatetime the approveDatetime to set
-     */
-    public void setApproveDatetime(Date approveDatetime) {
-    
-    	this.approveDatetime = approveDatetime;
-    }
-	
-    /**
-     * @return the accountUserName
-     */
-    public String getAccountUserName() {
-    
-    	return accountUserName;
-    }
-	
-    /**
-     * @param accountUserName the accountUserName to set
-     */
-    public void setAccountUserName(String accountUserName) {
-    
-    	this.accountUserName = accountUserName;
-    }
-	
-    /**
-     * @return the approveNote
-     */
-    public String getApproveNote() {
-    
-    	return approveNote;
-    }
-	
-    /**
-     * @param approveNote the approveNote to set
-     */
-    public void setApproveNote(String approveNote) {
-    
-    	this.approveNote = approveNote;
-    }
-	
-    /**
-     * @return the govAgencyTaxNo
-     */
-    public String getGovAgencyTaxNo() {
-    
-    	return govAgencyTaxNo;
-    }
-	
-    /**
-     * @param govAgencyTaxNo the govAgencyTaxNo to set
-     */
-    public void setGovAgencyTaxNo(String govAgencyTaxNo) {
-    
-    	this.govAgencyTaxNo = govAgencyTaxNo;
-    }
-	
-    /**
-     * @return the invoiceTemplateNo
-     */
-    public String getInvoiceTemplateNo() {
-    
-    	return invoiceTemplateNo;
-    }
-	
-    /**
-     * @param invoiceTemplateNo the invoiceTemplateNo to set
-     */
-    public void setInvoiceTemplateNo(String invoiceTemplateNo) {
-    
-    	this.invoiceTemplateNo = invoiceTemplateNo;
-    }
-	
-    /**
-     * @return the invoiceIssueNo
-     */
-    public String getInvoiceIssueNo() {
-    
-    	return invoiceIssueNo;
-    }
-	
-    /**
-     * @param invoiceIssueNo the invoiceIssueNo to set
-     */
-    public void setInvoiceIssueNo(String invoiceIssueNo) {
-    
-    	this.invoiceIssueNo = invoiceIssueNo;
-    }
-	
-    /**
-     * @return the invoiceNo
-     */
-    public String getInvoiceNo() {
-    
-    	return invoiceNo;
-    }
-	
-    /**
-     * @param invoiceNo the invoiceNo to set
-     */
-    public void setInvoiceNo(String invoiceNo) {
-    
-    	this.invoiceNo = invoiceNo;
-    }
-	
-    /**
-     * @return the syncStatus
-     */
-    public int getSyncStatus() {
-    
-    	return syncStatus;
-    }
-	
-    /**
-     * @param syncStatus the syncStatus to set
-     */
-    public void setSyncStatus(int syncStatus) {
-    
-    	this.syncStatus = syncStatus;
-    }
-	
-    /**
-     * @return the serviceContext
-     */
-    public ServiceContext getServiceContext() {
-    
-    	return serviceContext;
-    }
 
-	
-    /**
-     * @param serviceContext the serviceContext to set
-     */
-    public void setServiceContext(ServiceContext serviceContext) {
-    
-    	this.serviceContext = serviceContext;
-    }
+	/**
+	 * @return the paymentMethod
+	 */
+	public int getPaymentMethod() {
+
+		return paymentMethod;
+	}
+
+	/**
+	 * @param paymentMethod
+	 *            the paymentMethod to set
+	 */
+	public void setPaymentMethod(int paymentMethod) {
+
+		this.paymentMethod = paymentMethod;
+	}
+
+	/**
+	 * @return the confirmDatetime
+	 */
+	public Date getConfirmDatetime() {
+
+		return confirmDatetime;
+	}
+
+	/**
+	 * @param confirmDatetime
+	 *            the confirmDatetime to set
+	 */
+	public void setConfirmDatetime(Date confirmDatetime) {
+
+		this.confirmDatetime = confirmDatetime;
+	}
+
+	/**
+	 * @return the confirmFileEntry
+	 */
+	public byte[] getConfirmFileEntry() {
+
+		return confirmFileEntry;
+	}
+
+	/**
+	 * @param confirmFileEntry
+	 *            the confirmFileEntry to set
+	 */
+	public void setConfirmFileEntry(byte[] confirmFileEntry) {
+
+		this.confirmFileEntry = confirmFileEntry;
+	}
+
+	/**
+	 * @return the confirmNote
+	 */
+	public String getConfirmNote() {
+
+		return confirmNote;
+	}
+
+	/**
+	 * @param confirmNote
+	 *            the confirmNote to set
+	 */
+	public void setConfirmNote(String confirmNote) {
+
+		this.confirmNote = confirmNote;
+	}
+
+	/**
+	 * @return the approveDatetime
+	 */
+	public Date getApproveDatetime() {
+
+		return approveDatetime;
+	}
+
+	/**
+	 * @param approveDatetime
+	 *            the approveDatetime to set
+	 */
+	public void setApproveDatetime(Date approveDatetime) {
+
+		this.approveDatetime = approveDatetime;
+	}
+
+	/**
+	 * @return the accountUserName
+	 */
+	public String getAccountUserName() {
+
+		return accountUserName;
+	}
+
+	/**
+	 * @param accountUserName
+	 *            the accountUserName to set
+	 */
+	public void setAccountUserName(String accountUserName) {
+
+		this.accountUserName = accountUserName;
+	}
+
+	/**
+	 * @return the approveNote
+	 */
+	public String getApproveNote() {
+
+		return approveNote;
+	}
+
+	/**
+	 * @param approveNote
+	 *            the approveNote to set
+	 */
+	public void setApproveNote(String approveNote) {
+
+		this.approveNote = approveNote;
+	}
+
+	/**
+	 * @return the govAgencyTaxNo
+	 */
+	public String getGovAgencyTaxNo() {
+
+		return govAgencyTaxNo;
+	}
+
+	/**
+	 * @param govAgencyTaxNo
+	 *            the govAgencyTaxNo to set
+	 */
+	public void setGovAgencyTaxNo(String govAgencyTaxNo) {
+
+		this.govAgencyTaxNo = govAgencyTaxNo;
+	}
+
+	/**
+	 * @return the invoiceTemplateNo
+	 */
+	public String getInvoiceTemplateNo() {
+
+		return invoiceTemplateNo;
+	}
+
+	/**
+	 * @param invoiceTemplateNo
+	 *            the invoiceTemplateNo to set
+	 */
+	public void setInvoiceTemplateNo(String invoiceTemplateNo) {
+
+		this.invoiceTemplateNo = invoiceTemplateNo;
+	}
+
+	/**
+	 * @return the invoiceIssueNo
+	 */
+	public String getInvoiceIssueNo() {
+
+		return invoiceIssueNo;
+	}
+
+	/**
+	 * @param invoiceIssueNo
+	 *            the invoiceIssueNo to set
+	 */
+	public void setInvoiceIssueNo(String invoiceIssueNo) {
+
+		this.invoiceIssueNo = invoiceIssueNo;
+	}
+
+	/**
+	 * @return the invoiceNo
+	 */
+	public String getInvoiceNo() {
+
+		return invoiceNo;
+	}
+
+	/**
+	 * @param invoiceNo
+	 *            the invoiceNo to set
+	 */
+	public void setInvoiceNo(String invoiceNo) {
+
+		this.invoiceNo = invoiceNo;
+	}
+
+	/**
+	 * @return the syncStatus
+	 */
+	public int getSyncStatus() {
+
+		return syncStatus;
+	}
+
+	/**
+	 * @param syncStatus
+	 *            the syncStatus to set
+	 */
+	public void setSyncStatus(int syncStatus) {
+
+		this.syncStatus = syncStatus;
+	}
+
+	/**
+	 * @return the serviceContext
+	 */
+	public ServiceContext getServiceContext() {
+
+		return serviceContext;
+	}
+
+	/**
+	 * @param serviceContext
+	 *            the serviceContext to set
+	 */
+	public void setServiceContext(ServiceContext serviceContext) {
+
+		this.serviceContext = serviceContext;
+	}
+
+	/**
+	 * @return the extension
+	 */
+	public String getExtension() {
+
+		return extension;
+	}
+
+	/**
+	 * @param extension
+	 *            the extension to set
+	 */
+	public void setExtension(String extension) {
+
+		this.extension = extension;
+	}
+
+	/**
+	 * @return the fileDescription
+	 */
+	public String getFileDescription() {
+
+		return fileDescription;
+	}
+
+	/**
+	 * @param fileDescription
+	 *            the fileDescription to set
+	 */
+	public void setFileDescription(String fileDescription) {
+
+		this.fileDescription = fileDescription;
+	}
+
+	/**
+	 * @return the fileName
+	 */
+	public String getFileName() {
+
+		return fileName;
+	}
+
+	/**
+	 * @param fileName
+	 *            the fileName to set
+	 */
+	public void setFileName(String fileName) {
+
+		this.fileName = fileName;
+	}
+
+	/**
+	 * @return the fileTitle
+	 */
+	public String getFileTitle() {
+
+		return fileTitle;
+	}
+
+	/**
+	 * @param fileTitle
+	 *            the fileTitle to set
+	 */
+	public void setFileTitle(String fileTitle) {
+
+		this.fileTitle = fileTitle;
+	}
+
+	/**
+	 * @return the mimeType
+	 */
+	public String getMimeType() {
+
+		return mimeType;
+	}
+
+	/**
+	 * @param mimeType
+	 *            the mimeType to set
+	 */
+	public void setMimeType(String mimeType) {
+
+		this.mimeType = mimeType;
+	}
 	private int paymentMethod;
 	private Date confirmDatetime;
-	private byte [] confirmFileEntry;
+	private byte[] confirmFileEntry;
 	private String confirmNote;
 	private Date approveDatetime;
 	private String accountUserName;
@@ -249,4 +344,15 @@ public class PaymentFileMsgBody {
 	private String invoiceNo;
 	private int syncStatus;
 	private ServiceContext serviceContext;
+
+	private String extension;
+
+	private String fileDescription;
+
+	private String fileName;
+
+	private String fileTitle;
+
+	private String mimeType;
+
 }
