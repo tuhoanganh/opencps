@@ -65,7 +65,7 @@ public class SubmitDossierMessage {
 	 * @throws JMSException
 	 * @throws NamingException
 	 */
-	public void sendMessage(long dossierId)
+	public void sendMessage(long dossierId, long fileGroupId)
 		throws JMSException, NamingException {
 
 		try {
@@ -89,7 +89,7 @@ public class SubmitDossierMessage {
 					new SyncServiceContext(
 						companyId, groupId, userId, true, true);
 				DossierMsgBody dossierMsgBody =
-					JMSMessageBodyUtil.getDossierMsgBody(dossierId);
+					JMSMessageBodyUtil.getDossierMsgBody(dossierId, fileGroupId);
 				dossierMsgBody.setServiceContext(syncServiceContext.getServiceContext());
 				byte[] sender =
 					JMSMessageUtil.convertObjectToByteArray(dossierMsgBody);
@@ -111,7 +111,7 @@ public class SubmitDossierMessage {
 	 * @throws JMSException
 	 * @throws NamingException
 	 */
-	public void sendMessageByHornetq(long dossierId)
+	public void sendMessageByHornetq(long dossierId, long fileGroupId)
 		throws JMSException, NamingException {
 
 		try {
@@ -135,7 +135,7 @@ public class SubmitDossierMessage {
 					new SyncServiceContext(
 						companyId, groupId, userId, true, true);
 				DossierMsgBody dossierMsgBody =
-					JMSMessageBodyUtil.getDossierMsgBody(dossierId);
+					JMSMessageBodyUtil.getDossierMsgBody(dossierId, fileGroupId);
 				dossierMsgBody.setServiceContext(syncServiceContext.getServiceContext());
 				byte[] sender =
 					JMSMessageUtil.convertObjectToByteArray(dossierMsgBody);

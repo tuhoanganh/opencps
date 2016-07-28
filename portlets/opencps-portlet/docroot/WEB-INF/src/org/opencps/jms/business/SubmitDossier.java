@@ -30,6 +30,9 @@ import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.jms.message.body.DossierFileMsgBody;
 import org.opencps.jms.message.body.DossierMsgBody;
 import org.opencps.jms.util.JMSMessageBodyUtil.AnalyzeDossierFile;
+import org.opencps.processmgt.NoSuchProcessOrderException;
+import org.opencps.processmgt.model.ProcessOrder;
+import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
 import org.opencps.util.PortletConstants;
 import org.opencps.util.WebKeys;
 
@@ -91,36 +94,78 @@ public class SubmitDossier {
 		if (syncDossier != null && syncDossierFiles != null &&
 			syncDLFileEntries != null && data != null &&
 			syncDossierTemplate != null && serviceContext != null) {
-			dossier =
-				DossierLocalServiceUtil.syncDossier(
-					syncDossier, syncDossierFiles, syncFileGroups,
-					syncFileGroupDossierParts, syncDLFileEntries, data,
-					syncDossierTemplate, serviceContext);
+			if (syncDossier.getDossierStatus().equals(
+				PortletConstants.DOSSIER_STATUS_NEW)) {
+				dossier =
+					DossierLocalServiceUtil.syncDossier(
+						syncDossier, syncDossierFiles, syncFileGroups,
+						syncFileGroupDossierParts, syncDLFileEntries, data,
+						syncDossierTemplate, serviceContext);
+			}
+			else if (syncDossier.getDossierStatus().equals(
+				PortletConstants.DOSSIER_STATUS_WAITING)) {
+				dossier =
+					DossierLocalServiceUtil.syncReSubmitDossier(
+						syncDossier, syncDossierFiles, syncFileGroups,
+						syncFileGroupDossierParts, syncDLFileEntries, data,
+						syncDossierTemplate, serviceContext);
+			}
 
 			sendToBackend(
-				dossier.getDossierId(), dossier.getDossierStatus(),
+				dossier.getDossierId(),0, dossier.getDossierStatus(),
 				serviceContext);
 		}
 
 		return dossier;
 	}
 
+	/**
+	 * @param dossierId
+	 * @param fileGroupId
+	 * @param dossierStatus
+	 * @param serviceContext
+	 * @throws NoSuchProcessOrderException
+	 * @throws SystemException
+	 */
 	protected void sendToBackend(
-		long dossierId, String dossierStatus, ServiceContext serviceContext) {
+		long dossierId, long fileGroupId, String dossierStatus,
+		ServiceContext serviceContext)
+		throws NoSuchProcessOrderException, SystemException {
 
 		Message message = new Message();
 
 		SendToEngineMsg engineMsg = new SendToEngineMsg();
 
 		switch (dossierStatus) {
+		case PortletConstants.DOSSIER_STATUS_WAITING:
 
+			engineMsg.setAction(WebKeys.ACTION_RESUBMIT_VALUE);
+
+			engineMsg.setDossierId(dossierId);
+
+			engineMsg.setFileGroupId(fileGroupId);
+
+			engineMsg.setUserId(serviceContext.getUserId());
+
+			engineMsg.setGroupId(serviceContext.getScopeGroupId());
+
+			engineMsg.setCompanyId(serviceContext.getCompanyId());
+
+			ProcessOrder processOrder =
+				ProcessOrderLocalServiceUtil.getProcessOrder(
+					dossierId, fileGroupId);
+
+			engineMsg.setProcessOrderId(processOrder.getProcessOrderId());
+
+
+			break;
 		case PortletConstants.DOSSIER_STATUS_NEW:
 
 			engineMsg.setAction(WebKeys.ACTION_SUBMIT_VALUE);
 
 			engineMsg.setDossierId(dossierId);
 
-			engineMsg.setFileGroupId(0);
+			engineMsg.setFileGroupId(fileGroupId);
 
 			engineMsg.setCompanyId(serviceContext.getCompanyId());
 
