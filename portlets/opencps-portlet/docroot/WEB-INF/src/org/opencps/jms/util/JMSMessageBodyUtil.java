@@ -315,6 +315,13 @@ public class JMSMessageBodyUtil {
 					JMSMessageUtil.convertInputStreamToByteArray(dlFileEntry.getContentStream());
 
 				paymentFileMsgBody.setConfirmFileEntry(confirmFileEntry);
+				
+				paymentFileMsgBody.setExtension(dlFileEntry.getExtension());
+				paymentFileMsgBody.setFileDescription(dlFileEntry.getDescription());
+				paymentFileMsgBody.setFileName(dlFileEntry.getName());
+				paymentFileMsgBody.setFileTitle(dlFileEntry.getTitle());
+				paymentFileMsgBody.setMimeType(dlFileEntry.getMimeType());
+
 			}
 
 		}
@@ -519,25 +526,6 @@ public class JMSMessageBodyUtil {
 		protected LinkedHashMap<String, byte[]> _data;
 	}
 
-	/**
-	 * @param paymentFileId
-	 * @return
-	 */
-	public static PaymentFileMsgBody getPaymentFile(long paymentFileId) {
-
-		PaymentFileMsgBody paymentFileBody = new PaymentFileMsgBody();
-
-		try {
-			PaymentFile paymentFile =
-				PaymentFileLocalServiceUtil.fetchPaymentFile(paymentFileId);
-
-		}
-		catch (Exception e) {
-			_log.error(e);
-		}
-
-		return paymentFileBody;
-	}
 
 	private static Log _log =
 		LogFactoryUtil.getLog(DossierMsgBody.class.getName());
