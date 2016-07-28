@@ -105,6 +105,7 @@
 		 		<portlet:actionURL var="deleteDossierURL" name="deleteDossier" >
 					<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
 					<portlet:param name="redirectURL" value="<%=currentURL %>"/>
+					<portlet:param name="dossierStatus" value="<%=dossier.getDossierStatus() %>"/>
 				</portlet:actionURL> 
 				<liferay-ui:icon-delete 
 					image="delete"
