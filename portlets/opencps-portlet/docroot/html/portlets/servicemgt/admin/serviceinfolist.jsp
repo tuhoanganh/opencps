@@ -31,12 +31,12 @@
 	List<String> headerNames = new ArrayList<String>();
 	
 	headerNames.add("no");
-	headerNames.add("service-no");
+	/*	headerNames.add("service-no");
 	headerNames.add("service-name");
 	headerNames.add("service-domain");
 	headerNames.add("service-administrator");
 	headerNames.add("status");
-
+ */
 	boolean isPermission =
 				    ServicePermission.contains(
 				        themeDisplay.getPermissionChecker(),
@@ -49,13 +49,13 @@
 	
 	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
 %>
-
+<div class="ocps-serviceinfo-list">
 <c:if test="<%= ServicePermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_SERVICE) %>">
 	<liferay-util:include page='<%= templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
 </c:if>
 
 <liferay-util:include page='<%= templatePath + "toolbar.jsp"%>' servletContext="<%=application %>" />
-
+<div class="ocps-serviceinfo-search">
 <liferay-ui:search-container searchContainer="<%= new ServiceSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" 
 	headerNames="<%= headers %>">
 		
@@ -83,27 +83,27 @@
 	>
 		<%
 			PortletURL editURL = renderResponse.createRenderURL();
-			editURL.setParameter("mvcPath", templatePath + "edit_service.jsp");
+			editURL.setParameter("mvcPath", templatePath + "edit_service-ux.jsp");
 			editURL.setParameter("serviceinfoId", String.valueOf(service.getServiceinfoId()));
 			editURL.setParameter("backURL", currentURL);
 			
 			// no column
 			row.addText(String.valueOf(row.getPos() + 1), editURL);
 		
-			// service no
+			/* // service no
 			row.addText(service.getServiceNo(), editURL);
 			
 			// service name
-			row.addText(service.getServiceName(), editURL);
+			row.addText(service.getServiceName(), editURL); */
 			
 			// service domain
-						row.addText(DictItemUtil.getNameDictItem(service.getDomainCode()) , editURL);
+			/* row.addText(DictItemUtil.getNameDictItem(service.getDomainCode()) , editURL);
 			// service admin
 			row.addText(DictItemUtil.getNameDictItem(service.getAdministrationCode()), editURL);
-			
+	 */		
 			//service status
 			
-			int status = service.getActiveStatus();
+			/* int status = service.getActiveStatus();
 			String statusMess = StringPool.BLANK;
 			if(status == 0) {
 				statusMess = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "service-private");
@@ -113,8 +113,9 @@
 				statusMess = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "service-outdate");
 			}
 			
-			row.addText(statusMess , editURL);
-
+			row.addText(statusMess , editURL); */
+			row.addJSP("center", SearchEntry.DEFAULT_VALIGN,  templatePath + "service_admin_bound_data_col2.jsp", config.getServletContext(), request, response);
+			row.addJSP("center", SearchEntry.DEFAULT_VALIGN,  templatePath + "service_admin_bound_data.jsp", config.getServletContext(), request, response);
 			if(isPermission) {
 				//action column
 				row.addJSP("center", SearchEntry.DEFAULT_VALIGN, templatePath + "service_actions.jsp", config.getServletContext(), request, response);
@@ -126,7 +127,8 @@
 	<liferay-ui:search-iterator/>
 
 </liferay-ui:search-container>
-
+</div>
+</div>
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.servicemgt.admin.serviceinfo.jsp");
 %>

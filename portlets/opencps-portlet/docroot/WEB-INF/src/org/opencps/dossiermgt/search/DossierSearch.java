@@ -43,7 +43,9 @@ public class DossierSearch extends SearchContainer<Dossier> {
 	static List<String> headerNames = new ArrayList<String>();
 	static Map<String, String> orderableHeaders = new HashMap<String, String>();
 	static {
-		headerNames.add("#");
+		
+		//comment to use ux theme
+		/*headerNames.add("#");
 		//headerNames.add("create-date");
 		headerNames.add("service-name");
 		headerNames.add("gov-agency-name");
@@ -52,7 +54,7 @@ public class DossierSearch extends SearchContainer<Dossier> {
 		headerNames.add("reception-no");
 		headerNames.add("finish-date");
 		headerNames.add("action");
-
+*/
 		orderableHeaders
 		    .put("gov-agency-name", DossierDisplayTerms.GOVAGENCY_NAME);
 		orderableHeaders

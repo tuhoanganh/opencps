@@ -1,4 +1,6 @@
 
+<%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
+<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -37,9 +39,37 @@
 	iteratorURL.setParameter("mvcPath", "/html/portlets/dossiermgt/frontoffice/dossier/history.jsp");
 	List<DossierLog> dossierLogs = new ArrayList<DossierLog>();
 	
+	String serviceName = StringPool.BLANK;
+	String receptionNo = StringPool.BLANK;
+	ServiceInfo serviceInfo = null;
+	if(Validator.isNotNull(dossier)) {
+		receptionNo = dossier.getReceptionNo();
+		try {
+			serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(dossier.getServiceInfoId());
+			serviceName = serviceInfo.getServiceName();
+		} catch (Exception e) {
+			
+		}
+	}
+	
 %>
+<div class="ocps-title-detail">
+	<div class="ocps-title-detail-top">
+		<label class="service-reception-label">
+			<liferay-ui:message key="reception-no"/> 
+		</label>
+		<p class="service-reception-no"><%=receptionNo %></p>
+	</div>
+	<div class="ocps-title-detail-bot">
+		<label class="service-name-label">
+			<liferay-ui:message key="dossier-name"/> 
+		</label>
+		<p class="service-service-name"><%=serviceName%></p>
+	</div>
+</div>
 
-<liferay-ui:search-container 
+<div class="bound-search-container-history">
+	<liferay-ui:search-container 
 		emptyResultsMessage="no-history-were-found"
 		iteratorURL="<%=iteratorURL %>"
 		delta="<%=20 %>"
@@ -62,32 +92,35 @@
 					keyProperty="dossierLogId"
 				>
 				
-				<liferay-ui:search-container-column-text 
+				<%-- <liferay-ui:search-container-column-text 
 					name="row" 
 					value="<%=String.valueOf(row.getPos() +1) %>" 
-				/>
+				/> --%>
 				
-				<liferay-ui:search-container-column-text 
+				<%-- <liferay-ui:search-container-column-text 
 					name="time" 
 					value="<%=DateTimeUtil.convertDateToString(dossierLog.getUpdateDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) %>" 
-				/>
+				/> --%>
 				
-				<liferay-ui:search-container-column-text 
-					name="actor" 
-					value="<%=dossierLog.getActor() %>" 
-				/>
-				
-				<liferay-ui:search-container-column-text 
+				<%-- <liferay-ui:search-container-column-text 
+					name="	" 
+					value="<%=dossierLog.getSyncStatus() %>" 
+				/> --%>
+				 
+				<%-- <liferay-ui:search-container-column-text 
 					name="action" 
 					value="<%= dossierLog.getActionInfo() %>" 
-				/>
+				/> --%>
 				
-				<liferay-ui:search-container-column-text 
+				<%-- <liferay-ui:search-container-column-text 
 					name="note" 
 					value="<%=dossierLog.getMessageInfo() %>" 
-				/>
+				/> --%>
 				
+				<liferay-ui:search-container-column-jsp path="/html/portlets/dossiermgt/frontoffice/dossier/history-bound-data-second.jsp" />
+				<liferay-ui:search-container-column-jsp path="/html/portlets/dossiermgt/frontoffice/dossier/history-bound-data.jsp" />
 				
 		</liferay-ui:search-container-row>
-	<liferay-ui:search-iterator/>
-</liferay-ui:search-container>
+	<liferay-ui:search-iterator paginate="false"/>
+	</liferay-ui:search-container>
+</div>

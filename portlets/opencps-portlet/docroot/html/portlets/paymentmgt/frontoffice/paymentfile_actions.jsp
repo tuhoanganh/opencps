@@ -40,15 +40,6 @@
 	boolean isBank = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_BANK);
 %>
 
-<portlet:renderURL var="viewPaymentDetail">
-	<portlet:param name="<%= PaymentFileDisplayTerms.PAYMENT_FILE_ID %>"
-		value="<%=String.valueOf(paymentFile.getPaymentFileId()) %>" />
-	<portlet:param name="mvcPath"
-		value="/html/portlets/paymentmgt/frontoffice/frontofficepaymentdetail.jsp" />
-	<portlet:param name="redirectURL" value="<%= currentURL %>" />
-	<portlet:param name="backURL" value="<%=currentURL %>"/>
-	
-</portlet:renderURL>
 
 <portlet:renderURL var="keypayTransaction">
 	<portlet:param name="<%= PaymentFileDisplayTerms.PAYMENT_FILE_ID %>"
@@ -70,15 +61,13 @@
 	
 </portlet:renderURL>
 
-<liferay-ui:icon image="view" cssClass="view" message="view"
-	url="<%=viewPaymentDetail.toString()%>" />
 
 <c:if test="<%= paymentStatus == PaymentMgtUtil.PAYMENT_STATUS_REQUESTED || paymentStatus == PaymentMgtUtil.PAYMENT_STATUS_ON_PROCESSING
 || paymentStatus == PaymentMgtUtil.PAYMENT_STATUS_REJECTED%>">
-    <liferay-ui:icon image="key" cssClass="view" message="keypay-transaction"
-        url="<%=paymentFile.getKeypayUrl()%>" />
+
+    <a class="button" href="<%=paymentFile.toString() %>" ><liferay-ui:message key="keypay-transaction" ></liferay-ui:message></a> <br/>
     
-    <liferay-ui:icon image="post" cssClass="view" message="bank-transaction"
-        url="<%=bankTransaction.toString()%>" />    
+    <a class="button" href="<%=bankTransaction.toString() %>" ><liferay-ui:message key="bank-transaction" ></liferay-ui:message></a> 
+    
 </c:if>
     

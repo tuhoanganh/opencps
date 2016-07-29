@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.kernel.dao.orm.QueryUtil"%>
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
@@ -18,6 +19,7 @@
 <%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
+<%@ taglib prefix="opencps-ui" uri="/WEB-INF/tld/opencps-ui.tld"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -58,13 +60,8 @@
 	Format dateFormatDate = FastDateFormatFactoryUtil.getDate(locale, timeZone);
 %>
 <style>
-.lookup-result table {
-	width: 100%;
-}
-
-.lookup-result tr td {
-	padding: 5px;
-	border: 1px solid #cbcbcb;
+.opencps-theme .home_bg #column-1 .portlet-body{
+	margin-top: 0px !important;
 }
 </style>
 <%
@@ -98,136 +95,90 @@
 	backLabel="back"
 />
 </c:if>
+<div class="head">
+	<h3 style="float: left;text-transform: uppercase;"><liferay-ui:message key="ket-qua-tra-cuu-ho-so"/> <%= Validator.isNotNull(dossier)?dossier.getReceptionNo():StringPool.BLANK %></h3>
+	<div class = "page-search">
+		<liferay-util:include page="/html/portlets/dossiermgt/monitoring/toolbar.jsp" servletContext="<%=application %>" />
+	</div>
+</div>
 
-<div class="lookup-result">
+<div class="detail-left">
 	<%
 		if (dossier != null) {
 	%>
-	<table>
-		<tr>
-			<td class="col-left">
-				<liferay-ui:message key="reception-no"/>
-			</td>
-			<td class="col-right">
-				<%= dossier.getReceptionNo() %>
-			</td>
-		</tr>		
-		<tr>
-			<td class="col-left">
-				<liferay-ui:message key="service-name"/>
-			</td>
-			<td class="col-right">
-				<% if (serviceInfo != null) { %>
+	 <h4 class="matiepnhan"><liferay-ui:message key="reception-no"/> - <%= dossier.getReceptionNo() %></h4>
+     
+     <h4 class="thutuc"><liferay-ui:message key="service-name"/></h4>
+     
+     <p>- <% if (serviceInfo != null) { %>
 					<%= serviceInfo.getServiceName() %>
 				<% } %>
-			</td>
-		</tr>		
-		<tr>
-			<td class="col-left">
-				<liferay-ui:message key="administration-name"/>
-			</td>
-			<td class="col-right">
-				<% if (serviceInfo != null) { %>
+	 </p>
+       
+     <h4 class="coquanthuchien"><liferay-ui:message key="administration-name"/></h4>
+            
+     <p>- <% if (serviceInfo != null) { %>
 					<%= dossier.getGovAgencyName()  %>
 				<% } %>
-			</td>
-		</tr>		
-		<tr>
-			<td class="col-left">
-				<liferay-ui:message key="subject-name"/>
-			</td>
-			<td class="col-right">
-				<%= dossier.getSubjectName() %>
-			</td>
-		</tr>		
-		<tr>
-			<td class="col-left">
-				<liferay-ui:message key="address"/>
-			</td>
-			<td class="col-right">
-				<%= dossier.getAddress() %>
-			</td>
-		</tr>		
-		<tr>
-			<td class="col-left">
-				<liferay-ui:message key="receive-datetime"/>
-			</td>
-			<td class="col-right">
-				<%= (Validator.isNotNull(dossier.getReceiveDatetime())) ? dateFormatDate.format(dossier.getReceiveDatetime()) : "" %>
-			</td>
-		</tr>		
-		<tr>
-			<td class="col-left">
-				<liferay-ui:message key="estimate-datetime"/>
-			</td>
-			<td class="col-right">
-				<%= (Validator.isNotNull(dossier.getEstimateDatetime())) ? dateFormatDate.format(dossier.getEstimateDatetime()) : "" %>
-			</td>
-		</tr>		
-		<tr>
-			<td class="col-left">
-				<liferay-ui:message key="finish-datetime"/>
-			</td>
-			<td class="col-right">
-				<%= (Validator.isNotNull(dossier.getFinishDatetime())) ? dateFormatDate.format(dossier.getFinishDatetime()) : "" %>
-			</td>
-		</tr>		
-	</table>
+	 </p>
+     
+     <h4 class="chuhoso"><liferay-ui:message key="subject-name"/></h4>
+     
+     <p>- <%= dossier.getSubjectName() %></p>
+    
+     <h4 class="diachi"><liferay-ui:message key="address"/></h4>
+     
+     <p>- <%= dossier.getAddress() %></p>
+    
+     <h4 class="ngaytiepnhan"><liferay-ui:message key="receive-datetime"/></h4>
+        
+     <p>- <%= (Validator.isNotNull(dossier.getReceiveDatetime())) ? dateFormatDate.format(dossier.getReceiveDatetime()) : "" %></p>
+        
+     <h4 class="ngayhentra"><liferay-ui:message key="estimate-datetime"/></h4>
+       
+     <p>- <%= (Validator.isNotNull(dossier.getEstimateDatetime())) ? dateFormatDate.format(dossier.getEstimateDatetime()) : "" %></p>
+        
+      <h4 class="ngayhoanthanh"><liferay-ui:message key="finish-datetime"/></h4>
+        
+      <p>- <%= (Validator.isNotNull(dossier.getFinishDatetime())) ? dateFormatDate.format(dossier.getFinishDatetime()) : "" %></p>
+
 	<%
 		}
 	%>
 </div>
+<div class="detail-right">
+                <h4><liferay-ui:message key="qua-trinh-xu-ly-ho-so"/></h4>
+                <%
+	                List<DossierLog> dossierLogs = null;
+	    			try {
+	    				dossierLogs = DossierLogLocalServiceUtil.getDossierLogByDossierId(dossierId);
+	    			} catch(Exception e){
+	    				_log.error(e);
+	    			}
+                %>
+                <div class="date">
+                	<%
+                		for(DossierLog dossierLog: dossierLogs){
+                	%>
+                    <div>
+                        <p><%= (Validator.isNotNull(dossierLog.getUpdateDatetime())) ? dateFormatDate.format(dossierLog.getUpdateDatetime()) : StringPool.BLANK %></p>
+                        <p><%= dossierLog.getActionInfo() %></p>
+                    </div>
+                    <%} %>
+                </div>
+                <div class="info">
+                	<%
+                		for(DossierLog dossierLog: dossierLogs){
+                	%>
+                    <div>
+                        <p><span><liferay-ui:message key="doi-tuong"/>:</span> <%= dossierLog.getActor() %></p>
+                        <p><span><liferay-ui:message key="ghi-chu"/>:</span> <%= dossierLog.getMessageInfo() %></p>
+                    </div>
+                    <%} %>
+                    
+                </div>
 
-<liferay-ui:search-container deltaConfigurable="true" delta="<%= SearchContainer.DEFAULT_DELTA %>" iteratorURL="<%= iteratorURL %>">
-
-	<liferay-ui:search-container-results>
-		<%		
-			List<DossierLog> dossierLogs = null;
-			int totalCount = 0;
-			try {
-				dossierLogs = DossierLogLocalServiceUtil.getDossierLogByDossierId(dossierId, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-				totalCount = DossierLogLocalServiceUtil.countDossierLogByDossierId(dossierId);
-			} catch(Exception e){
-				_log.error(e);
-			}
-		
-			total = totalCount;
-			results = dossierLogs;
-			
-			_log.info("----DOSSIER LOG----" + results.size());
-			
-			pageContext.setAttribute("results", results);
-			pageContext.setAttribute("total", total);
-		%>
-	</liferay-ui:search-container-results>	
-		<liferay-ui:search-container-row 
-			className="org.opencps.dossiermgt.model.DossierLog" 
-			modelVar="dossierLog" 
-			keyProperty="dossierLogId"
-		>
-			<%
-				//DictItem dictItem = DictItemLocalServiceUtil.getDictItem(dossierLog.getDossierStatus());
-			%>
-			<liferay-ui:search-container-column-text name="row-no" title="row-no" value="<%= String.valueOf(row.getPos() + 1) %>"/>
-			<liferay-ui:search-container-column-text name="update-datetime" title="update-datetime" value="<%= (Validator.isNotNull(dossierLog.getUpdateDatetime())) ? dateFormatDate.format(dossierLog.getUpdateDatetime()) : \"\" %>"/>
-			<c:choose>
-				<c:when test="<%= Validator.equals(dossierLog.getActor(), WebKeys.ACTOR_ACTION_SYSTEM)%>">
-					<liferay-ui:search-container-column-text name="actor" title="actor" value="<%= LanguageUtil.get(pageContext, \"actor-system\") %>"/>
-				</c:when>
-				<c:when test="<%= Validator.equals(dossierLog.getActor(), WebKeys.ACTOR_ACTION_CITIZEN) %>">
-					<liferay-ui:search-container-column-text name="actor" title="actor" value="<%= LanguageUtil.get(pageContext, \"actor-citizen\") %>"/>
-				</c:when>
-				<c:when test="<%= Validator.equals(dossierLog.getActor(), WebKeys.ACTOR_ACTION_EMPLOYEE) %>">
-					<liferay-ui:search-container-column-text name="actor" title="actor" value="<%= LanguageUtil.get(pageContext, \"actor-employee\") %>"/>
-				</c:when>
-			</c:choose>
-			<liferay-ui:search-container-column-text name="action-info" title="action-info" value="<%= dossierLog.getActionInfo() %>"/>
-			<liferay-ui:search-container-column-text name="message-info" title="message-info" value="<%= dossierLog.getMessageInfo() %>"/>
-		
-		</liferay-ui:search-container-row> 
-	
-	<liferay-ui:search-iterator/>
-</liferay-ui:search-container>
+</div>
 
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.dossiermgt.monitoring.result.jsp");

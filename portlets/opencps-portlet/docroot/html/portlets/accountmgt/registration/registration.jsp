@@ -23,26 +23,27 @@
 
 <%
 	//HttpServletRequest originalServletRequest = PortalUtil.getOriginalServletRequest(request);
-	String type = GetterUtil.getString(request.getParameter("type"), "citizen");
+	/* String type = GetterUtil.getString(request.getParameter("type"), "citizen"); */
+	String type = ParamUtil.getString(request, "type", "citizen");
 %>
 
 <c:choose>
 	<c:when test='<%=type.equals("citizen") %>'>
 		<liferay-util:include 
-			page="/html/portlets/accountmgt/registration/citizenregistration.jsp" 
+			page="/html/portlets/accountmgt/registration/citizenregistration-ux.jsp" 
 			servletContext="<%=application %>" 
 		/> 
 	</c:when>
 	
 	<c:when test='<%=type.equals("business") %>'>
 		<liferay-util:include 
-			page="/html/portlets/accountmgt/registration/businessregistration.jsp" 
+			page="/html/portlets/accountmgt/registration/businessregistration-ux.jsp" 
 			servletContext="<%=application %>" 
 		/> 
 	</c:when>
 	<c:otherwise>
 		<liferay-util:include 
-			page="/html/portlets/accountmgt/registration/citizenregistration.jsp" 
+			page="/html/portlets/accountmgt/registration/citizenregistration-ux.jsp" 
 			servletContext="<%=application %>" 
 		/> 
 	</c:otherwise>
