@@ -67,155 +67,82 @@
     title="payment-detail"
     backLabel="back"
 />
-<div class="lookup-result">
-    <table>
-        <tr style="background: rgb(250, 229, 211) none repeat scroll 0% 0%; text-align: left;">
-            <th style="padding: 6px; border: 1px solid lightgray;"><liferay-ui:message key="so-ho-so"/></th>
-            <th style="padding: 6px; border: 1px solid lightgray;"><%=HtmlUtil.escape(soHoSo) %></th>
-        </tr>
-        <tr>
-            <td class="col-left">
-                <liferay-ui:message key="thu-tuc-hanh-chinh"/>
-            </td>
-            <td class="col-right">
-                <%=HtmlUtil.escape(serviceInfo.getServiceName()) %>
-            </td>
-        </tr>       
-        <tr>
-            <td class="col-left">
-                <liferay-ui:message key="co-quan-thuc-hien"/>
-            </td>
-            <td class="col-right">
-                <%=HtmlUtil.escape(coQuanQuanLyHoaDon) %>
-            </td>
-        </tr>       
-        <tr>
-            <td class="col-left">
-                <liferay-ui:message key="ten-phi-thanh-toan"/>
-            </td>
-            <td class="col-right">
-                <%=HtmlUtil.escape(paymentFile.getPaymentName()) %>
-            </td>
-        </tr>       
-        <tr>
-            <td class="col-left">
-                <liferay-ui:message key="ngay-yeu-cau"/>
-            </td>
-            <td class="col-right">
-                <%=Validator.isNotNull(paymentFile.getRequestDatetime())?HtmlUtil.escape(dateFormatDate.format(paymentFile.getRequestDatetime())):StringPool.BLANK %>
-            </td>
-        </tr>       
-        <tr>
-            <td class="col-left">
-                <liferay-ui:message key="so-tien"/>
-            </td>
-            <td class="col-right">
-                <%=HtmlUtil.escape(df2.format(Double.valueOf(paymentFile.getAmount())).toString()) %>
-            </td>
-        </tr>
-        
-        
-        <tr>
-            <td class="col-left">
-                <liferay-ui:message key="ghi-chu-kem-theo"/>
-            </td>
-            <td class="col-right">
-                <%=HtmlUtil.escape(paymentFile.getRequestNote()) %>
-            </td>
-        </tr>       
-        <tr>
-            <td class="col-left">
-                <liferay-ui:message key="tinh-trang-thanh-toan"/>
-            </td>
-            <td class="col-right">
-                <%=LanguageUtil.get(pageContext, PortletUtil.getPaymentStatusLabel(paymentFile.getPaymentStatus(), locale)) %>
-            </td>
-        </tr>       
-        <tr>
-            <td class="col-left">
-                <liferay-ui:message key="ngay-da-bao-nop"/>
-            </td>
-            <td class="col-right">
-                <%=Validator.isNotNull(paymentFile.getConfirmDatetime())?HtmlUtil.escape(dateFormatDate.format(paymentFile.getConfirmDatetime())):StringPool.BLANK %>
-            </td>
-        </tr>
-        <tr>
-            <td class="col-left">
-                <liferay-ui:message key="hinh-thuc-thuc-hien"/>
-            </td>
-            <td class="col-right">
-                <c:choose>
-                    <c:when test="<%=paymentFile.getPaymentStatus() == 3 %>"><%= LanguageUtil.get(pageContext, PortletUtil.getPaymentMethodLabel(paymentFile.getPaymentMethod(), locale)) %></c:when>
-                    <c:otherwise></c:otherwise>
-                </c:choose>
-                
-            </td>
-        </tr>   
-        <tr>
-            <td class="col-left">
-                <liferay-ui:message key="chung-tu-kem-theo"/>
-            </td>
-            <td class="col-right">
-                <%
-                        FileEntry fileEntry = null;
-                        try {
-                            fileEntry = DLAppServiceUtil.getFileEntry(paymentFile.getConfirmFileEntryId());
-                        }
-                        catch (NoSuchFileEntryException e) {
-                            
-                        }
-                        String dlURL = null;
-                        if (fileEntry != null) {
-                            FileVersion fileVersion = fileEntry.getFileVersion();
-                             
-                            String queryString = "";                             
-                            boolean appendFileEntryVersion = true;
-                             
-                            boolean useAbsoluteURL = true;
-                             
-                            dlURL = DLUtil.getPreviewURL(fileEntry, fileVersion, themeDisplay, queryString, appendFileEntryVersion, useAbsoluteURL);                            
-                        }
-                    %>
-                    <c:if test="<%= dlURL != null %>">
-                        <a class="label opencps dossiermgt part-file-ctr" target="_blank" href="<%= dlURL %>"><liferay-ui:message key="view-confirm-file-entry"></liferay-ui:message></a>
-                    </c:if>
-            </td>
-        </tr>   
-        <tr>
-            <td class="col-left">
-                <liferay-ui:message key="ngay-xac-nhan-thu-phi"/>
-            </td>
-            <td class="col-right">
-                <%=Validator.isNotNull(paymentFile.getApproveDatetime())?HtmlUtil.escape(dateFormatDate.format(paymentFile.getApproveDatetime())):StringPool.BLANK %>
-            </td>
-        </tr>   
-        <tr>
-            <td class="col-left">
-                <liferay-ui:message key="noi-dung-xac-nhan"/>
-            </td>
-            <td class="col-right">
-                <%=HtmlUtil.escape(paymentFile.getApproveNote()) %>
-            </td>
-        </tr>   
-        <tr>
-            <td class="col-left">
-                <liferay-ui:message key="nguoi-thuc-hien"/>
-            </td>
-            <td class="col-right">
-                <%=HtmlUtil.escape(paymentFile.getAccountUserName()) %>
-            </td>
-        </tr>           
-    </table>
-</div>
-<aui:button-row>
-<aui:button name="back" value="back" href="<%=backRedirect.toString() %>" />
-</aui:button-row>
-<style>
-.label.opencps.dossiermgt.part-file-ctr{
-    color: #fff !important;
-    background-color: #25BB61;
-    float: left;
-    margin-left: 5px;
-    padding: 5px 3px;
-}
-</style>
+<div class="payment-ld">
+<div class="content">
+                <div class="box50">
+                    <div>
+                        <p><span><liferay-ui:message key="so-ho-so"/>:</span> <%=HtmlUtil.escape(soHoSo) %></p>
+                    </div>
+                    <div>
+                        <p><span><liferay-ui:message key="thu-tuc-hanh-chinh"/>:</span> <span><%=HtmlUtil.escape(serviceInfo.getServiceName()) %></span></p>
+                    </div>
+                    <div>
+                        <p><span><liferay-ui:message key="co-quan-thuc-hien"/>:</span> <%=HtmlUtil.escape(coQuanQuanLyHoaDon) %></p>
+                    </div>
+                    <div>
+                        <p><span><liferay-ui:message key="ten-phi-thanh-toan"/>:</span> <%=HtmlUtil.escape(paymentFile.getPaymentName()) %></p>
+                    </div>
+                    <div>
+                        <p><span><liferay-ui:message key="ngay-yeu-cau"/>:</span> <%=Validator.isNotNull(paymentFile.getRequestDatetime())?HtmlUtil.escape(dateFormatDate.format(paymentFile.getRequestDatetime())):StringPool.BLANK %></p>
+                    </div>
+                    <div>
+                        <p><span><liferay-ui:message key="so-tien"/>:</span> <span class="red"><%=HtmlUtil.escape(df2.format(Double.valueOf(paymentFile.getAmount())).toString()) %> <liferay-ui:message key="vnd"/></span></p>
+                    </div>
+                    <div>
+                        <p><span><liferay-ui:message key="tinh-trang-thanh-toan"/>:</span> <%=LanguageUtil.get(pageContext, PortletUtil.getPaymentStatusLabel(paymentFile.getPaymentStatus(), locale)) %></p>
+                    </div>                
+                </div>
+                <div class="box50">
+                    <div>
+                        <p><span><liferay-ui:message key="ngay-da-bao-nop"/>:</span> <%=Validator.isNotNull(paymentFile.getConfirmDatetime())?HtmlUtil.escape(dateFormatDate.format(paymentFile.getConfirmDatetime())):StringPool.BLANK %></p>
+                    </div>
+                    <div>
+                        <p><span><liferay-ui:message key="hinh-thuc-thuc-hien"/>:</span> 
+	                        <c:choose>
+			                    <c:when test="<%=paymentFile.getPaymentStatus() == 3 %>"><%= LanguageUtil.get(pageContext, PortletUtil.getPaymentMethodLabel(paymentFile.getPaymentMethod(), locale)) %></c:when>
+			                    <c:otherwise></c:otherwise>
+			                </c:choose>
+	                	</p>
+                    </div>
+                    <div>
+                        <p><span><liferay-ui:message key="chung-tu-kem-theo"/>:</span> 
+							<%
+		                        FileEntry fileEntry = null;
+		                        try {
+		                            fileEntry = DLAppServiceUtil.getFileEntry(paymentFile.getConfirmFileEntryId());
+		                        }
+		                        catch (NoSuchFileEntryException e) {
+		                            
+		                        }
+		                        String dlURL = null;
+		                        if (fileEntry != null) {
+		                            FileVersion fileVersion = fileEntry.getFileVersion();
+		                             
+		                            String queryString = "";                             
+		                            boolean appendFileEntryVersion = true;
+		                             
+		                            boolean useAbsoluteURL = true;
+		                             
+		                            dlURL = DLUtil.getPreviewURL(fileEntry, fileVersion, themeDisplay, queryString, appendFileEntryVersion, useAbsoluteURL);                            
+		                        }
+		                    %>
+		                    <c:if test="<%= dlURL != null %>">
+		                        <a target="_blank" href="<%= dlURL %>"><liferay-ui:message key="view-confirm-file-entry"></liferay-ui:message></a>
+		                    </c:if>
+						</p>
+                    </div>
+                    <div>
+                        <p><span><liferay-ui:message key="ghi-chu-kem-theo"/>:</span> <%=HtmlUtil.escape(paymentFile.getRequestNote()) %></p>
+                    </div>
+                    <div>
+                        <p><span><liferay-ui:message key="ngay-xac-nhan-thu-phi"/>:</span> <%=Validator.isNotNull(paymentFile.getApproveDatetime())?HtmlUtil.escape(dateFormatDate.format(paymentFile.getApproveDatetime())):StringPool.BLANK %></p>
+                    </div>
+                    <div>
+                        <p><span><liferay-ui:message key="noi-dung-xac-nhan"/>:</span> <%=HtmlUtil.escape(paymentFile.getApproveNote()) %></p>
+                    </div>
+                    <div>
+                        <p><span><liferay-ui:message key="nguoi-thuc-hien"/>:</span> <%=HtmlUtil.escape(paymentFile.getAccountUserName()) %></p>
+                    </div>                
+                </div>
+            </div>
+            </div>

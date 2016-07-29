@@ -6,10 +6,23 @@
 @import url(font-awesome.min.css);
 @import url(portlets/p_10.css);
 @import url(portlets/p_13.css);
+<<<<<<< HEAD
 
+@import url(custom_frame_1.css);
+@import url(header_style_1.css);
+
+
+
+
+=======
+<<<<<<< HEAD
+body {
+=======
+@import url(portlets/binhth.css);
 
 
 /* body {
+>>>>>>> 00ca231008add274d1bfac81af0c2ffcc105d271
     background-color: #f2f2f2;
     display: table;
     font-family: 'Roboto-Regular';
@@ -23,7 +36,7 @@
 }
 
 
----------- Header ----------
+/*---------- Header ----------*/
 
 #wrapper {
     padding: 2em 125px 0;
@@ -39,12 +52,12 @@
 }
 
 
-
+/* 
 @media (min-width: 500px) and (max-width: 900px) {
     #wrapper{
 		padding: 2em 125px 0;
 	}
-}
+} */
 
 #banner {
     background-image: url(../images/custom/bg_gradient.png);
@@ -104,7 +117,7 @@
 }
 
 
----------- Menu ----------
+/*---------- Menu ----------*/
 
 .opencps-theme nav.top-menu {
     height: 40px;
@@ -286,7 +299,7 @@
 }
 
 
----------- Footer ----------
+/*---------- Footer ----------*/
 
 footer {
     align-items: center;
@@ -309,7 +322,7 @@ footer > p:nth-child(2) {
 }
 
 
----------- Main ----------
+/*---------- Main ----------*/
 
 .main {
     width: 92%;
@@ -363,14 +376,14 @@ footer > p:nth-child(2) {
 }
 
 
---- Khung chứa, tạm coi tương đương .portlet ----
+/*--- Khung chứa, tạm coi tương đương .portlet ----*/
 
 .box {}
 
 .box .box_content {}
 
 
----- Class tướng ứng cho layout có menu phụ hay không ----
+/*---- Class tướng ứng cho layout có menu phụ hay không ----*/
 
 .main.one_col {}
 
@@ -382,7 +395,7 @@ footer > p:nth-child(2) {
 }
 
 
----- Các cột tự định nghĩa ----
+/*---- Các cột tự định nghĩa ----*/
 
 .col {
     float: left;
@@ -433,7 +446,7 @@ footer > p:nth-child(2) {
 }
 
 
----- Khu lựa chọn các khung select, datetime ... ----
+/*---- Khu lựa chọn các khung select, datetime ... ----*/
 
 .condition_box {
     overflow: hidden;
@@ -441,7 +454,7 @@ footer > p:nth-child(2) {
 }
 
 
----- Table ----
+/*---- Table ----*/
 
 .mTable {}
 
@@ -466,7 +479,7 @@ footer > p:nth-child(2) {
 }
 
 
----- Pagination ----
+/*---- Pagination ----*/
 
 .pagination > li > a,
 .pagination > li > span {
@@ -481,7 +494,7 @@ footer > p:nth-child(2) {
 }
 
 
----- Sub menu ----
+/*---- Sub menu ----*/
 
 .sub_menu {}
 
@@ -533,7 +546,7 @@ footer > p:nth-child(2) {
 }
 
 
----- Menu tabs ----
+/*---- Menu tabs ----*/
 
 .nav-tabs {
     border-bottom: 2px solid #2587b4;
@@ -562,7 +575,7 @@ footer > p:nth-child(2) {
 }
 
 
----- Sub table ----
+/*---- Sub table ----*/
 
 .sm_row {
     overflow: hidden;
@@ -706,7 +719,7 @@ footer > p:nth-child(2) {
 }
 
 
----- Vertical menu ----
+/*---- Vertical menu ----*/
 
 .col_menu .title {
     text-align: center;
@@ -732,7 +745,7 @@ footer > p:nth-child(2) {
 }
 
 
----- Overwrite Tab ----
+/*---- Overwrite Tab ----*/
 
 .opencps-theme .nav-tabs {
     border-bottom: 2px solid #2587b4;
@@ -902,7 +915,7 @@ footer > p:nth-child(2) {
 }
 
 
----- Overwrite header taglib ----
+/*---- Overwrite header taglib ----*/
 
 .opencps-theme .taglib-header {
     border-bottom: 2px solid #2587b4;
@@ -935,7 +948,7 @@ footer > p:nth-child(2) {
     position: absolute;
 }
 
-.opencps-theme .input100 {
+/* .opencps-theme .input100 {
     box-sizing: border-box;
     css3 rec
     -moz-box-sizing: border-box;
@@ -950,9 +963,9 @@ footer > p:nth-child(2) {
     min-height: 30px !important;
     max-width: 100% !important;
     width: 100% !important;
-}
+} */
 
-.opencps-theme .input100 input{
+/* .opencps-theme .input100 input{
     box-sizing: border-box;
     css3 rec
     -moz-box-sizing: border-box;
@@ -967,7 +980,7 @@ footer > p:nth-child(2) {
     min-height: 30px !important;
     max-width: 100% !important;
     width: 100% !important;
-}
+} */
 
 .search-wrapper {
     display: table;
@@ -1037,20 +1050,20 @@ footer > p:nth-child(2) {
 }
 
 
----- Home layout ----
+/*---- Home layout ----*/
 .home-screen {
     height: 502px;
     margin-bottom: 30px;
 }
 
----- Merger from DungLT ----
+/*---- Merger from DungLT ---- */
 
 .opencps-theme input[type="text"].input100, .opencps-theme select.input100, .opencps-theme .input100.lfr-input-date input {
-	 box-sizing: border-box; css3 rec
-     -moz-box-sizing: border-box; ff2
-     -ms-box-sizing: border-box; ie8
-     -webkit-box-sizing: border-box; safari3
-     -khtml-box-sizing: border-box; konqueror
+	 box-sizing: border-box; /* css3 rec */
+     -moz-box-sizing: border-box; /* ff2 */
+     -ms-box-sizing: border-box; /* ie8 */
+     -webkit-box-sizing: border-box; /* safari3 */
+     -khtml-box-sizing: border-box; /* konqueror */
      
      box-sizing: border-box;
      max-width: 100% !important;
@@ -1064,7 +1077,7 @@ footer > p:nth-child(2) {
 .opencps-theme .nav-button-container  {
 	margin-top: 4px !important;
 }
----- Custom liferay toolbar ----
+/*---- Custom liferay toolbar ----*/
 .opencps-theme .nav-button-container .item-config{
 	background-color: #337ab7;
 	border-color: #2e6da4;
@@ -1090,7 +1103,7 @@ footer > p:nth-child(2) {
 
 .opencps-theme .fake_textarea {height: 90px; border: 1px solid #acacac; border-radius: 5px; background-color: white; padding: 0 10px; overflow-y: auto}
 
-.opencps-theme input[type="text"].input100, .opencps-theme select.input100, .opencps-theme .input100.lfr-input-date input {
+/* .opencps-theme input[type="text"].input100, .opencps-theme select.input100, .opencps-theme .input100.lfr-input-date input {
 	 box-sizing: border-box; css3 rec
      -moz-box-sizing: border-box; ff2
      -ms-box-sizing: border-box; ie8
@@ -1101,7 +1114,7 @@ footer > p:nth-child(2) {
      width: 100% !important;
      border-radius: 5px !important;
      padding: 1px 6px;
-}
+} */
 
 .opencps-theme.register input[type="text"].input100, 
 .opencps-theme.register select, 
@@ -1116,9 +1129,9 @@ footer > p:nth-child(2) {
 	font-weight: bold;
 }
 
-
+/*
 	table of dossier-content.jsp
-
+*/
 .opencps-theme.fake_table .opencps.dossiermgt.dossier-part-tree>div {
 	border:1px solid #ccc;
 	border-top:0;
@@ -1201,13 +1214,13 @@ footer > p:nth-child(2) {
 	width: 40%;
 	background:url("/opencps-theme/css/../images/custom/delete.png") center center no-repeat;
 }
-
+/*
 	end table of dossier-content.jsp
+*/
 
-
-
+/*
 	custom home-page
-
+*/
 	.opencps-theme .home-search {
 	position: relative;
 	height: 100px;
@@ -1405,12 +1418,8 @@ footer > p:nth-child(2) {
 .dialog-iframe-popup .nav-tabs > li.active > a:focus, 
 .dialog-iframe-popup .nav-tabs > li > a:hover {
 	color: #555 !important;
-} */
+}
 /*
 	--end---
 */
-
-
-
-@import url(custom_frame_1.css);
-@import url(header_style_1.css);
+>>>>>>> 93947ddc8a049a6fbd3c62d8ab70e34dc3f70cdb

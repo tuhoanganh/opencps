@@ -1,3 +1,8 @@
+<%@page import="org.opencps.accountmgt.model.Business"%>
+<%@page import="org.opencps.accountmgt.service.BusinessLocalServiceUtil"%>
+<%@page import="org.opencps.accountmgt.service.CitizenLocalServiceUtil"%>
+<%@page import="org.opencps.accountmgt.model.Citizen"%>
+<%@page import="org.opencps.paymentmgt.search.PaymentFileDisplayTerms"%>
 <%@page import="java.util.Locale"%>
 <%@page import="com.liferay.portal.service.ServiceContextThreadLocal"%>
 <%@page import="com.liferay.portal.service.ServiceContext"%>
@@ -56,7 +61,15 @@
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "frontofficepaymentlist.jsp");
 %>
-<liferay-ui:search-container  searchContainer="<%= new PaymentFileFrontOfficeSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
+
+<div class="payment-ld">
+<div class="content">
+<aui:form name="payForm" action="#">
+<div class="opcs-serviceinfo-list-label">
+  <p><liferay-ui:message key="cap-nhat-yeu-cau-moi-nhat" /></p>
+</div>
+
+<liferay-ui:search-container searchContainer="<%= new PaymentFileFrontOfficeSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
 
 	<liferay-ui:search-container-results>
 		<%
@@ -99,13 +112,14 @@
 			keyProperty="paymentFileId"
 		>
 			<%
-				// no column
-					row.addText(String.valueOf(row.getPos() + 1));
+					String soHoSo = StringPool.BLANK;
+					String chuHoSo = StringPool.BLANK;
 					
 					//reception no column
 					Dossier dossier = null; 
 					try {
 						dossier = DossierLocalServiceUtil.getDossier(paymentFile.getDossierId());
+						soHoSo =  dossier.getReceptionNo();
 					}
 					catch (NoSuchDossierException e) {
 						
@@ -119,28 +133,26 @@
 					catch (NoSuchServiceInfoException e) {
 						
 					}
-					
-					row.addText(Validator.isNotNull(dossier) ? dossier.getReceptionNo() : "");
-					
-					//gov agency name column
-					/*
-					row.addText(PaymentMgtUtil.getOwnerPayment(
-					    paymentFile.getOwnerUserId(),
-					    paymentFile.getOwnerOrganizationId()));
-					*/
-					if (dossier != null && dossier.getGovAgencyName() != null) {
-						row.addText(dossier.getGovAgencyName());
+					if(paymentFile.getOwnerUserId() > 0){
+						Citizen owner = null;
+						
+						try {
+							owner = CitizenLocalServiceUtil.getByMappingUserId(paymentFile.getOwnerUserId());
+							chuHoSo = owner.getFullName();
+						} catch (Exception e) {
+							
+						}
+					} else {
+						Business owner = null;
+						
+						try {
+							owner = BusinessLocalServiceUtil.getBymappingOrganizationId(paymentFile.getOwnerOrganizationId());
+							chuHoSo = owner.getName();
+						} catch (Exception e) {
+							
+						}
+						
 					}
-					else {
-						row.addText(StringPool.BLANK);
-					}
-						//payment name column
-						row.addText(paymentFile.getPaymentName());
-
-						//amount column
-						row.addText(String.valueOf(NumberFormat.getNumberInstance(
-						    new Locale("vi", "VN")).format(paymentFile.getAmount())));
-
 						// payment status column
 						String paymentStatusText = "";
 						switch (paymentFile.getPaymentStatus()) {
@@ -165,15 +177,57 @@
 							break;
 						}
 
-						row.addText(paymentStatusText);
-
-						row.addJSP(
-						    "center",
-						    SearchEntry.DEFAULT_VALIGN,
-						    "/html/portlets/paymentmgt/frontoffice/paymentfile_actions.jsp",
-						    config.getServletContext(), request, response);
+						PortletURL detailURLXem = renderResponse.createRenderURL();
+						detailURLXem.setParameter("mvcPath", templatePath + "frontofficepaymentdetail.jsp");
+						detailURLXem.setParameter(PaymentFileDisplayTerms.PAYMENT_FILE_ID, String.valueOf(paymentFile.getPaymentFileId()));
+						detailURLXem.setParameter("redirect", currentURL);
+						
+						String classColor = "chothanhtoan";
+						if(paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_ON_PROCESSING ||
+								paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_REQUESTED || paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_REJECTED){
+							classColor = "chothanhtoan";
+						}else if(paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_CONFIRMED){
+							classColor = "datiepnhan";
+						}else if(paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_APPROVED){
+							classColor = "hoanthanh";
+						}
+						
+						// no column
+						row.addText(String.valueOf(row.getPos() + 1));		
+					
+						row.addText("<p><b style=\"margin-left: -20px; padding-right: 20px;\" class=\"mamau "+classColor+"\"></b><span style=\"width: 95px; display: inline-block;\">"+LanguageUtil.get(pageContext, "reception-no")+":</span> "+soHoSo+"</p><p><span>"+LanguageUtil.get(pageContext, "payment-name")+":</span> "+paymentFile.getPaymentName()+" <a href=\""+detailURLXem.toString()+"\" class=\"chitiet\">"+LanguageUtil.get(pageContext, "xem-detail")+"</a></p><p><span>"+LanguageUtil.get(pageContext, "subject-name")+":</span>"+chuHoSo+"</p>");
+						
+						row.addText("<p><span>"+LanguageUtil.get(pageContext, "don-vi")+":</span> "+(Validator.isNotNull(dossier)?dossier.getGovAgencyName():StringPool.BLANK)+"</span></p><p><span>"+LanguageUtil.get(pageContext, "amount")+":</span> <span class=\"sotien\">"+String.valueOf(NumberFormat.getInstance(new Locale("vi", "VN")).format(paymentFile.getAmount()))+"</span></p><p><span>"+LanguageUtil.get(pageContext, "payment-status")+":</span><span class=\""+classColor+"\">"+paymentStatusText+"</span></p>");	
+						
+						row.addJSP("center", SearchEntry.DEFAULT_VALIGN, templatePath + "paymentfile_actions.jsp", config.getServletContext(), request, response);
+						row.addText("");
 			%>	
 		</liferay-ui:search-container-row> 
 	
 	<liferay-ui:search-iterator/>
 </liferay-ui:search-container>
+</aui:form>
+</div>
+</div>
+<style>
+.table.payment tr td:nth-child(2){
+   max-width: 600px;
+}
+.table.payment tr td:nth-child(3){
+   max-width: 300px;
+}
+.table.payment tr td:nth-child(4){
+   width: 190px;
+}
+.table.payment tr td a.button{
+	width: 145px !important;
+}
+</style>
+<aui:script>
+    AUI().ready(function(A) {
+    	var allTable = A.all(".table-striped");
+    	allTable.each(function (taskNode) {
+			taskNode.addClass('payment');
+	    });
+    });
+</aui:script>

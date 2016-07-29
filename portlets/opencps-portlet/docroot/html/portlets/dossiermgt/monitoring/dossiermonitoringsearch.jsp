@@ -44,7 +44,6 @@
 <%@page import="org.opencps.dossiermgt.search.DossierNewProcessingSearch"%>
 
 <div class = "home-search">
-	<liferay-util:include page="/html/portlets/dossiermgt/monitoring/toptabs.jsp" servletContext="<%=application %>" />
 	<liferay-util:include page="/html/portlets/dossiermgt/monitoring/toolbar.jsp" servletContext="<%=application %>" />
 </div>
 
@@ -53,7 +52,8 @@
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "dossiermonitoringsearch.jsp");	
 %>
-
+	<h2><liferay-ui:message key="beautiful-life"/></h2>
+	<p><liferay-ui:message key="slogan-key"/></p>
 <c:if test="<%= false %>">
 
 	<aui:row>

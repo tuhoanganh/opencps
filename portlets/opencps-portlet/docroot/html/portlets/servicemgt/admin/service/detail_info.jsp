@@ -50,6 +50,9 @@
 	<aui:col width="100">
 		<%-- <aui:input name="<%= ServiceDisplayTerms.SERVICE_DOSSIER %>" type="textarea" cssClass="txtarea-medium">
 		</aui:input> --%>
+		<div class="label">
+			<liferay-ui:message key="service-dossier"/>
+		</div>
 		<liferay-ui:input-editor name="<%= ServiceDisplayTerms.SERVICE_DOSSIER %>" initMethod="service_dossier"/>
 	</aui:col>
 </aui:row>
@@ -58,6 +61,9 @@
 	<aui:col width="100">
 		<%-- <aui:input name="<%= ServiceDisplayTerms.SERVICE_CONDITION %>" type="textarea" cssClass="txtarea-medium">
 		</aui:input> --%>
+		<div class="label">
+			<liferay-ui:message key="service-condition"/>
+		</div>
 		<liferay-ui:input-editor name="<%= ServiceDisplayTerms.SERVICE_CONDITION %>" initMethod="service_condition"/>
 	</aui:col>
 </aui:row>
@@ -67,6 +73,9 @@
 		<%-- <aui:input name="<%= ServiceDisplayTerms.SERVICE_DURATION %>" type="textarea" cssClass="txtarea-medium">
 		</aui:input>
 		 --%>
+		 <div class="label">
+			<liferay-ui:message key="service-duration"/>
+		</div>
 		<liferay-ui:input-editor name="<%= ServiceDisplayTerms.SERVICE_DURATION %>" initMethod="service_duration"/>
 	</aui:col>
 </aui:row>
@@ -75,7 +84,9 @@
 	<aui:col width="100">
 		<%-- <aui:input name="<%= ServiceDisplayTerms.SERVICE_ACTORS %>" type="textarea" cssClass="txtarea-medium">
 		</aui:input> --%>
-		
+		<div class="label">
+			<liferay-ui:message key="service-actors"/>
+		</div>
 		<liferay-ui:input-editor name="<%= ServiceDisplayTerms.SERVICE_ACTORS %>" initMethod="service_actors"/>
 	</aui:col>
 </aui:row>
@@ -85,6 +96,9 @@
 		<%-- <aui:input name="<%= ServiceDisplayTerms.SERVICE_FEE %>" type="textarea" cssClass="txtarea-medium">
 		</aui:input>
 		 --%>
+		 <div class="label">
+			<liferay-ui:message key="service-fee"/>
+		</div>
 		<liferay-ui:input-editor name="<%= ServiceDisplayTerms.SERVICE_FEE %>" initMethod="service_fee"/>
 	</aui:col>
 </aui:row>
@@ -93,7 +107,9 @@
 	<aui:col width="100">
 		<%-- <aui:input name="<%= ServiceDisplayTerms.SERVICE_RESULTS %>" type="textarea" cssClass="txtarea-medium">
 		</aui:input> --%>
-		
+		 <div class="label">
+			<liferay-ui:message key="service-results"/>
+		</div>
 		<liferay-ui:input-editor name="<%= ServiceDisplayTerms.SERVICE_RESULTS %>" initMethod="service_results"/>
 	</aui:col>
 </aui:row>
@@ -102,7 +118,9 @@
 	<aui:col width="100">
 		<%-- <aui:input name="<%= ServiceDisplayTerms.SERVICE_RECORDS %>" type="textarea" cssClass="txtarea-medium">
 		</aui:input> --%>
-		
+		 <div class="label">
+			<liferay-ui:message key="service-records"/>
+		</div>
 		<liferay-ui:input-editor name="<%= ServiceDisplayTerms.SERVICE_RECORDS %>" initMethod="service_records"/>
 		
 	</aui:col>

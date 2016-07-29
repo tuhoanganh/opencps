@@ -45,7 +45,7 @@
 				%>
 				
 				<portlet:renderURL var="editServiceURL">
-					<portlet:param name="mvcPath" value='<%= templatePath + "edit_service.jsp" %>'/>
+					<portlet:param name="mvcPath" value='<%= templatePath + "edit_service-ux.jsp" %>'/>
 					<portlet:param name="redirectURL" value="<%=currentURL %>"/>
 					<portlet:param name="backURL" value="<%=currentURL %>"/>
 				</portlet:renderURL>

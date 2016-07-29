@@ -14,6 +14,7 @@
  */
 --%>
 
+<%@page import="com.liferay.portal.kernel.util.StringPool"%>
 <%@ include file="/html/portlet/login/init.jsp" %>
 
 <c:choose>
@@ -109,45 +110,152 @@
 			<liferay-ui:error exception="<%= UserLockoutException.class %>" message="this-account-has-been-locked" />
 			<liferay-ui:error exception="<%= UserPasswordException.class %>" message="authentication-failed" />
 			<liferay-ui:error exception="<%= UserScreenNameException.class %>" message="authentication-failed" />
-
-			<aui:fieldset>
-
-				<%
-				String loginLabel = null;
-
-				if (authType.equals(CompanyConstants.AUTH_TYPE_EA)) {
-					loginLabel = "email-address";
-				}
-				else if (authType.equals(CompanyConstants.AUTH_TYPE_SN)) {
-					loginLabel = "screen-name";
-				}
-				else if (authType.equals(CompanyConstants.AUTH_TYPE_ID)) {
-					loginLabel = "id";
-				}
-				%>
-
-				<aui:input autoFocus="<%= windowState.equals(LiferayWindowState.EXCLUSIVE) || windowState.equals(WindowState.MAXIMIZED) %>" cssClass="clearable" label="<%= loginLabel %>" name="login" showRequiredLabel="<%= false %>" type="text" value="<%= login %>">
-					<aui:validator name="required" />
-				</aui:input>
-
-				<aui:input name="password" showRequiredLabel="<%= false %>" type="password" value="<%= password %>">
-					<aui:validator name="required" />
-				</aui:input>
-
-				<span id="<portlet:namespace />passwordCapsLockSpan" style="display: none;"><liferay-ui:message key="caps-lock-is-on" /></span>
-
-				<c:if test="<%= company.isAutoLogin() && !PropsValues.SESSION_DISABLED %>">
-					<aui:input checked="<%= rememberMe %>" name="rememberMe" type="checkbox" />
-				</c:if>
-			</aui:fieldset>
-
-			<aui:button-row>
-				<aui:button type="submit" value="sign-in" />
-			</aui:button-row>
+			
+			<c:choose>
+				<c:when test='<%=displayStyle.equals("default") %>'>
+					<div class="default-sign-in-wrapper">
+						<aui:fieldset>
+			
+							<%
+							String loginLabel = null;
+			
+							if (authType.equals(CompanyConstants.AUTH_TYPE_EA)) {
+								loginLabel = "email-address";
+							}
+							else if (authType.equals(CompanyConstants.AUTH_TYPE_SN)) {
+								loginLabel = "screen-name";
+							}
+							else if (authType.equals(CompanyConstants.AUTH_TYPE_ID)) {
+								loginLabel = "id";
+							}
+							%>
+							
+							<aui:input autoFocus="<%= windowState.equals(LiferayWindowState.EXCLUSIVE) || windowState.equals(WindowState.MAXIMIZED) %>" cssClass="clearable" label="<%= loginLabel %>" name="login" showRequiredLabel="<%= false %>" type="text" value="<%= login %>">
+								<aui:validator name="required" />
+							</aui:input>
+			
+							<aui:input name="password" showRequiredLabel="<%= false %>" type="password" value="<%= password %>">
+								<aui:validator name="required" />
+							</aui:input>
+			
+							<span id="<portlet:namespace />passwordCapsLockSpan" style="display: none;"><liferay-ui:message key="caps-lock-is-on" /></span>
+							
+							<c:if test="<%= company.isAutoLogin() && !PropsValues.SESSION_DISABLED %>">
+								<aui:input checked="<%= rememberMe %>" name="rememberMe" type="checkbox" />
+							</c:if>
+						</aui:fieldset>
+		
+						<aui:button-row>
+							<aui:button type="submit" value="sign-in" />
+						</aui:button-row>
+					</div>
+				</c:when>
+				<c:otherwise>
+					<div class="ux-sign-in-wrapper">
+						<div class="default-sign-in">
+							<div class="sign-in-header">
+								<span class="title">
+									<liferay-ui:message key="sign-in"/>
+								</span>
+								<span class="create-account">
+									<aui:a href="#">
+										<liferay-ui:message key="create-account"/>
+									</aui:a>
+								</span>
+							</div>
+							<aui:fieldset>
+								<%
+								String loginLabel = null;
+				
+								if (authType.equals(CompanyConstants.AUTH_TYPE_EA)) {
+									loginLabel = "email-address";
+								}
+								else if (authType.equals(CompanyConstants.AUTH_TYPE_SN)) {
+									loginLabel = "screen-name";
+								}
+								else if (authType.equals(CompanyConstants.AUTH_TYPE_ID)) {
+									loginLabel = "id";
+								}
+								%>
+								<div class="input-prepend">
+									<span class="add-on"><i class="fa fa-envelope-o"></i></span>
+									<aui:input autoFocus="<%= windowState.equals(LiferayWindowState.EXCLUSIVE) || windowState.equals(WindowState.MAXIMIZED) %>" 
+										cssClass="clearable user-name" 
+										label="<%= StringPool.BLANK %>" 
+										name="login" showRequiredLabel="<%= false %>" 
+										type="text" value="<%= login %>"
+									>
+										<aui:validator name="required" />
+									</aui:input>
+								</div>
+								<div class="input-prepend">
+									<span class="add-on"><i class="fa fa-key"></i></span>
+									<aui:input name="password" showRequiredLabel="<%= false %>" 
+										cssClass="password" 
+										type="password" value="<%= password %>" 
+										label="<%=StringPool.BLANK %>"
+									>
+										<aui:validator name="required" />
+									</aui:input>
+								</div>
+								
+								<span id="<portlet:namespace />passwordCapsLockSpan" style="display: none;"><liferay-ui:message key="caps-lock-is-on" /></span>
+								
+							</aui:fieldset>
+			
+							<aui:button-row>
+								<aui:button type="submit" value="sign-in" />
+							</aui:button-row>
+							
+							<div class="forgot-password">
+								<aui:a href="#">
+									<liferay-ui:message key="forgot-password"/>
+								</aui:a>
+							</div>
+						</div>
+						<div class="advance-signin">
+							<div class="sign-in-label">
+								<liferay-ui:message key="sign-in-with-facebook"/>
+							</div>
+							<div class="button-wrapper fb">
+								<aui:button name="sign-in-with-facebook" value="sign-in-with-facebook" cssClass="btn-fb-signin">
+									<i class="fa fa-facebook MR5"></i>
+								</aui:button>
+							</div>
+							<div class="split">
+								<span class="text-label">
+									<liferay-ui:message key="or"/>
+								</span>
+							</div>
+							
+							<div class="sign-in-label">
+								<liferay-ui:message key="sign-in-with-digital-signature"/>
+							</div>
+							<div class="input-prepend">
+		                        <span class="add-on"><i class="fa fa-key"></i></span>
+		                        <aui:input autoFocus="<%= windowState.equals(LiferayWindowState.EXCLUSIVE) || windowState.equals(WindowState.MAXIMIZED) %>" 
+									cssClass="digital-signature" 
+									label="<%= StringPool.BLANK %>" 
+									name="ignature" showRequiredLabel="<%= false %>" 
+									type="text" value=""
+									placeholder="digital-signature"
+								>
+								</aui:input>
+		                    </div>
+		                    
+		                    <div class="button-wrapper signature">
+								<aui:button name="sign-in-with-digital-signature" value="sign-in-with-digital-signature" cssClass="btn-signature-signin"/>
+							</div>
+						</div>
+					</div>
+				</c:otherwise>
+			</c:choose>
 		</aui:form>
 
-		<liferay-util:include page="/html/portlet/login/navigation.jsp" />
-
+		<c:if test='<%=displayStyle.equals("default") %>'>
+			<liferay-util:include page="/html/portlet/login/navigation.jsp" />
+		</c:if>
+		
 		<aui:script use="aui-base">
 			var form = A.one(document.<portlet:namespace />fm);
 

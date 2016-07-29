@@ -41,11 +41,13 @@
 	List<DossierPart> dossierParts = new ArrayList<DossierPart>();
 	List<String> headerNames = new ArrayList<String>();
 	
-	headerNames.add("row-no");
+	/* headerNames.add("row-no");
 	headerNames.add("part-no");
 	headerNames.add("part-name");
 	headerNames.add("part-type");
-	headerNames.add("part-tip");
+	headerNames.add("part-tip"); */
+	
+	
 	
 	boolean isPermission =
 					DossierPartPermission.contains(
@@ -64,6 +66,8 @@
  // chua sap xep theo sibling
 					
 %>
+
+<div class="ocps-serviceinfo-list">
 
 <portlet:renderURL var="editDossierPartURL">
 	<portlet:param name="mvcPath" value='<%= templatePath + "edit_dossier_part.jsp" %>'/>
@@ -105,11 +109,29 @@
 	>
 		<%
 			String partTypeName = LanguageUtil.get(portletConfig ,themeDisplay.getLocale(), DossierMgtUtil.getNameOfPartType(dossierPart.getPartType(), themeDisplay.getLocale()));
-			row.addText(String.valueOf(dossierPart.getSibling()));
-			row.addText(dossierPart.getPartNo());
-			row.addText(dossierPart.getPartName());
-			row.addText(partTypeName);
-			row.addText(dossierPart.getPartTip());
+		
+			String rowNo =  LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "row-no");
+			String partNo =  LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "part-no");
+			String partName =  LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "part-name");
+			String partType =  LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "part-type");
+			String parTip =  LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "part-tip");
+			
+			
+			String s = "<div class=\"ocps-searh-bound-data\"><p class=\"ocps-searh-bound-data-chirld-p\"><span class=\"ocps-searh-bound-data-chirld-span\">" + partNo + "</span>"+ dossierPart.getPartNo() +"</p>";
+			s= s + "<p class=\"ocps-searh-bound-data-chirld-p\"><span class=\"ocps-searh-bound-data-chirld-span\">"+ partName +"</span><a class=\"ocps-searh-bound-data-chirld-label\" href=\"#\"> "+ dossierPart.getPartName() + "</a></p></div>";
+			
+			String s1 = "<div class=\"ocps-searh-bound-data\"><p class=\"ocps-searh-bound-data-chirld-p\"><span class=\"ocps-searh-bound-data-chirld-span\">" + partType + "</span>"+ partTypeName +"</p>";
+			s1= s1 + "<p class=\"ocps-searh-bound-data-chirld-p\"><span class=\"ocps-searh-bound-data-chirld-span\">"+ parTip +"</span><a class=\"ocps-searh-bound-data-chirld-label\" href=\"#\"> "+ dossierPart.getPartTip() + "</a></p></div>";
+
+			row.addText(String.valueOf((int)dossierPart.getSibling()));
+			row.addText(s);
+			row.addText(s1);
+			
+			/* row.addText(partNo + " :: " +dossierPart.getPartNo());
+			row.addText(partName + " :::: " + dossierPart.getPartName());
+			row.addText(partType + " ::::: " + partTypeName);
+			row.addText(parTip + " :::: " + dossierPart.getPartTip()); */
+			
 			if(isPermission) {
 				row.addJSP("center", SearchEntry.DEFAULT_VALIGN, templatePath + "dossier_part_actions.jsp", config.getServletContext(), request, response);
 			}
@@ -118,3 +140,5 @@
 	</liferay-ui:search-container-row>
 	<liferay-ui:search-iterator paginate="<%=false %>"/>
 </liferay-ui:search-container>
+
+</div>

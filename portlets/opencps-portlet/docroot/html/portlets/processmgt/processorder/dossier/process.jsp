@@ -115,30 +115,30 @@
 	}
 	
 %>
-
+<div class="ocps-dossier-process">
 <table class="process-workflow-info">
   <tr class="odd">
-    <td width="20%"><liferay-ui:message key="step-name"/></td>
+    <td width="20%" class="opcs-dosier-process-key"><liferay-ui:message key="step-name"/></td>
     <td width="30%"><%=processStep != null ? processStep.getStepName() : StringPool.BLANK %></td>
-    <td width="20%"><liferay-ui:message key="assign-to-user"/></td>
+    <td width="20%" class="opcs-dosier-process-key"><liferay-ui:message key="assign-to-user"/></td>
     <td width="30%"><%=processOrder != null ? new ProcessOrderBean().getAssignToUserName(processOrder.getAssignToUserId()) : StringPool.BLANK %></td>
   </tr>
   
   <tr class="even">
-    <td width="20%"><liferay-ui:message key="pre-action-user"/></td>
+    <td width="20%" class="opcs-dosier-process-key"><liferay-ui:message key="pre-action-user"/></td>
     <td width="30%"><%=latestWorkflowActionHistory != null ? new ProcessOrderBean().getAssignToUserName(latestWorkflowActionHistory.getActionUserId()) : StringPool.BLANK %></td>
-    <td width="20%"><liferay-ui:message key="pre-action-date"/></td>
+    <td width="20%" class="opcs-dosier-process-key"><liferay-ui:message key="pre-action-date"/></td>
     <td width="30%"><%=latestWorkflowActionHistory != null ? DateTimeUtil.convertDateToString(latestWorkflowActionHistory.getActionDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) : StringPool.BLANK %></td>
   </tr>
   
   
   <tr class="odd">
-    <td width="20%"><liferay-ui:message key="pre-action"/></td>
+    <td width="20%" class="opcs-dosier-process-key"><liferay-ui:message key="pre-action"/></td>
     <td width="80%" colspan="3"><%=processStep != null ? processStep.getStepName() : StringPool.BLANK %></td>
   </tr>
   
   <tr class="even">
-    <td width="20%"><liferay-ui:message key="pre-action-note"/></td>
+    <td width="20%" class="opcs-dosier-process-key"><liferay-ui:message key="pre-action-note"/></td>
   	<td width="80%" colspan="3"><%=latestWorkflowActionHistory != null ? latestWorkflowActionHistory.getActionNote() : StringPool.BLANK %></td>
   </tr>
 </table>
@@ -449,7 +449,7 @@
 	%>
 </aui:row>
 
-
+</div>
 <aui:script use="aui-base,liferay-portlet-url,aui-io">
 
 	Liferay.provide(window, '<portlet:namespace/>assignToUser', function(e) {
