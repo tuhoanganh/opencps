@@ -22,8 +22,15 @@ import org.opencps.paymentmgt.service.base.PaymentFileLocalServiceBaseImpl;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.User;
+import com.liferay.portal.security.permission.PermissionChecker;
+import com.liferay.portal.security.permission.PermissionCheckerFactoryUtil;
+import com.liferay.portal.security.permission.PermissionThreadLocal;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.UserLocalServiceUtil;
 
 /**
  * The implementation of the Payment file local service.
@@ -266,14 +273,46 @@ public class PaymentFileLocalServiceImpl extends PaymentFileLocalServiceBaseImpl
 		return paymentFilePersistence.findByD_(dossierId);
 	}
 	
-	public PaymentFile syncPaymentFile(String oid, String typeUpdate)
+	public PaymentFile syncPaymentFile(
+	    String oid, String typeUpdate, int paymentStatus, int paymentMethod,
+	    String approveNote, byte[] bytes, long folderId, String sourceFileName,
+	    String mimeType, String title, String description, String changeLog,
+	    ServiceContext serviceContext)
 	    throws PortalException, SystemException {
-		
+
 		PaymentFile paymentFile = paymentFilePersistence.findByOID(oid);
+
+		paymentFile.setPaymentStatus(paymentStatus);
+		paymentFile.setPaymentMethod(paymentMethod);
 		
+		if (Validator.isNotNull(approveNote)) {
+			paymentFile.setApproveNote(approveNote);
+		}
 		
+		paymentFile.setApproveNote(approveNote);
+
+		User user = UserLocalServiceUtil.getUser(serviceContext.getUserId());
+
+		PermissionChecker permissionChecker;
+
+		try {
+			permissionChecker = PermissionCheckerFactoryUtil.create(user);
+			PermissionThreadLocal.setPermissionChecker(permissionChecker);
+		}
+		catch (Exception e) {
+		}
+
+		FileEntry fileEntry =
+		    dlAppLocalService.addFileEntry(
+		        serviceContext.getUserId(), serviceContext.getScopeGroupId(),
+		        folderId, sourceFileName, mimeType, title, description,
+		        changeLog, bytes, serviceContext);
 		
-		return null;
+		paymentFile.setConfirmFileEntryId(fileEntry.getFileEntryId());
 		
+		paymentFilePersistence.update(paymentFile);
+
+		return paymentFile;
+
 	}
 }
