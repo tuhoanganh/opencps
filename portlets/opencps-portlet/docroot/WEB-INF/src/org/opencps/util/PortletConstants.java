@@ -166,4 +166,6 @@ public class PortletConstants {
 	public static final String PAYMENT_TYPE_CONFIRM_BANK = "paymentConfirmBank";
 	
 	public static final String PAYMENT_TYPE_CONFIRM_CASH = "paymentConfirmCash";
+	
+	public static final String PAYMENT_TYPE = "paymentType";
 }
