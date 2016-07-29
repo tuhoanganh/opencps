@@ -1,3 +1,5 @@
+<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
+<%@page import="org.opencps.datamgt.model.DictItem"%>
 <%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
 <%
@@ -87,10 +89,20 @@
 			ServiceInfo service = null;
 			long serviceId = 0;
 			
+			DictItem dictItem = null;
+			String administrationName = StringPool.BLANK;
 			try {
 				service = ServiceInfoLocalServiceUtil.getServiceInfo(serviceConfig.getServiceInfoId());
 				serviceId = service.getServiceinfoId();
 			} catch(Exception e) {
+				
+			}
+			
+			try {
+				dictItem = DictItemLocalServiceUtil.getDicItemByTreeIndex(serviceConfig.getServiceDomainIndex());
+				administrationName = dictItem.getItemName(themeDisplay.getLocale(),true);
+			
+			} catch (Exception e) {
 				
 			}
 		%>
@@ -111,7 +123,7 @@
 				name="service-domain" value="<%=DictItemUtil.getNameDictItem(service.getDomainCode()) %>"
 			/>
 		<liferay-ui:search-container-column-text 
-				name="service-administration" value="<%=DictItemUtil.getNameDictItem(serviceConfig.getGovAgencyCode()) %>"
+				name="service-administration" value="<%=administrationName %>"
 			/>
 		<%
 			 final String hrefFix = "location.href='" + deteleRelaSeInfoAndProcessURL .toString()+"'";
