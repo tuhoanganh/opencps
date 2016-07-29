@@ -186,7 +186,7 @@
 									<td <%=cssClass %> width="5px">
 										<i class="fa fa-circle blue sx10"></i>
 									</td>
-									<td <%=cssClassLb %> width="20px" align="center">>
+									<td <%=cssClassLb %> width="20px" align="center">
 										<%=dem %>
 									</td>
 									<td <%=cssClass %>>

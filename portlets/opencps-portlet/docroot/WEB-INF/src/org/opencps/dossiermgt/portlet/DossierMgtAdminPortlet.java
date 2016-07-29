@@ -194,7 +194,7 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		        actionRequest,
 		        DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DESCRIPTION);
 		String returnURL = ParamUtil.getString(actionRequest, "returnURL");
-		String backURL = ParamUtil.getString(actionRequest, "backURL");
+		/*String backURL = ParamUtil.getString(actionRequest, "backURL");*/
 
 		try {
 			
@@ -215,8 +215,8 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 				    serviceContext);
 			}
 			
-			if(Validator.isNotNull(backURL)) {
-				actionResponse.sendRedirect(backURL);
+			if(Validator.isNotNull(returnURL)) {
+				actionResponse.sendRedirect(returnURL);
 			}
 		}
 		catch (Exception e) {
