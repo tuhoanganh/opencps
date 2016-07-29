@@ -64,6 +64,15 @@
         	<finder-column name="keypayTransactionId"/>
         </finder>
         
+        <finder return-type="PaymentFile" name="OID">
+        	<finder-column name="oid"/>
+        </finder>
+        
+        <reference entity="DLFileEntry" package-path="com.liferay.portlet.documentlibrary"/>
+        <reference package-path="com.liferay.portlet.documentlibrary" entity="DLFolder" />
+        <reference package-path="com.liferay.portlet.asset" entity="AssetEntry" />
+        <reference package-path="com.liferay.portlet.documentlibrary" entity="DLApp" />
+        
     </entity>
     <entity name="PaymentConfig" local-service="true" human-name="Payment configuration" table="opencps_payment_config">
         <column name="paymentConfigId" type="long" primary="true"></column>

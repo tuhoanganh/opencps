@@ -23,7 +23,11 @@ import javax.naming.NamingException;
 import org.opencps.backend.message.UserActionMsg;
 import org.opencps.jms.context.JMSHornetqContext;
 import org.opencps.jms.message.SubmitDossierMessage;
+import org.opencps.jms.message.SubmitPaymentFileMessage;
 import org.opencps.jms.util.JMSMessageUtil;
+import org.opencps.paymentmgt.model.PaymentFile;
+import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
+import org.opencps.util.PortletConstants;
 import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.log.Log;
@@ -48,6 +52,8 @@ public class MsgOutFrontOffice implements MessageListener {
 
 			UserActionMsg userActionMgs =
 				(UserActionMsg) message.get("msgToEngine");
+			
+			
 
 			/*
 			 * JMSContext context = JMSMessageUtil.createProducer(
@@ -63,12 +69,25 @@ public class MsgOutFrontOffice implements MessageListener {
 					WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(),
 					WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "remote",
 					"hornetq");
+			
+			if (userActionMgs.getAction().contentEquals(
+			    PortletConstants.PAYMENT_TYPE)) {
+				
+				SubmitPaymentFileMessage submitPaymentFileMessage = new SubmitPaymentFileMessage(context);
+				
+				PaymentFile paymentFile = PaymentFileLocalServiceUtil.fetchPaymentFile(userActionMgs.getPaymentFileId());
+				
+				submitPaymentFileMessage.sendHornetMessage(paymentFile);
+				
+			}
+			else {
+				SubmitDossierMessage submitDossierMessage =
+				    new SubmitDossierMessage(context);
 
-			SubmitDossierMessage submitDossierMessage =
-				new SubmitDossierMessage(context);
-
-			submitDossierMessage.sendMessageByHornetq(
-				userActionMgs.getDossierId(), userActionMgs.getFileGroupId());
+				submitDossierMessage.sendMessageByHornetq(
+				    userActionMgs.getDossierId(),
+				    userActionMgs.getFileGroupId());
+			}			
 
 		}
 		catch (Exception e) {
