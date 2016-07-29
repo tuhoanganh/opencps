@@ -27,7 +27,7 @@
 <%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
 <%@ include file="../init.jsp"%>
 
-
+<div class="ocps-search-process-leader">
 <liferay-util:include page='<%=templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
 <liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
 
@@ -129,6 +129,7 @@
 		<liferay-ui:search-iterator/>
 	</liferay-ui:search-container>
 </aui:form>
+</div>
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.processmgt.processorder.processordertodolist.jsp");
 %>
