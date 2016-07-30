@@ -74,4 +74,10 @@ public class MessageKeys {
 	public static final String PAYMENT_FILE_CONFIRM_CASH_SUCCESS = "payment.file.confirm.cash.success";
 	public static final String PAYMENT_FILE_CONFIRM_CASH_ERROR = "payment.file.confirm.cash.error";
 	public static final String PAYMENT_FILE_CONFIRM_BANK_ERROR = "payment.file.confirm.bank.error";
+
+	public static final String SERVICE_DELERR_EXITS_SERVICECONFIG = "serviceinf.serviceconfig.has.existed";
+	public static final String SERVICE_DELERR_EXITS_DOSSIER = "serviceinf.dossier.has.existed";
+	public static final String SERVICE_DELERR_EXITS_PROCESSORDER = "serviceinf.processorder.has.existed";
+
+	public static final String SERVICE_DELSUCC = "serviceinf.delete.success";
 }

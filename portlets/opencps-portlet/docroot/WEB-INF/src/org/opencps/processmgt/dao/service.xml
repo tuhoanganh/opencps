@@ -273,6 +273,10 @@
 		
 		<finder return-type="Collection" name="processStepId">
 			<finder-column name="processStepId"/>
+		</finder> 
+		
+		<finder return-type="Collection" name="ServiceInfoId">
+			<finder-column name="serviceInfoId"/>
 		</finder>
 	</entity>
 
