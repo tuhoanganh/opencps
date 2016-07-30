@@ -61,6 +61,7 @@
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "frontofficepaymentlist.jsp");
 %>
+
 <div class="payment-ld">
 <div class="content">
 <aui:form name="payForm" action="#">

@@ -117,6 +117,8 @@ public class DefineObjectsTag extends IncludeTag {
 						.getUserId(), themeDisplay
 							.getScopeGroupId(),
 						serviceContext);
+				
+				
 
 				if (accountBean != null) {
 					accountType = accountBean
@@ -134,7 +136,7 @@ public class DefineObjectsTag extends IncludeTag {
 						accountInstance = citizen;
 					}
 					else if (accountBean
-						.isEmployee()) {
+						.isEmployee()) { 
 						employee = (Employee) accountBean
 							.getAccountInstance();
 						accountInstance = employee;

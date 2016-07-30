@@ -224,8 +224,11 @@ public class AccountUtil {
 		User user = null;
 
 		try {
+			_log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 1" + userId);
 			user = UserLocalServiceUtil
 				.getUser(userId);
+			
+			_log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 2" + user.getFullName());
 			
 			accountRoles = RoleLocalServiceUtil.getUserRoles(user.getUserId());
 			
@@ -246,6 +249,9 @@ public class AccountUtil {
 								PortletPropsValues.USERMGT_USERGROUP_NAME_EMPLOYEE)) {
 						accountType = userGroup
 							.getName();
+						
+						_log.info("AAAAACCCTYPE " + accountType);
+						
 						break;
 					}
 

@@ -111,15 +111,6 @@
 		<portlet-name>15</portlet-name>
 		<icon>/icon.png</icon>
 		<scheduler-entry>
-			<scheduler-event-listener-class>org.opencps.backend.scheduler.OneMinute</scheduler-event-listener-class>
-			<trigger>
-				<simple>
-					<simple-trigger-value>1</simple-trigger-value>
-					<time-unit>minute</time-unit>
-				</simple>
-			</trigger>
-		</scheduler-entry>
-		<scheduler-entry>
 			<scheduler-event-listener-class>org.opencps.backend.scheduler.FiveMinutes</scheduler-event-listener-class>
 			<trigger>
 				<simple>
@@ -130,7 +121,17 @@
 		</scheduler-entry>
 		
 		<scheduler-entry>
-			<scheduler-event-listener-class>org.opencps.backend.scheduler.JMSRecevieQueue</scheduler-event-listener-class>
+			<scheduler-event-listener-class>org.opencps.backend.exc.MsgInBackOffice</scheduler-event-listener-class>
+			<trigger>
+				<simple>
+					<simple-trigger-value>1</simple-trigger-value>
+					<time-unit>minute</time-unit>
+				</simple>
+			</trigger>
+		</scheduler-entry>
+		
+		<scheduler-entry>
+			<scheduler-event-listener-class>org.opencps.backend.exc.MsgInFrontOffice</scheduler-event-listener-class>
 			<trigger>
 				<simple>
 					<simple-trigger-value>1</simple-trigger-value>

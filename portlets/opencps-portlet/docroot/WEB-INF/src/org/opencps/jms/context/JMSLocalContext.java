@@ -22,8 +22,6 @@ import java.util.Properties;
 
 import javax.jms.BytesMessage;
 import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
-import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.MapMessage;
 import javax.jms.MessageConsumer;
@@ -31,30 +29,32 @@ import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.jms.QueueBrowser;
+import javax.jms.QueueConnection;
+import javax.jms.QueueConnectionFactory;
+import javax.jms.QueueReceiver;
 import javax.jms.QueueSession;
-import javax.jms.Session;
 import javax.jms.StreamMessage;
 import javax.jms.TextMessage;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import org.hornetq.jms.client.HornetQJMSConnectionFactory;
 import org.opencps.util.PortletConstants;
 import org.opencps.util.PortletUtil;
 import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.StringPool;
 
 /**
  * @author trungnt
  */
-public class JMSContext {
+public class JMSLocalContext {
 
-
+	
 	/**
 	 * @param companyId
-	 * @param code
-	 * @param remote
 	 * @param channelName
 	 * @param queueName
 	 * @param lookup
@@ -63,22 +63,21 @@ public class JMSContext {
 	 * @throws SystemException
 	 * @throws Exception
 	 */
-	public JMSContext(
-		long companyId, String code, boolean remote, String channelName,
-		String queueName, String lookup, String mom)
+	public JMSLocalContext(
+		long companyId, String channelName, String queueName, String lookup,
+		String mom)
 		throws NamingException, SystemException, Exception {
 
-		init(companyId, code, remote, channelName, queueName, lookup, mom);
+		init(companyId, channelName, queueName, lookup, mom);
 	}
 
 	/**
 	 * @return
-	 * @throws Exception
+	 * @throws JMSException
 	 */
 	public int countMessageInQueue()
-		throws Exception {
+		throws JMSException {
 
-		createQueueBrowser();
 		int count = 0;
 		Enumeration<?> messages = _queueBrowser.getEnumeration();
 		while (messages.hasMoreElements()) {
@@ -89,23 +88,13 @@ public class JMSContext {
 	}
 
 	/**
-	 * @throws Exception
-	 */
-	public void createConsumer()
-		throws Exception {
-
-		MessageConsumer consumer = _session.createConsumer(_destination);
-
-		setMessageConsumer(consumer);
-	}
-
-	/**
+	 * @throws JMSException
 	 * @throws Exception
 	 */
 	public void createByteMessage()
 		throws Exception {
 
-		BytesMessage bytesMessage = _session.createBytesMessage();
+		BytesMessage bytesMessage = _queueSession.createBytesMessage();
 		setBytesMessage(bytesMessage);
 	}
 
@@ -115,7 +104,7 @@ public class JMSContext {
 	public void createMapMessage()
 		throws Exception {
 
-		MapMessage mapMessage = _session.createMapMessage();
+		MapMessage mapMessage = _queueSession.createMapMessage();
 		setMapMessage(mapMessage);
 	}
 
@@ -125,19 +114,15 @@ public class JMSContext {
 	public void createObjectMessage()
 		throws Exception {
 
-		ObjectMessage objectMessage = _session.createObjectMessage();
+		ObjectMessage objectMessage = _queueSession.createObjectMessage();
 		setObjectMessage(objectMessage);
 	}
 
-	/**
-	 * @throws Exception
-	 */
-	public void createProducer()
-		throws Exception {
+	public void createQueueReceiver()
+		throws JMSException {
 
-		MessageProducer producer = _session.createProducer(_destination);
-		setMessageProducer(producer);
-
+		QueueReceiver queueReceiver = _queueSession.createReceiver(_queue);
+		setQueueReceiver(queueReceiver);
 	}
 
 	/**
@@ -148,7 +133,6 @@ public class JMSContext {
 
 		Queue queue =
 			(Queue) _context.lookup(_properties.getProperty(WebKeys.JMS_DESTINATION));
-
 		setQueue(queue);
 	}
 
@@ -159,7 +143,7 @@ public class JMSContext {
 		throws Exception {
 
 		createQueue();
-		QueueBrowser queueBrowser = _session.createBrowser(_queue);
+		QueueBrowser queueBrowser = _queueSession.createBrowser(_queue);
 
 		setQueueBrowser(queueBrowser);
 	}
@@ -170,7 +154,7 @@ public class JMSContext {
 	public void createStreamMessage()
 		throws Exception {
 
-		StreamMessage streamMessage = _session.createStreamMessage();
+		StreamMessage streamMessage = _queueSession.createStreamMessage();
 		setStreamMessage(streamMessage);
 	}
 
@@ -180,7 +164,7 @@ public class JMSContext {
 	public void createTextMessage()
 		throws Exception {
 
-		TextMessage textMessage = _session.createTextMessage();
+		TextMessage textMessage = _queueSession.createTextMessage();
 		setTextMessage(textMessage);
 	}
 
@@ -213,13 +197,18 @@ public class JMSContext {
 			_queueBrowser.close();
 		}
 
-		if (_session != null) {
-			_session.close();
+		if (_queueSession != null) {
+			_queueSession.close();
 		}
 
-		_destination = null;
+		if (_queueConnectionFactory != null) {
+			_queueConnectionFactory = null;
+		}
 
-		_connectionFactory = null;
+		if (_hornetQJMSConnectionFactory != null) {
+			_hornetQJMSConnectionFactory.close();
+
+		}
 
 		_bytesMessage = null;
 
@@ -237,53 +226,56 @@ public class JMSContext {
 
 	}
 
-
 	/**
 	 * @param companyId
-	 * @param code
-	 * @param remote
 	 * @param channelName
-	 * @param queueName
-	 * @param lookup
-	 * @param mom
 	 * @throws SystemException
 	 * @throws NamingException
 	 * @throws JMSException
 	 */
 	protected void init(
-		long companyId, String code, boolean remote, String channelName,
-		String queueName, String lookup, String mom)
+		long companyId, String channelName, String queueName, String lookup,
+		String mom)
 		throws SystemException, NamingException, JMSException {
 
 		Properties properties =
 			PortletUtil.getJMSContextProperties(
-				companyId, code, remote, channelName, queueName, lookup, mom);
+				companyId, StringPool.BLANK, false, channelName, queueName,
+				lookup, mom);
 
-		Context context = new InitialContext(properties);
+		Context context = new InitialContext();
 
-		ConnectionFactory connectionFactory =
-			(ConnectionFactory) context.lookup(remote
-				? PortletConstants.JMS_REMOTE_CONNECTION_FACTORY
-				: PortletConstants.JMS_CONNECTION_FACTORY);
+		HornetQJMSConnectionFactory factory =
+			(HornetQJMSConnectionFactory) context.lookup(PortletConstants.JMS_CONNECTION_FACTORY);
 
-		Connection connection =
-			connectionFactory.createConnection(
-				properties.getProperty(Context.SECURITY_PRINCIPAL),
-				properties.getProperty(Context.SECURITY_CREDENTIALS));
+		/*
+		 * QueueConnectionFactory queueConnectionFactory =
+		 * (QueueConnectionFactory)
+		 * context.lookup(PortletConstants.JMS_CONNECTION_FACTORY);
+		 */
 
-		Destination destination =
-			(Destination) context.lookup(properties.getProperty(WebKeys.JMS_DESTINATION));
+		/*
+		 * QueueConnection connection =
+		 * queueConnectionFactory.createQueueConnection();
+		 */
 
-		Session session =
-			connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+		QueueConnection connection = factory.createQueueConnection();
 
+		QueueSession session =
+			connection.createQueueSession(false, QueueSession.AUTO_ACKNOWLEDGE);
+
+		Queue queue =
+			(Queue) context.lookup(properties.getProperty(WebKeys.JMS_DESTINATION));
+		QueueBrowser queueBrowser = session.createBrowser(queue);
+
+		this.setQueueSession(session);
 		this.setContext(context);
-		this.setConnectionFactory(connectionFactory);
+		// this.setQueueConnectionFactory(queueConnectionFactory);
 		this.setProperties(properties);
 		this.setConnection(connection);
-		this.setDestination(destination);
-		this.setSession(session);
-
+		this.setQueue(queue);
+		this.setQueueBrowser(queueBrowser);
+		this.setHornetQJMSConnectionFactory(factory);
 	}
 
 	/**
@@ -320,19 +312,9 @@ public class JMSContext {
 		return _connection;
 	}
 
-	public ConnectionFactory getConnectionFactory() {
-
-		return _connectionFactory;
-	}
-
 	public Context getContext() {
 
 		return _context;
-	}
-
-	public Destination getDestination() {
-
-		return _destination;
 	}
 
 	public MapMessage getMapMessage() {
@@ -370,34 +352,19 @@ public class JMSContext {
 		return _queueBrowser;
 	}
 
-	public Session getSession() {
-
-		return _session;
-	}
-
 	public void setBytesMessage(BytesMessage bytesMessage) {
 
 		this._bytesMessage = bytesMessage;
 	}
 
-	public void setConnection(Connection connection) {
+	public void setConnection(QueueConnection connection) {
 
 		this._connection = connection;
-	}
-
-	public void setConnectionFactory(ConnectionFactory connectionFactory) {
-
-		this._connectionFactory = connectionFactory;
 	}
 
 	public void setContext(Context context) {
 
 		this._context = context;
-	}
-
-	public void setDestination(Destination destination) {
-
-		this._destination = destination;
 	}
 
 	public void setMapMessage(MapMessage mapMessage) {
@@ -435,11 +402,6 @@ public class JMSContext {
 		this._queueBrowser = queueBrowser;
 	}
 
-	public void setSession(Session session) {
-
-		this._session = session;
-	}
-
 	public StreamMessage getStreamMessage() {
 
 		return _streamMessage;
@@ -460,6 +422,17 @@ public class JMSContext {
 		this._textMessage = textMessage;
 	}
 
+	public QueueConnectionFactory getQueueConnectionFactory() {
+
+		return _queueConnectionFactory;
+	}
+
+	public void setQueueConnectionFactory(
+		QueueConnectionFactory queueConnectionFactory) {
+
+		this._queueConnectionFactory = queueConnectionFactory;
+	}
+
 	public QueueSession getQueueSession() {
 
 		return _queueSession;
@@ -470,15 +443,38 @@ public class JMSContext {
 		this._queueSession = queueSession;
 	}
 
+	public QueueReceiver getQueueReceiver() {
+
+		return _queueReceiver;
+	}
+
+	public void setQueueReceiver(QueueReceiver queueReceiver) {
+
+		this._queueReceiver = queueReceiver;
+	}
+
+	public HornetQJMSConnectionFactory getHornetQJMSConnectionFactory() {
+
+		return _hornetQJMSConnectionFactory;
+	}
+
+	public void setHornetQJMSConnectionFactory(
+		HornetQJMSConnectionFactory hornetQJMSConnectionFactory) {
+
+		this._hornetQJMSConnectionFactory = hornetQJMSConnectionFactory;
+	}
+
+	private QueueConnectionFactory _queueConnectionFactory;
+
+	private QueueReceiver _queueReceiver;
+
+	private QueueSession _queueSession;
+
 	private BytesMessage _bytesMessage;
 
-	private Connection _connection;
-
-	private ConnectionFactory _connectionFactory;
+	private QueueConnection _connection;
 
 	private Context _context;
-
-	private Destination _destination;
 
 	private MapMessage _mapMessage;
 
@@ -494,11 +490,9 @@ public class JMSContext {
 
 	private QueueBrowser _queueBrowser;
 
-	private Session _session;
-
 	private StreamMessage _streamMessage;
 
 	private TextMessage _textMessage;
 
-	private QueueSession _queueSession;
+	private HornetQJMSConnectionFactory _hornetQJMSConnectionFactory;
 }

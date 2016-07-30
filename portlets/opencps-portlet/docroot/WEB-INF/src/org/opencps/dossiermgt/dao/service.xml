@@ -114,6 +114,17 @@
             <finder-column name="parentId"></finder-column>
             <finder-column name="partType"></finder-column>
         </finder>
+        
+        <finder return-type="Collection" name="F_FORM_ONLINE" where=" ( formScript != '' ) ">
+			<finder-column name="dossierTemplateId" />
+			<finder-column name="parentId" />
+			<finder-column name="groupId" />
+			<finder-column name="partType" />
+		</finder>
+        <finder name="TFN_PN" return-type="DossierPart">
+            <finder-column name="templateFileNo"></finder-column>
+            <finder-column name="partNo"></finder-column>
+        </finder>
 	</entity>
 
 	<entity name="ServiceConfig" local-service="true"
@@ -233,6 +244,7 @@
         <column name="dossierSource" type="int"/>
         <column name="keypayRedirectUrl" type="String"/>
         <column name="delayStatus" type="int"></column>
+        <column name="folderId" type="long"></column>
         <order by="desc">
             <order-column name="modifiedDate" order-by="desc"></order-column>
         </order>
@@ -257,9 +269,13 @@
             <finder-column name="delayStatus" comparator="=" arrayable-operator="AND"></finder-column>
             <finder-column name="dossierStatus" comparator="!=" arrayable-operator="AND"></finder-column>
         </finder>
+        <finder name="OID" return-type="Dossier">
+            <finder-column name="oid"></finder-column>
+        </finder>
         <reference entity="DLFileEntry" package-path="com.liferay.portlet.documentlibrary"/>
         <reference package-path="com.liferay.portlet.documentlibrary" entity="DLFolder" />
         <reference package-path="com.liferay.portlet.asset" entity="AssetEntry" />
+        <reference package-path="org.opencps.paymentmgt.dao" entity="PaymentFile" />
     </entity>
     
     <entity name="DossierStatus" local-service="true" table="opencps_dossier_status">
@@ -443,6 +459,15 @@
             <finder-column name="dossierId"></finder-column>
             <finder-column name="templateFileNo"></finder-column>
         </finder>
+        <finder name="Oid" return-type="DossierFile">
+            <finder-column name="oid"></finder-column>
+        </finder>
+        <finder name="D_S_R" return-type="Collection">
+            <finder-column name="dossierId"></finder-column>
+            <finder-column name="syncStatus"></finder-column>
+            <finder-column name="removed"></finder-column>
+        </finder>
+        
 	<reference package-path="com.liferay.portlet.documentlibrary" entity="DLApp" />
         <reference entity="DLFileEntry" package-path="com.liferay.portlet.documentlibrary"/>
     </entity>

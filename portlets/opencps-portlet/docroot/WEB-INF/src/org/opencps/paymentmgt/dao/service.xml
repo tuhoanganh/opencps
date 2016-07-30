@@ -37,7 +37,8 @@
         <column name="invoiceTemplateNo" type="String"></column>
         <column name="invoiceIssueNo" type="String"></column>
         <column name="invoiceNo" type="String"></column>
-        <column name='syncStatus' type="int"></column>
+        <column name="syncStatus" type="int"></column>
+        <column name="oid" type="String"/>
         <finder name="GoodCode" return-type="PaymentFile">
             <finder-column name="groupId"></finder-column>
             <finder-column name="keypayGoodCode"></finder-column>
@@ -62,6 +63,15 @@
         <finder return-type="PaymentFile" name="T_I" unique="true">
         	<finder-column name="keypayTransactionId"/>
         </finder>
+        
+        <finder return-type="PaymentFile" name="OID">
+        	<finder-column name="oid"/>
+        </finder>
+        
+        <reference entity="DLFileEntry" package-path="com.liferay.portlet.documentlibrary"/>
+        <reference package-path="com.liferay.portlet.documentlibrary" entity="DLFolder" />
+        <reference package-path="com.liferay.portlet.asset" entity="AssetEntry" />
+        <reference package-path="com.liferay.portlet.documentlibrary" entity="DLApp" />
         
     </entity>
     <entity name="PaymentConfig" local-service="true" human-name="Payment configuration" table="opencps_payment_config">

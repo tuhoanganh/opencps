@@ -11,6 +11,9 @@
     <bean id="opencps.listener.syncfromfrontoffice" class="org.opencps.backend.sync.SyncFromFrontOffice" />
     <bean id="opencps.listener.syncfrombackoffice" class="org.opencps.backend.sync.SyncFromBackOffice" />
 
+    <bean id="opencps.listener.excoutfrontoffice" class="org.opencps.backend.exc.MsgOutFrontOffice" />
+    <bean id="opencps.listener.excoutbackoffice" class="org.opencps.backend.exc.MsgOutBackOffice" />
+
     <bean id="opencps.listener.backofficeprocessengine" class="org.opencps.backend.engine.BackOfficeProcessEngine" />
     <bean id="opencps.listener.backofficeprocesscallback" class="org.opencps.backend.engine.BackOfficeProcessCallback" />
 
@@ -38,11 +41,13 @@
                 <entry key="opencps/frontoffice/out/destination">
                     <list value-type="com.liferay.portal.kernel.messaging.MessageListener">
                         <ref bean="opencps.listener.syncfromfrontoffice" />
+                        <ref bean="opencps.listener.excoutfrontoffice" />
                     </list>
                 </entry>
                 <entry key="opencps/backoffice/out/destination">
                     <list value-type="com.liferay.portal.kernel.messaging.MessageListener">
                         <ref bean="opencps.listener.syncfrombackoffice" />
+                        <ref bean="opencps.listener.excoutbackoffice" />
                     </list>
                 </entry>
                 <entry key="opencps/backoffice/engine/destination">

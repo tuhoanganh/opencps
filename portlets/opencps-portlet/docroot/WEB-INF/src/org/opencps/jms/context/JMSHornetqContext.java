@@ -17,29 +17,30 @@
 
 package org.opencps.jms.context;
 
-import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.jms.BytesMessage;
 import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
-import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.MapMessage;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
-import javax.jms.QueueBrowser;
-import javax.jms.QueueSession;
 import javax.jms.Session;
 import javax.jms.StreamMessage;
 import javax.jms.TextMessage;
 import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import org.opencps.util.PortletConstants;
+import org.hornetq.api.core.TransportConfiguration;
+import org.hornetq.api.jms.HornetQJMSClient;
+import org.hornetq.api.jms.JMSFactoryType;
+import org.hornetq.core.remoting.impl.netty.NettyConnectorFactory;
+import org.hornetq.core.remoting.impl.netty.TransportConstants;
+import org.hornetq.jms.client.HornetQConnectionFactory;
 import org.opencps.util.PortletUtil;
 import org.opencps.util.WebKeys;
 
@@ -48,8 +49,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 /**
  * @author trungnt
  */
-public class JMSContext {
-
+public class JMSHornetqContext {
 
 	/**
 	 * @param companyId
@@ -63,7 +63,7 @@ public class JMSContext {
 	 * @throws SystemException
 	 * @throws Exception
 	 */
-	public JMSContext(
+	public JMSHornetqContext(
 		long companyId, String code, boolean remote, String channelName,
 		String queueName, String lookup, String mom)
 		throws NamingException, SystemException, Exception {
@@ -72,20 +72,64 @@ public class JMSContext {
 	}
 
 	/**
-	 * @return
-	 * @throws Exception
+	 * @param companyId
+	 * @param code
+	 * @param remote
+	 * @param channelName
+	 * @param queueName
+	 * @param lookup
+	 * @param mom
+	 * @throws SystemException
+	 * @throws NamingException
+	 * @throws JMSException
 	 */
-	public int countMessageInQueue()
-		throws Exception {
+	protected void init(
+		long companyId, String code, boolean remote, String channelName,
+		String queueName, String lookup, String mom)
+		throws SystemException, NamingException, JMSException {
 
-		createQueueBrowser();
-		int count = 0;
-		Enumeration<?> messages = _queueBrowser.getEnumeration();
-		while (messages.hasMoreElements()) {
-			messages.nextElement();
-			count++;
-		}
-		return count;
+		Properties properties =
+			PortletUtil.getJMSContextProperties(
+				companyId, code, remote, channelName, queueName, lookup, mom);
+		
+		System.out.println("////////// " + properties.getProperty(WebKeys.JMS_PROVIDER_PORT));
+		System.out.println("////////// " + properties.getProperty(WebKeys.JMS_PROVIDER_URL));
+		System.out.println("////////// " + properties.getProperty(WebKeys.JMS_QUEUE));
+		System.out.println("////////// " + properties.getProperty(Context.SECURITY_PRINCIPAL));
+		System.out.println("////////// " + properties.getProperty(Context.SECURITY_CREDENTIALS));
+
+		Map<String, Object> connectionParams = new HashMap<String, Object>();
+		connectionParams.put(
+			TransportConstants.PORT_PROP_NAME,
+			properties.getProperty(WebKeys.JMS_PROVIDER_PORT));
+		connectionParams.put(
+			TransportConstants.HOST_PROP_NAME,
+			properties.getProperty(WebKeys.JMS_PROVIDER_URL));
+		TransportConfiguration transportConfiguration =
+			new TransportConfiguration(
+				NettyConnectorFactory.class.getName(), connectionParams);
+
+		HornetQConnectionFactory connectionFactory =
+			HornetQJMSClient.createConnectionFactoryWithoutHA(
+				JMSFactoryType.CF, transportConfiguration);
+
+		Queue queue =
+			HornetQJMSClient.createQueue(properties.getProperty(WebKeys.JMS_QUEUE));
+
+		Connection connection =
+			connectionFactory.createConnection(
+				properties.getProperty(Context.SECURITY_PRINCIPAL),
+				properties.getProperty(Context.SECURITY_CREDENTIALS));
+
+		Session session =
+			connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+
+		this.setConnectionFactory(connectionFactory);
+		this.setProperties(properties);
+		this.setConnection(connection);
+		this.setQueue(queue);
+		this.setSession(session);
+
 	}
 
 	/**
@@ -94,9 +138,20 @@ public class JMSContext {
 	public void createConsumer()
 		throws Exception {
 
-		MessageConsumer consumer = _session.createConsumer(_destination);
+		MessageConsumer consumer = _session.createConsumer(_queue);
 
 		setMessageConsumer(consumer);
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public void createProducer()
+		throws Exception {
+
+		MessageProducer producer = _session.createProducer(_queue);
+		setMessageProducer(producer);
+
 	}
 
 	/**
@@ -132,41 +187,6 @@ public class JMSContext {
 	/**
 	 * @throws Exception
 	 */
-	public void createProducer()
-		throws Exception {
-
-		MessageProducer producer = _session.createProducer(_destination);
-		setMessageProducer(producer);
-
-	}
-
-	/**
-	 * @throws Exception
-	 */
-	public void createQueue()
-		throws Exception {
-
-		Queue queue =
-			(Queue) _context.lookup(_properties.getProperty(WebKeys.JMS_DESTINATION));
-
-		setQueue(queue);
-	}
-
-	/**
-	 * @throws Exception
-	 */
-	public void createQueueBrowser()
-		throws Exception {
-
-		createQueue();
-		QueueBrowser queueBrowser = _session.createBrowser(_queue);
-
-		setQueueBrowser(queueBrowser);
-	}
-
-	/**
-	 * @throws Exception
-	 */
 	public void createStreamMessage()
 		throws Exception {
 
@@ -197,10 +217,6 @@ public class JMSContext {
 			_connection.close();;
 		}
 
-		if (_context != null) {
-			_context.close();;
-		}
-
 		if (_messageConsumer != null) {
 			_messageConsumer.close();
 		}
@@ -209,15 +225,9 @@ public class JMSContext {
 			_messageProducer.close();
 		}
 
-		if (_queueBrowser != null) {
-			_queueBrowser.close();
-		}
-
 		if (_session != null) {
 			_session.close();
 		}
-
-		_destination = null;
 
 		_connectionFactory = null;
 
@@ -234,55 +244,6 @@ public class JMSContext {
 		_queue = null;
 
 		_mapMessage = null;
-
-	}
-
-
-	/**
-	 * @param companyId
-	 * @param code
-	 * @param remote
-	 * @param channelName
-	 * @param queueName
-	 * @param lookup
-	 * @param mom
-	 * @throws SystemException
-	 * @throws NamingException
-	 * @throws JMSException
-	 */
-	protected void init(
-		long companyId, String code, boolean remote, String channelName,
-		String queueName, String lookup, String mom)
-		throws SystemException, NamingException, JMSException {
-
-		Properties properties =
-			PortletUtil.getJMSContextProperties(
-				companyId, code, remote, channelName, queueName, lookup, mom);
-
-		Context context = new InitialContext(properties);
-
-		ConnectionFactory connectionFactory =
-			(ConnectionFactory) context.lookup(remote
-				? PortletConstants.JMS_REMOTE_CONNECTION_FACTORY
-				: PortletConstants.JMS_CONNECTION_FACTORY);
-
-		Connection connection =
-			connectionFactory.createConnection(
-				properties.getProperty(Context.SECURITY_PRINCIPAL),
-				properties.getProperty(Context.SECURITY_CREDENTIALS));
-
-		Destination destination =
-			(Destination) context.lookup(properties.getProperty(WebKeys.JMS_DESTINATION));
-
-		Session session =
-			connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-
-		this.setContext(context);
-		this.setConnectionFactory(connectionFactory);
-		this.setProperties(properties);
-		this.setConnection(connection);
-		this.setDestination(destination);
-		this.setSession(session);
 
 	}
 
@@ -320,19 +281,9 @@ public class JMSContext {
 		return _connection;
 	}
 
-	public ConnectionFactory getConnectionFactory() {
+	public HornetQConnectionFactory getConnectionFactory() {
 
 		return _connectionFactory;
-	}
-
-	public Context getContext() {
-
-		return _context;
-	}
-
-	public Destination getDestination() {
-
-		return _destination;
 	}
 
 	public MapMessage getMapMessage() {
@@ -365,11 +316,6 @@ public class JMSContext {
 		return _queue;
 	}
 
-	public QueueBrowser getQueueBrowser() {
-
-		return _queueBrowser;
-	}
-
 	public Session getSession() {
 
 		return _session;
@@ -385,19 +331,9 @@ public class JMSContext {
 		this._connection = connection;
 	}
 
-	public void setConnectionFactory(ConnectionFactory connectionFactory) {
+	public void setConnectionFactory(HornetQConnectionFactory connectionFactory) {
 
 		this._connectionFactory = connectionFactory;
-	}
-
-	public void setContext(Context context) {
-
-		this._context = context;
-	}
-
-	public void setDestination(Destination destination) {
-
-		this._destination = destination;
 	}
 
 	public void setMapMessage(MapMessage mapMessage) {
@@ -430,11 +366,6 @@ public class JMSContext {
 		this._queue = queue;
 	}
 
-	public void setQueueBrowser(QueueBrowser queueBrowser) {
-
-		this._queueBrowser = queueBrowser;
-	}
-
 	public void setSession(Session session) {
 
 		this._session = session;
@@ -460,25 +391,11 @@ public class JMSContext {
 		this._textMessage = textMessage;
 	}
 
-	public QueueSession getQueueSession() {
-
-		return _queueSession;
-	}
-
-	public void setQueueSession(QueueSession queueSession) {
-
-		this._queueSession = queueSession;
-	}
-
 	private BytesMessage _bytesMessage;
 
 	private Connection _connection;
 
-	private ConnectionFactory _connectionFactory;
-
-	private Context _context;
-
-	private Destination _destination;
+	private HornetQConnectionFactory _connectionFactory;
 
 	private MapMessage _mapMessage;
 
@@ -492,13 +409,10 @@ public class JMSContext {
 
 	private Queue _queue;
 
-	private QueueBrowser _queueBrowser;
-
 	private Session _session;
 
 	private StreamMessage _streamMessage;
 
 	private TextMessage _textMessage;
 
-	private QueueSession _queueSession;
 }
