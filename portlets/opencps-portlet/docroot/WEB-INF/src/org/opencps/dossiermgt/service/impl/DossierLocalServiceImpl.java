@@ -1935,4 +1935,14 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 
 		dossierPersistence.update(dossier);
 	}
+	
+	/**
+	 * @param serviceinfoId
+	 * @return
+	 * @throws SystemException
+	 */
+	public List<Dossier> getDossiersByServiceInfo(long serviceinfoId) throws SystemException {
+		return dossierPersistence.findByServiceInfoId(serviceinfoId);
+	}
+	
 }

@@ -13,7 +13,7 @@
 package org.opencps.servicemgt.portlet;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
 
@@ -35,6 +35,12 @@ import org.opencps.datamgt.portlet.DataMamagementPortlet;
 import org.opencps.datamgt.search.DictItemDisplayTerms;
 import org.opencps.datamgt.service.DictCollectionLocalServiceUtil;
 import org.opencps.datamgt.service.DictItemLocalServiceUtil;
+import org.opencps.dossiermgt.model.Dossier;
+import org.opencps.dossiermgt.model.ServiceConfig;
+import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
+import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
+import org.opencps.processmgt.model.ProcessOrder;
+import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
 import org.opencps.servicemgt.DuplicateFileNameException;
 import org.opencps.servicemgt.DuplicateFileNoException;
 import org.opencps.servicemgt.IOFileUploadException;
@@ -44,8 +50,6 @@ import org.opencps.servicemgt.search.ServiceDisplayTerms;
 import org.opencps.servicemgt.service.ServiceFileTemplateLocalServiceUtil;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
 import org.opencps.servicemgt.service.TemplateFileLocalServiceUtil;
-import org.opencps.util.ActionKeys;
-import org.opencps.util.DateTimeUtil;
 import org.opencps.util.MessageKeys;
 import org.opencps.util.PortletPropsValues;
 import org.opencps.util.WebKeys;
@@ -54,28 +58,14 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.repository.model.FileEntry;
-import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
-import com.liferay.portal.kernel.upload.LiferayFileItemException;
-import com.liferay.portal.kernel.upload.UploadException;
-import com.liferay.portal.kernel.upload.UploadPortletRequest;
-import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.LocalizationUtil;
-import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
-import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.portlet.assetpublisher.util.AssetPublisherUtil;
-import com.liferay.portlet.documentlibrary.FileSizeException;
-import com.liferay.portlet.documentlibrary.model.DLFileEntry;
-import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
-import com.liferay.portlet.journal.NoSuchFolderException;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 /**
@@ -439,6 +429,50 @@ public class ServiceMgtPortlet extends MVCPortlet {
 		
 		
 	}
+	
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws IOException 
+	 * @throws SystemException 
+	 * @throws PortalException 
+	 */
+	public void deleteService(ActionRequest actionRequest , ActionResponse actionResponse) throws IOException, PortalException, SystemException {
+		long serviceinfoId = ParamUtil.getLong(actionRequest, ServiceDisplayTerms.SERVICE_ID);
+		
+		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
+		
+		ServiceConfig serviceConfig = null;
+		java.util.List<Dossier> dossier = new ArrayList<Dossier>();
+		java.util.List<ProcessOrder> processOrder = new ArrayList<ProcessOrder>(); 
+		try {
+			ServiceContext serviceContext = ServiceContextFactory
+						    .getInstance(actionRequest);
+			serviceConfig = ServiceConfigLocalServiceUtil
+							.getServiceConfigByG_S(serviceContext.getScopeGroupId(), serviceinfoId);
+			dossier =  DossierLocalServiceUtil.getDossiersByServiceInfo(serviceinfoId);
+			processOrder = ProcessOrderLocalServiceUtil.getProcessOrdersByServiceInfoId(serviceinfoId);
+		}
+		catch (Exception e) {
+			// nothing to do
+		}
+		
+		if(serviceConfig == null) {
+			SessionErrors.add(actionRequest, MessageKeys.SERVICE_DELERR_EXITS_SERVICECONFIG);
+		} else if(!dossier.isEmpty() ) {
+			SessionErrors.add(actionRequest, MessageKeys.SERVICE_DELERR_EXITS_DOSSIER);
+		} else if(!processOrder.isEmpty()) {
+			SessionErrors.add(actionRequest, MessageKeys.SERVICE_DELERR_EXITS_PROCESSORDER);
+		} else {
+			ServiceInfoLocalServiceUtil.deleteService(serviceinfoId);
+			SessionMessages.add(actionRequest, MessageKeys.SERVICE_DELSUCC);
+		}
+		
+		if(Validator.isNotNull(redirectURL)){
+			actionResponse.sendRedirect(redirectURL);
+		}
+	}
+	
 	
 	/*
 	 * (non-Javadoc)
