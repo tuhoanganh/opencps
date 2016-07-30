@@ -16,7 +16,7 @@
 
 <%@ include file="/html/taglib/aui/nav_bar/init.jsp" %>
 
-<div class="navbar <%= cssClass %> search_tools payment payment_search" id="<%= id %>" <%= InlineUtil.buildDynamicAttributes(dynamicAttributes) %>>
+<div class="navbar <%= cssClass %>" id="<%= id %>" <%= InlineUtil.buildDynamicAttributes(dynamicAttributes) %>>
 	<div class="navbar-inner">
 		<div class="container">
 			<span id="<%= id %>ResponsiveButton">
