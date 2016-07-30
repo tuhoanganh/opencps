@@ -56,7 +56,11 @@
 	
 	int totalCount = 0;
 	long dossierTemplateId = dossierTemplate != null ? dossierTemplate.getDossierTemplateId() : 0L;
-
+	
+	try {
+		totalCount = DossierPartLocalServiceUtil.CountByTempalteId(dossierTemplateId);
+	} catch (Exception e) {}
+	
 	if (isPermission) {
 		headerNames.add("action");
 	}
@@ -93,7 +97,7 @@
 			dossierParts = DossierPartLocalServiceUtil.getDossierParts(
 					dossierTemplateId, searchContainer.getStart(), searchContainer.getEnd());
 									
-			totalCount = DossierPartLocalServiceUtil.CountByTempalteId(dossierTemplateId);
+			
 			
 			total = totalCount;
 			results = dossierParts;
