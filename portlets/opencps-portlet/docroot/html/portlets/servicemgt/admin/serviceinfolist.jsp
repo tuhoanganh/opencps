@@ -1,3 +1,4 @@
+<%@page import="org.opencps.util.MessageKeys"%>
 <%@page import="org.opencps.util.DictItemUtil"%>
 <%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
 <%@page import="org.opencps.servicemgt.search.ServiceSearchTerms"%>
@@ -49,12 +50,21 @@
 	
 	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
 %>
+
+<liferay-ui:error key="<%=MessageKeys.SERVICE_DELERR_EXITS_SERVICECONFIG %>" message="<%=MessageKeys.SERVICE_DELERR_EXITS_SERVICECONFIG %>"/>
+<liferay-ui:error key="<%= MessageKeys.SERVICE_DELERR_EXITS_DOSSIER %>" message="<%=MessageKeys.SERVICE_DELERR_EXITS_DOSSIER %>" />
+<liferay-ui:error key="<%= MessageKeys.SERVICE_DELERR_EXITS_PROCESSORDER %>" message="<%=MessageKeys.SERVICE_DELERR_EXITS_DOSSIER %>"/>
+
+<liferay-ui:success key="<%=MessageKeys.SERVICE_DELSUCC %>" message="<%=MessageKeys.SERVICE_DELSUCC %>"/>
+
+
 <div class="ocps-serviceinfo-list">
 <c:if test="<%= ServicePermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_SERVICE) %>">
 	<liferay-util:include page='<%= templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
 </c:if>
 
 <liferay-util:include page='<%= templatePath + "toolbar.jsp"%>' servletContext="<%=application %>" />
+
 <div class="ocps-serviceinfo-search">
 <liferay-ui:search-container searchContainer="<%= new ServiceSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" 
 	headerNames="<%= headers %>">
