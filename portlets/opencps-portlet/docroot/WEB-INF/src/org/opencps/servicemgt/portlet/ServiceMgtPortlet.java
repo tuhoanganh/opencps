@@ -457,7 +457,7 @@ public class ServiceMgtPortlet extends MVCPortlet {
 			// nothing to do
 		}
 		
-		if(serviceConfig == null) {
+		if(serviceConfig != null) {
 			SessionErrors.add(actionRequest, MessageKeys.SERVICE_DELERR_EXITS_SERVICECONFIG);
 		} else if(!dossier.isEmpty() ) {
 			SessionErrors.add(actionRequest, MessageKeys.SERVICE_DELERR_EXITS_DOSSIER);

@@ -46,6 +46,14 @@
 		
 	}
 	
+	try {
+		for(ServiceInfoProcess serviceInfoProcess : serviceInfoProcesses) {
+			serviceConfigs.add(ServiceConfigLocalServiceUtil.getServiceConfig(serviceInfoProcess.getServiceinfoId()));
+		}
+	} catch (Exception e) {
+		
+	}
+	
 %>
 
 <portlet:renderURL var="chooseServiceURL" windowState="<%=LiferayWindowState.POP_UP.toString() %>">
@@ -60,19 +68,11 @@
 <liferay-ui:search-container 
 		emptyResultsMessage="no-service-were-found"
 		iteratorURL="<%=iteratorURL %>"
-		delta="<%=100 %>"
+		delta="<%=serviceConfigs.size() %>"
 		deltaConfigurable="true"
 >
 	<liferay-ui:search-container-results>
 		<%
-			try {
-				for(ServiceInfoProcess serviceInfoProcess : serviceInfoProcesses) {
-					serviceConfigs.add(ServiceConfigLocalServiceUtil.getServiceConfig(serviceInfoProcess.getServiceinfoId()));
-				}
-			} catch (Exception e) {
-				
-			}
-		
 		results = serviceConfigs;
 		total = serviceConfigs.size();
 		pageContext.setAttribute("results", results);
@@ -123,7 +123,7 @@
 				name="service-domain" value="<%=DictItemUtil.getNameDictItem(service.getDomainCode()) %>"
 			/>
 		<liferay-ui:search-container-column-text 
-				name="service-administration" value="<%=administrationName %>"
+				name="service-administration-action" value="<%=administrationName %>"
 			/>
 		<%
 			 final String hrefFix = "location.href='" + deteleRelaSeInfoAndProcessURL .toString()+"'";

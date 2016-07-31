@@ -152,6 +152,7 @@ public class UserMgtPortlet extends MVCPortlet {
 			    .add(actionRequest, MessageKeys.USERMGT_JOBPOS_DELETE_SUCCESS);
 			if (Validator
 			    .isNotNull(redirectURL)) {
+				_log.info(redirectURL);
 				actionResponse
 				    .sendRedirect(redirectURL);
 			}

@@ -33,26 +33,27 @@
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath +
 					"serviceinfolist_choose/serviceinfolist.jsp");
+	
+	try {
+		if(serviceProcessId > 0) {
+			serviceConfigs = ServiceConfigLocalServiceUtil.getServiceConfigs(serviceProcess.getDossierTemplateId());
+		}
+	} catch (Exception e) {
+		
+	}
 
 %>
 
 <liferay-ui:search-container 
 		emptyResultsMessage="no-service-were-found"
 		iteratorURL="<%=iteratorURL %>"
-		delta="<%=100 %>"
+		delta="<%=serviceConfigs.size() %>"
 		deltaConfigurable="true"
 		rowChecker="<%=new RowChecker(renderResponse)%>"
 >
 	<liferay-ui:search-container-results>
 	
 		<%
-			try {
-				if(serviceProcessId > 0) {
-					serviceConfigs = ServiceConfigLocalServiceUtil.getServiceConfigs(serviceProcess.getDossierTemplateId());
-				}
-			} catch (Exception e) {
-				
-			}
 			results = serviceConfigs;
 			total = serviceConfigs.size();
 			pageContext.setAttribute("results", results);
@@ -89,7 +90,7 @@
 				name="service-domain" value="<%=DictItemUtil.getNameDictItem(service.getDomainCode()) %>"
 			/>
 		<liferay-ui:search-container-column-text 
-				name="service-administration" value="<%=DictItemUtil.getNameDictItem(service.getAdministrationCode()) %>"
+				name="service-administration-action" value="<%=DictItemUtil.getNameDictItem(service.getAdministrationCode()) %>"
 			/>
 	</liferay-ui:search-container-row>
 <liferay-ui:search-iterator paginate="false"/>
