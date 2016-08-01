@@ -1,25 +1,38 @@
 /* This file allows you to override default styles in one central location for easier upgrade and maintenance. */
 
 @import url(font_face.css);
+@import url(controls.css);
+@import url(support.css);
 @import url(font-awesome.min.css);
-@import url(duongsat.css);
 
 /*vtduy_cmc */
+@import url(portlets/portlet_login.css);
+@import url(portlets/portlet_register.css);
+@import url(portlets/portlet_accountInfo.css);
+@import url(portlets/portlet_history.css);
+@import url(portlets/portlet_dossier_info.css);
+@import url(portlets/portlet_dossier_content.css);
+@import url(portlets/portlet_popup.css);
 
+
+@import url(portlets/portlet_hung_custom.css);
 @import url(portlets/binhth.css);
 
+@import url(button-custom.css);
 
 /*end*/
 
 /*----anh huong*/
+@import url(portlets/portlet_13_fileinfo.css);
 /*end*/
 
 
 @import url(custom_frame_1.css);
 @import url(header_style_1.css);
 
-@import url(nav_toolbar.css);
 
+@import url(input.css);
+@import url(nav_toolbar.css);
 
 
 /* custom css theme ngoai cung*/
@@ -42,6 +55,18 @@
 	float: right;
 }
 
+
+/* Overwrite page iterator css */
+
+.opencps-theme.ux .taglib-page-iterator{
+	padding: 0 20px;
+}
+
+
+.opencps-theme.ux .taglib-page-iterator .btn{
+	background-color: #fff;
+	border: 1px solid #ddd;
+} 
 
 .alpaca-array-actionbar-action.btn {
 	background-color: #ccc !important;
