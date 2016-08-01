@@ -64,7 +64,7 @@
 			<liferay-ui:message key="address"/>
 		</td>
 		<td >
-			<%=dossier != null ? ( dossier.getAddress() + dossier.getWardName() + dossier.getDistrictName() + dossier.getCityName() ):  StringPool.BLANK %>
+			<%=dossier != null ? ( dossier.getAddress() + " " + dossier.getWardName() + " "  + dossier.getDistrictName() + " "  + dossier.getCityName() ):  StringPool.BLANK %>
 		</td>
 	</tr>
 	<tr>
