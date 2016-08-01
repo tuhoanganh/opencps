@@ -201,15 +201,20 @@ public class AutoFillFormData {
 							JSONObject jsonOtherData = JSONFactoryUtil.createJSONObject(dossierFile.getFormData());
 							Map<String, Object> jsonOtherMap = jsonToMap(jsonOtherData);
 							String myCHK = StringPool.BLANK;
-								if(variable.contains(":")){
-									String[] variableMuti = variable.split(":");
-									for (String string : variableMuti) {
-										myCHK += ", " + jsonOtherMap.get(string).toString();
+								try {
+									if(variable.contains(":")){
+										String[] variableMuti = variable.split(":");
+										for (String string : variableMuti) {
+											myCHK += ", " + jsonOtherMap.get(string).toString();
+										}
+										myCHK = myCHK.replaceFirst(", ", "");
+									}else{
+										myCHK = jsonOtherMap.get(variable.replaceAll("_ok", "").replaceAll("_fail", "")).toString();
 									}
-									myCHK = myCHK.replaceFirst(", ", "");
-								}else{
-									myCHK = jsonOtherMap.get(variable.replaceAll("_ok", "").replaceAll("_fail", "")).toString();
+								} catch (Exception e) {
+									// TODO: handle exception
 								}
+								
 							
 							if(myCHK.startsWith("[{")){
 								JSONArray orignJsonArray = (JSONArray)jsonOtherMap.get(variable.replaceAll("_ok", "").replaceAll("_fail", ""));
@@ -241,6 +246,8 @@ public class AutoFillFormData {
 									}
 								}
 								
+							}else if(myCHK.startsWith("#")){
+								jsonMap.put(entry.getKey(), "");
 							}else{
 								jsonMap.put(entry.getKey(), myCHK.toString());
 							}

@@ -144,7 +144,7 @@
 					
 				}
 				String paymentMothodLabel = StringPool.BLANK;
-				if(paymentFile.getPaymentStatus() == 3){
+				if(paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_APPROVED){
 					paymentMothodLabel = LanguageUtil.get(pageContext, PortletUtil.getPaymentMethodLabel(paymentFile.getPaymentMethod(), locale)); 
 				}
 				PortletURL detailURLXem = renderResponse.createRenderURL();

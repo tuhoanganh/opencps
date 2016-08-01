@@ -2,6 +2,7 @@
 
 #parse ($init)
 
+
 <html class="$root_css_class" dir="#language ("lang.dir")" lang="$w3c_language_id">
 
 <head>
@@ -37,9 +38,7 @@
 			</div>
 		</header>
 		
-		#if ($has_navigation || $is_signed_in)
-			#parse ("$full_templates_path/navigation_custom_role.vm")
-		#end
+		#parse ("$full_templates_path/navigation_public_page.vm")
 	#else 
 		<header id="banner" role="banner" class="mHeader_2">
 			<div class="header container align-middle">
@@ -54,14 +53,12 @@
 			</div>
 		
 			#if ($has_navigation || $is_signed_in)
-				#parse ("$full_templates_path/navigation_custom_role.vm")
+				#parse ("$full_templates_path/navigation_public_page.vm")
 			#end
 		</header>
-		#*#parse ("$full_templates_path/navigation_custom_role.vm") *#
 		
-		#*add list private item here *#
 		#if ($has_navigation || $is_signed_in)
-			#parse ("$full_templates_path/navigation.vm")
+			#parse ("$full_templates_path/navigation_private_page.vm")
 		#end
 	#end
 	
