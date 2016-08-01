@@ -162,13 +162,13 @@
                         </div>
                         <div>
                             <p><span><liferay-ui:message key="payment-method"></liferay-ui:message>:</span> 
-								<c:if test="<%= paymentFile.getPaymentMethod() == 1 %>">
+								<c:if test="<%= paymentFile.getPaymentMethod() == PaymentMgtUtil.PAYMENT_METHOD_CASH %>">
 									<liferay-ui:message key="cash"></liferay-ui:message>
 								</c:if>
-								<c:if test="<%= paymentFile.getPaymentMethod() == 2 %>">
+								<c:if test="<%= paymentFile.getPaymentMethod() == PaymentMgtUtil.PAYMENT_METHOD_KEYPAY %>">
 									<liferay-ui:message key="keypay"></liferay-ui:message>
 								</c:if>
-								<c:if test="<%= paymentFile.getPaymentMethod() == 3 %>">
+								<c:if test="<%= paymentFile.getPaymentMethod() == PaymentMgtUtil.PAYMENT_METHOD_BANK %>">
 									<liferay-ui:message key="bank"></liferay-ui:message>
 								</c:if>
 							</p>
