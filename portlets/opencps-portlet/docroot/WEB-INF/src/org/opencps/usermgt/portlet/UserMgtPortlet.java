@@ -693,10 +693,6 @@ public class UserMgtPortlet extends MVCPortlet {
 				        actionRequest,
 				        JobPosSearchTerms.LEADER_JOBPOS + indexOfRows[index]
 				            .trim());
-				JobPosLocalServiceUtil
-				    .addJobPos(serviceContext
-				        .getUserId(), title, StringPool.BLANK, workingUnitId,
-				        leader, rowIds, serviceContext);
 				JobPos jobPos = null;
 				try {
 					jobPos = JobPosLocalServiceUtil
@@ -708,7 +704,13 @@ public class UserMgtPortlet extends MVCPortlet {
 				catch (Exception e) {
 					// TODO: handle exception
 				}
+				JobPosLocalServiceUtil
+				    .addJobPos(serviceContext
+				        .getUserId(), title, StringPool.BLANK, workingUnitId,
+				        leader, rowIds, serviceContext);
+				
 			}
+			
 			if(count == 0) {
 				SessionMessages
 			    .add(actionRequest, MessageKeys.USERMGT_JOBPOS_UPDATE_SUCESS);
