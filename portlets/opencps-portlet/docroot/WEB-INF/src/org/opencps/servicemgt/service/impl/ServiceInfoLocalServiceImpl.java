@@ -18,6 +18,7 @@ import java.util.List;
 
 import org.opencps.datamgt.model.DictItem;
 import org.opencps.datamgt.service.DictItemLocalServiceUtil;
+import org.opencps.servicemgt.model.ServiceFileTemplate;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.service.base.ServiceInfoLocalServiceBaseImpl;
 
@@ -371,7 +372,9 @@ public class ServiceInfoLocalServiceImpl
 	 */
 	public void deleteService(long serviceInfoId)
 	    throws PortalException, SystemException {
-
+		serviceFileTemplatePersistence.removeByServiceinfoId(serviceInfoId);
+		serviceInfoPersistence.remove(serviceInfoId);
+	
 	}
 
 	/**

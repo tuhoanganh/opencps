@@ -251,6 +251,9 @@
         <finder name="GroupId" return-type="Collection">
             <finder-column name="groupId"></finder-column>
         </finder>
+        <finder return-type="Collection" name="ServiceInfoId">
+        	<finder-column name="serviceInfoId" />
+        </finder>
         <finder name="G_DS" return-type="Collection">
             <finder-column name="groupId"></finder-column>
             <finder-column name="dossierStatus"></finder-column>

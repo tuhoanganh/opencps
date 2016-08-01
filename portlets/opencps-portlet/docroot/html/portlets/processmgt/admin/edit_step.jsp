@@ -300,7 +300,6 @@
 	<aui:button-row>
 		<aui:button name="save" type="submit" value="<%= Validator.isNotNull(step) ? Constants.ADD : Constants.UPDATE %>"/>
 		<aui:button type="cancel" name="cancel" />
-		<aui:button type="cancel" name="closeDialog" />
 	</aui:button-row>
 	
 </aui:form>
@@ -335,8 +334,3 @@
 	
 </aui:script>
 
-<aui:script use="aui-base">
-	A.one('#<portlet:namespace/>closeDialog').on('click', function(event) {
-		Liferay.Util.getOpener().closePopup('addstep');
-	});
-</aui:script>

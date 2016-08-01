@@ -40,6 +40,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 
@@ -94,16 +95,30 @@ public class SubmitDossier {
 		if (syncDossier != null && syncDossierFiles != null &&
 			syncDLFileEntries != null && data != null &&
 			syncDossierTemplate != null && serviceContext != null) {
-			if (syncDossier.getDossierStatus().equals(
-				PortletConstants.DOSSIER_STATUS_NEW)) {
+			
+			boolean isNew = false;
+			
+			Dossier dossierBackend = null;
+			
+			try {
+				dossierBackend = DossierLocalServiceUtil.getByoid(syncDossier.getOid());
+            }
+            catch (Exception e) {
+	            
+            }
+			
+			if (Validator.isNull(dossierBackend)) {
+				isNew = true;
+			}
+			
+			if (isNew) {
 				dossier =
 					DossierLocalServiceUtil.syncDossier(
 						syncDossier, syncDossierFiles, syncFileGroups,
 						syncFileGroupDossierParts, syncDLFileEntries, data,
 						syncDossierTemplate, serviceContext);
 			}
-			else if (syncDossier.getDossierStatus().equals(
-				PortletConstants.DOSSIER_STATUS_WAITING)) {
+			else {
 				dossier =
 					DossierLocalServiceUtil.syncReSubmitDossier(
 						syncDossier, syncDossierFiles, syncFileGroups,
@@ -113,7 +128,7 @@ public class SubmitDossier {
 
 			sendToBackend(
 				dossier.getDossierId(),0, dossier.getDossierStatus(),
-				serviceContext);
+				serviceContext, isNew);
 		}
 
 		return dossier;
@@ -129,16 +144,14 @@ public class SubmitDossier {
 	 */
 	protected void sendToBackend(
 		long dossierId, long fileGroupId, String dossierStatus,
-		ServiceContext serviceContext)
+		ServiceContext serviceContext, boolean isNew)
 		throws NoSuchProcessOrderException, SystemException {
 
 		Message message = new Message();
 
 		SendToEngineMsg engineMsg = new SendToEngineMsg();
-
-		switch (dossierStatus) {
-		case PortletConstants.DOSSIER_STATUS_WAITING:
-
+		
+		if (!isNew) {
 			engineMsg.setAction(WebKeys.ACTION_RESUBMIT_VALUE);
 
 			engineMsg.setDossierId(dossierId);
@@ -157,10 +170,8 @@ public class SubmitDossier {
 
 			engineMsg.setProcessOrderId(processOrder.getProcessOrderId());
 
-
-			break;
-		case PortletConstants.DOSSIER_STATUS_NEW:
-
+			
+		} else {
 			engineMsg.setAction(WebKeys.ACTION_SUBMIT_VALUE);
 
 			engineMsg.setDossierId(dossierId);
@@ -176,11 +187,7 @@ public class SubmitDossier {
 			engineMsg.setGroupId(serviceContext.getScopeGroupId());
 
 			engineMsg.setUserId(serviceContext.getUserId());
-
-			break;
-
-		default:
-			break;
+			
 		}
 
 		message.put("msgToEngine", engineMsg);

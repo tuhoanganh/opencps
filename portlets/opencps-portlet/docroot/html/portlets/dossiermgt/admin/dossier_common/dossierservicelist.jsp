@@ -59,6 +59,11 @@
 	long dossierTemplateId = dossierTemplate != null ? dossierTemplate.getDossierTemplateId() : 0L;
 	
 	int totalCount = 0;
+	
+	try{
+		totalCount = ServiceConfigLocalServiceUtil.countByDossierTemplateId(dossierTemplateId);
+	} catch (Exception e) {}
+	
 	if (isPermission) {
 		headerNames.add("action");
 	}
@@ -83,8 +88,6 @@
 		<liferay-ui:search-container-results>
 		<%
 			serviceConfigs = ServiceConfigLocalServiceUtil.getServiceConfigs(dossierTemplateId);
-									
-			totalCount = ServiceConfigLocalServiceUtil.countByDossierTemplateId(dossierTemplateId);
 			
 			total = totalCount;
 			results = serviceConfigs;

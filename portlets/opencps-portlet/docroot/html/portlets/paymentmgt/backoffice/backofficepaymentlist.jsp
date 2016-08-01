@@ -51,6 +51,9 @@
 <liferay-util:include page="/html/portlets/paymentmgt/backoffice/toolbar.jsp" servletContext="<%=application %>" />
 <%
 	String paymentStatus = ParamUtil.getString(request, "paymentStatus");
+	if(Validator.isNull(paymentStatus)){
+		paymentStatus = "-1";	
+	}
 	String keywords = ParamUtil.getString(request, "keywords");
 
 	PortletURL iteratorURL = renderResponse.createRenderURL();
@@ -63,7 +66,10 @@
 <div class="content">
 <aui:form name="payForm" action="#">
 <div class="opcs-serviceinfo-list-label">
-  <p><liferay-ui:message key="danh-sach-ho-so-thu-phi" /></p>
+	<div class="title_box">
+           <p class="file_manage_title"><liferay-ui:message key="danh-sach-ho-so-thu-phi" /></p>
+           <p class="count"></p>
+    </div>
 </div>
 <liferay-ui:search-container searchContainer="<%= new PaymentFileSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
 
@@ -138,7 +144,7 @@
 					
 				}
 				String paymentMothodLabel = StringPool.BLANK;
-				if(paymentFile.getPaymentStatus() == 3){
+				if(paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_APPROVED){
 					paymentMothodLabel = LanguageUtil.get(pageContext, PortletUtil.getPaymentMethodLabel(paymentFile.getPaymentMethod(), locale)); 
 				}
 				PortletURL detailURLXem = renderResponse.createRenderURL();
@@ -147,8 +153,7 @@
 				detailURLXem.setParameter("redirect", currentURL);
 				
 				String classColor = "chothanhtoan";
-				if(paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_ON_PROCESSING ||
-						paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_REQUESTED || paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_REJECTED){
+				if(paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_REQUESTED || paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_REJECTED){
 					classColor = "chothanhtoan";
 				}else if(paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_CONFIRMED){
 					classColor = "datiepnhan";

@@ -183,12 +183,11 @@
 			<c:when test="<%=!isViewForm %>">
 				<c:if test="<%=Validator.isNotNull(alpacaSchema) %>">
 					<aui:button type="button" value="save" name="save" cssClass="saveForm"/>
-					
-					
-					<aui:button type="button" value="preview" name="preview"/>
 				</c:if>
 					
 				<c:if test="<%=dossierFileId > 0%>">
+					<aui:button type="button" value="preview" name="preview"/>
+					
 					<aui:button type="button" value="create-file" name="create-file"/>
 				</c:if>
 			</c:when>

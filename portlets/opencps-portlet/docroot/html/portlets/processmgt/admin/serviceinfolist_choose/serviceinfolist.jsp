@@ -1,3 +1,5 @@
+<%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="org.opencps.util.PortletPropsValues"%>
 <%@page import="org.opencps.util.DictItemUtil"%>
 <%@page import="com.liferay.portal.kernel.dao.search.RowChecker"%>
 <%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
@@ -33,26 +35,27 @@
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath +
 					"serviceinfolist_choose/serviceinfolist.jsp");
+	
+	try {
+		if(serviceProcessId > 0) {
+			serviceConfigs = ServiceConfigLocalServiceUtil.getServiceConfigs(serviceProcess.getDossierTemplateId());
+		}
+	} catch (Exception e) {
+		
+	}
 
 %>
 
 <liferay-ui:search-container 
 		emptyResultsMessage="no-service-were-found"
 		iteratorURL="<%=iteratorURL %>"
-		delta="<%=100 %>"
+		delta="<%=serviceConfigs.size() %>"
 		deltaConfigurable="true"
 		rowChecker="<%=new RowChecker(renderResponse)%>"
 >
 	<liferay-ui:search-container-results>
 	
 		<%
-			try {
-				if(serviceProcessId > 0) {
-					serviceConfigs = ServiceConfigLocalServiceUtil.getServiceConfigs(serviceProcess.getDossierTemplateId());
-				}
-			} catch (Exception e) {
-				
-			}
 			results = serviceConfigs;
 			total = serviceConfigs.size();
 			pageContext.setAttribute("results", results);
@@ -89,7 +92,8 @@
 				name="service-domain" value="<%=DictItemUtil.getNameDictItem(service.getDomainCode()) %>"
 			/>
 		<liferay-ui:search-container-column-text 
-				name="service-administration" value="<%=DictItemUtil.getNameDictItem(service.getAdministrationCode()) %>"
+				name="service-administration-action" 
+				value="<%=PortletUtil.getDictItem(PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION, serviceConfig.getGovAgencyCode(), scopeGroupId).getItemName(locale,true) %>"
 			/>
 	</liferay-ui:search-container-row>
 <liferay-ui:search-iterator paginate="false"/>
