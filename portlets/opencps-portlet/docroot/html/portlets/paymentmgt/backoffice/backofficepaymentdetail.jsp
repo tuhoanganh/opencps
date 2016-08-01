@@ -1,3 +1,6 @@
+<%@page import="org.opencps.backend.util.PaymentRequestGenerator"%>
+<%@page import="com.liferay.portal.kernel.util.ListUtil"%>
+<%@page import="java.util.List"%>
 <%@page import="java.text.DecimalFormat"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="com.liferay.portlet.documentlibrary.util.DLUtil"%>
@@ -99,8 +102,22 @@
                     <div>
                         <p><span><liferay-ui:message key="hinh-thuc-thuc-hien"/>:</span> 
 	                        <c:choose>
-			                    <c:when test="<%=paymentFile.getPaymentStatus() != 0 %>"><%= LanguageUtil.get(pageContext, PortletUtil.getPaymentMethodLabel(paymentFile.getPaymentMethod(), locale)) %></c:when>
-			                    <c:otherwise></c:otherwise>
+	                        	<%
+									List<String> paymentOption = ListUtil.toList(StringUtil.split(paymentFile.getPaymentOptions()));
+									
+									boolean isCash = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_CASH);
+									boolean isKeypay = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_KEYPAY);
+									boolean isBank = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_BANK);
+								%>
+									<c:if test="<%= isCash %>">
+										[ <liferay-ui:message key="cash"></liferay-ui:message> ]&nbsp;
+									</c:if>
+									<c:if test="<%= isKeypay %>">
+										[ <liferay-ui:message key="keypay"></liferay-ui:message> ]&nbsp;
+									</c:if>
+									<c:if test="<%= isBank %>">
+										[ <liferay-ui:message key="bank"></liferay-ui:message> ]
+									</c:if>
 			                </c:choose>
 	                	</p>
                     </div>
