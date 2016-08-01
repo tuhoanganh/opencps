@@ -44,7 +44,7 @@ public class OneMinute implements MessageListener{
 	public void receive(Message message)
 	    throws MessageListenerException {
 
-		/*List<SchedulerJobs> schedulerJobs = new ArrayList<SchedulerJobs>();
+		List<SchedulerJobs> schedulerJobs = new ArrayList<SchedulerJobs>();
 
 		try {
 			schedulerJobs = SchedulerJobsLocalServiceUtil.getSchedulerJobs(1);
@@ -55,8 +55,8 @@ public class OneMinute implements MessageListener{
 		}
 		catch (Exception e) {
 			_log.error(e);
-		}*/
 
+		}
 	}
 
 	private Log _log = LogFactoryUtil.getLog(OneMinute.class);
