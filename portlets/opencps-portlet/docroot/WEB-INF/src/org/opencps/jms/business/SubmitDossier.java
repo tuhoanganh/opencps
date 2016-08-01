@@ -151,7 +151,7 @@ public class SubmitDossier {
 
 		SendToEngineMsg engineMsg = new SendToEngineMsg();
 		
-		if (isNew) {
+		if (!isNew) {
 			engineMsg.setAction(WebKeys.ACTION_RESUBMIT_VALUE);
 
 			engineMsg.setDossierId(dossierId);
