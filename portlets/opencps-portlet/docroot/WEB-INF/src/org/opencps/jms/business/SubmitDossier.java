@@ -95,14 +95,30 @@ public class SubmitDossier {
 		if (syncDossier != null && syncDossierFiles != null &&
 			syncDLFileEntries != null && data != null &&
 			syncDossierTemplate != null && serviceContext != null) {
-			if (Validator.isNull(syncDossier.getOid())) {
+			
+			boolean isNew = false;
+			
+			Dossier dossierBackend = null;
+			
+			try {
+				dossierBackend = DossierLocalServiceUtil.getByoid(syncDossier.getOid());
+            }
+            catch (Exception e) {
+	            
+            }
+			
+			if (Validator.isNull(dossierBackend)) {
+				isNew = true;
+			}
+			
+			if (isNew) {
 				dossier =
 					DossierLocalServiceUtil.syncDossier(
 						syncDossier, syncDossierFiles, syncFileGroups,
 						syncFileGroupDossierParts, syncDLFileEntries, data,
 						syncDossierTemplate, serviceContext);
 			}
-			else if (Validator.isNotNull(syncDossier.getOid())) {
+			else {
 				dossier =
 					DossierLocalServiceUtil.syncReSubmitDossier(
 						syncDossier, syncDossierFiles, syncFileGroups,
