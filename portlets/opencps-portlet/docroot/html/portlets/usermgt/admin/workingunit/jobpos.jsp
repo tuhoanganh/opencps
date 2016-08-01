@@ -42,6 +42,10 @@
 	List<JobPos> jobPos = new ArrayList<JobPos>();
 	
 	int totalCount = 0;
+	
+	try {
+		totalCount = JobPosLocalServiceUtil.countAll();
+	} catch (Exception e) {}
 %>
 
 <portlet:renderURL var="updateJobPosURL" windowState="<%=LiferayWindowState.POP_UP.toString() %>">
@@ -58,7 +62,7 @@
 />
 </c:if>
 
-<liferay-ui:search-container searchContainer="<%= new JobPosSearch(renderRequest ,SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
+<liferay-ui:search-container searchContainer="<%= new JobPosSearch(renderRequest ,totalCount, iteratorURL) %>">
 	
 	<liferay-ui:search-container-results>
 		<%@include file="/html/portlets/usermgt/admin/jobpos_search_results.jspf"%>
@@ -78,7 +82,7 @@
 				"jobpos_action.jsp", config.getServletContext(), request, response);
 		%>
 	</liferay-ui:search-container-row>
-	<liferay-ui:search-iterator paginate="false"/>
+	<liferay-ui:search-iterator  paginate="false"/>
 </liferay-ui:search-container>
 
 

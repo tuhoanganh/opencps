@@ -66,7 +66,10 @@
 <div class="content">
 <aui:form name="payForm" action="#">
 <div class="opcs-serviceinfo-list-label">
-  <p><liferay-ui:message key="cap-nhat-yeu-cau-moi-nhat" /></p>
+	<div class="title_box">
+           <p class="file_manage_title"><liferay-ui:message key="cap-nhat-yeu-cau-moi-nhat" /></p>
+           <p class="count"></p>
+    </div>
 </div>
 
 <liferay-ui:search-container searchContainer="<%= new PaymentFileFrontOfficeSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
@@ -183,8 +186,7 @@
 						detailURLXem.setParameter("redirect", currentURL);
 						
 						String classColor = "chothanhtoan";
-						if(paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_ON_PROCESSING ||
-								paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_REQUESTED || paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_REJECTED){
+						if(paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_REQUESTED || paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_REJECTED){
 							classColor = "chothanhtoan";
 						}else if(paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_CONFIRMED){
 							classColor = "datiepnhan";

@@ -99,7 +99,7 @@
                     <div>
                         <p><span><liferay-ui:message key="hinh-thuc-thuc-hien"/>:</span> 
 	                        <c:choose>
-			                    <c:when test="<%=paymentFile.getPaymentStatus() == 3 %>"><%= LanguageUtil.get(pageContext, PortletUtil.getPaymentMethodLabel(paymentFile.getPaymentMethod(), locale)) %></c:when>
+			                    <c:when test="<%=paymentFile.getPaymentStatus() != 0 %>"><%= LanguageUtil.get(pageContext, PortletUtil.getPaymentMethodLabel(paymentFile.getPaymentMethod(), locale)) %></c:when>
 			                    <c:otherwise></c:otherwise>
 			                </c:choose>
 	                	</p>
