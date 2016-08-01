@@ -71,6 +71,8 @@ import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.HtmlUtil;
+import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.User;
@@ -402,7 +404,7 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 									+ PortletProps.get("VIRTUAL_PORT")
 									+ "/documents/" + fileEntry.getGroupId()
 									+ StringPool.SLASH + fileEntry.getFolderId()
-									+ StringPool.SLASH + fileEntry.getTitle()
+									+ StringPool.SLASH + HttpUtil.encodeURL(HtmlUtil.unescape(fileEntry.getTitle()))
 									+ "?version=" + fileEntry.getVersion();
 
 							jsonDossierFile.put("dossierFileURL", url);
@@ -1509,7 +1511,7 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 										+ PortletProps.get("VIRTUAL_PORT")
 										+ "/documents/" + fileEntry.getGroupId()
 										+ StringPool.SLASH + fileEntry.getFolderId()
-										+ StringPool.SLASH + fileEntry.getTitle()
+										+ StringPool.SLASH + HttpUtil.encodeURL(HtmlUtil.unescape(fileEntry.getTitle()))
 										+ "?version=" + fileEntry.getVersion();
 
 								jsonDossierFile.put("dossierFileURL", url);
