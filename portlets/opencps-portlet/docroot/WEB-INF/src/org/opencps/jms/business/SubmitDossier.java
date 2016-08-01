@@ -40,6 +40,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 
@@ -94,16 +95,14 @@ public class SubmitDossier {
 		if (syncDossier != null && syncDossierFiles != null &&
 			syncDLFileEntries != null && data != null &&
 			syncDossierTemplate != null && serviceContext != null) {
-			if (syncDossier.getDossierStatus().equals(
-				PortletConstants.DOSSIER_STATUS_NEW)) {
+			if (Validator.isNull(syncDossier.getOid())) {
 				dossier =
 					DossierLocalServiceUtil.syncDossier(
 						syncDossier, syncDossierFiles, syncFileGroups,
 						syncFileGroupDossierParts, syncDLFileEntries, data,
 						syncDossierTemplate, serviceContext);
 			}
-			else if (syncDossier.getDossierStatus().equals(
-				PortletConstants.DOSSIER_STATUS_WAITING)) {
+			else if (Validator.isNotNull(syncDossier.getOid())) {
 				dossier =
 					DossierLocalServiceUtil.syncReSubmitDossier(
 						syncDossier, syncDossierFiles, syncFileGroups,
