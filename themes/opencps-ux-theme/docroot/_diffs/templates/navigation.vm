@@ -1,5 +1,6 @@
 #set($layoutLocalServiceUtil = $serviceLocator.findService("com.liferay.portal.service.LayoutLocalService"))
 
+
 #set($topPrivateLayouts = $layoutLocalServiceUtil.getLayouts($layout.getGroupId(),true,0))
 
 <nav class="$nav_css_class top-menu" id="navigation" role="navigation">
@@ -35,7 +36,7 @@
 								#end
 	
 								<li class="$nav_child_css_class" id="layout_$nav_child.getLayoutId()" $nav_child_attr_selected role="presentation">
-									<a aria-labelledby="layout_$nav_child.getLayoutId()" href="$nav_child.getURL()" $nav_child.getTarget() role="menuitem">$nav_child.getName()</a>
+									<a aria-labelledby="layout_$nav_child.getLayoutId()" href="$nav_child.getURL()" $nav_child.getTarget() role="menuitem">$nav_child.getName($locale)</a>
 								</li>
 							#end
 							

@@ -2,6 +2,7 @@
 
 #parse ($init)
 
+
 <html class="$root_css_class" dir="#language ("lang.dir")" lang="$w3c_language_id">
 
 <head>
@@ -17,7 +18,7 @@
 	#*<script type="text/javascript" src="$javascript_folder/jquery-1.11.3.js" ></script>*#
 </head>
 
-<body class="$css_class opencps-theme">
+<body class="$css_class opencps-theme ux">
 
 	$theme.include($body_top_include)
 	
