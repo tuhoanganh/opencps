@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -42,7 +43,7 @@
 					
 					String elementName = name + i;
 					
-					String emptyOptionLabel = StringPool.BLANK;
+					String emptyOptionLabel = LanguageUtil.get(pageContext, "empty-option");
 					
 					long selectedItem = 0;
 					
