@@ -1,3 +1,5 @@
+<%@page import="org.opencps.util.PortletPropsValues"%>
+<%@page import="org.opencps.util.PortletUtil"%>
 <%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
 <%@page import="org.opencps.datamgt.model.DictItem"%>
 <%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
@@ -123,7 +125,8 @@
 				name="service-domain" value="<%=DictItemUtil.getNameDictItem(service.getDomainCode()) %>"
 			/>
 		<liferay-ui:search-container-column-text 
-				name="service-administration-action" value="<%=administrationName %>"
+				name="service-administration-action" 
+				value="<%=PortletUtil.getDictItem(PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION, serviceConfig.getGovAgencyCode(), scopeGroupId).getItemName(locale,true) %>"
 			/>
 		<%
 			 final String hrefFix = "location.href='" + deteleRelaSeInfoAndProcessURL .toString()+"'";

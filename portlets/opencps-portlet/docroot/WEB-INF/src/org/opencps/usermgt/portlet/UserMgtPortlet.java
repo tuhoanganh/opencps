@@ -696,7 +696,7 @@ public class UserMgtPortlet extends MVCPortlet {
 				    .addJobPos(serviceContext
 				        .getUserId(), title, StringPool.BLANK, workingUnitId,
 				        leader, rowIds, serviceContext);
-
+				
 			}
 			SessionMessages
 			    .add(actionRequest, MessageKeys.USERMGT_JOBPOS_UPDATE_SUCESS);
