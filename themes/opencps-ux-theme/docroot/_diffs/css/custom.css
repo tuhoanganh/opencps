@@ -1,34 +1,26 @@
 /* This file allows you to override default styles in one central location for easier upgrade and maintenance. */
 
 @import url(font_face.css);
-@import url(controls.css);
-@import url(support.css);
 @import url(font-awesome.min.css);
+@import url(duongsat.css);
 
 /*vtduy_cmc */
-@import url(portlets/portlet_login.css);
-@import url(portlets/portlet_register.css);
-@import url(portlets/portlet_accountInfo.css);
-@import url(portlets/portlet_history.css);
-@import url(portlets/portlet_dossier_info.css);
-@import url(portlets/portlet_dossier_content.css);
-@import url(portlets/portlet_popup.css);
 
-
-@import url(portlets/portlet_hung_custom.css);
 @import url(portlets/binhth.css);
 
-@import url(button-custom.css);
 
 /*end*/
 
 /*----anh huong*/
-@import url(portlets/portlet_13_fileinfo.css);
 /*end*/
 
 
 @import url(custom_frame_1.css);
 @import url(header_style_1.css);
+
+@import url(nav_toolbar.css);
+
+
 
 /* custom css theme ngoai cung*/
 .opencps-theme {
@@ -50,3 +42,33 @@
 	float: right;
 }
 
+
+.alpaca-array-actionbar-action.btn {
+	background-color: #ccc !important;
+	height: 20px !important;
+	width: 30px !important;
+	display: inline-block;
+	padding: 6px 12px;
+	margin-bottom: 0;
+	font-size: 14px;
+	font-weight: normal;
+	line-height: 1.42857143;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	-ms-touch-action: manipulation;
+	touch-action: manipulation;
+	cursor: pointer;
+	-webkit-user-select: none;
+	   -moz-user-select: none;
+	    -ms-user-select: none;
+	        user-select: none;
+	background-image: none;
+	border: 1px solid transparent;
+	border-radius: 4px;
+}
+
+.alpaca-field-table td {
+    border-left: 1px solid #ccc !important;
+     border-right: 1px solid #ccc !important;
+}

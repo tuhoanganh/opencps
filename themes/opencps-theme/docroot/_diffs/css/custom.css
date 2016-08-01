@@ -1,28 +1,13 @@
 /* This file allows you to override default styles in one central location for easier upgrade and maintenance. */
 
+@import url(duongsat.css);
 @import url(font_face.css);
 @import url(controls.css);
 @import url(support.css);
 @import url(font-awesome.min.css);
 @import url(portlets/p_10.css);
 @import url(portlets/p_13.css);
-<<<<<<< HEAD
-
-@import url(custom_frame_1.css);
-@import url(header_style_1.css);
-
-
-
-
-=======
-<<<<<<< HEAD
 body {
-=======
-@import url(portlets/binhth.css);
-
-
-/* body {
->>>>>>> 00ca231008add274d1bfac81af0c2ffcc105d271
     background-color: #f2f2f2;
     display: table;
     font-family: 'Roboto-Regular';
@@ -94,7 +79,6 @@ body {
 #banner .options > div {
     float: left;
     margin-right: 30px;
-    color: white
 }
 
 #banner .options > div a {
@@ -186,8 +170,8 @@ body {
 }
 
 .opencps-theme nav.top-menu.top-menu > ul > li.selected {
-    background-color: white;
-    color: #2a2a2a;
+    background-color: transparent;
+    color: white;
 }
 
 .opencps-theme nav.top-menu ul li div.div_toogle {
@@ -748,7 +732,7 @@ footer > p:nth-child(2) {
 /*---- Overwrite Tab ----*/
 
 .opencps-theme .nav-tabs {
-    border-bottom: 2px solid #2587b4;
+    border-bottom: 2px solid #f68624;
 }
 
 .opencps-theme .nav-tabs > li {
@@ -764,7 +748,7 @@ footer > p:nth-child(2) {
 
 .opencps-theme .nav-tabs > .active > a,
 .opencps-theme .nav-tabs > .active > a:hover {
-    background-color: #479ac0 !important;
+    background-color: #f68624 !important;
 }
 
 .opencps-theme .box_content {
@@ -918,7 +902,7 @@ footer > p:nth-child(2) {
 /*---- Overwrite header taglib ----*/
 
 .opencps-theme .taglib-header {
-    border-bottom: 2px solid #2587b4;
+    border-bottom: 2px solid #f68624;
     margin-bottom: 0 !important;
     position: relative;
 }
@@ -928,7 +912,7 @@ footer > p:nth-child(2) {
 }
 
 .opencps-theme .taglib-header .header-title > span {
-    background-color: #2587b4;
+    background-color: #f68624;
     border-radius: 8px 8px 0 0;
     color: white;
     display: table;
@@ -1263,12 +1247,12 @@ footer > p:nth-child(2) {
 .opencps-theme .home-search .navbar-inner .input-append {
 	width: auto;
 	padding: 5px;
-	background-color: rgba(255,255,255,0.5);
+/* 	background-color: rgba(255,255,255,0.5); */
 	border-radius: 5px; 
 }
 .opencps-theme .home-search .input-append input[type="text"].search-query {
 	border-radius: 5px 0 0 5px;
-	height: 50px;
+	height: 60px;
 	width: 500px;
 	border-right: 0; 
 }
@@ -1278,148 +1262,12 @@ footer > p:nth-child(2) {
 	box-shadow: none;
 	background-size: 100% 100%;
 	text-indent: -9999px;
-	width: 50px;
-	height: 50px;
+	width: 128px;
+	height: 60px;
 	border-radius: 0 5px 5px 0 !important;
+	border: 1px !important;
 }
-
-.opencps-theme .search-container-action {
-	display: table-cell;
-}
-
-.opencps-theme .search-container-action.forward {	
-	background: url(/opencps-theme/css/../images/custom/send.png) center center no-repeat;
-	background-size: 80% 80%;
-}
-.opencps-theme .search-container-action.forward img {
-	width: 0 !important;
-	height: 0 !important;
-	padding: 8px;
-	background-image: none !important
-}
-
-.opencps-theme .search-container-action.delete {	
-	background: url(/opencps-theme/css/../images/custom/delete.png) center center no-repeat;
-	background-size: 80% 80%;
-}
-.opencps-theme .search-container-action.delete img {
-	width: 0 !important;
-	height: 0 !important;
-	padding: 8px;
-	background-image: none !important
-}
-
-.opencps-theme .search-container-action.edit {	
-	background: url(/opencps-theme/css/../images/custom/thaydoi.png) center center no-repeat;
-	background-size: 80% 80%;
-}
-.opencps-theme .search-container-action.edit img {
-	width: 0 !important;
-	height: 0 !important;
-	padding: 8px;
-	background-image: none !important
-}
-
-.opencps-theme .search-container-action.view {	
-	background: url(/opencps-theme/css/../images/custom/xem.png) center center no-repeat;
-	background-size: 100% 50%;
-	margin-right: 2px;
-}
-.opencps-theme .search-container-action.view a {
-	width: 0 !important;
-	height: 0 !important;
-	padding: 8px;
-	background-image: none !important
-}
-.opencps-theme .search-container-action.view img {
-	display: none;
-} 
-
-.opencps-theme .nav-display-style-buttons.font-pull {
-	background-color: #0077b3;
-	color: white;
-	border-radius: 4px; 
-}
-
-.opencps-theme .custom-input-search {
-	text-align: right;
-}
-
-.opencps-theme .front-custom-select-search .row-fluid > .span6:nth-child(1) > div > label {
-	display: none;
-}
-
-.opencps-theme .front-custom-select-search .row-fluid > .span6:nth-child(2) > div > button {
-	border-radius: 0 4px 4px 0; 
-}
-
-.opencps-theme .front-custom-select-search .row-fluid > .span6:nth-child(2) > div > input {
-	border-radius: 4px 0 0 4px; 
-}
-
-.opencps-theme .custom-input-search .input-append .search-query {
-	border-radius: 4px 0 0 4px; 
-}
-
-.opencps-theme .custom-input-search .input-append .btn {
-	border-radius: 0 4px 4px 0;
-}
-
-.opencps-theme .button-add-front-service {
-	background: #0077b3 none;
-	color: white !important;
-	border: 1px solid #0077b3;
-}
-
-.opencps-theme .font-dossier-list-action {
-	width:80px; 
-	vertical-align: middle !important;
-}
-
-.opencps-theme .sitemap-class {
-	margin: 0;
-}
-.opencps-theme .sitemap-class > li {
-	padding: 5px 10px;	
-}
-.opencps-theme .sitemap-class > li:nth-child(even) {
-	background-color: #ddd;
-}
-
-.opencps-theme .pull-right.custom-service-config {
-	width: 82%;
-	padding: 0px 10px;
-	box-sizing: border-box;
-}
-
-.opencps-theme .custom-button-service-config {
-	background-color: #0077b3;
-    border-radius: 4px;
-    color: white;
-	margin-top: 20px;
-	padding: 10px;
-}
-.opencps-theme .custom-button-dossier-temp {
-	background-color: #0077b3;
-    border-radius: 4px;
-    color: white;
-    padding: 10px;
-}
-
-.dialog-iframe-popup .nav-tabs > li {
-	font-weight: normal;
-}
-.dialog-iframe-popup .nav-tabs > li > a {
-	background-color: transparent;
-	color: inherit !important;
-}
-.dialog-iframe-popup .nav-tabs > li.active > a, 
-.dialog-iframe-popup .nav-tabs > li.active > a:hover, 
-.dialog-iframe-popup .nav-tabs > li.active > a:focus, 
-.dialog-iframe-popup .nav-tabs > li > a:hover {
-	color: #555 !important;
-}
+	
 /*
 	--end---
 */
->>>>>>> 93947ddc8a049a6fbd3c62d8ab70e34dc3f70cdb
