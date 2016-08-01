@@ -22,7 +22,7 @@
 	jobPos = JobPosLocalServiceUtil.getJobPossG_W(
 		scopeGroupId, workingUnitId, searchContainer.getStart(), searchContainer.getEnd() 
 		,searchContainer.getOrderByComparator()); 	
-	totalCount = JobPosLocalServiceUtil.countAll();
+	
 	total = totalCount;
 	results = jobPos;
 	pageContext.setAttribute("results", results);
