@@ -22,6 +22,8 @@ import java.io.IOException;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
@@ -66,12 +68,17 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.portlet.LiferayPortletMode;
+import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
+import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 /**
@@ -202,22 +209,36 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 						    .getInstance(actionRequest);
 			
 			dossierTemplateValidate(dossierTemplateId, templateNo, templateName);
-
+			
+			
+			
 			if (dossierTemplateId == 0) {
 				DossierTemplateLocalServiceUtil.addDossierTemplate(
 				    templateNo, templateName, description, serviceContext.getUserId(),
 				    serviceContext);
+								
+				DossierTemplate dossierTemplate = DossierTemplateLocalServiceUtil.getDossierTemplate(templateNo);
+				
+				ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+				String portletName = (String)actionRequest.getAttribute(WebKeys.PORTLET_ID);
+				PortletURL redirectURL = PortletURLFactoryUtil.create(PortalUtil.getHttpServletRequest(actionRequest),
+					portletName,
+					themeDisplay.getLayout().getPlid(), PortletRequest.RENDER_PHASE);
+					redirectURL.setParameter(DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DOSSIERTEMPLATEID, String.valueOf(dossierTemplate.getDossierTemplateId()));
+					redirectURL.setParameter("mvcPath", "/html/portlets/dossiermgt/admin/edit_dossier.jsp");
+					actionResponse.sendRedirect(redirectURL.toString());
+			
 			}
 			else {
 				DossierTemplateLocalServiceUtil.updateDossierTemplate(
 				    dossierTemplateId, templateNo, templateName, description,
 				    serviceContext.getUserId(),
 				    serviceContext);
+				if(Validator.isNotNull(returnURL)) {
+					actionResponse.sendRedirect(returnURL);
+				}
 			}
 			
-			if(Validator.isNotNull(returnURL)) {
-				actionResponse.sendRedirect(returnURL);
-			}
 		}
 		catch (Exception e) {
 			if (e instanceof OutOfLengthDossierTemplateNameException) {

@@ -116,7 +116,6 @@
 />
 
 <liferay-ui:error key="jobpos-existed-title" message="jobpos-existed-title"/>
-
 <portlet:actionURL var="updateWorkingUnitURL" name="updateWorkingUnit" >
 	<portlet:param name="returnURL" value="<%=currentURL %>"/>
 	<portlet:param name="redirectURL" value="<%=redirectURL %>"/>
