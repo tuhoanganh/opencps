@@ -176,7 +176,6 @@
 		/>	
 	</aui:col>
 </aui:row>
-<%=cmd %>
 
 <%
 String required=cmd.equals(Constants.VIEW) ? "" : "required";
