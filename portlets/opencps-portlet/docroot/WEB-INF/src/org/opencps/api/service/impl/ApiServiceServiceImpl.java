@@ -29,20 +29,15 @@ import java.util.Date;
 import java.util.List;
 
 import org.opencps.api.service.ApiServiceLocalServiceUtil;
-import org.opencps.api.service.base.ApiServiceServiceBaseImpl;
 import org.opencps.backend.message.SendToEngineMsg;
 import org.opencps.dossiermgt.NoSuchDossierPartException;
 import org.opencps.dossiermgt.bean.ProcessOrderBean;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.DossierPart;
-import org.opencps.dossiermgt.model.DossierTemplate;
-import org.opencps.dossiermgt.model.ServiceConfig;
 import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
-import org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil;
-import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
 import org.opencps.processmgt.NoSuchProcessOrderException;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.model.ProcessWorkflow;
@@ -52,7 +47,6 @@ import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
 import org.opencps.servicemgt.NoSuchServiceInfoException;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
-import org.opencps.usermgt.portlet.UserMgtEditProfilePortlet;
 import org.opencps.util.DLFolderUtil;
 import org.opencps.util.DateTimeUtil;
 import org.opencps.util.PortletConstants;
@@ -71,19 +65,20 @@ import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.HtmlUtil;
-import com.liferay.portal.kernel.util.HttpUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Company;
 import com.liferay.portal.model.User;
-import com.liferay.portal.security.ac.AccessControlled;
+import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextThreadLocal;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
-import com.liferay.util.portlet.PortletProps;
+import com.liferay.portlet.documentlibrary.util.DLUtil;
 
 /**
  * The implementation of the api service remote service.
@@ -399,13 +394,8 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 									"dossierFullFileName",
 									df.getDisplayName() + "."
 											+ fileEntry.getExtension());
-
-							String url = PortletProps.get("VIRTUAL_HOST") + ":"
-									+ PortletProps.get("VIRTUAL_PORT")
-									+ "/documents/" + fileEntry.getGroupId()
-									+ StringPool.SLASH + fileEntry.getFolderId()
-									+ StringPool.SLASH + HttpUtil.encodeURL(HtmlUtil.unescape(fileEntry.getTitle()))
-									+ "?version=" + fileEntry.getVersion();
+							
+							String url = getFileURL(fileEntry);
 
 							jsonDossierFile.put("dossierFileURL", url);
 
@@ -1059,6 +1049,7 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 			SendToEngineMsg sendToEngineMsg = new SendToEngineMsg();
 
 			// sendToEngineMsg.setAction(WebKeys.ACTION);
+			sendToEngineMsg.setCompanyId(dossier.getCompanyId());
 			sendToEngineMsg.setActionNote("Chuyển trạng thái");
 			sendToEngineMsg.setAssignToUserId(0);
 			sendToEngineMsg.setActionUserId(user.getUserId());
@@ -1231,6 +1222,7 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 			SendToEngineMsg sendToEngineMsg = new SendToEngineMsg();
 
 			// sendToEngineMsg.setAction(WebKeys.ACTION);
+			sendToEngineMsg.setCompanyId(dossier.getCompanyId());
 			sendToEngineMsg.setActionNote(actionnote);
 			sendToEngineMsg.setAssignToUserId(0);
 			sendToEngineMsg.setActionUserId(user.getUserId());
@@ -1507,12 +1499,7 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 										df.getDisplayName() + "."
 												+ fileEntry.getExtension());
 
-								String url = PortletProps.get("VIRTUAL_HOST") + ":"
-										+ PortletProps.get("VIRTUAL_PORT")
-										+ "/documents/" + fileEntry.getGroupId()
-										+ StringPool.SLASH + fileEntry.getFolderId()
-										+ StringPool.SLASH + HttpUtil.encodeURL(HtmlUtil.unescape(fileEntry.getTitle()))
-										+ "?version=" + fileEntry.getVersion();
+								String url = getFileURL(fileEntry);
 
 								jsonDossierFile.put("dossierFileURL", url);
 
@@ -1609,6 +1596,17 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 
 		return jsonObject;
 	}	
-	private Log _log = LogFactoryUtil.getLog(ApiServiceServiceImpl.class
-.getName());	
+	
+	private String getFileURL(FileEntry fileEntry) throws PortalException, SystemException {
+		Company company = CompanyLocalServiceUtil.getCompanyByMx(PropsUtil.get(PropsKeys.COMPANY_DEFAULT_WEB_ID));
+
+		String portalURL = PortalUtil.getPortalURL(
+				company.getVirtualHostname(), PortalUtil.getPortalPort(false), false);
+		
+		String fileURL = portalURL + DLUtil.getPreviewURL(fileEntry, fileEntry.getFileVersion(), null, "");
+		
+		return fileURL;
+	}
+	
+	private static Log _log = LogFactoryUtil.getLog(ApiServiceServiceImpl.class.getName());	
 }
