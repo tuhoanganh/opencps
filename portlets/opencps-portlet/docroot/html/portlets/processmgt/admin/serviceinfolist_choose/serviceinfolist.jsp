@@ -1,3 +1,5 @@
+<%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="org.opencps.util.PortletPropsValues"%>
 <%@page import="org.opencps.util.DictItemUtil"%>
 <%@page import="com.liferay.portal.kernel.dao.search.RowChecker"%>
 <%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
@@ -90,7 +92,8 @@
 				name="service-domain" value="<%=DictItemUtil.getNameDictItem(service.getDomainCode()) %>"
 			/>
 		<liferay-ui:search-container-column-text 
-				name="service-administration-action" value="<%=DictItemUtil.getNameDictItem(service.getAdministrationCode()) %>"
+				name="service-administration-action" 
+				value="<%=PortletUtil.getDictItem(PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION, serviceConfig.getGovAgencyCode(), scopeGroupId).getItemName(locale,true) %>"
 			/>
 	</liferay-ui:search-container-row>
 <liferay-ui:search-iterator paginate="false"/>

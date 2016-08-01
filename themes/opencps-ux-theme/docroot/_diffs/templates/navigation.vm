@@ -1,5 +1,6 @@
 #set($layoutLocalServiceUtil = $serviceLocator.findService("com.liferay.portal.service.LayoutLocalService"))
 
+
 #set($topPrivateLayouts = $layoutLocalServiceUtil.getLayouts($layout.getGroupId(),true,0))
 
 <nav class="$nav_css_class top-menu" id="navigation" role="navigation">
