@@ -128,7 +128,7 @@ public class SubmitDossier {
 
 			sendToBackend(
 				dossier.getDossierId(),0, dossier.getDossierStatus(),
-				serviceContext);
+				serviceContext, isNew);
 		}
 
 		return dossier;
@@ -144,16 +144,14 @@ public class SubmitDossier {
 	 */
 	protected void sendToBackend(
 		long dossierId, long fileGroupId, String dossierStatus,
-		ServiceContext serviceContext)
+		ServiceContext serviceContext, boolean isNew)
 		throws NoSuchProcessOrderException, SystemException {
 
 		Message message = new Message();
 
 		SendToEngineMsg engineMsg = new SendToEngineMsg();
-
-		switch (dossierStatus) {
-		case PortletConstants.DOSSIER_STATUS_WAITING:
-
+		
+		if (isNew) {
 			engineMsg.setAction(WebKeys.ACTION_RESUBMIT_VALUE);
 
 			engineMsg.setDossierId(dossierId);
@@ -172,10 +170,8 @@ public class SubmitDossier {
 
 			engineMsg.setProcessOrderId(processOrder.getProcessOrderId());
 
-
-			break;
-		case PortletConstants.DOSSIER_STATUS_NEW:
-
+			
+		} else {
 			engineMsg.setAction(WebKeys.ACTION_SUBMIT_VALUE);
 
 			engineMsg.setDossierId(dossierId);
@@ -191,11 +187,7 @@ public class SubmitDossier {
 			engineMsg.setGroupId(serviceContext.getScopeGroupId());
 
 			engineMsg.setUserId(serviceContext.getUserId());
-
-			break;
-
-		default:
-			break;
+			
 		}
 
 		message.put("msgToEngine", engineMsg);
