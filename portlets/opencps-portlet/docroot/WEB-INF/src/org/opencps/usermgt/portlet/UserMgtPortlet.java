@@ -680,6 +680,7 @@ public class UserMgtPortlet extends MVCPortlet {
 		long workingUnitId = ParamUtil
 		    .getLong(actionRequest, "workingUnitId");
 		try {
+			int count = 0;
 			ServiceContext serviceContext = ServiceContextFactory
 			    .getInstance(actionRequest);
 			for (int index = 0; index < indexOfRows.length; index++) {
@@ -696,10 +697,24 @@ public class UserMgtPortlet extends MVCPortlet {
 				    .addJobPos(serviceContext
 				        .getUserId(), title, StringPool.BLANK, workingUnitId,
 				        leader, rowIds, serviceContext);
-				
+				JobPos jobPos = null;
+				try {
+					jobPos = JobPosLocalServiceUtil
+									.getJobPosByTitle(serviceContext.getScopeGroupId(), title);
+					if(Validator.isNotNull(jobPos)) {
+						count ++;
+					}
+				}
+				catch (Exception e) {
+					// TODO: handle exception
+				}
 			}
-			SessionMessages
+			if(count == 0) {
+				SessionMessages
 			    .add(actionRequest, MessageKeys.USERMGT_JOBPOS_UPDATE_SUCESS);
+			} else {
+				SessionErrors.add(actionRequest, "jobpos-existed-title");
+			}
 			if (Validator
 			    .isNotNull(redirectURL)) {
 				actionResponse
