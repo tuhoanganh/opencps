@@ -56,7 +56,7 @@
 	
 %>
 
-<aui:nav-bar cssClass="custom-toolbar">
+<aui:nav-bar cssClass="opencps-toolbar custom-toolbar">
 
 	<c:if test="<%=!isListServiceConfig %>">
 		<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left font-pull" >
@@ -68,25 +68,32 @@
 					<portlet:param name="isListServiceConfig" value="<%=String.valueOf(true) %>"/>
 					<portlet:param name="backURL" value="<%=currentURL %>"/>
 				</portlet:renderURL>
-				<aui:nav-item 
+				<%-- <aui:nav-item 
 					id="addDictItem" 
 					label="add-dossier" 
 					iconCssClass="icon-plus"  
 					href="<%=addDossierURL %>"
-				/>
+					cssClass="action-button"
+				/> --%>
+				<aui:button icon="icon-plus" href="<%=addDossierURL %>" cssClass="action-button" value="add-dossier">
+					
+				</aui:button>
 			</c:if>
 		</aui:nav>
 	</c:if>
 	
 	<aui:nav-bar-search cssClass="pull-right front-custom-select-search">
 		<div class="form-search">
-			<aui:form action="<%= searchURL %>" method="post" name="fmSearch" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "doSearch();" %>'>
-
+			<aui:form 
+				action="<%= searchURL %>" method="post"
+				name="fmSearch" 
+				onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "doSearch();" %>'
+			>
 				<c:choose>
 					<c:when test="<%=isListServiceConfig %>">
 						
 						<aui:row>
-							<aui:col width="30">
+							<aui:col width="30" cssClass="search-col">
 								<datamgt:ddr 
 									depthLevel="1" 
 									dictCollectionCode="<%=ServiceUtil.SERVICE_DOMAIN %>" 
@@ -98,9 +105,10 @@
 									itemsEmptyOption="true"
 									itemNames="serviceDomainId"
 									selectedItems="<%=String.valueOf(serviceDomainId)%>"
+									cssClass="search-input select-box"
 								/>
 							</aui:col>
-							<aui:col width="30">
+							<aui:col width="30" cssClass="search-col">
 								<datamgt:ddr 
 									depthLevel="1" 
 									dictCollectionCode="<%=ServiceUtil.SERVICE_ADMINISTRATION %>" 
@@ -112,14 +120,16 @@
 									itemsEmptyOption="true"
 									itemNames="govAgencyId"
 									selectedItems="<%=String.valueOf(govAgencyId)%>"
+									cssClass="search-input select-box"
 								/>
 							</aui:col>
-							<aui:col width="30">
+							<aui:col width="30" cssClass="search-col">
 								<liferay-ui:input-search 
 									id="keywords1"
 									name="keywords"
 									title="keywords"
 									placeholder='<%= LanguageUtil.get(locale, "keywords") %>'
+									cssClass="search-input input-keyword"
 								/>
 							</aui:col>
 						</aui:row>
@@ -127,7 +137,7 @@
 					<c:otherwise>
 						<c:if test="<%=tabs1.equals(DossierMgtUtil.TOP_TABS_DOSSIER) %>">
 							<aui:row>
-								<aui:col width="30">
+								<aui:col width="30" cssClass="search-col">
 									<datamgt:ddr 
 										depthLevel="1" 
 										dictCollectionCode="<%=ServiceUtil.SERVICE_DOMAIN %>" 
@@ -139,10 +149,16 @@
 										itemsEmptyOption="true"
 										itemNames="serviceDomainId"
 										selectedItems="<%=String.valueOf(serviceDomainId)%>"
+										cssClass="search-input select-box"
 									/>
 								</aui:col>
-								<aui:col width="30">
-									<aui:select name="dossierStatus" label="<%=StringPool.BLANK %>" inlineField="<%=true %>" inlineLabel="left">
+								<aui:col width="30" cssClass="search-col">
+									<aui:select name="dossierStatus" 
+										label="<%=StringPool.BLANK %>" 
+										inlineField="<%=true %>" 
+										inlineLabel="left" 
+										cssClass="search-input select-box"
+									>
 										<aui:option><liferay-ui:message key="dossier-status"/></aui:option>
 										<aui:option value="<%=StringPool.BLANK %>" selected="<%=dossierStatus.equals(StringPool.BLANK)%>"><liferay-ui:message key="all"/></aui:option>
 											<%
@@ -159,12 +175,13 @@
 											%>
 									</aui:select>
 								</aui:col>
-								<aui:col width="30">
+								<aui:col width="30" cssClass="search-col">
 									<liferay-ui:input-search 
 										id="keywords1"
 										name="keywords"
 										title="keywords"
-										placeholder='<%=LanguageUtil.get(locale, "keywords") %>' 
+										placeholder='<%=LanguageUtil.get(locale, "keywords") %>'
+										cssClass="search-input input-keyword"
 									/>
 								</aui:col>
 							</aui:row>
