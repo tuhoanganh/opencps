@@ -68,6 +68,90 @@
 	border: 1px solid #ddd;
 } 
 
+
+.opencps-theme.ux .search-container-action{
+	border-radius: 20px;
+    color: white;
+	display: block;
+	margin: 5px 0;
+    height: 30px;
+    position: relative;
+    text-indent: 20px;
+    width: 110px;
+}
+
+.opencps-theme.ux .search-container-action a{
+    color: white;
+	display: block;
+    height: 30px;
+    width: 110px;
+}
+
+.opencps-theme.ux .search-container-action img{
+	display: none;
+}
+
+.opencps-theme.ux .search-container-action.fa{
+	padding-top: 8px;
+}
+
+.opencps-theme.ux .search-container-action.fa.view{
+	background-color: #ebebeb;
+	@extend .fa-search;
+    vertical-align: middle;
+}
+
+.opencps-theme.ux .search-container-action.fa.edit{
+	background-color: #50ea50;
+	@extend .fa-pencil-square-o;
+    vertical-align: middle;
+}
+
+.opencps-theme.ux .search-container-action.fa.delete{
+	background-color: #e61f06;
+	@extend .fa-trash-o;
+    vertical-align: middle;
+}
+
+.opencps-theme.ux .search-container-action.fa.forward{
+	background-color: #0090ff;
+	@extend .fa-paper-plane;
+    vertical-align: middle;
+}
+
+.opencps-theme.ux .search-container-action > a > .taglib-text.hide-accessible {
+    clip: auto !important;
+    position: absolute !important;
+    top: 8px;
+}
+
+.opencps-theme.ux .taglib-form-navigator .tabbable-content{
+	display: flex;
+}
+
+.opencps-theme.ux .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list{
+	background: transparent none repeat scroll 0 0;
+    border: medium none;
+}
+
+.opencps-theme.ux .taglib-form-navigator .tabbable-content .form-navigator-content{
+	border-left: 1px solid #ddd;
+    flex-grow: 1;
+}
+
+.opencps-theme.ux .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list .form-navigator-topper{
+	display: none;
+}
+
+.opencps-theme.ux .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list .nav-header{
+	display: none;
+}
+
+.opencps-theme.ux .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list > li > a{
+	padding: 10px 15px;
+}
+
+
 .alpaca-array-actionbar-action.btn {
 	background-color: #ccc !important;
 	height: 20px !important;
