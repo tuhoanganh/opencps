@@ -123,17 +123,17 @@
 
 	var localeCode = '<%=themeDisplay.getLanguageId() %>';
 	
-	var depthLevel = parseInt('<%=depthLevel %>');
+	var depthLevel<%=randomInstance %> = parseInt('<%=depthLevel %>');
 	
 	var strSelectItems = '<%=StringUtil.merge(selectedItems) %>';
 	
-	var strItemEmptyOption = '<%=StringUtil.merge(itemsEmptyOption) %>';
+	var strItemEmptyOption<%=randomInstance %> = '<%=StringUtil.merge(itemsEmptyOption) %>';
 	
 	var strEmptyOptionLabel = '<%=StringUtil.merge(emptyOptionLabels) %>';
 	
 	var selectItems<%=randomInstance %> = strSelectItems.split(",");
 	
-	var itemsEmptyOption = strItemEmptyOption.split(",");
+	var itemsEmptyOption<%=randomInstance %> = strItemEmptyOption<%=randomInstance %>.split(",");
 	
 	var emptyOptionLabels<%=randomInstance %> = strEmptyOptionLabel.split(",");
 	
@@ -207,8 +207,8 @@
 		
 		var emptyOptionLabel = '';
 		
-		if(itemsEmptyOption.length >= parseInt(level)){
-			itemEmptyOption = itemsEmptyOption[parseInt(level) - 1];
+		if(itemsEmptyOption<%=randomInstance %>.length >= parseInt(level)){
+			itemEmptyOption = itemsEmptyOption<%=randomInstance %>[parseInt(level) - 1];
 		}
 		
 		if(emptyOptionLabels<%=randomInstance %>.length >= parseInt(level)){
@@ -307,10 +307,13 @@
 		
 		var boundingBox = null;
 		
-		if(level <= depthLevel){
+				
+		if(level <= depthLevel<%=randomInstance %>){
+		
 			boundingBox = A.one('#<portlet:namespace/>col_<%=randomInstance %>' + level);
 			var data = null;
 			if(optionValueType ==='id'){
+				
 				if(parentItem != 0){
 					Liferay.Service(
 					  '/opencps-portlet.dictitem/get-dictitems-by-parentId',
@@ -323,9 +326,11 @@
 						  }
 						  
 						  if(data != null){
+						  	
 							<portlet:namespace/><%=randomInstance %>renderDataItems(objs, boundingBox, level, clearChild);
 						  }else{
-							for(var childLevel = level; childLevel <= depthLevel; childLevel++){
+						  	
+							for(var childLevel = level; childLevel <= depthLevel<%=randomInstance %>; childLevel++){
 								var childBoundingBox = A.one('#<portlet:namespace/>col_<%=randomInstance %>' + childLevel);
 								
 								if(childBoundingBox){
@@ -336,9 +341,10 @@
 					});
 				}
 			}else{
+				
 				if(parentItem != ''){
 					var itemId = 0;
-					
+						
 					Liferay.Service(
 					  '/opencps-portlet.dictitem/get-dictitem-inuse-by-code',
 					  {
@@ -364,7 +370,7 @@
 							  if(data != null){
 								<portlet:namespace/><%=randomInstance %>renderDataItems(objs, boundingBox, level, clearChild);
 							  }else{
-								for(var childLevel = level; childLevel <= depthLevel; childLevel++){
+								for(var childLevel = level; childLevel <= depthLevel<%=randomInstance %>; childLevel++){
 									var childBoundingBox = A.one('#<portlet:namespace/>col_<%=randomInstance %>' + childLevel);
 									
 									if(childBoundingBox){

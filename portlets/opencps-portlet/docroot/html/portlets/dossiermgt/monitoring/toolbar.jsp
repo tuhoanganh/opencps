@@ -76,6 +76,7 @@
 								</aui:col>
 							</aui:row>
 						</div>
+						<aui:button type="submit" value="submit"/>
 					</aui:form>
 				</div>			
 			</aui:nav-bar-search>
@@ -103,6 +104,7 @@
 								</aui:col>
 							</aui:row>
 						</div>
+						<aui:button type="submit" value="submit"/>
 					</aui:form>
 				</div>			
 			</aui:nav-bar-search>
@@ -130,6 +132,7 @@
 								</aui:col>
 							</aui:row>
 						</div>
+						<aui:button type="submit" value="submit"/>
 					</aui:form>
 				</div>			
 			</aui:nav-bar-search>

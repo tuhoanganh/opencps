@@ -1,4 +1,5 @@
 
+<%@page import="com.liferay.portal.security.auth.AuthTokenUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -136,8 +137,11 @@
 	
 	String formData = AutoFillFormData.dataBinding(sampleData, ownerCitizen, ownerBusiness, dossierId);
 
+	String auTock = AuthTokenUtil.getToken(request);
+	  
 	String alpacaSchema = dossierPart != null && Validator.isNotNull(dossierPart.getFormScript()) ? 
-			dossierPart.getFormScript() : StringPool.BLANK;
+	      dossierPart.getFormScript().replaceAll("p_auth=REPLACEKEY", "p_auth="+auTock) : StringPool.BLANK;
+
 
 	DossierFile dossierFile = null;
 	
@@ -216,6 +220,14 @@
 					$("#<portlet:namespace />formData" ).val(JSON.stringify(formData));
 					$("#<portlet:namespace />fm" ).submit();
 			    });
+				
+				$(".alpaca-field-table").delegate('select.alpaca-control', 'change', function(){   
+					  var listbox = $('#'+$(this).attr('id') + ' option:selected');
+					  var idText = $(this).attr('name') + "Text";
+					  var hiddenInput = $("input[name='"+idText+"']");
+					  hiddenInput.val(listbox.text());
+					  console.log(hiddenInput.val());
+					});
 			};
 		
 		}
@@ -312,3 +324,34 @@
 	},['aui-io','liferay-portlet-url', 'aui-loading-mask-deprecated']);
 	
 </aui:script>
+
+
+<script type="text/javascript">
+function openCPSSelectedTextValue(id) {
+	var listbox = document.getElementById(id);
+	var selIndex = listbox.selectedIndex;
+	var selText = listbox.options[selIndex].text; 
+    return selText;
+}
+
+function openCPSSelectedbildDataSource(controlId,dictCollectionId, parentItemId) {
+	Liferay.Service(
+			  '/opencps-portlet.dictitem/get-dictitems-inuse-by-dictcollectionId_parentItemId_datasource',
+			  {
+			    dictCollectionId: dictCollectionId,
+			    parentItemId: parentItemId
+			  },
+			  function(obj) {
+				var comboTarget = document.getElementById(controlId); 
+				comboTarget.innerHTML = "";
+			    for(j in obj){
+                    var sub_key = j;
+                    var sub_val = obj[j];
+                    var newOpt = comboTarget.appendChild(document.createElement('option'));
+					newOpt.value = sub_key;
+					newOpt.text = sub_val;
+                }
+			  }
+			);
+}
+</script>

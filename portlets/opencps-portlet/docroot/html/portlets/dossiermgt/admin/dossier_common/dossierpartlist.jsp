@@ -89,7 +89,7 @@
 	<aui:button href="<%= editDossierPartURL.toString() %>" value="add-dossier-part"/>
 </c:if>
 
-<liferay-ui:search-container searchContainer="<%= new DossierPartSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" 
+<liferay-ui:search-container searchContainer="<%= new DossierPartSearch(renderRequest, totalCount, iteratorURL) %>" 
 	headerNames="<%= headers %>">
 	<liferay-ui:search-container-results>
 		<%

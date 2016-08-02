@@ -425,7 +425,7 @@
 	right: 0;
 	top: 15px;
 }
-.opencps-theme .ocps-serviceinfo-list table td:first-child:after, 
+/* .opencps-theme .ocps-serviceinfo-list table td:first-child:after, 
 .opencps-theme .ocps-serviceinfo-list table td:last-child:after {
 	border: 0;
 }
@@ -469,7 +469,7 @@
 .opencps-theme .ocps-serviceinfo-list table td:last-child .delete a {
 	background-color: #ff5558;
 }
-
+ */
 /*---------- PortletID 9 - Detail ----------*/
 .ocps-update-service-bound-all .ocps-update-service-bound-general {
 	background-color: #fff;

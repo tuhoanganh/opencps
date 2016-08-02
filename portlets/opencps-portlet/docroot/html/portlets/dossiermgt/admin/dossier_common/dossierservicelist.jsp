@@ -82,7 +82,7 @@
 		<aui:button href="<%= editServiceConfigURL.toString() %>" value="add-service-config"/>
 </c:if>
 
-<liferay-ui:search-container searchContainer="<%= new ServiceConfigSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" 
+<liferay-ui:search-container searchContainer="<%= new ServiceConfigSearch(renderRequest, totalCount, iteratorURL) %>" 
 	headerNames="<%= headers %>"> 
 	
 		<liferay-ui:search-container-results>
