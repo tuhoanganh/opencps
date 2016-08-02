@@ -1509,7 +1509,7 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 						} 
 						if (Validator.isNotNull(df.getFormData())) {
 							jsonDossierFile.put("dossierFileContent", df.getFormData());
-							jsonDossierFile.put("dossierFileURL", "");						
+							jsonDossierFile.put("dossierFileURL", "");
 						}
 						/*
 						else {
