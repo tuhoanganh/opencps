@@ -115,6 +115,7 @@
 		var adminCodeSel = A.one("#<portlet:namespace/>administrationCode");
 		var serviceId = '<%= serviceinfoId %>';
 		var backURL = '<%=currentURL %>';
+		<portlet:namespace />getOnlineURL(adminCodeSel.val(), serviceId);
 		if(adminCodeSel) {
 			adminCodeSel.on('change',function() {
 				<portlet:namespace />getOnlineURL(adminCodeSel.val(), serviceId);
