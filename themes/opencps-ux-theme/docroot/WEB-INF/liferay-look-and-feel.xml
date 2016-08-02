@@ -5,12 +5,5 @@
 	<compatibility>
 		<version>6.2.5+</version>
 	</compatibility>
-	<theme id="opencps-ux" name="Opencps Ux" >
-		<settings>
-            <setting type="select" configurable="true" 
-                key="theme-style" 
-                options="opencps,pointgtvt,pointgtvtpage,viwa,vnra"                   
-                value="opencps" ></setting>
-        </settings>
-	</theme>
+	<theme id="opencps-ux" name="Opencps Ux" />
 </look-and-feel>
