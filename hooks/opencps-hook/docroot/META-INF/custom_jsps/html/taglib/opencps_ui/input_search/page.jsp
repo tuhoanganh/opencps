@@ -64,11 +64,9 @@ if(keySelect.contains(",")){
 	        </ul>
 	   </div>
 	</c:if>
-	<c:if test="<%= showButton %>">
-		<button class="btn" type="submit">
+		<button class="btn" type="submit" >
 			<%= buttonLabel %>
 		</button>
-	</c:if>
 </div>
 
 <c:if test="<%= autoFocus %>">
