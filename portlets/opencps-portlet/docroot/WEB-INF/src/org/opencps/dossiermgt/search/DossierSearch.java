@@ -54,7 +54,7 @@ public class DossierSearch extends SearchContainer<Dossier> {
 		headerNames.add("reception-no");
 		headerNames.add("finish-date");
 		headerNames.add("action");
-*/
+
 		orderableHeaders
 		    .put("gov-agency-name", DossierDisplayTerms.GOVAGENCY_NAME);
 		orderableHeaders
@@ -62,7 +62,11 @@ public class DossierSearch extends SearchContainer<Dossier> {
 		orderableHeaders
 		    .put("create-date", DossierDisplayTerms.CREATE_DATE);
 		orderableHeaders
-		    .put("dossier-status", DossierDisplayTerms.DOSSIER_STATUS);
+		    .put("dossier-status", DossierDisplayTerms.DOSSIER_STATUS);*/
+		
+		headerNames.add("dossier-info");
+		headerNames.add("dossier-status");
+		headerNames.add("action");
 		
 	}
 	public static final String EMPTY_RESULTS_MESSAGE =
