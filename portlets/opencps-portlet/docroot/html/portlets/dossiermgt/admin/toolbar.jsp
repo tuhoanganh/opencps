@@ -63,7 +63,7 @@
 	DictCollectionLocalServiceUtil
 					.getDictCollection(scopeGroupId, PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION);
 %>
-<aui:nav-bar cssClass="custom-toolbar">
+<aui:nav-bar cssClass="opencps-toolbar custom-toolbar">
 	<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left" >
 		<c:choose>
 			

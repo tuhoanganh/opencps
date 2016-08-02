@@ -23,7 +23,7 @@
 	PortletURL searchURL = renderResponse.createRenderURL();
 	searchURL.setParameter("mvcPath", templatePath + "submitinstruction.jsp");
 %>
-
+<aui:nav-bar cssClass="opencps-toolbar custom-toolbar">
 <div class="form-search">
 	<aui:form action="<%= searchURL %>" method="post" name="fm">
 		<aui:row>
@@ -63,3 +63,4 @@
 		</aui:row>
 	</aui:form>
 </div>
+</aui:nav-bar>

@@ -46,8 +46,6 @@
 
 
 
-<div class="ocps-serviceinfo-list serviceinfo-list-main">
-
 <liferay-util:include page='<%=templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
 <liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
 
@@ -80,91 +78,138 @@
 	message="<%=RequiredDossierPartException.class.getName() %>"
 />
 
-<%-- <portlet:actionURL var="TestConsumerURL" name="TestConsumer"/>
-
-<aui:button href="<%= TestConsumerURL.toString()%>" name="TestConsumer" value="TestConsumer"/> --%>
-
-<liferay-ui:search-container searchContainer="<%= new DossierSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
-
-	<liferay-ui:search-container-results>
-		<%
-			DossierSearchTerms searchTerms = (DossierSearchTerms)searchContainer.getSearchTerms();
-			
-			searchTerms.setDossierStatus(dossierStatus);
-			
-			DictItem domainItem = null;
-		
-			
-			try{
-				if(serviceDomainId > 0){
-					domainItem = DictItemLocalServiceUtil.getDictItem(serviceDomainId);
-				}
-
-				if(domainItem != null){
-					searchTerms.setServiceDomainIndex(domainItem.getTreeIndex());
-				}
+<div class="opencps-searchcontainer-wrapper">
+	<liferay-ui:search-container searchContainer="<%= new DossierSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
+	
+		<liferay-ui:search-container-results>
+			<%
+				DossierSearchTerms searchTerms = (DossierSearchTerms)searchContainer.getSearchTerms();
 				
-				%>
-					<%@include file="/html/portlets/dossiermgt/frontoffice/dosier_search_results.jspf" %>
-				<%
-			}catch(Exception e){
-				_log.error(e);
-			}
-		
-			total = totalCount;
-			results = dossiers;
+				searchTerms.setDossierStatus(dossierStatus);
+				
+				DictItem domainItem = null;
 			
-			pageContext.setAttribute("results", results);
-			pageContext.setAttribute("total", total);
-		%>
-	</liferay-ui:search-container-results>	
-		<liferay-ui:search-container-row 
-			className="org.opencps.dossiermgt.bean.DossierBean" 
-			modelVar="dossierBean" 
-			keyProperty="dossierId"
-		>
-		
+				
+				try{
+					if(serviceDomainId > 0){
+						domainItem = DictItemLocalServiceUtil.getDictItem(serviceDomainId);
+					}
+	
+					if(domainItem != null){
+						searchTerms.setServiceDomainIndex(domainItem.getTreeIndex());
+					}
+					
+					%>
+						<%@include file="/html/portlets/dossiermgt/frontoffice/dosier_search_results.jspf" %>
+					<%
+				}catch(Exception e){
+					_log.error(e);
+				}
+			
+				total = totalCount;
+				results = dossiers;
+				
+				pageContext.setAttribute("results", results);
+				pageContext.setAttribute("total", total);
+			%>
+		</liferay-ui:search-container-results>	
+			<liferay-ui:search-container-row 
+				className="org.opencps.dossiermgt.bean.DossierBean" 
+				modelVar="dossierBean" 
+				keyProperty="dossierId"
+			>
 			
 			<%
-			
-				String createDate =  LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "create-date");
-				String serviceName =  LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "service-name");
-				String govAgencyName =  LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "gov-agency-name");
-				String dosStatus =  LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "dossier-status");
-				String receiveDatetime =  LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "receive-datetime");
-				String finishDate =  LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "finish-date");
-				String receptionNo =  LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "reception-no");
 				Dossier dossier = dossierBean.getDossier();
+			%>
+			
+			<liferay-util:buffer var="info">
+				<div class="row-fluid">
+					<div class="span1">
+						<i class='<%="fa fa-circle sx10 " + dossier.getDossierStatus()%>'></i>
+					</div>
+					<div class="span2 bold-label">
+						<liferay-ui:message key="reception-no"/>
+					</div>
+					<div class="span9"><%=dossier.getReceptionNo() %></div>
+				</div>
 				
+				<div class="row-fluid">
+					<div class="span1"></div>
+					
+					<div class="span2 bold-label">
+						<liferay-ui:message key="service-name"/>
+					</div>
+					
+					<div class="span9"><%=dossierBean.getServiceName() %></div>
+				</div>
 				
-				 String cssStatus = dossier.getDossierStatus();
-				 String table = "<div class='row-fluid'><div class='span1'><i class='fa fa-circle sx10 " + cssStatus +"'></i></div><div class='span2 titleBold'>" + receptionNo + "</div><div class='span9'>" + dossier.getReceptionNo() + "</div></div>";
-				 table = table + "<div class='row-fluid'><div class='span1'></div><div class='span2 titleBold'>" + serviceName + "</div><div class='span9'>" + dossierBean.getServiceName() + "</div></div>";
-				 table = table + "<div class='row-fluid'><div class='span1'></div><div class='span2 titleBold'>" + govAgencyName + "</div><div class='span9'>" + dossier.getGovAgencyName() + "</div></div>";
-
-				 String sReceiveDate = Validator.isNotNull(dossier.getReceiveDatetime()) ? DateTimeUtil.convertDateToString(dossier.getReceiveDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT): StringPool.DASH;
-				 String sFinishDate = Validator.isNotNull(dossier.getFinishDatetime()) ? DateTimeUtil.convertDateToString(dossier.getFinishDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT): StringPool.DASH;
-				 String status = PortletUtil.getDossierStatusLabel(dossier.getDossierStatus(), locale);
-				 
-				 String table1 = "<div class='row-fluid'><div width=\"5px\"></div><div class='span5 titleBold'>" + createDate + "</div><div class='span6'>" + dossier.getCreateDate() + "</div></div>";
-				 table1 = table1 +"<div class='row-fluid'><div width=\"5px\"></div><div class='span5 titleBold'>" + receiveDatetime + "</div><div class='span6'>" + sReceiveDate + "</div></div>";
-				  
-				 table1 = table1 + "<div class='row-fluid'><div width=\"5px\"></div><div class='span5 titleBold'>" + finishDate + "</div><div class='span6'>" + sFinishDate + "</div></div>";
-				 table1 = table1 + "<div class='row-fluid'><div width=\"5px\"></div><div class='span5 titleBold'>" + dosStatus + "</div><div class='span6 " + cssStatus +"'>" + status + "</div></div>";
-				 
+				<div class="row-fluid">
+					<div class="span1"></div>
+					
+					<div class="span2 bold-label"><liferay-ui:message key="gov-agency-name"/></div>
+					
+					<div class="span9"><%=dossier.getGovAgencyName() %></div>
+				</div>
 				
-				//id column
-				row.addText("");
-				row.addText(table);
-				row.addText(table1);
-				row.addJSP("center", SearchEntry.DEFAULT_VALIGN,"/html/portlets/dossiermgt/frontoffice/dossier_actions.jsp", config.getServletContext(), request, response);
+			</liferay-util:buffer>
+			
+			<liferay-util:buffer var="status">
+				<div class="row-fluid">
+					<div width="5px"></div>
+					<div class="span5 bold-label"><liferay-ui:message key="create-date"/></div>
+					<div class="span6">
+						<%=Validator.isNotNull(dossier.getCreateDate()) ? DateTimeUtil.convertDateToString(dossier.getCreateDate(), DateTimeUtil._VN_DATE_FORMAT) : StringPool.DASH %>
+					</div>
+				</div>
 				
-			%>	
-		</liferay-ui:search-container-row> 
-	
-	<liferay-ui:search-iterator/>
-</liferay-ui:search-container>
+				<div class="row-fluid">
+					<div width="5px"></div>
+					<div class="span5 bold-label">
+						 <liferay-ui:message key="receive-datetime"/>
+					</div>
+					
+					<div class="span6">
+						<%=Validator.isNotNull(dossier.getReceiveDatetime()) ? DateTimeUtil.convertDateToString(dossier.getReceiveDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT): StringPool.DASH %>
+					</div>
+				</div>
+				
+				<div class="row-fluid">
+					<div width="5px"></div>
+					<div class="span5 bold-label">
+						<liferay-ui:message key="finish-date"/>
+					</div>
+					<div class="span6">
+						<%=Validator.isNotNull(dossier.getFinishDatetime()) ? DateTimeUtil.convertDateToString(dossier.getFinishDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT): StringPool.DASH %>
+					</div>
+				</div>
+				
+				<div class="row-fluid">
+					<div width="5px"></div>
+					
+					<div class="span5 bold-label">
+						<liferay-ui:message key="dossier-status"/>
+					</div>
+					
+					<div class='<%="span6 " + dossier.getDossierStatus() %>'>
+						<%=PortletUtil.getDossierStatusLabel(dossier.getDossierStatus(), locale) %>
+					</div>
+				</div>
+			</liferay-util:buffer>
+				
+				<%
+					row.setClassName("opencps-searchcontainer-row");
+					row.addText(info);
+					row.addText(status);
+					row.addJSP("center", SearchEntry.DEFAULT_VALIGN,"/html/portlets/dossiermgt/frontoffice/dossier_actions.jsp", config.getServletContext(), request, response);
+					
+				%>	
+			</liferay-ui:search-container-row> 
+		
+		<liferay-ui:search-iterator/>
+	</liferay-ui:search-container>
 </div>
+
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.dossiermgt.frontoffice.frontofficedossierlist.jsp");
 %>
