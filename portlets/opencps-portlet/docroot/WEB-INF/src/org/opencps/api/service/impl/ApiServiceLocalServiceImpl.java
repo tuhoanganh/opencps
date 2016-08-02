@@ -46,7 +46,7 @@ import com.liferay.portal.service.ServiceContext;
 public class ApiServiceLocalServiceImpl extends ApiServiceLocalServiceBaseImpl {
 	
 	public ApiService addLog(long userId, String apiCode, String ipAddress,
-			String httpAgent, String oid, String params, String status,
+			String oid, String params, String status,
 			ServiceContext serviceContext) {
 
 		ApiService apiService = null;
@@ -66,7 +66,6 @@ public class ApiServiceLocalServiceImpl extends ApiServiceLocalServiceBaseImpl {
 			apiService.setApiCode(apiCode);
 			apiService.setIpAddress(ipAddress);
 			apiService.setOid(oid);
-			apiService.setHttpAgent(httpAgent);
 			apiService.setParams(params);
 			apiService.setStatus(status);
 			
