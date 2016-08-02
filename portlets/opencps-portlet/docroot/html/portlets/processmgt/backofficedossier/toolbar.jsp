@@ -74,16 +74,17 @@
 						<aui:form action="<%= searchURL %>" method="post" name="fm">
 							<div class="toolbar_search_input">
 								<aui:row>
-									<aui:col width="30">
+									<aui:col width="30" cssClass="search-col">
 										<liferay-ui:input-search 
 											id="keywords"
 											name="keywords"
 											title='<%= LanguageUtil.get(portletConfig, locale, "keywords") %>'
 											placeholder="<%= LanguageUtil.get(portletConfig, locale, \"keywords\") %>" 
+											cssClass="search-input input-keyword"
 										/>
 									</aui:col>
-									<aui:col width="30">
-										<aui:select label="" name="<%= DossierDisplayTerms.SERVICE_DOMAIN_CODE %>" style="width: 100%;">
+									<aui:col width="30" cssClass="search-col">
+										<aui:select label="" name="<%= DossierDisplayTerms.SERVICE_DOMAIN_CODE %>" style="width: 100%;" cssClass="search-input select-box">
 											<aui:option value="">
 												<liferay-ui:message key="filter-by-service-domain"></liferay-ui:message>
 											</aui:option>
@@ -103,8 +104,8 @@
 											%>	
 										</aui:select>						
 									</aui:col>
-									<aui:col width="30">
-										<aui:select label="" name="<%= DossierDisplayTerms.DOSSIER_STATUS %>" style="width: 100%;">
+									<aui:col width="30" cssClass="search-col">
+										<aui:select label="" name="<%= DossierDisplayTerms.DOSSIER_STATUS %>" style="width: 100%;" cssClass="search-input select-box">
 											<aui:option value="-1">
 												<liferay-ui:message key="filter-by-dossier-status"></liferay-ui:message>
 											</aui:option>
@@ -194,16 +195,17 @@
 						<aui:form action="<%= searchURL %>" method="post" name="fm">
 							<div class="toolbar_search_input">
 								<aui:row>
-									<aui:col width="50">
+									<aui:col width="50" cssClass="search-col">
 										<liferay-ui:input-search 
 											id="keywords"
 											name="keywords"
 											title='<%= LanguageUtil.get(portletConfig, locale, "keywords") %>'
 											placeholder="<%= LanguageUtil.get(portletConfig, locale, \"keywords\") %>" 
+											cssClass="search-input input-keyword"
 										/>
 									</aui:col>
-									<aui:col width="50">
-										<aui:select label="" name="<%= ProcessDisplayTerms.PROCESS_DOSSIERTEMPLATE_ID %>" style="width: 100%;">
+									<aui:col width="50" cssClass="search-col">
+										<aui:select label="" name="<%= ProcessDisplayTerms.PROCESS_DOSSIERTEMPLATE_ID %>" style="width: 100%;" cssClass="search-input select-box">
 											<aui:option value="<%= DossierMgtUtil.DOSSIERFILETYPE_ALL %>">
 												<liferay-ui:message key="filter-by-dossier-template"></liferay-ui:message>
 											</aui:option>
