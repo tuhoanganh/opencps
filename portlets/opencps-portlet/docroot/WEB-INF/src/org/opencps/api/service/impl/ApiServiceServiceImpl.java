@@ -65,8 +65,6 @@ import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Company;
@@ -1600,9 +1598,7 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 	
 	private String getFileURL(FileEntry fileEntry) throws PortalException, SystemException {
 
-		long companyId = CompanyThreadLocal.getCompanyId();
-		
-		Company company = CompanyLocalServiceUtil.getCompany(companyId);
+		Company company = CompanyLocalServiceUtil.getCompany(getUser().getCompanyId());
 		
 		String portalURL = PortalUtil.getPortalURL(
 				company.getVirtualHostname(), PortalUtil.getPortalPort(false), false);
