@@ -128,7 +128,7 @@
 					<div class="span1">
 						<i class='<%="fa fa-circle sx10 " + dossier.getDossierStatus()%>'></i>
 					</div>
-					<div class="span2 titleBold">
+					<div class="span2 bold-label">
 						<liferay-ui:message key="reception-no"/>
 					</div>
 					<div class="span9"><%=dossier.getReceptionNo() %></div>
@@ -137,7 +137,7 @@
 				<div class="row-fluid">
 					<div class="span1"></div>
 					
-					<div class="span2 titleBold">
+					<div class="span2 bold-label">
 						<liferay-ui:message key="service-name"/>
 					</div>
 					
@@ -147,7 +147,7 @@
 				<div class="row-fluid">
 					<div class="span1"></div>
 					
-					<div class="span2 titleBold"><liferay-ui:message key="gov-agency-name"/></div>
+					<div class="span2 bold-label"><liferay-ui:message key="gov-agency-name"/></div>
 					
 					<div class="span9"><%=dossier.getGovAgencyName() %></div>
 				</div>
@@ -157,7 +157,7 @@
 			<liferay-util:buffer var="status">
 				<div class="row-fluid">
 					<div width="5px"></div>
-					<div class="span5 titleBold"><liferay-ui:message key="create-date"/></div>
+					<div class="span5 bold-label"><liferay-ui:message key="create-date"/></div>
 					<div class="span6">
 						<%=Validator.isNotNull(dossier.getCreateDate()) ? DateTimeUtil.convertDateToString(dossier.getCreateDate(), DateTimeUtil._VN_DATE_FORMAT) : StringPool.DASH %>
 					</div>
@@ -165,7 +165,7 @@
 				
 				<div class="row-fluid">
 					<div width="5px"></div>
-					<div class="span5 titleBold">
+					<div class="span5 bold-label">
 						 <liferay-ui:message key="receive-datetime"/>
 					</div>
 					
@@ -176,7 +176,7 @@
 				
 				<div class="row-fluid">
 					<div width="5px"></div>
-					<div class="span5 titleBold">
+					<div class="span5 bold-label">
 						<liferay-ui:message key="finish-date"/>
 					</div>
 					<div class="span6">
@@ -187,7 +187,7 @@
 				<div class="row-fluid">
 					<div width="5px"></div>
 					
-					<div class="span5 titleBold">
+					<div class="span5 bold-label">
 						<liferay-ui:message key="dossier-status"/>
 					</div>
 					
