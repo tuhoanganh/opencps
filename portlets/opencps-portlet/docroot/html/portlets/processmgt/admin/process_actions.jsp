@@ -36,7 +36,7 @@
 			editURL.setParameter("serviceProcessId", String.valueOf(process.getServiceProcessId()));
 			editURL.setParameter("backURL", currentURL);
 		%>
-		<liferay-ui:icon cssClass="edit" image="edit" url="<%= editURL.toString() %>" />
+		<liferay-ui:icon cssClass="search-container-action fa edit" image="edit" url="<%= editURL.toString() %>" />
  	</c:if>
 
  	<c:if test="<%= ProcessPermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE) %>">
@@ -44,6 +44,6 @@
 			<portlet:param name="serviceProcessId" value="<%=String.valueOf(process.getServiceProcessId()) %>"/>
 			<portlet:param name="redirectURL" value="<%=currentURL %>"/>
 		</portlet:actionURL> 
-		<liferay-ui:icon-delete cssClass="delete" image="delete" confirmation="are-you-sure-delete-entry" message="delete" url="<%= deleteProcessURL.toString() %>" />
+		<liferay-ui:icon-delete cssClass="search-container-action fa delete" image="delete" confirmation="are-you-sure-delete-entry" message="delete" url="<%= deleteProcessURL.toString() %>" />
  	</c:if>
 <%-- </liferay-ui:icon-menu> --%> 

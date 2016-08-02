@@ -33,6 +33,6 @@
 			<portlet:param name="templateId" value="<%=String.valueOf(templatefile.getTemplatefileId()) %>"/>
 			<portlet:param name="redirectURL" value="<%=currentURL %>"/>
 		</portlet:actionURL> 
-		<liferay-ui:icon-delete cssClass="delete" image="delete" confirmation="are-you-sure-delete-entry" message="delete" url="<%= deleteTemplateURL.toString() %>" />
+		<liferay-ui:icon-delete cssClass="search-container-action fa delete" image="delete" confirmation="are-you-sure-delete-entry" message="delete" url="<%= deleteTemplateURL.toString() %>" />
  	</c:if>
 <%-- </liferay-ui:icon-menu>  --%>
