@@ -282,7 +282,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				size, serviceContext);
 
 			updated = true;
-
+			SessionErrors.clear(actionRequest);
 		}
 		catch (Exception e) {
 			updated = false;

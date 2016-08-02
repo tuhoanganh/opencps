@@ -67,7 +67,7 @@
 	
 	String modalDialogId = ParamUtil.getString(request, "modalDialogId");
 	
-	//String redirectURL = ParamUtil.getString(request, "redirectURL");
+	String redirectURL = ParamUtil.getString(request, "redirectURL");
 	
 	DossierFile dossierFile = null;
 	
@@ -139,7 +139,7 @@
 	action="<%=addAttachmentFileURL%>" 
 	enctype="multipart/form-data"
 >
-	<aui:input name="redirectURL" type="hidden" value="<%=currentURL %>"/>
+	<aui:input name="redirectURL" type="hidden" value="<%=Validator.isNotNull(redirectURL)?redirectURL: currentURL %>"/>
 	<aui:input name="<%=DossierDisplayTerms.DOSSIER_ID %>" type="hidden" value="<%=dossierId %>"/>
 	<aui:input name="groupDossierPartId" type="hidden" value="<%=groupDossierPartId %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_ID %>" type="hidden" value="<%=dossierFileId %>"/>
