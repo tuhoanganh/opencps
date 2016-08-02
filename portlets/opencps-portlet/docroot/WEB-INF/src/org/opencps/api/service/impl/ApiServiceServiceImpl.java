@@ -174,9 +174,9 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 
 			String ipAddress = PortalUtil.getComputerAddress();
 
-			ApiServiceLocalServiceUtil.addApiService(getUser().getUserId(),
-					"02", ipAddress, "", "{ 'username': '" + username
-							+ "' }", "success", serviceContext);
+			ApiServiceLocalServiceUtil.addLog(getUserId(),
+					"02", ipAddress, "", "", "{ 'username': '" + username + "' }", 
+					"success", serviceContext);
 		}
 		catch (Exception e) {
 			_log.error(e);
@@ -240,7 +240,7 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 			resultObj.put("data", resultArr);
 
 			try {
-				ServiceContext serviceContext = new ServiceContext();
+				ServiceContext serviceContext = getS;
 				serviceContext.setUserId(getUser().getUserId());
 				serviceContext.setScopeGroupId(getUser().getGroupId());
 				serviceContext.setCompanyId(getUser().getCompanyId());
@@ -251,8 +251,8 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 				params.put("stepno", stepno);
 				params.put("username", username);
 
-				ApiServiceLocalServiceUtil.addApiService(getUser().getUserId(),
-						"01", ipAddress, "", params.toString(), "success",
+				ApiServiceLocalServiceUtil.addLog(getUserId(),
+						"01", ipAddress, "", "", params.toString(), "success",
 						serviceContext);
 			} catch (SystemException se) {
 
@@ -1460,9 +1460,8 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 					JSONObject params = JSONFactoryUtil.createJSONObject();
 					params.put("oid", oid);
 
-					ApiServiceLocalServiceUtil.addApiService(getUser().getUserId(),
-							"03", ipAddress, "", params.toString(), "error",
-							serviceContext);
+					ApiServiceLocalServiceUtil.addLog(getUserId(), "03", ipAddress, 
+							"", "", params.toString(), "error", serviceContext);
 				} catch (SystemException se) {
 					_log.error(se);
 				} catch (PortalException pe) {
