@@ -59,7 +59,7 @@
 	request.setAttribute(
 		EmployeeDisplayTerm.WORKING_UNIT_ID, workingUnitId);
 %>
-<aui:nav-bar cssClass="custom-toolbar">
+<aui:nav-bar cssClass="opencps-toolbar custom-toolbar">
 	<aui:nav-bar-search cssClass="pull-right">
 		<div class="form-search">
 			<%

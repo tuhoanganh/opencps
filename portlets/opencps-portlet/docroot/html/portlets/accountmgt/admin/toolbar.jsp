@@ -47,7 +47,7 @@
 	
 %>
 
-<aui:nav-bar cssClass="custom-toolbar">
+<aui:nav-bar cssClass="opencps-toolbar custom-toolbar">
 	<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left" >
 		<c:if test="<%=CitizenPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_CITIZEN) && tabs1.equals(AccountMgtUtil.TOP_TABS_CITIZEN)%>">
 			<%

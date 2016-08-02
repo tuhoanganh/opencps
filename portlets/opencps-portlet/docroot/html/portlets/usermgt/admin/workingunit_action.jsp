@@ -56,10 +56,10 @@
     </portlet:renderURL>
 	
 	<c:if test="<%=WorkingUnitPermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) %>">
-		<liferay-ui:icon cssClass="edit" image="edit" message="edit"
+		<liferay-ui:icon cssClass="search-container-action fa edit" image="edit" message="edit"
 		url="<%=updateWorkingUnit.toString()%>" />
 		
-		<liferay-ui:icon cssClass="add" image="add" message="add-child"
+		<liferay-ui:icon cssClass="search-container-action fa add" image="add" message="add-child"
         url="<%=updateWorkingUnitChirl.toString()%>" />
 	</c:if>
 
@@ -75,7 +75,7 @@
 	</portlet:actionURL>
 	<c:if test="<%=WorkingUnitPermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE) %>">
 		
-		<liferay-ui:icon cssClass="delete" image="delete" message="delete"
+		<liferay-ui:icon cssClass="search-container-action fa delete" image="delete" message="delete"
 			url="<%=deleteWorkingUnitURL.toString()%>" />
 		</c:if>
 	

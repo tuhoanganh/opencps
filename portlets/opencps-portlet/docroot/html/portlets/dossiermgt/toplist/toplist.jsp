@@ -37,7 +37,6 @@
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", "/html/portlets/dossiermgt/toplist/toplist.jsp");
 %>
-
 <liferay-ui:search-container 
 		emptyResultsMessage="no-dossier-were-found"
 		iteratorURL="<%=iteratorURL %>"

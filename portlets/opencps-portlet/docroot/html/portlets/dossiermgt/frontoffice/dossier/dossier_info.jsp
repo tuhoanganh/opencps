@@ -177,10 +177,6 @@
 	</aui:col>
 </aui:row>
 
-<%
-String required=cmd.equals(Constants.VIEW) ? "" : "required";
-%>
-
 <aui:row>
 	<aui:col width="100">
 		<aui:input 
@@ -189,7 +185,7 @@ String required=cmd.equals(Constants.VIEW) ? "" : "required";
 			type="text"
 			value="<%=citizen != null ? citizen.getFullName() : business != null ? business.getName() : StringPool.BLANK %>"
 		>
-			<aui:validator name="<%=required %>"/>
+			<aui:validator name="required"/>
 			
 			<aui:validator name="maxLength">
 				<%= PortletPropsValues.DOSSIERMGT_DOSSIER_SUBJECT_NAME_LENGTH %>
@@ -206,7 +202,7 @@ String required=cmd.equals(Constants.VIEW) ? "" : "required";
 			type="text"
 			value="<%=citizen != null ? citizen.getPersonalId() : business != null ? business.getIdNumber() : StringPool.BLANK %>"
 		>
-			<aui:validator name="<%=required %>"/>
+			<aui:validator name="required>"/>
 			<aui:validator name="maxLength">
 				<%= PortletPropsValues.DOSSIERMGT_DOSSIER_SUBJECT_ID_LENGTH %>
 			</aui:validator>
@@ -222,7 +218,7 @@ String required=cmd.equals(Constants.VIEW) ? "" : "required";
 			type="text"
 			value="<%=citizen != null ? citizen.getAddress() : business != null ? business.getAddress() : StringPool.BLANK %>"
 		>
-			<aui:validator name="<%=required %>"/>
+			<aui:validator name="required"/>
 			<aui:validator name="maxLength">
 				<%= PortletPropsValues.DOSSIERMGT_DOSSIER_ADDRESS_LENGTH %>
 			</aui:validator>
@@ -236,7 +232,6 @@ String required=cmd.equals(Constants.VIEW) ? "" : "required";
 		dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_ADMINISTRATIVE_REGION %>"
 		itemNames='<%=StringUtil.merge(new String[]{DossierDisplayTerms.CITY_ID,DossierDisplayTerms.DISTRICT_ID,DossierDisplayTerms.WARD_ID}) %>'
 		itemsEmptyOption="true,true,true"
-		cssClass="selectA"
 		selectedItems="<%=itemSelected %>"
 		displayStyle="vertical"
 	/>
@@ -249,7 +244,7 @@ String required=cmd.equals(Constants.VIEW) ? "" : "required";
 			type="text"
 			value="<%=citizen != null ? citizen.getFullName() : business != null ? business.getName() : StringPool.BLANK %>"
 		>
-			<aui:validator name="<%=required %>"/>
+			<aui:validator name="required"/>
 			<aui:validator name="maxLength">
 				<%= PortletPropsValues.DOSSIERMGT_DOSSIER_CONTACT_NAME_LENGTH %>
 			</aui:validator>
