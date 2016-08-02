@@ -42,7 +42,7 @@ import com.liferay.portal.kernel.util.StringPool;
  */
 public class JRReportUtil {
 
-	public synchronized static String createReportPDFfFile(
+	public static String createReportPDFfFile(
 	    String jrxmlTemplate, String jsonData, Map<String, Object> parameters,
 	    String outputDestination, String exportName) {
 
@@ -100,7 +100,7 @@ public class JRReportUtil {
         exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
         exporter.exportReport();
 	 */
-	public synchronized static void renderReportHTMLStream(
+	public static void renderReportHTMLStream(
 	    HttpServletResponse response, PrintWriter writer, String jrxmlTemplate,
 	    String jsonData, Map<String, Object> parameters) {
 
@@ -134,7 +134,6 @@ public class JRReportUtil {
 
 		}
 	}
-
 
 	protected static JasperPrint getJasperPrint(
 	    JasperReport jrReportTemplate, Map<String, Object> parameters,
