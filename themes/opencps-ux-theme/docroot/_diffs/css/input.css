@@ -1,0 +1,19 @@
+.opencps-theme.ux select {
+	background: transparent none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	outline: none;
+	line-height: 20px;
+	padding: 0 20px;
+	border: 1px solid #e1e1e1;
+	margin-bottom: 0
+}
+
+.opencps-theme.ux select:only-child {
+	background: white
+		url("../images/custom/nav_toolbar/select_arrow_gray.png") no-repeat
+		scroll 97% center;
+	border: 1px solid #e1e1e1 !important;
+    margin: 0 10px 0 0;
+    overflow: hidden;
+}

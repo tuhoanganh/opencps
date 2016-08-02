@@ -80,10 +80,6 @@
 	message="<%=RequiredDossierPartException.class.getName() %>"
 />
 
-<%-- <portlet:actionURL var="TestConsumerURL" name="TestConsumer"/>
-
-<aui:button href="<%= TestConsumerURL.toString()%>" name="TestConsumer" value="TestConsumer"/> --%>
-
 <liferay-ui:search-container searchContainer="<%= new DossierSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
 
 	<liferay-ui:search-container-results>
@@ -124,9 +120,21 @@
 			keyProperty="dossierId"
 		>
 		
+		<liferay-util:buffer var="info">
+			<div class="row-fluid">
+				<div class="span1"></div>
+			</div>
+		</liferay-util:buffer>
+		
+		<liferay-util:buffer var="status1">
+			<div class="row-fluid">
+				<div class="span1"><liferay-ui:message key="dossier-status"/></div>
+			</div>
+		</liferay-util:buffer>
 			
 			<%
-			
+				row.setClassName("opencps-searchcontainer-row");
+				
 				String createDate =  LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "create-date");
 				String serviceName =  LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "service-name");
 				String govAgencyName =  LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "gov-agency-name");
