@@ -63,10 +63,10 @@ if(keySelect.contains(",")){
 	             <%iKey++;} %>
 	        </ul>
 	   </div>
-	</c:if>
-		<button class="btn" type="submit" >
+	   	<button class="btn" type="submit" >
 			<%= buttonLabel %>
 		</button>
+	</c:if>
 </div>
 
 <c:if test="<%= autoFocus %>">
