@@ -14,6 +14,7 @@
 
 package org.opencps.api.service.impl;
 
+import org.opencps.api.model.ApiService;
 import org.opencps.api.service.base.ApiServiceServiceBaseImpl;
 
 import java.io.IOException;
@@ -43,7 +44,6 @@ import org.opencps.processmgt.model.ProcessWorkflow;
 import org.opencps.processmgt.search.ProcessOrderDisplayTerms;
 import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
-import org.opencps.servicemgt.NoSuchServiceInfoException;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
 import org.opencps.util.DLFolderUtil;
@@ -91,11 +91,7 @@ import com.liferay.portlet.documentlibrary.util.DLUtil;
  * @see org.opencps.api.service.ApiServiceServiceUtil
  */
 public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
-	/*
-	 * NOTE FOR DEVELOPERS:
-	 *
-	 * Never reference this interface directly. Always use {@link org.opencps.api.service.ApiServiceServiceUtil} to access the api service remote service.
-	 */
+	
 	@JSONWebService(value = "dossiers", method = "GET")
 	public JSONObject searchDossierByUserAssignProcessOrder(String username)
 			throws SystemException {
@@ -216,17 +212,11 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 							.getServiceInfoId());
 					dossierObj.put("serviceNo", serviceInfo.getServiceNo());
 					dossierObj.put("serviceName", serviceInfo.getServiceName());
-				} catch (NoSuchServiceInfoException e) {
+				} catch (Exception e) {
 					dossierObj.put("serviceNo", "");
 					dossierObj.put("serviceName", "");
-				} catch (PortalException e) {
-					// TODO Auto-generated catch block
-					dossierObj.put("serviceNo", "");
-					dossierObj.put("serviceName", "");
-				} catch (SystemException e) {
-					// TODO Auto-generated catch block
-
 				}
+				
 				dossierObj.put("subjectName", d.getSubjectName());
 				dossierObj.put("address", d.getAddress());
 				if (d.getSubmitDatetime() != null) {
@@ -282,6 +272,14 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 	public JSONObject getByoid(String oid) {
 		
 		_log.debug("getByoid===oid==============" + oid);
+		
+		try {
+			ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
+			
+			_log.info("===getByoid===getRemoteAddr===" + serviceContext.getRemoteAddr());
+		} catch(Exception e) {
+			_log.error(e);
+		}
 		
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 		Dossier dossier;
@@ -1268,14 +1266,11 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 						.getServiceInfoId());
 				dossierObj.put("serviceNo", serviceInfo.getServiceNo());
 				dossierObj.put("serviceName", serviceInfo.getServiceName());
-			} catch (NoSuchServiceInfoException e) {
+			} catch (Exception e) {
 				dossierObj.put("serviceNo", "");
 				dossierObj.put("serviceName", "");
-			} catch (PortalException e) {
-				// TODO Auto-generated catch block
-				dossierObj.put("serviceNo", "");
-				dossierObj.put("serviceName", "");
-			}
+			} 
+			
 			dossierObj.put("subjectName", d.getSubjectName());
 			dossierObj.put("address", d.getAddress());
 			if (d.getSubmitDatetime() != null) {
@@ -1335,14 +1330,12 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 							.getServiceInfo(dossier.getServiceInfoId());
 					jsonObject.put("serviceNo", serviceInfo.getServiceNo());
 					jsonObject.put("serviceName", serviceInfo.getServiceName());
-				} catch (NoSuchServiceInfoException e) {
+				} catch (Exception e) {
+					_log.error(e);
 					jsonObject.put("serviceNo", "");
 					jsonObject.put("serviceName", "");
-				} catch (PortalException e) {
-					// TODO Auto-generated catch block
-					jsonObject.put("serviceNo", "");
-					jsonObject.put("serviceName", "");
-				}
+				} 
+				
 				jsonObject.put("govAgencyCode", dossier.getGovAgencyCode());
 				jsonObject.put("govAgencyName", dossier.getGovAgencyName());
 				jsonObject.put("subjectName", dossier.getSubjectName());
@@ -1357,6 +1350,7 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 				jsonObject.put("contactTelNo", dossier.getContactTelNo());
 				jsonObject.put("contactEmail", dossier.getContactEmail());
 				jsonObject.put("note", dossier.getNote());
+				
 				if (dossier.getSubmitDatetime() != null) {
 					jsonObject.put("submitDatetime",
 							sdf.format(dossier.getSubmitDatetime()));
@@ -1425,17 +1419,12 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 							jsonDossierFile.put("dossierFileContent", df.getFormData());
 							jsonDossierFile.put("dossierFileURL", "");
 						}
-						/*
-						else {
-							jsonDossierFile.put("dossierFileContent", df.getFormData());
-							jsonDossierFile.put("dossierFileURL", "");
-						}
-						*/
+						
 						if (df.getDossierFileDate() != null) {
 							jsonDossierFile.put("dossierFileDate",
 									sdf.format(df.getDossierFileDate()));
 						}
-						dfArr.put(jsonDossierFile);						
+						dfArr.put(jsonDossierFile);
 					}
 				}
 
