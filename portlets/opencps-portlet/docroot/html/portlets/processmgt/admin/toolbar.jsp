@@ -30,7 +30,7 @@
 	    themeDisplay.getScopeGroupId(), ActionKeys.ADD_PROCESS);
 
 %>
-<aui:nav-bar cssClass="custom-toolbar">
+<aui:nav-bar cssClass="opencps-toolbar custom-toolbar">
 	<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left" >
 		
 	</aui:nav>

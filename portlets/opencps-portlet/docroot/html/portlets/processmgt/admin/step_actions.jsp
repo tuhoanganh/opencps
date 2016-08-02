@@ -37,7 +37,7 @@
 			
 <%--  <liferay-ui:icon-menu> --%>
 	<c:if test="<%= ProcessPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_PROCESS) %>">
-		<liferay-ui:icon cssClass="edit" image="edit" url="<%= editStepURL %>" />
+		<liferay-ui:icon cssClass="search-container-action fa edit" image="edit" url="<%= editStepURL %>" />
  	</c:if>
 
  	<c:if test="<%= ProcessPermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE) %>">
@@ -46,7 +46,7 @@
 			<portlet:param name="redirectURL" value="<%=currentURL %>"/>
 			<portlet:param name="currentURL" value="<%=currentURL %>"/>
 		</portlet:actionURL> 
-		<liferay-ui:icon-delete cssClass="delete" image="delete" confirmation="are-you-sure-delete-entry" message="delete" url="<%= deleteStepURL.toString() %>" />
+		<liferay-ui:icon-delete cssClass="search-container-action fa delete" image="delete" confirmation="are-you-sure-delete-entry" message="delete" url="<%= deleteStepURL.toString() %>" />
  	</c:if>
 <%-- </liferay-ui:icon-menu>  --%>
 

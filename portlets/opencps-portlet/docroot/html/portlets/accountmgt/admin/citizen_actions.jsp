@@ -44,7 +44,7 @@
 	
 		<liferay-ui:icon 
 			image="edit" 
-			cssClass="edit"
+			cssClass="search-container-action fa edit"
 			message="edit"
 			url="<%=updateCitizen.toString()%>" 
 		/>
@@ -61,7 +61,7 @@
 	
 			<liferay-ui:icon
 			 	image="publish"
-			 	cssClass="publish" 
+			 	cssClass="search-container-action fa publish" 
 			 	message="approve"
 				url="<%= updateStatusURL.toString()%>" 
 			/>
@@ -79,7 +79,7 @@
 			<liferay-ui:icon
 				image="deactivate"
 			 	label="deactivate"
-			 	cssClass="deactivate"
+			 	cssClass="search-container-action fa deactivate"
 				url="<%= updateStatusURL.toString()%>" 
 			/>
 		</c:if>
@@ -95,7 +95,7 @@
 	
 			<liferay-ui:icon
 			 	image="activate"
-			 	cssClass="activate" 
+			 	cssClass="search-container-action fa activate" 
 			 	message="activate"
 				url="<%= updateStatusURL.toString()%>" 
 			/>
@@ -115,7 +115,7 @@
 			<liferay-ui:icon-delete
 			 	confirmation="are-you-sure-remove-this-account"
 			 	message="delete"
-			 	cssClass="delete"
+			 	cssClass="search-container-action fa delete"
 				url="<%=deleteCitizenURL.toString()%>" 
 			/>
 		</c:if>

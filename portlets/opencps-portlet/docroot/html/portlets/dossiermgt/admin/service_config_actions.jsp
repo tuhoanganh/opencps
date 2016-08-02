@@ -43,7 +43,7 @@
 		</portlet:renderURL>
 		
 		<liferay-ui:icon
-			cssClass="edit" 
+			cssClass="search-container-action fa edit" 
 			image="edit" 
 			message="edit"
 			url="<%=updateServiceConfig.toString()%>" 
@@ -58,7 +58,7 @@
 			/>
 			<portlet:param name="CurrentURL" value="<%=currentURL %>"/>
 		</portlet:actionURL>
-		<liferay-ui:icon-delete cssClass="delete" confirmation="do-you-want-to-delete?" image="delete" message="delete"
+		<liferay-ui:icon-delete cssClass="search-container-action fa delete" confirmation="do-you-want-to-delete?" image="delete" message="delete"
 			url="<%=deleteServiceConfigURL.toString()%>" 
 		/>
 	</c:if>
