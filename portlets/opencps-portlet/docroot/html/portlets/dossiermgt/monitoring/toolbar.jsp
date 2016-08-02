@@ -48,7 +48,7 @@
 	String keySelect = DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_SEARCH + "," + DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_DOSSIER_FILE_LIST + "," + DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_SERVICE;
 	String urlSelect = viewMonitoringSearchURL + "," + dossierFileSearchUrl + "," + viewMonitoringServiceURL;
 %>
-<aui:nav-bar cssClass="custom-toolbar">
+<aui:nav-bar cssClass="opencps-toolbar custom-toolbar">
 	<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left" >
 		
 	</aui:nav>

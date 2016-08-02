@@ -45,7 +45,7 @@
 		
 		<liferay-ui:icon
 			cssClass="edit" 
-			image="edit" 
+			image="search-container-action fa edit" 
 			message="edit"
 			url="<%=updateDossierTemplate.toString()%>" 
 		/>
@@ -59,7 +59,7 @@
 			/>
 			<portlet:param name="backURL" value="<%=currentURL %>"/>
 		</portlet:actionURL>
-		<liferay-ui:icon-delete cssClass="delete" confirmation="do-you-want-to-delete?" image="delete" message="delete"
+		<liferay-ui:icon-delete cssClass="search-container-action fa delete" confirmation="do-you-want-to-delete?" image="delete" message="delete"
 			url="<%=deleteDossierTemplateURL.toString()%>" 
 		/>
 	</c:if>
