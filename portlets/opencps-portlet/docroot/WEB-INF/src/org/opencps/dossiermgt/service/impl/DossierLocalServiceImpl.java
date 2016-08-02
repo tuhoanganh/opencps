@@ -744,6 +744,10 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		return dossierPersistence.findByG_DS(
 			groupId, dossierStatus, start, end, obc);
 	}
+	
+	public List<Dossier> getDossierByStatus(long groupId, String dossierStatus) throws SystemException {
+		return dossierPersistence.filterFindByG_DS(groupId, dossierStatus);
+	}
 
 	/**
 	 * @param groupId

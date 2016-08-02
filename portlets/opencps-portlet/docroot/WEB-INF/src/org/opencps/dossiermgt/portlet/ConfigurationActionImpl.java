@@ -45,7 +45,7 @@ public class ConfigurationActionImpl implements ConfigurationAction{
 	public void processAction(
 		PortletConfig portletConfig, ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
-		int status = ParamUtil.getInteger(actionRequest, "status");
+		String status = ParamUtil.getString(actionRequest, "status");
 		
 		String portletResource =
 					    ParamUtil.getString(actionRequest, "portletResource");
@@ -53,7 +53,7 @@ public class ConfigurationActionImpl implements ConfigurationAction{
 		PortletPreferences preferences =
 					    PortletPreferencesFactoryUtil.getPortletSetup(
 					        actionRequest, portletResource);
-		preferences.setValue("status", String.valueOf(status));
+		preferences.setValue("status", status);
 		preferences.store();
 		
 		SessionMessages.add(actionRequest, "potlet-config-saved");
