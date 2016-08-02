@@ -240,7 +240,7 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 			resultObj.put("data", resultArr);
 
 			try {
-				ServiceContext serviceContext = getS;
+				ServiceContext serviceContext = new ServiceContext();
 				serviceContext.setUserId(getUser().getUserId());
 				serviceContext.setScopeGroupId(getUser().getGroupId());
 				serviceContext.setCompanyId(getUser().getCompanyId());
@@ -252,7 +252,7 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 				params.put("username", username);
 
 				ApiServiceLocalServiceUtil.addLog(getUserId(),
-						"01", ipAddress, "", "", params.toString(), "success",
+						"01", ipAddress, "", params.toString(), "success",
 						serviceContext);
 			} catch (SystemException se) {
 
