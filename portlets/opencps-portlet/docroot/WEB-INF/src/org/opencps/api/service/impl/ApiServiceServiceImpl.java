@@ -34,7 +34,6 @@ import org.opencps.dossiermgt.bean.ProcessOrderBean;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.DossierPart;
-import org.opencps.dossiermgt.model.DossierTemplate;
 import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
@@ -261,23 +260,24 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 		
 		_log.debug("getByoid===oid==============" + oid);
 		
-		try {
-			ServiceContext serviceContext = getServiceContext();
-			
-			_log.info("===getByoid===getRemoteAddr===" + serviceContext.getRemoteAddr());
-		} catch(Exception e) {
-			_log.error(e);
-		}
-		
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
-		Dossier dossier;
+		
+		Dossier dossier = null;
+		
+		ServiceContext serviceContext = getServiceContext();
+		
+		long userId = 0;
+		
 		try {
+			userId = getUserId();
+			
 			SimpleDateFormat sdf = new SimpleDateFormat(DateTimeUtil._VN_DATE_TIME_FORMAT);
 		
 			dossier = dossierLocalService.getByoid(oid);
 			
 			if (dossier != null) {
 				jsonObject.put("oid", dossier.getOid());
+				
 				ServiceInfo serviceInfo = null;
 				
 				try {
@@ -355,7 +355,7 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 							FileEntry fileEntry = DLAppLocalServiceUtil.getFileEntry(df.getFileEntryId());
 							jsonDossierFile.put("dossierFullFileName", df.getDisplayName() + "." + fileEntry.getExtension());
 							
-							String url = getFileURL(fileEntry);
+							String url = getFileURL(fileEntry, serviceContext);
 
 							jsonDossierFile.put("dossierFileURL", url);
 
@@ -377,54 +377,33 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 
 				jsonObject.put("dossierFiles", dfArr);
 
-				try {
-					ServiceContext serviceContext = getServiceContext();
-					String ipAddress = serviceContext.getRemoteAddr();
+				JSONObject params = JSONFactoryUtil.createJSONObject();
+				params.put("oid", oid);
 
-					JSONObject params = JSONFactoryUtil.createJSONObject();
-					params.put("oid", oid);
-
-					ApiServiceLocalServiceUtil.addLog(getUser().getUserId(),
-							"03", ipAddress, "", params.toString(), "success",
-							serviceContext);
-				} catch (Exception e) {
-					_log.error(e);
-				}			
+				ApiServiceLocalServiceUtil.addLog(userId,
+						"03", serviceContext.getRemoteAddr(), "", params.toString(), "success",
+						serviceContext);
 			}
 			else {
 				jsonObject.put("statusCode", "DossierNotFound");
-				try {
-					ServiceContext serviceContext = getServiceContext();
-					String ipAddress = serviceContext.getRemoteAddr();
-
 					JSONObject params = JSONFactoryUtil.createJSONObject();
 					params.put("oid", oid);
 
-					ApiServiceLocalServiceUtil.addLog(getUserId(),
-							"03", ipAddress, "", params.toString(), "error",
-							serviceContext);
-				} catch (Exception e) {
-					_log.error(e);
-				}			
+				ApiServiceLocalServiceUtil.addLog(userId,
+						"03", serviceContext.getRemoteAddr(), "", params.toString(), "error",
+						serviceContext);
 			}
 		} catch (Exception e) {
 			_log.error(e);
 			
 			jsonObject.put("statusCode", "DossierNotFound");
 			
-			try {
-				ServiceContext serviceContext = getServiceContext();
-				String ipAddress = serviceContext.getRemoteAddr();
+			JSONObject params = JSONFactoryUtil.createJSONObject();
+			params.put("oid", oid);
 
-				JSONObject params = JSONFactoryUtil.createJSONObject();
-				params.put("oid", oid);
-
-				ApiServiceLocalServiceUtil.addLog(getUser().getUserId(),
-						"03", ipAddress, "", params.toString(), "error",
-						serviceContext);
-			} catch (Exception e1) {
-				_log.error(e1);
-			}
+			ApiServiceLocalServiceUtil.addLog(userId,
+				"03", serviceContext.getRemoteAddr(), "", params.toString(), "error",
+				serviceContext);
 		}
 
 		return jsonObject;
@@ -445,7 +424,6 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 			String dossierFileContent = dossierfileObj
 					.getString("dossierFileContent");
 			String dossierFileURL = dossierfileObj.getString("dossierFileURL");
-			String templateFileNo = dossierfileObj.getString("templateFileNo");
 			String dossierFileName = dossierfileObj
 					.getString("dossierFileName");
 			String dossierFileNo = dossierfileObj.getString("dossierFileNo");
@@ -547,7 +525,7 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 							_log.error(ioe);
 						}
 						
-						ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
+						ServiceContext serviceContext = getServiceContext();
 		
 						Dossier dossier = null;
 						DossierFile dossierFile = null;
@@ -574,7 +552,7 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 											dossier.getCounter(),
 											serviceContext);
 							dossierPart = DossierPartLocalServiceUtil
-									.getDossierPartByTFN_PN(templateFileNo, dossierPartNo);
+									.getDossierPartByT_PN(dossier.getDossierTemplateId(), dossierPartNo);
 							DossierFileLocalServiceUtil
 									.addDossierFile(
 											dossier.getUserId(),
@@ -1216,7 +1194,9 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 		
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 		
-		long userId = -1;
+		long userId = 0;
+		
+		ServiceContext serviceContext = getServiceContext();
 		
 		try {
 			userId = getUserId();
@@ -1227,7 +1207,9 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 			
 			if (dossier != null) {
 				jsonObject.put("oid", dossier.getOid());
+				
 				ServiceInfo serviceInfo = null;
+				
 				try {
 					serviceInfo = ServiceInfoLocalServiceUtil
 							.getServiceInfo(dossier.getServiceInfoId());
@@ -1310,7 +1292,7 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 										df.getDisplayName() + "."
 												+ fileEntry.getExtension());
 
-								String url = getFileURL(fileEntry);
+								String url = getFileURL(fileEntry, serviceContext);
 
 								jsonDossierFile.put("dossierFileURL", url);
 
@@ -1333,41 +1315,32 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 				}
 
 				jsonObject.put("dossierFiles", dfArr);
-				ServiceContext serviceContext = getServiceContext();
 				
-				String ipAddress = serviceContext.getRemoteAddr();
-
 				JSONObject params = JSONFactoryUtil.createJSONObject();
 				params.put("oid", oid);
 
 				ApiServiceLocalServiceUtil.addLog(userId,
-						"03", ipAddress, "", params.toString(), "success",
+						"03", serviceContext.getRemoteAddr(), "", params.toString(), "success",
 						serviceContext);
 			}
 			else {
 				jsonObject.put("statusCode", "DossierNotFound");
 				
-				ServiceContext serviceContext = getServiceContext();
-				String ipAddress = serviceContext.getRemoteAddr();
-
 				JSONObject params = JSONFactoryUtil.createJSONObject();
 				params.put("oid", oid);
 
 				ApiServiceLocalServiceUtil.addLog(userId,
-					"03", ipAddress, "", params.toString(), "error",
+					"03", serviceContext.getRemoteAddr(), "", params.toString(), "error",
 					serviceContext);
 			}
 		} catch (Exception e) {
 			jsonObject.put("statusCode", "DossierNotFound");
 			
-			ServiceContext serviceContext = getServiceContext();
-			String ipAddress = serviceContext.getRemoteAddr();
-
 			JSONObject params = JSONFactoryUtil.createJSONObject();
 			params.put("oid", oid);
 
 			ApiServiceLocalServiceUtil.addLog(userId,
-				"03", ipAddress, "", params.toString(), "error",
+				"03", serviceContext.getRemoteAddr(), "", params.toString(), "error",
 				serviceContext);
 		}
 
@@ -1395,12 +1368,17 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 		return serviceContext;
 	}
 	
-	private String getFileURL(FileEntry fileEntry) throws PortalException, SystemException {
+	private String getFileURL(FileEntry fileEntry, ServiceContext serviceContext) 
+			throws PortalException, SystemException {
 
-		Company company = CompanyLocalServiceUtil.getCompany(getUser().getCompanyId());
+		String portalURL = serviceContext.getPortalURL();
 		
-		String portalURL = PortalUtil.getPortalURL(
+		if(Validator.isNull(portalURL)) {
+			Company company = CompanyLocalServiceUtil.getCompany(getUser().getCompanyId());
+			
+			portalURL = PortalUtil.getPortalURL(
 				company.getVirtualHostname(), PortalUtil.getPortalPort(false), false);
+		}
 		
 		String fileURL = portalURL + DLUtil.getPreviewURL(fileEntry, fileEntry.getFileVersion(), null, "");
 		
