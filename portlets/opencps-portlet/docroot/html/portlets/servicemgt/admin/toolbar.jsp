@@ -51,12 +51,13 @@
 				</portlet:renderURL>
 				
 				<c:if test="<%=ServicePermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_SERVICE) %>">
-					<aui:nav-item 
+					<%-- <aui:nav-item 
 						id="addService" 
 						label="add-service" 
 						iconCssClass="icon-plus icon-config"  
 						href="<%=editServiceURL %>"
-					/>
+					/> --%>
+					<aui:button icon="icon-plus" href="<%=editServiceURL %>" cssClass="action-button" value="add-service"/>
 				</c:if>
 				
 			</c:when>
@@ -75,12 +76,13 @@
 				
 				<aui:row>
 					<c:if test="<%= ServiceTemplatePermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_TEMPLATE) %>">
-						<aui:nav-item 
+						<%-- <aui:nav-item 
 							id="addTemplate" 
 							label="add-template" 
 							iconCssClass="icon-plus"  
 							href="<%=editTemplateURL %>"
-						/>
+						/> --%>
+						<aui:button icon="icon-plus" href="<%=editTemplateURL %>" cssClass="action-button" value="add-template"/>
 					</c:if>
 				</aui:row>
 			</c:when>
@@ -105,8 +107,9 @@
 						<c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_SERVICE) %>">
 								
 								<aui:row>
-									<aui:col width="25">
-										<datamgt:ddr cssClass="input100"
+									<aui:col width="25" cssClass="search-col">
+										<datamgt:ddr
+											cssClass="search-input select-box"
 											depthLevel="1" 
 											dictCollectionCode="SERVICE_ADMINISTRATION"
 											itemNames="<%= ServiceDisplayTerms.SERVICE_ADMINISTRATION %>"
@@ -116,8 +119,9 @@
 										</datamgt:ddr>
 		
 									</aui:col>
-									<aui:col width="25">
-										<datamgt:ddr cssClass="input100"
+									<aui:col width="25" cssClass="search-col">
+										<datamgt:ddr
+											cssClass="search-input select-box"
 											depthLevel="1" 
 											dictCollectionCode="SERVICE_DOMAIN"
 											itemNames="<%= ServiceDisplayTerms.SERVICE_DOMAINCODE %>"
@@ -127,15 +131,13 @@
 										</datamgt:ddr>
 
 									</aui:col>
-									<aui:col width="45">
-										<label>
-											<liferay-ui:message key="keywords"/>
-										</label>
+									<aui:col width="45" cssClass="search-col">
 										<liferay-ui:input-search 
 											id="keywords1"
 											name="keywords"
 											title="keywords"
 											placeholder='<%= LanguageUtil.get(locale, "name") %>' 
+											cssClass="search-input input-keyword"
 										/>
 									</aui:col>
 								</aui:row>
@@ -147,6 +149,7 @@
 								id="keywords1" 
 								name="keywords" 
 								placeholder='<%= LanguageUtil.get(locale, "name") %>' 
+								cssClass="search-input input-keyword"
 							/>
 						</c:when>
 						
@@ -159,11 +162,16 @@
 							</portlet:renderURL>
 							
 							<c:if test="<%= ServiceTemplatePermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_TEMPLATE) %>">
-								<aui:nav-item 
+								<%-- <aui:nav-item 
 									id="addDomain" 
 									label="add-domain" 
 									iconCssClass="icon-plus"  
 									href="<%= \"javascript:\" + renderResponse.getNamespace() + \"showPopup('\" + editDomainURL +\"');\" %>"
+								/> --%>
+								<aui:button icon="icon-plus" 
+											href="<%= \"javascript:\" + renderResponse.getNamespace() + \"showPopup('\" + editDomainURL +\"');\" %>" 
+											cssClass="action-button" 
+											value="add-domain"
 								/>
 							</c:if>
 						
@@ -177,11 +185,17 @@
 							</portlet:renderURL>
 							
 							<c:if test="<%= ServiceTemplatePermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_TEMPLATE) %>">
-								<aui:nav-item 
+								<%-- <aui:nav-item 
 									id="addDomain" 
 									label="add-administration" 
 									iconCssClass="icon-plus"  
 									href="<%= \"javascript:\" + renderResponse.getNamespace() + \"showPopup('\" + editDomainURL +\"');\" %>"
+								/> --%>
+								
+								<aui:button icon="icon-plus" 
+											href="<%= \"javascript:\" + renderResponse.getNamespace() + \"showPopup('\" + editDomainURL +\"');\" %>" 
+											cssClass="action-button" 
+											value="add-administration"
 								/>
 							</c:if>
 						</c:when>

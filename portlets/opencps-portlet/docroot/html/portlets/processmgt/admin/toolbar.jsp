@@ -1,4 +1,3 @@
-<%@page import="org.opencps.processmgt.permissions.ProcessPermission"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -19,6 +18,7 @@
 %>
 
 <%@ include file="../init.jsp"%>
+<%@page import="org.opencps.processmgt.permissions.ProcessPermission"%>
 
 <%
 	PortletURL searchURL = renderResponse.createRenderURL();
@@ -42,7 +42,8 @@
 						id="keywords1"
 						name="keywords"
 						title="keywords"
-						placeholder='<%= LanguageUtil.get(locale, "name") %>' 
+						placeholder='<%= LanguageUtil.get(locale, "name") %>'
+						cssClass="search-input input-keyword"
 					/>
 				</div>
 			</aui:form>
