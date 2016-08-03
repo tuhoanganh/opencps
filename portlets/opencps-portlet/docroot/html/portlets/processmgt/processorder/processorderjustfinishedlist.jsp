@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -39,119 +38,131 @@
 	
 	int totalCount = 0;
 	
+	List<String> headerNames = new ArrayList<String>();
+	
+	headerNames.add("boundcol1");
+	headerNames.add("boundcol2");
+	headerNames.add("boundcol3");
+	
+	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
+	
 	//RowChecker rowChecker = new RowChecker(liferayPortletResponse);
 %>
 <aui:form name="fm">
-	<liferay-ui:search-container 
-		searchContainer="<%= new ProcessOrderSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>"
-	>
-	
-		<liferay-ui:search-container-results>
-			<%
-				ProcessOrderSearchTerms searchTerms = (ProcessOrderSearchTerms)searchContainer.getSearchTerms();
-				
-				long serviceInfoId = searchTerms.getServiceInfoId();
-			
-				long processStepId = searchTerms.getProcessStepId();
-				
-				try{
+<div class="opencps-searchcontainer-wrapper">
+		<liferay-ui:search-container 
+			searchContainer="<%= new ProcessOrderSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>"
+			headerNames="<%= headers %>"
+		>
+		
+			<liferay-ui:search-container-results>
+				<%
+					ProcessOrderSearchTerms searchTerms = (ProcessOrderSearchTerms)searchContainer.getSearchTerms();
 					
-					%>
-						<%@include file="/html/portlets/processmgt/processorder/processorder_justfinished_searchresults.jspf" %>
-					<%
-				}catch(Exception e){
-					_log.error(e);
-				}
-			
-				total = totalCount;
-				results = processOrders;
+					long serviceInfoId = searchTerms.getServiceInfoId();
 				
-				pageContext.setAttribute("results", results);
-				pageContext.setAttribute("total", total);
-			%>
-		</liferay-ui:search-container-results>	
-			<liferay-ui:search-container-row 
-				className="org.opencps.dossiermgt.bean.ProcessOrderBean" 
-				modelVar="processOrder" 
-				keyProperty="processOrderId"
-				rowVar="row"
-				stringKey="<%=true%>"
-			>
-				<%	
-					String deadlineVal = Validator.isNotNull(processOrder.getDealine()) ? processOrder.getDealine() : StringPool.DASH;
+					long processStepId = searchTerms.getProcessStepId();
+					
+					try{
+						
+						%>
+							<%@include file="/html/portlets/processmgt/processorder/processorder_justfinished_searchresults.jspf" %>
+						<%
+					}catch(Exception e){
+						_log.error(e);
+					}
+				
+					total = totalCount;
+					results = processOrders;
+					
+					pageContext.setAttribute("results", results);
+					pageContext.setAttribute("total", total);
 				%>
-				
-					<liferay-util:buffer var="boundcol1">
-							<div class="row-fluid">
-								<div class="span1">
-									<i class='<%="fa fa-circle sx10 " + processOrder.getReceptionNo()%>'></i>
-								</div>
-								
+			</liferay-ui:search-container-results>	
+				<liferay-ui:search-container-row 
+					className="org.opencps.dossiermgt.bean.ProcessOrderBean" 
+					modelVar="processOrder" 
+					keyProperty="processOrderId"
+					rowVar="row"
+					stringKey="<%=true%>"
+				>
+					<%	
+						String deadlineVal = Validator.isNotNull(processOrder.getDealine()) ? processOrder.getDealine() : StringPool.DASH;
+					%>
+					
+						<liferay-util:buffer var="boundcol1">
 								<div class="row-fluid">
-									<div width="5px"></div>
-									<div class="span5 bold-label">
-										<liferay-ui:message key="service-name"/>
+									<div class="span1">
+										<i class='<%="fa fa-circle sx10 " + processOrder.getReceptionNo()%>'></i>
 									</div>
-									<div class="span6">
-										<%=processOrder.getServiceName() %>
+									
+									<div class="row-fluid">
+										<div width="5px"></div>
+										<div class="span5 bold-label">
+											<liferay-ui:message key="service-name"/>
+										</div>
+										<div class="span6">
+											<%=processOrder.getServiceName() %>
+										</div>
 									</div>
 								</div>
-							</div>
-						</liferay-util:buffer>
-						
-						
-						<liferay-util:buffer var="boundcol2">
-						<div class="row-fluid">
-							<div width="5px"></div>
-							<div class="span5 bold-label"><liferay-ui:message key="subject-name"/></div>
-							<div class="span6">
-								<%=processOrder.getSubjectName() %>
-							</div>
-						</div>
-						
-						<div class="row-fluid">
-							<div width="5px"></div>
-							<div class="span5 bold-label">
-								 <liferay-ui:message key="assign-to-user"/>
+							</liferay-util:buffer>
+							
+							
+							<liferay-util:buffer var="boundcol2">
+							<div class="row-fluid">
+								<div width="5px"></div>
+								<div class="span5 bold-label"><liferay-ui:message key="subject-name"/></div>
+								<div class="span6">
+									<%=processOrder.getSubjectName() %>
+								</div>
 							</div>
 							
-							<div class="span6">
-								<%=processOrder.getAssignToUserName() %>
-							</div>
-						</div>
-						
-						<div class="row-fluid">
-							<div width="5px"></div>
-							<div class="span5 bold-label">
-								<liferay-ui:message key="step-name"/>
-							</div>
-							<div class="span6">
-								<%=processOrder.getStepName() %>
-							</div>
-						</div>
-						
-						<div class="row-fluid">
-							<div width="5px"></div>
+							<div class="row-fluid">
+								<div width="5px"></div>
 								<div class="span5 bold-label">
-									<liferay-ui:message key="dealine"/>
+									 <liferay-ui:message key="assign-to-user"/>
 								</div>
 								
-								<div class='<%="span6"%>'>
-									<%= deadlineVal %>
+								<div class="span6">
+									<%=processOrder.getAssignToUserName() %>
 								</div>
 							</div>
-						</liferay-util:buffer>
+							
+							<div class="row-fluid">
+								<div width="5px"></div>
+								<div class="span5 bold-label">
+									<liferay-ui:message key="step-name"/>
+								</div>
+								<div class="span6">
+									<%=processOrder.getStepName() %>
+								</div>
+							</div>
+							
+							<div class="row-fluid">
+								<div width="5px"></div>
+									<div class="span5 bold-label">
+										<liferay-ui:message key="dealine"/>
+									</div>
+									
+									<div class='<%="span6"%>'>
+										<%= deadlineVal %>
+									</div>
+								</div>
+							</liferay-util:buffer>
+				
+					<%
+						row.setClassName("opencps-searchcontainer-row");
+						row.addText(boundcol1);
+						row.addText(boundcol2);
+						row.addJSP("center", SearchEntry.DEFAULT_VALIGN,  "/html/portlets/processmgt/processorder/justfinished_actions.jsp", config.getServletContext(), request, response);
+						
+					%>	
+				</liferay-ui:search-container-row> 
 			
-				<%
-					row.addText(boundcol1);
-					row.addText(boundcol2);
-					row.addJSP("center", SearchEntry.DEFAULT_VALIGN,  "/html/portlets/processmgt/processorder/justfinished_actions.jsp", config.getServletContext(), request, response);
-					
-				%>	
-			</liferay-ui:search-container-row> 
-		
-		<liferay-ui:search-iterator/>
-	</liferay-ui:search-container>
+			<liferay-ui:search-iterator/>
+		</liferay-ui:search-container>
+	</div>
 </aui:form>
 
 <%!
