@@ -45,15 +45,17 @@
 		<header id="banner" role="banner" class="opencps-header-wrapper member">
 			<div class="header container align-middle">
 	            <a href="" class="logo"></a>
-	            <div class="hotline">
-	                #language ("hotline-key")<br/><span>1900 0311</span>
-	            </div>
-	            <div class="log-out">
-					<span>#language ("welcome-key") $user_name</span>
-					<a href="$sign_out_url" class="btn-dn">#language ("logout-key")</a>
+	            <div class="right-panel">
+		            <div class="hotline">
+		                #language ("hotline-key")<br/><span>1900 0311</span>
+		            </div>
+		            
 				</div>
 			</div>
-		
+			<div class="log-out">
+				<span>#language ("welcome-key") $user_name</span>
+				<a href="$sign_out_url" class="btn-dn">#language ("logout-key")</a>
+			</div>
 			#if ($has_navigation || $is_signed_in)
 				#parse ("$full_templates_path/navigation_public_page.vm")
 			#end
