@@ -68,6 +68,8 @@ public class BackOfficeProcessEngine implements MessageListener {
 	
 	private void _doRecevie(Message message) {
 		
+		_log.info("POKEMON ->> GO ProcessEngine -->>>>>>>>>");
+		
 		Date now = new Date();
 		String actionName = StringPool.BLANK;
 		String stepName = StringPool.BLANK;
