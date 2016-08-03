@@ -38,8 +38,9 @@
 			<aui:form action="<%= searchURL %>" method="post" name="fm">
 				<div class="toolbar_search_input">
 					<aui:row>
-						<aui:col width="25">
-							<datamgt:ddr cssClass="input100"
+						<aui:col width="25" cssClass="search-col">
+							<datamgt:ddr
+								cssClass="search-input select-box"
 								depthLevel="1" 
 								dictCollectionCode="SERVICE_ADMINISTRATION"
 								itemNames="<%= ServiceDisplayTerms.SERVICE_ADMINISTRATION %>"
@@ -49,8 +50,9 @@
 							</datamgt:ddr>
 
 						</aui:col>
-						<aui:col width="25">
-							<datamgt:ddr cssClass="input100"
+						<aui:col width="25" cssClass="search-col">
+							<datamgt:ddr 
+								cssClass="search-input select-box"
 								depthLevel="1" 
 								dictCollectionCode="SERVICE_DOMAIN"
 								itemNames="<%= ServiceDisplayTerms.SERVICE_DOMAINCODE %>"
@@ -60,15 +62,13 @@
 							</datamgt:ddr>
 
 						</aui:col>
-						<aui:col width="45">
-							<label>
-								<liferay-ui:message key="keywords"/>
-							</label>
+						<aui:col width="45" cssClass="search-col">
 							<liferay-ui:input-search 
 								id="keywords1"
 								name="keywords"
 								title="keywords"
 								placeholder='<%= LanguageUtil.get(locale, "name") %>' 
+								cssClass="search-input input-keyword"
 							/>
 						</aui:col>
 					</aui:row>

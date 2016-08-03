@@ -86,7 +86,7 @@
 				<portlet:param name="backURL" value="<%=currentURL %>"/>
 			</portlet:renderURL>
 			<aui:nav-item 
-				cssClass="item-config"
+				cssClass="item-config search-input input-keyword"
 				id="processDossier" 
 				label="process-dossier" 
 				iconCssClass="icon-plus icon-config"  
@@ -100,14 +100,14 @@
 			<aui:form action="<%= searchURL %>" method="post" name="fmSearch">
 			<liferay-portlet:renderURLParams varImpl="searchURL" />
 				<aui:row>
-					<aui:col width="50">
+					<aui:col width="50" cssClass="search-col">
 						<aui:select 
 							name="serviceInfoId" 
 							label="<%=StringPool.BLANK %>" 
 							inlineField="<%=true %>" 
 							inlineLabel="left"
 							onChange='<%=renderResponse.getNamespace() + "searchByProcecssOrderService(this)"%>'
-							
+							cssClass="search-input select-box"
 						>
 							<aui:option value="0" title="service-info"><liferay-ui:message key="filter-service-info"/></aui:option>
 							<%
@@ -126,13 +126,14 @@
 						</aui:select>
 					</aui:col>
 				
-					<aui:col width="50">
+					<aui:col width="50" cssClass="search-col">
 						<aui:select 
 							name="dossierStatus" 
 							label="<%=StringPool.BLANK %>" 
 							inlineField="<%=true %>" 
 							inlineLabel="left"
 							onChange='<%=renderResponse.getNamespace() + "searchByProcecssStep(this)"%>'
+							cssClass="search-input select-box"
 						>
 							<aui:option value="0"><liferay-ui:message key="filter-process-step"/></aui:option>
 							<%
