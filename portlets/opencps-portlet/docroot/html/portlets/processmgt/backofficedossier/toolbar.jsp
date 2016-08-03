@@ -43,7 +43,7 @@
 	String tabs1 = ParamUtil.getString(request, "tabs1", ProcessMgtUtil.TOP_TABS_DOSSIERLIST);	
 %>
 
-<aui:nav-bar cssClass="opencps-toolbar custom-toolbar">
+<aui:nav-bar cssClass="custom-toolbar">
 	<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left" >
 		
 	</aui:nav>
@@ -57,7 +57,7 @@
 						
 				int domainCode = ParamUtil.getInteger(request, DossierDisplayTerms.SERVICE_DOMAIN_CODE, 0);
 				
-				String dossierStatus = ParamUtil.getString(request, DossierDisplayTerms.DOSSIER_STATUS, StringPool.BLANK);	
+				String dossierStatus = ParamUtil.getString(request, "dossierStatusValue", StringPool.BLANK);	
 				
 				request.setAttribute(DossierDisplayTerms.SERVICE_DOMAIN_CODE, domainCode);
 				request.setAttribute(DossierDisplayTerms.DOSSIER_STATUS, dossierStatus);
@@ -74,17 +74,16 @@
 						<aui:form action="<%= searchURL %>" method="post" name="fm">
 							<div class="toolbar_search_input">
 								<aui:row>
-									<aui:col width="30" cssClass="search-col">
+									<aui:col width="30">
 										<liferay-ui:input-search 
 											id="keywords"
 											name="keywords"
 											title='<%= LanguageUtil.get(portletConfig, locale, "keywords") %>'
 											placeholder="<%= LanguageUtil.get(portletConfig, locale, \"keywords\") %>" 
-											cssClass="search-input input-keyword"
 										/>
 									</aui:col>
-									<aui:col width="30" cssClass="search-col">
-										<aui:select label="" name="<%= DossierDisplayTerms.SERVICE_DOMAIN_CODE %>" style="width: 100%;" cssClass="search-input select-box">
+									<aui:col width="30">
+										<aui:select label="" name="<%= DossierDisplayTerms.SERVICE_DOMAIN_CODE %>" style="width: 100%;">
 											<aui:option value="">
 												<liferay-ui:message key="filter-by-service-domain"></liferay-ui:message>
 											</aui:option>
@@ -104,8 +103,8 @@
 											%>	
 										</aui:select>						
 									</aui:col>
-									<aui:col width="30" cssClass="search-col">
-										<aui:select label="" name="<%= DossierDisplayTerms.DOSSIER_STATUS %>" style="width: 100%;" cssClass="search-input select-box">
+									<aui:col width="30">
+										<aui:select label="" name="dossierStatusValue" style="width: 100%;">
 											<aui:option value="-1">
 												<liferay-ui:message key="filter-by-dossier-status"></liferay-ui:message>
 											</aui:option>
@@ -195,17 +194,16 @@
 						<aui:form action="<%= searchURL %>" method="post" name="fm">
 							<div class="toolbar_search_input">
 								<aui:row>
-									<aui:col width="50" cssClass="search-col">
+									<aui:col width="50">
 										<liferay-ui:input-search 
 											id="keywords"
 											name="keywords"
 											title='<%= LanguageUtil.get(portletConfig, locale, "keywords") %>'
 											placeholder="<%= LanguageUtil.get(portletConfig, locale, \"keywords\") %>" 
-											cssClass="search-input input-keyword"
 										/>
 									</aui:col>
-									<aui:col width="50" cssClass="search-col">
-										<aui:select label="" name="<%= ProcessDisplayTerms.PROCESS_DOSSIERTEMPLATE_ID %>" style="width: 100%;" cssClass="search-input select-box">
+									<aui:col width="50">
+										<aui:select label="" name="<%= ProcessDisplayTerms.PROCESS_DOSSIERTEMPLATE_ID %>" style="width: 100%;">
 											<aui:option value="<%= DossierMgtUtil.DOSSIERFILETYPE_ALL %>">
 												<liferay-ui:message key="filter-by-dossier-template"></liferay-ui:message>
 											</aui:option>
