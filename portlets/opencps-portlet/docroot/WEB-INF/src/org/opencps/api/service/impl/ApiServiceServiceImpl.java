@@ -34,6 +34,7 @@ import org.opencps.dossiermgt.bean.ProcessOrderBean;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.DossierPart;
+import org.opencps.dossiermgt.model.DossierTemplate;
 import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
@@ -473,10 +474,10 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 
 						ServiceContext serviceContext = getServiceContext();
 						try {
-							dossier = DossierLocalServiceUtil.getDossier(dossierId);
+							//dossier = DossierLocalServiceUtil.getDossier(dossierId);
 
-							dossierPart = DossierPartLocalServiceUtil.getDossierPartByTFN_PN(
-								templateFileNo, dossierPartNo);
+							dossierPart = DossierPartLocalServiceUtil.getDossierPartByT_PN(
+									dossier.getDossierTemplateId(), dossierPartNo);
 
 							serviceContext.setUserId(dossier.getUserId());
 							
