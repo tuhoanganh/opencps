@@ -1,4 +1,4 @@
-<%@page import="com.liferay.portlet.documentlibrary.DuplicateFolderNameException"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,7 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
+<%@page import="com.liferay.portlet.documentlibrary.DuplicateFolderNameException"%>
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
 <%@page import="org.opencps.util.PortletPropsValues"%>
 <%@page import="org.opencps.util.WebKeys"%>
@@ -129,7 +129,6 @@
 />
 
 
-<div class="sbc">
 <aui:row>
 	<aui:col width="100">
 		<aui:input 
@@ -290,7 +289,7 @@
 		</aui:input>	
 	</aui:col>
 </aui:row>
-</div>
+
 <aui:script>
 	AUI().ready('aui-base','aui-form-validator', function(A){
 		var rules = {

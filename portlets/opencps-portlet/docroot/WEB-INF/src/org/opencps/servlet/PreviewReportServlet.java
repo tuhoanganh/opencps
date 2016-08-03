@@ -73,6 +73,7 @@ public class PreviewReportServlet extends HttpServlet {
 
 			String formData = dossierFile
 			    .getFormData();
+
 			if(Validator.isNotNull(formData)) {
 				String jrxmlTemplate = dossierPart
 				    .getFormReport();

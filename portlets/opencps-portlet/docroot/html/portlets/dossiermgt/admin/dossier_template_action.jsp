@@ -44,8 +44,8 @@
 		</portlet:renderURL>
 		
 		<liferay-ui:icon
-			cssClass="edit" 
-			image="search-container-action fa edit" 
+			cssClass="search-container-action fa edit" 
+			image="edit" 
 			message="edit"
 			url="<%=updateDossierTemplate.toString()%>" 
 		/>
