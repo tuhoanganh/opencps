@@ -56,7 +56,7 @@
 <div class="opcs-serviceinfo-list-label">
 	<p><liferay-ui:message key="serviceinfo-list"/></p>
 </div>
-<aui:nav-bar cssClass="custom-toolbar">
+<aui:nav-bar cssClass="opencps-toolbar custom-toolbar">
 	<aui:nav-bar-search cssClass="pull-right">
 		<div class="form-search">
 			<aui:form action="<%= searchURL %>" method="post" name="fm">
