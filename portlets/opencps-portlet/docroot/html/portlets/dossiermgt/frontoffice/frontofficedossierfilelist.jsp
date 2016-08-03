@@ -38,11 +38,11 @@
 	headerNames.add("#");
 	headerNames.add("create-date");
 	headerNames.add("dossier-file-no");
-	headerNames.add("dossier-file-date");
+/* 	headerNames.add("dossier-file-date");
 	headerNames.add("display-name");
 	headerNames.add("dossier-name");
 	headerNames.add("dossier-file-type");
-	headerNames.add("original-file");
+	headerNames.add("original-file"); */
 	
 	String headers = StringUtil.merge(headerNames);
 	
@@ -54,66 +54,125 @@
 	int totalCount = 0;
 %>
 
-
-<liferay-ui:search-container 
-	searchContainer="<%= new DossierFileSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" 
-	headerNames="<%= headers %>"
->
-
-	<liferay-ui:search-container-results>
-		<%
-			DossierFileSearchTerms searchTerms = (DossierFileSearchTerms)searchContainer.getSearchTerms();
-						
-			String 	templateFileNo = StringPool.BLANK;
-			
-			int partType = -1;
-			
-			int original = 0;
-		
-			try {
-				dossierFileBeans = DossierFileLocalServiceUtil.searchDossierFileAdvance(scopeGroupId, citizen != null ? citizen.getMappingUserId() : 0, business != null ? business.getMappingOrganizationId() : 0, searchTerms.getKeywords(), templateFileNo, 0, partType, original, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-				totalCount = DossierFileLocalServiceUtil.countDossierFileAdvance(scopeGroupId, citizen != null ? citizen.getMappingUserId() : 0, business != null ? business.getMappingOrganizationId() : 0, searchTerms.getKeywords(), templateFileNo, 0, partType, original);
-			} catch(Exception e){
-				
-			}
-		
-			total = totalCount;
-			results = dossierFileBeans;
-			
-			pageContext.setAttribute("results", results);
-			pageContext.setAttribute("total", total);				
-		%>
-	</liferay-ui:search-container-results>	
-		<liferay-ui:search-container-row 
-			className="org.opencps.dossiermgt.bean.DossierFileBean" 
-			modelVar="dossierFileBean" 
-			keyProperty="dossierFileId"
-		>
-			<%
-			
-				DossierFile dossierFile = dossierFileBean.getDossierFile();
-			    // no column
-				row.addText(String.valueOf(row.getPos() + 1 + searchContainer.getStart()));
-			
-				row.addText(DateTimeUtil.convertDateToString(dossierFile.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT));
-				
-				// dossier file no column
-				row.addText(dossierFile.getDossierFileNo());
-								
-				row.addText(DateTimeUtil.convertDateToString(dossierFile.getDossierFileDate(), DateTimeUtil._VN_DATE_FORMAT));
-				// dossier display name column
-				row.addText(dossierFile.getDisplayName());
-				
-				row.addText(dossierFileBean.getReceptionNo());
-				
-				row.addText(String.valueOf(dossierFileBean.getPartType()));
-				
-				StringBuffer sb = new StringBuffer();
-				sb.append("<input type=\"checkbox\""+ (dossierFile.getOriginal() == 0 ? "checked" : StringPool.BLANK) + ">");
-				row.addText(sb.toString());
-				
-			%>	
-		</liferay-ui:search-container-row> 
+<div class="opencps-searchcontainer-wrapper">
+	<liferay-ui:search-container 
+		searchContainer="<%= new DossierFileSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" 
+		headerNames="<%= headers %>"
+	>
 	
-	<liferay-ui:search-iterator/>
-</liferay-ui:search-container>
+		<liferay-ui:search-container-results>
+			<%
+				DossierFileSearchTerms searchTerms = (DossierFileSearchTerms)searchContainer.getSearchTerms();
+							
+				String 	templateFileNo = StringPool.BLANK;
+				
+				int partType = -1;
+				
+				int original = 0;
+			
+				try {
+					dossierFileBeans = DossierFileLocalServiceUtil.searchDossierFileAdvance(scopeGroupId, citizen != null ? citizen.getMappingUserId() : 0, business != null ? business.getMappingOrganizationId() : 0, searchTerms.getKeywords(), templateFileNo, 0, partType, original, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
+					totalCount = DossierFileLocalServiceUtil.countDossierFileAdvance(scopeGroupId, citizen != null ? citizen.getMappingUserId() : 0, business != null ? business.getMappingOrganizationId() : 0, searchTerms.getKeywords(), templateFileNo, 0, partType, original);
+				} catch(Exception e){
+					
+				}
+			
+				total = totalCount;
+				results = dossierFileBeans;
+				
+				pageContext.setAttribute("results", results);
+				pageContext.setAttribute("total", total);				
+			%>
+		</liferay-ui:search-container-results>	
+			<liferay-ui:search-container-row 
+				className="org.opencps.dossiermgt.bean.DossierFileBean" 
+				modelVar="dossierFileBean" 
+				keyProperty="dossierFileId"
+			>
+				<%
+					DossierFile dossierFile = dossierFileBean.getDossierFile();
+				%>
+				
+				<liferay-util:buffer var="boundcol1">
+					<div class="row-fluid">
+						<div class="span1"></div>
+						
+						<div class="span2 bold-label">
+							<liferay-ui:message key="create-date"/>
+						</div>
+						<div class="span9"><%=DateTimeUtil.convertDateToString(dossierFile.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT) %></div>
+					</div>
+					
+					<div class="row-fluid">
+						<div class="span1"></div>
+						
+						<div class="span2 bold-label">
+							<liferay-ui:message key="dossier-file-no"/>
+						</div>
+						
+						<div class="span9"><%=dossierFile.getDossierFileNo() %></div>
+					</div>
+					
+					<div class="row-fluid">
+						<div class="span1"></div>
+						
+						<div class="span2 bold-label"><liferay-ui:message key="dossier-file-date"/></div>
+						
+						<div class="span9"><%=DateTimeUtil.convertDateToString(dossierFile.getDossierFileDate(), DateTimeUtil._VN_DATE_FORMAT)%></div>
+					</div>
+					
+				</liferay-util:buffer>	
+			
+				
+				<liferay-util:buffer var="boundcol2">
+					<div class="row-fluid">
+						<div class="span1"></div>
+						
+						<div class="span2 bold-label">
+							<liferay-ui:message key="display-name"/>
+						</div>
+						<div class="span9"><%=dossierFile.getDisplayName()%> </div>
+					</div>
+					
+					<div class="row-fluid">
+						<div class="span1"></div>
+						
+						<div class="span2 bold-label">
+							<liferay-ui:message key="dossier-name"/>
+						</div>
+						
+						<div class="span9"><%=dossierFileBean.getReceptionNo() %></div>
+					</div>
+					
+					<div class="row-fluid">
+						<div class="span1"></div>
+						
+						<div class="span2 bold-label"><liferay-ui:message key="dossier-file-type"/></div>
+						
+						<div class="span9"><%=String.valueOf(dossierFileBean.getPartType())%></div>
+					</div>
+					
+				</liferay-util:buffer>
+				
+				<%
+				
+					/* 
+				    // no column
+					row.addText(String.valueOf(row.getPos() + 1 + searchContainer.getStart()));
+					*/
+					row.setClassName("opencps-searchcontainer-row");
+					
+					row.addText(boundcol1);
+					
+					row.addText(boundcol2);
+					
+					StringBuffer sb = new StringBuffer();
+					sb.append("<input type=\"checkbox\""+ (dossierFile.getOriginal() == 0 ? "checked" : StringPool.BLANK) + ">");
+					row.addText(sb.toString());
+					
+				%>	
+			</liferay-ui:search-container-row> 
+		
+		<liferay-ui:search-iterator/>
+	</liferay-ui:search-container>
+</div>
