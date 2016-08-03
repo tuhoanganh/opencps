@@ -46,13 +46,15 @@
 	headerNames.add("col1");
 	headerNames.add("col2");
 	headerNames.add("col3");
+	
+	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
 %>
 <aui:form name="fm">
 	<div class="opencps-searchcontainer-wrapper">
 		<liferay-ui:search-container 
 				searchContainer="<%= new ProcessOrderSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>"
 				rowChecker="<%=rowChecker%>"
-				headerNames="<%= headerNames%>"
+				headerNames="<%= headers%>"
 			>
 			
 				<liferay-ui:search-container-results>
