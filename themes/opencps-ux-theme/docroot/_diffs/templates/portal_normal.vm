@@ -27,20 +27,22 @@
 	#end
 	
 	#if(!$is_signed_in) 
-		<header id="banner" role="banner" class="mHeader_1">
+		<header id="banner" role="banner" class="opencps-header-wrapper guest">
 			<div class="header container align-middle">
-	            <a href="" class="logo"></a>
-	            <div class="hotline">
-	                #language ("hotline-key")<br/><span>1900 0311</span>
+	            <a href="$site_default_url" title="#language_format ("go-to-x", [$site_name])" class="logo"></a>
+	            <div class="right-panel">
+		            <div class="hotline">
+		                #language ("hotline-key")<br/><span>1900 0311</span>
+		            </div>
+		            <a href="$sign_in_url" class="signin">#language ("login-key")</a>
+		            <a href="$register_url" class="register">#language ("register-key")</a>
 	            </div>
-	            <a href="$sign_in_url" class="btn-dn">#language ("login-key")</a>
-	            <a href="$register_url" class="btn-dk">#language ("register-key")</a>
 			</div>
 		</header>
 		
 		#parse ("$full_templates_path/navigation_public_page.vm")
 	#else 
-		<header id="banner" role="banner" class="mHeader_2">
+		<header id="banner" role="banner" class="opencps-header-wrapper member">
 			<div class="header container align-middle">
 	            <a href="" class="logo"></a>
 	            <div class="hotline">
