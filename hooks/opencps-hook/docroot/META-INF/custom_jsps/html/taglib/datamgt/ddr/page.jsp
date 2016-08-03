@@ -43,7 +43,7 @@
 					
 					String elementName = name + i;
 					
-					String emptyOptionLabel = LanguageUtil.get(pageContext, "empty-option");
+					String emptyOptionLabel = StringPool.BLANK;
 					
 					long selectedItem = 0;
 					

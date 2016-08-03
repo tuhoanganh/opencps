@@ -85,7 +85,7 @@
 				}
 				
 			%>
-		
+			
 			<liferay-ui:search-container-column-text 
 				name="row-no" value="<%=dossier.getReceptionNo()%>"
 			/>

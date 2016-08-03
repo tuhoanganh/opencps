@@ -26,7 +26,6 @@
 <%@page import="java.util.Collection"%>
 <%@page import="com.liferay.portal.kernel.util.ContextPathUtil"%>
 <%@page import="com.liferay.portal.model.ResourceConstants"%>
-<%@page import="com.sun.xml.internal.bind.v2.runtime.unmarshaller.Scope"%>
 <%@page import="com.liferay.portal.service.ResourcePermissionLocalServiceUtil"%>
 <%@page import="com.liferay.portal.model.ResourcePermission"%>
 <%@page import="org.opencps.usermgt.search.ResourceActionSearch"%>
