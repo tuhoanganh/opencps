@@ -1,3 +1,6 @@
+<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
+<%@page import="javax.portlet.PortletURL"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -19,9 +22,6 @@
 <%@ taglib prefix="opencps-ui" uri="/WEB-INF/tld/opencps-ui.tld"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
-<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
-<%@page import="javax.portlet.PortletURL"%>
-<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@ include file="../init.jsp"%>
 
 <%
@@ -50,6 +50,7 @@
 %>
 <aui:nav-bar cssClass="opencps-toolbar custom-toolbar">
 	<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left" >
+		
 	</aui:nav>
 	<c:choose>
 		<c:when test="<%= tabs1.equals(DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_SEARCH) %>">
@@ -58,16 +59,19 @@
 					<aui:form action="<%= searchUrl %>" method="post" name="fm">
 						<div class="toolbar_search_input" style="width: 98%">
 							<aui:row>
-								<aui:col cssClass="search-col">
+								<aui:col>
+									<label>
+										<liferay-ui:message key="keywords"/>
+									</label>
 									<opencps-ui:input-search 
 										id="keywords"
 										name="keywords"
+										cssClass="input-append home-bb-search"
 										title='<%= LanguageUtil.get(portletConfig, locale, "keywords") %>'
 										placeholder="<%= LanguageUtil.get(pageContext, \"dossier-search-keywords\") %>" 
 										keySelect="<%=keySelect %>"
 										urlSelect="<%=urlSelect %>"
 										currentTab="<%=tabs1 %>"
-										cssClass="search-input input-keyword"
 									/>
 								</aui:col>
 							</aui:row>
@@ -82,11 +86,14 @@
 					<aui:form action="<%= dossierFileSearchUrl %>" method="post" name="fm">
 						<div class="toolbar_search_input" style="width: 98%">
 							<aui:row>
-								<aui:col width="65" cssClass="search-col">
+								<aui:col width="65">
+									<label>
+										<liferay-ui:message key="keywords"/>
+									</label>
 									<opencps-ui:input-search 
 										id="keywords"
 										name="keywords"
-										cssClass="search-input input-keyword input-append home-bb-search"
+										cssClass="input-append home-bb-search"
 										title='<%= LanguageUtil.get(portletConfig, locale, "keywords") %>'
 										placeholder="<%= LanguageUtil.get(pageContext, \"dossier-search-keywords\") %>" 
 										keySelect="<%=keySelect %>"
@@ -106,11 +113,14 @@
 					<aui:form action="<%= serviceUrl %>" method="post" name="fm">
 						<div class="toolbar_search_input" style="width: 98%">
 							<aui:row>
-								<aui:col width="65" cssClass="search-col">
+								<aui:col width="65">
+									<label>
+										<liferay-ui:message key="keywords"/>
+									</label>
 									<opencps-ui:input-search 
 										id="keywords"
 										name="keywords"
-										cssClass="search-input input-keyword input-append home-bb-search"
+										cssClass="input-append home-bb-search"
 										title='<%= LanguageUtil.get(portletConfig, locale, "keywords") %>'
 										placeholder="<%= LanguageUtil.get(pageContext, \"dossier-search-keywords\") %>" 
 										keySelect="<%=keySelect %>"
