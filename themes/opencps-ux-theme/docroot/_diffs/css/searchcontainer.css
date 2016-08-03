@@ -1,62 +1,3 @@
-/* .opencps-theme.ux .ocps-serviceinfo-list {
-	background-color: #fff;
-	-webkit-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2);
-	box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2);
-	border-radius: 4px;
-	padding-top: 20px;
-}
-
-.opencps-theme.ux .ocps-serviceinfo-list .nav.nav-tabs {
-	padding: 0 0 0 30px;
-}
-.opencps-theme.ux .ocps-serviceinfo-list .search_tools.payment.payment_search ul li a {
-	background: #0090ff;
-    text-shadow: none;
-    color: white !important;
-    border-radius: 4px;
-    margin-left: 30px;
-}
-.opencps-theme.ux .ocps-serviceinfo-list .search_tools.payment.payment_search .toolbar_search_input .span3, 
-.opencps-theme.ux .ocps-serviceinfo-list .search_tools.payment.payment_search .toolbar_search_input .span5 {
-	width: 32%;
-	margin: 0;
-}
-.opencps-theme.ux .ocps-serviceinfo-list .search_tools.payment.payment_search .toolbar_search_input .span3 {
-	margin-right: 2%;
-}
-.opencps-theme.ux .ocps-serviceinfo-list .search_tools.payment.payment_search .navbar-search {
-	width: 100%;
-	padding: 0 30px;
-	margin-top: 15px;
-}
-.opencps-theme.ux .ocps-serviceinfo-list .navbar.custom-toolbar .navbar-inner .toolbar_search_input .span3 .control-group {
-	width: 100%;
-	height: 41px;
-	overflow: hidden;
-	background: url(../images/frame_1/icon_select_gray.png) no-repeat right;
-	background-position: 92% center;
-	margin-bottom: 0;
-}
-.opencps-theme.ux .ocps-serviceinfo-list .navbar.custom-toolbar .navbar-inner .toolbar_search_input .span5 .input-append {
-	width: 100%;
-}
-.opencps-theme.ux .ocps-serviceinfo-list .navbar.custom-toolbar .navbar-inner .toolbar_search_input .span5 .input-append input {
-	width: calc(100% - 70px);
-	min-width: auto;
-}
-.opencps-theme.ux .ocps-serviceinfo-list .navbar.custom-toolbar .navbar-inner .toolbar_search_input .span5 .input-append > .btn {
-	height: 41px;
-	text-indent: -5px;
-	width: 70px;
-} */
-/* Table Thu tuc hanh chinh */
-/* .opencps-theme.ux .ocps-serviceinfo-list table {
-	border: 0;
-}
-.opencps-theme.ux .ocps-serviceinfo-list table thead {
-	display: none;
-} */
-
 
 .opencps-theme.ux .opencps-searchcontainer-wrapper {
     background-color: #fff;
@@ -108,4 +49,71 @@
     font-size: 13px;
     font-weight: bold;
     white-space: nowrap;
+}
+
+/*SearchContainer Action*/
+
+.opencps-theme.ux .search-container-action{
+	border-radius: 20px;
+    color: white;
+    display: list-item;
+    height: 24px;
+    margin: 5px 0;
+    position: relative;
+    text-indent: 20px;
+    width: 110px;
+}
+
+.opencps-theme.ux .search-container-action a{
+    color: #fff;
+    display: block;
+    font-family: roboto-regular;
+    height: 32px;
+    left: 0;
+    position: absolute;
+    text-decoration: none;
+    top: 0;
+    width: 110px;
+}
+
+.opencps-theme.ux .search-container-action a:hover{
+    text-decoration: none;
+}
+
+.opencps-theme.ux .search-container-action img{
+	display: none;
+}
+
+.opencps-theme.ux .search-container-action.fa{
+	padding-top: 8px;
+}
+
+.opencps-theme.ux .search-container-action.fa.view{
+	background-color: #0090ff;
+	@extend .fa-search;
+    vertical-align: middle;
+}
+
+.opencps-theme.ux .search-container-action.fa.edit{
+	background-color: #0090ff;
+	@extend .fa-pencil-square-o;
+    vertical-align: middle;
+}
+
+.opencps-theme.ux .search-container-action.fa.delete{
+	background-color: #e61f06;
+	@extend .fa-trash-o;
+    vertical-align: middle;
+}
+
+.opencps-theme.ux .search-container-action.fa.forward{
+	background-color: #0090ff;
+	@extend .fa-paper-plane;
+    vertical-align: middle;
+}
+
+.opencps-theme.ux .search-container-action > a > .taglib-text.hide-accessible {
+    clip: auto !important;
+    position: absolute !important;
+    top: 8px;
 }
