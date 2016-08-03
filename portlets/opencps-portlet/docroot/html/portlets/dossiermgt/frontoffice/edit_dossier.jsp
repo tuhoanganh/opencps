@@ -102,11 +102,11 @@
 		<liferay-util:buffer var="htmlBottom">
 		
 		</liferay-util:buffer>
-		
-		<div class="file_detail ocps-history-process-bound-navigator">
+	
 		<aui:form name="fm" action="<%=updateDossierURL %>" method="post">
 		
 			<aui:model-context bean="<%= dossier %>" model="<%= Dossier.class %>" />
+			
 			<aui:input name="<%= DossierDisplayTerms.REDIRECT_PAYMENT_URL %>" value="<%= redirectPaymentURL %>" type="hidden"></aui:input>
 			
 			<aui:input 
@@ -202,6 +202,7 @@
 			/>
 		
 			<liferay-ui:form-navigator
+				displayStyle="left-navigator"
 				backURL="<%= backURL %>"
 				categoryNames="<%= DossierMgtUtil._DOSSIER_CATEGORY_NAMES %>"
 				categorySections="<%= categorySections %>"
@@ -212,7 +213,6 @@
 			/>
 	
 		</aui:form>
-		</div>
 	</c:when>
 	
 	<c:otherwise>
