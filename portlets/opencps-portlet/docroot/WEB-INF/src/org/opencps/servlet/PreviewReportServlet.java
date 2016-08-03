@@ -85,9 +85,11 @@ public class PreviewReportServlet extends HttpServlet {
 			
 			dataSource.put("opencps", jsonObject);*/
 
-			JRReportUtil
+			if(dossierFileId > 0){
+				JRReportUtil
 			    .renderReportHTMLStream(
 			        response, writer, jrxmlTemplate, jsonObject.toString(), null);
+			}
 
 		}
 		catch (Exception e) {
