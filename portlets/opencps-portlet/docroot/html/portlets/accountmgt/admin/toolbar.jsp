@@ -71,25 +71,32 @@
 					<c:if test="<%=tabs1.equals(AccountMgtUtil.TOP_TABS_CITIZEN)%>">
 						<aui:row>
 					
-							<aui:col width="50">
-								<aui:select name="<%=CitizenDisplayTerms.CITIZEN_ACCOUNTSTATUS %>" label="<%=StringPool.BLANK %>">
-									<%
-										for(int i=0; i<accoutStatuses.length; i++) {
-											%>
-												<aui:option value="<%=accoutStatuses[i] %>">
-													<liferay-ui:message key="<%=PortletUtil.getAccountStatus(accoutStatuses[i], themeDisplay.getLocale()) %>" />
-												</aui:option>
-											<%
-											
-										}
-									%>
+							<aui:col width="50" cssClass="search-col">
+								<aui:select name="<%=CitizenDisplayTerms.CITIZEN_ACCOUNTSTATUS %>" 
+									label="<%=StringPool.BLANK %>" 
+									cssClass="search-input select-box"
+									>
+										<aui:option>
+											<liferay-ui:message key="account-status" />
+										</aui:option>
+										<%
+											for(int i=0; i<accoutStatuses.length; i++) {
+												%>
+													<aui:option value="<%=accoutStatuses[i] %>">
+														<liferay-ui:message key="<%=PortletUtil.getAccountStatus(accoutStatuses[i], themeDisplay.getLocale()) %>" />
+													</aui:option>
+												<%
+												
+											}
+										%>
 								</aui:select>
 							</aui:col>
-							<aui:col width="30">
+							<aui:col width="30" cssClass="search-col">
 								<liferay-ui:input-search 
 									id="keywords1" 
 									name="keywords" 
 									placeholder='<%= LanguageUtil.get(locale, "name") %>' 			
+									cssClass="search-input input-keyword"
 								/>
 							</aui:col>
 							
@@ -99,8 +106,14 @@
 						
 						<aui:row>
 					
-							<aui:col width="50">
-								<aui:select name="<%=BusinessDisplayTerms.BUSINESS_ACCOUNTSTATUS %>" label="<%=StringPool.BLANK %>">
+							<aui:col width="50" cssClass="search-col">
+								<aui:select name="<%=BusinessDisplayTerms.BUSINESS_ACCOUNTSTATUS %>" 
+									label="<%=StringPool.BLANK %>"
+									cssClass="search-input select-box"
+								>
+									<aui:option>
+										<liferay-ui:message key="account-status" />
+									</aui:option>
 									<%
 										for(int i=0; i<accoutStatuses.length; i++) {
 											%>
@@ -113,11 +126,12 @@
 									%>
 								</aui:select>
 							</aui:col>
-							<aui:col width="30">
+							<aui:col width="30" cssClass="search-col">
 								<liferay-ui:input-search 
 									id="keywords1" 
 									name="keywords" 
 									placeholder='<%= LanguageUtil.get(locale, "name") %>' 			
+									cssClass="search-input input-keyword"
 								/>
 							</aui:col>
 							

@@ -1,4 +1,8 @@
 
+<%@page import="org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.service.ProcessOrderLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.model.ProcessWorkflow"%>
+<%@page import="org.opencps.processmgt.model.ProcessOrder"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -39,6 +43,15 @@
 	DossierBean dossierBean = (DossierBean) row.getObject();
 	
 	Dossier dossier = dossierBean.getDossier();
+	ProcessOrder processOrder = null;
+	ProcessWorkflow workFlow = null;
+	try {
+		processOrder = ProcessOrderLocalServiceUtil.getProcessOrder(dossier.getDossierId(), 0);
+		workFlow = ProcessWorkflowLocalServiceUtil.getByS_PreP_AN(processOrder.getServiceProcessId(), processOrder.getProcessStepId(), "Thông báo hủy hồ sơ");
+	}
+	catch (Exception e) {
+		
+	}	
 %> 
 
 			
@@ -116,5 +129,18 @@
 				/>
 		 	</c:if>
  		</c:when>
+  		<c:when test="<%= (dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_PROCESSING) && workFlow != null) %>">
+		 		<portlet:actionURL var="cancelDossierURL" name="cancelDossier" >
+					<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
+					<portlet:param name="redirectURL" value="<%=currentURL %>"/>
+				</portlet:actionURL> 
+				<liferay-ui:icon-delete 
+					image="undo"
+					cssClass="search-container-action undo"
+					confirmation="are-you-sure-cancel-entry" 
+					message="cancel"  
+					url="<%=cancelDossierURL.toString() %>" 
+				/>
+		</c:when>  		
  	</c:choose>
 <%-- </liferay-ui:icon-menu> --%> 

@@ -33,6 +33,7 @@
 
 @import url(input.css);
 @import url(nav_toolbar.css);
+@import url(searchcontainer.css);
 
 
 /* custom css theme ngoai cung*/
@@ -55,6 +56,9 @@
 	float: right;
 }
 
+.opencps-theme.ux body{
+	font-family: roboto;
+}
 
 /* Overwrite page iterator css */
 
@@ -127,6 +131,13 @@
 
 .opencps-theme.ux .taglib-form-navigator .tabbable-content{
 	display: flex;
+	/* display: table; */
+}
+
+.opencps-theme.ux .taglib-form-navigator ul.form-navigator.well{
+	float: none;
+	/* display: table-cell;
+	vertical-align: top; */
 }
 
 .opencps-theme.ux .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list{
@@ -137,6 +148,9 @@
 .opencps-theme.ux .taglib-form-navigator .tabbable-content .form-navigator-content{
 	border-left: 1px solid #ddd;
     flex-grow: 1;
+   /*display: table-cell;
+    vertical-align: top;
+    width: 100%; */
 }
 
 .opencps-theme.ux .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list .form-navigator-topper{

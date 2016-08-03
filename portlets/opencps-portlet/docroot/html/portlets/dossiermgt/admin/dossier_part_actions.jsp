@@ -62,7 +62,7 @@
 	<c:if test="<%=DossierPartPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_DOSSIER_PART) 
 				&&	DossierPartPermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) %>"
 	>		
-			<liferay-ui:icon image="search-container-action fa edit" message="edit"
+			<liferay-ui:icon image="edit" message="edit" cssClass="search-container-action fa edit"
 				url="<%=updateDossierPartURL.toString()%>" />
 			
 			<c:if test="<%= dossierPart.getPartType() == PortletConstants.DOSSIER_TYPE_GROUPS_OPTIONAL
@@ -71,7 +71,7 @@
 					updateDossierPartChildsURL.setParameter("isAddChild", "isAddChild");
 				%> 
 			
-				<liferay-ui:icon image="search-container-action fa add" cssClass="add" message="add-childs-part"
+				<liferay-ui:icon image="add" cssClass="search-container-action fa add" message="add-childs-part"
 					url="<%=updateDossierPartURL.toString()%>" />
 			
 			</c:if>	

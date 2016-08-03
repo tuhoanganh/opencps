@@ -27,29 +27,29 @@
 <div class="form-search">
 	<aui:form action="<%= searchURL %>" method="post" name="fm">
 		<aui:row>
-			<aui:col width="25">
-				<datamgt:ddr cssClass="input100"
+			<aui:col width="25" cssClass="search-col">
+				<datamgt:ddr
 					depthLevel="1" 
 					dictCollectionCode="SERVICE_ADMINISTRATION"
 					itemNames="administrationCode"
 					itemsEmptyOption="true"
-					
+					cssClass="search-input select-box"
 				>
 				</datamgt:ddr>
 
 			</aui:col>
-			<aui:col width="25">
-				<datamgt:ddr cssClass="input100"
+			<aui:col width="25" cssClass="search-col">
+				<datamgt:ddr
 					depthLevel="1" 
 					dictCollectionCode="SERVICE_DOMAIN"
 					itemNames="domainCode"
 					itemsEmptyOption="true"	
-					
+					cssClass="search-input select-box"
 				>
 				</datamgt:ddr>
 
 			</aui:col>
-			<aui:col width="45">
+			<aui:col width="45" cssClass="search-col">
 				<label>
 					<liferay-ui:message key="keywords"/>
 				</label>
@@ -58,6 +58,7 @@
 					name="keywords"
 					title="keywords"
 					placeholder='<%= LanguageUtil.get(locale, "name") %>' 
+					cssClass="search-input input-keyword"
 				/>
 			</aui:col>
 		</aui:row>
