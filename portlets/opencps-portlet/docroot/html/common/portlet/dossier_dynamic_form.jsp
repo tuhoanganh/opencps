@@ -1,4 +1,5 @@
 
+<%@page import="org.opencps.util.JsonUtils"%>
 <%@page import="com.liferay.portal.security.auth.AuthTokenUtil"%>
 <%
 /**
@@ -134,9 +135,8 @@
 		}
 	}
 	
+	String formData = "";
 	
-	String formData = AutoFillFormData.dataBinding(sampleData, ownerCitizen, ownerBusiness, dossierId);
-
 	String auTock = AuthTokenUtil.getToken(request);
 	  
 	String alpacaSchema = dossierPart != null && Validator.isNotNull(dossierPart.getFormScript()) ? 
@@ -153,8 +153,10 @@
 		}
 		
 		if(dossierFile != null && Validator.isNotNull(dossierFile.getFormData())){
-			formData = dossierFile.getFormData();
+			formData = JsonUtils.quote(dossierFile.getFormData());
 		}
+	}else{
+		formData = AutoFillFormData.dataBinding(sampleData, ownerCitizen, ownerBusiness, dossierId);
 	}
 	
 	String portleName = WebKeys.DOSSIER_MGT_PORTLET;
