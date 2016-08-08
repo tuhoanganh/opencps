@@ -96,12 +96,9 @@
 				%>
 				<liferay-util:buffer var="boundcol1">
 					<div class="row-fluid">
-						<div width="5px"></div>
-						
 						<div class="row-fluid">
-							<div width="5px"></div>
-							<div class="span5 bold-label">
-								<liferay-ui:message key="row-no"/>
+							<div class="span2 bold-label">
+								<liferay-ui:message key="dossier-no"/>
 							</div>
 							<div class="span6">
 								<%=dossier.getReceptionNo() %>
@@ -110,12 +107,12 @@
 					</div>
 					
 					<div class="row-fluid">
-						<div width="5px"></div>
-						<div class="span5 bold-label">
+						
+						<div class="span2 bold-label">
 							 <liferay-ui:message key="name-of-service"/>
 						</div>
 						
-						<div class="span6">
+						<div class="span9">
 							<%=serviceName %>
 						</div>
 					</div>
@@ -124,7 +121,7 @@
 				
 				<liferay-util:buffer var="boundcol2">
 				<div class="row-fluid">
-					<div width="5px"></div>
+					
 					<div class="span5 bold-label"><liferay-ui:message key="boss-of-dossier"/></div>
 					<div class="span6">
 						<%=dossierName %>
@@ -132,7 +129,7 @@
 				</div>
 				
 				<div class="row-fluid">
-					<div width="5px"></div>
+					
 					<div class="span5 bold-label">
 						 <liferay-ui:message key="date-of-receiving"/>
 					</div>

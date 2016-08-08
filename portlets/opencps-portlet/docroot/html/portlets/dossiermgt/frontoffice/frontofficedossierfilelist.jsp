@@ -95,17 +95,14 @@
 				
 				<liferay-util:buffer var="boundcol1">
 					<div class="row-fluid">
-						<div class="span1"></div>
-						
-						<div class="span2 bold-label">
+
+						<div class="span3 bold-label">
 							<liferay-ui:message key="create-date"/>
 						</div>
 						<div class="span9"><%=DateTimeUtil.convertDateToString(dossierFile.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT) %></div>
 					</div>
 					
 					<div class="row-fluid">
-						<div class="span1"></div>
-						
 						<div class="span2 bold-label">
 							<liferay-ui:message key="dossier-file-no"/>
 						</div>
@@ -114,8 +111,6 @@
 					</div>
 					
 					<div class="row-fluid">
-						<div class="span1"></div>
-						
 						<div class="span2 bold-label"><liferay-ui:message key="dossier-file-date"/></div>
 						
 						<div class="span9"><%=DateTimeUtil.convertDateToString(dossierFile.getDossierFileDate(), DateTimeUtil._VN_DATE_FORMAT)%></div>
@@ -123,11 +118,8 @@
 					
 				</liferay-util:buffer>	
 			
-				
 				<liferay-util:buffer var="boundcol2">
 					<div class="row-fluid">
-						<div class="span1"></div>
-						
 						<div class="span2 bold-label">
 							<liferay-ui:message key="display-name"/>
 						</div>
@@ -135,8 +127,7 @@
 					</div>
 					
 					<div class="row-fluid">
-						<div class="span1"></div>
-						
+					
 						<div class="span2 bold-label">
 							<liferay-ui:message key="dossier-name"/>
 						</div>
@@ -145,8 +136,6 @@
 					</div>
 					
 					<div class="row-fluid">
-						<div class="span1"></div>
-						
 						<div class="span2 bold-label"><liferay-ui:message key="dossier-file-type"/></div>
 						
 						<div class="span9"><%=String.valueOf(dossierFileBean.getPartType())%></div>
