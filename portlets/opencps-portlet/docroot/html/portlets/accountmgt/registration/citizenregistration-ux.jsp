@@ -105,20 +105,20 @@
 <div class="opencps-register-wrapper">
 	<div class="opencps accountmgt fm-registration header">
 		<aui:row>
-			<aui:col width="30" cssClass="opcs-register-label">
-				<label><liferay-ui:message key="register"></liferay-ui:message></label>
+			<aui:col width="30" cssClass="title-text">
+				<label ><liferay-ui:message key="register"></liferay-ui:message></label>
 			</aui:col>
-			<aui:col width="30">
+			<aui:col width="30" cssClass="register-options">
 				<aui:row>
 					<aui:col width="50">
-						<aui:input type="radio" name="typeOfRegister" value="citizen" inlineLabel="right" label="citizen" checked="true"/>
+						<aui:input type="radio" name="typeOfRegister" value="citizen" inlineLabel="right" label="citizen"/>
 					</aui:col>
 					<aui:col width="50">
-						<aui:input type="radio" name="typeOfRegister" value="business" inlineLabel="right" label="business"/>
+						<aui:input type="radio" name="typeOfRegister" value="business" inlineLabel="right" label="business" checked="true"/>
 					</aui:col>
 				</aui:row>
 			</aui:col>
-			<aui:col width="30" cssClass="opcs-register-login">
+			<aui:col width="30" cssClass="login-redirect">
 				<a href='<%=themeDisplay.getURLSignIn() %>'><liferay-ui:message key="login" /></a>
 			</aui:col>
 		</aui:row>
@@ -188,7 +188,6 @@
 	 					<liferay-ui:message key="birth-date"/>
 	 				</label>
 	 				<liferay-ui:input-date 
-	 					
 	 					dayParam="<%=CitizenDisplayTerms.BIRTH_DATE_DAY %>"
 	 					dayValue="<%= spd.getDayOfMoth() %>"
 	 					monthParam="<%=CitizenDisplayTerms.BIRTH_DATE_MONTH %>"
