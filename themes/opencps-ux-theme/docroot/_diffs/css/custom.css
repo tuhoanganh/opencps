@@ -3,6 +3,7 @@
 @import url(font_face.css);
 @import url(controls.css);
 @import url(font-awesome.min.css);
+@import url(portlets/portlet_5.css);
 
 /*vtduy_cmc */
 @import url(portlets/portlet_login.css);
