@@ -107,10 +107,9 @@
 								<div class="span1">
 									<i class='<%="fa fa-circle sx10 " + processOrder.getReceptionNo()%>'></i>
 								</div>
-								
 								<div class="row-fluid">
-									<div width="5px"></div>
-									<div class="span5 bold-label">
+									
+									<div class="span1 bold-label">
 										<liferay-ui:message key="service-name"/>
 									</div>
 									<div class="span6">
@@ -123,15 +122,15 @@
 						
 						<liferay-util:buffer var="boundcol2">
 						<div class="row-fluid">
-							<div width="5px"></div>
-							<div class="span5 bold-label"><liferay-ui:message key="subject-name"/></div>
+							<div class="span5 bold-label">
+								<liferay-ui:message key="subject-name"/>	
+							</div>
 							<div class="span6">
 								<%=processOrder.getSubjectName() %>
 							</div>
 						</div>
 						
 						<div class="row-fluid">
-							<div width="5px"></div>
 							<div class="span5 bold-label">
 								 <liferay-ui:message key="assign-to-user"/>
 							</div>
@@ -142,7 +141,6 @@
 						</div>
 						
 						<div class="row-fluid">
-							<div width="5px"></div>
 							<div class="span5 bold-label">
 								<liferay-ui:message key="step-name"/>
 							</div>
@@ -152,7 +150,6 @@
 						</div>
 						
 						<div class="row-fluid">
-							<div width="5px"></div>
 								<div class="span5 bold-label">
 									<liferay-ui:message key="dealine"/>
 								</div>
