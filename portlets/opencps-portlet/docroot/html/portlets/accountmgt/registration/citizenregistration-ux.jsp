@@ -198,12 +198,12 @@
 	 					yearValue="<%= spd.getYear() %>"
 	 					formName="fm"
 	 					autoFocus="<%=true %>"
-	 					cssClass="input100 ocps-input-date"
+	 					cssClass="input100"
 	 				>
 	 				</liferay-ui:input-date>
 				</aui:row>
 				
-				<aui:row cssClass="input100 ocps-file-attach">
+				<aui:row cssClass="input100">
 					<aui:input 
 						type="file" 
 						name="<%=CitizenDisplayTerms.CITIZEN_ATTACHFILE %>" 
