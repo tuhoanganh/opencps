@@ -45,6 +45,7 @@
 <%@page import="org.opencps.accountmgt.model.Business"%>
 <%@page import="org.opencps.accountmgt.model.Citizen"%>
 <%@page import="java.util.List"%>
+
 <%@ include file="../init.jsp"%>
 
 <%
@@ -191,23 +192,23 @@
 				type="hidden" 
 				value="<%= company.getCompanyId()%>"
 			/>
-		
-			<liferay-ui:form-navigator
-				displayStyle="left-navigator"
-				backURL="<%= backURL %>"
-				categoryNames="<%= DossierMgtUtil._DOSSIER_CATEGORY_NAMES %>"
-				categorySections="<%= categorySections %>"
-				htmlBottom="<%= htmlBottom %>"
-				htmlTop="<%= htmlTop %>"
-				jspPath='<%=templatePath + "dossier/" %>'
-				showButtons="<%=(cmd.equals(Constants.VIEW) || (dossier != null && dossier.getDossierStatus()  != PortletConstants.DOSSIER_STATUS_NEW)) ? false : true %>"
-			/>
-	
+			<div class="opencps-form-navigator-container">
+				<liferay-ui:form-navigator
+					displayStyle="left-navigator"
+					backURL="<%= backURL %>"
+					categoryNames="<%= DossierMgtUtil._DOSSIER_CATEGORY_NAMES %>"
+					categorySections="<%= categorySections %>"
+					htmlBottom="<%= htmlBottom %>"
+					htmlTop="<%= htmlTop %>"
+					jspPath='<%=templatePath + "dossier/" %>'
+					showButtons="<%=(cmd.equals(Constants.VIEW) || (dossier != null && dossier.getDossierStatus()  != PortletConstants.DOSSIER_STATUS_NEW)) ? false : true %>"
+				/>
+			</div>
 		</aui:form>
 	</c:when>
 	
 	<c:otherwise>
-		<div class="portlet-msg-alert"><liferay-ui:message key="your-account-not-nauthorized-update-dossier"/></div>
+		<div class="portlet-msg-alert"><liferay-ui:message key="your-account-not-authorized-update-dossier"/></div>
 	</c:otherwise>
  
 </c:choose>
