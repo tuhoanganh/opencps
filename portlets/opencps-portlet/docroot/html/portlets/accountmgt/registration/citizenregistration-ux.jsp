@@ -111,10 +111,10 @@
 			<aui:col width="30" cssClass="register-options">
 				<aui:row>
 					<aui:col width="50">
-						<aui:input type="radio" name="typeOfRegister" value="citizen" inlineLabel="right" label="citizen"/>
+						<aui:input type="radio" name="typeOfRegister" value="citizen" inlineLabel="right" label="citizen" checked="true"/>
 					</aui:col>
 					<aui:col width="50">
-						<aui:input type="radio" name="typeOfRegister" value="business" inlineLabel="right" label="business" checked="true"/>
+						<aui:input type="radio" name="typeOfRegister" value="business" inlineLabel="right" label="business"/>
 					</aui:col>
 				</aui:row>
 			</aui:col>
@@ -188,6 +188,7 @@
 	 					<liferay-ui:message key="birth-date"/>
 	 				</label>
 	 				<liferay-ui:input-date 
+	 					
 	 					dayParam="<%=CitizenDisplayTerms.BIRTH_DATE_DAY %>"
 	 					dayValue="<%= spd.getDayOfMoth() %>"
 	 					monthParam="<%=CitizenDisplayTerms.BIRTH_DATE_MONTH %>"
