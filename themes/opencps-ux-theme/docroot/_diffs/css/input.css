@@ -17,3 +17,12 @@
     margin: 0 10px 0 0;
     overflow: hidden;
 }
+
+.opencps-theme.ux select:nth-child(2n) {
+	background: white
+		url("../images/custom/nav_toolbar/select_arrow_gray.png") no-repeat
+		scroll 97% center;
+	border: 1px solid #e1e1e1 !important;
+    margin: 0 10px 0 0;
+    overflow: hidden;
+}
