@@ -4,7 +4,7 @@
 #set ($publicLayouts = $layoutService.getLayouts($layout.getGroupId(), true, 0))
 
 	
-<nav class="$nav_css_class top-menu" id="navigation" role="navigation">
+<nav class="$nav_css_class top-menu private" id="navigation" role="navigation">
 	<ul aria-label="#language ("site-pages")" role="menubar">
 		#foreach ($nav_item in $publicLayouts)
 			#set ($nav_item_attr_has_popup="")
@@ -24,7 +24,6 @@
 			
 				<li class="$nav_item_css_class ocps-nav" id="layout_$nav_item.getLayoutId()" $nav_item_attr_selected role="presentation">
 					<a aria-labelledby="layout_$nav_item.getLayoutId()" href="/group/guest$nav_item.getFriendlyURL()" $nav_item_attr_has_popup $nav_item.getTarget() role="menuitem"><span>$nav_item.getName()</span></a>
-	
 				</li>
 			#end
 		#end
@@ -42,4 +41,8 @@
 		#end
 
 	</ul>
+	<span class="account-info">
+		<span class="account-name">#language ("welcome-key") $user_name</span>
+		<span class="logout"><a href="$sign_out_url" class="btn-dn">#language ("logout-key")</a></span>
+	</span>
 </nav>
