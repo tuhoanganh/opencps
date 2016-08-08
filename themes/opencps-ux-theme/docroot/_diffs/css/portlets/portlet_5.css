@@ -1,0 +1,9 @@
+.opencps-theme.ux .opencps-register-wrapper {
+	display: block;
+	width: 100%;
+}
+
+.opencps-theme.ux .opencps-register-wrapper input, .opencps-theme.ux .opencps-register-wrapper select,
+	.opencps-theme.ux .opencps-register-wrapper button {
+	height: 41px;
+}
