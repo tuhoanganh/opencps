@@ -3,10 +3,11 @@
 @import url(font_face.css);
 @import url(controls.css);
 @import url(font-awesome.min.css);
+@import url(portlets/portlet_5.css);
 
 /*vtduy_cmc */
 @import url(portlets/portlet_login.css);
-@import url(portlets/portlet_register.css);
+/* @import url(portlets/portlet_register.css); */
 @import url(portlets/portlet_accountInfo.css);
 @import url(portlets/portlet_history.css);
 @import url(portlets/portlet_dossier_info.css);
@@ -56,8 +57,12 @@
 	float: right;
 }
 
-.opencps-theme.ux body{
+body{
 	font-family: roboto;
+}
+
+.opencps-theme.ux ul{
+	list-style-type: none;
 }
 
 /* Overwrite page iterator css */
@@ -74,6 +79,7 @@
 
 
 
+/* Overwrite Form Navigator  */
 
 .opencps-theme.ux .taglib-form-navigator .tabbable-content{
 	display: flex;
@@ -109,6 +115,22 @@
 
 .opencps-theme.ux .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list > li > a{
 	padding: 10px 15px;
+}
+
+
+/* Overwrite Taglib Header  */
+
+.opencps-theme.ux .taglib-header{
+	border-bottom: none;
+}
+
+.opencps-theme.ux .taglib-header .header-back-to span{
+	clip: auto !important;
+	position: relative !important;
+}
+
+.opencps-theme.ux .taglib-header .header-title{
+	text-align: center;
 }
 
 .alpaca-array-actionbar-action.btn {
