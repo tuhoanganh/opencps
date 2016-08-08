@@ -13,9 +13,9 @@
 
 /* @import url(portlets/portlet_register.css); */
 @import url(portlets/portlet_accountInfo.css);
-@import url(portlets/portlet_history.css);
+/* @import url(portlets/portlet_history.css);
 @import url(portlets/portlet_dossier_info.css);
-@import url(portlets/portlet_dossier_content.css);
+@import url(portlets/portlet_dossier_content.css); */
 @import url(portlets/portlet_popup.css);
 @import url(portlets/portlet_hung_custom.css);
 @import url(portlets/binhth.css);
@@ -59,34 +59,71 @@ body{
 
 /* Overwrite Form Navigator  */
 
-.opencps-theme.ux .taglib-form-navigator .tabbable-content{
+.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator{
+    border-radius: 3px;
+    box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.2);
+}
+
+.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator .tabbable-content{
 	display: flex;
 }
 
-.opencps-theme.ux .taglib-form-navigator ul.form-navigator.well{
+.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator ul.form-navigator.well{
 	float: none;
+	width: 22%;
 }
 
-.opencps-theme.ux .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list{
+.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list{
 	background: transparent none repeat scroll 0 0;
     border: medium none;
 }
 
-.opencps-theme.ux .taglib-form-navigator .tabbable-content .form-navigator-content{
+.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator .tabbable-content .form-navigator-content{
 	border-left: 1px solid #ddd;
     flex-grow: 1;
 }
 
-.opencps-theme.ux .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list .form-navigator-topper{
+.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator .tabbable-content .form-navigator-content > div{
+	padding: 20px 30px;
+}
+
+.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list .form-navigator-topper{
 	display: none;
 }
 
-.opencps-theme.ux .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list .nav-header{
+.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list .nav-header{
 	display: none;
 }
 
-.opencps-theme.ux .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list > li > a{
+.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list > li.active > a{
+	background-color: #0f97ff;
+	color: #fff;
+}
+
+.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list > li > a{
+	color: #000;
 	padding: 10px 15px;
+}
+
+.opencps-theme.ux .opencps-form-navigator-container .nav-content-row {
+    border-bottom: 1px solid #e1e1e1;
+    margin-bottom: 15px;
+}
+
+.opencps-theme.ux .opencps-form-navigator-container .nav-content-row .control-group {
+    display: flex;
+}
+
+.opencps-theme.ux .opencps-form-navigator-container .nav-content-row .control-group label{
+    font-weight: bold;
+    width: 130px;
+}
+
+.opencps-theme.ux .opencps-form-navigator-container .nav-content-row .control-group input, 
+.opencps-theme.ux .opencps-form-navigator-container .nav-content-row .control-group select, 
+.opencps-theme.ux .opencps-form-navigator-container .nav-content-row .control-group textarea{
+    flex-grow: 1;
+    max-width: 100% !important;
 }
 
 
@@ -100,7 +137,9 @@ body{
 
 .opencps-theme.ux .taglib-header .header-back-to a{
 	color: #888;
-	font-weight: normal;
+    font-size: 14px;
+    font-weight: normal;
+    padding: 15px 0;
 }
 
 .opencps-theme.ux .taglib-header .header-back-to span{
@@ -110,7 +149,9 @@ body{
 }
 
 .opencps-theme.ux .taglib-header .header-title{
-	text-align: center;
+	font-family: roboto-bold;
+    font-size: 18px;
+    text-align: center;
 }
 
 .alpaca-array-actionbar-action.btn {
