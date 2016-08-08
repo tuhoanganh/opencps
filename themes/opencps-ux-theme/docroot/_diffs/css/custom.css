@@ -6,7 +6,7 @@
 
 /*vtduy_cmc */
 @import url(portlets/portlet_login.css);
-@import url(portlets/portlet_register.css);
+/* @import url(portlets/portlet_register.css); */
 @import url(portlets/portlet_accountInfo.css);
 @import url(portlets/portlet_history.css);
 @import url(portlets/portlet_dossier_info.css);
