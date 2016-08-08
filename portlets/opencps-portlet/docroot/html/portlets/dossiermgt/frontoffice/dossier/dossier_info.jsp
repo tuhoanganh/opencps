@@ -43,6 +43,7 @@
 <%@page import="org.opencps.dossiermgt.EmptyDossierContactNameException"%>
 <%@page import="org.opencps.dossiermgt.OutOfLengthDossierAddressException"%>
 <%@page import="org.opencps.dossiermgt.InvalidDossierObjectException"%>
+
 <%@ include file="../../init.jsp"%>
 
 <%
@@ -129,7 +130,7 @@
 />
 
 
-<aui:row>
+<aui:row cssClass="nav-content-row">
 	<aui:col width="100">
 		<aui:input 
 			name="<%=DossierDisplayTerms.SERVICE_NAME %>"
@@ -141,7 +142,7 @@
 	</aui:col>
 </aui:row>
 
-<aui:row>
+<aui:row cssClass="nav-content-row">
 	<aui:col width="100">
 		<aui:input 
 			name="<%=DossierDisplayTerms.SERVICE_NO %>" 
@@ -154,7 +155,7 @@
 </aui:row>
 
 
-<aui:row>
+<aui:row cssClass="nav-content-row">
 	<aui:col width="100">
 		<aui:input 
 			name="<%=DossierDisplayTerms.GOVAGENCY_NAME%>"
@@ -165,7 +166,7 @@
 	</aui:col>
 </aui:row>
 
-<aui:row>
+<aui:row cssClass="nav-content-row">
 	<aui:col width="100">
 		<aui:input 
 			name="<%=DossierDisplayTerms.GOVAGENCY_CODE %>" 
@@ -176,7 +177,7 @@
 	</aui:col>
 </aui:row>
 
-<aui:row>
+<aui:row cssClass="nav-content-row">
 	<aui:col width="100">
 		<aui:input 
 			name="<%=DossierDisplayTerms.SUBJECT_NAME %>" 
@@ -193,23 +194,23 @@
 	</aui:col>
 </aui:row>
 
-<aui:row>
-<aui:col width="100">
-		<aui:input 
-			name="<%=DossierDisplayTerms.SUBJECT_ID %>" 
-			cssClass="" 
-			type="text"
-			value="<%=citizen != null ? citizen.getPersonalId() : business != null ? business.getIdNumber() : StringPool.BLANK %>"
-		>
-			<aui:validator name="required>"/>
-			<aui:validator name="maxLength">
-				<%= PortletPropsValues.DOSSIERMGT_DOSSIER_SUBJECT_ID_LENGTH %>
-			</aui:validator>
-		</aui:input>	
-	</aui:col>
-</aui:row>
+<aui:row cssClass="nav-content-row">
+	<aui:col width="100">
+			<aui:input 
+				name="<%=DossierDisplayTerms.SUBJECT_ID %>" 
+				cssClass="" 
+				type="text"
+				value="<%=citizen != null ? citizen.getPersonalId() : business != null ? business.getIdNumber() : StringPool.BLANK %>"
+			>
+				<aui:validator name="required>"/>
+				<aui:validator name="maxLength">
+					<%= PortletPropsValues.DOSSIERMGT_DOSSIER_SUBJECT_ID_LENGTH %>
+				</aui:validator>
+			</aui:input>	
+		</aui:col>
+	</aui:row>
 
-<aui:row>
+<aui:row cssClass="nav-content-row">
 	<aui:col width="100">
 		<aui:input 
 			name="<%=DossierDisplayTerms.ADDRESS %>" 
@@ -225,18 +226,19 @@
 	</aui:col>
 </aui:row>
 
-<aui:row>
+<aui:row cssClass="nav-content-row">
 	<datamgt:ddr 
 		depthLevel="3" 
 		dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_ADMINISTRATIVE_REGION %>"
 		itemNames='<%=StringUtil.merge(new String[]{DossierDisplayTerms.CITY_ID,DossierDisplayTerms.DISTRICT_ID,DossierDisplayTerms.WARD_ID}) %>'
 		itemsEmptyOption="true,true,true"
+		showLabel="true"
 		selectedItems="<%=itemSelected %>"
 		displayStyle="vertical"
 	/>
 </aui:row>
 
-<aui:row>
+<aui:row cssClass="nav-content-row">
 	<aui:col width="100">
 		<aui:input name="<%=DossierDisplayTerms.CONTACT_NAME %>" 
 			cssClass="" 
@@ -251,7 +253,7 @@
 	</aui:col>
 </aui:row>
 
-<aui:row>
+<aui:row cssClass="nav-content-row">
 	<aui:col width="100">
 		<aui:input 
 			name="<%=DossierDisplayTerms.CONTACT_TEL_NO %>" 
@@ -265,7 +267,7 @@
 	</aui:col>
 </aui:row>
 
-<aui:row>
+<aui:row cssClass="nav-content-row">
 	<aui:col width="100">
 		<aui:input 
 			name="<%=DossierDisplayTerms.CONTACT_EMAIL %>" 
@@ -280,7 +282,7 @@
 	</aui:col>
 </aui:row>
 
-<aui:row>
+<aui:row cssClass="nav-content-row">
 	<aui:col width="100">
 		<aui:input name="<%=DossierDisplayTerms.NOTE %>" type="textarea">
 			<aui:validator name="maxLength">
