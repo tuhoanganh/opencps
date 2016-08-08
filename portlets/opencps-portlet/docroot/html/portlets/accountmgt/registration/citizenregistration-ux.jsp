@@ -144,8 +144,8 @@
 	
 		<aui:input name="citizenRegStep_cfg" value="<%=citizenRegStep_cfg %>" type="hidden"></aui:input>
 			
-		<div class="opencps-register-content">
-			<div class="left-content">
+		<div class="register-content">
+			<div class="content-part left">
 				<aui:row>
 					<aui:input 
 	 					name="<%=CitizenDisplayTerms.CITIZEN_FULLNAME %>" 
@@ -215,7 +215,7 @@
 				</aui:row>
 			</div>
 			
-			<div class = "right-content">
+			<div class="content-part right">
 				<aui:row>
 					<aui:select 
 	 					name="<%=CitizenDisplayTerms.CITIZEN_GENDER %>"
