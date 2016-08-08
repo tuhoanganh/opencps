@@ -1,64 +1,42 @@
 /* This file allows you to override default styles in one central location for easier upgrade and maintenance. */
 
 @import url(font_face.css);
-@import url(controls.css);
+
 @import url(font-awesome.min.css);
 @import url(portlets/portlet_5.css);
-
-/*vtduy_cmc */
 @import url(portlets/portlet_login.css);
-/* @import url(portlets/portlet_register.css); */
-@import url(portlets/portlet_accountInfo.css);
-@import url(portlets/portlet_history.css);
-@import url(portlets/portlet_dossier_info.css);
-@import url(portlets/portlet_dossier_content.css);
-@import url(portlets/portlet_popup.css);
-
-
-@import url(portlets/portlet_hung_custom.css);
-@import url(portlets/binhth.css);
-
-@import url(button-custom.css);
-
-/*end*/
-
-/*----anh huong*/
-@import url(portlets/portlet_13_fileinfo.css);
-/*end*/
-
-
-@import url(custom_frame_1.css);
-/* @import url(header_style_1.css); */
-
-
 @import url(input.css);
 @import url(nav_toolbar.css);
 @import url(searchcontainer.css);
 @import url(header.css);
 @import url(nav_menu.css);
 
-/* custom css theme ngoai cung*/
-.opencps-theme {
-	height: initial;
-	background-color: #f5f5f5;
-}
-.portlet-body{
-	background-color: #f5f5f5;
-}
-#main-content{
-	margin: 0!important;
-}
-#hrefFm{
-	margin: 0!important;
-}
-.opencps-theme .fake_textarea {height: 90px; border: 1px solid #acacac; border-radius: 5px; background-color: white; padding: 0 10px; overflow-y: auto;}
+/* @import url(portlets/portlet_register.css); */
+@import url(portlets/portlet_accountInfo.css);
+@import url(portlets/portlet_history.css);
+@import url(portlets/portlet_dossier_info.css);
+@import url(portlets/portlet_dossier_content.css);
+@import url(portlets/portlet_popup.css);
+@import url(portlets/portlet_hung_custom.css);
+@import url(portlets/binhth.css);
+@import url(button-custom.css);
+@import url(portlets/portlet_13_fileinfo.css);
+@import url(custom_frame_1.css);
 
-.aui .dockbar.navbar-static-top .collapse .nav-account-controls{
-	float: right;
-}
+
+
 
 body{
+	background-color: #f5f5f5;
 	font-family: roboto;
+}
+
+.opencps-theme.ux .portlet-borderless-container{
+	background-color: #fff;
+}
+
+.opencps-theme.ux #hrefFm{
+	margin: 0!important;
 }
 
 .opencps-theme.ux ul{
@@ -83,13 +61,10 @@ body{
 
 .opencps-theme.ux .taglib-form-navigator .tabbable-content{
 	display: flex;
-	/* display: table; */
 }
 
 .opencps-theme.ux .taglib-form-navigator ul.form-navigator.well{
 	float: none;
-	/* display: table-cell;
-	vertical-align: top; */
 }
 
 .opencps-theme.ux .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list{
@@ -100,9 +75,6 @@ body{
 .opencps-theme.ux .taglib-form-navigator .tabbable-content .form-navigator-content{
 	border-left: 1px solid #ddd;
     flex-grow: 1;
-   /*display: table-cell;
-    vertical-align: top;
-    width: 100%; */
 }
 
 .opencps-theme.ux .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list .form-navigator-topper{
@@ -119,14 +91,22 @@ body{
 
 
 /* Overwrite Taglib Header  */
-
 .opencps-theme.ux .taglib-header{
-	border-bottom: none;
+	background-color: #f5f5f5;
+    border-bottom: 0 none;
+    padding-bottom: 1em;
+    margin-bottom: 0;
+}
+
+.opencps-theme.ux .taglib-header .header-back-to a{
+	color: #888;
+	font-weight: normal;
 }
 
 .opencps-theme.ux .taglib-header .header-back-to span{
 	clip: auto !important;
 	position: relative !important;
+	font-family: roboto-regular;
 }
 
 .opencps-theme.ux .taglib-header .header-title{
