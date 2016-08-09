@@ -1,10 +1,4 @@
 
-<%@page import="org.opencps.accountmgt.search.BusinessDisplayTerms"%>
-<%@page import="javax.portlet.PortletURL"%>
-<%@page import="org.opencps.util.DLFileEntryUtil"%>
-<%@page import="com.liferay.portal.kernel.repository.model.FileEntry"%>
-<%@page import="com.liferay.portlet.documentlibrary.util.DLUtil"%>
-<%@page import="org.opencps.accountmgt.search.CitizenDisplayTerms"%>
 <%
 	/**
 	 * OpenCPS is the open source Core Public Services software
@@ -23,8 +17,7 @@
 	 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 	 */
 %>
-<%@page
-	import="org.opencps.accountmgt.service.BusinessDomainLocalServiceUtil"%>
+<%@page import="org.opencps.accountmgt.service.BusinessDomainLocalServiceUtil"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="org.opencps.accountmgt.model.BusinessDomain"%>
@@ -32,12 +25,17 @@
 <%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
 <%@page import="org.opencps.datamgt.model.DictItem"%>
 <%@page import="com.liferay.portlet.documentlibrary.model.DLFileEntry"%>
-<%@page
-	import="com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil"%>
+<%@page import="com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil"%>
 <%@page import="org.opencps.util.DateTimeUtil"%>
 <%@page import="org.opencps.util.PortletPropsValues"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
+<%@page import="org.opencps.accountmgt.search.BusinessDisplayTerms"%>
+<%@page import="javax.portlet.PortletURL"%>
+<%@page import="org.opencps.util.DLFileEntryUtil"%>
+<%@page import="com.liferay.portal.kernel.repository.model.FileEntry"%>
+<%@page import="com.liferay.portlet.documentlibrary.util.DLUtil"%>
+<%@page import="org.opencps.accountmgt.search.CitizenDisplayTerms"%>
 <%@ include file="/init.jsp"%>
 <%
 	DictItem dictItemCity = null;
