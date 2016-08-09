@@ -4,7 +4,7 @@
 #set ($publicLayouts = $layoutService.getLayouts($layout.getGroupId(), false, 0))
 
 	
-<nav class="$nav_css_class top-menu" id="navigation" role="navigation">
+<nav class="$nav_css_class top-menu public" id="navigation" role="navigation">
 	<ul aria-label="#language ("site-pages")" role="menubar">
 		#foreach ($nav_item in $publicLayouts)
 			#set ($nav_item_attr_has_popup="")
