@@ -336,7 +336,8 @@ public class BackOfficeProcessEngine implements MessageListener {
 				toBackOffice.setDossierStatus(PortletConstants.DOSSIER_STATUS_ERROR);
 				toBackOffice.setCompanyId(toEngineMsg.getCompanyId());
 				toBackOffice.setGovAgencyCode(govAgencyCode);
-
+				toBackOffice.setReceptionNo(toEngineMsg.getReceptionNo());
+				
 				Message sendToBackOffice = new Message();
 
 				sendToBackOffice.put("toBackOffice", toBackOffice);
