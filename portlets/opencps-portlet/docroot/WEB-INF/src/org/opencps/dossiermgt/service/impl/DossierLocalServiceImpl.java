@@ -1767,13 +1767,20 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		Dossier dossier = dossierPersistence.findByPrimaryKey(dossierId);
 
 		dossier = getDossier(dossier, userId, govAgencyOrganizationId, status);
+		
+		int flagStatus = PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC;
+
+		if (syncStatus == PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS ||
+			syncStatus == PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCERROR) {
+			flagStatus = PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC;
+		}
 
 		if (fileGroupId > 0) {
 			FileGroup fileGroup =
 				fileGroupLocalService.getFileGroup(fileGroupId);
 			List<DossierFile> dossierFiles =
-				dossierFileLocalService.getDossierFileByD_GF(
-					dossierId, fileGroup.getFileGroupId());
+					dossierFileLocalService.findByF_D_S_R(
+						fileGroupId, dossierId, flagStatus, 0);
 			if (dossierFiles != null) {
 				for (DossierFile dossierFile : dossierFiles) {
 					dossierFile.setSyncStatus(syncStatus);
@@ -1789,7 +1796,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		}
 
 		List<DossierFile> dossierFiles =
-			dossierFileLocalService.getDossierFileByD_GF(dossierId, 0);
+			dossierFileLocalService.findByF_D_S_R(0, dossierId, flagStatus, 0);
 		if (dossierFiles != null) {
 			for (DossierFile dossierFile : dossierFiles) {
 				dossierFile.setSyncStatus(syncStatus);

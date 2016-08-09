@@ -24,7 +24,7 @@
 
                    ##set ($newNavItems = $navItemClass.fromLayouts($requestVars, $mainLayouts))
                    #set ($newNavItems = $navItemClass.fromLayouts($requestVars, $newMainLayouts))
-                   #set ($nav_items = $newNavItems)
+                   #set ($nav_items= $newNavItems)
           #end
 
 <nav class="$nav_css_class top-menu" id="navigation" role="navigation">
@@ -39,20 +39,13 @@
                
                 <a href="$nav_item.getURL()" $nav_item.getTarget()><span>$nav_item.icon() $nav_item.getName()</span></a>
 
-                #if ($nav_item.hasChildren())
-                    <ul class="child-menu">
-                        #foreach ($nav_child in $nav_item.getChildren())
-                            #if ($nav_child.isSelected())
-                                <li class="selected">
-                            #else
-                                <li>
-                            #end
-                                <a href="$nav_child.getURL()" $nav_child.getTarget()>$nav_child.getName()</a>
-                            </li>
-                        #end
-                    </ul>
-                #end
+
            </li>
         #end
     </ul>
+    
+    <span class="account-info">
+		<span class="account-name">#language ("welcome-key") $user_name</span>
+		<span class="logout"><a href="$sign_out_url" class="btn-dn">#language ("logout-key")</a></span>
+	</span>
 </nav>
