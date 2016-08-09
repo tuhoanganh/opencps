@@ -203,11 +203,11 @@
 	 				</liferay-ui:input-date>
 				</aui:row>
 				
-				<aui:row cssClass="input100">
+				<aui:row cssClass="input-file">
 					<aui:input 
 						type="file" 
 						name="<%=CitizenDisplayTerms.CITIZEN_ATTACHFILE %>" 
-						>
+					>
 						<aui:validator name="acceptFiles">
 							'<%= StringUtil.merge( PortletPropsValues.ACCOUNTMGT_FILE_TYPE) %>'
 						</aui:validator>

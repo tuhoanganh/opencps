@@ -246,7 +246,7 @@
 						name="<%=BusinessDisplayTerms.BUSINESS_TELNO %>" 
 						cssClass="input100"
 						placeholder="<%=BusinessDisplayTerms.BUSINESS_TELNO %>"
-						>
+					>
 						<aui:validator name="maxLength">20</aui:validator>
 					</aui:input>
 				</aui:row>
@@ -313,12 +313,12 @@
 				</aui:input>
 			</aui:row>
 			
-			<aui:row>
+			<aui:row cssClass="input-file">
 				<aui:input 
 					type="file" 
 					name="attachFile" 
 					label="business-attach-file"
-					>
+				>
 					<aui:validator name="acceptFiles">
 						'<%= StringUtil.merge(PortletPropsValues.ACCOUNTMGT_FILE_TYPE) %>'
 					</aui:validator>
