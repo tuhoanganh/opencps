@@ -52,10 +52,6 @@
 	
 	request.setAttribute(ServiceDisplayTerms.SERVICE_DOMAINCODE, domainCode);
 %>
-
-<div class="opcs-serviceinfo-list-label">
-	<p><liferay-ui:message key="serviceinfo-list"/></p>
-</div>
 <aui:nav-bar cssClass="opencps-toolbar custom-toolbar">
 	<aui:nav-bar-search cssClass="pull-right">
 		<div class="form-search">
@@ -145,7 +141,7 @@
 						<div class="span3 bold-label">
 							<liferay-ui:message key="service-no"/>
 						</div>
-						<div class="span7">
+						<div class="span9">
 							<a href="<%=viewURL.toString() %>"><%=service.getServiceNo() %></a>
 						</div>
 					</div>
@@ -154,7 +150,7 @@
 						<div class="span3 bold-label">
 							<liferay-ui:message key="service-name"/>
 						</div>
-						<div class="span7">
+						<div class="span9">
 							<a href="<%=viewURL.toString() %>"><%=service.getServiceName() %></a>
 						</div>
 					</div>

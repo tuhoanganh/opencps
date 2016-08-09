@@ -113,7 +113,6 @@
 			
 			<liferay-util:buffer var="boundcol1">
 				<div class="row-fluid">
-					<div class="span1"></div>
 					
 					<div class="span2 bold-label">
 						<liferay-ui:message key="service-name"/>
@@ -124,30 +123,27 @@
 			
 			<liferay-util:buffer var="boundcol2">	
 				<div class="row-fluid">
-					<div class="span1"></div>
 					
-					<div class="span2 bold-label">
+					<div class="span5 bold-label">
 						<liferay-ui:message key="service-domain"/>
 					</div>
-					<div class="span9"><%=DictItemUtil.getNameDictItem(service.getDomainCode())%></div>
+					<div class="span7"><%=DictItemUtil.getNameDictItem(service.getDomainCode())%></div>
 				</div>
 				
 				<div class="row-fluid">
-					<div class="span1"></div>
 					
-					<div class="span2 bold-label">
+					<div class="span5 bold-label">
 						<liferay-ui:message key="service-administrator"/>
 					</div>
-					<div class="span9"><%=DictItemUtil.getNameDictItem(service.getAdministrationCode())%></div>
+					<div class="span7"><%=DictItemUtil.getNameDictItem(service.getAdministrationCode())%></div>
 				</div>
 				
 				<div class="row-fluid">
-					<div class="span1"></div>
 					
-					<div class="span2 bold-label">
+					<div class="span5 bold-label">
 						<liferay-ui:message key="level"/>
 					</div>
-					<div class="span9"><%=levelNameOutput %> </div>
+					<div class="span7"><%=levelNameOutput %> </div>
 				</div>
 			</liferay-util:buffer>
 			

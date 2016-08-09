@@ -493,20 +493,20 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 */
 	public void deleteDossierByDossierId(long dossierId)
 		throws NoSuchDossierException, SystemException, PortalException {
-		
+
 		Dossier dossier = dossierPersistence.findByPrimaryKey(dossierId);
-	
+
 		List<FileGroup> fileGroups =
 			fileGroupLocalService.getFileGroupByDossierId(dossierId);
 		List<DossierFile> dossierFiles =
 			dossierFileLocalService.getDossierFileByDossierId(dossierId);
-		
+
 		if (dossierFiles != null) {
 			for (DossierFile dossierFile : dossierFiles) {
 				dossierFileLocalService.deleteDossierFile(dossierFile);
 			}
 		}
-		
+
 		if (fileGroups != null) {
 			for (FileGroup fileGroup : fileGroups) {
 
@@ -514,7 +514,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 
 			}
 		}
-		
+
 		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(Dossier.class);
 
 		indexer.delete(dossier);
@@ -531,7 +531,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		catch (Exception e) {
 			// TODO: handle exception
 		}
-		
+
 		dossierPersistence.remove(dossier);
 	}
 
@@ -744,8 +744,10 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		return dossierPersistence.findByG_DS(
 			groupId, dossierStatus, start, end, obc);
 	}
-	
-	public List<Dossier> getDossierByStatus(long groupId, String dossierStatus) throws SystemException {
+
+	public List<Dossier> getDossierByStatus(long groupId, String dossierStatus)
+		throws SystemException {
+
 		return dossierPersistence.filterFindByG_DS(groupId, dossierStatus);
 	}
 
@@ -1896,12 +1898,19 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 
 		Dossier dossier = dossierPersistence.findByPrimaryKey(dossierId);
 
+		int flagStatus = PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC;
+
+		if (syncStatus == PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS ||
+			syncStatus == PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCERROR) {
+			flagStatus = PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC;
+		}
+
 		if (fileGroupId > 0) {
 			FileGroup fileGroup =
 				fileGroupLocalService.getFileGroup(fileGroupId);
 			List<DossierFile> dossierFiles =
-				dossierFileLocalService.getDossierFileByD_GF(
-					dossierId, fileGroup.getFileGroupId());
+				dossierFileLocalService.findByF_D_S_R(
+					fileGroupId, dossierId, flagStatus, 0);
 			if (dossierFiles != null) {
 				for (DossierFile dossierFile : dossierFiles) {
 					dossierFile.setSyncStatus(syncStatus);
@@ -1917,7 +1926,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		}
 
 		List<DossierFile> dossierFiles =
-			dossierFileLocalService.getDossierFileByD_GF(dossierId, 0);
+			dossierFileLocalService.findByF_D_S_R(0, dossierId, flagStatus, 0);
 
 		if (dossierFiles != null) {
 			for (DossierFile dossierFile : dossierFiles) {
@@ -1939,14 +1948,16 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 
 		dossierPersistence.update(dossier);
 	}
-	
+
 	/**
 	 * @param serviceinfoId
 	 * @return
 	 * @throws SystemException
 	 */
-	public List<Dossier> getDossiersByServiceInfo(long serviceinfoId) throws SystemException {
+	public List<Dossier> getDossiersByServiceInfo(long serviceinfoId)
+		throws SystemException {
+
 		return dossierPersistence.findByServiceInfoId(serviceinfoId);
 	}
-	
+
 }
