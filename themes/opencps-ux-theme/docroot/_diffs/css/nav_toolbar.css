@@ -1,6 +1,7 @@
 .opencps-theme.ux .opencps-toolbar select {
 	border-radius: 20px;
 	height: 41px;
+	padding: 0 20px;
 }
 
 .opencps-theme.ux .opencps-toolbar button {
