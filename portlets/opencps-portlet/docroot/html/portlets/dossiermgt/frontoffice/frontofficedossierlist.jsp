@@ -128,28 +128,28 @@
 					<div class="span1">
 						<i class='<%="fa fa-circle sx10 " + dossier.getDossierStatus()%>'></i>
 					</div>
-					<div class="span2 bold-label">
+					<div class="span3 bold-label">
 						<liferay-ui:message key="reception-no"/>
 					</div>
-					<div class="span9"><%=dossier.getReceptionNo() %></div>
+					<div class="span6"><%=dossier.getReceptionNo() %></div>
 				</div>
 				
 				<div class="row-fluid">
 					<div class="span1"></div>
 					
-					<div class="span2 bold-label">
+					<div class="span3 bold-label">
 						<liferay-ui:message key="service-name"/>
 					</div>
 					
-					<div class="span9"><%=dossierBean.getServiceName() %></div>
+					<div class="span6"><%=dossierBean.getServiceName() %></div>
 				</div>
 				
 				<div class="row-fluid">
 					<div class="span1"></div>
 					
-					<div class="span2 bold-label"><liferay-ui:message key="gov-agency-name"/></div>
+					<div class="span3 bold-label"><liferay-ui:message key="gov-agency-name"/></div>
 					
-					<div class="span9"><%=dossier.getGovAgencyName() %></div>
+					<div class="span6"><%=dossier.getGovAgencyName() %></div>
 				</div>
 				
 			</liferay-util:buffer>
