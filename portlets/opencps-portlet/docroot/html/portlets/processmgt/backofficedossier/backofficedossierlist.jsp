@@ -104,10 +104,12 @@
 			viewURL.setParameter("mvcPath", templatePath + "backofficedossieroverview.jsp");
 			viewURL.setParameter("dossierId", String.valueOf(dossier.getDossierId()));
 			viewURL.setParameter("backURL", currentURL);
-
+			
+			
+			
 			// no column
 			row.addText(String.valueOf(row.getPos() + 1), viewURL);		
-		
+			
 			// receive datetime column
 			if (Validator.isNotNull(dossier.getReceiveDatetime())) {
 				row.addText(dateFormatDate.format(dossier.getReceiveDatetime()));				
@@ -193,6 +195,42 @@
 				}
 			}			
 		%>	
+		<!-- uxtheme -->
+		<liferay-util:buffer var="info">
+				<div class="row-fluid">
+					<div class="span1">
+						<i class='<%="fa fa-circle sx10 " + dossier.getDossierStatus()%>'></i>
+					</div>
+					<div class="span3 bold-label">
+						<liferay-ui:message key="reception-no"/>
+					</div>
+					<div class="span6"><%=dossier.getReceptionNo() %></div>
+				</div>
+				
+				<div class="row-fluid">
+					<div class="span1"></div>
+					
+					<div class="span3 bold-label">
+						<liferay-ui:message key="service-name"/>
+					</div>
+					
+					<div class="span6"><%=dossierBean.getServiceName() %></div>
+				</div>
+				
+				<div class="row-fluid">
+					<div class="span1"></div>
+					
+					<div class="span3 bold-label"><liferay-ui:message key="gov-agency-name"/></div>
+					
+					<div class="span6"><%=dossier.getGovAgencyName() %></div>
+				</div>
+				
+			</liferay-util:buffer>
+			
+		
+		<%
+			
+		%>
 	
 	</liferay-ui:search-container-row>	
 
