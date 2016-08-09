@@ -175,11 +175,10 @@ public class UserMgtEditProfilePortlet extends MVCPortlet {
 					oldPassWord, passWord, rePassWord, serviceContext);
 			
 			EmployeeLocalServiceUtil.updateProfile(serviceContext.getUserId(),
-					employeeId, fullName, gender, telNo, mobile,
-					mappingUser.getEmailAddress(), isChangePassWord,
+					employeeId, fullName, gender, telNo, mobile, email, isChangePassWord,
 					birthDateDay, birthDateMonth, birthDateYear, passWord,
 					rePassWord, serviceContext);
-
+			
 		} catch (Exception e) {
 
 			PortalUtil.copyRequestParameters(actionRequest, actionResponse);
