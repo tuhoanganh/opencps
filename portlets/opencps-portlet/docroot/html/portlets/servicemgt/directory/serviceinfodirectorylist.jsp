@@ -62,34 +62,38 @@
 			<aui:form action="<%= searchURL %>" method="post" name="fm">
 				<div class="toolbar_search_input">
 					<aui:row>
-						<aui:col width="25" cssClass="search-col">
+						<aui:col width="30" cssClass="search-col">
 							<datamgt:ddr
 								cssClass="search-input select-box"
 								depthLevel="1" 
 								dictCollectionCode="SERVICE_ADMINISTRATION"
 								itemNames="<%= ServiceDisplayTerms.SERVICE_ADMINISTRATION %>"
 								itemsEmptyOption="true"
-								selectedItems="<%= administrationCode %>"	
+								selectedItems="<%= administrationCode %>"
+								emptyOptionLabels="<%=ServiceDisplayTerms.SERVICE_ADMINISTRATION %>"
+								showLabel="false"
 							>
 							</datamgt:ddr>
 
 						</aui:col>
-						<aui:col width="25" cssClass="search-col">
+						<aui:col width="30" cssClass="search-col">
 							<datamgt:ddr 
 								depthLevel="1" 
 								dictCollectionCode="SERVICE_DOMAIN"
 								itemNames="<%= ServiceDisplayTerms.SERVICE_DOMAINCODE %>"
 								itemsEmptyOption="true"	
 								selectedItems="<%= domainCode %>"
+								emptyOptionLabels="<%=ServiceDisplayTerms.SERVICE_DOMAINCODE %>"
 								cssClass="search-input select-box"
+								showLabel="false"
 							>
 							</datamgt:ddr>
 
 						</aui:col>
-						<aui:col width="45" cssClass="search-col">
-							<label>
+						<aui:col width="30" cssClass="search-col">
+							<%-- <label>
 								<liferay-ui:message key="keywords"/>
-							</label>
+							</label> --%>
 							<liferay-ui:input-search 
 								cssClass="search-input input-keyword"
 								id="keywords1"
@@ -138,23 +142,19 @@
 			%>
 				<liferay-util:buffer var="boundcol1">
 					<div class="row-fluid">
-						<div class="span1"></div>
-						
-						<div class="span2 bold-label">
+						<div class="span3 bold-label">
 							<liferay-ui:message key="service-no"/>
 						</div>
-						<div class="span9">
+						<div class="span7">
 							<a href="<%=viewURL.toString() %>"><%=service.getServiceNo() %></a>
 						</div>
 					</div>
 					
 					<div class="row-fluid">
-						<div class="span1"></div>
-						
-						<div class="span2 bold-label">
+						<div class="span3 bold-label">
 							<liferay-ui:message key="service-name"/>
 						</div>
-						<div class="span9">
+						<div class="span7">
 							<a href="<%=viewURL.toString() %>"><%=service.getServiceName() %></a>
 						</div>
 					</div>
@@ -162,23 +162,21 @@
 				
 				<liferay-util:buffer var="boundcol2">
 					<div class="row-fluid">
-						<div class="span1"></div>
 						
-						<div class="span2 bold-label">
+						<div class="span5 bold-label">
 							<liferay-ui:message key="service-domain"/>
 						</div>
-						<div class="span9">
+						<div class="span7">
 							<a href="<%=viewURL.toString() %>"><%=DictItemUtil.getNameDictItem(service.getDomainCode())%></a>
 						</div>
 					</div>
 					
 					<div class="row-fluid">
-						<div class="span1"></div>
 						
-						<div class="span2 bold-label">
+						<div class="span5 bold-label">
 							<liferay-ui:message key="service-administrator"/>
 						</div>
-						<div class="span9">
+						<div class="span7">
 							<a href="<%=viewURL.toString() %>"><%=DictItemUtil.getNameDictItem(service.getAdministrationCode())%></a>
 						</div>
 					</div>

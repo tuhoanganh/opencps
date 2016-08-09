@@ -387,6 +387,7 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 		employee.setGender(gender);
 		employee.setBirthdate(birthDate);
 		employee.setTelNo(telNo);
+		employee.setEmail(email);
 		employee.setMobile(mobile);
 		employeePersistence.update(employee);
 	}
@@ -651,6 +652,7 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 		employee.setFullName(fullName);
 		employee.setGender(gender);
 		employee.setBirthdate(birthDate);
+		employee.setEmail(email);
 		employee.setTelNo(telNo);
 		employee.setMobile(mobile);
 		employee.setWorkingUnitId(workingUnitId);
