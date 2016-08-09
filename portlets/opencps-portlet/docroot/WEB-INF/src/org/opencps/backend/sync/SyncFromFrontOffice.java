@@ -120,7 +120,6 @@ public class SyncFromFrontOffice implements MessageListener{
 						    "opencps/backoffice/engine/destination",
 						    msgToEngine);
 
-
 				}
 				else if (Validator.equals(WebKeys.ACTION_RESUBMIT_VALUE, action) &&
 				    _checkStatus(
