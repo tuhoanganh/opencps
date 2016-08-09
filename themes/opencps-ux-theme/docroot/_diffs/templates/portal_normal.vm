@@ -39,8 +39,9 @@
 	            </div>
 			</div>
 		</header>
-		
-		#parse ("$full_templates_path/navigation_public_page.vm")
+		<div class="nav-container">
+			#parse ("$full_templates_path/navigation_public_page.vm")
+		</div>
 	#else 
 		<header id="banner" role="banner" class="opencps-header-wrapper member">
 			<div class="header container align-middle">
@@ -49,21 +50,20 @@
 		            <div class="hotline">
 		                #language ("hotline-key")<br/><span>1900 0311</span>
 		            </div>
-		            
+				</div>
+				<div class="nav-container-small">
+					#if ($has_navigation || $is_signed_in)
+						#parse ("$full_templates_path/navigation_public_page.vm")
+					#end
 				</div>
 			</div>
-			<div class="log-out">
-				<span>#language ("welcome-key") $user_name</span>
-				<a href="$sign_out_url" class="btn-dn">#language ("logout-key")</a>
-			</div>
-			#if ($has_navigation || $is_signed_in)
-				#parse ("$full_templates_path/navigation_public_page.vm")
-			#end
+			
 		</header>
-		
-		#if ($has_navigation || $is_signed_in)
-			#parse ("$full_templates_path/navigation_private_page.vm")
-		#end
+		<div class="nav-container">
+			#if ($has_navigation || $is_signed_in)
+				#parse ("$full_templates_path/navigation_private_page.vm")
+			#end
+		</div>
 	#end
 	
 	<article id="wrapper" class="container">	
@@ -85,7 +85,7 @@
 	<footer>
 		<div class="footer">
             <div class="logo">
-                <p>Copyright © 2016 - OpenCPS v1.4</p>
+                <p>Copyright © 2016 - OpenCPS v1.4.1</p>
             </div>
             <div class="danhmuc">
                 <p class="title">#language ("danhmuc-key")</p>

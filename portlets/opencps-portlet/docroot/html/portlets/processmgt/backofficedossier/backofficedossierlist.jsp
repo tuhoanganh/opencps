@@ -85,7 +85,6 @@
 						
 			total =  DossierLocalServiceUtil.countDossierByKeywordDomainAndStatus(scopeGroupId, searchTerms.getKeywords(), 
 					domainCode, dossierStatus);
-			System.out.print("AAA:" + total);
 
 			results = DossierLocalServiceUtil.searchDossierByKeywordDomainAndStatus(scopeGroupId, searchTerms.getKeywords(), 
 					domainCode, dossierStatus, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
@@ -95,7 +94,6 @@
 		%>
 		
 	</liferay-ui:search-container-results>
-	<% out.print("ABC" + total); %>
 	<liferay-ui:search-container-row 
 		className="org.opencps.dossiermgt.model.Dossier" 
 		modelVar="dossier" 

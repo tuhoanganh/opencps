@@ -1,63 +1,46 @@
 /* This file allows you to override default styles in one central location for easier upgrade and maintenance. */
 
 @import url(font_face.css);
-@import url(controls.css);
+
 @import url(font-awesome.min.css);
-
-/*vtduy_cmc */
+@import url(portlets/portlet_5.css);
 @import url(portlets/portlet_login.css);
-@import url(portlets/portlet_register.css);
-@import url(portlets/portlet_accountInfo.css);
-@import url(portlets/portlet_history.css);
-@import url(portlets/portlet_dossier_info.css);
-@import url(portlets/portlet_dossier_content.css);
-@import url(portlets/portlet_popup.css);
-
-
-@import url(portlets/portlet_hung_custom.css);
-@import url(portlets/binhth.css);
-
-@import url(button-custom.css);
-
-/*end*/
-
-/*----anh huong*/
-@import url(portlets/portlet_13_fileinfo.css);
-/*end*/
-
-
-@import url(custom_frame_1.css);
-/* @import url(header_style_1.css); */
-
-
 @import url(input.css);
 @import url(nav_toolbar.css);
 @import url(searchcontainer.css);
 @import url(header.css);
 @import url(nav_menu.css);
 
-/* custom css theme ngoai cung*/
-.opencps-theme {
-	height: initial;
-	background-color: #f5f5f5;
-}
-.portlet-body{
-	background-color: #f5f5f5;
-}
-#main-content{
-	margin: 0!important;
-}
-#hrefFm{
-	margin: 0!important;
-}
-.opencps-theme .fake_textarea {height: 90px; border: 1px solid #acacac; border-radius: 5px; background-color: white; padding: 0 10px; overflow-y: auto;}
+/* @import url(portlets/portlet_register.css); */
+@import url(portlets/portlet_accountInfo.css);
+/* @import url(portlets/portlet_history.css);
+@import url(portlets/portlet_dossier_info.css);
+@import url(portlets/portlet_dossier_content.css); */
+@import url(portlets/portlet_popup.css);
+@import url(portlets/portlet_hung_custom.css);
+@import url(portlets/binhth.css);
+@import url(button-custom.css);
+@import url(portlets/portlet_13_fileinfo.css);
+@import url(custom_frame_1.css);
 
-.aui .dockbar.navbar-static-top .collapse .nav-account-controls{
-	float: right;
-}
 
-.opencps-theme.ux body{
+
+
+body{
+	background-color: #f5f5f5;
 	font-family: roboto;
+}
+
+.opencps-theme.ux .portlet-borderless-container{
+	background-color: #fff;
+}
+
+.opencps-theme.ux #hrefFm{
+	margin: 0!important;
+}
+
+.opencps-theme.ux ul{
+	list-style-type: none;
 }
 
 /* Overwrite page iterator css */
@@ -74,41 +57,101 @@
 
 
 
+/* Overwrite Form Navigator  */
 
-.opencps-theme.ux .taglib-form-navigator .tabbable-content{
+.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator{
+    border-radius: 3px;
+    box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.2);
+}
+
+.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator .tabbable-content{
 	display: flex;
-	/* display: table; */
 }
 
-.opencps-theme.ux .taglib-form-navigator ul.form-navigator.well{
+.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator ul.form-navigator.well{
 	float: none;
-	/* display: table-cell;
-	vertical-align: top; */
+	width: 22%;
 }
 
-.opencps-theme.ux .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list{
+.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list{
 	background: transparent none repeat scroll 0 0;
     border: medium none;
 }
 
-.opencps-theme.ux .taglib-form-navigator .tabbable-content .form-navigator-content{
+.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator .tabbable-content .form-navigator-content{
 	border-left: 1px solid #ddd;
     flex-grow: 1;
-   /*display: table-cell;
-    vertical-align: top;
-    width: 100%; */
 }
 
-.opencps-theme.ux .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list .form-navigator-topper{
+.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator .tabbable-content .form-navigator-content > div{
+	padding: 20px 30px;
+}
+
+.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list .form-navigator-topper{
 	display: none;
 }
 
-.opencps-theme.ux .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list .nav-header{
+.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list .nav-header{
 	display: none;
 }
 
-.opencps-theme.ux .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list > li > a{
+.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list > li.active > a{
+	background-color: #0f97ff;
+	color: #fff;
+}
+
+.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list > li > a{
+	color: #000;
 	padding: 10px 15px;
+}
+
+.opencps-theme.ux .opencps-form-navigator-container .nav-content-row {
+    border-bottom: 1px solid #e1e1e1;
+    margin-bottom: 15px;
+}
+
+.opencps-theme.ux .opencps-form-navigator-container .nav-content-row .control-group {
+    display: flex;
+}
+
+.opencps-theme.ux .opencps-form-navigator-container .nav-content-row .control-group label{
+    font-weight: bold;
+    width: 130px;
+}
+
+.opencps-theme.ux .opencps-form-navigator-container .nav-content-row .control-group input, 
+.opencps-theme.ux .opencps-form-navigator-container .nav-content-row .control-group select, 
+.opencps-theme.ux .opencps-form-navigator-container .nav-content-row .control-group textarea{
+    flex-grow: 1;
+    max-width: 100% !important;
+}
+
+
+/* Overwrite Taglib Header  */
+.opencps-theme.ux .taglib-header{
+	background-color: #f5f5f5;
+    border-bottom: 0 none;
+    padding-bottom: 1em;
+    margin-bottom: 0;
+}
+
+.opencps-theme.ux .taglib-header .header-back-to a{
+	color: #888;
+    font-size: 14px;
+    font-weight: normal;
+    padding: 15px 0;
+}
+
+.opencps-theme.ux .taglib-header .header-back-to span{
+	clip: auto !important;
+	position: relative !important;
+	font-family: roboto-regular;
+}
+
+.opencps-theme.ux .taglib-header .header-title{
+	font-family: roboto-bold;
+    font-size: 18px;
+    text-align: center;
 }
 
 .alpaca-array-actionbar-action.btn {
