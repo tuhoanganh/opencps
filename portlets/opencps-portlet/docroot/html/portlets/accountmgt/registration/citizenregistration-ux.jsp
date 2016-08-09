@@ -103,28 +103,6 @@
 />
 
 <div class="opencps-register-wrapper">
-	<div class="opencps accountmgt fm-registration header">
-		<aui:row>
-			<aui:col width="30" cssClass="title-text">
-				<label ><liferay-ui:message key="register"></liferay-ui:message></label>
-			</aui:col>
-			<aui:col width="30" cssClass="register-options">
-				<aui:row>
-					<aui:col width="50">
-						<aui:input type="radio" name="typeOfRegister" value="citizen" inlineLabel="right" label="citizen" checked="true"/>
-					</aui:col>
-					<aui:col width="50">
-						<aui:input type="radio" name="typeOfRegister" value="business" inlineLabel="right" label="business"/>
-					</aui:col>
-				</aui:row>
-			</aui:col>
-			<aui:col width="30" cssClass="login-redirect">
-				<a href='<%=themeDisplay.getURLSignIn() %>'><liferay-ui:message key="login" /></a>
-			</aui:col>
-		</aui:row>
-	</div>
-	
-	<div class="bottom-horizontal-line"></div>
 	
 	<portlet:actionURL var="updateCitizenURL" name="updateCitizen">
 		<portlet:param 
@@ -145,6 +123,30 @@
 		<aui:input name="citizenRegStep_cfg" value="<%=citizenRegStep_cfg %>" type="hidden"></aui:input>
 			
 		<div class="register-content">
+		
+			<div class="opencps accountmgt fm-registration header">
+				<aui:row>
+					<aui:col width="30" cssClass="title-text">
+						<label ><liferay-ui:message key="register"></liferay-ui:message></label>
+					</aui:col>
+					<aui:col width="30" cssClass="register-options">
+						<aui:row>
+							<aui:col width="50">
+								<aui:input type="radio" name="typeOfRegister" value="citizen" inlineLabel="right" label="citizen" checked="true"/>
+							</aui:col>
+							<aui:col width="50">
+								<aui:input type="radio" name="typeOfRegister" value="business" inlineLabel="right" label="business"/>
+							</aui:col>
+						</aui:row>
+					</aui:col>
+					<aui:col width="30" cssClass="login-redirect">
+						<a href='<%=themeDisplay.getURLSignIn() %>'><liferay-ui:message key="login" /></a>
+					</aui:col>
+				</aui:row>
+			</div>
+			
+			<div class="bottom-horizontal-line"></div>
+			
 			<div class="content-part left">
 				<aui:row>
 					<aui:input 
@@ -203,11 +205,11 @@
 	 				</liferay-ui:input-date>
 				</aui:row>
 				
-				<aui:row cssClass="input100">
+				<aui:row cssClass="input-file">
 					<aui:input 
 						type="file" 
 						name="<%=CitizenDisplayTerms.CITIZEN_ATTACHFILE %>" 
-						>
+					>
 						<aui:validator name="acceptFiles">
 							'<%= StringUtil.merge( PortletPropsValues.ACCOUNTMGT_FILE_TYPE) %>'
 						</aui:validator>
@@ -269,9 +271,13 @@
 						cssClass="ocps-terms-of-use"
 					/>
 				</aui:row>
+				
 			</div>
+			<aui:row>
+				<aui:button name="register" type="submit" value="register" disabled="true" />
+			</aui:row>
 		</div>
-		<aui:button name="register" type="submit" value="register" disabled="true" />
+		
 	</aui:form>
 </div>
 
