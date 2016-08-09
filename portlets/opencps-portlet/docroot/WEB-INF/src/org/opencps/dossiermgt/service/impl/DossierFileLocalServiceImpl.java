@@ -907,6 +907,22 @@ public class DossierFileLocalServiceImpl
 	}
 
 	/**
+	 * @param fileGroupId
+	 * @param dossierId
+	 * @param syncStatus
+	 * @param removed
+	 * @return
+	 * @throws SystemException
+	 */
+	public List<DossierFile> findByF_D_S_R(
+		long fileGroupId, long dossierId, int syncStatus, int removed)
+		throws SystemException {
+
+		return dossierFilePersistence.findByF_D_S_R(
+			fileGroupId, dossierId, syncStatus, removed);
+	}
+
+	/**
 	 * Find all dossierFile in use(removed = 0)
 	 * 
 	 * @param dossierId
