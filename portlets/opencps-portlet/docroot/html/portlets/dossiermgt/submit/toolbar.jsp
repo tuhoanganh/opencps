@@ -34,6 +34,8 @@
 					itemNames="administrationCode"
 					itemsEmptyOption="true"
 					cssClass="search-input select-box"
+					emptyOptionLabels="administrationCode"
+					showLabel="false"
 				>
 				</datamgt:ddr>
 
@@ -45,14 +47,13 @@
 					itemNames="domainCode"
 					itemsEmptyOption="true"	
 					cssClass="search-input select-box"
+					emptyOptionLabels="domainCode"
+					showLabel="false"
 				>
 				</datamgt:ddr>
 
 			</aui:col>
 			<aui:col width="45" cssClass="search-col">
-				<label>
-					<liferay-ui:message key="keywords"/>
-				</label>
 				<liferay-ui:input-search 
 					id="keywords1"
 					name="keywords"

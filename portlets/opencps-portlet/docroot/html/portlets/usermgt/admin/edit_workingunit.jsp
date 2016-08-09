@@ -161,13 +161,3 @@
 		getLog("html.portlets.usermgt.admin.edit_workingunit.jsp");
 %>
 
-<aui:script use='liferay-util-window'>
-	AUI().ready(function(A) {
-		var success = '<%= success%>';
-		if(success == 'true') {
-			Liferay.Util.getOpener().<portlet:namespace/>closePopup('<portlet:namespace/>dialog');
-		}
-	});
-	
-    
-</aui:script>

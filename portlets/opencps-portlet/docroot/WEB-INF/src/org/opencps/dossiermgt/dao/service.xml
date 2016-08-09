@@ -470,6 +470,12 @@
             <finder-column name="syncStatus"></finder-column>
             <finder-column name="removed"></finder-column>
         </finder>
+        <finder name="F_D_S_R" return-type="Collection">
+            <finder-column name="groupFileId"></finder-column>
+            <finder-column name="dossierId"></finder-column>
+            <finder-column name="syncStatus"></finder-column>
+            <finder-column name="removed"></finder-column>
+        </finder>
         
 	<reference package-path="com.liferay.portlet.documentlibrary" entity="DLApp" />
         <reference entity="DLFileEntry" package-path="com.liferay.portlet.documentlibrary"/>
