@@ -446,5 +446,6 @@
 	</c:otherwise>
 </c:choose>
 
-<%-- <%!private Log _log =
-		LogFactoryUtil.getLog(".html.portlets.accountmgt.citizenprofile.jsp");%> --%>
+<%!
+	private Log _log = LogFactoryUtil.getLog(".html.portlets.accountmgt.citizenprofile.jsp");
+%>
