@@ -295,7 +295,7 @@
 											<label><liferay-ui:message key="address" /></label>
 										</aui:col>
 										<aui:col width="50">
-											<div><a href="<%=citizen.getAddress() %>"></a></div>
+											<div><%=citizen.getAddress() %></div>
 										</aui:col>
 										<aui:col width="20">
 											<a href="<%=editProFile.toString() %>" class="fix"><liferay-ui:message key="edit"/></a>
@@ -307,7 +307,7 @@
 											<label><liferay-ui:message key="city-name" /></label>
 										</aui:col>
 										<aui:col width="50">
-											<div><a href="<%=cityName %>"></a></div>
+											<div><%=cityName %></div>
 										</aui:col>
 										<aui:col width="20">
 											<a href="<%=editProFile.toString() %>" class="fix"><liferay-ui:message key="edit"/></a>
@@ -319,7 +319,7 @@
 											<label><liferay-ui:message key="district-name" /></label>
 										</aui:col>
 										<aui:col width="50">
-											<div><a href="<%=districtName %>"></a></div>
+											<div><%=districtName %></div>
 										</aui:col>
 										<aui:col width="20">
 											<a href="<%=editProFile.toString() %>" class="fix"><liferay-ui:message key="edit"/></a>
@@ -331,7 +331,7 @@
 											<label><liferay-ui:message key="ward-name" /></label>
 										</aui:col>
 										<aui:col width="50">
-											<div><a href="<%=wardName %>"></a></div>
+											<div><%=wardName %></div>
 										</aui:col>
 										<aui:col width="20">
 											<a href="<%=editProFile.toString() %>" class="fix"><liferay-ui:message key="edit"/></a>
@@ -344,7 +344,7 @@
 											<label><liferay-ui:message key="address" /></label>
 										</aui:col>
 										<aui:col width="50">
-											<div><a href="<%=business.getAddress() %>"></a></div>
+											<div><%=business.getAddress() %></div>
 										</aui:col>
 										<aui:col width="20">
 											<a href="<%=editProFile.toString() %>" class="fix"><liferay-ui:message key="edit"/></a>
@@ -356,7 +356,7 @@
 											<label><liferay-ui:message key="city-name" /></label>
 										</aui:col>
 										<aui:col width="50">
-											<div><a href="<%=cityName %>"></a></div>
+											<div><%=cityName %></div>
 										</aui:col>
 										<aui:col width="20">
 											<a href="<%=editProFile.toString() %>" class="fix"><liferay-ui:message key="edit"/></a>
@@ -368,7 +368,7 @@
 											<label><liferay-ui:message key="district-name" /></label>
 										</aui:col>
 										<aui:col width="50">
-											<div><a href="<%=districtName %>"></a></div>
+											<div><%=districtName %></div>
 										</aui:col>
 										<aui:col width="20">
 											<a href="<%=editProFile.toString() %>" class="fix"><liferay-ui:message key="edit"/></a>
@@ -380,19 +380,7 @@
 											<label><liferay-ui:message key="ward-name" /></label>
 										</aui:col>
 										<aui:col width="50">
-											<div><a href="<%=wardName %>"></a></div>
-										</aui:col>
-										<aui:col width="20">
-											<a href="<%=editProFile.toString() %>" class="fix"><liferay-ui:message key="edit"/></a>
-										</aui:col>
-									</aui:row>
-									
-									<aui:row>
-										<aui:col width="30">
-											<label><liferay-ui:message key="ward-name" /></label>
-										</aui:col>
-										<aui:col width="50">
-											<div><a href="<%=wardName %>"></a></div>
+											<div><%=wardName %></div>
 										</aui:col>
 										<aui:col width="20">
 											<a href="<%=editProFile.toString() %>" class="fix"><liferay-ui:message key="edit"/></a>
@@ -404,7 +392,7 @@
 											<label><liferay-ui:message key="email" /></label>
 										</aui:col>
 										<aui:col width="50">
-											<div><a href="<%=business.getEmail() %>"></a></div>
+											<div><%=business.getEmail() %></div>
 										</aui:col>
 										<aui:col width="20">
 											<a href="<%=editProFile.toString() %>" class="fix"><liferay-ui:message key="edit"/></a>
@@ -416,7 +404,7 @@
 											<label><liferay-ui:message key="telNo" /></label>
 										</aui:col>
 										<aui:col width="50">
-											<div><a href="<%=business.getTelNo() %>"></a></div>
+											<div><%=business.getTelNo() %></div>
 										</aui:col>
 										<aui:col width="20">
 											<a href="<%=editProFile.toString() %>" class="fix"><liferay-ui:message key="edit"/></a>
@@ -428,7 +416,7 @@
 											<label><liferay-ui:message key="representative-Name" /></label>
 										</aui:col>
 										<aui:col width="50">
-											<div><a href="<%=business.getRepresentativeName() %>"></a></div>
+											<div><%=business.getRepresentativeName() %></div>
 										</aui:col>
 										<aui:col width="20">
 											<a href="<%=editProFile.toString() %>" class="fix"><liferay-ui:message key="edit"/></a>
@@ -440,7 +428,7 @@
 											<label><liferay-ui:message key="representative-Role" /></label>
 										</aui:col>
 										<aui:col width="50">
-											<div><a href="<%=business.getRepresentativeRole() %>"></a></div>
+											<div><%=business.getRepresentativeRole() %></div>
 										</aui:col>
 										<aui:col width="20">
 											
