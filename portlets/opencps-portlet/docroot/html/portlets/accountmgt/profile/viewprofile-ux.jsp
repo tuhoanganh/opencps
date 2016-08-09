@@ -208,7 +208,7 @@
 											<label><liferay-ui:message key="business-id" /></label>
 										</aui:col>
 										<aui:col width="50">
-											<div><%=business.getBusinessId() %></div>
+											<div><%=business.getIdNumber() %></div>
 										</aui:col>
 										<aui:col width="20">
 											<a href="<%=editProFile.toString() %>" class="fix"><liferay-ui:message key="edit"/></a>
