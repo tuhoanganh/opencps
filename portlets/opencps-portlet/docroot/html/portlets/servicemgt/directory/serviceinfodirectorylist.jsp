@@ -145,7 +145,7 @@
 						<div class="span3 bold-label">
 							<liferay-ui:message key="service-no"/>
 						</div>
-						<div class="span7">
+						<div class="span9">
 							<a href="<%=viewURL.toString() %>"><%=service.getServiceNo() %></a>
 						</div>
 					</div>
@@ -154,7 +154,7 @@
 						<div class="span3 bold-label">
 							<liferay-ui:message key="service-name"/>
 						</div>
-						<div class="span7">
+						<div class="span9">
 							<a href="<%=viewURL.toString() %>"><%=service.getServiceName() %></a>
 						</div>
 					</div>

@@ -238,30 +238,25 @@
 									</aui:row>
 									
 									<aui:row>
-										<div>
-				                            <p>
-				                                <span class="fix_topleft"><liferay-ui:message key="business-domain"/></span>
-				                                	<label class="box_scroll">
+										<aui:col width="30">
+											<span class="fix_topleft"><liferay-ui:message key="business-domain"/></span>
+										</aui:col>
+										<aui:col width="50">
+											<label class="box_scroll">
 				                                <%
-				                                	if(businessDomains.isEmpty()) {
-				                                		//nothing to do
-				                                	} else {
-				                                		%>
-							                                    <%
-							                                    	for(BusinessDomain businessDomain : businessDomains) {
-							                                    		%>
-							                                    			<span><%=PortletUtil.getDictItem(PortletPropsValues.DATAMGT_MASTERDATA_BUSINESS_DOMAIN, businessDomain.getBusinessDomainId(), scopeGroupId) %></span>
-							                                    		<%
-							                                    	}
-							                                    %>
-							                                </label>
-				                                			
-				                                		<%
+				                                	if(!businessDomains.isEmpty()) {
+					                                    	for(BusinessDomain businessDomain : businessDomains) {
+					                                    		%>
+					                                    			<span><%=PortletUtil.getDictItem(PortletPropsValues.DATAMGT_MASTERDATA_BUSINESS_DOMAIN, businessDomain.getBusinessDomainId(), scopeGroupId) %></span>
+					                                    		<%
+					                                	}
 				                                	}
-				                                %>
-				                            </p>
-				                            <a href="<%=editProFile.toString() %>" class="fix"><liferay-ui:message key="edit"/></a>
-				                        </div>
+					                            %> 
+										</aui:col>
+										<aui:col width="30">
+											<a href="<%=editProFile.toString() %>" class="fix"><liferay-ui:message key="edit"/></a>
+										</aui:col>
+									
 				                     </aui:row>
 				                     
 				                     <aui:row>
@@ -451,5 +446,5 @@
 	</c:otherwise>
 </c:choose>
 
-<%!private Log _log =
-		LogFactoryUtil.getLog(".html.portlets.accountmgt.citizenprofile.jsp");%>
+<%-- <%!private Log _log =
+		LogFactoryUtil.getLog(".html.portlets.accountmgt.citizenprofile.jsp");%> --%>
