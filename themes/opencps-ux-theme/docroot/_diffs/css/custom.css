@@ -4,8 +4,10 @@
 
 @import url(font-awesome.min.css);
 @import url(portlets/portlet_5.css);
-@import url(portlets/portlet_login.css);
+@import url(portlets/portlet_6.css);
 @import url(portlets/portlet_13.css);
+@import url(portlets/portlet_login.css);
+
 @import url(input.css);
 @import url(nav_toolbar.css);
 @import url(searchcontainer.css);
