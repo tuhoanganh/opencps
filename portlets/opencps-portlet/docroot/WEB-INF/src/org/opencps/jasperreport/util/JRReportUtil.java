@@ -32,6 +32,7 @@ import net.sf.jasperreports.export.SimpleHtmlExporterOutput;
 
 import org.opencps.jasperreport.compile.JRReportTemplate;
 import org.opencps.jasperreport.datasource.JRJSONDataSource;
+import org.opencps.util.JsonUtils;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -48,6 +49,8 @@ public class JRReportUtil {
 
 		String sourceFileName = outputDestination + exportName;
 		try {
+			//fix json enter char
+			jsonData = jsonData.replaceAll("\n", "<br/>");
 			JasperReport reportTemplate = JRReportTemplate
 			    .getJasperReport(jrxmlTemplate);
 			JRJSONDataSource dataSource = JRJSONDataSource
