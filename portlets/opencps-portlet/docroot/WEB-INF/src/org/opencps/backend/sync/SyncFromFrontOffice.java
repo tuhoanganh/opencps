@@ -84,11 +84,6 @@ public class SyncFromFrontOffice implements MessageListener{
 				        userActionMgs.getDossierId(),
 				        userActionMgs.getFileGroupId())) {
 
-					if (Validator.equals(
-					    PortletConstants.DOSSIER_STATUS_NEW,
-					    BackendUtils.getDossierStatus(
-					        userActionMgs.getDossierId(),
-					        userActionMgs.getFileGroupId()))) {
 
 						int logLevel = 0;
 
@@ -124,7 +119,6 @@ public class SyncFromFrontOffice implements MessageListener{
 						MessageBusUtil.sendMessage(
 						    "opencps/backoffice/engine/destination",
 						    msgToEngine);
-					}
 
 				}
 				else if (Validator.equals(WebKeys.ACTION_RESUBMIT_VALUE, action) &&
