@@ -81,7 +81,6 @@
 <liferay-ui:header
     backURL="<%= backRedirect %>"
     title="payment-confirm"
-    backLabel="back"
 />
 
 <c:choose>
