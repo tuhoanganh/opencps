@@ -106,41 +106,37 @@
 	<%
 		if (dossier != null) {
 	%>
-	 <h4 class="matiepnhan"><liferay-ui:message key="reception-no"/> - <%= dossier.getReceptionNo() %></h4>
+	 <h4 class="matiepnhan"><liferay-ui:message key="reception-no"/> - <%= Validator.isNotNull(dossier.getReceptionNo()) ? dossier.getReceptionNo() : LanguageUtil.get(pageContext, "monitoring-chua-co") %></h4>
      
      <h4 class="thutuc"><liferay-ui:message key="service-name"/></h4>
      
-     <p>- <% if (serviceInfo != null) { %>
-					<%= serviceInfo.getServiceName() %>
-				<% } %>
+     <p>- <%= Validator.isNotNull(serviceInfo)? serviceInfo.getServiceName() : LanguageUtil.get(pageContext, "monitoring-chua-co") %>
 	 </p>
        
      <h4 class="coquanthuchien"><liferay-ui:message key="administration-name"/></h4>
             
-     <p>- <% if (serviceInfo != null) { %>
-					<%= dossier.getGovAgencyName()  %>
-				<% } %>
+     <p>- <%= Validator.isNotNull(dossier)? dossier.getGovAgencyName() : LanguageUtil.get(pageContext, "monitoring-chua-co") %>
 	 </p>
      
      <h4 class="chuhoso"><liferay-ui:message key="subject-name"/></h4>
      
-     <p>- <%= dossier.getSubjectName() %></p>
+     <p>- <%= Validator.isNotNull(dossier.getSubjectName()) ? dossier.getSubjectName() : LanguageUtil.get(pageContext, "monitoring-chua-co") %></p>
     
      <h4 class="diachi"><liferay-ui:message key="address"/></h4>
      
-     <p>- <%= dossier.getAddress() %></p>
+     <p>- <%= Validator.isNotNull(dossier.getAddress())? dossier.getAddress(): LanguageUtil.get(pageContext, "monitoring-chua-co") %></p>
     
      <h4 class="ngaytiepnhan"><liferay-ui:message key="receive-datetime"/></h4>
         
-     <p>- <%= (Validator.isNotNull(dossier.getReceiveDatetime())) ? dateFormatDate.format(dossier.getReceiveDatetime()) : "" %></p>
+     <p>- <%= (Validator.isNotNull(dossier.getReceiveDatetime())) ? dateFormatDate.format(dossier.getReceiveDatetime()) : LanguageUtil.get(pageContext, "monitoring-chua-co") %></p>
         
      <h4 class="ngayhentra"><liferay-ui:message key="estimate-datetime"/></h4>
        
-     <p>- <%= (Validator.isNotNull(dossier.getEstimateDatetime())) ? dateFormatDate.format(dossier.getEstimateDatetime()) : "" %></p>
+     <p>- <%= (Validator.isNotNull(dossier.getEstimateDatetime())) ? dateFormatDate.format(dossier.getEstimateDatetime()) : LanguageUtil.get(pageContext, "monitoring-chua-co") %></p>
         
       <h4 class="ngayhoanthanh"><liferay-ui:message key="finish-datetime"/></h4>
         
-      <p>- <%= (Validator.isNotNull(dossier.getFinishDatetime())) ? dateFormatDate.format(dossier.getFinishDatetime()) : "" %></p>
+      <p>- <%= (Validator.isNotNull(dossier.getFinishDatetime())) ? dateFormatDate.format(dossier.getFinishDatetime()) : LanguageUtil.get(pageContext, "monitoring-chua-co") %></p>
 
 	<%
 		}
@@ -162,7 +158,7 @@
                 	%>
                     <div>
                         <p><%= (Validator.isNotNull(dossierLog.getUpdateDatetime())) ? dateFormatDate.format(dossierLog.getUpdateDatetime()) : StringPool.BLANK %></p>
-                        <p><%= dossierLog.getActionInfo() %></p>
+                        <p><%= dossierLog.getActionInfo() %><font style="color: #fff;">-</font></p>
                     </div>
                     <%} %>
                 </div>
