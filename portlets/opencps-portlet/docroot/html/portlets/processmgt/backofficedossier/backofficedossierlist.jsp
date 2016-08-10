@@ -206,7 +206,7 @@
 						<liferay-ui:message key="receive-datetime"/>
 					</div>
 					
-					<div class="span6">
+					<div class="span9">
 						<a href="<%=viewURL.toString()%>"><%=receiveDatetime %></a>
 					</div>
 				</div>
@@ -217,7 +217,7 @@
 						<liferay-ui:message key="reception-no"/>
 					</div>
 					
-					<div class="span6">
+					<div class="span9">
 						<a href="<%=viewURL.toString()%>"><%=dossier.getReceptionNo() %></a>
 					</div>
 				</div>
@@ -227,7 +227,7 @@
 						<liferay-ui:message key="subjectname"/>
 					</div>
 					
-					<div class="span6">
+					<div class="span9">
 						<a href="<%=viewURL.toString()%>"><%=dossier.getSubjectName() %></a>
 					</div>
 				</div>
@@ -239,7 +239,7 @@
 						<liferay-ui:message key="serviceinfo-name"/>
 					</div>
 					
-					<div class="span6">
+					<div class="span9">
 						<a href="<%=viewURL.toString()%>"><%=serviceInfo.getServiceName() %></a>
 					</div>
 				</div>
@@ -250,7 +250,7 @@
 						<liferay-ui:message key="finish-datetime"/>
 					</div>
 					
-					<div class="span6">
+					<div class="span9">
 						<a href="<%=viewURL.toString()%>"><%=finishDate %></a>
 					</div>
 				</div>
@@ -260,7 +260,7 @@
 						<liferay-ui:message key="process-status"/>
 					</div>
 					
-					<div class="span6">
+					<div class="span9">
 						<a href="<%=viewURL.toString()%>"><%=statusText %></a>
 					</div>
 				</div>

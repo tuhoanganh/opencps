@@ -61,33 +61,30 @@
 		<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/frontoffice/edit_dossier.jsp"/>
 		<portlet:param name="serviceConfigId" value="<%=(serviceConfig != null) ? String.valueOf(serviceConfig.getServiceConfigId()) : String.valueOf(0) %>"/>
 </liferay-portlet:renderURL>
-<aui:row>
+
+<aui:row cssClass="serice-des">
+	<liferay-ui:message key="service-description"/>
+</aui:row>
 	
-	<aui:col width="30">
-		<liferay-ui:message key="service-description"/>
-	</aui:col>
-		
-	<aui:col width="70">
-		<c:choose>
-			<c:when test="<%=Validator.isNotNull(serviceConfig) %>">
-				<c:choose>
-					<c:when test="<%=serviceConfig.getServiceInstruction().equalsIgnoreCase(StringPool.BLANK) %>">
-						<liferay-ui:message key="service-no-description"/>
-					</c:when>
-					<c:otherwise>
-						<%= serviceConfig.getServiceInstruction() %>
-					</c:otherwise>
-				</c:choose>
-			</c:when>
-			<c:otherwise>
-				<liferay-ui:message key="no-config"/>
-			</c:otherwise>
-		</c:choose>
-	</aui:col>
-	
+<aui:row cssClass="des-detail">		
+	<c:choose>
+		<c:when test="<%=Validator.isNotNull(serviceConfig) %>">
+			<c:choose>
+				<c:when test="<%=serviceConfig.getServiceInstruction().equalsIgnoreCase(StringPool.BLANK) %>">
+					<liferay-ui:message key="service-no-description"/>
+				</c:when>
+				<c:otherwise>
+					<%= serviceConfig.getServiceInstruction() %>
+				</c:otherwise>
+			</c:choose>
+		</c:when>
+		<c:otherwise>
+			<liferay-ui:message key="no-config"/>
+		</c:otherwise>
+	</c:choose>	
 </aui:row>
 
-<aui:row>
+<aui:row cssClass="btn-submit-online">
 	<c:if test = "<%=Validator.isNotNull(serviceConfig) && Validator.isNotNull(serviceInfo) && (serviceConfig.getServiceLevel() >= 3)%>">
 	<aui:button name="submitonline" value="dossier-submit-online" href="<%=servieOnlinePopURL.toString() %>" />
 </c:if>
