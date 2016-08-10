@@ -182,7 +182,7 @@
 					<aui:input 
 						name="<%=BusinessDisplayTerms.BUSINESS_NAME %>" 
 						cssClass="input100" 
-						placeholder="<%=BusinessDisplayTerms.BUSINESS_NAME %>"
+						placeholder="business-full-name"
 					>
 						<aui:validator name="required" />
 						<aui:validator name="maxLength">255</aui:validator>
@@ -217,16 +217,6 @@
 						placeholder="<%=BusinessDisplayTerms.BUSINESS_SHORTNAME %>"
 					>
 						<aui:validator name="maxLength">100</aui:validator>
-					</aui:input>
-				</aui:row>
-				
-				<aui:row>
-					<aui:input 
-						name="<%=BusinessDisplayTerms.BUSINESS_ADDRESS %>" 
-						cssClass="input100"
-						placeholder="<%=BusinessDisplayTerms.BUSINESS_ADDRESS %>"
-					>
-						<aui:validator name="maxLength">500</aui:validator>
 					</aui:input>
 				</aui:row>
 				
@@ -274,6 +264,16 @@
 		
 			<div class = "content-part right">
 				<aui:row>
+					<aui:input 
+						name="<%=BusinessDisplayTerms.BUSINESS_ADDRESS %>" 
+						cssClass="input100"
+						placeholder="<%=BusinessDisplayTerms.BUSINESS_ADDRESS %>"
+					>
+						<aui:validator name="maxLength">500</aui:validator>
+					</aui:input>
+				</aui:row>
+			
+				<aui:row>
 					<datamgt:ddr 
 						cssClass="input100"
 						depthLevel="3" 
@@ -281,6 +281,8 @@
 						itemNames="cityId,districtId,wardId"
 						itemsEmptyOption="true,true,true"	
 						displayStyle="vertical"
+						emptyOptionLabels="cityId,districtId,wardId"
+						showLabel="false"
 					/>	
 				</aui:row>
 				
@@ -291,6 +293,8 @@
 						dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_BUSINESS_TYPE %>"
 						itemNames="businessType"
 						itemsEmptyOption="true"	
+						emptyOptionLabels="businessType"
+						showLabel="false"
 					/>
 				</aui:row>
 				
@@ -325,14 +329,16 @@
 						</aui:validator>
 					</aui:input>
 				</aui:row>
-				
-				<aui:row>
-					<aui:input 
-						name="termsOfUse"
-						type="checkbox" 
-						label="terms-of-use"
-					/>
-				</aui:row>
+				<div class="term-user">
+					<aui:row>
+						<aui:input 
+							name="termsOfUse"
+							type="checkbox" 
+							label="terms-of-use"
+						/>
+					</aui:row>
+					<aui:a href="#" cssClass="term-detail-register"><liferay-ui:message key="term-detail"/></aui:a>
+				</div>
 			</div>
 			<aui:row>
 				<aui:button name="register" type="submit" value="register" disabled="true"/>

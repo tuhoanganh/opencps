@@ -197,6 +197,7 @@
 					htmlBottom="<%= htmlBott %>"
 					htmlTop="<%= htmlTop %>"
 					jspPath="<%=path%>"
+					displayStyle="left-navigator"
 					>	
 				</liferay-ui:form-navigator>
 			</c:when>
