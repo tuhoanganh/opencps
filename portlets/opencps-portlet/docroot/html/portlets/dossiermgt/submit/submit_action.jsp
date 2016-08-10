@@ -30,6 +30,4 @@
 	submitOnlineURL.setParameter("onlineURL", service.getOnlineUrl());
 	submitOnlineURL.setParameter("backURL", currentURL);
 %>
-<div class="des-sub-bound-div">
-	<aui:button value="service-description" href="<%=submitOnlineURL.toString() %>" cssClass="des-sub-button" />
-</div>
+<aui:button value="service-description" href="<%=submitOnlineURL.toString() %>" cssClass="des-sub-button" />
