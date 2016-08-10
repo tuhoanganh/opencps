@@ -101,21 +101,13 @@
 					levelNameOutput = levelName;
 				}
 				
-				
-				PortletURL submitOnlineURL = renderResponse.createRenderURL();
-				submitOnlineURL.setParameter("mvcPath", templatePath + "dossier_submit_online.jsp");
-				submitOnlineURL.setParameter("serviceinfoId", String.valueOf(service.getServiceinfoId()));
-				submitOnlineURL.setParameter("onlineURL", service.getOnlineUrl());
-				submitOnlineURL.setParameter("backURL", currentURL);
-				
-				final String hrefFix = "location.href='" + submitOnlineURL .toString()+"'";
 			%>
 			
 			<liferay-util:buffer var="boundcol1">
 				<div class="row-fluid">
 					
 					<div class="span2 bold-label">
-						<liferay-ui:message key="service-name"/>
+						<liferay-ui:message key=""/>
 					</div>
 					<div class="span9"><%=service.getServiceName()%></div>
 				</div>
@@ -141,59 +133,19 @@
 				<div class="row-fluid">
 					
 					<div class="span5 bold-label">
-						<liferay-ui:message key="level"/>
+						<liferay-ui:message key="level-dvc"/>
 					</div>
 					<div class="span7"><%=levelNameOutput %> </div>
 				</div>
 			</liferay-util:buffer>
 			
 			<%
-				String actionButt = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "description");
 				row.setClassName("opencps-searchcontainer-row");
 				row.addText(String.valueOf(row.getPos() + 1));
 				row.addText(boundcol1);
 				row.addText(boundcol2);
-				row.addButton(actionButt, hrefFix);
+				row.addJSP("center", SearchEntry.DEFAULT_VALIGN,"/html/portlets/dossiermgt/submit/submit_action.jsp", config.getServletContext(), request, response);
 			%>
-			<%-- <liferay-ui:search-container-column-text 
-				name="row-no" 
-				value="<%=String.valueOf(row.getPos() + 1) %>"
-			/>
-			
-			<liferay-ui:search-container-column-text 
-				name="service-name" 
-				value="<%=service.getServiceName() %>"
-			/>
-			
-			<liferay-ui:search-container-column-text 
-				name="service-domain" 
-				value="<%=DictItemUtil.getNameDictItem(service.getDomainCode())%>"
-			/>
-			
-			<liferay-ui:search-container-column-text 
-				name="service-administrator" 
-				value="<%=DictItemUtil.getNameDictItem(service.getAdministrationCode())%>"
-			/>
-			
-			<c:choose>
-				<c:when test="<%=levelName.equals(StringPool.BLANK) %>">
-					<liferay-ui:search-container-column-text 
-						name="level" 
-						value='<%=LanguageUtil.get(portletConfig ,themeDisplay.getLocale(), "under-level-3") %>'
-					/>
-				</c:when>
-				<c:otherwise>
-					<liferay-ui:search-container-column-text 
-						name="level" 
-						value="<%=levelName %>"
-					/>
-				</c:otherwise>
-			</c:choose>
-			
-			<liferay-ui:search-container-column-button 
-				name="description"
-				href="<%=hrefFix %>"
-			/> --%>
 				
 		</liferay-ui:search-container-row>
 			

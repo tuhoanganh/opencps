@@ -141,7 +141,7 @@
 						<liferay-ui:message key="service-name"/>
 					</div>
 					
-					<div class="span6"><%=dossierBean.getServiceName() %></div>
+					<div class="span8"><%=dossierBean.getServiceName() %></div>
 				</div>
 				
 				<div class="row-fluid">
@@ -149,7 +149,7 @@
 					
 					<div class="span3 bold-label"><liferay-ui:message key="gov-agency-name"/></div>
 					
-					<div class="span6"><%=dossier.getGovAgencyName() %></div>
+					<div class="span8"><%=dossier.getGovAgencyName() %></div>
 				</div>
 				
 			</liferay-util:buffer>
