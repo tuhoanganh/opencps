@@ -68,7 +68,6 @@
 <liferay-ui:header
     backURL="<%= backRedirect %>"
     title="payment-detail"
-    backLabel="back"
 />
 <div class="payment-ld">
 <div class="content">

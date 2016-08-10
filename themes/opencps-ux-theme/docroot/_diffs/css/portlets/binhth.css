@@ -193,7 +193,7 @@ box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); width: 370px; float: right; padding
 
 .table.payment tr td a.button{
     width: 132px;
-	height: 30px;
+	height: 20px;
 	border: 0px solid #e1e1e1;
 	color: white !important;
 	border-radius: 20px;
@@ -210,6 +210,7 @@ box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); width: 370px; float: right; padding
     border-radius: 8px;
     -webkit-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2);
     box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2);
+    overflow: hidden;
 }
 .file_manage_title {
     background: url(/opencps-ux-theme/css/../images/frame_1/icon_danhsachhoso.png) 0 center no-repeat;
@@ -247,9 +248,7 @@ box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); width: 370px; float: right; padding
     width: calc((100% - 30px) / 2);
     float: left;
 }
-.payment-ld .content .box50:nth-child(1) {
-    margin-right: 30px;
-}
+
 .payment-ld .content .box50 > div, .payment-ld .content .box100 > div {
     border-bottom: 1px solid #ccc;
     padding: 15px 30px 5px;
@@ -282,7 +281,7 @@ box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); width: 370px; float: right; padding
     font-family: 'Roboto-Bold';
     justify-content: space-between;
     align-items: center;
-    padding: 15px 30px;
+/*     padding: 15px 30px; */
 }
 .payment-ld .content .box100 p span:first-child {
     font-family: 'Roboto-Bold';
@@ -302,7 +301,7 @@ box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); width: 370px; float: right; padding
 .payment-ld .content .box100 .box50 {
     display: block !important;
     box-shadow: none;
-    /*! padding: 20px 0; */
+    padding: 20px 0;
     font-family: 'Roboto-Regular' !important;
     border-bottom: 0;
     border-radius: 0;
@@ -370,4 +369,18 @@ box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); width: 370px; float: right; padding
 }
 .opencps-theme.ux .home_bg .page-search button[data-toggle="dropdown"]{
   height: 40px !important;
+}
+.payment-ld .content .box50:nth-child(1) p:first-child {
+  float: left;
+  width: 135px;
+}
+.payment-ld .content .box50:nth-child(2) p:first-child {
+  float: left;
+  width: 165px;
+}
+.upercase{
+	text-transform: uppercase;	
+}
+.payment-ld input[type="file"]{
+  display: none;
 }
