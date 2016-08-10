@@ -76,15 +76,6 @@ table.payment tr td:nth-last-of-type(-n+2):after {border-right: 0;}
     float: right;
     padding: 30px 25px;
 }
-.detail-left {
-    background-color: white;
-    border-radius: 8px;
-    -webkit-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2);
-    box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2);
-    width: 770px;
-    float: left;
-    padding: 30px 25px;
-}
 .opencps-theme .page-search{
 	float: right;
 }
@@ -131,7 +122,7 @@ table.payment tr td:nth-last-of-type(-n+2):after {border-right: 0;}
 }
 /*--- Search File Detail ---*/
 .detail-left {background-color: white; border-radius: 8px; -webkit-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2);
-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); width: 60%; float: left; padding: 30px 25px}
+box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); width: 59%; float: left; padding: 30px 25px}
 .detail-left h4 {margin: 0; font-family: 'Roboto-Bold'; font-weight: normal; font-size: 18px; padding-left: 25px}
 .detail-left h4 {margin-bottom: 5px}
 .detail-left h4:first-child {margin-bottom: 20px}
@@ -371,12 +362,12 @@ box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); width: 370px; float: right; padding
     transform: translateX(-50%);
     position: relative;
 }
-.opencps-theme.ux.home_bg .taglib-header{
+.opencps-theme.ux .home_bg .taglib-header{
   display: none;
 }
-.opencps-theme.ux.home_bg .form-search label{
+.opencps-theme.ux .home_bg .form-search label{
   display: none;
 }
-.opencps-theme.ux.home_bg .page-search button[data-toggle="dropdown"]{
+.opencps-theme.ux .home_bg .page-search button[data-toggle="dropdown"]{
   height: 40px !important;
 }
