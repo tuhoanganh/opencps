@@ -152,7 +152,7 @@
 					<aui:input 
 	 					name="<%=CitizenDisplayTerms.CITIZEN_FULLNAME %>" 
 	 					cssClass="input100"
-	 					placeholder="<%=CitizenDisplayTerms.CITIZEN_FULLNAME %>"
+	 					placeholder="citizen-full-name"
 	 				>
 		 				<aui:validator name="required" />
 		 				<aui:validator name="maxLength">255</aui:validator>
@@ -201,6 +201,7 @@
 	 					formName="fm"
 	 					autoFocus="<%=true %>"
 	 					cssClass="input100"
+	 					
 	 				>
 	 				</liferay-ui:input-date>
 				</aui:row>
@@ -260,18 +261,21 @@
 						itemNames="cityId,districtId,wardId"
 						itemsEmptyOption="true,true,true"
 						displayStyle="vertical"
+						emptyOptionLabels="cityId,districtId,wardId"
+						showLabel="false"
 					/>	
 				</aui:row>
-				
-				<aui:row>
-					<aui:input 
-						name="termsOfUse"
-						type="checkbox" 
-						label="terms-of-use"
-						cssClass="ocps-terms-of-use"
-					/>
-				</aui:row>
-				
+				<div class="term-user">
+					<aui:row>
+						<aui:input 
+							name="termsOfUse"
+							type="checkbox" 
+							label="terms-of-use"
+							cssClass="ocps-terms-of-use"
+						/>
+					</aui:row>
+					<aui:a href="#" cssClass="term-detail-register"><liferay-ui:message key="term-detail"/></aui:a>
+				</div>
 			</div>
 			<aui:row>
 				<aui:button name="register" type="submit" value="register" disabled="true" />
