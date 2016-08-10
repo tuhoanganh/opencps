@@ -202,3 +202,21 @@ body{
 #navigation ul li.selected {
 	background-color: #0074cd;
 }
+
+.aui a {
+	color: #000;
+}
+
+
+.pager.lfr-pagination-buttons {
+    margin-top: 8px;
+}
+
+
+.footer a {
+    color: #7d91a0;
+}
+
+.opencps-theme.ux .home_bg #column-1 .portlet-borderless-container{
+  background: transparent !important;
+}
