@@ -50,7 +50,7 @@ public class JRReportUtil {
 		String sourceFileName = outputDestination + exportName;
 		try {
 			//fix json enter char
-			jsonData = jsonData.replaceAll("\n", "<br/>");
+			jsonData = JsonUtils.quoteHTML(jsonData);
 			JasperReport reportTemplate = JRReportTemplate
 			    .getJasperReport(jrxmlTemplate);
 			JRJSONDataSource dataSource = JRJSONDataSource
