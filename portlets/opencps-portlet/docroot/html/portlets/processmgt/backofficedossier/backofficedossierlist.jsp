@@ -63,13 +63,17 @@
 	
 	List<String> headerNames = new ArrayList<String>();
 	
-	headerNames.add("no");
+	/* headerNames.add("no");
 	headerNames.add("receive-datetime");
 	headerNames.add("reception-no");
 	headerNames.add("subjectname");
 	headerNames.add("serviceinfo-name");
 	headerNames.add("finish-datetime");
-	headerNames.add("process-status");
+	headerNames.add("process-status"); */
+	
+	headerNames.add("boundcol1");
+	headerNames.add("boundcol2");
+	headerNames.add("boundcol3");
 	
 	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
 	Format dateFormatDate = FastDateFormatFactoryUtil.getDate(locale, timeZone); 
@@ -104,38 +108,28 @@
 			viewURL.setParameter("mvcPath", templatePath + "backofficedossieroverview.jsp");
 			viewURL.setParameter("dossierId", String.valueOf(dossier.getDossierId()));
 			viewURL.setParameter("backURL", currentURL);
-			
-			
-			
-			// no column
-			row.addText(String.valueOf(row.getPos() + 1), viewURL);		
-			
+					
+			String receiveDatetime = StringPool.BLANK;
 			// receive datetime column
 			if (Validator.isNotNull(dossier.getReceiveDatetime())) {
-				row.addText(dateFormatDate.format(dossier.getReceiveDatetime()));				
-			}
-			else {
-				row.addText(StringPool.BLANK);
+				receiveDatetime =  dateFormatDate.format(dossier.getReceiveDatetime());				
 			}
 			
-			// reception no column
+			
+			/* // reception no column
 			row.addText(dossier.getReceptionNo(), viewURL);
 			
 			// subjectname column
-			row.addText(dossier.getSubjectName(), viewURL);
+			row.addText(dossier.getSubjectName(), viewURL); */
 			
 			// serviceinfo name column
 			ServiceInfo serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(dossier.getServiceInfoId());
-			row.addText(serviceInfo.getServiceName());
-						
+			
+			String finishDate = StringPool.BLANK;
 			// finish datetime column
 			if (Validator.isNotNull(dossier.getFinishDatetime())) {
-				row.addText(dateFormatDate.format(dossier.getFinishDatetime()));				
+				finishDate = dateFormatDate.format(dossier.getFinishDatetime());				
 			}
-			else {
-				row.addText("");
-			}
-			
 			// dossierstatus column
 			/*
 			String dossierStatusText = "";
@@ -196,37 +190,87 @@
 			}			
 		%>	
 		<!-- uxtheme -->
-		<liferay-util:buffer var="info">
+		<liferay-util:buffer var="boundcol1">
 				<div class="row-fluid">
-					<div class="span1">
-						<i class='<%="fa fa-circle sx10 " + dossier.getDossierStatus()%>'></i>
+					<div class="span5 bold-label">
+						<liferay-ui:message key="no"/>
 					</div>
+					<div class="span7">
+						<a href="<%=viewURL.toString()%>">String.valueOf(row.getPos() + 1)</a>
+					</div>
+				</div>
+		</liferay-util:buffer>
+		<liferay-util:buffer var="boundcol2">
+				<div class="row-fluid">
+					<div class="span3 bold-label">
+						<liferay-ui:message key="receive-datetime"/>
+					</div>
+					
+					<div class="span6">
+						<a href="<%=viewURL.toString()%>"><%=receiveDatetime %></a>
+					</div>
+				</div>
+				
+				
+				<div class="row-fluid">
 					<div class="span3 bold-label">
 						<liferay-ui:message key="reception-no"/>
 					</div>
-					<div class="span6"><%=dossier.getReceptionNo() %></div>
+					
+					<div class="span6">
+						<a href="<%=viewURL.toString()%>"><%=dossier.getReceptionNo() %></a>
+					</div>
 				</div>
 				
 				<div class="row-fluid">
-					<div class="span1"></div>
-					
 					<div class="span3 bold-label">
-						<liferay-ui:message key="service-name"/>
+						<liferay-ui:message key="subjectname"/>
 					</div>
 					
-					<div class="span6"><%=dossierBean.getServiceName() %></div>
+					<div class="span6">
+						<a href="<%=viewURL.toString()%>"><%=dossier.getSubjectName() %></a>
+					</div>
+				</div>
+			</liferay-util:buffer>
+			
+			<liferay-util:buffer var="boundcol3">
+				<div class="row-fluid">
+					<div class="span3 bold-label">
+						<liferay-ui:message key="serviceinfo-name"/>
+					</div>
+					
+					<div class="span6">
+						<a href="<%=viewURL.toString()%>"><%=serviceInfo.getServiceName() %></a>
+					</div>
+				</div>
+				
+				
+				<div class="row-fluid">
+					<div class="span3 bold-label">
+						<liferay-ui:message key="finish-datetime"/>
+					</div>
+					
+					<div class="span6">
+						<a href="<%=viewURL.toString()%>"><%=finishDate %></a>
+					</div>
 				</div>
 				
 				<div class="row-fluid">
-					<div class="span1"></div>
+					<div class="span3 bold-label">
+						<liferay-ui:message key="process-status"/>
+					</div>
 					
-					<div class="span3 bold-label"><liferay-ui:message key="gov-agency-name"/></div>
-					
-					<div class="span6"><%=dossier.getGovAgencyName() %></div>
+					<div class="span6">
+						<a href="<%=viewURL.toString()%>"><%=statusText %></a>
+					</div>
 				</div>
-				
 			</liferay-util:buffer>
 			
+			<%
+				row.addText(boundcol1);
+				row.addText(boundcol2);
+				row.addText(boundcol3);
+			%>
 		
 		<%
 			
