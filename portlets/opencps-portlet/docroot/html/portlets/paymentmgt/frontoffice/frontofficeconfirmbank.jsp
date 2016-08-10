@@ -1,4 +1,6 @@
 
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
+<%@page import="org.opencps.util.PortletPropsValues"%>
 <%@page import="org.opencps.util.DateTimeUtil"%>
 <%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
 <%@page import="java.util.Locale"%>
@@ -37,6 +39,7 @@
 	String backURL = ParamUtil.getString(request, "backURL");
 	String redirectURL = ParamUtil.getString(request, "redirectURL");
 	long paymentFileId = ParamUtil.getLong(request, PaymentFileDisplayTerms.PAYMENT_FILE_ID, 0L);
+	String chuHoSo = ParamUtil.getString(request, "chuHoSo");
 	PaymentFile paymentFile = null;
 	try {
 		paymentFile = PaymentFileLocalServiceUtil.getPaymentFile(paymentFileId);
@@ -63,6 +66,8 @@
 			
 		}
 	}
+	
+	
 %>
 <style>
 .payment-ld button {
@@ -82,7 +87,7 @@
 </style>
 
 <liferay-ui:header backURL="<%= backURL.toString() %>"
-	title="request-bank" backLabel="back" />
+	title="request-bank" cssClass="upercase" />
 
 
 <portlet:actionURL var="requestBankPaymentURL" windowState="normal" name="requestBankPayment"/>
@@ -100,35 +105,40 @@
                 <div class="box100 row-eq-height">
                     <div class="box50">
                         <div>
-                            <p><span><liferay-ui:message key="reception-no"></liferay-ui:message>:</span> <%= dossier != null ? dossier.getReceptionNo() : "" %></p>
+                            <p><span><liferay-ui:message key="reception-no"></liferay-ui:message>:</span></p> <%= dossier != null ? dossier.getReceptionNo() : LanguageUtil.get(pageContext, "monitoring-chua-co")  %>
                         </div>
                         <div>
-                            <p><span><liferay-ui:message key="payment-name"></liferay-ui:message>:</span> <%= paymentFile != null ? paymentFile.getPaymentName() : "" %></p>
+                            <p><span><liferay-ui:message key="payment-name"></liferay-ui:message>:</span></p> <%= paymentFile != null ? paymentFile.getPaymentName() : LanguageUtil.get(pageContext, "monitoring-chua-co")  %>
                         </div>
                         <div>
-                            <p><span><liferay-ui:message key="service-name"></liferay-ui:message>:</span> <span><%= serviceInfo != null ? serviceInfo.getServiceName() : "" %></span></p>
+                            <p><span><liferay-ui:message key="service-name"></liferay-ui:message>:</span> </p><span><%= serviceInfo != null ? serviceInfo.getServiceName() : LanguageUtil.get(pageContext, "monitoring-chua-co")  %></span>
                         </div>
                         <div>
-                            <p><span><liferay-ui:message key="administration-name"></liferay-ui:message>:</span> <c:if test="<%= dossier != null %>">
+                            <p><span><liferay-ui:message key="administration-name"></liferay-ui:message>:</span> </p>
+                            <c:if test="<%= dossier != null %>">
 								<%= dossier.getGovAgencyName() %>
-							</c:if></p>
+							</c:if>
                         </div>
                         <div>
-                            <p><span><liferay-ui:message key="payment-name"></liferay-ui:message>:</span> <%= paymentFile != null ? paymentFile.getPaymentName() : "" %></p>
+                            <p><span><liferay-ui:message key="subject-name"></liferay-ui:message>:</span> </p><%= chuHoSo != null ? chuHoSo : LanguageUtil.get(pageContext, "monitoring-chua-co")  %>
                         </div>
                         <div>
-                            <p><span><liferay-ui:message key="ngay-yeu-cau"></liferay-ui:message>:</span> <%=paymentFile != null ? HtmlUtil.escape(DateTimeUtil.convertDateToString(paymentFile.getRequestDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT)):"" %></p>
+                            <p><span><liferay-ui:message key="ngay-yeu-cau"></liferay-ui:message>:</span> </p><%=paymentFile != null ? HtmlUtil.escape(DateTimeUtil.convertDateToString(paymentFile.getRequestDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT)): LanguageUtil.get(pageContext, "monitoring-chua-co") %>
                         </div>
                         <div>
-                            <p><span><liferay-ui:message key="amount"></liferay-ui:message>: </span> <span class="black"><%= NumberFormat.getInstance(new Locale("vi","VN")).format(paymentFile.getAmount()) %> <liferay-ui:message key="vnd"></liferay-ui:message></span></p>
+                            <p><span><liferay-ui:message key="amount"></liferay-ui:message>: </span> </p><span class="black"><%= NumberFormat.getInstance(new Locale("vi","VN")).format(paymentFile.getAmount()) %> <liferay-ui:message key="vnd"></liferay-ui:message></span>
                         </div>
                     </div>
                     <div class="box50 text-center bor-left">
                         <div>
                             <div class="image_placeholder" style="width: 126px; height: 120px;" ></div>
-                            <h5><liferay-ui:message key="dinh-kem-tep-chung-tu"></liferay-ui:message></h5>
+                            <h5 class="upercase"><liferay-ui:message key="dinh-kem-tep-chung-tu"></liferay-ui:message></h5>
                             <p><liferay-ui:message key="chung-tu-thanh-toan"></liferay-ui:message><br><liferay-ui:message key="hoac-hoa-don-chung-nhan-giao-dich-chuyen-khoan-duoc-in-ra"></liferay-ui:message></p>
-                            <aui:input cssClass="btnUpload" name="uploadedFile" type="file" label="uploaded-file"/>
+                            <aui:input type="file" cssClass="input-file" name="uploadedFile" label="uploaded-file">
+								<aui:validator name="acceptFiles">
+									'<%= StringUtil.merge(PortletPropsValues.ACCOUNTMGT_FILE_TYPE) %>'
+								</aui:validator>
+							</aui:input>
                         </div>
                     </div>
                 </div>
