@@ -29,6 +29,7 @@ import org.opencps.dossiermgt.comparator.DossierTemplateNoComparator;
 import org.opencps.dossiermgt.model.DossierPart;
 import org.opencps.dossiermgt.search.DossierTemplateDisplayTerms;
 import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
+import org.opencps.paymentmgt.util.PaymentMgtUtil;
 
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
@@ -57,6 +58,10 @@ public class DossierMgtUtil {
 	public static final int DOSSIERFILETYPE_OUTPUT = 2;
 	public static final int DOSSIERFILETYPE_ALL = 0;
 
+	public static final int DOSSIERFILEMARK_BAN_CHINH = 1;
+	public static final int DOSSIERFILEMARK_BAN_CONG_CHUNG = 2;
+	public static final int DOSSIERFILEMARK_BAN_CHUP = 3;
+	
 	public static final String TOP_TABS_DOSSIER_MONITORING_SEARCH =
 		"dossier-monitoring-search";
 	public static final String TOP_TABS_DOSSIER_MONITORING_DOSSIER_FILE_LIST =
@@ -226,6 +231,29 @@ public class DossierMgtUtil {
 
 		return new ArrayList<DossierPart>();
 	}
+	
+	public static String getLoaiGiayToLabel(int value, Locale locale) {
+
+		String statusLabel = StringPool.BLANK;
+
+		switch (value) {
+		case DOSSIERFILEMARK_BAN_CHINH:
+			statusLabel = LanguageUtil.get(locale, "loai-giay-to-ban-chinh");
+			break;
+		case DOSSIERFILEMARK_BAN_CONG_CHUNG:
+			statusLabel = LanguageUtil.get(locale, "loai-giay-to-ban-cong-chung");
+			break;
+		case DOSSIERFILEMARK_BAN_CHUP:
+			statusLabel = LanguageUtil.get(locale, "loai-giay-to-ban-chup");
+			break;
+		default:
+			statusLabel = StringPool.BLANK;
+			break;
+		}
+
+		return statusLabel;
+	}
+	
 	private static Log _log =
 		LogFactoryUtil.getLog(DossierMgtUtil.class.getName());
 }
