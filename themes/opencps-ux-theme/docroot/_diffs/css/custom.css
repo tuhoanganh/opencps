@@ -15,7 +15,7 @@
 @import url(nav_menu.css);
 
 /* @import url(portlets/portlet_register.css); */
-@import url(portlets/portlet_accountInfo.css);
+/*@import url(portlets/portlet_accountInfo.css);*/
 /* @import url(portlets/portlet_history.css);
 @import url(portlets/portlet_dossier_info.css);
 @import url(portlets/portlet_dossier_content.css); */
@@ -197,4 +197,8 @@ body{
     text-shadow: none !important;
     width: 125px !important;
     color: #292929;
+}
+
+#navigation ul li.selected {
+	background-color: #0074cd;
 }

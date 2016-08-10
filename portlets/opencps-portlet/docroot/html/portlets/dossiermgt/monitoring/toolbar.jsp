@@ -68,7 +68,7 @@
 										name="keywords"
 										cssClass="input-append home-bb-search"
 										title='<%= LanguageUtil.get(portletConfig, locale, "keywords") %>'
-										placeholder="<%= LanguageUtil.get(pageContext, \"dossier-search-keywords\") %>" 
+										placeholder="<%= LanguageUtil.get(pageContext, \"dossier-file-search-keywords\") %>" 
 										keySelect="<%=keySelect %>"
 										urlSelect="<%=urlSelect %>"
 										currentTab="<%=tabs1 %>"

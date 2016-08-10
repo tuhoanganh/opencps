@@ -1,6 +1,5 @@
 ##set this to the groupID of the menu you wish to copy
 #set ($mainGroupId = $layout.getGroupId())               
-            #set ($layoutService = $serviceLocator.findService('com.liferay.portal.service.ThemeLocalServiceBaseImpl'))
                
            #if ($page_group.groupId != $mainGroupId) ## The main site's groupId
                    #set ($layoutService = $serviceLocator.findService('com.liferay.portal.service.LayoutLocalService'))
@@ -38,7 +37,7 @@
             #end
                
                 <a href="$nav_item.getURL()" $nav_item.getTarget()><span>$nav_item.icon() $nav_item.getName()</span></a>
-
+	
 
            </li>
         #end
