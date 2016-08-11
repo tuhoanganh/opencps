@@ -300,17 +300,13 @@
 	border-bottom: 1px solid #e1e1e1;
 }
 .opencps-theme .ocps-service-detal-bound-all .service-detail-wrapper table td.col-left {
-	width: 105px;
-	min-width: 105px;
-	padding: 15px 0 15px 25px;
+	width: 150px;
+	min-width: 100px;
+	padding: 15px;
 	vertical-align: top;
 	font-family: 'Roboto-Bold';
 }
-.opencps-theme .ocps-service-detal-bound-all .service-detail-wrapper table td.col-right {
-	width: 765px;
-	max-width: 765px;
-	padding: 15px 30px;
-}
+
 .opencps-theme .ocps-service-detal-bound-all .service-detail-wrapper table td.col-right ul {
 	margin: 0;
 }
@@ -350,7 +346,7 @@
 	padding: 0;
 }
 
-.opencps-theme .ocps-serviceinfo-list {
+/* .opencps-theme .ocps-serviceinfo-list {
 	background-color: #fff;
 	-webkit-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2);
 	box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2);
@@ -400,7 +396,7 @@
 	text-indent: -5px;
 	width: 70px;
 }
-/* Table Thu tuc hanh chinh */
+Table Thu tuc hanh chinh
 .opencps-theme .ocps-serviceinfo-list table {
 	border: 0;
 }
@@ -424,8 +420,8 @@
 	position: absolute;
 	right: 0;
 	top: 15px;
-}
-.opencps-theme .ocps-serviceinfo-list table td:first-child:after, 
+} */
+/* .opencps-theme .ocps-serviceinfo-list table td:first-child:after, 
 .opencps-theme .ocps-serviceinfo-list table td:last-child:after {
 	border: 0;
 }
@@ -469,7 +465,7 @@
 .opencps-theme .ocps-serviceinfo-list table td:last-child .delete a {
 	background-color: #ff5558;
 }
-
+ */
 /*---------- PortletID 9 - Detail ----------*/
 .ocps-update-service-bound-all .ocps-update-service-bound-general {
 	background-color: #fff;

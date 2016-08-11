@@ -32,7 +32,7 @@
 <%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
 <%
 	
-	String backURL = ParamUtil.getString(request, "backURL");
+	String backURL1 = ParamUtil.getString(request, "backURL");
 	String onlineURL = ParamUtil.getString(request, "onlineURL");
 	long serviceinfoId = ParamUtil.getLong(request, "serviceinfoId");
 	
@@ -68,6 +68,12 @@
 	}
 	
 %>
+
+<liferay-ui:header 
+	backURL="<%=backURL1 %>"
+	title="guide-sibmition-dossier"
+	cssClass="submit-headers"
+/>
 <portlet:renderURL var="referToSubmitOnline" windowState="<%=LiferayWindowState.EXCLUSIVE.toString() %>">
 	<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/submit/ajax/url_online.jsp"/>
 </portlet:renderURL>
@@ -80,41 +86,43 @@
 		<portlet:param name="mvcPath" value="/html/portlets/servicemgt/directory/service_detail.jsp"/>
 		<portlet:param name="serviceinfoId" value="<%= String.valueOf(serviceinfoId) %>"/>
 </liferay-portlet:renderURL>
-
-<aui:row>
-	<aui:col width="30">
-		<liferay-ui:message key="service-label" />
-	</aui:col>
-	
-	<aui:col width="70">
-		<c:if test="<%=serviceInfo != null %>">
-			<a href="<%= detailServiceURL.toString() %>">
-				<span style="color:blue"><%=serviceInfo.getServiceName() %></span>
-			</a>
-		</c:if>
-	</aui:col>
-</aui:row>
-<aui:row>
-	<aui:col width="100">
-		<aui:select name="administrationCode" cssClass="input100">
-			<%
-				for(DictItem dictItem : listAdmin) {
-					%>
-						<aui:option value="<%=dictItem.getItemCode() %>">
-							<%=dictItem.getItemName(themeDisplay.getLocale(),true) %>
-						</aui:option>
-					<%
-				}
-			%>
-		</aui:select>
-	</aui:col>
-</aui:row>
-<div id = "<portlet:namespace />submitOnlineRes"></div>
+<div class="ocps-submit-online">
+	<aui:row>
+		<aui:col width="30">
+			<liferay-ui:message key="service-label" />
+		</aui:col>
+		
+		<aui:col width="70">
+			<c:if test="<%=serviceInfo != null %>">
+				<a href="<%= detailServiceURL.toString() %>">
+					<span><%=serviceInfo.getServiceName() %></span>
+				</a>
+			</c:if>
+		</aui:col>
+	</aui:row>
+	<aui:row>
+		<aui:col width="50">
+			<aui:select name="administrationCode" cssClass="submit-online">
+				<%
+					for(DictItem dictItem : listAdmin) {
+						%>
+							<aui:option value="<%=dictItem.getItemCode() %>">
+								<%=dictItem.getItemName(themeDisplay.getLocale(),true) %>
+							</aui:option>
+						<%
+					}
+				%>
+			</aui:select>
+		</aui:col>
+	</aui:row>
+	<div id = "<portlet:namespace />submitOnlineRes"></div>
+</div>
 <aui:script>
 	AUI().ready(function(A) {
 		var adminCodeSel = A.one("#<portlet:namespace/>administrationCode");
 		var serviceId = '<%= serviceinfoId %>';
 		var backURL = '<%=currentURL %>';
+		<portlet:namespace />getOnlineURL(adminCodeSel.val(), serviceId);
 		if(adminCodeSel) {
 			adminCodeSel.on('change',function() {
 				<portlet:namespace />getOnlineURL(adminCodeSel.val(), serviceId);

@@ -1,7 +1,4 @@
-<%@page import="org.opencps.util.PortletPropsValues"%>
-<%@page import="java.util.Date"%>
-<%@page import="org.opencps.util.PortletUtil"%>
-<%@page import="org.opencps.util.DateTimeUtil"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -36,6 +33,11 @@
 <%@page import="org.opencps.accountmgt.InvalidWardCodeException"%>
 <%@page import="org.opencps.accountmgt.InvalidDistricCodeException"%>
 <%@page import="org.opencps.accountmgt.InvalidCityCodeException"%>
+<%@page import="org.opencps.util.PortletPropsValues"%>
+<%@page import="java.util.Date"%>
+<%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="org.opencps.util.DateTimeUtil"%>
+
 <%@ include file="../init.jsp" %>
 
 <%
@@ -100,39 +102,7 @@
 	message="<%= OutOfSizeFileUploadException.class.getName() %>" 
 />
 
-<portlet:renderURL var="switcherBusinessRegisterURL">
-	<portlet:param name="mvcPath" value='<%= templatePath + "businessregistration.jsp-ux" %>'/>
-</portlet:renderURL>
-<div class="ocps-register">
-	<div class="opencps accountmgt fm-registration header">
-		<%-- <div class="register-label">
-			<liferay-ui:message key="register-citizen"/>
-		</div> --%>
-		<div>
-			<aui:row>
-				<aui:col width="30" cssClass="opcs-register-label">
-					<label><liferay-ui:message key="register"></liferay-ui:message></label>
-				</aui:col>
-				<aui:col width="30">
-					<aui:row>
-						<aui:col width="50">
-							<aui:input type="radio" name="typeOfRegister" value="citizen" inlineLabel="right" label="citizen" checked="true"/>
-						</aui:col>
-						<aui:col width="50">
-							<aui:input type="radio" name="typeOfRegister" value="business" inlineLabel="right" label="business"/>
-						</aui:col>
-					</aui:row>
-				</aui:col>
-				<aui:col width="30" cssClass="opcs-register-login">
-					<a href='<%=themeDisplay.getURLSignIn() %>'><liferay-ui:message key="login" /></a>
-				</aui:col>
-			</aui:row>
-			<%-- <aui:button name="business" value="business" type="button" href="<%=switcherBusinessRegisterURL.toString() %>"/> --%>
-		</div>
-	</div>
-	
-	<div class="bottom-horizontal-line"></div>
-	
+<div class="opencps-register-wrapper">
 	
 	<portlet:actionURL var="updateCitizenURL" name="updateCitizen">
 		<portlet:param 
@@ -151,148 +121,167 @@
 	>
 	
 		<aui:input name="citizenRegStep_cfg" value="<%=citizenRegStep_cfg %>" type="hidden"></aui:input>
+			
+		<div class="register-content">
 		
-		<%-- <liferay-util:include 
-			page="/html/portlets/accountmgt/registration/citizen/general_info-ux.jsp" 
-			servletContext="<%=application %>" 
-		/> 
-	
-		<liferay-util:include 
-			page="/html/portlets/accountmgt/registration/citizen/contact-ux.jsp" 
-			servletContext="<%=application %>" 
-		/>  --%>
-		
-	<div class = "ocps-bound-left-right">
-		<div class = "ocps-res-left">
-			<aui:row>
-				<aui:input 
- 					name="<%=CitizenDisplayTerms.CITIZEN_FULLNAME %>" 
- 					cssClass="input100"
- 					placeholder="<%=CitizenDisplayTerms.CITIZEN_FULLNAME %>"
- 				>
-	 				<aui:validator name="required" />
-	 				<aui:validator name="maxLength">255</aui:validator>
- 				</aui:input>
-			</aui:row>
+			<div class="opencps accountmgt fm-registration header">
+				<aui:row>
+					<aui:col width="30" cssClass="title-text">
+						<label ><liferay-ui:message key="register"></liferay-ui:message></label>
+					</aui:col>
+					<aui:col width="30" cssClass="register-options">
+						<aui:row>
+							<aui:col width="50">
+								<aui:input type="radio" name="typeOfRegister" value="citizen" inlineLabel="right" label="citizen" checked="true"/>
+							</aui:col>
+							<aui:col width="50">
+								<aui:input type="radio" name="typeOfRegister" value="business" inlineLabel="right" label="business"/>
+							</aui:col>
+						</aui:row>
+					</aui:col>
+					<aui:col width="30" cssClass="login-redirect">
+						<a href='<%=themeDisplay.getURLSignIn() %>'><liferay-ui:message key="login" /></a>
+					</aui:col>
+				</aui:row>
+			</div>
 			
-			<aui:row>
-				<aui:input 
-					name="<%=CitizenDisplayTerms.CITIZEN_EMAIL %>"
-					cssClass="input100"
-					placeholder="<%=CitizenDisplayTerms.CITIZEN_EMAIL %>"
-				>
-					<aui:validator name="required" />
-					<aui:validator name="email" />
-					<aui:validator name="maxLength">255</aui:validator>	
-				</aui:input>
-			</aui:row>
+			<div class="bottom-horizontal-line"></div>
 			
-			<aui:row>
-				<aui:input 
- 					name="<%=CitizenDisplayTerms.CITIZEN_PERSONALID %>"
- 					cssClass="input100"
- 					placeholder="<%=CitizenDisplayTerms.CITIZEN_PERSONALID %>"
- 				/>
-			</aui:row>
-			
-			<aui:row>
-				<aui:input name="<%=CitizenDisplayTerms.CITIZEN_TELNO %>" cssClass="input100" placeholder="<%=CitizenDisplayTerms.CITIZEN_TELNO %>">
-					<aui:validator name="minLength">10</aui:validator>
-				</aui:input>
-			</aui:row>
-			
-			<aui:row>
-				<label class="control-label custom-lebel" for='<portlet:namespace/><%=CitizenDisplayTerms.CITIZEN_BIRTHDATE %>'>
- 					<liferay-ui:message key="birth-date"/>
- 				</label>
- 				<liferay-ui:input-date 
- 					
- 					dayParam="<%=CitizenDisplayTerms.BIRTH_DATE_DAY %>"
- 					dayValue="<%= spd.getDayOfMoth() %>"
- 					monthParam="<%=CitizenDisplayTerms.BIRTH_DATE_MONTH %>"
- 					monthValue="<%= spd.getMonth() %>"
- 					name="<%=CitizenDisplayTerms.CITIZEN_BIRTHDATE %>"
- 					yearParam="<%=CitizenDisplayTerms.BIRTH_DATE_YEAR %>"
- 					yearValue="<%= spd.getYear() %>"
- 					formName="fm"
- 					autoFocus="<%=true %>"
- 					cssClass="input100 ocps-input-date"
- 				>
- 				</liferay-ui:input-date>
-			</aui:row>
-			
-			<aui:row cssClass="input100 ocps-file-attach">
-				<aui:input 
-					type="file" 
-					name="<%=CitizenDisplayTerms.CITIZEN_ATTACHFILE %>" 
+			<div class="content-part left">
+				<aui:row>
+					<aui:input 
+	 					name="<%=CitizenDisplayTerms.CITIZEN_FULLNAME %>" 
+	 					cssClass="input100"
+	 					placeholder="citizen-full-name"
+	 				>
+		 				<aui:validator name="required" />
+		 				<aui:validator name="maxLength">255</aui:validator>
+	 				</aui:input>
+				</aui:row>
+				
+				<aui:row>
+					<aui:input 
+						name="<%=CitizenDisplayTerms.CITIZEN_EMAIL %>"
+						cssClass="input100"
+						placeholder="<%=CitizenDisplayTerms.CITIZEN_EMAIL %>"
 					>
-					<aui:validator name="acceptFiles">
-						'<%= StringUtil.merge( PortletPropsValues.ACCOUNTMGT_FILE_TYPE) %>'
-					</aui:validator>
-				</aui:input>
+						<aui:validator name="required" />
+						<aui:validator name="email" />
+						<aui:validator name="maxLength">255</aui:validator>	
+					</aui:input>
+				</aui:row>
+				
+				<aui:row>
+					<aui:input 
+	 					name="<%=CitizenDisplayTerms.CITIZEN_PERSONALID %>"
+	 					cssClass="input100"
+	 					placeholder="<%=CitizenDisplayTerms.CITIZEN_PERSONALID %>"
+	 				/>
+				</aui:row>
+				
+				<aui:row>
+					<aui:input name="<%=CitizenDisplayTerms.CITIZEN_TELNO %>" cssClass="input100" placeholder="<%=CitizenDisplayTerms.CITIZEN_TELNO %>">
+						<aui:validator name="minLength">10</aui:validator>
+					</aui:input>
+				</aui:row>
+				
+				<aui:row>
+					<label class="control-label custom-lebel" for='<portlet:namespace/><%=CitizenDisplayTerms.CITIZEN_BIRTHDATE %>'>
+	 					<liferay-ui:message key="birth-date"/>
+	 				</label>
+	 				<liferay-ui:input-date 
+	 					
+	 					dayParam="<%=CitizenDisplayTerms.BIRTH_DATE_DAY %>"
+	 					dayValue="<%= spd.getDayOfMoth() %>"
+	 					monthParam="<%=CitizenDisplayTerms.BIRTH_DATE_MONTH %>"
+	 					monthValue="<%= spd.getMonth() %>"
+	 					name="<%=CitizenDisplayTerms.CITIZEN_BIRTHDATE %>"
+	 					yearParam="<%=CitizenDisplayTerms.BIRTH_DATE_YEAR %>"
+	 					yearValue="<%= spd.getYear() %>"
+	 					formName="fm"
+	 					autoFocus="<%=true %>"
+	 					cssClass="input100"
+	 					
+	 				>
+	 				</liferay-ui:input-date>
+				</aui:row>
+				
+				<aui:row cssClass="input-file">
+					<aui:input 
+						type="file" 
+						name="<%=CitizenDisplayTerms.CITIZEN_ATTACHFILE %>" 
+					>
+						<aui:validator name="acceptFiles">
+							'<%= StringUtil.merge( PortletPropsValues.ACCOUNTMGT_FILE_TYPE) %>'
+						</aui:validator>
+					</aui:input>
+				</aui:row>
+			</div>
+			
+			<div class="content-part right">
+				<aui:row>
+					<aui:select 
+	 					name="<%=CitizenDisplayTerms.CITIZEN_GENDER %>"
+	 					cssClass="input100"
+	 				>
+	 					<aui:option label="<%=CitizenDisplayTerms.CITIZEN_GENDER %>" value="<%=CitizenDisplayTerms.CITIZEN_GENDER %>" />
+	 					<%
+	 						if(PortletPropsValues.USERMGT_GENDER_VALUES != null && 
+	 							PortletPropsValues.USERMGT_GENDER_VALUES.length > 0){
+	 							for(int g = 0; g < PortletPropsValues.USERMGT_GENDER_VALUES.length; g++){
+	 								%>
+	 									<aui:option 
+	 										value="<%= PortletPropsValues.USERMGT_GENDER_VALUES[g]%>"
+	 										selected="<%=citizen != null && citizen.getGender() == PortletPropsValues.USERMGT_GENDER_VALUES[g]%>"
+	 									>
+	 										<%= PortletUtil.getGender(PortletPropsValues.USERMGT_GENDER_VALUES[g], locale)%>
+	 									</aui:option>
+	 								<%
+	 							}
+	 						}
+	 					%>
+	 				</aui:select>
+				</aui:row>
+				
+				<aui:row>
+					<aui:input 
+						name="<%=CitizenDisplayTerms.CITIZEN_ADDRESS %>" 
+						cssClass="input100"
+						placeholder="<%=CitizenDisplayTerms.CITIZEN_ADDRESS %>"
+					>
+						<aui:validator name="maxLength">255</aui:validator>
+					</aui:input>
+				</aui:row>
+				
+				<aui:row>
+					<datamgt:ddr 
+						cssClass="input100"
+						depthLevel="3" 
+						dictCollectionCode="ADMINISTRATIVE_REGION"
+						itemNames="cityId,districtId,wardId"
+						itemsEmptyOption="true,true,true"
+						displayStyle="vertical"
+						emptyOptionLabels="cityId,districtId,wardId"
+						showLabel="false"
+					/>	
+				</aui:row>
+				<div class="term-user">
+					<aui:row>
+						<aui:input 
+							name="termsOfUse"
+							type="checkbox" 
+							label="terms-of-use"
+							cssClass="ocps-terms-of-use"
+						/>
+					</aui:row>
+					<aui:a href="#" cssClass="term-detail-register"><liferay-ui:message key="term-detail"/></aui:a>
+				</div>
+			</div>
+			<aui:row>
+				<aui:button name="register" type="submit" value="register" disabled="true" />
 			</aui:row>
 		</div>
 		
-		<div class = "ocps-res-right">
-			<aui:row>
-				<aui:select 
- 					name="<%=CitizenDisplayTerms.CITIZEN_GENDER %>"
- 					cssClass="input100"
- 				>
- 					<aui:option label="<%=CitizenDisplayTerms.CITIZEN_GENDER %>" value="<%=CitizenDisplayTerms.CITIZEN_GENDER %>" />
- 					<%
- 						if(PortletPropsValues.USERMGT_GENDER_VALUES != null && 
- 							PortletPropsValues.USERMGT_GENDER_VALUES.length > 0){
- 							for(int g = 0; g < PortletPropsValues.USERMGT_GENDER_VALUES.length; g++){
- 								%>
- 									<aui:option 
- 										value="<%= PortletPropsValues.USERMGT_GENDER_VALUES[g]%>"
- 										selected="<%=citizen != null && citizen.getGender() == PortletPropsValues.USERMGT_GENDER_VALUES[g]%>"
- 									>
- 										<%= PortletUtil.getGender(PortletPropsValues.USERMGT_GENDER_VALUES[g], locale)%>
- 									</aui:option>
- 								<%
- 							}
- 						}
- 					%>
- 				</aui:select>
-			</aui:row>
-			
-			<aui:row>
-				<aui:input 
-					name="<%=CitizenDisplayTerms.CITIZEN_ADDRESS %>" 
-					cssClass="input100"
-					placeholder="<%=CitizenDisplayTerms.CITIZEN_ADDRESS %>"
-				>
-					<aui:validator name="maxLength">255</aui:validator>
-				</aui:input>
-			</aui:row>
-			
-			<aui:row>
-				<datamgt:ddr 
-					cssClass="input100"
-					depthLevel="3" 
-					dictCollectionCode="ADMINISTRATIVE_REGION"
-					itemNames="cityId,districtId,wardId"
-					itemsEmptyOption="true,true,true"
-					displayStyle="vertical"
-				/>	
-			</aui:row>
-			
-			<aui:row>
-				<aui:input 
-					name="termsOfUse"
-					type="checkbox" 
-					label="terms-of-use"
-					cssClass="ocps-terms-of-use"
-				/>
-			</aui:row>
-		</div>
-	</div>
-		<aui:row cssClass="ocps-register-button">
-			<aui:button name="register" type="submit" value="register" disabled="true" />
-			<%-- <aui:button name="back" type="button" value="back" onClick="window.history.back();"/> --%>
-		</aui:row>
 	</aui:form>
 </div>
 

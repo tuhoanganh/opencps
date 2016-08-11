@@ -38,8 +38,9 @@
 	boolean isCash = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_CASH);
 	boolean isKeypay = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_KEYPAY);
 	boolean isBank = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_BANK);
+	
+	String chuHoSo = (String)request.getAttribute("chuHoSo");
 %>
-
 
 <portlet:renderURL var="keypayTransaction">
 	<portlet:param name="<%= PaymentFileDisplayTerms.PAYMENT_FILE_ID %>"
@@ -58,11 +59,11 @@
 		value="/html/portlets/paymentmgt/frontoffice/frontofficeconfirmbank.jsp" />
 	<portlet:param name="redirectURL" value="<%= currentURL %>" />
 	<portlet:param name="backURL" value="<%=currentURL %>"/>
-	
+	<portlet:param name="chuHoSo" value="<%=chuHoSo %>"/>
 </portlet:renderURL>
 
 
-<c:if test="<%= paymentStatus == PaymentMgtUtil.PAYMENT_STATUS_REQUESTED || paymentStatus == PaymentMgtUtil.PAYMENT_STATUS_ON_PROCESSING
+<c:if test="<%= paymentStatus == PaymentMgtUtil.PAYMENT_STATUS_REQUESTED
 || paymentStatus == PaymentMgtUtil.PAYMENT_STATUS_REJECTED%>">
 
     <a class="button" href="<%=paymentFile.toString() %>" ><liferay-ui:message key="keypay-transaction" ></liferay-ui:message></a> <br/>

@@ -52,44 +52,46 @@
 	
 	request.setAttribute(ServiceDisplayTerms.SERVICE_DOMAINCODE, domainCode);
 %>
-<div class="ocps-bound-service-infodirect">
-
-<div class="opcs-serviceinfo-list-label">
-	<p><liferay-ui:message key="serviceinfo-list"/></p>
-</div>
-<aui:nav-bar cssClass="custom-toolbar">
+<aui:nav-bar cssClass="opencps-toolbar custom-toolbar">
 	<aui:nav-bar-search cssClass="pull-right">
 		<div class="form-search">
 			<aui:form action="<%= searchURL %>" method="post" name="fm">
 				<div class="toolbar_search_input">
 					<aui:row>
-						<aui:col width="25">
-							<datamgt:ddr cssClass="input100"
+						<aui:col width="30" cssClass="search-col">
+							<datamgt:ddr
+								cssClass="search-input select-box"
 								depthLevel="1" 
 								dictCollectionCode="SERVICE_ADMINISTRATION"
 								itemNames="<%= ServiceDisplayTerms.SERVICE_ADMINISTRATION %>"
 								itemsEmptyOption="true"
-								selectedItems="<%= administrationCode %>"	
+								selectedItems="<%= administrationCode %>"
+								emptyOptionLabels="<%=ServiceDisplayTerms.SERVICE_ADMINISTRATION %>"
+								showLabel="false"
 							>
 							</datamgt:ddr>
 
 						</aui:col>
-						<aui:col width="25">
-							<datamgt:ddr cssClass="input100"
+						<aui:col width="30" cssClass="search-col">
+							<datamgt:ddr 
 								depthLevel="1" 
 								dictCollectionCode="SERVICE_DOMAIN"
 								itemNames="<%= ServiceDisplayTerms.SERVICE_DOMAINCODE %>"
 								itemsEmptyOption="true"	
 								selectedItems="<%= domainCode %>"
+								emptyOptionLabels="<%=ServiceDisplayTerms.SERVICE_DOMAINCODE %>"
+								cssClass="search-input select-box"
+								showLabel="false"
 							>
 							</datamgt:ddr>
 
 						</aui:col>
-						<aui:col width="45">
-							<label>
+						<aui:col width="30" cssClass="search-col">
+							<%-- <label>
 								<liferay-ui:message key="keywords"/>
-							</label>
+							</label> --%>
 							<liferay-ui:input-search 
+								cssClass="search-input input-keyword"
 								id="keywords1"
 								name="keywords"
 								title="keywords"
@@ -102,65 +104,100 @@
 		</div>
 	</aui:nav-bar-search>
 </aui:nav-bar>
-
-<liferay-ui:search-container searchContainer="<%= new ServiceSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" 
-	headerNames="<%= headers %>">
-		
-	<liferay-ui:search-container-results>
-		<%
-			ServiceSearchTerms searchTerms = (ServiceSearchTerms) searchContainer.getSearchTerms();
-
-			total = ServiceInfoLocalServiceUtil.countService(scopeGroupId, searchTerms.getKeywords(), 
-				searchTerms.getAdministrationCode(), searchTerms.getDomainCode());
-
-			results = ServiceInfoLocalServiceUtil.searchService(scopeGroupId, searchTerms.getKeywords(), 
-				searchTerms.getAdministrationCode(), searchTerms.getDomainCode(),
-				searchContainer.getStart(), searchContainer.getEnd());
+<div class="opencps-searchcontainer-wrapper">
+	<liferay-ui:search-container searchContainer="<%= new ServiceSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" 
+		headerNames="<%= headers %>">
 			
-			pageContext.setAttribute("results", results);
-			pageContext.setAttribute("total", total);
-		%>
-		
-	</liferay-ui:search-container-results>
-
-	<liferay-ui:search-container-row 
-		className="org.opencps.servicemgt.model.ServiceInfo" 
-		modelVar="service" 
-		keyProperty="serviceinfoId"
-	>
-		<%
-			PortletURL viewURL = renderResponse.createRenderURL();
-			viewURL.setParameter("mvcPath", templatePath + "service_detail.jsp");
-			viewURL.setParameter("serviceinfoId", String.valueOf(service.getServiceinfoId()));
-			viewURL.setParameter("backURL", currentURL);
-			
-			if(service.getActiveStatus() !=0) {
-				// no column
-				row.addText(String.valueOf(row.getPos() + 1), viewURL);
-			
-				/* // service no
-				row.addText(service.getServiceNo(), viewURL);
-				 */
-				/* // service name
-				row.addText(service.getServiceName(), viewURL); */
-				
-				/* // service domain
-				row.addText(DictItemUtil.getNameDictItem(service.getDomainCode()) , viewURL);
-				
-				// service admin
-				row.addText(DictItemUtil.getNameDictItem(service.getAdministrationCode()), viewURL); */
-				
-				//use addJSP to use UX(User eXperience) theme
-				row.addJSP("center", SearchEntry.DEFAULT_VALIGN,  templatePath + "service_directory_bound_data-col2.jsp", config.getServletContext(), request, response);
-				row.addJSP("center", SearchEntry.DEFAULT_VALIGN,  templatePath + "service_directory_bound_data.jsp", config.getServletContext(), request, response);
-			}
-		%>	
+		<liferay-ui:search-container-results>
+			<%
+				ServiceSearchTerms searchTerms = (ServiceSearchTerms) searchContainer.getSearchTerms();
 	
-	</liferay-ui:search-container-row>	
-
-	<liferay-ui:search-iterator/>
-
-</liferay-ui:search-container>
+				total = ServiceInfoLocalServiceUtil.countService(scopeGroupId, searchTerms.getKeywords(), 
+					searchTerms.getAdministrationCode(), searchTerms.getDomainCode());
+	
+				results = ServiceInfoLocalServiceUtil.searchService(scopeGroupId, searchTerms.getKeywords(), 
+					searchTerms.getAdministrationCode(), searchTerms.getDomainCode(),
+					searchContainer.getStart(), searchContainer.getEnd());
+				
+				pageContext.setAttribute("results", results);
+				pageContext.setAttribute("total", total);
+			%>
+			
+		</liferay-ui:search-container-results>
+	
+		<liferay-ui:search-container-row 
+			className="org.opencps.servicemgt.model.ServiceInfo" 
+			modelVar="service" 
+			keyProperty="serviceinfoId"
+		>
+			<%
+				PortletURL viewURL = renderResponse.createRenderURL();
+				viewURL.setParameter("mvcPath", templatePath + "service_detail.jsp");
+				viewURL.setParameter("serviceinfoId", String.valueOf(service.getServiceinfoId()));
+				viewURL.setParameter("backURL", currentURL);
+			%>
+				<liferay-util:buffer var="boundcol1">
+					<div class="row-fluid">
+						<div class="span3 bold-label">
+							<liferay-ui:message key="service-no"/>
+						</div>
+						<div class="span9">
+							<a href="<%=viewURL.toString() %>"><%=service.getServiceNo() %></a>
+						</div>
+					</div>
+					
+					<div class="row-fluid">
+						<div class="span3 bold-label">
+							<liferay-ui:message key="service-name"/>
+						</div>
+						<div class="span9">
+							<a href="<%=viewURL.toString() %>"><%=service.getServiceName() %></a>
+						</div>
+					</div>
+				</liferay-util:buffer>
+				
+				<liferay-util:buffer var="boundcol2">
+					<div class="row-fluid">
+						
+						<div class="span5 bold-label">
+							<liferay-ui:message key="service-domain"/>
+						</div>
+						<div class="span7">
+							<a href="<%=viewURL.toString() %>"><%=DictItemUtil.getNameDictItem(service.getDomainCode())%></a>
+						</div>
+					</div>
+					
+					<div class="row-fluid">
+						
+						<div class="span5 bold-label">
+							<liferay-ui:message key="service-administrator"/>
+						</div>
+						<div class="span7">
+							<a href="<%=viewURL.toString() %>"><%=DictItemUtil.getNameDictItem(service.getAdministrationCode())%></a>
+						</div>
+					</div>
+				</liferay-util:buffer>
+			<%
+				if(service.getActiveStatus() !=0) {
+					row.setClassName("opencps-searchcontainer-row");
+					
+					// no column
+					row.addText(String.valueOf(row.getPos() + 1), viewURL);
+				
+					
+					row.addText(boundcol1);
+					
+					
+					row.addText(boundcol2); 
+					
+				}
+			%>	
+		
+		</liferay-ui:search-container-row>	
+	
+		<liferay-ui:search-iterator/>
+	
+	</liferay-ui:search-container>
 </div>
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.servicemgt.directory.serviceinfo.jsp");

@@ -656,13 +656,13 @@ public class PortletUtil {
 		String statusLabel = StringPool.BLANK;
 
 		switch (value) {
-		case 1:
+		case PaymentMgtUtil.PAYMENT_METHOD_CASH:
 			statusLabel = LanguageUtil.get(locale, "cash");
 			break;
-		case 2:
+		case PaymentMgtUtil.PAYMENT_METHOD_KEYPAY:
 			statusLabel = LanguageUtil.get(locale, "keypay");
 			break;
-		case 4:
+		case PaymentMgtUtil.PAYMENT_METHOD_BANK:
 			statusLabel = LanguageUtil.get(locale, "chuyen-khoan");
 			break;
 		default:

@@ -39,7 +39,10 @@
 			<portlet:param name="<%=DictItemDisplayTerms.DICTITEM_ID %>" value="<%=String.valueOf(dictItem.getDictItemId()) %>"/>
 			<portlet:param name="backURL" value="<%=currentURL %>"/>
 		</portlet:renderURL> 
- 		<liferay-ui:icon image="edit" cssClass="edit" message="edit" url="<%=updateDictItemURL.toString() %>" /> 
+ 		<liferay-ui:icon image="edit" 
+ 						cssClass="search-container-action fa edit" 
+ 						message="edit" 
+ 						url="<%=updateDictItemURL.toString() %>" /> 
  	</c:if>
  	
  	<c:if test="<%=DictItemPermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE) %>">
@@ -47,7 +50,7 @@
 			<portlet:param name="<%=DictItemDisplayTerms.DICTITEM_ID %>" value="<%=String.valueOf(dictItem.getDictItemId()) %>"/>
 			<portlet:param name="redirectURL" value="<%=currentURL %>"/>
 		</portlet:actionURL> 
-		<liferay-ui:icon-delete cssClass="delete" image="delete" confirmation="are-you-sure-delete-entry" message="delete"  url="<%=deleteDictItemURL.toString() %>" />
+		<liferay-ui:icon-delete cssClass="search-container-action fa delete" image="delete" confirmation="are-you-sure-delete-entry" message="delete"  url="<%=deleteDictItemURL.toString() %>" />
  	</c:if>
 	  
 <%-- </liferay-ui:icon-menu>  --%>

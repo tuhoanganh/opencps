@@ -133,38 +133,7 @@
 	message="<%= OutOfSizeFileUploadException.class.getName() %>" 
 />
 
-<portlet:renderURL var="switcherCitizenRegisterURL">
-	<portlet:param name="mvcPath" value='<%= templatePath + "citizenregistration-ux.jsp" %>'/>
-</portlet:renderURL>
-<div class="ocps-register">
-	<div class="opencps accountmgt fm-registration header">
-		<%-- <div class="register-label">
-			<liferay-ui:message key="register-business"/>
-		</div> --%>
-		<div>
-			<%-- <aui:button name="citizen" value="citizen" type="button" href="<%=switcherCitizenRegisterURL.toString() %>"/> --%>
-			<aui:row>
-				<aui:col width="30" cssClass="opcs-register-label">
-					<label ><liferay-ui:message key="register"></liferay-ui:message></label>
-				</aui:col>
-				<aui:col width="30">
-					<aui:row>
-						<aui:col width="50">
-							<aui:input type="radio" name="typeOfRegister" value="citizen" inlineLabel="right" label="citizen"/>
-						</aui:col>
-						<aui:col width="50">
-							<aui:input type="radio" name="typeOfRegister" value="business" inlineLabel="right" label="business" checked="true"/>
-						</aui:col>
-					</aui:row>
-				</aui:col>
-				<aui:col width="30" cssClass="opcs-register-login">
-					<a href='<%=themeDisplay.getURLSignIn() %>'><liferay-ui:message key="login" /></a>
-				</aui:col>
-			</aui:row>
-		</div>
-	</div>
-	
-	<div class="bottom-horizontal-line"></div>
+<div class="opencps-register-wrapper">
 	
 	<portlet:actionURL var="updateBusinessURL" name="updateBusiness">
 		<portlet:param 
@@ -184,25 +153,37 @@
 		
 		<aui:input name="businessRegStep_cfg" value="<%=businessRegStep_cfg %>" type="hidden"></aui:input>
 		
-		<%-- <liferay-util:include 
-			page="/html/portlets/accountmgt/registration/business/contact-ux.jsp" 
-			servletContext="<%=application %>" 
-		/> 
-		
-		<liferay-util:include 
-			page="/html/portlets/accountmgt/registration/business/general_info-ux.jsp" 
-			servletContext="<%=application %>" 
-		/>  --%>
-		
-		
-		<div class = "ocps-bound-left-right">
-			<div class = "ocps-res-left">
+		<div class="register-content">
+			<div class="opencps accountmgt fm-registration header">
+				<aui:row>
+					<aui:col width="30" cssClass="title-text">
+						<label ><liferay-ui:message key="register"></liferay-ui:message></label>
+					</aui:col>
+					<aui:col width="30" cssClass="register-options">
+						<aui:row>
+							<aui:col width="50">
+								<aui:input type="radio" name="typeOfRegister" value="citizen" inlineLabel="right" label="citizen"/>
+							</aui:col>
+							<aui:col width="50">
+								<aui:input type="radio" name="typeOfRegister" value="business" inlineLabel="right" label="business" checked="true"/>
+							</aui:col>
+						</aui:row>
+					</aui:col>
+					<aui:col width="30" cssClass="login-redirect">
+						<a href='<%=themeDisplay.getURLSignIn() %>'><liferay-ui:message key="login" /></a>
+					</aui:col>
+				</aui:row>
+			</div>
+	
+			<div class="bottom-horizontal-line"></div>
+	
+			<div class="content-part left">
 				<aui:row>
 					<aui:input 
 						name="<%=BusinessDisplayTerms.BUSINESS_NAME %>" 
 						cssClass="input100" 
-						placeholder="<%=BusinessDisplayTerms.BUSINESS_NAME %>"
-						>
+						placeholder="business-full-name"
+					>
 						<aui:validator name="required" />
 						<aui:validator name="maxLength">255</aui:validator>
 					</aui:input>
@@ -213,7 +194,7 @@
 						name="<%=BusinessDisplayTerms.BUSINESS_IDNUMBER %>" 
 						cssClass="input100"
 						placeholder="<%=BusinessDisplayTerms.BUSINESS_IDNUMBER %>"	
-						>
+					>
 						<aui:validator name="required" />
 						<aui:validator name="maxLength">100</aui:validator>
 					</aui:input>
@@ -224,7 +205,7 @@
 						name="<%= BusinessDisplayTerms.BUSINESS_ENNAME %>" 
 						cssClass="input100"
 						placeholder="<%=BusinessDisplayTerms.BUSINESS_ENNAME %>"
-						>
+					>
 						<aui:validator name="maxLength">255</aui:validator>
 					</aui:input>
 				</aui:row>
@@ -234,18 +215,8 @@
 						name="<%=BusinessDisplayTerms.BUSINESS_SHORTNAME %>" 
 						cssClass="input100"
 						placeholder="<%=BusinessDisplayTerms.BUSINESS_SHORTNAME %>"
-						>
+					>
 						<aui:validator name="maxLength">100</aui:validator>
-					</aui:input>
-				</aui:row>
-				
-				<aui:row>
-					<aui:input 
-						name="<%=BusinessDisplayTerms.BUSINESS_ADDRESS %>" 
-						cssClass="input100"
-						placeholder="<%=BusinessDisplayTerms.BUSINESS_ADDRESS %>"
-						>
-						<aui:validator name="maxLength">500</aui:validator>
 					</aui:input>
 				</aui:row>
 				
@@ -266,7 +237,7 @@
 						name="<%=BusinessDisplayTerms.BUSINESS_TELNO %>" 
 						cssClass="input100"
 						placeholder="<%=BusinessDisplayTerms.BUSINESS_TELNO %>"
-						>
+					>
 						<aui:validator name="maxLength">20</aui:validator>
 					</aui:input>
 				</aui:row>
@@ -291,74 +262,89 @@
 				</aui:row>
 			</div>
 		
-		<div class = "ocps-res-right">
-			<aui:row>
-				<datamgt:ddr 
-					cssClass="input100"
-					depthLevel="3" 
-					dictCollectionCode="ADMINISTRATIVE_REGION"
-					itemNames="cityId,districtId,wardId"
-					itemsEmptyOption="true,true,true"	
-					displayStyle="vertical"
-				/>	
-			</aui:row>
-			
-			<aui:row>
-				<datamgt:ddr
-					cssClass="input100"
-					depthLevel="1" 
-					dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_BUSINESS_TYPE %>"
-					itemNames="businessType"
-					itemsEmptyOption="true"	
-				/>
-			</aui:row>
-			
-			<aui:row>
-				<aui:input 
-					name="<%=BusinessDisplayTerms.BUSINESS_REPRESENTATIVENAME %>" 
-					cssClass="input100"
-					placeholder="<%=BusinessDisplayTerms.BUSINESS_REPRESENTATIVENAME %>"
+			<div class = "content-part right">
+				<aui:row>
+					<aui:input 
+						name="<%=BusinessDisplayTerms.BUSINESS_ADDRESS %>" 
+						cssClass="input100"
+						placeholder="<%=BusinessDisplayTerms.BUSINESS_ADDRESS %>"
 					>
-					<aui:validator name="maxLength">255</aui:validator>
-				</aui:input>
-			</aui:row>
+						<aui:validator name="maxLength">500</aui:validator>
+					</aui:input>
+				</aui:row>
 			
-			<aui:row>
-				<aui:input 
-					name="<%=BusinessDisplayTerms.BUSINESS_REPRESENTATIVEROLE %>" 
-					cssClass="input100"
-					placeholder="<%=BusinessDisplayTerms.BUSINESS_REPRESENTATIVEROLE %>"
+				<aui:row>
+					<datamgt:ddr 
+						cssClass="input100"
+						depthLevel="3" 
+						dictCollectionCode="ADMINISTRATIVE_REGION"
+						itemNames="cityId,districtId,wardId"
+						itemsEmptyOption="true,true,true"	
+						displayStyle="vertical"
+						emptyOptionLabels="cityId,districtId,wardId"
+						showLabel="false"
+					/>	
+				</aui:row>
+				
+				<aui:row>
+					<datamgt:ddr
+						cssClass="input100"
+						depthLevel="1" 
+						dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_BUSINESS_TYPE %>"
+						itemNames="businessType"
+						itemsEmptyOption="true"	
+						emptyOptionLabels="businessType"
+						showLabel="false"
+					/>
+				</aui:row>
+				
+				<aui:row>
+					<aui:input 
+						name="<%=BusinessDisplayTerms.BUSINESS_REPRESENTATIVENAME %>" 
+						cssClass="input100"
+						placeholder="<%=BusinessDisplayTerms.BUSINESS_REPRESENTATIVENAME %>"
+						>
+						<aui:validator name="maxLength">255</aui:validator>
+					</aui:input>
+				</aui:row>
+				
+				<aui:row>
+					<aui:input 
+						name="<%=BusinessDisplayTerms.BUSINESS_REPRESENTATIVEROLE %>" 
+						cssClass="input100"
+						placeholder="<%=BusinessDisplayTerms.BUSINESS_REPRESENTATIVEROLE %>"
+						>
+						<aui:validator name="maxLength">100</aui:validator>
+					</aui:input>
+				</aui:row>
+				
+				<aui:row cssClass="input-file">
+					<aui:input 
+						type="file" 
+						name="attachFile" 
+						label="business-attach-file"
 					>
-					<aui:validator name="maxLength">100</aui:validator>
-				</aui:input>
-			</aui:row>
-			
-			<aui:row cssClass="ocps-file-attach" >
-				<aui:input 
-					type="file" 
-					name="attachFile" 
-					label="business-attach-file"
-					>
-					<aui:validator name="acceptFiles">
-						'<%= StringUtil.merge(PortletPropsValues.ACCOUNTMGT_FILE_TYPE) %>'
-					</aui:validator>
-				</aui:input>
-			</aui:row>
-			
+						<aui:validator name="acceptFiles">
+							'<%= StringUtil.merge(PortletPropsValues.ACCOUNTMGT_FILE_TYPE) %>'
+						</aui:validator>
+					</aui:input>
+				</aui:row>
+				<div class="term-user">
+					<aui:row>
+						<aui:input 
+							name="termsOfUse"
+							type="checkbox" 
+							label="terms-of-use"
+						/>
+					</aui:row>
+					<aui:a href="#" cssClass="term-detail-register"><liferay-ui:message key="term-detail"/></aui:a>
+				</div>
+			</div>
 			<aui:row>
-				<aui:input 
-					name="termsOfUse"
-					type="checkbox" 
-					label="terms-of-use"
-				/>
+				<aui:button name="register" type="submit" value="register" disabled="true"/>
 			</aui:row>
 		</div>
-		</div>
-		<div class = ""></div>
-		<aui:row cssClass="ocps-register-button">
-			<aui:button name="register" type="submit" value="register" disabled="true"/>
-<%-- 			<aui:button name="back" type="button" value="back" onClick="window.history.back();"/>
- --%>	</aui:row>
+			
 	</aui:form>
 </div>
 

@@ -1,6 +1,3 @@
-<%@page import="org.opencps.paymentmgt.util.PaymentMgtUtil"%>
-<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
-<%@page import="javax.portlet.PortletURL"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -20,12 +17,15 @@
  */
 %>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
+<%@page import="org.opencps.paymentmgt.util.PaymentMgtUtil"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
+<%@page import="javax.portlet.PortletURL"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@ include file="../init.jsp"%>
 <%
 	PortletURL searchUrl = renderResponse.createRenderURL();
 %>
-<aui:nav-bar cssClass="custom-toolbar">
+<aui:nav-bar cssClass="opencps-toolbar custom-toolbar">
 	<aui:nav id="toolbarContainer"
 		cssClass="nav-display-style-buttons pull-left">
 
@@ -38,9 +38,9 @@
 						<aui:col width="30">
 						
 						</aui:col>
-						<aui:col width="35">
+						<aui:col width="35" cssClass="search-col">
 							<div class="select">
-								<aui:select name="paymentStatus" label="">
+								<aui:select name="paymentStatus" label="" cssClass="search-input select-box">
 									<aui:option value="-1">
 										<liferay-ui:message key="loc-trang-thai-thanh-toan"></liferay-ui:message>
 									</aui:option>
@@ -59,12 +59,12 @@
 								</aui:select>	
 							</div>						
 						</aui:col>
-						<aui:col width="35">
-							<label> <liferay-ui:message key="keywords" />
-							</label>
+						<aui:col width="35" cssClass="search-col">
 							<liferay-ui:input-search id="keywords" name="keywords"
 								title='<%= LanguageUtil.get(portletConfig, locale, "keywords") %>'
-								placeholder="<%= LanguageUtil.get(portletConfig, locale, \"keywords\") %>" />
+								placeholder="<%= LanguageUtil.get(portletConfig, locale, \"keywords\") %>" 
+								cssClass="search-input input-keyword"
+								/>
 						</aui:col>
 					</aui:row>
 				</div>

@@ -1,4 +1,3 @@
-<%@page import="org.opencps.processmgt.permissions.ProcessPermission"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -19,6 +18,7 @@
 %>
 
 <%@ include file="../init.jsp"%>
+<%@page import="org.opencps.processmgt.permissions.ProcessPermission"%>
 
 <%
 	PortletURL searchURL = renderResponse.createRenderURL();
@@ -30,7 +30,7 @@
 	    themeDisplay.getScopeGroupId(), ActionKeys.ADD_PROCESS);
 
 %>
-<aui:nav-bar cssClass="custom-toolbar">
+<aui:nav-bar cssClass="opencps-toolbar custom-toolbar">
 	<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left" >
 		
 	</aui:nav>
@@ -42,7 +42,8 @@
 						id="keywords1"
 						name="keywords"
 						title="keywords"
-						placeholder='<%= LanguageUtil.get(locale, "name") %>' 
+						placeholder='<%= LanguageUtil.get(locale, "name") %>'
+						cssClass="search-input input-keyword"
 					/>
 				</div>
 			</aui:form>

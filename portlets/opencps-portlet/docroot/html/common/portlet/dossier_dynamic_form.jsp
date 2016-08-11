@@ -1,4 +1,6 @@
 
+<%@page import="org.opencps.util.JsonUtils"%>
+<%@page import="com.liferay.portal.security.auth.AuthTokenUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -133,11 +135,13 @@
 		}
 	}
 	
+	String formData = "";
 	
-	String formData = AutoFillFormData.dataBinding(sampleData, ownerCitizen, ownerBusiness, dossierId);
-
+	String auTock = AuthTokenUtil.getToken(request);
+	  
 	String alpacaSchema = dossierPart != null && Validator.isNotNull(dossierPart.getFormScript()) ? 
-			dossierPart.getFormScript() : StringPool.BLANK;
+	      dossierPart.getFormScript().replaceAll("p_auth=REPLACEKEY", "p_auth="+auTock) : StringPool.BLANK;
+
 
 	DossierFile dossierFile = null;
 	
@@ -149,8 +153,10 @@
 		}
 		
 		if(dossierFile != null && Validator.isNotNull(dossierFile.getFormData())){
-			formData = dossierFile.getFormData();
+			formData = JsonUtils.quote(dossierFile.getFormData());
 		}
+	}else{
+		formData = AutoFillFormData.dataBinding(sampleData, ownerCitizen, ownerBusiness, dossierId);
 	}
 	
 	String portleName = WebKeys.DOSSIER_MGT_PORTLET;
@@ -183,12 +189,11 @@
 			<c:when test="<%=!isViewForm %>">
 				<c:if test="<%=Validator.isNotNull(alpacaSchema) %>">
 					<aui:button type="button" value="save" name="save" cssClass="saveForm"/>
-					
-					
-					<aui:button type="button" value="preview" name="preview"/>
 				</c:if>
 					
 				<c:if test="<%=dossierFileId > 0%>">
+					<aui:button type="button" value="preview" name="preview"/>
+					
 					<aui:button type="button" value="create-file" name="create-file"/>
 				</c:if>
 			</c:when>
@@ -217,6 +222,14 @@
 					$("#<portlet:namespace />formData" ).val(JSON.stringify(formData));
 					$("#<portlet:namespace />fm" ).submit();
 			    });
+				
+				$(".alpaca-field-table").delegate('select.alpaca-control', 'change', function(){   
+					  var listbox = $('#'+$(this).attr('id') + ' option:selected');
+					  var idText = $(this).attr('name') + "Text";
+					  var hiddenInput = $("input[name='"+idText+"']");
+					  hiddenInput.val(listbox.text());
+					  console.log(hiddenInput.val());
+					});
 			};
 		
 		}
@@ -313,3 +326,34 @@
 	},['aui-io','liferay-portlet-url', 'aui-loading-mask-deprecated']);
 	
 </aui:script>
+
+
+<script type="text/javascript">
+function openCPSSelectedTextValue(id) {
+	var listbox = document.getElementById(id);
+	var selIndex = listbox.selectedIndex;
+	var selText = listbox.options[selIndex].text; 
+    return selText;
+}
+
+function openCPSSelectedbildDataSource(controlId,dictCollectionId, parentItemId) {
+	Liferay.Service(
+			  '/opencps-portlet.dictitem/get-dictitems-inuse-by-dictcollectionId_parentItemId_datasource',
+			  {
+			    dictCollectionId: dictCollectionId,
+			    parentItemId: parentItemId
+			  },
+			  function(obj) {
+				var comboTarget = document.getElementById(controlId); 
+				comboTarget.innerHTML = "";
+			    for(j in obj){
+                    var sub_key = j;
+                    var sub_val = obj[j];
+                    var newOpt = comboTarget.appendChild(document.createElement('option'));
+					newOpt.value = sub_key;
+					newOpt.text = sub_val;
+                }
+			  }
+			);
+}
+</script>

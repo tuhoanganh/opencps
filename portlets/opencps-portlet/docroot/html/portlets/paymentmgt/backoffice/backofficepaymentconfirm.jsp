@@ -1,3 +1,6 @@
+<%@page import="org.opencps.backend.util.PaymentRequestGenerator"%>
+<%@page import="com.liferay.portal.kernel.util.ListUtil"%>
+<%@page import="java.util.List"%>
 <%@page import="org.opencps.util.DateTimeUtil"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="java.text.DecimalFormat"%>
@@ -78,7 +81,6 @@
 <liferay-ui:header
     backURL="<%= backRedirect %>"
     title="payment-confirm"
-    backLabel="back"
 />
 
 <c:choose>
@@ -115,7 +117,24 @@
                         <p><span><liferay-ui:message key="so-tien"/>: </span> <span class="red"><%=HtmlUtil.escape(df2.format(Double.valueOf(paymentFile.getAmount())).toString()) %> <liferay-ui:message key="vnd"/></span></p>
                     </div>
                     <div>
-                        <p><span><liferay-ui:message key="hinh-thuc-thuc-hien"/>: </span> <%= LanguageUtil.get(pageContext, PortletUtil.getPaymentMethodLabel(paymentFile.getPaymentMethod(), locale)) %></p>
+                        <p><span><liferay-ui:message key="hinh-thuc-thuc-hien"/>: </span> 
+							<%
+									List<String> paymentOption = ListUtil.toList(StringUtil.split(paymentFile.getPaymentOptions()));
+									
+									boolean isCash = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_CASH);
+									boolean isKeypay = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_KEYPAY);
+									boolean isBank = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_BANK);
+								%>
+									<c:if test="<%= isCash %>">
+										[ <liferay-ui:message key="cash"></liferay-ui:message> ]&nbsp;
+									</c:if>
+									<c:if test="<%= isKeypay %>">
+										[ <liferay-ui:message key="keypay"></liferay-ui:message> ]&nbsp;
+									</c:if>
+									<c:if test="<%= isBank %>">
+										[ <liferay-ui:message key="bank"></liferay-ui:message> ]
+									</c:if>
+						</p>
                     </div>
                     <div>
                         <p><span><liferay-ui:message key="chung-tu-kem-theo"/>:</span> 

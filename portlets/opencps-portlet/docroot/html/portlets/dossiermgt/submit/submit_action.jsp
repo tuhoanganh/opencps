@@ -16,27 +16,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-<%@ include file="../init.jsp" %>
-<%@page import="org.opencps.util.DictItemUtil"%>
 <%@page import="com.liferay.portal.kernel.dao.search.ResultRow"%>
+<%@ include file="init.jsp"%>
 <%
-	ResultRow row = (ResultRow) request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
- 	ServiceInfo info = (ServiceInfo) row.getObject();
- 	
- 	PortletURL viewURL = renderResponse.createRenderURL();
-	viewURL.setParameter("mvcPath", templatePath + "service_detail.jsp");
-	viewURL.setParameter("serviceinfoId", String.valueOf(info.getServiceinfoId()));
-	viewURL.setParameter("backURL", currentURL);
+	ResultRow row =
+	(ResultRow) request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
+
+	ServiceInfo service = (ServiceInfo) row.getObject();
+	
+	PortletURL submitOnlineURL = renderResponse.createRenderURL();
+	submitOnlineURL.setParameter("mvcPath", templatePath + "dossier_submit_online.jsp");
+	submitOnlineURL.setParameter("serviceinfoId", String.valueOf(service.getServiceinfoId()));
+	submitOnlineURL.setParameter("onlineURL", service.getOnlineUrl());
+	submitOnlineURL.setParameter("backURL", currentURL);
 %>
-
-<div class="ocps-searh-bound-data">
-	<p class="ocps-searh-bound-data-chirld-p">
-		<span class="ocps-searh-bound-data-chirld-span">
-			<liferay-ui:message key="service-name" />
-		</span>
-		<a class="ocps-searh-bound-data-chirld-label" href="<%=viewURL.toString()%>">
-			<%=info.getServiceName() %>
-		</a>
-	</p>
-
-</div>
+<aui:button value="service-description" href="<%=submitOnlineURL.toString() %>" cssClass="des-sub-button" />

@@ -22,9 +22,9 @@
 .opencps-theme .sbc .row-fluid .control-group {
 	margin-bottom: 10px
 }
-.aui .row-fluid .span4 {
+/* .aui .row-fluid .span4 {
 	margin-top: 20px;
-}
+} */
 .opencps-theme .sbc .row-fluid input, 
 .opencps-theme .sbc .row-fluid select {
 	width: 78%;
@@ -87,9 +87,9 @@ html, body{
 
 /*--------------------*/
 .portlet_13_result {
-	padding: 20px 30px 10px;
 	border-right: 1px solid #e1e1e1;
 } 
+
 .portlet_13_lb {
 	font-family: "Roboto-Bold";
 }

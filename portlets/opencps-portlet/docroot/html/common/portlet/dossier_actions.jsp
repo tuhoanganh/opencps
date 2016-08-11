@@ -28,6 +28,8 @@
 <%
 	boolean isDynamicForm = ParamUtil.getBoolean(request, "isDynamicForm");
 
+	int isOnlineData = ParamUtil.getInteger(request, "isOnlineData", 0);
+
 	boolean isEditDossier = ParamUtil.getBoolean(request, "isEditDossier");
 
 	boolean isChildDossierPart = GetterUtil.getBoolean(ParamUtil.getBoolean(request, "isChildDossierPart"), false);
@@ -80,7 +82,7 @@
 			<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_SUBMIT%>">
 				<td width="80%" align="right">
 					<c:choose>
-						<c:when test="<%=isDynamicForm && fileEntryId <= 0%>">
+						<c:when test="<%=isDynamicForm && fileEntryId <= 0 && isOnlineData <= 0%>">
 							<c:if test="<%=isEditDossier %>">
 								<aui:a 
 									id="<%=String.valueOf(dossierPartId) %>"
@@ -97,7 +99,7 @@
 								/>
 							</c:if>
 						</c:when>
-						<c:when test="<%=isDynamicForm && fileEntryId > 0  %>">
+						<c:when test="<%= ( isDynamicForm && fileEntryId > 0 ) || isOnlineData > 0  %>">
 							<aui:a 
 								id="<%=String.valueOf(dossierPartId) %>"
 								dossier="<%=String.valueOf(dossierId) %>"

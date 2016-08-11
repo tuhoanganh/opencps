@@ -96,6 +96,7 @@
 		htmlTop="<%= htmlTop %>"
 		jspPath='<%=templatePath + "dossier/" %>'
 		showButtons="<%=false%>"
+		displayStyle="left-navigator"
 	/>
 </aui:form>
 </div>

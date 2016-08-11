@@ -68,6 +68,8 @@ public class BackOfficeProcessEngine implements MessageListener {
 	
 	private void _doRecevie(Message message) {
 		
+		_log.info("POKEMON ->> GO ProcessEngine -->>>>>>>>>");
+		
 		Date now = new Date();
 		String actionName = StringPool.BLANK;
 		String stepName = StringPool.BLANK;
@@ -277,7 +279,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 				if (processWorkflow.getRequestPayment()) {
 
 					int totalPayment =
-					    PaymentRequestGenerator.getTotalPayment(processWorkflow.getPaymentFee());
+					    PaymentRequestGenerator.getTotalPayment(processWorkflow.getPaymentFee(), dossier.getDossierId());
 
 					List<String> paymentMethods =
 					    PaymentRequestGenerator.getPaymentMethod(processWorkflow.getPaymentFee());
@@ -334,7 +336,8 @@ public class BackOfficeProcessEngine implements MessageListener {
 				toBackOffice.setDossierStatus(PortletConstants.DOSSIER_STATUS_ERROR);
 				toBackOffice.setCompanyId(toEngineMsg.getCompanyId());
 				toBackOffice.setGovAgencyCode(govAgencyCode);
-
+				toBackOffice.setReceptionNo(toEngineMsg.getReceptionNo());
+				
 				Message sendToBackOffice = new Message();
 
 				sendToBackOffice.put("toBackOffice", toBackOffice);

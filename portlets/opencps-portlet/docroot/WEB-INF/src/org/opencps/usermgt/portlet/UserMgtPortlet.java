@@ -152,6 +152,7 @@ public class UserMgtPortlet extends MVCPortlet {
 			    .add(actionRequest, MessageKeys.USERMGT_JOBPOS_DELETE_SUCCESS);
 			if (Validator
 			    .isNotNull(redirectURL)) {
+				_log.info(redirectURL);
 				actionResponse
 				    .sendRedirect(redirectURL);
 			}
@@ -679,6 +680,7 @@ public class UserMgtPortlet extends MVCPortlet {
 		long workingUnitId = ParamUtil
 		    .getLong(actionRequest, "workingUnitId");
 		try {
+			int count = 0;
 			ServiceContext serviceContext = ServiceContextFactory
 			    .getInstance(actionRequest);
 			for (int index = 0; index < indexOfRows.length; index++) {
@@ -691,14 +693,30 @@ public class UserMgtPortlet extends MVCPortlet {
 				        actionRequest,
 				        JobPosSearchTerms.LEADER_JOBPOS + indexOfRows[index]
 				            .trim());
+				JobPos jobPos = null;
+				try {
+					jobPos = JobPosLocalServiceUtil
+									.getJobPosByTitle(serviceContext.getScopeGroupId(), title);
+					if(Validator.isNotNull(jobPos)) {
+						count ++;
+					}
+				}
+				catch (Exception e) {
+					// TODO: handle exception
+				}
 				JobPosLocalServiceUtil
 				    .addJobPos(serviceContext
 				        .getUserId(), title, StringPool.BLANK, workingUnitId,
 				        leader, rowIds, serviceContext);
-
+				
 			}
-			SessionMessages
+			
+			if(count == 0) {
+				SessionMessages
 			    .add(actionRequest, MessageKeys.USERMGT_JOBPOS_UPDATE_SUCESS);
+			} else {
+				SessionErrors.add(actionRequest, "jobpos-existed-title");
+			}
 			if (Validator
 			    .isNotNull(redirectURL)) {
 				actionResponse

@@ -128,6 +128,11 @@
 		<finder return-type="Collection" name="WorkingUnitId">
 			<finder-column name="workingUnitId"></finder-column>
 		</finder>
+		
+		<finder return-type="JobPos" name="Title">
+		<finder-column name="groupId" />
+			<finder-column name="title" />
+		</finder>
 	</entity>
 
 

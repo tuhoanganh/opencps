@@ -42,10 +42,10 @@
 	List<String> headerNames = new ArrayList<String>();
 	
 	/* headerNames.add("row-no");
-	headerNames.add("part-no");
+	headerNames.add("part-no");*/
 	headerNames.add("part-name");
 	headerNames.add("part-type");
-	headerNames.add("part-tip"); */
+	headerNames.add("part-tip"); 
 	
 	
 	
@@ -56,7 +56,11 @@
 	
 	int totalCount = 0;
 	long dossierTemplateId = dossierTemplate != null ? dossierTemplate.getDossierTemplateId() : 0L;
-
+	
+	try {
+		totalCount = DossierPartLocalServiceUtil.CountByTempalteId(dossierTemplateId);
+	} catch (Exception e) {}
+	
 	if (isPermission) {
 		headerNames.add("action");
 	}
@@ -66,8 +70,6 @@
  // chua sap xep theo sibling
 					
 %>
-
-<div class="ocps-serviceinfo-list">
 
 <portlet:renderURL var="editDossierPartURL">
 	<portlet:param name="mvcPath" value='<%= templatePath + "edit_dossier_part.jsp" %>'/>
@@ -84,61 +86,90 @@
 	<%-- <div id="<portlet:namespace/>toolbarResponse"></div> --%>
 	<aui:button href="<%= editDossierPartURL.toString() %>" value="add-dossier-part"/>
 </c:if>
-
-<liferay-ui:search-container searchContainer="<%= new DossierPartSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" 
-	headerNames="<%= headers %>">
-	<liferay-ui:search-container-results>
-		<%
-			
-			dossierParts = DossierPartLocalServiceUtil.getDossierParts(
-					dossierTemplateId, searchContainer.getStart(), searchContainer.getEnd());
-									
-			totalCount = DossierPartLocalServiceUtil.CountByTempalteId(dossierTemplateId);
-			
-			total = totalCount;
-			results = dossierParts;
-			pageContext.setAttribute("results", results);
-			pageContext.setAttribute("total", total);
-		%>
-	</liferay-ui:search-container-results>
-	
-	<liferay-ui:search-container-row 
-		className="org.opencps.dossiermgt.model.DossierPart" 
-		modelVar="dossierPart" 
-		keyProperty="dossierpartId"
-	>
-		<%
-			String partTypeName = LanguageUtil.get(portletConfig ,themeDisplay.getLocale(), DossierMgtUtil.getNameOfPartType(dossierPart.getPartType(), themeDisplay.getLocale()));
+<div class="opencps-searchcontainer-wrapper">
+	<liferay-ui:search-container searchContainer="<%= new DossierPartSearch(renderRequest, totalCount, iteratorURL) %>" 
+		headerNames="<%= headers %>">
+		<liferay-ui:search-container-results>
+			<%
+				
+				dossierParts = DossierPartLocalServiceUtil.getDossierParts(
+						dossierTemplateId, searchContainer.getStart(), searchContainer.getEnd());
+										
+				total = totalCount;
+				results = dossierParts;
+				pageContext.setAttribute("results", results);
+				pageContext.setAttribute("total", total);
+			%>
+		</liferay-ui:search-container-results>
 		
-			String rowNo =  LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "row-no");
-			String partNo =  LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "part-no");
-			String partName =  LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "part-name");
-			String partType =  LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "part-type");
-			String parTip =  LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "part-tip");
+		<liferay-ui:search-container-row 
+			className="org.opencps.dossiermgt.model.DossierPart" 
+			modelVar="dossierPart" 
+			keyProperty="dossierpartId"
+		>
+			<%
+				String partTypeName = LanguageUtil.get(portletConfig ,themeDisplay.getLocale(), DossierMgtUtil.getNameOfPartType(dossierPart.getPartType(), themeDisplay.getLocale()));
+			%>
+			<liferay-util:buffer var="boundcol1">
+				<div class="row-fluid">
+					<div class="span1"></div>
+					
+					<div class="span2 bold-label">
+						<liferay-ui:message key="sibling"/>
+					</div>
+					<div class="span9"><%=String.valueOf((int)dossierPart.getSibling())%></div>
+				</div>
+				
+				<div class="row-fluid">
+					<div class="span1"></div>
+					
+					<div class="span2 bold-label">
+						<liferay-ui:message key="part-no"/>
+					</div>
+					<div class="span9"><%=dossierPart.getPartNo()%></div>
+				</div>
+				
+				<div class="row-fluid">
+					<div class="span1"></div>
+					
+					<div class="span2 bold-label">
+						<liferay-ui:message key="part-name"/>
+					</div>
+					<div class="span9"><%=dossierPart.getPartName()%></div>
+				</div>
+			</liferay-util:buffer>
 			
+			<liferay-util:buffer var="boundcol2">
+				<div class="row-fluid">
+					<div class="span1"></div>
+					
+					<div class="span2 bold-label">
+						<liferay-ui:message key="part-type"/>
+					</div>
+					<div class="span9"><%=partTypeName %> </div>
+				</div>
+				
+				<div class="row-fluid">
+					<div class="span1"></div>
+					
+					<div class="span2 bold-label">
+						<liferay-ui:message key="part-tip"/>
+					</div>
+					<div class="span9"><%=dossierPart.getPartTip() %> </div>
+				</div>
+			</liferay-util:buffer>
+			<%
+				/* row.addText(String.valueOf((int)dossierPart.getSibling())); */
+				row.setClassName("opencps-searchcontainer-row");
+				row.addText(boundcol1);
+				row.addText(boundcol2);
+				
+				if(isPermission) {
+					row.addJSP("center", SearchEntry.DEFAULT_VALIGN, templatePath + "dossier_part_actions.jsp", config.getServletContext(), request, response);
+				}
+			%>
 			
-			String s = "<div class=\"ocps-searh-bound-data\"><p class=\"ocps-searh-bound-data-chirld-p\"><span class=\"ocps-searh-bound-data-chirld-span\">" + partNo + "</span>"+ dossierPart.getPartNo() +"</p>";
-			s= s + "<p class=\"ocps-searh-bound-data-chirld-p\"><span class=\"ocps-searh-bound-data-chirld-span\">"+ partName +"</span><a class=\"ocps-searh-bound-data-chirld-label\" href=\"#\"> "+ dossierPart.getPartName() + "</a></p></div>";
-			
-			String s1 = "<div class=\"ocps-searh-bound-data\"><p class=\"ocps-searh-bound-data-chirld-p\"><span class=\"ocps-searh-bound-data-chirld-span\">" + partType + "</span>"+ partTypeName +"</p>";
-			s1= s1 + "<p class=\"ocps-searh-bound-data-chirld-p\"><span class=\"ocps-searh-bound-data-chirld-span\">"+ parTip +"</span><a class=\"ocps-searh-bound-data-chirld-label\" href=\"#\"> "+ dossierPart.getPartTip() + "</a></p></div>";
-
-			row.addText(String.valueOf((int)dossierPart.getSibling()));
-			row.addText(s);
-			row.addText(s1);
-			
-			/* row.addText(partNo + " :: " +dossierPart.getPartNo());
-			row.addText(partName + " :::: " + dossierPart.getPartName());
-			row.addText(partType + " ::::: " + partTypeName);
-			row.addText(parTip + " :::: " + dossierPart.getPartTip()); */
-			
-			if(isPermission) {
-				row.addJSP("center", SearchEntry.DEFAULT_VALIGN, templatePath + "dossier_part_actions.jsp", config.getServletContext(), request, response);
-			}
-		%>
-		
-	</liferay-ui:search-container-row>
-	<liferay-ui:search-iterator paginate="<%=false %>"/>
-</liferay-ui:search-container>
-
+		</liferay-ui:search-container-row>
+		<liferay-ui:search-iterator paginate="<%=false %>"/>
+	</liferay-ui:search-container>
 </div>

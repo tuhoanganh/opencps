@@ -29,6 +29,7 @@ public class MessageKeys {
 	public static final String USERMGT_JOBPOS_DELETE_SUCCESS = "usermgt.jobpos.delete.success";
 	public static final String USERMGT_JOBPOS_UPDATE_ERROR = "usermgt.jobpos.update.error";
 	public static final String USERMGT_JOBPOS_UPDATE_SUCESS = "usermgt.jobpos.update.success";
+	public static final String USERMGT_JOBPOS_HAS_EXITS_TITLE = "usermgt.jobpos.has.exits";
 	public static final String USERMGT_ADD_SUCCESS = "usermgt.add.sucess";
 	public static final String USERMGT_EMPLOYEE_DELETE_ERROR = "usermgt.employee.delete.error";
 	public static final String USERMGT_EMPLOYEE_DELETE_SUCCESS = "usermgt.employee.delete.sucess";
@@ -37,7 +38,7 @@ public class MessageKeys {
 	public static final String USERMGT_WORKINGUNIT_DELETE_ERROR = "usermgt.workingunit.delete.error";
 	public static final String USERMGT_WORKINGUNIT_DELETE_ERROR_EXIST = "usermgt.workingunit.delete.error.exist";
 	public static final String USERMGT_WORKINGUNIT_DELETE_SUCCESS = "usermgt.workingunit.delete.success";
-
+	
 	public static final String USERMGT_WORKINGUNIT_UPDATE_ERROR = "usermgt.workingunit.update.error";
 	public static final String USERMGT_WORKINGUNIT_UPDATE_SUCESS = "usermgt.workingunit.update.success";
 	
@@ -74,4 +75,10 @@ public class MessageKeys {
 	public static final String PAYMENT_FILE_CONFIRM_CASH_SUCCESS = "payment.file.confirm.cash.success";
 	public static final String PAYMENT_FILE_CONFIRM_CASH_ERROR = "payment.file.confirm.cash.error";
 	public static final String PAYMENT_FILE_CONFIRM_BANK_ERROR = "payment.file.confirm.bank.error";
+
+	public static final String SERVICE_DELERR_EXITS_SERVICECONFIG = "serviceinf.serviceconfig.has.existed";
+	public static final String SERVICE_DELERR_EXITS_DOSSIER = "serviceinf.dossier.has.existed";
+	public static final String SERVICE_DELERR_EXITS_PROCESSORDER = "serviceinf.processorder.has.existed";
+
+	public static final String SERVICE_DELSUCC = "serviceinf.delete.success";
 }
