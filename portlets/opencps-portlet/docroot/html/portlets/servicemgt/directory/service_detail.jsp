@@ -207,7 +207,7 @@
 				</tr>
 				<tr>
 					<td class="col-left" colspan="2">
-						<aui:button href="<%= serviceInfo.getOnlineUrl() %>" cssClass="des-sub-button" value="online-url"></aui:button>
+						<aui:button href="<%= serviceInfo.getOnlineUrl() %>" cssClass="des-sub-button radius20" value="online-url"></aui:button>
 					</td>
 				</tr>
 			</table>
