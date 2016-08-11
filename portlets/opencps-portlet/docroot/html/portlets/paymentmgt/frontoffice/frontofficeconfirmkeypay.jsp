@@ -65,7 +65,6 @@
 <liferay-ui:header
 	backURL="<%= backURL.toString() %>"
 	title="payment-list"
-	backLabel="back"
 />
 
 <c:choose>

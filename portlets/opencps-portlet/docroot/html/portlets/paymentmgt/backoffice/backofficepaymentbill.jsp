@@ -24,7 +24,6 @@
 <liferay-ui:header
 	backURL="<%= backRedirect %>"
 	title="payment-report"
-	backLabel="back"
 />
 
 <portlet:actionURL name="createReport" var="createReportURL" />

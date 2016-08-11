@@ -38,8 +38,9 @@
 	boolean isCash = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_CASH);
 	boolean isKeypay = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_KEYPAY);
 	boolean isBank = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_BANK);
+	
+	String chuHoSo = (String)request.getAttribute("chuHoSo");
 %>
-
 
 <portlet:renderURL var="keypayTransaction">
 	<portlet:param name="<%= PaymentFileDisplayTerms.PAYMENT_FILE_ID %>"
@@ -58,7 +59,7 @@
 		value="/html/portlets/paymentmgt/frontoffice/frontofficeconfirmbank.jsp" />
 	<portlet:param name="redirectURL" value="<%= currentURL %>" />
 	<portlet:param name="backURL" value="<%=currentURL %>"/>
-	
+	<portlet:param name="chuHoSo" value="<%=chuHoSo %>"/>
 </portlet:renderURL>
 
 
