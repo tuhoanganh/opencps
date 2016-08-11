@@ -57,10 +57,10 @@
             <finder-column name="amount"></finder-column>
         </finder>
         
-        <finder return-type="PaymentFile" name="G_C" unique="true">
+        <finder return-type="PaymentFile" name="G_C">
         	<finder-column name="keypayGoodCode"/>
         </finder>
-        <finder return-type="PaymentFile" name="T_I" unique="true">
+        <finder return-type="PaymentFile" name="T_I">
         	<finder-column name="keypayTransactionId"/>
         </finder>
         

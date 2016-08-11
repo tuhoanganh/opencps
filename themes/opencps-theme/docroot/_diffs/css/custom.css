@@ -1267,6 +1267,10 @@ footer > p:nth-child(2) {
 	border-radius: 0 5px 5px 0 !important;
 	border: 1px !important;
 }
+
+.aui a {
+	color: #000;
+}
 	
 /*
 	--end---

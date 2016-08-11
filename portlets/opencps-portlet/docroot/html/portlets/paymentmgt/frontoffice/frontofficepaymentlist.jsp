@@ -156,6 +156,7 @@
 						}
 						
 					}
+					request.setAttribute("chuHoSo", chuHoSo);
 						// payment status column
 						String paymentStatusText = "";
 						switch (paymentFile.getPaymentStatus()) {
@@ -184,7 +185,7 @@
 						detailURLXem.setParameter("mvcPath", templatePath + "frontofficepaymentdetail.jsp");
 						detailURLXem.setParameter(PaymentFileDisplayTerms.PAYMENT_FILE_ID, String.valueOf(paymentFile.getPaymentFileId()));
 						detailURLXem.setParameter("redirect", currentURL);
-						
+						detailURLXem.setParameter("chuHoSo", chuHoSo);
 						String classColor = "chothanhtoan";
 						if(paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_REQUESTED || paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_REJECTED){
 							classColor = "chothanhtoan";

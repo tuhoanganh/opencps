@@ -35,6 +35,7 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 /**
  * @author trungnt
@@ -47,7 +48,7 @@ public class PreviewReportServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected synchronized void doGet(
+	protected void doGet(
 	    HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
 
@@ -72,23 +73,24 @@ public class PreviewReportServlet extends HttpServlet {
 
 			String formData = dossierFile
 			    .getFormData();
-			String jrxmlTemplate = dossierPart
-			    .getFormReport();
 
-			// Validate json string
-
-			JSONObject jsonObject = JSONFactoryUtil
-						    .createJSONObject(formData);
-			
-			/*JSONObject dataSource = JSONFactoryUtil
-						    .createJSONObject();
-			
-			dataSource.put("opencps", jsonObject);*/
-
-			if(dossierFileId > 0){
+			if(Validator.isNotNull(formData)) {
+				String jrxmlTemplate = dossierPart
+				    .getFormReport();
+	
+				// Validate json string
+	
+				JSONObject jsonObject = JSONFactoryUtil
+							    .createJSONObject(formData);
+				
+				/*JSONObject dataSource = JSONFactoryUtil
+							    .createJSONObject();
+				
+				dataSource.put("opencps", jsonObject);*/
+	
 				JRReportUtil
-			    .renderReportHTMLStream(
-			        response, writer, jrxmlTemplate, jsonObject.toString(), null);
+				    .renderReportHTMLStream(
+				        response, writer, jrxmlTemplate, jsonObject.toString(), null);
 			}
 
 		}
