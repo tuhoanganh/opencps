@@ -111,6 +111,7 @@
 									boolean isKeypay = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_KEYPAY);
 									boolean isBank = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_BANK);
 								%>
+									
 									<c:if test="<%= isCash %>">
 										[ <liferay-ui:message key="cash"></liferay-ui:message> ]&nbsp;
 									</c:if>

@@ -43,6 +43,7 @@ import org.opencps.accountmgt.NoSuchAccountOwnUserIdException;
 import org.opencps.accountmgt.NoSuchAccountTypeException;
 import org.opencps.accountmgt.model.Business;
 import org.opencps.accountmgt.model.Citizen;
+import org.opencps.backend.message.SendToEngineMsg;
 import org.opencps.backend.message.UserActionMsg;
 import org.opencps.datamgt.model.DictCollection;
 import org.opencps.datamgt.model.DictItem;
@@ -89,7 +90,10 @@ import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
 import org.opencps.dossiermgt.util.DossierMgtUtil;
 import org.opencps.jasperreport.util.JRReportUtil;
 import org.opencps.processmgt.model.ProcessOrder;
+import org.opencps.processmgt.model.ProcessWorkflow;
+import org.opencps.processmgt.search.ProcessOrderDisplayTerms;
 import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
+import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
 import org.opencps.util.AccountUtil;
@@ -124,6 +128,7 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
+import com.liferay.portal.service.ServiceContextThreadLocal;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.DuplicateFileException;
@@ -2851,4 +2856,95 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		}
 	}
 
+
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws IOException
+	 */
+	public void cancelDossier(
+		ActionRequest actionRequest, ActionResponse actionResponse)
+		throws IOException {
+		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
+		AccountBean accountBean = AccountUtil.getAccountBean(actionRequest);
+		if (accountBean.isBusiness() || accountBean.isCitizen()) {
+			long dossierId =
+					ParamUtil.getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
+			try {
+				Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
+				ProcessOrder processOrder = ProcessOrderLocalServiceUtil.getProcessOrder(dossierId, 0);
+				ProcessWorkflow workFlow = ProcessWorkflowLocalServiceUtil.getByS_PreP_AN(processOrder.getServiceProcessId(), processOrder.getProcessStepId(), "Thông báo hủy hồ sơ");
+				Message message = new Message();
+				if (Validator.isNotNull(workFlow.getAutoEvent())) {
+					message.put(ProcessOrderDisplayTerms.EVENT, workFlow.getAutoEvent());				
+				}
+				else {
+					message.put(ProcessOrderDisplayTerms.PROCESS_WORKFLOW_ID,
+							workFlow.getProcessWorkflowId());				
+				}
+
+				message.put(ProcessOrderDisplayTerms.ACTION_NOTE, "Người làm thủ tục hủy hồ sơ");
+				message.put(ProcessOrderDisplayTerms.PROCESS_STEP_ID,
+						processOrder.getProcessStepId());
+				message.put(ProcessOrderDisplayTerms.ASSIGN_TO_USER_ID, 0);
+				message.put(ProcessOrderDisplayTerms.SERVICE_PROCESS_ID,
+						processOrder.getServiceProcessId());
+				message.put(ProcessOrderDisplayTerms.PAYMENTVALUE, 0);
+				message.put(ProcessOrderDisplayTerms.GROUP_ID, serviceContext.getScopeGroupId());
+				message.put(ProcessOrderDisplayTerms.ACTION_USER_ID,
+				serviceContext.getUserId());
+
+				message.put(ProcessOrderDisplayTerms.PROCESS_ORDER_ID,
+						processOrder.getProcessOrderId());
+				message.put(ProcessOrderDisplayTerms.FILE_GROUP_ID, 0);
+				message.put(ProcessOrderDisplayTerms.DOSSIER_ID,
+						dossier.getDossierId());
+
+				message.put(ProcessOrderDisplayTerms.GROUP_ID, dossier.getGroupId());
+
+				message.put(ProcessOrderDisplayTerms.COMPANY_ID,
+						dossier.getCompanyId());
+
+				SendToEngineMsg sendToEngineMsg = new SendToEngineMsg();
+
+				sendToEngineMsg.setActionNote("Người làm thủ tục hủy hồ sơ");
+				sendToEngineMsg.setAssignToUserId(0);
+				sendToEngineMsg.setActionUserId(Long.parseLong(actionRequest.getRemoteUser()));
+				sendToEngineMsg.setDossierId(dossier.getDossierId());
+				sendToEngineMsg.setFileGroupId(0);
+				sendToEngineMsg.setPaymentValue(GetterUtil.getDouble(0));
+				sendToEngineMsg.setProcessOrderId(processOrder.getProcessOrderId());
+				sendToEngineMsg.setReceptionNo(Validator.isNotNull(dossier
+						.getReceptionNo()) ? dossier.getReceptionNo()
+						: StringPool.BLANK);
+				sendToEngineMsg.setSignature(0);
+				if (Validator.isNotNull(workFlow.getAutoEvent())) {
+					sendToEngineMsg.setEvent(workFlow.getAutoEvent());				
+				}
+				else {
+					sendToEngineMsg.setProcessWorkflowId(workFlow
+							.getProcessWorkflowId());				
+				}			
+				sendToEngineMsg.setGroupId(serviceContext.getScopeGroupId());
+				sendToEngineMsg.setUserId(serviceContext.getUserId());
+				message.put("msgToEngine", sendToEngineMsg);
+				MessageBusUtil.sendMessage("opencps/backoffice/engine/destination",
+						message);
+				addProcessActionSuccessMessage = false;
+				SessionMessages.add(actionRequest, "cancel-dossier-success");
+			} catch (PortalException e) {
+				// TODO Auto-generated catch block
+				_log.error(e);
+				SessionErrors.add(actionRequest, "user-not-have-permission-cancel-dossier");
+			} catch (SystemException e) {
+				// TODO Auto-generated catch block
+				_log.error(e);
+				SessionErrors.add(actionRequest, "user-not-have-permission-cancel-dossier");
+			}
+			
+		}
+		else {
+			SessionErrors.add(actionRequest, "user-not-have-permission-cancel-dossier");
+		}
+	} 	
 }
