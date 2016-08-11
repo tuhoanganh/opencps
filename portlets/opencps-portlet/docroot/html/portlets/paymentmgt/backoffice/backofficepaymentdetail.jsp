@@ -100,7 +100,6 @@
                     </div>
                     <div>
                         <p><span><liferay-ui:message key="hinh-thuc-thuc-hien"/>:</span> 
-	                        <c:choose>
 	                        	<%
 									List<String> paymentOption = ListUtil.toList(StringUtil.split(paymentFile.getPaymentOptions()));
 									
@@ -108,6 +107,7 @@
 									boolean isKeypay = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_KEYPAY);
 									boolean isBank = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_BANK);
 								%>
+									
 									<c:if test="<%= isCash %>">
 										[ <liferay-ui:message key="cash"></liferay-ui:message> ]&nbsp;
 									</c:if>
@@ -117,7 +117,6 @@
 									<c:if test="<%= isBank %>">
 										[ <liferay-ui:message key="bank"></liferay-ui:message> ]
 									</c:if>
-			                </c:choose>
 	                	</p>
                     </div>
                     <div>
