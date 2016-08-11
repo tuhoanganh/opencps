@@ -60,10 +60,16 @@
 		urls.add(viewExternalDossierURL.toString());
 	}
 %>
-<liferay-ui:tabs
-	names="<%= StringUtil.merge(names) %>"
-	param="tabs1"
-	url0="<%=urls != null && urls.size() > 0 ? urls.get(0): StringPool.BLANK %>"
-	url1="<%=urls != null && urls.size() > 1 ? urls.get(1): StringPool.BLANK %>"
-	url2="<%=urls != null && urls.size() > 2 ? urls.get(2): StringPool.BLANK %>"
-/>
+<div class="menu_level_2">
+	<div class="container">
+		<liferay-ui:tabs  
+			names="<%= StringUtil.merge(names) %>"
+			param="tabs1"
+			url0="<%=urls != null && urls.size() > 0 ? urls.get(0): StringPool.BLANK %>"
+			url1="<%=urls != null && urls.size() > 1 ? urls.get(1): StringPool.BLANK %>"
+			url2="<%=urls != null && urls.size() > 2 ? urls.get(2): StringPool.BLANK %>"
+		/>
+	</div>
+</div>
+
+

@@ -131,7 +131,7 @@
 	text-align: center;
 	height: 1px;
 	background-color: #e1e1e1;
-	margin-top: 10px;
+	margin-top: 30px;
 	margin-bottom: 20px;
 }
 
@@ -208,4 +208,28 @@
 	color: white !Important;
 	position: absolute;
 	margin-left: 18px;
+}
+
+.opencps-theme.ux .ux-sign-in-wrapper  .btn-fb-signin{
+	text-transform: uppercase;
+    font-family: 'Roboto-Medium';
+}
+.opencps-theme.ux .ux-sign-in-wrapper  .btn-signature-signin{
+	text-transform: uppercase;
+    font-family: 'Roboto-Medium';
+}
+.opencps-theme.ux .portlet-boundary_26_WAR_opencpsportlet_ .opencps-searchcontainer-wrapper .opencps-searchcontainer-row .last{
+	width: 10%;
+}
+.opencps-theme.ux .portlet-boundary_26_WAR_opencpsportlet_ .opencps-searchcontainer-wrapper .opencps-searchcontainer-row .table-cell {
+	vertical-align: middle;
+}
+.opencps-theme.ux .portlet-boundary_26_WAR_opencpsportlet_ .opencps-searchcontainer-wrapper .des-sub-button{
+	width: 100%;
+    background: #0090ff;
+    border-radius: 20px;
+    color: white;
+    font-family: 'Roboto-Medium';
+    border: 0;
+    padding: 10px;
 }

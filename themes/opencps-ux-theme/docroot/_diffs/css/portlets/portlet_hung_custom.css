@@ -300,17 +300,13 @@
 	border-bottom: 1px solid #e1e1e1;
 }
 .opencps-theme .ocps-service-detal-bound-all .service-detail-wrapper table td.col-left {
-	width: 105px;
-	min-width: 105px;
-	padding: 15px 0 15px 25px;
+	width: 150px;
+	min-width: 100px;
+	padding: 15px;
 	vertical-align: top;
 	font-family: 'Roboto-Bold';
 }
-.opencps-theme .ocps-service-detal-bound-all .service-detail-wrapper table td.col-right {
-	width: 765px;
-	max-width: 765px;
-	padding: 15px 30px;
-}
+
 .opencps-theme .ocps-service-detal-bound-all .service-detail-wrapper table td.col-right ul {
 	margin: 0;
 }
