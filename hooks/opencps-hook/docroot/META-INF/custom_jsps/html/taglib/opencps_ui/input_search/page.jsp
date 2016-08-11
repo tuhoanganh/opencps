@@ -63,9 +63,7 @@ if(keySelect.contains(",")){
 	             <%iKey++;} %>
 	        </ul>
 	   </div>
-	</c:if>
-	<c:if test="<%= showButton %>">
-		<button class="btn" type="submit">
+	   	<button class="btn" type="submit" >
 			<%= buttonLabel %>
 		</button>
 	</c:if>

@@ -59,6 +59,8 @@ String historyKey = ParamUtil.getString(request, "historyKey");
 if (Validator.isNotNull(historyKey)) {
 	curSection = historyKey;
 }
+
+System.out.println(displayStyle + " ###################################################");
 %>
 
 <div class="taglib-form-navigator" id="<portlet:namespace />tabsBoundingBox">
@@ -66,6 +68,16 @@ if (Validator.isNotNull(historyKey)) {
 
 	<c:choose>
 		<c:when test='<%= displayStyle.equals("panel") %>'>
+			<liferay-ui:panel-container accordion="<%= true %>" extended="<%= true %>" id="tabs" persistState="<%= true %>">
+				<%@ include file="/html/taglib/ui/form_navigator/sections.jspf" %>
+			</liferay-ui:panel-container>
+
+			<aui:button-row>
+				<aui:button cssClass="btn-primary pull-right" type="submit" />
+			</aui:button-row>
+		</c:when>
+		
+		<c:when test='<%= displayStyle.equals("right-navigator") %>'>
 			<liferay-ui:panel-container accordion="<%= true %>" extended="<%= true %>" id="tabs" persistState="<%= true %>">
 				<%@ include file="/html/taglib/ui/form_navigator/sections.jspf" %>
 			</liferay-ui:panel-container>
@@ -96,21 +108,25 @@ if (Validator.isNotNull(historyKey)) {
 
 					<%= Validator.isNotNull(htmlBottom) ? htmlBottom : StringPool.BLANK %>
 				</liferay-util:buffer>
+				
+				<c:if test='<%=!displayStyle.equals("left-navigator") %>'>
+					<liferay-util:buffer var="formSectionsBuffer">
 
-				<liferay-util:buffer var="formSectionsBuffer">
+						<%
+						String contentCssClass = "form-navigator-content";
+	
+						if (!displayStyle.equals("steps")) {
+							contentCssClass += " span8";
+						}
+						%>
+	
+						<div class="<%= contentCssClass %>">
+							<%@ include file="/html/taglib/ui/form_navigator/sections.jspf" %>
+						</div>
+					</liferay-util:buffer>
+					<%= formSectionsBuffer %>
+				</c:if>
 
-					<%
-					String contentCssClass = "form-navigator-content";
-
-					if (!displayStyle.equals("steps")) {
-						contentCssClass += " span8";
-					}
-					%>
-
-					<div class="<%= contentCssClass %>">
-						<%@ include file="/html/taglib/ui/form_navigator/sections.jspf" %>
-					</div>
-				</liferay-util:buffer>
 
 				<ul class="form-navigator nav nav-list span4 well">
 					<%= Validator.isNotNull(htmlTop) ? htmlTop : StringPool.BLANK %>
@@ -210,7 +226,24 @@ if (Validator.isNotNull(historyKey)) {
 					</c:if>
 				</ul>
 
-				<%= formSectionsBuffer %>
+				<c:if test='<%=displayStyle.equals("left-navigator") %>'>
+					<liferay-util:buffer var="formSectionsBuffer">
+
+						<%
+						String contentCssClass = "form-navigator-content";
+	
+						if (!displayStyle.equals("steps")) {
+							contentCssClass += " span8";
+						}
+						%>
+	
+						<div class="<%= contentCssClass %>">
+							<%@ include file="/html/taglib/ui/form_navigator/sections.jspf" %>
+						</div>
+					</liferay-util:buffer>				
+					<%= formSectionsBuffer %>
+				</c:if>
+				
 
 				<c:if test='<%= displayStyle.equals("steps") %>'>
 					<%= formNavigatorBottom %>

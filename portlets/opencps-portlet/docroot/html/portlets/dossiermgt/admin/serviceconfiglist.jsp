@@ -36,86 +36,11 @@
 <%@page import="org.opencps.dossiermgt.search.ServiceConfigSearchTerm"%>
 <%@page import="org.opencps.processmgt.service.ServiceProcessLocalServiceUtil"%>
 
-<style>
-<!--
-/* Table Thu tuc hanh chinh */
-.opencps-theme .ocps-serviceinfo-list table {
-	border: 0;
-}
-.opencps-theme .ocps-serviceinfo-list table thead {
-	display: none;
-}
-.opencps-theme .ocps-serviceinfo-list table td {
-	background: none #fff;
-	border: 0;
-	border-bottom: 1px solid #e1e1e1;
-	position: relative;
-}
-.opencps-theme .ocps-serviceinfo-list table tr:first-child td {
-	border-top: 1px solid #e1e1e1;
-}
-.opencps-theme .ocps-serviceinfo-list table td:after {
-	content: "";
-	border-right: 1px solid #e1e1e1;
-	width: 1px;
-	height: calc(100% - 30px);
-	position: absolute;
-	right: 0;
-	top: 15px;
-}
-.opencps-theme .ocps-serviceinfo-list table td:first-child:after, 
-.opencps-theme .ocps-serviceinfo-list table td:last-child:after {
-	border: 0;
-}
-.opencps-theme .ocps-serviceinfo-list table td.table-cell {
-	padding: 20px 30px;
-}
-.opencps-theme .ocps-serviceinfo-list table td.table-cell.first {
-	text-align: right;
-	font-family: 'Roboto-Bold';
-	padding: 20px 0;
-	width: 40px;
-}
-.opencps-theme .ocps-serviceinfo-list table td.table-cell .ocps-searh-bound-data p span {
-	font-family: 'Roboto-Bold';
-	display: inline-block;
-	width: 125px;
-}
-.opencps-theme .ocps-serviceinfo-list table td.table-cell .ocps-searh-bound-data p a, 
-.opencps-theme .ocps-serviceinfo-list table td.table-cell .ocps-searh-bound-data p > i {
-	display: flex;
-}
-.opencps-theme .ocps-serviceinfo-list table td:nth-child(3) {
-	width: 280px;
-}
-.opencps-theme .ocps-serviceinfo-list table td:last-child {
-	width: 150px;
-}
-.opencps-theme .ocps-serviceinfo-list table td:last-child a img {
-	display: none;
-}
-.opencps-theme .ocps-serviceinfo-list table td:last-child a {
-	width: 100%;
-    display: block;
-    height: 30px;
-    border-radius: 20px;
-}
-.opencps-theme .ocps-serviceinfo-list table td:last-child .edit a {
-	background-color: #0090ff;
-	margin: 25% 0;
-}
-.opencps-theme .ocps-serviceinfo-list table td:last-child .delete a {
-	background-color: #ff5558;
-}
-
--->
-</style>
-
-<div class="ocps-serviceinfo-list">
 <liferay-util:include page='<%= templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
 <c:if test="<%=ServiceConfigPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_SERVICE_CONFIG) %>">
     <liferay-util:include page='<%= templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
 </c:if>
+
 <%
 
 	PortletURL iteratorURL = renderResponse.createRenderURL();
@@ -127,16 +52,10 @@
 	
 	/* headerNames.add("row-no");
 	headerNames.add("service-name");
-	headerNames.add("govAgency-Name");
+	headerNames.add("govAgency-Name"); */
 	headerNames.add("template-name");
 	headerNames.add("service-mode");
-	headerNames.add("process"); */
-	
-	String serviceName =  LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "service-name");
-	String govAgencyName =  LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "govAgency-Name");
-	String templateName =  LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "template-name");
-	String serviceMode =  LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "service-mode");
-	String processName =  LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "process");
+	headerNames.add("process"); 
 	
 	boolean isPermission =
 					ServiceConfigPermission.contains(
@@ -156,72 +75,112 @@
 <c:if test="<%=ServiceConfigPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_SERVICE_CONFIG) %>">
 		<div id="<portlet:namespace/>toolbarResponse"></div>
 </c:if>
-
-<liferay-ui:search-container searchContainer="<%= new ServiceConfigSearch (renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" 
-	headerNames="<%= headers %>"> 
-	
-		<liferay-ui:search-container-results>
-		<%
-			ServiceConfigSearchTerm searchTerm = (ServiceConfigSearchTerm) searchContainer.getSearchTerms();
-			
-			serviceConfigs = ServiceConfigLocalServiceUtil.searchServiceConfig(
-				scopeGroupId, searchTerm.getKeywords(), govAdencyCode, 
-				searchTerm.getDomainCode(), searchContainer.getStart(), searchContainer.getEnd());						
-			
-			totalCount = ServiceConfigLocalServiceUtil.countServiceConfig(
-				scopeGroupId, searchTerm.getKeywords(), govAdencyCode, 
-				searchTerm.getDomainCode());
-			
-			total = totalCount;
-			results = serviceConfigs;
-			pageContext.setAttribute("results", results);
-			pageContext.setAttribute("total", total);
-		%>
-	</liferay-ui:search-container-results>
-	
-	<liferay-ui:search-container-row 
-		className="org.opencps.dossiermgt.model.ServiceConfig" 
-		modelVar="serviceConfig" 
-		keyProperty="serviceConfigId"
-	>
-		<%
-			ServiceInfo serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(serviceConfig.getServiceInfoId());
-			DossierTemplate dossierTemplate = DossierTemplateLocalServiceUtil.getDossierTemplate(serviceConfig.getDossierTemplateId());
+<div class="opencps-searchcontainer-wrapper">
+	<liferay-ui:search-container searchContainer="<%= new ServiceConfigSearch (renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" 
+		headerNames="<%= headers %>"> 
 		
-			String serviceConfigModeName = LanguageUtil.get(portletConfig ,themeDisplay.getLocale(), DossierMgtUtil.getNameOfServiceConfigMode(serviceConfig.getServiceMode(), themeDisplay.getLocale()));
+			<liferay-ui:search-container-results>
+			<%
+				ServiceConfigSearchTerm searchTerm = (ServiceConfigSearchTerm) searchContainer.getSearchTerms();
+				
+				serviceConfigs = ServiceConfigLocalServiceUtil.searchServiceConfig(
+					scopeGroupId, searchTerm.getKeywords(), govAdencyCode, 
+					searchTerm.getDomainCode(), searchContainer.getStart(), searchContainer.getEnd());						
+				
+				totalCount = ServiceConfigLocalServiceUtil.countServiceConfig(
+					scopeGroupId, searchTerm.getKeywords(), govAdencyCode, 
+					searchTerm.getDomainCode());
+				
+				total = totalCount;
+				results = serviceConfigs;
+				pageContext.setAttribute("results", results);
+				pageContext.setAttribute("total", total);
+			%>
+		</liferay-ui:search-container-results>
+		
+		<liferay-ui:search-container-row 
+			className="org.opencps.dossiermgt.model.ServiceConfig" 
+			modelVar="serviceConfig" 
+			keyProperty="serviceConfigId"
+		>
+			<%
+				ServiceInfo serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(serviceConfig.getServiceInfoId());
+				DossierTemplate dossierTemplate = DossierTemplateLocalServiceUtil.getDossierTemplate(serviceConfig.getDossierTemplateId());
 			
-			int countProcess = ServiceProcessLocalServiceUtil.countByG_T(themeDisplay.getScopeGroupId(), dossierTemplate.getDossierTemplateId());
-			
-			String process = "<i class=\"opencps-icon checked\"></i>";
-			
-			if(countProcess == 0) {
-				process = "<i class=\"opencps-icon removed\"></i>";
-			}
-			
-			String s = "<div class=\"ocps-searh-bound-data\"><p class=\"ocps-searh-bound-data-chirld-p\"><span class=\"ocps-searh-bound-data-chirld-span\">" + govAgencyName + "</span>"+ serviceConfig.getGovAgencyName() +"</p>";
-			s= s + "<p class=\"ocps-searh-bound-data-chirld-p\"><span class=\"ocps-searh-bound-data-chirld-span\">"+ templateName +"</span><a class=\"ocps-searh-bound-data-chirld-label\" href=\"#\"> "+ dossierTemplate.getTemplateName() + "</a></p></div>";
-			
-			String s1 = "<div class=\"ocps-searh-bound-data\"><p class=\"ocps-searh-bound-data-chirld-p\"><span class=\"ocps-searh-bound-data-chirld-span\">" + processName + "</span>"+ process +"</p>";
-			s1 = s1 + "<p class=\"ocps-searh-bound-data-chirld-p\"><span class=\"ocps-searh-bound-data-chirld-span\">" + serviceMode + "</span>"+ serviceConfigModeName +"</p>";
-			s1 = s1 + "<p class=\"ocps-searh-bound-data-chirld-p\"><span class=\"ocps-searh-bound-data-chirld-span\">"+ serviceName +"</span><a class=\"ocps-searh-bound-data-chirld-label\" href=\"#\"> "+ serviceInfo.getServiceName() + "</a></p></div>";
+				String serviceConfigModeName = LanguageUtil.get(portletConfig ,themeDisplay.getLocale(), DossierMgtUtil.getNameOfServiceConfigMode(serviceConfig.getServiceMode(), themeDisplay.getLocale()));
+				
+				int countProcess = ServiceProcessLocalServiceUtil.countByG_T(themeDisplay.getScopeGroupId(), dossierTemplate.getDossierTemplateId());
+				
+				String process = "<i class=\"opencps-icon checked\"></i>";
+				
+				if(countProcess == 0) {
+					process = "<i class=\"opencps-icon removed\"></i>";
+				}
+				%>
+				<liferay-util:buffer var="boundcol1">
+					<div class="row-fluid">
+						<div class="span1"></div>
+						
+						<div class="span2 bold-label">
+							<liferay-ui:message key="govAgency-Name"/>
+						</div>
+						<div class="span9"><%=serviceConfig.getGovAgencyName()%></div>
+					</div>
 					
+					<div class="row-fluid">
+						<div class="span1"></div>
+						
+						<div class="span2 bold-label">
+							<liferay-ui:message key="govAgency-Name"/>
+						</div>
+						
+						<div class="span9"><%=dossierTemplate.getTemplateName() %></div>
+					</div>
+					
+				</liferay-util:buffer>	
 			
-			row.addText(String.valueOf(row.getPos() + 1));
-			row.addText(s);
-			row.addText(s1);
+				
+				<liferay-util:buffer var="boundcol2">
+					<div class="row-fluid">
+						<div class="span1"></div>
+						
+						<div class="span2 bold-label">
+							<liferay-ui:message key="process"/>
+						</div>
+						<div class="span9"><%=process%> </div>
+					</div>
+					
+					<div class="row-fluid">
+						<div class="span1"></div>
+						
+						<div class="span2 bold-label">
+							<liferay-ui:message key="service-mode"/>
+						</div>
+						
+						<div class="span9"><%=serviceConfigModeName%></div>
+					</div>
+					
+					<div class="row-fluid">
+						<div class="span1"></div>
+						
+						<div class="span2 bold-label"><liferay-ui:message key="service-name"/></div>
+						
+						<div class="span9"><%=serviceInfo.getServiceName()%></div>
+					</div>
+					
+				</liferay-util:buffer>
+				
+				<%	
+				row.setClassName("opencps-searchcontainer-row");
+				row.addText(boundcol1);
+				row.addText(boundcol2);
+				if(isPermission) {
+					row.addJSP("center", SearchEntry.DEFAULT_VALIGN, templatePath + "service_config_actions.jsp", config.getServletContext(), request, response);
+				}
+			%>
 			
-			/* row.addText(serviceInfo.getServiceName());
-			row.addText(serviceConfig.getGovAgencyName());
-			row.addText(dossierTemplate.getTemplateName());
-			row.addText(serviceConfigModeName);
-			row.addText(process); */
-			if(isPermission) {
-				row.addJSP("center", SearchEntry.DEFAULT_VALIGN, templatePath + "service_config_actions.jsp", config.getServletContext(), request, response);
-			}
-		%>
+		</liferay-ui:search-container-row>
 		
-	</liferay-ui:search-container-row>
-	
-	<liferay-ui:search-iterator/>
-</liferay-ui:search-container>
+		<liferay-ui:search-iterator/>
+	</liferay-ui:search-container>
 </div>

@@ -54,7 +54,7 @@
 	request.setAttribute(DictItemSearchTerms.DICTCOLLECTION_ID, dictCollectionId);
 %>
 
-<aui:nav-bar cssClass="custom-toolbar">
+<aui:nav-bar cssClass="opencps-toolbar custom-toolbar">
 	<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left" >
 		<c:if test="<%=DictItemPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_DICTITEM) && tabs1.equals(DataMgtUtil.TOP_TABS_DICTITEM)%>">
 			<%

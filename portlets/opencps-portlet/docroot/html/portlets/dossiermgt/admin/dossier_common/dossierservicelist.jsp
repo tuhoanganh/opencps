@@ -46,7 +46,7 @@
 	List<ServiceConfig> serviceConfigs = new ArrayList<ServiceConfig>();
 	List<String> headerNames = new ArrayList<String>();
 	
-	headerNames.add("row-no");
+	/* headerNames.add("row-no"); */
 	headerNames.add("service-name");
 	headerNames.add("govAgency-Name");
 	headerNames.add("service-mode");
@@ -81,42 +81,73 @@
 		<%-- <div id="<portlet:namespace/>toolbarResponse"></div> --%>
 		<aui:button href="<%= editServiceConfigURL.toString() %>" value="add-service-config"/>
 </c:if>
-
-<liferay-ui:search-container searchContainer="<%= new ServiceConfigSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" 
-	headerNames="<%= headers %>"> 
-	
-		<liferay-ui:search-container-results>
-		<%
-			serviceConfigs = ServiceConfigLocalServiceUtil.getServiceConfigs(dossierTemplateId);
-			
-			total = totalCount;
-			results = serviceConfigs;
-			pageContext.setAttribute("results", results);
-			pageContext.setAttribute("total", total);
-		%>
-	</liferay-ui:search-container-results>
-	
-	<liferay-ui:search-container-row 
-		className="org.opencps.dossiermgt.model.ServiceConfig" 
-		modelVar="serviceConfig" 
-		keyProperty="serviceConfigId"
-	>
-		<%
-			ServiceInfo serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(serviceConfig.getServiceInfoId());
-			
-			String serviceConfigModeName = LanguageUtil.get(portletConfig ,themeDisplay.getLocale(), DossierMgtUtil.getNameOfServiceConfigMode(serviceConfig.getServiceMode(), themeDisplay.getLocale()));
+<div class="opencps-searchcontainer-wrapper">
+	<liferay-ui:search-container searchContainer="<%= new ServiceConfigSearch(renderRequest, totalCount, iteratorURL) %>" 
+		headerNames="<%= headers %>"> 
 		
-			row.addText(String.valueOf(row.getPos() + 1));
-			row.addText(serviceInfo.getServiceName());
-			row.addText(serviceConfig.getGovAgencyName());
-			row.addText(serviceConfigModeName);
-			if(isPermission) {
-				row.addJSP("center", SearchEntry.DEFAULT_VALIGN, templatePath + "service_config_actions.jsp", config.getServletContext(), request, response);
-			}
-		%>
+			<liferay-ui:search-container-results>
+			<%
+				serviceConfigs = ServiceConfigLocalServiceUtil.getServiceConfigs(dossierTemplateId);
+				
+				total = totalCount;
+				results = serviceConfigs;
+				pageContext.setAttribute("results", results);
+				pageContext.setAttribute("total", total);
+			%>
+		</liferay-ui:search-container-results>
 		
-	</liferay-ui:search-container-row>
-	
-	<liferay-ui:search-iterator paginate="<%=false %>"/>
-</liferay-ui:search-container>
-
+		<liferay-ui:search-container-row 
+			className="org.opencps.dossiermgt.model.ServiceConfig" 
+			modelVar="serviceConfig" 
+			keyProperty="serviceConfigId"
+		>
+			<%
+				ServiceInfo serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(serviceConfig.getServiceInfoId());
+				
+				String serviceConfigModeName = LanguageUtil.get(portletConfig ,themeDisplay.getLocale(), DossierMgtUtil.getNameOfServiceConfigMode(serviceConfig.getServiceMode(), themeDisplay.getLocale()));
+			%>
+			<liferay-util:buffer var="boundcol1">
+				<div class="row-fluid">
+					<div class="span1"></div>
+					
+					<div class="span2 bold-label">
+						<liferay-ui:message key="service-name"/>
+					</div>
+					<div class="span9"><%=serviceInfo.getServiceName()%></div>
+				</div>
+			</liferay-util:buffer>
+			
+			<liferay-util:buffer var="boundcol2">
+				<div class="row-fluid">
+					<div class="span1"></div>
+					
+					<div class="span2 bold-label">
+						<liferay-ui:message key="govAgency-Name"/>
+					</div>
+					<div class="span9"><%=serviceConfig.getGovAgencyName() %> </div>
+				</div>
+				
+				<div class="row-fluid">
+					<div class="span1"></div>
+					
+					<div class="span2 bold-label">
+						<liferay-ui:message key="service-mode"/>
+					</div>
+					<div class="span9"><%=serviceConfigModeName %> </div>
+				</div>
+			</liferay-util:buffer>
+			<%
+				row.setClassName("opencps-searchcontainer-row");
+				row.addText(String.valueOf(row.getPos() + 1));
+				row.addText(boundcol1);
+				row.addText(boundcol2);
+				if(isPermission) {
+					row.addJSP("center", SearchEntry.DEFAULT_VALIGN, templatePath + "service_config_actions.jsp", config.getServletContext(), request, response);
+				}
+			%>
+			
+		</liferay-ui:search-container-row>
+		
+		<liferay-ui:search-iterator paginate="<%=false %>"/>
+	</liferay-ui:search-container>
+</div>

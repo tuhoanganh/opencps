@@ -64,7 +64,7 @@
 		<portlet:param name="backURL" value="<%=currentURL %>"/>
 	</portlet:renderURL> 
 	<liferay-ui:icon 
-		cssClass="search-container-action view" 
+		cssClass="search-container-action fa view" 
 		image="view" 
 		message="view" 
 		url="<%=viewDossierURL.toString() %>" 
@@ -80,7 +80,7 @@
 					<portlet:param name="isEditDossier" value="<%=String.valueOf(true) %>"/>
 				</portlet:renderURL> 
 		 		<liferay-ui:icon 
-		 			cssClass="search-container-action edit" 
+		 			cssClass="search-container-action fa edit" 
 		 			image="edit" 
 		 			message="edit" 
 		 			url="<%=updateDossierURL.toString() %>" 
@@ -92,11 +92,11 @@
 						<portlet:param name="backURL" value="<%=currentURL %>"/>
 					</portlet:actionURL> 
 			 		<liferay-ui:icon
-			 			cssClass="search-container-action forward"
+			 			cssClass="search-container-action fa forward"
 			 			image="forward"
 			 			message="send" 
 			 			url="<%=updateDossierStatusURL.toString() %>" 
-			 		/> 
+			 		/>
 		 		</c:if>
 		 		
 		 		<c:if test="<%=dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_WAITING) %>">
@@ -106,7 +106,7 @@
 						<portlet:param name="backURL" value="<%=currentURL %>"/>
 					</portlet:actionURL> 
 			 		<liferay-ui:icon
-			 			cssClass="search-container-action forward"
+			 			cssClass="search-container-action fa forward"
 			 			image="reply"
 			 			message="resend" 
 			 			url="<%=updateDossierStatusURL.toString() %>" 
@@ -122,7 +122,7 @@
 				</portlet:actionURL> 
 				<liferay-ui:icon-delete 
 					image="delete"
-					cssClass="search-container-action delete"
+					cssClass="search-container-action fa delete"
 					confirmation="are-you-sure-delete-entry" 
 					message="delete"  
 					url="<%=deleteDossierURL.toString() %>" 

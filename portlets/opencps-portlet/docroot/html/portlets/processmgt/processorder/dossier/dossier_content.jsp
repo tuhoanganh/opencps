@@ -108,16 +108,21 @@
 								
 								DossierFile dossierFile = null;
 								
+								int isOnlineData = 0;
+								
 								if(dossier != null){
 									try{
 										dossierFile = DossierFileLocalServiceUtil.getDossierFileInUse(dossier.getDossierId(), 
 												dossierPart.getDossierpartId());
-										
+										if(dossierFile.getFormData().length() > 0){
+											isOnlineData = 1;
+										}else{
+											isOnlineData = 0;
+										}
 									}catch(Exception e){
 										
 									}
 								}
-								
 								
 								%>
 									<div class='<%="opencps dossiermgt dossier-part-row r-" + index%>'>
@@ -188,6 +193,12 @@
 													name="isEditDossier" 
 													value="<%=String.valueOf(isEditDossier) %>"
 												/>
+												
+												<portlet:param 
+													name="isOnlineData" 
+													value="<%=String.valueOf(isOnlineData) %>"
+												/>
+												
 											</liferay-util:include>
 										</span>
 									</div>

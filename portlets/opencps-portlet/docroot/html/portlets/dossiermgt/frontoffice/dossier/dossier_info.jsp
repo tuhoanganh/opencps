@@ -1,4 +1,4 @@
-<%@page import="com.liferay.portlet.documentlibrary.DuplicateFolderNameException"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,7 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
+<%@page import="com.liferay.portlet.documentlibrary.DuplicateFolderNameException"%>
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
 <%@page import="org.opencps.util.PortletPropsValues"%>
 <%@page import="org.opencps.util.WebKeys"%>
@@ -43,6 +43,7 @@
 <%@page import="org.opencps.dossiermgt.EmptyDossierContactNameException"%>
 <%@page import="org.opencps.dossiermgt.OutOfLengthDossierAddressException"%>
 <%@page import="org.opencps.dossiermgt.InvalidDossierObjectException"%>
+
 <%@ include file="../../init.jsp"%>
 
 <%
@@ -129,8 +130,7 @@
 />
 
 
-<div class="sbc">
-<aui:row>
+<aui:row cssClass="nav-content-row">
 	<aui:col width="100">
 		<aui:input 
 			name="<%=DossierDisplayTerms.SERVICE_NAME %>"
@@ -142,7 +142,7 @@
 	</aui:col>
 </aui:row>
 
-<aui:row>
+<aui:row cssClass="nav-content-row">
 	<aui:col width="100">
 		<aui:input 
 			name="<%=DossierDisplayTerms.SERVICE_NO %>" 
@@ -155,7 +155,7 @@
 </aui:row>
 
 
-<aui:row>
+<aui:row cssClass="nav-content-row">
 	<aui:col width="100">
 		<aui:input 
 			name="<%=DossierDisplayTerms.GOVAGENCY_NAME%>"
@@ -166,7 +166,7 @@
 	</aui:col>
 </aui:row>
 
-<aui:row>
+<aui:row cssClass="nav-content-row">
 	<aui:col width="100">
 		<aui:input 
 			name="<%=DossierDisplayTerms.GOVAGENCY_CODE %>" 
@@ -176,13 +176,8 @@
 		/>	
 	</aui:col>
 </aui:row>
-<%=cmd %>
 
-<%
-String required=cmd.equals(Constants.VIEW) ? "" : "required";
-%>
-
-<aui:row>
+<aui:row cssClass="nav-content-row">
 	<aui:col width="100">
 		<aui:input 
 			name="<%=DossierDisplayTerms.SUBJECT_NAME %>" 
@@ -190,7 +185,7 @@ String required=cmd.equals(Constants.VIEW) ? "" : "required";
 			type="text"
 			value="<%=citizen != null ? citizen.getFullName() : business != null ? business.getName() : StringPool.BLANK %>"
 		>
-			<aui:validator name="<%=required %>"/>
+			<aui:validator name="required"/>
 			
 			<aui:validator name="maxLength">
 				<%= PortletPropsValues.DOSSIERMGT_DOSSIER_SUBJECT_NAME_LENGTH %>
@@ -199,23 +194,23 @@ String required=cmd.equals(Constants.VIEW) ? "" : "required";
 	</aui:col>
 </aui:row>
 
-<aui:row>
-<aui:col width="100">
-		<aui:input 
-			name="<%=DossierDisplayTerms.SUBJECT_ID %>" 
-			cssClass="" 
-			type="text"
-			value="<%=citizen != null ? citizen.getPersonalId() : business != null ? business.getIdNumber() : StringPool.BLANK %>"
-		>
-			<aui:validator name="<%=required %>"/>
-			<aui:validator name="maxLength">
-				<%= PortletPropsValues.DOSSIERMGT_DOSSIER_SUBJECT_ID_LENGTH %>
-			</aui:validator>
-		</aui:input>	
-	</aui:col>
-</aui:row>
+<aui:row cssClass="nav-content-row">
+	<aui:col width="100">
+			<aui:input 
+				name="<%=DossierDisplayTerms.SUBJECT_ID %>" 
+				cssClass="" 
+				type="text"
+				value="<%=citizen != null ? citizen.getPersonalId() : business != null ? business.getIdNumber() : StringPool.BLANK %>"
+			>
+				<aui:validator name="required>"/>
+				<aui:validator name="maxLength">
+					<%= PortletPropsValues.DOSSIERMGT_DOSSIER_SUBJECT_ID_LENGTH %>
+				</aui:validator>
+			</aui:input>	
+		</aui:col>
+	</aui:row>
 
-<aui:row>
+<aui:row cssClass="nav-content-row">
 	<aui:col width="100">
 		<aui:input 
 			name="<%=DossierDisplayTerms.ADDRESS %>" 
@@ -223,7 +218,7 @@ String required=cmd.equals(Constants.VIEW) ? "" : "required";
 			type="text"
 			value="<%=citizen != null ? citizen.getAddress() : business != null ? business.getAddress() : StringPool.BLANK %>"
 		>
-			<aui:validator name="<%=required %>"/>
+			<aui:validator name="required"/>
 			<aui:validator name="maxLength">
 				<%= PortletPropsValues.DOSSIERMGT_DOSSIER_ADDRESS_LENGTH %>
 			</aui:validator>
@@ -231,26 +226,26 @@ String required=cmd.equals(Constants.VIEW) ? "" : "required";
 	</aui:col>
 </aui:row>
 
-<aui:row>
+<aui:row cssClass="nav-content-row">
 	<datamgt:ddr 
 		depthLevel="3" 
 		dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_ADMINISTRATIVE_REGION %>"
 		itemNames='<%=StringUtil.merge(new String[]{DossierDisplayTerms.CITY_ID,DossierDisplayTerms.DISTRICT_ID,DossierDisplayTerms.WARD_ID}) %>'
 		itemsEmptyOption="true,true,true"
-		cssClass="selectA"
+		showLabel="true"
 		selectedItems="<%=itemSelected %>"
 		displayStyle="vertical"
 	/>
 </aui:row>
 
-<aui:row>
+<aui:row cssClass="nav-content-row">
 	<aui:col width="100">
 		<aui:input name="<%=DossierDisplayTerms.CONTACT_NAME %>" 
 			cssClass="" 
 			type="text"
 			value="<%=citizen != null ? citizen.getFullName() : business != null ? business.getName() : StringPool.BLANK %>"
 		>
-			<aui:validator name="<%=required %>"/>
+			<aui:validator name="required"/>
 			<aui:validator name="maxLength">
 				<%= PortletPropsValues.DOSSIERMGT_DOSSIER_CONTACT_NAME_LENGTH %>
 			</aui:validator>
@@ -258,7 +253,7 @@ String required=cmd.equals(Constants.VIEW) ? "" : "required";
 	</aui:col>
 </aui:row>
 
-<aui:row>
+<aui:row cssClass="nav-content-row">
 	<aui:col width="100">
 		<aui:input 
 			name="<%=DossierDisplayTerms.CONTACT_TEL_NO %>" 
@@ -272,7 +267,7 @@ String required=cmd.equals(Constants.VIEW) ? "" : "required";
 	</aui:col>
 </aui:row>
 
-<aui:row>
+<aui:row cssClass="nav-content-row">
 	<aui:col width="100">
 		<aui:input 
 			name="<%=DossierDisplayTerms.CONTACT_EMAIL %>" 
@@ -287,7 +282,7 @@ String required=cmd.equals(Constants.VIEW) ? "" : "required";
 	</aui:col>
 </aui:row>
 
-<aui:row>
+<aui:row cssClass="nav-content-row">
 	<aui:col width="100">
 		<aui:input name="<%=DossierDisplayTerms.NOTE %>" type="textarea">
 			<aui:validator name="maxLength">
@@ -296,7 +291,7 @@ String required=cmd.equals(Constants.VIEW) ? "" : "required";
 		</aui:input>	
 	</aui:col>
 </aui:row>
-</div>
+
 <aui:script>
 	AUI().ready('aui-base','aui-form-validator', function(A){
 		var rules = {

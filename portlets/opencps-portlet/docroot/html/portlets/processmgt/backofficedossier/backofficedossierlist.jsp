@@ -45,16 +45,21 @@
 />
 
 <%
+	String dossierStatus = 	ParamUtil.getString(request, "dossierStatusValue");
+	
 	String backURL = ParamUtil.getString(request, "backURL");
 	User mappingUser = (User)request.getAttribute(WebKeys.USER_MAPPING_ENTRY);
+	
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "backofficedossierlist.jsp");
 	iteratorURL.setParameter("tab1", ProcessMgtUtil.TOP_TABS_DOSSIERLIST);
+	iteratorURL.setParameter("dossierStatusValue", dossierStatus);
+	
 	
 	String domainCode = ParamUtil.getString(request, DossierDisplayTerms.SERVICE_DOMAIN_CODE);
-	String dossierStatus = 	ParamUtil.getString(request, DossierDisplayTerms.DOSSIER_STATUS);
+	
 	request.setAttribute(DossierDisplayTerms.SERVICE_DOMAIN_CODE, domainCode);
-	request.setAttribute(DossierDisplayTerms.DOSSIER_STATUS, dossierStatus);
+	/* request.setAttribute(DossierDisplayTerms.DOSSIER_STATUS, dossierStatus); */
 	
 	List<String> headerNames = new ArrayList<String>();
 	
@@ -89,7 +94,6 @@
 		%>
 		
 	</liferay-ui:search-container-results>
-
 	<liferay-ui:search-container-row 
 		className="org.opencps.dossiermgt.model.Dossier" 
 		modelVar="dossier" 
@@ -100,10 +104,12 @@
 			viewURL.setParameter("mvcPath", templatePath + "backofficedossieroverview.jsp");
 			viewURL.setParameter("dossierId", String.valueOf(dossier.getDossierId()));
 			viewURL.setParameter("backURL", currentURL);
-
+			
+			
+			
 			// no column
 			row.addText(String.valueOf(row.getPos() + 1), viewURL);		
-		
+			
 			// receive datetime column
 			if (Validator.isNotNull(dossier.getReceiveDatetime())) {
 				row.addText(dateFormatDate.format(dossier.getReceiveDatetime()));				
@@ -189,6 +195,42 @@
 				}
 			}			
 		%>	
+		<!-- uxtheme -->
+		<liferay-util:buffer var="info">
+				<div class="row-fluid">
+					<div class="span1">
+						<i class='<%="fa fa-circle sx10 " + dossier.getDossierStatus()%>'></i>
+					</div>
+					<div class="span3 bold-label">
+						<liferay-ui:message key="reception-no"/>
+					</div>
+					<div class="span6"><%=dossier.getReceptionNo() %></div>
+				</div>
+				
+				<div class="row-fluid">
+					<div class="span1"></div>
+					
+					<div class="span3 bold-label">
+						<liferay-ui:message key="service-name"/>
+					</div>
+					
+					<div class="span6"><%=dossierBean.getServiceName() %></div>
+				</div>
+				
+				<div class="row-fluid">
+					<div class="span1"></div>
+					
+					<div class="span3 bold-label"><liferay-ui:message key="gov-agency-name"/></div>
+					
+					<div class="span6"><%=dossier.getGovAgencyName() %></div>
+				</div>
+				
+			</liferay-util:buffer>
+			
+		
+		<%
+			
+		%>
 	
 	</liferay-ui:search-container-row>	
 

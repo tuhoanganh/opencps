@@ -23,7 +23,7 @@
 <liferay-ui:success key="potlet-config-saved" message="portlet-configuration-have-been-successfully-saved" />
 <liferay-portlet:actionURL var="configurationActionURL" portletConfiguration="true"/>
 <aui:form action="<%=configurationActionURL%>" method="post" name="configurationForm">
-	<aui:select name="status" id="status">
+	<%-- <aui:select name="status" id="status">
 		<%
 			for(String stt : PortletUtil.getDossierStatus()) {
 				%>
@@ -33,13 +33,13 @@
 				<%
 			}
 		%>
-	</aui:select>
+	</aui:select> --%>
 	
-	<%-- <datamgt:ddr 
+	<datamgt:ddr 
 		depthLevel="1" 
 		dictCollectionCode="DOSSIER_STATUS"
 		itemNames="status"
-		itemsEmptyOption="true"	
-	/>	 --%>
+		optionValueType="code"
+	/>
 	<aui:button type="submit" name="Save" value="save"></aui:button>
 </aui:form>

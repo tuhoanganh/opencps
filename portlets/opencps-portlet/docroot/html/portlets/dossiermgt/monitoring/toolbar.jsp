@@ -28,15 +28,15 @@
 	String tabs1 = ParamUtil.getString(request, "tabs1", DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_SEARCH);
 
 	PortletURL viewMonitoringSearchURL = renderResponse.createRenderURL();
-	viewMonitoringSearchURL.setParameter("mvcPath", templatePath + "dossiermonitoringsearch.jsp");
+	viewMonitoringSearchURL.setParameter("mvcPath", "/html/portlets/dossiermgt/monitoring/dossiermonitoringsearch.jsp");
 	viewMonitoringSearchURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_SEARCH);
 	
 	PortletURL dossierFileSearchUrl = renderResponse.createRenderURL();
-	dossierFileSearchUrl.setParameter("mvcPath", templatePath + "dossiermonitoringdossierfilelist.jsp");
+	dossierFileSearchUrl.setParameter("mvcPath", "/html/portlets/dossiermgt/monitoring/dossiermonitoringdossierfilelist.jsp");
 	dossierFileSearchUrl.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_DOSSIER_FILE_LIST);
 	
 	PortletURL viewMonitoringServiceURL = renderResponse.createRenderURL();
-	viewMonitoringServiceURL.setParameter("mvcPath", templatePath + "dossiermonitoringservice.jsp");
+	viewMonitoringServiceURL.setParameter("mvcPath", "/html/portlets/dossiermgt/monitoring/dossiermonitoringservice.jsp");
 	viewMonitoringServiceURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_SERVICE);
 %>
 
@@ -48,7 +48,7 @@
 	String keySelect = DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_SEARCH + "," + DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_DOSSIER_FILE_LIST + "," + DossierMgtUtil.TOP_TABS_DOSSIER_MONITORING_SERVICE;
 	String urlSelect = viewMonitoringSearchURL + "," + dossierFileSearchUrl + "," + viewMonitoringServiceURL;
 %>
-<aui:nav-bar cssClass="custom-toolbar">
+<aui:nav-bar cssClass="opencps-toolbar custom-toolbar">
 	<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left" >
 		
 	</aui:nav>

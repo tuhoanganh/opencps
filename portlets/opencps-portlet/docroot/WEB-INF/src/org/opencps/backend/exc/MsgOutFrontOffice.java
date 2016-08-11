@@ -66,8 +66,8 @@ public class MsgOutFrontOffice implements MessageListener {
 				JMSMessageUtil.createHornetqProducer(
 					userActionMgs.getCompanyId(),
 					userActionMgs.getGovAgencyCode(), true,
-					WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(),
-					WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "remote",
+					WebKeys.JMS_QUEUE_OPENCPS_FRONTOFFICE.toLowerCase(),
+					WebKeys.JMS_QUEUE_OPENCPS_FRONTOFFICE.toLowerCase(), "remote",
 					"hornetq");
 			
 			if (userActionMgs.getAction().contentEquals(

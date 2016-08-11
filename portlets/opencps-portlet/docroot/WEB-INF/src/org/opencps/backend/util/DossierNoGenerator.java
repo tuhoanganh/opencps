@@ -20,8 +20,12 @@ package org.opencps.backend.util;
 import java.util.Calendar;
 import java.util.Random;
 
+import org.opencps.dossiermgt.model.Dossier;
+import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
+
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 
 /**
@@ -40,12 +44,36 @@ public class DossierNoGenerator {
     }
 	
 	/**
+	 * @param pattern
+	 * @return
+	 */
+	public static String genaratorNoReception(String pattern) {
+		
+		String noReception = _genaratorNoReception(pattern);
+		
+		Dossier dossier = null;
+		
+		try {
+			dossier = DossierLocalServiceUtil.getDossierByReceptionNo(noReception);
+        }
+        catch (Exception e) {
+	        
+        }
+		
+		if (Validator.isNotNull(dossier)) {
+			noReception = genaratorNoReception(pattern);
+		}
+		
+		return noReception;
+	}
+	
+	/**
 	 * Generate noReception with pattern
 	 * 
 	 * @param pattern
 	 * @return
 	 */
-	public static String genaratorNoReception(String pattern) {
+	private static String _genaratorNoReception(String pattern) {
 		
 		String noReception = StringPool.BLANK;
 		

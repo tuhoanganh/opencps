@@ -15,6 +15,7 @@
 package org.opencps.api.service.impl;
 
 import org.opencps.api.service.base.ApiServiceLocalServiceBaseImpl;
+
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
@@ -24,6 +25,8 @@ import org.opencps.api.service.base.ApiServiceLocalServiceBaseImpl;
 
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.service.ServiceContext;
 
 /**
@@ -41,36 +44,38 @@ import com.liferay.portal.service.ServiceContext;
  * @see org.opencps.api.service.ApiServiceLocalServiceUtil
  */
 public class ApiServiceLocalServiceImpl extends ApiServiceLocalServiceBaseImpl {
-	/*
-	 * NOTE FOR DEVELOPERS:
-	 *
-	 * Never reference this interface directly. Always use {@link org.opencps.api.service.ApiServiceLocalServiceUtil} to access the api service local service.
-	 */
 	
-	public ApiService addApiService(long userId,
-			String apiCode,
-			String ipAddress,
-			String httpAgent,
-			String params,
-			String status,
-			ServiceContext serviceContext) throws SystemException {
+	public ApiService addLog(long userId, String apiCode, String ipAddress,
+			String oid, String params, String status,
+			ServiceContext serviceContext) {
 
-		long apiLogId = CounterLocalServiceUtil
-				.increment(ApiService.class.getName());
-		ApiService apiService = apiServicePersistence
-				.create(apiLogId);
-		Date curDate = new Date();
-		apiService.setCompanyId(serviceContext.getCompanyId());
-		apiService.setGroupId(serviceContext.getScopeGroupId());
-		apiService.setUserId(userId);
-		apiService.setCreateDate(curDate);
-		apiService.setModifiedDate(curDate);
-		apiService.setApiCode(apiCode);
-		apiService.setIpAddress(ipAddress);
-		apiService.setHttpAgent(httpAgent);
-		apiService.setParams(params);
-		apiService.setStatus(status);
+		ApiService apiService = null;
 		
-		return apiServicePersistence.update(apiService);
-}	
+		try {
+			long apiLogId = counterLocalService.increment(ApiService.class.getName());
+			
+			apiService = apiServicePersistence.create(apiLogId);
+			
+			Date curDate = new Date();
+			
+			apiService.setCompanyId(serviceContext.getCompanyId());
+			apiService.setGroupId(serviceContext.getScopeGroupId());
+			apiService.setUserId(userId);
+			apiService.setCreateDate(curDate);
+			apiService.setModifiedDate(curDate);
+			apiService.setApiCode(apiCode);
+			apiService.setIpAddress(ipAddress);
+			apiService.setOid(oid);
+			apiService.setParams(params);
+			apiService.setStatus(status);
+			
+			apiServicePersistence.update(apiService);
+		} catch(Exception e) {
+			_log.error(e);
+		}
+		
+		return apiService;
+	}	
+	
+	private static Log _log = LogFactoryUtil.getLog(ApiServiceLocalServiceImpl.class);
 }

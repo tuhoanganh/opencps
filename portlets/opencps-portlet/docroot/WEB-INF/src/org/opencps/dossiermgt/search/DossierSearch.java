@@ -18,9 +18,7 @@
 package org.opencps.dossiermgt.search;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
@@ -41,7 +39,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 public class DossierSearch extends SearchContainer<Dossier> {
 
 	static List<String> headerNames = new ArrayList<String>();
-	static Map<String, String> orderableHeaders = new HashMap<String, String>();
+	//static Map<String, String> orderableHeaders = new HashMap<String, String>();
 	static {
 		
 		//comment to use ux theme
@@ -54,7 +52,7 @@ public class DossierSearch extends SearchContainer<Dossier> {
 		headerNames.add("reception-no");
 		headerNames.add("finish-date");
 		headerNames.add("action");
-*/
+
 		orderableHeaders
 		    .put("gov-agency-name", DossierDisplayTerms.GOVAGENCY_NAME);
 		orderableHeaders
@@ -62,7 +60,11 @@ public class DossierSearch extends SearchContainer<Dossier> {
 		orderableHeaders
 		    .put("create-date", DossierDisplayTerms.CREATE_DATE);
 		orderableHeaders
-		    .put("dossier-status", DossierDisplayTerms.DOSSIER_STATUS);
+		    .put("dossier-status", DossierDisplayTerms.DOSSIER_STATUS);*/
+		
+		headerNames.add("dossier-info");
+		headerNames.add("dossier-status");
+		headerNames.add("action");
 		
 	}
 	public static final String EMPTY_RESULTS_MESSAGE =
@@ -110,7 +112,7 @@ public class DossierSearch extends SearchContainer<Dossier> {
 			OrderByComparator orderByComparator = DataMgtUtil
 			    .getDictCollectionOrderByComparator(orderByCol, orderByType);
 
-			setOrderableHeaders(orderableHeaders);
+			//setOrderableHeaders(orderableHeaders);
 			setOrderByCol(orderByCol);
 			setOrderByType(orderByType);
 			setOrderByComparator(orderByComparator);

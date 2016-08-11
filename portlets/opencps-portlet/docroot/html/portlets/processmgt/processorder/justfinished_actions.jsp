@@ -1,3 +1,4 @@
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -16,27 +17,25 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-<%@ include file="../init.jsp" %>
-<%@page import="org.opencps.util.DictItemUtil"%>
+<%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
+<%@page import="org.opencps.processmgt.model.ProcessOrder"%>
+<%@page import="org.opencps.util.WebKeys"%>
 <%@page import="com.liferay.portal.kernel.dao.search.ResultRow"%>
+<%@ include file="../init.jsp"%>
 <%
 	ResultRow row = (ResultRow) request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
- 	ServiceInfo info = (ServiceInfo) row.getObject();
- 	
- 	PortletURL viewURL = renderResponse.createRenderURL();
-	viewURL.setParameter("mvcPath", templatePath + "service_detail.jsp");
-	viewURL.setParameter("serviceinfoId", String.valueOf(info.getServiceinfoId()));
-	viewURL.setParameter("backURL", currentURL);
+	ProcessOrder processOrder = (ProcessOrder) row.getObject();
+	
+	PortletURL processURL = renderResponse.createRenderURL();
+	processURL.setParameter("mvcPath", templatePath + "process_order_detail.jsp");
+	processURL.setParameter(ProcessOrderDisplayTerms.PROCESS_ORDER_ID, String.valueOf(processOrder.getProcessOrderId()));
+	processURL.setParameter("backURL", currentURL);
+	processURL.setParameter("isEditDossier", String.valueOf(false));
 %>
 
-<div class="ocps-searh-bound-data">
-	<p class="ocps-searh-bound-data-chirld-p">
-		<span class="ocps-searh-bound-data-chirld-span">
-			<liferay-ui:message key="service-name" />
-		</span>
-		<a class="ocps-searh-bound-data-chirld-label" href="<%=viewURL.toString()%>">
-			<%=info.getServiceName() %>
-		</a>
-	</p>
-
-</div>
+<liferay-ui:icon 
+	cssClass="search-container-action fa view" 
+	image="view" 
+	message="view" 
+	url="<%=processURL.toString() %>" 
+/>

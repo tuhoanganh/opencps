@@ -45,6 +45,7 @@
 <%@page import="org.opencps.accountmgt.model.Business"%>
 <%@page import="org.opencps.accountmgt.model.Citizen"%>
 <%@page import="java.util.List"%>
+
 <%@ include file="../init.jsp"%>
 
 <%
@@ -72,19 +73,10 @@
 	<c:when test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) && Validator.isNotNull(accountType) &&
 				(accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN) ||
 				accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS)) %>">
-		<%-- <liferay-ui:header
+		 <liferay-ui:header
 			backURL="<%= backURL %>"
 			title='<%= (dossier == null) ? "add-dossier" : (cmd.equals(Constants.VIEW) ? "view-dossier" : "update-dossier") %>'
-		/> --%>
-		
-		<div class="ocps-custom-header">
-		 <label class="opcps-label">
-		  <liferay-ui:message key='<%= (dossier == null) ? "add-dossier" : (cmd.equals(Constants.VIEW) ? "view-dossier" : "update-dossier") %>' />
-		 </label>
-		 <span class="ocps-span">
-		  <a href="<%=backURL %>"><liferay-ui:message key="back"/></a>
-		 </span>
-		</div>
+		/>
 		
 		<portlet:actionURL var="updateDossierURL" name="updateDossier"/>
 		
@@ -102,11 +94,11 @@
 		<liferay-util:buffer var="htmlBottom">
 		
 		</liferay-util:buffer>
-		
-		<div class="file_detail ocps-history-process-bound-navigator">
+	
 		<aui:form name="fm" action="<%=updateDossierURL %>" method="post">
 		
 			<aui:model-context bean="<%= dossier %>" model="<%= Dossier.class %>" />
+			
 			<aui:input name="<%= DossierDisplayTerms.REDIRECT_PAYMENT_URL %>" value="<%= redirectPaymentURL %>" type="hidden"></aui:input>
 			
 			<aui:input 
@@ -200,23 +192,23 @@
 				type="hidden" 
 				value="<%= company.getCompanyId()%>"
 			/>
-		
-			<liferay-ui:form-navigator
-				backURL="<%= backURL %>"
-				categoryNames="<%= DossierMgtUtil._DOSSIER_CATEGORY_NAMES %>"
-				categorySections="<%= categorySections %>"
-				htmlBottom="<%= htmlBottom %>"
-				htmlTop="<%= htmlTop %>"
-				jspPath='<%=templatePath + "dossier/" %>'
-				showButtons="<%=(cmd.equals(Constants.VIEW) || (dossier != null && dossier.getDossierStatus()  != PortletConstants.DOSSIER_STATUS_NEW)) ? false : true %>"
-			/>
-	
+			<div class="opencps-form-navigator-container">
+				<liferay-ui:form-navigator
+					displayStyle="left-navigator"
+					backURL="<%= backURL %>"
+					categoryNames="<%= DossierMgtUtil._DOSSIER_CATEGORY_NAMES %>"
+					categorySections="<%= categorySections %>"
+					htmlBottom="<%= htmlBottom %>"
+					htmlTop="<%= htmlTop %>"
+					jspPath='<%=templatePath + "dossier/" %>'
+					showButtons="<%=(cmd.equals(Constants.VIEW) || (dossier != null && dossier.getDossierStatus()  != PortletConstants.DOSSIER_STATUS_NEW)) ? false : true %>"
+				/>
+			</div>
 		</aui:form>
-		</div>
 	</c:when>
 	
 	<c:otherwise>
-		<div class="portlet-msg-alert"><liferay-ui:message key="your-account-not-nauthorized-update-dossier"/></div>
+		<div class="portlet-msg-alert"><liferay-ui:message key="your-account-not-authorized-update-dossier"/></div>
 	</c:otherwise>
  
 </c:choose>

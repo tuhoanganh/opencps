@@ -18,125 +18,45 @@
 package org.opencps.backend.scheduler;
 
 import java.util.Map;
+import java.util.Enumeration;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.jms.BytesMessage;
-import javax.jms.ObjectMessage;
-import javax.jms.StreamMessage;
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.MessageConsumer;
+import javax.jms.Queue;
+import javax.jms.QueueBrowser;
+import javax.jms.Session;
 import javax.jms.TextMessage;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
-import org.opencps.jms.context.JMSContext;
-import org.opencps.jms.message.SubmitDossierMessage;
-import org.opencps.jms.message.body.DossierMsgBody;
-import org.opencps.jms.util.JMSMessageUtil;
-import org.opencps.util.PortletUtil;
-import org.opencps.util.WebKeys;
-
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.MessageListenerException;
-import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.util.PortalUtil;
+
 
 /**
  * @author khoavd
+ *
  */
-public class JMSRecevieQueue implements MessageListener {
+public class JMSRecevieQueue implements MessageListener{
 
-	@Override
-	public void receive(Message message)
-		throws MessageListenerException {
+	/* (non-Javadoc)
+     * @see com.liferay.portal.kernel.messaging.MessageListener#receive(com.liferay.portal.kernel.messaging.Message)
+     */
+    @Override
+    public void receive(Message message)
+        throws MessageListenerException {
 
-		long[] companyIds = PortalUtil.getCompanyIds();
-
-		_log.info("********************************************************CompanyIds Length*********************************************** " +
-			companyIds.length);
-
-		long companyId = 0;
-
-		if (companyIds != null && companyIds.length > 0) {
-			for (int i = 0; i < companyIds.length; i++) {
-				if (PortletUtil.checkJMSConfig(companyIds[i])) {
-					companyId = companyIds[i];
-
-					break;
-				}
-			}
-		}
-
-		if (companyId > 0) {
-
-			JMSContext context =
-				JMSMessageUtil.createConsumer(
-					companyId, StringPool.BLANK, true,
-					WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(),
-					WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "local", "jmscore");
-			try {
-				int messageInQueue = context.countMessageInQueue();
-				int receiveNumber = messageInQueue <= 50 ? messageInQueue : 50;
-
-				int count = 1;
-				while (count <= receiveNumber) {
-
-					javax.jms.Message jsmMessage =
-						context.getMessageConsumer().receive();
-					if (jsmMessage != null) {
-						if (jsmMessage instanceof TextMessage) {
-							_log.info("*******************TextMessage*******************");
-							_log.info(((TextMessage) jsmMessage).getText());
-						}
-						else if (jsmMessage instanceof ObjectMessage) {
-							_log.info("*******************ObjectMessage*******************");
-							_log.info(((ObjectMessage) jsmMessage).getClass().getName());
-						}
-						else if (jsmMessage instanceof BytesMessage) {
-							BytesMessage bytesMessage =
-								(BytesMessage) jsmMessage;
-							_log.info("*******************BytesMessage*******************");
-							_log.info(((BytesMessage) jsmMessage).getBodyLength());
-							byte[] result =
-								new byte[(int) bytesMessage.getBodyLength()];
-							bytesMessage.readBytes(result);
-							Object object =
-								JMSMessageUtil.convertByteArrayToObject(result);
-							if (object instanceof DossierMsgBody) {
-								DossierMsgBody dossierMsgBody =
-									(DossierMsgBody) object;
-								SubmitDossierMessage submitDossierMessage =
-									new SubmitDossierMessage(context);
-								submitDossierMessage.receiveLocalMessage(dossierMsgBody);
-							}
-						}
-						else if (jsmMessage instanceof StreamMessage) {
-							_log.info("*******************StreamMessage*******************");
-						}
-					}
-					else {
-						_log.info("*******************Null Message*******************");
-					}
-
-					count++;
-				}
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-			finally {
-				try {
-					context.destroy();
-				}
-				catch (Exception e) {
-					_log.error(e);
-				}
-
-			}
-		}
-		else {
-			_log.info("Cannot create connection to JMS Queue..................");
-		}
-	}
-
-	private Log _log = LogFactoryUtil.getLog(JMSRecevieQueue.class.getName());
+	    // TODO Auto-generated method stub
+	    
+    }
 
 }

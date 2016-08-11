@@ -18,7 +18,9 @@
         <column name="httpAgent" type="String"></column>
         <column name="params" type="String"></column>
         <column name="status" type="String"></column>
-        
-		<reference entity="Dossier" package-path="org.opencps.dossiermgt.dao" />		
+
+		<reference entity="Dossier" package-path="org.opencps.dossiermgt.dao" />
+		<reference entity="DLApp" package-path="com.liferay.portlet.documentlibrary" />
+		<reference entity="DLFileEntry" package-path="com.liferay.portlet.documentlibrary"/>
 	</entity>
 </service-builder>

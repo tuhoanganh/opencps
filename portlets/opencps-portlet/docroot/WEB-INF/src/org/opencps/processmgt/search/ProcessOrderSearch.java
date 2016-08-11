@@ -40,7 +40,7 @@ public class ProcessOrderSearch extends SearchContainer<ProcessOrderBean> {
 	static Map<String, String> orderableHeaders = new HashMap<String, String>();
 	static {
 		
-		/*headerNames
+		headerNames
 		    .add("reception-no");
 		headerNames
 		    .add("subject-name");
@@ -51,7 +51,7 @@ public class ProcessOrderSearch extends SearchContainer<ProcessOrderBean> {
 		headerNames
 		    .add("assign-to-user");
 		headerNames
-		    .add("dealine");*/
+		    .add("dealine");
 		
 	}
 	public static final String EMPTY_RESULTS_MESSAGE = "no-process-order-were-found";
