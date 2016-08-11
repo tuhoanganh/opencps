@@ -89,6 +89,8 @@
             </div>
             <div class="danhmuc">
                 <p class="title">#language ("danhmuc-key")</p>
+                #parse ("$full_templates_path/navigation_footer_public_page.vm")
+                
                 <ul>
                     <li><a href="">#language ("home-page-key")</a></li>
                     <li><a href="">#language ("notifier-key")</a></li>
