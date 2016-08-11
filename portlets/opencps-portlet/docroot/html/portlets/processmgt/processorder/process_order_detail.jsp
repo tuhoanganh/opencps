@@ -87,17 +87,18 @@
 		type="hidden" 
 		value="<%= currentURL%>"
 	/>
-	
-	<liferay-ui:form-navigator
-		backURL="<%= backURL %>"
-		categoryNames="<%= ProcessUtils._PROCESS_ORDER_CATEGORY_NAMES %>"
-		categorySections="<%= categorySections %>"
-		htmlBottom="<%= htmlBottom %>"
-		htmlTop="<%= htmlTop %>"
-		jspPath='<%=templatePath + "dossier/" %>'
-		showButtons="<%=false%>"
-		displayStyle="left-navigator"
-	/>
+	<div class="opencps-form-navigator-container">
+		<liferay-ui:form-navigator
+			backURL="<%= backURL %>"
+			categoryNames="<%= ProcessUtils._PROCESS_ORDER_CATEGORY_NAMES %>"
+			categorySections="<%= categorySections %>"
+			htmlBottom="<%= htmlBottom %>"
+			htmlTop="<%= htmlTop %>"
+			jspPath='<%=templatePath + "dossier/" %>'
+			showButtons="<%=false%>"
+			displayStyle="left-navigator"
+		/>
+	</div>
 </aui:form>
 </div>
 <aui:script>
