@@ -1,3 +1,4 @@
+<%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="com.liferay.portal.kernel.dao.orm.QueryUtil"%>
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
 <%@page import="org.opencps.util.WebKeys"%>
@@ -147,7 +148,7 @@
                 <%
 	                List<DossierLog> dossierLogs = null;
 	    			try {
-	    				dossierLogs = DossierLogLocalServiceUtil.getDossierLogByDossierId(dossierId);
+	    				dossierLogs = DossierLogLocalServiceUtil.getDossierLogByDossierId(dossierId, PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS);
 	    			} catch(Exception e){
 	    				_log.error(e);
 	    			}
