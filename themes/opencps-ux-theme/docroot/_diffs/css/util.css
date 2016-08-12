@@ -1,46 +1,103 @@
-.bold{
+.bold {
 	font-family: "roboto-bold";
 }
 
-.bottom-line{
+.bottom-line {
 	border-bottom: 1px solid #e1e1e1;
 }
 
-.top-line{
+.top-line {
 	border-top: 1px solid #e1e1e1;
 }
 
-.radius20{
+.radius8 {
+	border-radius: 8px;
+}
+
+.radius20 {
 	border-radius: 20px;
 }
 
-.pd_b20{
+.pd_b20 {
 	padding-bottom: 20px;
 }
 
-.pd_t1{
+.pd_t1 {
 	padding-top: 1px;
 }
 
-.pd_t2{
+.pd_t2 {
 	padding-top: 2px;
 }
 
-.pd_t3{
+.pd_t3 {
 	padding-top: 3px;
 }
 
-.pd_t4{
+.pd_t4 {
 	padding-top: 4px;
 }
 
-.pd_t5{
+.pd_t5 {
 	padding-top: 5px;
 }
 
-.pd_t20{
+.pd_t20 {
 	padding-top: 20px;
 }
 
+.default-box-shadow {
+	box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.2);
+}
 
+.status-color-new {
+	color: #00b4ff;
+}
 
+.status-color-receiving {
+	color: #23b58d;
+}
+
+.status-color-waiting {
+	color: #a5a313;
+}
+
+.status-color-paying {
+	color: #ffa400;
+}
+
+.status-color-denied {
+	color: #ff0000;
+}
+
+.status-color-received {
+	color: #23b58d;
+}
+
+.status-color-processing {
+	color: #0078ff;
+}
+
+.status-color-canceled {
+	color: #ff2300;
+}
+
+.status-color-done {
+	color: #0030ff;
+}
+
+.status-color-archived {
+	color: #888;
+}
+
+.status-color-system {
+	color: #155315;
+}
+
+.status-color-error {
+	color: #ff0000;
+}
+
+.text-align-left{
+	text-align: left;
+}
