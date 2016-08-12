@@ -2,20 +2,22 @@
 #set ($publicLayoutPlid = $layoutService.getDefaultPlid($layout.getGroupId(), false)) ##true for private pages and false for public
 #set ($publicLayout = $layoutService.getLayout($publicLayoutPlid))
 #set ($publicLayouts = $layoutService.getLayouts($layout.getGroupId(), false, 0))
-
 	
 <nav class="$nav_css_class top-menu public" id="navigation" role="navigation">
 
 	#if (!$is_signed_in)
 		<ul>
 			#foreach ($nav_item in $publicLayouts)
-			    #if ($nav_item.isSelected())
-	                <li class="selected">
-	            #else
-	                <li>
-	            #end
-                		<a href="$nav_item.getURL()" $nav_item.getTarget()><span>$nav_item.icon() $nav_item.getName()</span></a>
+				#if (!$nav_item.isHidden())
+					#if ($nav_item.isSelected())
+		                <li class="selected">
+		            #else
+		                <li>
+		            #end
+						<a aria-labelledby="layout_$nav_item.getLayoutId()" href="/web/guest$nav_item.getFriendlyURL()" $nav_item_attr_has_popup $nav_item.getTarget() role="menuitem"><span>$nav_item.getName()</span></a>
+		
 					</li>
+				#end
 			#end
 		</ul>
 	#else
@@ -28,15 +30,20 @@
 		#else
 			<ul aria-label="#language ("site-pages")" role="menubar">
 			    #foreach ($nav_item in $publicLayouts)
-			    #if ($nav_item.isSelected())
-	                <li class="selected">
-	            #else
-	                <li>
-	            #end
-                		<a href="$nav_item.getURL()" $nav_item.getTarget()><span>$nav_item.icon() $nav_item.getName()</span></a>
+
+				
+				#if (!$nav_item.isHidden())
+					 #if ($nav_item.isSelected())
+		                <li class="selected">
+		            #else
+		                <li>
+		            #end
+						<a aria-labelledby="layout_$nav_item.getLayoutId()" href="/web/guest$nav_item.getFriendlyURL()" $nav_item_attr_has_popup $nav_item.getTarget() role="menuitem"><span>$nav_item.getName()</span></a>
+		
 					</li>
 				#end
-			</ul>
+			#end
+		</ul>
 		#end
 	#end
 </nav>
