@@ -207,7 +207,7 @@
 		</aui:row>
 		
 		<c:if test="<%=dossierLogs != null && !dossierLogs.isEmpty() %>">
-			<aui:row cssClass="top-line">
+			<aui:row cssClass="top-line pd_b20 pd_t20">
 				<label class="bold">
 					<liferay-ui:message key="required-process"/>
 				</label>
@@ -263,7 +263,7 @@
 		</c:if>
 		
 		<c:if test="<%=dossierPartsLevel1 != null && !dossierPartsLevel1.isEmpty() %>">
-			<aui:row cssClass="top-line">
+			<aui:row cssClass="top-line pd_b20 pd_t20">
 				<label class="bold">
 					<liferay-ui:message key="dossier-file-result"/>
 				</label>
