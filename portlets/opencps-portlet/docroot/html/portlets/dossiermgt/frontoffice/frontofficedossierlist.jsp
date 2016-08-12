@@ -78,7 +78,7 @@
 	message="<%=RequiredDossierPartException.class.getName() %>"
 />
 
-<div class="opencps-searchcontainer-wrapper">
+<div class="opencps-searchcontainer-wrapper default-box-shadow">
 	<liferay-ui:search-container searchContainer="<%= new DossierSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
 	
 		<liferay-ui:search-container-results>
@@ -121,77 +121,75 @@
 			
 			<%
 				Dossier dossier = dossierBean.getDossier();
+				String cssStatusColor = "status-color-" + dossier.getDossierStatus();
 			%>
 			
 			<liferay-util:buffer var="info">
 				<div class="row-fluid">
-					<div class="span1">
+					<div class='<%= "text-align-left span1 " + cssStatusColor%>'>
 						<i class='<%="fa fa-circle sx10 " + dossier.getDossierStatus()%>'></i>
 					</div>
-					<div class="span3 bold-label">
+					<div class="span2 bold-label">
 						<liferay-ui:message key="reception-no"/>
 					</div>
-					<div class="span6"><%=dossier.getReceptionNo() %></div>
+					<div class="span9"><%=dossier.getReceptionNo() %></div>
 				</div>
 				
 				<div class="row-fluid">
 					<div class="span1"></div>
 					
-					<div class="span3 bold-label">
+					<div class="span2 bold-label">
 						<liferay-ui:message key="service-name"/>
 					</div>
 					
-					<div class="span8"><%=dossierBean.getServiceName() %></div>
+					<div class="span9"><%=dossierBean.getServiceName() %></div>
 				</div>
 				
 				<div class="row-fluid">
 					<div class="span1"></div>
 					
-					<div class="span3 bold-label"><liferay-ui:message key="gov-agency-name"/></div>
+					<div class="span2 bold-label"><liferay-ui:message key="gov-agency-name"/></div>
 					
-					<div class="span8"><%=dossier.getGovAgencyName() %></div>
+					<div class="span9"><%=dossier.getGovAgencyName() %></div>
 				</div>
 				
 			</liferay-util:buffer>
 			
 			<liferay-util:buffer var="status">
 				<div class="row-fluid">
-					<div width="5px"></div>
 					<div class="span5 bold-label"><liferay-ui:message key="create-date"/></div>
-					<div class="span6">
+					<div class="span7">
 						<%=Validator.isNotNull(dossier.getCreateDate()) ? DateTimeUtil.convertDateToString(dossier.getCreateDate(), DateTimeUtil._VN_DATE_FORMAT) : StringPool.DASH %>
 					</div>
 				</div>
 				
 				<div class="row-fluid">
-					<div width="5px"></div>
 					<div class="span5 bold-label">
 						 <liferay-ui:message key="receive-datetime"/>
 					</div>
 					
-					<div class="span6">
+					<div class="span7">
 						<%=Validator.isNotNull(dossier.getReceiveDatetime()) ? DateTimeUtil.convertDateToString(dossier.getReceiveDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT): StringPool.DASH %>
 					</div>
 				</div>
 				
 				<div class="row-fluid">
-					<div width="5px"></div>
+				
 					<div class="span5 bold-label">
 						<liferay-ui:message key="finish-date"/>
 					</div>
-					<div class="span6">
+					<div class="span7">
 						<%=Validator.isNotNull(dossier.getFinishDatetime()) ? DateTimeUtil.convertDateToString(dossier.getFinishDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT): StringPool.DASH %>
 					</div>
 				</div>
 				
 				<div class="row-fluid">
-					<div width="5px"></div>
 					
 					<div class="span5 bold-label">
 						<liferay-ui:message key="dossier-status"/>
 					</div>
 					
-					<div class='<%="span6 " + dossier.getDossierStatus() %>'>
+					<div class='<%="span7 " + cssStatusColor %>'>
 						<%=PortletUtil.getDossierStatusLabel(dossier.getDossierStatus(), locale) %>
 					</div>
 				</div>
