@@ -36,7 +36,6 @@
     vertical-align: middle;
     width: 19px;
 }
-
 .opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list > li > a > i.dossier_part{
 	background-image: url("../images/custom/icon_dossierpart_blue.png");
 	height: 16px;
@@ -61,7 +60,6 @@
     vertical-align: middle;
     width: 19px;
 }
-
 
 .opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list > li.active > a > i.history{
 	background-image: url("../images/custom/icon_dossierhistory_white.png");
@@ -160,4 +158,16 @@
 	display: none;
 }
 
+.opencps-theme.ux .opencps-form-navigator-container .opencps.dossiermgt.dossier-part-row .dossier-part-control .opencps.dossiermgt.part-file-ctr.add-individual-part-group::before {
+    content: "\f067";
+    font-family: fontawesome;
+    font-size: 18px;
+    padding-right: 5px;
+    vertical-align: middle;
+}
 
+#_13_WAR_opencpsportlet_history{
+	.lfr-search-container {
+		display:none;
+	}
+}

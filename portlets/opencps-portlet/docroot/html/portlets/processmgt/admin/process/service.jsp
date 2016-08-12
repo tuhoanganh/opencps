@@ -137,7 +137,7 @@
 			name="delete" 
 		/>
 	</liferay-ui:search-container-row>
-	<liferay-ui:search-iterator type="opencs_page_iterator" paginate="false"/>
+	<liferay-ui:search-iterator paginate="false"/>
 </liferay-ui:search-container>
 
 <aui:script use="liferay-util-window">
