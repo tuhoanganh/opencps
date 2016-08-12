@@ -284,7 +284,7 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 	 * @return
 	 * @throws SystemException
 	 */
-	public List<DossierLog> getDossierLogByDossierId(long dossierId, int syncStatus)
+	public List<DossierLog> getDossierLogByDossierId(long dossierId, int[] syncStatus)
 		throws SystemException {
 
 		return dossierLogPersistence
