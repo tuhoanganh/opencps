@@ -158,7 +158,8 @@
 									<liferay-ui:message key="sign-in"/>
 								</span>
 								<span class="create-account">
-									<aui:a href="#">
+									<liferay-portlet:renderURL var="linkToPage"></liferay-portlet:renderURL>
+									<aui:a href="<%=linkToPage %>">
 										<liferay-ui:message key="create-account"/>
 									</aui:a>
 								</span>
