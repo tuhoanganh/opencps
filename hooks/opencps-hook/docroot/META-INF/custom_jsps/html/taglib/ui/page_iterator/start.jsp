@@ -180,7 +180,7 @@ NumberFormat numberFormat = NumberFormat.getNumberInstance(locale);
 				  <c:if test="<%= PropsValues.SEARCH_CONTAINER_PAGE_DELTA_VALUES.length > 0 %>">
 					<div class="lfr-pagination-config">
 					<%@ include file="/html/taglib/ui/page_iterator/showing_x_results.jspf" %>
-						<liferay-ui:message key="so-luong-hien-thi-interator" />
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <liferay-ui:message key="so-luong-hien-thi-interator" />
 						<div class="lfr-pagination-delta-selector">
 							<c:choose>
 								<c:when test="<%= !deltaConfigurable || themeDisplay.isFacebook() %>">
