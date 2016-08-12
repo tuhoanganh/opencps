@@ -30,8 +30,11 @@ body{
 	font-family: roboto;
 }
 
+.opencps-theme #wrapper #main-content {
+	padding: 25px 0px;
+}
 .opencps-theme.ux .portlet-borderless-container{
-	background-color: #fff;
+	/* background-color: #fff; */
 }
 
 .opencps-theme.ux .home-screen .portlet-borderless-container{
