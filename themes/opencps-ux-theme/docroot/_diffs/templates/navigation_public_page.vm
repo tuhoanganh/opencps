@@ -7,7 +7,7 @@
 <nav class="$nav_css_class top-menu public" id="navigation" role="navigation">
 
 	#if (!$is_signed_in)
-		<ul aria-label="#language ("site-pages")" role="menubar">
+		<ul>
 			#foreach ($nav_item in $publicLayouts)
 
 				#if (!$nav_item.isHidden())
@@ -17,6 +17,8 @@
 		                <li>
 		            #end
 							<a aria-labelledby="layout_$nav_item.getLayoutId()" href="/web/guest$nav_item.getFriendlyURL()" $nav_item_attr_has_popup $nav_item.getTarget() role="menuitem"><span>$nav_item.getName()</span></a>
+			  
+	              
 					</li>
 				#end
 			#end
@@ -31,28 +33,15 @@
 		#else
 			<ul aria-label="#language ("site-pages")" role="menubar">
 			    #foreach ($nav_item in $publicLayouts)
-				#set ($nav_item_attr_has_popup="")
-				#set ($nav_item_attr_selected="")
-				#set ($nav_item_css_class = "")
-	
-				#if ($nav_item.isSelected())
-					#set ($nav_item_attr_selected="aria-selected='true'")
-					#set ($nav_item_css_class = "selected")
-				#end
-	
-				#if ($nav_item.hasChildren())
-					#set ($nav_item_attr_has_popup="aria-haspopup='true'")
-				#end
-				
-				#if (!$nav_item.isHidden())
-				
-					<li class="$nav_item_css_class ocps-nav" id="layout_$nav_item.getLayoutId()" $nav_item_attr_selected role="presentation">
-						<a aria-labelledby="layout_$nav_item.getLayoutId()" href="/web/guest$nav_item.getFriendlyURL()" $nav_item_attr_has_popup $nav_item.getTarget() role="menuitem"><span>$nav_item.getName()</span></a>
-		
+			    #if ($nav_item.isSelected())
+	                <li class="selected">
+	            #else
+	                <li>
+	            #end
+                		<a href="$nav_item.getURL()" $nav_item.getTarget()><span>$nav_item.icon() $nav_item.getName()</span></a>
 					</li>
 				#end
-			#end
-		</ul>
+			</ul>
 		#end
 	#end
 </nav>

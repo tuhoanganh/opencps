@@ -68,7 +68,6 @@
 	
 	<article id="wrapper" class="container">	
 		<div id="content">
-			#*<nav id="breadcrumbs">#breadcrumbs()</nav>*#
 	
 			#if ($selectable)
 				$theme.include($content_include)

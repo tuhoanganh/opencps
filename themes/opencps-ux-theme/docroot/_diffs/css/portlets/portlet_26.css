@@ -117,3 +117,6 @@
 .opencps-theme.ux .submit-headers .header-back-to {
 	position: absolute;
 }
+.opencps-theme.ux .taglib-header .header-title {
+    text-transform: uppercase;
+}

@@ -146,9 +146,10 @@
 <div class="detail-right">
                 <h4><liferay-ui:message key="qua-trinh-xu-ly-ho-so"/></h4>
                 <%
+                	int[] logFitter = {PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC, PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS};
 	                List<DossierLog> dossierLogs = null;
 	    			try {
-	    				dossierLogs = DossierLogLocalServiceUtil.getDossierLogByDossierId(dossierId, PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS);
+	    				dossierLogs = DossierLogLocalServiceUtil.getDossierLogByDossierId(dossierId, logFitter);
 	    			} catch(Exception e){
 	    				_log.error(e);
 	    			}

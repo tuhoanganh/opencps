@@ -184,6 +184,7 @@
 										label="<%= StringPool.BLANK %>" 
 										name="login" showRequiredLabel="<%= false %>" 
 										type="text" value="<%= login %>"
+										placeholder="<%= LanguageUtil.get(pageContext, \"login-placehoder\") %>" 
 									>
 										<aui:validator name="required" />
 									</aui:input>
@@ -194,6 +195,7 @@
 										cssClass="password" 
 										type="password" value="<%= password %>" 
 										label="<%=StringPool.BLANK %>"
+										placeholder="<%= LanguageUtil.get(pageContext, \"password-placehoder\") %>" 
 									>
 										<aui:validator name="required" />
 									</aui:input>
@@ -204,7 +206,7 @@
 							</aui:fieldset>
 			
 							<aui:button-row>
-								<aui:button type="submit" value="sign-in" />
+								<aui:button type="submit" value="sign-in-cus" />
 							</aui:button-row>
 							
 							<div class="forgot-password">
