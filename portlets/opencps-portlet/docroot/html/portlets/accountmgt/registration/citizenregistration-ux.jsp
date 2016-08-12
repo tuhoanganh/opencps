@@ -267,14 +267,17 @@
 				</aui:row>
 				<div class="term-user">
 					<aui:row>
+						<liferay-portlet:renderURL var="linkToPage"></liferay-portlet:renderURL>
+						<%
+							String chiTiet = StringPool.BLANK;
+							chiTiet =  "<a href=\""+linkToPage+"\" class=\"detail-terms-links\">"+LanguageUtil.get(pageContext, "term-detail")+"</a>";
+						%>
 						<aui:input 
 							name="termsOfUse"
 							type="checkbox" 
-							label="terms-of-use"
-							cssClass="ocps-terms-of-use"
+							label="<%= LanguageUtil.format(pageContext, \"terms-of-use-x\", chiTiet) %>"
 						/>
 					</aui:row>
-					<aui:a href="#" cssClass="term-detail-register"><liferay-ui:message key="term-detail"/></aui:a>
 				</div>
 			</div>
 			<aui:row>
