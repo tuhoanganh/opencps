@@ -26,7 +26,7 @@
                    #set ($nav_items= $newNavItems)
           #end
 
-<nav class="$nav_css_class top-menu" id="navigation" role="navigation">
+<nav class="$nav_css_class top-menu private" id="navigation" role="navigation">
 
     <ul>
         #foreach ($nav_item in $nav_items)
