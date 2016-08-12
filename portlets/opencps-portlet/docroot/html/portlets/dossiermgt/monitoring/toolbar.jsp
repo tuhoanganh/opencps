@@ -66,6 +66,7 @@
 									<opencps-ui:input-search 
 										id="keywords"
 										name="keywords"
+										useNamespace="<%=true %>"
 										cssClass="input-append home-bb-search"
 										title='<%= LanguageUtil.get(portletConfig, locale, "keywords") %>'
 										placeholder="<%= LanguageUtil.get(pageContext, \"dossier-search-keywords-home\") %>" 
@@ -93,6 +94,7 @@
 									<opencps-ui:input-search 
 										id="keywords"
 										name="keywords"
+										useNamespace="<%=true %>"
 										cssClass="input-append home-bb-search"
 										title='<%= LanguageUtil.get(portletConfig, locale, "keywords") %>'
 										placeholder="<%= LanguageUtil.get(pageContext, \"dossier-search-keywords\") %>" 
@@ -120,6 +122,7 @@
 									<opencps-ui:input-search 
 										id="keywords"
 										name="keywords"
+										useNamespace="<%=true %>"
 										cssClass="input-append home-bb-search"
 										title='<%= LanguageUtil.get(portletConfig, locale, "keywords") %>'
 										placeholder="<%= LanguageUtil.get(pageContext, \"dossier-search-keywords\") %>" 
