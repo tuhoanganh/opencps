@@ -122,6 +122,6 @@
 				<liferay-ui:search-container-column-jsp path="/html/portlets/dossiermgt/frontoffice/dossier/history-bound-data.jsp" />
 				
 		</liferay-ui:search-container-row>
-	<liferay-ui:search-iterator paginate="false"/>
+	<liferay-ui:search-iterator type="opencs_page_iterator" paginate="false"/>
 	</liferay-ui:search-container>
 </div>
