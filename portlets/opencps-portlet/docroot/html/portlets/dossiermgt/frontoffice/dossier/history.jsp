@@ -1,6 +1,4 @@
 
-<%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
-<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -30,6 +28,9 @@
 <%@page import="org.opencps.dossiermgt.model.DossierLog"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.dossiermgt.model.Dossier"%>
+<%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
+<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
+
 <%@ include file="../../init.jsp"%>
 
 <%
