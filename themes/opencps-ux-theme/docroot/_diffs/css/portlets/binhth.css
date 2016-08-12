@@ -421,3 +421,24 @@ box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); width: 370px; float: right; padding
 .payment-ld input[type="file"]{
   display: none;
 }
+.taglib-page-iterator .pagination ul{
+	float: left;
+	left: 50%;
+	position: relative;
+	transform: translate(-50%);
+}
+.taglib-page-iterator div.search-results{
+  display: none;
+}
+.taglib-page-iterator .lfr-pagination-config{
+	float: right !important;
+}
+.opencps-theme.ux .taglib-page-iterator .btn {
+    color: #333 !important;
+}
+.taglib-search-iterator-page-iterator-top .taglib-page-iterator ul.lfr-pagination-buttons{
+  display: none;
+}
+.taglib-search-iterator-page-iterator-bottom .taglib-page-iterator ul.lfr-pagination-buttons{
+  display: block;
+}
