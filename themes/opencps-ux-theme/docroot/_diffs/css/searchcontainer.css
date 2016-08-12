@@ -117,4 +117,5 @@
     clip: auto !important;
     position: absolute !important;
     top: 8px;
+    transform: none;
 }
