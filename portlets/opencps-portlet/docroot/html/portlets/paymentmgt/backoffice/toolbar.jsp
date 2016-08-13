@@ -40,7 +40,7 @@
 						</aui:col>
 						<aui:col width="35" cssClass="search-col">
 							<div class="select">
-								<aui:select name="paymentStatus" label="" cssClass="search-input select-box">
+								<aui:select name="paymentStatus" label="" cssClass="search-input select-box input100">
 									<aui:option value="-1">
 										<liferay-ui:message key="loc-trang-thai-thanh-toan"></liferay-ui:message>
 									</aui:option>
@@ -62,7 +62,7 @@
 						<aui:col width="35" cssClass="search-col">
 							<liferay-ui:input-search id="keywords" name="keywords"
 								title='<%= LanguageUtil.get(portletConfig, locale, "keywords") %>'
-								placeholder="<%= LanguageUtil.get(portletConfig, locale, \"keywords\") %>" 
+								placeholder="<%= LanguageUtil.get(portletConfig, locale, \"keywords-ma-tiep-nhan-ho-so\") %>" 
 								cssClass="search-input input-keyword"
 								/>
 						</aui:col>
