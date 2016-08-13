@@ -70,6 +70,10 @@ body{
 
 /* Overwrite Form Navigator  */
 
+.opencps-theme.ux .opencps-form-navigator-container{
+    background-color: #fff;
+}
+
 .opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator{
     border-radius: 3px;
     box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.2);
