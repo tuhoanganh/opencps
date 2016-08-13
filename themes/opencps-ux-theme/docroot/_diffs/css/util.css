@@ -118,6 +118,18 @@
 	margin-right: -30px;
 }
 
+.min-width60{
+	min-width: 60px !important;
+}
+
+.min-width70{
+	min-width: 70px !important;
+}
+
+.min-width180{
+	min-width: 180px !important;
+}
+
 .text-align-left{
 	display: block;
 	text-align: left;
