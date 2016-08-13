@@ -48,20 +48,20 @@
 	<c:when test="<%=dossier != null && dossier.getDossierStatus() != PortletConstants.DOSSIER_STATUS_NEW %>">
 		<%
 			String[] actors = new String[]{StringPool.APOSTROPHE + WebKeys.ACTOR_ACTION_EMPLOYEE + StringPool.APOSTROPHE};
-			String[] requestCommands = new String[]{StringPool.APOSTROPHE + WebKeys.DOSSIER_LOG_RESUBMIT_REQUEST + StringPool.APOSTROPHE, StringPool.APOSTROPHE + WebKeys.DOSSIER_LOG_PAYMENT_REQUEST + StringPool.APOSTROPHE};
+			String[] requestCommands = new String[]{StringPool.APOSTROPHE + WebKeys.DOSSIER_LOG_RESUBMIT_REQUEST + StringPool.APOSTROPHE, 
+													StringPool.APOSTROPHE + WebKeys.DOSSIER_LOG_PAYMENT_REQUEST + StringPool.APOSTROPHE};
 			List<DossierLog> dossierLogs = DossierLogLocalServiceUtil.findRequiredProcessDossier(dossier.getDossierId(), actors, requestCommands);
 			List<DossierPart> dossierPartsLevel1 = new ArrayList<DossierPart>();
 			
 			ServiceInfo info = null;
 			String serviceInfoName = StringPool.BLANK;
+			
 			try {
+				
 				info = ServiceInfoLocalServiceUtil.getServiceInfo(dossier.getServiceInfoId());
 				serviceInfoName = info.getServiceName();
 				
-				
-			} catch (Exception e) {
-				
-			}
+			} catch (Exception e) {}
 				
 			if(dossierTemplate != null){
 				
@@ -83,15 +83,7 @@
 			}
 		%>
 		
-		<aui:row>
-			<aui:col width="20" cssClass="bold">
-				<liferay-ui:message key="dossier-reception-no"/>
-			</aui:col>
-			<aui:col width="80">
-				<%=dossier.getReceptionNo() %>
-			</aui:col>
-		</aui:row>
-		<aui:row>
+		<aui:row cssClass="pd_b20">
 			<aui:col width="20" cssClass="bold">
 				<liferay-ui:message key="dossier-service-name"/>
 			</aui:col>
@@ -99,7 +91,6 @@
 				<%=serviceInfoName %>
 			</aui:col>
 		</aui:row>
-		
 		
 		<aui:row>
 			<aui:col width="50">
@@ -207,8 +198,11 @@
 		</aui:row>
 		
 		<c:if test="<%=dossierLogs != null && !dossierLogs.isEmpty() %>">
-			<aui:row cssClass="top-line pd_b20 pd_t20">
-				<label class="bold">
+		
+			<aui:row cssClass="bottom-line mg-l-30 pd_b20 pd_t20 pd-r60"></aui:row>
+		
+			<aui:row cssClass="pd_t20">
+				<label class="bold uppercase">
 					<liferay-ui:message key="required-process"/>
 				</label>
 			
@@ -218,7 +212,7 @@
 						for(DossierLog dossierLog : dossierLogs){
 							
 							%>
-								<aui:row cssClass="bottom-line pd_b20 pd_t20">
+								<aui:row cssClass='<%=count <  dossierLogs.size() ? "bottom-line pd_b20 pd_t20" : "pd_t20" %>'>
 									<aui:col width="30">
 										<span class="span1">
 											<i class="fa fa-circle blue sx10"></i>
@@ -263,8 +257,11 @@
 		</c:if>
 		
 		<c:if test="<%=dossierPartsLevel1 != null && !dossierPartsLevel1.isEmpty() %>">
-			<aui:row cssClass="top-line pd_b20 pd_t20">
-				<label class="bold">
+		
+			<aui:row cssClass="bottom-line mg-l-30 pd_b20 pd_t20 pd-r60"></aui:row>
+			
+			<aui:row cssClass="pd_t20">
+				<label class="bold uppercase">
 					<liferay-ui:message key="dossier-file-result"/>
 				</label>
 				<%
@@ -303,7 +300,7 @@
 								}
 
 								%>
-									<aui:row cssClass="bottom-line pd_b20 pd_t20">
+									<aui:row cssClass='<%=count > 1 ? "top-line pd_b20 pd_t20" : "pd_b20 pd_t20" %>'>
 										<aui:col width="50">
 											<aui:row>
 												<aui:col width="50">
@@ -319,14 +316,13 @@
 															DateTimeUtil.convertDateToString(dossierFile.getDossierFileDate(), DateTimeUtil._VN_DATE_TIME_FORMAT) : 
 															DateTimeUtil._EMPTY_DATE_TIME
 														%>
-														
 													</span>
 												</aui:col>
 												<aui:col width="50">
-													<span class="span4 bold">
+													<span class="span5 bold">
 														<liferay-ui:message key="dossier-file-no"/>
 													</span>
-													<span class="span8">
+													<span class="span7">
 														<%=Validator.isNotNull(dossierFile.getDossierFileNo()) ? dossierFile.getDossierFileNo() : StringPool.DASH %>
 													</span>
 												</aui:col>
@@ -357,11 +353,12 @@
 			</aui:row>
 		</c:if>
 		
-	
 	</c:when>
+	
 	<c:otherwise>
 		<div class="portlet-msg-info">
 			<liferay-ui:message key="no-dossier-result-info"/>
 		</div>
 	</c:otherwise>
+	
 </c:choose>
