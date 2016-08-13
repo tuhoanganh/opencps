@@ -97,7 +97,7 @@
 />
 </c:if>
 <div class="head">
-	<h3 style="float: left;text-transform: uppercase;"><liferay-ui:message key="ket-qua-tra-cuu-ho-so"/> <%= Validator.isNotNull(dossier)?dossier.getReceptionNo():StringPool.BLANK %></h3>
+	<h3 class="headh3"><liferay-ui:message key="ket-qua-tra-cuu-ho-so"/> <%= Validator.isNotNull(dossier)?dossier.getReceptionNo():StringPool.BLANK %></h3>
 	<div class = "page-search">
 		<liferay-util:include page="/html/portlets/dossiermgt/monitoring/toolbar.jsp" servletContext="<%=application %>" />
 	</div>
@@ -146,7 +146,7 @@
 <div class="detail-right">
                 <h4><liferay-ui:message key="qua-trinh-xu-ly-ho-so"/></h4>
                 <%
-                	int[] logFitter = {PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC, PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS};
+                	int[] logFitter = {0, PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC, PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS};
 	                List<DossierLog> dossierLogs = null;
 	    			try {
 	    				dossierLogs = DossierLogLocalServiceUtil.getDossierLogByDossierId(dossierId, logFitter);
