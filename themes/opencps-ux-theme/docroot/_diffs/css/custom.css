@@ -37,7 +37,7 @@ body{
 	font-family: roboto;
 }
 
-.opencps-theme #wrapper #main-content {
+.opencps-theme.ux #wrapper #main-content {
 	padding: 25px 0px;
 }
 .opencps-theme.ux .portlet-borderless-container{
@@ -180,6 +180,12 @@ body{
 .opencps-theme.ux .portlet-topper .portlet-title-text{
 	font-size: 18px;
 	text-transform: uppercase;
+}
+
+/* Overwrite portlet alert  */
+
+.opencps-theme.ux .alert {
+    margin: 10px !important;
 }
 
 .alpaca-array-actionbar-action.btn {
