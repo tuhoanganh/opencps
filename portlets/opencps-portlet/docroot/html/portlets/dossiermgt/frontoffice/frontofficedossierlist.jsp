@@ -78,7 +78,7 @@
 	message="<%=RequiredDossierPartException.class.getName() %>"
 />
 
-<div class="opencps-searchcontainer-wrapper default-box-shadow">
+<div class="opencps-searchcontainer-wrapper default-box-shadow radius8">
 	<liferay-ui:search-container searchContainer="<%= new DossierSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
 	
 		<liferay-ui:search-container-results>
@@ -126,7 +126,7 @@
 			
 			<liferay-util:buffer var="info">
 				<div class="row-fluid">
-					<div class='<%= "text-align-left span1 " + cssStatusColor%>'>
+					<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
 						<i class='<%="fa fa-circle sx10 " + dossier.getDossierStatus()%>'></i>
 					</div>
 					<div class="span2 bold-label">
