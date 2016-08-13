@@ -11,11 +11,11 @@
 }
 
 .radius8 {
-	border-radius: 8px;
+	border-radius: 8px !important
 }
 
 .radius20 {
-	border-radius: 20px;
+	border-radius: 20px !important;
 }
 
 .pd_b20 {
@@ -116,6 +116,18 @@
 } 
 .mg-r-30{
 	margin-right: -30px;
+}
+
+.min-width60{
+	min-width: 60px !important;
+}
+
+.min-width70{
+	min-width: 70px !important;
+}
+
+.min-width180{
+	min-width: 180px !important;
 }
 
 .text-align-left{

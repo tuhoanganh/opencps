@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -18,24 +17,25 @@
  */
 %>
 
-<%@page import="org.opencps.servicemgt.util.ServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.bean.ServiceBean"%>
 <%@page import="com.liferay.portal.kernel.dao.search.SearchEntry"%>
-<%@page import="com.liferay.util.dao.orm.CustomSQLUtil"%>
-<%@page import="org.opencps.dossiermgt.search.ServiceSearchTerms"%>
-<%@page import="org.opencps.dossiermgt.search.ServiceSearch"%>
-<%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
-<%@page import="java.util.List"%>
+<%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
+<%@page import="com.liferay.util.dao.orm.CustomSQLUtil"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
 <%@page import="javax.portlet.PortletURL"%>
-<%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
-<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
-<%@page import="org.opencps.util.PortletConstants"%>
-<%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
-<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
 <%@page import="org.opencps.datamgt.model.DictItem"%>
+<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.bean.ServiceBean"%>
+<%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
+<%@page import="org.opencps.dossiermgt.search.ServiceSearch"%>
+<%@page import="org.opencps.dossiermgt.search.ServiceSearchTerms"%>
+<%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
+<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
+<%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
+<%@page import="org.opencps.servicemgt.util.ServiceUtil"%>
+<%@page import="org.opencps.util.PortletConstants"%>
+
 <%@ include file="../init.jsp"%>
 
 <%
@@ -66,9 +66,12 @@
 		<liferay-ui:search-container-results>
 			<%
 				try{
-					serviceBeansRecent = ServiceConfigLocalServiceUtil.getServiceConfigRecent(scopeGroupId, themeDisplay.getUserId(), 1, -1, -1, citizen != null ? 1 : -1, business != null ? 1 :-1, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-					
+					serviceBeansRecent = ServiceConfigLocalServiceUtil.getServiceConfigRecent(scopeGroupId, 
+						themeDisplay.getUserId(), 1, -1, -1, 
+						citizen != null ? 1 : -1, business != null ? 1 :-1, searchContainer.getStart(), 
+						searchContainer.getEnd(), searchContainer.getOrderByComparator());
 				}catch(Exception e){}
+			
 				total = serviceBeansRecent.size();
 				results = serviceBeansRecent;
 				
@@ -85,29 +88,33 @@
 				<%
 				
 					DictItem dictItem = null;
+				
 					String domainName = StringPool.DASH;
 					
 					try{
 						dictItem = DictItemLocalServiceUtil.getDictItem(GetterUtil.getLong(serviceBean.getDomainCode()));
-						domainName = dictItem.getItemName(locale);
-					}catch(Exception e){
 						
-					}
+						domainName = dictItem.getItemName(locale);
+						
+					}catch(Exception e){}
 					
 				%>
 				
 			
-				<liferay-util:buffer var="boundcol2">
+				<liferay-util:buffer var="service">
 					<div class="row-fluid">
-						<div class="span5 bold-label"><liferay-ui:message key="service-name"/></div>
-						<div class="span7">
-							<%=Validator.isNotNull(serviceBean.getServiceName()) ? serviceBean.getServiceName() : StringPool.BLANK %>
+						<div class="span2 bold-label"><liferay-ui:message key="service-name"/></div>
+						<div class="span10">
+							<%=
+								Validator.isNotNull(serviceBean.getServiceName()) ? 
+								serviceBean.getServiceName() : StringPool.BLANK 
+							%>
 						</div>
 					</div>
 				</liferay-util:buffer>
 				
-				<liferay-util:buffer var="boundcol3">
-					<div class="row-fluid">
+				<liferay-util:buffer var="domain">
+					<div class="row-fluid min-width180">
 						<div class="span5 bold-label"><liferay-ui:message key="domain-code"/></div>
 						<div class="span7">
 							<%=domainName %>
@@ -115,8 +122,8 @@
 					</div>
 				</liferay-util:buffer>
 				
-				<liferay-util:buffer var="boundcol4">
-					<div class="row-fluid">
+				<liferay-util:buffer var="govAgency">
+					<div class="row-fluid min-width180">
 						<div class="span5 bold-label"><liferay-ui:message key="gov-agency-name"/></div>
 						<div class="span7">
 							<%=serviceBean.getGovAgencyName() %>
@@ -124,10 +131,10 @@
 					</div>
 				</liferay-util:buffer>
 				
-				<liferay-util:buffer var="boundcol5">
-					<div class="row-fluid">
-						<div class="span5 bold-label"><liferay-ui:message key="level"/></div>
-						<div class="span7">
+				<liferay-util:buffer var="level">
+					<div class="row-fluid min-width70">
+						<div class="span9 bold-label"><liferay-ui:message key="level"/></div>
+						<div class="span3">
 							<%=String.valueOf(serviceBean.getLevel()) %>
 						</div>
 					</div>
@@ -136,19 +143,22 @@
 				<%
 					row.setClassName("opencps-searchcontainer-row");
 					row.addText(String.valueOf(row.getPos() + 1 + searchContainer.getStart()));
-					row.addText(boundcol2);
-					row.addText(boundcol3);
-					row.addText(boundcol4);
-					row.addText(boundcol5);
+					row.addText(service);
+					row.addText(domain);
+					row.addText(govAgency);
+					row.addText(level);
 					row.addJSP("center", SearchEntry.DEFAULT_VALIGN,"/html/portlets/dossiermgt/frontoffice/service_actions.jsp", config.getServletContext(), request, response);
 				%>	
 			</liferay-ui:search-container-row> 
 		
 		<liferay-ui:search-iterator type="opencs_page_iterator"/>
 	</liferay-ui:search-container>
+</div>
+
+<liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
 	
-	<liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
-	
+<div class="opencps-searchcontainer-wrapper default-box-shadow radius8">
+
 	<liferay-ui:search-container searchContainer="<%= new ServiceSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
 	
 		<liferay-ui:search-container-results>
@@ -161,6 +171,7 @@
 				long govAgencyId = ParamUtil.getLong(request, "govAgencyId");
 		
 				DictItem domainItem = null;
+				
 				DictItem govAgencygovItem = null;
 			
 				try{
@@ -202,8 +213,8 @@
 			>
 				<%
 				
-					
 					DictItem dictItem = null;
+				
 					String domainName = StringPool.DASH;
 					
 					try{
@@ -214,17 +225,20 @@
 					}
 				%>
 				
-				<liferay-util:buffer var="boundcol2">
+				<liferay-util:buffer var="service">
 					<div class="row-fluid">
-						<div class="span5 bold-label"><liferay-ui:message key="service-name"/></div>
-						<div class="span7">
-							<%=Validator.isNotNull(serviceBean.getServiceName()) ? serviceBean.getServiceName() : StringPool.BLANK %>
+						<div class="span2 bold-label"><liferay-ui:message key="service-name"/></div>
+						<div class="span10">
+							<%=
+								Validator.isNotNull(serviceBean.getServiceName()) ? 
+								serviceBean.getServiceName() : StringPool.BLANK 
+							%>
 						</div>
 					</div>
 				</liferay-util:buffer>
 				
-				<liferay-util:buffer var="boundcol3">
-					<div class="row-fluid">
+				<liferay-util:buffer var="domain">
+					<div class="row-fluid min-width180">
 						<div class="span5 bold-label"><liferay-ui:message key="domain-code"/></div>
 						<div class="span7">
 							<%=domainName %>
@@ -232,8 +246,8 @@
 					</div>
 				</liferay-util:buffer>
 				
-				<liferay-util:buffer var="boundcol4">
-					<div class="row-fluid">
+				<liferay-util:buffer var="govAgency">
+					<div class="row-fluid min-width180">
 						<div class="span5 bold-label"><liferay-ui:message key="gov-agency-name"/></div>
 						<div class="span7">
 							<%=serviceBean.getGovAgencyName() %>
@@ -241,23 +255,22 @@
 					</div>
 				</liferay-util:buffer>
 				
-				<liferay-util:buffer var="boundcol5">
-					<div class="row-fluid">
-						<div class="span5 bold-label"><liferay-ui:message key="level"/></div>
-						<div class="span7">
+				<liferay-util:buffer var="level">
+					<div class="row-fluid min-width70">
+						<div class="span9 bold-label"><liferay-ui:message key="level"/></div>
+						<div class="span3">
 							<%=String.valueOf(serviceBean.getLevel()) %>
 						</div>
 					</div>
 				</liferay-util:buffer>
 				
-				
 				<%
 					row.setClassName("opencps-searchcontainer-row");
 					row.addText(String.valueOf(row.getPos() + 1 + searchContainer.getStart()));
-					row.addText(boundcol2);
-					row.addText(boundcol3);
-					row.addText(boundcol4);
-					row.addText(boundcol5);
+					row.addText(service);
+					row.addText(domain);
+					row.addText(govAgency);
+					row.addText(level);
 					row.addJSP("center", SearchEntry.DEFAULT_VALIGN,"/html/portlets/dossiermgt/frontoffice/service_actions.jsp", config.getServletContext(), request, response);
 				%>
 			</liferay-ui:search-container-row> 
