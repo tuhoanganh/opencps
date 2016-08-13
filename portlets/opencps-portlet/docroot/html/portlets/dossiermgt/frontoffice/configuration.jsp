@@ -1,5 +1,4 @@
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array"%>
 <%@page import="com.liferay.portal.kernel.util.ListUtil"%>
 <%@page import="com.liferay.portal.model.Layout"%>
 <%@page import="java.util.List"%>

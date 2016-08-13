@@ -233,3 +233,11 @@
     border: 0;
     padding: 10px;
 }
+
+.opencps-theme .default-sign-in .forgot-password{
+  text-align: right;
+}
+
+.opencps-theme .ux-sign-in-wrapper{
+	background: whitesmoke;
+}
