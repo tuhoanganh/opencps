@@ -150,37 +150,7 @@
 						<%= serviceInfo.getServiceRecords() %>
 					</td>
 				</tr>
-				<tr>
-					<td class="col-left">
-						<liferay-ui:message key="service-instructions"/>
-					</td>
-					<td class="col-right">
-						<%= serviceInfo.getServiceInstructions() %>
-					</td>
-				</tr>
-				<tr>
-					<td class="col-left">
-						<liferay-ui:message key="status"/>
-					</td>
-					<td class="col-right">
-						<%
-							int status = serviceInfo.getActiveStatus(); 
-						%>
-						<c:choose>
-							<c:when test="<%=status == 0 %>">
-								<liferay-ui:message key="service-private"/>
-							</c:when>
-							
-							<c:when test="<%=status == 1 %>">
-								<liferay-ui:message key="service-public"/>
-							</c:when>
-							<c:when test="<%=status == 2 %>">
-								<liferay-ui:message key="service-outdate"/>
-							</c:when>
-						</c:choose>
-						
-					</td>
-				</tr>
+				
 				<tr>
 					<td class="col-left">
 						<liferay-ui:message key="template_info"/>
@@ -208,7 +178,7 @@
 				</tr>
 				<tr>
 					<td class="col-left" colspan="2">
-						<aui:button href="<%= serviceInfo.getOnlineUrl() %>" cssClass="des-sub-button radius20" value="online-url"></aui:button>
+						<aui:button href="<%= serviceInfo.getOnlineUrl() %>" cssClass="des-sub-button radius20" value="online-url-button"></aui:button>
 					</td>
 				</tr>
 			</table>
