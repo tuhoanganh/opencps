@@ -177,7 +177,6 @@ NumberFormat numberFormat = NumberFormat.getNumberInstance(locale);
 						 </li>
 				  </ul>
 				  
-				  <c:if test="<%= PropsValues.SEARCH_CONTAINER_PAGE_DELTA_VALUES.length > 0 %>">
 					<div class="lfr-pagination-config">
 					<%@ include file="/html/taglib/ui/page_iterator/showing_x_results.jspf" %>
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <liferay-ui:message key="so-luong-hien-thi-interator" />:&nbsp;
@@ -216,7 +215,6 @@ NumberFormat numberFormat = NumberFormat.getNumberInstance(locale);
 								</c:otherwise>
 							</c:choose>
 						</div>
-					</c:if>
 	          </div>
 				
 		</div>
