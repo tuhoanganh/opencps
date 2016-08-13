@@ -14,7 +14,7 @@
  */
 --%>
 
-<small class="search-results">
+<font class="search-results">
 	<c:choose>
 		<c:when test='<%= type.equals("approximate") %>'>
 			<%= LanguageUtil.format(pageContext, "page-x-of-approximately-x-results", new Object[] {numberFormat.format(cur), numberFormat.format(total)}) %>
@@ -22,7 +22,10 @@
 		<c:when test='<%= type.equals("more") %>'>
 			<%= LanguageUtil.format(pageContext, "showing-x-x", new Object[] {numberFormat.format(start + 1), numberFormat.format(end)}) %>
 		</c:when>
-		<c:when test="<%= total > resultRowsSize %>">
+		<c:when test='<%= type.equals("opencs_page_iterator") %>'>
+			<%= LanguageUtil.format(pageContext, "showing-x-x-of-x-results-opencps", new Object[] {numberFormat.format(start + 1), numberFormat.format(end), numberFormat.format(total)}) %>
+		</c:when>
+		<c:when test="<%= total > resultRowsSize &&  !type.equals(\"opencs_page_iterator\") %>">
 			<%= LanguageUtil.format(pageContext, "showing-x-x-of-x-results", new Object[] {numberFormat.format(start + 1), numberFormat.format(end), numberFormat.format(total)}) %>
 		</c:when>
 		<c:otherwise>
@@ -36,4 +39,4 @@
 			</c:choose>
 		</c:otherwise>
 	</c:choose>
-</small>
+</font>
