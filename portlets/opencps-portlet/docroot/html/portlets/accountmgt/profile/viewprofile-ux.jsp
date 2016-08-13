@@ -215,6 +215,18 @@
 									
 									<aui:row>
 										<aui:col width="30">
+											<label><liferay-ui:message key="id-number" /></label>
+										</aui:col>
+										<aui:col width="50">
+											<div><%=business.getIdNumber() %></div>
+										</aui:col>
+										<aui:col width="20">
+											<a href="<%=editProFile.toString() %>" class="fix"><liferay-ui:message key="edit"/></a>
+										</aui:col>
+									</aui:row>
+									
+									<aui:row>
+										<aui:col width="30">
 											<label><liferay-ui:message key="en-name" /></label>
 										</aui:col>
 										<aui:col width="50">
