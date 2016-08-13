@@ -259,8 +259,8 @@ public class AccountProfilePortlet extends MVCPortlet {
 		String shortName =
 		    ParamUtil.getString(
 		        actionRequest, BusinessDisplayTerms.BUSINESS_SHORTNAME);
-		String type =
-		    ParamUtil.getString(
+		long type =
+		    ParamUtil.getLong(
 		        actionRequest, BusinessDisplayTerms.BUSINESS_BUSINESSTYPE);
 		String address =
 		    ParamUtil.getString(
@@ -296,6 +296,8 @@ public class AccountProfilePortlet extends MVCPortlet {
 		DictItem district = null;
 
 		DictItem ward = null;
+		
+		DictItem busType = null;
 
 		try {
 			AccountRegPortlet
@@ -308,13 +310,17 @@ public class AccountProfilePortlet extends MVCPortlet {
 			district = DictItemLocalServiceUtil.getDictItem(districtId);
 
 			ward = DictItemLocalServiceUtil.getDictItem(wardId);
+			
+			busType = DictItemLocalServiceUtil.getDictItem(type);
 			ServiceContext serviceContext =
 			    ServiceContextFactory.getInstance(actionRequest);
-
+			System.out.println("*********BEFORE********");
 			if (businessId > 0) {
+				
+				System.out.println("*******domain************ " + domain.length);
 				district.getItemName(serviceContext.getLocale(), true);
 				BusinessLocalServiceUtil.updateBusiness(
-				    businessId, name, enName, shortName, type, idNumber,
+				    businessId, name, enName, shortName, busType.getItemCode(), idNumber,
 				    address, city.getItemCode(), district.getItemCode(),
 				    ward.getItemCode(),
 				    city.getItemName(serviceContext.getLocale(), true),

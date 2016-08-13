@@ -214,7 +214,7 @@ public class AccountRegPortlet extends MVCPortlet {
 			    ServiceContextFactory.getInstance(uploadPortletRequest);
 
 			inputStream =
-			    uploadPortletRequest.getFileAsStream(CitizenDisplayTerms.CITIZEN_ATTACHFILE);
+			    uploadPortletRequest.getFileAsStream(BusinessDisplayTerms.BUSINESS_ATTACHFILE);
 
 			repositoryId = serviceContext.getScopeGroupId();
 			city = DictItemLocalServiceUtil.getDictItem(cityId);
@@ -222,11 +222,10 @@ public class AccountRegPortlet extends MVCPortlet {
 			ward = DictItemLocalServiceUtil.getDictItem(wardId);
 			if(type != 0) {
 				businessType = DictItemLocalServiceUtil.getDictItem(type);
-				businessTypeCode = businessType.getItemName(
-		            serviceContext.getLocale(), true);
+				businessTypeCode = businessType.getItemCode();
 			} 
 			
-
+			System.out.println("**************domain************" + domain.length);
 			if (businessId == 0) {
 
 				Business business =

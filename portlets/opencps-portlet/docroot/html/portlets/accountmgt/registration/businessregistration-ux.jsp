@@ -250,8 +250,8 @@
 					<%
 						for(DictItem dictItemDomain : dictItemDomains) {
 							%>
-								<aui:input
-									name="businessDomain"
+								<aui:input 
+									name="businessDomains"
 									id='<%= "businessDomain" + dictItemDomain.getDictItemId()%>'
 									value="<%=dictItemDomain.getItemCode() %>"
 									type="checkbox" 

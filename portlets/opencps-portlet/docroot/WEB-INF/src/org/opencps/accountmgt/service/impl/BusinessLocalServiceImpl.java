@@ -109,7 +109,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 					WebKeys.CITIZEN_BUSINESS_ROLE_NAME);
 		}
 		catch (Exception e) {
-			_log.info("ROLE CITIZEN IS NULL");
+			_log.info("ROLE BUSINESS IS NULL");
 		}
 
 		long businessId =
@@ -278,6 +278,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		business = businessPersistence.update(business);
 
 		if (businessDomainCodes != null && businessDomainCodes.length > 0) {
+			System.out.println("***************GO HERE DOMAIN********************");
 			for (int b = 0; b < businessDomainCodes.length; b++) {
 				BusinessDomain domain = new BusinessDomainImpl();
 				domain.setBusinessId(businessId);
@@ -457,6 +458,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		business = businessPersistence.update(business);
 
 		if (businessDomainCodes != null && businessDomainCodes.length > 0) {
+			System.out.println("******GO HERE UPDATE DOMAIN************");
 			for (int b = 0; b < businessDomainCodes.length; b++) {
 				BusinessDomain domain = new BusinessDomainImpl();
 				domain.setBusinessId(businessId);
