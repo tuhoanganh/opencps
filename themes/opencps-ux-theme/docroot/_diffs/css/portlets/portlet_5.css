@@ -178,6 +178,10 @@
 }
 .detail-terms-links{
 	font-weight: bold;
-	color: #00aaff;
+	color: #0077b3 !important;
 	font-size: 13px;
+	text-decoration: none !important;
 }
+.opencps-theme.ux  .content-part .lfr-input-date .control-group {position: relative;margin-bottom: 20px;}
+.opencps-theme.ux  .content-part .lfr-input-date .control-group:before {content:"\f073"; position: absolute; font-family: FontAwesome; right: 10px; top:50%;width: 100%;text-align: right;font-size: 16px;color: #4b4b4b;transform: translateY(-50%); pointer-events: none}
+.opencps-theme.ux  .content-part .lfr-input-date .control-group input {margin-bottom: 0}

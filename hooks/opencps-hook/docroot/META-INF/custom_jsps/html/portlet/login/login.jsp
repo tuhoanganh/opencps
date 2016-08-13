@@ -51,6 +51,9 @@
 		if (Validator.isNull(authType)) {
 			authType = company.getAuthType();
 		}
+		if(login.startsWith("@")){
+			login = StringPool.BLANK;
+		}
 		%>
 
 		<portlet:actionURL secure="<%= PropsValues.COMPANY_SECURITY_AUTH_REQUIRES_HTTPS || request.isSecure() %>" var="loginURL">
