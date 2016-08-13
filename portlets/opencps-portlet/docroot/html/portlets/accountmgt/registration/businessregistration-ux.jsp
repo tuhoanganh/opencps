@@ -319,10 +319,14 @@
 				</aui:row>
 				
 				<aui:row cssClass="input-file">
+					<%
+						String attachFileX = StringPool.BLANK;
+						attachFileX =  "<a href=\"#\" class=\"detail-terms-links\">"+LanguageUtil.get(pageContext, "term-detail-tai-day")+"</a>";
+					%>
 					<aui:input 
 						type="file" 
 						name="attachFile" 
-						label="business-attach-file"
+						label="<%= LanguageUtil.format(pageContext, \"business-attach-file-x\", attachFileX) %>"
 					>
 						<aui:validator name="acceptFiles">
 							'<%= StringUtil.merge(PortletPropsValues.ACCOUNTMGT_FILE_TYPE) %>'

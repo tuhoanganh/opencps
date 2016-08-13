@@ -190,7 +190,7 @@
 	 					<liferay-ui:message key="birth-date"/>
 	 				</label>
 	 				<liferay-ui:input-date 
-	 					
+	 					nullable="true"
 	 					dayParam="<%=CitizenDisplayTerms.BIRTH_DATE_DAY %>"
 	 					dayValue="<%= spd.getDayOfMoth() %>"
 	 					monthParam="<%=CitizenDisplayTerms.BIRTH_DATE_MONTH %>"
@@ -207,9 +207,14 @@
 				</aui:row>
 				
 				<aui:row cssClass="input-file">
+					<%
+						String attachFileX = StringPool.BLANK;
+						attachFileX =  "<a href=\"#\" class=\"detail-terms-links\">"+LanguageUtil.get(pageContext, "term-detail-tai-day")+"</a>";
+					%>
 					<aui:input 
 						type="file" 
 						name="<%=CitizenDisplayTerms.CITIZEN_ATTACHFILE %>" 
+						label="<%= LanguageUtil.format(pageContext, \"attachFile-x\", attachFileX) %>"
 					>
 						<aui:validator name="acceptFiles">
 							'<%= StringUtil.merge( PortletPropsValues.ACCOUNTMGT_FILE_TYPE) %>'
@@ -323,7 +328,7 @@
 				}
 			});
 		}
-		
+		A.one('#<portlet:namespace />birthDate').setAttribute("placeholder", '<%=LanguageUtil.get(pageContext, "ngay-sinh-placehoder") %>');
 	});
 
 	Liferay.provide(window, '<portlet:namespace />registerAccount', function() {
