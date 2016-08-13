@@ -35,12 +35,12 @@
 		font-weight: bold;
 		font-size: 14px;
 		display: inline-block;
-		width: 62%;
+		width: 69%;
 	}
 	.opencps-theme.ux  .ocps-submit-online .span6 .control-group select {
 		display: inline-block;
 		display: inline-block;
-		width: 28%;
+		width: 30%;
 		height: 41px;
 	}
 }
@@ -116,5 +116,14 @@
 
 .opencps-theme.ux .submit-headers .header-back-to {
 	position: absolute;
+	text-transform: uppercase;
+}
+
+.opencps-theme.ux .portlet-boundary_26_WAR_opencpsportlet_ .portlet-body .previous-level{
+	padding: 0 13em;
+	margin-top: 13px;
+}
+
+.opencps-theme.ux .portlet-boundary_26_WAR_opencpsportlet_ .portlet-body .header-title {
 	text-transform: uppercase;
 }
