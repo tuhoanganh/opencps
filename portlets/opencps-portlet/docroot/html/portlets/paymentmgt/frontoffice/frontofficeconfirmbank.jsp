@@ -134,7 +134,7 @@
                             <h5 class="upercase"><liferay-ui:message key="dinh-kem-tep-chung-tu"></liferay-ui:message></h5>
                             <p><liferay-ui:message key="chung-tu-thanh-toan"></liferay-ui:message><br><liferay-ui:message key="hoac-hoa-don-chung-nhan-giao-dich-chuyen-khoan-duoc-in-ra"></liferay-ui:message></p>
                             <div class="paymentUploadBTN">
-                            	<aui:input type="file" cssClass="input-file" name="uploadedFile" label="uploaded-file">
+                            	<aui:input type="file" cssClass="input-file" name="uploadedFile" label="uploaded-file-payment">
 								<aui:validator name="acceptFiles">
 									'<%= StringUtil.merge(PortletPropsValues.ACCOUNTMGT_FILE_TYPE) %>'
 								</aui:validator>

@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,6 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
@@ -53,11 +53,9 @@
 		searchURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER);
 	}
 	
-	
 %>
 
 <aui:nav-bar cssClass="opencps-toolbar custom-toolbar">
-
 	<c:choose>
 		<c:when test="<%=isListServiceConfig%>">
 			<div class="pd_t20">
@@ -85,9 +83,7 @@
 						href="<%=addDossierURL %>"
 						cssClass="action-button"
 					/> --%>
-					<aui:button icon="icon-plus" href="<%=addDossierURL %>" cssClass="action-button" value="add-dossier">
-						
-					</aui:button>
+					<aui:button icon="icon-plus" href="<%=addDossierURL %>" cssClass="action-button" value="add-dossier-online"/>
 				</c:if>
 			</aui:nav>
 		</c:otherwise>
