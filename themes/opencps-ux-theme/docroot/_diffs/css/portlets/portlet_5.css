@@ -190,3 +190,6 @@
   font-weight: 500;
   text-decoration: none !important;;
 }
+.opencps-theme.ux .input-file .detail-terms-links {
+	pointer-events: none;
+}
