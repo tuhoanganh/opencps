@@ -75,7 +75,7 @@
 					href="<%=addDossierURL %>"
 					cssClass="action-button"
 				/> --%>
-				<aui:button icon="icon-plus" href="<%=addDossierURL %>" cssClass="action-button" value="add-dossier">
+				<aui:button icon="icon-plus" href="<%=addDossierURL %>" cssClass="action-button" value="add-dossier-online">
 					
 				</aui:button>
 			</c:if>
