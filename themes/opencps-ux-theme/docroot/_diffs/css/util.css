@@ -46,6 +46,11 @@
 	padding-top: 20px;
 }
 
+.pd-r60 {
+	padding-right: 60px;
+}
+
+
 .default-box-shadow {
 	box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.2);
 }
@@ -98,6 +103,28 @@
 	color: #ff0000;
 }
 
+.lowercase{
+	text-transform: lowercase;
+}
+
+.uppercase{
+	text-transform: uppercase;
+}
+
+.mg-l-30{
+	margin-left: -30px;
+} 
+.mg-r-30{
+	margin-right: -30px;
+}
+
 .text-align-left{
+	display: block;
 	text-align: left;
 }
+
+.text-align-right{
+	display: block;
+	text-align: right;
+}
+

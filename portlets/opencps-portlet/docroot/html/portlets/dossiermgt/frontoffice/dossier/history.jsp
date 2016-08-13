@@ -62,16 +62,16 @@
 
 <aui:row>
 	<aui:col width="20" cssClass="bold">
-		<liferay-ui:message key="reception-no"/> 
+		<liferay-ui:message key="dossier-reception-no"/> 
 	</aui:col>
 	<aui:col width="80">
 		<%=receptionNo %>
 	</aui:col>
 </aui:row>
 
-<aui:row>
+<aui:row cssClass="pd_b20">
 	<aui:col width="20" cssClass="bold">
-		<liferay-ui:message key="dossier-name"/> 
+		<liferay-ui:message key="dossier-service-name"/> 
 	</aui:col>
 	<aui:col width="80">
 		<%=serviceName%>
@@ -100,9 +100,6 @@
 		%>
 	</liferay-ui:search-container-results>
 	
-	<%
-		
-	%>
 	<liferay-ui:search-container-row 
 		className="org.opencps.dossiermgt.model.DossierLog" 
 		modelVar="dossierLog" 
@@ -115,7 +112,7 @@
 				</span>
 				
 				<span class="span3 bold">
-					<liferay-ui:message key="reception-time" />
+					<liferay-ui:message key="time" />
 				</span>
 				
 				<span class="span8">
