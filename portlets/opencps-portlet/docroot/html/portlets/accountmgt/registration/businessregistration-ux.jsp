@@ -1,3 +1,5 @@
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -335,10 +337,12 @@
 				</aui:row>
 				<div class="term-user">
 					<aui:row>
-						<liferay-portlet:renderURL var="linkToPage"></liferay-portlet:renderURL>
+						<liferay-portlet:renderURL var="linkToPage" ></liferay-portlet:renderURL>
+						<aui:input name="linkToPageURL" value="<%=linkToPage %>" type="hidden"></aui:input>
 						<%
 							String chiTiet = StringPool.BLANK;
-							chiTiet =  "<a href=\""+linkToPage+"\" class=\"detail-terms-links\">"+LanguageUtil.get(pageContext, "term-detail")+"</a>";
+							String popupURL = renderResponse.getNamespace() +  "openDialogTermOfUse();";
+							chiTiet =  "<a onclick=\""+popupURL+"\" class=\"detail-terms-links\">"+LanguageUtil.get(pageContext, "term-detail")+"</a>";
 						%>
 						<aui:input 
 							name="termsOfUse"
@@ -405,5 +409,12 @@
 			return;
 		}
 	});
+	
+	Liferay.provide(window, '<portlet:namespace/>openDialogTermOfUse', function() {
+		var A = AUI();
+		var linkToPageURL = A.one('#<portlet:namespace />linkToPageURL');
+		openDialog(linkToPageURL.val(), '<portlet:namespace />dieuKhoanSuDung', '<%= UnicodeLanguageUtil.get(pageContext, "dieu-khoan-su-dung") %>');
+		
+	},['aui-io','liferay-portlet-url']);
 	
 </aui:script>
