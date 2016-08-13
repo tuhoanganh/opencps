@@ -214,7 +214,7 @@
 				<aui:row cssClass="input-file">
 					<%
 						String attachFileX = StringPool.BLANK;
-						attachFileX =  "<a href=\"#\" class=\"detail-terms-links\">"+LanguageUtil.get(pageContext, "term-detail-tai-day")+"</a>";
+						attachFileX =  "<a class=\"detail-terms-links\">"+LanguageUtil.get(pageContext, "term-detail-tai-day")+"</a>";
 					%>
 					<aui:input 
 						type="file" 
