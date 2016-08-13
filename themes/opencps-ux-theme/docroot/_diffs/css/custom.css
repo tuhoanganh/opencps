@@ -6,6 +6,7 @@
 @import url(portlets/portlet_5.css);
 @import url(portlets/portlet_6.css);
 @import url(portlets/portlet_13.css);
+@import url(portlets/portlet_16.css);
 @import url(portlets/portlet_26.css);
 @import url(portlets/portlet_11.css);
 @import url(portlets/portlet_10.css);
@@ -227,7 +228,3 @@ body{
 .opencps-theme.ux .home_bg #column-1 .portlet-borderless-container{
   background: transparent !important;
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> 12f10b4820d1a46582f337e3024ceb4ca348900b
