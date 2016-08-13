@@ -314,10 +314,8 @@ public class AccountProfilePortlet extends MVCPortlet {
 			busType = DictItemLocalServiceUtil.getDictItem(type);
 			ServiceContext serviceContext =
 			    ServiceContextFactory.getInstance(actionRequest);
-			System.out.println("*********BEFORE********");
 			if (businessId > 0) {
 				
-				System.out.println("*******domain************ " + domain.length);
 				district.getItemName(serviceContext.getLocale(), true);
 				BusinessLocalServiceUtil.updateBusiness(
 				    businessId, name, enName, shortName, busType.getItemCode(), idNumber,

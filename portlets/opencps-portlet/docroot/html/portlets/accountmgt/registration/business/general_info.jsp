@@ -189,7 +189,7 @@
 							}
 						%>
 							<aui:input
-								name="businessDomain"
+								name="businessDomains"
 								id='<%= "businessDomain" + dictItemDomain.getDictItemId()%>'
 								value="<%=dictItemDomain.getItemCode() %>"
 								type="checkbox" 
