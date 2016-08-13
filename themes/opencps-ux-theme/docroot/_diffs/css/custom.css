@@ -170,6 +170,18 @@ body{
     text-align: center;
 }
 
+/* Overwrite portlet header  */
+
+.opencps-theme.ux .portlet-topper{
+	padding: 0 10px;
+	
+}
+
+.opencps-theme.ux .portlet-topper .portlet-title-text{
+	font-size: 18px;
+	text-transform: uppercase;
+}
+
 .alpaca-array-actionbar-action.btn {
 	background-color: #ccc !important;
 	height: 20px !important;
