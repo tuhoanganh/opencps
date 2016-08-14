@@ -38,6 +38,7 @@
 	String backURL = ParamUtil.getString(request, "backURL");
 	
 %>
+
 <div class="ocps-service-detal-bound-all">
 	<div class="ocps-custom-header">
 		<label class="opcps-label">
@@ -175,8 +176,8 @@
 					</td>
 				</tr>
 				<tr>
-					<td class="col-left" colspan="2" align="center">
-						<aui:button href="<%= serviceInfo.getOnlineUrl() %>" cssClass="des-sub-button radius20" value="online-url-manual"></aui:button>
+					<td class="col-left" colspan="2">
+						<aui:button href="<%= serviceInfo.getOnlineUrl() %>" cssClass="des-sub-button radius20" value="online-url-button"></aui:button>
 					</td>
 				</tr>
 			</table>
