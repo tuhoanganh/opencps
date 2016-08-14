@@ -1,3 +1,6 @@
+<%@page import="javax.portlet.PortletRequest"%>
+<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
+<%@page import="javax.portlet.PortletMode"%>
 <%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
 <%@page import="org.opencps.util.PortletPropsValues"%>
 <%@page import="org.opencps.datamgt.service.DictCollectionLocalServiceUtil"%>
@@ -67,13 +70,18 @@
 		//nothing to do
 	}
 	
+	PortletURL returnServiceURL = PortletURLFactoryUtil.create(request, WebKeys.SERVICE_MGT_DIRECTORY, PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(),  WebKeys.SERVICE_MGT_DIRECTORY), PortletRequest.RENDER_PHASE);
+	returnServiceURL.setWindowState(WindowState.MAXIMIZED);
+	returnServiceURL.setPortletMode(PortletMode.VIEW);
+	returnServiceURL.setParameter("mvcPath", "/html/portlets/servicemgt/directory/service_detail.jsp");
+	returnServiceURL.setParameter("serviceinfoId", Validator.isNotNull(serviceInfo)?String.valueOf(serviceInfo.getServiceinfoId()):String.valueOf(0));
 %>
-
 <liferay-ui:header 
-	backURL="<%=backURL1 %>"
+	backURL="<%=Validator.isNotNull(backURL1)?backURL1:returnServiceURL.toString() %>"
 	title="guide-sibmition-dossier"
 	cssClass="submit-headers"
 />
+
 <portlet:renderURL var="referToSubmitOnline" windowState="<%=LiferayWindowState.EXCLUSIVE.toString() %>">
 	<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/submit/ajax/url_online.jsp"/>
 </portlet:renderURL>

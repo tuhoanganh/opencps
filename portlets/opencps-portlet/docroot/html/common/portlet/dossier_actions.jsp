@@ -124,7 +124,7 @@
 										group-dossier-part="<%=String.valueOf(groupDossierPartId) %>"
 										group-name="<%=groupName %>"
 										href="javascript:void(0);" 
-										label="view-attachment" 
+										label="view-content" 
 										cssClass="label opencps dossiermgt part-file-ctr view-attachment"
 										title="view-attachment"
 									/>
@@ -227,7 +227,7 @@
 								group-dossier-part="<%=String.valueOf(groupDossierPartId) %>"
 								group-name="<%=groupName %>"
 								href="javascript:void(0);" 
-								label="view-attachment" 
+								label="view-content" 
 								cssClass="label opencps dossiermgt part-file-ctr view-attachment"
 								title="view-attachment"
 							/>
@@ -253,7 +253,7 @@
 				</td>
 				
 				<td width="10%" align="right">
-					<span class="dossier-file-counter">
+					<span class="dossier-version-counter">
 						<span class="counter-value" title="version">
 							<aui:a 
 								id="<%=String.valueOf(dossierPartId) %>"
@@ -344,7 +344,7 @@
 								group-dossier-part="<%=String.valueOf(groupDossierPartId) %>"
 								group-name="<%=groupName %>"
 								href="javascript:void(0);" 
-								label="view-attachment" 
+								label="view-content" 
 								cssClass="label opencps dossiermgt part-file-ctr view-attachment"
 								title="view-attachment"
 							/>
@@ -370,7 +370,7 @@
 				</td>
 				
 				<td width="10%" align="right">
-					<span class="dossier-file-counter">
+					<span class="dossier-version-counter">
 						<span class="counter-value" title="version">
 							<aui:a 
 								id="<%=String.valueOf(dossierPartId) %>"
@@ -451,7 +451,7 @@
 										group-dossier-part="<%=String.valueOf(groupDossierPartId) %>"
 										group-name="<%=groupName %>"
 										href="javascript:void(0);" 
-										label="view-attachment" 
+										label="view-content" 
 										cssClass="label opencps dossiermgt part-file-ctr view-attachment"
 										
 										title="view-attachment"
@@ -479,7 +479,7 @@
 					</c:choose>
 				</td>
 				<td width="10%" align="right">
-					<span class="dossier-file-counter">
+					<span class="dossier-version-counter">
 						<span class="counter-value" title="version">
 							<aui:a 
 								id="<%=String.valueOf(dossierPartId) %>"

@@ -51,6 +51,9 @@
 		if (Validator.isNull(authType)) {
 			authType = company.getAuthType();
 		}
+		if(login.startsWith("@")){
+			login = StringPool.BLANK;
+		}
 		%>
 
 		<portlet:actionURL secure="<%= PropsValues.COMPANY_SECURITY_AUTH_REQUIRES_HTTPS || request.isSecure() %>" var="loginURL">
@@ -158,7 +161,8 @@
 									<liferay-ui:message key="sign-in"/>
 								</span>
 								<span class="create-account">
-									<aui:a href="#">
+									<liferay-portlet:renderURL var="linkToPage"></liferay-portlet:renderURL>
+									<aui:a href="<%=linkToPage %>">
 										<liferay-ui:message key="create-account"/>
 									</aui:a>
 								</span>

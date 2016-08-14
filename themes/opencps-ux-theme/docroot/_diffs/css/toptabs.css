@@ -3,7 +3,8 @@
 	height: 39px;
 	color: white;
 	font-family: 'Roboto-Bold';
-	margin-bottom: 30px
+	margin-bottom: 30px;
+	margin-top: -25px;
 }
 
 .opencps-theme.ux  .portlet-boundary_13_WAR_opencpsportlet_ .opencps-toptabs ul {
@@ -52,16 +53,13 @@
 	border-color: rgba(255, 0, 0, 0);
 }
 
-.opencps-theme.ux  .portlet-boundary_13_WAR_opencpsportlet_ .nav-tabs .tab a
-{
-        color: #DAE7E1;
+.opencps-theme.ux  .portlet-boundary_13_WAR_opencpsportlet_ .nav-tabs .tab a {
+    color: #DAE7E1;
 	text-decoration: none;
 }
 
-.opencps-theme.ux  .portlet-boundary_13_WAR_opencpsportlet_ .nav-tabs .active a
-	{
+.opencps-theme.ux  .portlet-boundary_13_WAR_opencpsportlet_ .nav-tabs .active a {
 	color: #fff;
 	background-color: rgba(255, 0, 0, 0);
 	border-color: rgba(255, 0, 0, 0);
-
 }

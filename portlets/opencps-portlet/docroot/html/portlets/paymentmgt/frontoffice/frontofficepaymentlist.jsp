@@ -67,7 +67,7 @@
 <aui:form name="payForm" action="#">
 <div class="opcs-serviceinfo-list-label">
 	<div class="title_box">
-           <p class="file_manage_title"><liferay-ui:message key="danh-sach-ho-so-thu-phi" /></p>
+           <p class="file_manage_title"><liferay-ui:message key="danh-sach-yeu-cau-thu-phi" /></p>
            <p class="count"></p>
     </div>
 </div>

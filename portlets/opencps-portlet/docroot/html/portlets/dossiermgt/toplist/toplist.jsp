@@ -98,7 +98,7 @@
 					<div class="row-fluid">
 						<div class="row-fluid">
 							<div class="span2 bold-label">
-								<liferay-ui:message key="dossier-no"/>
+								<liferay-ui:message key="dossier-numb-top"/>
 							</div>
 							<div class="span6">
 								<%=dossier.getReceptionNo() %>
@@ -131,7 +131,7 @@
 				<div class="row-fluid">
 					
 					<div class="span5 bold-label">
-						 <liferay-ui:message key="date-of-receiving"/>
+						 <liferay-ui:message key="date-for-receiving"/>
 					</div>
 					
 					<div class="span6">
