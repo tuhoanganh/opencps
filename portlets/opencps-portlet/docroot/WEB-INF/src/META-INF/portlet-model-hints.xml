@@ -187,8 +187,9 @@
 		<field name="accountStatus" type="int" />
 	</model>
 	<model name="org.opencps.accountmgt.model.BusinessDomain">
+		<field name="domainId" type="long" />
 		<field name="businessId" type="long" />
-		<field name="businessDomainId" type="String" />
+		<field name="businessDomainCode" type="String" />
 	</model>
 	<model name="org.opencps.accountmgt.model.Citizen">
 		<field name="citizenId" type="long" />

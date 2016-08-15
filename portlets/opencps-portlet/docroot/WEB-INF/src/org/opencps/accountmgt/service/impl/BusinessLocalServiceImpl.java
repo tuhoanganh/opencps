@@ -26,6 +26,7 @@ import org.opencps.accountmgt.NoSuchBusinessException;
 import org.opencps.accountmgt.model.Business;
 import org.opencps.accountmgt.model.BusinessDomain;
 import org.opencps.accountmgt.model.impl.BusinessDomainImpl;
+import org.opencps.accountmgt.service.BusinessLocalServiceUtil;
 import org.opencps.accountmgt.service.base.BusinessLocalServiceBaseImpl;
 import org.opencps.util.DLFolderUtil;
 import org.opencps.util.DateTimeUtil;
@@ -278,11 +279,8 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		business = businessPersistence.update(business);
 
 		if (businessDomainCodes != null && businessDomainCodes.length > 0) {
-			for (int b = 0; b < businessDomainCodes.length; b++) {
-				BusinessDomain domain = new BusinessDomainImpl();
-				domain.setBusinessId(businessId);
-				domain.setBusinessDomainId(businessDomainCodes[b]);
-				businessDomainPersistence.update(domain);
+			if (businessDomainCodes != null && businessDomainCodes.length > 0) {
+				businessDomainLocalService.addBusinessDomains(businessId, businessDomainCodes);
 			}
 		}
 
@@ -457,11 +455,13 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		business = businessPersistence.update(business);
 
 		if (businessDomainCodes != null && businessDomainCodes.length > 0) {
-			for (int b = 0; b < businessDomainCodes.length; b++) {
-				BusinessDomain domain = new BusinessDomainImpl();
-				domain.setBusinessId(businessId);
-				domain.setBusinessDomainId(businessDomainCodes[b]);
-				businessDomainPersistence.update(domain);
+			businessDomainLocalService.addBusinessDomains(businessId, businessDomainCodes);
+		} else if (businessDomainCodes != null && businessDomainCodes.length <= 0) {
+			List<BusinessDomain> currentBusinessDomains = new ArrayList<BusinessDomain>();
+			currentBusinessDomains = businessDomainPersistence.findByBusinessId(businessId);
+			
+			for(BusinessDomain bdm : currentBusinessDomains) {
+				businessDomainPersistence.remove(bdm);
 			}
 		}
 
@@ -565,16 +565,16 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		business = businessPersistence.update(business);
 
 		if (businessDomainCodes != null && businessDomainCodes.length > 0) {
-			for (int b = 0; b < businessDomainCodes.length; b++) {
-				BusinessDomain domain = new BusinessDomainImpl();
-				domain.setBusinessId(businessId);
-				domain.setBusinessDomainId(businessDomainCodes[b]);
-				businessDomainPersistence.update(domain);
+			businessDomainLocalService.addBusinessDomains(businessId, businessDomainCodes);
+		} else if (businessDomainCodes != null && businessDomainCodes.length <= 0) {
+			List<BusinessDomain> currentBusinessDomains = new ArrayList<BusinessDomain>();
+			currentBusinessDomains = businessDomainPersistence.findByBusinessId(businessId);
+			
+			for(BusinessDomain bdm : currentBusinessDomains) {
+				businessDomainPersistence.remove(bdm);
 			}
 		}
-
 		return business;
-
 	}
 
 	public Business updateStatus(long businessId, long userId, int accountStatus)
