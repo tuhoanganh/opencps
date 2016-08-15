@@ -109,10 +109,10 @@
 								</div>
 								<div class="row-fluid">
 									
-									<div class="span1 bold-label">
+									<div class="span2 bold">
 										<liferay-ui:message key="service-name"/>
 									</div>
-									<div class="span6">
+									<div class="span9">
 										<%=processOrder.getServiceName() %>
 									</div>
 								</div>
@@ -121,40 +121,40 @@
 						
 						
 						<liferay-util:buffer var="boundcol2">
-						<div class="row-fluid">
-							<div class="span5 bold-label">
+						<div class="row-fluid min-width340">
+							<div class="span5 bold">
 								<liferay-ui:message key="subject-name"/>	
 							</div>
-							<div class="span6">
+							<div class="span7">
 								<%=processOrder.getSubjectName() %>
 							</div>
 						</div>
 						
-						<div class="row-fluid">
-							<div class="span5 bold-label">
+						<div class="row-fluid" >
+							<div class="span5 bold">
 								 <liferay-ui:message key="assign-to-user"/>
 							</div>
 							
-							<div class="span6">
+							<div class="span7">
 								<%=processOrder.getAssignToUserName() %>
 							</div>
 						</div>
 						
-						<div class="row-fluid">
-							<div class="span5 bold-label">
+						<div class="row-fluid min-width340">
+							<div class="span5 bold">
 								<liferay-ui:message key="step-name"/>
 							</div>
-							<div class="span6">
+							<div class="span7">
 								<%=processOrder.getStepName() %>
 							</div>
 						</div>
 						
-						<div class="row-fluid">
-								<div class="span5 bold-label">
+						<div class="row-fluid min-width340">
+								<div class="span5 bold">
 									<liferay-ui:message key="dealine"/>
 								</div>
 								
-								<div class='<%="span6"%>'>
+								<div class='<%="span7"%>'>
 									<%= deadlineVal %>
 								</div>
 							</div>
