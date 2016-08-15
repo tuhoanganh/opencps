@@ -103,10 +103,7 @@
 						%>
 						
 						<liferay-util:buffer var="boundcol1">
-							<div class="row-fluid">
-								<div class="span1">
-									<i class='<%="fa fa-circle sx10 " + processOrder.getReceptionNo()%>'></i>
-								</div>
+							<div class="row-fluid">	
 								<div class="row-fluid">
 									
 									<div class="span2 bold">
