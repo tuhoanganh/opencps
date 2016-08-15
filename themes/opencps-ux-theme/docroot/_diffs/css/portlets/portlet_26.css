@@ -116,7 +116,10 @@
 
 .opencps-theme.ux .submit-headers .header-back-to {
 	position: absolute;
-	text-transform: uppercase;
+}
+.opencps-theme.ux .taglib-header .header-title {
+    text-transform: uppercase;
+
 }
 
 .opencps-theme.ux .portlet-boundary_26_WAR_opencpsportlet_ .portlet-body .previous-level{

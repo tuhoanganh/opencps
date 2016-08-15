@@ -150,7 +150,6 @@
 						<%= serviceInfo.getServiceRecords() %>
 					</td>
 				</tr>
-				
 				<tr>
 					<td class="col-left">
 						<liferay-ui:message key="template_info"/>
