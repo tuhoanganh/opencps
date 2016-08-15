@@ -41,10 +41,9 @@
     width: 60%;
 }
 .opencps-theme.ux  .ocps-submit-online .span6 .control-group select{
-	margin-left: 60px;
     display: inline-block;
     display: inline-block;
-    width: 30%;
+    width: 39%;
     height: 41px;
 }
 
@@ -117,6 +116,6 @@
     margin-top: 20px;
     margin-bottom: 30px;
 }
-.opencps-theme.ux .submit-headers {
+.opencps-theme.ux .submit-headers .header-back-to{
 	position: absolute;
 }
