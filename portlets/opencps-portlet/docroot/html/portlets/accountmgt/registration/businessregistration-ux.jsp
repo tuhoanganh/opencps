@@ -256,11 +256,13 @@
 									value="<%=dictItemDomain.getItemCode() %>"
 									type="checkbox" 
 								    label="<%=dictItemDomain.getItemName(locale, true)%>"
+								    cssClass="getval"
 								/>
 							<%
 						}
 					%>
 					</div>
+					<aui:input name="listBussinessDomains" type="hidden" value=""></aui:input>
 				</aui:row>
 			</div>
 		
@@ -365,6 +367,11 @@
 	AUI().ready(function(A) {
 		var termsOfUseCheckbox = A.one('#<portlet:namespace />termsOfUseCheckbox');
 		
+		var businessTypeCbs = $(".getval");
+		var businessTypeCbsChecked = $(".getval:checked");
+		var checkedArr = [];
+		var listBussinessDomains = A.one("#<portlet:namespace />listBussinessDomains");
+		
 		var allRadios = A.all( "input[type='radio']" );
 		
 		var typeValue =  A.one("input[name=<portlet:namespace/>typeOfRegister]:checked").get("value");
@@ -397,6 +404,30 @@
 				}
 			});
 		}
+		
+		businessTypeCbsChecked.each(function() {
+			checkedArr.push($(this).attr("value"));
+			listBussinessDomains.val(checkedArr);
+		});
+		
+		businessTypeCbs.click(function() {
+			if($(this).is(":checked")) {
+				//alert($(this).attr("value") + ' ' + $(this).attr("id"));
+				if($.inArray($(this).attr("value"), checkedArr) == -1) {
+					checkedArr.push($(this).attr("value"));
+				}
+			} else {
+				if($.inArray($(this).attr("value"), checkedArr) > -1) {
+					removeItem = $(this).attr("value");
+					checkedArr = $.grep(checkedArr, function(value) {
+						  return value != removeItem;
+					});
+				}
+			}
+			
+			listBussinessDomains.val(checkedArr);
+		});
+		
 	});
 
 	Liferay.provide(window, '<portlet:namespace />registerAccount', function() {
