@@ -154,25 +154,21 @@
 	    				_log.error(e);
 	    			}
                 %>
-                <div class="date">
-                	<%
-                		for(DossierLog dossierLog: dossierLogs){
-                	%>
-                    <div>
-                        <p><%= (Validator.isNotNull(dossierLog.getUpdateDatetime())) ? dateFormatDate.format(dossierLog.getUpdateDatetime()) : StringPool.BLANK %></p>
-                        <p><%= dossierLog.getDossierStatus() %><font style="color: #fff;">-</font></p>
-                    </div>
-                    <%} %>
-                </div>
+               
                 <div class="info">
                 	<%
                 		for(DossierLog dossierLog: dossierLogs){
+                			if(!dossierLog.getDossierStatus().equalsIgnoreCase("system") && !dossierLog.getDossierStatus().equalsIgnoreCase("error")){
                 	%>
+                	 <div class="date">
+                        <p><%= (Validator.isNotNull(dossierLog.getUpdateDatetime())) ? dateFormatDate.format(dossierLog.getUpdateDatetime()) : StringPool.BLANK %></p>
+                        <p><%= Validator.isNotNull(dossierLog.getDossierStatus())? LanguageUtil.get(pageContext, dossierLog.getDossierStatus()+"-cus"):StringPool.BLANK %><font style="color: #fff;">-</font></p>
+                    </div>
                     <div>
-                        <p><span><liferay-ui:message key="doi-tuong"/>:</span> <%= dossierLog.getActor() %></p>
+                        <p><span><liferay-ui:message key="doi-tuong"/>:</span> <%= Validator.isNotNull(dossierLog.getActor())? LanguageUtil.get(pageContext, dossierLog.getActor()+"-cus"):StringPool.BLANK %></p>
                         <p><span><liferay-ui:message key="ghi-chu"/>:</span> <%= dossierLog.getActionInfo() %></p>
                     </div>
-                    <%} %>
+                    <%}} %>
                     
                 </div>
 
