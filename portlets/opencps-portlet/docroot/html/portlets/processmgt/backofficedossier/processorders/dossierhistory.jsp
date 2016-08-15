@@ -55,6 +55,7 @@
 	}
 	
 	long processOrderId = Validator.isNotNull(processOrder) ? processOrder.getProcessOrderId() : 0L;
+	
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "dossier/history.jsp");
 	
