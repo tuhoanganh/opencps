@@ -101,15 +101,16 @@
 </liferay-util:buffer>
 
 <liferay-util:buffer var="htmlBot">
-	<div class="button-holder ">
+	<%-- <div class="button-holder ">
 			<aui:button name="submit" type="submit" value="submit"/>
 			<aui:button name="cancel" value="cancel" href="<%=backURL %>"/>	
-	</div>
+	</div> --%>
 </liferay-util:buffer>
 
 <aui:form name="fm" 
 	method="post" 
 	action="<%=updateDossierURL.toString() %>">
+<div class="opencps-form-navigator-container">
 	<liferay-ui:form-navigator 
 		backURL="<%= currentURL %>"
 		categoryNames= "<%= DossierMgtUtil._DOSSIER_CATEGORY_NAMES %>"	
@@ -117,72 +118,8 @@
 		htmlBottom="<%= htmlBot %>"
 		htmlTop="<%= htmlTop %>"
 		jspPath='<%=templatePath + "dossier_common/" %>'
-		showButtons="false"
-		
+		displayStyle="left-navigator"
 		>	
 	</liferay-ui:form-navigator>
+</div>
 </aui:form>
-<%-- <aui:script>
-	
-	AUI().ready('liferay-portlet-url',function(A) {	
-		var dossierPartLink = A.one('#<portlet:namespace />dossierpartlistLink');
-		var dossierServiceLink = A.one('#<portlet:namespace />dossierservicelistLink'); 
-		var dossierTemplateLink = A.one('#<portlet:namespace />edit_dossier_templateLink');
-		
-		if(dossierTemplateLink) {
-			var submitBtn = A.one('#<portlet:namespace />submit');
-			dossierTemplateLink.on('click',function(){
-				submitBtn.show();
-			});
-		} 
-		
-		if(dossierPartLink) {
-			var submitBtn = A.one('#<portlet:namespace />submit');
-			dossierPartLink.on('click',function(){
-				submitBtn.hide();
-				<portlet:namespace />sentToolBarSignal('dossierPartToolBar');
-			});
-		} 
-		
-		if(dossierServiceLink) {
-			var submitBtn = A.one('#<portlet:namespace />submit');
-			dossierServiceLink.on('click',function(){
-				submitBtn.hide();
-				<portlet:namespace />sentToolBarSignal('serviceConfigToolBar');
-			});
-		} 
-		
-	});
-	
-Liferay.provide(window, '<portlet:namespace/>sentToolBarSignal', function(tbSignal) {
-		
-		var A = AUI();
-		
-		A.io.request(
-			'<%= renderToToolBar.toString() %>',
-			{
-				dataType : 'text/html',
-				method : 'GET',
-			    data:{    	
-			    	"<portlet:namespace />tabs1" : tbSignal,
-			    	"<portlet:namespace />currURL" : '<%=currentURL %>'
-			    },   
-			    on: {
-			    	success: function(event, id, obj) {
-						var instance = this;
-						var res = instance.get('responseData');
-						
-						var toolbarResponse = A.all("#<portlet:namespace/>toolbarResponse");
-						
-						if(toolbarResponse){
-							toolbarResponse.empty();
-							toolbarResponse.html(res);
-						}
-						
-					},
-			    	error: function(){}
-				}
-			}
-		);
-	},['aui-base','aui-io']);
-</aui:script> --%>

@@ -44,6 +44,8 @@
 				    ProcessPermission.contains(
 				        themeDisplay.getPermissionChecker(),
 				        themeDisplay.getScopeGroupId(), ActionKeys.ADD_PROCESS);
+	
+	int totalCount = ProcessWorkflowLocalServiceUtil.countWorkflow(serviceProcessId);
 %>
 
 <liferay-portlet:renderURL var="editActionURL" windowState="<%= LiferayWindowState.NORMAL.toString() %>">
@@ -57,13 +59,13 @@
 	<aui:button name="addAction" href="<%= editActionURL %>" value="add-action" ></aui:button>
 </aui:button-row>
 
-<liferay-ui:search-container searchContainer="<%= new WorkflowSearch(renderRequest, ITEM_PERPAGE, iteratorURL) %>">
+<liferay-ui:search-container searchContainer="<%= new WorkflowSearch(renderRequest, totalCount, iteratorURL) %>">
 		
 	<liferay-ui:search-container-results>
 		<%
 			WorkflowSearchTerms searchTerms = (WorkflowSearchTerms) searchContainer.getSearchTerms();
 		
-			total = ProcessWorkflowLocalServiceUtil.countWorkflow(serviceProcessId); 
+			total = totalCount;
 
 			results = ProcessWorkflowLocalServiceUtil.searchWorkflow(serviceProcessId, searchContainer.getStart(), searchContainer.getEnd());
 			
@@ -112,7 +114,7 @@
 	
 	</liferay-ui:search-container-row>	
 
-	<liferay-ui:search-iterator type="opencs_page_iterator"/>
+	<liferay-ui:search-iterator paginate="false"/>
 
 </liferay-ui:search-container>
 
