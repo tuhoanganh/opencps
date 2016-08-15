@@ -105,11 +105,19 @@
 						<liferay-util:buffer var="boundcol1">
 							<div class="row-fluid">	
 								<div class="row-fluid">
-									
+									<div class="span2 bold">
+										<liferay-ui:message key="reception-no"/>
+									</div>
+									<div class="span10">
+										<%=processOrder.getReceptionNo() %>
+									</div>
+								</div>
+								
+								<div class="row-fluid">
 									<div class="span2 bold">
 										<liferay-ui:message key="service-name"/>
 									</div>
-									<div class="span9">
+									<div class="span10">
 										<%=processOrder.getServiceName() %>
 									</div>
 								</div>

@@ -71,7 +71,6 @@
 	headerNames.add("finish-datetime");
 	headerNames.add("process-status"); */
 	
-	headerNames.add("boundcol1");
 	headerNames.add("boundcol2");
 	headerNames.add("boundcol3");
 	
@@ -190,16 +189,6 @@
 				}			
 			%>	
 			<!-- uxtheme -->
-			<liferay-util:buffer var="boundcol1">
-					<div class="row-fluid">
-						<div class="span5 bold-label">
-							<liferay-ui:message key="no"/>
-						</div>
-						<div class="span7">
-							<a href="<%=viewURL.toString()%>"><%=String.valueOf(row.getPos() + 1) %></a>
-						</div>
-					</div>
-			</liferay-util:buffer>
 			<liferay-util:buffer var="boundcol2">
 					<div class="row-fluid">
 						<div class="span5 bold-label">
@@ -268,7 +257,7 @@
 				
 				<%
 					row.setClassName("opencps-searchcontainer-row");
-					row.addText(boundcol1);
+					row.addText(String.valueOf(row.getPos() + 1), viewURL);
 					row.addText(boundcol2);
 					row.addText(boundcol3);
 				%>
