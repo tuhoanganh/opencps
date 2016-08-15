@@ -57,57 +57,58 @@
  	PortletUtil.SplitDate spd = new PortletUtil.SplitDate(defaultBirthDate);
 %>
 
-<liferay-ui:error 
-	exception="<%= OutOfLengthCitizenAddressException.class %>" 
-	message="<%= OutOfLengthCitizenAddressException.class.getName() %>" 
-/>
-
-<liferay-ui:error 
-	exception="<%= OutOfLengthCitizenEmailException.class %>" 
-	message="<%= OutOfLengthCitizenEmailException.class.getName() %>" 
-/>
-
-<liferay-ui:error 
-	exception="<%= OutOfLengthCitizenNameException.class %>" 
-	message="<%= OutOfLengthCitizenNameException.class.getName() %>" 
-/>
-
-<liferay-ui:error 
-	exception="<%= DuplicateCitizenEmailException.class %>" 
-	message="<%= DuplicateCitizenEmailException.class.getName() %>" 
-/>
-
-<liferay-ui:error 
-	key="<%=MessageKeys.ACCOUNT_SYSTEM_EXCEPTION_OCCURRED %>" 
-	message="system.exception.occured" 
-/>
-
-<liferay-ui:error 
-	exception="<%= InvalidCityCodeException.class %>" 
-	message="<%= InvalidCityCodeException.class.getName() %>" 
-/>
-<liferay-ui:error 
-	exception="<%= InvalidDistricCodeException.class %>" 
-	message="<%= InvalidDistricCodeException.class.getName() %>" 
-/>
-<liferay-ui:error 
-	exception="<%= InvalidWardCodeException.class %>" 
-	message="<%= InvalidWardCodeException.class.getName() %>" 
-/>
-<liferay-ui:error 
-	exception="<%= InvalidFileUploadException.class %>" 
-	message="<%= InvalidFileUploadException.class.getName() %>" 
-/>
-<liferay-ui:error 
-	exception="<%= FileTypeFailException.class %>" 
-	message="<%= FileTypeFailException.class.getName() %>" 
-/>
-<liferay-ui:error 
-	exception="<%= OutOfSizeFileUploadException.class %>" 
-	message="<%= OutOfSizeFileUploadException.class.getName() %>" 
-/>
 
 <div class="opencps-register-wrapper">
+	
+	<liferay-ui:error 
+		exception="<%= OutOfLengthCitizenAddressException.class %>" 
+		message="<%= OutOfLengthCitizenAddressException.class.getName() %>" 
+	/>
+	
+	<liferay-ui:error 
+		exception="<%= OutOfLengthCitizenEmailException.class %>" 
+		message="<%= OutOfLengthCitizenEmailException.class.getName() %>" 
+	/>
+	
+	<liferay-ui:error 
+		exception="<%= OutOfLengthCitizenNameException.class %>" 
+		message="<%= OutOfLengthCitizenNameException.class.getName() %>" 
+	/>
+	
+	<liferay-ui:error 
+		exception="<%= DuplicateCitizenEmailException.class %>" 
+		message="<%= DuplicateCitizenEmailException.class.getName() %>" 
+	/>
+	
+	<liferay-ui:error 
+		key="<%=MessageKeys.ACCOUNT_SYSTEM_EXCEPTION_OCCURRED %>" 
+		message="system.exception.occured" 
+	/>
+	
+	<liferay-ui:error 
+		exception="<%= InvalidCityCodeException.class %>" 
+		message="<%= InvalidCityCodeException.class.getName() %>" 
+	/>
+	<liferay-ui:error 
+		exception="<%= InvalidDistricCodeException.class %>" 
+		message="<%= InvalidDistricCodeException.class.getName() %>" 
+	/>
+	<liferay-ui:error 
+		exception="<%= InvalidWardCodeException.class %>" 
+		message="<%= InvalidWardCodeException.class.getName() %>" 
+	/>
+	<liferay-ui:error 
+		exception="<%= InvalidFileUploadException.class %>" 
+		message="<%= InvalidFileUploadException.class.getName() %>" 
+	/>
+	<liferay-ui:error 
+		exception="<%= FileTypeFailException.class %>" 
+		message="<%= FileTypeFailException.class.getName() %>" 
+	/>
+	<liferay-ui:error 
+		exception="<%= OutOfSizeFileUploadException.class %>" 
+		message="<%= OutOfSizeFileUploadException.class.getName() %>" 
+	/>	
 	
 	<portlet:actionURL var="updateCitizenURL" name="updateCitizen">
 		<portlet:param 
