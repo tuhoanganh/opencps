@@ -278,7 +278,7 @@
 				                                    		%>
 				                                    			<span>
 				                                    				<i class="fa fa-check-square-o" aria-hidden="true"></i>
-				                                    				<%=PortletUtil.getDictItem(PortletPropsValues.DATAMGT_MASTERDATA_BUSINESS_DOMAIN, businessDomain.getBusinessDomainCode()(), scopeGroupId) %>
+				                                    				<%=PortletUtil.getDictItem(PortletPropsValues.DATAMGT_MASTERDATA_BUSINESS_DOMAIN, businessDomain.getBusinessDomainCode(), scopeGroupId) %>
 				                                    			</span>
 				                                    		<%
 				                                	}
