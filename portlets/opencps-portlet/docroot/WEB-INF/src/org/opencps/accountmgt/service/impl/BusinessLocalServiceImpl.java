@@ -353,7 +353,9 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		}
 
 		List<BusinessDomain> businessDomains = new ArrayList<BusinessDomain>();
+		
 		businessDomains = businessDomainPersistence.findByBusinessId(businessId);
+		
 		for(BusinessDomain businessDomain : businessDomains) {
 			businessDomainPersistence.remove(businessDomain);
 		}

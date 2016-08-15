@@ -92,16 +92,20 @@
 					
 						<liferay-util:buffer var="boundcol1">
 								<div class="row-fluid">
-									<div class="span1">
-										<i class='<%="fa fa-circle sx10 " + processOrder.getReceptionNo()%>'></i>
-									</div>
-									
 									<div class="row-fluid">
-										<div width="5px"></div>
-										<div class="span5 bold-label">
+										<div class="span2 bold-label">
+											<liferay-ui:message key="reception-no"/>
+										</div>
+										<div class="span10">
+											<%=processOrder.getReceptionNo() %>
+										</div>
+									</div>
+
+									<div class="row-fluid">
+										<div class="span2 bold-label">
 											<liferay-ui:message key="service-name"/>
 										</div>
-										<div class="span6">
+										<div class="span10">
 											<%=processOrder.getServiceName() %>
 										</div>
 									</div>
@@ -110,42 +114,38 @@
 							
 							
 							<liferay-util:buffer var="boundcol2">
-							<div class="row-fluid">
-								<div width="5px"></div>
+							<div class="row-fluid min-width340">
 								<div class="span5 bold-label"><liferay-ui:message key="subject-name"/></div>
 								<div class="span6">
 									<%=processOrder.getSubjectName() %>
 								</div>
 							</div>
 							
-							<div class="row-fluid">
-								<div width="5px"></div>
+							<div class="row-fluid min-width340">
 								<div class="span5 bold-label">
 									 <liferay-ui:message key="assign-to-user"/>
 								</div>
 								
-								<div class="span6">
+								<div class="span7">
 									<%=processOrder.getAssignToUserName() %>
 								</div>
 							</div>
 							
-							<div class="row-fluid">
-								<div width="5px"></div>
+							<div class="row-fluid min-width340">
 								<div class="span5 bold-label">
 									<liferay-ui:message key="step-name"/>
 								</div>
-								<div class="span6">
+								<div class="span7">
 									<%=processOrder.getStepName() %>
 								</div>
 							</div>
 							
-							<div class="row-fluid">
-								<div width="5px"></div>
+							<div class="row-fluid min-width340">
 									<div class="span5 bold-label">
 										<liferay-ui:message key="dealine"/>
 									</div>
 									
-									<div class='<%="span6"%>'>
+									<div class='<%="span7"%>'>
 										<%= deadlineVal %>
 									</div>
 								</div>
