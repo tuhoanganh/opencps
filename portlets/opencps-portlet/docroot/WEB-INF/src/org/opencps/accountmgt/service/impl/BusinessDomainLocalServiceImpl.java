@@ -22,10 +22,8 @@ import java.util.List;
 
 import org.opencps.accountmgt.model.BusinessDomain;
 import org.opencps.accountmgt.service.base.BusinessDomainLocalServiceBaseImpl;
-import org.opencps.accountmgt.service.persistence.BusinessDomainPK;
 
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.util.Validator;
 
 /**
  * The implementation of the business domain local service.
