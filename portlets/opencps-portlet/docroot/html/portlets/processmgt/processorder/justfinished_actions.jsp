@@ -1,4 +1,5 @@
 
+<%@page import="org.opencps.dossiermgt.bean.ProcessOrderBean"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -18,13 +19,12 @@
  */
 %>
 <%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
-<%@page import="org.opencps.processmgt.model.ProcessOrder"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="com.liferay.portal.kernel.dao.search.ResultRow"%>
 <%@ include file="../init.jsp"%>
 <%
 	ResultRow row = (ResultRow) request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
-	ProcessOrder processOrder = (ProcessOrder) row.getObject();
+	ProcessOrderBean processOrder = (ProcessOrderBean) row.getObject();
 	
 	PortletURL processURL = renderResponse.createRenderURL();
 	processURL.setParameter("mvcPath", templatePath + "process_order_detail.jsp");
