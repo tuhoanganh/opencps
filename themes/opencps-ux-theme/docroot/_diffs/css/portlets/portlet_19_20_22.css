@@ -23,9 +23,22 @@
     border-radius: 0 !important;
     text-shadow: none !important;
     border: 1px solid #ececec !important;
-    width: 125px !important;
+    min-width: 125px !important;
+    width: 100% !important;
     margin-bottom: 0 !important;
     color: #444 !important;
+}
+
+.opencps-theme.ux button[data-toggle="dropdown"]{
+	background: white none repeat scroll 0 0 !important;
+    border: 1px solid #ececec !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    height: 60px !important;
+    text-shadow: none !important;
+    color: #292929;
+    min-width: 125px !important;
+    width: 100% !important;
 }
 .custom-toolbar.search_tools{
   background-color: transparent !important;;
@@ -140,8 +153,8 @@ box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); width: 58%; float: left; padding: 3
 .detail-right {background-color: white; border-radius: 8px; -webkit-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2);
 box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); width: 370px; float: right; padding: 30px 25px}
 .detail-right h4 {margin: 0 0 20px; font-family: 'Roboto-Bold'; font-weight: normal; font-size: 18px}
-.detail-right .date {border-right: 1px solid #e1e1e1; float: left; width: 95px;}
-.detail-right .info {float: right; width: calc(100% - 116px);}
+.detail-right .info .date {margin-left: -130px; position: absolute;}
+.detail-right .info {float: right; width: calc(100% - 116px);padding-left: 20px;border-left: 1px solid #e1e1e1;}
 .detail-right .date p, .detail-right .info p {margin-bottom: 0}
 .detail-right .date div, .detail-right .info div {margin-bottom: 30px}
 .detail-right .date div:last-child, .detail-right .info div:last-child {margin-bottom: 0px}
@@ -462,6 +475,9 @@ box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); width: 370px; float: right; padding
 	text-transform: uppercase;
 	font-size: 20px;
 }
-.portlet-boundary_19_WAR_opencpsportlet_ .taglib-header{
+.opencps-theme.ux .portlet-boundary_19_WAR_opencpsportlet_ .taglib-header{
+	display: none;
+}
+.opencps-theme.ux .portlet-boundary_19_WAR_opencpsportlet_ .toolbar_search_input label{
 	display: none;
 }

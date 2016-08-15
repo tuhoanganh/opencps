@@ -17,6 +17,7 @@
 
 package org.opencps.accountmgt.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.opencps.accountmgt.model.BusinessDomain;
@@ -44,5 +45,36 @@ public class BusinessDomainLocalServiceImpl
 	public List<BusinessDomain> getBusinessDomains(long businessId) 
 					throws SystemException {
 		return businessDomainPersistence.findByBusinessId(businessId);
+	}
+	
+	public void addBusinessDomains(long businessId, String[] domainCodes )
+					throws SystemException {
+		List<BusinessDomain> currentBusinessDomains = new ArrayList<BusinessDomain>();
+		currentBusinessDomains = businessDomainPersistence.findByBusinessId(businessId);
+		
+		//remove exist businessdomain
+		for (BusinessDomain bdm : currentBusinessDomains) {
+			businessDomainPersistence.remove(bdm);
+		}
+		
+		//add new bdm
+		
+		for (String domainCode : domainCodes) {
+			addBussinessDomain(businessId, domainCode);
+		}
+		
+	}
+	
+	public BusinessDomain addBussinessDomain(long businessId, String businessDomainId )
+					throws SystemException {
+		long businessdomainId = counterLocalService.increment(BusinessDomain.class.getName());
+		BusinessDomain businessDomain = businessDomainPersistence.create(businessdomainId);
+		
+		businessDomain.setBusinessId(businessId);
+		businessDomain.setBusinessDomainCode(businessDomainId);
+		
+		businessDomainPersistence.update(businessDomain);
+		
+		return businessDomain;
 	}
 }

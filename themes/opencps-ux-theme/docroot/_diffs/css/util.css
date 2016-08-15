@@ -130,6 +130,11 @@
 	min-width: 180px !important;
 }
 
+.min-width340{
+	min-width: 340px !important;
+}
+
+
 .text-align-left{
 	display: block;
 	text-align: left;
