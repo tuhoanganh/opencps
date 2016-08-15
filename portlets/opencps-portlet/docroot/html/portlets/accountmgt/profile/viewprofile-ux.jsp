@@ -94,7 +94,9 @@
 		districtName = dictItemDistrict.getItemName(themeDisplay.getLocale(), true);
 		wardName = dictItemWard.getItemName(themeDisplay.getLocale(), true);
 		
-		businessTypeName = dicBusinessType.getItemName(locale,true);
+		if(Validator.isNotNull(dicBusinessType)) {
+			businessTypeName = dicBusinessType.getItemName(locale,true);
+		}
 	
 	}
 %>
