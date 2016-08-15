@@ -122,7 +122,8 @@ public class AccountRegPortlet extends MVCPortlet {
 		long businessId =
 		    ParamUtil.getLong(
 		        uploadPortletRequest, BusinessDisplayTerms.BUSINESS_BUSINESSID);
-
+		String [] listBussinessDomains = ParamUtil
+						.getParameterValues(uploadPortletRequest, "listBussinessDomains");		
 		long cityId =
 		    ParamUtil.getLong(
 		        uploadPortletRequest, BusinessDisplayTerms.BUSINESS_CITY_ID);
@@ -206,6 +207,7 @@ public class AccountRegPortlet extends MVCPortlet {
 		boolean registered = false;
 
 		try {
+			
 			ValidateBusiness(
 			    businessId, email, sourceFileName, enName, shortName, address,
 			    representativeName, representativeRole, cityId, districtId, wardId,
@@ -225,7 +227,6 @@ public class AccountRegPortlet extends MVCPortlet {
 				businessTypeCode = businessType.getItemCode();
 			} 
 			
-			System.out.println("**************domain************" + domain.length);
 			if (businessId == 0) {
 
 				Business business =
@@ -237,7 +238,7 @@ public class AccountRegPortlet extends MVCPortlet {
 				        district.getItemName(serviceContext.getLocale(), true),
 				        ward.getItemName(serviceContext.getLocale(), true),
 				        telNo, email, representativeName, representativeRole,
-				        domain, spd.getDayOfMoth(), spd.getMonth(),
+				        listBussinessDomains, spd.getDayOfMoth(), spd.getMonth(),
 				        spd.getYear(), repositoryId, sourceFileName,
 				        contentType, title, inputStream, size, serviceContext);
 
