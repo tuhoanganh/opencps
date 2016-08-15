@@ -31,7 +31,7 @@
 <%@ include file="../init.jsp"%>
 
 <liferay-util:include page='<%=templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
-<liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
+<%-- <liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" /> --%>
 <%
 	List<String> headerNames = new ArrayList<String>();
 	

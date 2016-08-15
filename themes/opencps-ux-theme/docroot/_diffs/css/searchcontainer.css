@@ -2,7 +2,7 @@
 .opencps-theme.ux .opencps-searchcontainer-wrapper {
     background-color: #fff;
     border: 1px solid #e1e1e1;
-    border-radius: 3px;
+    border-radius: 8px;
     padding: 10px 0;
 }
 
@@ -24,6 +24,7 @@
 	border: 0;
 	border-top: 1px solid #e1e1e1;
 	position: relative;
+	padding: 8px 6px;
 }
 
 .opencps-theme.ux .opencps-searchcontainer-wrapper .searchcontainer-content table tr.opencps-searchcontainer-row td:after {
@@ -116,4 +117,5 @@
     clip: auto !important;
     position: absolute !important;
     top: 8px;
+    transform: none;
 }

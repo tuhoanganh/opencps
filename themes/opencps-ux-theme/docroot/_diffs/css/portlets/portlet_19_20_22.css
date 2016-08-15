@@ -82,7 +82,7 @@ table.payment tr td:nth-last-of-type(-n+2):after {border-right: 0;}
 .opencps-theme .page-search .input-append input.search-query[type="text"] {
     border-radius: 20px 0 0 20px !important;
     height: 40px !important;
-    width: 300px !important;
+    width: 382px !important;
     border-right: 0 !important;
     border-left: 1px solid #e1e1e1 !important;
     border-top: 1px solid #e1e1e1 !important;
@@ -126,14 +126,14 @@ box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); width: 58%; float: left; padding: 3
 .detail-left h4 {margin: 0; font-family: 'Roboto-Bold'; font-weight: normal; font-size: 18px; padding-left: 25px}
 .detail-left h4 {margin-bottom: 5px}
 .detail-left h4:first-child {margin-bottom: 20px}
-.detail-left h4.matiepnhan {background: url(/opencps-ux-theme/css/../images/frame_1/icon_matiepnhan.png) 0 center no-repeat}
-.detail-left h4.thutuc {background: url(/opencps-ux-theme/css/../images/frame_1/icon_thutuc.png) 0 center no-repeat}
-.detail-left h4.coquanthuchien {background: url(/opencps-ux-theme/css/../images/frame_1/icon_coquanthuchien.png) 0 center no-repeat}
-.detail-left h4.chuhoso {background: url(/opencps-ux-theme/css/../images/frame_1/icon_chuhoso.png) 0 center no-repeat}
-.detail-left h4.diachi {background: url(/opencps-ux-theme/css/../images/frame_1/icon_diachi_2.png) 0 center no-repeat}
-.detail-left h4.ngaytiepnhan {background: url(/opencps-ux-theme/css/../images/frame_1/icon_ngaythang.png) 0 center no-repeat}
-.detail-left h4.ngayhentra {background: url(/opencps-ux-theme/css/../images/frame_1/icon_ngaythang.png) 0 center no-repeat}
-.detail-left h4.ngayhoanthanh {background: url(/opencps-ux-theme/css/../images/frame_1/icon_ngaythang.png) 0 center no-repeat}
+.detail-left h4.matiepnhan {background: url(/opencps-ux-theme/css/../images/custom/icon_matiepnhan.png) 0 center no-repeat}
+.detail-left h4.thutuc {background: url(/opencps-ux-theme/css/../images/custom/icon_thutuc.png) 0 center no-repeat}
+.detail-left h4.coquanthuchien {background: url(/opencps-ux-theme/css/../images/custom/icon_coquanthuchien.png) 0 center no-repeat}
+.detail-left h4.chuhoso {background: url(/opencps-ux-theme/css/../images/custom/icon_chuhoso.png) 0 center no-repeat}
+.detail-left h4.diachi {background: url(/opencps-ux-theme/css/../images/custom/icon_diachi_2.png) 0 center no-repeat}
+.detail-left h4.ngaytiepnhan {background: url(/opencps-ux-theme/css/../images/custom/icon_ngaythang.png) 0 center no-repeat}
+.detail-left h4.ngayhentra {background: url(/opencps-ux-theme/css/../images/custom/icon_ngaythang.png) 0 center no-repeat}
+.detail-left h4.ngayhoanthanh {background: url(/opencps-ux-theme/css/../images/custom/icon_ngaythang.png) 0 center no-repeat}
 .detail-left p {margin-bottom: 20px}
 .detail-left p:last-child {margin-bottom: 0px}
 
@@ -220,7 +220,7 @@ box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); width: 370px; float: right; padding
     margin-right: 20px;
 }
 .file_manage_title {
-    background: url(/opencps-ux-theme/css/../images/frame_1/icon_danhsachhoso.png) 0 center no-repeat;
+    background: url(/opencps-ux-theme/css/../images/custom/icon_danhsachhoso.png) 0 center no-repeat;
     padding-left: 20px;
     text-transform: uppercase;
     font-family: 'Roboto-Bold';
@@ -371,7 +371,7 @@ box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); width: 370px; float: right; padding
     width: 265px;
     height: 41px;
     overflow: hidden;
-    background: url(/opencps-ux-theme/css/../images/frame_1/icon_select_gray.png) white no-repeat right;
+    background: url(/opencps-ux-theme/css/../images/custom/icon_select_gray.png) white no-repeat right;
     background-position: 93% center;
     border-radius: 20px;
     margin: 0 20px 0 0;
@@ -383,21 +383,12 @@ box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); width: 370px; float: right; padding
     padding: 0;
 }
 .image_placeholder {
-    background: url(/opencps-ux-theme/css/../images/frame_1/image_placeholder.png);
+    background: url(/opencps-ux-theme/css/../images/custom/image_placeholder.png);
     left: 50%;
     transform: translateX(-50%);
     position: relative;
 }
 
-.image_placeholder {
-    background: url(/opencps-ux-theme/css/../images/frame_1/image_placeholder.png);
-    left: 50%;
-    transform: translateX(-50%);
-    position: relative;
-}
-.opencps-theme.ux .home_bg .taglib-header{
-  display: none;
-}
 .opencps-theme.ux .home_bg .form-search label{
   display: none;
 }
@@ -441,4 +432,36 @@ box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); width: 370px; float: right; padding
 }
 .taglib-search-iterator-page-iterator-bottom .taglib-page-iterator ul.lfr-pagination-buttons{
   display: block;
+}
+.taglib-search-iterator-page-iterator-bottom .taglib-page-iterator div.lfr-pagination-config{
+  display: none;
+}
+.paymentUploadBTN{
+	background-color: rgb(245, 245, 245);
+	border: 1px solid rgb(225, 225, 225);
+	color: rgb(68, 68, 68);
+	font-size: 12px;
+	text-transform: uppercase;
+	width: 50%;
+	padding: 5px 0px;
+	border-radius: 20px;
+	left: 50%;
+	margin-top: 10px;
+	transform: translateX(-50%);
+	position: relative;
+}
+
+.paymentUploadBTN label{
+	margin-bottom: -2px !important;
+}
+.opencps-theme.ux .portlet-boundary_19_WAR_opencpsportlet_ .opencps-toolbar .navbar-inner{
+  padding-right: 0;
+}
+.head .headh3{
+	float: left;
+	text-transform: uppercase;
+	font-size: 20px;
+}
+.portlet-boundary_19_WAR_opencpsportlet_ .taglib-header{
+	display: none;
 }

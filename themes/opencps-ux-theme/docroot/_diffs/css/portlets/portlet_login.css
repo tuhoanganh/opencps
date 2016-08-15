@@ -233,3 +233,18 @@
     border: 0;
     padding: 10px;
 }
+
+.opencps-theme .default-sign-in .forgot-password{
+  text-align: left;
+}
+
+.opencps-theme .ux-sign-in-wrapper{
+	background: whitesmoke;
+}
+.ux-sign-in-wrapper .add-on .fa.fa-key{
+  -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    transform: rotate(45deg);
+}

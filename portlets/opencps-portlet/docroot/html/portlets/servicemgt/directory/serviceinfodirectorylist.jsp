@@ -101,7 +101,7 @@
 								id="keywords1"
 								name="keywords"
 								title="keywords"
-								placeholder='<%= LanguageUtil.get(locale, "keyword") %>' 
+								placeholder='<%= LanguageUtil.get(portletConfig, locale, "put-keyword") %>' 
 							/>
 						</aui:col>
 					</aui:row>

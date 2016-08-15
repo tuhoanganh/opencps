@@ -6,8 +6,12 @@
 @import url(portlets/portlet_5.css);
 @import url(portlets/portlet_6.css);
 @import url(portlets/portlet_13.css);
+@import url(portlets/portlet_16.css);
+@import url(portlets/portlet_26.css);
+@import url(portlets/portlet_11.css);
+@import url(portlets/portlet_10.css);
 @import url(portlets/portlet_login.css);
-
+@import url(button.css);
 @import url(input.css);
 @import url(nav_toolbar.css);
 @import url(searchcontainer.css);
@@ -16,7 +20,8 @@
 
 @import url(portlets/portlet_popup.css);
 @import url(portlets/portlet_hung_custom.css);
-@import url(portlets/binhth.css);
+
+@import url(portlets/portlet_19_20_22.css);
 @import url(button.css);
 @import url(portlets/portlet_26.css);
 @import url(portlets/portlet_11.css);
@@ -25,14 +30,18 @@
 @import url(custom_frame_1.css);
 @import url(util.css);
 @import url(page_iterator.css);
+@import url(toptabs.css);
 
 body{
 	background-color: #f5f5f5;
 	font-family: roboto;
 }
 
+.opencps-theme.ux #wrapper #main-content {
+	padding: 25px 0px;
+}
 .opencps-theme.ux .portlet-borderless-container{
-	background-color: #fff;
+	/* background-color: #fff; */
 }
 
 .opencps-theme.ux .home-screen .portlet-borderless-container{
@@ -61,6 +70,10 @@ body{
 } 
 
 /* Overwrite Form Navigator  */
+
+.opencps-theme.ux .opencps-form-navigator-container{
+    background-color: #fff;
+}
 
 .opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator{
     border-radius: 3px;
@@ -157,6 +170,24 @@ body{
     text-align: center;
 }
 
+/* Overwrite portlet header  */
+
+.opencps-theme.ux .portlet-topper{
+	padding: 0 10px;
+	
+}
+
+.opencps-theme.ux .portlet-topper .portlet-title-text{
+	font-size: 18px;
+	text-transform: uppercase;
+}
+
+/* Overwrite portlet alert  */
+
+.opencps-theme.ux .alert {
+    margin: 10px !important;
+}
+
 .alpaca-array-actionbar-action.btn {
 	background-color: #ccc !important;
 	height: 20px !important;
@@ -219,13 +250,3 @@ body{
 .opencps-theme.ux .home_bg #column-1 .portlet-borderless-container{
   background: transparent !important;
 }
-
-
-
-.menu_level_2 {background-color: #2ea4ff; height: 44px; color: white; font-family: 'Roboto-Bold'; margin-bottom: 30px}
-.menu_level_2 ul {margin: 0}
-.menu_level_2 ul li {float: left}
-.menu_level_2 ul li a {padding: 0 30px; line-height: 44px; display: block; opacity: 0.7; position: relative}
-.menu_level_2 ul li.active a, .menu_level_2 ul li:hover a {opacity: 1}
-.menu_level_2 ul li a:before {pointer-events: none; position: absolute; z-index: -1; content: ''; border-style: solid; -webkit-transition-duration: 0.3s; transition-duration: 0.3s; -webkit-transition-property: transform; transition-property: transform; left: calc(50% - 10px); bottom: 0; border-width: 10px 10px 0 10px; border-color: #2ea4ff transparent transparent transparent; opacity: 0}
-.menu_level_2 ul li.active a:before {-webkit-transform: translateY(10px); transform: translateY(10px); opacity: 1}

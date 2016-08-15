@@ -95,11 +95,11 @@ public class DossierMornitoringPortlet extends MVCPortlet {
 			redirectURL.setParameter(DossierDisplayTerms.DOSSIER_ID, String.valueOf(ds.getDossierId()));
 			response.sendRedirect(redirectURL.toString());
 		}
-		else if (Validator.isNotNull(receptionNo) && !"".equals(receptionNo)) {		
-			redirectURL.setParameter("jspPage", templatePath + "dossiermonitoringdossierlist.jsp");
-			redirectURL.setParameter("keywords", receptionNo);
-			response.sendRedirect(redirectURL.toString());
-		}			
+//		else if (Validator.isNotNull(receptionNo) && !"".equals(receptionNo)) {		
+//			redirectURL.setParameter("jspPage", templatePath + "dossiermonitoringdossierlist.jsp");
+//			redirectURL.setParameter("keywords", receptionNo);
+//			response.sendRedirect(redirectURL.toString());
+//		}			
 	}
 	
 	public void searchServiceAction(ActionRequest request, ActionResponse response) throws PortletException, IOException {
