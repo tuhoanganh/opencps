@@ -417,6 +417,8 @@ public class AccountMgtPortlet extends MVCPortlet {
 		String[] domain = ParamUtil
 		    .getParameterValues(
 		        actionRequest, BusinessDisplayTerms.BUSINESS_DOMAIN);
+		String [] listBussinessDomains = ParamUtil
+						.getParameterValues(actionRequest, "listBussinessDomains");
 		String curPass = ParamUtil
 		    .getString(actionRequest, BusinessDisplayTerms.CURRENT_PASSWORD);
 		String newPass = ParamUtil
@@ -484,7 +486,7 @@ public class AccountMgtPortlet extends MVCPortlet {
 				        ward
 				            .getItemName(serviceContext
 				                .getLocale(), true),
-				        telNo, representativeName, representativeRole, domain,
+				        telNo, representativeName, representativeRole, listBussinessDomains,
 				        isChangePassWord, curPass, rePass, serviceContext
 				            .getUserId(),
 				        serviceContext);
