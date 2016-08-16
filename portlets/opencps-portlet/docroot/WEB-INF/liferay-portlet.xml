@@ -274,7 +274,7 @@
 	<portlet>
 		<portlet-name>25</portlet-name>
 		<icon>/icon.png</icon>
-		<configuration-action-class>org.opencps.dossiermgt.portlet.ConfigurationActionImpl</configuration-action-class>
+		<configuration-action-class>org.opencps.dossiermgt.portl	et.ConfigurationActionImpl</configuration-action-class>
 		<instanceable>true</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>
