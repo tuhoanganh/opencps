@@ -91,6 +91,8 @@
 				<portlet:param name="<%=BusinessDisplayTerms.BUSINESS_BUSINESSID %>" value="<%=String.valueOf(business.getBusinessId()) %>"/>
 				<portlet:param name="redirectURL" value="<%=currentURL %>"/>
 			</portlet:actionURL>
+			
+			<portlet:renderURL var="ccc"></portlet:renderURL>
 	
 			<liferay-ui:icon
 			 	image="activate" 
@@ -119,5 +121,7 @@
 			/>
 		</c:if>
 	</c:if>
+	
+	
 
 <%-- </liferay-ui:icon-menu> --%>

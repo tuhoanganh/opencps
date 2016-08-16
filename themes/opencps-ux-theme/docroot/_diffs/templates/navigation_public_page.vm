@@ -1,44 +1,49 @@
-##set this to the groupID of the menu you wish to copy
-#set ($mainGroupId = $layout.getGroupId())               
-           #if ($page_group.groupId != $mainGroupId) ## The main site's groupId
-                   #set ($layoutService = $serviceLocator.findService('com.liferay.portal.service.LayoutLocalService'))
-                   #set ($mainLayoutPlid = $layoutService.getDefaultPlid($mainGroupId, false)) ##true for private pages and false for public
-                   #set ($mainLayout = $layoutService.getLayout($mainLayoutPlid))
-                   #set ($mainLayouts = $layoutService.getLayouts($mainGroupId, false,0))
-       
-                   ##Need to loop through and only display the the non hidden menu items   
-                   #set($newMainLayouts = [])
-                   #foreach ($newLayout in $mainLayouts)
-                        #if($newLayout.isHidden() == false)
-                            $newMainLayouts.add($newLayout)
-                        #end
-                   #end
-                  
-                   #set ($requestVarsClass = $portal.getClass().forName('com.liferay.portal.theme.RequestVars'))
-                   #set ($requestVarsConstructor = $requestVarsClass.constructors)
-                   #set ($requestVarsConstructor = $requestVarsConstructor.get(0))
-                   #set ($requestVars = $requestVarsConstructor.newInstance($request, $theme_display, $mainLayout.ancestorPlid, $mainLayout.ancestorLayoutId))
-                   #set ($navItemClass = $portal.getClass().forName('com.liferay.portal.theme.NavItem'))
+#set ($layoutService = $serviceLocator.findService('com.liferay.portal.service.LayoutLocalService'))
+#set ($publicLayoutPlid = $layoutService.getDefaultPlid($layout.getGroupId(), false)) ##true for private pages and false for public
+#set ($publicLayout = $layoutService.getLayout($publicLayoutPlid))
+#set ($publicLayouts = $layoutService.getLayouts($layout.getGroupId(), false, 0))
+	
+<nav class="$nav_css_class top-menu public" id="navigation" role="navigation">
 
-                   ##set ($newNavItems = $navItemClass.fromLayouts($requestVars, $mainLayouts))
-                   #set ($newNavItems = $navItemClass.fromLayouts($requestVars, $newMainLayouts))
-                   #set ($nav_items= $newNavItems)
-          #end
+	#if (!$is_signed_in)
+		<ul>
+			#foreach ($nav_item in $publicLayouts)
+				#if (!$nav_item.isHidden())
+					#if ($nav_item.isSelected())
+		                <li class="selected">
+		            #else
+		                <li>
+		            #end
+						<a aria-labelledby="layout_$nav_item.getLayoutId()" href="/web/guest$nav_item.getFriendlyURL()" $nav_item_attr_has_popup $nav_item.getTarget() role="menuitem"><span>$nav_item.getName()</span></a>
+		
+					</li>
+				#end
+			#end
+		</ul>
+	#else
+		#if($layout.isPublicLayout())
+			<ul>
+				<li>
+					<a href="/group/guest">#language("back-to-backoffice")</a>
+				</li>
+			</ul>
+		#else
+			<ul aria-label="#language ("site-pages")" role="menubar">
+			    #foreach ($nav_item in $publicLayouts)
 
-<nav class="$nav_css_class top-menu" id="navigation" role="navigation">
-
-    <ul>
-        #foreach ($nav_item in $nav_items)
-            #if ($nav_item.isSelected())
-                <li class="selected">
-            #else
-                <li>
-            #end
-               
-                <a href="$nav_item.getURL()" $nav_item.getTarget()><span>$nav_item.icon() $nav_item.getName()</span></a>
-
-           </li>
-        #end
-    </ul>
-
+				
+				#if (!$nav_item.isHidden())
+					 #if ($nav_item.isSelected())
+		                <li class="selected">
+		            #else
+		                <li>
+		            #end
+						<a aria-labelledby="layout_$nav_item.getLayoutId()" href="/web/guest$nav_item.getFriendlyURL()" $nav_item_attr_has_popup $nav_item.getTarget() role="menuitem"><span>$nav_item.getName()</span></a>
+		
+					</li>
+				#end
+			#end
+		</ul>
+		#end
+	#end
 </nav>

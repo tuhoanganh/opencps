@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,17 +16,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-<%@page import="org.opencps.util.PortletConstants"%>
-<%@page import="org.opencps.servicemgt.util.ServiceUtil"%>
-<%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
-<%@page import="com.liferay.portal.kernel.log.Log"%>
-<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
-<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
-<%@page import="org.opencps.util.ActionKeys"%>
-<%@page import="org.opencps.dossiermgt.permissions.DossierPermission"%>
-<%@page import="javax.portlet.PortletURL"%>
-<%@page import="org.opencps.util.PortletUtil"%>
+
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
+<%@page import="com.liferay.portal.kernel.log.Log"%>
+<%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
+<%@page import="javax.portlet.PortletURL"%>
+<%@page import="org.opencps.dossiermgt.permissions.DossierPermission"%>
+<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
+<%@page import="org.opencps.servicemgt.util.ServiceUtil"%>
+<%@page import="org.opencps.util.ActionKeys"%>
+<%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.util.PortletUtil"%>
 
 <%@ include file="../init.jsp"%>
 
@@ -53,35 +53,42 @@
 		searchURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER);
 	}
 	
-	
 %>
 
 <aui:nav-bar cssClass="opencps-toolbar custom-toolbar">
-
-	<c:if test="<%=!isListServiceConfig %>">
-		<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left font-pull" >
-			<c:if test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_DOSSIER) 
-				&& tabs1.equals(DossierMgtUtil.TOP_TABS_DOSSIER)%>">
-				
-				<portlet:renderURL var="addDossierURL" windowState="<%=LiferayWindowState.NORMAL.toString() %>">
-					<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/frontoffice/frontofficeservicelist.jsp"/>
-					<portlet:param name="isListServiceConfig" value="<%=String.valueOf(true) %>"/>
-					<portlet:param name="backURL" value="<%=currentURL %>"/>
-				</portlet:renderURL>
-				<%-- <aui:nav-item 
-					id="addDictItem" 
-					label="add-dossier" 
-					iconCssClass="icon-plus"  
-					href="<%=addDossierURL %>"
-					cssClass="action-button"
-				/> --%>
-				<aui:button icon="icon-plus" href="<%=addDossierURL %>" cssClass="action-button" value="add-dossier">
+	<c:choose>
+		<c:when test="<%=isListServiceConfig%>">
+			<div class="pd_t20">
+				<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left font-pull" >
+					<h5>
+						<liferay-ui:message key="list-service-config"/>
+					</h5>
+				</aui:nav>
+			</div>
+		</c:when>
+		<c:otherwise>
+			<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left font-pull" >
+				<c:if test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_DOSSIER) 
+					&& tabs1.equals(DossierMgtUtil.TOP_TABS_DOSSIER)%>">
 					
-				</aui:button>
-			</c:if>
-		</aui:nav>
-	</c:if>
-	
+					<portlet:renderURL var="addDossierURL" windowState="<%=LiferayWindowState.NORMAL.toString() %>">
+						<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/frontoffice/frontofficeservicelist.jsp"/>
+						<portlet:param name="isListServiceConfig" value="<%=String.valueOf(true) %>"/>
+						<portlet:param name="backURL" value="<%=currentURL %>"/>
+					</portlet:renderURL>
+					<%-- <aui:nav-item 
+						id="addDictItem" 
+						label="add-dossier" 
+						iconCssClass="icon-plus"  
+						href="<%=addDossierURL %>"
+						cssClass="action-button"
+					/> --%>
+					<aui:button icon="icon-plus" href="<%=addDossierURL %>" cssClass="action-button" value="add-dossier-online"/>
+				</c:if>
+			</aui:nav>
+		</c:otherwise>
+	</c:choose>
+
 	<aui:nav-bar-search cssClass="pull-right front-custom-select-search">
 		<div class="form-search">
 			<aui:form 
@@ -153,27 +160,18 @@
 									/>
 								</aui:col>
 								<aui:col width="30" cssClass="search-col">
-									<aui:select name="dossierStatus" 
-										label="<%=StringPool.BLANK %>" 
-										inlineField="<%=true %>" 
-										inlineLabel="left" 
+									
+									<datamgt:ddr 
+										depthLevel="1" 
+										dictCollectionCode="DOSSIER_STATUS" 
+										showLabel="<%=false%>"
+										emptyOptionLabels="dossier-status"
+										itemsEmptyOption="true"
+										itemNames="dossierStatus"
+										optionValueType="code"
 										cssClass="search-input select-box"
-									>
-										<aui:option><liferay-ui:message key="dossier-status"/></aui:option>
-										<aui:option value="<%=StringPool.BLANK %>" selected="<%=dossierStatus.equals(StringPool.BLANK)%>"><liferay-ui:message key="all"/></aui:option>
-											<%
-												for(String status : PortletUtil.getDossierStatus()){
-													%>
-														<aui:option 
-															value="<%= status%>"
-															selected="<%=dossierStatus.equals(status)%>"
-														>
-															<%=PortletUtil.getDossierStatusLabel(status, locale) %>
-														</aui:option>
-													<%
-												}
-											%>
-									</aui:select>
+									/>
+									
 								</aui:col>
 								<aui:col width="30" cssClass="search-col">
 									<liferay-ui:input-search 

@@ -102,6 +102,7 @@
 <aui:form name="fm1" 
 	method="post" 
 	action="<%=updateJobPosURL.toString() %>">
+<div class="opencps-form-navigator-container">
 	<liferay-ui:form-navigator 
 		backURL="<%= redirectURL %>"
 		categoryNames= "<%= UserMgtUtil._JOBPOS_CATEGORY_NAMES %>"	
@@ -109,8 +110,10 @@
 		htmlBottom="<%= htmlBot %>"
 		htmlTop="<%= htmlTop %>"
 		jspPath='<%=templatePath + "jobpos/" %>'
+		displayStyle="left-navigator"
 		>
 	</liferay-ui:form-navigator>
+</div>
 	<aui:input name="<%=JobPosDisplayTerms.ID_JOBPOS %>" 
 		type="hidden" />
 		

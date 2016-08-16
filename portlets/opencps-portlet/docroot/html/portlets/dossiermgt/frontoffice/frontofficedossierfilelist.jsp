@@ -31,7 +31,7 @@
 <%@ include file="../init.jsp"%>
 
 <liferay-util:include page='<%=templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
-<liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
+<%-- <liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" /> --%>
 <%
 	List<String> headerNames = new ArrayList<String>();
 	
@@ -162,6 +162,6 @@
 				%>	
 			</liferay-ui:search-container-row> 
 		
-		<liferay-ui:search-iterator/>
+		<liferay-ui:search-iterator type="opencs_page_iterator"/>
 	</liferay-ui:search-container>
 </div>

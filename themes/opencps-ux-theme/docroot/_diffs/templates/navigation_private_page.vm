@@ -26,7 +26,7 @@
                    #set ($nav_items= $newNavItems)
           #end
 
-<nav class="$nav_css_class top-menu" id="navigation" role="navigation">
+<nav class="$nav_css_class top-menu private" id="navigation" role="navigation">
 
     <ul>
         #foreach ($nav_item in $nav_items)
@@ -44,8 +44,10 @@
     </ul>
     
     <span class="account-info">
-		<span class="account-name"> welcome
-		<span class="tooltiptext">#language ("welcome-key") $user_name</span></span>
+    	<span class="account-name">
+    	&nbsp;
+			<span class="tooltiptext">#language ("welcome-key") $user_name</span>
+		</span>
 		<span class="logout"><a href="$sign_out_url" class="btn-dn">#language ("logout-key")</a></span>
 	</span>
 </nav>

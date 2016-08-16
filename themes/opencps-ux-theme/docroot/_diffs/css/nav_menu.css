@@ -112,16 +112,19 @@
 .opencps-theme.ux .nav-container .account-info .account-name{
 	color: #fff;
 	display: inline-block;
-	height: 50px;
-	line-height: 50px;
+/* 	height: 50px; */
+	line-height: 35px;
 	padding: 0 15px 0 0;
-	background: url("docroot/_diffs/images/custom/bg_dn.png") no-repeat;
+	background: url("/opencps-ux-theme/css/../images/custom/welcome.png");
+	border-radius: 12px;
+	width: 120px;
+	margin-right:10px;
 }
 
 .opencps-theme.ux .nav-container .account-info .account-name .tooltiptext{
 	visibility: hidden;
-    width: 120px;
-    background-color: black;
+    width: 260px;
+    background-color: #1b5de4;
     color: #fff;
     text-align: center;
     border-radius: 6px;
@@ -130,6 +133,7 @@
     /* Position the tooltip */
     position: absolute;
     z-index: 1;
+    margin: 35px 0px 0px -115px;
 }
 
 .opencps-theme.ux .nav-container .account-info .account-name:hover .tooltiptext{

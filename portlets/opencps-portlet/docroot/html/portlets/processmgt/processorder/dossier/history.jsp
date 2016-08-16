@@ -97,7 +97,7 @@
 			keyProperty="actionHistoryId"
 		>
 		
-			<%-- <%
+			 <%
 				String date = StringPool.BLANK;
 				
 				if (Validator.isNotNull(actionHistory.getCreateDate())) {
@@ -117,46 +117,65 @@
 					
 				}
 				
-			%> --%>
-			<%-- <liferay-ui:search-container-column-text 
-				name="row-no"
-			 	value="<%= String.valueOf(row.getPos()+1) %>"
-			/>
+			%>
 			
-			<liferay-ui:search-container-column-text 
-				name="step-name"
-			 	value="<%= actionHistory.getStepName() %>"
-			/>
-			
-			<liferay-ui:search-container-column-text 
-				name="action-name"
-			 	value="<%= actionHistory.getActionName() %>"
-			/>
-			
-			<liferay-ui:search-container-column-text 
-				name="action-date"
-			 	value="<%= date %>"
-			/>
-			
-			<liferay-ui:search-container-column-text 
-				name="action-user"
-			 	value="<%= userActionName %>"
-			/>
-			
-			<liferay-ui:search-container-column-text 
-				name="action-note"
-			 	value="<%= actionHistory.getActionNote() %>"
-			/>
-			
-			<liferay-ui:search-container-column-text 
-				name="days-delay"
-			 	value="<%= String.valueOf(actionHistory.getDaysDelay()) %>"
-			/> --%>
-			
-			<liferay-ui:search-container-column-jsp path="/html/portlets/processmgt/processorder/dossier/history-bound-data-col1.jsp" />
-			<liferay-ui:search-container-column-jsp path="/html/portlets/processmgt/processorder/dossier/history-bound-data-col2.jsp" />
-	
+				<aui:row cssClass="top-line pd_b20 pd_t20">
+					<aui:col width="50">
+						<aui:row>
+							<span class="span4 bold">
+								<liferay-ui:message key="step-name" />
+							</span>
+							
+							<span class="span8">
+								<%=actionHistory.getStepName()%>
+							</span>
+						</aui:row>
+						
+						<aui:row>
+							<span class="span4 bold">
+								<liferay-ui:message key="action-date" />
+							</span>
+							
+							<span class="span8">
+								<%=date%>
+							</span>
+						</aui:row>
+					</aui:col>
+					<aui:col width="50">
+						<aui:row>
+							<span class="span4 bold">
+								<liferay-ui:message key="action-user" />
+							</span>
+							
+							<span class="span8">
+								<%=userActionName%>
+							</span>
+						</aui:row>
+					
+						<aui:row>
+							<span class="span4 bold">
+								<liferay-ui:message key="action-name" />
+							</span>
+							
+							<span class="span8">
+								<%=actionHistory.getActionName()%>
+							</span>
+						</aui:row>
+						
+						<aui:row>
+							<span class="span4 bold">
+								<liferay-ui:message key="days-delay" />
+							</span>
+							
+							<span class="span8">
+								<%=String.valueOf(actionHistory.getDaysDelay())%>
+							</span>
+							
+						</aui:row>
+					</aui:col>
+				</aui:row>
+				
 		</liferay-ui:search-container-row>
-		<liferay-ui:search-iterator/>
+		<liferay-ui:search-iterator type="opencs_page_iterator"/>
 	</liferay-ui:search-container>
 </div>

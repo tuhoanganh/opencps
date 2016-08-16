@@ -1,3 +1,5 @@
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -68,73 +70,73 @@
 	}
 %>
 
-<liferay-ui:error 
-	exception="<%= OutOfLengthBusinessNameException.class %>" 
-	message="<%= OutOfLengthBusinessNameException.class.getName() %>" 
-/>
-
-<liferay-ui:error 
-	exception="<%= DuplicateBusinessEmailException.class %>" 
-	message="<%= DuplicateBusinessEmailException.class.getName() %>" 
-/>
-
-<liferay-ui:error 
-	exception="<%= OutOfLengthBusinessEmailException.class %>" 
-	message="<%= OutOfLengthBusinessEmailException.class.getName() %>" 
-/>
-
-<liferay-ui:error 
-	exception="<%= DuplicateBusinessEmailException.class %>" 
-	message="<%= DuplicateBusinessEmailException.class.getName() %>" 
-/>
-
-<liferay-ui:error 
-	exception="<%= OutOfLengthBusinessShortNameException.class %>" 
-	message="<%= OutOfLengthBusinessShortNameException.class.getName() %>" 
-/>
-
-<liferay-ui:error 
-	exception="<%= OutOfLengthBusinessRepresentativeNameException.class %>" 
-	message="<%= OutOfLengthBusinessRepresentativeNameException.class.getName() %>" 
-/>
-
-<liferay-ui:error 
-	exception="<%= OutOfLengthBusinessRepresentativeRoleException.class %>" 
-	message="<%= OutOfLengthBusinessRepresentativeRoleException.class.getName() %>" 
-/>
-
-<liferay-ui:error 
-	key="<%=MessageKeys.ACCOUNT_SYSTEM_EXCEPTION_OCCURRED %>" 
-	message="system.exception.occured" 
-/>
-
-<liferay-ui:error 
-	exception="<%= InvalidCityCodeException.class %>" 
-	message="<%= InvalidCityCodeException.class.getName() %>" 
-/>
-<liferay-ui:error 
-	exception="<%= InvalidDistricCodeException.class %>" 
-	message="<%= InvalidDistricCodeException.class.getName() %>" 
-/>
-<liferay-ui:error 
-	exception="<%= InvalidWardCodeException.class %>" 
-	message="<%= InvalidWardCodeException.class.getName() %>" 
-/>
-<liferay-ui:error 
-	exception="<%= InvalidFileUploadException.class %>" 
-	message="<%= InvalidFileUploadException.class.getName() %>" 
-/>
-<liferay-ui:error 
-	exception="<%= FileTypeFailException.class %>" 
-	message="<%= FileTypeFailException.class.getName() %>" 
-/>
-<liferay-ui:error 
-	exception="<%= OutOfSizeFileUploadException.class %>" 
-	message="<%= OutOfSizeFileUploadException.class.getName() %>" 
-/>
-
 <div class="opencps-register-wrapper">
 	
+	<liferay-ui:error 
+		exception="<%= OutOfLengthBusinessNameException.class %>" 
+		message="<%= OutOfLengthBusinessNameException.class.getName() %>" 
+	/>
+	
+	<liferay-ui:error 
+		exception="<%= DuplicateBusinessEmailException.class %>" 
+		message="<%= DuplicateBusinessEmailException.class.getName() %>" 
+	/>
+	
+	<liferay-ui:error 
+		exception="<%= OutOfLengthBusinessEmailException.class %>" 
+		message="<%= OutOfLengthBusinessEmailException.class.getName() %>" 
+	/>
+	
+	<liferay-ui:error 
+		exception="<%= DuplicateBusinessEmailException.class %>" 
+		message="<%= DuplicateBusinessEmailException.class.getName() %>" 
+	/>
+	
+	<liferay-ui:error 
+		exception="<%= OutOfLengthBusinessShortNameException.class %>" 
+		message="<%= OutOfLengthBusinessShortNameException.class.getName() %>" 
+	/>
+	
+	<liferay-ui:error 
+		exception="<%= OutOfLengthBusinessRepresentativeNameException.class %>" 
+		message="<%= OutOfLengthBusinessRepresentativeNameException.class.getName() %>" 
+	/>
+	
+	<liferay-ui:error 
+		exception="<%= OutOfLengthBusinessRepresentativeRoleException.class %>" 
+		message="<%= OutOfLengthBusinessRepresentativeRoleException.class.getName() %>" 
+	/>
+	
+	<liferay-ui:error 
+		key="<%=MessageKeys.ACCOUNT_SYSTEM_EXCEPTION_OCCURRED %>" 
+		message="system.exception.occured" 
+	/>
+	
+	<liferay-ui:error 
+		exception="<%= InvalidCityCodeException.class %>" 
+		message="<%= InvalidCityCodeException.class.getName() %>" 
+	/>
+	<liferay-ui:error 
+		exception="<%= InvalidDistricCodeException.class %>" 
+		message="<%= InvalidDistricCodeException.class.getName() %>" 
+	/>
+	<liferay-ui:error 
+		exception="<%= InvalidWardCodeException.class %>" 
+		message="<%= InvalidWardCodeException.class.getName() %>" 
+	/>
+	<liferay-ui:error 
+		exception="<%= InvalidFileUploadException.class %>" 
+		message="<%= InvalidFileUploadException.class.getName() %>" 
+	/>
+	<liferay-ui:error 
+		exception="<%= FileTypeFailException.class %>" 
+		message="<%= FileTypeFailException.class.getName() %>" 
+	/>
+	<liferay-ui:error 
+		exception="<%= OutOfSizeFileUploadException.class %>" 
+		message="<%= OutOfSizeFileUploadException.class.getName() %>" 
+	/>
+
 	<portlet:actionURL var="updateBusinessURL" name="updateBusiness">
 		<portlet:param 
 			name="<%=BusinessDisplayTerms.BUSINESS_BUSINESSID %>" 
@@ -248,17 +250,19 @@
 					<%
 						for(DictItem dictItemDomain : dictItemDomains) {
 							%>
-								<aui:input
-									name="businessDomain"
+								<aui:input 
+									name="businessDomains"
 									id='<%= "businessDomain" + dictItemDomain.getDictItemId()%>'
 									value="<%=dictItemDomain.getItemCode() %>"
 									type="checkbox" 
 								    label="<%=dictItemDomain.getItemName(locale, true)%>"
+								    cssClass="getval"
 								/>
 							<%
 						}
 					%>
 					</div>
+					<aui:input name="listBussinessDomains" type="hidden" value=""></aui:input>
 				</aui:row>
 			</div>
 		
@@ -293,7 +297,7 @@
 						dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_BUSINESS_TYPE %>"
 						itemNames="businessType"
 						itemsEmptyOption="true"	
-						emptyOptionLabels="businessType"
+						emptyOptionLabels="business-type"
 						showLabel="false"
 					/>
 				</aui:row>
@@ -319,10 +323,14 @@
 				</aui:row>
 				
 				<aui:row cssClass="input-file">
+					<%
+						String attachFileX = StringPool.BLANK;
+						attachFileX =  "<a class=\"detail-terms-links\">"+LanguageUtil.get(pageContext, "term-detail-tai-day")+"</a>";
+					%>
 					<aui:input 
 						type="file" 
 						name="attachFile" 
-						label="business-attach-file"
+						label="<%= LanguageUtil.format(pageContext, \"business-attach-file-x\", attachFileX) %>"
 					>
 						<aui:validator name="acceptFiles">
 							'<%= StringUtil.merge(PortletPropsValues.ACCOUNTMGT_FILE_TYPE) %>'
@@ -331,13 +339,19 @@
 				</aui:row>
 				<div class="term-user">
 					<aui:row>
+						<liferay-portlet:renderURL var="linkToPage" ></liferay-portlet:renderURL>
+						<aui:input name="linkToPageURL" value="<%=linkToPage %>" type="hidden"></aui:input>
+						<%
+							String chiTiet = StringPool.BLANK;
+							String popupURL = renderResponse.getNamespace() +  "openDialogTermOfUse();";
+							chiTiet =  "<a onclick=\""+popupURL+"\" class=\"detail-terms-links\">"+LanguageUtil.get(pageContext, "term-detail")+"</a>";
+						%>
 						<aui:input 
 							name="termsOfUse"
 							type="checkbox" 
-							label="terms-of-use"
+							label="<%= LanguageUtil.format(pageContext, \"terms-of-use-x\", chiTiet ) %>"
 						/>
 					</aui:row>
-					<aui:a href="#" cssClass="term-detail-register"><liferay-ui:message key="term-detail"/></aui:a>
 				</div>
 			</div>
 			<aui:row>
@@ -352,6 +366,11 @@
 <aui:script>
 	AUI().ready(function(A) {
 		var termsOfUseCheckbox = A.one('#<portlet:namespace />termsOfUseCheckbox');
+		
+		var businessTypeCbs = $(".getval");
+		var businessTypeCbsChecked = $(".getval:checked");
+		var checkedArr = [];
+		var listBussinessDomains = A.one("#<portlet:namespace />listBussinessDomains");
 		
 		var allRadios = A.all( "input[type='radio']" );
 		
@@ -385,6 +404,30 @@
 				}
 			});
 		}
+		
+		businessTypeCbsChecked.each(function() {
+			checkedArr.push($(this).attr("value"));
+			listBussinessDomains.val(checkedArr);
+		});
+		
+		businessTypeCbs.click(function() {
+			if($(this).is(":checked")) {
+				//alert($(this).attr("value") + ' ' + $(this).attr("id"));
+				if($.inArray($(this).attr("value"), checkedArr) == -1) {
+					checkedArr.push($(this).attr("value"));
+				}
+			} else {
+				if($.inArray($(this).attr("value"), checkedArr) > -1) {
+					removeItem = $(this).attr("value");
+					checkedArr = $.grep(checkedArr, function(value) {
+						  return value != removeItem;
+					});
+				}
+			}
+			
+			listBussinessDomains.val(checkedArr);
+		});
+		
 	});
 
 	Liferay.provide(window, '<portlet:namespace />registerAccount', function() {
@@ -397,5 +440,12 @@
 			return;
 		}
 	});
+	
+	Liferay.provide(window, '<portlet:namespace/>openDialogTermOfUse', function() {
+		var A = AUI();
+		var linkToPageURL = A.one('#<portlet:namespace />linkToPageURL');
+		openDialog(linkToPageURL.val(), '<portlet:namespace />dieuKhoanSuDung', '<%= UnicodeLanguageUtil.get(pageContext, "dieu-khoan-su-dung") %>');
+		
+	},['aui-io','liferay-portlet-url']);
 	
 </aui:script>

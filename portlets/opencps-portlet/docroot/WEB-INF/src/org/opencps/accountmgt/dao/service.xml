@@ -191,11 +191,12 @@
 
 	<entity name="BusinessDomain" local-service="true" remote-service="true"
 		table="opencps_acc_businessdomain">
-
+		
+		<column name="domainId" type="long" primary="true" />
 		<!-- PK fields -->
 
-		<column name="businessId" type="long" primary="true" />
-		<column name="businessDomainId" type="String" primary="false" />
+		<column name="businessId" type="long"/>
+		<column name="businessDomainCode" type="String" />
 
 		<!-- Finder methods -->
 		<finder name="BusinessId" return-type="Collection">
@@ -203,7 +204,7 @@
 		</finder>
 		
 		<finder name="BusinessDomain" return-type="Collection">
-			<finder-column name="businessDomainId" />
+			<finder-column name="businessDomainCode" />
 		</finder>
 	</entity>
 

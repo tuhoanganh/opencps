@@ -181,7 +181,7 @@
 					for(DictItem dictItemDomain : dictItemDomains) {
 							if(businessDomains != null) {
 								for(BusinessDomain businessDomainChecked : businessDomains) {
-									if(dictItemDomain.getItemCode().equals(businessDomainChecked.getBusinessDomainId())) {
+									if(dictItemDomain.getItemCode().equals(businessDomainChecked.getBusinessDomainCode())) {
 										isCheckItemDomain = true;
 										break;
 									}
@@ -189,22 +189,59 @@
 							}
 						%>
 							<aui:input
-								name="businessDomain"
+								name="businessDomains"
 								id='<%= "businessDomain" + dictItemDomain.getDictItemId()%>'
 								value="<%=dictItemDomain.getItemCode() %>"
 								type="checkbox" 
 							    label="<%=dictItemDomain.getItemName(locale, true)%>"
 							    checked="<%= isCheckItemDomain %>"
+							    cssClass="getval"
 							/>		
 						<%
 						isCheckItemDomain = false;
 					}
 				%>
 				</div>
+				<aui:input name="listBussinessDomains" type="hidden" value=""></aui:input>
 			</aui:row>
 		</c:if>
 	</aui:col>
 </aui:row>
+
+<aui:script>
+	AUI().ready(function(A) {
+		var businessTypeCbs = $(".getval");
+		var businessTypeCbsChecked = $(".getval:checked");
+		var checkedArr = [];
+		var listBussinessDomains = A.one("#<portlet:namespace />listBussinessDomains");
+		
+		businessTypeCbsChecked.each(function() {
+			checkedArr.push($(this).attr("value"));
+			listBussinessDomains.val(checkedArr);
+		});
+		
+		businessTypeCbs.click(function() {
+			if($(this).is(":checked")) {
+				//alert($(this).attr("value") + ' ' + $(this).attr("id"));
+				if($.inArray($(this).attr("value"), checkedArr) == -1) {
+					checkedArr.push($(this).attr("value"));
+				}
+			} else {
+				if($.inArray($(this).attr("value"), checkedArr) > -1) {
+					removeItem = $(this).attr("value");
+					checkedArr = $.grep(checkedArr, function(value) {
+						  return value != removeItem;
+					});
+				} 
+			}
+			
+			listBussinessDomains.val(checkedArr);
+		});
+
+		
+	});
+</aui:script>
+
 <%!
 	private Log _log = LogFactoryUtil.getLog(".html.portlets.accountmgt.registration.registration_business.business_register.jsp");
 %>

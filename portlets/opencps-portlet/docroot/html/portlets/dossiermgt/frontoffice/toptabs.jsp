@@ -30,7 +30,8 @@
 
 <%
 
-	String[] names = new String[]{DossierMgtUtil.TOP_TABS_DOSSIER, DossierMgtUtil.TOP_TABS_DOSSIER_FILE, DossierMgtUtil.TOP_TABS_EXTERNAL_DOSSIER};
+	//String[] names = new String[]{DossierMgtUtil.TOP_TABS_DOSSIER, DossierMgtUtil.TOP_TABS_DOSSIER_FILE, DossierMgtUtil.TOP_TABS_EXTERNAL_DOSSIER};
+	String[] names = new String[]{DossierMgtUtil.TOP_TABS_DOSSIER, DossierMgtUtil.TOP_TABS_DOSSIER_FILE};
 
 	String value = ParamUtil.getString(request, "tabs1", DossierMgtUtil.TOP_TABS_DOSSIER);
 
@@ -60,7 +61,7 @@
 		urls.add(viewExternalDossierURL.toString());
 	}
 %>
-<div class="menu_level_2">
+<%-- <div class="opencps-toptabs">
 	<div class="container">
 		<liferay-ui:tabs  
 			names="<%= StringUtil.merge(names) %>"
@@ -68,6 +69,17 @@
 			url0="<%=urls != null && urls.size() > 0 ? urls.get(0): StringPool.BLANK %>"
 			url1="<%=urls != null && urls.size() > 1 ? urls.get(1): StringPool.BLANK %>"
 			url2="<%=urls != null && urls.size() > 2 ? urls.get(2): StringPool.BLANK %>"
+		/>
+	</div>
+</div> --%>
+
+<div class="opencps-toptabs">
+	<div class="container">
+		<liferay-ui:tabs  
+			names="<%= StringUtil.merge(names) %>"
+			param="tabs1"
+			url0="<%=urls != null && urls.size() > 0 ? urls.get(0): StringPool.BLANK %>"
+			url1="<%=urls != null && urls.size() > 1 ? urls.get(1): StringPool.BLANK %>"
 		/>
 	</div>
 </div>

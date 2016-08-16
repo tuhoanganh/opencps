@@ -67,7 +67,7 @@
 <aui:form name="payForm" action="#">
 <div class="opcs-serviceinfo-list-label">
 	<div class="title_box">
-           <p class="file_manage_title"><liferay-ui:message key="cap-nhat-yeu-cau-moi-nhat" /></p>
+           <p class="file_manage_title"><liferay-ui:message key="danh-sach-yeu-cau-thu-phi" /></p>
            <p class="count"></p>
     </div>
 </div>
@@ -156,6 +156,7 @@
 						}
 						
 					}
+					request.setAttribute("chuHoSo", chuHoSo);
 						// payment status column
 						String paymentStatusText = "";
 						switch (paymentFile.getPaymentStatus()) {
@@ -184,7 +185,7 @@
 						detailURLXem.setParameter("mvcPath", templatePath + "frontofficepaymentdetail.jsp");
 						detailURLXem.setParameter(PaymentFileDisplayTerms.PAYMENT_FILE_ID, String.valueOf(paymentFile.getPaymentFileId()));
 						detailURLXem.setParameter("redirect", currentURL);
-						
+						detailURLXem.setParameter("chuHoSo", chuHoSo);
 						String classColor = "chothanhtoan";
 						if(paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_REQUESTED || paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_REJECTED){
 							classColor = "chothanhtoan";
@@ -206,7 +207,7 @@
 			%>	
 		</liferay-ui:search-container-row> 
 	
-	<liferay-ui:search-iterator/>
+	<liferay-ui:search-iterator type="opencs_page_iterator"/>
 </liferay-ui:search-container>
 </aui:form>
 </div>

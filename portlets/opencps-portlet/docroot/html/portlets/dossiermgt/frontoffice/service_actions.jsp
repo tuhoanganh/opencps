@@ -18,21 +18,19 @@
  */
 %>
 
-<%@page import="org.opencps.dossiermgt.bean.ServiceBean"%>
-<%@page import="com.liferay.portal.kernel.util.Constants"%>
-<%@page import="org.opencps.util.PortletConstants"%>
-<%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
-<%@page import="org.opencps.util.WebKeys"%>
-<%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%@page import="com.liferay.portal.kernel.dao.search.ResultRow"%>
 <%@page import="com.liferay.portal.kernel.dao.search.SearchContainer"%>
+<%@page import="com.liferay.portal.kernel.util.Constants"%>
+<%@page import="org.opencps.dossiermgt.bean.ServiceBean"%>
+<%@page import="org.opencps.dossiermgt.model.Dossier"%>
+<%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
 <%@page import="org.opencps.dossiermgt.permissions.DossierPermission"%>
-<%@page import="org.opencps.util.ActionKeys"%>
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
-
+<%@page import="org.opencps.util.ActionKeys"%>
+<%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.util.WebKeys"%>
 
 <%@ include file="../init.jsp"%>
-
  
 <%
 	ResultRow row = (ResultRow)request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
@@ -49,7 +47,7 @@
 			<portlet:param name="backURL" value="<%=currentURL %>"/>
 			<portlet:param name="isEditDossier" value="<%=String.valueOf(true) %>"/>
 		</portlet:renderURL> 
- 		<aui:button type="button" value="choose" href="<%=addDossierURL.toString() %>" cssClass="button-add-front-service"></aui:button>
+ 		<aui:button type="button" value="choose" href="<%=addDossierURL.toString() %>" cssClass="button-add-front-service radius20"></aui:button>
  		<%-- <liferay-ui:icon cssClass="add" image="add" message="add" url="<%=addDossierURL.toString() %>" />  --%>
  	</c:if>
  	  

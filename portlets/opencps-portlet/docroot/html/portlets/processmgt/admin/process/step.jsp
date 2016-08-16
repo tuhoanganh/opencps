@@ -40,6 +40,8 @@
 				    ProcessPermission.contains(
 				        themeDisplay.getPermissionChecker(),
 				        themeDisplay.getScopeGroupId(), ActionKeys.ADD_PROCESS);
+	
+	int totalCount = ProcessStepLocalServiceUtil.countStepByProcess(serviceProcessId);
 
 %>
 
@@ -60,14 +62,14 @@
 	<aui:button name="addStep" href="<%= editStepInlineURL.toString() %>" value="add-step-inline" ></aui:button>
 </aui:button-row>
 
-<liferay-ui:search-container searchContainer="<%= new StepSearch(renderRequest, ITEM_PERPAGE, iteratorURL) %>">
+<liferay-ui:search-container searchContainer="<%= new StepSearch(renderRequest, totalCount, iteratorURL) %>">
 		
 	<liferay-ui:search-container-results>
 		<%
 		
 			StepSearchTerms searchTerms = (StepSearchTerms) searchContainer.getSearchTerms();
 
-			total = ProcessStepLocalServiceUtil.countStepByProcess(serviceProcessId); 
+			total =  totalCount;
 
 			results = ProcessStepLocalServiceUtil.getStepByProcess(serviceProcessId,
 				searchContainer.getStart(), searchContainer.getEnd());
@@ -104,7 +106,7 @@
 	
 	</liferay-ui:search-container-row>	
 
-	<liferay-ui:search-iterator/>
+	<liferay-ui:search-iterator paginate="false"/>
 
 </liferay-ui:search-container>
 
