@@ -172,6 +172,17 @@
 							</span>
 							
 						</aui:row>
+						
+						<aui:row>
+							<span class="span4 bold">
+								<liferay-ui:message key="action-note" />
+							</span>
+							
+							<span class="span8">
+								<%=String.valueOf(actionHistory.getActionNote())%>
+							</span>
+							
+						</aui:row>
 					</aui:col>
 				</aui:row>
 				
