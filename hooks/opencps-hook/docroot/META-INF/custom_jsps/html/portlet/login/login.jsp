@@ -51,6 +51,9 @@
 		if (Validator.isNull(authType)) {
 			authType = company.getAuthType();
 		}
+		if(login.startsWith("@")){
+			login = StringPool.BLANK;
+		}
 		%>
 
 		<portlet:actionURL secure="<%= PropsValues.COMPANY_SECURITY_AUTH_REQUIRES_HTTPS || request.isSecure() %>" var="loginURL">
@@ -158,7 +161,8 @@
 									<liferay-ui:message key="sign-in"/>
 								</span>
 								<span class="create-account">
-									<aui:a href="#">
+									<liferay-portlet:renderURL var="linkToPage"></liferay-portlet:renderURL>
+									<aui:a href="<%=linkToPage %>">
 										<liferay-ui:message key="create-account"/>
 									</aui:a>
 								</span>
@@ -184,6 +188,7 @@
 										label="<%= StringPool.BLANK %>" 
 										name="login" showRequiredLabel="<%= false %>" 
 										type="text" value="<%= login %>"
+										placeholder="<%= LanguageUtil.get(pageContext, \"login-placehoder\") %>" 
 									>
 										<aui:validator name="required" />
 									</aui:input>
@@ -194,6 +199,7 @@
 										cssClass="password" 
 										type="password" value="<%= password %>" 
 										label="<%=StringPool.BLANK %>"
+										placeholder="<%= LanguageUtil.get(pageContext, \"password-placehoder\") %>" 
 									>
 										<aui:validator name="required" />
 									</aui:input>
@@ -204,7 +210,7 @@
 							</aui:fieldset>
 			
 							<aui:button-row>
-								<aui:button type="submit" value="sign-in" />
+								<aui:button type="submit" value="sign-in-cus" />
 							</aui:button-row>
 							
 							<div class="forgot-password">

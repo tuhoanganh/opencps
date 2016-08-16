@@ -109,7 +109,6 @@
 }
 .opencps-theme.ux .register-content .ocps-fake_textarea-bound .fake_textarea{
     float: right;
-    width: 60%;
     height: 90px;
     overflow: auto;
     border: 1px solid #e1e1e1;
@@ -173,5 +172,33 @@
 .opencps-theme.ux .opencps-register-wrapper .term-user .term-detail-register {
     float: right;
     margin-top: -30px;
-    margin-right: 135px;
+    margin-right: 122px;
+    color: blue;
+}
+.detail-terms-links{
+	font-weight: bold;
+	color: #0077b3 !important;
+	font-size: 13px;
+	text-decoration: none !important;
+}
+.opencps-theme.ux  .content-part .lfr-input-date .control-group {position: relative;margin-bottom: 20px;}
+.opencps-theme.ux  .content-part .lfr-input-date .control-group:before {content:"\f073"; position: absolute; font-family: FontAwesome; right: 10px; top:50%;width: 100%;text-align: right;font-size: 16px;color: #4b4b4b;transform: translateY(-50%); pointer-events: none}
+.opencps-theme.ux  .content-part .lfr-input-date .control-group input {margin-bottom: 0}
+
+.span4.login-redirect a{
+  color: #0077b3;
+  font-weight: 500;
+  text-decoration: none !important;;
+}
+.opencps-theme.ux .input-file .detail-terms-links {
+	pointer-events: none;
+}
+.opencps-theme.ux.register #wrapper #main-content{
+	background-color: rgb(245, 245, 245) !important;
+}
+.portlet-body > div.alert.alert-error{
+	position: relative;
+	left: 50%;
+	transform: translateX(-51%);
+	width: 62%;
 }

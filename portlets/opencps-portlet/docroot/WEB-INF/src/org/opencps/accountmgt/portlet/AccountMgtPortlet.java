@@ -397,8 +397,8 @@ public class AccountMgtPortlet extends MVCPortlet {
 		    .getString(actionRequest, BusinessDisplayTerms.BUSINESS_IDNUMBER);
 		String shortName = ParamUtil
 		    .getString(actionRequest, BusinessDisplayTerms.BUSINESS_SHORTNAME);
-		String type = ParamUtil
-		    .getString(
+		long type = ParamUtil
+		    .getLong(
 		        actionRequest, BusinessDisplayTerms.BUSINESS_BUSINESSTYPE);
 		String address = ParamUtil
 		    .getString(actionRequest, BusinessDisplayTerms.BUSINESS_ADDRESS);
@@ -417,6 +417,8 @@ public class AccountMgtPortlet extends MVCPortlet {
 		String[] domain = ParamUtil
 		    .getParameterValues(
 		        actionRequest, BusinessDisplayTerms.BUSINESS_DOMAIN);
+		String [] listBussinessDomains = ParamUtil
+						.getParameterValues(actionRequest, "listBussinessDomains");
 		String curPass = ParamUtil
 		    .getString(actionRequest, BusinessDisplayTerms.CURRENT_PASSWORD);
 		String newPass = ParamUtil
@@ -437,6 +439,8 @@ public class AccountMgtPortlet extends MVCPortlet {
 		DictItem district = null;
 
 		DictItem ward = null;
+		
+		DictItem busType = null;
 
 		try {
 
@@ -454,6 +458,9 @@ public class AccountMgtPortlet extends MVCPortlet {
 
 			ward = DictItemLocalServiceUtil
 			    .getDictItem(wardId);
+			
+			busType = DictItemLocalServiceUtil
+						    .getDictItem(type);
 			ServiceContext serviceContext = ServiceContextFactory
 			    .getInstance(actionRequest);
 
@@ -463,7 +470,7 @@ public class AccountMgtPortlet extends MVCPortlet {
 				        .getLocale(), true);
 				BusinessLocalServiceUtil
 				    .updateBusiness(
-				        businessId, name, enName, shortName, type, idNumber,
+				        businessId, name, enName, shortName, busType.getItemCode(), idNumber,
 				        address, city
 				            .getItemCode(),
 				        district
@@ -479,7 +486,7 @@ public class AccountMgtPortlet extends MVCPortlet {
 				        ward
 				            .getItemName(serviceContext
 				                .getLocale(), true),
-				        telNo, representativeName, representativeRole, domain,
+				        telNo, representativeName, representativeRole, listBussinessDomains,
 				        isChangePassWord, curPass, rePass, serviceContext
 				            .getUserId(),
 				        serviceContext);

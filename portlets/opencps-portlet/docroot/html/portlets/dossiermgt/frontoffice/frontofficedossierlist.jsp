@@ -17,33 +17,34 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
-<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
-<%@page import="org.opencps.datamgt.model.DictItem"%>
-<%@page import="org.opencps.dossiermgt.bean.DossierBean"%>
-<%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
-<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
-<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
-<%@page import="org.opencps.util.DateTimeUtil"%>
-<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
-<%@page import="org.opencps.dossiermgt.model.Dossier"%>
-<%@page import="com.liferay.portal.kernel.management.jmx.DoOperationAction"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="com.liferay.util.dao.orm.CustomSQLUtil"%>
-<%@page import="org.opencps.dossiermgt.search.DossierSearchTerms"%>
-<%@page import="org.opencps.dossiermgt.search.DossierSearch"%>
-<%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
-<%@page import="com.liferay.portal.kernel.log.Log"%>
-<%@page import="com.liferay.portal.kernel.dao.search.SearchEntry"%>
-<%@page import="javax.portlet.PortletURL"%>
-<%@page import="org.opencps.util.PortletUtil"%>
-<%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.RequiredDossierPartException"%>
-<%@page import="org.opencps.dossiermgt.NoSuchDossierTemplateException"%>
-<%@page import="org.opencps.dossiermgt.NoSuchDossierException"%>
-<%@page import="java.util.List"%>
-<%@ include file="../init.jsp"%>
 
+<%@page import="com.liferay.portal.kernel.dao.search.SearchEntry"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
+<%@page import="com.liferay.portal.kernel.log.Log"%>
+<%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
+<%@page import="com.liferay.portal.kernel.management.jmx.DoOperationAction"%>
+<%@page import="com.liferay.util.dao.orm.CustomSQLUtil"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page import="javax.portlet.PortletURL"%>
+<%@page import="org.opencps.datamgt.model.DictItem"%>
+<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.bean.DossierBean"%>
+<%@page import="org.opencps.dossiermgt.model.Dossier"%>
+<%@page import="org.opencps.dossiermgt.NoSuchDossierException"%>
+<%@page import="org.opencps.dossiermgt.NoSuchDossierTemplateException"%>
+<%@page import="org.opencps.dossiermgt.RequiredDossierPartException"%>
+<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
+<%@page import="org.opencps.dossiermgt.search.DossierSearch"%>
+<%@page import="org.opencps.dossiermgt.search.DossierSearchTerms"%>
+<%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
+<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
+<%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
+<%@page import="org.opencps.util.DateTimeUtil"%>
+<%@page import="org.opencps.util.PortletUtil"%>
+
+<%@ include file="../init.jsp"%>
 
 
 <liferay-util:include page='<%=templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
@@ -78,7 +79,7 @@
 	message="<%=RequiredDossierPartException.class.getName() %>"
 />
 
-<div class="opencps-searchcontainer-wrapper">
+<div class="opencps-searchcontainer-wrapper default-box-shadow radius8">
 	<liferay-ui:search-container searchContainer="<%= new DossierSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
 	
 		<liferay-ui:search-container-results>
@@ -121,77 +122,87 @@
 			
 			<%
 				Dossier dossier = dossierBean.getDossier();
+				String cssStatusColor = "status-color-" + dossier.getDossierStatus();
 			%>
 			
 			<liferay-util:buffer var="info">
 				<div class="row-fluid">
-					<div class="span1">
+					<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
 						<i class='<%="fa fa-circle sx10 " + dossier.getDossierStatus()%>'></i>
 					</div>
-					<div class="span3 bold-label">
+					<div class="span2 bold-label">
 						<liferay-ui:message key="reception-no"/>
 					</div>
-					<div class="span6"><%=dossier.getReceptionNo() %></div>
+					<div class="span9"><%=dossier.getReceptionNo() %></div>
 				</div>
 				
 				<div class="row-fluid">
 					<div class="span1"></div>
 					
-					<div class="span3 bold-label">
+					<div class="span2 bold-label">
 						<liferay-ui:message key="service-name"/>
 					</div>
 					
-					<div class="span8"><%=dossierBean.getServiceName() %></div>
+					<div class="span9"><%=dossierBean.getServiceName() %></div>
 				</div>
 				
 				<div class="row-fluid">
 					<div class="span1"></div>
 					
-					<div class="span3 bold-label"><liferay-ui:message key="gov-agency-name"/></div>
+					<div class="span2 bold-label"><liferay-ui:message key="gov-agency-name"/></div>
 					
-					<div class="span8"><%=dossier.getGovAgencyName() %></div>
+					<div class="span9"><%=dossier.getGovAgencyName() %></div>
 				</div>
 				
 			</liferay-util:buffer>
 			
 			<liferay-util:buffer var="status">
 				<div class="row-fluid">
-					<div width="5px"></div>
 					<div class="span5 bold-label"><liferay-ui:message key="create-date"/></div>
-					<div class="span6">
-						<%=Validator.isNotNull(dossier.getCreateDate()) ? DateTimeUtil.convertDateToString(dossier.getCreateDate(), DateTimeUtil._VN_DATE_FORMAT) : StringPool.DASH %>
+					<div class="span7">
+						<%=
+							Validator.isNotNull(dossier.getCreateDate()) ? 
+							DateTimeUtil.convertDateToString(dossier.getCreateDate(), DateTimeUtil._VN_DATE_FORMAT) : 
+							StringPool.DASH 
+						%>
 					</div>
 				</div>
 				
 				<div class="row-fluid">
-					<div width="5px"></div>
 					<div class="span5 bold-label">
 						 <liferay-ui:message key="receive-datetime"/>
 					</div>
 					
-					<div class="span6">
-						<%=Validator.isNotNull(dossier.getReceiveDatetime()) ? DateTimeUtil.convertDateToString(dossier.getReceiveDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT): StringPool.DASH %>
+					<div class="span7">
+						<%=
+							Validator.isNotNull(dossier.getReceiveDatetime()) ? 
+							DateTimeUtil.convertDateToString(dossier.getReceiveDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT): 
+							StringPool.DASH 
+						%>
 					</div>
 				</div>
 				
 				<div class="row-fluid">
-					<div width="5px"></div>
+				
 					<div class="span5 bold-label">
 						<liferay-ui:message key="finish-date"/>
 					</div>
-					<div class="span6">
-						<%=Validator.isNotNull(dossier.getFinishDatetime()) ? DateTimeUtil.convertDateToString(dossier.getFinishDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT): StringPool.DASH %>
+					<div class="span7">
+						<%=
+							Validator.isNotNull(dossier.getFinishDatetime()) ? 
+							DateTimeUtil.convertDateToString(dossier.getFinishDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT): 
+							StringPool.DASH 
+						%>
 					</div>
 				</div>
 				
 				<div class="row-fluid">
-					<div width="5px"></div>
 					
 					<div class="span5 bold-label">
 						<liferay-ui:message key="dossier-status"/>
 					</div>
 					
-					<div class='<%="span6 " + dossier.getDossierStatus() %>'>
+					<div class='<%="span7 " + cssStatusColor %>'>
 						<%=PortletUtil.getDossierStatusLabel(dossier.getDossierStatus(), locale) %>
 					</div>
 				</div>
@@ -201,12 +212,14 @@
 					row.setClassName("opencps-searchcontainer-row");
 					row.addText(info);
 					row.addText(status);
-					row.addJSP("center", SearchEntry.DEFAULT_VALIGN,"/html/portlets/dossiermgt/frontoffice/dossier_actions.jsp", config.getServletContext(), request, response);
+					row.addJSP("center", SearchEntry.DEFAULT_VALIGN,"/html/portlets/dossiermgt/frontoffice/dossier_actions.jsp", 
+								config.getServletContext(), request, response);
 					
 				%>	
 			</liferay-ui:search-container-row> 
 		
-		<liferay-ui:search-iterator/>
+		<liferay-ui:search-iterator type="opencs_page_iterator"/>
+		
 	</liferay-ui:search-container>
 </div>
 

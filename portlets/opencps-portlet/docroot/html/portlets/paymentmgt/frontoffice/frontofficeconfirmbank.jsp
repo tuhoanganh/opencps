@@ -82,7 +82,6 @@
     left: 50%;
     transform: translateX(-50%);
     margin-top: 20px !important;;
-    opacity: 0.5;
 }
 </style>
 
@@ -110,9 +109,9 @@
                         <div>
                             <p><span><liferay-ui:message key="payment-name"></liferay-ui:message>:</span></p> <%= paymentFile != null ? paymentFile.getPaymentName() : LanguageUtil.get(pageContext, "monitoring-chua-co")  %>
                         </div>
-                        <div>
-                            <p><span><liferay-ui:message key="service-name"></liferay-ui:message>:</span> </p><span><%= serviceInfo != null ? serviceInfo.getServiceName() : LanguageUtil.get(pageContext, "monitoring-chua-co")  %></span>
-                        </div>
+                        <div class="over100">
+	                        <p><span><liferay-ui:message key="service-name"/>:</span> <span><%=Validator.isNotNull(serviceInfo.getServiceName())? HtmlUtil.escape(serviceInfo.getServiceName()): LanguageUtil.get(pageContext, "monitoring-chua-co") %></span></p>
+	                    </div>
                         <div>
                             <p><span><liferay-ui:message key="administration-name"></liferay-ui:message>:</span> </p>
                             <c:if test="<%= dossier != null %>">
@@ -126,7 +125,7 @@
                             <p><span><liferay-ui:message key="ngay-yeu-cau"></liferay-ui:message>:</span> </p><%=paymentFile != null ? HtmlUtil.escape(DateTimeUtil.convertDateToString(paymentFile.getRequestDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT)): LanguageUtil.get(pageContext, "monitoring-chua-co") %>
                         </div>
                         <div>
-                            <p><span><liferay-ui:message key="amount"></liferay-ui:message>: </span> </p><span class="black"><%= NumberFormat.getInstance(new Locale("vi","VN")).format(paymentFile.getAmount()) %> <liferay-ui:message key="vnd"></liferay-ui:message></span>
+                            <p><span><liferay-ui:message key="amount"></liferay-ui:message>: </span> </p><span class="black bold"><%= NumberFormat.getInstance(new Locale("vi","VN")).format(paymentFile.getAmount()) %> <liferay-ui:message key="vnd"></liferay-ui:message></span>
                         </div>
                     </div>
                     <div class="box50 text-center bor-left">
@@ -134,11 +133,13 @@
                             <div class="image_placeholder" style="width: 126px; height: 120px;" ></div>
                             <h5 class="upercase"><liferay-ui:message key="dinh-kem-tep-chung-tu"></liferay-ui:message></h5>
                             <p><liferay-ui:message key="chung-tu-thanh-toan"></liferay-ui:message><br><liferay-ui:message key="hoac-hoa-don-chung-nhan-giao-dich-chuyen-khoan-duoc-in-ra"></liferay-ui:message></p>
-                            <aui:input type="file" cssClass="input-file" name="uploadedFile" label="uploaded-file">
+                            <div class="paymentUploadBTN">
+                            	<aui:input type="file" cssClass="input-file" name="uploadedFile" label="uploaded-file-payment">
 								<aui:validator name="acceptFiles">
 									'<%= StringUtil.merge(PortletPropsValues.ACCOUNTMGT_FILE_TYPE) %>'
 								</aui:validator>
 							</aui:input>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -122,7 +122,8 @@ public class AccountRegPortlet extends MVCPortlet {
 		long businessId =
 		    ParamUtil.getLong(
 		        uploadPortletRequest, BusinessDisplayTerms.BUSINESS_BUSINESSID);
-
+		String [] listBussinessDomains = ParamUtil
+						.getParameterValues(uploadPortletRequest, "listBussinessDomains");		
 		long cityId =
 		    ParamUtil.getLong(
 		        uploadPortletRequest, BusinessDisplayTerms.BUSINESS_CITY_ID);
@@ -206,6 +207,7 @@ public class AccountRegPortlet extends MVCPortlet {
 		boolean registered = false;
 
 		try {
+			
 			ValidateBusiness(
 			    businessId, email, sourceFileName, enName, shortName, address,
 			    representativeName, representativeRole, cityId, districtId, wardId,
@@ -214,7 +216,7 @@ public class AccountRegPortlet extends MVCPortlet {
 			    ServiceContextFactory.getInstance(uploadPortletRequest);
 
 			inputStream =
-			    uploadPortletRequest.getFileAsStream(CitizenDisplayTerms.CITIZEN_ATTACHFILE);
+			    uploadPortletRequest.getFileAsStream(BusinessDisplayTerms.BUSINESS_ATTACHFILE);
 
 			repositoryId = serviceContext.getScopeGroupId();
 			city = DictItemLocalServiceUtil.getDictItem(cityId);
@@ -222,11 +224,9 @@ public class AccountRegPortlet extends MVCPortlet {
 			ward = DictItemLocalServiceUtil.getDictItem(wardId);
 			if(type != 0) {
 				businessType = DictItemLocalServiceUtil.getDictItem(type);
-				businessTypeCode = businessType.getItemName(
-		            serviceContext.getLocale(), true);
+				businessTypeCode = businessType.getItemCode();
 			} 
 			
-
 			if (businessId == 0) {
 
 				Business business =
@@ -238,7 +238,7 @@ public class AccountRegPortlet extends MVCPortlet {
 				        district.getItemName(serviceContext.getLocale(), true),
 				        ward.getItemName(serviceContext.getLocale(), true),
 				        telNo, email, representativeName, representativeRole,
-				        domain, spd.getDayOfMoth(), spd.getMonth(),
+				        listBussinessDomains, spd.getDayOfMoth(), spd.getMonth(),
 				        spd.getYear(), repositoryId, sourceFileName,
 				        contentType, title, inputStream, size, serviceContext);
 

@@ -1,4 +1,9 @@
 
+<%@page import="javax.portlet.PortletRequest"%>
+<%@page import="javax.portlet.WindowState"%>
+<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -52,57 +57,58 @@
  	PortletUtil.SplitDate spd = new PortletUtil.SplitDate(defaultBirthDate);
 %>
 
-<liferay-ui:error 
-	exception="<%= OutOfLengthCitizenAddressException.class %>" 
-	message="<%= OutOfLengthCitizenAddressException.class.getName() %>" 
-/>
-
-<liferay-ui:error 
-	exception="<%= OutOfLengthCitizenEmailException.class %>" 
-	message="<%= OutOfLengthCitizenEmailException.class.getName() %>" 
-/>
-
-<liferay-ui:error 
-	exception="<%= OutOfLengthCitizenNameException.class %>" 
-	message="<%= OutOfLengthCitizenNameException.class.getName() %>" 
-/>
-
-<liferay-ui:error 
-	exception="<%= DuplicateCitizenEmailException.class %>" 
-	message="<%= DuplicateCitizenEmailException.class.getName() %>" 
-/>
-
-<liferay-ui:error 
-	key="<%=MessageKeys.ACCOUNT_SYSTEM_EXCEPTION_OCCURRED %>" 
-	message="system.exception.occured" 
-/>
-
-<liferay-ui:error 
-	exception="<%= InvalidCityCodeException.class %>" 
-	message="<%= InvalidCityCodeException.class.getName() %>" 
-/>
-<liferay-ui:error 
-	exception="<%= InvalidDistricCodeException.class %>" 
-	message="<%= InvalidDistricCodeException.class.getName() %>" 
-/>
-<liferay-ui:error 
-	exception="<%= InvalidWardCodeException.class %>" 
-	message="<%= InvalidWardCodeException.class.getName() %>" 
-/>
-<liferay-ui:error 
-	exception="<%= InvalidFileUploadException.class %>" 
-	message="<%= InvalidFileUploadException.class.getName() %>" 
-/>
-<liferay-ui:error 
-	exception="<%= FileTypeFailException.class %>" 
-	message="<%= FileTypeFailException.class.getName() %>" 
-/>
-<liferay-ui:error 
-	exception="<%= OutOfSizeFileUploadException.class %>" 
-	message="<%= OutOfSizeFileUploadException.class.getName() %>" 
-/>
 
 <div class="opencps-register-wrapper">
+	
+	<liferay-ui:error 
+		exception="<%= OutOfLengthCitizenAddressException.class %>" 
+		message="<%= OutOfLengthCitizenAddressException.class.getName() %>" 
+	/>
+	
+	<liferay-ui:error 
+		exception="<%= OutOfLengthCitizenEmailException.class %>" 
+		message="<%= OutOfLengthCitizenEmailException.class.getName() %>" 
+	/>
+	
+	<liferay-ui:error 
+		exception="<%= OutOfLengthCitizenNameException.class %>" 
+		message="<%= OutOfLengthCitizenNameException.class.getName() %>" 
+	/>
+	
+	<liferay-ui:error 
+		exception="<%= DuplicateCitizenEmailException.class %>" 
+		message="<%= DuplicateCitizenEmailException.class.getName() %>" 
+	/>
+	
+	<liferay-ui:error 
+		key="<%=MessageKeys.ACCOUNT_SYSTEM_EXCEPTION_OCCURRED %>" 
+		message="system.exception.occured" 
+	/>
+	
+	<liferay-ui:error 
+		exception="<%= InvalidCityCodeException.class %>" 
+		message="<%= InvalidCityCodeException.class.getName() %>" 
+	/>
+	<liferay-ui:error 
+		exception="<%= InvalidDistricCodeException.class %>" 
+		message="<%= InvalidDistricCodeException.class.getName() %>" 
+	/>
+	<liferay-ui:error 
+		exception="<%= InvalidWardCodeException.class %>" 
+		message="<%= InvalidWardCodeException.class.getName() %>" 
+	/>
+	<liferay-ui:error 
+		exception="<%= InvalidFileUploadException.class %>" 
+		message="<%= InvalidFileUploadException.class.getName() %>" 
+	/>
+	<liferay-ui:error 
+		exception="<%= FileTypeFailException.class %>" 
+		message="<%= FileTypeFailException.class.getName() %>" 
+	/>
+	<liferay-ui:error 
+		exception="<%= OutOfSizeFileUploadException.class %>" 
+		message="<%= OutOfSizeFileUploadException.class.getName() %>" 
+	/>	
 	
 	<portlet:actionURL var="updateCitizenURL" name="updateCitizen">
 		<portlet:param 
@@ -190,7 +196,7 @@
 	 					<liferay-ui:message key="birth-date"/>
 	 				</label>
 	 				<liferay-ui:input-date 
-	 					
+	 					nullable="true"
 	 					dayParam="<%=CitizenDisplayTerms.BIRTH_DATE_DAY %>"
 	 					dayValue="<%= spd.getDayOfMoth() %>"
 	 					monthParam="<%=CitizenDisplayTerms.BIRTH_DATE_MONTH %>"
@@ -207,9 +213,14 @@
 				</aui:row>
 				
 				<aui:row cssClass="input-file">
+					<%
+						String attachFileX = StringPool.BLANK;
+						attachFileX =  "<a class=\"detail-terms-links\">"+LanguageUtil.get(pageContext, "term-detail-tai-day")+"</a>";
+					%>
 					<aui:input 
 						type="file" 
 						name="<%=CitizenDisplayTerms.CITIZEN_ATTACHFILE %>" 
+						label="<%= LanguageUtil.format(pageContext, \"attachFile-x\", attachFileX) %>"
 					>
 						<aui:validator name="acceptFiles">
 							'<%= StringUtil.merge( PortletPropsValues.ACCOUNTMGT_FILE_TYPE) %>'
@@ -267,14 +278,19 @@
 				</aui:row>
 				<div class="term-user">
 					<aui:row>
+						<liferay-portlet:renderURL var="linkToPage" ></liferay-portlet:renderURL>
+						<aui:input name="linkToPageURL" value="<%=linkToPage %>" type="hidden"></aui:input>
+						<%
+							String chiTiet = StringPool.BLANK;
+							String popupURL = renderResponse.getNamespace() +  "openDialogTermOfUse();";
+							chiTiet =  "<a onclick=\""+popupURL+"\" class=\"detail-terms-links\">"+LanguageUtil.get(pageContext, "term-detail")+"</a>";
+						%>
 						<aui:input 
 							name="termsOfUse"
 							type="checkbox" 
-							label="terms-of-use"
-							cssClass="ocps-terms-of-use"
+							label="<%= LanguageUtil.format(pageContext, \"terms-of-use-x\", chiTiet) %>"
 						/>
 					</aui:row>
-					<aui:a href="#" cssClass="term-detail-register"><liferay-ui:message key="term-detail"/></aui:a>
 				</div>
 			</div>
 			<aui:row>
@@ -284,7 +300,6 @@
 		
 	</aui:form>
 </div>
-
 
 <aui:script use="liferay-portlet-url">
 	AUI().ready(function(A) {
@@ -320,7 +335,7 @@
 				}
 			});
 		}
-		
+		A.one('#<portlet:namespace />birthDate').setAttribute("placeholder", '<%=LanguageUtil.get(pageContext, "ngay-sinh-placehoder") %>');
 	});
 
 	Liferay.provide(window, '<portlet:namespace />registerAccount', function() {
@@ -335,5 +350,11 @@
 		}
 	});
 	
+	Liferay.provide(window, '<portlet:namespace/>openDialogTermOfUse', function() {
+		var A = AUI();
+		var linkToPageURL = A.one('#<portlet:namespace />linkToPageURL');
+		openDialog(linkToPageURL.val(), '<portlet:namespace />dieuKhoanSuDung', '<%= UnicodeLanguageUtil.get(pageContext, "dieu-khoan-su-dung") %>');
+		
+	},['aui-io','liferay-portlet-url']);
+	
 </aui:script>
-

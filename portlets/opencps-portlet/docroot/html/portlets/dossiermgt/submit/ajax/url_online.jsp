@@ -63,7 +63,7 @@
 </liferay-portlet:renderURL>
 
 <aui:row cssClass="serice-des">
-	<liferay-ui:message key="service-description"/>
+	<liferay-ui:message key="service-description-dvc"/>
 </aui:row>
 	
 <aui:row cssClass="des-detail">		

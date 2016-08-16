@@ -23,9 +23,22 @@
     border-radius: 0 !important;
     text-shadow: none !important;
     border: 1px solid #ececec !important;
-    width: 125px !important;
+    min-width: 125px !important;
+    width: 100% !important;
     margin-bottom: 0 !important;
     color: #444 !important;
+}
+
+.opencps-theme.ux button[data-toggle="dropdown"]{
+	background: white none repeat scroll 0 0 !important;
+    border: 1px solid #ececec !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    height: 60px !important;
+    text-shadow: none !important;
+    color: #292929;
+    min-width: 125px !important;
+    width: 100% !important;
 }
 .custom-toolbar.search_tools{
   background-color: transparent !important;;
@@ -82,7 +95,7 @@ table.payment tr td:nth-last-of-type(-n+2):after {border-right: 0;}
 .opencps-theme .page-search .input-append input.search-query[type="text"] {
     border-radius: 20px 0 0 20px !important;
     height: 40px !important;
-    width: 300px !important;
+    width: 382px !important;
     border-right: 0 !important;
     border-left: 1px solid #e1e1e1 !important;
     border-top: 1px solid #e1e1e1 !important;
@@ -122,26 +135,26 @@ table.payment tr td:nth-last-of-type(-n+2):after {border-right: 0;}
 }
 /*--- Search File Detail ---*/
 .detail-left {background-color: white; border-radius: 8px; -webkit-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2);
-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); width: 59%; float: left; padding: 30px 25px}
+box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); width: 58%; float: left; padding: 30px 25px}
 .detail-left h4 {margin: 0; font-family: 'Roboto-Bold'; font-weight: normal; font-size: 18px; padding-left: 25px}
 .detail-left h4 {margin-bottom: 5px}
 .detail-left h4:first-child {margin-bottom: 20px}
-.detail-left h4.matiepnhan {background: url(/opencps-ux-theme/css/../images/frame_1/icon_matiepnhan.png) 0 center no-repeat}
-.detail-left h4.thutuc {background: url(/opencps-ux-theme/css/../images/frame_1/icon_thutuc.png) 0 center no-repeat}
-.detail-left h4.coquanthuchien {background: url(/opencps-ux-theme/css/../images/frame_1/icon_coquanthuchien.png) 0 center no-repeat}
-.detail-left h4.chuhoso {background: url(/opencps-ux-theme/css/../images/frame_1/icon_chuhoso.png) 0 center no-repeat}
-.detail-left h4.diachi {background: url(/opencps-ux-theme/css/../images/frame_1/icon_diachi_2.png) 0 center no-repeat}
-.detail-left h4.ngaytiepnhan {background: url(/opencps-ux-theme/css/../images/frame_1/icon_ngaythang.png) 0 center no-repeat}
-.detail-left h4.ngayhentra {background: url(/opencps-ux-theme/css/../images/frame_1/icon_ngaythang.png) 0 center no-repeat}
-.detail-left h4.ngayhoanthanh {background: url(/opencps-ux-theme/css/../images/frame_1/icon_ngaythang.png) 0 center no-repeat}
+.detail-left h4.matiepnhan {background: url(/opencps-ux-theme/css/../images/custom/icon_matiepnhan.png) 0 center no-repeat}
+.detail-left h4.thutuc {background: url(/opencps-ux-theme/css/../images/custom/icon_thutuc.png) 0 center no-repeat}
+.detail-left h4.coquanthuchien {background: url(/opencps-ux-theme/css/../images/custom/icon_coquanthuchien.png) 0 center no-repeat}
+.detail-left h4.chuhoso {background: url(/opencps-ux-theme/css/../images/custom/icon_chuhoso.png) 0 center no-repeat}
+.detail-left h4.diachi {background: url(/opencps-ux-theme/css/../images/custom/icon_diachi_2.png) 0 center no-repeat}
+.detail-left h4.ngaytiepnhan {background: url(/opencps-ux-theme/css/../images/custom/icon_ngaythang.png) 0 center no-repeat}
+.detail-left h4.ngayhentra {background: url(/opencps-ux-theme/css/../images/custom/icon_ngaythang.png) 0 center no-repeat}
+.detail-left h4.ngayhoanthanh {background: url(/opencps-ux-theme/css/../images/custom/icon_ngaythang.png) 0 center no-repeat}
 .detail-left p {margin-bottom: 20px}
 .detail-left p:last-child {margin-bottom: 0px}
 
 .detail-right {background-color: white; border-radius: 8px; -webkit-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2);
 box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); width: 370px; float: right; padding: 30px 25px}
 .detail-right h4 {margin: 0 0 20px; font-family: 'Roboto-Bold'; font-weight: normal; font-size: 18px}
-.detail-right .date {border-right: 1px solid #e1e1e1; float: left; width: 95px;}
-.detail-right .info {float: right; width: calc(100% - 116px);}
+.detail-right .info .date {margin-left: -130px; position: absolute;}
+.detail-right .info {float: right; width: calc(100% - 116px);padding-left: 20px;border-left: 1px solid #e1e1e1;}
 .detail-right .date p, .detail-right .info p {margin-bottom: 0}
 .detail-right .date div, .detail-right .info div {margin-bottom: 30px}
 .detail-right .date div:last-child, .detail-right .info div:last-child {margin-bottom: 0px}
@@ -212,8 +225,15 @@ box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); width: 370px; float: right; padding
     box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2);
     overflow: hidden;
 }
+.payment-ld .content.overfolow {
+    box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0) !important;
+	overflow: unset !important;
+}
+.payment-ld .content.overfolow div.box50:first-child {
+    margin-right: 20px;
+}
 .file_manage_title {
-    background: url(/opencps-ux-theme/css/../images/frame_1/icon_danhsachhoso.png) 0 center no-repeat;
+    background: url(/opencps-ux-theme/css/../images/custom/icon_danhsachhoso.png) 0 center no-repeat;
     padding-left: 20px;
     text-transform: uppercase;
     font-family: 'Roboto-Bold';
@@ -256,12 +276,39 @@ box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); width: 370px; float: right; padding
 .payment-ld .content .box50:nth-child(1) p span:first-child {
     font-family: 'Roboto-Bold';
     display: inline-block;
-    width: 135px;
 }
 .payment-ld .content .box50:nth-child(2) p span:first-child {
     font-family: 'Roboto-Bold';
     display: inline-block;
     width: 160px;
+}
+.payment-ld .content .box50:nth-child(1) div.over100{
+	overflow: hidden;
+	width: 100%;
+}
+.payment-ld .content .box50:nth-child(1) div.over100  p:first-child{
+  	width: 100%;
+}
+.payment-ld .content .box50:nth-child(1) div.over100  p span:first-child{
+	float: left;
+	width: 155px;
+}
+.payment-ld .content .box50:nth-child(1) div.over100  p span:last-child{
+	width: 65%;
+	float: left;
+	text-align: justify;
+}
+.payment-ld .content .box100 div.over100{
+	overflow: hidden;
+}
+.payment-ld .content .box100 div.over100  p span:first-child{
+	float: left;
+	width: 143px;
+}
+.payment-ld .content .box100 div.over100  p span:last-child{
+	width: 65%;
+	float: left;
+	text-align: justify;
 }
 .payment-ld .content .box50 a, .payment-ld .content .box100 a {
     color: #0090ff !important;
@@ -337,7 +384,7 @@ box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); width: 370px; float: right; padding
     width: 265px;
     height: 41px;
     overflow: hidden;
-    background: url(/opencps-ux-theme/css/../images/frame_1/icon_select_gray.png) white no-repeat right;
+    background: url(/opencps-ux-theme/css/../images/custom/icon_select_gray.png) white no-repeat right;
     background-position: 93% center;
     border-radius: 20px;
     margin: 0 20px 0 0;
@@ -349,30 +396,24 @@ box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); width: 370px; float: right; padding
     padding: 0;
 }
 .image_placeholder {
-    background: url(/opencps-ux-theme/css/../images/frame_1/image_placeholder.png);
+    background: url(/opencps-ux-theme/css/../images/custom/image_placeholder.png);
     left: 50%;
     transform: translateX(-50%);
     position: relative;
 }
 
-.image_placeholder {
-    background: url(/opencps-ux-theme/css/../images/frame_1/image_placeholder.png);
-    left: 50%;
-    transform: translateX(-50%);
-    position: relative;
-}
-.opencps-theme.ux .home_bg .taglib-header{
-  display: none;
-}
 .opencps-theme.ux .home_bg .form-search label{
   display: none;
 }
 .opencps-theme.ux .home_bg .page-search button[data-toggle="dropdown"]{
   height: 40px !important;
 }
+.opencps-theme.ux .portlet-boundary_19_WAR_opencpsportlet_ .page-search button[data-toggle="dropdown"]{
+  height: 40px !important;
+}
 .payment-ld .content .box50:nth-child(1) p:first-child {
   float: left;
-  width: 135px;
+  width: 155px;
 }
 .payment-ld .content .box50:nth-child(2) p:first-child {
   float: left;
@@ -383,4 +424,60 @@ box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2); width: 370px; float: right; padding
 }
 .payment-ld input[type="file"]{
   display: none;
+}
+.taglib-page-iterator .pagination ul{
+	float: left;
+	left: 50%;
+	position: relative;
+	transform: translate(-50%);
+}
+.taglib-page-iterator div.search-results{
+  display: none;
+}
+.taglib-page-iterator .lfr-pagination-config{
+	float: right !important;
+}
+.opencps-theme.ux .taglib-page-iterator .btn {
+    color: #333 !important;
+}
+.taglib-search-iterator-page-iterator-top .taglib-page-iterator ul.lfr-pagination-buttons{
+  display: none;
+}
+.taglib-search-iterator-page-iterator-bottom .taglib-page-iterator ul.lfr-pagination-buttons{
+  display: block;
+}
+.taglib-search-iterator-page-iterator-bottom .taglib-page-iterator div.lfr-pagination-config{
+  display: none;
+}
+.paymentUploadBTN{
+	background-color: rgb(245, 245, 245);
+	border: 1px solid rgb(225, 225, 225);
+	color: rgb(68, 68, 68);
+	font-size: 12px;
+	text-transform: uppercase;
+	width: 50%;
+	padding: 5px 0px;
+	border-radius: 20px;
+	left: 50%;
+	margin-top: 10px;
+	transform: translateX(-50%);
+	position: relative;
+}
+
+.paymentUploadBTN label{
+	margin-bottom: -2px !important;
+}
+.opencps-theme.ux .portlet-boundary_19_WAR_opencpsportlet_ .opencps-toolbar .navbar-inner{
+  padding-right: 0;
+}
+.head .headh3{
+	float: left;
+	text-transform: uppercase;
+	font-size: 20px;
+}
+.opencps-theme.ux .portlet-boundary_19_WAR_opencpsportlet_ .taglib-header{
+	display: none;
+}
+.opencps-theme.ux .portlet-boundary_19_WAR_opencpsportlet_ .toolbar_search_input label{
+	display: none;
 }
