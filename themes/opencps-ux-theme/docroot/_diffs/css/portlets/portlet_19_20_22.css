@@ -15,6 +15,7 @@
 	border-right: 0;
 	border-left: 1px solid #e1e1e1 !important;
 	border-top: 1px solid #e1e1e1 !important;
+	font-size: 15px;
 }
 .opencps-theme .search_tools .input-append .btn-group button {
     height: 60px !important;
