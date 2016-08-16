@@ -20,7 +20,10 @@
         <column name="status" type="String"></column>
 
 		<reference entity="Dossier" package-path="org.opencps.dossiermgt.dao" />
+		<reference entity="DossierPart" package-path="org.opencps.dossiermgt.dao" />
+		<reference entity="DossierFile" package-path="org.opencps.dossiermgt.dao" />
 		<reference entity="DLApp" package-path="com.liferay.portlet.documentlibrary" />
 		<reference entity="DLFileEntry" package-path="com.liferay.portlet.documentlibrary"/>
+		<reference entity="ServiceInfo" package-path="org.opencps.servicemgt.dao" />
 	</entity>
 </service-builder>
