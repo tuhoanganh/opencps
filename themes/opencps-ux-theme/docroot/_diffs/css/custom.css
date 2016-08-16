@@ -7,6 +7,9 @@
 @import url(portlets/portlet_6.css);
 @import url(portlets/portlet_13.css);
 @import url(portlets/portlet_login.css);
+@import url(portlets/portlet_26.css);
+@import url(portlets/portlet_11.css);
+@import url(portlets/submenu_nav.css);
 
 @import url(input.css);
 @import url(nav_toolbar.css);
@@ -15,7 +18,7 @@
 @import url(nav_menu.css);
 
 /* @import url(portlets/portlet_register.css); */
-/*@import url(portlets/portlet_accountInfo.css);*/
+/* @import url(portlets/portlet_accountInfo.css); */
 /* @import url(portlets/portlet_history.css);
 @import url(portlets/portlet_dossier_info.css);
 @import url(portlets/portlet_dossier_content.css); */
@@ -23,8 +26,7 @@
 @import url(portlets/portlet_hung_custom.css);
 @import url(portlets/binhth.css);
 @import url(button-custom.css);
-@import url(portlets/portlet_26.css);
-@import url(portlets/portlet_13_fileinfo.css);
+/* @import url(portlets/portlet_13_fileinfo.css); */
 @import url(custom_frame_1.css);
 
 
@@ -199,35 +201,3 @@ body{
     width: 125px !important;
     color: #292929;
 }
-
-#navigation ul li.selected {
-	background-color: #0074cd;
-}
-
-.aui a {
-	color: #000;
-}
-
-
-.pager.lfr-pagination-buttons {
-    margin-top: 8px;
-}
-
-
-.footer a {
-    color: #7d91a0;
-}
-
-.opencps-theme.ux .home_bg #column-1 .portlet-borderless-container{
-  background: transparent !important;
-}
-
-
-
-.menu_level_2 {background-color: #2ea4ff; height: 44px; color: white; font-family: 'Roboto-Bold'; margin-bottom: 30px}
-.menu_level_2 ul {margin: 0}
-.menu_level_2 ul li {float: left}
-.menu_level_2 ul li a {padding: 0 30px; line-height: 44px; display: block; opacity: 0.7; position: relative}
-.menu_level_2 ul li.active a, .menu_level_2 ul li:hover a {opacity: 1}
-.menu_level_2 ul li a:before {pointer-events: none; position: absolute; z-index: -1; content: ''; border-style: solid; -webkit-transition-duration: 0.3s; transition-duration: 0.3s; -webkit-transition-property: transform; transition-property: transform; left: calc(50% - 10px); bottom: 0; border-width: 10px 10px 0 10px; border-color: #2ea4ff transparent transparent transparent; opacity: 0}
-.menu_level_2 ul li.active a:before {-webkit-transform: translateY(10px); transform: translateY(10px); opacity: 1}

@@ -149,37 +149,39 @@
 						<%= serviceInfo.getServiceRecords() %>
 					</td>
 				</tr>
-				<tr>
-					<td class="col-left">
-						<liferay-ui:message key="service-instructions"/>
-					</td>
-					<td class="col-right">
-						<%= serviceInfo.getServiceInstructions() %>
-					</td>
-				</tr>
-				<tr>
-					<td class="col-left">
-						<liferay-ui:message key="status"/>
-					</td>
-					<td class="col-right">
-						<%
-							int status = serviceInfo.getActiveStatus(); 
-						%>
-						<c:choose>
-							<c:when test="<%=status == 0 %>">
-								<liferay-ui:message key="service-private"/>
-							</c:when>
+				<!-- Thanh CMC comment hai dong nay lai -->
+<!-- 				<tr> -->
+<!-- 					<td class="col-left"> -->
+<%-- 						<liferay-ui:message key="service-instructions"/> --%>
+<!-- 					</td> -->
+<!-- 					<td class="col-right"> -->
+<%-- 						<%= serviceInfo.getServiceInstructions() %> --%>
+<!-- 					</td> -->
+<!-- 				</tr> -->
+<!-- 				<tr> -->
+<!-- 					<td class="col-left"> -->
+<%-- 						<liferay-ui:message key="status"/> --%>
+<!-- 					</td> -->
+<!-- 					<td class="col-right"> -->
+<%-- 						<% --%>
+// 							int status = serviceInfo.getActiveStatus(); 
+<%-- 						%> --%>
+<%-- 						<c:choose> --%>
+<%-- 							<c:when test="<%=status == 0 %>"> --%>
+<%-- 								<liferay-ui:message key="service-private"/> --%>
+<%-- 							</c:when> --%>
 							
-							<c:when test="<%=status == 1 %>">
-								<liferay-ui:message key="service-public"/>
-							</c:when>
-							<c:when test="<%=status == 2 %>">
-								<liferay-ui:message key="service-outdate"/>
-							</c:when>
-						</c:choose>
+<%-- 							<c:when test="<%=status == 1 %>"> --%>
+<%-- 								<liferay-ui:message key="service-public"/> --%>
+<%-- 							</c:when> --%>
+<%-- 							<c:when test="<%=status == 2 %>"> --%>
+<%-- 								<liferay-ui:message key="service-outdate"/> --%>
+<%-- 							</c:when> --%>
+<%-- 						</c:choose> --%>
 						
-					</td>
-				</tr>
+<!-- 					</td> -->
+<!-- 				</tr> -->
+				<!-- ---------END-------------- -->
 				<tr>
 					<td class="col-left">
 						<liferay-ui:message key="template_info"/>
