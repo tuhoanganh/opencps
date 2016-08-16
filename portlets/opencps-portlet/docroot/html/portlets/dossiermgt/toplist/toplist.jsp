@@ -59,11 +59,6 @@
 							(scopeGroupId, status, user.getUserId()
 								, searchContainer.getStart(), searchContainer.getEnd());
 					
-					
-				System.out.print("*****scopeGroupId** " + scopeGroupId 
-						+  " ****status**** " + status + " ****user.getUserId()***** " + user.getUserId());
-				
-					
 					totalCount = DossierLocalServiceUtil
 									.countDossierByG_DS_U
 									(scopeGroupId, status, user.getUserId());		
