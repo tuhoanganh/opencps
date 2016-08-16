@@ -46,9 +46,13 @@
 	}
 	
 %>
-<liferay-ui:tabs
-	names="<%= StringUtil.merge(names) %>"
-	param="tabs1"
-	url0="<%=urls != null && urls.size() > 0 ? urls.get(0): StringPool.BLANK %>"
-	url1="<%=urls != null && urls.size() > 1 ? urls.get(1): StringPool.BLANK %>"
-/>
+<div class="opencps-toptabs">
+	<div class="container">
+		<liferay-ui:tabs
+			names="<%= StringUtil.merge(names) %>"
+			param="tabs1"
+			url0="<%=urls != null && urls.size() > 0 ? urls.get(0): StringPool.BLANK %>"
+			url1="<%=urls != null && urls.size() > 1 ? urls.get(1): StringPool.BLANK %>"
+		/>
+	</div>
+</div>
