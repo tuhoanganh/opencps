@@ -1,21 +1,7 @@
-.opencps-theme .home_bg #column-1{
-	height: auto !important;
-	min-height: 475px !important;
-	position: relative !important;
-	left: 50% !important;
-	transform: translateX(-50%) !important;
-}
 .search_tools label{
   display: none !important;
 }
-.opencps-theme .home-search .input-append input.search-query[type="text"]{
-	border-radius: 20px 0 0 20px;
-	height: 60px;
-	width: 487px;
-	border-right: 0;
-	border-left: 1px solid #e1e1e1 !important;
-	border-top: 1px solid #e1e1e1 !important;
-}
+
 .opencps-theme .search_tools .input-append .btn-group button {
     height: 60px !important;
     background: none white !important;
