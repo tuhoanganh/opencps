@@ -88,16 +88,16 @@
 	</article>
 	
 	<footer>
-		<div class="footer">
-            <div class="logo">
+		<div class="content">
+            <div class="span3 logo">
                 <p>Copyright © 2016 - OpenCPS v1.5</p>
             </div>
-            <div class="danhmuc">
+            <div class="span2">
                 <p class="title">#language ("danhmuc-key")</p>
                 #parse ("$full_templates_path/navigation_footer_public_page.vm")
 
             </div>
-            <div class="huongdan">
+            <div class="span2">
                 <p class="title">#language ("conduct-key")</p>
                 <ul>
                     <li><a href="/-ang-ky-tai-khoan">#language ("account-register-key")</a></li>
@@ -107,13 +107,13 @@
                     <li><a href="/can-bo-xu-ly-ho-so">#language ("cbxl-nophs-key")</a></li>
                 </ul>
             </div>
-            <div class="lienhehotro">
+            <div class="span2">
                 <p class="title">#language ("lienhehotro-key")</p>
-                <p class="diachi">#language ("nhavapa-key")<br/>#language ("tonthatthuyet-street-key")</p>
+                <p class="address">#language ("nhavapa-key")<br/>#language ("tonthatthuyet-street-key")</p>
                 <p class="mail">opencps@gmail.com</p>
                 <p class="phone">1900 0311</p>
             </div>
-            <div class="lienketwebsite">
+            <div class="span3">
                 <p class="title">#language ("lienketwebsite-key")</p>
                 <div class="select">
                     <select onchange="location = this.options[this.selectedIndex].value;">
