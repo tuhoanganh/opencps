@@ -12,6 +12,7 @@ build.trungnt.properties
 build.dunglt.properties
 build.Tomorow.properties
 build.xml
+build.*.properties
 ci.properties
 common.bnd
 copyright.txt

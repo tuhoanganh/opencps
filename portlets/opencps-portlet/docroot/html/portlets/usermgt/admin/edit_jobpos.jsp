@@ -57,7 +57,7 @@
 		
 	}
 	
-s%>
+%>
 
 <liferay-ui:header
 	backURL="<%= redirectURL %>"
