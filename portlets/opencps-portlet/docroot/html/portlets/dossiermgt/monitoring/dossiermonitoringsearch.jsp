@@ -45,8 +45,11 @@
 
 <%@ include file="../init.jsp"%>
 
-<h2><liferay-ui:message key="beautiful-life"/></h2>
-<p><liferay-ui:message key="slogan-key"/></p>
+<div class="home-search-sologan">
+	<h2><liferay-ui:message key="beautiful-life"/></h2>
+	
+	<p><liferay-ui:message key="slogan-key"/></p>
+</div>
 
 <div class = "home-search">
 	<liferay-util:include page="/html/portlets/dossiermgt/monitoring/toolbar.jsp" servletContext="<%=application %>" />
