@@ -187,12 +187,13 @@
 				
 				<aui:row>
 					<div id = "<portlet:namespace/>def">
-					<aui:input name="<%=CitizenDisplayTerms.CITIZEN_TELNO %>" cssClass="input100" placeholder="<%=CitizenDisplayTerms.CITIZEN_TELNO %>">
-						<aui:validator name="minLength">10</aui:validator>
-					</aui:input>
+					<aui:input name="<%=CitizenDisplayTerms.CITIZEN_TELNO %>" cssClass="input100" placeholder="<%=CitizenDisplayTerms.CITIZEN_TELNO %>" />
 					</div>
 					<div  id="<portlet:namespace/>defErr" style="text-align: left; color: #b50303; margin-left:7px; margin-bottom: 10px; display: none;">
 						<liferay-ui:message key="Error_TelNo_message"/>
+					</div>
+					<div  id="<portlet:namespace/>defErr2" style="text-align: left; color: #b50303; margin-left:7px; margin-bottom: 10px; display: none;">
+						<liferay-ui:message key="Error_TelNo_message2"/>
 					</div>
 				</aui:row>
 				
@@ -364,7 +365,6 @@
 		
 	},['aui-io','liferay-portlet-url']);
 	
-	
 	function telephoneCheck() {
 		var numRegex = A.one("#<portlet:namespace/>telNo").val();
 		var num = A.one("#<portlet:namespace/>telNo").val().toString().length;
@@ -373,15 +373,23 @@
 		if(isphone.test(numRegex)){
 			A.one("#<portlet:namespace/>def").removeClass('changeDefErr');
 			A.one("#<portlet:namespace/>defErr").removeClass('displayDefErr');
+			A.one("#<portlet:namespace/>defErr2").removeClass('displayDefErr');
 			return true;
 		  }  
 		  else {
 			  if(num>=10){
 				  A.one("#<portlet:namespace/>def").addClass('changeDefErr');
 				  A.one("#<portlet:namespace/>defErr").addClass('displayDefErr');
+				  A.one("#<portlet:namespace/>defErr2").removeClass('displayDefErr');
+				  return false;
+			  } if(num<10){
+				  A.one("#<portlet:namespace/>def").addClass('changeDefErr');
+				  A.one("#<portlet:namespace/>defErr2").addClass('displayDefErr');
+				  A.one("#<portlet:namespace/>defErr").removeClass('displayDefErr');
 				  return false;
 			  }
+			  
 			}
 		}
-
+ 
 </aui:script>
