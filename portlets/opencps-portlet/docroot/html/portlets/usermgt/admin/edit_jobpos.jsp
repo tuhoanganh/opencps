@@ -124,9 +124,13 @@
 %>
 <aui:script use='liferay-util-window'>
 	AUI().ready(function(A) {
+		alert(1)
 		var success = '<%= success%>';
+		alert(2)
+		alert(success)
 		if(success == 'true') {
-			Liferay.Util.getOpener().<portlet:namespace/>closePopup('<portlet:namespace/>dialog');
+			alert(3)
+			Liferay.Util.getOpener().<portlet:namespace/>closePopup('<portlet:namespace/>dialogeee');
 		}
 	});
 </aui:script>

@@ -95,7 +95,7 @@
 				modal : true,
 				width : 11000
 			},
-			id : '<portlet:namespace/>dialog',
+			id : '<portlet:namespace/>dialogeee',
 			title : '',
 			uri : url
 		});
