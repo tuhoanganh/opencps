@@ -8,6 +8,7 @@
 	#if (!$is_signed_in)
 		<ul>
 			#foreach ($nav_item in $publicLayouts)
+
 				#if (!$nav_item.isHidden())
 					#if ($nav_item.isSelected())
 		                <li class="selected">
