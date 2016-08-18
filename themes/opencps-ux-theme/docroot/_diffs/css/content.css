@@ -8,6 +8,7 @@
 }
 
 .opencps-theme.ux #wrapper > div {
+	background-color: #f5f5f5;
     width: 100%;
 }
 
@@ -65,7 +66,7 @@
 	font-family: 'Roboto-Bold';
 	font-size: 17px;
 	text-transform: uppercase;
-	background: url(../images/custom//icon_huongdansudung.png) 16px 19px
+	background: url(../images/custom/icon_helper.png) 16px 19px
 		no-repeat;
 	color: #0090ff;
 }
