@@ -155,7 +155,7 @@ public class UserMgtPortlet extends MVCPortlet {
 			    .isNotNull(redirectURL)) {
 				_log.info(redirectURL);
 				actionResponse
-				    .sendRedirect(redirectURL);
+				    .sendRedirect(redirectURL + "#_2_WAR_opencpsportlet_tab=_2_WAR_opencpsportlet_jobpos");
 			}
 		}
 		else {
@@ -268,7 +268,7 @@ public class UserMgtPortlet extends MVCPortlet {
 			if (Validator
 			    .isNotNull(returnURL)) {
 				actionResponse
-				    .sendRedirect(returnURL + "#_2_WAR_opencpsportlet_tab=_2_WAR_opencpsportlet_jobpos");
+				    .sendRedirect(returnURL);
 			}
 
 		}
@@ -720,7 +720,7 @@ public class UserMgtPortlet extends MVCPortlet {
 			if (Validator
 			    .isNotNull(returnURL)) {
 				actionResponse
-				    .sendRedirect(returnURL + "#_2_WAR_opencpsportlet_tab=_2_WAR_opencpsportlet_jobpos");
+				    .sendRedirect(returnURL);
 			}
 		}
 		catch (Exception e) {
