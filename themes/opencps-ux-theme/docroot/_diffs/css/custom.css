@@ -18,6 +18,9 @@
 @import url(header.css);
 @import url(nav_menu.css);
 
+
+
+
 @import url(portlets/portlet_popup.css);
 @import url(portlets/portlet_hung_custom.css);
 
@@ -208,4 +211,20 @@ body{
 
 .opencps-theme.ux .home_bg #column-1 .portlet-borderless-container{
   background: transparent !important;
+}
+/*vtduy quan ly can bo */
+
+.opencps-theme.ux .portlet-boundary_2_WAR_opencpsportlet_ .table .last .btn {
+	border-radius: 20px;
+    color: white;
+    display: block;
+    margin: 5px 0;
+    position: relative;
+    width: 110px;
+}
+
+.opencps-theme.ux .portlet-boundary_2_WAR_opencpsportlet_ .table .last .btn:BEFORE {
+    content: "\f044";
+    margin-left: -25px;
+    font-family: FontAwesome;
 }
