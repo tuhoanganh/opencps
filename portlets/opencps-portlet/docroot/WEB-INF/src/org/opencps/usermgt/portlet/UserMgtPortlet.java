@@ -77,6 +77,7 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.service.OrganizationLocalServiceUtil;
 import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
+import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.UserGroupLocalServiceUtil;
@@ -441,6 +442,7 @@ public class UserMgtPortlet extends MVCPortlet {
 
 			}
 		}
+		
 		try {
 			userGroup = UserGroupLocalServiceUtil
 			    .getUserGroup(
@@ -669,8 +671,6 @@ public class UserMgtPortlet extends MVCPortlet {
 
 		String[] indexOfRows = rowIndexes
 		    .split(",");
-		String redirectURL = ParamUtil
-		    .getString(actionRequest, "redirectURL");
 		String returnURL = ParamUtil
 		    .getString(actionRequest, "returnURL");
 		SessionMessages
@@ -718,9 +718,9 @@ public class UserMgtPortlet extends MVCPortlet {
 				SessionErrors.add(actionRequest, "jobpos-existed-title");
 			}
 			if (Validator
-			    .isNotNull(redirectURL)) {
+			    .isNotNull(returnURL)) {
 				actionResponse
-				    .sendRedirect(redirectURL + "#_2_WAR_opencpsportlet_tab=_2_WAR_opencpsportlet_jobpos");
+				    .sendRedirect(returnURL + "#_2_WAR_opencpsportlet_tab=_2_WAR_opencpsportlet_jobpos");
 			}
 		}
 		catch (Exception e) {
