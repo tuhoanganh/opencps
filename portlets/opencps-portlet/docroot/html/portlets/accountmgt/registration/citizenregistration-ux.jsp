@@ -381,6 +381,7 @@
 				  A.one("#<portlet:namespace/>defErr").addClass('displayDefErr');
 				  return false;
 			  }
+			  
 			}
 		}
 
