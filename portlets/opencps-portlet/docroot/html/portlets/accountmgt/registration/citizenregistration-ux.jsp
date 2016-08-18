@@ -1,9 +1,3 @@
-
-<%@page import="javax.portlet.PortletRequest"%>
-<%@page import="javax.portlet.WindowState"%>
-<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
-<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
-<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -22,7 +16,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
-
+<%@page import="javax.portlet.PortletRequest"%>
+<%@page import="javax.portlet.WindowState"%>
+<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="org.opencps.accountmgt.DuplicateCitizenEmailException"%>
 <%@page import="org.opencps.accountmgt.OutOfLengthCitizenEmailException"%>
 <%@page import="org.opencps.accountmgt.OutOfLengthCitizenAddressException"%>
@@ -108,7 +106,12 @@
 	<liferay-ui:error 
 		exception="<%= OutOfSizeFileUploadException.class %>" 
 		message="<%= OutOfSizeFileUploadException.class.getName() %>" 
-	/>	
+	/>
+	
+	<liferay-ui:success 
+		key="<%=MessageKeys.ACCOUNT_UPDATE_CUCCESS %>" 
+		message="<%=MessageKeys.ACCOUNT_UPDATE_CUCCESS %>"
+	/>
 	
 	<portlet:actionURL var="updateCitizenURL" name="updateCitizen">
 		<portlet:param 
@@ -187,12 +190,13 @@
 				
 				<aui:row>
 					<div id = "<portlet:namespace/>def">
-					<aui:input name="<%=CitizenDisplayTerms.CITIZEN_TELNO %>" cssClass="input100" placeholder="<%=CitizenDisplayTerms.CITIZEN_TELNO %>">
-						<aui:validator name="minLength">10</aui:validator>
-					</aui:input>
+					<aui:input name="<%=CitizenDisplayTerms.CITIZEN_TELNO %>" cssClass="input100" placeholder="<%=CitizenDisplayTerms.CITIZEN_TELNO %>" />
 					</div>
 					<div  id="<portlet:namespace/>defErr" style="text-align: left; color: #b50303; margin-left:7px; margin-bottom: 10px; display: none;">
 						<liferay-ui:message key="Error_TelNo_message"/>
+					</div>
+					<div  id="<portlet:namespace/>defErr2" style="text-align: left; color: #b50303; margin-left:7px; margin-bottom: 10px; display: none;">
+						<liferay-ui:message key="Error_TelNo_message2"/>
 					</div>
 				</aui:row>
 				
@@ -364,25 +368,36 @@
 		
 	},['aui-io','liferay-portlet-url']);
 	
-	
 	function telephoneCheck() {
 		var numRegex = A.one("#<portlet:namespace/>telNo").val();
+		
 		var num = A.one("#<portlet:namespace/>telNo").val().toString().length;
+		
 		var temp = A.one("#<portlet:namespace/>telNo");
 		var isphone = /^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/;
-		if(isphone.test(numRegex)){
+		if(isphone.test(numRegex) && num>=10){
 			A.one("#<portlet:namespace/>def").removeClass('changeDefErr');
 			A.one("#<portlet:namespace/>defErr").removeClass('displayDefErr');
+			A.one("#<portlet:namespace/>defErr2").removeClass('displayDefErr');
 			return true;
 		  }  
 		  else {
-			  if(num>=10){
+			  if(num==0){return true;}
+			  else {
+				 if(num<10){
+				  A.one("#<portlet:namespace/>def").addClass('changeDefErr');
+				  A.one("#<portlet:namespace/>defErr").removeClass('displayDefErr');
+				  A.one("#<portlet:namespace/>defErr2").addClass('displayDefErr');
+				  return false;
+			  } else if(!isphone.test(numRegex)) {
 				  A.one("#<portlet:namespace/>def").addClass('changeDefErr');
 				  A.one("#<portlet:namespace/>defErr").addClass('displayDefErr');
-				  return false;
+				  A.one("#<portlet:namespace/>defErr2").removeClass('displayDefErr');
 			  }
+				 }
+			  
 			  
 			}
 		}
-
+ 
 </aui:script>

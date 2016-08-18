@@ -77,6 +77,7 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.service.OrganizationLocalServiceUtil;
 import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
+import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.UserGroupLocalServiceUtil;
@@ -154,7 +155,7 @@ public class UserMgtPortlet extends MVCPortlet {
 			    .isNotNull(redirectURL)) {
 				_log.info(redirectURL);
 				actionResponse
-				    .sendRedirect(redirectURL);
+				    .sendRedirect(redirectURL + "#_2_WAR_opencpsportlet_tab=_2_WAR_opencpsportlet_jobpos");
 			}
 		}
 		else {
@@ -267,7 +268,7 @@ public class UserMgtPortlet extends MVCPortlet {
 			if (Validator
 			    .isNotNull(returnURL)) {
 				actionResponse
-				    .sendRedirect(returnURL + "#_2_WAR_opencpsportlet_tab=_2_WAR_opencpsportlet_jobpos");
+				    .sendRedirect(returnURL);
 			}
 
 		}
@@ -441,6 +442,7 @@ public class UserMgtPortlet extends MVCPortlet {
 
 			}
 		}
+		
 		try {
 			userGroup = UserGroupLocalServiceUtil
 			    .getUserGroup(
@@ -718,7 +720,7 @@ public class UserMgtPortlet extends MVCPortlet {
 			if (Validator
 			    .isNotNull(returnURL)) {
 				actionResponse
-				    .sendRedirect(returnURL + "#_2_WAR_opencpsportlet_tab=_2_WAR_opencpsportlet_jobpos");
+				    .sendRedirect(returnURL);
 			}
 		}
 		catch (Exception e) {

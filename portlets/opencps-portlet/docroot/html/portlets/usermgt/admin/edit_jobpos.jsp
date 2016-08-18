@@ -52,7 +52,6 @@
 
 	try{
 		success = !SessionMessages.isEmpty(renderRequest) && SessionErrors.isEmpty(renderRequest);
-		
 	}catch(Exception e){
 		
 	}
@@ -124,9 +123,9 @@
 %>
 <aui:script use='liferay-util-window'>
 	AUI().ready(function(A) {
-		var success = '<%= success%>';
-		if(success == 'true') {
-			Liferay.Util.getOpener().<portlet:namespace/>closePopup('<portlet:namespace/>dialog');
+		var successVal = "<%= success %>";
+		if(successVal == 'true') {
+			Liferay.Util.getOpener().<portlet:namespace/>closePopup('<portlet:namespace/>dialogJobPoses');
 		}
 	});
 </aui:script>
