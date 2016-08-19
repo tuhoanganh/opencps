@@ -704,6 +704,10 @@ public class UserMgtPortlet extends MVCPortlet {
 				catch (Exception e) {
 					// TODO: handle exception
 				}
+				if(count > 0) {
+					break;
+				}
+				
 				JobPosLocalServiceUtil
 				    .addJobPos(serviceContext
 				        .getUserId(), title, StringPool.BLANK, workingUnitId,
