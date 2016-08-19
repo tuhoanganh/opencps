@@ -82,4 +82,7 @@ public class MessageKeys {
 	public static final String SERVICE_DELERR_EXITS_PROCESSORDER = "serviceinf.processorder.has.existed";
 
 	public static final String SERVICE_DELSUCC = "serviceinf.delete.success";
+	
+	//default message
+	public static final String DEFAULT_SUCCESS_KEY = "your-request-completed-successfully";
 }

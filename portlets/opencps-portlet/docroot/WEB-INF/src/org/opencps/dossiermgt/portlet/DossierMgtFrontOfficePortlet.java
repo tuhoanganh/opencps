@@ -2086,7 +2086,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 					actionRequest.getLocale()),
 				PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC,
 				PortletConstants.DOSSIER_LOG_NORMAL);
-
+			
+			//add default message success
+			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 		}
 		catch (Exception e) {
 

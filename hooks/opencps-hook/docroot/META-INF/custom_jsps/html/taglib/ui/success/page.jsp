@@ -20,7 +20,6 @@
 String key = (String)request.getAttribute("liferay-ui:success:key");
 String message = (String)request.getAttribute("liferay-ui:success:message");
 boolean translateMessage = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:success:translateMessage"));
-SessionMessages.add(portletRequest, "your-request-completed-successfully-cus");
 %>
 <c:if test="<%= SessionMessages.contains(portletRequest, key) %>">
 	<div class="alert alert-success">
