@@ -2086,6 +2086,10 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 			MessageBusUtil.sendMessage(
 				"opencps/frontoffice/out/destination", message);
+			
+			//add default message success
+			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+
 		}
 		catch (Exception e) {
 

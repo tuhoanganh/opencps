@@ -1,4 +1,5 @@
 
+<%@page import="org.opencps.util.MessageKeys"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
 <%
 /**
@@ -50,7 +51,7 @@
 
 <liferay-util:include page='<%=templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
 
-<liferay-ui:success  key="your-request-completed-successfully-cus" message="your-request-completed-successfully"/>
+<liferay-ui:success  key="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>" message="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>"/>
 
 <liferay-ui:error 
 	exception="<%= NoSuchDossierException.class %>" 

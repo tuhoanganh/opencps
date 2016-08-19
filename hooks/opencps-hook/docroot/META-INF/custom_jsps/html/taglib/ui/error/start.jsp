@@ -17,19 +17,12 @@
 <%@ include file="/html/taglib/init.jsp" %>
 
 <%
-String key = (String)request.getAttribute("liferay-ui:success:key");
-String message = (String)request.getAttribute("liferay-ui:success:message");
-boolean translateMessage = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:success:translateMessage"));
+String key = (String)request.getAttribute("liferay-ui:error:key");
+String message = (String)request.getAttribute("liferay-ui:error:message");
 %>
-<c:if test="<%= SessionMessages.contains(portletRequest, key) %>">
-	<div class="alert alert-success">
-		<c:choose>
-			<c:when test="<%= translateMessage %>">
-				<%= LanguageUtil.get(pageContext, message) %>
-			</c:when>
-			<c:otherwise>
-				<%= message %>
-			</c:otherwise>
-		</c:choose>
-	</div>
+
+<c:if test="<%= (key != null) && Validator.isNull(message) %>">
+	<c:if test="<%= SessionErrors.contains(portletRequest, key) %>">
+		<div class="alert alert-error">
+	</c:if>
 </c:if>
