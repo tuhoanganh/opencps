@@ -118,12 +118,44 @@
 	margin-right: -30px;
 }
 
+.min-width10{
+	min-width: 10px !important;
+}
+
+.min-width20{
+	min-width: 20px !important;
+}
+
+.min-width30{
+	min-width: 30px !important;
+}
+
+.min-width40{
+	min-width: 40px !important;
+}
+
+.min-width50{
+	min-width: 50px !important;
+}
+
 .min-width60{
 	min-width: 60px !important;
 }
 
 .min-width70{
 	min-width: 70px !important;
+}
+
+.min-width80{
+	min-width: 80px !important;
+}
+
+.min-width90{
+	min-width: 90px !important;
+}
+
+.min-width100{
+	min-width: 100px !important;
 }
 
 .min-width180{
@@ -145,3 +177,51 @@
 	text-align: right;
 }
 
+
+.width10{
+	width: 10px;
+}
+
+.width20{
+	width: 20px;
+}
+
+.width30{
+	width: 30px;
+}
+
+.width40{
+	width: 40px;
+}
+
+.width50{
+	width: 50px;
+}
+
+.width60{
+	width: 60px;
+}
+
+.width70{
+	width: 70px;
+}
+
+.width80{
+	width: 80px;
+}
+
+.width90{
+	width: 90px;
+}
+
+.width100{
+	width: 100px;
+}
+
+.width180{
+	width: 180px;
+}
+
+.idth340{
+	width: 340px;
+}
