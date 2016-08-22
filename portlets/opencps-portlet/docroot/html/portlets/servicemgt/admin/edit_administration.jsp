@@ -16,3 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+<%@ include file="../init.jsp"%>
+
+<div class="alert alert-info">
+	<label>This module is developing</label>
+</div>
