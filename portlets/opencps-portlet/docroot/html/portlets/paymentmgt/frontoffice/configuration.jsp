@@ -29,35 +29,10 @@
 <liferay-portlet:actionURL var="configurationActionURL" portletConfiguration="true"/>
 
 <%
-	boolean privateLayout = true;
-	
-	List<Layout> privLayouts = LayoutLocalServiceUtil.getLayouts(scopeGroupId, true);
-	List<Layout> pubLayouts = LayoutLocalServiceUtil.getLayouts(scopeGroupId, false);
-	
-	List<Layout> allLayout = new ArrayList<Layout>();
-	
-	for (Layout privLayout : privLayouts) {
-		allLayout.add(privLayout);
-	}
-
-	for (Layout pubLayout : pubLayouts) {
-		allLayout.add(pubLayout);
-	}
-	
-	int itemsToDisplay_cfg = GetterUtil.getInteger(portletPreferences.getValue("itemsToDisplay", "2"));
+int itemsToDisplay_cfg = GetterUtil.getInteger(portletPreferences.getValue("itemsToDisplay", "2"));
 %>
 
 <aui:form action="<%= configurationActionURL %>" method="post" name="configurationForm">
-	<aui:select name="plid" id="plid">
-		<%
-			for (Layout lout : allLayout) {
-		%>
-			<aui:option value="<%= lout.getPlid() %>"><%= lout.getName(locale) %></aui:option>
-		<%
-			}
-		%>
-	</aui:select>
-
 	<aui:select name="itemsToDisplay" id="itemsToDisplay">
 		<%
 			for (int iTems = 2 ; iTems < 10; iTems ++) {
@@ -67,6 +42,7 @@
 			}
 		%>
 	</aui:select>
+
 	<aui:button type="submit" name="Save" value="save"></aui:button>
 
 </aui:form>
