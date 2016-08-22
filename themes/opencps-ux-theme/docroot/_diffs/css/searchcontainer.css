@@ -89,6 +89,12 @@
 	padding-top: 8px;
 }
 
+.opencps-theme.ux .search-container-action.fa.add{
+	background-color: #0090ff;
+	@extend .fa-plus;
+    vertical-align: middle;
+}
+
 .opencps-theme.ux .search-container-action.fa.view{
 	background-color: #0090ff;
 	@extend .fa-search;
