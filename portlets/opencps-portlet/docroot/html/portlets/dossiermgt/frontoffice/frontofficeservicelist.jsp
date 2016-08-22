@@ -180,7 +180,7 @@
 					}
 					
 					if(govAgencyId > 0){
-						govAgencygovItem = DictItemLocalServiceUtil.getDictItem(serviceDomainId);
+						govAgencygovItem = DictItemLocalServiceUtil.getDictItem(govAgencyId);
 					}
 	
 					if(domainItem != null){

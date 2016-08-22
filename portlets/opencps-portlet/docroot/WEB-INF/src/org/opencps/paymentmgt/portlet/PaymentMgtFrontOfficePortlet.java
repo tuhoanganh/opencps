@@ -174,6 +174,7 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 	        String country_code = "+84";
 	        String internal_bank = "all_card";
 	        String merchant_secure_key = paymentConfig.getKeypaySecureKey();
+	        paymentFile.setModifiedDate(new Date());
 	        paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_REQUESTED);
 	        updatePaymentFile = true;
 	        if (updatePaymentFile) {
