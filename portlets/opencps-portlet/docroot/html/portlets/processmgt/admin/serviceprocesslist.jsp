@@ -1,9 +1,4 @@
-<%@page import="org.opencps.processmgt.util.ProcessMgtUtil"%>
-<%@page import="org.opencps.processmgt.permissions.ProcessPermission"%>
-<%@page import="com.liferay.portal.kernel.dao.search.SearchEntry"%>
-<%@page import="org.opencps.processmgt.service.ServiceProcessLocalServiceUtil"%>
-<%@page import="org.opencps.processmgt.search.ProcessSearchTerms"%>
-<%@page import="org.opencps.processmgt.search.ProcessSearch"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -22,24 +17,35 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
+<%@page import="org.opencps.processmgt.util.ProcessMgtUtil"%>
+<%@page import="org.opencps.processmgt.permissions.ProcessPermission"%>
+<%@page import="com.liferay.portal.kernel.dao.search.SearchEntry"%>
+<%@page import="org.opencps.processmgt.service.ServiceProcessLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.search.ProcessSearchTerms"%>
+<%@page import="org.opencps.processmgt.search.ProcessSearch"%>
 
 <%@ include file="../init.jsp" %>
 
 <liferay-ui:error 
 	key="<%=ProcessMgtUtil.DELERR_EXIST_SERVICE_CONFIG %>" 
-	message="<%=ProcessMgtUtil.DELERR_EXIST_SERVICE_CONFIG %>" />
+	message="<%=ProcessMgtUtil.DELERR_EXIST_SERVICE_CONFIG %>" 
+/>
 
 <liferay-ui:error 
 	key="<%=ProcessMgtUtil.DELERR_EXIST_STEP %>" 
-	message="<%=ProcessMgtUtil.DELERR_EXIST_STEP %>" />
+	message="<%=ProcessMgtUtil.DELERR_EXIST_STEP %>" 
+/>
 
 <liferay-ui:error 
 	key="<%=ProcessMgtUtil.DELERR_EXIST_WORKFLOW %>" 
-	message="<%=ProcessMgtUtil.DELERR_EXIST_WORKFLOW %>" />
+	message="<%=ProcessMgtUtil.DELERR_EXIST_WORKFLOW %>" 
+/>
 
 <liferay-ui:success 
 	key="<%=ProcessMgtUtil.DEL_PROCESS_SUCC %>" 
-	message="<%=ProcessMgtUtil.DEL_PROCESS_SUCC %>" />
+	message="<%=ProcessMgtUtil.DEL_PROCESS_SUCC %>" 
+/>
+	
 <liferay-util:include page='<%= templatePath + "toolbar.jsp" %>' servletContext="<%= application %>" />
 
 <%
@@ -53,8 +59,10 @@
 
 %>
 
+<div class="opencps-searchcontainer-wrapper default-box-shadow radius8">
+
 	<liferay-ui:search-container searchContainer="<%= new ProcessSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
-		
+			
 		<liferay-ui:search-container-results>
 			<%
 				ProcessSearchTerms searchTerms = (ProcessSearchTerms) searchContainer.getSearchTerms();
@@ -81,17 +89,55 @@
 				editURL.setParameter("serviceProcessId", String.valueOf(process.getServiceProcessId()));
 				editURL.setParameter("backURL", currentURL);
 				
-				// no column
-				row.addText(String.valueOf(row.getPos() + 1), editURL);
+			%>
+		
+			<liferay-util:buffer var="no">
+				<div class="row-fluid min-width10">
+					<div class="span12 bold">
+						<a href="<%=editURL%>"><%=row.getPos() + 1 %></a>
+					</div>
+				</div>
+			</liferay-util:buffer>
 			
-				// process no
-				row.addText(process.getProcessNo(), editURL);
+			<liferay-util:buffer var="processInfo">
+				<div class="row-fluid">
+					<div class="span3 bold">
+						<liferay-ui:message key="process-no"/>
+					</div>
+					<div class="span9">
+						<a href="<%=editURL%>"><%= process.getProcessNo() %></a>
+					</div>
+				</div>
 				
-				// process name
-				row.addText(process.getProcessName(), editURL);
-	
-				// process description
-				row.addText(process.getDescription());
+				<div class="row-fluid">
+					<div class="span3 bold">
+						<liferay-ui:message key="process-name"/>
+					</div>
+					<div class="span9">
+						<a href="<%=editURL%>"><%= process.getProcessName()  %></a>
+					</div>
+				</div>
+			</liferay-util:buffer>
+			
+			<liferay-util:buffer var="description">
+				<div class="row-fluid">
+					<div class="span3 bold">
+						<liferay-ui:message key="description"/>
+					</div>
+					<div class="span9">
+						<a href="<%=editURL%>"><%= process.getDescription() %></a>
+					</div>
+				</div>
+				
+			</liferay-util:buffer>
+			
+			<%
+				
+				row.addText(no);
+				
+				row.addText(processInfo);
+				
+				row.addText(description);
 				
 				if(isPermission) {
 					//action column
@@ -105,6 +151,4 @@
 	
 	</liferay-ui:search-container>
 
-
-
-
+</div>
