@@ -1,9 +1,4 @@
-<%@page import="org.opencps.util.PortletPropsValues"%>
-<%@page import="org.opencps.util.PortletUtil"%>
-<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
-<%@page import="org.opencps.datamgt.model.DictItem"%>
-<%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -22,12 +17,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
-
-<%@ include file="../../init.jsp" %>
+<%@page import="org.opencps.util.PortletPropsValues"%>
+<%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
+<%@page import="org.opencps.datamgt.model.DictItem"%>
+<%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
 <%@page import="org.opencps.util.DictItemUtil"%>
 <%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.service.ServiceInfoProcessLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.model.ServiceInfoProcess"%>
+
+<%@ include file="../../init.jsp" %>
+
 
 <%
 	ServiceProcess serviceProcess = (ServiceProcess) request.getAttribute(WebKeys.SERVICE_PROCESS_ENTRY);
