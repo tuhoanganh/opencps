@@ -69,6 +69,7 @@
 	<portlet:param name="serviceinfoId" value="<%=String.valueOf(serviceInfoId) %>"/>
 </liferay-portlet:renderURL>
 
+
 <liferay-ui:header
 	backURL="<%= backURL %>"
 	title='<%= Validator.isNotNull(serviceInfo) ? "update-service" : "add-service" %>'
@@ -101,49 +102,60 @@
 	/>
 	
 	<div class="opencps-bound-wrapper pd20 mg-t-20">
-		<a href="<%=currentURL.toString() %>">
+		<aui:a href="<%=currentURL.toString() %>" cssClass="uppercase bottom-line font18 bold">
 			<liferay-ui:message key="general-service"/>
-		</a>
+		</aui:a>
 		
 		<aui:row>
-			<aui:col width="100" cssClass="ocps-edit-serviceinfo-col-only">
-				<aui:input name="<%= ServiceDisplayTerms.SERVICE_NAME %>" ></aui:input>
+			<aui:col cssClass="pd_t20">
+				<aui:input name="<%= ServiceDisplayTerms.SERVICE_NAME %>" cssClass="input100"></aui:input>
 			</aui:col>
 		</aui:row>
 		
 		<aui:row>
-			<aui:col width="100" cssClass="ocps-edit-serviceinfo-col-only">
-				<aui:input name="<%= ServiceDisplayTerms.SERVICE_FULLNAME %>"></aui:input>
+			<aui:col>
+				<aui:input name="<%= ServiceDisplayTerms.SERVICE_FULLNAME %>" cssClass="input100"></aui:input>
 			</aui:col>
 		</aui:row>
 		
 		<aui:row>
-			<aui:col cssClass="ocps-edit-serviceinfo-col">
+			<aui:col width="50">
 				<datamgt:ddr 
 					cssClass="input100"
 					depthLevel="1" 
 					dictCollectionCode="SERVICE_ADMINISTRATION"
 					itemNames="<%= ServiceDisplayTerms.SERVICE_ADMINISTRATION %>"
 					itemsEmptyOption="true"
+					showLabel="<%= true %>"
 					selectedItems="<%= Validator.isNotNull(serviceInfo) ? serviceInfo.getAdministrationCode() : StringPool.BLANK %>"
 				>
 				</datamgt:ddr>
 			</aui:col>
 			
-			<aui:col width="30" cssClass="ocps-edit-serviceinfo-col">
+			<aui:col width="50">
 				<datamgt:ddr 
 					cssClass="input100"
 					depthLevel="1" 
 					dictCollectionCode="SERVICE_DOMAIN"
 					itemNames="<%= ServiceDisplayTerms.SERVICE_DOMAINCODE %>"
 					itemsEmptyOption="true"
+					showLabel="<%=true %>"
 					selectedItems="<%= Validator.isNotNull(serviceInfo) ? serviceInfo.getDomainCode() : StringPool.BLANK %>"
 				>
 				</datamgt:ddr>
 			</aui:col>
 			
-			<aui:col width="30" cssClass="ocps-edit-serviceinfo-col">
-				<aui:select name="<%= ServiceDisplayTerms.SERVICE_ACTIVESTATUS %>" showEmptyOption="true">
+			
+		</aui:row>
+		
+		
+		<aui:row>
+			<aui:col width="50">
+				<aui:input name="<%= ServiceDisplayTerms.SERVICE_NO %>" cssClass="input100"></aui:input>
+			</aui:col>
+			
+			<aui:col width="50">
+				<aui:select name="<%= ServiceDisplayTerms.SERVICE_ACTIVESTATUS %>" showEmptyOption="true" cssClass="input100">
 					<aui:option value="0">
 						<liferay-ui:message key="service-private"/>
 					</aui:option>
@@ -157,19 +169,23 @@
 			</aui:col>
 		</aui:row>
 		
-		
 		<aui:row>
-			<aui:col width="30" cssClass="ocps-edit-serviceinfo-col">
-				<aui:input name="<%= ServiceDisplayTerms.SERVICE_NO %>"></aui:input>
-			</aui:col>
-			
-			<aui:col width="30" cssClass="ocps-edit-serviceinfo-col">
+			<aui:col>
 				<c:choose>
 					<c:when test="<%=Validator.isNotNull(serviceInfo) && Validator.isNull(serviceInfo.getOnlineUrl())%>">
-						<aui:input cssClass="input100" name="urlOnline" type="text" value="<%=servieOnlinePopURL.toString() %>"/>
+						<aui:input 
+							cssClass="input100" 
+							name="urlOnline" 
+							type="textarea" 
+							value="<%=servieOnlinePopURL.toString() %>"
+						/>
 					</c:when>
 					<c:otherwise>
-						<aui:input cssClass="input100" name="<%= ServiceDisplayTerms.SERVICE_ONLINEURL %>" />
+						<aui:input 
+							cssClass="input100" 
+							name="<%= ServiceDisplayTerms.SERVICE_ONLINEURL %>" 
+							type="textarea"
+						/>
 					</c:otherwise>
 				</c:choose>	
 			</aui:col>
@@ -178,9 +194,9 @@
 		
 	<div class="opencps-bound-wrapper pd20 mg-t-20">
 		
-		<a href="<%=currentURL.toString() %>">
+		<aui:a href="<%=currentURL.toString() %>" cssClass="uppercase bottom-line font18 bold">
 			<liferay-ui:message key="detail-service"/>
-		</a>
+		</aui:a>
 		
 		<liferay-util:include 
 			page="/html/portlets/servicemgt/admin/service/detail_info.jsp" 
@@ -196,5 +212,9 @@
 		/>
 	</div>
 	
-	<aui:button type="submit" value="submit"/>
+	<aui:row>
+		<aui:col cssClass="center pd_t20">
+			<aui:button type="submit" value="submit" cssClass="radius20 width180 pd_t20 height40"/>
+		</aui:col>
+	</aui:row>
 </aui:form>
