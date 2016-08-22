@@ -67,7 +67,7 @@
 	<portlet:param name="mvcPath" value='<%=templatePath + "choose_service.jsp" %>'/>
 </portlet:renderURL>
 
-<aui:button name="chooseService" value="choose-service" cssClass="pd_b20"/>
+<aui:button name="chooseService" value="choose-service" cssClass="mg-b-20"/>
 
 
 <liferay-ui:search-container 
