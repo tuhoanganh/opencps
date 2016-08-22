@@ -193,7 +193,7 @@
 .opencps-theme.ux .input-file .detail-terms-links {
 	pointer-events: none;
 }
-.opencps-theme.ux.register #wrapper #main-content{
+/* .opencps-theme.ux.register #wrapper #main-content{
 	background-color: rgb(245, 245, 245) !important;
 }
 .portlet-body > div.alert.alert-error{
@@ -201,4 +201,4 @@
 	left: 50%;
 	transform: translateX(-51%);
 	width: 62%;
-}
+} */
