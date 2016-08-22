@@ -70,80 +70,91 @@
 	
 %>
 
-<aui:row>
-	<aui:col width="20">
+<div class="row-fluid">
+	<div class="span12">
 		<liferay-ui:message key="account.status.total" />  : <%=countLocked +
 			countConfirmed + countRegistered + countApproved
 		%>
-	</aui:col>
-	<aui:col width="20">
-		<liferay-ui:message key="account.status.registered" />  : <%=countRegistered %>
-	</aui:col>
-	<aui:col width="20">
-		<liferay-ui:message key="account.status.confirmed" />  : <%=countConfirmed %>
-	</aui:col>
-	<aui:col width="20">
-		<liferay-ui:message key="account.status.approved" />  : <%=countApproved %>
-	</aui:col>
-	<aui:col width="20">
-		<liferay-ui:message key="account.status.locked" />  : <%=countLocked %>
-	</aui:col>
 	
-</aui:row>
+	</div>
+</div>
+<div class="row-fluid">
+	<div class="span3">
+				<liferay-ui:message key="account.status.registered" />  : <%=countRegistered %>
+	
+	</div>
+	<div class="span3">
+				<liferay-ui:message key="account.status.confirmed" />  : <%=countConfirmed %>
+	
+	</div>
+	<div class="span3">
+			<liferay-ui:message key="account.status.approved" />  : <%=countApproved %>
+	
+	</div>
+	<div class="span3">
+			<liferay-ui:message key="account.status.locked" />  : <%=countLocked %>
+	
+	</div>
+</div>
+
+
 
 <c:if test="<%=CitizenPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_CITIZEN) %>" >
 	<liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
 </c:if>
 
-<liferay-ui:search-container searchContainer="<%= new CitizenSearch(
-	renderRequest ,SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
-	
-	<liferay-ui:search-container-results>
-		<%
-			CitizenSearchTerm searchTerms = (CitizenSearchTerm) searchContainer.getSearchTerms();
-			
-			if(Validator.isNotNull(searchTerms.getKeywords())) {
-				citizens = CitizenLocalServiceUtil.getCitizens(themeDisplay.getScopeGroupId(), searchTerms.getKeywords());
-			} else if(accountStatus!=0) {
-				citizens = CitizenLocalServiceUtil.getCitizens(themeDisplay.getScopeGroupId(), accountStatus);
-			} else if(Validator.isNotNull(searchTerms.getKeywords()) && accountStatus!=0)  {
-				citizens = CitizenLocalServiceUtil.getCitizens(themeDisplay.getScopeGroupId(), searchTerms.getKeywords(), accountStatus);
-			} else {
-				citizens = CitizenLocalServiceUtil.getCitizens(searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-			}
-			
-			totalCount = CitizenLocalServiceUtil.countAll();
-			total = totalCount;
-			results = citizens;
-			pageContext.setAttribute("results", results);
-			pageContext.setAttribute("total", total);
-		%>
-	
-	</liferay-ui:search-container-results>
-	<liferay-ui:search-container-row 
-		className="org.opencps.accountmgt.model.Citizen" 
-		modelVar="citiZen" 
-		keyProperty="citizenId"
-	>
-		<%
-			String gender = StringPool.BLANK;
-			gender = PortletUtil.getGender(citiZen.getGender(), themeDisplay.getLocale());
-			
-			String accoutStatus = StringPool.BLANK;
-			
-			accoutStatus = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), PortletUtil.getAccountStatus(citiZen.getAccountStatus(), themeDisplay.getLocale()));
-			
-			
-			row.addText(citiZen.getPersonalId());
-			row.addText(citiZen.getFullName());
-			row.addText(gender);
-			row.addText(DateTimeUtil.convertDateToString(citiZen.getBirthdate(), DateTimeUtil._VN_DATE_FORMAT));
-			row.addText(citiZen.getEmail());
-			row.addText(accoutStatus);
-			row.addJSP("center", SearchEntry.DEFAULT_VALIGN,  "/html/portlets/accountmgt/admin/citizen_actions.jsp", config.getServletContext(), request, response);
-			
-		%>
+<div class="opencps-searchcontainer-wrapper default-box-shadow radius8">
+
+	<liferay-ui:search-container searchContainer="<%= new CitizenSearch(
+		renderRequest ,SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
 		
-	</liferay-ui:search-container-row>
-	<liferay-ui:search-iterator type="opencs_page_iterator"/>
-</liferay-ui:search-container>	
+		<liferay-ui:search-container-results>
+			<%
+				CitizenSearchTerm searchTerms = (CitizenSearchTerm) searchContainer.getSearchTerms();
+				
+				if(Validator.isNotNull(searchTerms.getKeywords())) {
+					citizens = CitizenLocalServiceUtil.getCitizens(themeDisplay.getScopeGroupId(), searchTerms.getKeywords());
+				} else if(accountStatus!=0) {
+					citizens = CitizenLocalServiceUtil.getCitizens(themeDisplay.getScopeGroupId(), accountStatus);
+				} else if(Validator.isNotNull(searchTerms.getKeywords()) && accountStatus!=0)  {
+					citizens = CitizenLocalServiceUtil.getCitizens(themeDisplay.getScopeGroupId(), searchTerms.getKeywords(), accountStatus);
+				} else {
+					citizens = CitizenLocalServiceUtil.getCitizens(searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
+				}
+				
+				totalCount = CitizenLocalServiceUtil.countAll();
+				total = totalCount;
+				results = citizens;
+				pageContext.setAttribute("results", results);
+				pageContext.setAttribute("total", total);
+			%>
+		
+		</liferay-ui:search-container-results>
+		<liferay-ui:search-container-row 
+			className="org.opencps.accountmgt.model.Citizen" 
+			modelVar="citiZen" 
+			keyProperty="citizenId"
+		>
+			<%
+				String gender = StringPool.BLANK;
+				gender = PortletUtil.getGender(citiZen.getGender(), themeDisplay.getLocale());
+				
+				String accoutStatus = StringPool.BLANK;
+				
+				accoutStatus = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), PortletUtil.getAccountStatus(citiZen.getAccountStatus(), themeDisplay.getLocale()));
+				
+				
+				row.addText(citiZen.getPersonalId());
+				row.addText(citiZen.getFullName());
+				row.addText(gender);
+				row.addText(DateTimeUtil.convertDateToString(citiZen.getBirthdate(), DateTimeUtil._VN_DATE_FORMAT));
+				row.addText(citiZen.getEmail());
+				row.addText(accoutStatus);
+				row.addJSP("center", SearchEntry.DEFAULT_VALIGN,  "/html/portlets/accountmgt/admin/citizen_actions.jsp", config.getServletContext(), request, response);
+				
+			%>
+			
+		</liferay-ui:search-container-row>
+		<liferay-ui:search-iterator type="opencs_page_iterator"/>
+	</liferay-ui:search-container>	
+</div>
