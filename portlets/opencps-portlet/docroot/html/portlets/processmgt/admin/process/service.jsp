@@ -1,4 +1,5 @@
 
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -66,7 +67,7 @@
 	<portlet:param name="mvcPath" value='<%=templatePath + "choose_service.jsp" %>'/>
 </portlet:renderURL>
 
-<aui:button name="chooseService" value="choose-service" />
+<aui:button name="chooseService" value="choose-service" cssClass="pd_b20"/>
 
 
 <liferay-ui:search-container 
@@ -144,29 +145,9 @@
 
 <aui:script use="liferay-util-window">
 	A.one('#<portlet:namespace/>chooseService').on('click', function(event) {
-		Liferay.Util.openWindow({
-			dialog : {
-				centered : true,
-				height : 900,
-				modal : true,
-				width : 1100
-			},
-			id : '<portlet:namespace/>dialog',
-			title : '',
-			uri : '<%=chooseServiceURL %>'
-		});
+		
+		openDialog('<%=chooseServiceURL %>', '<portlet:namespace/>chooseService' , '<%=UnicodeLanguageUtil.get(pageContext, "choose-service")%>');
+		
 	});
 </aui:script>
 
-<aui:script>
-	Liferay.provide(window, '<portlet:namespace/>closePopup', function(
-			dialogId) {
-		var A = AUI();
-		// Closing the dialog
-		var dialog = Liferay.Util.Window.getById(dialogId);
-		dialog.destroy();
-		
-		Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id' + '<portlet:namespace/>');
-		
-	}, [ 'liferay-util-window' ]);
-</aui:script>
