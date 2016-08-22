@@ -196,6 +196,19 @@
     vertical-align: middle;
 }
 
+.opencps-theme.ux .search-container-action.fa.deactivate{
+	background-color: #0090ff;
+	@extend .fa-pencil-square-o;
+    vertical-align: middle;
+}
+
+.opencps-theme.ux .search-container-action.fa.activate{
+	background-color: #0090ff;
+	@extend .fa-pencil-square-o;
+    vertical-align: middle;
+}
+
+
 .opencps-theme.ux .search-container-action > a > .taglib-text.hide-accessible {
     clip: auto !important;
     position: absolute !important;
