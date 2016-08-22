@@ -53,56 +53,58 @@
 
 %>
 
-<liferay-ui:search-container searchContainer="<%= new ProcessSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
+	<liferay-ui:search-container searchContainer="<%= new ProcessSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
 		
-	<liferay-ui:search-container-results>
-		<%
-			ProcessSearchTerms searchTerms = (ProcessSearchTerms) searchContainer.getSearchTerms();
-
-			total = ServiceProcessLocalServiceUtil.countProcess(scopeGroupId, searchTerms.getKeywords()); 
-
-			results = ServiceProcessLocalServiceUtil.searchProcess(scopeGroupId, searchTerms.getKeywords(),
-				searchContainer.getStart(), searchContainer.getEnd());
-			
-			pageContext.setAttribute("results", results);
-			pageContext.setAttribute("total", total);
-		%>
-		
-	</liferay-ui:search-container-results>
-
-	<liferay-ui:search-container-row 
-		className="org.opencps.processmgt.model.ServiceProcess" 
-		modelVar="process" 
-		keyProperty="serviceProcessId"
-	>
-		<%
-			PortletURL editURL = renderResponse.createRenderURL();
-			editURL.setParameter("mvcPath", templatePath + "edit_process.jsp");
-			editURL.setParameter("serviceProcessId", String.valueOf(process.getServiceProcessId()));
-			editURL.setParameter("backURL", currentURL);
-			
-			// no column
-			row.addText(String.valueOf(row.getPos() + 1), editURL);
-		
-			// process no
-			row.addText(process.getProcessNo(), editURL);
-			
-			// process name
-			row.addText(process.getProcessName(), editURL);
-
-			// process description
-			row.addText(process.getDescription());
-			
-			if(isPermission) {
-				//action column
-				row.addJSP("center", SearchEntry.DEFAULT_VALIGN, templatePath + "process_actions.jsp", config.getServletContext(), request, response);
-			}
-		%>	
+		<liferay-ui:search-container-results>
+			<%
+				ProcessSearchTerms searchTerms = (ProcessSearchTerms) searchContainer.getSearchTerms();
 	
-	</liferay-ui:search-container-row>	
+				total = ServiceProcessLocalServiceUtil.countProcess(scopeGroupId, searchTerms.getKeywords()); 
+	
+				results = ServiceProcessLocalServiceUtil.searchProcess(scopeGroupId, searchTerms.getKeywords(),
+					searchContainer.getStart(), searchContainer.getEnd());
+				
+				pageContext.setAttribute("results", results);
+				pageContext.setAttribute("total", total);
+			%>
+			
+		</liferay-ui:search-container-results>
+	
+		<liferay-ui:search-container-row 
+			className="org.opencps.processmgt.model.ServiceProcess" 
+			modelVar="process" 
+			keyProperty="serviceProcessId"
+		>
+			<%
+				PortletURL editURL = renderResponse.createRenderURL();
+				editURL.setParameter("mvcPath", templatePath + "edit_process.jsp");
+				editURL.setParameter("serviceProcessId", String.valueOf(process.getServiceProcessId()));
+				editURL.setParameter("backURL", currentURL);
+				
+				// no column
+				row.addText(String.valueOf(row.getPos() + 1), editURL);
+			
+				// process no
+				row.addText(process.getProcessNo(), editURL);
+				
+				// process name
+				row.addText(process.getProcessName(), editURL);
+	
+				// process description
+				row.addText(process.getDescription());
+				
+				if(isPermission) {
+					//action column
+					row.addJSP("center", SearchEntry.DEFAULT_VALIGN, templatePath + "process_actions.jsp", config.getServletContext(), request, response);
+				}
+			%>	
+		
+		</liferay-ui:search-container-row>	
+	
+		<liferay-ui:search-iterator type="opencs_page_iterator"/>
+	
+	</liferay-ui:search-container>
 
-	<liferay-ui:search-iterator type="opencs_page_iterator"/>
 
-</liferay-ui:search-container>
 
 
