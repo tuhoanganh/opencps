@@ -18,6 +18,10 @@
 	border-radius: 20px !important;
 }
 
+.pd20{
+	padding: 20px;
+}
+
 .pd_b20 {
 	padding-bottom: 20px;
 }
@@ -109,6 +113,10 @@
 
 .uppercase{
 	text-transform: uppercase;
+}
+
+.mg-t-20{
+	margin-top: 20px;
 }
 
 .mg-l-30{
@@ -222,6 +230,13 @@
 	width: 180px;
 }
 
-.idth340{
+.width340{
 	width: 340px;
+}
+
+.opencps-theme.ux .opencps-bound-wrapper {
+    background-color: #fff;
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+    padding: 10px 0;
 }
