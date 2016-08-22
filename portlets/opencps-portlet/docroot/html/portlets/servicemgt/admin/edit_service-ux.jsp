@@ -101,7 +101,7 @@
 		value="<%= Validator.isNotNull(serviceInfo) ? serviceInfo.getServiceinfoId() : StringPool.BLANK %>"
 	/>
 	
-	<div class="opencps-bound-wrapper pd20 mg-t-20">
+	<div class="opencps-bound-wrapper pd20 mg-t-20 default-box-shadow">
 		<aui:a href="<%=currentURL.toString() %>" cssClass="uppercase bottom-line font18 bold">
 			<liferay-ui:message key="general-service"/>
 		</aui:a>
@@ -192,7 +192,7 @@
 		</aui:row>
 	</div>
 		
-	<div class="opencps-bound-wrapper pd20 mg-t-20">
+	<div class="opencps-bound-wrapper pd20 mg-t-20 default-box-shadow">
 		
 		<aui:a href="<%=currentURL.toString() %>" cssClass="uppercase bottom-line font18 bold">
 			<liferay-ui:message key="detail-service"/>
@@ -205,7 +205,7 @@
 			
 	</div >
 		
-	<div class = "opencps-bound-wrapper pd20 mg-t-20">
+	<div class = "opencps-bound-wrapper pd20 mg-t-20 default-box-shadow">
 		<liferay-util:include 
 			page="/html/portlets/servicemgt/admin/service/template_info.jsp" 
 			servletContext="<%=application %>" 

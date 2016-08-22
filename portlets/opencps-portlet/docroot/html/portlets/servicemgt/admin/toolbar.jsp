@@ -51,7 +51,6 @@
 				</portlet:renderURL>
 				
 				<c:if test="<%=ServicePermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_SERVICE) %>">
-					
 					<aui:button icon="icon-plus" href="<%=editServiceURL %>" cssClass="action-button" value="add-service"/>
 				</c:if>
 			</c:when>
@@ -70,7 +69,6 @@
 				
 				<aui:row>
 					<c:if test="<%= ServiceTemplatePermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_TEMPLATE) %>">
-						
 						<aui:button icon="icon-plus" href="<%=editTemplateURL %>" cssClass="action-button" value="add-template"/>
 					</c:if>
 				</aui:row>
@@ -160,35 +158,36 @@
 										emptyOptionLabels="<%= ServiceDisplayTerms.SERVICE_DOMAINCODE %>"
 									>
 									</datamgt:ddr>
-
 								</aui:col>
 								<aui:col width="30" cssClass="search-col">
 									<liferay-ui:input-search 
 										id="keywords1"
 										name="keywords"
-										title="keywords"
+										title='<%= LanguageUtil.get(locale, "keywords") %>'
 										placeholder='<%= LanguageUtil.get(locale, "name") %>' 
 										cssClass="search-input input-keyword"
 									/>
 								</aui:col>
 							</aui:row>
+
 						</c:when>
 						
 						<c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_TEMPLATE) %>">
 							<liferay-ui:input-search 
 								id="keywords1" 
 								name="keywords" 
+								title='<%= LanguageUtil.get(locale, "keywords") %>'
 								placeholder='<%= LanguageUtil.get(locale, "name") %>' 
 								cssClass="search-input input-keyword"
 							/>
 						</c:when>
 						
 						<c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_DOMAIN) %>">
-
+	
 						</c:when>
 						
 						<c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_ADMINISTRATION) %>">
-							
+			
 						</c:when>
 						
 					</c:choose>
