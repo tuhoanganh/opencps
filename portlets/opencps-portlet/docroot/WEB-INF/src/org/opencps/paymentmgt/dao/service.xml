@@ -73,6 +73,10 @@
         	<finder-column name="paymentStatus"/>
         </finder>
         
+        <finder return-type="Collection" name="F_PaymentResponseStatus">
+        	<finder-column name="paymentResponseStatus"/>
+        </finder>
+        
         <reference entity="DLFileEntry" package-path="com.liferay.portlet.documentlibrary"/>
         <reference package-path="com.liferay.portlet.documentlibrary" entity="DLFolder" />
         <reference package-path="com.liferay.portlet.asset" entity="AssetEntry" />

@@ -66,7 +66,7 @@
 <c:if test="<%= paymentStatus == PaymentMgtUtil.PAYMENT_STATUS_REQUESTED
 || paymentStatus == PaymentMgtUtil.PAYMENT_STATUS_REJECTED%>">
 	<c:if test="<%= Validator.isNotNull(paymentFile.getKeypayUrl()) %>">
-    	<a class="button" href="<%= paymentFile.getKeypayUrl() %>" ><liferay-ui:message key="keypay-transaction" ></liferay-ui:message></a> <br/>
+    	<a class="button" onclick="" href="<%= paymentFile.getKeypayUrl() %>" ><liferay-ui:message key="keypay-transaction" ></liferay-ui:message></a> <br/>
     </c:if>
     <a class="button" href="<%=bankTransaction.toString() %>" ><liferay-ui:message key="bank-transaction" ></liferay-ui:message></a> 
     
