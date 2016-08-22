@@ -111,7 +111,7 @@
 			
 			<c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_ADMINISTRATION) %>">
 				<portlet:renderURL var="editServiceAdministrationURL" windowState="<%=LiferayWindowState.POP_UP.toString() %>">
-					<portlet:param name="mvcPath" value='<%= templatePath + "edit_administrations.jsp" %>'/>
+					<portlet:param name="mvcPath" value='<%= templatePath + "edit_administration.jsp" %>'/>
 					<portlet:param name="backURL" value="<%=currentURL %>"/>
 					<portlet:param name="tabs1" value="<%=tabs1 %>"/>
 				</portlet:renderURL>

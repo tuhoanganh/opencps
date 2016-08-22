@@ -10,15 +10,15 @@
 	font-family: 'Roboto-Bold';
     font-size: 20px;
     background-color: #0271c7;
-    color: white;
+    color: #fff;
     text-transform: uppercase;
-    height: 60px;
+    min-height: 30px;
     padding: 0 30px;
 }
-.dialog-iframe-root-node{
+/* .dialog-iframe-root-node{
 	background-color: #f5f5f5;
     padding: 20px;
 }
 .opencps-dialog .aui body{
 	background-color: #f5f5f5;
-}
+} */
