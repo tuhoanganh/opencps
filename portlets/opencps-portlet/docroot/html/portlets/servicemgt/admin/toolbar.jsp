@@ -1,5 +1,4 @@
 
-<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -19,6 +18,7 @@
  */
 %>
 
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 
 <%@ include file="../init.jsp"%>
 
@@ -51,12 +51,7 @@
 				</portlet:renderURL>
 				
 				<c:if test="<%=ServicePermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_SERVICE) %>">
-					<%-- <aui:nav-item 
-						id="addService" 
-						label="add-service" 
-						iconCssClass="icon-plus icon-config"  
-						href="<%=editServiceURL %>"
-					/> --%>
+					
 					<aui:button icon="icon-plus" href="<%=editServiceURL %>" cssClass="action-button" value="add-service"/>
 				</c:if>
 			</c:when>
@@ -75,12 +70,7 @@
 				
 				<aui:row>
 					<c:if test="<%= ServiceTemplatePermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_TEMPLATE) %>">
-						<%-- <aui:nav-item 
-							id="addTemplate" 
-							label="add-template" 
-							iconCssClass="icon-plus"  
-							href="<%=editTemplateURL %>"
-						/> --%>
+						
 						<aui:button icon="icon-plus" href="<%=editTemplateURL %>" cssClass="action-button" value="add-template"/>
 					</c:if>
 				</aui:row>
@@ -94,15 +84,16 @@
 				</portlet:renderURL>
 							
 				<c:if test="<%= ServiceTemplatePermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_TEMPLATE) %>">
-					<%-- <aui:nav-item 
-						id="addDomain" 
-						label="add-domain" 
-						iconCssClass="icon-plus"  
-						href="<%= \"javascript:\" + renderResponse.getNamespace() + \"showPopup('\" + editDomainURL +\"');\" %>"
-					/> --%>
+					
 					<aui:button 
 						icon="icon-plus" 
-						href="<%= \"javascript:\" + \"openDialog('\" + editDomainURL +\"');\" %>" 
+						href="<%=
+								\"javascript:\" +  \"openDialog('\" + 
+								editDomainURL + \"','\" + 
+								renderResponse.getNamespace() + \"updateServiceDomain\" + \"','\" +
+								UnicodeLanguageUtil.get(pageContext, \"update-service-domain\") +
+								\"');\" 
+							%>"
 						cssClass="action-button" 
 						value="add-domain"
 					/>
@@ -117,13 +108,7 @@
 				</portlet:renderURL>
 							
 				<c:if test="<%= ServiceTemplatePermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_TEMPLATE) %>">
-					<%-- <aui:nav-item 
-						id="addDomain" 
-						label="add-administration" 
-						iconCssClass="icon-plus"  
-						href="<%= \"javascript:\" + renderResponse.getNamespace() + \"showPopup('\" + editDomainURL +\"');\" %>"
-					/> --%>
-					
+				
 					<aui:button 
 						icon="icon-plus" 
 						href="<%=
@@ -149,31 +134,35 @@
 					<c:choose>
 						<c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_SERVICE) %>">
 							<aui:row>
-								<aui:col width="25" cssClass="search-col">
+								<aui:col width="30" cssClass="search-col">
 									<datamgt:ddr
 										cssClass="search-input select-box"
 										depthLevel="1" 
 										dictCollectionCode="SERVICE_ADMINISTRATION"
 										itemNames="<%= ServiceDisplayTerms.SERVICE_ADMINISTRATION %>"
 										itemsEmptyOption="true"
+										showLabel="<%=false %>"
 										selectedItems="<%= administrationCode %>"	
+										emptyOptionLabels="<%= ServiceDisplayTerms.SERVICE_ADMINISTRATION %>"
 									>
 									</datamgt:ddr>
 	
 								</aui:col>
-								<aui:col width="25" cssClass="search-col">
+								<aui:col width="30" cssClass="search-col">
 									<datamgt:ddr
 										cssClass="search-input select-box"
 										depthLevel="1" 
 										dictCollectionCode="SERVICE_DOMAIN"
 										itemNames="<%= ServiceDisplayTerms.SERVICE_DOMAINCODE %>"
 										itemsEmptyOption="true"	
+										showLabel="<%=false %>"
 										selectedItems="<%= domainCode %>"
+										emptyOptionLabels="<%= ServiceDisplayTerms.SERVICE_DOMAINCODE %>"
 									>
 									</datamgt:ddr>
 
 								</aui:col>
-								<aui:col width="45" cssClass="search-col">
+								<aui:col width="30" cssClass="search-col">
 									<liferay-ui:input-search 
 										id="keywords1"
 										name="keywords"
