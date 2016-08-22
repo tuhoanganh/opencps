@@ -2072,20 +2072,23 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			default:
 				break;
 			}
+			
+			DossierLocalServiceUtil.updateDossierStatus(
+					dossierId, fileGroupId, PortletConstants.DOSSIER_STATUS_SYSTEM,
+					WebKeys.ACTOR_ACTION_CITIZEN, StringPool.BLANK,
+					PortletUtil.getActionInfo(
+						PortletConstants.DOSSIER_STATUS_SYSTEM,
+						actionRequest.getLocale()), PortletUtil.getMessageInfo(
+						PortletConstants.DOSSIER_STATUS_SYSTEM,
+						actionRequest.getLocale()),
+					PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC,
+					PortletConstants.DOSSIER_LOG_NORMAL);
 
 			MessageBusUtil.sendMessage(
 				"opencps/frontoffice/out/destination", message);
-
-			DossierLocalServiceUtil.updateDossierStatus(
-				dossierId, fileGroupId, PortletConstants.DOSSIER_STATUS_SYSTEM,
-				WebKeys.ACTOR_ACTION_CITIZEN, StringPool.BLANK,
-				PortletUtil.getActionInfo(
-					PortletConstants.DOSSIER_STATUS_SYSTEM,
-					actionRequest.getLocale()), PortletUtil.getMessageInfo(
-					PortletConstants.DOSSIER_STATUS_SYSTEM,
-					actionRequest.getLocale()),
-				PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC,
-				PortletConstants.DOSSIER_LOG_NORMAL);
+			
+			//add default message success
+			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 
 		}
 		catch (Exception e) {

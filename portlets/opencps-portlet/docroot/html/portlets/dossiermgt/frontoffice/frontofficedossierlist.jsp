@@ -1,4 +1,6 @@
 
+<%@page import="org.opencps.util.MessageKeys"%>
+<%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -48,6 +50,22 @@
 
 
 <liferay-util:include page='<%=templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
+
+<liferay-ui:success  key="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>" message="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>"/>
+
+<liferay-ui:error 
+	exception="<%= NoSuchDossierException.class %>" 
+	message="<%=NoSuchDossierException.class.getName() %>"
+/>
+<liferay-ui:error 
+	exception="<%= NoSuchDossierTemplateException.class %>" 
+	message="<%=NoSuchDossierTemplateException.class.getName() %>"
+/>
+<liferay-ui:error 
+	exception="<%= RequiredDossierPartException.class %>" 
+	message="<%=RequiredDossierPartException.class.getName() %>"
+/>
+
 <liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
 
 <%
@@ -65,19 +83,6 @@
 	
 	int totalCount = 0;
 %>
-
-<liferay-ui:error 
-	exception="<%= NoSuchDossierException.class %>" 
-	message="<%=NoSuchDossierException.class.getName() %>"
-/>
-<liferay-ui:error 
-	exception="<%= NoSuchDossierTemplateException.class %>" 
-	message="<%=NoSuchDossierTemplateException.class.getName() %>"
-/>
-<liferay-ui:error 
-	exception="<%= RequiredDossierPartException.class %>" 
-	message="<%=RequiredDossierPartException.class.getName() %>"
-/>
 
 <div class="opencps-searchcontainer-wrapper default-box-shadow radius8">
 	<liferay-ui:search-container searchContainer="<%= new DossierSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
