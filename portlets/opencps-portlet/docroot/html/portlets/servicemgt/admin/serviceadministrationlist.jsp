@@ -112,7 +112,7 @@
 			/>
 			
 			<liferay-ui:search-container-column-jsp 
-				path='<%=templatePath + "domain_actions.jsp" %>' 
+				path='<%=templatePath + "administration_actions.jsp" %>' 
 				name="action" cssClass="width80"
 			/>
 		</liferay-ui:search-container-row>
