@@ -100,7 +100,7 @@
 <liferay-ui:error exception="<%= NoSuchJobPosException.class %>" 
 	message="<%=NoSuchJobPosException.class.getName() %>" 
 />
-<aui:row cssClass="nav-content-row">
+<aui:row cssClass="nav-content-row-2">
 	<aui:col width="100">
 		<aui:select 
 			name="<%= EmployeeDisplayTerm.WORKING_UNIT_ID %>" 
@@ -127,7 +127,7 @@
 	</aui:col>
 </aui:row>
 
-<aui:row cssClass="nav-content-row">
+<aui:row cssClass="nav-content-row-2">
 	<aui:col width="100">
 		<aui:input 
 			name="<%= EmployeeDisplayTerm.WORKING_STATUS  %>" 
@@ -142,7 +142,7 @@
 </aui:row>
 
 <label><liferay-ui:message key="main-jobpos"/></label>
-<aui:row id="mainJobPosBoundingBox" cssClass="nav-content-row">
+<aui:row id="mainJobPosBoundingBox" cssClass="nav-content-row-2">
 	<aui:col width="50">
 		<aui:select 
 			name='<%= EmployeeDisplayTerm.WORKING_UNIT_ID%>' 
@@ -205,7 +205,7 @@
 </aui:row>
 
 <label><liferay-ui:message key="other-jobpos"/></label>
-<aui:row id="opencps-usermgt-employee-jobpos" cssClass="nav-content-row">
+<aui:row id="opencps-usermgt-employee-jobpos" cssClass="nav-content-row-2">
 	<aui:fieldset id="boundingBox">
 	<%
 		for(int i = 0; i < jobPosIndexes.length; i++){
