@@ -88,7 +88,7 @@
 	message="<%=OutOfLengthTelNoException.class.getName() %>" 
 />
 
-<aui:row cssClass="nav-content-row">
+<aui:row cssClass="nav-content-row-2">
 	<aui:col width="100">
 		<aui:input 
 			name='<%=EmployeeDisplayTerm.EMPLOYEE_NO %>'
@@ -102,7 +102,7 @@
 	</aui:col>
 </aui:row>
 
-<aui:row cssClass="nav-content-row">
+<aui:row cssClass="nav-content-row-2">
 	<aui:col width="50">
 		<aui:input 
 			name="<%=EmployeeDisplayTerm.FULL_NAME %>" 
@@ -136,7 +136,7 @@
 	</aui:col>
 </aui:row>
 
-<aui:row cssClass="nav-content-row">
+<aui:row cssClass="nav-content-row-2">
 	<aui:col width="50">
 		<label class="control-label custom-lebel" for='<portlet:namespace/><%=EmployeeDisplayTerm.BIRTH_DATE %>'>
 			<liferay-ui:message key="birth-date"/>
@@ -170,7 +170,7 @@
 	</aui:col>
 </aui:row>
 
-<aui:row cssClass="nav-content-row">
+<aui:row cssClass="nav-content-row-2">
 	<aui:col width="50">
 		<aui:input 
 			name="<%= EmployeeDisplayTerm.MOBILE%>"
