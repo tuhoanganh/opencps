@@ -108,6 +108,7 @@
 			showEmptyOption="<%=true %>"
 			required="<%=true %>"
 			disabled='<%=userViewProfile ? true : false %>'
+			cssClass="input100"
 		>
 			<%
 				if(workingUnits != null){
@@ -137,6 +138,7 @@
 			value="<%=employee != null 
 				&& employee.getWorkingStatus() == PortletConstants.WORKING_STATUS_ACTIVATE ? true : false %>"
 			disabled='<%=userViewProfile ? true : false %>'
+			cssClass="input100"
 		/>
 	</aui:col>
 </aui:row>
@@ -150,6 +152,7 @@
 			onChange='<%=renderResponse.getNamespace() + "getJobPosByWorkingUnitId(this)" %>'
 			required='<%=true %>'
 			disabled="<%=userViewProfile ? true : false %>"
+			cssClass="input100"
 		>
 			<aui:option value=""><liferay-ui:message key="select-working-unit"/></aui:option>
 			<%
@@ -184,6 +187,7 @@
 			label='<%=StringPool.BLANK %>'  
 			required='<%=true %>'
 			disabled='<%=userViewProfile ? true : false %>'
+			cssClass="input100"
 		>
 			<aui:option value=""><liferay-ui:message key="select-jobpos"/></aui:option>
 			<%
@@ -230,6 +234,7 @@
 								onChange='<%=renderResponse.getNamespace() + "getJobPosByWorkingUnitId(this)" %>'
 								showEmptyOption='<%=true %>'
 								disabled='<%=userViewProfile ? true : false %>'
+								cssClass="input100"
 							>
 							
 								<%
@@ -267,6 +272,7 @@
 								label='<%=StringPool.BLANK %>'
 								showEmptyOption='<%=true %>'
 								disabled='<%=userViewProfile ? true : false %>'
+								cssClass="input100"
 							>
 								<%
 									if(selectedWorkingUnitId > 0 && jobPos != null){

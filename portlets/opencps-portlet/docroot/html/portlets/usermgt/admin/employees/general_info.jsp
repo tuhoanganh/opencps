@@ -93,6 +93,7 @@
 		<aui:input 
 			name='<%=EmployeeDisplayTerm.EMPLOYEE_NO %>'
 			disabled='<%=userViewProfile ? true : false %>'
+			cssClass="input100"
 		>
 			<aui:validator name="required"/>
 			<aui:validator name="maxLength">
@@ -106,6 +107,7 @@
 	<aui:col width="50">
 		<aui:input 
 			name="<%=EmployeeDisplayTerm.FULL_NAME %>" 
+			cssClass="input100"
 		>
 			<aui:validator name="required"/>
 			<aui:validator name="maxLength">
@@ -115,7 +117,7 @@
 	</aui:col>
 	
 	<aui:col width="50">
-		<aui:select name="<%= EmployeeDisplayTerm.GENDER%>">
+		<aui:select name="<%= EmployeeDisplayTerm.GENDER%>" cssClass="input100">
 			<%
 				if(PortletPropsValues.USERMGT_GENDER_VALUES != null && 
 					PortletPropsValues.USERMGT_GENDER_VALUES.length > 0){
@@ -138,7 +140,7 @@
 
 <aui:row cssClass="nav-content-row-2">
 	<aui:col width="50">
-		<label class="control-label custom-lebel" for='<portlet:namespace/><%=EmployeeDisplayTerm.BIRTH_DATE %>'>
+		<label class="control-label bold custom-lebel" for='<portlet:namespace/><%=EmployeeDisplayTerm.BIRTH_DATE %>'>
 			<liferay-ui:message key="birth-date"/>
 		</label>
 		
@@ -153,6 +155,7 @@
 			yearValue="<%= spd.getYear() %>"
 			formName="fm"
 			autoFocus="<%=true %>"
+			cssClass="input100"
 		/>
 
 	</aui:col>
@@ -160,6 +163,7 @@
 	<aui:col width="50">
 		<aui:input 
 			name="<%= EmployeeDisplayTerm.EMAIL%>"
+			cssClass="input100"
 		>
 			<aui:validator name="required"/>
 			<aui:validator name="email"/>
@@ -174,6 +178,7 @@
 	<aui:col width="50">
 		<aui:input 
 			name="<%= EmployeeDisplayTerm.MOBILE%>"
+			cssClass="input100"
 		>
 			<aui:validator name="maxLength">
 				<%=PortletPropsValues.USERMGT_EMPLOYEE_MOBILE_LENGTH%>
@@ -184,6 +189,7 @@
 	<aui:col width="50">
 		<aui:input 
 			name="<%= EmployeeDisplayTerm.TEL_NO%>"
+			cssClass="input100"
 		>
 			<aui:validator name="maxLength">
 				<%=PortletPropsValues.USERMGT_EMPLOYEE_TELNO_LENGTH%>

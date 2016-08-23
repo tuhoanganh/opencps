@@ -71,6 +71,7 @@
 				required="<%=false %>"
 				id="mappingUserScreenName"
 				type="text"
+				cssClass="input100"
 			>
 			</aui:input>
 			
@@ -78,6 +79,7 @@
 				name="<%= EmployeeDisplayTerm.USER_EMAIL%>"
 				disabled="<%=mappingUser != null ? true : false  %>"
 				type="text"
+				cssClass="input100"
 			>
 				<aui:validator name="email"/>
 				<aui:validator name="maxLength">
@@ -124,18 +126,18 @@
 	
 	<div id = "<portlet:namespace />showOrHidePasswordsField" >
 		<aui:row cssClass="nav-content-row-2">
-			<aui:col width="90">
-				<aui:input name="<%= EmployeeDisplayTerm.OLD_PASS_WORD%>" type="password"></aui:input>
+			<aui:col width="100">
+				<aui:input name="<%= EmployeeDisplayTerm.OLD_PASS_WORD%>" type="password" cssClass="input100"/>
 			</aui:col>
 		</aui:row>
 		
 		<aui:row cssClass="nav-content-row-2">
 			<aui:col width="50">
-				<aui:input name="<%= EmployeeDisplayTerm.PASS_WORD%>" type="password"></aui:input>
+				<aui:input name="<%= EmployeeDisplayTerm.PASS_WORD%>" type="password" cssClass="input100"/>
 			</aui:col>
 			
 			<aui:col width="50">
-				<aui:input name="<%= EmployeeDisplayTerm.RE_PASS_WORD%>" type="password">
+				<aui:input name="<%= EmployeeDisplayTerm.RE_PASS_WORD%>" type="password" cssClass="input100">
 					<aui:validator name="equalTo">'#<portlet:namespace /><%= EmployeeDisplayTerm.PASS_WORD%>'</aui:validator>
 				</aui:input>
 			</aui:col>
