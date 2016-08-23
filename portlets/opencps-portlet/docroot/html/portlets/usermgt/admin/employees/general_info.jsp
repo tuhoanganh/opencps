@@ -1,4 +1,4 @@
-<%@page import="org.opencps.usermgt.service.EmployeeLocalServiceUtil"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -32,6 +32,8 @@
 <%@page import="org.opencps.usermgt.OutOfLengthEmployeeEmailException"%>
 <%@page import="org.opencps.usermgt.OutOfLengthTelNoException"%>
 <%@page import="org.opencps.usermgt.OutOfLengthMobileException"%>
+<%@page import="org.opencps.usermgt.service.EmployeeLocalServiceUtil"%>
+
 <%@ include file="../../init.jsp"%>
 
 
@@ -86,8 +88,8 @@
 	message="<%=OutOfLengthTelNoException.class.getName() %>" 
 />
 
-<aui:row>
-	<aui:col width="50">
+<aui:row cssClass="nav-content-row">
+	<aui:col width="100">
 		<aui:input 
 			name='<%=EmployeeDisplayTerm.EMPLOYEE_NO %>'
 			disabled='<%=userViewProfile ? true : false %>'
@@ -98,9 +100,9 @@
 			</aui:validator>
 		</aui:input>
 	</aui:col>
-	<aui:col width="50"></aui:col>
 </aui:row>
-<aui:row>
+
+<aui:row cssClass="nav-content-row">
 	<aui:col width="50">
 		<aui:input 
 			name="<%=EmployeeDisplayTerm.FULL_NAME %>" 
@@ -108,32 +110,6 @@
 			<aui:validator name="required"/>
 			<aui:validator name="maxLength">
 				<%=PortletPropsValues.USERMGT_EMPLOYEE_FULLNAME_LENGTH %>
-			</aui:validator>
-		</aui:input>
-		
-		<label class="control-label custom-lebel" for='<portlet:namespace/><%=EmployeeDisplayTerm.BIRTH_DATE %>'>
-			<liferay-ui:message key="birth-date"/>
-		</label>
-		
-		<liferay-ui:input-date
-			dayParam="<%=EmployeeDisplayTerm.BIRTH_DATE_DAY %>"
-			dayValue="<%= spd.getDayOfMoth() %>"
-			disabled="<%= false %>"
-			monthParam="<%=EmployeeDisplayTerm.BIRTH_DATE_MONTH %>"
-			monthValue="<%= spd.getMonth() %>"
-			name="<%=EmployeeDisplayTerm.BIRTH_DATE %>"
-			yearParam="<%=EmployeeDisplayTerm.BIRTH_DATE_YEAR %>"
-			yearValue="<%= spd.getYear() %>"
-			formName="fm"
-			autoFocus="<%=true %>"
-		/>
-		
-		
-		<aui:input 
-			name="<%= EmployeeDisplayTerm.MOBILE%>"
-		>
-			<aui:validator name="maxLength">
-				<%=PortletPropsValues.USERMGT_EMPLOYEE_MOBILE_LENGTH%>
 			</aui:validator>
 		</aui:input>
 	</aui:col>
@@ -156,7 +132,32 @@
 				}
 			%>
 		</aui:select>
+
+	</aui:col>
+</aui:row>
+
+<aui:row cssClass="nav-content-row">
+	<aui:col width="50">
+		<label class="control-label custom-lebel" for='<portlet:namespace/><%=EmployeeDisplayTerm.BIRTH_DATE %>'>
+			<liferay-ui:message key="birth-date"/>
+		</label>
 		
+		<liferay-ui:input-date
+			dayParam="<%=EmployeeDisplayTerm.BIRTH_DATE_DAY %>"
+			dayValue="<%= spd.getDayOfMoth() %>"
+			disabled="<%= false %>"
+			monthParam="<%=EmployeeDisplayTerm.BIRTH_DATE_MONTH %>"
+			monthValue="<%= spd.getMonth() %>"
+			name="<%=EmployeeDisplayTerm.BIRTH_DATE %>"
+			yearParam="<%=EmployeeDisplayTerm.BIRTH_DATE_YEAR %>"
+			yearValue="<%= spd.getYear() %>"
+			formName="fm"
+			autoFocus="<%=true %>"
+		/>
+
+	</aui:col>
+	
+	<aui:col width="50">
 		<aui:input 
 			name="<%= EmployeeDisplayTerm.EMAIL%>"
 		>
@@ -166,7 +167,21 @@
 				<%=PortletPropsValues.USERMGT_EMPLOYEE_EMAIL_LENGTH %>
 			</aui:validator>
 		</aui:input>
-		
+	</aui:col>
+</aui:row>
+
+<aui:row cssClass="nav-content-row">
+	<aui:col width="50">
+		<aui:input 
+			name="<%= EmployeeDisplayTerm.MOBILE%>"
+		>
+			<aui:validator name="maxLength">
+				<%=PortletPropsValues.USERMGT_EMPLOYEE_MOBILE_LENGTH%>
+			</aui:validator>
+		</aui:input>
+	</aui:col>
+	
+	<aui:col width="50">
 		<aui:input 
 			name="<%= EmployeeDisplayTerm.TEL_NO%>"
 		>
@@ -176,5 +191,4 @@
 		</aui:input>
 	</aui:col>
 </aui:row>
-
 
