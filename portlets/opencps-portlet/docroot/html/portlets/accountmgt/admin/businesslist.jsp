@@ -95,49 +95,52 @@
 	<liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
 </c:if>
 
-<liferay-ui:search-container searchContainer="<%= new BusinessSearch(
-	renderRequest ,SearchContainer	.DEFAULT_DELTA, iteratorURL) %>">
-	
-	<liferay-ui:search-container-results>
-		<%
-			BusinessSearchTerm searchTerms = (BusinessSearchTerm) searchContainer.getSearchTerms();
-			
-			if(Validator.isNotNull(searchTerms.getKeywords())) {
-				businesses = BusinessLocalServiceUtil.getBusinesses(themeDisplay.getScopeGroupId(), searchTerms.getKeywords());
-			} else if(accountStatus!=0) {
-				businesses = BusinessLocalServiceUtil.getBusinesses(themeDisplay.getScopeGroupId(), accountStatus);
-			} else if(Validator.isNotNull(searchTerms.getKeywords()) && accountStatus!=0)  {
-				businesses = BusinessLocalServiceUtil.getBusinesses(themeDisplay.getScopeGroupId(), searchTerms.getKeywords(), accountStatus);
-			} else {
-				businesses = BusinessLocalServiceUtil.getBusinesses(searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-			}
-			
-			totalCount = BusinessLocalServiceUtil.countAll();
-			total = totalCount;
-			results = businesses;
-			pageContext.setAttribute("results", results);
-			pageContext.setAttribute("total", total);
-		%>
-	
-	</liferay-ui:search-container-results>
-	<liferay-ui:search-container-row 
-		className="org.opencps.accountmgt.model.Business" 
-		modelVar="businesS" 
-		keyProperty="businessId"
-	>
-		<%
-			String accoutStatus = StringPool.BLANK;
-			
-			accoutStatus = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), PortletUtil.getAccountStatus(businesS.getAccountStatus(), themeDisplay.getLocale()));
-			row.addText(businesS.getIdNumber());
-			row.addText(businesS.getName());
-			row.addText(businesS.getBusinessType());
-			row.addText(businesS.getEmail());
-			row.addText(accoutStatus);
-			row.addJSP("center", SearchEntry.DEFAULT_VALIGN,  "/html/portlets/accountmgt/admin/business_actions.jsp", config.getServletContext(), request, response);
-			
-		%>
+<div class="opencps-searchcontainer-wrapper default-box-shadow radius8">
+
+	<liferay-ui:search-container searchContainer="<%= new BusinessSearch(
+		renderRequest ,SearchContainer	.DEFAULT_DELTA, iteratorURL) %>">
 		
-	</liferay-ui:search-container-row>
-	<liferay-ui:search-iterator type="opencs_page_iterator"/>
-</liferay-ui:search-container>	
+		<liferay-ui:search-container-results>
+			<%
+				BusinessSearchTerm searchTerms = (BusinessSearchTerm) searchContainer.getSearchTerms();
+				
+				if(Validator.isNotNull(searchTerms.getKeywords())) {
+					businesses = BusinessLocalServiceUtil.getBusinesses(themeDisplay.getScopeGroupId(), searchTerms.getKeywords());
+				} else if(accountStatus!=0) {
+					businesses = BusinessLocalServiceUtil.getBusinesses(themeDisplay.getScopeGroupId(), accountStatus);
+				} else if(Validator.isNotNull(searchTerms.getKeywords()) && accountStatus!=0)  {
+					businesses = BusinessLocalServiceUtil.getBusinesses(themeDisplay.getScopeGroupId(), searchTerms.getKeywords(), accountStatus);
+				} else {
+					businesses = BusinessLocalServiceUtil.getBusinesses(searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
+				}
+				
+				totalCount = BusinessLocalServiceUtil.countAll();
+				total = totalCount;
+				results = businesses;
+				pageContext.setAttribute("results", results);
+				pageContext.setAttribute("total", total);
+			%>
+		
+		</liferay-ui:search-container-results>
+		<liferay-ui:search-container-row 
+			className="org.opencps.accountmgt.model.Business" 
+			modelVar="businesS" 
+			keyProperty="businessId"
+		>
+			<%
+				String accoutStatus = StringPool.BLANK;
+				
+				accoutStatus = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), PortletUtil.getAccountStatus(businesS.getAccountStatus(), themeDisplay.getLocale()));
+				row.addText(businesS.getIdNumber());
+				row.addText(businesS.getName());
+				row.addText(businesS.getBusinessType());
+				row.addText(businesS.getEmail());
+				row.addText(accoutStatus);
+				row.addJSP("center", SearchEntry.DEFAULT_VALIGN,  "/html/portlets/accountmgt/admin/business_actions.jsp", config.getServletContext(), request, response);
+				
+			%>
+			
+		</liferay-ui:search-container-row>
+		<liferay-ui:search-iterator type="opencs_page_iterator"/>
+	</liferay-ui:search-container>	
+</div>
