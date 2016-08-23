@@ -1,13 +1,4 @@
 
-<%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
-<%@page import="org.opencps.usermgt.util.UserMgtUtil"%>
-<%@page import="org.opencps.util.MessageKeys"%>
-<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
-<%@page import="org.opencps.usermgt.search.JobPosDisplayTerms"%>
-<%@page import="org.opencps.usermgt.service.JobPosLocalServiceUtil"%>
-<%@page import="org.opencps.usermgt.model.JobPos"%>
-<%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
-<%@page import="com.liferay.portal.kernel.log.Log"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -26,6 +17,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+
+<%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
+<%@page import="org.opencps.usermgt.util.UserMgtUtil"%>
+<%@page import="org.opencps.util.MessageKeys"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
+<%@page import="org.opencps.usermgt.search.JobPosDisplayTerms"%>
+<%@page import="org.opencps.usermgt.service.JobPosLocalServiceUtil"%>
+<%@page import="org.opencps.usermgt.model.JobPos"%>
+<%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
+<%@page import="com.liferay.portal.kernel.log.Log"%>
+
 <%@ include file="../init.jsp"%>
 
 <%
@@ -43,10 +45,10 @@
 	
 	String message = LanguageUtil.get(portletConfig ,themeDisplay.getLocale(), "are-you-sure-to-update");
 %>
-<liferay-ui:header
+<%-- <liferay-ui:header
 	backURL="<%= redirectURL %>"
 	title='<%= (jobPos == null) ? "add-jobpos" : "update-jobpos" %>'
-/>
+/> --%>
 
 <liferay-ui:error 
 	key="<%=MessageKeys.USERMGT_JOBPOS_UPDATE_ERROR %>" 
