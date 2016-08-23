@@ -104,7 +104,6 @@
 	<aui:col width="100">
 		<aui:select 
 			name="<%= EmployeeDisplayTerm.WORKING_UNIT_ID %>" 
-			cssClass="input100"
 			showEmptyOption="<%=true %>"
 			required="<%=true %>"
 			disabled='<%=userViewProfile ? true : false %>'
