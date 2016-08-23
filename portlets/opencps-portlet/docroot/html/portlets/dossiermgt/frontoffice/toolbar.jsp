@@ -75,6 +75,7 @@
 						<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/frontoffice/frontofficeservicelist.jsp"/>
 						<portlet:param name="isListServiceConfig" value="<%=String.valueOf(true) %>"/>
 						<portlet:param name="backURL" value="<%=currentURL %>"/>
+						<portlet:param name="backURLFromList" value="<%=currentURL %>"/>
 					</portlet:renderURL>
 					<%-- <aui:nav-item 
 						id="addDictItem" 
