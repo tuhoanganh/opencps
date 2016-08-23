@@ -1,5 +1,4 @@
 
-<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -26,6 +25,7 @@
 <%@page import="org.opencps.util.ActionKeys"%>
 <%@page import="org.opencps.usermgt.permissions.JobPosPermission"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 
 <%@ include file="../init.jsp"%>
 
