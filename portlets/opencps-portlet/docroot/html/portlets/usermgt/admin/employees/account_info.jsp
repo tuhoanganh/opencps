@@ -57,7 +57,7 @@
 </c:if>
 </liferay-ui:error>
 
-<aui:row cssClass="nav-content-row">
+<aui:row cssClass="nav-content-row-2">
 	<aui:col width="100">
 		<aui:input 
 			name="isMappingUser" 
@@ -71,7 +71,7 @@
 </aui:row>
 
 <div id="<portlet:namespace/>accountInfo">
-	<aui:row cssClass="nav-content-row">
+	<aui:row cssClass="nav-content-row-2">
 		<aui:col width="50">
 			<aui:input 
 				name="<%= EmployeeDisplayTerm.SCREEN_NAME%>"
@@ -98,7 +98,7 @@
 		</aui:col>
 	</aui:row>
 	
-	<aui:row cssClass="nav-content-row">
+	<aui:row cssClass="nav-content-row-2">
 		<aui:col width="50">
 			<aui:input name="<%= EmployeeDisplayTerm.PASS_WORD%>" type="password"></aui:input>
 		</aui:col>
