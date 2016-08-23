@@ -31,6 +31,7 @@
 <%@page import="com.liferay.portal.model.Group"%>
 <%@page import="com.liferay.portal.service.LayoutLocalServiceUtil"%>
 <%@page import="com.liferay.portal.model.Layout"%>
+
 <%@ include file="../../init.jsp"%>
 
 <%
@@ -62,7 +63,7 @@
 <liferay-ui:error exception="<%= AuthException.class %>" message="<%=AuthException.class.getName() %>"/>
 
 <div id="<portlet:namespace/>accountInfo">
-	<aui:row cssClass="nav-content-row">
+	<aui:row cssClass="nav-content-row-2">
 		<aui:col width="50">
 			<aui:input 
 				name="<%= EmployeeDisplayTerm.SCREEN_NAME%>"
@@ -117,18 +118,18 @@
 		</aui:col>
 	</aui:row>
 	
-	<aui:row cssClass="nav-content-row">
+	<aui:row cssClass="nav-content-row-2">
 		<aui:input name="changePassWord" type="checkbox" checked="false"/>
 	</aui:row>
 	
 	<div id = "<portlet:namespace />showOrHidePasswordsField" >
-		<aui:row cssClass="nav-content-row">
+		<aui:row cssClass="nav-content-row-2">
 			<aui:col width="90">
 				<aui:input name="<%= EmployeeDisplayTerm.OLD_PASS_WORD%>" type="password"></aui:input>
 			</aui:col>
 		</aui:row>
 		
-		<aui:row cssClass="nav-content-row">
+		<aui:row cssClass="nav-content-row-2">
 			<aui:col width="50">
 				<aui:input name="<%= EmployeeDisplayTerm.PASS_WORD%>" type="password"></aui:input>
 			</aui:col>
