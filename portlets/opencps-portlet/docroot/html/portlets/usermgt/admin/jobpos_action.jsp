@@ -59,13 +59,14 @@
 	<c:if test="<%=JobPosPermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) %>">
 		<liferay-ui:icon 
 			cssClass="search-container-action fa edit" image="edit" message="edit"
-			url="<%=
+			url="javascript:void(0);" 
+			onClick="<%=
 					\"javascript:\" +  \"openDialog('\" + 
 					updateJobPos + \"','\" + 
 					renderResponse.getNamespace() + \"updateJobPos\" + \"','\" +
 					UnicodeLanguageUtil.get(pageContext, \"update-jobpos\") +
 					\"');\"  
-				%>" 
+				%>"
 		/>
 	</c:if>
 
