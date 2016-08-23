@@ -1,4 +1,5 @@
 
+<%@page import="org.opencps.util.WebKeys"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -112,7 +113,7 @@
 		var btnChooseCancel = A.one('#<portlet:namespace />cancel');
 		if(btnChooseCancel) {
 			btnChooseCancel.on('click', function() {
-				Liferay.Util.getOpener().<portlet:namespace/>closePopup('<portlet:namespace/>dialog');
+				closeDialog('<portlet:namespace/>updateJobPos', '<%=WebKeys.USER_MGT_PORTLET%>_');
 			});
 		}
 		
@@ -124,7 +125,7 @@
 				if(r == true) {
 					<portlet:namespace/>submitItemForm();
 				} else {
-					Liferay.Util.getOpener().<portlet:namespace/>closePopup('<portlet:namespace/>dialog');
+					closeDialog('<portlet:namespace/>updateJobPos', '<%=WebKeys.USER_MGT_PORTLET%>_');
 				}
 				
 			});
@@ -139,8 +140,7 @@
               form: { id: '<portlet:namespace />fm2' },
               on: {
                   success: function(){
-                	  Liferay.Util.getOpener().<portlet:namespace/>closePopup('<portlet:namespace/>dialog');
-                	  
+                	  closeDialog('<portlet:namespace/>updateJobPos', '<%=WebKeys.USER_MGT_PORTLET%>_');
                   }
              }
         });
