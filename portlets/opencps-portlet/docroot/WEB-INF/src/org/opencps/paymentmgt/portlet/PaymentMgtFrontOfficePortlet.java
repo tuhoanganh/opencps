@@ -21,6 +21,8 @@ import java.io.InputStream;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -172,6 +174,7 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 	        String country_code = "+84";
 	        String internal_bank = "all_card";
 	        String merchant_secure_key = paymentConfig.getKeypaySecureKey();
+	        paymentFile.setModifiedDate(new Date());
 	        paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_REQUESTED);
 	        updatePaymentFile = true;
 	        if (updatePaymentFile) {
@@ -272,6 +275,7 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 						paymentFile.setConfirmFileEntryId(fileEntry.getFileEntryId());
 						paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_CONFIRMED);
 						paymentFile.setPaymentMethod(PaymentMgtUtil.PAYMENT_METHOD_BANK);
+						paymentFile.setModifiedDate(new Date());
 						PaymentFileLocalServiceUtil.updatePaymentFile(paymentFile);
 					}
 				}
@@ -310,6 +314,73 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 
 	}
 
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 * @throws IOException
+	 */
+	public void requestBankPaymentItems(
+	    ActionRequest actionRequest, ActionResponse actionResponse)
+	    throws IOException {
+
+		long[] paymentFileIds =
+		    ParamUtil.getLongValues(actionRequest, PaymentFileDisplayTerms.PAYMENT_FILE_IDS);
+		
+		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
+		String returnURL = ParamUtil.getString(actionRequest, "returnURL");
+
+		SessionMessages.add(
+		    actionRequest, PortalUtil.getPortletId(actionRequest) +
+		        SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_ERROR_MESSAGE);
+		System.out.println("----PAYMENT FILE ID----" + paymentFileIds);
+		try {
+			ServiceContext serviceContext =
+			    ServiceContextFactory.getInstance(actionRequest);
+
+			PaymentFile paymentFile = null;
+			for (int i = 0; i < paymentFileIds.length; i++) {
+				
+					paymentFile = PaymentFileLocalServiceUtil.getPaymentFile(paymentFileIds[i]);
+					if (paymentFile != null) {
+						paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_CONFIRMED);
+						paymentFile.setPaymentMethod(PaymentMgtUtil.PAYMENT_METHOD_BANK);
+						paymentFile.setModifiedDate(new Date());
+						PaymentFileLocalServiceUtil.updatePaymentFile(paymentFile);
+					}
+			}
+			SessionMessages.add(
+				    actionRequest,
+				    MessageKeys.PAYMENT_FILE_CONFIRM_BANK_SUCCESS);
+		}
+		catch (Exception e) {
+			if (e instanceof DuplicateFileNameException) {
+				SessionErrors.add(
+				    actionRequest,
+				    MessageKeys.SERVICE_TEMPLATE_FILE_NAME_EXCEPTION);
+			}
+			else if (e instanceof DuplicateFileNoException) {
+				SessionErrors.add(
+				    actionRequest,
+				    MessageKeys.SERVICE_TEMPLATE_FILE_NO_EXCEPTION);
+
+			}
+			else if (e instanceof IOFileUploadException) {
+				SessionErrors.add(
+				    actionRequest,
+				    MessageKeys.SERVICE_TEMPLATE_UPLOAD_EXCEPTION);
+			}
+			else {
+				SessionErrors.add(
+				    actionRequest,
+				    MessageKeys.SERVICE_TEMPLATE_EXCEPTION_OCCURRED);
+			}
+		}
+
+	}
+	
 	/**
 	 * Upload file
 	 * 
