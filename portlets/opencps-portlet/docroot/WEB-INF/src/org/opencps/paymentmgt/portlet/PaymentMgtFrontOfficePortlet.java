@@ -536,7 +536,7 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 			if(paymentFileId > 0){
 				PaymentFile paymentFile = PaymentFileLocalServiceUtil.fetchPaymentFile(paymentFileId);
 				
-				paymentFile.setPaymentResponseStatus(PaymentMgtUtil.PAYMENT_STATUS_KEYPAY_PENDING);
+//				paymentFile.setPaymentResponseStatus(PaymentMgtUtil.PAYMENT_STATUS_KEYPAY_PENDING);
 				
 				PaymentFileLocalServiceUtil.updatePaymentFile(paymentFile);
 			}

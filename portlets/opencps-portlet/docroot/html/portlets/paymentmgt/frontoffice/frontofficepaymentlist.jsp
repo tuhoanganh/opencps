@@ -394,7 +394,7 @@
 		var A = AUI();
 		
 		A.io.request(
-			'<%=createReportURL.toString() %>',
+			'1232',
 			{
 			    dataType : 'json',
 			    data:{    	

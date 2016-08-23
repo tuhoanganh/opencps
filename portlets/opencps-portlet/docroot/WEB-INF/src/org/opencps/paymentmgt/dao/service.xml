@@ -39,7 +39,6 @@
         <column name="invoiceNo" type="String"></column>
         <column name="syncStatus" type="int"></column>
         <column name="oid" type="String"/>
-        <column name="paymentResponseStatus" type="int"/>
         <finder name="GoodCode" return-type="PaymentFile">
             <finder-column name="groupId"></finder-column>
             <finder-column name="keypayGoodCode"></finder-column>
@@ -71,10 +70,6 @@
         
         <finder return-type="Collection" name="F_NEW_Request">
         	<finder-column name="paymentStatus"/>
-        </finder>
-        
-        <finder return-type="Collection" name="F_PaymentResponseStatus">
-        	<finder-column name="paymentResponseStatus"/>
         </finder>
         
         <reference entity="DLFileEntry" package-path="com.liferay.portlet.documentlibrary"/>

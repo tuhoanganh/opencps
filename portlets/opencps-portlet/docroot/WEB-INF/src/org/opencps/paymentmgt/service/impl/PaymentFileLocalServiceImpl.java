@@ -335,7 +335,4 @@ public class PaymentFileLocalServiceImpl extends PaymentFileLocalServiceBaseImpl
 
 	}
 	
-	public List<PaymentFile> getPaymentFileByPaymentResponseStatus(int paymentResponseStatus) throws SystemException {
-		return paymentFilePersistence.findByF_PaymentResponseStatus(paymentResponseStatus);
-	}
 }
