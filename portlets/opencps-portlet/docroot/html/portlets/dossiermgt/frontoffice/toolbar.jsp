@@ -51,6 +51,9 @@
 	}else if(!isListServiceConfig && tabs1.equals(DossierMgtUtil.TOP_TABS_DOSSIER)){
 		searchURL.setParameter("mvcPath", templatePath + "frontofficedossierlist.jsp");
 		searchURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER);
+	} else {
+		searchURL.setParameter("mvcPath", templatePath + "frontofficedossierfilelist.jsp");
+		searchURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER_FILE);
 	}
 	
 %>
