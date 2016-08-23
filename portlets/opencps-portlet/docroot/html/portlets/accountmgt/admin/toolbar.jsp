@@ -1,3 +1,4 @@
+<%@page import="org.opencps.accountmgt.model.BusinessDomain"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -70,7 +71,6 @@
 				<div class="toolbar_search_input">
 					<c:if test="<%=tabs1.equals(AccountMgtUtil.TOP_TABS_CITIZEN)%>">
 						<aui:row>
-					
 							<aui:col width="50" cssClass="search-col">
 								<aui:select name="<%=CitizenDisplayTerms.CITIZEN_ACCOUNTSTATUS %>" 
 									label="<%=StringPool.BLANK %>" 
@@ -105,8 +105,22 @@
 					<c:if test="<%=tabs1.equals(AccountMgtUtil.TOP_TABS_BUSINESS)%>">
 						
 						<aui:row>
-					
-							<aui:col width="50" cssClass="search-col">
+							<aui:col width="30" cssClass="search-col">
+									<datamgt:ddr 
+										depthLevel="1" 
+										dictCollectionCode="BUSINESS_DOMAIN" 
+										name="businessDomain"
+										inlineField="<%=true%>"
+										inlineLabel="left"
+										showLabel="<%=false%>"
+										emptyOptionLabels="business-Domain"
+										itemsEmptyOption="true"
+										itemNames="businessDomain"
+										cssClass="search-input select-box"
+									/>
+							</aui:col>
+							
+							 <aui:col width="30" cssClass="search-col">
 								<aui:select name="<%=BusinessDisplayTerms.BUSINESS_ACCOUNTSTATUS %>" 
 									label="<%=StringPool.BLANK %>"
 									cssClass="search-input select-box"
@@ -125,15 +139,15 @@
 										}
 									%>
 								</aui:select>
-							</aui:col>
-							<aui:col width="30" cssClass="search-col">
+							 </aui:col>
+							 <aui:col width="30" cssClass="search-col">
 								<liferay-ui:input-search 
 									id="keywords1" 
 									name="keywords" 
 									placeholder='<%= LanguageUtil.get(locale, "name") %>' 			
 									cssClass="search-input input-keyword"
 								/>
-							</aui:col>
+							 </aui:col>
 							
 						</aui:row>
 					</c:if>

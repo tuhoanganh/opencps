@@ -167,7 +167,7 @@
 										showLabel="<%=false%>"
 										emptyOptionLabels="dossier-status"
 										itemsEmptyOption="true"
-										itemNames="dossierStatus"
+										itemNames="dossierStatusNew"
 										optionValueType="code"
 										cssClass="search-input select-box"
 									/>
