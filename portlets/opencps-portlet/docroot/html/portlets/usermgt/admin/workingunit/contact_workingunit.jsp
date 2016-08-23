@@ -77,7 +77,7 @@
 </aui:row>
 
 <aui:row cssClass="nav-content-row-2">
-	<datamgt:ddr cssClass="input100" 
+	<datamgt:ddr 
 		depthLevel="3"
 		dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_ADMINISTRATIVE_REGION%>"
 		itemNames="cityCode,districtCode,wardCode"
@@ -86,7 +86,8 @@
 		cssClass="input100"
 		showLabel="<%=true%>"
 		emptyOptionLabels="cityId,districtId,wardId"
-	/>
+	>
+	</datamgt:ddr>
 </aui:row>
 
 <aui:row cssClass="nav-content-row-2">
