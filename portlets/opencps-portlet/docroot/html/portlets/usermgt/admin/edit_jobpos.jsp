@@ -1,7 +1,4 @@
 
-<%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
-<%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
-<%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -20,7 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-<%@ include file="../init.jsp"%>
+
 <%@page import="org.opencps.usermgt.util.UserMgtUtil"%>
 <%@page import="org.opencps.usermgt.service.JobPosLocalServiceUtil"%>
 <%@page import="org.opencps.usermgt.search.JobPosDisplayTerms"%>
@@ -30,7 +27,12 @@
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
 <%@page import="org.opencps.usermgt.model.JobPos"%>
 <%@page import="com.liferay.portal.kernel.exception.SystemException"%>
+<%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
+<%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
+<%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
+<%@page import="org.opencps.util.WebKeys"%>
 
+<%@ include file="../init.jsp"%>
 <%
 	long workingUnitId = ParamUtil.getLong(request, "workingUnitId");
 	long jobPosId = ParamUtil.getLong(request, JobPosDisplayTerms.ID_JOBPOS);
@@ -57,11 +59,11 @@
 	}
 	
 %>
-
+<%-- 
 <liferay-ui:header
 	backURL="<%= redirectURL %>"
 	title='<%= (jobPos == null) ? "add-jobpos" : "update-jobpos" %>'
-/>
+/> --%>
 
 
 <liferay-ui:error 
@@ -125,7 +127,7 @@
 	AUI().ready(function(A) {
 		var successVal = "<%= success %>";
 		if(successVal == 'true') {
-			Liferay.Util.getOpener().<portlet:namespace/>closePopup('<portlet:namespace/>dialogJobPoses');
+			closeDialog('<portlet:namespace/>editJobPos', '<%=WebKeys.USER_MGT_PORTLET%>_');
 		}
 	});
 </aui:script>
