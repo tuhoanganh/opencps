@@ -1,5 +1,5 @@
 .opencps-theme.ux footer {
-    background: rgba(0, 0, 0, 0) url("../images/frame_1/bg_footer.png") no-repeat scroll center center / cover ;
+    background: rgba(0, 0, 0, 0) url("../images/custom/bg_footer.png") no-repeat scroll center center / cover ;
     min-height: 228px;
     padding-top: 25px;
 }

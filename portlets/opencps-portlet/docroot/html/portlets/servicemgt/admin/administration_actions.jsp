@@ -33,14 +33,14 @@
 
 <%-- <liferay-ui:icon-menu> --%>
 
-	<portlet:renderURL var="updateDomainChirldURL" windowState="<%=LiferayWindowState.POP_UP.toString() %>">
+	<portlet:renderURL var="updateAdministrationChirldURL" windowState="<%=LiferayWindowState.POP_UP.toString() %>">
 		<portlet:param name="backURL" value="<%=currentURL %>"/>
 		<portlet:param name="<%=DictItemDisplayTerms.DICTITEM_ID %>" value="<%=String.valueOf(dictItem.getDictItemId()) %>"/>
 		<portlet:param name="mvcPath" value='<%=templatePath + "edit_domain.jsp" %>'/>
 		<portlet:param name="isAddChirld" value="isAddChirld"/>
 	</portlet:renderURL>
 	
-	<portlet:renderURL var="updateDomainURL" windowState="<%=LiferayWindowState.POP_UP.toString() %>">
+	<portlet:renderURL var="updateAdministrationURL" windowState="<%=LiferayWindowState.POP_UP.toString() %>">
 		<portlet:param name="backURL" value="<%=currentURL %>"/>
 		<portlet:param name="<%=DictItemDisplayTerms.DICTITEM_ID %>" value="<%=String.valueOf(dictItem.getDictItemId()) %>"/>
 		<portlet:param name="mvcPath" value='<%=templatePath + "edit_domain.jsp" %>'/>
@@ -55,9 +55,9 @@
 			cssClass="search-container-action fa edit" image="edit" message="edit"
 			url="<%=
 					\"javascript:\" +  \"openDialog('\" + 
-					updateDomainURL + \"','\" + 
-					renderResponse.getNamespace() + \"updateServiceDomain\" + \"','\" +
-					UnicodeLanguageUtil.get(pageContext, \"update-service-domain\") +
+					updateAdministrationURL + \"','\" + 
+					renderResponse.getNamespace() + \"updateServiceAdministration\" + \"','\" +
+					UnicodeLanguageUtil.get(pageContext, \"update-service-administration\") +
 					\"');\"  
 				%>" 
 		/>
@@ -68,9 +68,9 @@
 			cssClass="search-container-action fa add" image="add" message="add_chirld_dictitem"
 			url="<%=
 					\"javascript:\" +  \"openDialog('\" + 
-					updateDomainChirldURL + \"','\" + 
-					renderResponse.getNamespace() + \"updateServiceDomain\" + \"','\" +
-					UnicodeLanguageUtil.get(pageContext, \"update-service-domain\") +
+					updateAdministrationChirldURL + \"','\" + 
+					renderResponse.getNamespace() + \"updateServiceAdministration\" + \"','\" +
+					UnicodeLanguageUtil.get(pageContext, \"update-service-administration\") +
 					\"');\"  
 				%>"
 		/>

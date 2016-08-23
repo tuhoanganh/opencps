@@ -1,6 +1,4 @@
 
-<%@page import="org.opencps.util.MessageKeys"%>
-<%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -20,6 +18,7 @@
  */
 %>
 
+<%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
 <%@page import="com.liferay.portal.kernel.dao.search.SearchEntry"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
@@ -45,6 +44,8 @@
 <%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
 <%@page import="org.opencps.util.DateTimeUtil"%>
 <%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="org.opencps.util.MessageKeys"%>
+
 
 <%@ include file="../init.jsp"%>
 
