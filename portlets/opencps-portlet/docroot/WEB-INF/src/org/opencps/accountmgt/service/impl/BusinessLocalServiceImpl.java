@@ -662,6 +662,17 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 
 		return businessPersistence.findBymappingOrganizationId(mappingOrganizationId);
 	}
+	//groupId, names, accountStatus, andOperator,businessDomain, start, end
+	public List<Business> searchBusiness(long groupId, String keywords, int accountStatus,
+		String businessDomain, int start, int end) {
+		return businessFinder.searchBusiness(groupId, keywords,
+			accountStatus, businessDomain, start, end);
+	}
+	//
+	public int countBusiness (long groupId, String keywords, int accountStatus,
+		String businessDomain) {
+		return businessFinder.countBussiness(groupId, keywords, accountStatus, businessDomain);
+	}
 
 	private Log _log =
 		LogFactoryUtil.getLog(BusinessLocalServiceImpl.class.getName());

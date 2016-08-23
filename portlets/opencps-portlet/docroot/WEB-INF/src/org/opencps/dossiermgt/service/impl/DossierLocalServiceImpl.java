@@ -1978,4 +1978,31 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		return dossierPersistence.countByG_DS_U(groupId, dossierStatus, userId);
 	}
 
+	/**
+	 * @param groupId
+	 * @param userId
+	 * @return
+	 */
+	public int countDossierByUserNewRequest(
+		long groupId, long userId) {
+
+		return dossierFinder.countDossierByUserNewRequest(
+			groupId, userId);
+	}
+	
+	/**
+	 * @param groupId
+	 * @param userId
+	 * @param start
+	 * @param end
+	 * @param obc
+	 * @return
+	 */
+	public List getDossierByUserNewRequest(
+		long groupId, long userId, int start,
+		int end, OrderByComparator obc) {
+
+		return dossierFinder.searchDossierByUserNewRequest(
+			groupId, userId, start, end, obc);
+	}
 }

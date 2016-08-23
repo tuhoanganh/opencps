@@ -43,6 +43,8 @@
 	for (Layout pubLayout : pubLayouts) {
 		allLayout.add(pubLayout);
 	}
+	
+	int itemsToDisplay_cfg = GetterUtil.getInteger(portletPreferences.getValue("itemsToDisplay", "2"));
 %>
 
 <aui:form action="<%= configurationActionURL %>" method="post" name="configurationForm">
@@ -56,6 +58,15 @@
 		%>
 	</aui:select>
 
+	<aui:select name="itemsToDisplay" id="itemsToDisplay">
+		<%
+			for (int iTems = 2 ; iTems < 10; iTems ++) {
+		%>
+			<aui:option selected="<%= itemsToDisplay_cfg == iTems %>" value="<%= iTems %>"><%= iTems %></aui:option>
+		<%
+			}
+		%>
+	</aui:select>
 	<aui:button type="submit" name="Save" value="save"></aui:button>
 
 </aui:form>

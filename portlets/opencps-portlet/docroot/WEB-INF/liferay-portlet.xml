@@ -121,6 +121,16 @@
 		</scheduler-entry>
 		
 		<scheduler-entry>
+			<scheduler-event-listener-class>org.opencps.backend.scheduler.OneMinute</scheduler-event-listener-class>
+			<trigger>
+				<simple>
+					<simple-trigger-value>1</simple-trigger-value>
+					<time-unit>minute</time-unit>
+				</simple>
+			</trigger>
+		</scheduler-entry>
+		
+		<scheduler-entry>
 			<scheduler-event-listener-class>org.opencps.backend.exc.MsgInBackOffice</scheduler-event-listener-class>
 			<trigger>
 				<simple>
@@ -235,6 +245,7 @@
 	<portlet>
 		<portlet-name>20</portlet-name>
 		<icon>/icon.png</icon>
+		<configuration-action-class>org.opencps.paymentmgt.portlet.ConfigurationImpl</configuration-action-class>
 		<instanceable>false</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>

@@ -110,7 +110,7 @@
 	</aui:row>
 	<aui:row>
 		<aui:col width="50">
-			<aui:select name="administrationCode" cssClass="submit-online">
+			<aui:select name="administrationCode" cssClass="submit-online input100">
 				<%
 					for(DictItem dictItem : listAdmin) {
 						%>

@@ -65,6 +65,8 @@
 	iteratorURL.setParameter("mvcPath", "/html/portlets/accountmgt/admin/businesslist.jsp");
 	iteratorURL.setParameter(BusinessDisplayTerms.BUSINESS_ACCOUNTSTATUS, String.valueOf(accountStatus));
 	
+	String businessDomain = ParamUtil.getString(request, "businessDomain");
+	
 	List<Business> businesses = new ArrayList<Business>();
 	int totalCount = 0;
 	
@@ -102,6 +104,11 @@
 		<%
 			BusinessSearchTerm searchTerms = (BusinessSearchTerm) searchContainer.getSearchTerms();
 			
+			/* businesses = BusinessLocalServiceUtil.searchBusiness(scopeGroupId, 
+				searchTerms.getKeywords() , accountStatus, businessDomain,
+				searchContainer.getStart(), searchContainer.getEnd());
+			 */
+			
 			if(Validator.isNotNull(searchTerms.getKeywords())) {
 				businesses = BusinessLocalServiceUtil.getBusinesses(themeDisplay.getScopeGroupId(), searchTerms.getKeywords());
 			} else if(accountStatus!=0) {
@@ -113,6 +120,15 @@
 			}
 			
 			totalCount = BusinessLocalServiceUtil.countAll();
+			/* BusinessLocalServiceUtil.countBusiness(scopeGroupId, searchTerms.getKeywords(),
+				accountStatus, businessDomain); */
+			
+			/* System.out.print("**************totalcount========== " + totalCount+"  === ");
+			System.out.print("**************businessDomain========== " + businessDomain + "  === ");
+			System.out.print("**************businessDomain========== " + accountStatus + "  === ");
+			System.out.print("**************KEYWORDS========== " + searchTerms.getKeywords() + "  === "); */
+			
+			/* BusinessLocalServiceUtil.countAll(); */
 			total = totalCount;
 			results = businesses;
 			pageContext.setAttribute("results", results);
