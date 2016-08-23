@@ -70,32 +70,38 @@
 	
 %>
 
-<aui:row>
-	<aui:col width="20">
-		<liferay-ui:message key="account.status.total" />  : <%=countLocked +
-			countConfirmed + countRegistered + countApproved
-		%>
-	</aui:col>
-	<aui:col width="20">
-		<liferay-ui:message key="account.status.registered" />  : <%=countRegistered %>
-	</aui:col>
-	<aui:col width="20">
-		<liferay-ui:message key="account.status.confirmed" />  : <%=countConfirmed %>
-	</aui:col>
-	<aui:col width="20">
-		<liferay-ui:message key="account.status.approved" />  : <%=countApproved %>
-	</aui:col>
-	<aui:col width="20">
-		<liferay-ui:message key="account.status.locked" />  : <%=countLocked %>
-	</aui:col>
-	
-</aui:row>
-
 <c:if test="<%=BusinessPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_BUSINESS) %>" >
 	<liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
 </c:if>
 
-<div class="opencps-searchcontainer-wrapper default-box-shadow radius8">
+<aui:row cssClass="mg-b-20 text-align-right">
+	<aui:col width="100">
+		<span class="span4 bold">
+			<liferay-ui:message key="account.status.total" />  : <%=countLocked +
+				countConfirmed + countRegistered + countApproved
+			%>
+		</span>
+		<span class="span2">
+			<liferay-ui:message key="account.status.registered" />  : <%=countRegistered %>
+		</span>
+		
+		<span class="span2">
+			<liferay-ui:message key="account.status.confirmed" />  : <%=countConfirmed %>
+		</span>
+		
+		<span class="span2">
+			<liferay-ui:message key="account.status.approved" />  : <%=countApproved %>
+		</span>
+		
+		<span class="span2">
+			<liferay-ui:message key="account.status.locked" />  : <%=countLocked %>
+		</span>
+	</aui:col>
+</aui:row>
+
+
+
+<div class="opencps-searchcontainer-wrapper-width-header default-box-shadow radius8">
 
 	<liferay-ui:search-container searchContainer="<%= new BusinessSearch(
 		renderRequest ,SearchContainer	.DEFAULT_DELTA, iteratorURL) %>">
@@ -131,6 +137,8 @@
 				String accoutStatus = StringPool.BLANK;
 				
 				accoutStatus = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), PortletUtil.getAccountStatus(businesS.getAccountStatus(), themeDisplay.getLocale()));
+				
+				row.setClassName("opencps-searchcontainer-row");
 				row.addText(businesS.getIdNumber());
 				row.addText(businesS.getName());
 				row.addText(businesS.getBusinessType());
