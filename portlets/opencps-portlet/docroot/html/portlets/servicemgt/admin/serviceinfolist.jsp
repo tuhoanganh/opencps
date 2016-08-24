@@ -161,28 +161,28 @@
 			
 			<liferay-util:buffer var="domain">
 				<div class="row-fluid">
-					<div class="span3 bold">
+					<div class="span5 bold">
 						<liferay-ui:message key="service-domain" />
 					</div>
-					<div class="span9">
+					<div class="span7">
 						<%= DictItemUtil.getNameDictItem(serviceInfo.getDomainCode()) %>
 					</div>
 				</div>
 				
 				<div class="row-fluid">
-					<div class="span3 bold">
+					<div class="span5 bold">
 						<liferay-ui:message key="service-administrator" />
 					</div>
-					<div class="span9">
+					<div class="span7">
 						<%=DictItemUtil.getNameDictItem(serviceInfo.getAdministrationCode()) %>
 					</div>
 				</div>
 				
 				<div class="row-fluid">
-					<div class="span3 bold">
+					<div class="span5 bold">
 						<liferay-ui:message key="status" />
 					</div>
-					<div class="span9">
+					<div class="span7">
 						<%=statusLabel %>
 					</div>
 				</div>
