@@ -106,19 +106,19 @@
 			
 				<div class="row-fluid">
 					
-					<div class="span3 bold-label">
+					<div class="span4 bold">
 						<liferay-ui:message key="template-number"/>
 					</div>
 					
-					<div class="span9"><%=templateNo%></div>
+					<div class="span8"><%=templateNo%></div>
 				</div>
 				
 				<div class="row-fluid">
-					<div class="span3 bold-label">
+					<div class="span4 bold-label">
 						<liferay-ui:message key="template_name"/>
 					</div>
 					
-					<div class="span9"><%=dossierTemplate.getTemplateName() %></div>
+					<div class="span8"><%=dossierTemplate.getTemplateName() %></div>
 				</div>
 				
 			</liferay-util:buffer>
