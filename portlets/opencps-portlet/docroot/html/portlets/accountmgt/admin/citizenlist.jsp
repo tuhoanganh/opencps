@@ -36,6 +36,7 @@
 <%@page import="org.opencps.accountmgt.util.AccountMgtUtil"%>
 <%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
+
 <%@ include file="../init.jsp" %>
 
 
@@ -72,26 +73,6 @@
 	
 %>
 
-<aui:row>
-	<aui:col width="20">
-		<liferay-ui:message key="account.status.total" />  : <%=countLocked +
-			countConfirmed + countRegistered + countApproved
-		%>
-	</aui:col>
-	<aui:col width="20">
-		<liferay-ui:message key="account.status.registered" />  : <%=countRegistered %>
-	</aui:col>
-	<aui:col width="20">
-		<liferay-ui:message key="account.status.confirmed" />  : <%=countConfirmed %>
-	</aui:col>
-	<aui:col width="20">
-		<liferay-ui:message key="account.status.approved" />  : <%=countApproved %>
-	</aui:col>
-	<aui:col width="20">
-		<liferay-ui:message key="account.status.locked" />  : <%=countLocked %>
-	</aui:col>
-	
-</aui:row>
 
 <c:if test="<%=CitizenPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_CITIZEN) %>" >
 	<liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
@@ -137,7 +118,7 @@
 			row.addJSP("center", SearchEntry.DEFAULT_VALIGN,  "/html/portlets/accountmgt/admin/citizen_actions.jsp", config.getServletContext(), request, response);
 			
 		%>
-		
-	</liferay-ui:search-container-row>
-	<liferay-ui:search-iterator type="opencs_page_iterator"/>
-</liferay-ui:search-container>	
+		</liferay-ui:search-container-row>
+		<liferay-ui:search-iterator type="opencs_page_iterator"/>
+	</liferay-ui:search-container>	
+</div>

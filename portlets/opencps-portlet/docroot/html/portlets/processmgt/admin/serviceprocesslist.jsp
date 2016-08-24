@@ -89,7 +89,6 @@
 				editURL.setParameter("serviceProcessId", String.valueOf(process.getServiceProcessId()));
 				editURL.setParameter("backURL", currentURL);
 				
-				row.setClassName("opencps-searchcontainer-row");
 			%>
 		
 			<liferay-util:buffer var="no">

@@ -92,7 +92,7 @@
 										%>
 								</aui:select>
 							</aui:col>
-							<aui:col width="30" cssClass="search-col">
+							<aui:col width="50" cssClass="search-col">
 								<liferay-ui:input-search 
 									id="keywords1" 
 									name="keywords1" 
