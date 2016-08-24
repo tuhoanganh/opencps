@@ -88,11 +88,11 @@ public class BusinessFinderImpl extends BasePersistenceImpl<Business> implements
 						true, keywords);
 
 				sql = CustomSQLUtil.replaceKeywords(sql,
-						"lower(opencps_acc_business.shortName))",
+						"lower(opencps_acc_business.shortName)",
 						StringPool.LIKE, true, keywords);
 
 				sql = CustomSQLUtil.replaceKeywords(sql,
-						"lower(opencps_acc_business.enName", StringPool.LIKE,
+						"lower(opencps_acc_business.enName))", StringPool.LIKE,
 						true, keywords);
 
 			} else {
