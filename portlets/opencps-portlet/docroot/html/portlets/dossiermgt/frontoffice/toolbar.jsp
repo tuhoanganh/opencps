@@ -113,7 +113,7 @@
 									itemsEmptyOption="true"
 									itemNames="serviceDomainId"
 									selectedItems="<%=String.valueOf(serviceDomainId)%>"
-									cssClass="search-input select-box"
+									cssClass="search-input select-box input100"
 								/>
 							</aui:col>
 							<aui:col width="30" cssClass="search-col">
@@ -128,14 +128,14 @@
 									itemsEmptyOption="true"
 									itemNames="govAgencyId"
 									selectedItems="<%=String.valueOf(govAgencyId)%>"
-									cssClass="search-input select-box"
+									cssClass="search-input select-box input100"
 								/>
 							</aui:col>
 							<aui:col width="30" cssClass="search-col">
 								<liferay-ui:input-search 
 									id="keywords1"
 									name="keywords"
-									title="keywords"
+									title='<%= LanguageUtil.get(locale, "keywords") %>'
 									placeholder='<%= LanguageUtil.get(locale, "keywords") %>'
 									cssClass="search-input input-keyword"
 								/>
@@ -157,7 +157,7 @@
 										itemsEmptyOption="true"
 										itemNames="serviceDomainId"
 										selectedItems="<%=String.valueOf(serviceDomainId)%>"
-										cssClass="search-input select-box"
+										cssClass="search-input select-box input100"
 									/>
 								</aui:col>
 								<aui:col width="30" cssClass="search-col">
@@ -170,7 +170,7 @@
 										itemsEmptyOption="true"
 										itemNames="dossierStatusNew"
 										optionValueType="code"
-										cssClass="search-input select-box"
+										cssClass="search-input select-box input100"
 									/>
 									
 								</aui:col>
@@ -178,7 +178,7 @@
 									<liferay-ui:input-search 
 										id="keywords1"
 										name="keywords"
-										title="keywords"
+										title='<%= LanguageUtil.get(locale, "keywords") %>'
 										placeholder='<%=LanguageUtil.get(locale, "keywords") %>'
 										cssClass="search-input input-keyword"
 									/>
