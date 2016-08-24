@@ -206,39 +206,4 @@ body{
 .opencps-theme.ux .home_bg #column-1 .portlet-borderless-container{
   background: transparent !important;
 }
-/*vtduy quan ly can bo */
-
-.opencps-theme.ux .portlet-boundary_2_WAR_opencpsportlet_ .table .last .btn {
-	border-radius: 20px;
-    color: white;
-    display: block;
-    margin: 5px 0;
-    position: relative;
-    width: 110px;
-}
-
-.opencps-theme.ux .portlet-boundary_2_WAR_opencpsportlet_ .table .last .btn:BEFORE {
-    content: "\f044";
-    margin-left: -25px;
-    font-family: FontAwesome;
-}
-
-/*test*/	
-.opencps-theme.ux .button-add {
-	width: 108px;
-	border-radius: 17px 17px 17px 17px;
-	background-color: green;
-	height: 30px;
-	margin-top: 5px;
-}
-
-.opencps-theme.ux .button-del {
-	width: 108px;
-	border-radius: 17px 17px 17px 17px;
-	background-color: #b30e2c;
-	height: 30px;
-	margin-top: 5px;
-}
-
-/*end*/
 

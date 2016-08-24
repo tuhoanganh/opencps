@@ -76,6 +76,12 @@
 		MessageKeys.USERMGT_JOBPOS_DELETE_SUCCESS) %>"
 />
 
+<liferay-ui:error 
+	key="jobpos-existed-title" 
+	message="jobpos-existed-title"
+/>
+
+
 <portlet:actionURL var="updateJobPosURL" name="updateJobPoses">
 	<portlet:param name="workingUnitId" value="<%=String.valueOf(workingUnitId) %>"/>
 	<portlet:param name="returnURL" value="<%=returnURL %>"/>

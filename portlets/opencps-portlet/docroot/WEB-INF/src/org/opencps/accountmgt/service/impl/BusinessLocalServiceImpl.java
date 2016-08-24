@@ -399,7 +399,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 			userLocalService.getUser(business.getMappingUserId());
 
 		Date now = new Date();
-
+		
 		if (mappingUser != null) {
 			// Reset password
 			if (isChangePassword) {
@@ -437,6 +437,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 			}
 		}
 
+		
 		business.setAddress(address);
 
 		business.setBusinessType(businessType);
