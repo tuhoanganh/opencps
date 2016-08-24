@@ -76,7 +76,6 @@
 				} catch(Exception e){
 					
 				}
-			
 				total = totalCount;
 				results = dossierFileBeans;
 				

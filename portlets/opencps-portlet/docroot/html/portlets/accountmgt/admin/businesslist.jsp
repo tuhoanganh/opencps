@@ -42,14 +42,14 @@
 
 
 <liferay-util:include page="/html/portlets/accountmgt/admin/toptabs.jsp" servletContext="<%=application %>" />
-
+		
 
 <%
 	if(request.getAttribute(WebKeys.BUSINESS_ENTRY) != null){
 		business = (Business) request.getAttribute(WebKeys.BUSINESS_ENTRY);
 	}
 
-	long businessId = business != null ? business.getBusinessId() : 0L;
+	long businessId = business != null ? business.getBusinessId() : 0;
 	
 	int accountStatus = ParamUtil.getInteger(request, BusinessDisplayTerms.BUSINESS_ACCOUNTSTATUS);
 	
@@ -64,6 +64,8 @@
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", "/html/portlets/accountmgt/admin/businesslist.jsp");
 	iteratorURL.setParameter(BusinessDisplayTerms.BUSINESS_ACCOUNTSTATUS, String.valueOf(accountStatus));
+	
+	String businessDomain = ParamUtil.getString(request, "businessDomain");
 	
 	List<Business> businesses = new ArrayList<Business>();
 	int totalCount = 0;
@@ -102,6 +104,11 @@
 		<%
 			BusinessSearchTerm searchTerms = (BusinessSearchTerm) searchContainer.getSearchTerms();
 			
+			businesses = BusinessLocalServiceUtil.searchBusiness(scopeGroupId, 
+				searchTerms.getKeywords() , accountStatus, businessDomain,
+				searchContainer.getStart(), searchContainer.getEnd());
+			
+			/* 
 			if(Validator.isNotNull(searchTerms.getKeywords())) {
 				businesses = BusinessLocalServiceUtil.getBusinesses(themeDisplay.getScopeGroupId(), searchTerms.getKeywords());
 			} else if(accountStatus!=0) {
@@ -110,13 +117,25 @@
 				businesses = BusinessLocalServiceUtil.getBusinesses(themeDisplay.getScopeGroupId(), searchTerms.getKeywords(), accountStatus);
 			} else {
 				businesses = BusinessLocalServiceUtil.getBusinesses(searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-			}
+			} */
 			
-			totalCount = BusinessLocalServiceUtil.countAll();
+			totalCount = BusinessLocalServiceUtil.countBusiness(scopeGroupId, searchTerms.getKeywords(),
+					accountStatus, businessDomain); 
+			/* BusinessLocalServiceUtil.countAll(); */
+			/* BusinessLocalServiceUtil.countBusiness(scopeGroupId, searchTerms.getKeywords(),
+				accountStatus, businessDomain); */
+			
+			/* System.out.print("**************totalcount========== " + totalCount+"  === ");
+			System.out.print("**************businessDomain========== " + businessDomain + "  === ");
+			System.out.print("**************businessDomain========== " + accountStatus + "  === ");
+			System.out.print("**************KEYWORDS========== " + searchTerms.getKeywords() + "  === "); */
+			
+			/* BusinessLocalServiceUtil.countAll(); */
 			total = totalCount;
 			results = businesses;
 			pageContext.setAttribute("results", results);
 			pageContext.setAttribute("total", total);
+			
 		%>
 	
 	</liferay-ui:search-container-results>

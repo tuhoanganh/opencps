@@ -118,6 +118,7 @@
 										itemsEmptyOption="true"
 										itemNames="businessDomain"
 										cssClass="search-input select-box"
+										optionValueType="code"
 									/>
 							</aui:col>
 							
@@ -126,7 +127,7 @@
 									label="<%=StringPool.BLANK %>"
 									cssClass="search-input select-box"
 								>
-									<aui:option>
+									<aui:option value="<%=-1 %>">
 										<liferay-ui:message key="account-status" />
 									</aui:option>
 									<%
