@@ -16,12 +16,10 @@
 @import url(portlets/portlet_login.css);
 @import url(portlets/portlet_hung_custom.css);
 @import url(portlets/portlet_19_20_22.css);
+@import url(portlets/portlet_13_fileinfo.css);
 @import url(button.css);
-@import url(portlets/portlet_26.css);
-@import url(portlets/portlet_11.css);
 @import url(portlets/portlet_10.css);
 @import url(portlets/portlet_18.css);
-@import url(portlets/portlet_13_fileinfo.css);
 
 /* Components  */
 @import url(button.css);
@@ -142,6 +140,27 @@ body{
 .opencps-theme.ux .opencps-form-navigator-container .nav-content-row .control-group textarea{
     flex-grow: 1;
     max-width: 100% !important;
+}
+
+
+.opencps-theme.ux .opencps-form-navigator-container .nav-content-row-2 {
+    border-bottom: 1px solid #e1e1e1;
+    margin-bottom: 15px;
+}
+
+
+.opencps-theme.ux .opencps-form-navigator-container .nav-content-row-2 .control-group label{
+    font-weight: bold;
+}
+
+
+.opencps-theme.ux .opencps-form-navigator-container .nav-content-row-2 .fake_textarea {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin-bottom: 20px;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 10px;
 }
 
 
