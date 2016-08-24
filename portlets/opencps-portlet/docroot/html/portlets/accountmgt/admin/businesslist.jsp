@@ -51,7 +51,7 @@
 
 	long businessId = business != null ? business.getBusinessId() : 0L;
 	
-	int accountStatus = ParamUtil.getInteger(request, BusinessDisplayTerms.BUSINESS_ACCOUNTSTATUS);
+	int accountStatus = ParamUtil.getInteger(request, "account-status", -1);
 	
 	int countRegistered = BusinessLocalServiceUtil.countByG_S(scopeGroupId, PortletConstants.ACCOUNT_STATUS_REGISTERED);
 	
@@ -64,34 +64,13 @@
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", "/html/portlets/accountmgt/admin/businesslist.jsp");
 	iteratorURL.setParameter(BusinessDisplayTerms.BUSINESS_ACCOUNTSTATUS, String.valueOf(accountStatus));
-	
+	iteratorURL.setParameter("tabs1", AccountMgtUtil.TOP_TABS_BUSINESS);
 	String businessDomain = ParamUtil.getString(request, "businessDomain");
 	
 	List<Business> businesses = new ArrayList<Business>();
 	int totalCount = 0;
 	
 %>
-
-<aui:row>
-	<aui:col width="20">
-		<liferay-ui:message key="account.status.total" />  : <%=countLocked +
-			countConfirmed + countRegistered + countApproved
-		%>
-	</aui:col>
-	<aui:col width="20">
-		<liferay-ui:message key="account.status.registered" />  : <%=countRegistered %>
-	</aui:col>
-	<aui:col width="20">
-		<liferay-ui:message key="account.status.confirmed" />  : <%=countConfirmed %>
-	</aui:col>
-	<aui:col width="20">
-		<liferay-ui:message key="account.status.approved" />  : <%=countApproved %>
-	</aui:col>
-	<aui:col width="20">
-		<liferay-ui:message key="account.status.locked" />  : <%=countLocked %>
-	</aui:col>
-	
-</aui:row>
 
 <c:if test="<%=BusinessPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_BUSINESS) %>" >
 	<liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
@@ -108,29 +87,9 @@
 				searchTerms.getKeywords() , accountStatus, businessDomain,
 				searchContainer.getStart(), searchContainer.getEnd());
 			
-			/* 
-			if(Validator.isNotNull(searchTerms.getKeywords())) {
-				businesses = BusinessLocalServiceUtil.getBusinesses(themeDisplay.getScopeGroupId(), searchTerms.getKeywords());
-			} else if(accountStatus!=0) {
-				businesses = BusinessLocalServiceUtil.getBusinesses(themeDisplay.getScopeGroupId(), accountStatus);
-			} else if(Validator.isNotNull(searchTerms.getKeywords()) && accountStatus!=0)  {
-				businesses = BusinessLocalServiceUtil.getBusinesses(themeDisplay.getScopeGroupId(), searchTerms.getKeywords(), accountStatus);
-			} else {
-				businesses = BusinessLocalServiceUtil.getBusinesses(searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-			} */
-			
 			totalCount = BusinessLocalServiceUtil.countBusiness(scopeGroupId, searchTerms.getKeywords(),
 					accountStatus, businessDomain); 
-			/* BusinessLocalServiceUtil.countAll(); */
-			/* BusinessLocalServiceUtil.countBusiness(scopeGroupId, searchTerms.getKeywords(),
-				accountStatus, businessDomain); */
 			
-			/* System.out.print("**************totalcount========== " + totalCount+"  === ");
-			System.out.print("**************businessDomain========== " + businessDomain + "  === ");
-			System.out.print("**************businessDomain========== " + accountStatus + "  === ");
-			System.out.print("**************KEYWORDS========== " + searchTerms.getKeywords() + "  === "); */
-			
-			/* BusinessLocalServiceUtil.countAll(); */
 			total = totalCount;
 			results = businesses;
 			pageContext.setAttribute("results", results);
@@ -156,7 +115,7 @@
 			row.addJSP("center", SearchEntry.DEFAULT_VALIGN,  "/html/portlets/accountmgt/admin/business_actions.jsp", config.getServletContext(), request, response);
 			
 		%>
-		
-	</liferay-ui:search-container-row>
-	<liferay-ui:search-iterator type="opencs_page_iterator"/>
-</liferay-ui:search-container>	
+		</liferay-ui:search-container-row>
+		<liferay-ui:search-iterator type="opencs_page_iterator"/>
+	</liferay-ui:search-container>	
+</div>

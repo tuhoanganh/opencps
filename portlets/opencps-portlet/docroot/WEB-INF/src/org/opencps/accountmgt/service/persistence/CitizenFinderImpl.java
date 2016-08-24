@@ -100,7 +100,7 @@ public class CitizenFinderImpl extends BasePersistenceImpl<Citizen> implements
 			q.addEntity("Citizen", CitizenImpl.class);
 
 			QueryPos qPos = QueryPos.getInstance(q);
-			
+
 			qPos.add(groupId);
 
 			if (accountStatus != -1) {
@@ -115,7 +115,7 @@ public class CitizenFinderImpl extends BasePersistenceImpl<Citizen> implements
 
 			return (List<Citizen>) QueryUtil.list(q, getDialect(), start, end);
 		} catch (Exception e) {
-			// _log.error(e);
+			_log.error(e);
 		} finally {
 			session.close();
 		}
@@ -133,7 +133,7 @@ public class CitizenFinderImpl extends BasePersistenceImpl<Citizen> implements
 			andOperator = true;
 		}
 
-		return _countCitizen(groupId, names, accountStatus,	andOperator);
+		return _countCitizen(groupId, names, accountStatus, andOperator);
 	}
 
 	private int _countCitizen(long groupId, String[] keywords,
@@ -147,9 +147,9 @@ public class CitizenFinderImpl extends BasePersistenceImpl<Citizen> implements
 		try {
 			session = openSession();
 			String sql = CustomSQLUtil.get(COUNT_CITIZEN);
-			
+
 			if (keywords != null && keywords.length > 0) {
-				
+
 				sql = CustomSQLUtil.replaceKeywords(sql,
 						"lower(opencps_acc_citizen.fullName)", StringPool.LIKE,
 						true, keywords);
@@ -166,7 +166,7 @@ public class CitizenFinderImpl extends BasePersistenceImpl<Citizen> implements
 						"AND (opencps_acc_citizen.accountStatus = ?)",
 						StringPool.BLANK);
 			}
-			
+
 			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
 			SQLQuery q = session.createSQLQuery(sql);
 			q.setCacheable(false);
@@ -197,7 +197,7 @@ public class CitizenFinderImpl extends BasePersistenceImpl<Citizen> implements
 			}
 
 		} catch (Exception e) {
-			// _log.error(e);
+			_log.error(e);
 		} finally {
 			session.close();
 		}

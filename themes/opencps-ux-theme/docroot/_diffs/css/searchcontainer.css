@@ -139,7 +139,7 @@
     margin: 5px 0;
     position: relative;
     text-indent: 20px;
-    width: 110px;
+    min-width: 110px;
 }
 
 .opencps-theme.ux .search-container-action a{
@@ -151,7 +151,7 @@
     position: absolute;
     text-decoration: none;
     top: 0;
-    width: 110px;
+    width: 100%;
 }
 
 .opencps-theme.ux .search-container-action a:hover{
@@ -198,13 +198,13 @@
 
 .opencps-theme.ux .search-container-action.fa.deactivate{
 	background-color: #0090ff;
-	@extend .fa-pencil-square-o;
+	@extend .fa-lock;
     vertical-align: middle;
 }
 
 .opencps-theme.ux .search-container-action.fa.activate{
 	background-color: #0090ff;
-	@extend .fa-pencil-square-o;
+	@extend .fa-check-square-o;
     vertical-align: middle;
 }
 
