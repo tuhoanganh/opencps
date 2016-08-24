@@ -49,7 +49,7 @@
 		business = (Business) request.getAttribute(WebKeys.BUSINESS_ENTRY);
 	}
 
-	long businessId = business != null ? business.getBusinessId() : 0;
+	long businessId = business != null ? business.getBusinessId() : 0L;
 	
 	int accountStatus = ParamUtil.getInteger(request, BusinessDisplayTerms.BUSINESS_ACCOUNTSTATUS);
 	

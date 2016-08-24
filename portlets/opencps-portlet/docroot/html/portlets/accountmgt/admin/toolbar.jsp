@@ -72,11 +72,11 @@
 					<c:if test="<%=tabs1.equals(AccountMgtUtil.TOP_TABS_CITIZEN)%>">
 						<aui:row>
 							<aui:col width="50" cssClass="search-col">
-								<aui:select name="<%=CitizenDisplayTerms.CITIZEN_ACCOUNTSTATUS %>" 
+								<aui:select name="citizenAccStt" 
 									label="<%=StringPool.BLANK %>" 
 									cssClass="search-input select-box"
 									>
-										<aui:option value="<%=-1 %>">
+										<aui:option value="<%= -1 %>">
 											<liferay-ui:message key="account-status" />
 										</aui:option>
 										<%
@@ -94,7 +94,7 @@
 							<aui:col width="30" cssClass="search-col">
 								<liferay-ui:input-search 
 									id="keywords1" 
-									name="keywords" 
+									name="keywords1" 
 									title='<%= LanguageUtil.get(locale, "keywords") %>' 
 									placeholder='<%= LanguageUtil.get(locale, "name") %>' 			
 									cssClass="search-input input-keyword"

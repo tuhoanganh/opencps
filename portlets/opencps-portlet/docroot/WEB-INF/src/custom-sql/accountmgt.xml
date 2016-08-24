@@ -49,4 +49,34 @@
 	    		(opencps_acc_businessdomain.businessDomainCode = ?)
 		]]>
 	</sql>
+	
+	<sql id="org.opencps.accountmgt.service.persistence.CitizenFinder.searchCitizen">	
+		<![CDATA[
+	    	SELECT 
+	    		opencps_acc_citizen.*
+	    	FROM
+	    		opencps_acc_citizen
+	    	WHERE
+	    		(opencps_acc_citizen.groupId = ?)
+	    	AND
+	    		(opencps_acc_citizen.accountStatus = ?)
+	    	AND
+	    		(lower(opencps_acc_citizen.fullName) LIKE ? [$AND_OR_NULL_CHECK$]) 
+		]]>
+	</sql>	
+	
+	<sql id="org.opencps.accountmgt.service.persistence.CitizenFinder.countCitizen">	
+		<![CDATA[
+	    	SELECT 
+	    		count(*) AS COUNT_VALUE
+	    	FROM
+	    		opencps_acc_citizen
+	    	WHERE
+	    		(opencps_acc_citizen.groupId = ?)
+	    	AND
+	    		(opencps_acc_citizen.accountStatus = ?)
+	    	AND
+	    		(lower(opencps_acc_citizen.fullName) LIKE ? [$AND_OR_NULL_CHECK$]) 
+		]]>
+	</sql>
 </custom-sql>

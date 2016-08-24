@@ -53,7 +53,7 @@
 	
 	long citizenId = citizen != null ? citizen.getCitizenId() : 0L;
 	
-	int accountStatus = ParamUtil.getInteger(request, CitizenDisplayTerms.CITIZEN_ACCOUNTSTATUS);
+	int accountStatus = ParamUtil.getInteger(request, "citizenAccStt", -1);
 	
 	int countRegistered = CitizenLocalServiceUtil.countByG_S(scopeGroupId, PortletConstants.ACCOUNT_STATUS_REGISTERED);
 	
@@ -62,6 +62,8 @@
 	int countApproved = CitizenLocalServiceUtil.countByG_S(scopeGroupId, PortletConstants.ACCOUNT_STATUS_APPROVED);
 
 	int countLocked = CitizenLocalServiceUtil.countByG_S(scopeGroupId, PortletConstants.ACCOUNT_STATUS_LOCKED);
+	
+	String searchKeyword = ParamUtil.getString(request, "keywords1");
 	
 	int totalCount = 0;
 	
@@ -102,19 +104,12 @@
 		<%
 			CitizenSearchTerm searchTerms = (CitizenSearchTerm) searchContainer.getSearchTerms();
 			
-			if(Validator.isNotNull(searchTerms.getKeywords())) {
-				citizens = CitizenLocalServiceUtil.getCitizens(themeDisplay.getScopeGroupId(), searchTerms.getKeywords());
-			} else if(accountStatus!=0) {
-				citizens = CitizenLocalServiceUtil.getCitizens(themeDisplay.getScopeGroupId(), accountStatus);
-			} else if(Validator.isNotNull(searchTerms.getKeywords()) && accountStatus!=0)  {
-				citizens = CitizenLocalServiceUtil.getCitizens(themeDisplay.getScopeGroupId(), searchTerms.getKeywords(), accountStatus);
-			} else {
-				citizens = CitizenLocalServiceUtil.getCitizens(searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-			}
-			
-			totalCount = CitizenLocalServiceUtil.countAll();
+			citizens = CitizenLocalServiceUtil.searchCitizen(scopeGroupId, searchKeyword, accountStatus, searchContainer.getStart(), searchContainer.getEnd());
+			totalCount = CitizenLocalServiceUtil.countCitizen(scopeGroupId, searchKeyword, accountStatus);
+			 
 			total = totalCount;
 			results = citizens;
+			
 			pageContext.setAttribute("results", results);
 			pageContext.setAttribute("total", total);
 		%>
@@ -132,7 +127,6 @@
 			String accoutStatus = StringPool.BLANK;
 			
 			accoutStatus = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), PortletUtil.getAccountStatus(citiZen.getAccountStatus(), themeDisplay.getLocale()));
-			
 			
 			row.addText(citiZen.getPersonalId());
 			row.addText(citiZen.getFullName());
