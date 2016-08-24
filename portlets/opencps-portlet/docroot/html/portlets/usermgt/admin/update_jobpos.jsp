@@ -1,13 +1,5 @@
 
-<%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
-<%@page import="org.opencps.usermgt.util.UserMgtUtil"%>
-<%@page import="org.opencps.util.MessageKeys"%>
-<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
-<%@page import="org.opencps.usermgt.search.JobPosDisplayTerms"%>
-<%@page import="org.opencps.usermgt.service.JobPosLocalServiceUtil"%>
-<%@page import="org.opencps.usermgt.model.JobPos"%>
-<%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
-<%@page import="com.liferay.portal.kernel.log.Log"%>
+<%@page import="org.opencps.util.WebKeys"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -26,6 +18,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+
+<%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
+<%@page import="org.opencps.usermgt.util.UserMgtUtil"%>
+<%@page import="org.opencps.util.MessageKeys"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
+<%@page import="org.opencps.usermgt.search.JobPosDisplayTerms"%>
+<%@page import="org.opencps.usermgt.service.JobPosLocalServiceUtil"%>
+<%@page import="org.opencps.usermgt.model.JobPos"%>
+<%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
+<%@page import="com.liferay.portal.kernel.log.Log"%>
+
 <%@ include file="../init.jsp"%>
 
 <%
@@ -43,10 +46,10 @@
 	
 	String message = LanguageUtil.get(portletConfig ,themeDisplay.getLocale(), "are-you-sure-to-update");
 %>
-<liferay-ui:header
+<%-- <liferay-ui:header
 	backURL="<%= redirectURL %>"
 	title='<%= (jobPos == null) ? "add-jobpos" : "update-jobpos" %>'
-/>
+/> --%>
 
 <liferay-ui:error 
 	key="<%=MessageKeys.USERMGT_JOBPOS_UPDATE_ERROR %>" 
@@ -110,7 +113,7 @@
 		var btnChooseCancel = A.one('#<portlet:namespace />cancel');
 		if(btnChooseCancel) {
 			btnChooseCancel.on('click', function() {
-				Liferay.Util.getOpener().<portlet:namespace/>closePopup('<portlet:namespace/>dialog');
+				closeDialog('<portlet:namespace/>updateJobPos', '<%=WebKeys.USER_MGT_PORTLET%>_');
 			});
 		}
 		
@@ -122,7 +125,7 @@
 				if(r == true) {
 					<portlet:namespace/>submitItemForm();
 				} else {
-					Liferay.Util.getOpener().<portlet:namespace/>closePopup('<portlet:namespace/>dialog');
+					closeDialog('<portlet:namespace/>updateJobPos', '<%=WebKeys.USER_MGT_PORTLET%>_');
 				}
 				
 			});
@@ -137,8 +140,7 @@
               form: { id: '<portlet:namespace />fm2' },
               on: {
                   success: function(){
-                	  Liferay.Util.getOpener().<portlet:namespace/>closePopup('<portlet:namespace/>dialog');
-                	  
+                	  closeDialog('<portlet:namespace/>updateJobPos', '<%=WebKeys.USER_MGT_PORTLET%>_');
                   }
              }
         });

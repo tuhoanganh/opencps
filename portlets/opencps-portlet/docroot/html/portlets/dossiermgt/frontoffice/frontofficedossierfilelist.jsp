@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,6 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+
 <%@page import="org.opencps.dossiermgt.bean.DossierFileBean"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="org.opencps.util.DateTimeUtil"%>
@@ -93,34 +93,34 @@
 					DossierFile dossierFile = dossierFileBean.getDossierFile();
 				%>
 				
-				<liferay-util:buffer var="boundcol1">
+				<liferay-util:buffer var="dossierFileInfo">
 					<div class="row-fluid">
 
-						<div class="span3 bold-label">
+						<div class="span4 bold-label">
 							<liferay-ui:message key="create-date"/>
 						</div>
-						<div class="span9"><%=DateTimeUtil.convertDateToString(dossierFile.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT) %></div>
+						<div class="span8"><%=DateTimeUtil.convertDateToString(dossierFile.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT) %></div>
 					</div>
 					
 					<div class="row-fluid">
-						<div class="span2 bold-label">
+						<div class="span4 bold-label">
 							<liferay-ui:message key="dossier-file-no"/>
 						</div>
 						
-						<div class="span9"><%=dossierFile.getDossierFileNo() %></div>
+						<div class="span8"><%=dossierFile.getDossierFileNo() %></div>
 					</div>
 					
 					<div class="row-fluid">
-						<div class="span2 bold-label"><liferay-ui:message key="dossier-file-date"/></div>
+						<div class="span4 bold-label"><liferay-ui:message key="dossier-file-date"/></div>
 						
-						<div class="span9"><%=DateTimeUtil.convertDateToString(dossierFile.getDossierFileDate(), DateTimeUtil._VN_DATE_FORMAT)%></div>
+						<div class="span8"><%=DateTimeUtil.convertDateToString(dossierFile.getDossierFileDate(), DateTimeUtil._VN_DATE_FORMAT)%></div>
 					</div>
 					
 				</liferay-util:buffer>	
 			
-				<liferay-util:buffer var="boundcol2">
+				<liferay-util:buffer var="dossierFileInfoDetail">
 					<div class="row-fluid">
-						<div class="span2 bold-label">
+						<div class="span3 bold-label">
 							<liferay-ui:message key="display-name"/>
 						</div>
 						<div class="span9"><%=dossierFile.getDisplayName()%> </div>
@@ -128,7 +128,7 @@
 					
 					<div class="row-fluid">
 					
-						<div class="span2 bold-label">
+						<div class="span3 bold-label">
 							<liferay-ui:message key="dossier-name"/>
 						</div>
 						
@@ -136,7 +136,7 @@
 					</div>
 					
 					<div class="row-fluid">
-						<div class="span2 bold-label"><liferay-ui:message key="dossier-file-type"/></div>
+						<div class="span3 bold-label"><liferay-ui:message key="dossier-file-type"/></div>
 						
 						<div class="span9"><%=String.valueOf(dossierFileBean.getPartType())%></div>
 					</div>
@@ -151,9 +151,9 @@
 					*/
 					row.setClassName("opencps-searchcontainer-row");
 					
-					row.addText(boundcol1);
+					row.addText(dossierFileInfo);
 					
-					row.addText(boundcol2);
+					row.addText(dossierFileInfoDetail);
 					
 					StringBuffer sb = new StringBuffer();
 					sb.append("<input type=\"checkbox\""+ (dossierFile.getOriginal() == 0 ? "checked" : StringPool.BLANK) + ">");

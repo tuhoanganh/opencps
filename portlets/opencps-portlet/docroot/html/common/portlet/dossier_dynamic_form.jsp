@@ -1,6 +1,4 @@
 
-<%@page import="org.opencps.util.JsonUtils"%>
-<%@page import="com.liferay.portal.security.auth.AuthTokenUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -46,6 +44,8 @@
 <%@page import="org.opencps.accountmgt.model.Citizen"%>
 <%@page import="org.opencps.backend.util.AutoFillFormData"%>
 <%@page import="org.opencps.backend.util.BackendUtils"%>
+<%@page import="org.opencps.util.JsonUtils"%>
+<%@page import="com.liferay.portal.security.auth.AuthTokenUtil"%>
 
 <%@ include file="/init.jsp"%>
 
@@ -329,31 +329,31 @@
 
 
 <script type="text/javascript">
-function openCPSSelectedTextValue(id) {
-	var listbox = document.getElementById(id);
-	var selIndex = listbox.selectedIndex;
-	var selText = listbox.options[selIndex].text; 
-    return selText;
-}
-
-function openCPSSelectedbildDataSource(controlId,dictCollectionId, parentItemId) {
-	Liferay.Service(
-			  '/opencps-portlet.dictitem/get-dictitems-inuse-by-dictcollectionId_parentItemId_datasource',
-			  {
-			    dictCollectionId: dictCollectionId,
-			    parentItemId: parentItemId
-			  },
-			  function(obj) {
-				var comboTarget = document.getElementById(controlId); 
-				comboTarget.innerHTML = "";
-			    for(j in obj){
-                    var sub_key = j;
-                    var sub_val = obj[j];
-                    var newOpt = comboTarget.appendChild(document.createElement('option'));
-					newOpt.value = sub_key;
-					newOpt.text = sub_val;
-                }
-			  }
-			);
-}
+	function openCPSSelectedTextValue(id) {
+		var listbox = document.getElementById(id);
+		var selIndex = listbox.selectedIndex;
+		var selText = listbox.options[selIndex].text; 
+	    return selText;
+	}
+	
+	function openCPSSelectedbildDataSource(controlId,dictCollectionId, parentItemId) {
+		Liferay.Service(
+				  '/opencps-portlet.dictitem/get-dictitems-inuse-by-dictcollectionId_parentItemId_datasource',
+				  {
+				    dictCollectionId: dictCollectionId,
+				    parentItemId: parentItemId
+				  },
+				  function(obj) {
+					var comboTarget = document.getElementById(controlId); 
+					comboTarget.innerHTML = "";
+				    for(j in obj){
+	                    var sub_key = j;
+	                    var sub_val = obj[j];
+	                    var newOpt = comboTarget.appendChild(document.createElement('option'));
+						newOpt.value = sub_key;
+						newOpt.text = sub_val;
+	                }
+				  }
+				);
+	}
 </script>
