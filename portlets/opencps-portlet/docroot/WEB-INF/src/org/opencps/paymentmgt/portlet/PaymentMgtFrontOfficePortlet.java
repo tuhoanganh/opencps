@@ -122,11 +122,11 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 		}
         catch (PortalException e) {
 	        // TODO Auto-generated catch block
-	        e.printStackTrace();
+	        _log.error(e);
         }
         catch (SystemException e) {
 	        // TODO Auto-generated catch block
-	        e.printStackTrace();
+	        _log.error(e);
         }
 		PaymentConfig paymentConfig = null;
 		try {
@@ -138,11 +138,11 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 		}
         catch (PortalException e) {
 	        // TODO Auto-generated catch block
-	        e.printStackTrace();
+	        _log.error(e);
         }
         catch (SystemException e) {
 	        // TODO Auto-generated catch block
-	        e.printStackTrace();
+	        _log.error(e);
         }
 		System.out.println("----REDIRECT KEYPAY----");
 		if (paymentConfig != null) {
@@ -167,11 +167,11 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 	        	}
                 catch (PortalException e) {
 	                // TODO Auto-generated catch block
-	                e.printStackTrace();
+	                _log.error(e);
                 }
                 catch (SystemException e) {
 	                // TODO Auto-generated catch block
-	                e.printStackTrace();
+	                _log.error(e);
                 }
 	        	//paymentFile.setKeypayGoodCode("GC_" + paymentFile.getDossierId());
 	        	good_code = paymentFile.getKeypayGoodCode();
@@ -495,7 +495,7 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 			return fileEntry;
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			_log.error(e);
 			UploadException uploadException =
 			    (UploadException) actionRequest.getAttribute(WebKeys.UPLOAD_EXCEPTION);
 
