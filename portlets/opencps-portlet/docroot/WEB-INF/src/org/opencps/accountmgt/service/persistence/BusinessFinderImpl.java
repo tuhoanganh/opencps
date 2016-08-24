@@ -163,7 +163,7 @@ public class BusinessFinderImpl extends BasePersistenceImpl<Business> implements
 
 			return (List<Business>) QueryUtil.list(q, getDialect(), start, end);
 		} catch (Exception e) {
-			// _log.error(e);
+			_log.error(e);
 		} finally {
 			session.close();
 		}
@@ -284,7 +284,7 @@ public class BusinessFinderImpl extends BasePersistenceImpl<Business> implements
 			}
 
 		} catch (Exception e) {
-			// _log.error(e);
+			_log.error(e);
 		} finally {
 			session.close();
 		}
