@@ -1,4 +1,3 @@
-<%@page import="org.opencps.accountmgt.model.BusinessDomain"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -33,6 +32,8 @@
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@page import="java.util.List"%>
+<%@page import="org.opencps.accountmgt.model.BusinessDomain"%>
+
 <%@ include file="../init.jsp"%>
 <%
 	String tabs1 = ParamUtil.getString(request, "tabs1", AccountMgtUtil.TOP_TABS_CITIZEN);
@@ -114,7 +115,7 @@
 										inlineField="<%=true%>"
 										inlineLabel="left"
 										showLabel="<%=false%>"
-										emptyOptionLabels="business-Domain"
+										emptyOptionLabels="business-domain"
 										itemsEmptyOption="true"
 										itemNames="businessDomain"
 										cssClass="search-input select-box"
@@ -123,7 +124,7 @@
 							</aui:col>
 							
 							 <aui:col width="30" cssClass="search-col">
-								<aui:select name="<%=BusinessDisplayTerms.BUSINESS_ACCOUNTSTATUS %>" 
+								<aui:select name="account-status" 
 									label="<%=StringPool.BLANK %>"
 									cssClass="search-input select-box"
 								>
