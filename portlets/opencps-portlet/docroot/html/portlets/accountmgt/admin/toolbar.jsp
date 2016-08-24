@@ -76,7 +76,7 @@
 									label="<%=StringPool.BLANK %>" 
 									cssClass="search-input select-box"
 									>
-										<aui:option>
+										<aui:option value="<%=-1 %>">
 											<liferay-ui:message key="account-status" />
 										</aui:option>
 										<%
