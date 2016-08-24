@@ -100,7 +100,7 @@ public class BusinessFinderImpl extends BasePersistenceImpl<Business> implements
 				sql = StringUtil
 						.replace(
 								sql,
-								"AND ((lower(opencps_acc_business.name) LIKE ? [$AND_OR_NULL_CHECK$]))",
+								"AND ((lower(opencps_acc_business.name) LIKE ? [$AND_OR_NULL_CHECK$])",
 								StringPool.BLANK);
 
 				sql = StringUtil
@@ -137,8 +137,6 @@ public class BusinessFinderImpl extends BasePersistenceImpl<Business> implements
 
 			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
 			
-			System.out.println("===========sql last chage: "+sql);
-
 			SQLQuery q = session.createSQLQuery(sql);
 			q.setCacheable(false);
 			q.addEntity("Business", BusinessImpl.class);
@@ -215,7 +213,7 @@ public class BusinessFinderImpl extends BasePersistenceImpl<Business> implements
 				sql = StringUtil
 						.replace(
 								sql,
-								"AND ((lower(opencps_acc_business.name) LIKE ? [$AND_OR_NULL_CHECK$]))",
+								"AND ((lower(opencps_acc_business.name) LIKE ? [$AND_OR_NULL_CHECK$])",
 								StringPool.BLANK);
 
 				sql = StringUtil
