@@ -2755,7 +2755,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 					dossierTemplate.getDossierTemplateId(), 0);
 		}
 		catch (Exception e) {
-
+			
 		}
 
 		boolean requiredFlag = false;
