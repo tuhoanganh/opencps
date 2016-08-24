@@ -3,7 +3,7 @@
 	<sql id="org.opencps.accountmgt.service.persistence.BusinessFinder.searchBusiness">	
 		<![CDATA[
 	    	SELECT 
-	    		opencps_acc_business*
+	    		opencps_acc_business.*
 	    	FROM
 	    		opencps_acc_business
 	    	INNER JOIN
@@ -15,11 +15,11 @@
 	    	AND
 	    		(opencps_acc_business.accountStatus = ?)
 	    	AND
-	    		((lower(opencps_acc_business.name) LIKE [$AND_OR_NULL_CHECK$]) 
+	    		((lower(opencps_acc_business.name) LIKE ? [$AND_OR_NULL_CHECK$]) 
 	    		OR 
-	    			(lower(opencps_acc_business.shortName) LIKE [$AND_OR_NULL_CHECK$]) 
+	    			(lower(opencps_acc_business.shortName) LIKE ? [$AND_OR_NULL_CHECK$]) 
 	    		OR 
-	    			(lower(opencps_acc_business.enName) LIKE [$AND_OR_NULL_CHECK$]))
+	    			(lower(opencps_acc_business.enName) LIKE ? [$AND_OR_NULL_CHECK$]))
 	    	AND
 	    		(opencps_acc_businessdomain.businessDomainCode = ?)
 		]]>
@@ -40,11 +40,11 @@
 	    	AND
 	    		(opencps_acc_business.accountStatus = ?)
 	    	AND
-	    		((lower(opencps_acc_business.name) LIKE [$AND_OR_NULL_CHECK$]) 
+	    		((lower(opencps_acc_business.name) LIKE ? [$AND_OR_NULL_CHECK$]) 
 	    		OR 
-	    			(lower(opencps_acc_business.shortName) LIKE [$AND_OR_NULL_CHECK$]) 
+	    			(lower(opencps_acc_business.shortName) LIKE ? [$AND_OR_NULL_CHECK$]) 
 	    		OR 
-	    			(lower(opencps_acc_business.enName) LIKE [$AND_OR_NULL_CHECK$]))
+	    			(lower(opencps_acc_business.enName) LIKE ? [$AND_OR_NULL_CHECK$]))
 	    	AND
 	    		(opencps_acc_businessdomain.businessDomainCode = ?)
 		]]>

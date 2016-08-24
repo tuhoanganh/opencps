@@ -42,14 +42,14 @@
 
 
 <liferay-util:include page="/html/portlets/accountmgt/admin/toptabs.jsp" servletContext="<%=application %>" />
-
+		
 
 <%
 	if(request.getAttribute(WebKeys.BUSINESS_ENTRY) != null){
 		business = (Business) request.getAttribute(WebKeys.BUSINESS_ENTRY);
 	}
 
-	long businessId = business != null ? business.getBusinessId() : 0L;
+	long businessId = business != null ? business.getBusinessId() : 0;
 	
 	int accountStatus = ParamUtil.getInteger(request, BusinessDisplayTerms.BUSINESS_ACCOUNTSTATUS);
 	
@@ -104,11 +104,11 @@
 		<%
 			BusinessSearchTerm searchTerms = (BusinessSearchTerm) searchContainer.getSearchTerms();
 			
-			/* businesses = BusinessLocalServiceUtil.searchBusiness(scopeGroupId, 
+			businesses = BusinessLocalServiceUtil.searchBusiness(scopeGroupId, 
 				searchTerms.getKeywords() , accountStatus, businessDomain,
 				searchContainer.getStart(), searchContainer.getEnd());
-			 */
 			
+			/* 
 			if(Validator.isNotNull(searchTerms.getKeywords())) {
 				businesses = BusinessLocalServiceUtil.getBusinesses(themeDisplay.getScopeGroupId(), searchTerms.getKeywords());
 			} else if(accountStatus!=0) {
@@ -117,9 +117,11 @@
 				businesses = BusinessLocalServiceUtil.getBusinesses(themeDisplay.getScopeGroupId(), searchTerms.getKeywords(), accountStatus);
 			} else {
 				businesses = BusinessLocalServiceUtil.getBusinesses(searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-			}
+			} */
 			
-			totalCount = BusinessLocalServiceUtil.countAll();
+			totalCount = BusinessLocalServiceUtil.countBusiness(scopeGroupId, searchTerms.getKeywords(),
+					accountStatus, businessDomain); 
+			/* BusinessLocalServiceUtil.countAll(); */
 			/* BusinessLocalServiceUtil.countBusiness(scopeGroupId, searchTerms.getKeywords(),
 				accountStatus, businessDomain); */
 			
@@ -133,6 +135,7 @@
 			results = businesses;
 			pageContext.setAttribute("results", results);
 			pageContext.setAttribute("total", total);
+			
 		%>
 	
 	</liferay-ui:search-container-results>

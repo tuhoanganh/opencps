@@ -105,7 +105,7 @@
 					</c:if>
 					<c:if test="<%=tabs1.equals(AccountMgtUtil.TOP_TABS_BUSINESS)%>">
 						
-						<%-- <aui:row>
+						<aui:row>
 							<aui:col width="30" cssClass="search-col">
 									<datamgt:ddr 
 										depthLevel="1" 
@@ -120,7 +120,7 @@
 										cssClass="search-input select-box"
 										optionValueType="code"
 									/>
-							</aui:col> --%>
+							</aui:col>
 							
 							 <aui:col width="30" cssClass="search-col">
 								<aui:select name="<%=BusinessDisplayTerms.BUSINESS_ACCOUNTSTATUS %>" 
