@@ -131,7 +131,7 @@ public class AutoFillFormData {
 			for (Map.Entry<String, Object> entry : jsonMap.entrySet()) {
 //				System.out.println(entry.getKey() + ": " + entry.getValue());
 				String value = String.valueOf(entry.getValue());
-				if(value.startsWith("_")){
+				if(value.startsWith("_") && !value.contains(":")){
 					if(value.equals("_subjectName")){
 						jsonMap.put(entry.getKey(), _subjectName);
 					}else if(value.equals("_subjectId")){
@@ -190,6 +190,51 @@ public class AutoFillFormData {
 						}
 					}
 					
+				}else if(value.startsWith("_") && value.contains(":")){
+					String resultBinding = StringPool.BLANK;
+					String[] valueSplit = value.split(":");
+					for (String string : valueSplit) {
+						if(string.equals("_subjectName")){
+							resultBinding += ", " +  _subjectName;
+						}else if(string.equals("_subjectId")){
+							resultBinding += ", " +  _subjectId;
+						}else if(string.equals("_address")){
+							resultBinding += ", " +  _address;
+						}else if(string.equals("_wardCode")){
+							resultBinding += ", " +  _wardCode;
+						}else if(string.equals("_wardName")){
+							resultBinding += ", " +  _wardName;
+						}else if(string.equals("_districtCode")){
+							resultBinding += ", " +  _districtCode;
+						}else if(string.equals("_districtName")){
+							resultBinding += ", " +  _districtName;
+						}else if(string.equals("_cityCode")){
+							resultBinding += ", " +  _cityCode;
+						}else if(string.equals("_cityName")){
+							resultBinding += ", " +  _cityName;
+						}else if(string.equals("_contactName")){
+							resultBinding += ", " +  _contactName;
+						}else if(string.equals("_contactTelNo")){
+							resultBinding += ", " +  _contactTelNo;
+						}else if(string.equals("_contactEmail")){
+							resultBinding += ", " +  _contactEmail;
+						}else if(string.equals("_ngayNopDon")){
+							resultBinding += ", " + ngayNopDon();
+						}else if(string.equals("_donViThucHien")){
+							if(dossierId > 0){
+								try {
+									Dossier dossier = DossierLocalServiceUtil.fetchDossier(dossierId);
+									resultBinding += ", " + dossier.getGovAgencyName();
+								} catch (SystemException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
+						}
+					}
+					
+					jsonMap.put(entry.getKey(), resultBinding.replaceFirst(", ", StringPool.BLANK));
+
 				}else if(value.startsWith("#") && value.contains("@")){
 					String newString = value.substring(1);
 					String[] stringSplit = newString.split("@");
@@ -261,7 +306,15 @@ public class AutoFillFormData {
 			
 			jsonSampleData = JSONFactoryUtil.createJSONObject();
 			for (Map.Entry<String, Object> entry : jsonMap.entrySet()) {
-				jsonSampleData.put(entry.getKey(), entry.getValue()+"");
+				Object value = null;
+	            if(entry.getValue().getClass().getName().contains("JSONArray")){
+	            	jsonSampleData.put(entry.getKey(), (JSONArray)entry.getValue());
+	            }else if(entry.getValue().getClass().getName().contains("JSONObject")){
+	            	jsonSampleData.put(entry.getKey(), (JSONObject)entry.getValue());
+	            }else{
+	            	jsonSampleData.put(entry.getKey(), entry.getValue() + "");
+	            }
+				
 			}
 			
 			
