@@ -36,6 +36,7 @@
 <%@page import="org.opencps.accountmgt.util.AccountMgtUtil"%>
 <%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
+
 <%@ include file="../init.jsp" %>
 
 
@@ -70,40 +71,39 @@
 	
 %>
 
-<div class="row-fluid">
-	<div class="span12">
-		<liferay-ui:message key="account.status.total" />  : <%=countLocked +
-			countConfirmed + countRegistered + countApproved
-		%>
-	
-	</div>
-</div>
-<div class="row-fluid">
-	<div class="span3">
-				<liferay-ui:message key="account.status.registered" />  : <%=countRegistered %>
-	
-	</div>
-	<div class="span3">
-				<liferay-ui:message key="account.status.confirmed" />  : <%=countConfirmed %>
-	
-	</div>
-	<div class="span3">
-			<liferay-ui:message key="account.status.approved" />  : <%=countApproved %>
-	
-	</div>
-	<div class="span3">
-			<liferay-ui:message key="account.status.locked" />  : <%=countLocked %>
-	
-	</div>
-</div>
-
-
 
 <c:if test="<%=CitizenPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_CITIZEN) %>" >
 	<liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
 </c:if>
 
-<div class="opencps-searchcontainer-wrapper default-box-shadow radius8">
+
+<aui:row cssClass="mg-b-20 text-align-right">
+	<aui:col width="100">
+		<span class="span4 bold">
+			<liferay-ui:message key="account.status.total" />  : <%=countLocked +
+				countConfirmed + countRegistered + countApproved
+			%>
+		</span>
+		<span class="span2">
+			<liferay-ui:message key="account.status.registered" />  : <%=countRegistered %>
+		</span>
+		
+		<span class="span2">
+			<liferay-ui:message key="account.status.confirmed" />  : <%=countConfirmed %>
+		</span>
+		
+		<span class="span2">
+			<liferay-ui:message key="account.status.approved" />  : <%=countApproved %>
+		</span>
+		
+		<span class="span2">
+			<liferay-ui:message key="account.status.locked" />  : <%=countLocked %>
+		</span>
+	</aui:col>
+</aui:row>
+
+
+<div class="opencps-searchcontainer-wrapper-width-header default-box-shadow radius8">
 
 	<liferay-ui:search-container searchContainer="<%= new CitizenSearch(
 		renderRequest ,SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
@@ -143,6 +143,7 @@
 				
 				accoutStatus = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), PortletUtil.getAccountStatus(citiZen.getAccountStatus(), themeDisplay.getLocale()));
 				
+				row.setClassName("opencps-searchcontainer-row");
 				
 				row.addText(citiZen.getPersonalId());
 				row.addText(citiZen.getFullName());
