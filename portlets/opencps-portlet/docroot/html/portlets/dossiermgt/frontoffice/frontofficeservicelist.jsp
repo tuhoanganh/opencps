@@ -56,11 +56,14 @@
 	title="service-list"
 />
 
-<h5>
-	<liferay-ui:message key="service-recent"/>
-</h5>
-
 <div class="opencps-searchcontainer-wrapper default-box-shadow radius8">
+
+	<div class="opcs-serviceinfo-list-label">
+		<div class="title_box">
+	           <p class="file_manage_title_new"><liferay-ui:message key="service-recent"/></p>
+	           <p class="count"></p>
+	    </div>
+	</div>
 	<liferay-ui:search-container searchContainer="<%= new ServiceSearch(renderRequest, 5, iteratorURL) %>">
 	
 		<liferay-ui:search-container-results>
@@ -159,6 +162,12 @@
 	
 <div class="opencps-searchcontainer-wrapper default-box-shadow radius8">
 
+	<div class="opcs-serviceinfo-list-label">
+		<div class="title_box">
+	           <p class="file_manage_title"><liferay-ui:message key="list-service-config"/></p>
+	           <p class="count"></p>
+	    </div>
+	</div>
 	<liferay-ui:search-container searchContainer="<%= new ServiceSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
 	
 		<liferay-ui:search-container-results>
