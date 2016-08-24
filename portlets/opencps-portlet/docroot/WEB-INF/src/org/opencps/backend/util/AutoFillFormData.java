@@ -261,7 +261,16 @@ public class AutoFillFormData {
 			
 			jsonSampleData = JSONFactoryUtil.createJSONObject();
 			for (Map.Entry<String, Object> entry : jsonMap.entrySet()) {
-				jsonSampleData.put(entry.getKey(), entry.getValue()+"");
+				Object value = null;
+	            System.out.println("AutoFillFormData.dataBinding()"+entry.getValue().getClass().getName());
+	            if(entry.getValue().getClass().getName().contains("JSONArray")){
+	            	jsonSampleData.put(entry.getKey(), (JSONArray)entry.getValue());
+	            }else if(entry.getValue().getClass().getName().contains("JSONObject")){
+	            	jsonSampleData.put(entry.getKey(), (JSONObject)entry.getValue());
+	            }else{
+	            	jsonSampleData.put(entry.getKey(), entry.getValue() + "");
+	            }
+				
 			}
 			
 			
