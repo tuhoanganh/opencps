@@ -192,53 +192,43 @@ public class AutoFillFormData {
 					
 				}else if(value.startsWith("_") && value.contains(":")){
 					String resultBinding = StringPool.BLANK;
-					if(value.contains("_subjectName")){
-						resultBinding += ", " +  _subjectName;
-					}
-					if(value.contains("_subjectId")){
-						resultBinding += ", " +  _subjectId;
-					} 
-					if(value.contains("_address")){
-						resultBinding += ", " +  _address;
-					}
-					if(value.contains("_wardCode")){
-						resultBinding += ", " +  _wardCode;
-					} 
-					if(value.contains("_wardName")){
-						resultBinding += ", " +  _wardName;
-					}
-					if(value.contains("_districtCode")){
-						resultBinding += ", " +  _districtCode;
-					} 
-					if(value.contains("_districtName")){
-						resultBinding += ", " +  _districtName;
-					} 
-					if(value.contains("_cityCode")){
-						resultBinding += ", " +  _cityCode;
-					} 
-					if(value.contains("_cityName")){
-						resultBinding += ", " +  _cityName;
-					} 
-					if(value.contains("_contactName")){
-						resultBinding += ", " +  _contactName;
-					}
-					if(value.contains("_contactTelNo")){
-						resultBinding += ", " +  _contactTelNo;
-					}
-					if(value.contains("_contactEmail")){
-						resultBinding += ", " +  _contactEmail;
-					}
-					if(value.contains("_ngayNopDon")){
-						resultBinding += ", " + ngayNopDon();
-					}
-					if(value.contains("_donViThucHien")){
-						if(dossierId > 0){
-							try {
-								Dossier dossier = DossierLocalServiceUtil.fetchDossier(dossierId);
-								resultBinding += ", " + dossier.getGovAgencyName();
-							} catch (SystemException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+					String[] valueSplit = value.split(":");
+					for (String string : valueSplit) {
+						if(string.equals("_subjectName")){
+							resultBinding += ", " +  _subjectName;
+						}else if(string.equals("_subjectId")){
+							resultBinding += ", " +  _subjectId;
+						}else if(string.equals("_address")){
+							resultBinding += ", " +  _address;
+						}else if(string.equals("_wardCode")){
+							resultBinding += ", " +  _wardCode;
+						}else if(string.equals("_wardName")){
+							resultBinding += ", " +  _wardName;
+						}else if(string.equals("_districtCode")){
+							resultBinding += ", " +  _districtCode;
+						}else if(string.equals("_districtName")){
+							resultBinding += ", " +  _districtName;
+						}else if(string.equals("_cityCode")){
+							resultBinding += ", " +  _cityCode;
+						}else if(string.equals("_cityName")){
+							resultBinding += ", " +  _cityName;
+						}else if(string.equals("_contactName")){
+							resultBinding += ", " +  _contactName;
+						}else if(string.equals("_contactTelNo")){
+							resultBinding += ", " +  _contactTelNo;
+						}else if(string.equals("_contactEmail")){
+							resultBinding += ", " +  _contactEmail;
+						}else if(string.equals("_ngayNopDon")){
+							resultBinding += ", " + ngayNopDon();
+						}else if(string.equals("_donViThucHien")){
+							if(dossierId > 0){
+								try {
+									Dossier dossier = DossierLocalServiceUtil.fetchDossier(dossierId);
+									resultBinding += ", " + dossier.getGovAgencyName();
+								} catch (SystemException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
 							}
 						}
 					}
