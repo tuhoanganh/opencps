@@ -1,3 +1,4 @@
+<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -171,7 +172,7 @@
 										showLabel="<%=false%>"
 										emptyOptionLabels="dossier-status"
 										itemsEmptyOption="true"
-										itemNames="dossierStatusNew"
+										itemNames="<%=DossierDisplayTerms.DOSSIER_STATUS %>"
 										optionValueType="code"
 										cssClass="search-input select-box input100"
 									/>

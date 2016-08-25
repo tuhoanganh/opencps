@@ -70,7 +70,7 @@
 <liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
 
 <%
-	String dossierStatus = ParamUtil.getString(request, "dossierStatusNew", StringPool.BLANK);
+	String dossierStatus = ParamUtil.getString(request, DossierDisplayTerms.DOSSIER_STATUS, StringPool.BLANK);
 	int itemsToDisplay_cfg = GetterUtil.getInteger(portletPreferences.getValue("itemsToDisplay", "2"));
 	
 	long serviceDomainId = ParamUtil.getLong(request, "serviceDomainId");
@@ -78,7 +78,7 @@
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "frontofficedossierlist.jsp");
 	iteratorURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER);
-	iteratorURL.setParameter("dossierStatusNew", String.valueOf(dossierStatus));
+	iteratorURL.setParameter(DossierDisplayTerms.DOSSIER_STATUS, String.valueOf(dossierStatus));
 	iteratorURL.setParameter("serviceDomainId", String.valueOf(serviceDomainId));
 	
 	List<Dossier> dossiers =  new ArrayList<Dossier>();
