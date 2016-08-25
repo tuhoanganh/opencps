@@ -553,7 +553,9 @@ public class UserMgtPortlet extends MVCPortlet {
 						+ SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_ERROR_MESSAGE);
 		long workingUnitId = ParamUtil.getLong(actionRequest, "workingUnitId");
 		try {
-			int count = 0;
+//			int count = 0;
+			boolean duplicate = false;
+			boolean flag = false;
 			ServiceContext serviceContext = ServiceContextFactory
 					.getInstance(actionRequest);
 			for (int index = 0; index < indexOfRows.length; index++) {
@@ -569,13 +571,17 @@ public class UserMgtPortlet extends MVCPortlet {
 					jobPos = JobPosLocalServiceUtil.getJobPosByTitle(
 							serviceContext.getScopeGroupId(), title);
 					if (Validator.isNotNull(jobPos)) {
-						count++;
+//						count++;
+						flag = true;
+						duplicate = true;
 					}
 				} catch (Exception e) {
 					_log.error(e);
 				}
-				if (count > 0) {
-					break;
+				if (flag == true) {
+//					break;
+					flag = false;
+					continue;
 				}
 
 				JobPosLocalServiceUtil.addJobPos(serviceContext.getUserId(),
@@ -584,7 +590,7 @@ public class UserMgtPortlet extends MVCPortlet {
 
 			}
 
-			if (count == 0) {
+			if (!duplicate) {
 				SessionMessages.add(actionRequest,
 						MessageKeys.USERMGT_JOBPOS_UPDATE_SUCESS);
 			} else {
