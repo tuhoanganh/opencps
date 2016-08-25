@@ -50,9 +50,25 @@
 	}
 	
 	List<DossierPart> dossiers = ProcessUtils.getDossierParts(dossierTemplateId, PortletConstants.DOSSIER_TYPE_OWN_RECORDS);
-
+	
+	List<DossierPart> dossiersResults = new ArrayList<DossierPart>();
+	
 	List<DossierPart> dossiersResult = ProcessUtils.getDossierParts(dossierTemplateId, PortletConstants.DOSSIER_PART_TYPE_RESULT);
-
+	
+	List<DossierPart> dossiersResultMulti = ProcessUtils.getDossierParts(dossierTemplateId, PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT);
+	
+	System.out.println("######### partType=" + PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT + " dossierTemplateId="+dossierTemplateId + "###");
+	
+	if(dossiersResult!=null && !dossiersResult.isEmpty()){
+		System.out.println("######### dossiersResult.size=" + dossiersResult.size() + "###");
+		dossiersResults.addAll(dossiersResult);
+	}
+	
+	if(dossiersResultMulti!=null && !dossiersResultMulti.isEmpty()){
+		System.out.println("######### dossiersResultMulti.size=" + dossiersResultMulti.size() + "###");
+		dossiersResults.addAll(dossiersResultMulti);
+	}
+	
 	List<StepAllowance> stepAllowances = Collections.emptyList();
 	
 	List<ProcessStepDossierPart> dossierSel = Collections.emptyList();
@@ -239,7 +255,7 @@
 				<div class="row-fields">
 					<aui:select id='<%= "dossierPart" + dossierIndex %>' inlineField="<%= true %>" label="" name='<%= "dossierPart" + dossierIndex %>' showEmptyOption="true">
 						<%
-							for (DossierPart dossier : dossiersResult) {
+							for (DossierPart dossier : dossiersResults) {
 						%>
 							<aui:option selected="<%=  Validator.equals(stepDossier.getDossierPartId(), dossier.getDossierpartId())  %>" value="<%= dossier.getDossierpartId() %>">
 								<%= dossier.getPartName() %>
