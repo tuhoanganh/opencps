@@ -31,6 +31,7 @@ import org.opencps.datamgt.service.DictItemLocalServiceUtil;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.FileGroup;
+import org.opencps.dossiermgt.portlet.DossierMgtFrontOfficePortlet;
 import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.dossiermgt.service.FileGroupLocalServiceUtil;
@@ -41,6 +42,8 @@ import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -165,7 +168,8 @@ public class AutoFillFormData {
 								jsonMap.put(entry.getKey(), dossier.getGovAgencyName());
 							} catch (SystemException e) {
 								// TODO Auto-generated catch block
-								e.printStackTrace();
+								_log.error(e);
+								
 							}
 						}
 					}else if(value.equals("_thanhPhanHoSoCon")){
@@ -185,7 +189,7 @@ public class AutoFillFormData {
 								jsonMap.put(entry.getKey(), arrays);
 							} catch (SystemException e) {
 								// TODO Auto-generated catch block
-								e.printStackTrace();
+								_log.error(e);
 							}
 						}
 					}
@@ -227,7 +231,7 @@ public class AutoFillFormData {
 									resultBinding += ", " + dossier.getGovAgencyName();
 								} catch (SystemException e) {
 									// TODO Auto-generated catch block
-									e.printStackTrace();
+									_log.error(e);
 								}
 							}
 						}
@@ -299,7 +303,7 @@ public class AutoFillFormData {
 						}
 					} catch (SystemException e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+						_log.error(e);
 					}
 				}
 			}
@@ -321,7 +325,7 @@ public class AutoFillFormData {
 			result = jsonSampleData.toString();
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			_log.error(e);
 		}
 		return result;
 	}
@@ -354,7 +358,8 @@ public class AutoFillFormData {
 					"th\u00E1ng" + " " + sMonth + " "+ 
 					"n\u0103m" + " " + year;
 		} catch (Exception e) {
-			e.printStackTrace();
+			_log.error(e);
+			
 		}
 		return "";
 	}
@@ -366,7 +371,7 @@ public class AutoFillFormData {
 				retMap = toMap(json);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				_log.error(e);
 			}
         }
         return retMap;
@@ -409,4 +414,7 @@ public class AutoFillFormData {
         }
         return list;
     }
+    
+    private static Log _log =
+    		LogFactoryUtil.getLog(AutoFillFormData.class.getName());
 }
