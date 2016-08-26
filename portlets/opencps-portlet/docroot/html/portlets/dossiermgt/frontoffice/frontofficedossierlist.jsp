@@ -23,7 +23,6 @@
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
-<%@page import="com.liferay.portal.kernel.management.jmx.DoOperationAction"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="javax.portlet.PortletURL"%>
@@ -152,7 +151,7 @@
 											<liferay-ui:message key="reception-no"/>
 										</div>
 										
-										<div class="span9"><%=dossier.getDossierStatus() %></div>
+										<div class="span9"><%=dossier.getReceptionNo() %></div>
 									</div>
 								</c:when>
 								
@@ -336,7 +335,7 @@
 								<liferay-ui:message key="reception-no"/>
 							</div>
 							
-							<div class="span9"><%=dossier.getDossierStatus() %></div>
+							<div class="span9"><%=dossier.getReceptionNo() %></div>
 						</div>
 					</c:when>
 					
