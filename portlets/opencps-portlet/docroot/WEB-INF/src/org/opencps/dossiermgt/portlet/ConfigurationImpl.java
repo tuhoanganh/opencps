@@ -52,6 +52,8 @@ public class ConfigurationImpl implements ConfigurationAction{
 	    throws Exception {
 
 		long plid = ParamUtil.getLong(actionRequest, "plid");
+		
+		long itemsToDisplay = ParamUtil.getLong(actionRequest, "itemsToDisplay");
 
 		PortletURL redirectURL =
 		    PortletURLFactoryUtil.create(
@@ -70,6 +72,7 @@ public class ConfigurationImpl implements ConfigurationAction{
 		        actionRequest, portletResource);
 
 		preferences.setValue("redirectPaymentURL", redirectURL.toString());
+		preferences.setValue("itemsToDisplay", String.valueOf(itemsToDisplay));
 		preferences.store();
 
 		SessionMessages.add(actionRequest, "potlet-config-saved");
