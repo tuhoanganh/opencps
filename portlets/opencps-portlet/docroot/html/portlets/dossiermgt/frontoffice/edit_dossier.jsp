@@ -1,8 +1,3 @@
-
-<%@page import="org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil"%>
-<%@page import="org.opencps.processmgt.service.ProcessOrderLocalServiceUtil"%>
-<%@page import="org.opencps.processmgt.model.ProcessWorkflow"%>
-<%@page import="org.opencps.processmgt.model.ProcessOrder"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -49,6 +44,10 @@
 <%@page import="org.opencps.accountmgt.model.Business"%>
 <%@page import="org.opencps.accountmgt.model.Citizen"%>
 <%@page import="java.util.List"%>
+<%@page import="org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.service.ProcessOrderLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.model.ProcessWorkflow"%>
+<%@page import="org.opencps.processmgt.model.ProcessOrder"%>
 
 <%@ include file="../init.jsp"%>
 
@@ -61,7 +60,6 @@
 	DossierPart dossierPart = (DossierPart)request.getAttribute(WebKeys.DOSSIER_PART_ENTRY);
 	
 	String backURL = ParamUtil.getString(request, "backURL");
-	String backURLFromList = ParamUtil.getString(request, "backURLFromList");
 	
 	String cmd = ParamUtil.getString(request, Constants.CMD, Constants.UPDATE);
 	
@@ -72,9 +70,6 @@
 	String[][] categorySections = {dossierSections};
 	
 	boolean isEditDossier = ParamUtil.getBoolean(request, "isEditDossier");
-	
-	
-	
 	
 	ProcessOrder processOrder = null;
 	ProcessWorkflow workFlow = null;
@@ -94,7 +89,7 @@
 				(accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN) ||
 				accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS)) %>">
 		 <liferay-ui:header
-			backURL="<%= (Validator.isNull(backURL) ? backURLFromList : backURL) %>"
+			backURL="<%= backURL %>"
 			title='<%= (dossier == null) ? "add-dossier" : (cmd.equals(Constants.VIEW) ? "view-dossier" : "update-dossier") %>'
 		/>
 		
@@ -194,12 +189,12 @@
 			 			icon="icon-plus"
 			 			value="edit-dossier-btn"
 			 		/>	
-			 		<aui:button 
+			 		<%-- <aui:button 
 	 					href="<%=backURLFromList.toString() %>" 
 	 					cssClass="button-del" 
 	 					value="canceled-dossier-btn"
 			 			icon="icon-remove"
-			 		/>
+			 		/> --%>
 			 	</div>
 		 	</c:if>
 		</liferay-util:buffer>

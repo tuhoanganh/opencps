@@ -2923,7 +2923,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			try {
 				Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
 				ProcessOrder processOrder = ProcessOrderLocalServiceUtil.getProcessOrder(dossierId, 0);
-				ProcessWorkflow workFlow = ProcessWorkflowLocalServiceUtil.getByS_PreP_AN(processOrder.getServiceProcessId(), processOrder.getProcessStepId(), "Thông báo hủy hồ sơ");
+				ProcessWorkflow workFlow = ProcessWorkflowLocalServiceUtil.getByS_PreP_AN(processOrder.getServiceProcessId(), processOrder.getProcessStepId(), PortletPropsValues.OPENCPS_CANCEL_DOSSIER_NOTICE);
 				Message message = new Message();
 				if (Validator.isNotNull(workFlow.getAutoEvent())) {
 					message.put(ProcessOrderDisplayTerms.EVENT, workFlow.getAutoEvent());				
@@ -2933,7 +2933,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 							workFlow.getProcessWorkflowId());				
 				}
 
-				message.put(ProcessOrderDisplayTerms.ACTION_NOTE, "Người làm thủ tục hủy hồ sơ");
+				message.put(ProcessOrderDisplayTerms.ACTION_NOTE, PortletPropsValues.OPENCPS_PERSON_MAKE_PROCEDURE_CANCEL);
 				message.put(ProcessOrderDisplayTerms.PROCESS_STEP_ID,
 						processOrder.getProcessStepId());
 				message.put(ProcessOrderDisplayTerms.ASSIGN_TO_USER_ID, 0);
@@ -2957,7 +2957,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 				SendToEngineMsg sendToEngineMsg = new SendToEngineMsg();
 
-				sendToEngineMsg.setActionNote("Người làm thủ tục hủy hồ sơ");
+				sendToEngineMsg.setActionNote(PortletPropsValues.OPENCPS_PERSON_MAKE_PROCEDURE_CANCEL);
 				sendToEngineMsg.setAssignToUserId(0);
 				sendToEngineMsg.setActionUserId(Long.parseLong(actionRequest.getRemoteUser()));
 				sendToEngineMsg.setDossierId(dossier.getDossierId());

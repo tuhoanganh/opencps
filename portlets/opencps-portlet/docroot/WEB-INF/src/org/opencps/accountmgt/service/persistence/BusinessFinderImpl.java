@@ -22,6 +22,8 @@ package org.opencps.accountmgt.service.persistence;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.transaction.SystemException;
+
 import org.opencps.accountmgt.model.Business;
 import org.opencps.accountmgt.model.impl.BusinessImpl;
 
@@ -66,6 +68,16 @@ public class BusinessFinderImpl extends BasePersistenceImpl<Business> implements
 				businessDomain, start, end);
 	}
 	
+	/**
+	 * @param groupId
+	 * @param keywords
+	 * @param accountStatus
+	 * @param andOperator
+	 * @param businessDomain
+	 * @param start
+	 * @param end
+	 * @return
+	 */
 	private List<Business> _searchBusiness(long groupId, String[] keywords,
 			int accountStatus, boolean andOperator, String businessDomain,
 			int start, int end) {
@@ -88,11 +100,11 @@ public class BusinessFinderImpl extends BasePersistenceImpl<Business> implements
 						true, keywords);
 
 				sql = CustomSQLUtil.replaceKeywords(sql,
-						"lower(opencps_acc_business.shortName))",
+						"lower(opencps_acc_business.shortName)",
 						StringPool.LIKE, true, keywords);
 
 				sql = CustomSQLUtil.replaceKeywords(sql,
-						"lower(opencps_acc_business.enName", StringPool.LIKE,
+						"lower(opencps_acc_business.enName))", StringPool.LIKE,
 						true, keywords);
 
 			} else {
@@ -163,7 +175,12 @@ public class BusinessFinderImpl extends BasePersistenceImpl<Business> implements
 
 			return (List<Business>) QueryUtil.list(q, getDialect(), start, end);
 		} catch (Exception e) {
-			_log.error(e);
+			try {
+				throw new SystemException();
+			}
+			catch (SystemException ex) {
+				ex.printStackTrace();
+			}
 		} finally {
 			session.close();
 		}
@@ -186,6 +203,14 @@ public class BusinessFinderImpl extends BasePersistenceImpl<Business> implements
 				andOperator);
 	}
 
+	/**
+	 * @param groupId
+	 * @param keywords
+	 * @param accountStatus
+	 * @param businessDomain
+	 * @param andOperator
+	 * @return
+	 */
 	private int _countBussiness(long groupId, String[] keywords,
 			int accountStatus, String businessDomain, boolean andOperator) {
 
@@ -284,7 +309,14 @@ public class BusinessFinderImpl extends BasePersistenceImpl<Business> implements
 			}
 
 		} catch (Exception e) {
-			_log.error(e);
+			try {
+				throw new SystemException();
+			}
+			catch (SystemException ex) {
+				ex.printStackTrace();
+			}
+			
+			
 		} finally {
 			session.close();
 		}
