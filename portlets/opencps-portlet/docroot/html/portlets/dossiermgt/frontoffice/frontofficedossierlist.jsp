@@ -24,7 +24,6 @@
 <%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
 <%@page import="com.liferay.portal.kernel.management.jmx.DoOperationAction"%>
-<%@page import="com.liferay.util.dao.orm.CustomSQLUtil"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="javax.portlet.PortletURL"%>
@@ -101,7 +100,7 @@
 
 <c:if test="<%=totalCount > 0 %>">
 	<!-- cap nhat thay doi moi nhat -->
-		<c:if test="<%=Validator.isNull(keywords) && !displayRecentlyResultWhenSearch %>">
+		<c:if test="<%= (Validator.isNull(keywords) && displayRecentlyResultWhenSearch) || displayRecentlyResultWhenSearch == false%>">
 			<div class="opencps-searchcontainer-wrapper default-box-shadow radius8 mrb25 " id="<portlet:namespace />is-hidden">
 				<div class="opcs-serviceinfo-list-label">
 					<div class="title_box">
