@@ -52,7 +52,11 @@ public class ConfigurationImpl implements ConfigurationAction{
 	    throws Exception {
 
 		long plid = ParamUtil.getLong(actionRequest, "plid");
-
+		
+		boolean displayDossierNo = ParamUtil.getBoolean(actionRequest, "displayDossierNo");
+		
+		boolean displayRecentlyResultWhenSearch = ParamUtil.getBoolean(actionRequest, "displayRecentlyResultWhenSearch");
+		
 		PortletURL redirectURL =
 		    PortletURLFactoryUtil.create(
 		        PortalUtil.getHttpServletRequest(actionRequest),
@@ -70,6 +74,8 @@ public class ConfigurationImpl implements ConfigurationAction{
 		        actionRequest, portletResource);
 
 		preferences.setValue("redirectPaymentURL", redirectURL.toString());
+		preferences.setValue("displayRecentlyResultWhenSearch", String.valueOf(displayDossierNo));
+		preferences.setValue("displayDossierNo", String.valueOf(displayRecentlyResultWhenSearch));
 		preferences.store();
 
 		SessionMessages.add(actionRequest, "potlet-config-saved");

@@ -68,10 +68,7 @@
 	iteratorURL.setParameter("tabs1", AccountMgtUtil.TOP_TABS_BUSINESS);
 	iteratorURL.setParameter(BusinessDisplayTerms.BUSINESS_DOMAIN, businessDomain);
 	List<Business> businesses = new ArrayList<Business>();
-	int totalCount = 0;
-	
-	System.out.print("Domain ..." + businessDomain);
-	
+	int totalCount = 0;	
 %>
 
 <c:if test="<%=BusinessPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_BUSINESS) %>" >
