@@ -598,16 +598,6 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			dossierPart =
 				DossierPartLocalServiceUtil.getDossierPart(dossierPartId);
 
-			/*
-			 * DLFolder accountFolder = accountBean.getAccountFolder(); DLFolder
-			 * dossierFolder = DLFolderUtil.addFolder(
-			 * serviceContext.getUserId(), serviceContext.getScopeGroupId(),
-			 * serviceContext.getScopeGroupId(), false,
-			 * accountFolder.getFolderId(),
-			 * String.valueOf(dossier.getCounter()), StringPool.BLANK, false,
-			 * serviceContext);
-			 */
-
 			DossierFileLocalServiceUtil.addDossierFile(
 				serviceContext.getUserId(), dossierId, dossierPartId,
 				dossierPart.getTemplateFileNo(), groupName, fileGroupId,
