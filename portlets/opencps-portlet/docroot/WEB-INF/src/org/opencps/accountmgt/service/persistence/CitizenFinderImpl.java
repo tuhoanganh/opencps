@@ -22,6 +22,8 @@ package org.opencps.accountmgt.service.persistence;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.transaction.SystemException;
+
 import org.opencps.accountmgt.model.Citizen;
 import org.opencps.accountmgt.model.impl.CitizenImpl;
 
@@ -37,6 +39,11 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.util.dao.orm.CustomSQLUtil;
+
+/**
+ * @author dunglt
+ *
+ */
 
 public class CitizenFinderImpl extends BasePersistenceImpl<Citizen> implements
 		CitizenFinder {
@@ -62,12 +69,17 @@ public class CitizenFinderImpl extends BasePersistenceImpl<Citizen> implements
 				start, end);
 	}
 
+	/**
+	 * @param groupId
+	 * @param keywords
+	 * @param accountStatus
+	 * @param andOperator
+	 * @param start
+	 * @param end
+	 * @return
+	 */
 	private List<Citizen> _searchCitizen(long groupId, String[] keywords,
 			int accountStatus, boolean andOperator, int start, int end) {
-
-		// /*
-		// * keywords = CustomSQLUtil .keywords(keywords, false);
-		// */
 
 		Session session = null;
 
@@ -115,7 +127,12 @@ public class CitizenFinderImpl extends BasePersistenceImpl<Citizen> implements
 
 			return (List<Citizen>) QueryUtil.list(q, getDialect(), start, end);
 		} catch (Exception e) {
-			_log.error(e);
+			try {
+				throw new SystemException();
+			}
+			catch (SystemException ex) {
+				ex.printStackTrace();
+			}
 		} finally {
 			session.close();
 		}
@@ -136,6 +153,13 @@ public class CitizenFinderImpl extends BasePersistenceImpl<Citizen> implements
 		return _countCitizen(groupId, names, accountStatus, andOperator);
 	}
 
+	/**
+	 * @param groupId
+	 * @param keywords
+	 * @param accountStatus
+	 * @param andOperator
+	 * @return
+	 */
 	private int _countCitizen(long groupId, String[] keywords,
 			int accountStatus, boolean andOperator) {
 
@@ -197,7 +221,12 @@ public class CitizenFinderImpl extends BasePersistenceImpl<Citizen> implements
 			}
 
 		} catch (Exception e) {
-			_log.error(e);
+			try {
+				throw new SystemException();
+			}
+			catch (SystemException ex) {
+				ex.printStackTrace();
+			}
 		} finally {
 			session.close();
 		}
