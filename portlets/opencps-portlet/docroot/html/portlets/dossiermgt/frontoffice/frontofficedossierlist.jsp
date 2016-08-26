@@ -78,7 +78,7 @@
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "frontofficedossierlist.jsp");
 	iteratorURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER);
-	iteratorURL.setParameter("dossierStatusNew", String.valueOf(dossierStatus));
+	iteratorURL.setParameter(DossierDisplayTerms.DOSSIER_STATUS, String.valueOf(dossierStatus));
 	iteratorURL.setParameter("serviceDomainId", String.valueOf(serviceDomainId));
 	
 	List<Dossier> dossiers =  new ArrayList<Dossier>();
