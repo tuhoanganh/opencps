@@ -52,3 +52,6 @@ position: absolute;
 right: 0px;
 margin-right: 30px;
 }
+.opcs-serviceinfo-list-label{
+	overflow: hidden;
+}
