@@ -99,7 +99,7 @@
 <c:if test="<%=totalCount > 0 %>">
 
 	<!-- cap nhat thay doi moi nhat -->
-	<div class="opencps-searchcontainer-wrapper default-box-shadow radius8 mrb25">
+	<div class="opencps-searchcontainer-wrapper default-box-shadow radius8 mrb25 " id="<portlet:namespace />is-hidden">
 		<div class="opcs-serviceinfo-list-label">
 			<div class="title_box">
 		           <p class="file_manage_title_new"><liferay-ui:message key="title-danh-sach-ho-so-thay-doi" /></p>
@@ -130,15 +130,43 @@
 				%>
 				
 				<liferay-util:buffer var="info">
-					<div class="row-fluid">
-						<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
-							<i class='<%="fa fa-circle sx10 " + dossier.getDossierStatus()%>'></i>
-						</div>
-						<div class="span2 bold-label">
-							<liferay-ui:message key="reception-no"/>
-						</div>
-						<div class="span9"><%=dossier.getReceptionNo() %></div>
-					</div>
+			
+					<c:choose>
+						<c:when test='<%=Validator.isNotNull(displayDossierNo) && displayDossierNo.equals("displayDossierNo") %>'>
+							<div class="row-fluid">
+								<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
+									<i class='<%="fa fa-circle sx10 " + dossier.getDossierStatus()%>'></i>
+								</div>
+								<div class="span2 bold-label">
+									<liferay-ui:message key="dossier-number"/>
+								</div>
+								<div class="span9"><%=String.valueOf(dossier.getDossierId()) %></div>
+							</div>
+							
+							<div class="row-fluid">
+								<div class="span1"></div>
+								
+								<div class="span2 bold-label">
+									<liferay-ui:message key="reception-no"/>
+								</div>
+								
+								<div class="span9"><%=dossier.getDossierStatus() %></div>
+							</div>
+						</c:when>
+						
+						<c:otherwise>
+							<div class="row-fluid">
+								<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
+									<i class='<%="fa fa-circle sx10 " + dossier.getDossierStatus()%>'></i>
+								</div>
+								<div class="span2 bold-label">
+									<liferay-ui:message key="reception-no"/>
+								</div>
+								<div class="span9"><%=dossier.getReceptionNo() %></div>
+							</div>
+						</c:otherwise>
+					</c:choose>
+					
 					
 					<div class="row-fluid">
 						<div class="span1"></div>
@@ -285,15 +313,42 @@
 			%>
 			
 			<liferay-util:buffer var="info">
-				<div class="row-fluid">
-					<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
-						<i class='<%="fa fa-circle sx10 " + dossier.getDossierStatus()%>'></i>
-					</div>
-					<div class="span2 bold-label">
-						<liferay-ui:message key="reception-no"/>
-					</div>
-					<div class="span9"><%=dossier.getReceptionNo() %></div>
-				</div>
+				
+				<c:choose>
+					<c:when test='<%=Validator.isNotNull(displayDossierNo) && displayDossierNo.equals("displayDossierNo") %>'>
+						<div class="row-fluid">
+							<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
+								<i class='<%="fa fa-circle sx10 " + dossier.getDossierStatus()%>'></i>
+							</div>
+							<div class="span2 bold-label">
+								<liferay-ui:message key="dossier-number"/>
+							</div>
+							<div class="span9"><%=String.valueOf(dossier.getDossierId()) %></div>
+						</div>
+						
+						<div class="row-fluid">
+							<div class="span1"></div>
+							
+							<div class="span2 bold-label">
+								<liferay-ui:message key="reception-no"/>
+							</div>
+							
+							<div class="span9"><%=dossier.getDossierStatus() %></div>
+						</div>
+					</c:when>
+					
+					<c:otherwise>
+						<div class="row-fluid">
+							<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
+								<i class='<%="fa fa-circle sx10 " + dossier.getDossierStatus()%>'></i>
+							</div>
+							<div class="span2 bold-label">
+								<liferay-ui:message key="reception-no"/>
+							</div>
+							<div class="span9"><%=dossier.getReceptionNo() %></div>
+						</div>
+					</c:otherwise>
+				</c:choose>
 				
 				<div class="row-fluid">
 					<div class="span1"></div>
@@ -381,6 +436,25 @@
 		
 	</liferay-ui:search-container>
 </div>
+
+<aui:script>
+	AUI().ready(function(A) {
+		var isHidden = A.one("#<portlet:namespace />is-hidden");
+		var displayRecentlyResultWhenSearch = '<%=displayRecentlyResultWhenSearch%>';
+		var inputSearch = A.one("#<portlet:namespace />keywords1");
+		alert("aaaa " + displayRecentlyResultWhenSearch);
+		inputSearch.on('keypress', function() {
+			if(displayRecentlyResultWhenSearch != '') {
+				if(inputSearch.val() != '') {
+					isHidden.hide();
+				} else {
+					isHidden.show();
+				}
+			}
+		}); 
+	
+	});
+</aui:script>
 
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.dossiermgt.frontoffice.frontofficedossierlist.jsp");

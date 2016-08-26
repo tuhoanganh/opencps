@@ -1,8 +1,4 @@
-<%@page import="java.util.ArrayList"%>
-<%@page import="com.liferay.portal.kernel.util.ListUtil"%>
-<%@page import="com.liferay.portal.model.Layout"%>
-<%@page import="java.util.List"%>
-<%@page import="com.liferay.portal.service.LayoutLocalServiceUtil"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -23,6 +19,12 @@
 %>
 
 <%@ include file="../init.jsp" %>
+
+<%@page import="java.util.ArrayList"%>
+<%@page import="com.liferay.portal.kernel.util.ListUtil"%>
+<%@page import="com.liferay.portal.model.Layout"%>
+<%@page import="java.util.List"%>
+<%@page import="com.liferay.portal.service.LayoutLocalServiceUtil"%>
 
 <liferay-ui:success key="potlet-config-saved" message="portlet-configuration-have-been-successfully-saved" />
 
@@ -45,6 +47,19 @@
 	}
 	
 	int itemsToDisplay_cfg = GetterUtil.getInteger(portletPreferences.getValue("itemsToDisplay", "2"));
+
+	boolean isCheckedDisPlayDossierNo = false;
+	
+	boolean isCheckedDisplayRecently = false;
+	
+	if(Validator.isNotNull(displayDossierNo)) {
+		isCheckedDisPlayDossierNo = true;
+	}
+	
+	if(Validator.isNotNull(displayRecentlyResultWhenSearch)) {
+		isCheckedDisplayRecently = true;
+	}
+	
 %>
 
 <aui:form action="<%= configurationActionURL %>" method="post" name="configurationForm">
@@ -67,6 +82,20 @@
 			}
 		%>
 	</aui:select>
+	
+	<aui:input 
+		type="checkbox" 
+		name="displayDossierNo"
+		value='<%= "displayDossierNo" %>' 
+		checked="<%=isCheckedDisPlayDossierNo %>"
+	/>
+	
+	<aui:input 
+		type="checkbox"
+		name="displayRecentlyResultWhenSearch" 
+		value='<%="displayRecentlyResultWhenSearch" %>'
+		checked="<%=isCheckedDisplayRecently %>"
+	/>
 	<aui:button type="submit" name="Save" value="save"></aui:button>
 
 </aui:form>
