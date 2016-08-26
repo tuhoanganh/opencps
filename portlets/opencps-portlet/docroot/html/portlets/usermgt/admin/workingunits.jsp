@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,7 +16,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
+<%@page import="org.opencps.usermgt.WorkingUnitHasChildException"%>
+<%@page import="org.opencps.usermgt.NoSuchWorkingUnitException"%>
+<%@page import="org.opencps.usermgt.EmployeeHasExistedException"%>
+<%@page import="org.opencps.usermgt.JopPosHasExistedException"%>
 <%@page import="com.liferay.portal.kernel.dao.search.RowChecker"%>
 <%@page import="com.liferay.taglib.aui.RowTag"%>
 <%@page import="com.liferay.portal.kernel.dao.search.SearchEntry"%>
@@ -80,6 +82,31 @@
 	key="<%=MessageKeys.USERMGT_WORKINGUNIT_DELETE_ERROR %>" 
 	message="<%=LanguageUtil.get(pageContext, 
 		MessageKeys.USERMGT_WORKINGUNIT_DELETE_ERROR) %>"
+/>
+
+<liferay-ui:error 
+	exception="<%=NoSuchWorkingUnitException.class %>"
+	message="<%=NoSuchWorkingUnitException.class.getName() %>"	
+/>
+
+<liferay-ui:error 
+	exception="<%=JopPosHasExistedException.class  %>"
+	message="<%=JopPosHasExistedException.class.getName() %>"	
+/>
+
+<liferay-ui:error 
+	exception="<%=EmployeeHasExistedException.class %>"
+	message="<%=EmployeeHasExistedException.class.getName() %>"	
+/>
+
+<liferay-ui:error 
+	exception="<%=WorkingUnitHasChildException.class %>"
+	message="<%=WorkingUnitHasChildException.class.getName() %>"	
+/>
+
+<liferay-ui:error 
+	key="<%=MessageKeys.USERMGT_SYSTEM_EXCEPTION_OCCURRED %>"
+	message="<%=MessageKeys.USERMGT_SYSTEM_EXCEPTION_OCCURRED %>"	
 />
 
 <div class="opencps-searchcontainer-wrapper default-box-shadow radius8">
