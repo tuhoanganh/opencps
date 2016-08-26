@@ -150,7 +150,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 					PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS);
 		}
 		catch (Exception e) {
-			_log.warn(e.getMessage());
+			_log.error(e);
 		}
 
 		if (userGroup == null) {
@@ -304,7 +304,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 				mappingUser = userLocalService.getUser(mappingUserId);
 			}
 			catch (Exception e) {
-
+				_log.error(e);
 			}
 
 			if (mappingUser != null) {
@@ -318,7 +318,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 				fileEntry = DLAppServiceUtil.getFileEntry(fileEntryId);
 			}
 			catch (Exception e) {
-				// TODO: handle exception
+				_log.error(e);
 			}
 			long folderId = 0;
 
@@ -343,7 +343,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 					organizationLocalService.getOrganization(mappingOrgId);
 			}
 			catch (Exception e) {
-				// TODO: handle exception
+				_log.error(e);
 			}
 
 			if (organization != null) {
