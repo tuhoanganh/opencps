@@ -32,6 +32,8 @@
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@page import="java.util.List"%>
+<%@page import="org.opencps.accountmgt.model.BusinessDomain"%>
+
 <%@ include file="../init.jsp"%>
 <%
 	String tabs1 = ParamUtil.getString(request, "tabs1", AccountMgtUtil.TOP_TABS_CITIZEN);
@@ -70,13 +72,12 @@
 				<div class="toolbar_search_input">
 					<c:if test="<%=tabs1.equals(AccountMgtUtil.TOP_TABS_CITIZEN)%>">
 						<aui:row>
-					
 							<aui:col width="50" cssClass="search-col">
-								<aui:select name="<%=CitizenDisplayTerms.CITIZEN_ACCOUNTSTATUS %>" 
+								<aui:select name="citizenAccStt" 
 									label="<%=StringPool.BLANK %>" 
 									cssClass="search-input select-box"
 									>
-										<aui:option>
+										<aui:option value="<%= -1 %>">
 											<liferay-ui:message key="account-status" />
 										</aui:option>
 										<%
@@ -94,7 +95,7 @@
 							<aui:col width="50" cssClass="search-col">
 								<liferay-ui:input-search 
 									id="keywords1" 
-									name="keywords" 
+									name="keywords1" 
 									title='<%= LanguageUtil.get(locale, "keywords") %>' 
 									placeholder='<%= LanguageUtil.get(locale, "name") %>' 			
 									cssClass="search-input input-keyword"
@@ -106,13 +107,28 @@
 					<c:if test="<%=tabs1.equals(AccountMgtUtil.TOP_TABS_BUSINESS)%>">
 						
 						<aui:row>
-					
-							<aui:col width="50" cssClass="search-col">
-								<aui:select name="<%=BusinessDisplayTerms.BUSINESS_ACCOUNTSTATUS %>" 
+							<aui:col width="30" cssClass="search-col">
+									<datamgt:ddr 
+										depthLevel="1" 
+										dictCollectionCode="BUSINESS_DOMAIN" 
+										name="businessDomain"
+										inlineField="<%=true%>"
+										inlineLabel="left"
+										showLabel="<%=false%>"
+										emptyOptionLabels="business-domain"
+										itemsEmptyOption="true"
+										itemNames="businessDomain"
+										cssClass="search-input select-box"
+										optionValueType="code"
+									/>
+							</aui:col>
+							
+							 <aui:col width="30" cssClass="search-col">
+								<aui:select name="account-status" 
 									label="<%=StringPool.BLANK %>"
 									cssClass="search-input select-box"
 								>
-									<aui:option>
+									<aui:option value="<%=-1 %>">
 										<liferay-ui:message key="account-status" />
 									</aui:option>
 									<%
@@ -126,8 +142,8 @@
 										}
 									%>
 								</aui:select>
-							</aui:col>
-							<aui:col width="50" cssClass="search-col">
+							 </aui:col>
+							 <aui:col width="30" cssClass="search-col">
 								<liferay-ui:input-search 
 									id="keywords1" 
 									name="keywords" 
@@ -135,7 +151,7 @@
 									placeholder='<%= LanguageUtil.get(locale, "name") %>' 			
 									cssClass="search-input input-keyword"
 								/>
-							</aui:col>
+							 </aui:col>
 							
 						</aui:row>
 					</c:if>
