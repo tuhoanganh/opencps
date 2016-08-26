@@ -53,6 +53,8 @@ public class ConfigurationImpl implements ConfigurationAction{
 
 		long plid = ParamUtil.getLong(actionRequest, "plid");
 		
+		long itemsToDisplay = ParamUtil.getLong(actionRequest, "itemsToDisplay");
+
 		boolean displayDossierNo = ParamUtil.getBoolean(actionRequest, "displayDossierNo");
 		
 		boolean displayRecentlyResultWhenSearch = ParamUtil.getBoolean(actionRequest, "displayRecentlyResultWhenSearch");
@@ -76,6 +78,9 @@ public class ConfigurationImpl implements ConfigurationAction{
 		preferences.setValue("redirectPaymentURL", redirectURL.toString());
 		preferences.setValue("displayDossierNo", String.valueOf(displayDossierNo));
 		preferences.setValue("displayRecentlyResultWhenSearch", String.valueOf(displayRecentlyResultWhenSearch));
+		
+		preferences.setValue("itemsToDisplay", String.valueOf(itemsToDisplay));
+		
 		preferences.store();
 
 		SessionMessages.add(actionRequest, "potlet-config-saved");
