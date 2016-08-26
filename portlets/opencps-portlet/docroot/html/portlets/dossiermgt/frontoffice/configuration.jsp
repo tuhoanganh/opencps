@@ -74,16 +74,15 @@
 	<aui:input 
 		type="checkbox" 
 		name="displayDossierNo"
-		value='<%= true %>'
-		checked="<%=displayDossierNo %>"
+		value='<%= displayDossierNo %>'
 	/>
 	
 	<aui:input 
 		type="checkbox"
 		name="displayRecentlyResultWhenSearch" 
-		value='<%= true %>'
-		checked="<%=displayRecentlyResultWhenSearch %>"
+		value='<%= displayRecentlyResultWhenSearch %>'
 	/>
 	<aui:button type="submit" name="Save" value="save"></aui:button>
 
 </aui:form>
+
