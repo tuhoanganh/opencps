@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -61,7 +60,7 @@
 		<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
 		<portlet:param name="<%=Constants.CMD %>" value="<%=Constants.VIEW %>"/>
 		<portlet:param name="isEditDossier" value="<%=String.valueOf(false) %>"/>
-		<portlet:param name="backURLFromList" value="<%=currentURL %>"/>
+		<portlet:param name="backURL" value="<%=currentURL %>"/>
 	</portlet:renderURL> 
 	<liferay-ui:icon 
 		cssClass="search-container-action fa view" 
@@ -76,7 +75,7 @@
 		 		<portlet:renderURL var="updateDossierURL">
 					<portlet:param name="mvcPath" value='<%=templatePath + "edit_dossier.jsp" %>'/>
 					<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
-					<portlet:param name="backURLFromList" value="<%=currentURL %>"/>
+					<portlet:param name="backURL" value="<%=currentURL %>"/>
 					<portlet:param name="isEditDossier" value="<%=String.valueOf(true) %>"/>
 				</portlet:renderURL> 
 		 		<liferay-ui:icon 

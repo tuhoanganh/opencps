@@ -70,7 +70,7 @@
 <liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
 
 <%
-	String dossierStatus = ParamUtil.getString(request, "dossierStatusNew", StringPool.BLANK);
+	String dossierStatus = ParamUtil.getString(request, DossierDisplayTerms.DOSSIER_STATUS, StringPool.BLANK);
 	int itemsToDisplay_cfg = GetterUtil.getInteger(portletPreferences.getValue("itemsToDisplay", "2"));
 	
 	long serviceDomainId = ParamUtil.getLong(request, "serviceDomainId");
