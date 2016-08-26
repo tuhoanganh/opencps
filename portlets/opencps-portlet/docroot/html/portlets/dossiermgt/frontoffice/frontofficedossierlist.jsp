@@ -94,6 +94,7 @@
 	}catch(Exception e){
 		_log.error(e);
 	}
+	
 %>
 
 <c:if test="<%=totalCount > 0 %>">
@@ -132,7 +133,7 @@
 				<liferay-util:buffer var="info">
 			
 					<c:choose>
-						<c:when test='<%=Validator.isNotNull(displayDossierNo) && displayDossierNo.equals("displayDossierNo") %>'>
+						<c:when test='<%=Validator.isNotNull(displayDossierNo) && displayDossierNo %>'>
 							<div class="row-fluid">
 								<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
 									<i class='<%="fa fa-circle sx10 " + dossier.getDossierStatus()%>'></i>
@@ -150,7 +151,7 @@
 									<liferay-ui:message key="reception-no"/>
 								</div>
 								
-								<div class="span9"><%=dossier.getDossierStatus() %></div>
+								<div class="span9"><%=dossier.getReceptionNo()%></div>
 							</div>
 						</c:when>
 						
@@ -315,7 +316,7 @@
 			<liferay-util:buffer var="info">
 				
 				<c:choose>
-					<c:when test='<%=Validator.isNotNull(displayDossierNo) && displayDossierNo.equals("displayDossierNo") %>'>
+					<c:when test='<%=Validator.isNotNull(displayDossierNo) && displayDossierNo %>'>
 						<div class="row-fluid">
 							<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
 								<i class='<%="fa fa-circle sx10 " + dossier.getDossierStatus()%>'></i>
@@ -333,7 +334,7 @@
 								<liferay-ui:message key="reception-no"/>
 							</div>
 							
-							<div class="span9"><%=dossier.getDossierStatus() %></div>
+							<div class="span9"><%=dossier.getReceptionNo() %></div>
 						</div>
 					</c:when>
 					
@@ -442,9 +443,8 @@
 		var isHidden = A.one("#<portlet:namespace />is-hidden");
 		var displayRecentlyResultWhenSearch = '<%=displayRecentlyResultWhenSearch%>';
 		var inputSearch = A.one("#<portlet:namespace />keywords1");
-		alert("aaaa " + displayRecentlyResultWhenSearch);
 		inputSearch.on('keypress', function() {
-			if(displayRecentlyResultWhenSearch != '') {
+			if(displayRecentlyResultWhenSearch == 'true') {
 				if(inputSearch.val() != '') {
 					isHidden.hide();
 				} else {

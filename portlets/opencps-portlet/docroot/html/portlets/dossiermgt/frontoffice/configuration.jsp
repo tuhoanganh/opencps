@@ -47,18 +47,6 @@
 	}
 	
 	int itemsToDisplay_cfg = GetterUtil.getInteger(portletPreferences.getValue("itemsToDisplay", "2"));
-
-	boolean isCheckedDisPlayDossierNo = false;
-	
-	boolean isCheckedDisplayRecently = false;
-	
-	if(Validator.isNotNull(displayDossierNo)) {
-		isCheckedDisPlayDossierNo = true;
-	}
-	
-	if(Validator.isNotNull(displayRecentlyResultWhenSearch)) {
-		isCheckedDisplayRecently = true;
-	}
 	
 %>
 
@@ -86,15 +74,15 @@
 	<aui:input 
 		type="checkbox" 
 		name="displayDossierNo"
-		value='<%= "displayDossierNo" %>' 
-		checked="<%=isCheckedDisPlayDossierNo %>"
+		value='<%= true %>'
+		checked="<%=displayDossierNo %>"
 	/>
 	
 	<aui:input 
 		type="checkbox"
 		name="displayRecentlyResultWhenSearch" 
-		value='<%="displayRecentlyResultWhenSearch" %>'
-		checked="<%=isCheckedDisplayRecently %>"
+		value='<%= true %>'
+		checked="<%=displayRecentlyResultWhenSearch %>"
 	/>
 	<aui:button type="submit" name="Save" value="save"></aui:button>
 

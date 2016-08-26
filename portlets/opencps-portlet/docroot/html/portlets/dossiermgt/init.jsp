@@ -32,8 +32,9 @@
 	
 	String redirectPaymentURL = preferences.getValue("redirectPaymentURL",StringPool.BLANK);
 	
-	String displayRecentlyResultWhenSearch = preferences.getValue("displayRecentlyResultWhenSearch", StringPool.BLANK);
+	boolean displayRecentlyResultWhenSearch = GetterUtil.getBoolean(preferences.getValue("displayRecentlyResultWhenSearch", "false"), false);
 	
-	String displayDossierNo = preferences.getValue("displayDossierNo", StringPool.BLANK);
+	boolean displayDossierNo =  GetterUtil.getBoolean(preferences.getValue("displayDossierNo", "false"), false);
+					
 %>
 
