@@ -22,8 +22,6 @@ package org.opencps.accountmgt.service.persistence;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.transaction.SystemException;
-
 import org.opencps.accountmgt.model.Business;
 import org.opencps.accountmgt.model.impl.BusinessImpl;
 
@@ -32,8 +30,7 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.Type;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -53,13 +50,16 @@ public class BusinessFinderImpl extends BasePersistenceImpl<Business> implements
 			+ ".countBusiness";
 
 	public List<Business> searchBusiness(long groupId, String keywords,
-			int accountStatus, String businessDomain, int start, int end) {
+			int accountStatus, String businessDomain, int start, int end) 
+		throws SystemException {
 
 		String[] names = null;
 		boolean andOperator = false;
 
 		if (Validator.isNotNull(keywords)) {
-			names = CustomSQLUtil.keywords(keywords);
+			// names = CustomSQLUtil.keywords(keywords);
+			// Khong cat nho keywords go vao theo tung khoang trang.
+			names = new String[]{keywords};
 		} else {
 			andOperator = true;
 		}
@@ -80,11 +80,7 @@ public class BusinessFinderImpl extends BasePersistenceImpl<Business> implements
 	 */
 	private List<Business> _searchBusiness(long groupId, String[] keywords,
 			int accountStatus, boolean andOperator, String businessDomain,
-			int start, int end) {
-
-		// /*
-		// * keywords = CustomSQLUtil .keywords(keywords, false);
-		// */
+			int start, int end) throws SystemException {
 
 		Session session = null;
 
@@ -175,26 +171,23 @@ public class BusinessFinderImpl extends BasePersistenceImpl<Business> implements
 
 			return (List<Business>) QueryUtil.list(q, getDialect(), start, end);
 		} catch (Exception e) {
-			try {
-				throw new SystemException();
-			}
-			catch (SystemException ex) {
-				ex.printStackTrace();
-			}
+			throw new SystemException();
 		} finally {
 			session.close();
 		}
-		return null;
 	}
 
 	public int countBussiness(long groupId, String keywords, int accountStatus,
-			String businessDomain) {
+			String businessDomain) 
+		throws SystemException {
 
 		String[] names = null;
 		boolean andOperator = false;
 
 		if (Validator.isNotNull(keywords)) {
-			names = CustomSQLUtil.keywords(keywords);
+			// names = CustomSQLUtil.keywords(keywords);
+			// Khong cat nho keywords go vao theo tung khoang trang.
+			names = new String[]{keywords};
 		} else {
 			andOperator = true;
 		}
@@ -212,16 +205,16 @@ public class BusinessFinderImpl extends BasePersistenceImpl<Business> implements
 	 * @return
 	 */
 	private int _countBussiness(long groupId, String[] keywords,
-			int accountStatus, String businessDomain, boolean andOperator) {
-
-		/*
-		 * keywords = CustomSQLUtil .keywords(keywords, false);
-		 */
+			int accountStatus, String businessDomain, boolean andOperator) 
+		throws SystemException {
 
 		Session session = null;
+		
 		try {
 			session = openSession();
+			
 			String sql = CustomSQLUtil.get(COUNT_BUSINESS);
+			
 			if (keywords != null && keywords.length > 0) {
 				sql = CustomSQLUtil.replaceKeywords(sql,
 						"lower(opencps_acc_business.name)", StringPool.LIKE,
@@ -308,21 +301,11 @@ public class BusinessFinderImpl extends BasePersistenceImpl<Business> implements
 				}
 			}
 
+			return 0;
 		} catch (Exception e) {
-			try {
-				throw new SystemException();
-			}
-			catch (SystemException ex) {
-				ex.printStackTrace();
-			}
-			
-			
+			throw new SystemException();
 		} finally {
 			session.close();
 		}
-
-		return 0;
 	}
-
-	private Log _log = LogFactoryUtil.getLog(BusinessFinderImpl.class);
 }
