@@ -506,12 +506,14 @@ public class CitizenLocalServiceImpl extends CitizenLocalServiceBaseImpl {
 	}
 
 	public List<Citizen> searchCitizen(long groupId, String keyword,
-			int status, int start, int end) {
-		return citizenFinder
-				.searchCitizen(groupId, keyword, status, start, end);
+			int status, int start, int end) throws SystemException {
+		
+		return citizenFinder.searchCitizen(groupId, keyword, status, start, end);
 	}
 	
-	public int countCitizen(long groupId, String keyword, int status){
+	public int countCitizen(long groupId, String keyword, int status) 
+			throws SystemException {
+		
 		return citizenFinder.countCitizen(groupId, keyword, status);
 	}
 
