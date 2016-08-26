@@ -86,7 +86,3 @@
 
 </aui:form>
 
-<%
-	System.out.println("===displayDossierNo " + displayDossierNo);
-	System.out.println("===displayRecentlyResultWhenSearch " + displayRecentlyResultWhenSearch);
-%>
