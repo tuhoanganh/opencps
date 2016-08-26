@@ -1,4 +1,5 @@
 
+<%@page import="org.opencps.util.MessageKeys"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -49,6 +50,9 @@
 	
 	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
 %>
+
+<liferay-ui:success  key="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>" message="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>"/>
+
 <aui:form name="fm">
 	<div class="opencps-searchcontainer-wrapper">
 		<liferay-ui:search-container 
