@@ -76,9 +76,13 @@ public class ConfigurationImpl implements ConfigurationAction{
 		        actionRequest, portletResource);
 
 		preferences.setValue("redirectPaymentURL", redirectURL.toString());
+		
 		preferences.setValue("itemsToDisplay", String.valueOf(itemsToDisplay));
+		
 		preferences.setValue("displayRecentlyResultWhenSearch", String.valueOf(displayDossierNo));
+		
 		preferences.setValue("displayDossierNo", String.valueOf(displayRecentlyResultWhenSearch));
+		
 		preferences.store();
 
 		SessionMessages.add(actionRequest, "potlet-config-saved");
