@@ -81,7 +81,8 @@
 	
 	List<Dossier> dossiers =  new ArrayList<Dossier>();
 	
-	String keywords = ParamUtil.getString(request, "keywords1");
+	
+	System.out.print("*********  " + keyword + " **** display" + displayRecentlyResultWhenSearch);
 	
 	int totalCount = 0;
 	
@@ -99,7 +100,7 @@
 
 <c:if test="<%=totalCount > 0 %>">
 	<!-- cap nhat thay doi moi nhat -->
-		<c:if test="<%= (Validator.isNull(keywords) && displayRecentlyResultWhenSearch) || displayRecentlyResultWhenSearch == false%>">
+		<c:if test="<%= (Validator.isNull(keyword) && displayRecentlyResultWhenSearch) || displayRecentlyResultWhenSearch == false%>">
 			<div class="opencps-searchcontainer-wrapper default-box-shadow radius8 mrb25 " id="<portlet:namespace />is-hidden">
 				<div class="opcs-serviceinfo-list-label">
 					<div class="title_box">
