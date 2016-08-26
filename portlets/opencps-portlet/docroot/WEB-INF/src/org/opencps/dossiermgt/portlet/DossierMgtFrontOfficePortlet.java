@@ -104,8 +104,8 @@ import org.opencps.util.MessageKeys;
 import org.opencps.util.PortletConstants;
 import org.opencps.util.PortletPropsValues;
 import org.opencps.util.PortletUtil;
-import org.opencps.util.WebKeys;
 import org.opencps.util.PortletUtil.SplitDate;
+import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -116,6 +116,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.servlet.PortalSessionContext;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
@@ -143,11 +144,6 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  * @author trungnt
  */
 public class DossierMgtFrontOfficePortlet extends MVCPortlet {
-
-	private boolean _hasPermission = true;
-
-	private Log _log =
-		LogFactoryUtil.getLog(DossierMgtFrontOfficePortlet.class.getName());
 
 	/**
 	 * @param actionRequest
@@ -262,17 +258,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 			String contentType =
 				uploadPortletRequest.getContentType(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
-
-			// DLFolder accountFolder = accountBean.getAccountFolder();
-
-			/*
-			 * DLFolder dossierFolder = DLFolderUtil.addFolder(
-			 * serviceContext.getUserId(), serviceContext.getScopeGroupId(),
-			 * serviceContext.getScopeGroupId(), false,
-			 * accountFolder.getFolderId(),
-			 * String.valueOf(dossier.getCounter()), StringPool.BLANK, false,
-			 * serviceContext);
-			 */
 
 			DossierFileLocalServiceUtil.addDossierFile(
 				serviceContext.getUserId(), dossierId, dossierPartId,
@@ -749,17 +734,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 			dossierPart =
 				DossierPartLocalServiceUtil.getDossierPart(dossierPartId);
-
-			// DLFolder accountFolder = accountBean.getAccountFolder();
-
-			/*
-			 * DLFolder dossierFolder = DLFolderUtil.addFolder(
-			 * serviceContext.getUserId(), serviceContext.getScopeGroupId(),
-			 * serviceContext.getScopeGroupId(), false,
-			 * accountFolder.getFolderId(),
-			 * String.valueOf(dossier.getCounter()), StringPool.BLANK, false,
-			 * serviceContext);
-			 */
 
 			DossierFileLocalServiceUtil.addDossierFile(
 				serviceContext.getUserId(), dossierId, dossierPartId,
@@ -1328,17 +1302,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	protected void include(
 		String path, RenderRequest renderRequest, RenderResponse renderResponse)
 		throws IOException, PortletException {
-		HttpServletRequest request2 =
-						PortalUtil.getHttpServletRequest(renderRequest);
-		HttpSession session = request2.getSession();
 
-		String accountType =
-			GetterUtil.getString(session.getAttribute(WebKeys.ACCOUNT_TYPE));
-
-		System.out.println("######################################2"+ accountType);
-		validatePermission(renderRequest, renderResponse);
-		System.out.println("#####################################+ " + _hasPermission);
-		if (!_hasPermission) {
+		if (!hasPermission()) {
 			path = "/html/portlets/dossiermgt/frontoffice/warning.jsp";
 		}
 
@@ -1524,16 +1489,21 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	public void render(
 		RenderRequest renderRequest, RenderResponse renderResponse)
 		throws PortletException, IOException {
-		
-		HttpServletRequest request2 =
-						PortalUtil.getHttpServletRequest(renderRequest);
-		HttpSession session2 = request2.getSession();
 
-		String accountType2 =
-			GetterUtil.getString(session2.getAttribute(WebKeys.ACCOUNT_TYPE));
+		// Reset check permission flag
+		setHasPermission(true);
 
-		System.out.println("######################################2"+ accountType2);
-		if (_hasPermission) {
+		HttpServletRequest request =
+			PortalUtil.getHttpServletRequest(renderRequest);
+
+		HttpSession session =
+			PortalSessionContext.get(request.getRequestedSessionId());
+
+		// HttpSession session = request.getSession();
+
+		validatePermission(renderRequest, renderResponse);
+
+		if (hasPermission()) {
 			ThemeDisplay themeDisplay =
 				(ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
@@ -1556,11 +1526,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			long serviceConfigId =
 				ParamUtil.getLong(
 					renderRequest, DossierDisplayTerms.SERVICE_CONFIG_ID);
-
-			HttpServletRequest request =
-				PortalUtil.getHttpServletRequest(renderRequest);
-
-			HttpSession session = request.getSession();
 
 			String accountType =
 				GetterUtil.getString(session.getAttribute(WebKeys.ACCOUNT_TYPE));
@@ -2496,9 +2461,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		else if (Validator.isNull(accountBean.getAccountType())) {
 			throw new NoSuchAccountTypeException();
 		}
-		else if (accountBean.getAccountFolder() == null) {
-			throw new NoSuchAccountFolderException();
-		}
 
 		else if (accountBean.isCitizen() && accountBean.getOwnerUserId() == 0) {
 			throw new NoSuchAccountOwnUserIdException();
@@ -2930,10 +2892,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		if (accountBean == null ||
 			(!accountBean.isBusiness() && !accountBean.isCitizen())) {
-			//Xu ly sau
-			//_hasPermission = false;
-			
-			//return;
+			setHasPermission(false);
+			return;
 		}
 		else {
 			ownerId =
@@ -2953,7 +2913,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 					Dossier dossier =
 						DossierLocalServiceUtil.getDossier(dossierId);
 					if (dossier.getUserId() != themeDisplay.getUserId()) {
-						_hasPermission = false;
+						setHasPermission(false);
 						return;
 					}
 				}
@@ -2964,13 +2924,13 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 					if (dossierFile.getOwnerUserId() > 0 &&
 						dossierFile.getOwnerUserId() != ownerId) {
-						_hasPermission = false;
+						setHasPermission(false);
 						return;
 					}
 
 					if (dossierFile.getOwnerOrganizationId() > 0 &&
 						dossierFile.getOwnerOrganizationId() != ownerId) {
-						_hasPermission = false;
+						setHasPermission(false);
 						return;
 					}
 
@@ -3075,4 +3035,19 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			throw new RequiredDossierPartException();
 		}
 	}
+
+	private boolean _hasPermission = true;
+
+	public boolean hasPermission() {
+
+		return _hasPermission;
+	}
+
+	public void setHasPermission(boolean hasPermission) {
+
+		this._hasPermission = hasPermission;
+	}
+
+	private Log _log =
+		LogFactoryUtil.getLog(DossierMgtFrontOfficePortlet.class.getName());
 }
