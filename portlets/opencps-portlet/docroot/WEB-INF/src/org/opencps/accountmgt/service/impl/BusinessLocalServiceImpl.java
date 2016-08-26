@@ -653,25 +653,22 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		return businessPersistence.fetchBymappingOrganizationId(mappingOrganizationId);
 	}
 
-	/*
-	 * don't know getBymappingOrganizationId have been used or not, instead that
-	 * to use bellow function for finding on payment module
-	 */
-
 	public Business getByMappingOrganizationId(long mappingOrganizationId)
 		throws SystemException, NoSuchBusinessException {
 
 		return businessPersistence.findBymappingOrganizationId(mappingOrganizationId);
 	}
-	//groupId, names, accountStatus, andOperator,businessDomain, start, end
+	
 	public List<Business> searchBusiness(long groupId, String keywords, int accountStatus,
-		String businessDomain, int start, int end) {
+		String businessDomain, int start, int end) throws SystemException {
+		
 		return businessFinder.searchBusiness(groupId, keywords,
 			accountStatus, businessDomain, start, end);
 	}
-	//
+
 	public int countBusiness (long groupId, String keywords, int accountStatus,
-		String businessDomain) {
+		String businessDomain) throws SystemException {
+		
 		return businessFinder.countBussiness(groupId, keywords, accountStatus, businessDomain);
 	}
 
