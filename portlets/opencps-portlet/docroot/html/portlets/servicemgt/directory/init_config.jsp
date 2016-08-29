@@ -19,12 +19,12 @@
 <%@ include file="/init.jsp" %>
 <%@page import="javax.portlet.PortletPreferences"%>
 <%
-	PortletPreferences preferences = renderRequest.getPreferences();
+	PortletPreferences preferences1 = renderRequest.getPreferences();
 	
-	portletResource = ParamUtil.getString(request, "portletResource");
+	String portletResource1 = ParamUtil.getString(request, "portletResource");
 	
 	if (Validator.isNotNull(portletResource)) {
-		preferences = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
+		preferences1 = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource1);
 	}	
-	String plidRes = preferences.getValue("plid","0");
+	String plidRes = preferences1.getValue("plid","0");
 %>
