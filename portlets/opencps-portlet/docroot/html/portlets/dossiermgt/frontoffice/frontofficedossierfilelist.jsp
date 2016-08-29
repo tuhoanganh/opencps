@@ -47,14 +47,20 @@
 	String headers = StringUtil.merge(headerNames);
 	
 	PortletURL iteratorURL = renderResponse.createRenderURL();
-	iteratorURL.setParameter("mvcPath", templatePath + "frontofficeexternaldossierlist.jsp");
-	iteratorURL.setParameter("tab1", DossierMgtUtil.TOP_TABS_DOSSIER_FILE);
+	iteratorURL.setParameter("mvcPath", templatePath + "frontofficedossierfilelist.jsp");
+	iteratorURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER_FILE);
 
 	List<DossierFileBean> dossierFileBeans = new ArrayList<DossierFileBean>();
 	int totalCount = 0;
 %>
 
-<div class="opencps-searchcontainer-wrapper">
+<div class="opencps-searchcontainer-wrapper default-box-shadow radius8">
+		<div class="opcs-serviceinfo-list-label">
+			<div class="title_box">
+		           <p class="file_manage_title"><liferay-ui:message key="title-danh-sach-giay-to" /></p>
+		           <p class="count"></p>
+		    </div>
+		</div>
 	<liferay-ui:search-container 
 		searchContainer="<%= new DossierFileSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" 
 		headerNames="<%= headers %>"
@@ -76,7 +82,6 @@
 				} catch(Exception e){
 					
 				}
-			
 				total = totalCount;
 				results = dossierFileBeans;
 				
