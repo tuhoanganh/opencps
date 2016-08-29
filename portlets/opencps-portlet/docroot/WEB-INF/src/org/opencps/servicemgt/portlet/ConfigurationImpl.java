@@ -48,7 +48,9 @@ public class ConfigurationImpl implements ConfigurationAction {
 	    throws Exception {
 
 		String menuType = ParamUtil.getString(actionRequest, "menuType");
-
+		
+		long plidServiceDetail = ParamUtil.getLong(actionRequest, "plidServiceDetail");
+		
 		String portletResource =
 		    ParamUtil.getString(actionRequest, "portletResource");
 		
@@ -57,6 +59,7 @@ public class ConfigurationImpl implements ConfigurationAction {
 		        actionRequest, portletResource);
 		
 		preferences.setValue("menuType", menuType);
+		preferences.setValue("plidServiceDetail", String.valueOf(plidServiceDetail));
 		preferences.store();
 		
 		SessionMessages.add(actionRequest, "potlet-config-saved");

@@ -70,5 +70,7 @@
 	String menuTye = preferences.getValue("menuType","administrator");
 	
 	String plidRes = preferences.getValue("plid","0");
+	
+	String plidServiceDetail = preferences.getValue("plidServiceDetail", "0");
 %>
 
