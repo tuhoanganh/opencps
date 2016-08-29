@@ -25,7 +25,7 @@
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
 <%@ include file="../init.jsp" %>
-
+<%@ include file="init_config.jsp" %>
 <%
 	long serviceinfoId = ParamUtil.getLong(request, "serviceinfoId");
 	ServiceInfo serviceInfo = null;
@@ -37,7 +37,20 @@
 	
 	String backURL = ParamUtil.getString(request, "backURL");
 	
+	
 %>
+
+<liferay-portlet:renderURL 
+		var="renderToSubmitOnline" 
+		portletName="<%=WebKeys.DOSSIER_MGT_PORTLET %>"
+		plid="<%=Long.valueOf(plidRes) %>"
+		portletMode="VIEW"
+		windowState="<%=LiferayWindowState.NORMAL.toString() %>"
+	>
+	<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/submit/dossier_submit_online.jsp"/>
+	<portlet:param name="serviceinfoId" value="<%=String.valueOf(serviceinfoId) %>"/>
+	<portlet:param name="backURL" value="<%=backURL %>"/>
+</liferay-portlet:renderURL>
 
 <div class="ocps-service-detal-bound-all">
 	<div class="ocps-custom-header">
@@ -177,7 +190,7 @@
 				</tr>
 				<tr>
 					<td class="col-left" colspan="2">
-						<aui:button href="<%= serviceInfo.getOnlineUrl() %>" cssClass="des-sub-button radius20" value="online-url-button"></aui:button>
+						<aui:button href="<%= renderToSubmitOnline.toString() %>" cssClass="des-sub-button radius20" value="online-url-button"></aui:button>
 					</td>
 				</tr>
 			</table>
