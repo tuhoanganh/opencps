@@ -32,7 +32,9 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.opencps.accountmgt.NoSuchAccountException;
 import org.opencps.accountmgt.NoSuchAccountFolderException;
@@ -71,12 +73,14 @@ import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.model.ProcessStep;
 import org.opencps.processmgt.model.ProcessWorkflow;
 import org.opencps.processmgt.model.ServiceProcess;
+import org.opencps.processmgt.model.StepAllowance;
 import org.opencps.processmgt.model.WorkflowOutput;
 import org.opencps.processmgt.search.ProcessOrderDisplayTerms;
 import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
 import org.opencps.processmgt.service.ServiceProcessLocalServiceUtil;
+import org.opencps.processmgt.service.StepAllowanceLocalServiceUtil;
 import org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
@@ -101,6 +105,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.servlet.PortalSessionContext;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.Base64;
@@ -109,6 +114,7 @@ import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Role;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -542,9 +548,11 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
 
-		/*AccountBean accountBean =
-			AccountUtil.getAccountBeanFromAttribute(actionRequest);*/
-		
+		/*
+		 * AccountBean accountBean =
+		 * AccountUtil.getAccountBeanFromAttribute(actionRequest);
+		 */
+
 		AccountBean accountBean = AccountUtil.getAccountBean(actionRequest);
 
 		Dossier dossier = null;
@@ -747,9 +755,11 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		 * actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		 */
 
-		/*AccountBean accountBean =
-			AccountUtil.getAccountBeanFromAttribute(actionRequest);*/
-		
+		/*
+		 * AccountBean accountBean =
+		 * AccountUtil.getAccountBeanFromAttribute(actionRequest);
+		 */
+
 		AccountBean accountBean = AccountUtil.getAccountBean(actionRequest);
 
 		long dossierFileId =
@@ -1204,6 +1214,25 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		return JRReportUtil.createReportPDFfFile(
 			jrxmlTemplate, formData, map, outputDestination, fileName);
 	}
+	
+	/**
+	 * @param path
+	 * @param renderRequest
+	 * @param renderResponse
+	 * @throws IOException
+	 * @throws PortletException
+	 */
+	@Override
+	protected void include(
+		String path, RenderRequest renderRequest, RenderResponse renderResponse)
+		throws IOException, PortletException {
+
+		if (!hasPermission()) {
+			path = "/html/portlets/processmgt/processorder/warning.jsp";
+		}
+
+		super.include(path, renderRequest, renderResponse);
+	}
 
 	/**
 	 * @param actionRequest
@@ -1340,98 +1369,89 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		RenderRequest renderRequest, RenderResponse renderResponse)
 		throws PortletException, IOException {
 
-		long processOrderId =
-			ParamUtil.getLong(
-				renderRequest, ProcessOrderDisplayTerms.PROCESS_ORDER_ID);
+		setHasPermission(true);
 
-		long dossierFileId =
-			ParamUtil.getLong(
-				renderRequest, DossierFileDisplayTerms.DOSSIER_FILE_ID);
+		validatePermission(renderRequest, renderResponse);
 
-		long dossierPartId =
-			ParamUtil.getLong(
-				renderRequest, DossierFileDisplayTerms.DOSSIER_PART_ID);
+		if (hasPermission()) {
+			long processOrderId =
+				ParamUtil.getLong(
+					renderRequest, ProcessOrderDisplayTerms.PROCESS_ORDER_ID);
 
-		if (processOrderId > 0) {
-			try {
-				/*
-				 * ServiceContext serviceContext =
-				 * ServiceContextFactory.getInstance(renderRequest);
-				 */
+			long dossierFileId =
+				ParamUtil.getLong(
+					renderRequest, DossierFileDisplayTerms.DOSSIER_FILE_ID);
 
-				ProcessOrder processOrder =
-					ProcessOrderLocalServiceUtil.getProcessOrder(processOrderId);
-				ProcessStep processStep =
-					ProcessStepLocalServiceUtil.getProcessStep(processOrder.getProcessStepId());
-				Dossier dossier =
-					DossierLocalServiceUtil.getDossier(processOrder.getDossierId());
+			long dossierPartId =
+				ParamUtil.getLong(
+					renderRequest, DossierFileDisplayTerms.DOSSIER_PART_ID);
 
-				/*
-				 * AccountBean accountBean = AccountUtil.getAccountBean(
-				 * dossier.getUserId(), serviceContext.getScopeGroupId(),
-				 * serviceContext);
-				 */
-				ServiceProcess serviceProcess =
-					ServiceProcessLocalServiceUtil.getServiceProcess(processOrder.getServiceProcessId());
-				ServiceInfo serviceInfo =
-					ServiceInfoLocalServiceUtil.getServiceInfo(processOrder.getServiceInfoId());
-				ServiceConfig serviceConfig =
-					ServiceConfigLocalServiceUtil.getServiceConfig(dossier.getServiceConfigId());
+			if (processOrderId > 0) {
+				try {
 
-				DossierTemplate dossierTemplate =
-					DossierTemplateLocalServiceUtil.getDossierTemplate(dossier.getDossierTemplateId());
+					ProcessOrder processOrder =
+						ProcessOrderLocalServiceUtil.getProcessOrder(processOrderId);
 
-				ProcessWorkflow processWorkflow =
-					ProcessWorkflowLocalServiceUtil.getProcessWorkflow(processOrder.getProcessWorkflowId());
+					ProcessStep processStep =
+						ProcessStepLocalServiceUtil.getProcessStep(processOrder.getProcessStepId());
+					Dossier dossier =
+						DossierLocalServiceUtil.getDossier(processOrder.getDossierId());
 
-				renderRequest.setAttribute(
-					WebKeys.PROCESS_ORDER_ENTRY, processOrder);
-				renderRequest.setAttribute(
-					WebKeys.PROCESS_STEP_ENTRY, processStep);
-				renderRequest.setAttribute(WebKeys.DOSSIER_ENTRY, dossier);
-				renderRequest.setAttribute(
-					WebKeys.SERVICE_PROCESS_ENTRY, serviceProcess);
-				renderRequest.setAttribute(
-					WebKeys.SERVICE_INFO_ENTRY, serviceInfo);
-				renderRequest.setAttribute(
-					WebKeys.SERVICE_CONFIG_ENTRY, serviceConfig);
+					ServiceProcess serviceProcess =
+						ServiceProcessLocalServiceUtil.getServiceProcess(processOrder.getServiceProcessId());
+					ServiceInfo serviceInfo =
+						ServiceInfoLocalServiceUtil.getServiceInfo(processOrder.getServiceInfoId());
+					ServiceConfig serviceConfig =
+						ServiceConfigLocalServiceUtil.getServiceConfig(dossier.getServiceConfigId());
 
-				renderRequest.setAttribute(
-					WebKeys.DOSSIER_TEMPLATE_ENTRY, dossierTemplate);
+					DossierTemplate dossierTemplate =
+						DossierTemplateLocalServiceUtil.getDossierTemplate(dossier.getDossierTemplateId());
 
-				renderRequest.setAttribute(
-					WebKeys.PROCESS_WORKFLOW_ENTRY, processWorkflow);
-
-				/*
-				 * HttpServletRequest request =
-				 * PortalUtil.getHttpServletRequest(renderRequest);
-				 * ServletContext servletContext = request.getServletContext();
-				 * servletContext.setAttribute(WebKeys.ACCOUNT_BEAN,
-				 * accountBean);
-				 */
-
-				if (dossierFileId > 0) {
-					DossierFile dossierFile =
-						DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
+					ProcessWorkflow processWorkflow =
+						ProcessWorkflowLocalServiceUtil.getProcessWorkflow(processOrder.getProcessWorkflowId());
 
 					renderRequest.setAttribute(
-						WebKeys.DOSSIER_FILE_ENTRY, dossierFile);
+						WebKeys.PROCESS_ORDER_ENTRY, processOrder);
+					renderRequest.setAttribute(
+						WebKeys.PROCESS_STEP_ENTRY, processStep);
+					renderRequest.setAttribute(WebKeys.DOSSIER_ENTRY, dossier);
+					renderRequest.setAttribute(
+						WebKeys.SERVICE_PROCESS_ENTRY, serviceProcess);
+					renderRequest.setAttribute(
+						WebKeys.SERVICE_INFO_ENTRY, serviceInfo);
+					renderRequest.setAttribute(
+						WebKeys.SERVICE_CONFIG_ENTRY, serviceConfig);
+
+					renderRequest.setAttribute(
+						WebKeys.DOSSIER_TEMPLATE_ENTRY, dossierTemplate);
+
+					renderRequest.setAttribute(
+						WebKeys.PROCESS_WORKFLOW_ENTRY, processWorkflow);
+
+					if (dossierFileId > 0) {
+						DossierFile dossierFile =
+							DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
+
+						renderRequest.setAttribute(
+							WebKeys.DOSSIER_FILE_ENTRY, dossierFile);
+					}
+
+					if (dossierPartId > 0) {
+						DossierPart dossierPart =
+							DossierPartLocalServiceUtil.getDossierPart(dossierPartId);
+						renderRequest.setAttribute(
+							WebKeys.DOSSIER_PART_ENTRY, dossierPart);
+					}
+
 				}
 
-				if (dossierPartId > 0) {
-					DossierPart dossierPart =
-						DossierPartLocalServiceUtil.getDossierPart(dossierPartId);
-					renderRequest.setAttribute(
-						WebKeys.DOSSIER_PART_ENTRY, dossierPart);
+				catch (Exception e) {
+					_log.error(e.getCause());
 				}
 
 			}
-
-			catch (Exception e) {
-				_log.error(e.getCause());
-			}
-
 		}
+
 		super.render(renderRequest, renderResponse);
 	}
 
@@ -1444,9 +1464,11 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
 
-		/*AccountBean accountBean =
-			AccountUtil.getAccountBeanFromAttribute(actionRequest);*/
-		
+		/*
+		 * AccountBean accountBean =
+		 * AccountUtil.getAccountBeanFromAttribute(actionRequest);
+		 */
+
 		AccountBean accountBean = AccountUtil.getAccountBean(actionRequest);
 
 		DossierFile dossierFile = null;
@@ -1921,5 +1943,109 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		if (requiredFlag) {
 			throw new RequiredDossierPartException();
 		}
+	}
+
+	/**
+	 * @param renderRequest
+	 * @param renderResponse
+	 */
+	private void validatePermission(
+		RenderRequest renderRequest, RenderResponse renderResponse) {
+
+		AccountBean accountBean = AccountUtil.getAccountBean(renderRequest);
+
+		if (accountBean == null || !accountBean.isEmployee()) {
+			setHasPermission(false);
+			return;
+		}
+		else {
+
+			Employee employee = (Employee) accountBean.getAccountInstance();
+
+			ArrayList<Role> roles = accountBean.getAccountRoles();
+
+			List<Long> roleIds = new ArrayList<Long>();
+
+			if (roleIds != null) {
+				for (Role role : roles) {
+					if (!roleIds.contains(role.getRoleId())) {
+						roleIds.add(role.getRoleId());
+					}
+				}
+			}
+
+			String processOrderIdParam =
+				ParamUtil.getString(
+					renderRequest, ProcessOrderDisplayTerms.PROCESS_ORDER_ID);
+
+			if (Validator.isNotNull(processOrderIdParam) &&
+				!Validator.isNumber(processOrderIdParam)) {
+				setHasPermission(false);
+				return;
+			}
+			else if (Validator.isNotNull(processOrderIdParam) &&
+				Validator.isNumber(processOrderIdParam)) {
+				long processOrderId =
+					ParamUtil.getLong(
+						renderRequest,
+						ProcessOrderDisplayTerms.PROCESS_ORDER_ID);
+
+				if (processOrderId <= 0) {
+					setHasPermission(false);
+					return;
+				}
+				else {
+					try {
+
+						boolean hasProcessRole = false;
+
+						boolean hasAssigned = false;
+
+						ProcessOrder processOrder =
+							ProcessOrderLocalServiceUtil.getProcessOrder(processOrderId);
+
+						if (processOrder.getAssignToUserId() == employee.getMappingUserId()) {
+							hasAssigned = true;
+						}
+
+						List<StepAllowance> stepAllowances =
+							StepAllowanceLocalServiceUtil.getByProcessStep(processOrder.getProcessStepId());
+
+						if (stepAllowances != null) {
+							for (StepAllowance stepAllowance : stepAllowances) {
+								if (roleIds.contains(stepAllowance.getRoleId())) {
+									hasProcessRole = true;
+									break;
+								}
+							}
+						}
+
+						if (!hasProcessRole || !hasAssigned) {
+							setHasPermission(false);
+							return;
+						}
+
+					}
+					catch (Exception e) {
+						_log.info("Resource does not exist width " +
+							"processOrderId=" + processOrderId + " account=" +
+							accountBean.getAccountType());
+						_hasPermission = false;
+					}
+				}
+			}
+		}
+	}
+
+	private boolean _hasPermission = true;
+
+	public boolean hasPermission() {
+
+		return _hasPermission;
+	}
+
+	public void setHasPermission(boolean hasPermission) {
+
+		this._hasPermission = hasPermission;
 	}
 }
