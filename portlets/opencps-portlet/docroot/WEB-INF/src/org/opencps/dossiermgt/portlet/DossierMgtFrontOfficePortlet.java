@@ -289,6 +289,10 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				size, serviceContext);
 
 			updated = true;
+			
+			SessionMessages.add(
+					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+			
 			SessionErrors.clear(actionRequest);
 		}
 		catch (Exception e) {
@@ -385,6 +389,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				serviceContext.getUserId(), dossierId, dossierPartId, partName,
 				PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
 				serviceContext);
+			
+			SessionMessages.add(
+					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 		}
 		catch (Exception e) {
 			updated = false;
@@ -554,6 +561,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				PortletConstants.DOSSIER_FILE_TYPE_INPUT);
 
 			jsonObject.put(DossierDisplayTerms.TEMPLATE_FILE_NO, templateFileNo);
+			
+			SessionMessages.add(
+					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 
 		}
 		catch (Exception e) {
@@ -574,7 +584,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			}
 		}
 	}
-
+	
 	/**
 	 * @param actionRequest
 	 * @param actionResponse
@@ -583,106 +593,84 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	public void cancelDossier(
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
-
-		ServiceContext serviceContext =
-			ServiceContextThreadLocal.getServiceContext();
+		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
 		AccountBean accountBean = AccountUtil.getAccountBean(actionRequest);
 		if (accountBean.isBusiness() || accountBean.isCitizen()) {
 			long dossierId =
-				ParamUtil.getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
+					ParamUtil.getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
 			try {
 				Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
-				ProcessOrder processOrder =
-					ProcessOrderLocalServiceUtil.getProcessOrder(dossierId, 0);
-				ProcessWorkflow workFlow =
-					ProcessWorkflowLocalServiceUtil.getByS_PreP_AN(
-						processOrder.getServiceProcessId(),
-						processOrder.getProcessStepId(), "Thông báo hủy hồ sơ");
+				ProcessOrder processOrder = ProcessOrderLocalServiceUtil.getProcessOrder(dossierId, 0);
+				ProcessWorkflow workFlow = ProcessWorkflowLocalServiceUtil.getByS_PreP_AN(processOrder.getServiceProcessId(), processOrder.getProcessStepId(), PortletPropsValues.OPENCPS_CANCEL_DOSSIER_NOTICE);
 				Message message = new Message();
 				if (Validator.isNotNull(workFlow.getAutoEvent())) {
-					message.put(
-						ProcessOrderDisplayTerms.EVENT, workFlow.getAutoEvent());
+					message.put(ProcessOrderDisplayTerms.EVENT, workFlow.getAutoEvent());				
 				}
 				else {
-					message.put(
-						ProcessOrderDisplayTerms.PROCESS_WORKFLOW_ID,
-						workFlow.getProcessWorkflowId());
+					message.put(ProcessOrderDisplayTerms.PROCESS_WORKFLOW_ID,
+							workFlow.getProcessWorkflowId());				
 				}
 
-				message.put(
-					ProcessOrderDisplayTerms.ACTION_NOTE,
-					"Người làm thủ tục hủy hồ sơ");
-				message.put(
-					ProcessOrderDisplayTerms.PROCESS_STEP_ID,
-					processOrder.getProcessStepId());
+				message.put(ProcessOrderDisplayTerms.ACTION_NOTE, PortletPropsValues.OPENCPS_PERSON_MAKE_PROCEDURE_CANCEL);
+				message.put(ProcessOrderDisplayTerms.PROCESS_STEP_ID,
+						processOrder.getProcessStepId());
 				message.put(ProcessOrderDisplayTerms.ASSIGN_TO_USER_ID, 0);
-				message.put(
-					ProcessOrderDisplayTerms.SERVICE_PROCESS_ID,
-					processOrder.getServiceProcessId());
+				message.put(ProcessOrderDisplayTerms.SERVICE_PROCESS_ID,
+						processOrder.getServiceProcessId());
 				message.put(ProcessOrderDisplayTerms.PAYMENTVALUE, 0);
-				message.put(
-					ProcessOrderDisplayTerms.GROUP_ID,
-					serviceContext.getScopeGroupId());
-				message.put(
-					ProcessOrderDisplayTerms.ACTION_USER_ID,
-					serviceContext.getUserId());
+				message.put(ProcessOrderDisplayTerms.GROUP_ID, serviceContext.getScopeGroupId());
+				message.put(ProcessOrderDisplayTerms.ACTION_USER_ID,
+				serviceContext.getUserId());
 
-				message.put(
-					ProcessOrderDisplayTerms.PROCESS_ORDER_ID,
-					processOrder.getProcessOrderId());
+				message.put(ProcessOrderDisplayTerms.PROCESS_ORDER_ID,
+						processOrder.getProcessOrderId());
 				message.put(ProcessOrderDisplayTerms.FILE_GROUP_ID, 0);
-				message.put(
-					ProcessOrderDisplayTerms.DOSSIER_ID, dossier.getDossierId());
+				message.put(ProcessOrderDisplayTerms.DOSSIER_ID,
+						dossier.getDossierId());
 
-				message.put(
-					ProcessOrderDisplayTerms.GROUP_ID, dossier.getGroupId());
+				message.put(ProcessOrderDisplayTerms.GROUP_ID, dossier.getGroupId());
 
-				message.put(
-					ProcessOrderDisplayTerms.COMPANY_ID, dossier.getCompanyId());
+				message.put(ProcessOrderDisplayTerms.COMPANY_ID,
+						dossier.getCompanyId());
 
 				SendToEngineMsg sendToEngineMsg = new SendToEngineMsg();
 
-				sendToEngineMsg.setActionNote("Người làm thủ tục hủy hồ sơ");
+				sendToEngineMsg.setActionNote(PortletPropsValues.OPENCPS_PERSON_MAKE_PROCEDURE_CANCEL);
 				sendToEngineMsg.setAssignToUserId(0);
 				sendToEngineMsg.setActionUserId(Long.parseLong(actionRequest.getRemoteUser()));
 				sendToEngineMsg.setDossierId(dossier.getDossierId());
 				sendToEngineMsg.setFileGroupId(0);
 				sendToEngineMsg.setPaymentValue(GetterUtil.getDouble(0));
 				sendToEngineMsg.setProcessOrderId(processOrder.getProcessOrderId());
-				sendToEngineMsg.setReceptionNo(Validator.isNotNull(dossier.getReceptionNo())
-					? dossier.getReceptionNo() : StringPool.BLANK);
+				sendToEngineMsg.setReceptionNo(Validator.isNotNull(dossier
+						.getReceptionNo()) ? dossier.getReceptionNo()
+						: StringPool.BLANK);
 				sendToEngineMsg.setSignature(0);
 				if (Validator.isNotNull(workFlow.getAutoEvent())) {
-					sendToEngineMsg.setEvent(workFlow.getAutoEvent());
+					sendToEngineMsg.setEvent(workFlow.getAutoEvent());				
 				}
 				else {
-					sendToEngineMsg.setProcessWorkflowId(workFlow.getProcessWorkflowId());
-				}
+					sendToEngineMsg.setProcessWorkflowId(workFlow
+							.getProcessWorkflowId());				
+				}			
 				sendToEngineMsg.setGroupId(serviceContext.getScopeGroupId());
 				sendToEngineMsg.setUserId(serviceContext.getUserId());
 				message.put("msgToEngine", sendToEngineMsg);
-				MessageBusUtil.sendMessage(
-					"opencps/backoffice/engine/destination", message);
+				MessageBusUtil.sendMessage("opencps/backoffice/engine/destination",
+						message);
 				addProcessActionSuccessMessage = false;
 				SessionMessages.add(actionRequest, "cancel-dossier-success");
-			}
-			catch (PortalException e) {
-				// TODO Auto-generated catch block
+			} catch (PortalException e) {
 				_log.error(e);
-				SessionErrors.add(
-					actionRequest, "user-not-have-permission-cancel-dossier");
-			}
-			catch (SystemException e) {
-				// TODO Auto-generated catch block
+				SessionErrors.add(actionRequest, "user-not-have-permission-cancel-dossier");
+			} catch (SystemException e) {
 				_log.error(e);
-				SessionErrors.add(
-					actionRequest, "user-not-have-permission-cancel-dossier");
+				SessionErrors.add(actionRequest, "user-not-have-permission-cancel-dossier");
 			}
-
+			
 		}
 		else {
-			SessionErrors.add(
-				actionRequest, "user-not-have-permission-cancel-dossier");
+			SessionErrors.add(actionRequest, "user-not-have-permission-cancel-dossier");
 		}
 	}
 
@@ -782,6 +770,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 			updated = true;
 
+			SessionMessages.add(
+					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 		}
 		catch (Exception e) {
 			updated = false;
@@ -956,7 +946,12 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 							serviceContext);
 					}
 				}
+				
+				SessionMessages.add(
+						actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+				
 			}
+			
 		}
 		catch (Exception e) {
 			if (e instanceof NoSuchDossierFileException) {
@@ -1034,6 +1029,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 					dossierFileId, fileEntryId);
 				jsonObject.put("deleted", Boolean.TRUE);
 			}
+			
+			SessionMessages.add(
+					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 
 		}
 		catch (Exception e) {
@@ -1072,6 +1070,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 				DossierLocalServiceUtil.deleteDossierByDossierId(dossierId);
 			}
+			
+			SessionMessages.add(
+					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 
 		}
 		catch (Exception e) {
@@ -1148,6 +1149,10 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 					DossierFileLocalServiceUtil.deleteDossierFile(dossierFile);
 					jsonObject.put("deleted", Boolean.TRUE);
 				}
+				
+				SessionMessages.add(
+						actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+				
 			}
 			catch (Exception e) {
 				_log.error(e);
@@ -1180,6 +1185,10 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		try {
 			DLAppServiceUtil.deleteFileEntry(fileEntryId);
 			jsonObject.put("deleted", Boolean.TRUE);
+			
+			SessionMessages.add(
+					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+			
 		}
 		catch (Exception e) {
 			String errorMessage =
@@ -1316,7 +1325,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		return selectedItems;
 	}
-
+	
 	/**
 	 * @param path
 	 * @param renderRequest
@@ -1335,9 +1344,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		String accountType =
 			GetterUtil.getString(session.getAttribute(WebKeys.ACCOUNT_TYPE));
 
-		System.out.println("######################################2"+ accountType);
+		_log.info("######################################2"+ accountType);
 		validatePermission(renderRequest, renderResponse);
-		System.out.println("#####################################+ " + _hasPermission);
+		_log.info("#####################################+ " + _hasPermission);
 		if (!_hasPermission) {
 			path = "/html/portlets/dossiermgt/frontoffice/warning.jsp";
 		}
@@ -1463,6 +1472,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			}
 
 			jsonObject.put("deleted", Boolean.TRUE);
+			
+			SessionMessages.add(
+					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 
 		}
 		catch (Exception e) {
@@ -1504,6 +1516,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				jsonObject.put("deleted", Boolean.TRUE);
 			}
 
+			SessionMessages.add(
+					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+			
 		}
 		catch (Exception e) {
 			jsonObject.put("deleted", Boolean.FALSE);
@@ -1532,7 +1547,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		String accountType2 =
 			GetterUtil.getString(session2.getAttribute(WebKeys.ACCOUNT_TYPE));
 
-		System.out.println("######################################2"+ accountType2);
+		_log.info("######################################2"+ accountType2);
 		if (_hasPermission) {
 			ThemeDisplay themeDisplay =
 				(ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
@@ -1691,11 +1706,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		long govAgencyOrganizationId =
 			ParamUtil.getLong(
 				actionRequest, DossierDisplayTerms.GOVAGENCY_ORGANIZATION_ID);
-		/*
-		 * long ownerUserId =
-		 * GetterUtil.getLong(session.getAttribute(WebKeys.ACCOUNT_OWNERUSERID
-		 * ));
-		 */
+		
 		long ownerOrganizationId =
 			GetterUtil.getLong(session.getAttribute(WebKeys.ACCOUNT_OWNERORGANIZATIONID));
 
@@ -1760,19 +1771,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			}
 
 			String dossierDestinationFolder = StringPool.BLANK;
-
-			/*
-			 * if
-			 * (accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN
-			 * )) { dossierDestinationFolder =
-			 * PortletUtil.getCitizenDossierDestinationFolder(
-			 * serviceContext.getScopeGroupId(), ownerUserId); } else if
-			 * (accountType
-			 * .equals(PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS)) {
-			 * dossierDestinationFolder =
-			 * PortletUtil.getBusinessDossierDestinationFolder(
-			 * serviceContext.getScopeGroupId(), ownerOrganizationId); }
-			 */
 
 			SplitDate splitDate = PortletUtil.splitDate(new Date());
 
@@ -1895,10 +1893,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		}
 		finally {
-			/*
-			 * actionRequest .setAttribute(WebKeys.DOSSIER_ENTRY, dossier);
-			 */
-
 			if (update) {
 				if (Validator.isNotNull(redirectURL)) {
 
@@ -2106,6 +2100,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				PortletConstants.DOSSIER_FILE_TYPE_INPUT);
 
 			jsonObject.put(DossierDisplayTerms.TEMPLATE_FILE_NO, templateFileNo);
+			
+			SessionMessages.add(
+					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 
 		}
 		catch (Exception e) {
@@ -2362,6 +2359,10 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 						dossierFileType, dossierFileNo, dossierFileDate,
 						original, syncStatus, serviceContext);
 			}
+			
+			SessionMessages.add(
+					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+			
 		}
 		catch (Exception e) {
 			if (e instanceof NoSuchDossierException) {
@@ -2441,6 +2442,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		actionResponse.setRenderParameter(
 			"mvcPath", "/html/portlets/dossiermgt/frontoffice/dynamic_form.jsp");
+		
+		SessionMessages.add(
+				actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 
 	}
 

@@ -1,4 +1,5 @@
 
+<%@page import="org.opencps.util.MessageKeys"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -166,6 +167,8 @@
 	}
 	
 %>
+
+<liferay-ui:success  key="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>" message="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>"/>
 
 <portlet:actionURL var="updateDynamicFormDataURL" name="updateDynamicFormData"/>
 
