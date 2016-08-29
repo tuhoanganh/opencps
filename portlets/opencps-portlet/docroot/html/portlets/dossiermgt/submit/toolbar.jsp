@@ -30,7 +30,7 @@
 			<aui:col width="25" cssClass="search-col">
 				<datamgt:ddr
 					depthLevel="1" 
-					dictCollectionCode="SERVICE_ADMINISTRATION"
+					dictCollectionCode="GOVERNMENT_AGENCY"
 					itemNames="administrationCode"
 					itemsEmptyOption="true"
 					cssClass="search-input select-box"

@@ -136,7 +136,7 @@
 				row.addText(String.valueOf(row.getPos() + 1));
 				row.addText(boundcol1);
 				row.addText(boundcol2);
-// 				row.addJSP("center", SearchEntry.DEFAULT_VALIGN,"/html/portlets/dossiermgt/submit/submit_action.jsp", config.getServletContext(), request, response);
+				row.addJSP("center", SearchEntry.DEFAULT_VALIGN,"/html/portlets/dossiermgt/submit/submit_action.jsp", config.getServletContext(), request, response);
 			%>
 				
 		</liferay-ui:search-container-row>

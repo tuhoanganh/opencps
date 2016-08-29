@@ -12,6 +12,7 @@
 <%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
+<%@page import="org.opencps.util.PortletUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -38,7 +39,9 @@
 	String backURL1 = ParamUtil.getString(request, "backURL");
 	String onlineURL = ParamUtil.getString(request, "onlineURL");
 	long serviceinfoId = ParamUtil.getLong(request, "serviceinfoId");
-	
+	long serviceConfigId = ParamUtil.getLong(request, "serviceConfigId");
+	System.out.println("######serviceConfigId="+serviceConfigId+" ######");
+	DictItem dictItem = null;
 	long plidServiceDetailRes = 0;
 	
 	long directServicePlid = PortalUtil.getPlidFromPortletId(scopeGroupId, true,  WebKeys.SERVICE_MGT_DIRECTORY);
@@ -65,6 +68,11 @@
 	}
 	
 	try {
+		//Lay thong tin co quan thuc hien tu dich vu cong
+		serviceConfig = ServiceConfigLocalServiceUtil.getServiceConfig(serviceConfigId);
+		System.out.println("######govAgencyCode="+serviceConfig.getGovAgencyCode()+" ######");
+		dictItem = PortletUtil.getDictItem(PortletPropsValues.DATAMGT_MASTERDATA_GOVERNMENT_AGENCY, serviceConfig.getGovAgencyCode(), scopeGroupId);
+		//Lay thong tin co quan thuc hien tu dich vu cong END
 		serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(serviceinfoId);
 	} catch (Exception e) {
 		//nothing to do
@@ -112,7 +120,8 @@
 		<aui:col width="50">
 			<aui:select name="administrationCode" cssClass="submit-online input100">
 				<%
-					for(DictItem dictItem : listAdmin) {
+					if(dictItem!=null){
+						System.out.println("######govAgencyCode ######");
 						%>
 							<aui:option value="<%=dictItem.getItemCode() %>">
 								<%=dictItem.getItemName(themeDisplay.getLocale(),true) %>
