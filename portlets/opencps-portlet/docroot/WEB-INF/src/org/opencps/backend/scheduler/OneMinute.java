@@ -46,19 +46,19 @@ public class OneMinute implements MessageListener{
 		
     	_log.info(">>>>> CHECK PAYMENT <<<<<<");
 		
-		List<SchedulerJobs> schedulerJobs = new ArrayList<SchedulerJobs>();
-
-		try {
-			schedulerJobs = SchedulerJobsLocalServiceUtil.getSchedulerJobs(1);
-			for (SchedulerJobs schJob : schedulerJobs) {
-				SchedulerUtils.doScheduler(schJob);
-			}
-
-		}
-		catch (Exception e) {
-			_log.error(e);
-
-		}
+//		List<SchedulerJobs> schedulerJobs = new ArrayList<SchedulerJobs>();
+//
+//		try {
+//			schedulerJobs = SchedulerJobsLocalServiceUtil.getSchedulerJobs(1);
+//			for (SchedulerJobs schJob : schedulerJobs) {
+//				SchedulerUtils.doScheduler(schJob);
+//			}
+//
+//		}
+//		catch (Exception e) {
+//			_log.error(e);
+//
+//		}
 	}
 
 	private Log _log = LogFactoryUtil.getLog(OneMinute.class);
