@@ -149,7 +149,7 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 		String currentURL = ParamUtil.getString(actionRequest, "CurrentURL");
 
 		int dossierPartCount = DossierPartLocalServiceUtil
-				.CountByTempalteId(dossierTemplateId);
+				.countByTempalteId(dossierTemplateId);
 
 		if (dossierPartCount == 0) {
 			DossierTemplateLocalServiceUtil
