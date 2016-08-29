@@ -43,6 +43,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.PortalSessionContext;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Organization;
@@ -54,6 +55,7 @@ import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 
 /**
@@ -64,15 +66,19 @@ public class AccountUtil {
 	private static AccountBean _accountBean;
 
 	public static void initAccount(
-		HttpServletRequest request, HttpServletResponse response) throws PortalException, SystemException {
+		HttpServletRequest request, HttpServletResponse response)
+		throws PortalException, SystemException {
 
 		HttpSession session = request.getSession();
 
 		User user = (User) session.getAttribute(WebKeys.USER);
 
-		//long companyId = PortalUtil.getCompanyId(request);
-		
-		long scopeGroupId = PortalUtil.getScopeGroupId(request);
+		// long companyId = PortalUtil.getCompanyId(request);
+
+		// long scopeGroupId = PortalUtil.getScopeGroupId(request);
+
+		ServiceContext serviceContext =
+			ServiceContextFactory.getInstance(request);
 
 		Object accountInstance = null;
 
@@ -114,12 +120,10 @@ public class AccountUtil {
 				// Clean account bean
 				AccountUtil.destroy(request, false);
 
-				ServiceContext serviceContext =
-					ServiceContextFactory.getInstance(request);
-
 				accountBean =
 					AccountUtil.getAccountBean(
-						user.getUserId(), scopeGroupId, serviceContext);
+						user.getUserId(), serviceContext.getScopeGroupId(),
+						serviceContext);
 
 				if (accountBean != null) {
 
