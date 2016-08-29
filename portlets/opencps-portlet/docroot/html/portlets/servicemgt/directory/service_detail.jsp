@@ -43,7 +43,7 @@
 <liferay-portlet:renderURL 
 		var="renderToSubmitOnline" 
 		portletName="<%=WebKeys.DOSSIER_MGT_PORTLET %>"
-		plid="<%=Long.valueOf(plidRes) %>"
+		plid="<%=Long.valueOf(plidServiceDetail) %>"
 		portletMode="VIEW"
 		windowState="<%=LiferayWindowState.NORMAL.toString() %>"
 	>

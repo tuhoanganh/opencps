@@ -1,3 +1,4 @@
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -16,19 +17,49 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
-
+<%@page import="com.liferay.portal.service.LayoutLocalServiceUtil"%>
+<%@page import="com.liferay.portal.model.Layout"%>
 <%@ include file="../init.jsp" %>
 
 <liferay-ui:success key="potlet-config-saved" message="portlet-configuration-have-been-successfully-saved" />
 
 <liferay-portlet:actionURL var="configurationActionURL" portletConfiguration="true"/>
 
+<%
+	boolean privateLayout = true;
+	
+	List<Layout> privLayouts = LayoutLocalServiceUtil.getLayouts(scopeGroupId, true);
+	List<Layout> pubLayouts = LayoutLocalServiceUtil.getLayouts(scopeGroupId, false);
+	
+	List<Layout> allLayout = new ArrayList<Layout>();
+	
+	for (Layout privLayout : privLayouts) {
+		allLayout.add(privLayout);
+	}
+	
+	for (Layout pubLayout : pubLayouts) {
+		allLayout.add(pubLayout);
+}
+%>
+
 <aui:form action="<%=configurationActionURL%>" method="post" name="configurationForm">
 	<aui:select name="menuType" id="menuType">
 		<aui:option value="administrator" label="administrator"></aui:option>
 		<aui:option value="domain" label="domain"></aui:option>
 	</aui:select>
-
+	
+	<aui:row>
+		<aui:select name="plidServiceDetail" id="plidServiceDetail" label="plid-service-detail">
+			<%
+				for (Layout lout : allLayout) {
+			%>
+				<aui:option value="<%= lout.getPlid() %>"><%= lout.getName(locale) %></aui:option>
+			<%
+				}
+			%>
+		</aui:select>
+	</aui:row>
+	
 	<aui:button type="submit" name="Save" value="save"></aui:button>
 
 </aui:form>
