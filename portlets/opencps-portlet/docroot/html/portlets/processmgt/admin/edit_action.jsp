@@ -63,15 +63,12 @@
 	
 	List<DossierPart> dossiersResultMulti = ProcessUtils.getDossierParts(dossierTemplateId, PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT);
 	
-	System.out.println("######### partType=" + PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT + " dossierTemplateId="+dossierTemplateId + "###");
 	
 	if(dossiersResult!=null && !dossiersResult.isEmpty()){
-		System.out.println("######### dossiersResult.size=" + dossiersResult.size() + "###");
 		dossiersResults.addAll(dossiersResult);
 	}
 	
 	if(dossiersResultMulti!=null && !dossiersResultMulti.isEmpty()){
-		System.out.println("######### dossiersResultMulti.size=" + dossiersResultMulti.size() + "###");
 		dossiersResults.addAll(dossiersResultMulti);
 	}
 	
