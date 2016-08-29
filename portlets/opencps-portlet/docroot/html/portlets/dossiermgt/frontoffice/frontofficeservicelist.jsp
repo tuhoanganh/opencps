@@ -41,6 +41,7 @@
 <%
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "frontofficeservicelist.jsp");
+	iteratorURL.setParameter("isListServiceConfig", String.valueOf(true));
 	
 	String backURL = ParamUtil.getString(request, "backURL");
 	
