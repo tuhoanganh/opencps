@@ -244,5 +244,8 @@
         <exception>OutOfScope</exception>
         <exception>OutOfLengthMobile</exception>
         <exception>OutOfLengthTelNo</exception>
+        <exception>WorkingUnitHasChild</exception>
+        <exception>JopPosHasExisted</exception>
+        <exception>EmployeeHasExisted</exception>
 	</exceptions>
 </service-builder>

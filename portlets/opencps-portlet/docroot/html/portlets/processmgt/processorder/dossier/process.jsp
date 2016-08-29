@@ -149,7 +149,6 @@
 	List<DossierPart> dossierPartsLevel1 = new ArrayList<DossierPart>();
 	
 	if(dossierTemplate != null){
-		System.out.print("########## dossierTemplate.getDossierTemplateId="+dossierTemplate.getDossierTemplateId());
 		try{
 			List<DossierPart> lstTmp1 = DossierPartLocalServiceUtil.getDossierPartsByT_P_PT(dossierTemplate.getDossierTemplateId(), 0, PortletConstants.DOSSIER_PART_TYPE_RESULT);
 			if(lstTmp1 != null){
