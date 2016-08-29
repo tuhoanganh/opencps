@@ -75,7 +75,9 @@
 						themeDisplay.getUserId(), 1, -1, -1, 
 						citizen != null ? 1 : -1, business != null ? 1 :-1, 0, 
 						5, searchContainer.getOrderByComparator());
-				}catch(Exception e){}
+				}catch(Exception e){
+					_log.error(e);			
+				}
 			
 				total = serviceBeansRecent.size();
 				results = serviceBeansRecent;
@@ -233,7 +235,7 @@
 						dictItem = DictItemLocalServiceUtil.getDictItem(GetterUtil.getLong(serviceBean.getDomainCode()));
 						domainName = dictItem.getItemName(locale);
 					}catch(Exception e){
-						
+						_log.error(e);
 					}
 				%>
 				
