@@ -48,6 +48,7 @@
 <%@page import="org.opencps.dossiermgt.InvalidServiceConfigGovCodeException"%>
 <%@page import="org.opencps.dossiermgt.OutOfLengthServiceConfigGovNameException"%>
 <%@page import="org.opencps.dossiermgt.OutOfLengthServiceConfigGovCodeException"%>
+<%@page import="org.opencps.dossiermgt.ServiceUrlHasExistedException"%>
 <%
 	ServiceConfig serviceConfig = (ServiceConfig) 
 		request.getAttribute(WebKeys.SERVICE_CONFIG_ENTRY);
@@ -154,6 +155,11 @@
 <liferay-ui:error 
 	exception="<%= DuplicateServiceConfigGovCodeAndServiceInFoException.class%>"
 	message="<%= DuplicateServiceConfigGovCodeAndServiceInFoException.class.getName() %>"
+/>
+
+<liferay-ui:error 
+	exception="<%= ServiceUrlHasExistedException.class%>"
+	message="<%= ServiceUrlHasExistedException.class.getName() %>"
 />
 
 <portlet:renderURL 
@@ -280,6 +286,12 @@
 	<aui:row>
 		<aui:col width="100">
 			<aui:input name="<%= ServiceConfigDisplayTerms.SERVICE_INSTRUCTION%>" cssClass="input100"/>
+		</aui:col>
+	</aui:row>
+	
+	<aui:row>
+		<aui:col width="100">
+			<aui:input name="<%= ServiceConfigDisplayTerms.SERVICE_URL%>"/>
 		</aui:col>
 	</aui:row>
 	
