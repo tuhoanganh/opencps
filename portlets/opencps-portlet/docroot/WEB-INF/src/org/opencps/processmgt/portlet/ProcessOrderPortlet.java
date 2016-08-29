@@ -1164,14 +1164,14 @@ public class ProcessOrderPortlet extends MVCPortlet {
 					inputFilePath, certPath, hashFileTempPath, outputFilePath,
 					isVisible, imagePath);
 
-			System.out.println("inputFilePath: " + inputFilePath);
-			System.out.println("hashFileTempPath: " + hashFileTempPath);
-			System.out.println("outputFilePath: " + outputFilePath);
-			System.out.println("imagePath: " + imagePath);
+			// System.out.println("inputFilePath: " + inputFilePath);
+			// System.out.println("hashFileTempPath: " + hashFileTempPath);
+			// System.out.println("outputFilePath: " + outputFilePath);
+			// System.out.println("imagePath: " + imagePath);
 
 			pdfSigner.setHashAlgorithm(HashAlgorithm.SHA1);
 
-			byte[] hash = pdfSigner.computeHash(0, 0, 144, 80);
+			byte[] hash = pdfSigner.computeHash();
 
 			String hashHex = Helper.binToHex(hash);
 
@@ -1214,7 +1214,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		return JRReportUtil.createReportPDFfFile(
 			jrxmlTemplate, formData, map, outputDestination, fileName);
 	}
-	
+
 	/**
 	 * @param path
 	 * @param renderRequest
@@ -1968,6 +1968,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 			if (roleIds != null) {
 				for (Role role : roles) {
+
 					if (!roleIds.contains(role.getRoleId())) {
 						roleIds.add(role.getRoleId());
 					}
@@ -2013,6 +2014,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 						if (stepAllowances != null) {
 							for (StepAllowance stepAllowance : stepAllowances) {
+
 								if (roleIds.contains(stepAllowance.getRoleId())) {
 									hasProcessRole = true;
 									break;
@@ -2020,7 +2022,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 							}
 						}
 
-						if (!hasProcessRole || !hasAssigned) {
+						if (!hasProcessRole && !hasAssigned) {
 							setHasPermission(false);
 							return;
 						}
