@@ -187,7 +187,7 @@
 								}
 								
 								//Toi uu thuat toan tim kiem sau
-								boolean hasProcecssOrderResult = true;
+								boolean hasProcecssOrderResult = false;
 								if(workflowOutputs != null){
 									for(WorkflowOutput workflowOutput : workflowOutputs){
 										if(workflowOutput.getDossierPartId() == dossierPart.getDossierpartId()){
@@ -299,7 +299,7 @@
 										}
 										
 										//Toi uu thuat toan tim kiem sau
-										boolean hasProcecssOrderResult1 = true;
+										boolean hasProcecssOrderResult1 = false;
 										if(workflowOutputs != null){
 											for(WorkflowOutput workflowOutput : workflowOutputs){
 												if(workflowOutput.getDossierPartId() == dossierPart.getDossierpartId()){
@@ -531,6 +531,9 @@
 					boolean showButton = true;
 
 					showButton = BackendUtils.checkPreCondition(preCondition, dossier.getDossierId());
+					
+					//Kiem tra neu co su kien auto event thi khong hien thi nut
+					showButton = Validator.isNotNull(postProcessWorkflow.getAutoEvent()) ? false : true;
 					
 				%>
 					<c:if test="<%= showButton %>">
