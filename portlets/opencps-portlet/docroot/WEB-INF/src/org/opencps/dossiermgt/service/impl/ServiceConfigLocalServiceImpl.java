@@ -483,4 +483,8 @@ public class ServiceConfigLocalServiceImpl extends
 		return serviceConfigPersistence.update(serviceConfig);
 
 	}
+	
+	public List<ServiceConfig> getServiceConfigsByS_G(long serviceInfoId, long groupId) throws SystemException {
+		return serviceConfigPersistence.findByS_G(serviceInfoId, groupId);
+	}
 }

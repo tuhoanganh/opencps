@@ -189,6 +189,11 @@
 			<finder-column name="groupId" />
 			<finder-column name="serviceMode"/>
 		</finder>
+		
+		<finder return-type="Collection" name="S_G">
+			<finder-column name="serviceInfoId"/>
+			<finder-column name="groupId" />
+		</finder>
 
 	</entity>
 	
