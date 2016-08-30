@@ -146,7 +146,7 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 
 		long dossierTemplateId = ParamUtil.getLong(actionRequest,
 				DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DOSSIERTEMPLATEID);
-		String currentURL = ParamUtil.getString(actionRequest, "CurrentURL");
+		String currentURL = ParamUtil.getString(actionRequest, CURRENT_URL);
 
 		int dossierPartCount = DossierPartLocalServiceUtil
 				.countByTempalteId(dossierTemplateId);
@@ -738,7 +738,8 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 			throw new DuplicateDossierTemplateNumberException();
 		}
 	}
-
+	
+	private static final String CURRENT_URL = "CurrentURL";
 	private Log _log = LogFactoryUtil.getLog(DossierMgtAdminPortlet.class
 			.getName());
 }
