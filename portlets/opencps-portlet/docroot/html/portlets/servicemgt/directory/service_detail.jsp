@@ -24,8 +24,7 @@
 <%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
-<%@ include file="../init.jsp" %>
-<%@ include file="init_config.jsp" %>
+<%@ include file="init.jsp" %>
 <%
 	long serviceinfoId = ParamUtil.getLong(request, "serviceinfoId");
 	ServiceInfo serviceInfo = null;
@@ -42,7 +41,7 @@
 
 <liferay-portlet:renderURL 
 		var="renderToSubmitOnline" 
-		portletName="<%=WebKeys.DOSSIER_MGT_PORTLET %>"
+		portletName="<%=WebKeys.P26_SUBMIT_ONLINE %>"
 		plid="<%=Long.valueOf(plidServiceDetail) %>"
 		portletMode="VIEW"
 		windowState="<%=LiferayWindowState.NORMAL.toString() %>"
@@ -52,6 +51,11 @@
 	<portlet:param name="backURL" value="<%=backURL %>"/>
 </liferay-portlet:renderURL>
 
+
+<%
+	System.out.println("plidServiceDetail   " + plidServiceDetail);
+	System.out.println("renderToSubmitOnline   " + renderToSubmitOnline);
+%>
 <div class="ocps-service-detal-bound-all">
 	<div class="ocps-custom-header">
 		<label class="opcps-label">

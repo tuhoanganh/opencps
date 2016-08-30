@@ -13,22 +13,18 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
 <%@ include file="../init.jsp" %>
-
-<liferay-ui:success key="potlet-config-saved" message="portlet-configuration-have-been-successfully-saved" />
-
-<liferay-portlet:actionURL var="configurationActionURL" portletConfiguration="true"/>
-
-<aui:form action="<%=configurationActionURL%>" method="post" name="configurationForm">
-	<aui:select name="menuType" id="menuType">
-		<aui:option value="administrator" label="administrator"></aui:option>
-		<aui:option value="domain" label="domain"></aui:option>
-	</aui:select>
-
-	<aui:button type="submit" name="Save" value="save"></aui:button>
-
-</aui:form>
+<%
+	PortletPreferences preferencesPortlet = renderRequest.getPreferences();
+	
+	portletResource = ParamUtil.getString(request, "portletResource");
+	
+	if (Validator.isNotNull(portletResource)) {
+		preferencesPortlet = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
+	}
+		
+	String plidServiceDetail = preferences.getValue("plidServiceDetail","0");
+%>
