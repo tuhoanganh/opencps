@@ -94,12 +94,8 @@
 				if(serviceInfo!=null){
 					serviceName = serviceInfo.getServiceName();
 				}
-
-					DictItem dictItemGov =  PortletUtil.getDictItem(PortletPropsValues.DATAMGT_MASTERDATA_GOVERNMENT_AGENCY, service.getGovAgencyCode(), scopeGroupId);
-				if(Validator.isNotNull(dictItemGov)) {
-					itemName = dictItemGov.getItemName(locale,true);
-				}
-				
+				itemName = service.getGovAgencyName();
+			
 			%>
 			
 			<liferay-util:buffer var="boundcol1">
