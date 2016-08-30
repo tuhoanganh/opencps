@@ -151,6 +151,7 @@ public class ServiceInfoFinderImpl extends BasePersistenceImpl<ServiceInfo>
 				        sql, "AND (opencps_serviceinfo.domainCode = ?)",
 				        StringPool.BLANK);
 			}
+			
 
 			SQLQuery q = session.createSQLQuery(sql);
 
@@ -163,9 +164,9 @@ public class ServiceInfoFinderImpl extends BasePersistenceImpl<ServiceInfo>
 			qPos.add(groupId);
 			
 			if(Validator.isNotNull(keyword)){
-				qPos.add(keyword);
+				qPos.add("%"+keyword+"%");
 				
-				qPos.add(keyword);
+				qPos.add("%"+keyword+"%");
 			}
 
 			
@@ -261,9 +262,9 @@ public class ServiceInfoFinderImpl extends BasePersistenceImpl<ServiceInfo>
 			qPos.add(groupId);
 
 			if(Validator.isNotNull(keyword)){
-				qPos.add(keyword);
+				qPos.add("%"+keyword+"%");
 				
-				qPos.add(keyword);
+				qPos.add("%"+keyword+"%");
 			}
 
 			if (!Validator.equals(adminCode, "0") && !Validator.equals(adminCode, StringPool.BLANK) ) {
