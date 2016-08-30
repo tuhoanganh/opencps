@@ -461,6 +461,8 @@
 		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.ACTION_PHASE) %>');
 		portletURL.setParameter("javax.portlet.action", "signature");
 		portletURL.setWindowState('<%=WindowState.NORMAL%>');
+		console.log(hex);
+		console.log(resources);
 		
 		$.sign({
 		    hash: {
@@ -475,7 +477,9 @@
 		        // do something
 		    },
 		    afterSign: function(signer, signature) {
-		    	//console.log(signature);
+		    	console.log(signature.value);
+				console.log(signature.certificate);
+		    	console.log(signature);
 		       $.ajax({
 			   		type: "POST",
 		       		url : portletURL.toString(),
