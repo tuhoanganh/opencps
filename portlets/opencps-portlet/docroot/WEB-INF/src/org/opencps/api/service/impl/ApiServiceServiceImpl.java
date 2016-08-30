@@ -16,10 +16,8 @@ package org.opencps.api.service.impl;
 
 import org.opencps.api.service.base.ApiServiceServiceBaseImpl;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -57,6 +55,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.StringPool;
@@ -346,10 +345,18 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 					//String mimeType = StringPool.BLANK;
 					
 					//try {
-					String extension = dossierFileURL.substring(dossierFileURL.lastIndexOf("."));
-					extension = StringUtil.replace(extension, "/", "");
+					String extension = FileUtil.getExtension(dossierFileName);
 					
-					String mimeType = MimeTypesUtil.getContentType(is, "A".concat(extension));
+					if(Validator.isNull(extension)) {
+						extension = StringUtil.replace(FileUtil.getExtension(dossierFileURL), 
+							StringPool.FORWARD_SLASH, StringPool.BLANK);
+						
+						if(Validator.isNotNull(extension)) {
+							dossierFileName = dossierFileName.concat(".").concat(extension);
+						}
+					}
+					
+					String mimeType = MimeTypesUtil.getContentType(is, dossierFileName);
 					//}
 					//catch (IOException ioe) {
 					//	_log.error(ioe);
@@ -387,7 +394,7 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 									1,
 									PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS,
 									dossierFolder.getFolderId(),
-									dossierFileNo, "", dossierFileName,
+									dossierFileName, "", dossierFileName,
 									StringPool.BLANK, StringPool.BLANK,
 									is, size, serviceContext);
 				}
@@ -424,15 +431,18 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 					long size = is.available();
 					//String mimeType = StringPool.BLANK;
 					
-					//try {
-					String extension = dossierFileURL.substring(dossierFileURL.lastIndexOf("."));
-					extension = StringUtil.replace(extension, "/", "");
+					String extension = FileUtil.getExtension(dossierFileName);
 					
-					String mimeType = MimeTypesUtil.getContentType(is, "A".concat(extension));
-					//}
-					//catch (IOException ioe) {
-					//	_log.error(ioe);
-					//}
+					if(Validator.isNull(extension)) {
+						extension = StringUtil.replace(FileUtil.getExtension(dossierFileURL), 
+							StringPool.FORWARD_SLASH, StringPool.BLANK);
+						
+						if(Validator.isNotNull(extension)) {
+							dossierFileName = dossierFileName.concat(".").concat(extension);
+						}
+					}
+					
+					String mimeType = MimeTypesUtil.getContentType(is, dossierFileName);
 
 					serviceContext.setScopeGroupId(dossier.getGroupId());
 					serviceContext.setCompanyId(dossier.getCompanyId());
@@ -469,10 +479,9 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 									1,
 									PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS,
 									dossierFolder.getFolderId(),
-									dossierFileNo, "", dossierFileName,
+									dossierFileName, "", dossierFileName,
 									StringPool.BLANK, StringPool.BLANK, is,
 									size, serviceContext);
-					
 				}
 			}
 			
