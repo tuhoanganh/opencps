@@ -1,3 +1,5 @@
+<%@page import="org.opencps.util.PortletPropsValues"%>
+<%@page import="org.opencps.util.PortletUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -90,10 +92,12 @@
 				String itemName  = StringPool.BLANK;
 				ServiceInfo serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(service.getServiceInfoId());
 				if(serviceInfo!=null){
-					if(DictItemLocalServiceUtil.getDicItemByTreeIndex(service.getServiceAdministrationIndex())!=null){
-						itemName = DictItemLocalServiceUtil.getDicItemByTreeIndex(service.getServiceAdministrationIndex()).getItemName(locale,true);
-					}
 					serviceName = serviceInfo.getServiceName();
+				}
+
+					DictItem dictItemGov =  PortletUtil.getDictItem(PortletPropsValues.DATAMGT_MASTERDATA_GOVERNMENT_AGENCY, service.getGovAgencyCode(), scopeGroupId);
+				if(Validator.isNotNull(dictItemGov)) {
+					itemName = dictItemGov.getItemName(locale,true);
 				}
 				
 			%>
