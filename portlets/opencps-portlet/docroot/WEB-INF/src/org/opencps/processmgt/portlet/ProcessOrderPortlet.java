@@ -262,9 +262,8 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				size, serviceContext);
 
 			updated = true;
-			
-			SessionMessages.add(
-					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+
+			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 
 		}
 		catch (Exception e) {
@@ -364,10 +363,9 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				serviceContext.getUserId(), dossierId, dossierPartId, partName,
 				PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
 				serviceContext);
-			
-			SessionMessages.add(
-					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
-			
+
+			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+
 		}
 		catch (Exception e) {
 			updated = false;
@@ -514,10 +512,9 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				"opencps/backoffice/engine/destination", message);
 
 			sending = true;
-			
-			SessionMessages.add(
-					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
-			
+
+			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+
 		}
 		catch (Exception e) {
 			sending = false;
@@ -638,9 +635,8 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				serviceContext);
 
 			updated = true;
-			
-			SessionMessages.add(
-					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+
+			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 
 		}
 		catch (Exception e) {
@@ -871,10 +867,9 @@ public class ProcessOrderPortlet extends MVCPortlet {
 					}
 				}
 			}
-			
-			SessionMessages.add(
-					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
-			
+
+			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+
 		}
 		catch (Exception e) {
 			if (e instanceof NoSuchDossierFileException) {
@@ -949,12 +944,12 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				DossierFileLocalServiceUtil.deleteDossierFile(
 					dossierFileId, fileEntryId);
 				jsonObject.put("deleted", Boolean.TRUE);
-				
+
 				SessionMessages.add(
-						actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
-				
+					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+
 			}
-			
+
 		}
 		catch (Exception e) {
 			jsonObject.put("deleted", Boolean.FALSE);
@@ -987,7 +982,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 							dossierFile.getFileEntryId());
 					System.out.println(tempFilePath);
 				}
-				
+
 			}
 			catch (Exception e) {
 				// TODO: handle exception
@@ -1021,7 +1016,13 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			_log.error(e);
 		}
 		finally {
-			PortletUtil.writeJSON(actionRequest, actionResponse, data);
+			if (data != null) {
+				PortletUtil.writeJSON(actionRequest, actionResponse, data);
+			}
+			else {
+				_log.info("################################ Can not computerHash signature");
+			}
+
 		}
 	}
 
@@ -1111,10 +1112,8 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			if (is != null) {
 				is.close();
 			}
-			
-			SessionMessages.add(
-					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
-			
+
+			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 
 		}
 		catch (Exception e) {
@@ -1199,25 +1198,34 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 			pdfSigner.setHashAlgorithm(HashAlgorithm.SHA1);
 
+			_log.info("############################################### pdfSigner.setHashAlgorithm(HashAlgorithm.SHA1)");
+
 			byte[] hash = pdfSigner.computeHash();
 
-			String hashHex = Helper.binToHex(hash);
+			_log.info("############################################### pdfSigner.computeHash()");
 
-			data.put("hashHex", hashHex);
+			if (hash != null) {
+				String hashHex = Helper.binToHex(hash);
 
-			resources.put("inputFilePath", inputFilePath);
-			resources.put("dossierFileId", dossierFile.getDossierFileId());
-			resources.put("dossierId", dossierFile.getDossierId());
-			resources.put("dossierPartId", dossierFile.getDossierPartId());
-			resources.put("outputFilePath", outputFilePath);
-			resources.put("hashFileTempPath", hashFileTempPath);
-			resources.put("certPath", certPath);
-			resources.put("imagePath", imagePath);
+				data.put("hashHex", hashHex);
 
-			resources.put(
-				"signatureFieldName", pdfSigner.getSignatureFieldName());
+				resources.put("inputFilePath", inputFilePath);
+				resources.put("dossierFileId", dossierFile.getDossierFileId());
+				resources.put("dossierId", dossierFile.getDossierId());
+				resources.put("dossierPartId", dossierFile.getDossierPartId());
+				resources.put("outputFilePath", outputFilePath);
+				resources.put("hashFileTempPath", hashFileTempPath);
+				resources.put("certPath", certPath);
+				resources.put("imagePath", imagePath);
 
-			data.put("resources", resources);
+				resources.put(
+					"signatureFieldName", pdfSigner.getSignatureFieldName());
+
+				data.put("resources", resources);
+			}
+			else {
+				_log.info("############################################### Can not computeHash");
+			}
 
 		}
 		catch (Exception e) {
@@ -1381,9 +1389,8 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 			jsonObject.put("deleted", Boolean.TRUE);
 
-			SessionMessages.add(
-					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
-			
+			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+
 		}
 		catch (Exception e) {
 			jsonObject.put("deleted", Boolean.FALSE);
@@ -1596,10 +1603,9 @@ public class ProcessOrderPortlet extends MVCPortlet {
 						dossierFileType, dossierFileNo, dossierFileDate,
 						original, syncStatus, serviceContext);
 			}
-			
-			SessionMessages.add(
-					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
-			
+
+			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+
 		}
 		catch (Exception e) {
 			if (e instanceof NoSuchDossierException) {
