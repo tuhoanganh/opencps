@@ -535,6 +535,7 @@ public class DossierMgtAdminPortlet extends MVCPortlet {
 			} else {
 				SessionErrors.add(actionRequest,
 						MessageKeys.DOSSIER_SYSTEM_EXCEPTION_OCCURRED);
+				_log.error(e);
 			}
 			
 			if (Validator.isNotNull(returnURL)) {

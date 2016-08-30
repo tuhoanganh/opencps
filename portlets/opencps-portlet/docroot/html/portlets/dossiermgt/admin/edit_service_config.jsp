@@ -86,7 +86,7 @@
 	if(Validator.isNotNull(serviceConfig)) {
 		//get GovAgency by GovAgenCyCode
 		govAgencyItem = PortletUtil
-			.getDictItem(PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION ,
+			.getDictItem(PortletPropsValues.DATAMGT_MASTERDATA_GOVERNMENT_AGENCY ,
 			serviceConfig.getGovAgencyCode(), scopeGroupId);
 		//get Id
 		dictItemGovAgencyId = String.valueOf(govAgencyItem.getDictItemId());
@@ -213,7 +213,7 @@
 			<datamgt:ddr
 				cssClass="input100"
 				depthLevel="1" 
-				dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION %>"
+				dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_GOVERNMENT_AGENCY %>"
 				itemNames="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_GOVAGENCYCODE %>"
 				itemsEmptyOption="true"
 				selectedItems="<%=dictItemGovAgencyId%>"
