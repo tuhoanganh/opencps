@@ -39,8 +39,8 @@
 	}
 	.opencps-theme.ux  .ocps-submit-online .span6 .control-group select {
 		display: inline-block;
-		display: inline-block;
-		width: 30%;
+		margin-left : -15px;
+		width: 32%;
 		height: 41px;
 	}
 }
