@@ -134,7 +134,7 @@
   
   <tr class="odd">
     <td width="20%" class="opcs-dosier-process-key"><liferay-ui:message key="pre-action"/></td>
-    <td width="80%" colspan="3"><%=processStep != null ? processStep.getStepName() : StringPool.BLANK %></td>
+    <td width="80%" colspan="3"><%=latestWorkflowActionHistory != null ? latestWorkflowActionHistory.getActionName() : StringPool.BLANK %></td>
   </tr>
   
   <tr class="even">
