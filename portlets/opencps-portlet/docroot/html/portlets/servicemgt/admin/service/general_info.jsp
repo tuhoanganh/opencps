@@ -101,7 +101,7 @@
 	</aui:col>
 </aui:row>
 
-<aui:row>
+<%-- <aui:row>
 	<aui:col width="100">
 		<c:choose>
 			<c:when test="<%=Validator.isNotNull(serviceInfo) && Validator.isNull(serviceInfo.getOnlineUrl())%>">
@@ -112,7 +112,7 @@
 			</c:otherwise>
 		</c:choose>	
 	</aui:col>
-</aui:row>
+</aui:row> --%>
 
 <aui:row>
 	<aui:col width="100">

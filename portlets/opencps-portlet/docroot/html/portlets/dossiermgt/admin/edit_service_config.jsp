@@ -294,7 +294,9 @@
 	
 	<aui:row>
 		<aui:col width="100">
-			<aui:input name="<%= ServiceConfigDisplayTerms.SERVICE_URL%>" cssClass="input100"/>
+			<aui:input name="<%= ServiceConfigDisplayTerms.SERVICE_URL%>" cssClass="input100">
+				<aui:validator name="url" />
+			</aui:input>
 		</aui:col>
 	</aui:row>
 	
