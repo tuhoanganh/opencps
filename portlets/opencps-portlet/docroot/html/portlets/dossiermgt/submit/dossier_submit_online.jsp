@@ -1,18 +1,3 @@
-<%@page import="javax.portlet.PortletRequest"%>
-<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
-<%@page import="javax.portlet.PortletMode"%>
-<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
-<%@page import="org.opencps.util.PortletPropsValues"%>
-<%@page import="org.opencps.datamgt.service.DictCollectionLocalServiceUtil"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="org.opencps.datamgt.model.DictItem"%>
-<%@page import="java.util.List"%>
-<%@page import="org.opencps.datamgt.model.DictCollection"%>
-<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
-<%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
-<%@page import="org.opencps.util.PortletUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -31,6 +16,23 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+<%@page import="sun.print.resources.serviceui_zh_CN"%>
+<%@page import="javax.validation.Valid"%>
+<%@page import="javax.portlet.PortletRequest"%>
+<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
+<%@page import="javax.portlet.PortletMode"%>
+<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
+<%@page import="org.opencps.util.PortletPropsValues"%>
+<%@page import="org.opencps.datamgt.service.DictCollectionLocalServiceUtil"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.opencps.datamgt.model.DictItem"%>
+<%@page import="java.util.List"%>
+<%@page import="org.opencps.datamgt.model.DictCollection"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
+<%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
+<%@page import="org.opencps.util.PortletUtil"%>
 <%@ include file="init.jsp"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
@@ -40,7 +42,6 @@
 	String onlineURL = ParamUtil.getString(request, "onlineURL");
 	long serviceinfoId = ParamUtil.getLong(request, "serviceinfoId");
 	long serviceConfigId = ParamUtil.getLong(request, "serviceConfigId");
-	System.out.println("######serviceConfigId="+serviceConfigId+" ######");
 	DictItem dictItem = null;
 	long plidServiceDetailRes = 0;
 	
@@ -55,25 +56,45 @@
 	ServiceConfig serviceConfig = null;
 	DictCollection collection = null;
 	List<DictItem> listAdmin = new ArrayList<DictItem>();
+	List<ServiceConfig> listServiceConfig = new ArrayList<ServiceConfig>();
 	
-	try {
-		collection = DictCollectionLocalServiceUtil.getDictCollection(scopeGroupId, 
-			PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION);
+	//comment lai lam theo cach moi
+// 	try {
+// 		collection = DictCollectionLocalServiceUtil.getDictCollection(scopeGroupId, 
+// 			PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION);
 		
-		if(Validator.isNotNull(collection)) {
-			listAdmin = DictItemLocalServiceUtil.getDictItemsByDictCollectionId(collection.getDictCollectionId());
-		}
-	} catch (Exception e) {
-		//nothing to do
-	}
+// 		if(Validator.isNotNull(collection)) {
+// 			listAdmin = DictItemLocalServiceUtil.getDictItemsByDictCollectionId(collection.getDictCollectionId());
+// 		}
+// 	} catch (Exception e) {
+// 		//nothing to do
+// 	}
+	//comment lai lam theo cach moi END
 	
 	try {
-		//Lay thong tin co quan thuc hien tu dich vu cong
-		serviceConfig = ServiceConfigLocalServiceUtil.getServiceConfig(serviceConfigId);
-		System.out.println("######govAgencyCode="+serviceConfig.getGovAgencyCode()+" ######");
-		dictItem = PortletUtil.getDictItem(PortletPropsValues.DATAMGT_MASTERDATA_GOVERNMENT_AGENCY, serviceConfig.getGovAgencyCode(), scopeGroupId);
+		//Lay thong tin co quan thuc hien theo serviceConfigId tu man hinh tiep nhan ho so
+		if(Validator.isNotNull(serviceConfigId)){
+			serviceConfig = ServiceConfigLocalServiceUtil.getServiceConfig(serviceConfigId);
+			dictItem = PortletUtil.getDictItem(PortletPropsValues.DATAMGT_MASTERDATA_GOVERNMENT_AGENCY, serviceConfig.getGovAgencyCode(), scopeGroupId);
+			if(dictItem != null){
+				listAdmin.add(dictItem);
+			}
+		}
 		//Lay thong tin co quan thuc hien tu dich vu cong END
-		serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(serviceinfoId);
+		
+		//Lay thong tin co quan thuc hien theo serviceinfoId tu man hinh thu tuc hanh chinh 
+		if(Validator.isNotNull(serviceinfoId)){
+			listServiceConfig = ServiceConfigLocalServiceUtil.getServiceConfigsByS_G(serviceinfoId, scopeGroupId);
+			if(Validator.isNotNull(listServiceConfig)){
+				for(ServiceConfig s: listServiceConfig){
+					dictItem = PortletUtil.getDictItem(PortletPropsValues.DATAMGT_MASTERDATA_GOVERNMENT_AGENCY, s.getGovAgencyCode(), scopeGroupId);
+					if(dictItem != null){
+						listAdmin.add(dictItem);
+					}
+				}
+			}
+		}
+		//Lay thong tin co quan thuc hien theo serviceinfoId tu man hinh thu tuc hanh chinh END
 	} catch (Exception e) {
 		//nothing to do
 	}
@@ -120,13 +141,14 @@
 		<aui:col width="50">
 			<aui:select name="administrationCode" cssClass="submit-online input100">
 				<%
-					if(dictItem!=null){
-						System.out.println("######govAgencyCode ######");
-						%>
-							<aui:option value="<%=dictItem.getItemCode() %>">
-								<%=dictItem.getItemName(themeDisplay.getLocale(),true) %>
-							</aui:option>
-						<%
+					if(listAdmin!=null && !listAdmin.isEmpty()){
+						for(DictItem d : listAdmin){
+							%>
+								<aui:option value="<%=d.getItemCode() %>">
+									<%=d.getItemName(themeDisplay.getLocale(),true) %>
+								</aui:option>
+							<%
+						}
 					}
 				%>
 			</aui:select>
