@@ -89,7 +89,10 @@
 			.getDictItem(PortletPropsValues.DATAMGT_MASTERDATA_GOVERNMENT_AGENCY ,
 			serviceConfig.getGovAgencyCode(), scopeGroupId);
 		//get Id
-		dictItemGovAgencyId = String.valueOf(govAgencyItem.getDictItemId());
+		if(Validator.isNotNull(govAgencyItem)) {
+			dictItemGovAgencyId = String.valueOf(govAgencyItem.getDictItemId());
+		}
+		
 	}
 	
 	try {

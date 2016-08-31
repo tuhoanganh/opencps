@@ -1,3 +1,5 @@
+<%@page import="org.opencps.util.PortletPropsValues"%>
+<%@page import="org.opencps.util.PortletUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -97,12 +99,10 @@
 				String itemName  = StringPool.BLANK;
 				ServiceInfo serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(service.getServiceInfoId());
 				if(serviceInfo!=null){
-					if(DictItemLocalServiceUtil.getDicItemByTreeIndex(service.getServiceAdministrationIndex())!=null){
-						itemName = DictItemLocalServiceUtil.getDicItemByTreeIndex(service.getServiceAdministrationIndex()).getItemName(locale,true);
-					}
 					serviceName = serviceInfo.getServiceName();
 				}
-				
+				itemName = service.getGovAgencyName();
+			
 			%>
 			
 			<liferay-util:buffer var="boundcol1">
