@@ -88,7 +88,8 @@
 	<c:when test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) && Validator.isNotNull(accountType) &&
 				(accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN) ||
 				accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS)) %>">
-		 <liferay-ui:header
+		
+		<liferay-ui:header
 			backURL="<%= backURL %>"
 			title='<%= (dossier == null) ? "add-dossier" : (cmd.equals(Constants.VIEW) ? "view-dossier" : "update-dossier") %>'
 		/>
