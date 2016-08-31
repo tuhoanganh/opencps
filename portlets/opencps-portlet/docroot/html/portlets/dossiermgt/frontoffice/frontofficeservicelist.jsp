@@ -41,6 +41,7 @@
 <%
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "frontofficeservicelist.jsp");
+	iteratorURL.setParameter("isListServiceConfig", String.valueOf(true));
 	
 	String backURL = ParamUtil.getString(request, "backURL");
 	
@@ -58,12 +59,14 @@
 
 <div class="opencps-searchcontainer-wrapper default-box-shadow radius8">
 
+	
 	<div class="opcs-serviceinfo-list-label">
 		<div class="title_box">
 	           <p class="file_manage_title_new"><liferay-ui:message key="service-recent"/></p>
 	           <p class="count"></p>
 	    </div>
 	</div>
+	
 	<liferay-ui:search-container searchContainer="<%= new ServiceSearch(renderRequest, 5, iteratorURL) %>">
 	
 		<liferay-ui:search-container-results>
@@ -71,9 +74,11 @@
 				try{
 					serviceBeansRecent = ServiceConfigLocalServiceUtil.getServiceConfigRecent(scopeGroupId, 
 						themeDisplay.getUserId(), 1, -1, -1, 
-						citizen != null ? 1 : -1, business != null ? 1 :-1, searchContainer.getStart(), 
-						searchContainer.getEnd(), searchContainer.getOrderByComparator());
-				}catch(Exception e){}
+						citizen != null ? 1 : -1, business != null ? 1 :-1, 0, 
+						5, searchContainer.getOrderByComparator());
+				}catch(Exception e){
+					_log.error(e);			
+				}
 			
 				total = serviceBeansRecent.size();
 				results = serviceBeansRecent;
@@ -154,7 +159,7 @@
 				%>	
 			</liferay-ui:search-container-row> 
 		
-		<liferay-ui:search-iterator type="opencs_page_iterator"/>
+		<liferay-ui:search-iterator paginate="false" />
 	</liferay-ui:search-container>
 </div>
 
@@ -168,6 +173,7 @@
 	           <p class="count"></p>
 	    </div>
 	</div>
+
 	<liferay-ui:search-container searchContainer="<%= new ServiceSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
 	
 		<liferay-ui:search-container-results>
@@ -230,7 +236,7 @@
 						dictItem = DictItemLocalServiceUtil.getDictItem(GetterUtil.getLong(serviceBean.getDomainCode()));
 						domainName = dictItem.getItemName(locale);
 					}catch(Exception e){
-						
+						_log.error(e);
 					}
 				%>
 				

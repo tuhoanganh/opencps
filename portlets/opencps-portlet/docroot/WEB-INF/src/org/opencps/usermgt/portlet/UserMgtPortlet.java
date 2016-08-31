@@ -19,7 +19,9 @@ package org.opencps.usermgt.portlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -31,9 +33,11 @@ import org.opencps.usermgt.DuplicatEgovAgencyCodeException;
 import org.opencps.usermgt.DuplicatWorkingUnitEmailException;
 import org.opencps.usermgt.DuplicateEmployeeEmailException;
 import org.opencps.usermgt.DuplicateEmployeeNoException;
+import org.opencps.usermgt.EmployeeHasExistedException;
 import org.opencps.usermgt.EmptyEmployeeEmailException;
 import org.opencps.usermgt.EmptyEmployeeNameException;
 import org.opencps.usermgt.EmptyEmployeeNoException;
+import org.opencps.usermgt.JopPosHasExistedException;
 import org.opencps.usermgt.NoSuchEmployeeException;
 import org.opencps.usermgt.NoSuchJobPosException;
 import org.opencps.usermgt.NoSuchWorkingUnitException;
@@ -45,9 +49,11 @@ import org.opencps.usermgt.OutOfLengthUnitEmailException;
 import org.opencps.usermgt.OutOfLengthUnitEnNameException;
 import org.opencps.usermgt.OutOfLengthUnitNameException;
 import org.opencps.usermgt.OutOfScopeException;
+import org.opencps.usermgt.WorkingUnitHasChildException;
 import org.opencps.usermgt.model.Employee;
 import org.opencps.usermgt.model.JobPos;
 import org.opencps.usermgt.model.WorkingUnit;
+import org.opencps.usermgt.model.impl.JobPosImpl;
 import org.opencps.usermgt.search.EmployeeDisplayTerm;
 import org.opencps.usermgt.search.JobPosDisplayTerms;
 import org.opencps.usermgt.search.JobPosSearchTerms;
@@ -61,6 +67,7 @@ import org.opencps.util.WebKeys;
 
 import com.liferay.portal.DuplicateUserEmailAddressException;
 import com.liferay.portal.DuplicateUserScreenNameException;
+import com.liferay.portal.NoSuchOrganizationException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
@@ -72,6 +79,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.ResourcePermission;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroup;
@@ -156,55 +164,92 @@ public class UserMgtPortlet extends MVCPortlet {
 		}
 	}
 
-	public void deleteWorkingUnit(
-		ActionRequest actionRequest, ActionResponse actionResponse)
-		throws SystemException, PortalException, IOException {
+	public void deleteWorkingUnit(ActionRequest actionRequest,
+			ActionResponse actionResponse) throws SystemException,
+			PortalException, IOException {
 
-		long workingUnitId =
-			ParamUtil.getLong(
-				actionRequest, WorkingUnitDisplayTerms.WORKINGUNIT_ID);
-		ServiceContext serviceContext =
-			ServiceContextFactory.getInstance(actionRequest);
-		List<JobPos> jobPoses =
-			JobPosLocalServiceUtil.getJobPoss(workingUnitId);
-		List<Employee> employees =
-			EmployeeLocalServiceUtil.getEmployees(
-				serviceContext.getScopeGroupId(), workingUnitId);
-		String returnURL = ParamUtil.getString(actionRequest, "returnURL");
+		long workingUnitId = ParamUtil.getLong(actionRequest,
+				WorkingUnitDisplayTerms.WORKINGUNIT_ID);
 
-		SessionMessages.add(
-			actionRequest, PortalUtil.getPortletId(actionRequest) +
-				SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_ERROR_MESSAGE);
+		ServiceContext serviceContext = ServiceContextFactory
+				.getInstance(actionRequest);
 
-		WorkingUnit unit =
-			WorkingUnitLocalServiceUtil.getWorkingUnit(workingUnitId);
+		String returnURL = ParamUtil.getString(actionRequest, "redirectURL");
 
-		if (workingUnitId <= 0) {
-			SessionErrors.add(
-				actionRequest,
-				MessageKeys.USERMGT_WORKINGUNIT_DELETE_ERROR_EXIST);
+		try {
+			// CHECK VALIDATE
+			validateDeleteWorkingUnit(workingUnitId, serviceContext);
+
+			// BUSINESS
+			WorkingUnitLocalServiceUtil
+					.deleteWorkingUnitByWorkingUnitId(workingUnitId);
+
+			SessionMessages.add(actionRequest,
+					MessageKeys.USERMGT_WORKINGUNIT_UPDATE_SUCESS);
+
+		} catch (Exception e) {
+			if (e instanceof NoSuchWorkingUnitException) {
+				SessionErrors.add(actionRequest,
+						NoSuchWorkingUnitException.class);
+
+			} else if (e instanceof JopPosHasExistedException) {
+				SessionErrors.add(actionRequest,
+						JopPosHasExistedException.class);
+
+			} else if (e instanceof EmployeeHasExistedException) {
+				SessionErrors.add(actionRequest,
+						EmployeeHasExistedException.class);
+
+			} else if (e instanceof WorkingUnitHasChildException) {
+				SessionErrors.add(actionRequest,
+						WorkingUnitHasChildException.class);
+
+			} else {
+				SessionErrors.add(actionRequest,
+						MessageKeys.USERMGT_SYSTEM_EXCEPTION_OCCURRED);
+			}
+
+		} finally {
+			if (Validator.isNotNull(returnURL)) {
+				actionResponse.sendRedirect(returnURL);
+			}
+		}
+
+	}
+
+	protected void validateDeleteWorkingUnit(long workingUnitId,
+			ServiceContext context) throws NoSuchWorkingUnitException,
+			PortalException, SystemException, NoSuchEmployeeException,
+			NoSuchEmployeeException, WorkingUnitHasChildException,
+			NoSuchWorkingUnitException {
+
+		WorkingUnit workingUnit = WorkingUnitLocalServiceUtil
+				.getWorkingUnit(workingUnitId);
+
+		List<JobPos> jobPoses = JobPosLocalServiceUtil
+				.getJobPoss(workingUnitId);
+
+		List<Employee> employees = EmployeeLocalServiceUtil.getEmployees(
+				context.getScopeGroupId(), workingUnitId);
+
+		WorkingUnit unit = WorkingUnitLocalServiceUtil
+				.getWorkingUnit(workingUnitId);
+		List<Organization> organization = OrganizationLocalServiceUtil
+				.getOrganizations(unit.getCompanyId(),
+						unit.getMappingOrganisationId());
+
+		if (Validator.isNull(workingUnit)) {
+			throw new NoSuchWorkingUnitException();
+		}
+		if (!jobPoses.isEmpty()) {
+			throw new JopPosHasExistedException();
 
 		}
-		
-		else if (!jobPoses.isEmpty() || !employees.isEmpty()) {
-			SessionErrors.add(
-				actionRequest, MessageKeys.USERMGT_WORKINGUNIT_DELETE_ERROR);
-
+		if (!employees.isEmpty()) {
+			throw new EmployeeHasExistedException();
 		}
-		
-		else if (!OrganizationLocalServiceUtil.getOrganizations(
-			unit.getCompanyId(), unit.getMappingOrganisationId()).isEmpty()) {
-			SessionErrors.add(
-				actionRequest, MessageKeys.USERMGT_WORKINGUNIT_DELETE_ERROR);
-		}
-		else {
-			WorkingUnitLocalServiceUtil.deleteWorkingUnitByWorkingUnitId(workingUnitId);
-			SessionMessages.add(
-				actionRequest, MessageKeys.USERMGT_WORKINGUNIT_DELETE_SUCCESS);
-		}
-
-		if (Validator.isNotNull(returnURL)) {
-			actionResponse.sendRedirect(returnURL);
+		if (!organization.isEmpty()) {
+			throw new WorkingUnitHasChildException();
 		}
 
 	}
@@ -599,52 +644,68 @@ public class UserMgtPortlet extends MVCPortlet {
 		long[] rowIds = ParamUtil.getLongValues(actionRequest, "rowIds");
 
 		String[] indexOfRows = rowIndexes.split(",");
+
+		List<JobPos> jobPoses = new ArrayList<JobPos>();
+
 		String returnURL = ParamUtil.getString(actionRequest, "returnURL");
 		SessionMessages.add(
 			actionRequest, PortalUtil.getPortletId(actionRequest) +
 				SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_ERROR_MESSAGE);
 		long workingUnitId = ParamUtil.getLong(actionRequest, "workingUnitId");
+
 		try {
-			int count = 0;
-			ServiceContext serviceContext =
-				ServiceContextFactory.getInstance(actionRequest);
-			for (int index = 0; index < indexOfRows.length; index++) {
-				String title =
-					actionRequest.getParameter(JobPosSearchTerms.TITLE_JOBPOS +
-						indexOfRows[index].trim());
-				int leader =
-					ParamUtil.getInteger(
-						actionRequest, JobPosSearchTerms.LEADER_JOBPOS +
-							indexOfRows[index].trim());
-				JobPos jobPos = null;
+
+			ServiceContext serviceContext = ServiceContextFactory
+					.getInstance(actionRequest);
+
+			for (String indexOfRow : indexOfRows) {
+
+				JobPos jobPos = new JobPosImpl();
+
+				String title = actionRequest
+						.getParameter(JobPosSearchTerms.TITLE_JOBPOS
+								+ indexOfRow.trim());
+				int leader = ParamUtil.getInteger(actionRequest,
+						JobPosSearchTerms.LEADER_JOBPOS + indexOfRow.trim());
+
+				jobPos.setTitle(title);
+				jobPos.setLeader(leader);
+
+				jobPoses.add(jobPos);
+			}
+
+			// Check duplicate jobpos
+			boolean duplicate = false;
+			for (JobPos jobPos : jobPoses) {
+				List<JobPos> pos = new ArrayList<JobPos>();
 				try {
-					jobPos =
-						JobPosLocalServiceUtil.getJobPosByTitle(
-							serviceContext.getScopeGroupId(), title);
-					if (Validator.isNotNull(jobPos)) {
-						count++;
-					}
+					pos = JobPosLocalServiceUtil
+							.getJobPosByG_T_W(serviceContext.getScopeGroupId(), 
+									jobPos.getTitle(), workingUnitId);
+				} catch (Exception e) {
+					//
 				}
-				catch (Exception e) {
-					_log.error(e);
-				}
-				if (count > 0) {
+				if (!pos.isEmpty()) {
+					duplicate = true;
 					break;
 				}
-
-				JobPosLocalServiceUtil.addJobPos(
-					serviceContext.getUserId(), title, StringPool.BLANK,
-					workingUnitId, leader, rowIds, serviceContext);
-
 			}
 
-			if (count == 0) {
-				SessionMessages.add(
-					actionRequest, MessageKeys.USERMGT_JOBPOS_UPDATE_SUCESS);
+			// Add jobpos
+			if (!duplicate) {
+				for (JobPos jobPos : jobPoses) {
+					JobPosLocalServiceUtil.addJobPos(
+							serviceContext.getUserId(), jobPos.getTitle(),
+							StringPool.BLANK, workingUnitId,
+							jobPos.getLeader(), rowIds, serviceContext);
+				}
+				SessionMessages.add(actionRequest,
+						MessageKeys.USERMGT_JOBPOS_UPDATE_SUCESS);
+			} else {
+				SessionErrors.add(actionRequest,
+						MessageKeys.JOBPOS_EXISTED_TITLE);
 			}
-			else {
-				SessionErrors.add(actionRequest, "jobpos-existed-title");
-			}
+
 			if (Validator.isNotNull(returnURL)) {
 				actionResponse.sendRedirect(returnURL);
 			}
