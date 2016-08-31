@@ -139,8 +139,9 @@
 								<c:when test='<%=Validator.isNotNull(displayDossierNo) && displayDossierNo %>'>
 
 									<div class="row-fluid">
-										<div class="span1"></div>
-										
+										<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
+											<i class='<%="fa fa-circle sx10 " + dossier.getDossierStatus()%>'></i>
+										</div>										
 										<div class="span2 bold-label">
 											<liferay-ui:message key="dossier-no"/>
 										</div>
