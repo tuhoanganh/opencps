@@ -16,6 +16,9 @@
 */
 package org.opencps.processmgt.util;
 
+import org.opencps.processmgt.model.ProcessWorkflow;
+import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
+
 public class ProcessMgtUtil {
 	public static final String TOP_TABS_DOSSIERLIST = "top_tabs_dossierlist";
 	public static final String TOP_TABS_DOSSIERFILELIST = "top_tabs_dossierfilelist";
@@ -29,4 +32,26 @@ public class ProcessMgtUtil {
 	public static final String[] _PROCESS_ORDER_CATEGORY_NAMES = {
 		"process-order"
 	};	
+	
+	
+	/**
+	 * @param processWorkflowId
+	 * @return
+	 */
+	public static long getAssignUser(long processWorkflowId) {
+		long userId = 0;
+		
+		try {
+			if (processWorkflowId > 0) {
+				ProcessWorkflow processWorkflow = ProcessWorkflowLocalServiceUtil.getProcessWorkflow(processWorkflowId);
+				
+				userId = processWorkflow.getActionUserId();
+			}
+        }
+        catch (Exception e) {
+	        userId = 0;
+        }
+		
+		return userId;
+	}
 }

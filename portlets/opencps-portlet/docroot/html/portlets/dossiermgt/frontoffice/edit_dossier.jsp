@@ -143,20 +143,6 @@
 						 		/> 
 					 		</c:if>
 					 	</c:if>
-					 	<c:if test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE) && dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_NEW) %>">
-					 		<portlet:actionURL var="deleteDossierURL" name="deleteDossier" >
-								<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
-								<portlet:param name="redirectURL" value="<%=currentURL %>"/>
-								<portlet:param name="dossierStatus" value="<%=dossier.getDossierStatus() %>"/>
-							</portlet:actionURL> 
-							<liferay-ui:icon-delete 
-								image="delete"
-								cssClass="search-container-action fa delete"
-								confirmation="are-you-sure-delete-entry" 
-								message="delete"  
-								url="<%=deleteDossierURL.toString() %>" 
-							/>
-					 	</c:if>
 					 	
 					 	<liferay-portlet:renderURL var="backDossierList">
 					 		<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/frontoffice/frontofficedossierlist.jsp"/>
@@ -184,6 +170,20 @@
 					</c:if>
 			  		
 		 		</c:if>
+ 				<c:if test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE) && dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_NEW) %>">
+			 		<portlet:actionURL var="deleteDossierURL" name="deleteDossier" >
+						<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
+						<portlet:param name="redirectURL" value="<%=currentURL %>"/>
+						<portlet:param name="dossierStatus" value="<%=dossier.getDossierStatus() %>"/>
+					</portlet:actionURL> 
+					<liferay-ui:icon-delete 
+						image="delete"
+						cssClass="search-container-action fa delete"
+						confirmation="are-you-sure-delete-entry" 
+						message="delete"  
+						url="<%=deleteDossierURL.toString() %>" 
+					/>
+			 	</c:if>
 		 	
 			 	<div>	
 			 		<aui:button 

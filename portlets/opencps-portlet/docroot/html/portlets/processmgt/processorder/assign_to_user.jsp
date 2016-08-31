@@ -1,4 +1,5 @@
 
+<%@page import="org.opencps.processmgt.util.ProcessMgtUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -106,6 +107,8 @@
 	
 	boolean esign = false;
 	
+	long assigerToUserId = ProcessMgtUtil.getAssignUser(processWorkflowId);
+	
 %>
 
 <liferay-ui:error 
@@ -192,9 +195,10 @@
 	>
 		<%
 			List<User> assignUsers = ProcessUtils.getAssignUsers(processStepId, 0);
+			
 			for (User userSel : assignUsers) {
 		%>	
-			<aui:option value="<%= userSel.getUserId() %>"><%= userSel.getFullName() %></aui:option>
+			<aui:option selected="<%= assigerToUserId == userSel.getUserId() ? true : false  %>" value="<%= userSel.getUserId() %>"><%= userSel.getFullName() %></aui:option>
 		<%
 			}
 		%>
