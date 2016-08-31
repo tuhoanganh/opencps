@@ -27,8 +27,6 @@ import org.opencps.accountmgt.model.Business;
 import org.opencps.accountmgt.model.Citizen;
 import org.opencps.usermgt.model.Employee;
 
-import com.liferay.portlet.documentlibrary.model.DLFolder;
-
 /**
  * @author trungnt
  */
@@ -48,8 +46,6 @@ public class DefineObjectsTei extends TagExtraInfo {
 	    new VariableInfo("employee", Employee.class
 	        .getName(), true, VariableInfo.AT_END),
 	    new VariableInfo("accountType", String.class
-	        .getName(), true, VariableInfo.AT_END),
-	    new VariableInfo("accountFolder", DLFolder.class
 	        .getName(), true, VariableInfo.AT_END),
 	    new VariableInfo("accountRoles", List.class
 	        .getName(), true, VariableInfo.AT_END),

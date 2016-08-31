@@ -65,7 +65,7 @@
 	
 	int totalCount = 0;
 	
-	String searchKeyword = ParamUtil.getString(request, "keywords1");
+	String searchKeyword = ParamUtil.getString(request, "keywords");
 	
 	iteratorURL.setParameter("mvcPath", templatePath + "citizenlist.jsp");
 	iteratorURL.setParameter(CitizenDisplayTerms.CITIZEN_ACCOUNTSTATUS, String.valueOf(accountStatus));

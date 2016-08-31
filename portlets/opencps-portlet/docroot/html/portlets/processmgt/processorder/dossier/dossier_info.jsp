@@ -144,7 +144,7 @@
 			<liferay-ui:message key="note"/>
 		</td>
 		<td >
-			<%=processOrder != null && Validator.isNotNull(processOrder.getActionNote()) ? processOrder.getActionNote() : StringPool.BLANK%>
+			<%=dossier != null && Validator.isNotNull(dossier.getNote()) ? dossier.getNote() : StringPool.BLANK%>
 		</td>
 	</tr>
 </table>
