@@ -32,7 +32,6 @@ import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.Type;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.util.dao.orm.CustomSQLUtil;
@@ -53,18 +52,7 @@ public class BusinessFinderImpl extends BasePersistenceImpl<Business> implements
 			int accountStatus, String businessDomain, int start, int end) 
 		throws SystemException {
 
-		String[] names = null;
-		boolean andOperator = false;
-
-		if (Validator.isNotNull(keywords)) {
-			// names = CustomSQLUtil.keywords(keywords);
-			// Khong cat nho keywords go vao theo tung khoang trang.
-			names = new String[]{keywords};
-		} else {
-			andOperator = true;
-		}
-		
-		return _searchBusiness(groupId, names, accountStatus, andOperator,
+		return _searchBusiness(groupId, keywords, accountStatus,
 				businessDomain, start, end);
 	}
 	
@@ -78,97 +66,70 @@ public class BusinessFinderImpl extends BasePersistenceImpl<Business> implements
 	 * @param end
 	 * @return
 	 */
-	private List<Business> _searchBusiness(long groupId, String[] keywords,
-			int accountStatus, boolean andOperator, String businessDomain,
+	private List<Business> _searchBusiness(long groupId, String keywords,
+			int accountStatus, String businessDomain,
 			int start, int end) throws SystemException {
 
 		Session session = null;
 
 		try {
+			
 			session = openSession();
 
 			String sql = CustomSQLUtil.get(SEARCH_BUSINESS);
-
-			if (keywords != null && keywords.length > 0) {
-
-				sql = CustomSQLUtil.replaceKeywords(sql,
-						"lower(opencps_acc_business.name)", StringPool.LIKE,
-						true, keywords);
-
-				sql = CustomSQLUtil.replaceKeywords(sql,
-						"lower(opencps_acc_business.shortName)",
-						StringPool.LIKE, true, keywords);
-
-				sql = CustomSQLUtil.replaceKeywords(sql,
-						"lower(opencps_acc_business.enName)", StringPool.LIKE,
-						true, keywords);
-
-			} else {
-
-				sql = StringUtil
-						.replace(
-								sql,
-								"AND ((lower(opencps_acc_business.name) LIKE ? [$AND_OR_NULL_CHECK$])",
-								StringPool.BLANK);
-
-				sql = StringUtil
-						.replace(
-								sql,
-								"OR (lower(opencps_acc_business.shortName) LIKE ? [$AND_OR_NULL_CHECK$])",
-								StringPool.BLANK);
-
-				sql = StringUtil
-						.replace(
-								sql,
-								"OR (lower(opencps_acc_business.enName) LIKE ? [$AND_OR_NULL_CHECK$]))",
-								StringPool.BLANK);
-
-			}
-
-			if (Validator.isNull(businessDomain)) {
-				sql = StringUtil
-						.replace(
-								sql,
-								"AND (opencps_acc_businessdomain.businessDomainCode = ?)",
-								StringPool.BLANK);
-				sql = StringUtil.replace(sql, 
-						"INNER JOIN opencps_acc_businessdomain ON opencps_acc_business.businessId = opencps_acc_businessdomain.businessId"
+			
+			if (Validator.isNull(groupId)){
+				sql = sql.replace("AND (opencps_acc_business.groupId = ?)"
 						, StringPool.BLANK);
-
 			}
-
-			if (accountStatus == -1) {
-				sql = StringUtil.replace(sql,
-						"AND (opencps_acc_business.accountStatus = ?)",
-						StringPool.BLANK);
+			if (accountStatus == -1){
+				sql = sql.replace("AND (opencps_acc_business.accountStatus = ?)"
+						, StringPool.BLANK);
 			}
-
-			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
+			if (Validator.isNull(keywords)){
+				sql = sql.replace("AND " 
+									+ "((lower(opencps_acc_business.name) LIKE ?) "
+									+ "OR "
+										+ "(lower(opencps_acc_business.shortName) LIKE ?) "
+									+ "OR " 
+										+ "(lower(opencps_acc_business.enName) LIKE ?) "
+									+ "OR "
+										+ "(lower(opencps_acc_business.email) LIKE ?))"
+						, StringPool.BLANK);
+			}
+			if (Validator.isNull(businessDomain)){
+				sql = sql.replace("INNER JOIN "
+									+ "opencps_acc_businessdomain "
+								+ "ON "
+									+ "opencps_acc_business.businessId = opencps_acc_businessdomain.businessId"
+						, StringPool.BLANK);
+				
+				sql = sql.replace("AND (opencps_acc_businessdomain.businessDomainCode = ?)"
+						, StringPool.BLANK);
+			}
 			
 			SQLQuery q = session.createSQLQuery(sql);
 			q.setCacheable(false);
 			q.addEntity("Business", BusinessImpl.class);
 
 			QueryPos qPos = QueryPos.getInstance(q);
-			qPos.add(groupId);
-
-			if (Validator.isNotNull(businessDomain)) {
-				qPos.add(businessDomain);
+			
+			if (Validator.isNotNull(groupId)){
+				qPos.add(groupId);
 			}
-			if (accountStatus != -1) {
+			if (accountStatus != -1){
 				qPos.add(accountStatus);
 			}
-
-			if (keywords != null && keywords.length > 0) {
-
-				qPos.add(keywords, 2);
-
-				qPos.add(keywords, 2);
-
-				qPos.add(keywords, 2);
-
+			if (Validator.isNotNull(keywords)){
+				qPos.add(StringPool.PERCENT + keywords + StringPool.PERCENT);
+				qPos.add(StringPool.PERCENT + keywords + StringPool.PERCENT);
+				qPos.add(StringPool.PERCENT + keywords + StringPool.PERCENT);
+				qPos.add(StringPool.PERCENT + keywords + StringPool.PERCENT);
 			}
-
+			if (Validator.isNotNull(businessDomain)){
+				qPos.add(businessDomain);
+			}
+			
 			return (List<Business>) QueryUtil.list(q, getDialect(), start, end);
 		} catch (Exception e) {
 			throw new SystemException();
@@ -178,22 +139,9 @@ public class BusinessFinderImpl extends BasePersistenceImpl<Business> implements
 	}
 
 	public int countBussiness(long groupId, String keywords, int accountStatus,
-			String businessDomain) 
-		throws SystemException {
+			String businessDomain) throws SystemException {
 
-		String[] names = null;
-		boolean andOperator = false;
-
-		if (Validator.isNotNull(keywords)) {
-			// names = CustomSQLUtil.keywords(keywords);
-			// Khong cat nho keywords go vao theo tung khoang trang.
-			names = new String[]{keywords};
-		} else {
-			andOperator = true;
-		}
-
-		return _countBussiness(groupId, names, accountStatus, businessDomain,
-				andOperator);
+		return _countBussiness(groupId, keywords, accountStatus, businessDomain);
 	}
 
 	/**
@@ -204,8 +152,8 @@ public class BusinessFinderImpl extends BasePersistenceImpl<Business> implements
 	 * @param andOperator
 	 * @return
 	 */
-	private int _countBussiness(long groupId, String[] keywords,
-			int accountStatus, String businessDomain, boolean andOperator) 
+	private int _countBussiness(long groupId, String keywords, int accountStatus,
+			String businessDomain) 
 		throws SystemException {
 
 		Session session = null;
@@ -215,82 +163,59 @@ public class BusinessFinderImpl extends BasePersistenceImpl<Business> implements
 			
 			String sql = CustomSQLUtil.get(COUNT_BUSINESS);
 			
-			if (keywords != null && keywords.length > 0) {
-				sql = CustomSQLUtil.replaceKeywords(sql,
-						"lower(opencps_acc_business.name)", StringPool.LIKE,
-						true, keywords);
-
-				sql = CustomSQLUtil.replaceKeywords(sql,
-						"lower(opencps_acc_business.shortName))",
-						StringPool.LIKE, true, keywords);
-
-				sql = CustomSQLUtil.replaceKeywords(sql,
-						"lower(opencps_acc_business.enName", StringPool.LIKE,
-						true, keywords);
-			} else {
-				sql = StringUtil
-						.replace(
-								sql,
-								"AND ((lower(opencps_acc_business.name) LIKE ? [$AND_OR_NULL_CHECK$])",
-								StringPool.BLANK);
-
-				sql = StringUtil
-						.replace(
-								sql,
-								"OR (lower(opencps_acc_business.shortName) LIKE ? [$AND_OR_NULL_CHECK$])",
-								StringPool.BLANK);
-
-				sql = StringUtil
-						.replace(
-								sql,
-								"OR (lower(opencps_acc_business.enName) LIKE ? [$AND_OR_NULL_CHECK$]))",
-								StringPool.BLANK);
+			if (Validator.isNull(groupId)){
+				sql = sql.replace("AND (opencps_acc_business.groupId = ?)"
+						, StringPool.BLANK);
+			}
+			if (accountStatus == -1){
+				sql = sql.replace("AND (opencps_acc_business.accountStatus = ?)"
+						, StringPool.BLANK);
+			}
+			if (Validator.isNull(keywords)){
+				sql = sql.replace("AND " 
+									+ "((lower(opencps_acc_business.name) LIKE ?) "
+									+ "OR "
+										+ "(lower(opencps_acc_business.shortName) LIKE ?) "
+									+ "OR " 
+										+ "(lower(opencps_acc_business.enName) LIKE ?) "
+									+ "OR "
+										+ "(lower(opencps_acc_business.email) LIKE ?))"
+						, StringPool.BLANK);
+			}
+			if (Validator.isNull(businessDomain)){
+				sql = sql.replace("INNER JOIN "
+									+ "opencps_acc_businessdomain "
+								+ "ON "
+									+ "opencps_acc_business.businessId = opencps_acc_businessdomain.businessId"
+						, StringPool.BLANK);
+				
+				sql = sql.replace("AND (opencps_acc_businessdomain.businessDomainCode = ?)"
+						, StringPool.BLANK);
 			}
 			
-			if (Validator.isNull(businessDomain)) {
-				sql = StringUtil
-						.replace(
-								sql,
-								"AND (opencps_acc_businessdomain.businessDomainCode = ?)",
-								StringPool.BLANK);
-				sql = StringUtil.replace(sql, 
-						"INNER JOIN opencps_acc_businessdomain ON opencps_acc_business.businessId = opencps_acc_businessdomain.businessId"
-						, StringPool.BLANK);
-
-			}
-
-			if (accountStatus == -1) {
-				sql = StringUtil.replace(sql,
-						"AND (opencps_acc_business.accountStatus = ?)",
-						StringPool.BLANK);
-			}
-			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
 			SQLQuery q = session.createSQLQuery(sql);
 			q.setCacheable(false);
 
 			q.addScalar(COUNT_COLUMN_NAME, Type.INTEGER);
 
 			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			if (accountStatus != -1) {
+			
+			if (Validator.isNotNull(groupId)){
+				qPos.add(groupId);
+			}
+			if (accountStatus != -1){
 				qPos.add(accountStatus);
 			}
-
-			if (Validator.isNotNull(businessDomain)) {
+			if (Validator.isNotNull(keywords)){
+				qPos.add(StringPool.PERCENT + keywords + StringPool.PERCENT);
+				qPos.add(StringPool.PERCENT + keywords + StringPool.PERCENT);
+				qPos.add(StringPool.PERCENT + keywords + StringPool.PERCENT);
+				qPos.add(StringPool.PERCENT + keywords + StringPool.PERCENT);
+			}
+			if (Validator.isNotNull(businessDomain)){
 				qPos.add(businessDomain);
 			}
-
-			if (keywords != null && keywords.length > 0) {
-				
-				qPos.add(keywords, 2);
-				
-				qPos.add(keywords, 2);
-
-				qPos.add(keywords, 2);
-
-			}
+			
 			Iterator<Integer> itr = q.iterate();
 
 			if (itr.hasNext()) {
