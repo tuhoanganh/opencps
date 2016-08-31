@@ -341,7 +341,7 @@
 	
 	function openCPSSelectedbildDataSource(controlId,dictCollectionId, parentItemId) {
 		Liferay.Service(
-				  '/opencps-portlet.dictitem/get-dictitems-inuse-by-dictcollectionId_parentItemId_datasource',
+				  '/opencps-portlet.dictitem/get-dictitems_itemCode_datasource',
 				  {
 				    dictCollectionId: dictCollectionId,
 				    parentItemId: parentItemId
