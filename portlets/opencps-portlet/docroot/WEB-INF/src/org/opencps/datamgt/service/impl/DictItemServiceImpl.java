@@ -20,6 +20,7 @@ package org.opencps.datamgt.service.impl;
 import java.util.List;
 import java.util.Locale;
 
+import org.opencps.datamgt.NoSuchDictItemException;
 import org.opencps.datamgt.model.DictItem;
 import org.opencps.datamgt.service.base.DictItemServiceBaseImpl;
 
@@ -114,6 +115,34 @@ public class DictItemServiceImpl extends DictItemServiceBaseImpl {
 				.put(String
 					.valueOf(dictItem
 						.getDictItemId()),
+					dictItem
+						.getItemName(Locale
+							.getDefault()));
+		}
+		return jsonObject;
+	}
+	
+	@JSONWebService(value = "get-dictitems_itemCode_datasource")
+	@AccessControlled(guestAccessEnabled = true)
+	public JSONObject getDictItemsByItemCodeDataSource(
+		long dictCollectionId, String itemCode)
+		throws SystemException, NoSuchDictItemException {
+
+		JSONObject jsonObject = JSONFactoryUtil
+			.createJSONObject();
+		
+		DictItem ett = dictItemLocalService
+				.getDictItemInuseByItemCode(dictCollectionId, itemCode);
+		
+		List<DictItem> result = dictItemLocalService
+			.getDictItemsInUseByDictCollectionIdAndParentItemId(
+				dictCollectionId, ett.getDictItemId());
+		
+		for (DictItem dictItem : result) {
+			jsonObject
+				.put(String
+					.valueOf(dictItem
+						.getItemCode()),
 					dictItem
 						.getItemName(Locale
 							.getDefault()));
