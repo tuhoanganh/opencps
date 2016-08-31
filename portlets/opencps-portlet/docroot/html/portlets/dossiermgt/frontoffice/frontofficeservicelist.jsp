@@ -58,6 +58,7 @@
 />
 
 <div class="opencps-searchcontainer-wrapper default-box-shadow radius8">
+
 	
 	<div class="opcs-serviceinfo-list-label">
 		<div class="title_box">
@@ -172,7 +173,7 @@
 	           <p class="count"></p>
 	    </div>
 	</div>
-	
+
 	<liferay-ui:search-container searchContainer="<%= new ServiceSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>">
 	
 		<liferay-ui:search-container-results>
