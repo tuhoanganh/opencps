@@ -43,6 +43,7 @@
 <%@page import="org.opencps.util.DateTimeUtil"%>
 <%@page import="org.opencps.util.PortletUtil"%>
 <%@page import="org.opencps.util.MessageKeys"%>
+<%@page import="org.opencps.util.DictItemUtil"%>
 
 
 <%@ include file="../init.jsp"%>
@@ -420,7 +421,8 @@
 					</div>
 					
 					<div class='<%="span7 " + cssStatusColor %>'>
-						<%=PortletUtil.getDossierStatusLabel(dossier.getDossierStatus(), locale) %>
+						<%-- <%=PortletUtil.getDossierStatusLabel(dossier.getDossierStatus(), locale) %> --%>
+						<%= DictItemUtil.getDictItemName(dossier.getDossierStatus(), locale) %>
 					</div>
 				</div>
 			</liferay-util:buffer>
