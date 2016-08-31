@@ -20,6 +20,8 @@ package org.opencps.accountmgt.portlet;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -67,6 +69,7 @@ import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
@@ -338,6 +341,15 @@ public class AccountRegPortlet extends MVCPortlet {
 				    MessageKeys.ACCOUNT_SYSTEM_EXCEPTION_OCCURRED);
 				_log.error(e);
 			}
+			
+			String busDomains = StringUtil.merge(listBussinessDomains,StringPool.COMMA);
+			Map<String, String> businessResponseObject = new HashMap<String, String>();
+			
+			businessResponseObject.put("listBussinessDomains", busDomains);
+			businessResponseObject.put(BusinessDisplayTerms.BUSINESS_CITY_ID, String.valueOf(cityId));
+			businessResponseObject.put(BusinessDisplayTerms.BUSINESS_DISTRICT_ID, String.valueOf(districtId));
+			businessResponseObject.put(BusinessDisplayTerms.BUSINESS_WARD_ID, String.valueOf(wardId));
+			
 			
 		}finally {
 			if(registered){
