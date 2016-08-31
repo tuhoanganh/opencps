@@ -47,6 +47,14 @@
 	List<ServiceInfo> serviceInfoUses = new ArrayList<ServiceInfo>();
 	int totalCount = 0;
 	
+	DictItem dictItemGov = null;
+	
+	try {
+		dictItemGov = DictItemLocalServiceUtil.getDictItem(Long.valueOf(administrationCode));
+	} catch(Exception e) {
+		
+	}
+	String govCode = Validator.isNotNull(dictItemGov) ? dictItemGov.getItemCode() : StringPool.BLANK;	
 	List<String> headerNames = new ArrayList<String>();
 	
 	headerNames.add("col1");
@@ -55,7 +63,6 @@
 	headerNames.add("col4");
 	
 	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
-	
 %>
 <div class="opencps-searchcontainer-wrapper">
 	<liferay-ui:search-container 
@@ -67,13 +74,13 @@
 		
 		<liferay-ui:search-container-results>
 			<%
-				serviceConfigs = ServiceConfigLocalServiceUtil.searchServiceConfig(scopeGroupId, keyword, administrationCode, domainCode, searchContainer.getStart(), searchContainer.getEnd());
+				serviceConfigs = ServiceConfigLocalServiceUtil.searchServiceConfig(scopeGroupId, keyword, govCode, domainCode, searchContainer.getStart(), searchContainer.getEnd());
 // 				(scopeGroupId, keyword,
 // 					administrationCode, domainCode, 
 // 					searchContainer.getStart(), searchContainer.getEnd());
 				if(serviceConfigs!=null){
 				}
-				totalCount = ServiceConfigLocalServiceUtil.countServiceConfig(scopeGroupId, keyword, administrationCode, domainCode);
+				totalCount = ServiceConfigLocalServiceUtil.countServiceConfig(scopeGroupId, keyword, govCode, domainCode);
 				results = serviceConfigs;
 				total = totalCount;
 				pageContext.setAttribute("results", results);

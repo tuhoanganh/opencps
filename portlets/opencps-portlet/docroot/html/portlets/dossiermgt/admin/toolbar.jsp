@@ -50,7 +50,7 @@
 	String currURL = ParamUtil.getString(request, "currURL");
 	try {
 		dictCollectionServiceAdmin = DictCollectionLocalServiceUtil
-	                    .getDictCollection(scopeGroupId, PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION);
+	                    .getDictCollection(scopeGroupId, PortletPropsValues.DATAMGT_MASTERDATA_GOVERNMENT_AGENCY);
 		if(Validator.isNotNull(dictCollectionServiceAdmin)) {
 			dictItemsServiceAdmin = DictItemLocalServiceUtil
 							.getDictItemsByDictCollectionId(dictCollectionServiceAdmin.getDictCollectionId());
@@ -59,9 +59,6 @@
 	}catch (Exception e) {
 		//no thing to do
 	}
-	
-	DictCollectionLocalServiceUtil
-					.getDictCollection(scopeGroupId, PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION);
 %>
 <aui:nav-bar cssClass="opencps-toolbar custom-toolbar">
 	<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left" >
