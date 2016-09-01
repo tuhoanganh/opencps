@@ -44,7 +44,7 @@ public class OneMinute implements MessageListener{
 	public void receive(Message message)
 	    throws MessageListenerException {
 		
-    	_log.info(">>>>> CHECK PAYMENT <<<<<<");
+ /*   	_log.info(">>>>> CHECK PAYMENT <<<<<<");
 		
 		List<SchedulerJobs> schedulerJobs = new ArrayList<SchedulerJobs>();
 
@@ -59,7 +59,7 @@ public class OneMinute implements MessageListener{
 			_log.error(e);
 
 		}
-	}
+*/	}
 
 	private Log _log = LogFactoryUtil.getLog(OneMinute.class);
 
