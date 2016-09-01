@@ -301,12 +301,12 @@ public class AccountRegPortlet extends MVCPortlet {
 			
 			actionRequest.setAttribute("businessValidate", business);
 			
-			/*String busDomains = StringUtil.merge(listBussinessDomains,StringPool.COMMA);
-			actionResponse.setRenderParameter("listBussinessDomains", busDomains);*/
+			String busDomains = StringUtil.merge(listBussinessDomains,StringPool.COMMA);
+			actionResponse.setRenderParameter("busDomains", busDomains);
 			
-			for (String bussinessDomain : listBussinessDomains) {
+			/*for (String bussinessDomain : listBussinessDomains) {
 				actionResponse.setRenderParameter(bussinessDomain, bussinessDomain);
-			}
+			}*/
 			
 			if (e instanceof DuplicateBusinessEmailException) {
 				SessionErrors.add(

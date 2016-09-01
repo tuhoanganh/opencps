@@ -86,11 +86,10 @@ public class CitizenFinderImpl extends BasePersistenceImpl<Citizen> implements
 						, StringPool.BLANK);
 			}
 			if (Validator.isNull(keywords)){
-				sql = sql.replace("AND " 
-									+ "((lower(opencps_acc_citizen.fullName) LIKE ?) "
-										+ "OR "
-											+ "(lower(opencps_acc_citizen.email) LIKE ?))"
-						, StringPool.BLANK);
+				sql = sql.replace("AND ((lower(opencps_acc_citizen.fullName) LIKE ?)",
+						StringPool.BLANK);
+				sql = sql.replace("OR (lower(opencps_acc_citizen.email) LIKE ?))",
+						StringPool.BLANK);
 			}
 			
 			SQLQuery q = session.createSQLQuery(sql);
@@ -151,11 +150,10 @@ public class CitizenFinderImpl extends BasePersistenceImpl<Citizen> implements
 						, StringPool.BLANK);
 			}
 			if (Validator.isNull(keywords)){
-				sql = sql.replace("AND " 
-									+ "((lower(opencps_acc_citizen.fullName) LIKE ?) "
-										+ "OR "
-											+ "(lower(opencps_acc_citizen.email) LIKE ?))"
-						, StringPool.BLANK);
+				sql = sql.replace("AND ((lower(opencps_acc_citizen.fullName) LIKE ?)",
+						StringPool.BLANK);
+				sql = sql.replace("OR (lower(opencps_acc_citizen.email) LIKE ?))",
+						StringPool.BLANK);
 			}
 			
 			SQLQuery q = session.createSQLQuery(sql);
