@@ -45,6 +45,14 @@ body{
 	width: 1170px;
 }
 
+@media (max-width: 1000px) {
+	.opencps-theme.ux #main-content {
+		padding: 25px 0px;
+		margin: auto;
+		width: auto;
+	}	
+}
+
 .opencps-theme.ux .home-screen .portlet-borderless-container{
 	background-color: transparent;
 }

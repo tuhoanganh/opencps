@@ -134,7 +134,7 @@
   
   <tr class="odd">
     <td width="20%" class="opcs-dosier-process-key"><liferay-ui:message key="pre-action"/></td>
-    <td width="80%" colspan="3"><%=processStep != null ? processStep.getStepName() : StringPool.BLANK %></td>
+    <td width="80%" colspan="3"><%=latestWorkflowActionHistory != null ? latestWorkflowActionHistory.getActionName() : StringPool.BLANK %></td>
   </tr>
   
   <tr class="even">
@@ -187,7 +187,7 @@
 								}
 								
 								//Toi uu thuat toan tim kiem sau
-								boolean hasProcecssOrderResult = true;
+								boolean hasProcecssOrderResult = false;
 								if(workflowOutputs != null){
 									for(WorkflowOutput workflowOutput : workflowOutputs){
 										if(workflowOutput.getDossierPartId() == dossierPart.getDossierpartId()){
@@ -292,7 +292,9 @@
 							<%
 								
 										//Toi uu thuat toan tim kiem sau
+
 										boolean hasProcecssOrderResult = false;
+
 										if(workflowOutputs != null){
 											for(WorkflowOutput workflowOutput : workflowOutputs){
 												if(workflowOutput.getDossierPartId() == dossierPartLevel1.getDossierpartId()){
@@ -484,6 +486,9 @@
 					
 					boolean showButton = true;
 					/* showButton = BackendUtils.checkPreCondition(preCondition, dossier.getDossierId()); */
+					
+					//Kiem tra neu co su kien auto event thi khong hien thi nut
+					showButton = Validator.isNotNull(postProcessWorkflow.getAutoEvent()) ? false : true;
 					
 					//Kiem tra neu co su kien auto event thi khong hien thi nut
 					showButton = Validator.isNotNull(postProcessWorkflow.getAutoEvent()) ? false : true;
