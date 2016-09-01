@@ -30,13 +30,17 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.Type;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.util.dao.orm.CustomSQLUtil;
+
+/**
+ * @author dunglt
+ *
+ */
 
 public class CitizenFinderImpl extends BasePersistenceImpl<Citizen> implements
 		CitizenFinder {
@@ -47,13 +51,16 @@ public class CitizenFinderImpl extends BasePersistenceImpl<Citizen> implements
 			+ ".countCitizen";
 
 	public List<Citizen> searchCitizen(long groupId, String keywords,
-			int accountStatus, int start, int end) {
+			int accountStatus, int start, int end) 
+		throws SystemException {
 
 		String[] names = null;
 		boolean andOperator = false;
 
 		if (Validator.isNotNull(keywords)) {
-			names = CustomSQLUtil.keywords(keywords);
+			// names = CustomSQLUtil.keywords(keywords);
+			// Khong cat nho keywords go vao theo tung khoang trang.
+			names = new String[]{keywords};
 		} else {
 			andOperator = true;
 		}
@@ -62,12 +69,18 @@ public class CitizenFinderImpl extends BasePersistenceImpl<Citizen> implements
 				start, end);
 	}
 
+	/**
+	 * @param groupId
+	 * @param keywords
+	 * @param accountStatus
+	 * @param andOperator
+	 * @param start
+	 * @param end
+	 * @return
+	 */
 	private List<Citizen> _searchCitizen(long groupId, String[] keywords,
-			int accountStatus, boolean andOperator, int start, int end) {
-
-		// /*
-		// * keywords = CustomSQLUtil .keywords(keywords, false);
-		// */
+			int accountStatus, boolean andOperator, int start, int end) 
+		throws SystemException {
 
 		Session session = null;
 
@@ -115,20 +128,22 @@ public class CitizenFinderImpl extends BasePersistenceImpl<Citizen> implements
 
 			return (List<Citizen>) QueryUtil.list(q, getDialect(), start, end);
 		} catch (Exception e) {
-			_log.error(e);
+			throw new SystemException();
 		} finally {
 			session.close();
 		}
-		return null;
 	}
 
-	public int countCitizen(long groupId, String keywords, int accountStatus) {
+	public int countCitizen(long groupId, String keywords, int accountStatus) 
+			throws SystemException {
 
 		String[] names = null;
 		boolean andOperator = false;
 
 		if (Validator.isNotNull(keywords)) {
-			names = CustomSQLUtil.keywords(keywords);
+			// names = CustomSQLUtil.keywords(keywords);
+			// Khong cat nho keywords go vao theo tung khoang trang.
+			names = new String[]{keywords};
 		} else {
 			andOperator = true;
 		}
@@ -136,14 +151,19 @@ public class CitizenFinderImpl extends BasePersistenceImpl<Citizen> implements
 		return _countCitizen(groupId, names, accountStatus, andOperator);
 	}
 
+	/**
+	 * @param groupId
+	 * @param keywords
+	 * @param accountStatus
+	 * @param andOperator
+	 * @return
+	 */
 	private int _countCitizen(long groupId, String[] keywords,
-			int accountStatus, boolean andOperator) {
-
-		/*
-		 * keywords = CustomSQLUtil .keywords(keywords, false);
-		 */
+			int accountStatus, boolean andOperator) 
+		throws SystemException {
 
 		Session session = null;
+		
 		try {
 			session = openSession();
 			String sql = CustomSQLUtil.get(COUNT_CITIZEN);
@@ -195,15 +215,12 @@ public class CitizenFinderImpl extends BasePersistenceImpl<Citizen> implements
 					return count.intValue();
 				}
 			}
-
+			
+			return 0;
 		} catch (Exception e) {
-			_log.error(e);
+			throw new SystemException();
 		} finally {
 			session.close();
 		}
-
-		return 0;
 	}
-
-	private Log _log = LogFactoryUtil.getLog(CitizenFinderImpl.class);
 }

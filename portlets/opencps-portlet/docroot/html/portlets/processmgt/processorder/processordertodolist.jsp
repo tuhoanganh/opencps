@@ -1,4 +1,5 @@
 
+<%@page import="org.opencps.util.MessageKeys"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -28,6 +29,9 @@
 <%@ include file="../init.jsp"%>
 
 <liferay-util:include page='<%=templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
+
+<liferay-ui:success  key="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>" message="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>"/>
+
 <liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
 
 <%
@@ -49,6 +53,7 @@
 	
 	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
 %>
+
 <aui:form name="fm">
 	<div class="opencps-searchcontainer-wrapper">
 		<liferay-ui:search-container 
@@ -100,24 +105,30 @@
 							String deadlineVal = Validator.isNotNull(processOrder.getDealine()) ? processOrder.getDealine() : StringPool.DASH;
 							
 							String hrefFix = "location.href='" + processURL.toString()+"'";
+							String cssStatusColor = "status-color-" + processOrder.getDossierStatus();
 						%>
 						
 						<liferay-util:buffer var="boundcol1">
 							<div class="row-fluid">	
 								<div class="row-fluid">
+									<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
+										<i class='<%="fa fa-circle sx10 " + processOrder.getDossierStatus()%>'></i>
+									</div>
 									<div class="span2 bold">
 										<liferay-ui:message key="reception-no"/>
 									</div>
-									<div class="span10">
+									<div class="span9">
 										<%=processOrder.getReceptionNo() %>
 									</div>
 								</div>
 								
 								<div class="row-fluid">
+									<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
+									</div>
 									<div class="span2 bold">
 										<liferay-ui:message key="service-name"/>
 									</div>
-									<div class="span10">
+									<div class="span9">
 										<%=processOrder.getServiceName() %>
 									</div>
 								</div>
@@ -149,7 +160,7 @@
 							<div class="span5 bold">
 								<liferay-ui:message key="step-name"/>
 							</div>
-							<div class="span7">
+							<div class='<%="span7 " + cssStatusColor %>'>
 								<%=processOrder.getStepName() %>
 							</div>
 						</div>

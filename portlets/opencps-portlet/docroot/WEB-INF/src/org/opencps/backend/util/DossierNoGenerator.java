@@ -35,21 +35,20 @@ import com.liferay.portal.kernel.util.Validator;
 public class DossierNoGenerator {
 	
 	public static void main(String[] args) {
-		String pattern = "{yy}-{mm}-{dd}-{nnnnnnnnnnn}";
-		
-		String receptionNo = genaratorNoReception(pattern);
-		
-		System.out.println(receptionNo);
+
+	    String numberString = _getSpecicalChar("{yyyy}/{%ABCCSSS%}-{nnnnnnnnnnnnnnnn}");
 	    
+	    System.out.println(numberString);
     }
+	
 	
 	/**
 	 * @param pattern
 	 * @return
 	 */
-	public static String genaratorNoReception(String pattern) {
+	public static String genaratorNoReception(String pattern, long dossierId) {
 		
-		String noReception = _genaratorNoReception(pattern);
+		String noReception = _genaratorNoReception(pattern, dossierId);
 		
 		Dossier dossier = null;
 		
@@ -61,7 +60,7 @@ public class DossierNoGenerator {
         }
 		
 		if (Validator.isNotNull(dossier)) {
-			noReception = genaratorNoReception(pattern);
+			noReception = genaratorNoReception(pattern, dossierId);
 		}
 		
 		return noReception;
@@ -73,7 +72,7 @@ public class DossierNoGenerator {
 	 * @param pattern
 	 * @return
 	 */
-	private static String _genaratorNoReception(String pattern) {
+	private static String _genaratorNoReception(String pattern, long dossierId) {
 		
 		String noReception = StringPool.BLANK;
 		
@@ -97,14 +96,18 @@ public class DossierNoGenerator {
 		        : Integer.toString(cal.get(Calendar.DAY_OF_MONTH));
 		
 		if (_validateParttern(pattern)) {
-			int numberSerial = StringUtil.count(pattern, "n");
 			
-			String serialNumber = noGenarator(numberSerial);
+			String specialChar = _getSpecicalChar(pattern);
+			
+			String serialNumber = _serialNumberAutoIncrement(pattern, dossierId);
 			
 			sbNoReception.replace(pattern.indexOf('n') - 1 , pattern.lastIndexOf('n') + 2, serialNumber);
 			
+			sbNoReception.replace(pattern.indexOf('%') - 2, pattern.lastIndexOf('%') + 2, specialChar);
+
 			pattern = sbNoReception.toString();
 			
+
 			if (pattern.contains(FIX_YEAR_PATTERN_TYPE_1)) {
 				pattern = StringUtil.replace(pattern, FIX_YEAR_PATTERN_TYPE_1, strYearTypeOne);
 			}
@@ -144,9 +147,15 @@ public class DossierNoGenerator {
 	private static boolean _validateParttern(String pattern) {
 		boolean isValidator = true;
 		
-		pattern = StringUtil.lowerCase(pattern);
+		//pattern = StringUtil.lowerCase(pattern);
 		
-		if (!pattern.contains(FIX_YEAR_PATTERN_TYPE_1) &&
+		int countSpecial = StringUtil.count(pattern, "%");
+		
+		if (countSpecial > 2) {
+			isValidator = false;
+		}
+		
+/*		if (!pattern.contains(FIX_YEAR_PATTERN_TYPE_1) &&
 		    !pattern.contains(FIX_YEAR_PATTERN_TYPE_2)) {
 			isValidator = false;
 		}
@@ -162,7 +171,7 @@ public class DossierNoGenerator {
 		if (!pattern.contains(FIX_SERIAL_PATERN)) {
 			isValidator = false;
 		}
-		
+*/		
 		return isValidator;
 	}
 
@@ -183,6 +192,45 @@ public class DossierNoGenerator {
 		
 		return sb.toString();
 	}
+	
+	/**
+	 * @param pattern
+	 * @param dossierId
+	 * @return
+	 */
+	private static String _serialNumberAutoIncrement(String pattern, long dossierId) {
+		dossierId  = dossierId + 2;
+		int numberSerial = StringUtil.count(pattern, "n");
+		
+		String strNumSerial = intToString(dossierId, numberSerial);
+		
+		return strNumSerial;
+	}
+	
+	
+	private static String _getSpecicalChar(String pattern) {
+		return pattern.substring(pattern.indexOf('%')+1, pattern.lastIndexOf('%'));
+	}
+	
+	/**
+	 * @param number
+	 * @param stringLength
+	 * @return
+	 */
+	public static String intToString(long number, int stringLength) {
+
+		int numberOfDigits = String.valueOf(number).length();
+		int numberOfLeadingZeroes = stringLength - numberOfDigits;
+		StringBuilder sb = new StringBuilder();
+		if (numberOfLeadingZeroes > 0) {
+			for (int i = 0; i < numberOfLeadingZeroes; i++) {
+				sb.append("0");
+			}
+		}
+		sb.append(number);
+		return sb.toString();
+	}
+
 	
 	public static final String FIX_YEAR_PATTERN_TYPE_1 = "{yyyy}";
 

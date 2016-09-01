@@ -23,7 +23,7 @@
 <%@page import="com.liferay.portal.kernel.dao.search.ResultRow"%>
 <%@page import="org.opencps.dossiermgt.search.DossierTemplateDisplayTerms"%>
 <%@page import="org.opencps.util.ActionKeys"%>
-<%@page import="org.opencps.dossiermgt.permissions.DossierTemplatePermission"%>\
+<%@page import="org.opencps.dossiermgt.permissions.DossierTemplatePermission"%>
 
 <%@ include file="../init.jsp"%>
 

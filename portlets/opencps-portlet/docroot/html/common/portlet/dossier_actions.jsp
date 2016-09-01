@@ -1,4 +1,5 @@
 
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -153,7 +154,7 @@
 				
 				<td width="10%" align="right">
 					<span class="dossier-version-counter">
-						<span class="counter-value" title="version">
+						<span class="counter-value" title='<%=LanguageUtil.get(pageContext, "version") %>'>
 							<aui:a 
 								id="<%=String.valueOf(dossierPartId) %>"
 								dossier="<%=String.valueOf(dossierId) %>"
@@ -254,7 +255,7 @@
 				
 				<td width="10%" align="right">
 					<span class="dossier-version-counter">
-						<span class="counter-value" title="version">
+						<span class="counter-value" title='<%=LanguageUtil.get(pageContext, "version") %>'>
 							<aui:a 
 								id="<%=String.valueOf(dossierPartId) %>"
 								dossier="<%=String.valueOf(dossierId) %>"
@@ -371,7 +372,7 @@
 				
 				<td width="10%" align="right">
 					<span class="dossier-version-counter">
-						<span class="counter-value" title="version">
+						<span class="counter-value" title='<%=LanguageUtil.get(pageContext, "version") %>'>
 							<aui:a 
 								id="<%=String.valueOf(dossierPartId) %>"
 								dossier="<%=String.valueOf(dossierId) %>"
@@ -389,20 +390,22 @@
 					</span>
 				</td>
 				<td width="10%" align="right">
-					<aui:a 
-						cssClass="opencps dossiermgt part-file-ctr remove-dossier-file"
-						dossier-file="<%=String.valueOf(dossierFileId) %>"
-						dossier-part="<%=String.valueOf(isChildDossierPart ? childDossierPartId : dossierPartId) %>"
-						group-dossier-part="<%=String.valueOf(groupDossierPartId) %>"
-						group-name="<%=groupName %>"
-						level = "<%=level %>"
-						href="javascript:void(0);" 
-						id="<%=String.valueOf(dossierPartId) %>"
-						title="remove"
-					>
-						<i class="fa fa-times" aria-hidden="true"></i>
-						
-					</aui:a>
+					<c:if test="<%=isEditDossier %>">
+						<aui:a 
+							cssClass="opencps dossiermgt part-file-ctr remove-dossier-file"
+							dossier-file="<%=String.valueOf(dossierFileId) %>"
+							dossier-part="<%=String.valueOf(isChildDossierPart ? childDossierPartId : dossierPartId) %>"
+							group-dossier-part="<%=String.valueOf(groupDossierPartId) %>"
+							group-name="<%=groupName %>"
+							level = "<%=level %>"
+							href="javascript:void(0);" 
+							id="<%=String.valueOf(dossierPartId) %>"
+							title="remove"
+						>
+							<i class="fa fa-times" aria-hidden="true"></i>
+							
+						</aui:a>
+					</c:if>
 				</td>
 			</c:when>
 			
@@ -480,7 +483,7 @@
 				</td>
 				<td width="10%" align="right">
 					<span class="dossier-version-counter">
-						<span class="counter-value" title="version">
+						<span class="counter-value" title='<%=LanguageUtil.get(pageContext, "version") %>'>
 							<aui:a 
 								id="<%=String.valueOf(dossierPartId) %>"
 								dossier="<%=String.valueOf(dossierId) %>"

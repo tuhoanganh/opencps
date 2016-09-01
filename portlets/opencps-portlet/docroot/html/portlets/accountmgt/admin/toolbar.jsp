@@ -1,3 +1,4 @@
+<%@page import="org.opencps.datamgt.model.DictItem"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -33,12 +34,20 @@
 <%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@page import="java.util.List"%>
 <%@page import="org.opencps.accountmgt.model.BusinessDomain"%>
+<%@page import="org.opencps.util.PortletPropsValues"%>
 
 <%@ include file="../init.jsp"%>
 <%
 	String tabs1 = ParamUtil.getString(request, "tabs1", AccountMgtUtil.TOP_TABS_CITIZEN);
 	
 	PortletURL searchURL = renderResponse.createRenderURL();
+	
+	String businessDomain = ParamUtil.getString(request, BusinessDisplayTerms.BUSINESS_DOMAIN);
+	
+	DictItem dictItemBusinessDomain = PortletUtil
+					.getDictItem(PortletPropsValues.DATAMGT_MASTERDATA_BUSINESS_DOMAIN, businessDomain, scopeGroupId);
+	
+	long businessDomainItemId = Validator.isNotNull(dictItemBusinessDomain) ? dictItemBusinessDomain.getDictItemId() : 0L;
 	
 	int [] accoutStatuses = new int [4];
 	accoutStatuses[0] = PortletConstants.ACCOUNT_STATUS_REGISTERED;
@@ -73,7 +82,7 @@
 					<c:if test="<%=tabs1.equals(AccountMgtUtil.TOP_TABS_CITIZEN)%>">
 						<aui:row>
 							<aui:col width="50" cssClass="search-col">
-								<aui:select name="citizenAccStt" 
+								<aui:select name="<%=CitizenDisplayTerms.CITIZEN_ACCOUNTSTATUS %>" 
 									label="<%=StringPool.BLANK %>" 
 									cssClass="search-input select-box"
 									>
@@ -95,7 +104,7 @@
 							<aui:col width="50" cssClass="search-col">
 								<liferay-ui:input-search 
 									id="keywords1" 
-									name="keywords1" 
+									name="keywords" 
 									title='<%= LanguageUtil.get(locale, "keywords") %>' 
 									placeholder='<%= LanguageUtil.get(locale, "name") %>' 			
 									cssClass="search-input input-keyword"
@@ -110,21 +119,22 @@
 							<aui:col width="30" cssClass="search-col">
 									<datamgt:ddr 
 										depthLevel="1" 
-										dictCollectionCode="BUSINESS_DOMAIN" 
-										name="businessDomain"
+										dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_BUSINESS_DOMAIN %>"
+										name="<%=BusinessDisplayTerms.BUSINESS_DOMAIN %>"
 										inlineField="<%=true%>"
 										inlineLabel="left"
 										showLabel="<%=false%>"
 										emptyOptionLabels="business-domain"
 										itemsEmptyOption="true"
-										itemNames="businessDomain"
+										itemNames= "<%=BusinessDisplayTerms.BUSINESS_DOMAIN %>"
 										cssClass="search-input select-box"
 										optionValueType="code"
+										selectedItems="<%=String.valueOf(businessDomainItemId)%>"
 									/>
 							</aui:col>
 							
 							 <aui:col width="30" cssClass="search-col">
-								<aui:select name="account-status" 
+								<aui:select name="<%=BusinessDisplayTerms.BUSINESS_ACCOUNTSTATUS %>" 
 									label="<%=StringPool.BLANK %>"
 									cssClass="search-input select-box"
 								>

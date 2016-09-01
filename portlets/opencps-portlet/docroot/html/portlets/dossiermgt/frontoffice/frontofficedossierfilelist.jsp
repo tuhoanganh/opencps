@@ -54,7 +54,13 @@
 	int totalCount = 0;
 %>
 
-<div class="opencps-searchcontainer-wrapper">
+<div class="opencps-searchcontainer-wrapper default-box-shadow radius8">
+		<div class="opcs-serviceinfo-list-label">
+			<div class="title_box">
+		           <p class="file_manage_title"><liferay-ui:message key="title-danh-sach-giay-to" /></p>
+		           <p class="count"></p>
+		    </div>
+		</div>
 	<liferay-ui:search-container 
 		searchContainer="<%= new DossierFileSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" 
 		headerNames="<%= headers %>"

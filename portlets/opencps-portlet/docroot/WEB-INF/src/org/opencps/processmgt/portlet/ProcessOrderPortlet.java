@@ -32,7 +32,9 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.opencps.accountmgt.NoSuchAccountException;
 import org.opencps.accountmgt.NoSuchAccountFolderException;
@@ -71,12 +73,14 @@ import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.model.ProcessStep;
 import org.opencps.processmgt.model.ProcessWorkflow;
 import org.opencps.processmgt.model.ServiceProcess;
+import org.opencps.processmgt.model.StepAllowance;
 import org.opencps.processmgt.model.WorkflowOutput;
 import org.opencps.processmgt.search.ProcessOrderDisplayTerms;
 import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
 import org.opencps.processmgt.service.ServiceProcessLocalServiceUtil;
+import org.opencps.processmgt.service.StepAllowanceLocalServiceUtil;
 import org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
@@ -101,7 +105,9 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.servlet.PortalSessionContext;
 import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.Base64;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -109,6 +115,7 @@ import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Role;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -256,6 +263,8 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 			updated = true;
 
+			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+
 		}
 		catch (Exception e) {
 			updated = false;
@@ -354,6 +363,9 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				serviceContext.getUserId(), dossierId, dossierPartId, partName,
 				PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
 				serviceContext);
+
+			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+
 		}
 		catch (Exception e) {
 			updated = false;
@@ -500,6 +512,9 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				"opencps/backoffice/engine/destination", message);
 
 			sending = true;
+
+			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+
 		}
 		catch (Exception e) {
 			sending = false;
@@ -542,9 +557,11 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
 
-		/*AccountBean accountBean =
-			AccountUtil.getAccountBeanFromAttribute(actionRequest);*/
-		
+		/*
+		 * AccountBean accountBean =
+		 * AccountUtil.getAccountBeanFromAttribute(actionRequest);
+		 */
+
 		AccountBean accountBean = AccountUtil.getAccountBean(actionRequest);
 
 		Dossier dossier = null;
@@ -598,16 +615,6 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			dossierPart =
 				DossierPartLocalServiceUtil.getDossierPart(dossierPartId);
 
-			/*
-			 * DLFolder accountFolder = accountBean.getAccountFolder(); DLFolder
-			 * dossierFolder = DLFolderUtil.addFolder(
-			 * serviceContext.getUserId(), serviceContext.getScopeGroupId(),
-			 * serviceContext.getScopeGroupId(), false,
-			 * accountFolder.getFolderId(),
-			 * String.valueOf(dossier.getCounter()), StringPool.BLANK, false,
-			 * serviceContext);
-			 */
-
 			DossierFileLocalServiceUtil.addDossierFile(
 				serviceContext.getUserId(), dossierId, dossierPartId,
 				dossierPart.getTemplateFileNo(), groupName, fileGroupId,
@@ -628,6 +635,8 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				serviceContext);
 
 			updated = true;
+
+			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 
 		}
 		catch (Exception e) {
@@ -757,9 +766,11 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		 * actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		 */
 
-		/*AccountBean accountBean =
-			AccountUtil.getAccountBeanFromAttribute(actionRequest);*/
-		
+		/*
+		 * AccountBean accountBean =
+		 * AccountUtil.getAccountBeanFromAttribute(actionRequest);
+		 */
+
 		AccountBean accountBean = AccountUtil.getAccountBean(actionRequest);
 
 		long dossierFileId =
@@ -856,6 +867,9 @@ public class ProcessOrderPortlet extends MVCPortlet {
 					}
 				}
 			}
+
+			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+
 		}
 		catch (Exception e) {
 			if (e instanceof NoSuchDossierFileException) {
@@ -930,6 +944,10 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				DossierFileLocalServiceUtil.deleteDossierFile(
 					dossierFileId, fileEntryId);
 				jsonObject.put("deleted", Boolean.TRUE);
+
+				SessionMessages.add(
+					actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+
 			}
 
 		}
@@ -964,6 +982,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 							dossierFile.getFileEntryId());
 					System.out.println(tempFilePath);
 				}
+
 			}
 			catch (Exception e) {
 				// TODO: handle exception
@@ -997,7 +1016,13 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			_log.error(e);
 		}
 		finally {
-			PortletUtil.writeJSON(actionRequest, actionResponse, data);
+			if (data != null) {
+				PortletUtil.writeJSON(actionRequest, actionResponse, data);
+			}
+			else {
+				_log.info("################################ Can not computerHash signature");
+			}
+
 		}
 	}
 
@@ -1088,6 +1113,8 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				is.close();
 			}
 
+			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+
 		}
 		catch (Exception e) {
 			_log.error(e);
@@ -1164,32 +1191,41 @@ public class ProcessOrderPortlet extends MVCPortlet {
 					inputFilePath, certPath, hashFileTempPath, outputFilePath,
 					isVisible, imagePath);
 
-			System.out.println("inputFilePath: " + inputFilePath);
-			System.out.println("hashFileTempPath: " + hashFileTempPath);
-			System.out.println("outputFilePath: " + outputFilePath);
-			System.out.println("imagePath: " + imagePath);
+			// System.out.println("inputFilePath: " + inputFilePath);
+			// System.out.println("hashFileTempPath: " + hashFileTempPath);
+			// System.out.println("outputFilePath: " + outputFilePath);
+			// System.out.println("imagePath: " + imagePath);
 
 			pdfSigner.setHashAlgorithm(HashAlgorithm.SHA1);
 
-			byte[] hash = pdfSigner.computeHash(0, 0, 144, 80);
+			_log.info("############################################### pdfSigner.setHashAlgorithm(HashAlgorithm.SHA1)");
 
-			String hashHex = Helper.binToHex(hash);
+			byte[] hash = pdfSigner.computeHash();
 
-			data.put("hashHex", hashHex);
+			_log.info("############################################### pdfSigner.computeHash()");
 
-			resources.put("inputFilePath", inputFilePath);
-			resources.put("dossierFileId", dossierFile.getDossierFileId());
-			resources.put("dossierId", dossierFile.getDossierId());
-			resources.put("dossierPartId", dossierFile.getDossierPartId());
-			resources.put("outputFilePath", outputFilePath);
-			resources.put("hashFileTempPath", hashFileTempPath);
-			resources.put("certPath", certPath);
-			resources.put("imagePath", imagePath);
+			if (hash != null) {
+				String hashHex = Helper.binToHex(hash);
 
-			resources.put(
-				"signatureFieldName", pdfSigner.getSignatureFieldName());
+				data.put("hashHex", hashHex);
 
-			data.put("resources", resources);
+				resources.put("inputFilePath", inputFilePath);
+				resources.put("dossierFileId", dossierFile.getDossierFileId());
+				resources.put("dossierId", dossierFile.getDossierId());
+				resources.put("dossierPartId", dossierFile.getDossierPartId());
+				resources.put("outputFilePath", outputFilePath);
+				resources.put("hashFileTempPath", hashFileTempPath);
+				resources.put("certPath", certPath);
+				resources.put("imagePath", imagePath);
+
+				resources.put(
+					"signatureFieldName", pdfSigner.getSignatureFieldName());
+
+				data.put("resources", resources);
+			}
+			else {
+				_log.info("############################################### Can not computeHash");
+			}
 
 		}
 		catch (Exception e) {
@@ -1213,6 +1249,25 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 		return JRReportUtil.createReportPDFfFile(
 			jrxmlTemplate, formData, map, outputDestination, fileName);
+	}
+
+	/**
+	 * @param path
+	 * @param renderRequest
+	 * @param renderResponse
+	 * @throws IOException
+	 * @throws PortletException
+	 */
+	@Override
+	protected void include(
+		String path, RenderRequest renderRequest, RenderResponse renderResponse)
+		throws IOException, PortletException {
+
+		if (!hasPermission()) {
+			path = "/html/portlets/processmgt/processorder/warning.jsp";
+		}
+
+		super.include(path, renderRequest, renderResponse);
 	}
 
 	/**
@@ -1334,6 +1389,8 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 			jsonObject.put("deleted", Boolean.TRUE);
 
+			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+
 		}
 		catch (Exception e) {
 			jsonObject.put("deleted", Boolean.FALSE);
@@ -1350,98 +1407,89 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		RenderRequest renderRequest, RenderResponse renderResponse)
 		throws PortletException, IOException {
 
-		long processOrderId =
-			ParamUtil.getLong(
-				renderRequest, ProcessOrderDisplayTerms.PROCESS_ORDER_ID);
+		setHasPermission(true);
 
-		long dossierFileId =
-			ParamUtil.getLong(
-				renderRequest, DossierFileDisplayTerms.DOSSIER_FILE_ID);
+		validatePermission(renderRequest, renderResponse);
 
-		long dossierPartId =
-			ParamUtil.getLong(
-				renderRequest, DossierFileDisplayTerms.DOSSIER_PART_ID);
+		if (hasPermission()) {
+			long processOrderId =
+				ParamUtil.getLong(
+					renderRequest, ProcessOrderDisplayTerms.PROCESS_ORDER_ID);
 
-		if (processOrderId > 0) {
-			try {
-				/*
-				 * ServiceContext serviceContext =
-				 * ServiceContextFactory.getInstance(renderRequest);
-				 */
+			long dossierFileId =
+				ParamUtil.getLong(
+					renderRequest, DossierFileDisplayTerms.DOSSIER_FILE_ID);
 
-				ProcessOrder processOrder =
-					ProcessOrderLocalServiceUtil.getProcessOrder(processOrderId);
-				ProcessStep processStep =
-					ProcessStepLocalServiceUtil.getProcessStep(processOrder.getProcessStepId());
-				Dossier dossier =
-					DossierLocalServiceUtil.getDossier(processOrder.getDossierId());
+			long dossierPartId =
+				ParamUtil.getLong(
+					renderRequest, DossierFileDisplayTerms.DOSSIER_PART_ID);
 
-				/*
-				 * AccountBean accountBean = AccountUtil.getAccountBean(
-				 * dossier.getUserId(), serviceContext.getScopeGroupId(),
-				 * serviceContext);
-				 */
-				ServiceProcess serviceProcess =
-					ServiceProcessLocalServiceUtil.getServiceProcess(processOrder.getServiceProcessId());
-				ServiceInfo serviceInfo =
-					ServiceInfoLocalServiceUtil.getServiceInfo(processOrder.getServiceInfoId());
-				ServiceConfig serviceConfig =
-					ServiceConfigLocalServiceUtil.getServiceConfig(dossier.getServiceConfigId());
+			if (processOrderId > 0) {
+				try {
 
-				DossierTemplate dossierTemplate =
-					DossierTemplateLocalServiceUtil.getDossierTemplate(dossier.getDossierTemplateId());
+					ProcessOrder processOrder =
+						ProcessOrderLocalServiceUtil.getProcessOrder(processOrderId);
 
-				ProcessWorkflow processWorkflow =
-					ProcessWorkflowLocalServiceUtil.getProcessWorkflow(processOrder.getProcessWorkflowId());
+					ProcessStep processStep =
+						ProcessStepLocalServiceUtil.getProcessStep(processOrder.getProcessStepId());
+					Dossier dossier =
+						DossierLocalServiceUtil.getDossier(processOrder.getDossierId());
 
-				renderRequest.setAttribute(
-					WebKeys.PROCESS_ORDER_ENTRY, processOrder);
-				renderRequest.setAttribute(
-					WebKeys.PROCESS_STEP_ENTRY, processStep);
-				renderRequest.setAttribute(WebKeys.DOSSIER_ENTRY, dossier);
-				renderRequest.setAttribute(
-					WebKeys.SERVICE_PROCESS_ENTRY, serviceProcess);
-				renderRequest.setAttribute(
-					WebKeys.SERVICE_INFO_ENTRY, serviceInfo);
-				renderRequest.setAttribute(
-					WebKeys.SERVICE_CONFIG_ENTRY, serviceConfig);
+					ServiceProcess serviceProcess =
+						ServiceProcessLocalServiceUtil.getServiceProcess(processOrder.getServiceProcessId());
+					ServiceInfo serviceInfo =
+						ServiceInfoLocalServiceUtil.getServiceInfo(processOrder.getServiceInfoId());
+					ServiceConfig serviceConfig =
+						ServiceConfigLocalServiceUtil.getServiceConfig(dossier.getServiceConfigId());
 
-				renderRequest.setAttribute(
-					WebKeys.DOSSIER_TEMPLATE_ENTRY, dossierTemplate);
+					DossierTemplate dossierTemplate =
+						DossierTemplateLocalServiceUtil.getDossierTemplate(dossier.getDossierTemplateId());
 
-				renderRequest.setAttribute(
-					WebKeys.PROCESS_WORKFLOW_ENTRY, processWorkflow);
-
-				/*
-				 * HttpServletRequest request =
-				 * PortalUtil.getHttpServletRequest(renderRequest);
-				 * ServletContext servletContext = request.getServletContext();
-				 * servletContext.setAttribute(WebKeys.ACCOUNT_BEAN,
-				 * accountBean);
-				 */
-
-				if (dossierFileId > 0) {
-					DossierFile dossierFile =
-						DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
+					ProcessWorkflow processWorkflow =
+						ProcessWorkflowLocalServiceUtil.getProcessWorkflow(processOrder.getProcessWorkflowId());
 
 					renderRequest.setAttribute(
-						WebKeys.DOSSIER_FILE_ENTRY, dossierFile);
+						WebKeys.PROCESS_ORDER_ENTRY, processOrder);
+					renderRequest.setAttribute(
+						WebKeys.PROCESS_STEP_ENTRY, processStep);
+					renderRequest.setAttribute(WebKeys.DOSSIER_ENTRY, dossier);
+					renderRequest.setAttribute(
+						WebKeys.SERVICE_PROCESS_ENTRY, serviceProcess);
+					renderRequest.setAttribute(
+						WebKeys.SERVICE_INFO_ENTRY, serviceInfo);
+					renderRequest.setAttribute(
+						WebKeys.SERVICE_CONFIG_ENTRY, serviceConfig);
+
+					renderRequest.setAttribute(
+						WebKeys.DOSSIER_TEMPLATE_ENTRY, dossierTemplate);
+
+					renderRequest.setAttribute(
+						WebKeys.PROCESS_WORKFLOW_ENTRY, processWorkflow);
+
+					if (dossierFileId > 0) {
+						DossierFile dossierFile =
+							DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
+
+						renderRequest.setAttribute(
+							WebKeys.DOSSIER_FILE_ENTRY, dossierFile);
+					}
+
+					if (dossierPartId > 0) {
+						DossierPart dossierPart =
+							DossierPartLocalServiceUtil.getDossierPart(dossierPartId);
+						renderRequest.setAttribute(
+							WebKeys.DOSSIER_PART_ENTRY, dossierPart);
+					}
+
 				}
 
-				if (dossierPartId > 0) {
-					DossierPart dossierPart =
-						DossierPartLocalServiceUtil.getDossierPart(dossierPartId);
-					renderRequest.setAttribute(
-						WebKeys.DOSSIER_PART_ENTRY, dossierPart);
+				catch (Exception e) {
+					_log.error(e.getCause());
 				}
 
 			}
-
-			catch (Exception e) {
-				_log.error(e.getCause());
-			}
-
 		}
+
 		super.render(renderRequest, renderResponse);
 	}
 
@@ -1454,9 +1502,11 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
 
-		/*AccountBean accountBean =
-			AccountUtil.getAccountBeanFromAttribute(actionRequest);*/
-		
+		/*
+		 * AccountBean accountBean =
+		 * AccountUtil.getAccountBeanFromAttribute(actionRequest);
+		 */
+
 		AccountBean accountBean = AccountUtil.getAccountBean(actionRequest);
 
 		DossierFile dossierFile = null;
@@ -1553,6 +1603,9 @@ public class ProcessOrderPortlet extends MVCPortlet {
 						dossierFileType, dossierFileNo, dossierFileDate,
 						original, syncStatus, serviceContext);
 			}
+
+			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+
 		}
 		catch (Exception e) {
 			if (e instanceof NoSuchDossierException) {
@@ -1931,5 +1984,111 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		if (requiredFlag) {
 			throw new RequiredDossierPartException();
 		}
+	}
+
+	/**
+	 * @param renderRequest
+	 * @param renderResponse
+	 */
+	private void validatePermission(
+		RenderRequest renderRequest, RenderResponse renderResponse) {
+
+		AccountBean accountBean = AccountUtil.getAccountBean(renderRequest);
+
+		if (accountBean == null || !accountBean.isEmployee()) {
+			setHasPermission(false);
+			return;
+		}
+		else {
+
+			Employee employee = (Employee) accountBean.getAccountInstance();
+
+			ArrayList<Role> roles = accountBean.getAccountRoles();
+
+			List<Long> roleIds = new ArrayList<Long>();
+
+			if (roleIds != null) {
+				for (Role role : roles) {
+
+					if (!roleIds.contains(role.getRoleId())) {
+						roleIds.add(role.getRoleId());
+					}
+				}
+			}
+
+			String processOrderIdParam =
+				ParamUtil.getString(
+					renderRequest, ProcessOrderDisplayTerms.PROCESS_ORDER_ID);
+
+			if (Validator.isNotNull(processOrderIdParam) &&
+				!Validator.isNumber(processOrderIdParam)) {
+				setHasPermission(false);
+				return;
+			}
+			else if (Validator.isNotNull(processOrderIdParam) &&
+				Validator.isNumber(processOrderIdParam)) {
+				long processOrderId =
+					ParamUtil.getLong(
+						renderRequest,
+						ProcessOrderDisplayTerms.PROCESS_ORDER_ID);
+
+				if (processOrderId <= 0) {
+					setHasPermission(false);
+					return;
+				}
+				else {
+					try {
+
+						boolean hasProcessRole = false;
+
+						boolean hasAssigned = false;
+
+						ProcessOrder processOrder =
+							ProcessOrderLocalServiceUtil.getProcessOrder(processOrderId);
+
+						if (processOrder.getAssignToUserId() == employee.getMappingUserId()) {
+							hasAssigned = true;
+						}
+
+						List<StepAllowance> stepAllowances =
+							StepAllowanceLocalServiceUtil.getByProcessStep(processOrder.getProcessStepId());
+
+						if (stepAllowances != null) {
+							for (StepAllowance stepAllowance : stepAllowances) {
+
+								if (roleIds.contains(stepAllowance.getRoleId())) {
+									hasProcessRole = true;
+									break;
+								}
+							}
+						}
+
+						if (!hasProcessRole && !hasAssigned) {
+							setHasPermission(false);
+							return;
+						}
+
+					}
+					catch (Exception e) {
+						_log.info("Resource does not exist width " +
+							"processOrderId=" + processOrderId + " account=" +
+							accountBean.getAccountType());
+						_hasPermission = false;
+					}
+				}
+			}
+		}
+	}
+
+	private boolean _hasPermission = true;
+
+	public boolean hasPermission() {
+
+		return _hasPermission;
+	}
+
+	public void setHasPermission(boolean hasPermission) {
+
+		this._hasPermission = hasPermission;
 	}
 }
