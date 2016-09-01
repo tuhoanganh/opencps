@@ -19,8 +19,10 @@ package org.opencps.accountmgt.portlet;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.portlet.ActionRequest;
@@ -28,6 +30,8 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+
+import net.sourceforge.jtds.jdbc.DateTime;
 
 import org.opencps.accountmgt.DuplicateBusinessEmailException;
 import org.opencps.accountmgt.DuplicateCitizenEmailException;
@@ -48,6 +52,8 @@ import org.opencps.accountmgt.OutOfLengthCitizenNameException;
 import org.opencps.accountmgt.OutOfSizeFileUploadException;
 import org.opencps.accountmgt.model.Business;
 import org.opencps.accountmgt.model.Citizen;
+import org.opencps.accountmgt.model.impl.BusinessImpl;
+import org.opencps.accountmgt.model.impl.CitizenImpl;
 import org.opencps.accountmgt.search.BusinessDisplayTerms;
 import org.opencps.accountmgt.search.CitizenDisplayTerms;
 import org.opencps.accountmgt.service.BusinessLocalServiceUtil;
@@ -127,7 +133,7 @@ public class AccountRegPortlet extends MVCPortlet {
 		    ParamUtil.getLong(
 		        uploadPortletRequest, BusinessDisplayTerms.BUSINESS_BUSINESSID);
 		String [] listBussinessDomains = ParamUtil
-						.getParameterValues(uploadPortletRequest, "listBussinessDomains");		
+						.getParameterValues(uploadPortletRequest, "listBussinessDomains");
 		long cityId =
 		    ParamUtil.getLong(
 		        uploadPortletRequest, BusinessDisplayTerms.BUSINESS_CITY_ID);
@@ -277,6 +283,31 @@ public class AccountRegPortlet extends MVCPortlet {
 			
 			registered = false;
 			
+			BusinessImpl business = new BusinessImpl();
+			
+			business.setName(name);
+			business.setIdNumber(idNumber);
+			business.setEnName(enName);
+			business.setShortName(shortName);
+			business.setEmail(email);
+			business.setTelNo(telNo);
+			business.setAddress(address);
+			business.setBusinessType(String.valueOf(type));
+			business.setRepresentativeName(representativeName);
+			business.setRepresentativeRole(representativeRole);
+			business.setCityCode(String.valueOf(cityId));
+			business.setDistrictCode(String.valueOf(districtId));
+			business.setWardCode(String.valueOf(wardId));
+			
+			actionRequest.setAttribute("businessValidate", business);
+			
+			/*String busDomains = StringUtil.merge(listBussinessDomains,StringPool.COMMA);
+			actionResponse.setRenderParameter("listBussinessDomains", busDomains);*/
+			
+			for (String bussinessDomain : listBussinessDomains) {
+				actionResponse.setRenderParameter(bussinessDomain, bussinessDomain);
+			}
+			
 			if (e instanceof DuplicateBusinessEmailException) {
 				SessionErrors.add(
 				    actionRequest, DuplicateBusinessEmailException.class);
@@ -341,14 +372,6 @@ public class AccountRegPortlet extends MVCPortlet {
 				    MessageKeys.ACCOUNT_SYSTEM_EXCEPTION_OCCURRED);
 				_log.error(e);
 			}
-			
-			String busDomains = StringUtil.merge(listBussinessDomains,StringPool.COMMA);
-			Map<String, String> businessResponseObject = new HashMap<String, String>();
-			
-			businessResponseObject.put("listBussinessDomains", busDomains);
-			businessResponseObject.put(BusinessDisplayTerms.BUSINESS_CITY_ID, String.valueOf(cityId));
-			businessResponseObject.put(BusinessDisplayTerms.BUSINESS_DISTRICT_ID, String.valueOf(districtId));
-			businessResponseObject.put(BusinessDisplayTerms.BUSINESS_WARD_ID, String.valueOf(wardId));
 			
 			
 		}finally {
@@ -440,6 +463,8 @@ public class AccountRegPortlet extends MVCPortlet {
 
 		InputStream inputStream = null;
 
+		boolean registered = false;
+		
 		try {
 
 			ValidateCitizen(
@@ -470,9 +495,7 @@ public class AccountRegPortlet extends MVCPortlet {
 				        city.getItemName(serviceContext.getLocale(), true),
 				        district.getItemName(serviceContext.getLocale(), true),
 				        ward.getItemName(serviceContext.getLocale(), true),
-				        email,
-
-				        telNo, repositoryId, sourceFileName, contentType,
+				        email,telNo, repositoryId, sourceFileName, contentType,
 				        title, inputStream, size, serviceContext);
 
 				if (citizen != null) {
@@ -498,8 +521,35 @@ public class AccountRegPortlet extends MVCPortlet {
 
 			}
 
+			registered = true;
 		}
 		catch (Exception e) {
+			
+			registered = false;
+			
+			List<String> lstBirthDate = new ArrayList<String>();
+			
+			lstBirthDate.add(String.valueOf(birthDateDay));
+			lstBirthDate.add(String.valueOf(birthDateMonth));
+			lstBirthDate.add(String.valueOf(birthDateYear));
+			
+			Date birthDate = DateTimeUtil.getDate(birthDateDay, birthDateMonth,
+					birthDateYear);
+			CitizenImpl citizen = new CitizenImpl();
+			
+			citizen.setFullName(fullName);
+			citizen.setEmail(email);
+			citizen.setPersonalId(personId);
+			citizen.setTelNo(telNo);
+			citizen.setBirthdate(birthDate);
+			citizen.setGender(gender);
+			citizen.setAddress(adress);
+			citizen.setCityCode(String.valueOf(cityId));;
+			citizen.setDistrictCode(String.valueOf(districtId));
+			citizen.setWardCode(String.valueOf(wardId));
+			
+			actionRequest.setAttribute("citizenValidate", citizen);
+			
 			if (e instanceof OutOfLengthCitizenAddressException) {
 				SessionErrors.add(
 				    actionRequest, OutOfLengthCitizenAddressException.class);
@@ -546,10 +596,15 @@ public class AccountRegPortlet extends MVCPortlet {
 				    MessageKeys.ACCOUNT_SYSTEM_EXCEPTION_OCCURRED);
 				_log.error(e);
 			}
-			if (Validator.isNotNull(currentURL)) {
-				actionResponse.sendRedirect(currentURL);
-			}
 
+		} finally {
+			if(registered){
+				actionResponse.sendRedirect(currentURL);
+			}else{
+				actionResponse.setRenderParameter("mvcPath", "/html/portlets/accountmgt/registration/registration.jsp");
+				actionResponse.setRenderParameter("type", "citizen");
+			}
+			
 		}
 	}
 
