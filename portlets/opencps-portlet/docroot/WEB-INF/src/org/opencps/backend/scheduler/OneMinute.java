@@ -44,22 +44,22 @@ public class OneMinute implements MessageListener{
 	public void receive(Message message)
 	    throws MessageListenerException {
 		
-    	_log.info(">>>>> CHECK PAYMENT <<<<<<");
+ /*   	_log.info(">>>>> CHECK PAYMENT <<<<<<");
 		
-//		List<SchedulerJobs> schedulerJobs = new ArrayList<SchedulerJobs>();
-//
-//		try {
-//			schedulerJobs = SchedulerJobsLocalServiceUtil.getSchedulerJobs(1);
-//			for (SchedulerJobs schJob : schedulerJobs) {
-//				SchedulerUtils.doScheduler(schJob);
-//			}
-//
-//		}
-//		catch (Exception e) {
-//			_log.error(e);
-//
-//		}
-	}
+		List<SchedulerJobs> schedulerJobs = new ArrayList<SchedulerJobs>();
+
+		try {
+			schedulerJobs = SchedulerJobsLocalServiceUtil.getSchedulerJobs(1);
+			for (SchedulerJobs schJob : schedulerJobs) {
+				SchedulerUtils.doScheduler(schJob);
+			}
+
+		}
+		catch (Exception e) {
+			_log.error(e);
+
+		}
+*/	}
 
 	private Log _log = LogFactoryUtil.getLog(OneMinute.class);
 
