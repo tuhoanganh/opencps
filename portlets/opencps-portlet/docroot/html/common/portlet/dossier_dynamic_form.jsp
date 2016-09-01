@@ -343,9 +343,9 @@
 		Liferay.Service(
 				  '/opencps-portlet.dictitem/get-dictitems_itemCode_datasource',
 				  {
-				    dictCollectionId: dictCollectionId,
-				    parentItemId: parentItemId,
-				    groupId: Liferay.ThemeDisplay.getScopeGroupId()
+					  collectionCode: dictCollectionId,
+					  itemCode: parentItemId,
+					  groupId: Liferay.ThemeDisplay.getScopeGroupId()
 				  },
 				  function(obj) {
 					var comboTarget = document.getElementById(controlId); 
