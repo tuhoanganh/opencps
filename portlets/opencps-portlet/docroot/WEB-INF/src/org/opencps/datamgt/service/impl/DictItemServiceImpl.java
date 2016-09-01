@@ -129,8 +129,7 @@ public class DictItemServiceImpl extends DictItemServiceBaseImpl {
 	@JSONWebService(value = "get-dictitems_itemCode_datasource")
 	@AccessControlled(guestAccessEnabled = true)
 	public JSONObject getDictItemsByItemCodeDataSource(
-		String collectionCode, String itemCode, long groupId)
-		throws SystemException, NoSuchDictItemException, NoSuchDictCollectionException {
+		String collectionCode, String itemCode, long groupId) throws SystemException, PortalException {
 
 		JSONObject jsonObject = JSONFactoryUtil
 			.createJSONObject();
