@@ -304,10 +304,6 @@ public class AccountRegPortlet extends MVCPortlet {
 			String busDomains = StringUtil.merge(listBussinessDomains,StringPool.COMMA);
 			actionResponse.setRenderParameter("busDomains", busDomains);
 			
-			/*for (String bussinessDomain : listBussinessDomains) {
-				actionResponse.setRenderParameter(bussinessDomain, bussinessDomain);
-			}*/
-			
 			if (e instanceof DuplicateBusinessEmailException) {
 				SessionErrors.add(
 				    actionRequest, DuplicateBusinessEmailException.class);
