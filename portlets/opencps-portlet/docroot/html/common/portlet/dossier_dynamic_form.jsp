@@ -211,7 +211,7 @@
 	var dossierFileId = '<%=dossierFileId%>';
 	
 	AUI().ready(function(A){
-		
+
 		if(alpacaSchema.options != 'undefined' && alpacaSchema.schema != 'undefined'){
 			
 			if(formData != ''){
@@ -345,7 +345,7 @@
 				  {
 				    dictCollectionId: dictCollectionId,
 				    parentItemId: parentItemId,
-				    groupId: Liferay.Portlet.getScopeGroupId()
+				    groupId: Liferay.ThemeDisplay.getScopeGroupId()
 				  },
 				  function(obj) {
 					var comboTarget = document.getElementById(controlId); 
