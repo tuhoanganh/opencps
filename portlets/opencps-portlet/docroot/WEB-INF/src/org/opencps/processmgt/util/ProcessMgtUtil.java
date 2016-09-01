@@ -19,6 +19,8 @@ package org.opencps.processmgt.util;
 import org.opencps.processmgt.model.ProcessWorkflow;
 import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
 
+import com.sun.corba.se.spi.activation._LocatorImplBase;
+
 public class ProcessMgtUtil {
 	public static final String TOP_TABS_DOSSIERLIST = "top_tabs_dossierlist";
 	public static final String TOP_TABS_DOSSIERFILELIST = "top_tabs_dossierfilelist";
@@ -53,5 +55,25 @@ public class ProcessMgtUtil {
         }
 		
 		return userId;
+	}
+	
+	/**
+	 * @param processWorkflowId
+	 * @return
+	 */
+	public static ProcessWorkflow getProcessWorkflow (long processWorkflowId) {
+		
+		ProcessWorkflow workflow = null;
+		try {
+			
+			if (processWorkflowId != 0) {
+				workflow = ProcessWorkflowLocalServiceUtil.getProcessWorkflow(processWorkflowId);
+			}
+        }
+        catch (Exception e) {
+	       
+        }
+		
+		return workflow;
 	}
 }
