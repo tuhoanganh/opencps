@@ -21,8 +21,6 @@
 <%@ include file="init.jsp" %>
 
 <%
-boolean privateLayout = true;
-
 	List<Layout> privLayouts = LayoutLocalServiceUtil.getLayouts(scopeGroupId, true);
 	List<Layout> pubLayouts = LayoutLocalServiceUtil.getLayouts(scopeGroupId, false);
 	
