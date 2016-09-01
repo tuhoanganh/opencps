@@ -141,7 +141,7 @@
 	String auTock = AuthTokenUtil.getToken(request);
 	  
 	String alpacaSchema = dossierPart != null && Validator.isNotNull(dossierPart.getFormScript()) ? 
-	      dossierPart.getFormScript().replaceAll("p_auth=REPLACEKEY", "p_auth="+auTock) : StringPool.BLANK;
+	      dossierPart.getFormScript().replaceAll("\\?p_auth=REPLACEKEY", "/group-id/"+ themeDisplay.getScopeGroupId()+"?p_auth="+auTock) : StringPool.BLANK;
 
 
 	DossierFile dossierFile = null;
@@ -344,7 +344,8 @@
 				  '/opencps-portlet.dictitem/get-dictitems_itemCode_datasource',
 				  {
 				    dictCollectionId: dictCollectionId,
-				    parentItemId: parentItemId
+				    parentItemId: parentItemId,
+				    groupId: Liferay.Portlet.getScopeGroupId()
 				  },
 				  function(obj) {
 					var comboTarget = document.getElementById(controlId); 
