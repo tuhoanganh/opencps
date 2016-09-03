@@ -18,7 +18,22 @@
         <column name="httpAgent" type="String"></column>
         <column name="params" type="String"></column>
         <column name="status" type="String"></column>
+        
+		<!-- Finder methods -->
+		<finder name="ApiCode" return-type="Collection">
+			<finder-column name="apiCode" />
+		</finder>
+		
+		<finder name="Oid" return-type="Collection" >
+			<finder-column name="oid" />
+		</finder>
+		
+		<finder name="A_O" return-type="Collection">
+			<finder-column name="apiCode"/>
+			<finder-column name="oid"/>
+		</finder>
 
+		<!-- Reference -->
 		<reference entity="Dossier" package-path="org.opencps.dossiermgt.dao" />
 		<reference entity="DossierPart" package-path="org.opencps.dossiermgt.dao" />
 		<reference entity="DossierFile" package-path="org.opencps.dossiermgt.dao" />
