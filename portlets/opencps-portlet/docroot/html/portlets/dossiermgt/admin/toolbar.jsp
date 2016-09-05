@@ -202,7 +202,7 @@
 											depthLevel="1" 
 											dictCollectionCode="SERVICE_DOMAIN"
 											itemNames="<%= ServiceDisplayTerms.SERVICE_DOMAINCODE %>"
-											itemsEmptyOption="false"
+											itemsEmptyOption="true"
 											emptyOptionLabels="fill-domain-code"	
 											showLabel="false"
 											selectedItems="<%=String.valueOf(domainCode)%>"
