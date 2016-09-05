@@ -205,7 +205,7 @@
 											itemsEmptyOption="false"
 											emptyOptionLabels="fill-domain-code"	
 											showLabel="false"
-											selectedItems="<%=domainCode%>"
+											selectedItems="<%=String.valueOf(domainCode)%>"
 										>
 										</datamgt:ddr>
 										
