@@ -218,7 +218,7 @@ public class AccountRegPortlet extends MVCPortlet {
 
 		try {
 			
-			ValidateBusiness(
+			validateBusiness(
 			    businessId, email, sourceFileName, enName, shortName, address,
 			    representativeName, representativeRole, cityId, districtId, wardId,
 			    size, sourceFileName);
@@ -463,7 +463,7 @@ public class AccountRegPortlet extends MVCPortlet {
 		
 		try {
 
-			ValidateCitizen(
+			validateCitizen(
 			    citizenId, fullName, personId, adress, email, telNo, size,
 			    contentType, cityId, districtId, wardId, sourceFileName);
 
@@ -604,7 +604,7 @@ public class AccountRegPortlet extends MVCPortlet {
 		}
 	}
 
-	protected static void ValidateCitizen(
+	protected static void validateCitizen(
 	    long citizenId, String fullName, String personalId, String address,
 	    String email, String telNo, long size, String mimeType, long cityId,
 	    long districId, long wardId, String sourceFileName)
@@ -661,7 +661,7 @@ public class AccountRegPortlet extends MVCPortlet {
 
 	}
 
-	protected static void ValidateBusiness(
+	protected static void validateBusiness(
 	    long businessId, String email, String name, String enName,
 	    String shortName, String address, String representativeName,
 	    String representativeRole, long cityId, long districId, long wardId,

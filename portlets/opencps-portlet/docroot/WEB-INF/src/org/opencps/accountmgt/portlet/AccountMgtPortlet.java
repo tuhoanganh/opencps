@@ -291,7 +291,7 @@ public class AccountMgtPortlet extends MVCPortlet {
 		try {
 			
 			AccountRegPortlet
-			    .ValidateCitizen(
+			    .validateCitizen(
 			        citizenId, StringPool.BLANK, StringPool.BLANK, address,
 			        StringPool.BLANK, telNo, 1, StringPool.BLANK, cityId, districtId, wardId
 			        , StringPool.BLANK);
@@ -445,7 +445,7 @@ public class AccountMgtPortlet extends MVCPortlet {
 		try {
 
 			AccountRegPortlet
-			    .ValidateBusiness(
+			    .validateBusiness(
 			        businessId, email, StringPool.BLANK, enName, shortName,
 			        address, representativeName, representativeRole, cityId, districtId, wardId,
 			        1,StringPool.BLANK);
