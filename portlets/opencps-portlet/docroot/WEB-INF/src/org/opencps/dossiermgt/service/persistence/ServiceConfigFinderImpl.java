@@ -127,7 +127,7 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 										StringPool.BLANK);
 				sql = StringUtil
 								.replace(sql,
-									"OR ((lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))",
+									"OR (lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))",
 										StringPool.BLANK);
 			}
 			// remove condition query
@@ -523,7 +523,7 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 										StringPool.BLANK);
 				sql = StringUtil
 								.replace(sql,
-									"OR ((lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))",
+									"OR (lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))",
 										StringPool.BLANK);
 			}
 			
