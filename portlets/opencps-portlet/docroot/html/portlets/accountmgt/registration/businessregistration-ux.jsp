@@ -1,4 +1,5 @@
 
+<%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -87,6 +88,8 @@
 		typeID = businessValidate.getBusinessType();
 	}
 	
+	String busDomains = ParamUtil.getString(request, "busDomains");
+	String[] listDomains = busDomains.split(StringPool.COMMA);
 %>
 
 <div class="opencps-register-wrapper">
@@ -274,10 +277,11 @@
 					<div class="fake_textarea">
 					<%
 						for(DictItem dictItemDomain : dictItemDomains) {
-							String businessDomain = ParamUtil.getString(request, dictItemDomain.getItemCode());
 							boolean checked = false;
-							if (Validator.isNotNull(businessDomain)){
-								checked = true;
+							for (String domain : listDomains){
+								if (dictItemDomain.getItemCode().equals(domain)){
+									checked = true;
+								}
 							}
 							%>
 								<aui:input 

@@ -87,15 +87,14 @@ public class BusinessFinderImpl extends BasePersistenceImpl<Business> implements
 						, StringPool.BLANK);
 			}
 			if (Validator.isNull(keywords)){
-				sql = sql.replace("AND " 
-									+ "((lower(opencps_acc_business.name) LIKE ?) "
-									+ "OR "
-										+ "(lower(opencps_acc_business.shortName) LIKE ?) "
-									+ "OR " 
-										+ "(lower(opencps_acc_business.enName) LIKE ?) "
-									+ "OR "
-										+ "(lower(opencps_acc_business.email) LIKE ?))"
-						, StringPool.BLANK);
+				sql = sql.replace("AND ((lower(opencps_acc_business.name) LIKE ?)",
+						StringPool.BLANK);
+				sql = sql.replace("OR (lower(opencps_acc_business.shortName) LIKE ?)",
+						StringPool.BLANK);
+				sql = sql.replace("OR (lower(opencps_acc_business.enName) LIKE ?)",
+						StringPool.BLANK);
+				sql = sql.replace("OR (lower(opencps_acc_business.email) LIKE ?))",
+						StringPool.BLANK);
 			}
 			if (Validator.isNull(businessDomain)){
 				sql = sql.replace("INNER JOIN "
@@ -172,15 +171,14 @@ public class BusinessFinderImpl extends BasePersistenceImpl<Business> implements
 						, StringPool.BLANK);
 			}
 			if (Validator.isNull(keywords)){
-				sql = sql.replace("AND " 
-									+ "((lower(opencps_acc_business.name) LIKE ?) "
-									+ "OR "
-										+ "(lower(opencps_acc_business.shortName) LIKE ?) "
-									+ "OR " 
-										+ "(lower(opencps_acc_business.enName) LIKE ?) "
-									+ "OR "
-										+ "(lower(opencps_acc_business.email) LIKE ?))"
-						, StringPool.BLANK);
+				sql = sql.replace("AND ((lower(opencps_acc_business.name) LIKE ?)",
+						StringPool.BLANK);
+				sql = sql.replace("OR (lower(opencps_acc_business.shortName) LIKE ?)",
+						StringPool.BLANK);
+				sql = sql.replace("OR (lower(opencps_acc_business.enName) LIKE ?)",
+						StringPool.BLANK);
+				sql = sql.replace("OR (lower(opencps_acc_business.email) LIKE ?))",
+						StringPool.BLANK);
 			}
 			if (Validator.isNull(businessDomain)){
 				sql = sql.replace("INNER JOIN "
