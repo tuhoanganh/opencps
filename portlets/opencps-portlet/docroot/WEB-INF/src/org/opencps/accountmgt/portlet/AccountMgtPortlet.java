@@ -160,7 +160,7 @@ public class AccountMgtPortlet extends MVCPortlet {
 	}
 
 	public void updateStatus(
-	    ActionRequest actionRequest, ActionResponse actionResponse) {
+	    ActionRequest actionRequest, ActionResponse actionResponse) throws IOException {
 
 		long citizenId = ParamUtil
 		    .getLong(actionRequest, CitizenDisplayTerms.CITIZEN_ID, 0L);
@@ -172,7 +172,9 @@ public class AccountMgtPortlet extends MVCPortlet {
 		    .getInteger(actionRequest, "curAccountStatus", -1);
 
 		int accountStatus = -1;
-
+		
+		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
+		
 		try {
 			ServiceContext serviceContext = ServiceContextFactory
 			    .getInstance(actionRequest);
@@ -244,6 +246,10 @@ public class AccountMgtPortlet extends MVCPortlet {
 		catch (Exception e) {
 			_log
 			    .error(e);
+		} finally {
+			if (Validator.isNotNull(redirectURL)) {
+				actionResponse.sendRedirect(redirectURL);
+			}
 		}
 
 	}
@@ -434,6 +440,8 @@ public class AccountMgtPortlet extends MVCPortlet {
 			isChangePassWord = true;
 		}
 
+		String backURL = ParamUtil.getString(actionRequest, "backURL");
+		
 		DictItem city = null;
 
 		DictItem district = null;
@@ -490,6 +498,10 @@ public class AccountMgtPortlet extends MVCPortlet {
 				        isChangePassWord, curPass, rePass, serviceContext
 				            .getScopeGroupId(),
 				        serviceContext);
+				
+				if(Validator.isNotNull(backURL)) {
+					actionResponse.sendRedirect(backURL);
+				}
 
 			}
 
