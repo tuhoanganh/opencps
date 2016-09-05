@@ -83,9 +83,6 @@
 	
 	List<Dossier> dossiers =  new ArrayList<Dossier>();
 	
-	
-	System.out.print("*********  " + keyword + " **** display" + displayRecentlyResultWhenSearch);
-	
 	int totalCount = 0;
 	
 	try{
