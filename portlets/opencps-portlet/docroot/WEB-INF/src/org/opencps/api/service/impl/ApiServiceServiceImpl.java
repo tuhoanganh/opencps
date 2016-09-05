@@ -18,8 +18,8 @@ import org.opencps.api.service.base.ApiServiceServiceBaseImpl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -57,8 +57,11 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.User;
@@ -163,9 +166,11 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 			inputObj.put("stepno", stepno);
 			inputObj.put("username", username);
 			
-			ApiServiceLocalServiceUtil.addLog(userId, APIServiceConstants.CODE_01, 
-				serviceContext.getRemoteAddr(), "", inputObj.toString(), 
-				APIServiceConstants.IN, serviceContext);
+			if(_log.isDebugEnabled()) {
+				ApiServiceLocalServiceUtil.addLog(userId, APIServiceConstants.CODE_01, 
+					serviceContext.getRemoteAddr(), "", inputObj.toString(), 
+					APIServiceConstants.IN, serviceContext);
+			}
 			
 			/*int count = dossierLocalService.countDossierByP_PS_U(processno, stepno,
 					username);*/
@@ -194,9 +199,11 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 			resultObj.put("message", e.getClass().getName());
 		}
 		
-		ApiServiceLocalServiceUtil.addLog(userId, APIServiceConstants.CODE_01, 
-			serviceContext.getRemoteAddr(), "", resultObj.toString(), 
-			APIServiceConstants.OUT, serviceContext);
+		if(_log.isDebugEnabled()) {
+			ApiServiceLocalServiceUtil.addLog(userId, APIServiceConstants.CODE_01, 
+				serviceContext.getRemoteAddr(), "", resultObj.toString(), 
+				APIServiceConstants.OUT, serviceContext);
+		}
 
 		return resultObj;
 	}
@@ -338,17 +345,22 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 
 					
 				} else if (dossierFileContent.equals("") || dossierFileContent.equals("{}")) {
-					URL fileURL = new URL(dossierFileURL);
-					InputStream is = fileURL.openStream();
-					long size = is.available();
-					String mimeType = StringPool.BLANK;
+					byte[] bytes = getFileFromURL(dossierFileURL);
 					
-					try {
-						mimeType = URLConnection.guessContentTypeFromStream(is);
+					String extension = FileUtil.getExtension(dossierFileName);
+					
+					if(Validator.isNull(extension)) {
+						extension = StringUtil.replace(FileUtil.getExtension(dossierFileURL), 
+							StringPool.FORWARD_SLASH, StringPool.BLANK);
+						
+						if(Validator.isNotNull(extension)) {
+							dossierFileName = dossierFileName.concat(StringPool.UNDERLINE)
+									.concat(String.valueOf(System.nanoTime()))
+									.concat(StringPool.PERIOD).concat(extension);
+						}
 					}
-					catch (IOException ioe) {
-						_log.error(ioe);
-					}
+					
+					String mimeType = MimeTypesUtil.getExtensionContentType(extension);
 					
 					serviceContext.setUserId(dossier.getUserId());
 					
@@ -371,10 +383,7 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 									dossier.getUserId(),
 									dossier.getOwnerOrganizationId(),
 									dossierFileName,
-									//StringPool.BLANK,
 									mimeType,
-									dossierFile != null ? dossierFile
-											.getFileEntryId() : 0,
 									PortletConstants.DOSSIER_FILE_MARK_UNKNOW,
 									2,
 									dossierFileNo,
@@ -382,9 +391,9 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 									1,
 									PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS,
 									dossierFolder.getFolderId(),
-									dossierFileNo, "", dossierFileName,
+									dossierFileName, mimeType, dossierFileName,
 									StringPool.BLANK, StringPool.BLANK,
-									is, size, serviceContext);
+									bytes, serviceContext);
 				}
 			} else {
 				if (Validator.isNull(dossierFileURL)) {
@@ -414,16 +423,22 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 									serviceContext);
 
 				} else {
-					URL fileURL = new URL(dossierFileURL);
-					InputStream is = fileURL.openStream();
-					long size = is.available();
-					String mimeType = StringPool.BLANK;
-					try {
-						mimeType = URLConnection.guessContentTypeFromStream(is);
+					byte[] bytes = getFileFromURL(dossierFileURL);
+					
+					String extension = FileUtil.getExtension(dossierFileName);
+					
+					if(Validator.isNull(extension)) {
+						extension = StringUtil.replace(FileUtil.getExtension(dossierFileURL), 
+							StringPool.FORWARD_SLASH, StringPool.BLANK);
+						
+						if(Validator.isNotNull(extension)) {
+							dossierFileName = dossierFileName.concat(StringPool.UNDERLINE)
+									.concat(String.valueOf(System.nanoTime()))
+									.concat(StringPool.PERIOD).concat(extension);
+						}
 					}
-					catch (IOException ioe) {
-						_log.error(ioe);
-					}
+					
+					String mimeType = MimeTypesUtil.getExtensionContentType(extension);
 
 					serviceContext.setScopeGroupId(dossier.getGroupId());
 					serviceContext.setCompanyId(dossier.getCompanyId());
@@ -449,10 +464,7 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 									dossier.getUserId(),
 									dossier.getOwnerOrganizationId(),
 									dossierFileName,
-									//StringPool.BLANK,
 									mimeType,
-									dossierFile != null ? dossierFile
-											.getFileEntryId() : 0,
 									PortletConstants.DOSSIER_FILE_MARK_UNKNOW,
 									2,
 									dossierFileNo,
@@ -460,10 +472,8 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 									1,
 									PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS,
 									dossierFolder.getFolderId(),
-									dossierFileNo, "", dossierFileName,
-									StringPool.BLANK, StringPool.BLANK, is,
-									size, serviceContext);
-					
+									dossierFileName, mimeType, dossierFileName,
+									StringPool.BLANK, StringPool.BLANK, bytes, serviceContext);
 				}
 			}
 			
@@ -891,6 +901,79 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 		String fileURL = portalURL + DLUtil.getPreviewURL(fileEntry, fileEntry.getFileVersion(), null, "");
 		
 		return fileURL;
+	}
+	
+	private byte[] getFileFromURL(String fileURL) throws IOException {
+		
+		HttpURLConnection connection = null;
+		byte[] bytes = null;
+		if(Validator.isNotNull(fileURL)) {
+			
+			try {
+				URL url = new URL(fileURL);
+				
+				connection = (HttpURLConnection) url.openConnection();
+				connection.addRequestProperty("Accept-Language", "en-US,en;q=0.8");
+				connection.addRequestProperty("User-Agent", "Mozilla");
+				connection.addRequestProperty("Referer", "google.com");
+				
+				connection.setInstanceFollowRedirects(false);
+				connection.setConnectTimeout(5000);	// 5s
+				connection.setReadTimeout(5000);	// 5s
+				
+				int status = connection.getResponseCode();
+				
+				boolean redirect = false;
+
+				// normally, 3xx is redirect
+				if (status != HttpURLConnection.HTTP_OK) {
+					if (status == HttpURLConnection.HTTP_MOVED_TEMP
+						|| status == HttpURLConnection.HTTP_MOVED_PERM
+							|| status == HttpURLConnection.HTTP_SEE_OTHER)
+					redirect = true;
+				}
+				
+				if (redirect) {
+
+					// get redirect url from "location" header field
+					String newUrl = connection.getHeaderField("Location");
+
+					// get the cookie if need, for login
+					String cookies = connection.getHeaderField("Set-Cookie");
+
+					// open the new connnection again
+					connection = (HttpURLConnection) new URL(newUrl).openConnection();
+					
+					connection.setRequestProperty("Cookie", cookies);
+					connection.addRequestProperty("Accept-Language", "en-US,en;q=0.8");
+					connection.addRequestProperty("User-Agent", "Mozilla");
+					connection.addRequestProperty("Referer", "google.com");
+					
+					connection.setConnectTimeout(5000);	// 5s
+					connection.setReadTimeout(5000);	// 5s
+											
+					status = connection.getResponseCode();
+				}
+			
+				if(status == HttpURLConnection.HTTP_OK) {
+					InputStream is = connection.getInputStream();
+					//File file = FileUtil.createTempFile(is);
+					//long size = connection.getContentLengthLong();
+					//_log.info("===fileURL===" + fileURL + "===" + file.getAbsolutePath());
+					//_log.info("===fileURL===" + fileURL + "===" + size);
+					
+					bytes = FileUtil.getBytes(is);
+					
+					//FileUtil.createTempFile(bytes);
+				}
+			} catch(IOException ioe) {
+				throw new IOException(ioe.getMessage());
+			}finally{
+				connection.disconnect();
+			}
+		}
+		
+		return bytes;
 	}
 	
 	private static Log _log = LogFactoryUtil.getLog(ApiServiceServiceImpl.class.getName());	

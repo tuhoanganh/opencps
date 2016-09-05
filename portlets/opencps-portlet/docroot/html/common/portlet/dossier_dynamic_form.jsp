@@ -211,7 +211,7 @@
 	var dossierFileId = '<%=dossierFileId%>';
 	
 	AUI().ready(function(A){
-		
+
 		if(alpacaSchema.options != 'undefined' && alpacaSchema.schema != 'undefined'){
 			
 			if(formData != ''){
@@ -343,9 +343,9 @@
 		Liferay.Service(
 				  '/opencps-portlet.dictitem/get-dictitems_itemCode_datasource',
 				  {
-				    dictCollectionId: dictCollectionId,
-				    parentItemId: parentItemId,
-				    groupId: Liferay.Portlet.getScopeGroupId()
+					  collectionCode: dictCollectionId,
+					  itemCode: parentItemId,
+					  groupId: Liferay.ThemeDisplay.getScopeGroupId()
 				  },
 				  function(obj) {
 					var comboTarget = document.getElementById(controlId); 

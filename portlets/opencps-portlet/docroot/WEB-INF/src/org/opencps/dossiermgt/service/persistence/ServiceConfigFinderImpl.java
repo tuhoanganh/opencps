@@ -91,8 +91,8 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 		long groupId, String[] keywords, String govAgencyCode,
 		String domainCode, boolean andOperator) {
 
-		keywords = CustomSQLUtil
-			.keywords(keywords, false);
+		/*keywords = CustomSQLUtil
+			.keywords(keywords, false);*/
 
 		Session session = null;
 
@@ -123,15 +123,16 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 										StringPool.BLANK);
 				sql = StringUtil
 								.replace(sql,
-									"AND ((lower(opencps_dossiertemplate.templateName) LIKE ? [$AND_OR_NULL_CHECK$])",
+									"AND ((lower(opencps_dossiertemplate.templateName) LIKE ? [$AND_OR_NULL_CHECK$]))",
 										StringPool.BLANK);
 				sql = StringUtil
 								.replace(sql,
-									"OR (lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))",
+									"OR ((lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))",
 										StringPool.BLANK);
 			}
 			// remove condition query
-			if (Validator.isNull( govAgencyCode)) {
+			if (govAgencyCode
+				.equals(StringPool.BLANK)) {
 				sql = StringUtil
 					.replace(sql,
 						"AND (opencps_service_config.govAgencyCode = ?)",
@@ -238,11 +239,21 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 					.replaceKeywords(sql,
 						"lower(opencps_serviceinfo.serviceName)",
 						StringPool.LIKE, true, keywords);
+				
+				sql = CustomSQLUtil
+					.replaceKeywords(sql,
+						"lower(opencps_serviceinfo.serviceNo)",
+						StringPool.LIKE, true, keywords);
 			}
 			else {
 				sql = StringUtil
 					.replace(sql,
-						"AND ((lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))",
+						"AND (lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$])",
+						StringPool.BLANK);
+				
+				sql = StringUtil
+					.replace(sql,
+						"OR (lower(opencps_serviceinfo.serviceNo) LIKE ? [$AND_OR_NULL_CHECK$])",
 						StringPool.BLANK);
 			}
 
@@ -334,7 +345,7 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 				}
 
 			}
-
+			
 			sql = CustomSQLUtil
 				.replaceAndOperator(sql, andOperator);
 
@@ -353,9 +364,8 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 				.add(groupId);
 
 			if (keywords != null && keywords.length > 0) {
-				qPos
-					.add(keywords, 2);
-
+				qPos.add(keywords, 2);
+				qPos.add(keywords, 2);
 			}
 
 			if (servicePortal == 1) {
@@ -477,8 +487,8 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 		long groupId, String[] keywords, String govAgencyCode,
 		String domainCode, boolean andOperator, int start, int end) {
 
-		keywords = CustomSQLUtil
-			.keywords(keywords, false);
+		/*keywords = CustomSQLUtil
+			.keywords(keywords, false);*/
 
 		Session session = null;
 
@@ -509,16 +519,17 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 										StringPool.BLANK);
 				sql = StringUtil
 								.replace(sql,
-									"AND ((lower(opencps_dossiertemplate.templateName) LIKE ? [$AND_OR_NULL_CHECK$])",
+									"AND ((lower(opencps_dossiertemplate.templateName) LIKE ? [$AND_OR_NULL_CHECK$]))",
 										StringPool.BLANK);
 				sql = StringUtil
 								.replace(sql,
-									"OR (lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))",
+									"OR ((lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))",
 										StringPool.BLANK);
 			}
 			
 			// remove condition query
-			if (Validator.isNull(govAgencyCode)) {
+			if (govAgencyCode
+				.equals(StringPool.BLANK)) {
 				sql = StringUtil
 					.replace(sql,
 						"AND (opencps_service_config.govAgencyCode = ?)",
@@ -541,6 +552,7 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 				.setCacheable(false);
 			q
 				.addEntity("ServiceConfig", ServiceConfigImpl.class);
+
 			QueryPos qPos = QueryPos
 				.getInstance(q);
 
@@ -566,6 +578,7 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 				qPos
 					.add(domainCode);
 			}
+
 			return (List<ServiceConfig>) QueryUtil
 				.list(q, getDialect(), start, end);
 		}
@@ -615,11 +628,21 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 					.replaceKeywords(sql,
 						"lower(opencps_serviceinfo.serviceName)",
 						StringPool.LIKE, true, keywords);
+				
+				sql = CustomSQLUtil
+					.replaceKeywords(sql,
+						"lower(opencps_serviceinfo.serviceNo)",
+						StringPool.LIKE, true, keywords);
 			}
 			else {
 				sql = StringUtil
 					.replace(sql,
-						"AND ((lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))",
+						"AND (lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$])",
+						StringPool.BLANK);
+				
+				sql = StringUtil
+					.replace(sql,
+						"OR (lower(opencps_serviceinfo.serviceNo) LIKE ? [$AND_OR_NULL_CHECK$])",
 						StringPool.BLANK);
 			}
 
@@ -715,7 +738,7 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 
 			sql = CustomSQLUtil
 				.replaceAndOperator(sql, andOperator);
-
+			
 			SQLQuery q = session
 				.createSQLQuery(sql);
 
@@ -738,9 +761,8 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 				.add(groupId);
 
 			if (keywords != null && keywords.length > 0) {
-				qPos
-					.add(keywords, 2);
-
+				qPos.add(keywords, 2);
+				qPos.add(keywords, 2);
 			}
 
 			if (servicePortal == 1) {
@@ -941,10 +963,11 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 		String[] names = null;
 		boolean andOperator = false;
 
-		if (Validator
-			.isNotNull(keywords)) {
-			names = CustomSQLUtil
-				.keywords(keywords);
+		if (Validator.isNotNull(keywords)) {
+			names = new String[]{
+				StringUtil.quote(
+					StringUtil.toLowerCase(keywords).trim(), 
+					StringPool.PERCENT)};
 		}
 		else {
 			andOperator = true;
@@ -962,10 +985,11 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 		String[] keywords = null;
 		boolean andOperator = false;
 
-		if (Validator
-			.isNotNull(keyword)) {
-			keywords = CustomSQLUtil
-				.keywords(keyword);
+		if (Validator.isNotNull(keyword)) {
+			keywords = new String[]{
+				StringUtil.quote(
+					StringUtil.toLowerCase(keyword).trim(), 
+					StringPool.PERCENT)};
 		}
 		else {
 			andOperator = true;
@@ -1051,10 +1075,11 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 		String[] names = null;
 		boolean andOperator = false;
 
-		if (Validator
-			.isNotNull(keywords)) {
-			names = CustomSQLUtil
-				.keywords(keywords);
+		if (Validator.isNotNull(keywords)) {
+			names = new String[]{
+				StringUtil.quote(
+					StringUtil.toLowerCase(keywords).trim(), 
+					StringPool.PERCENT)};
 		}
 		else {
 			andOperator = true;
@@ -1088,10 +1113,11 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 		String[] keywords = null;
 		boolean andOperator = false;
 
-		if (Validator
-			.isNotNull(keyword)) {
-			keywords = CustomSQLUtil
-				.keywords(keyword);
+		if (Validator.isNotNull(keyword)) {
+			keywords = new String[]{
+				StringUtil.quote(
+					StringUtil.toLowerCase(keyword).trim(), 
+					StringPool.PERCENT)};
 		}
 		else {
 			andOperator = true;

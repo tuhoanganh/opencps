@@ -22,14 +22,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import org.opencps.dossiermgt.bean.DossierBean;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.impl.DossierImpl;
-import org.opencps.util.DateTimeUtil;
 
 import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
@@ -449,10 +447,11 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 
 		boolean andOperator = false;
 
-		if (Validator
-			.isNotNull(keyword)) {
-			keywords = CustomSQLUtil
-				.keywords(keyword);
+		if (Validator.isNotNull(keyword)) {
+			keywords = new String[]{
+				StringUtil.quote(
+					StringUtil.toLowerCase(keyword).trim(), 
+					StringPool.PERCENT)};
 		}
 		else {
 			andOperator = true;
@@ -543,7 +542,7 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 
 			sql = CustomSQLUtil
 				.replaceAndOperator(sql, andOperator);
-
+			
 			SQLQuery q = session
 				.createSQLQuery(sql);
 
@@ -558,23 +557,6 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 
 			qPos
 				.add(userId);
-
-			if (Validator
-				.isNotNull(serviceDomainTreeIndex) && StringUtil
-					.contains(serviceDomainTreeIndex, StringPool.PERIOD)) {
-				qPos
-					.add(serviceDomainTreeIndex + StringPool.PERCENT);
-
-			}
-			else if (Validator
-				.isNotNull(serviceDomainTreeIndex) && !StringUtil
-					.contains(serviceDomainTreeIndex, StringPool.PERIOD)) {
-				qPos
-					.add(serviceDomainTreeIndex + StringPool.PERIOD +
-						StringPool.PERCENT);
-				qPos
-					.add(serviceDomainTreeIndex);
-			}
 
 			if (keywords != null && keywords.length > 0) {
 				qPos
@@ -591,6 +573,23 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 				.isNotNull(dossierStatus)) {
 				qPos
 					.add(dossierStatus);
+			}
+			
+			if (Validator
+				.isNotNull(serviceDomainTreeIndex) && StringUtil
+					.contains(serviceDomainTreeIndex, StringPool.PERIOD)) {
+				qPos
+					.add(serviceDomainTreeIndex + StringPool.PERCENT);
+
+			}
+			else if (Validator
+				.isNotNull(serviceDomainTreeIndex) && !StringUtil
+					.contains(serviceDomainTreeIndex, StringPool.PERIOD)) {
+				qPos
+					.add(serviceDomainTreeIndex + StringPool.PERIOD +
+						StringPool.PERCENT);
+				qPos
+					.add(serviceDomainTreeIndex);
 			}
 
 			Iterator<Integer> itr = q
@@ -940,10 +939,11 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 
 		String[] keywords = null;
 		boolean andOperator = false;
-		if (Validator
-			.isNotNull(keyword)) {
-			keywords = CustomSQLUtil
-				.keywords(keyword);
+		if (Validator.isNotNull(keyword)) {
+			keywords = new String[]{
+					StringUtil.quote(
+						StringUtil.toLowerCase(keyword).trim(), 
+						StringPool.PERCENT)};
 		}
 		else {
 			andOperator = true;
@@ -1037,7 +1037,7 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 
 			sql = CustomSQLUtil
 				.replaceAndOperator(sql, andOperator);
-
+			
 			SQLQuery q = session
 				.createSQLQuery(sql);
 
@@ -1055,23 +1055,6 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 			qPos
 				.add(userId);
 
-			if (Validator
-				.isNotNull(serviceDomainTreeIndex) && StringUtil
-					.contains(serviceDomainTreeIndex, StringPool.PERIOD)) {
-				qPos
-					.add(serviceDomainTreeIndex + StringPool.PERCENT);
-
-			}
-			else if (Validator
-				.isNotNull(serviceDomainTreeIndex) && !StringUtil
-					.contains(serviceDomainTreeIndex, StringPool.PERIOD)) {
-				qPos
-					.add(serviceDomainTreeIndex + StringPool.PERIOD +
-						StringPool.PERCENT);
-				qPos
-					.add(serviceDomainTreeIndex);
-			}
-
 			if (keywords != null && keywords.length > 0) {
 				qPos
 					.add(keywords, 2);
@@ -1087,6 +1070,23 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 				.isNotNull(dossierStatus)) {
 				qPos
 					.add(dossierStatus);
+			}
+			
+			if (Validator
+				.isNotNull(serviceDomainTreeIndex) && StringUtil
+					.contains(serviceDomainTreeIndex, StringPool.PERIOD)) {
+				qPos
+					.add(serviceDomainTreeIndex + StringPool.PERCENT);
+
+			}
+			else if (Validator
+				.isNotNull(serviceDomainTreeIndex) && !StringUtil
+					.contains(serviceDomainTreeIndex, StringPool.PERIOD)) {
+				qPos
+					.add(serviceDomainTreeIndex + StringPool.PERIOD +
+						StringPool.PERCENT);
+				qPos
+					.add(serviceDomainTreeIndex);
 			}
 
 			Iterator<Object[]> itr = (Iterator<Object[]>) QueryUtil
@@ -1210,7 +1210,6 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 
 			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
 
-			_log.info("Count sql: " + sql);
 			SQLQuery q = session.createSQLQuery(sql);
 
 			q.addScalar(COUNT_COLUMN_NAME, Type.INTEGER);
@@ -1221,7 +1220,6 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 			if (!"-1".equals(dossiertype)) {
 				qPos.add(dossiertype);
 			}
-			_log.info("Gov agency code: " + organizationcode);
 			if (Validator.isNotNull(processStepId)
 					&& !"-1".equals(processStepId)) {
 				qPos.add(processStepId);
@@ -1342,7 +1340,6 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 
 			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
 
-			_log.info("Search dossier sql: " + sql);
 			SQLQuery q = session.createSQLQuery(sql);
 			q.addEntity("Dossier", DossierImpl.class);
 
@@ -1371,7 +1368,6 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 				qPos.add(documentyear);
 			}
 			if (keywords != null && keywords.length > 0) {
-				_log.info("Keyword: " + Arrays.toString(keywords));
 				qPos.add(keywords, 2);
 			}
 			return (List<Dossier>) QueryUtil.list(q, getDialect(), start, end);
@@ -1832,7 +1828,6 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 				
 			}
 
-			_log.info("SEARCH DOSSIER DS RD=============" + sql);
 			SQLQuery q = session.createSQLQuery(sql);
 			q.addEntity("Dossier", DossierImpl.class);
 
