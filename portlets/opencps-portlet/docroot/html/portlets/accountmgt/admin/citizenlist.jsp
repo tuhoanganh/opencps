@@ -53,7 +53,7 @@
 	
 	long citizenId = citizen != null ? citizen.getCitizenId() : 0L;
 	
-	int accountStatus = ParamUtil.getInteger(request, CitizenDisplayTerms.CITIZEN_ACCOUNTSTATUS);
+	int accountStatus = ParamUtil.getInteger(request, CitizenDisplayTerms.CITIZEN_ACCOUNTSTATUS, -1);
 	
 	int countRegistered = CitizenLocalServiceUtil.countByG_S(scopeGroupId, PortletConstants.ACCOUNT_STATUS_REGISTERED);
 	
@@ -65,7 +65,7 @@
 	
 	int totalCount = 0;
 	
-	String searchKeyword = ParamUtil.getString(request, "keywords1");
+	String searchKeyword = ParamUtil.getString(request, "keywords");
 	
 	iteratorURL.setParameter("mvcPath", templatePath + "citizenlist.jsp");
 	iteratorURL.setParameter(CitizenDisplayTerms.CITIZEN_ACCOUNTSTATUS, String.valueOf(accountStatus));

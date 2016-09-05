@@ -17,8 +17,10 @@
 
 package org.opencps.datamgt.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.opencps.datamgt.NoSuchDictCollectionException;
 import org.opencps.datamgt.NoSuchDictItemException;
@@ -32,8 +34,12 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.jsonwebservice.JSONWebService;
 import com.liferay.portal.kernel.util.GroupThreadLocal;
+import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.security.ac.AccessControlled;
 import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.ServiceContextThreadLocal;
 
 /**
  * The implementation of the dict item remote service. <p> All custom service
@@ -54,6 +60,90 @@ public class DictItemServiceImpl extends DictItemServiceBaseImpl {
 	 * {@link org.opencps.datamgt.service.DictItemServiceUtil} to access the
 	 * dict item remote service.
 	 */
+	
+	@JSONWebService(value = "add-dictitem", method = "POST")
+	public DictItem addDictItem(String dictCollectionCode, String
+			dictItemCode, String dictItemName, String parentDictItemCode) 
+		throws SystemException, PortalException {
+		
+		DictCollection dictCollection = dictCollectionPersistence.findByCollectionCode(
+				dictCollectionCode);
+		
+		DictItem dictItem = dictItemPersistence.fetchByC_C_I(
+				dictCollection.getDictCollectionId(), dictItemCode);
+		
+		if(dictItem != null) {
+			throw new SystemException("Duplicate dictItemCode");
+		}
+		
+		long parentItemId = 0;
+		
+		if(Validator.isNotNull(parentDictItemCode)) {
+			DictItem parentDictItem = dictItemPersistence.findByC_C_I(
+					dictCollection.getDictCollectionId(), parentDictItemCode);
+			
+			parentItemId = parentDictItem.getDictItemId();
+		}
+		
+		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
+		
+		Map<Locale, String> itemNameMap = new HashMap<Locale, String>();
+		Locale[] locales = LanguageUtil.getAvailableLocales();
+		
+		for(Locale locale : locales) {
+			itemNameMap.put(locale, dictItemName);
+		}
+		
+		return dictItemLocalService.addDictItem(getUserId(), dictCollection.getDictCollectionId(),
+				dictItemCode, itemNameMap, parentItemId, serviceContext);
+	}
+	
+	@JSONWebService(value = "update-dictitem", method = "POST")
+	public DictItem updateDictItem(String dictCollectionCode, String
+			dictItemCode, String dictItemName, String parentDictItemCode) 
+		throws SystemException, PortalException {
+		
+		DictCollection dictCollection = dictCollectionPersistence.findByCollectionCode(
+				dictCollectionCode);
+		
+		DictItem dictItem = dictItemPersistence.findByC_C_I(
+			dictCollection.getDictCollectionId(), dictItemCode);
+		
+		long parentItemId = 0;
+		
+		if(Validator.isNotNull(parentDictItemCode)) {
+			DictItem parentDictItem = dictItemPersistence.findByC_C_I(
+					dictCollection.getDictCollectionId(), parentDictItemCode);
+			
+			parentItemId = parentDictItem.getDictItemId();
+		}
+		
+		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
+		
+		Map<Locale, String> itemNameMap = new HashMap<Locale, String>();
+		Locale[] locales = LanguageUtil.getAvailableLocales();
+		
+		for(Locale locale : locales) {
+			itemNameMap.put(locale, dictItemName);
+		}
+		
+		return dictItemLocalService.updateDictItem(dictItem.getDictItemId(),
+				dictCollection.getDictCollectionId(), 0, dictItemCode, itemNameMap,
+				parentItemId, serviceContext);
+	}
+	
+	@JSONWebService(value = "delete-dictitem", method = "POST")
+	public void deleteDictItem(String dictCollectionCode, String dictItemCode) 
+		throws SystemException, PortalException {
+		
+		DictCollection dictCollection = dictCollectionPersistence.findByCollectionCode(
+				dictCollectionCode);
+		
+		DictItem dictItem = dictItemPersistence.findByC_C_I(
+			dictCollection.getDictCollectionId(), dictItemCode);
+		
+		dictItemLocalService.deleteDictItemById(dictItem.getDictItemId());
+	}
 
 	@JSONWebService(value = "get-dictitem-by-pk")
 	@AccessControlled(guestAccessEnabled = true)
@@ -129,7 +219,7 @@ public class DictItemServiceImpl extends DictItemServiceBaseImpl {
 	@JSONWebService(value = "get-dictitems_itemCode_datasource")
 	@AccessControlled(guestAccessEnabled = true)
 	public JSONObject getDictItemsByItemCodeDataSource(
-		String collectionCode, String itemCode, long groupId) throws SystemException, PortalException {
+			String collectionCode, String itemCode, long groupId) throws SystemException, PortalException {
 
 		JSONObject jsonObject = JSONFactoryUtil
 			.createJSONObject();

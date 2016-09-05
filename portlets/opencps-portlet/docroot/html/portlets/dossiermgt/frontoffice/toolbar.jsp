@@ -1,3 +1,4 @@
+<%@page import="org.opencps.util.PortletPropsValues"%>
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
 <%
 /**
@@ -123,7 +124,7 @@
 							<aui:col width="30" cssClass="search-col">
 								<datamgt:ddr 
 									depthLevel="1" 
-									dictCollectionCode="<%=ServiceUtil.SERVICE_ADMINISTRATION %>" 
+									dictCollectionCode="<%= PortletPropsValues.DATAMGT_MASTERDATA_GOVERNMENT_AGENCY %>" 
 									name="govAgency"
 									inlineField="<%=true%>"
 									inlineLabel="left"
