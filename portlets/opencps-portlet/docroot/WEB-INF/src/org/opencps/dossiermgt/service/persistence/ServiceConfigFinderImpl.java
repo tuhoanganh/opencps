@@ -101,7 +101,6 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 			// get sql command from sql xml
 			String sql = CustomSQLUtil
 				.get(COUNT_SERVICE_CONFIG_SQL);
-
 			if (keywords != null && keywords.length > 0) {
 				sql = CustomSQLUtil
 					.replaceKeywords(sql,
@@ -123,16 +122,15 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 										StringPool.BLANK);
 				sql = StringUtil
 								.replace(sql,
-									"AND ((lower(opencps_dossiertemplate.templateName) LIKE ? [$AND_OR_NULL_CHECK$]))",
+									"AND ((lower(opencps_dossiertemplate.templateName) LIKE ? [$AND_OR_NULL_CHECK$])",
 										StringPool.BLANK);
 				sql = StringUtil
 								.replace(sql,
-									"OR ((lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))",
+									"OR (lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))",
 										StringPool.BLANK);
 			}
 			// remove condition query
-			if (govAgencyCode
-				.equals(StringPool.BLANK)) {
+			if (Validator.isNull(govAgencyCode)) {
 				sql = StringUtil
 					.replace(sql,
 						"AND (opencps_service_config.govAgencyCode = ?)",
@@ -497,7 +495,6 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 			// get sql command from sql xml
 			String sql = CustomSQLUtil
 				.get(SEARCH_SERVICE_CONFIG_SQL);
-			
 			if (keywords != null && keywords.length > 0) {
 				sql = CustomSQLUtil
 					.replaceKeywords(sql,
@@ -519,17 +516,16 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 										StringPool.BLANK);
 				sql = StringUtil
 								.replace(sql,
-									"AND ((lower(opencps_dossiertemplate.templateName) LIKE ? [$AND_OR_NULL_CHECK$]))",
+									"AND ((lower(opencps_dossiertemplate.templateName) LIKE ? [$AND_OR_NULL_CHECK$])",
 										StringPool.BLANK);
 				sql = StringUtil
 								.replace(sql,
-									"OR ((lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))",
+									"OR (lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))",
 										StringPool.BLANK);
 			}
 			
 			// remove condition query
-			if (govAgencyCode
-				.equals(StringPool.BLANK)) {
+			if (Validator.isNull(govAgencyCode)) {
 				sql = StringUtil
 					.replace(sql,
 						"AND (opencps_service_config.govAgencyCode = ?)",
