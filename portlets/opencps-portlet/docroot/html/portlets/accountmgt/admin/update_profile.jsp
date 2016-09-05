@@ -154,10 +154,12 @@
 
 <portlet:actionURL var="updateCitizenProfileURL" name="updateCitizenProfile" >
 	<portlet:param name="returnURL" value="<%=currentURL %>"/>
+	<portlet:param name="backURL" value="<%=backURL %>"/>
 </portlet:actionURL>
 
 <portlet:actionURL var="updateBusinessProfileURL" name="updateBusinessProfile" >
 	<portlet:param name="returnURL" value="<%=currentURL %>"/>
+	<portlet:param name="backURL" value="<%=backURL %>"/>
 </portlet:actionURL>
 
 <liferay-util:buffer var="htmlTop">

@@ -1,3 +1,5 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -53,6 +55,17 @@
 	Date defaultBirthDate = DateTimeUtil.convertStringToDate("01/01/1970");
  		
  	PortletUtil.SplitDate spd = new PortletUtil.SplitDate(defaultBirthDate);
+ 	
+ 	Citizen citizenValidate = (Citizen) request.getAttribute("citizenValidate");
+ 	List<String> cdw = new ArrayList<String>();
+ 	if(Validator.isNotNull(citizenValidate)) {
+ 		String cityId = citizenValidate.getCityCode();
+ 		String districtId = citizenValidate.getDistrictCode();
+ 		String wardId = citizenValidate.getWardCode();
+ 		cdw.add(cityId);
+ 		cdw.add(districtId);
+ 		cdw.add(wardId);
+ 	}
 %>
 
 
@@ -128,6 +141,8 @@
 		enctype="multipart/form-data"
 		onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "registerAccount();" %>'
 	>
+	
+		<aui:model-context bean='<%=citizenValidate %>' model='<%=Citizen.class %>'/>
 	
 		<aui:input name="citizenRegStep_cfg" value="<%=citizenRegStep_cfg %>" type="hidden"></aui:input>
 			
@@ -283,6 +298,7 @@
 						displayStyle="vertical"
 						emptyOptionLabels="cityId,districtId,wardId"
 						showLabel="false"
+						selectedItems="<%= StringUtil.merge(cdw, StringPool.COMMA) %>"
 					/>	
 				</aui:row>
 				<div class="term-user">
