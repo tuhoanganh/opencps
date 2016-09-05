@@ -17,9 +17,8 @@
 			
 			WHERE
 				(opencps_service_config.groupId = ?)
-			AND (
-				(lower(opencps_dossiertemplate.templateName) LIKE ? [$AND_OR_NULL_CHECK$])
-			OR  (lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))	
+			AND ((lower(opencps_dossiertemplate.templateName) LIKE ? [$AND_OR_NULL_CHECK$])
+			OR (lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))	
 			AND (opencps_service_config.govAgencyCode = ?)
 			AND (opencps_service_config.domainCode = ?)
 		]]>
@@ -57,9 +56,8 @@
 				opencps_service_config.dossierTemplateId = opencps_dossiertemplate.dossierTemplateId
 			WHERE
 				(opencps_service_config.groupId = ?)
-			AND (
-				(lower(opencps_dossiertemplate.templateName) LIKE ? [$AND_OR_NULL_CHECK$])
-			OR  (lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))
+			AND ((lower(opencps_dossiertemplate.templateName) LIKE ? [$AND_OR_NULL_CHECK$])
+			OR (lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))
 			AND (opencps_service_config.govAgencyCode = ?)
 			AND (opencps_service_config.domainCode = ?)
 		]]>
