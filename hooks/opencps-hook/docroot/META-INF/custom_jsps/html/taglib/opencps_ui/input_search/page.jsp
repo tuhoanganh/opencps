@@ -42,7 +42,6 @@ String[] listUrl = null;
 if(keySelect.contains(",")){
 	listKey = keySelect.split(",");
 	listUrl = urlSelect.split(",");
-	System.out.println(listKey+"/"+listUrl);
 }
 %>
 <div class="<%= cssClass %>">

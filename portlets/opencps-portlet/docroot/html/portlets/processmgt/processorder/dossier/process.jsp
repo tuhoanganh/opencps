@@ -67,7 +67,6 @@
 	
 	/* if(accountRoles != null && processStep != null){
 		for(int r = 0; r < accountRoles.size(); r++){
-			System.out.println(((Role)accountRoles.get(r)).getName());
 			try{
 				StepAllowance stepAllowance = 
 								StepAllowanceLocalServiceUtil.getStepAllowance(processStep.getProcessStepId(), ((Role)accountRoles.get(r)).getRoleId());

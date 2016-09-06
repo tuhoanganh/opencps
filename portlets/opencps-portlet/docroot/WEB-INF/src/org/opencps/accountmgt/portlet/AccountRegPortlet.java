@@ -448,7 +448,6 @@ public class AccountRegPortlet extends MVCPortlet {
 		contentType =
 		    Validator.isNotNull(contentType)
 		        ? MimeTypesUtil.getContentType(contentType) : StringPool.BLANK;
-		System.out.println("city code" + cityId);
 		String title = "Personal File";
 
 		DictItem city = null;
