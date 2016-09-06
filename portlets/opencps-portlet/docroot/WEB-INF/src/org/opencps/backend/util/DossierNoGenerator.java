@@ -36,7 +36,7 @@ public class DossierNoGenerator {
 	
 	public static void main(String[] args) {
 
-	    String numberString = _getSpecicalChar("{yyyy}/{%ABCCSSS%}-{nnnnnnnnnnnnnnnn}");
+	    String numberString = genaratorNoReception("{yyyy}{dd}{mm}{%-ABC1111/%}{nnnnnnnnnnnnnnnn}", 43213);
 	    
 	    System.out.println(numberString);
     }
@@ -76,7 +76,7 @@ public class DossierNoGenerator {
 		
 		String noReception = StringPool.BLANK;
 		
-		pattern = StringUtil.lowerCase(pattern);
+		//pattern = StringUtil.lowerCase(pattern);
 		pattern = StringUtil.trim(pattern, ' ');
 		
 		StringBuffer sbNoReception = new StringBuffer(pattern);
@@ -103,7 +103,13 @@ public class DossierNoGenerator {
 			
 			sbNoReception.replace(pattern.indexOf('n') - 1 , pattern.lastIndexOf('n') + 2, serialNumber);
 			
-			sbNoReception.replace(pattern.indexOf('%') - 2, pattern.lastIndexOf('%') + 2, specialChar);
+			try {
+				sbNoReception.replace(pattern.indexOf('%') - 1, pattern.lastIndexOf('%') + 3, specialChar);
+
+			} catch (Exception e) {
+				
+			}
+			
 
 			pattern = sbNoReception.toString();
 			
@@ -209,7 +215,15 @@ public class DossierNoGenerator {
 	
 	
 	private static String _getSpecicalChar(String pattern) {
-		return pattern.substring(pattern.indexOf('%')+1, pattern.lastIndexOf('%'));
+		String special = StringPool.BLANK;
+		try {
+			special = pattern.substring(pattern.indexOf('%')+1, pattern.lastIndexOf('%'));
+        }
+        catch (Exception e) {
+	        // TODO: handle exception
+        }
+		
+		return special;
 	}
 	
 	/**
