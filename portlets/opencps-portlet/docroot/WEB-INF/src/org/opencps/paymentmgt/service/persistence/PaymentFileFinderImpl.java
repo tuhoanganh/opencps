@@ -254,8 +254,8 @@ implements PaymentFileFinder {
 
 		if (Validator
 		    .isNotNull(keyword)) {
-			keywords = CustomSQLUtil
-			    .keywords(keyword);
+			keywords = new String[]{"%"+keyword+"%"};/*CustomSQLUtil
+			    .keywords(keyword);*/
 		}
 		else {
 			andOperator = true;
@@ -286,6 +286,11 @@ implements PaymentFileFinder {
 				    .replaceKeywords(
 				        sql, "lower(opencps_payment_file.accountUserName)",
 				        StringPool.LIKE, true, keywords);
+				
+				sql = CustomSQLUtil
+					    .replaceKeywords(
+					        sql, "lower(opencps_dossier.receptionNo)",
+					        StringPool.LIKE, true, keywords);
 			}
 
 			
@@ -301,7 +306,13 @@ implements PaymentFileFinder {
 				    .replace(
 				        sql,
 				        "OR (lower(opencps_payment_file.accountUserName) LIKE ? [$AND_OR_NULL_CHECK$])",
-				        StringPool.BLANK);				
+				        StringPool.BLANK);	
+				
+				sql = StringUtil
+					    .replace(
+					        sql,
+					        "OR (lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$])",
+					        StringPool.BLANK);
 			}
 
 			if (paymentStatus < 0) {
@@ -341,9 +352,11 @@ implements PaymentFileFinder {
 			
 			if (keywords != null && keywords.length > 0) {
 				qPos
-				    .add(keywords, 2);
+					.add(keywords, 2);
 				qPos
-				    .add(keywords, 2);
+					.add(keywords, 2);
+				qPos
+					.add(keywords, 2);
 			}
 
 			if (paymentStatus >= 0) {
@@ -387,8 +400,8 @@ implements PaymentFileFinder {
 		boolean andOperator = false;
 		if (Validator
 		    .isNotNull(keyword)) {
-			keywords = CustomSQLUtil
-			    .keywords(keyword);
+			keywords = new String[]{"%"+keyword+"%"};/*CustomSQLUtil
+			    .keywords(keyword);*/
 		}
 		else {
 			andOperator = true;
@@ -415,10 +428,15 @@ implements PaymentFileFinder {
 							        sql, "lower(opencps_payment_file.paymentName)",
 							        StringPool.LIKE, true, keywords);
 
-							sql = CustomSQLUtil
-							    .replaceKeywords(
-							        sql, "lower(opencps_payment_file.accountUserName)",
-							        StringPool.LIKE, true, keywords);
+				sql = CustomSQLUtil
+				    .replaceKeywords(
+				        sql, "lower(opencps_payment_file.accountUserName)",
+				        StringPool.LIKE, true, keywords);
+				
+				sql = CustomSQLUtil
+					    .replaceKeywords(
+					        sql, "lower(opencps_dossier.receptionNo)",
+					        StringPool.LIKE, true, keywords);
 			}
 
 			if (keywords == null || keywords.length == 0) {
@@ -428,11 +446,17 @@ implements PaymentFileFinder {
 							        "AND (lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$])",
 							        StringPool.BLANK);
 
-							sql = StringUtil
-							    .replace(
-							        sql,
-							        "OR (lower(opencps_payment_file.accountUserName) LIKE ? [$AND_OR_NULL_CHECK$])",
-							        StringPool.BLANK);				
+				sql = StringUtil
+				    .replace(
+				        sql,
+				        "OR (lower(opencps_payment_file.accountUserName) LIKE ? [$AND_OR_NULL_CHECK$])",
+				        StringPool.BLANK);
+				
+				sql = StringUtil
+					    .replace(
+					        sql,
+					        "OR (lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$])",
+					        StringPool.BLANK);		
 			}
 
 			if (paymentStatus < 0) {
@@ -475,6 +499,8 @@ implements PaymentFileFinder {
 				    .add(keywords, 2);
 				qPos
 				    .add(keywords, 2);
+				qPos
+			    	.add(keywords, 2);
 			}
 
 			if (paymentStatus >= 0) {
@@ -504,8 +530,8 @@ implements PaymentFileFinder {
 
 		if (Validator
 		    .isNotNull(keyword)) {
-			keywords = CustomSQLUtil
-			    .keywords(keyword);
+			keywords = new String[]{keyword};/*CustomSQLUtil
+			    .keywords(keyword);*/
 		}
 		else {
 			andOperator = true;
@@ -536,6 +562,11 @@ implements PaymentFileFinder {
 				    .replaceKeywords(
 				        sql, "lower(opencps_payment_file.accountUserName)",
 				        StringPool.LIKE, true, keywords);
+				
+				sql = CustomSQLUtil
+					    .replaceKeywords(
+					        sql, "lower(opencps_dossier.receptionNo)",
+					        StringPool.LIKE, true, keywords);
 			}
 
 			
@@ -551,7 +582,13 @@ implements PaymentFileFinder {
 				    .replace(
 				        sql,
 				        "OR (lower(opencps_payment_file.accountUserName) LIKE ? [$AND_OR_NULL_CHECK$])",
-				        StringPool.BLANK);				
+				        StringPool.BLANK);
+				
+				sql = StringUtil
+					    .replace(
+					        sql,
+					        "OR (lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$])",
+					        StringPool.BLANK);
 			}
 
 			if (Validator.isNull(paymentStatus) || paymentStatus.length <= 0) {
@@ -599,6 +636,8 @@ implements PaymentFileFinder {
 				    .add(keywords, 2);
 				qPos
 				    .add(keywords, 2);
+				qPos
+			    	.add(keywords, 2);
 			}
 
 			Iterator<Integer> itr = q
@@ -637,8 +676,8 @@ implements PaymentFileFinder {
 		boolean andOperator = false;
 		if (Validator
 		    .isNotNull(keyword)) {
-			keywords = CustomSQLUtil
-			    .keywords(keyword);
+			keywords = new String[]{keyword};/*CustomSQLUtil
+			    .keywords(keyword);*/
 		}
 		else {
 			andOperator = true;
@@ -665,10 +704,15 @@ implements PaymentFileFinder {
 							        sql, "lower(opencps_payment_file.paymentName)",
 							        StringPool.LIKE, true, keywords);
 
-							sql = CustomSQLUtil
-							    .replaceKeywords(
-							        sql, "lower(opencps_payment_file.accountUserName)",
-							        StringPool.LIKE, true, keywords);
+				sql = CustomSQLUtil
+				    .replaceKeywords(
+				        sql, "lower(opencps_payment_file.accountUserName)",
+				        StringPool.LIKE, true, keywords);
+				
+				sql = CustomSQLUtil
+					    .replaceKeywords(
+					        sql, "lower(opencps_dossier.receptionNo)",
+					        StringPool.LIKE, true, keywords);
 			}
 
 			if (keywords == null || keywords.length == 0) {
@@ -678,11 +722,17 @@ implements PaymentFileFinder {
 							        "AND (lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$])",
 							        StringPool.BLANK);
 
-							sql = StringUtil
-							    .replace(
-							        sql,
-							        "OR (lower(opencps_payment_file.accountUserName) LIKE ? [$AND_OR_NULL_CHECK$])",
-							        StringPool.BLANK);				
+				sql = StringUtil
+				    .replace(
+				        sql,
+				        "OR (lower(opencps_payment_file.accountUserName) LIKE ? [$AND_OR_NULL_CHECK$])",
+				        StringPool.BLANK);
+				
+				sql = StringUtil
+					    .replace(
+					        sql,
+					        "OR (lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$])",
+					        StringPool.BLANK);
 			}
 
 			if (Validator.isNull(paymentStatus) || paymentStatus.length <= 0) {
@@ -727,9 +777,11 @@ implements PaymentFileFinder {
 			
 			if (keywords != null && keywords.length > 0) {
 				qPos
-				    .add(keywords, 2);
+					.add(keywords, 2);
 				qPos
-				    .add(keywords, 2);
+					.add(keywords, 2);
+				qPos
+					.add(keywords, 2);
 			}
 
 			return (List<PaymentFile>) QueryUtil
