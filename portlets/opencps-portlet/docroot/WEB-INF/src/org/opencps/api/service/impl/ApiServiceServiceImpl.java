@@ -105,9 +105,11 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 			JSONObject inputObj = JSONFactoryUtil.createJSONObject();
 			inputObj.put("username", username);
 			
-			ApiServiceLocalServiceUtil.addLog(userId, APIServiceConstants.CODE_02, 
-				serviceContext.getRemoteAddr(), "", inputObj.toString(), 
-				APIServiceConstants.IN, serviceContext);
+			if(_log.isDebugEnabled()) {
+				ApiServiceLocalServiceUtil.addLog(userId, APIServiceConstants.CODE_02, 
+					serviceContext.getRemoteAddr(), "", inputObj.toString(), 
+					APIServiceConstants.IN, serviceContext);
+			}
 			
 			int serviceInfoId = 0;
 			int processStepId = 0;
@@ -141,9 +143,11 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 			resultObj.put("message", e.getClass().getName());
 		}	
 		
-		ApiServiceLocalServiceUtil.addLog(userId, APIServiceConstants.CODE_02, 
-			serviceContext.getRemoteAddr(), "", resultObj.toString(), 
-			APIServiceConstants.OUT, serviceContext);
+		if(_log.isDebugEnabled()) {
+			ApiServiceLocalServiceUtil.addLog(userId, APIServiceConstants.CODE_02, 
+				serviceContext.getRemoteAddr(), "", resultObj.toString(), 
+				APIServiceConstants.OUT, serviceContext);
+		}
 			
 		return resultObj;
 	}
