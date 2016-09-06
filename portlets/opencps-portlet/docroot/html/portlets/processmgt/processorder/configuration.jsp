@@ -25,21 +25,21 @@
 <aui:form action="<%= configurationActionURL %>" method="post" name="configurationForm">
 
 	<aui:select name="oderByToDo">
-		<aui:option value="<%= true %>" selected='<%= String.valueOf(oderByToDo).equalsIgnoreCase("true") %>'>
+		<aui:option value="<%= true %>" selected='<%= oderByToDo %>'>
 			<liferay-ui:message key="order-by-new-dossier"/>
 		</aui:option>
 		
-		<aui:option value="<%= false %>" selected='<%= String.valueOf(oderByToDo).equalsIgnoreCase("false") %>'>
+		<aui:option value="<%= false %>" selected='<%= !oderByToDo %>'>
 			<liferay-ui:message key="order-by-old-dossier"/>
 		</aui:option>
 	</aui:select>
 	
 	<aui:select name="oderByJustFinish">
-		<aui:option value="<%= true %>" selected='<%= String.valueOf(oderByJustFinish).equalsIgnoreCase("true") %>'>
+		<aui:option value="<%= true %>" selected='<%= oderByJustFinish %>'>
 			<liferay-ui:message key="order-by-new-dossier"/>
 		</aui:option>
 		
-		<aui:option value="<%= false %>" selected='<%= String.valueOf(oderByJustFinish).equalsIgnoreCase("false") %>'>
+		<aui:option value="<%= false %>" selected='<%= !oderByJustFinish%>'>
 			<liferay-ui:message key="order-by-old-dossier" />
 		</aui:option>
 	</aui:select>
