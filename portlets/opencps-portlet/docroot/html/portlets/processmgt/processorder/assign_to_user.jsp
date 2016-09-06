@@ -72,9 +72,7 @@
 	String actionNote = ParamUtil.getString(request, ProcessOrderDisplayTerms.ACTION_NOTE);
 	String event = ParamUtil.getString(request, ProcessOrderDisplayTerms.EVENT);
 	String receptionNo = ParamUtil.getString(request, ProcessOrderDisplayTerms.RECEPTION_NO);
-	
-	System.out.println(Validator.isNotNull(workflow) ? workflow.getProcessWorkflowId() : "NULLLLLLLLLLLL");
-	
+		
 	if (Validator.isNull(receptionNo) && Validator.isNotNull(workflow) && workflow.getGenerateReceptionNo()) {
 		receptionNo = DossierNoGenerator.genaratorNoReception(workflow.getReceptionNoPattern(), dossierId);
 	}

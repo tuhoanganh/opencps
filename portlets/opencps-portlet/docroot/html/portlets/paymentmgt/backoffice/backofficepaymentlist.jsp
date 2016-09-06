@@ -100,7 +100,6 @@
 					_log.error(e);
 				}
 			}
-			System.out.println(paymentStatus);
 			total = totalCount;
 			results = dossierFiles;
 			
