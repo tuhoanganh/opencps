@@ -51,10 +51,6 @@
 </liferay-portlet:renderURL>
 
 
-<%
-	System.out.println("plidServiceDetail   " + plidServiceDetail);
-	System.out.println("renderToSubmitOnline   " + renderToSubmitOnline);
-%>
 <div class="ocps-service-detal-bound-all">
 	<div class="ocps-custom-header">
 		<label class="opcps-label">
