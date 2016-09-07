@@ -76,7 +76,7 @@ public class DossierNoGenerator {
 		
 		String noReception = StringPool.BLANK;
 		
-		//pattern = StringUtil.lowerCase(pattern);
+		pattern = StringUtil.lowerCase(pattern);
 		pattern = StringUtil.trim(pattern, ' ');
 		
 		StringBuffer sbNoReception = new StringBuffer(pattern);
