@@ -26,21 +26,21 @@
 
 	<aui:select name="oderByToDo">
 		<aui:option value="<%= true %>" selected='<%= oderByToDo %>'>
-			<liferay-ui:message key="order-by-new-dossier"/>
+			<liferay-ui:message key="order-by-old-dossier"/>
 		</aui:option>
 		
 		<aui:option value="<%= false %>" selected='<%= !oderByToDo %>'>
-			<liferay-ui:message key="order-by-old-dossier"/>
+			<liferay-ui:message key="order-by-new-dossier"/>
 		</aui:option>
 	</aui:select>
 	
 	<aui:select name="oderByJustFinish">
 		<aui:option value="<%= true %>" selected='<%= oderByJustFinish %>'>
-			<liferay-ui:message key="order-by-new-dossier"/>
+			<liferay-ui:message key="order-by-old-dossier"/>
 		</aui:option>
 		
 		<aui:option value="<%= false %>" selected='<%= !oderByJustFinish%>'>
-			<liferay-ui:message key="order-by-old-dossier" />
+			<liferay-ui:message key="order-by-new-dossier" />
 		</aui:option>
 	</aui:select>
 
