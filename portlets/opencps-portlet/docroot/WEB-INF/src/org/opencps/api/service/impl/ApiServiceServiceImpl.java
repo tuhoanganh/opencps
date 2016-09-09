@@ -65,6 +65,7 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.User;
+import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextThreadLocal;
@@ -89,6 +90,21 @@ import com.liferay.portlet.documentlibrary.util.DLUtil;
  */
 public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 	
+	@JSONWebService(value = "sms", method = "GET")
+	public void receiveSMS(String phone, String message) 
+		throws SystemException, PortalException {
+		
+		ServiceContext serviceContext = getServiceContext();
+		
+		JSONObject inputObj = JSONFactoryUtil.createJSONObject();
+		inputObj.put("phone", phone);
+		inputObj.put("message", message);
+		
+		ApiServiceLocalServiceUtil.addLog(getUserId(), APIServiceConstants.CODE_06, 
+			serviceContext.getRemoteAddr(), phone, inputObj.toString(), 
+			APIServiceConstants.IN, serviceContext);
+	}
+	
 	@JSONWebService(value = "dossiers", method = "GET")
 	public JSONObject searchDossierByUserAssignProcessOrder(String username)
 			throws SystemException {
@@ -105,9 +121,11 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 			JSONObject inputObj = JSONFactoryUtil.createJSONObject();
 			inputObj.put("username", username);
 			
-			ApiServiceLocalServiceUtil.addLog(userId, APIServiceConstants.CODE_02, 
-				serviceContext.getRemoteAddr(), "", inputObj.toString(), 
-				APIServiceConstants.IN, serviceContext);
+			if(_log.isDebugEnabled()) {
+				ApiServiceLocalServiceUtil.addLog(userId, APIServiceConstants.CODE_02, 
+					serviceContext.getRemoteAddr(), "", inputObj.toString(), 
+					APIServiceConstants.IN, serviceContext);
+			}
 			
 			int serviceInfoId = 0;
 			int processStepId = 0;
@@ -141,9 +159,11 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 			resultObj.put("message", e.getClass().getName());
 		}	
 		
-		ApiServiceLocalServiceUtil.addLog(userId, APIServiceConstants.CODE_02, 
-			serviceContext.getRemoteAddr(), "", resultObj.toString(), 
-			APIServiceConstants.OUT, serviceContext);
+		if(_log.isDebugEnabled()) {
+			ApiServiceLocalServiceUtil.addLog(userId, APIServiceConstants.CODE_02, 
+				serviceContext.getRemoteAddr(), "", resultObj.toString(), 
+				APIServiceConstants.OUT, serviceContext);
+		}
 			
 		return resultObj;
 	}

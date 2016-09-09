@@ -281,3 +281,5 @@ portlets/portal-vbpq-portlet/
 portlets/opencps-portlet/ivy.xml.MD5
 portlets/opencps-portlet/docroot/WEB-INF/lib/jasperreports-fonts-6.2.2.jar
 
+portlets/StudentLiferayMVC-portlet/
+portlets/vidu-portlet/

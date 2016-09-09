@@ -25,6 +25,7 @@ import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.processmgt.NoSuchProcessOrderException;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.service.base.ProcessOrderLocalServiceBaseImpl;
+import org.opencps.processmgt.util.comparator.ProcessOrderModifiedDateComparator;
 import org.opencps.util.PortletConstants;
 
 import com.liferay.portal.kernel.exception.PortalException;
@@ -530,12 +531,14 @@ public class ProcessOrderLocalServiceImpl
 	 */
 	public List searchProcessOrder(
 		long serviceInfoId, long processStepId, long loginUserId,
-		long actionUserId, int start, int end,
-		OrderByComparator orderByComparator) {
-
+		long actionUserId, int start, int end, boolean orderByAsc) {
+		
+		ProcessOrderModifiedDateComparator comparatorByM_D = 
+				new ProcessOrderModifiedDateComparator(orderByAsc);
+		
 		return processOrderFinder
 			.searchProcessOrder(serviceInfoId, processStepId, loginUserId,
-				actionUserId, start, end, orderByComparator);
+				actionUserId, start, end, comparatorByM_D);
 	}
 
 	/**
@@ -549,11 +552,14 @@ public class ProcessOrderLocalServiceImpl
 	 */
 	public List searchProcessOrderJustFinished(
 		long serviceInfoId, long processStepId, long actionUserId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, boolean orderByAsc) {
+		
+		ProcessOrderModifiedDateComparator comparatorByM_D = 
+						new ProcessOrderModifiedDateComparator(orderByAsc);
 
 		return processOrderFinder
 			.searchProcessOrderJustFinished(serviceInfoId, processStepId,
-				actionUserId, start, end, orderByComparator);
+				actionUserId, start, end, comparatorByM_D);
 	}
 
 	/**
