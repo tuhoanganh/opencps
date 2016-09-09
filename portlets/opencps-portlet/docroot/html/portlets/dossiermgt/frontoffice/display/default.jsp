@@ -50,8 +50,6 @@
 <%@ include file="../../init.jsp"%>
 
 
-<liferay-util:include page='<%=templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
-
 <liferay-ui:success  key="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>" message="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>"/>
 
 <liferay-ui:error 

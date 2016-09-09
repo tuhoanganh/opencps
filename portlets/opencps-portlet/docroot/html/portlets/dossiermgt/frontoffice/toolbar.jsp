@@ -42,6 +42,8 @@
 
 	String tabs1 = ParamUtil.getString(request, "tabs1", DossierMgtUtil.TOP_TABS_DOSSIER);
 	
+	String templatesToDisplay_cfg = GetterUtil.getString(portletPreferences.getValue("templatesToDisplay", "default"));
+	
 	PortletURL searchURL = renderResponse.createRenderURL();
 	
 	boolean isListServiceConfig = ParamUtil.getBoolean(request, "isListServiceConfig", false);
@@ -149,46 +151,63 @@
 					</c:when>
 					<c:otherwise>
 						<c:if test="<%=tabs1.equals(DossierMgtUtil.TOP_TABS_DOSSIER) %>">
-							<aui:row>
-								<aui:col width="30" cssClass="search-col">
-									<datamgt:ddr 
-										depthLevel="1" 
-										dictCollectionCode="<%=ServiceUtil.SERVICE_DOMAIN %>" 
-										name="serviceDomain"
-										inlineField="<%=true%>"
-										inlineLabel="left"
-										showLabel="<%=false%>"
-										emptyOptionLabels="filter-by-service-domain"
-										itemsEmptyOption="true"
-										itemNames="serviceDomainId"
-										selectedItems="<%=String.valueOf(serviceDomainId)%>"
-										cssClass="search-input select-box input100"
-									/>
-								</aui:col>
-								<aui:col width="30" cssClass="search-col">
-									
-									<datamgt:ddr 
-										depthLevel="1" 
-										dictCollectionCode="DOSSIER_STATUS" 
-										showLabel="<%=false%>"
-										emptyOptionLabels="dossier-status"
-										itemsEmptyOption="true"
-										itemNames="<%=DossierDisplayTerms.DOSSIER_STATUS %>"
-										optionValueType="code"
-										cssClass="search-input select-box input100"
-									/>
-									
-								</aui:col>
-								<aui:col width="30" cssClass="search-col">
-									<liferay-ui:input-search 
-										id="keywords1"
-										name="keywords"
-										title='<%= LanguageUtil.get(locale, "keywords") %>'
-										placeholder='<%=LanguageUtil.get(locale, "keywords") %>'
-										cssClass="search-input input-keyword"
-									/>
-								</aui:col>
-							</aui:row>
+							<c:choose>
+								<c:when test="<%=templatesToDisplay_cfg.equals(\"20_80\") %>">
+									<aui:row>
+										<aui:col cssClass="search-col">
+											<liferay-ui:input-search 
+												id="keywords1"
+												name="keywords"
+												title='<%= LanguageUtil.get(locale, "keywords") %>'
+												placeholder='<%=LanguageUtil.get(locale, "keywords") %>'
+												cssClass="search-input input-keyword"
+											/>
+										</aui:col>
+									</aui:row>
+								</c:when>
+								<c:otherwise>
+									<aui:row>
+										<aui:col width="30" cssClass="search-col">
+											<datamgt:ddr 
+												depthLevel="1" 
+												dictCollectionCode="<%=ServiceUtil.SERVICE_DOMAIN %>" 
+												name="serviceDomain"
+												inlineField="<%=true%>"
+												inlineLabel="left"
+												showLabel="<%=false%>"
+												emptyOptionLabels="filter-by-service-domain"
+												itemsEmptyOption="true"
+												itemNames="serviceDomainId"
+												selectedItems="<%=String.valueOf(serviceDomainId)%>"
+												cssClass="search-input select-box input100"
+											/>
+										</aui:col>
+										<aui:col width="30" cssClass="search-col">
+											
+											<datamgt:ddr 
+												depthLevel="1" 
+												dictCollectionCode="DOSSIER_STATUS" 
+												showLabel="<%=false%>"
+												emptyOptionLabels="dossier-status"
+												itemsEmptyOption="true"
+												itemNames="<%=DossierDisplayTerms.DOSSIER_STATUS %>"
+												optionValueType="code"
+												cssClass="search-input select-box input100"
+											/>
+											
+										</aui:col>
+										<aui:col width="30" cssClass="search-col">
+											<liferay-ui:input-search 
+												id="keywords1"
+												name="keywords"
+												title='<%= LanguageUtil.get(locale, "keywords") %>'
+												placeholder='<%=LanguageUtil.get(locale, "keywords") %>'
+												cssClass="search-input input-keyword"
+											/>
+										</aui:col>
+									</aui:row>
+								</c:otherwise>
+							</c:choose>
 						</c:if>
 					</c:otherwise>
 				</c:choose>
@@ -203,18 +222,30 @@
 		
 		var A = AUI();
 		
-		var isListServiceConfig = '<%=isListServiceConfig%>'
+		var isListServiceConfig = '<%=isListServiceConfig%>';
 		
-		var serviceDomainId = A.one('#<portlet:namespace/>serviceDomainId').val();
+		var serviceDomainId = '<%=serviceDomainId%>';
+		
+		if( A.one('#<portlet:namespace/>serviceDomainId') != "undefined" &&
+				A.one('#<portlet:namespace/>serviceDomainId') != null){
+		
+			serviceDomainId = A.one('#<portlet:namespace/>serviceDomainId').val();
+		
+		}
 		
 		var govAgencyId;
 		
-		var dossierStatus;
+		var dossierStatus = '<%=dossierStatus%>';
 		
 		if(isListServiceConfig == 'true'){
+			
 			govAgencyId = A.one('#<portlet:namespace/>govAgencyId').val();
-		}else{
+			
+		}else if( A.one('#<portlet:namespace/>dossierStatus') != "undefined" &&
+				A.one('#<portlet:namespace/>dossierStatus') != null){
+		
 			dossierStatus = A.one('#<portlet:namespace/>dossierStatus').val();
+
 		} 
 
 		var fmSearch = A.one('#<portlet:namespace/>fmSearch');
