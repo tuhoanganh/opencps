@@ -41,6 +41,8 @@
 	boolean isEditDossier = ParamUtil.getBoolean(request, "isEditDossier");
 	
 	String groupName = ParamUtil.getString(request, DossierFileDisplayTerms.GROUP_NAME);
+	
+	String cssRequiredPage = StringPool.BLANK;
 %>
 
 <div class="opencps dossiermgt dossier-part-tree">
@@ -73,6 +75,8 @@
 						}catch(Exception e){}
 					}
 					
+					cssRequiredPage = dossierPart.getRequired() ? "cssRequired" : StringPool.BLANK;
+					
 					%>
 						<div class='<%="opencps dossiermgt dossier-part-row r-" + index%>'>
 							<span class='<%="level-" + level + " opencps dossiermgt dossier-part"%>'>
@@ -93,7 +97,7 @@
 									</c:choose>
 								</span>
 								
-								<span class="opencps dossiermgt dossier-part-name">
+								<span class="opencps dossiermgt dossier-part-name <%=cssRequiredPage %>">
 									<c:choose>
 										<c:when test="<%=level > 1 %>">
 											<%=dossierPart.getPartName() %>

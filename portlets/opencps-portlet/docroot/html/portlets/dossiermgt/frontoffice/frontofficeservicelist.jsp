@@ -20,7 +20,6 @@
 <%@page import="com.liferay.portal.kernel.dao.search.SearchEntry"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
-<%@page import="com.liferay.util.dao.orm.CustomSQLUtil"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="javax.portlet.PortletURL"%>

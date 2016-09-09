@@ -68,6 +68,7 @@
 		
 	}
 	
+	String cssRequired = StringPool.BLANK;
 	
 	ServiceInfo serviceInfo = null;
 	ServiceConfig serviceConfig = null;
@@ -152,7 +153,7 @@
 										
 									}
 								}
-								
+								cssRequired = dossierPart.getRequired() ? "cssRequired" : StringPool.BLANK;
 								%>
 									<div class='<%="opencps dossiermgt dossier-part-row r-" + index%>'>
 										<span class='<%="level-" + level + " opencps dossiermgt dossier-part"%>'>
@@ -174,7 +175,7 @@
 												</c:choose>
 												
 											</span>
-											<span class="opencps dossiermgt dossier-part-name">
+											<span class="opencps dossiermgt dossier-part-name <%=cssRequired %>">
 												<%=dossierPart.getPartName() + (Validator.isNotNull(dossierFile) ?  " - " + dossierFile.getDossierFileNo():StringPool.BLANK) + DossierMgtUtil.getLoaiGiayToLabel((Validator.isNotNull(dossierFile) ? dossierFile.getDossierFileMark() : -1), locale) %>
 											</span>
 										</span>
@@ -316,14 +317,14 @@
 									fileGroups = FileGroupLocalServiceUtil.getFileGroupByD_DP(dossier.getDossierId(), dossierPartLevel1.getDossierpartId());
 								}catch(Exception e){}
 								
-								
+								cssRequired = dossierPartLevel1.getRequired() ? "cssRequired" : StringPool.BLANK;
 							%>
 							<div class='<%="opencps dossiermgt dossier-part-row r-" + index%>'>
 								<span class='<%="level-0" + " opencps dossiermgt dossier-part"%>'>
 									<span class="row-icon">
 										<i class="fa fa-dot-circle-o" aria-hidden="true"></i>
 									</span>
-									<span class="opencps dossiermgt dossier-part-name">
+									<span class="opencps dossiermgt dossier-part-name <%=cssRequired %>">
 										<%=dossierPartLevel1.getPartName() %>
 									</span>
 								</span>
