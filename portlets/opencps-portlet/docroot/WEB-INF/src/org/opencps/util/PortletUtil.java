@@ -34,10 +34,12 @@ import javax.portlet.ResourceRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.opencps.datamgt.NoSuchDictCollectionException;
 import org.opencps.datamgt.model.DictCollection;
 import org.opencps.datamgt.model.DictItem;
 import org.opencps.datamgt.service.DictCollectionLocalServiceUtil;
 import org.opencps.datamgt.service.DictItemLocalServiceUtil;
+import org.opencps.dossiermgt.search.DossierDisplayTerms;
 import org.opencps.paymentmgt.util.PaymentMgtUtil;
 
 import com.liferay.portal.kernel.exception.SystemException;
@@ -412,22 +414,16 @@ public class PortletUtil {
 		return statusLabel;
 	}
 
-	public static List<String> getDossierStatus() {
+	public static List<DictItem> getDossierStatus(long groupId) throws NoSuchDictCollectionException, SystemException {
 
-		List<String> dossierStatus = new ArrayList<String>();
-		dossierStatus.add(PortletConstants.DOSSIER_STATUS_NEW);
-		dossierStatus.add(PortletConstants.DOSSIER_STATUS_RECEIVING);
-		dossierStatus.add(PortletConstants.DOSSIER_STATUS_WAITING);
-		dossierStatus.add(PortletConstants.DOSSIER_STATUS_PAYING);
-		dossierStatus.add(PortletConstants.DOSSIER_STATUS_DENIED);
-		dossierStatus.add(PortletConstants.DOSSIER_STATUS_RECEIVED);
-		dossierStatus.add(PortletConstants.DOSSIER_STATUS_PROCESSING);
-		dossierStatus.add(PortletConstants.DOSSIER_STATUS_CANCELED);
-		dossierStatus.add(PortletConstants.DOSSIER_STATUS_DONE);
-		dossierStatus.add(PortletConstants.DOSSIER_STATUS_ARCHIVED);
-		dossierStatus.add(PortletConstants.DOSSIER_STATUS_SYSTEM);
-		dossierStatus.add(PortletConstants.DOSSIER_STATUS_ERROR);
-		return dossierStatus;
+		DictCollection dictCollection = DictCollectionLocalServiceUtil.getDictCollection(groupId, "DOSSIER_STATUS");
+		
+		
+		List<DictItem> result = DictItemLocalServiceUtil
+			.getDictItemsInUseByDictCollectionIdAndParentItemId(
+					dictCollection.getDictCollectionId(), 0);
+		
+		return result;
 	}
 
 	public static String getDestinationFolder(String[] folderNames) {

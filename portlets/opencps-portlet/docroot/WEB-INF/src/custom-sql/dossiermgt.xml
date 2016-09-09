@@ -102,6 +102,8 @@
 				(lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$])
 			AND 
 				(opencps_dossier.dossierStatus = ?)
+			AND 
+				(opencps_dossier.serviceDomainIndex LIKE ? OR opencps_dossier.serviceDomainIndex = ?)
 		]]>
 	</sql>
 	
@@ -948,7 +950,7 @@
 	<sql id="org.opencps.dossiermgt.service.persistence.DossierFinder.countDossierByUserNewRequest">	
 		<![CDATA[
 			SELECT
-				COUNT(DISTINCT opencps_dossier.dossierId) AS COUNT_VALUE
+				COUNT(opencps_dossier.dossierId) AS COUNT_VALUE
 			FROM
 				opencps_dossier
 			INNER JOIN
@@ -973,7 +975,6 @@
 	<sql id="org.opencps.dossiermgt.service.persistence.DossierFinder.searchDossierByUserNewRequest">	
 		<![CDATA[
 			SELECT
-				DISTINCT
 				opencps_dossier.*,
 				opencps_serviceinfo.serviceName AS SERVICE_NAME
 			FROM
@@ -994,6 +995,7 @@
 				(opencps_dossier.groupId = ?)
 			AND
 				(opencps_dossier.userId = ?)
+				
 			ORDER BY opencps_processorder.actionDatetime DESC
 		]]>
 	</sql>
