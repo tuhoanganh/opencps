@@ -531,14 +531,11 @@ public class ProcessOrderLocalServiceImpl
 	 */
 	public List searchProcessOrder(
 		long serviceInfoId, long processStepId, long loginUserId,
-		long actionUserId, int start, int end, boolean orderByAsc) {
-		
-		ProcessOrderModifiedDateComparator comparatorByM_D = 
-				new ProcessOrderModifiedDateComparator(orderByAsc);
+		long actionUserId, int start, int end, OrderByComparator orderByComparator) {
 		
 		return processOrderFinder
 			.searchProcessOrder(serviceInfoId, processStepId, loginUserId,
-				actionUserId, start, end, comparatorByM_D);
+				actionUserId, start, end, orderByComparator);
 	}
 
 	/**
