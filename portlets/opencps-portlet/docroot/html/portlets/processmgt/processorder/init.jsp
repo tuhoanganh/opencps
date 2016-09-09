@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,11 +16,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
+<%@ include file="../init.jsp"%>
 
 <%
-	totalCount = ProcessOrderLocalServiceUtil.countProcessOrderJustFinished(serviceInfoId, processStepId, themeDisplay.getUserId());
-	processOrders = ProcessOrderLocalServiceUtil.searchProcessOrderJustFinished(serviceInfoId, processStepId, themeDisplay.getUserId(), 
-		searchContainer.getStart(), searchContainer.getEnd(), 
-		oderByJustFinish);
+	PortletPreferences preferences1 = renderRequest.getPreferences();
+	
+	portletResource = ParamUtil.getString(request, "portletResource");
+	
+	if (Validator.isNotNull(portletResource)) {
+		preferences1 = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
+	}
+	
+	boolean oderByToDo = GetterUtil.getBoolean(preferences1.getValue("oderByToDo", "false"), false);
+	boolean oderByJustFinish = GetterUtil.getBoolean(preferences1.getValue("oderByJustFinish", "false"), false);
+	
 %>
