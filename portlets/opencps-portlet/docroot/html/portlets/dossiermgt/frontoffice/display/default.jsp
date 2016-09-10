@@ -109,6 +109,20 @@
 				
 					<liferay-ui:search-container-results>
 						<%
+							DossierSearchTerms searchTerms = (DossierSearchTerms)searchContainer.getSearchTerms();
+						
+							DictItem domainItem = null;
+							
+							try{
+								if(serviceDomainId > 0){
+									domainItem = DictItemLocalServiceUtil.getDictItem(serviceDomainId);
+								}
+								if(domainItem != null){
+									searchTerms.setServiceDomainIndex(domainItem.getTreeIndex());
+								}
+							}catch(Exception e){
+								_log.error(e);
+							}
 						
 							total = totalCount;
 							results = dossiers;

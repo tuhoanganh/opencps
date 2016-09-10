@@ -104,7 +104,7 @@
 		<div id="serviceDomainIdTree" class="openCPSTree"></div>
 		
 		<%=ProcessOrderUtils.generateTreeView("serviceDomainId", "SERVICE_DOMAIN", "0", 
-				LanguageUtil.get(locale, "filter-by-service-domain") , 0,"serviceDomainIdTree", "radio", String.valueOf(serviceDomainId),
+				LanguageUtil.get(locale, "filter-by-service-domain-left") , 1,"serviceDomainIdTree", "radio", String.valueOf(serviceDomainId),
 				false,renderRequest, iteratorURL)%>
 		
 	</div>

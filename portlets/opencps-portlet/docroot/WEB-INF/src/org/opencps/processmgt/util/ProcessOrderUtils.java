@@ -527,7 +527,7 @@ public class ProcessOrderUtils {
 			.append(" }).render();treeView.after('lastSelectedChange', function(event) { ");
 
 //			sbHtml.append("var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DATA_MANAGEMENT_ADMIN_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');portletURL.setParameter('mvcPath', '/html/portlets/data_management/admin/select_dictitems.jsp');portletURL.setWindowState('<%=LiferayWindowState.EXCLUSIVE.toString()%>'); portletURL.setPortletMode('normal');");
-			sbHtml.append("var portletURL = \""+redirectURL.toString().replaceAll(paramURL, "")+"&"+themeDisplay.getPortletDisplay().getNamespace() +name+"=" + "\" ; var newCode = event.newVal.get('id') ; window.location = portletURL.toString()+newCode;");
+			sbHtml.append("var portletURL = \""+redirectURL.toString().replaceAll(paramURL, "")+"&"+themeDisplay.getPortletDisplay().getNamespace() +name+"=" + "\" ; var newCode = event.newVal.get('id'); var parr =''; if (!newCode.startsWith('yui_patched')){parr = newCode} ; window.location = portletURL.toString()+parr ");
 			
 //			sbHtml.append(" window.location = portletURL.toString();");
 			
