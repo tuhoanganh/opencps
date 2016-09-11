@@ -113,7 +113,7 @@ public class DictItemServiceImpl extends DictItemServiceBaseImpl {
 		throws SystemException, PortalException {
 		
 		return dictItemService.updateDictItem(dictCollectionCode, dictItemCode, 
-			dictItemName, StringPool.BLANK, parentDictItemCode);
+			dictItemName, null, parentDictItemCode);
 	}
 	
 	@JSONWebService(value = "update-dictitem", method = "POST")
@@ -139,12 +139,19 @@ public class DictItemServiceImpl extends DictItemServiceBaseImpl {
 		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
 		
 		Map<Locale, String> itemNameMap = new HashMap<Locale, String>();
-		Map<Locale, String> itemDescriptionMap = new HashMap<Locale, String>();
+		Map<Locale, String> itemDescriptionMap = null;
 		Locale[] locales = LanguageUtil.getAvailableLocales();
+
+		if(dictItemDescription != null) {
+			itemDescriptionMap = new HashMap<Locale, String>();
+		}
 		
 		for(Locale locale : locales) {
 			itemNameMap.put(locale, dictItemName);
-			itemDescriptionMap.put(locale, dictItemDescription);
+			
+			if(dictItemDescription != null) {
+				itemDescriptionMap.put(locale, dictItemDescription);
+			}
 		}
 		
 		return dictItemLocalService.updateDictItem(dictItem.getDictItemId(),
