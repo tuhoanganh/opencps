@@ -237,12 +237,8 @@ public class DictItemLocalServiceImpl extends DictItemLocalServiceBaseImpl {
 			.setItemCode(itemCode);
 		dictItem
 			.setItemNameMap(itemNameMap);
-		
-		if(itemDescriptionMap != null) {
-			dictItem
-				.setItemDescriptionMap(itemDescriptionMap);
-		}
-		
+		dictItem
+			.setItemDescriptionMap(itemDescriptionMap);
 		dictItem
 			.setModifiedDate(now);
 		dictItem
@@ -619,12 +615,8 @@ public class DictItemLocalServiceImpl extends DictItemLocalServiceBaseImpl {
 			.setItemCode(itemCode);
 		dictItem
 			.setItemNameMap(itemNameMap);
-		
-		if(itemDescriptionMap != null) {
-			dictItem
-				.setItemDescriptionMap(itemDescriptionMap);
-		}
-		
+		dictItem
+			.setItemDescriptionMap(itemDescriptionMap);
 		dictItem
 			.setModifiedDate(now);
 		dictItem
