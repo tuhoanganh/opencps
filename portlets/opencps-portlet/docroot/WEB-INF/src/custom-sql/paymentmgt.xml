@@ -48,6 +48,8 @@
 				count(*) AS COUNT_VALUE
 	    	FROM
 	    		opencps_payment_file
+	    	LEFT JOIN
+	    		opencps_dossier ON opencps_payment_file.dossierId = opencps_dossier.dossierId
 	    	WHERE
 	    		(1 = 1)
 	    	AND
@@ -58,6 +60,8 @@
 	    		(lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$])
 	    	OR
 	    		(lower(opencps_payment_file.accountUserName) LIKE ? [$AND_OR_NULL_CHECK$])
+	    	OR
+	    		(lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$])
 	    	AND
 				(opencps_payment_file.paymentStatus = ?)
 		]]>
@@ -69,6 +73,8 @@
 	    		*
 	    	FROM
 	    		opencps_payment_file
+	    	LEFT JOIN
+	    		opencps_dossier ON opencps_payment_file.dossierId = opencps_dossier.dossierId
 	    	WHERE
 	    		(1 = 1)
 	    	AND
@@ -79,6 +85,8 @@
 	    		(lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$])
 	    	OR
 	    		(lower(opencps_payment_file.accountUserName) LIKE ? [$AND_OR_NULL_CHECK$])
+	    	OR
+	    		(lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$])
 	    	AND
 				(opencps_payment_file.paymentStatus = ?)
 			ORDER BY opencps_payment_file.modifiedDate DESC
@@ -91,6 +99,8 @@
 				count(*) AS COUNT_VALUE
 	    	FROM
 	    		opencps_payment_file
+	    	LEFT JOIN
+	    		opencps_dossier ON opencps_payment_file.dossierId = opencps_dossier.dossierId
 	    	WHERE
 	    		(1 = 1)
 	    	AND
@@ -101,6 +111,8 @@
 	    		(lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$])
 	    	OR
 	    		(lower(opencps_payment_file.accountUserName) LIKE ? [$AND_OR_NULL_CHECK$])
+	    	OR
+	    		(lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$])
 	    	AND
 				(opencps_payment_file.paymentStatus IN (?) )
 		]]>
@@ -112,6 +124,8 @@
 	    		*
 	    	FROM
 	    		opencps_payment_file
+	    	LEFT JOIN
+	    		opencps_dossier ON opencps_payment_file.dossierId = opencps_dossier.dossierId
 	    	WHERE
 	    		(1 = 1)
 	    	AND
@@ -122,6 +136,8 @@
 	    		(lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$])
 	    	OR
 	    		(lower(opencps_payment_file.accountUserName) LIKE ? [$AND_OR_NULL_CHECK$])
+	    	OR
+	    		(lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$])
 	    	AND
 				(opencps_payment_file.paymentStatus IN (?) )
 			ORDER BY opencps_payment_file.modifiedDate DESC

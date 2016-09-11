@@ -85,16 +85,16 @@
 			<aui:input name="redirectURL" type="hidden" value="<%=backURL %>"/>
 			<aui:input name="returnURL" type="hidden" value="<%=currentURL %>"/>
 			<aui:fieldset>
+				
+				<aui:input name="<%=DictItemDisplayTerms.ITEM_CODE%>" type="text" cssClass="input20">
+					<aui:validator name="required"/>
+					<aui:validator name="maxLength">100</aui:validator> 
+				</aui:input>
 			
 				<aui:input name="<%=DictItemDisplayTerms.ITEM_NAME %>" cssClass="input80" label="item-name">
 					<aui:validator name="required"/>
 					<aui:validator name="minLength">3</aui:validator>
 					<aui:validator name="maxLength">255</aui:validator>
-				</aui:input>
-				
-				<aui:input name="<%=DictItemDisplayTerms.ITEM_CODE%>" type="text" cssClass="input20">
-					<aui:validator name="required"/>
-					<aui:validator name="maxLength">100</aui:validator> 
 				</aui:input>
 				
 				<aui:select name="<%=DictItemDisplayTerms.DICTCOLLECTION_ID %>" label="dict-collection">

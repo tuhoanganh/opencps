@@ -79,7 +79,6 @@
 				    //Hits hits = indexer.search(searchContext);
 				    BooleanQuery query = DossierSearchUtil.buildSearchQuery(searchTerms.getKeywords(), searchContext);
 				    Hits hits = SearchEngineUtil.search(searchContext, query);
-					System.out.println("----HITS----" + hits.getLength());
 					totalCount = hits.getLength();
 					searchContext.setStart(searchContainer.getStart());
 					searchContext.setEnd(searchContainer.getEnd());

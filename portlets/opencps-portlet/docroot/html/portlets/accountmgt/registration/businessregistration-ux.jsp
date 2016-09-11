@@ -1,5 +1,5 @@
-<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
-<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
+
+<%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -43,6 +43,10 @@
 <%@page import="org.opencps.accountmgt.InvalidWardCodeException"%>
 <%@page import="org.opencps.accountmgt.InvalidDistricCodeException"%>
 <%@page import="org.opencps.accountmgt.InvalidCityCodeException"%>
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.Map"%>
 <%@ include file="../init.jsp" %>
 
 <%
@@ -68,6 +72,24 @@
 	} catch (Exception e) {
 		
 	}
+	
+	Business businessValidate = (Business) request.getAttribute("businessValidate");
+	List<String> cdw = new ArrayList<String>();
+	String typeID = StringPool.BLANK;
+	if (Validator.isNotNull(businessValidate)){
+		String cityId = businessValidate.getCityCode();
+		String districtId = businessValidate.getDistrictCode();
+		String wardId = businessValidate.getWardCode();
+		
+		cdw.add(cityId);
+		cdw.add(districtId);
+		cdw.add(wardId);
+		
+		typeID = businessValidate.getBusinessType();
+	}
+	
+	String busDomains = ParamUtil.getString(request, "busDomains");
+	String[] listDomains = busDomains.split(StringPool.COMMA);
 %>
 
 <div class="opencps-register-wrapper">
@@ -157,6 +179,7 @@
 		enctype="multipart/form-data"
 		onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "registerAccount();" %>'
 	>
+		<aui:model-context bean="<%=businessValidate%>" model="<%=Business.class%>" />
 		
 		<aui:input name="businessRegStep_cfg" value="<%=businessRegStep_cfg %>" type="hidden"></aui:input>
 		
@@ -254,6 +277,12 @@
 					<div class="fake_textarea">
 					<%
 						for(DictItem dictItemDomain : dictItemDomains) {
+							boolean checked = false;
+							for (String domain : listDomains){
+								if (dictItemDomain.getItemCode().equals(domain)){
+									checked = true;
+								}
+							}
 							%>
 								<aui:input 
 									name="businessDomains"
@@ -262,6 +291,7 @@
 									type="checkbox" 
 								    label="<%=dictItemDomain.getItemName(locale, true)%>"
 								    cssClass="getval"
+								    checked="<%= checked %>"
 								/>
 							<%
 						}
@@ -292,6 +322,7 @@
 						displayStyle="vertical"
 						emptyOptionLabels="cityId,districtId,wardId"
 						showLabel="false"
+						selectedItems="<%= StringUtil.merge(cdw, StringPool.COMMA) %>"
 					/>	
 				</aui:row>
 				
@@ -304,6 +335,7 @@
 						itemsEmptyOption="true"	
 						emptyOptionLabels="business-type"
 						showLabel="false"
+						selectedItems="<%= typeID %>"
 					/>
 				</aui:row>
 				

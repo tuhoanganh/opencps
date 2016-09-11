@@ -22,6 +22,7 @@ import org.opencps.accountmgt.model.Citizen;
 import org.opencps.accountmgt.service.BusinessLocalServiceUtil;
 import org.opencps.accountmgt.service.CitizenLocalServiceUtil;
 
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
@@ -102,10 +103,10 @@ public class DLFolderUtil {
 
 		try {
 			dlFolder =
-				DLFolderLocalServiceUtil.getFolder(
+				DLFolderLocalServiceUtil.fetchFolder(
 					groupId, parentFolderId, name);
 		}
-		catch (Exception e) {
+		catch (SystemException e) {
 			_log.error(e);
 		}
 
@@ -180,10 +181,10 @@ public class DLFolderUtil {
 
 		try {
 			dlFolder =
-				DLFolderLocalServiceUtil.getFolder(
+				DLFolderLocalServiceUtil.fetchFolder(
 					groupId, parentFolderId, name);
 		}
-		catch (Exception e) {
+		catch (SystemException e) {
 			_log.error(e);
 		}
 
