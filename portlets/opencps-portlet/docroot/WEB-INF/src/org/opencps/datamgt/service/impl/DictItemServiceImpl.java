@@ -95,19 +95,30 @@ public class DictItemServiceImpl extends DictItemServiceBaseImpl {
 		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
 		
 		Map<Locale, String> itemNameMap = new HashMap<Locale, String>();
+		Map<Locale, String> itemDescriptionMap = new HashMap<Locale, String>();
 		Locale[] locales = LanguageUtil.getAvailableLocales();
 		
 		for(Locale locale : locales) {
 			itemNameMap.put(locale, dictItemName);
+			itemDescriptionMap.put(locale, dictItemDescription);
 		}
 		
 		return dictItemLocalService.addDictItem(getUserId(), dictCollection.getDictCollectionId(),
-				dictItemCode, itemNameMap, parentItemId, serviceContext);
+				dictItemCode, itemNameMap, itemDescriptionMap, parentItemId, serviceContext);
 	}
 	
 	@JSONWebService(value = "update-dictitem", method = "POST")
 	public DictItem updateDictItem(String dictCollectionCode, String
 			dictItemCode, String dictItemName, String parentDictItemCode) 
+		throws SystemException, PortalException {
+		
+		return dictItemService.updateDictItem(dictCollectionCode, dictItemCode, 
+			dictItemName, StringPool.BLANK, parentDictItemCode);
+	}
+	
+	@JSONWebService(value = "update-dictitem", method = "POST")
+	public DictItem updateDictItem(String dictCollectionCode, String
+			dictItemCode, String dictItemName, String dictItemDescription, String parentDictItemCode) 
 		throws SystemException, PortalException {
 		
 		DictCollection dictCollection = dictCollectionPersistence.findByCollectionCode(
@@ -128,14 +139,16 @@ public class DictItemServiceImpl extends DictItemServiceBaseImpl {
 		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
 		
 		Map<Locale, String> itemNameMap = new HashMap<Locale, String>();
+		Map<Locale, String> itemDescriptionMap = new HashMap<Locale, String>();
 		Locale[] locales = LanguageUtil.getAvailableLocales();
 		
 		for(Locale locale : locales) {
 			itemNameMap.put(locale, dictItemName);
+			itemDescriptionMap.put(locale, dictItemDescription);
 		}
 		
 		return dictItemLocalService.updateDictItem(dictItem.getDictItemId(),
-				dictCollection.getDictCollectionId(), 0, dictItemCode, itemNameMap,
+				dictCollection.getDictCollectionId(), 0, dictItemCode, itemNameMap, itemDescriptionMap,
 				parentItemId, serviceContext);
 	}
 	

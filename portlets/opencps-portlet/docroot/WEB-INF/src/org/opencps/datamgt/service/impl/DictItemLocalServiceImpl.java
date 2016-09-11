@@ -554,6 +554,47 @@ public class DictItemLocalServiceImpl extends DictItemLocalServiceBaseImpl {
 		throws NoSuchDictItemException, SystemException,
 		NoSuchDictVersionException {
 
+		return dictItemLocalService.updateDictItem(dictItemId,
+				dictCollectionId, dictVersionId, itemCode, itemNameMap, null,
+				parentItemId, serviceContext);
+	}
+	
+	/**
+	 * <p> Phuong thuc update DictItem. Neu co version thi trang thai la draf,
+	 * neu khong co version thi trang thai la inuse </p>
+	 * 
+	 * @param dictItemId
+	 *            - Data type<code>[long]</code> - Id dictItem
+	 * @param dictCollectionId
+	 *            - Data type<code>[long]</code> - Id ban ghi trong bang quan he
+	 *            DictCollection
+	 * @param dictVersionId
+	 *            - Data type<code>[long]</code> - Id ban ghi trong bang quan he
+	 *            DictVersion
+	 * @param itemCode
+	 *            - Data type<code>[String]</code> - Ma code
+	 * @param itemNameMap
+	 *            - Data type<code>[Map&lt;Locale,String&gt;]</code> -
+	 * @param itemDescriptionMap
+	 *            - Data type<code>[Map&lt;Locale,String&gt;]</code> -
+	 * @param parentItemId
+	 *            - Data type<code>[long]</code> - Id DictItem cha
+	 * @param serviceContext
+	 *            - Data type<code>[ServiceContext]</code>
+	 * @return DictItem
+	 * @throws SystemException
+	 *             Ngoai le xay ra trong qua trinh thuc thi phuong thuc
+	 * @throws NoSuchDictVersionException
+	 *             Ngoai le khong tim thay DictItem voi dictItemId tuong ung
+	 */
+	public DictItem updateDictItem(
+		long dictItemId, long dictCollectionId, long dictVersionId,
+		String itemCode, Map<Locale, String> itemNameMap, 
+		Map<Locale, String> itemDescriptionMap, long parentItemId,
+		ServiceContext serviceContext)
+		throws NoSuchDictItemException, SystemException,
+		NoSuchDictVersionException {
+
 		DictItem dictItem = dictItemPersistence
 			.findByPrimaryKey(dictItemId);
 
@@ -578,6 +619,12 @@ public class DictItemLocalServiceImpl extends DictItemLocalServiceBaseImpl {
 			.setItemCode(itemCode);
 		dictItem
 			.setItemNameMap(itemNameMap);
+		
+		if(itemDescriptionMap != null) {
+			dictItem
+				.setItemDescriptionMap(itemDescriptionMap);
+		}
+		
 		dictItem
 			.setModifiedDate(now);
 		dictItem
