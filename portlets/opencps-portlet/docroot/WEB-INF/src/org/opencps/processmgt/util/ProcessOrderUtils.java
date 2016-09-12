@@ -38,8 +38,10 @@ import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.model.ProcessStep;
 import org.opencps.processmgt.model.StepAllowance;
+import org.opencps.processmgt.search.ProcessOrderDisplayTerms;
 import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
 import org.opencps.processmgt.service.StepAllowanceLocalServiceUtil;
+import org.opencps.processmgt.util.comparator.ProcessOrderModifiedDateComparator;
 import org.opencps.util.PortletUtil;
 //import org.opencps.processmgt.util.comparator.BuocXuLyComparator;
 //import org.opencps.processmgt.util.comparator.ChuHoSoComparator;
@@ -88,7 +90,11 @@ public class ProcessOrderUtils {
 		}
 
 		OrderByComparator orderByComparator = null;
-
+		
+		if(orderByCol.equals(ProcessOrderDisplayTerms.MODIFIEDDATE)) {
+			orderByComparator = new ProcessOrderModifiedDateComparator(orderByAsc);
+		}
+		
 		// if(orderByCol.equals(ProcessOrderDisplayTerms.MA_TIEP_NHAN)) {
 		// orderByComparator = new MaTiepNhanComparator(orderByAsc);
 		// } else if(orderByCol.equals(ProcessOrderDisplayTerms.CHU_HO_SO)) {
