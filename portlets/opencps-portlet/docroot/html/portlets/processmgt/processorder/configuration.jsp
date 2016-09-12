@@ -27,7 +27,7 @@
 		<aui:col width="50">
 			<aui:select name="oderFieldToDo">
 				<aui:option value='<%=ProcessOrderDisplayTerms.MODIFIEDDATE %>' selected='<%= oderFieldToDo.equals(ProcessOrderDisplayTerms.MODIFIEDDATE) %>'>
-					<liferay-ui:message key="order-by-old-dossier"/>
+					<liferay-ui:message key="order-by-modified-date"/>
 				</aui:option>
 				
 			</aui:select>
@@ -49,7 +49,7 @@
 		<aui:col width="50" >
 			<aui:select name="oderFieldJustFinish">
 				<aui:option value='<%=ProcessOrderDisplayTerms.MODIFIEDDATE %>' selected='<%= oderFieldJustFinish.equals(ProcessOrderDisplayTerms.MODIFIEDDATE) %>'>
-					<liferay-ui:message key="order-by-old-dossier"/>
+					<liferay-ui:message key="order-by-modified-date"/>
 				</aui:option>
 				
 			</aui:select>

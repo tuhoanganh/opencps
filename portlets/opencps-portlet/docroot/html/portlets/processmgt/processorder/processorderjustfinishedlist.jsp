@@ -17,7 +17,6 @@
  */
 %>
 <%@page import="org.opencps.processmgt.util.ProcessOrderUtils"%>
-<%@page import="org.opencps.processmgt.util.comparator.ProcessOrderModifiedDateComparator"%>
 <%@page import="org.opencps.processmgt.search.ProcessOrderSearchTerms"%>
 <%@page import="org.opencps.processmgt.search.ProcessOrderSearch"%>
 <%@page import="org.opencps.processmgt.model.ProcessOrder"%>
