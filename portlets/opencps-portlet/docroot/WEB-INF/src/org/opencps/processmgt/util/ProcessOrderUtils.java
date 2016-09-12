@@ -507,8 +507,6 @@ public class ProcessOrderUtils {
 			
 			jsonArrayRoot.put(jsonObjectRoot);
 			
-			System.out.println("ProcessOrderUtils.generateTreeView()"+jsonArrayRoot);
-			
 			StringBuilder sbHtml = new StringBuilder();
 
 			sbHtml
