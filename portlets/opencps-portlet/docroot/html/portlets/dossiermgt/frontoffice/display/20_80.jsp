@@ -412,7 +412,7 @@ ul.tree-root-container > li:first-child > div.tree-node-content > span {
 							
 							<div class='<%="span7 " + cssStatusColor %>'>
 								<%-- <%=PortletUtil.getDossierStatusLabel(dossier.getDossierStatus(), locale) %> --%>
-								<%= DictItemUtil.getDictItemName(dossier.getDossierStatus(), locale) %>
+								<%= PortletUtil.getDossierStatusLabel(dossier.getDossierStatus(), locale) %>
 							</div>
 						</div>
 					</liferay-util:buffer>
