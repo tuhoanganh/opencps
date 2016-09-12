@@ -228,4 +228,6 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String JMS_MOM_HORNETQ = "hornetq";
 	public static final String JMS_CORE = "jmscore";
 	public static final String JMS_QUEUE = "JMS_QUEUE";
+	public static final String ORDER_BY_ASC = "asc";
+	public static final String ORDER_BY_DESC = "desc";
 }

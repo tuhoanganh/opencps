@@ -23,26 +23,49 @@
 <liferay-portlet:actionURL var="configurationActionURL" portletConfiguration="true"/>
 
 <aui:form action="<%= configurationActionURL %>" method="post" name="configurationForm">
-
-	<aui:select name="oderByToDo">
-		<aui:option value="<%= true %>" selected='<%= oderByToDo %>'>
-			<liferay-ui:message key="order-by-old-dossier"/>
-		</aui:option>
-		
-		<aui:option value="<%= false %>" selected='<%= !oderByToDo %>'>
-			<liferay-ui:message key="order-by-new-dossier"/>
-		</aui:option>
-	</aui:select>
+	<aui:row>
+		<aui:col width="50">
+			<aui:select name="oderFieldToDo">
+				<aui:option value='<%=ProcessOrderDisplayTerms.MODIFIEDDATE %>' selected='<%= oderFieldToDo.equals(ProcessOrderDisplayTerms.MODIFIEDDATE) %>'>
+					<liferay-ui:message key="order-by-modified-date"/>
+				</aui:option>
+				
+			</aui:select>
+		</aui:col>
+		<aui:col width="50">
+			<aui:select name="oderByToDo">
+				<aui:option value="<%= WebKeys.ORDER_BY_ASC %>" selected='<%= oderByToDo.equals(WebKeys.ORDER_BY_ASC) %>'>
+					<liferay-ui:message key="order-by-old-dossier"/>
+				</aui:option>
+				
+				<aui:option value="<%= WebKeys.ORDER_BY_DESC %>" selected='<%= oderByToDo.equals(WebKeys.ORDER_BY_DESC) %>'>
+					<liferay-ui:message key="order-by-new-dossier"/>
+				</aui:option>
+			</aui:select>
+		</aui:col>
+	</aui:row>
 	
-	<aui:select name="oderByJustFinish">
-		<aui:option value="<%= true %>" selected='<%= oderByJustFinish %>'>
-			<liferay-ui:message key="order-by-old-dossier"/>
-		</aui:option>
-		
-		<aui:option value="<%= false %>" selected='<%= !oderByJustFinish%>'>
-			<liferay-ui:message key="order-by-new-dossier" />
-		</aui:option>
-	</aui:select>
+	<aui:row>
+		<aui:col width="50" >
+			<aui:select name="oderFieldJustFinish">
+				<aui:option value='<%=ProcessOrderDisplayTerms.MODIFIEDDATE %>' selected='<%= oderFieldJustFinish.equals(ProcessOrderDisplayTerms.MODIFIEDDATE) %>'>
+					<liferay-ui:message key="order-by-modified-date"/>
+				</aui:option>
+				
+			</aui:select>
+		</aui:col>
+		<aui:col width="50">
+			<aui:select name="oderByJustFinish">
+				<aui:option value="<%= WebKeys.ORDER_BY_ASC %>" selected='<%= oderByJustFinish.equals(WebKeys.ORDER_BY_ASC ) %>'>
+					<liferay-ui:message key="order-by-old-dossier"/>
+				</aui:option>
+				
+				<aui:option value="<%= WebKeys.ORDER_BY_DESC %>" selected='<%= oderByJustFinish.equals(WebKeys.ORDER_BY_DESC)%>'>
+					<liferay-ui:message key="order-by-new-dossier" />
+				</aui:option>
+			</aui:select>
+		</aui:col>
+	</aui:row>
 
 	<aui:button type="submit" name="Save" value="save"/>
 </aui:form>
