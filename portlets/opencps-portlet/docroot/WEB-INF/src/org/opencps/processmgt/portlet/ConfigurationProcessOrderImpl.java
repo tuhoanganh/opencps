@@ -26,6 +26,9 @@ import javax.portlet.PortletPreferences;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.opencps.processmgt.search.ProcessOrderDisplayTerms;
+import org.opencps.util.WebKeys;
+
 import com.liferay.portal.kernel.portlet.ConfigurationAction;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -46,9 +49,10 @@ public class ConfigurationProcessOrderImpl implements ConfigurationAction{
 		PortletConfig arg0, ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
-		boolean oderByToDo = ParamUtil.getBoolean(actionRequest, "oderByToDo", false);
-		boolean oderByJustFinish = ParamUtil.getBoolean(actionRequest, "oderByJustFinish", false);
-		
+		String oderByToDo = ParamUtil.getString(actionRequest, "oderByToDo", ProcessOrderDisplayTerms.MODIFIEDDATE);
+		String oderByJustFinish = ParamUtil.getString(actionRequest, "oderByJustFinish", ProcessOrderDisplayTerms.MODIFIEDDATE);
+		String oderFieldToDo = ParamUtil.getString(actionRequest, "oderFieldToDo", WebKeys.ORDER_BY_ASC);
+		String oderFieldJustFinish = ParamUtil.getString(actionRequest, "oderFieldJustFinish", WebKeys.ORDER_BY_ASC);
 		String portletResource =
 					    ParamUtil.getString(actionRequest, "portletResource");
 
@@ -58,6 +62,8 @@ public class ConfigurationProcessOrderImpl implements ConfigurationAction{
 					
 		preferences.setValue("oderByToDo", String.valueOf(oderByToDo));
 		preferences.setValue("oderByJustFinish", String.valueOf(oderByJustFinish));
+		preferences.setValue("oderFieldToDo", oderFieldToDo);
+		preferences.setValue("oderFieldJustFinish", oderFieldJustFinish);
 		
 		preferences.store();
 
