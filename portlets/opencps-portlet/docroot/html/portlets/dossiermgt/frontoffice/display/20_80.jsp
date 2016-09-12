@@ -104,7 +104,7 @@
 		<div id="serviceDomainIdTree" class="openCPSTree"></div>
 		
 		<%=ProcessOrderUtils.generateTreeView("serviceDomainId", "SERVICE_DOMAIN", "0", 
-				LanguageUtil.get(locale, "filter-by-service-domain") , 0,"serviceDomainIdTree", "radio", String.valueOf(serviceDomainId),
+				LanguageUtil.get(locale, "filter-by-service-domain-left") , 1,"serviceDomainIdTree", "radio", String.valueOf(serviceDomainId),
 				false,renderRequest, iteratorURL)%>
 		
 	</div>
@@ -184,69 +184,6 @@
 		
 	},['aui-base','liferay-portlet-url','aui-io']);
 </aui:script>
-
-	<style>
-	.aui .icon-minus::before {
-    position: relative;
-    left: 0;
-    top: 0px;
-    height: 0;
-    content: '' !important;
-    width: 0;
-    border-left: 7px solid transparent;
-    border-top: 7px solid transparent;
-    border-bottom: 7px #1ba1e2 solid;
-}		
-.aui .icon-plus::before {
-	position: relative;
-	left: 0;
-	top: 0px;
-	height: 0;
-	content: '' !important;	
-	width: 0;
-	border-left: 7px solid transparent;
-	border-top: 7px solid transparent;
-	border-bottom: 7px #1ba1e2 solid;
-	-webkit-transform: rotate(-45deg);
-	transform: rotate(-45deg);
-	border-bottom-color: #999999;
-	left: -4px;
-}		
-ul.tree-root-container > li:first-child > div.tree-node-content > span {
-  font-size: 18px;
-  text-transform: uppercase;
-}
-.openCPSTree > ul {margin:0}
-.openCPSTree ul li {border-bottom: 1px solid #ccc;padding: 10px 0;position: relative;}
-.openCPSTree > ul > li {padding-bottom: 0; border-bottom: 0}
-.openCPSTree > ul > li > div {border-bottom: 1px solid #ccc;padding: 0 40px 10px 20px;display: inherit;position: relative;}
-.openCPSTree ul li > div.tree-expanded:before {
-    content: "\f054";
-    position: absolute;
-    font-family: FontAwesome;
-    right: 20px;
-}
-.openCPSTree > ul > li:before {content: ""}
-.openCPSTree > ul > li ul {margin: 0}
-.openCPSTree > ul > li ul li {padding-left: 25px;padding-right: 15px;}
-.openCPSTree li.current {
-  font-family: "Roboto-Bold";
-  background: rgb(0, 144, 255) none repeat scroll 0% 0%;
-  color: rgb(255, 255, 255);
-}
-.openCPSTree li.current > div > i.icon-ok-sign {opacity: 1; color: #444}
-.openCPSTree li .badge {font-weight: normal}
-.openCPSTree li.current .badge{
-  background-color: #444;
-}
-.openCPSTree li .badge{
-  background-color: #0090FF;
-}
-.tree-node-leaf {
-	    margin-left: 15px;
-	    display: inline-block;
-}	
-	</style>
 	
 	</aui:col>
 	<aui:col width="75" >

@@ -57,7 +57,6 @@
 
 	try{
 		success = !SessionMessages.isEmpty(renderRequest) && SessionErrors.isEmpty(renderRequest);
-		
 	}catch(Exception e){
 		
 	}
@@ -260,8 +259,11 @@
 			var data = {
 				'conserveHash': true
 			};
+			alert(1);
 			
 			Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id' + '<portlet:namespace/>', data);
+			
+			<portlet:namespace/>createReport(dossierFileId);
 		}
 	});
 	
