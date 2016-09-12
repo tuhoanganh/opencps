@@ -366,15 +366,16 @@ public class PortletUtil {
 
 		String name = StringPool.BLANK;
 		DictItem dictItem = null;
-		try {
+		
+		try  {
 			dictItem = DictItemLocalServiceUtil.getDictItemByCode(itemCode);
-	        if(Validator.isNotNull(dictItem)) {
-	        	name = dictItem.getItemName(locale);
+			if(Validator.isNotNull(dictItem)) {
+				name = dictItem.getItemName(locale);
 	        }
         }
         catch (Exception e) {
-	        _log.error(e);
-        }
+        	_log.error(e);
+		}
 		
 		return name;
 	}
