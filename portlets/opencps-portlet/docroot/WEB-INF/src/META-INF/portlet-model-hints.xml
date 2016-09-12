@@ -43,6 +43,9 @@
 		<field name="itemName" type="String" localized="true">
 			<hint name="max-length">255</hint>
 		</field>
+		<field name="itemDescription" type="String" localized="true">
+			<hint-collection name="TEXTAREA" />
+		</field>
 		<field name="parentItemId" type="long" />
 		<field name="treeIndex" type="String" />
 		<field name="issueStatus" type="int" />
