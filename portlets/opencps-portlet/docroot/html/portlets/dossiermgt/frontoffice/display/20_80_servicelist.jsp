@@ -179,7 +179,7 @@
 		<div id="serviceDomainIdTree" class="openCPSTree"></div>
 		
 		<%=ProcessOrderUtils.generateTreeView("serviceDomainId", "SERVICE_DOMAIN", "0", 
-				LanguageUtil.get(locale, "filter-by-service-domain-left") , 0,"serviceDomainIdTree", "radio", "",
+				LanguageUtil.get(locale, "filter-by-service-domain-left") , 1,"serviceDomainIdTree", "radio", "",
 				false,renderRequest, iteratorURL)%>
 		
 	</div>
@@ -189,7 +189,7 @@
 	
 		<%=ProcessOrderUtils.generateTreeView("govAgencyId", "GOVERNMENT_AGENCY", "0", 
 				LanguageUtil.get(locale, "filter-by-gov-agency-left") , 0,"govAgencyIdTree", "radio", "",
-				true,renderRequest, iteratorURL)%>
+				false,renderRequest, iteratorURL)%>
 	
 	</div>
 	

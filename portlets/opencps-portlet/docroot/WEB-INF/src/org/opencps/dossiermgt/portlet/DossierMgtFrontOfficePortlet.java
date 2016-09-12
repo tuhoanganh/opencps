@@ -3048,7 +3048,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-
+		
         long groupId = themeDisplay.getScopeGroupId();
 
         // now read your parameters, e.g. like this:
@@ -3068,8 +3068,11 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		for (DictItem item : PortletUtil.getDossierStatus(groupId)){
 			obj = JSONFactoryUtil.createJSONObject();
 			
-			counterVal = DossierLocalServiceUtil.countDossier(groupId, 
-					StringPool.BLANK, item.getItemCode(), Validator.isNotNull(domainItem)? domainItem.getTreeIndex():StringPool.BLANK);
+			counterVal = DossierLocalServiceUtil.countDossierByUser(groupId, 
+					themeDisplay.getUserId(), 
+					StringPool.BLANK, 
+					Validator.isNotNull(domainItem)? domainItem.getTreeIndex():StringPool.BLANK, 
+					item.getItemCode());
 
 			obj.put("code", item.getItemCode());
 			obj.put("counter", String.valueOf(counterVal));
