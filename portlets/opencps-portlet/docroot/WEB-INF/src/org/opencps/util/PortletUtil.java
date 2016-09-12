@@ -371,10 +371,10 @@ public class PortletUtil {
 			dictItem = DictItemLocalServiceUtil.getDictItemByCode(itemCode);
 			if(Validator.isNotNull(dictItem)) {
 				name = dictItem.getItemName(locale);
-	        }
-        }
-        catch (Exception e) {
-        	_log.error(e);
+			}
+		}
+		catch (Exception e) {
+			_log.error(e);
 		}
 		
 		return name;
