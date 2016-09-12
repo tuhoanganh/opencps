@@ -68,6 +68,7 @@
 />
 
 <%
+	String dossierStatusCHKInit = ParamUtil.getString(request, DossierDisplayTerms.DOSSIER_STATUS, "-1");
 	String dossierStatus = ParamUtil.getString(request, DossierDisplayTerms.DOSSIER_STATUS, StringPool.BLANK);
 	int itemsToDisplay_cfg = GetterUtil.getInteger(portletPreferences.getValue("itemsToDisplay", "2"));
 	
@@ -77,7 +78,7 @@
 	iteratorURL.setParameter("mvcPath", templatePath + "frontofficedossierlist.jsp");
 	iteratorURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER);
 	iteratorURL.setParameter(DossierDisplayTerms.DOSSIER_STATUS, String.valueOf(dossierStatus));
-	iteratorURL.setParameter("serviceDomainId", String.valueOf(serviceDomainId));
+	iteratorURL.setParameter("serviceDomainId", (serviceDomainId > 0) ? String.valueOf(serviceDomainId):StringPool.BLANK);
 	
 	List<Dossier> dossiers =  new ArrayList<Dossier>();
 	
@@ -94,7 +95,6 @@
 		
 	}
 %>
-
 
 <aui:row>
 	<aui:col width="25">
@@ -118,7 +118,7 @@
 	
 	</div>
 	
-	<liferay-portlet:actionURL  var="menuCounterUrl" name="menuCounterAction"/>
+<liferay-portlet:actionURL  var="menuCounterUrl" name="menuCounterAction"/>
 <aui:script >
 	var serviceDomainId = '<%=String.valueOf(serviceDomainId) %>';
 	var dossierStatus = '<%=String.valueOf(dossierStatus) %>';
@@ -188,8 +188,9 @@
 	</aui:col>
 	<aui:col width="75" >
 
-			<liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
-		<div class="opencps-searchcontainer-wrapper default-box-shadow radius8">
+		<liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
+		<c:if test="<%=!dossierStatusCHKInit.equals(\"-1\") %>">
+			<div class="opencps-searchcontainer-wrapper default-box-shadow radius8">
 			<div class="opcs-serviceinfo-list-label">
 				<div class="title_box">
 			           <p class="file_manage_title ds"><liferay-ui:message key="title-danh-sach-ho-so" /></p>
@@ -368,6 +369,8 @@
 				
 			</liferay-ui:search-container>
 		</div>
+		</c:if>
+		
 	</aui:col>
 </aui:row>
 
