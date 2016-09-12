@@ -16,6 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
+<%@page import="org.opencps.processmgt.util.comparator.ProcessOrderModifiedDateComparator"%>
 <%@page import="org.opencps.processmgt.search.ProcessOrderSearchTerms"%>
 <%@page import="org.opencps.processmgt.search.ProcessOrderSearch"%>
 <%@page import="org.opencps.processmgt.model.ProcessOrder"%>
@@ -35,6 +36,8 @@
 	iteratorURL.setParameter("tabs1", ProcessUtils.TOP_TABS_PROCESS_ORDER_FINISHED_PROCESSING);
 	
 	List<ProcessOrderBean> processOrders =  new ArrayList<ProcessOrderBean>();
+	
+	ProcessOrderModifiedDateComparator modifiDateComparator = new ProcessOrderModifiedDateComparator(oderByJustFinish);
 	
 	int totalCount = 0;
 	
