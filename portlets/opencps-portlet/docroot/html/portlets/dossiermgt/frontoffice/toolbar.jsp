@@ -255,7 +255,12 @@
 		
 		if(isListServiceConfig == 'true'){
 			
-			govAgencyId = A.one('#<portlet:namespace/>govAgencyId').val();
+			if( A.one('#<portlet:namespace/>govAgencyId') != "undefined" &&
+					A.one('#<portlet:namespace/>govAgencyId') != null){
+			
+				govAgencyId = A.one('#<portlet:namespace/>govAgencyId').val();
+			
+			}
 			
 		}else if( A.one('#<portlet:namespace/>dossierStatus') != "undefined" &&
 				A.one('#<portlet:namespace/>dossierStatus') != null){
