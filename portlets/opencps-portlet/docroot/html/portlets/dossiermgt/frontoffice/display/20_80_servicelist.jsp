@@ -189,7 +189,7 @@
 	
 		<%=ProcessOrderUtils.generateTreeView("govAgencyId", "GOVERNMENT_AGENCY", "0", 
 				LanguageUtil.get(locale, "filter-by-gov-agency-left") , 0,"govAgencyIdTree", "radio", "",
-				true,renderRequest, iteratorURL)%>
+				false,renderRequest, iteratorURL)%>
 	
 	</div>
 	
