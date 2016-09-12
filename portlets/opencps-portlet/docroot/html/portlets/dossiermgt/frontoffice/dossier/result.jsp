@@ -191,7 +191,7 @@
 						<liferay-ui:message key="log-status"/>
 					</aui:col>
 					<aui:col width="70">
-						<%=DictItemUtil.getDictItemName(dossier.getDossierStatus(), locale) %>
+						<%=PortletUtil.getDossierStatusLabel(dossier.getDossierStatus(), locale) %>
 					</aui:col>
 				</aui:row>
 			</aui:col>

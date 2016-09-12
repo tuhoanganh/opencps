@@ -365,11 +365,12 @@ public class PortletUtil {
 	public static String getDossierStatusLabel(String itemCode, Locale locale) {
 
 		String name = StringPool.BLANK;
-		
+		DictItem dictItem = null;
 		try {
-	        DictItem dictItem = DictItemLocalServiceUtil.getDictItemByCode(itemCode);
-	        
-	        name = dictItem.getItemName(locale);
+			dictItem = DictItemLocalServiceUtil.getDictItemByCode(itemCode);
+	        if(Validator.isNotNull(dictItem)) {
+	        	name = dictItem.getItemName(locale);
+	        }
         }
         catch (Exception e) {
 	        _log.error(e);

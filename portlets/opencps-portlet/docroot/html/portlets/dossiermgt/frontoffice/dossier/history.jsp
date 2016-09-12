@@ -132,7 +132,7 @@
 					</span>
 					
 					<span class="span8">
-						<%=DictItemUtil.getDictItemName(dossierLog.getDossierStatus(), locale)%>
+						<%=PortletUtil.getDossierStatusLabel(dossierLog.getDossierStatus(), locale)%>
 					</span>
 				</aui:row>
 			

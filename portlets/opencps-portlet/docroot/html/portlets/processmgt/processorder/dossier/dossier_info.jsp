@@ -129,7 +129,7 @@
 			<liferay-ui:message key="dossier-status"/>
 		</td>
 		<td >
-			<%=dossier != null ? DictItemUtil.getDictItemName(dossier.getDossierStatus(), locale) :  StringPool.BLANK %>
+			<%=dossier != null ? PortletUtil.getDossierStatusLabel(dossier.getDossierStatus(), locale) :  StringPool.BLANK %>
 		</td>
 	</tr>
 	<tr>
