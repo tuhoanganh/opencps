@@ -50,12 +50,16 @@ Liferay.provide(window, 'buildTreeView', function(boundingBox, nameControl, data
 							}
 						},
 						failure: function() {
-							var myTreeObj = A.one("#"+active);
-							if(myTreeObj != "undefined" &&
-									myTreeObj != null){
-								myTreeObj.addClass("current");
-							}
-							
+							var myTreeObj = A.one("#"+boundingBox);
+							var allLI = myTreeObj.all( ".tree-node" );
+							allLI.each(function (taskNode) {
+								alert(taskNode.getAttribute("id") + "/" + active);
+								if(taskNode.getAttribute("id") === active){
+									taskNode.addClass("current");
+								}else{
+									taskNode.removeClass("current");
+								}
+				             });
 						},
 					    end: function() {
 					    	console.log("menu js sleep end!");
@@ -63,10 +67,6 @@ Liferay.provide(window, 'buildTreeView', function(boundingBox, nameControl, data
 					}
 				}
 			);
-		
-		treeView.after('rendered', function(event) {
-			alert(111);
-		});
 		treeView.after('lastSelectedChange', function(event) {
 			var newCode = event.newVal.get('id');
 					
@@ -75,6 +75,8 @@ Liferay.provide(window, 'buildTreeView', function(boundingBox, nameControl, data
 	            var sub_val = json[j];
 	            if(sub_key === nameControl && !newCode.startsWith('yui_patched')){
 	            	portletURL.setParameter(sub_key, newCode);
+	            }else  if(sub_key === nameControl && newCode.startsWith('yui_patched')){
+	            	portletURL.setParameter(sub_key, '');
 	            }else{
 	            	portletURL.setParameter(sub_key, sub_val);
 	            }

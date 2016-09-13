@@ -71,7 +71,7 @@
 	JSONObject arrayParam = JSONFactoryUtil
 		    .createJSONObject();
 	arrayParam.put(DossierDisplayTerms.SERVICE_DOMAIN_ID, (serviceDomainId > 0) ? String.valueOf(serviceDomainId):StringPool.BLANK);
-	arrayParam.put("govAgencyId", (serviceDomainId > 0) ? String.valueOf(serviceDomainId):StringPool.BLANK);
+	arrayParam.put("govAgencyId", (govAgencyId > 0) ? String.valueOf(govAgencyId):StringPool.BLANK);
 	
 %>
 <c:if test="<%=serviceDomainIdCHKInit.equals(\"-1\") %>">
