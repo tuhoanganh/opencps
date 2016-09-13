@@ -198,7 +198,7 @@ public class JMSMessageBodyUtil {
 			List<DossierFile> dossierFiles =
 				DossierFileLocalServiceUtil.getDossierFileByD_S_R(
 					dossierId,
-					PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC, 0);
+					PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC, 0);
 			
 			_log.info("##################################################### SIZE" +dossierFiles.size());
 
