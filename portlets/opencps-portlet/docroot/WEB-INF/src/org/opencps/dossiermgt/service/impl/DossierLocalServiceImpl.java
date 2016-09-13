@@ -228,8 +228,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 			actorName,
 			PortletUtil.getActionInfo(
 				PortletConstants.DOSSIER_STATUS_NEW, serviceContext.getLocale()),
-			PortletUtil.getMessageInfo(
-				PortletConstants.DOSSIER_STATUS_NEW, serviceContext.getLocale()),
+			StringPool.BLANK,
 			now, PortletConstants.DOSSIER_LOG_NORMAL, serviceContext);
 		
 		long classTypeId = 0;
@@ -1671,8 +1670,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 			actorName,
 			PortletUtil.getActionInfo(
 				PortletConstants.DOSSIER_STATUS_UPDATE, serviceContext.getLocale()),
-			PortletUtil.getMessageInfo(
-				PortletConstants.DOSSIER_STATUS_UPDATE, serviceContext.getLocale()),
+			StringPool.BLANK,
 			now, PortletConstants.DOSSIER_LOG_NORMAL, serviceContext);
 		
 		
@@ -1920,7 +1918,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		dossierLogLocalService.addDossierLog(
 			userId, dossier.getGroupId(), dossier.getCompanyId(), dossierId,
 			fileGroupId, status, PortletUtil.getActionInfo(status, locale),
-			PortletUtil.getMessageInfo(status, locale), now, level);
+			StringPool.BLANK, now, level);
 
 		dossierPersistence.update(dossier);
 

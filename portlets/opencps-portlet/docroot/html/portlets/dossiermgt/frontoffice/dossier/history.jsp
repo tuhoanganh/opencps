@@ -141,7 +141,7 @@
 					</span>
 					
 					<span class="span8">
-						<liferay-ui:message key="<%= dossierLog.getActor() %>"/>
+						<liferay-ui:message key="<%= dossierLog.getActorName() %>"/>
 					</span>
 				</aui:row>
 				
@@ -151,7 +151,7 @@
 					</span>
 					
 					<span class="span8">
-						<%=dossierLog.getActionInfo()%>
+						<%= dossierLog.getMessageInfo() %>
 					</span>
 					
 				</aui:row>

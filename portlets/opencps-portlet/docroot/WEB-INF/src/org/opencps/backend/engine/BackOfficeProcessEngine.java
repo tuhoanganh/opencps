@@ -93,20 +93,60 @@ public class BackOfficeProcessEngine implements MessageListener {
 		long serviceProcessId = 0;
 				
 		int actor = 0;
-		int actorId = 0;
+		long actorId = 0;
 		String actorName = StringPool.BLANK;
 
 		long actionUserId = toEngineMsg.getActionUserId();
 		
 		// Set actor
-		setActor(actor, actorId, actorName, actionUserId);
+		//setActor(actor, actorId, actorName, actionUserId);
+		try {
+			if (actionUserId != 0) {
+				User user = UserLocalServiceUtil.fetchUser(actionUserId);
+				
+				actor = WebKeys.DOSSIER_ACTOR_EMPLOYEE;
+				
+				actorId = actionUserId;
+				
+				actorName = user.getFullName();
+			} else {
+				actor = 0;
+				actorId = 0;
+				actorName = WebKeys.DOSSIER_ACTOR_SYSTEM_NAME;
+			}
+        }
+        catch (Exception e) {
+	        _log.error(e);
+        }
 		
+		if (Validator.isNotNull(dossier)) {
+			serviceInfoId = dossier.getServiceInfoId();
+			dossierTemplateId = dossier.getDossierTemplateId();
+			govAgencyCode = dossier.getGovAgencyCode();
+			govAgencyName = dossier.getGovAgencyName();
+			govAgencyOrganizationId = dossier.getGovAgencyOrganizationId();
+			
+			
+			try {
+
+				ServiceConfig serviceConfig =
+				    ServiceConfigLocalServiceUtil.getServiceConfigByG_S_G(
+				    	toEngineMsg.getGroupId(), serviceInfoId, govAgencyCode);
+				serviceProcessId = serviceConfig.getServiceProcessId();
+				
+
+			}
+			catch (Exception e) {
+				_log.error(e);
+			}
+		}
+
 		// Set Dossier
-		setExtraInfoDossier(
+		/*setExtraInfoDossier(
 		    serviceInfoId, dossierTemplateId, govAgencyCode, govAgencyName,
 		    govAgencyOrganizationId, serviceProcessId,
 		    toEngineMsg.getGroupId(), dossier);
-
+*/
 		SendToBackOfficeMsg toBackOffice = new SendToBackOfficeMsg();
 		
 		toBackOffice.setSubmitDateTime(now);
@@ -156,7 +196,9 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 				curStepId = processOrder.getProcessStepId();
 			}
-
+			
+			
+			
 			ProcessWorkflow processWorkflow = null;
 
 			// Find workflow
@@ -164,6 +206,8 @@ public class BackOfficeProcessEngine implements MessageListener {
 				processWorkflow =
 				    ProcessWorkflowLocalServiceUtil.getProcessWorkflowByEvent(
 				        serviceProcessId, toEngineMsg.getEvent(), curStepId);
+				
+				_log.info("######################## CREATE WORKFLOW ###############");
 			}
 			else {
 				processWorkflow =
@@ -439,13 +483,16 @@ public class BackOfficeProcessEngine implements MessageListener {
 			govAgencyCode = dossier.getGovAgencyCode();
 			govAgencyName = dossier.getGovAgencyName();
 			govAgencyOrganizationId = dossier.getGovAgencyOrganizationId();
-
+			
+			
 			try {
 
 				ServiceConfig serviceConfig =
 				    ServiceConfigLocalServiceUtil.getServiceConfigByG_S_G(
 				        groupId, serviceInfoId, govAgencyCode);
 				serviceProcessId = serviceConfig.getServiceProcessId();
+				
+
 			}
 			catch (Exception e) {
 				_log.error(e);
