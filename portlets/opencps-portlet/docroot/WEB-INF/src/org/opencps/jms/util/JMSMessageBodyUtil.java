@@ -158,6 +158,8 @@ public class JMSMessageBodyUtil {
 					new SubmitDossierMessage(context);
 
 				submitDossierMessage.receiveLocalMessage(dossierMsgBody);
+				
+				//
 			} else if (object instanceof PaymentFileMsgBody) {
 				_log.info("////// POKEMON GO > PaymentFileMgsBody");
 				

@@ -2123,11 +2123,12 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 				actionMsg.setCompanyId(dossier.getCompanyId());
 
-				ProcessOrder processOrder =
-					ProcessOrderLocalServiceUtil.getProcessOrder(
-						dossierId, fileGroupId);
+				//Phan nay phai xu ly lay trong backend
+				//ProcessOrder processOrder =
+				//	ProcessOrderLocalServiceUtil.getProcessOrder(
+				//		dossierId, fileGroupId);
 
-				actionMsg.setProcessOrderId(processOrder.getProcessOrderId());
+				//actionMsg.setProcessOrderId(processOrder.getProcessOrderId());
 
 				actionMsg.setGovAgencyCode(dossier.getGovAgencyCode());
 

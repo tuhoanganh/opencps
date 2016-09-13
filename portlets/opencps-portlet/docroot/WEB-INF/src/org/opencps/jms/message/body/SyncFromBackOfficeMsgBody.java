@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.opencps.paymentmgt.model.PaymentFile;
+import org.opencps.util.PortletConstants;
 
 import com.liferay.portal.service.ServiceContext;
 
@@ -230,8 +231,19 @@ public class SyncFromBackOfficeMsgBody implements Serializable{
     }
 
 
+	public int getSyncStatus() {
 	
-    /**
+		return _syncStatus;
+	}
+
+	
+	public void setSyncStatus(int syncStatus) {
+	
+		this._syncStatus = syncStatus;
+	}
+
+
+	/**
      * @param _submitDateTime the _submitDateTime to set
      */
     public void setSubmitDateTime(Date _submitDateTime) {
@@ -270,4 +282,6 @@ public class SyncFromBackOfficeMsgBody implements Serializable{
 	private PaymentFile _paymentFile;
 	
 	private Date _submitDateTime;
+	
+	private int _syncStatus = PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC;
 }

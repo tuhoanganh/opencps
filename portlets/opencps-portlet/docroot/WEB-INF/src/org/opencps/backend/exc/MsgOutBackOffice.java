@@ -26,10 +26,8 @@ import javax.naming.NamingException;
 import org.opencps.backend.message.SendToBackOfficeMsg;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierFile;
-import org.opencps.dossiermgt.model.DossierPart;
 import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
-import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
 import org.opencps.jms.context.JMSHornetqContext;
 import org.opencps.jms.message.SyncFromBackOfficeMessage;
 import org.opencps.jms.message.body.DossierFileMsgBody;
@@ -79,25 +77,44 @@ public class MsgOutBackOffice implements MessageListener {
 
 				List<DossierFile> dossierFiles = new ArrayList<DossierFile>();
 
-				// Check file return
-				for (WorkflowOutput workflowOutput : workflowOutputs) {
+				List<DossierFile> dossierFilesSyncSucess =
+					DossierFileLocalServiceUtil.getDossierFileByD_S_R(
+						toBackOffice.getDossierId(),
+						PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS,
+						0);
 
-					DossierFile dossierFile = null;
-					try {
-						DossierPart dossierPart =
-							DossierPartLocalServiceUtil.getDossierPart(workflowOutput.getDossierPartId());
-						dossierFile =
-							DossierFileLocalServiceUtil.getDossierFileInUse(
-								toBackOffice.getDossierId(),
-								dossierPart.getDossierpartId());
-
-						dossierFile.setSyncStatus(PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS);
-						dossierFiles.add(dossierFile);
-					}
-					catch (Exception e) {
-						_log.error(e);
-					}
+				if (dossierFilesSyncSucess != null) {
+					dossierFiles.addAll(dossierFilesSyncSucess);
 				}
+
+				List<DossierFile> dossierFilesSyncError =
+					DossierFileLocalServiceUtil.getDossierFileByD_S_R(
+						toBackOffice.getDossierId(),
+						PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCERROR, 0);
+
+				if (dossierFilesSyncError != null) {
+					dossierFiles.addAll(dossierFilesSyncError);
+				}
+
+				// Check file return
+				// for (WorkflowOutput workflowOutput : workflowOutputs) {
+
+				// DossierFile dossierFile = null;
+				// try {
+				// DossierPartLocalServiceUtil.getDossierPart(workflowOutput.getDossierPartId());
+				// dossierFile =
+				// DossierFileLocalServiceUtil.getDossierFileInUse(
+				// toBackOffice.getDossierId(),
+				// dossierPart.getDossierpartId());
+
+				// dossierFile.setSyncStatus(PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS);
+				// dossierFiles.add(dossierFile);
+				// }
+				// catch (Exception e) {
+				// _log.error(e);
+				// }
+				// }
+
 				List<DossierFileMsgBody> lstDossierFileMsgBody =
 					JMSMessageBodyUtil.getDossierFileMsgBody(dossierFiles);
 
@@ -127,7 +144,9 @@ public class MsgOutBackOffice implements MessageListener {
 					new SyncFromBackOfficeMsgBody();
 
 				_log.info("################################## dossier.getReceptionNo()" +
-					dossier.getReceptionNo());
+					dossier.getReceptionNo() +
+					"--Time--" +
+					System.currentTimeMillis());
 
 				msgBody.setOid(dossier.getOid());
 				msgBody.setReceptionNo(dossier.getReceptionNo());
@@ -138,7 +157,6 @@ public class MsgOutBackOffice implements MessageListener {
 				msgBody.setSubmitDateTime(toBackOffice.getSubmitDateTime());
 				msgBody.setEstimateDatetime(toBackOffice.getEstimateDatetime());
 				msgBody.setPaymentFile(toBackOffice.getPaymentFile());
-
 				syncFromBackoffice.sendMessageByHornetq(msgBody);
 
 			}

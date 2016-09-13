@@ -243,8 +243,13 @@ public class BackOfficeProcessEngine implements MessageListener {
 					if (Validator.isNotNull(pattern) && StringUtil.trim(pattern).length() != 0) {
 						
 						toBackOffice.setReceptionNo(DossierNoGenerator.genaratorNoReception(pattern, toEngineMsg.getDossierId())); 
+						
+						_log.info("################################## genaratorNoReception" +
+										+ System.currentTimeMillis());
 					} else {
 						toBackOffice.setReceptionNo(dossier.getReceptionNo());
+						_log.info("################################## genaratorNoReception" +
+										+ System.currentTimeMillis());
 					}
 				}
 				else {
