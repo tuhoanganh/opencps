@@ -1059,6 +1059,8 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		dossier.setGovAgencyOrganizationId(syncDossier.getGovAgencyOrganizationId());
 		dossier.setNote(syncDossier.getNote());
 		dossier.setOwnerOrganizationId(0);// Sync from another system
+		dossier.setReceptionNo(syncDossier.getReceptionNo());
+		//dossier.setReceiveDatetime(receiveDatetime);
 		dossier.setServiceAdministrationIndex(syncDossier.getServiceAdministrationIndex());
 		dossier.setServiceConfigId(syncDossier.getServiceConfigId());
 		dossier.setServiceDomainIndex(syncDossier.getServiceDomainIndex());
@@ -1224,7 +1226,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	public Dossier syncDossierStatus(
 		String oid, long fileGroupId, String dossierStatus, String receptionNo,
 		Date estimateDatetime, Date receiveDatetime, Date finishDatetime,
-		String actor, String requestCommand, String actionInfo,
+		int actor, long actorId, String actorName, String requestCommand, String actionInfo,
 		String messageInfo,
 		LinkedHashMap<DossierFile, DossierPart> syncDossierFiles,
 		LinkedHashMap<String, FileGroup> syncFileGroups,
@@ -1363,7 +1365,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 
 		dossierLogLocalService.addDossierLog(
 			dossier.getUserId(), dossier.getGroupId(), dossier.getCompanyId(),
-			dossier.getDossierId(), fileGroupId, dossierStatus, actor,
+			dossier.getDossierId(), fileGroupId, dossierStatus, actor, actorId, actorName,
 			requestCommand, actionInfo, messageInfo, level);
 
 		dossierPersistence.update(dossier);
@@ -1764,7 +1766,75 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		String status, int syncStatus, long fileGroupId, int level,
 		Locale locale)
 		throws SystemException, NoSuchDossierStatusException, PortalException {
+		
+		//TODO check again
+		
+		Date now = new Date();
 
+		Dossier dossier = dossierPersistence.findByPrimaryKey(dossierId);
+
+		dossier = getDossier(dossier, userId, govAgencyOrganizationId, status);
+
+		int flagStatus = PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC;
+
+		if (syncStatus == PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS ||
+			syncStatus == PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCERROR) {
+			flagStatus = PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC;
+		}
+
+		if (fileGroupId > 0) {
+			FileGroup fileGroup =
+				fileGroupLocalService.getFileGroup(fileGroupId);
+			List<DossierFile> dossierFiles =
+				dossierFileLocalService.findByF_D_S_R(
+					fileGroupId, dossierId, flagStatus, 0);
+			if (dossierFiles != null) {
+				for (DossierFile dossierFile : dossierFiles) {
+					dossierFile.setSyncStatus(syncStatus);
+					dossierFile.setModifiedDate(now);
+					dossierFile.setUserId(userId);
+					dossierFileLocalService.updateDossierFile(dossierFile);
+				}
+			}
+			fileGroup.setSyncStatus(syncStatus);
+			fileGroup.setModifiedDate(now);
+			fileGroup.setUserId(userId);
+			fileGroupLocalService.updateFileGroup(fileGroup);
+		}
+
+		List<DossierFile> dossierFiles =
+			dossierFileLocalService.findByF_D_S_R(0, dossierId, flagStatus, 0);
+		if (dossierFiles != null) {
+			for (DossierFile dossierFile : dossierFiles) {
+				dossierFile.setSyncStatus(syncStatus);
+				dossierFile.setModifiedDate(now);
+				dossierFile.setUserId(userId);
+				dossierFileLocalService.updateDossierFile(dossierFile);
+			}
+		}
+
+/*		dossierLogLocalService.addDossierLog(
+			userId, dossier.getGroupId(), dossier.getCompanyId(), dossierId,
+			fileGroupId, status, PortletUtil.getActionInfo(status, locale),
+			PortletUtil.getMessageInfo(status, locale), now, level);
+*/		
+		dossierLogLocalService.addDossierLog(
+			userId, dossier.getGroupId(), dossier.getCompanyId(), dossierId,
+			fileGroupId, status, PortletUtil.getActionInfo(status, locale),
+			PortletUtil.getMessageInfo(status, locale), now, level);
+
+		dossierPersistence.update(dossier);
+
+		return dossier;
+	}
+	
+	public Dossier updateDossierStatus(
+		long userId, long dossierId, long govAgencyOrganizationId,
+		String status, int syncStatus, long fileGroupId, int level,
+		Locale locale, int actor, long actorId, String actorName)
+		throws SystemException, NoSuchDossierStatusException, PortalException {
+		
+		
 		Date now = new Date();
 
 		Dossier dossier = dossierPersistence.findByPrimaryKey(dossierId);
@@ -1819,6 +1889,8 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		return dossier;
 	}
 
+
+
 	/**
 	 * @param dossierId
 	 * @param fileGroupId
@@ -1836,7 +1908,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	public boolean updateDossierStatus(
 		long dossierId, long fileGroupId, String dossierStatus,
 		String receptionNo, Date submitDatetime, Date estimateDatetime,
-		Date receiveDatetime, Date finishDatetime, String actor,
+		Date receiveDatetime, Date finishDatetime, int actor, long actorId, String actorName,
 		String requestCommand, String actionInfo, String messageInfo) {
 
 		boolean result = false;
@@ -1872,7 +1944,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 			dossierLogLocalService.addDossierLog(
 				dossier.getUserId(), dossier.getGroupId(),
 				dossier.getCompanyId(), dossierId, fileGroupId, dossierStatus,
-				actor, requestCommand, actionInfo, messageInfo, level);
+				actor, actorId, actorName, requestCommand, actionInfo, messageInfo, level);
 
 			dossierPersistence.update(dossier);
 
@@ -1899,7 +1971,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 * @throws PortalException
 	 */
 	public void updateDossierStatus(
-		long dossierId, long fileGroupId, String dossierStatus, String actor,
+		long dossierId, long fileGroupId, String dossierStatus, int actor, long actorId, String actorName,
 		String requestCommand, String actionInfo, String messageInfo,
 		int syncStatus, int level)
 		throws SystemException, PortalException {
@@ -1953,7 +2025,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 
 		dossierLogLocalService.addDossierLog(
 			dossier.getUserId(), dossier.getGroupId(), dossier.getCompanyId(),
-			dossierId, fileGroupId, dossierStatus, actor, requestCommand,
+			dossierId, fileGroupId, dossierStatus, actor, actorId, actorName, requestCommand,
 			actionInfo, messageInfo, level);
 
 		dossierPersistence.update(dossier);

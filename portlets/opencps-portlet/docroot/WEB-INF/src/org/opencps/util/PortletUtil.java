@@ -747,7 +747,7 @@ public class PortletUtil {
 		String queueName, String lookup, String mom)
 		throws SystemException {
 
-		Properties properties = new Properties();
+		Properties properties = null;
 
 		PortletPreferences preferences =
 			PrefsPropsUtil.getPreferences(companyId, true);
@@ -762,6 +762,7 @@ public class PortletUtil {
 
 		try {
 
+			properties = new Properties();
 			// Create json object from string
 			JSONObject jmsJSONObject =
 				JSONFactoryUtil.createJSONObject(jmsJSON);
@@ -853,8 +854,7 @@ public class PortletUtil {
 
 		return properties;
 	}
-	
-	
+
 	public static String intToString(long number, int stringLength) {
 
 		int numberOfDigits = String.valueOf(number).length();

@@ -130,9 +130,11 @@ import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.ServiceContextThreadLocal;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.DuplicateFileException;
@@ -823,11 +825,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
 
-		/*
-		 * ThemeDisplay themeDisplay = (ThemeDisplay)
-		 * actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		 */
-
 		AccountBean accountBean = AccountUtil.getAccountBean(actionRequest);
 
 		long dossierFileId =
@@ -862,19 +859,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 			Dossier dossier =
 				DossierLocalServiceUtil.getDossier(dossierFile.getDossierId());
-
-			// Get account folder
-			// DLFolder accountForlder = accountBean.getAccountFolder();
-
-			// Get dossier folder
-			/*
-			 * DLFolder dosserFolder = DLFolderUtil.addFolder(
-			 * themeDisplay.getUserId(), themeDisplay.getScopeGroupId(),
-			 * themeDisplay.getScopeGroupId(), false,
-			 * accountForlder.getFolderId(),
-			 * String.valueOf(dossier.getCounter()), StringPool.BLANK, false,
-			 * serviceContext);
-			 */
 
 			String formData = dossierFile.getFormData();
 			String jrxmlTemplate = dossierPart.getFormReport();
@@ -2183,10 +2167,20 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			default:
 				break;
 			}
+			
+			long actorId = actionMsg.getUserId();
+			
+			String actorName = StringPool.BLANK;
+			
+			User user = UserLocalServiceUtil.fetchUser(actorId);
+			
+			if (Validator.isNotNull(user)) {
+				actorName = user.getFullName();
+			}
 
 			DossierLocalServiceUtil.updateDossierStatus(
 				dossierId, fileGroupId, PortletConstants.DOSSIER_STATUS_SYSTEM,
-				WebKeys.ACTOR_ACTION_CITIZEN, StringPool.BLANK,
+				WebKeys.DOSSIER_ACTOR_CITIZEN, actorId, actorName, StringPool.BLANK,
 				PortletUtil.getActionInfo(
 					PortletConstants.DOSSIER_STATUS_SYSTEM,
 					actionRequest.getLocale()), PortletUtil.getMessageInfo(

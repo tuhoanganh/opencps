@@ -198,7 +198,9 @@ public class JMSMessageBodyUtil {
 			List<DossierFile> dossierFiles =
 				DossierFileLocalServiceUtil.getDossierFileByD_S_R(
 					dossierId,
-					PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC, 0);
+					PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC, 0);
+			
+			_log.info("##################################################### SIZE" +dossierFiles.size());
 
 			List<DossierFileMsgBody> dossierFileMsgBodies =
 				new ArrayList<DossierFileMsgBody>();
@@ -220,6 +222,9 @@ public class JMSMessageBodyUtil {
 						DossierPartLocalServiceUtil.getDossierPart(dossierFile.getDossierPartId());
 
 					if (dossierFile.getFileEntryId() > 0) {
+						
+						_log.info("#####################################################" +dossierFile.getFileEntryId());
+						
 						DLFileEntry dlFileEntry =
 							DLFileEntryUtil.getDLFileEntry(dossierFile.getFileEntryId());
 						dossierFileMsgBody.setFileDescription(dlFileEntry.getDescription());
