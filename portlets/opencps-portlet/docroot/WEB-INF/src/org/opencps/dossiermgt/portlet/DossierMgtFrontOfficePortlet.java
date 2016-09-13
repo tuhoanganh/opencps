@@ -127,9 +127,11 @@ import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.ServiceContextThreadLocal;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.DuplicateFileException;
@@ -2163,10 +2165,20 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			default:
 				break;
 			}
+			
+			long actorId = actionMsg.getUserId();
+			
+			String actorName = StringPool.BLANK;
+			
+			User user = UserLocalServiceUtil.fetchUser(actorId);
+			
+			if (Validator.isNotNull(user)) {
+				actorName = user.getFullName();
+			}
 
 			DossierLocalServiceUtil.updateDossierStatus(
 				dossierId, fileGroupId, PortletConstants.DOSSIER_STATUS_SYSTEM,
-				WebKeys.ACTOR_ACTION_CITIZEN, StringPool.BLANK,
+				WebKeys.DOSSIER_ACTOR_CITIZEN, actorId, actorName, StringPool.BLANK,
 				PortletUtil.getActionInfo(
 					PortletConstants.DOSSIER_STATUS_SYSTEM,
 					actionRequest.getLocale()), PortletUtil.getMessageInfo(
