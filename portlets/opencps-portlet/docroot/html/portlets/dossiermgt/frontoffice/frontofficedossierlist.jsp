@@ -1,5 +1,4 @@
 
-<%@page import="org.opencps.backend.util.DossierNoGenerator"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -197,7 +196,7 @@
 								<div class="span7">
 									<%=
 										Validator.isNotNull(dossier.getCreateDate()) ? 
-										DateTimeUtil.convertDateToString(dossier.getCreateDate(), DateTimeUtil._VN_DATE_FORMAT) : 
+										DateTimeUtil.convertDateToString(dossier.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT) : 
 										StringPool.DASH 
 									%>
 								</div>
