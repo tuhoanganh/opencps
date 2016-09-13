@@ -8,7 +8,13 @@ Liferay.provide(window, 'buildTreeView', function(boundingBox, nameControl, data
 
 		var treeView=new A.TreeViewDD({
 			boundingBox: '#'+boundingBox,
-			children: JSON.parse(data)
+			children: JSON.parse(data),
+			 on: {
+				 render: function(){
+				 		var lis = A.all('.tree-node');
+				        console.log(lis); // 2 items here
+				 	}
+		        }
 		}).render();
 		
 			var dataJson = {};
@@ -50,16 +56,19 @@ Liferay.provide(window, 'buildTreeView', function(boundingBox, nameControl, data
 							}
 						},
 						failure: function() {
-							var myTreeObj = A.one("#"+boundingBox);
-							var allLI = myTreeObj.all( ".tree-node" );
-							allLI.each(function (taskNode) {
-								alert(taskNode.getAttribute("id") + "/" + active);
-								if(taskNode.getAttribute("id") === active){
-									taskNode.addClass("current");
-								}else{
-									taskNode.removeClass("current");
-								}
-				             });
+							setTimeout(function(){
+								var myTreeObj = A.one("#"+boundingBox);
+								var allLI = myTreeObj.all( ".tree-node" );
+								allLI.each(function (taskNode) {
+									
+									if(taskNode.getAttribute("id") === active){
+										taskNode.addClass("current");
+									}else{
+										taskNode.removeClass("current");
+									}
+					             });
+					        }, 1000);
+							
 						},
 					    end: function() {
 					    	console.log("menu js sleep end!");
@@ -67,6 +76,8 @@ Liferay.provide(window, 'buildTreeView', function(boundingBox, nameControl, data
 					}
 				}
 			);
+		
+			
 		treeView.after('lastSelectedChange', function(event) {
 			var newCode = event.newVal.get('id');
 					
