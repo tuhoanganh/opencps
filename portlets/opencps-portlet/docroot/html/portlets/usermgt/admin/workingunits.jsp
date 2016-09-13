@@ -59,7 +59,7 @@
 	
 	List<String> headerNames = new ArrayList<String>();
 	
-	headerNames.add("rowIndex");
+	headerNames.add("row-index");
 	headerNames.add("working-unit-info");
 	headerNames.add("action");
 	
