@@ -125,7 +125,10 @@ public class MsgOutBackOffice implements MessageListener {
 
 				SyncFromBackOfficeMsgBody msgBody =
 					new SyncFromBackOfficeMsgBody();
-				 
+
+				_log.info("################################## dossier.getReceptionNo()" +
+					dossier.getReceptionNo());
+
 				msgBody.setOid(dossier.getOid());
 				msgBody.setReceptionNo(dossier.getReceptionNo());
 				msgBody.setFinishDatetime(dossier.getFinishDatetime());
