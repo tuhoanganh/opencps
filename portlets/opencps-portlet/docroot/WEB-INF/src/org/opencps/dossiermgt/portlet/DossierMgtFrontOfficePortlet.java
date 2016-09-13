@@ -822,11 +822,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
 
-		/*
-		 * ThemeDisplay themeDisplay = (ThemeDisplay)
-		 * actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		 */
-
 		AccountBean accountBean = AccountUtil.getAccountBean(actionRequest);
 
 		long dossierFileId =
@@ -861,19 +856,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 			Dossier dossier =
 				DossierLocalServiceUtil.getDossier(dossierFile.getDossierId());
-
-			// Get account folder
-			// DLFolder accountForlder = accountBean.getAccountFolder();
-
-			// Get dossier folder
-			/*
-			 * DLFolder dosserFolder = DLFolderUtil.addFolder(
-			 * themeDisplay.getUserId(), themeDisplay.getScopeGroupId(),
-			 * themeDisplay.getScopeGroupId(), false,
-			 * accountForlder.getFolderId(),
-			 * String.valueOf(dossier.getCounter()), StringPool.BLANK, false,
-			 * serviceContext);
-			 */
 
 			String formData = dossierFile.getFormData();
 			String jrxmlTemplate = dossierPart.getFormReport();
