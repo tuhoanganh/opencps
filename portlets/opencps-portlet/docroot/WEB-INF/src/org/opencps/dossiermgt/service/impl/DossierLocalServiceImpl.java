@@ -1096,6 +1096,8 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 				serviceContext.getScopeGroupId(), false, 0,
 				dossierFolderDestination, StringPool.BLANK, false,
 				serviceContext);
+		
+		dossier.setFolderId(folder.getFolderId());
 
 		if (syncDossierFiles != null) {
 			for (Map.Entry<DossierFile, DossierPart> entry : syncDossierFiles.entrySet()) {
