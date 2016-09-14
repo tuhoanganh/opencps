@@ -306,10 +306,11 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 * @return
 	 */
 	public int countDossierByKeywordDomainAndStatus(
-		long groupId, String keyword, String domainCode, String dossierStatus) {
+		long groupId, String keyword, String domainCode,
+		List<String> govAgencyCodes, String dossierStatus) {
 
 		return dossierFinder.countDossierByKeywordDomainAndStatus(
-			groupId, keyword, domainCode, dossierStatus);
+			groupId, keyword, domainCode, govAgencyCodes, dossierStatus);
 	};
 
 	/**
@@ -825,11 +826,13 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 * @return
 	 */
 	public List<Dossier> searchDossierByKeywordDomainAndStatus(
-		long groupId, String keyword, String domainCode, String dossierStatus,
-		int start, int end, OrderByComparator obc) {
+		long groupId, String keyword, String domainCode,
+		List<String> govAgencyCodes, String dossierStatus, int start, int end,
+		OrderByComparator obc) {
 
 		return dossierFinder.searchDossierByKeywordDomainAndStatus(
-			groupId, keyword, domainCode, dossierStatus, start, end, obc);
+			groupId, keyword, domainCode, govAgencyCodes, dossierStatus, start,
+			end, obc);
 	}
 
 	/**

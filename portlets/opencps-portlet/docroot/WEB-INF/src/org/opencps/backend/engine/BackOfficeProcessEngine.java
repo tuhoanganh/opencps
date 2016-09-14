@@ -207,6 +207,10 @@ public class BackOfficeProcessEngine implements MessageListener {
 				    ProcessWorkflowLocalServiceUtil.getProcessWorkflowByEvent(
 				        serviceProcessId, toEngineMsg.getEvent(), curStepId);
 				
+				_log.info("#############################serviceProcessId " + serviceProcessId);
+				_log.info("#############################toEngineMsg.getEvent() " + toEngineMsg.getEvent());
+				_log.info("#############################curStepId " + curStepId);
+				
 				_log.info("######################## CREATE WORKFLOW ###############");
 			}
 			else {
@@ -290,8 +294,13 @@ public class BackOfficeProcessEngine implements MessageListener {
 					if (Validator.isNotNull(pattern) && StringUtil.trim(pattern).length() != 0) {
 						
 						toBackOffice.setReceptionNo(DossierNoGenerator.genaratorNoReception(pattern, toEngineMsg.getDossierId())); 
+						
+						_log.info("################################## genaratorNoReception" +
+										+ System.currentTimeMillis());
 					} else {
 						toBackOffice.setReceptionNo(dossier.getReceptionNo());
+						_log.info("################################## genaratorNoReception" +
+										+ System.currentTimeMillis());
 					}
 				}
 				else {

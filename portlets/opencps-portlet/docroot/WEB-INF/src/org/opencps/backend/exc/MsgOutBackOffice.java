@@ -85,6 +85,7 @@ public class MsgOutBackOffice implements MessageListener {
 					DossierFile dossierFile = null;
 					try {
 						DossierPart dossierPart =
+
 							DossierPartLocalServiceUtil.getDossierPart(workflowOutput.getDossierPartId());
 						dossierFile =
 							DossierFileLocalServiceUtil.getDossierFileInUse(
@@ -98,6 +99,7 @@ public class MsgOutBackOffice implements MessageListener {
 						_log.error(e);
 					}
 				}
+
 				List<DossierFileMsgBody> lstDossierFileMsgBody =
 					JMSMessageBodyUtil.getDossierFileMsgBody(dossierFiles);
 
@@ -127,7 +129,9 @@ public class MsgOutBackOffice implements MessageListener {
 					new SyncFromBackOfficeMsgBody();
 
 				_log.info("################################## dossier.getReceptionNo()" +
-					dossier.getReceptionNo());
+					dossier.getReceptionNo() +
+					"--Time--" +
+					System.currentTimeMillis());
 
 				msgBody.setOid(dossier.getOid());
 				msgBody.setReceptionNo(dossier.getReceptionNo());
@@ -138,8 +142,15 @@ public class MsgOutBackOffice implements MessageListener {
 				msgBody.setSubmitDateTime(toBackOffice.getSubmitDateTime());
 				msgBody.setEstimateDatetime(toBackOffice.getEstimateDatetime());
 				msgBody.setPaymentFile(toBackOffice.getPaymentFile());
-
+				msgBody.setActorId(toBackOffice.getActorId());
+				msgBody.setActor(toBackOffice.getActor());
+				msgBody.setActorName(toBackOffice.getActorName());
+				msgBody.setActionInfo(toBackOffice.getActionInfo());
+				msgBody.setMessageInfo(toBackOffice.getMessageInfo());
+				msgBody.setFileGroupId(toBackOffice.getFileGroupId());
+				msgBody.setRequestCommand(toBackOffice.getRequestCommand());
 				syncFromBackoffice.sendMessageByHornetq(msgBody);
+				
 
 			}
 			catch (Exception e) {
