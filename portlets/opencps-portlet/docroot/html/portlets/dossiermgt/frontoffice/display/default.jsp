@@ -46,7 +46,7 @@
 <%@page import="org.opencps.util.DictItemUtil"%>
 
 
-<%@ include file="../init.jsp"%>
+<%@ include file="../../init.jsp"%>
 
 
 <liferay-util:include page='<%=templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
