@@ -57,7 +57,6 @@
 
 	try{
 		success = !SessionMessages.isEmpty(renderRequest) && SessionErrors.isEmpty(renderRequest);
-		
 	}catch(Exception e){
 		
 	}
@@ -262,6 +261,8 @@
 			};
 			
 			Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id' + '<portlet:namespace/>', data);
+			
+			<portlet:namespace/>createReport(dossierFileId);
 		}
 	});
 	

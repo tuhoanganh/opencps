@@ -248,17 +248,6 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	}
 
 	/**
-	 * @param groupId
-	 * @param keyword
-	 * @param dossierStatus
-	 * @return
-	 */
-	public int countDossier(long groupId, String keyword, String dossierStatus, String serviceDomainTreeIndex) {
-
-		return dossierFinder.countDossier(groupId, keyword, dossierStatus, serviceDomainTreeIndex);
-	}
-
-	/**
 	 * @param dossierStatus
 	 * @param serviceNo
 	 * @param fromDate
@@ -664,22 +653,6 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		return dossier;
 	}
 
-	/**
-	 * @param groupId
-	 * @param keyword
-	 * @param dossierStatus
-	 * @param start
-	 * @param end
-	 * @param obc
-	 * @return
-	 */
-	public List<Dossier> getDossier(
-		long groupId, String keyword, String dossierStatus, int start, int end,
-		OrderByComparator obc) {
-
-		return dossierFinder.searchDossier(
-			groupId, keyword, dossierStatus, start, end, obc);
-	}
 
 	/**
 	 * @param delayStatus

@@ -65,13 +65,7 @@
 <aui:nav-bar cssClass="opencps-toolbar custom-toolbar">
 	<c:choose>
 		<c:when test="<%=isListServiceConfig%>">
-			<div class="pd_t20">
-<%-- 				<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left font-pull" > --%>
-<!-- 					<h5> -->
-<%-- 						<liferay-ui:message key="list-service-config"/> --%>
-<!-- 					</h5> -->
-<%-- 				</aui:nav> --%>
-			</div>
+
 		</c:when>
 		<c:otherwise>
 			<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left font-pull" >
@@ -107,47 +101,69 @@
 				<c:choose>
 					<c:when test="<%=isListServiceConfig %>">
 						
-						<aui:row>
-							<aui:col width="30" cssClass="search-col">
-								<datamgt:ddr 
-									depthLevel="1" 
-									dictCollectionCode="<%=ServiceUtil.SERVICE_DOMAIN %>" 
-									name="serviceDomain"
-									inlineField="<%=true%>"
-									inlineLabel="left"
-									showLabel="<%=false%>"
-									emptyOptionLabels="filter-by-service-domain"
-									itemsEmptyOption="true"
-									itemNames="serviceDomainId"
-									selectedItems="<%=String.valueOf(serviceDomainId)%>"
-									cssClass="search-input select-box input100"
-								/>
-							</aui:col>
-							<aui:col width="30" cssClass="search-col">
-								<datamgt:ddr 
-									depthLevel="1" 
-									dictCollectionCode="<%= PortletPropsValues.DATAMGT_MASTERDATA_GOVERNMENT_AGENCY %>" 
-									name="govAgency"
-									inlineField="<%=true%>"
-									inlineLabel="left"
-									showLabel="<%=false%>"
-									emptyOptionLabels="filter-by-gov-agency"
-									itemsEmptyOption="true"
-									itemNames="govAgencyId"
-									selectedItems="<%=String.valueOf(govAgencyId)%>"
-									cssClass="search-input select-box input100"
-								/>
-							</aui:col>
-							<aui:col width="30" cssClass="search-col">
-								<liferay-ui:input-search 
-									id="keywords1"
-									name="keywords"
-									title='<%= LanguageUtil.get(locale, "keywords") %>'
-									placeholder='<%= LanguageUtil.get(locale, "keywords") %>'
-									cssClass="search-input input-keyword"
-								/>
-							</aui:col>
-						</aui:row>
+						<c:choose>
+								<c:when test="<%=templatesToDisplay_cfg.equals(\"20_80\") %>">
+									<aui:row>
+										<aui:col cssClass="search-col">
+											<liferay-ui:input-search 
+												id="keywords1"
+												name="keywords"
+												title='<%= LanguageUtil.get(locale, "keywords") %>'
+												placeholder='<%=LanguageUtil.get(locale, "keywords") %>'
+												cssClass="search-input input-keyword"
+											/>
+										</aui:col>
+										<style>
+											.navbar-search.pull-right.front-custom-select-search{
+												width: 100% !important;
+											}
+										</style>
+									</aui:row>
+								</c:when>
+								<c:otherwise>
+									<aui:row>
+										<aui:col width="30" cssClass="search-col">
+											<datamgt:ddr 
+												depthLevel="1" 
+												dictCollectionCode="<%=ServiceUtil.SERVICE_DOMAIN %>" 
+												name="serviceDomain"
+												inlineField="<%=true%>"
+												inlineLabel="left"
+												showLabel="<%=false%>"
+												emptyOptionLabels="filter-by-service-domain"
+												itemsEmptyOption="true"
+												itemNames="serviceDomainId"
+												selectedItems="<%=String.valueOf(serviceDomainId)%>"
+												cssClass="search-input select-box input100"
+											/>
+										</aui:col>
+										<aui:col width="30" cssClass="search-col">
+											<datamgt:ddr 
+												depthLevel="1" 
+												dictCollectionCode="<%= PortletPropsValues.DATAMGT_MASTERDATA_GOVERNMENT_AGENCY %>" 
+												name="govAgency"
+												inlineField="<%=true%>"
+												inlineLabel="left"
+												showLabel="<%=false%>"
+												emptyOptionLabels="filter-by-gov-agency"
+												itemsEmptyOption="true"
+												itemNames="govAgencyId"
+												selectedItems="<%=String.valueOf(govAgencyId)%>"
+												cssClass="search-input select-box input100"
+											/>
+										</aui:col>
+										<aui:col width="30" cssClass="search-col">
+											<liferay-ui:input-search 
+												id="keywords1"
+												name="keywords"
+												title='<%= LanguageUtil.get(locale, "keywords") %>'
+												placeholder='<%= LanguageUtil.get(locale, "keywords") %>'
+												cssClass="search-input input-keyword"
+											/>
+										</aui:col>
+									</aui:row>
+								</c:otherwise>
+							</c:choose>
 					</c:when>
 					<c:otherwise>
 						<c:if test="<%=tabs1.equals(DossierMgtUtil.TOP_TABS_DOSSIER) %>">
@@ -239,7 +255,12 @@
 		
 		if(isListServiceConfig == 'true'){
 			
-			govAgencyId = A.one('#<portlet:namespace/>govAgencyId').val();
+			if( A.one('#<portlet:namespace/>govAgencyId') != "undefined" &&
+					A.one('#<portlet:namespace/>govAgencyId') != null){
+			
+				govAgencyId = A.one('#<portlet:namespace/>govAgencyId').val();
+			
+			}
 			
 		}else if( A.one('#<portlet:namespace/>dossierStatus') != "undefined" &&
 				A.one('#<portlet:namespace/>dossierStatus') != null){
