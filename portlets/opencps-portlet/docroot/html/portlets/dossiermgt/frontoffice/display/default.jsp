@@ -46,7 +46,7 @@
 <%@page import="org.opencps.util.DictItemUtil"%>
 
 
-<%@ include file="../init.jsp"%>
+<%@ include file="../../init.jsp"%>
 
 
 <liferay-util:include page='<%=templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
@@ -78,7 +78,7 @@
 	iteratorURL.setParameter("mvcPath", templatePath + "frontofficedossierlist.jsp");
 	iteratorURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER);
 	iteratorURL.setParameter(DossierDisplayTerms.DOSSIER_STATUS, String.valueOf(dossierStatus));
-	iteratorURL.setParameter("serviceDomainId", String.valueOf(serviceDomainId));
+	iteratorURL.setParameter("serviceDomainId", (serviceDomainId > 0) ? String.valueOf(serviceDomainId):StringPool.BLANK);
 	
 	List<Dossier> dossiers =  new ArrayList<Dossier>();
 	

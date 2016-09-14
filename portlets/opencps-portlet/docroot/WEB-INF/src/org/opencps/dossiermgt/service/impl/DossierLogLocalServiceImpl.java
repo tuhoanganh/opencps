@@ -326,7 +326,7 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 		long dossierId, int start, int end)
 		throws SystemException {
 
-		boolean orderByAsc = true;
+		boolean orderByAsc = false;
 
 		DossierLogUpdateDatetimeComparator orderByComparator =
 			new DossierLogUpdateDatetimeComparator(orderByAsc);

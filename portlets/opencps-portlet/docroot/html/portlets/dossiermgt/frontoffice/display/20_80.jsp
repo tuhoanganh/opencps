@@ -1,4 +1,12 @@
 
+<%@page import="org.opencps.util.PortletPropsValues"%>
+<%@page import="com.liferay.portal.kernel.json.JSONFactoryUtil"%>
+<%@page import="com.liferay.portal.kernel.json.JSONObject"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
+<%@page import="org.opencps.util.WebKeys"%>
+<%@page import="javax.portlet.PortletRequest"%>
+<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
+<%@page import="com.liferay.portal.kernel.json.JSONArray"%>
 <%@page import="org.opencps.processmgt.util.ProcessOrderUtils"%>
 <%@page import="org.opencps.servicemgt.util.ServiceUtil"%>
 <%@page import="org.opencps.backend.util.DossierNoGenerator"%>
@@ -68,6 +76,7 @@
 />
 
 <%
+	String dossierStatusCHKInit = ParamUtil.getString(request, DossierDisplayTerms.DOSSIER_STATUS, "-1");
 	String dossierStatus = ParamUtil.getString(request, DossierDisplayTerms.DOSSIER_STATUS, StringPool.BLANK);
 	int itemsToDisplay_cfg = GetterUtil.getInteger(portletPreferences.getValue("itemsToDisplay", "2"));
 	
@@ -77,7 +86,7 @@
 	iteratorURL.setParameter("mvcPath", templatePath + "frontofficedossierlist.jsp");
 	iteratorURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER);
 	iteratorURL.setParameter(DossierDisplayTerms.DOSSIER_STATUS, String.valueOf(dossierStatus));
-	iteratorURL.setParameter("serviceDomainId", String.valueOf(serviceDomainId));
+	iteratorURL.setParameter("serviceDomainId", (serviceDomainId > 0) ? String.valueOf(serviceDomainId):StringPool.BLANK);
 	
 	List<Dossier> dossiers =  new ArrayList<Dossier>();
 	
@@ -93,8 +102,13 @@
 		_log.error(e);
 		
 	}
+	
+	JSONObject arrayParam = JSONFactoryUtil
+		    .createJSONObject();
+	arrayParam.put(DossierDisplayTerms.SERVICE_DOMAIN_ID, (serviceDomainId > 0) ? String.valueOf(serviceDomainId):StringPool.BLANK);
+	arrayParam.put(DossierDisplayTerms.DOSSIER_STATUS, String.valueOf(dossierStatus));
+	
 %>
-
 
 <aui:row>
 	<aui:col width="25">
@@ -103,156 +117,78 @@
 		
 		<div id="serviceDomainIdTree" class="openCPSTree"></div>
 		
-		<%=ProcessOrderUtils.generateTreeView("serviceDomainId", "SERVICE_DOMAIN", "0", 
-				LanguageUtil.get(locale, "filter-by-service-domain") , 0,"serviceDomainIdTree", "radio", String.valueOf(serviceDomainId),
-				false,renderRequest, iteratorURL)%>
+		<%
+		
+		String serviceDomainJsonData = ProcessOrderUtils.generateTreeView(
+				PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN, 
+				"0", 
+				LanguageUtil.get(locale, "filter-by-service-domain-left") , 
+				1, 
+				"radio",
+				false,
+				renderRequest);
+		%>
 		
 	</div>
 	<div class="opencps-searchcontainer-wrapper default-box-shadow radius8">
 		
 		<div id="dossierStatusTree" class="openCPSTree"></div>
 	
-		<%=ProcessOrderUtils.generateTreeView(DossierDisplayTerms.DOSSIER_STATUS, "DOSSIER_STATUS", "0", 
-				LanguageUtil.get(locale, "dossier-status") , 0,"dossierStatusTree", "radio", String.valueOf(dossierStatus),
-				true,renderRequest, iteratorURL)%>
-	
+		<% 
+		String dossierStatusJsonData = ProcessOrderUtils.generateTreeView(
+				PortletPropsValues.DATAMGT_MASTERDATA_DOSSIER_STATUS, 
+				"0", 
+				LanguageUtil.get(locale, "dossier-status") , 
+				0, 
+				"radio",
+				true,
+				renderRequest);
+		%>
 	</div>
 	
-	<liferay-portlet:actionURL  var="menuCounterUrl" name="menuCounterAction"/>
-<aui:script >
+<liferay-portlet:actionURL  var="menuCounterUrl" name="menuCounterAction"/>
+
+<aui:script use="liferay-util-window,liferay-portlet-url">
+
 	var serviceDomainId = '<%=String.valueOf(serviceDomainId) %>';
 	var dossierStatus = '<%=String.valueOf(dossierStatus) %>';
-	
+	var serviceDomainJsonData = '<%=serviceDomainJsonData%>';
+	var dossierStatusJsonData = '<%=dossierStatusJsonData%>';
+	var arrayParam = '<%=arrayParam.toString() %>';
 	AUI().ready(function(A){
-		doCounterMenuCPS('<%=menuCounterUrl.toString() %>', "dossierStatusTree", dossierStatus);
-		doCounterMenuCPS(null, "serviceDomainIdTree", serviceDomainId);
+		buildTreeView("serviceDomainIdTree", 
+				"<%=DossierDisplayTerms.SERVICE_DOMAIN_ID %>", 
+				serviceDomainJsonData, 
+				arrayParam, 
+				'<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>', 
+				'<%=templatePath + "frontofficedossierlist.jsp" %>', 
+				'<%=LiferayWindowState.NORMAL.toString() %>', 
+				'normal',
+				null,
+				serviceDomainId,
+				'<%=renderResponse.getNamespace() %>');
+		buildTreeView("dossierStatusTree", 
+				'<%=DossierDisplayTerms.DOSSIER_STATUS %>', 
+				dossierStatusJsonData, 
+				arrayParam, 
+				'<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>', 
+				'<%=templatePath + "frontofficedossierlist.jsp" %>', 
+				'<%=LiferayWindowState.NORMAL.toString() %>', 
+				'normal',
+				'<%=menuCounterUrl.toString() %>',
+				dossierStatus,
+				'<%=renderResponse.getNamespace() %>');
+		
 	});
-	Liferay.provide(window, 'doCounterMenuCPS', function(url, myTree ,active) {
-		var A = AUI();
-		
-		if(url == null){
-			var myTreeObj = A.one("#"+myTree);
-			var allLI = myTreeObj.all( "li" );
-			allLI.each(function (taskNode) {
-				if(taskNode.getAttribute("id") === active){
-					taskNode.addClass("current");
-				}else{
-					taskNode.removeClass("current");
-				}
-             });
-		}else{
-			A.io.request(
-					url,
-				{
-				    dataType : 'json',
-				    data:{    	
-				    	<portlet:namespace/>serviceDomainId : serviceDomainId
-				    },   
-				    on: {
-				        success: function(event, id, obj) {
-							var instance = this;
-							var res = instance.get('responseData');
-							
-							if(res){
-								
-								var data = res.badge;
-		                    	for(j in data){
-		                    		var sub_key = data[j].code;
-		                            var sub_val = data[j].counter;
-		                            
-		                            if( A.one('#'+sub_key) != "undefined" &&
-		                            		A.one('#'+sub_key) != null){
-		                            	
-		                            	var elementOBJ = A.one('#'+sub_key);
-		                            	
-		                            	if( elementOBJ.getAttribute("id") === active){
-		                            		elementOBJ.addClass("current");
-		                				}else{
-		                					elementOBJ.removeClass("current");
-		                				}
-		                            	elementOBJ.appendChild("<span class='badge pull-right'>"+sub_val+"</span>");
-		                            }
-		                        }
-							}
-							
-							
-						}
-					}
-				}
-			);
-		}
-		
-	},['aui-base','liferay-portlet-url','aui-io']);
+	
 </aui:script>
-
-	<style>
-	.aui .icon-minus::before {
-    position: relative;
-    left: 0;
-    top: 0px;
-    height: 0;
-    content: '' !important;
-    width: 0;
-    border-left: 7px solid transparent;
-    border-top: 7px solid transparent;
-    border-bottom: 7px #1ba1e2 solid;
-}		
-.aui .icon-plus::before {
-	position: relative;
-	left: 0;
-	top: 0px;
-	height: 0;
-	content: '' !important;	
-	width: 0;
-	border-left: 7px solid transparent;
-	border-top: 7px solid transparent;
-	border-bottom: 7px #1ba1e2 solid;
-	-webkit-transform: rotate(-45deg);
-	transform: rotate(-45deg);
-	border-bottom-color: #999999;
-	left: -4px;
-}		
-ul.tree-root-container > li:first-child > div.tree-node-content > span {
-  font-size: 18px;
-  text-transform: uppercase;
-}
-.openCPSTree > ul {margin:0}
-.openCPSTree ul li {border-bottom: 1px solid #ccc;padding: 10px 0;position: relative;}
-.openCPSTree > ul > li {padding-bottom: 0; border-bottom: 0}
-.openCPSTree > ul > li > div {border-bottom: 1px solid #ccc;padding: 0 40px 10px 20px;display: inherit;position: relative;}
-.openCPSTree ul li > div.tree-expanded:before {
-    content: "\f054";
-    position: absolute;
-    font-family: FontAwesome;
-    right: 20px;
-}
-.openCPSTree > ul > li:before {content: ""}
-.openCPSTree > ul > li ul {margin: 0}
-.openCPSTree > ul > li ul li {padding-left: 25px;padding-right: 15px;}
-.openCPSTree li.current {
-  font-family: "Roboto-Bold";
-  background: rgb(0, 144, 255) none repeat scroll 0% 0%;
-  color: rgb(255, 255, 255);
-}
-.openCPSTree li.current > div > i.icon-ok-sign {opacity: 1; color: #444}
-.openCPSTree li .badge {font-weight: normal}
-.openCPSTree li.current .badge{
-  background-color: #444;
-}
-.openCPSTree li .badge{
-  background-color: #0090FF;
-}
-.tree-node-leaf {
-	    margin-left: 15px;
-	    display: inline-block;
-}	
-	</style>
 	
 	</aui:col>
 	<aui:col width="75" >
 
-			<liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
-		<div class="opencps-searchcontainer-wrapper default-box-shadow radius8">
+		<liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
+		<c:if test="<%=!dossierStatusCHKInit.equals(\"-1\") %>">
+			<div class="opencps-searchcontainer-wrapper default-box-shadow radius8">
 			<div class="opcs-serviceinfo-list-label">
 				<div class="title_box">
 			           <p class="file_manage_title ds"><liferay-ui:message key="title-danh-sach-ho-so" /></p>
@@ -431,6 +367,8 @@ ul.tree-root-container > li:first-child > div.tree-node-content > span {
 				
 			</liferay-ui:search-container>
 		</div>
+		</c:if>
+		
 	</aui:col>
 </aui:row>
 

@@ -48,16 +48,15 @@
 
 <%
 	String dossierStatus = 	ParamUtil.getString(request, "dossierStatusValue");
-	
+	String domainCode = ParamUtil.getString(request, DossierDisplayTerms.SERVICE_DOMAIN_CODE);
+
 	String backURL = ParamUtil.getString(request, "backURL");
 	
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "backofficedossierlist.jsp");
 	iteratorURL.setParameter("tab1", ProcessMgtUtil.TOP_TABS_DOSSIERLIST);
 	iteratorURL.setParameter("dossierStatusValue", dossierStatus);
-	
-	
-	String domainCode = ParamUtil.getString(request, DossierDisplayTerms.SERVICE_DOMAIN_CODE);
+	iteratorURL.setParameter(DossierDisplayTerms.SERVICE_DOMAIN_CODE, domainCode);
 	
 	request.setAttribute(DossierDisplayTerms.SERVICE_DOMAIN_CODE, domainCode);
 	/* request.setAttribute(DossierDisplayTerms.DOSSIER_STATUS, dossierStatus); */
