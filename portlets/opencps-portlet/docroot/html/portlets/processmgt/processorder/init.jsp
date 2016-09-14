@@ -17,6 +17,7 @@
  */
 %>
 <%@ include file="../init.jsp"%>
+<%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
 
 <%
 	PortletPreferences preferences1 = renderRequest.getPreferences();
@@ -27,7 +28,13 @@
 		preferences1 = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
 	}
 	
-	boolean oderByToDo = GetterUtil.getBoolean(preferences1.getValue("oderByToDo", "false"), false);
-	boolean oderByJustFinish = GetterUtil.getBoolean(preferences1.getValue("oderByJustFinish", "false"), false);
+	String oderByToDo = preferences1.getValue("oderByToDo", WebKeys.ORDER_BY_ASC);
+	String oderByJustFinish = preferences1.getValue("oderByJustFinish", WebKeys.ORDER_BY_ASC);
+	
+	String oderFieldToDo = preferences1.getValue("oderFieldToDo", ProcessOrderDisplayTerms.MODIFIEDDATE);
+	String oderFieldJustFinish = preferences1.getValue("oderFieldJustFinish", ProcessOrderDisplayTerms.MODIFIEDDATE);
+	
+	
+	
 	
 %>

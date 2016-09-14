@@ -38,6 +38,10 @@ import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.MessageListenerException;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Organization;
+import com.liferay.portal.model.User;
+import com.liferay.portal.service.OrganizationLocalServiceUtil;
+import com.liferay.portal.service.UserLocalServiceUtil;
 
 
 /**
@@ -79,10 +83,15 @@ public class SyncFromFrontOffice implements MessageListener{
 
 		if (trustServiceMode) {
 			try {
+				int actor = WebKeys.DOSSIER_ACTOR_CITIZEN;
+				long actorId = 0;
+				String actorName = "SYSTEM";
+				
 				if (Validator.equals(WebKeys.ACTION_SUBMIT_VALUE, action) &&
 				    _checkStatus(
 				        userActionMgs.getDossierId(),
 				        userActionMgs.getFileGroupId())) {
+						
 
 
 						int logLevel = 0;
@@ -92,7 +101,7 @@ public class SyncFromFrontOffice implements MessageListener{
 
 						// Change dossier status to SYSTEM
 						// Update govAgencyOrgId of dossier and dossierFile
-						DossierLocalServiceUtil.updateDossierStatus(
+/*						DossierLocalServiceUtil.updateDossierStatus(
 						    userActionMgs.getUserId(),
 						    userActionMgs.getDossierId(),
 						    govAgencyOrgId,
@@ -100,7 +109,18 @@ public class SyncFromFrontOffice implements MessageListener{
 						    PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS,
 						    userActionMgs.getFileGroupId(), logLevel,
 						    userActionMgs.getLocale());
-
+*/
+						
+						DossierLocalServiceUtil.updateDossierStatus(
+					    userActionMgs.getUserId(),
+					    userActionMgs.getDossierId(),
+					    govAgencyOrgId,
+					    PortletConstants.DOSSIER_STATUS_SYSTEM,
+					    PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS,
+					    userActionMgs.getFileGroupId(), logLevel,
+					    userActionMgs.getLocale(), actor, actorId, actorName);
+						
+						
 						// Create message
 						Message msgToEngine = new Message();
 
@@ -111,8 +131,6 @@ public class SyncFromFrontOffice implements MessageListener{
 						engineMsg.setEvent(WebKeys.ACTION_SUBMIT_VALUE);
 						engineMsg.setGroupId(userActionMgs.getGroupId());
 						
-						_log.info("-------------------->>>" + userActionMgs.getGroupId());
-
 						msgToEngine.put("msgToEngine", engineMsg);
 
 						// Send message to ...engine/destination
@@ -134,14 +152,15 @@ public class SyncFromFrontOffice implements MessageListener{
 					    BackendUtils.getGovAgencyOrgId(userActionMgs.getDossierId());
 
 					SendToEngineMsg engineMsg = new SendToEngineMsg();
-
+					
+					// TODO update new function add dossier status
 					DossierLocalServiceUtil.updateDossierStatus(
 					    userActionMgs.getUserId(),
 					    userActionMgs.getDossierId(), govAgencyOrgId,
 					    PortletConstants.DOSSIER_STATUS_SYSTEM,
 					    PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS,
 					    userActionMgs.getFileGroupId(), logLevel,
-					    userActionMgs.getLocale());
+					    userActionMgs.getLocale(), actor, actorId, actorName);
 
 					engineMsg.setDossierId(userActionMgs.getDossierId());
 					engineMsg.setFileGroupId(userActionMgs.getFileGroupId());
@@ -159,9 +178,27 @@ public class SyncFromFrontOffice implements MessageListener{
 				}
 				else if (Validator.equals(WebKeys.ACTION_REPAIR_VALUE, action)) {
 					// Update requestCommand = repair
-					
+					//TODO check again 
 					Dossier dossier =
 					    DossierLocalServiceUtil.fetchDossier(userActionMgs.getDossierId());
+					
+					actor = WebKeys.DOSSIER_ACTOR_CITIZEN;
+					
+					actorId = dossier.getOwnerOrganizationId();
+					
+					if (actorId == 0) {
+						actorId = dossier.getUserId();
+						
+						User user = UserLocalServiceUtil.fetchUser(actorId);
+						
+						actorName = user.getFullName();
+					} else {
+						Organization org = OrganizationLocalServiceUtil.fetchOrganization(actorId);
+						
+						actorName = org.getName();
+					}
+					
+					
 
 					DossierLocalServiceUtil.updateDossierStatus(
 					    userActionMgs.getDossierId(),
@@ -171,7 +208,9 @@ public class SyncFromFrontOffice implements MessageListener{
 					    dossier.getEstimateDatetime(),
 					    dossier.getReceiveDatetime(),
 					    dossier.getFinishDatetime(),
-					    WebKeys.ACTOR_ACTION_CITIZEN,
+					    actor,
+					    actorId,
+					    actorName,
 					    WebKeys.ACTION_REPAIR_VALUE,
 					    WebKeys.ACTION_REPAIR_VALUE,
 					    WebKeys.ACTION_REPAIR_VALUE);
@@ -179,6 +218,25 @@ public class SyncFromFrontOffice implements MessageListener{
 				else if (Validator.equals(WebKeys.ACTION_CLOSE_VALUE, action)) {
 					Dossier dossier =
 					    DossierLocalServiceUtil.fetchDossier(userActionMgs.getDossierId());
+					
+					//TODO check again 
+					
+					actor = WebKeys.DOSSIER_ACTOR_CITIZEN;
+					
+					actorId = dossier.getOwnerOrganizationId();
+					
+					if (actorId == 0) {
+						actorId = dossier.getUserId();
+						
+						User user = UserLocalServiceUtil.fetchUser(actorId);
+						
+						actorName = user.getFullName();
+					} else {
+						Organization org = OrganizationLocalServiceUtil.fetchOrganization(actorId);
+						
+						actorName = org.getName();
+					}
+					
 
 					DossierLocalServiceUtil.updateDossierStatus(
 					    userActionMgs.getDossierId(),
@@ -188,7 +246,9 @@ public class SyncFromFrontOffice implements MessageListener{
 					    dossier.getEstimateDatetime(),
 					    dossier.getReceiveDatetime(),
 					    dossier.getFinishDatetime(),
-					    WebKeys.ACTOR_ACTION_CITIZEN,
+					    actor,
+					    actorId,
+					    actorName,
 					    WebKeys.ACTION_CLOSE_VALUE,
 					    WebKeys.ACTION_CLOSE_VALUE,
 					    WebKeys.ACTION_CLOSE_VALUE);
@@ -219,7 +279,7 @@ public class SyncFromFrontOffice implements MessageListener{
 			ServiceConfig serviceConfig =
 			    ServiceConfigLocalServiceUtil.fetchServiceConfig(serviceConfigId);
 			
-			if (serviceConfig.getServicePortal()) {
+			if (serviceConfig.getServicePortal() && serviceConfig.getServiceBackoffice()) {
 				trustServiceMode = true;
 			} 
 		}

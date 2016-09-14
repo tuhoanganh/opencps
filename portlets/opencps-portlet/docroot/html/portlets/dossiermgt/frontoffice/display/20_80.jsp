@@ -1,4 +1,12 @@
 
+<%@page import="org.opencps.util.PortletPropsValues"%>
+<%@page import="com.liferay.portal.kernel.json.JSONFactoryUtil"%>
+<%@page import="com.liferay.portal.kernel.json.JSONObject"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
+<%@page import="org.opencps.util.WebKeys"%>
+<%@page import="javax.portlet.PortletRequest"%>
+<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
+<%@page import="com.liferay.portal.kernel.json.JSONArray"%>
 <%@page import="org.opencps.processmgt.util.ProcessOrderUtils"%>
 <%@page import="org.opencps.servicemgt.util.ServiceUtil"%>
 <%@page import="org.opencps.backend.util.DossierNoGenerator"%>
@@ -94,6 +102,12 @@
 		_log.error(e);
 		
 	}
+	
+	JSONObject arrayParam = JSONFactoryUtil
+		    .createJSONObject();
+	arrayParam.put(DossierDisplayTerms.SERVICE_DOMAIN_ID, (serviceDomainId > 0) ? String.valueOf(serviceDomainId):StringPool.BLANK);
+	arrayParam.put(DossierDisplayTerms.DOSSIER_STATUS, String.valueOf(dossierStatus));
+	
 %>
 
 <aui:row>
@@ -103,86 +117,70 @@
 		
 		<div id="serviceDomainIdTree" class="openCPSTree"></div>
 		
-		<%=ProcessOrderUtils.generateTreeView("serviceDomainId", "SERVICE_DOMAIN", "0", 
-				LanguageUtil.get(locale, "filter-by-service-domain-left") , 1,"serviceDomainIdTree", "radio", String.valueOf(serviceDomainId),
-				false,renderRequest, iteratorURL)%>
+		<%
+		
+		String serviceDomainJsonData = ProcessOrderUtils.generateTreeView(
+				PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN, 
+				"0", 
+				LanguageUtil.get(locale, "filter-by-service-domain-left") , 
+				1, 
+				"radio",
+				false,
+				renderRequest);
+		%>
 		
 	</div>
 	<div class="opencps-searchcontainer-wrapper default-box-shadow radius8">
 		
 		<div id="dossierStatusTree" class="openCPSTree"></div>
 	
-		<%=ProcessOrderUtils.generateTreeView(DossierDisplayTerms.DOSSIER_STATUS, "DOSSIER_STATUS", "0", 
-				LanguageUtil.get(locale, "dossier-status") , 0,"dossierStatusTree", "radio", String.valueOf(dossierStatus),
-				true,renderRequest, iteratorURL)%>
-	
+		<% 
+		String dossierStatusJsonData = ProcessOrderUtils.generateTreeView(
+				PortletPropsValues.DATAMGT_MASTERDATA_DOSSIER_STATUS, 
+				"0", 
+				LanguageUtil.get(locale, "dossier-status") , 
+				0, 
+				"radio",
+				true,
+				renderRequest);
+		%>
 	</div>
 	
 <liferay-portlet:actionURL  var="menuCounterUrl" name="menuCounterAction"/>
-<aui:script >
+
+<aui:script use="liferay-util-window,liferay-portlet-url">
+
 	var serviceDomainId = '<%=String.valueOf(serviceDomainId) %>';
 	var dossierStatus = '<%=String.valueOf(dossierStatus) %>';
-	
+	var serviceDomainJsonData = '<%=serviceDomainJsonData%>';
+	var dossierStatusJsonData = '<%=dossierStatusJsonData%>';
+	var arrayParam = '<%=arrayParam.toString() %>';
 	AUI().ready(function(A){
-		doCounterMenuCPS('<%=menuCounterUrl.toString() %>', "dossierStatusTree", dossierStatus);
-		doCounterMenuCPS(null, "serviceDomainIdTree", serviceDomainId);
+		buildTreeView("serviceDomainIdTree", 
+				"<%=DossierDisplayTerms.SERVICE_DOMAIN_ID %>", 
+				serviceDomainJsonData, 
+				arrayParam, 
+				'<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>', 
+				'<%=templatePath + "frontofficedossierlist.jsp" %>', 
+				'<%=LiferayWindowState.NORMAL.toString() %>', 
+				'normal',
+				null,
+				serviceDomainId,
+				'<%=renderResponse.getNamespace() %>');
+		buildTreeView("dossierStatusTree", 
+				'<%=DossierDisplayTerms.DOSSIER_STATUS %>', 
+				dossierStatusJsonData, 
+				arrayParam, 
+				'<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>', 
+				'<%=templatePath + "frontofficedossierlist.jsp" %>', 
+				'<%=LiferayWindowState.NORMAL.toString() %>', 
+				'normal',
+				'<%=menuCounterUrl.toString() %>',
+				dossierStatus,
+				'<%=renderResponse.getNamespace() %>');
+		
 	});
-	Liferay.provide(window, 'doCounterMenuCPS', function(url, myTree ,active) {
-		var A = AUI();
-		
-		if(url == null){
-			var myTreeObj = A.one("#"+myTree);
-			var allLI = myTreeObj.all( "li" );
-			allLI.each(function (taskNode) {
-				if(taskNode.getAttribute("id") === active){
-					taskNode.addClass("current");
-				}else{
-					taskNode.removeClass("current");
-				}
-             });
-		}else{
-			A.io.request(
-					url,
-				{
-				    dataType : 'json',
-				    data:{    	
-				    	<portlet:namespace/>serviceDomainId : serviceDomainId
-				    },   
-				    on: {
-				        success: function(event, id, obj) {
-							var instance = this;
-							var res = instance.get('responseData');
-							
-							if(res){
-								
-								var data = res.badge;
-		                    	for(j in data){
-		                    		var sub_key = data[j].code;
-		                            var sub_val = data[j].counter;
-		                            
-		                            if( A.one('#'+sub_key) != "undefined" &&
-		                            		A.one('#'+sub_key) != null){
-		                            	
-		                            	var elementOBJ = A.one('#'+sub_key);
-		                            	
-		                            	if( elementOBJ.getAttribute("id") === active){
-		                            		elementOBJ.addClass("current");
-		                				}else{
-		                					elementOBJ.removeClass("current");
-		                				}
-		                            	elementOBJ.appendChild("<span class='badge pull-right'>"+sub_val+"</span>");
-		                            }
-		                        }
-							}
-							
-							
-						}
-					}
-				}
-			);
-		}
-		
-	},['aui-base','liferay-portlet-url','aui-io']);
+	
 </aui:script>
 	
 	</aui:col>
@@ -350,7 +348,7 @@
 							
 							<div class='<%="span7 " + cssStatusColor %>'>
 								<%-- <%=PortletUtil.getDossierStatusLabel(dossier.getDossierStatus(), locale) %> --%>
-								<%= DictItemUtil.getDictItemName(dossier.getDossierStatus(), locale) %>
+								<%= PortletUtil.getDossierStatusLabel(dossier.getDossierStatus(), locale) %>
 							</div>
 						</div>
 					</liferay-util:buffer>

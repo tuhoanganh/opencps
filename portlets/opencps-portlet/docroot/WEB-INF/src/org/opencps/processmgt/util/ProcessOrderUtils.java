@@ -38,8 +38,10 @@ import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.model.ProcessStep;
 import org.opencps.processmgt.model.StepAllowance;
+import org.opencps.processmgt.search.ProcessOrderDisplayTerms;
 import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
 import org.opencps.processmgt.service.StepAllowanceLocalServiceUtil;
+import org.opencps.processmgt.util.comparator.ProcessOrderModifiedDateComparator;
 import org.opencps.util.PortletUtil;
 //import org.opencps.processmgt.util.comparator.BuocXuLyComparator;
 //import org.opencps.processmgt.util.comparator.ChuHoSoComparator;
@@ -88,7 +90,11 @@ public class ProcessOrderUtils {
 		}
 
 		OrderByComparator orderByComparator = null;
-
+		
+		if(orderByCol.equals(ProcessOrderDisplayTerms.MODIFIEDDATE)) {
+			orderByComparator = new ProcessOrderModifiedDateComparator(orderByAsc);
+		}
+		
 		// if(orderByCol.equals(ProcessOrderDisplayTerms.MA_TIEP_NHAN)) {
 		// orderByComparator = new MaTiepNhanComparator(orderByAsc);
 		// } else if(orderByCol.equals(ProcessOrderDisplayTerms.CHU_HO_SO)) {
@@ -414,26 +420,13 @@ public class ProcessOrderUtils {
 
 	}
 
-	public static String generateTreeView(String name, String collectionCode, String itemCode,
-			String myLabel, int level, String boundingBox, String type, String active,
-			boolean isCode ,RenderRequest renderRequest, PortletURL redirectURL)		
+	public static String generateTreeView(String collectionCode, String itemCode,
+			String myLabel, int level, String type,
+			boolean isCode ,RenderRequest renderRequest)		
 					throws SystemException, PortalException {
 		
 			ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest
 				.getAttribute(WebKeys.THEME_DISPLAY);
-
-			
-			Map<String, String[]> map = redirectURL.getParameterMap();
-			
-			String paramURL = StringPool.BLANK;
-			
-			for (String key : map.keySet()) {
-
-				if(key.equals(name)){
-					paramURL = "&"+themeDisplay.getPortletDisplay().getNamespace() +key+"="+ GetterUtil.getString(map.get(key)[0]);
-				}
-				
-			}
 
 			long groupId = themeDisplay
 				.getScopeGroupId();
@@ -501,42 +494,9 @@ public class ProcessOrderUtils {
 			
 			jsonObjectRoot.put("label", myLabel);
 			
-			if(Validator.isNull(active)){
-				jsonObjectRoot.put("active", "true");
-			}
-			
 			jsonArrayRoot.put(jsonObjectRoot);
 			
-			StringBuilder sbHtml = new StringBuilder();
-
-			sbHtml
-				.append(" <script type= text/javascript> ");
-			sbHtml
-			.append(" AUI().use('aui-tree-view', function(A) { var treeView=new A.TreeViewDD({  ");
-			
-			
-			sbHtml
-			.append(" boundingBox: '#"+boundingBox+"', ");
-			
-			sbHtml
-			.append(" children: "+jsonArrayRoot.toString());
-			
-			sbHtml
-			.append(" }).render();treeView.after('lastSelectedChange', function(event) { ");
-
-//			sbHtml.append("var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DATA_MANAGEMENT_ADMIN_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');portletURL.setParameter('mvcPath', '/html/portlets/data_management/admin/select_dictitems.jsp');portletURL.setWindowState('<%=LiferayWindowState.EXCLUSIVE.toString()%>'); portletURL.setPortletMode('normal');");
-			sbHtml.append("var portletURL = \""+redirectURL.toString().replaceAll(paramURL, "")+"&"+themeDisplay.getPortletDisplay().getNamespace() +name+"=" + "\" ; var newCode = event.newVal.get('id'); var parr =''; if (!newCode.startsWith('yui_patched')){parr = newCode} ; window.location = portletURL.toString()+parr ");
-			
-//			sbHtml.append(" window.location = portletURL.toString();");
-			
-			sbHtml
-			.append(" });}); ");
-			
-			sbHtml
-			.append(" </script> ");
-			
-			return sbHtml
-				.toString();
+			return jsonArrayRoot.toString();
 		}
 	
 	private static JSONObject doChildTreeJson(JSONObject jsonObject,String type, boolean isCode,
@@ -559,7 +519,7 @@ public class ProcessOrderUtils {
 			if(isCode){
 				jsonObjectlv1.put("id", dictItem2.getItemCode());
 			}else{
-				jsonObjectlv1.put("id", dictItem2.getDictItemId());
+				jsonObjectlv1.put("id", StringUtil.valueOf(dictItem2.getDictItemId()));
 			}
 			
 			jsonObjectlv1.put("expanded", true);
@@ -587,7 +547,7 @@ public class ProcessOrderUtils {
 						if(isCode){
 							jsonObjectlv2.put("id", dictItem3.getItemCode());
 						}else{
-							jsonObjectlv2.put("id", dictItem3.getDictItemId());
+							jsonObjectlv2.put("id", StringUtil.valueOf(dictItem3.getDictItemId()));
 						}
 						
 						jsonObjectlv2.put("leaf", true);

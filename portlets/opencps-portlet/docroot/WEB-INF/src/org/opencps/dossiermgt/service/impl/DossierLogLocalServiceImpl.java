@@ -69,7 +69,9 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 		long fileGroupId, String status, String actionInfo, String messageInfo,
 		Date updateDatetime, int level)
 		throws SystemException {
-
+		
+		//TODO check lai, neu khong can bo di
+		
 		long dossierLogId =
 			counterLocalService.increment(DossierLog.class.getName());
 		DossierLog dossierLog = dossierLogPersistence.create(dossierLogId);
@@ -96,6 +98,45 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 		return dossierLogPersistence.update(dossierLog);
 
 	}
+	
+	public DossierLog addDossierLog(
+		long userId, long groupId, long companyId, long dossierId,
+		long fileGroupId, String status, String actionInfo, String messageInfo,
+		Date updateDatetime, int level, int actor, long actorId, String actorName)
+		throws SystemException {
+		
+		//TODO check lai, neu khong can bo di
+		
+		long dossierLogId =
+			counterLocalService.increment(DossierLog.class.getName());
+		DossierLog dossierLog = dossierLogPersistence.create(dossierLogId);
+
+		dossierLog.setGroupId(groupId);
+		dossierLog.setCompanyId(companyId);
+
+		Date now = new Date();
+
+		dossierLog.setUserId(userId);
+
+		dossierLog.setCreateDate(now);
+
+		dossierLog.setModifiedDate(now);
+
+		dossierLog.setDossierId(dossierId);
+		dossierLog.setFileGroupId(fileGroupId);
+		dossierLog.setDossierStatus(status);
+		dossierLog.setActionInfo(actionInfo);
+		dossierLog.setMessageInfo(messageInfo);
+		dossierLog.setUpdateDatetime(updateDatetime);
+		dossierLog.setLevel(level);
+		dossierLog.setActor(actor);
+		dossierLog.setActorId(actorId);
+		dossierLog.setActorName(actorName);
+
+		return dossierLogPersistence.update(dossierLog);
+
+	}
+
 
 	/**
 	 * @param userId
@@ -156,7 +197,7 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 	 */
 	public DossierLog addDossierLog(
 		long userId, long groupId, long companyId, long dossierId,
-		long fileGroupId, String dossierStatus, String actor,
+		long fileGroupId, String dossierStatus, int actor, long actorId, String actorName,
 		String requestCommand, String actionInfo, String messageInfo, int level)
 		throws SystemException {
 
@@ -178,6 +219,8 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 		dossierLog.setMessageInfo(messageInfo);
 		dossierLog.setUpdateDatetime(now);
 		dossierLog.setActor(actor);
+		dossierLog.setActorId(actorId);
+		dossierLog.setActorName(actorName);
 
 		dossierLog.setLevel(level);
 

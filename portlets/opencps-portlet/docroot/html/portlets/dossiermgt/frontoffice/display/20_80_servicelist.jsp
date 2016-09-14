@@ -1,3 +1,10 @@
+<%@page import="javax.portlet.PortletRequest"%>
+<%@page import="org.opencps.util.WebKeys"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
+<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
+<%@page import="com.liferay.portal.kernel.json.JSONFactoryUtil"%>
+<%@page import="com.liferay.portal.kernel.json.JSONObject"%>
+<%@page import="org.opencps.util.PortletPropsValues"%>
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="org.opencps.processmgt.util.ProcessOrderUtils"%>
@@ -51,7 +58,7 @@
 	iteratorURL.setParameter("mvcPath", templatePath + "frontofficeservicelist.jsp");
 	iteratorURL.setParameter("isListServiceConfig", String.valueOf(true));
 	iteratorURL.setParameter("govAgencyId", (govAgencyId > 0) ? String.valueOf(govAgencyId):StringPool.BLANK);
-	iteratorURL.setParameter("serviceDomainId", (serviceDomainId > 0) ? String.valueOf(serviceDomainId):StringPool.BLANK);
+	iteratorURL.setParameter(DossierDisplayTerms.SERVICE_DOMAIN_ID, (serviceDomainId > 0) ? String.valueOf(serviceDomainId):StringPool.BLANK);
 	
 	String backURL = ParamUtil.getString(request, "backURL");
 	
@@ -60,6 +67,11 @@
 	List<ServiceBean> serviceBeansRecent =  new ArrayList<ServiceBean>();
 	
 	int totalCount = 0;
+	
+	JSONObject arrayParam = JSONFactoryUtil
+		    .createJSONObject();
+	arrayParam.put(DossierDisplayTerms.SERVICE_DOMAIN_ID, (serviceDomainId > 0) ? String.valueOf(serviceDomainId):StringPool.BLANK);
+	arrayParam.put("govAgencyId", (govAgencyId > 0) ? String.valueOf(govAgencyId):StringPool.BLANK);
 	
 %>
 <c:if test="<%=serviceDomainIdCHKInit.equals(\"-1\") %>">
@@ -178,21 +190,71 @@
 		
 		<div id="serviceDomainIdTree" class="openCPSTree"></div>
 		
-		<%=ProcessOrderUtils.generateTreeView("serviceDomainId", "SERVICE_DOMAIN", "0", 
-				LanguageUtil.get(locale, "filter-by-service-domain-left") , 1,"serviceDomainIdTree", "radio", "",
-				false,renderRequest, iteratorURL)%>
+		<%
+			String serviceDomainJsonData = ProcessOrderUtils.generateTreeView(
+				PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN, 
+				"0", 
+				LanguageUtil.get(locale, "filter-by-service-domain-left") , 
+				1, 
+				"radio",
+				false,
+				renderRequest);
+				
+		%>
 		
 	</div>
 	<div class="opencps-searchcontainer-wrapper default-box-shadow radius8">
 		
 		<div id="govAgencyIdTree" class="openCPSTree"></div>
 	
-		<%=ProcessOrderUtils.generateTreeView("govAgencyId", "GOVERNMENT_AGENCY", "0", 
-				LanguageUtil.get(locale, "filter-by-gov-agency-left") , 0,"govAgencyIdTree", "radio", "",
-				false,renderRequest, iteratorURL)%>
+		<%
+
+			String governmentAgencyJsonData = ProcessOrderUtils.generateTreeView(
+				PortletPropsValues.DATAMGT_MASTERDATA_GOVERNMENT_AGENCY, 
+				"0", 
+				LanguageUtil.get(locale, "filter-by-gov-agency-left") , 
+				0, 
+				"radio",
+				false,
+				renderRequest);
+				
+		%>
 	
 	</div>
 	
+<liferay-portlet:actionURL  var="menuCounterUrl" name="menuCounterAction"/>
+<aui:script >
+	var serviceDomainId = '<%=String.valueOf(serviceDomainId) %>';
+	var govAgencyId = '<%=String.valueOf(govAgencyId) %>';
+	var serviceDomainJsonData = '<%=serviceDomainJsonData%>';
+	var governmentAgencyJsonData = '<%=governmentAgencyJsonData%>';
+	var arrayParam = '<%=arrayParam.toString() %>';
+	AUI().ready(function(A){
+		buildTreeView("serviceDomainIdTree", 
+				"<%=DossierDisplayTerms.SERVICE_DOMAIN_ID %>", 
+				serviceDomainJsonData, 
+				arrayParam, 
+				'<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>', 
+				'<%=templatePath + "frontofficeservicelist.jsp" %>', 
+				'<%=LiferayWindowState.NORMAL.toString() %>', 
+				'normal',
+				null,
+				serviceDomainId,
+				'<%=renderResponse.getNamespace() %>');
+		buildTreeView("govAgencyIdTree", 
+				'govAgencyId', 
+				governmentAgencyJsonData, 
+				arrayParam, 
+				'<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>', 
+				'<%=templatePath + "frontofficeservicelist.jsp" %>', 
+				'<%=LiferayWindowState.NORMAL.toString() %>', 
+				'normal',
+				null,
+				govAgencyId,
+				'<%=renderResponse.getNamespace() %>');
+		
+	});
+</aui:script>
 	
 	</aui:col>
 	<aui:col width="75" >
@@ -327,32 +389,6 @@
 	</aui:col>
 </aui:row>
 
-<liferay-portlet:actionURL  var="menuCounterUrl" name="menuCounterAction"/>
-<aui:script >
-	var serviceDomainId = '<%=String.valueOf(serviceDomainId) %>';
-	var govAgencyId = '<%=String.valueOf(govAgencyId) %>';
-	
-	AUI().ready(function(A){
-		doCounterMenuCPS(null, "govAgencyIdTree", govAgencyId);
-		doCounterMenuCPS(null, "serviceDomainIdTree", serviceDomainId);
-	});
-	Liferay.provide(window, 'doCounterMenuCPS', function(url, myTree ,active) {
-		var A = AUI();
-		
-		var myTreeObj = A.one("#"+myTree);
-		
-		var allLI = myTreeObj.all( "li" );
-		
-		allLI.each(function (taskNode) {
-			if(taskNode.getAttribute("id") === active){
-				taskNode.addClass("current");
-			}else{
-				taskNode.removeClass("current");
-			}
-        });
-		
-	},['aui-base','liferay-portlet-url','aui-io']);
-</aui:script>
 <style>
 .min-width180 {
     min-width: 150px !important;

@@ -362,56 +362,22 @@ public class PortletUtil {
 		return leaderLabel;
 	}
 
-	public static String getDossierStatusLabel(String value, Locale locale) {
+	public static String getDossierStatusLabel(String itemCode, Locale locale) {
 
-		String statusLabel = StringPool.BLANK;
-
-		switch (value) {
-		case PortletConstants.DOSSIER_STATUS_NEW:
-			statusLabel = LanguageUtil.get(locale, "new");
-			break;
-		case PortletConstants.DOSSIER_STATUS_RECEIVING:
-			statusLabel = LanguageUtil.get(locale, "receiving");
-			break;
-		case PortletConstants.DOSSIER_STATUS_WAITING:
-			statusLabel = LanguageUtil.get(locale, "waiting");
-			break;
-		case PortletConstants.DOSSIER_STATUS_PAYING:
-			statusLabel = LanguageUtil.get(locale, "paying");
-			break;
-		case PortletConstants.DOSSIER_STATUS_DENIED:
-			statusLabel = LanguageUtil.get(locale, "denied");
-			break;
-		case PortletConstants.DOSSIER_STATUS_RECEIVED:
-			statusLabel = LanguageUtil.get(locale, "received");
-			break;
-		case PortletConstants.DOSSIER_STATUS_PROCESSING:
-			statusLabel = LanguageUtil.get(locale, "processing");
-			break;
-		case PortletConstants.DOSSIER_STATUS_CANCELED:
-			statusLabel = LanguageUtil.get(locale, "canceled");
-			break;
-		case PortletConstants.DOSSIER_STATUS_DONE:
-			statusLabel = LanguageUtil.get(locale, "done");
-			break;
-		case PortletConstants.DOSSIER_STATUS_ARCHIVED:
-			statusLabel = LanguageUtil.get(locale, "archived");
-			break;
-		case PortletConstants.DOSSIER_STATUS_SYSTEM:
-			statusLabel = LanguageUtil.get(locale, "system");
-			break;
-		case PortletConstants.DOSSIER_STATUS_ENDED:
-			statusLabel = LanguageUtil.get(locale, "Ended");
-			break;
-		case PortletConstants.DOSSIER_STATUS_ERROR:
-			statusLabel = LanguageUtil.get(locale, "error");
-			break;
-		default:
-			statusLabel = LanguageUtil.get(locale, "new");
-			break;
+		String name = StringPool.BLANK;
+		DictItem dictItem = null;
+		
+		try  {
+			dictItem = DictItemLocalServiceUtil.getDictItemByCode(itemCode);
+			if(Validator.isNotNull(dictItem)) {
+				name = dictItem.getItemName(locale);
+			}
 		}
-
-		return statusLabel;
+		catch (Exception e) {
+			_log.error(e);
+		}
+		
+		return name;
 	}
 
 	public static List<DictItem> getDossierStatus(long groupId) throws NoSuchDictCollectionException, SystemException {
@@ -781,7 +747,7 @@ public class PortletUtil {
 		String queueName, String lookup, String mom)
 		throws SystemException {
 
-		Properties properties = new Properties();
+		Properties properties = null;
 
 		PortletPreferences preferences =
 			PrefsPropsUtil.getPreferences(companyId, true);
@@ -796,6 +762,7 @@ public class PortletUtil {
 
 		try {
 
+			properties = new Properties();
 			// Create json object from string
 			JSONObject jmsJSONObject =
 				JSONFactoryUtil.createJSONObject(jmsJSON);
@@ -887,8 +854,7 @@ public class PortletUtil {
 
 		return properties;
 	}
-	
-	
+
 	public static String intToString(long number, int stringLength) {
 
 		int numberOfDigits = String.valueOf(number).length();
