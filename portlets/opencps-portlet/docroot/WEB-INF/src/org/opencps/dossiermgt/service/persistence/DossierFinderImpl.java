@@ -120,7 +120,7 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 	 * @return
 	 */
 	public int countDossier(
-		long groupId, String keyword, String dossierStatus) {
+		long groupId, String keyword, String dossierStatus, String serviceDomainTreeIndex) {
 
 		String[] keywords = null;
 
@@ -135,7 +135,7 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 			andOperator = true;
 		}
 
-		return countDossier(groupId, keywords, dossierStatus, andOperator);
+		return countDossier(groupId, keywords, dossierStatus, serviceDomainTreeIndex, andOperator);
 	}
 
 	/**
@@ -146,7 +146,7 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 	 * @return
 	 */
 	private int countDossier(
-		long groupId, String[] keywords, String dossierStatus,
+		long groupId, String[] keywords, String dossierStatus, String serviceDomainTreeIndex,
 		boolean andOperator) {
 
 		Session session = null;
@@ -207,6 +207,15 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 						StringPool.BLANK);
 			}
 
+			if (Validator
+					.isNull(serviceDomainTreeIndex)) {
+
+					sql = StringUtil
+						.replace(sql,
+							"AND (opencps_dossier.serviceDomainIndex LIKE ? OR opencps_dossier.serviceDomainIndex = ?)",
+							StringPool.BLANK);
+				}
+			
 			sql = CustomSQLUtil
 				.replaceAndOperator(sql, andOperator);
 
@@ -239,6 +248,22 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 					.add(dossierStatus);
 			}
 
+			if (Validator
+					.isNotNull(serviceDomainTreeIndex) && StringUtil
+						.contains(serviceDomainTreeIndex, StringPool.PERIOD)) {
+					qPos
+						.add(serviceDomainTreeIndex + StringPool.PERCENT);
+
+				}
+				else if (Validator
+					.isNotNull(serviceDomainTreeIndex) && !StringUtil
+						.contains(serviceDomainTreeIndex, StringPool.PERIOD)) {
+					qPos
+						.add(serviceDomainTreeIndex + StringPool.PERIOD +
+							StringPool.PERCENT);
+					qPos
+						.add(serviceDomainTreeIndex);
+				}
 			Iterator<Integer> itr = q
 				.iterate();
 

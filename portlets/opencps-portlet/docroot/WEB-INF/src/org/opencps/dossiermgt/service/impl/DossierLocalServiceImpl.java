@@ -266,9 +266,9 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 * @param dossierStatus
 	 * @return
 	 */
-	public int countDossier(long groupId, String keyword, String dossierStatus) {
+	public int countDossier(long groupId, String keyword, String dossierStatus, String serviceDomainTreeIndex) {
 
-		return dossierFinder.countDossier(groupId, keyword, dossierStatus);
+		return dossierFinder.countDossier(groupId, keyword, dossierStatus, serviceDomainTreeIndex);
 	}
 
 	/**
