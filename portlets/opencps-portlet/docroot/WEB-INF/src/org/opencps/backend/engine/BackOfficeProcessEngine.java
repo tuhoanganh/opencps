@@ -207,6 +207,10 @@ public class BackOfficeProcessEngine implements MessageListener {
 				    ProcessWorkflowLocalServiceUtil.getProcessWorkflowByEvent(
 				        serviceProcessId, toEngineMsg.getEvent(), curStepId);
 				
+				_log.info("#############################serviceProcessId " + serviceProcessId);
+				_log.info("#############################toEngineMsg.getEvent() " + toEngineMsg.getEvent());
+				_log.info("#############################curStepId " + curStepId);
+				
 				_log.info("######################## CREATE WORKFLOW ###############");
 			}
 			else {

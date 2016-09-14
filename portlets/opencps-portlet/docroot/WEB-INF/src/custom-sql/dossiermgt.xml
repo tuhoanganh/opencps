@@ -161,7 +161,11 @@
 				(lower(opencps_dossier.subjectName) LIKE ? [$AND_OR_NULL_CHECK$])
 			AND 
 				(opencps_dossier.dossierStatus = ?)
+
 			AND (opencps_serviceinfo.domainCode = ?)
+			
+			AND 
+				(opencps_dossier.govAgencyCode IN (?))
 		]]>
 	</sql>	
 	
@@ -189,7 +193,11 @@
 				(lower(opencps_dossier.subjectName) LIKE ? [$AND_OR_NULL_CHECK$])				
 			AND 
 				(opencps_dossier.dossierStatus = ?)
+				
 			AND (opencps_serviceinfo.domainCode = ?)
+			
+			AND 
+				(opencps_dossier.govAgencyCode IN (?))
 		]]>
 	</sql>	
 
