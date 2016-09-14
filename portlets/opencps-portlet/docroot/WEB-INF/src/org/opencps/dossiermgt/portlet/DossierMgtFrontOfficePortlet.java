@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -109,6 +110,7 @@ import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
@@ -121,6 +123,7 @@ import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StreamUtil;
@@ -3034,6 +3037,42 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		}
 	}
 
+	public void menuCounterAction(ActionRequest actionRequest, ActionResponse actionResponse) throws PortalException, SystemException, IOException {
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+
+        long groupId = themeDisplay.getScopeGroupId();
+
+        // now read your parameters, e.g. like this:
+        // long someParameter = ParamUtil.getLong(request, "someParameter");
+        
+        String keywords = ParamUtil.getString(actionRequest, "keywords");
+        long serviceDomainId = ParamUtil.getLong(actionRequest, "serviceDomainId");
+        
+        DictItem domainItem = null;
+		
+		if(serviceDomainId > 0){
+			domainItem = DictItemLocalServiceUtil.fetchDictItem(serviceDomainId);
+		}
+        
+		long counterVal = 0;
+		JSONObject obj = null;
+		for (DictItem item : PortletUtil.getDossierStatus(groupId)){
+			obj = JSONFactoryUtil.createJSONObject();
+			
+			counterVal = DossierLocalServiceUtil.countDossier(groupId, 
+					StringPool.BLANK, item.getItemCode(), Validator.isNotNull(domainItem)? domainItem.getTreeIndex():StringPool.BLANK);
+
+			obj.put("code", item.getItemCode());
+			obj.put("counter", String.valueOf(counterVal));
+			jsonArray.put(obj);
+		}
+		jsonObject.put("badge", jsonArray);
+		PortletUtil.writeJSON(actionRequest, actionResponse, jsonObject);
+	}
+	
+	
 	private boolean _hasPermission = true;
 
 	public boolean hasPermission() {

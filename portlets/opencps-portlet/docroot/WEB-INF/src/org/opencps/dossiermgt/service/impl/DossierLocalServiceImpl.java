@@ -266,9 +266,9 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 * @param dossierStatus
 	 * @return
 	 */
-	public int countDossier(long groupId, String keyword, String dossierStatus) {
+	public int countDossier(long groupId, String keyword, String dossierStatus, String serviceDomainTreeIndex) {
 
-		return dossierFinder.countDossier(groupId, keyword, dossierStatus);
+		return dossierFinder.countDossier(groupId, keyword, dossierStatus, serviceDomainTreeIndex);
 	}
 
 	/**
@@ -1347,11 +1347,16 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 					}
 
 					if (oldDossierFile != null) {
-						if (oldDossierFile.getSyncStatus() != syncDossierFile.getSyncStatus()) {
-							oldDossierFile.setSyncStatus(syncDossierFile.getSyncStatus());
-							dossierFileLocalService.updateDossierFile(oldDossierFile);
-						}
-
+						//Tang version
+						dossierFileLocalService.addDossierFile(
+							oldDossierFile.getDossierFileId(),
+							folder.getFolderId(),
+							syncDLFileEntry.getName() + StringPool.PERIOD +
+								syncDLFileEntry.getExtension(),
+							syncDLFileEntry.getMimeType(),
+							syncDLFileEntry.getTitle(),
+							syncDLFileEntry.getDescription(), StringPool.BLANK,
+							bytes, serviceContext);
 					}
 					else {
 						dossierFileLocalService.addDossierFile(

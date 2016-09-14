@@ -1,4 +1,4 @@
-/** 
+/**
 * OpenCPS is the open source Core Public Services software
 * Copyright (C) 2016-present OpenCPS community
 
@@ -14,28 +14,42 @@
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>
 */
-package org.opencps.usermgt.util.comparator;
+/**
+ * 
+ */
+package org.opencps.processmgt.util.comparator;
 
-import org.opencps.usermgt.model.WorkingUnit;
+import org.opencps.processmgt.model.ProcessOrder;
 
 import com.liferay.portal.kernel.util.OrderByComparator;
-import com.liferay.portal.kernel.util.StringUtil;
 
-public class WorkingUnitAdressComporator extends OrderByComparator {
 
-	public static final String ORDER_BY_ASC = "opencps_workingunit.address ASC";
+/**
+ * @author dunglt
+ * 
+ */
+public class ProcessOrderModifiedDateComparator extends OrderByComparator{
+
+	/* (non-Javadoc)
+	 * @see com.liferay.portal.kernel.util.OrderByComparator#compare(java.lang.Object, java.lang.Object)
+	 */
+	public static final String ORDER_BY_ASC =
+				    "opencps_processorder.modifiedDate ASC";
 	public static final String ORDER_BY_DESC =
-		"opencps_workingunit.address DESC";
+				    "opencps_processorder.modifiedDate DESC";
+
 	public static final String[] ORDER_BY_FIELDS = {
-		"address"
+		"modifiedDate"
 	};
-
-	public WorkingUnitAdressComporator() {
-
+	
+	public ProcessOrderModifiedDateComparator() {
 		this(false);
 	}
-
-	public WorkingUnitAdressComporator(boolean ascending) {
+	
+	/**
+	 * @param b
+	 */
+	public ProcessOrderModifiedDateComparator(boolean ascending) {
 
 		_ascending = ascending;
 	}
@@ -43,17 +57,17 @@ public class WorkingUnitAdressComporator extends OrderByComparator {
 	@Override
 	public int compare(Object arg0, Object arg1) {
 
-		WorkingUnit workingUnit1 = (WorkingUnit) arg0;
-		WorkingUnit workingUnit2 = (WorkingUnit) arg1;
-
-		String adress1 = StringUtil.lowerCase(workingUnit1.getAddress());
-		String adress2 = StringUtil.lowerCase(workingUnit2.getAddress());
-
-		int value = adress1.compareTo(adress2);
-
-		return (_ascending) ? value : -value;
+		ProcessOrder processOrder = (ProcessOrder) arg0;
+		ProcessOrder processOrder1 = (ProcessOrder) arg1;
+		int value = 0;
+		value = (processOrder.getModifiedDate()).compareTo(processOrder1.getModifiedDate());
+		
+		/*if (value == 0) {
+			value = (processOrder.getActionDatetime()).compareTo(processOrder1.getActionDatetime());
+		}*/
+	    return _ascending ? value : -value;
 	}
-
+	
 	@Override
 	public String getOrderBy() {
 
@@ -70,12 +84,12 @@ public class WorkingUnitAdressComporator extends OrderByComparator {
 
 		return ORDER_BY_FIELDS;
 	}
-
+	
 	@Override
 	public boolean isAscending() {
 
 		return _ascending;
 	}
-
+	
 	private boolean _ascending;
 }
