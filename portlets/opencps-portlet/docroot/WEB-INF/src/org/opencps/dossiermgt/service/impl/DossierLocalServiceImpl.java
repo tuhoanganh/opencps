@@ -1258,6 +1258,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		throws SystemException, PortalException {
 
 		Dossier dossier = dossierPersistence.findByOID(oid);
+
 		dossier.setReceptionNo(receptionNo);
 		dossier.setEstimateDatetime(estimateDatetime);
 		dossier.setReceiveDatetime(receiveDatetime);
@@ -1415,6 +1416,8 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 			dossier.getUserId(), dossier.getGroupId(), dossier.getCompanyId(),
 			dossier.getDossierId(), fileGroupId, dossierStatus, actor, actorId,
 			actorName, requestCommand, actionInfo, messageInfo, level);
+
+		System.out.println("Done syncDossierStatus /////////////////////////////////////////");
 
 		dossierPersistence.update(dossier);
 

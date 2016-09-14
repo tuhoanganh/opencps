@@ -179,7 +179,7 @@ public class SubmitDossier {
 
 			engineMsg.setCompanyId(serviceContext.getCompanyId());
 			
-			engineMsg.setAction(WebKeys.ACTION_SUBMIT_VALUE);
+			engineMsg.setEvent(WebKeys.ACTION_CHANGE_VALUE);
 			
 			ProcessOrder processOrder =
 				ProcessOrderLocalServiceUtil.getProcessOrder(
