@@ -183,16 +183,14 @@
 			}
 		} catch (Exception e) {}
 	%>
-	
-	<aui:row>
-		<aui:col width="100">
-			<liferay-ui:message key="file-name" /> : 
-			<c:if test="<%=Validator.isNotNull(url) %>">
-				<a href="<%=url%>"><span style="color: blue"><liferay-ui:message key="url.file.entry" /> - <liferay-ui:message key="download-file-entry" /> </span></a>
-			</c:if>
-		</aui:col>
-	</aui:row>
-	
+	<c:if test="<%=Validator.isNotNull(url) %>">
+		<aui:row>
+			<aui:col width="100">
+				<liferay-ui:message key="file-name" /> : 
+					<a href="<%=url%>"><span style="color: blue"><liferay-ui:message key="url.file.entry" /> - <liferay-ui:message key="download-file-entry" /> </span></a>
+			</aui:col>
+		</aui:row>
+	</c:if>
 	<aui:row>
 		<aui:col width="100">
 			<aui:input name="<%= DossierFileDisplayTerms.DISPLAY_NAME %>" type="text" value="<%=dossierPartName %>">
