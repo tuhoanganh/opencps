@@ -22,7 +22,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.opencps.paymentmgt.model.PaymentFile;
-import org.opencps.util.PortletConstants;
 
 import com.liferay.portal.service.ServiceContext;
 
@@ -47,19 +46,6 @@ public class SyncFromBackOfficeMsgBody implements Serializable{
 	
 		this._actionInfo = actionInfo;
 	}
-
-	
-/*	public String getActor() {
-	
-		return _actor;
-	}
-
-	
-	public void setActor(String actor) {
-	
-		this._actor = actor;
-	}*/
-
 	
 	public long getDossierId() {
 	
@@ -300,7 +286,6 @@ public class SyncFromBackOfficeMsgBody implements Serializable{
     
 
 	private String _actionInfo;
-	
 	
 	private long _dossierId;
 	
