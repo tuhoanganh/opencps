@@ -380,15 +380,20 @@ public class PortletUtil {
 		return name;
 	}
 
-	public static List<DictItem> getDossierStatus(long groupId) throws NoSuchDictCollectionException, SystemException {
+	public static List<DictItem> getDossierStatus(long groupId) {
 
-		DictCollection dictCollection = DictCollectionLocalServiceUtil.getDictCollection(groupId, "DOSSIER_STATUS");
-		
-		
-		List<DictItem> result = DictItemLocalServiceUtil
-			.getDictItemsInUseByDictCollectionIdAndParentItemId(
-					dictCollection.getDictCollectionId(), 0);
-		
+		DictCollection dictCollection = null;
+		List<DictItem> result = new ArrayList<DictItem>();
+		try {
+			dictCollection = DictCollectionLocalServiceUtil.getDictCollection(groupId, "DOSSIER_STATUS");
+			if(Validator.isNotNull(dictCollection)) {
+				result = DictItemLocalServiceUtil
+								.getDictItemsByDictCollectionId(dictCollection.getDictCollectionId());
+			}
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+		}
 		return result;
 	}
 
