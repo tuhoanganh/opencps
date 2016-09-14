@@ -178,7 +178,9 @@ public class SubmitDossier {
 			engineMsg.setGroupId(serviceContext.getScopeGroupId());
 
 			engineMsg.setCompanyId(serviceContext.getCompanyId());
-
+			
+			engineMsg.setAction(WebKeys.ACTION_SUBMIT_VALUE);
+			
 			ProcessOrder processOrder =
 				ProcessOrderLocalServiceUtil.getProcessOrder(
 					dossierId, fileGroupId);
