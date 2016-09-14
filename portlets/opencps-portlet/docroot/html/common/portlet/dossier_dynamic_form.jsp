@@ -196,7 +196,7 @@
 				<c:if test="<%=dossierFileId > 0%>">
 					<aui:button type="button" value="preview" name="preview"/>
 					
-					<aui:button type="button" value="create-file" name="create-file"/>
+<%-- 					<aui:button type="button" value="create-file" name="create-file"/> --%>
 				</c:if>
 			</c:when>
 		</c:choose>
