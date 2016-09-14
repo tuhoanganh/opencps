@@ -230,19 +230,6 @@ public class SyncFromBackOfficeMsgBody implements Serializable{
     	return _submitDateTime;
     }
 
-
-	public int getSyncStatus() {
-	
-		return _syncStatus;
-	}
-
-	
-	public void setSyncStatus(int syncStatus) {
-	
-		this._syncStatus = syncStatus;
-	}
-
-
 	/**
      * @param _submitDateTime the _submitDateTime to set
      */
@@ -283,5 +270,4 @@ public class SyncFromBackOfficeMsgBody implements Serializable{
 	
 	private Date _submitDateTime;
 	
-	private int _syncStatus = PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC;
 }
