@@ -2165,7 +2165,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				
 			}
 			
-			obj.put("code", item.getProcessStepId());
+			obj.put("code", item.getServiceInfoId());
 			obj.put("counter", String.valueOf(counterVal));
 			jsonArray.put(obj);
 		}
