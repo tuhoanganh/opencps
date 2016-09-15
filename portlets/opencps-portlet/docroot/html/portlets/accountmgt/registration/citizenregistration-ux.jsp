@@ -234,6 +234,11 @@
 	 				>
 	 				</liferay-ui:input-date>
 				</aui:row>
+				<aui:row>
+					<div  id="<portlet:namespace/>defErrBirthDate" style="text-align: left; color: #b50303; margin-left:7px; margin-bottom: 10px; display: none;">
+						<liferay-ui:message key="required"/>
+					</div>
+				</aui:row>
 				
 				<aui:row cssClass="input-file">
 					<%
@@ -284,6 +289,7 @@
 						placeholder="<%=CitizenDisplayTerms.CITIZEN_ADDRESS %>"
 					>
 						<aui:validator name="maxLength">255</aui:validator>
+						<aui:validator name="required"/>
 					</aui:input>
 				</aui:row>
 				
@@ -369,7 +375,8 @@
 		var register = A.one('#<portlet:namespace />register');
 		var termsOfUse = A.one('#<portlet:namespace />termsOfUse');
 		var checkTel = telephoneCheck();
-		if(termsOfUse.val() == 'true' && checkTel == true){
+		var checkDate = checkBirthDate();
+		if(termsOfUse.val() == 'true' && checkTel == true && checkDate == true 	){
 			submitForm(document.<portlet:namespace />fm);
 		}else{
 			return;
@@ -382,6 +389,19 @@
 		openDialog(linkToPageURL.val(), '<portlet:namespace />dieuKhoanSuDung', '<%= UnicodeLanguageUtil.get(pageContext, "dieu-khoan-su-dung") %>');
 		
 	},['aui-io','liferay-portlet-url']);
+	
+	function checkBirthDate() {
+		var birthDate = A.one('#<portlet:namespace />birthDate');
+		if(birthDate.val() === "") {
+			birthDate.addClass('changeDefErr');
+			A.one("#<portlet:namespace/>defErrBirthDate").addClass('displayDefErr');
+			return false;
+		} else {
+			birthDate.removeClass('changeDefErr');
+			A.one("#<portlet:namespace/>defErrBirthDate").removeClass('displayDefErr');
+			return true;
+		}
+	}
 	
 	function telephoneCheck() {
 		var numRegex = A.one("#<portlet:namespace/>telNo").val();
