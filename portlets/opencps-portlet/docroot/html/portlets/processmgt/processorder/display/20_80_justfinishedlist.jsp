@@ -67,8 +67,8 @@
 
 <%
 	PortletURL iteratorURL = renderResponse.createRenderURL();
-	iteratorURL.setParameter("mvcPath", templatePath + "processordertodolist.jsp");
-	iteratorURL.setParameter("tabs1", ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS);
+	iteratorURL.setParameter("mvcPath", templatePath + "processorderjustfinishedlist.jsp");
+	iteratorURL.setParameter("tabs1", ProcessUtils.TOP_TABS_PROCESS_ORDER_FINISHED_PROCESSING);
 	
 	List<ProcessOrderBean> processOrders =  new ArrayList<ProcessOrderBean>();
 	
@@ -164,10 +164,10 @@
 				serviceInfoIdJsonData, 
 				arrayParam, 
 				'<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>', 
-				'<%=templatePath + "processordertodolist.jsp" %>', 
+				'<%=templatePath + "processorderjustfinishedlist.jsp" %>', 
 				'<%=LiferayWindowState.NORMAL.toString() %>', 
 				'normal',
-				null,
+				'<%=menuCounterServiceInfoIdUrl.toString() %>',
 				serviceInfoId,
 				'<%=renderResponse.getNamespace() %>');
 		buildTreeView("processStepIdTree", 
@@ -175,7 +175,7 @@
 				processStepIdJsonData, 
 				arrayParam, 
 				'<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>', 
-				'<%=templatePath + "processordertodolist.jsp" %>', 
+				'<%=templatePath + "processorderjustfinishedlist.jsp" %>', 
 				'<%=LiferayWindowState.NORMAL.toString() %>', 
 				'normal',
 				'<%=menuCounterUrl.toString() %>',
