@@ -260,7 +260,7 @@
 	<aui:col width="75" >
 
 		<liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
-	<c:if test="<%=!serviceDomainIdCHKInit.equals(\"-1\") %>">
+
 		<div class="opencps-searchcontainer-wrapper default-box-shadow radius8">
 
 		<div class="opcs-serviceinfo-list-label">
@@ -298,7 +298,9 @@
 						}
 						
 						%>
-							<%@include file="/html/portlets/dossiermgt/frontoffice/service_search_results.jspf" %>
+							<c:if test="<%=!serviceDomainIdCHKInit.equals(\"-1\") %>">
+								<%@include file="/html/portlets/dossiermgt/frontoffice/service_search_results.jspf" %>
+							</c:if>
 						<%
 					}catch(Exception e){
 						_log.error(e);
@@ -384,7 +386,6 @@
 			<liferay-ui:search-iterator type="opencs_page_iterator"/>
 		</liferay-ui:search-container>
 	</div>
-	</c:if>
 
 	</aui:col>
 </aui:row>
