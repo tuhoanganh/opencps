@@ -51,8 +51,8 @@ public class ConfigurationProcessOrderImpl implements ConfigurationAction{
 
 		String oderByToDo = ParamUtil.getString(actionRequest, "oderByToDo", ProcessOrderDisplayTerms.MODIFIEDDATE);
 		String oderByJustFinish = ParamUtil.getString(actionRequest, "oderByJustFinish", ProcessOrderDisplayTerms.MODIFIEDDATE);
-		String oderFieldToDo = ParamUtil.getString(actionRequest, "oderFieldToDo", WebKeys.ORDER_BY_ASC);
-		String oderFieldJustFinish = ParamUtil.getString(actionRequest, "oderFieldJustFinish", WebKeys.ORDER_BY_ASC);
+		String oderFieldToDo = ParamUtil.getString(actionRequest, "oderFieldToDo", WebKeys.ORDER_BY_DESC);
+		String oderFieldJustFinish = ParamUtil.getString(actionRequest, "oderFieldJustFinish", WebKeys.ORDER_BY_DESC);
 		String portletResource =
 					    ParamUtil.getString(actionRequest, "portletResource");
 
