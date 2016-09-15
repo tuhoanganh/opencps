@@ -91,18 +91,7 @@
 	List<Dossier> dossiers =  new ArrayList<Dossier>();
 	
 	int totalCount = 0;
-	
-	try{
-		
-		dossiers = DossierLocalServiceUtil.getDossierByUserNewRequest(scopeGroupId, themeDisplay.getUserId(), 0, itemsToDisplay_cfg, 
-			null);
-		totalCount = dossiers.size();
-	
-	}catch(Exception e){
-		_log.error(e);
-		
-	}
-	
+
 	JSONObject arrayParam = JSONFactoryUtil
 		    .createJSONObject();
 	arrayParam.put(DossierDisplayTerms.SERVICE_DOMAIN_ID, (serviceDomainId > 0) ? String.valueOf(serviceDomainId):StringPool.BLANK);
@@ -187,7 +176,7 @@
 	<aui:col width="75" >
 
 		<liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
-		<c:if test="<%=!dossierStatusCHKInit.equals(\"-1\") %>">
+		
 			<div class="opencps-searchcontainer-wrapper default-box-shadow radius8">
 			<div class="opcs-serviceinfo-list-label">
 				<div class="title_box">
@@ -206,7 +195,7 @@
 						
 						DictItem domainItem = null;
 					
-						
+
 						try{
 							if(serviceDomainId > 0){
 								domainItem = DictItemLocalServiceUtil.getDictItem(serviceDomainId);
@@ -217,7 +206,9 @@
 							}
 							
 							%>
-								<%@include file="/html/portlets/dossiermgt/frontoffice/dosier_search_results.jspf" %>
+								<c:if test="<%=!dossierStatusCHKInit.equals(\"-1\") %>">
+									<%@include file="/html/portlets/dossiermgt/frontoffice/dosier_search_results.jspf" %>
+								</c:if>
 							<%
 						}catch(Exception e){
 							_log.error(e);
@@ -367,7 +358,6 @@
 				
 			</liferay-ui:search-container>
 		</div>
-		</c:if>
 		
 	</aui:col>
 </aui:row>
