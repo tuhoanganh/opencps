@@ -1,4 +1,6 @@
 
+<%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
 <%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
 <%
 /**
@@ -78,6 +80,12 @@
 		
 	}
 	
+	String dossierPartName = StringPool.BLANK; 
+	if(dossierPartId > 0){
+		DossierPart dossierPart = DossierPartLocalServiceUtil.fetchDossierPart(dossierPartId);
+		dossierPartName = Validator.isNotNull(dossierPart)?dossierPart.getPartName():StringPool.BLANK;
+	}
+	
 	Date defaultDossierFileDate = dossierFile != null && dossierFile.getDossierFileDate() != null ? 
 		dossierFile.getDossierFileDate() : DateTimeUtil.convertStringToDate("01/01/1970");
 		
@@ -150,7 +158,7 @@
 	<aui:input name="<%=DossierFileDisplayTerms.GROUP_NAME %>" type="hidden" value="<%=groupName %>"/>
 	<aui:row>
 		<aui:col width="100">
-			<aui:input name="<%= DossierFileDisplayTerms.DISPLAY_NAME %>" type="text">
+			<aui:input name="<%= DossierFileDisplayTerms.DISPLAY_NAME %>" type="text" value="<%=dossierPartName %>">
 				<aui:validator name="required"/>
 			</aui:input>
 		</aui:col>

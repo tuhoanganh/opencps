@@ -1,3 +1,4 @@
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -20,25 +21,16 @@
 <%@ include file="../init.jsp"%>
 
 <%
-	String tab1 = ParamUtil.getString(request, "tab1", "upload-file");
+	String content = ParamUtil.getString(request, "content", "upload");
 %>
 
-<liferay-ui:tabs
-	names="upload-file,select-file-store"
-	refresh="<%= false %>"
-	value="<%=tab1 %>"
->
-	<liferay-ui:section>
-		<liferay-util:include 
-			page="/html/common/portlet/dossier_upload_file.jsp" 
-			servletContext="<%=application %>"
-		/>
-	</liferay-ui:section>
-	<liferay-ui:section >
-		
-		<liferay-util:include 
-			page='<%=templatePath + "dossier_select_file.jsp" %>' 
-			servletContext="<%=application %>"
-		/>
-	</liferay-ui:section>
-</liferay-ui:tabs>
+<c:choose>
+	<c:when test='<%=content.equals("view-form") %>'>
+		<liferay-util:include page="/html/common/portlet/dossier_dynamic_form.jsp" servletContext="<%=application %>"/>
+	</c:when>
+	<c:when test='<%=content.equals("view-version") %>'>
+		<liferay-util:include  page="/html/portlets/dossiermgt/frontoffice/dossier_file_version.jsp" servletContext="<%=application %>"/>
+	</c:when>
+</c:choose>
+
+

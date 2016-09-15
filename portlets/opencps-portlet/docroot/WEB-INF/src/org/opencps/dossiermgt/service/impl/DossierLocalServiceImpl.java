@@ -261,17 +261,6 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	}
 
 	/**
-	 * @param groupId
-	 * @param keyword
-	 * @param dossierStatus
-	 * @return
-	 */
-	public int countDossier(long groupId, String keyword, String dossierStatus, String serviceDomainTreeIndex) {
-
-		return dossierFinder.countDossier(groupId, keyword, dossierStatus, serviceDomainTreeIndex);
-	}
-
-	/**
 	 * @param dossierStatus
 	 * @param serviceNo
 	 * @param fromDate
@@ -317,10 +306,11 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 * @return
 	 */
 	public int countDossierByKeywordDomainAndStatus(
-		long groupId, String keyword, String domainCode, String dossierStatus) {
+		long groupId, String keyword, String domainCode,
+		List<String> govAgencyCodes, String dossierStatus) {
 
 		return dossierFinder.countDossierByKeywordDomainAndStatus(
-			groupId, keyword, domainCode, dossierStatus);
+			groupId, keyword, domainCode, govAgencyCodes, dossierStatus);
 	};
 
 	/**
@@ -677,22 +667,6 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		return dossier;
 	}
 
-	/**
-	 * @param groupId
-	 * @param keyword
-	 * @param dossierStatus
-	 * @param start
-	 * @param end
-	 * @param obc
-	 * @return
-	 */
-	public List<Dossier> getDossier(
-		long groupId, String keyword, String dossierStatus, int start, int end,
-		OrderByComparator obc) {
-
-		return dossierFinder.searchDossier(
-			groupId, keyword, dossierStatus, start, end, obc);
-	}
 
 	/**
 	 * @param delayStatus
@@ -852,11 +826,13 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	 * @return
 	 */
 	public List<Dossier> searchDossierByKeywordDomainAndStatus(
-		long groupId, String keyword, String domainCode, String dossierStatus,
-		int start, int end, OrderByComparator obc) {
+		long groupId, String keyword, String domainCode,
+		List<String> govAgencyCodes, String dossierStatus, int start, int end,
+		OrderByComparator obc) {
 
 		return dossierFinder.searchDossierByKeywordDomainAndStatus(
-			groupId, keyword, domainCode, dossierStatus, start, end, obc);
+			groupId, keyword, domainCode, govAgencyCodes, dossierStatus, start,
+			end, obc);
 	}
 
 	/**
@@ -1073,7 +1049,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		dossier.setNote(syncDossier.getNote());
 		dossier.setOwnerOrganizationId(0);// Sync from another system
 		dossier.setReceptionNo(syncDossier.getReceptionNo());
-		// dossier.setReceiveDatetime(receiveDatetime);
+		//dossier.setReceiveDatetime(receiveDatetime);
 		dossier.setServiceAdministrationIndex(syncDossier.getServiceAdministrationIndex());
 		dossier.setServiceConfigId(syncDossier.getServiceConfigId());
 		dossier.setServiceDomainIndex(syncDossier.getServiceDomainIndex());
@@ -1109,8 +1085,6 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 				serviceContext.getScopeGroupId(), false, 0,
 				dossierFolderDestination, StringPool.BLANK, false,
 				serviceContext);
-
-		dossier.setFolderId(folder.getFolderId());
 
 		if (syncDossierFiles != null) {
 			for (Map.Entry<DossierFile, DossierPart> entry : syncDossierFiles.entrySet()) {
@@ -1252,6 +1226,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		throws SystemException, PortalException {
 
 		Dossier dossier = dossierPersistence.findByOID(oid);
+
 		dossier.setReceptionNo(receptionNo);
 		dossier.setEstimateDatetime(estimateDatetime);
 		dossier.setReceiveDatetime(receiveDatetime);
@@ -1336,58 +1311,31 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 				if (bytes != null && syncDLFileEntry != null) {
 					System.out.println("SyncDossierStatus Add Dossier File//////////////////");
 
-					DossierFile oldDossierFile = null;
-
-					try {
-						oldDossierFile =
-							dossierFileLocalService.getByOid(syncDossierFile.getOid());
-					}
-					catch (Exception e) {
-						// TODO: handle exception
-					}
-
-					if (oldDossierFile != null) {
-						//Tang version
-						dossierFileLocalService.addDossierFile(
-							oldDossierFile.getDossierFileId(),
-							folder.getFolderId(),
-							syncDLFileEntry.getName() + StringPool.PERIOD +
-								syncDLFileEntry.getExtension(),
-							syncDLFileEntry.getMimeType(),
-							syncDLFileEntry.getTitle(),
-							syncDLFileEntry.getDescription(), StringPool.BLANK,
-							bytes, serviceContext);
-					}
-					else {
-						dossierFileLocalService.addDossierFile(
-							serviceContext.getUserId(),
-							dossier.getDossierId(),
-							dossierPart.getDossierpartId(),
-							dossierTemplate.getTemplateNo(),
-							syncFileGroup != null
-								? syncFileGroup.getDisplayName()
-								: StringPool.BLANK,
-							syncFileGroup != null
-								? syncFileGroup.getFileGroupId() : 0,
-							groupDossierPart != null
-								? groupDossierPart.getDossierpartId() : 0, 0,
-							0, syncDossierFile.getDisplayName(),
-							syncDossierFile.getFormData(),
-							syncDossierFile.getDossierFileMark(),
-							syncDossierFile.getDossierFileType(),
-							syncDossierFile.getDossierFileNo(),
-							syncDossierFile.getDossierFileDate(),
-							syncDossierFile.getOriginal(),
-							syncDossierFile.getSyncStatus(),
-							folder.getFolderId(),
-							syncDLFileEntry.getName() + StringPool.PERIOD +
-								syncDLFileEntry.getExtension(),
-							syncDLFileEntry.getMimeType(),
-							syncDLFileEntry.getTitle(),
-							syncDLFileEntry.getDescription(), StringPool.BLANK,
-							bytes, serviceContext);
-					}
-
+					dossierFileLocalService.addDossierFile(
+						serviceContext.getUserId(),
+						dossier.getDossierId(),
+						dossierPart.getDossierpartId(),
+						dossierTemplate.getTemplateNo(),
+						syncFileGroup != null
+							? syncFileGroup.getDisplayName() : StringPool.BLANK,
+						syncFileGroup != null
+							? syncFileGroup.getFileGroupId() : 0,
+						groupDossierPart != null
+							? groupDossierPart.getDossierpartId() : 0, 0, 0,
+						syncDossierFile.getDisplayName(),
+						syncDossierFile.getFormData(),
+						syncDossierFile.getDossierFileMark(),
+						syncDossierFile.getDossierFileType(),
+						syncDossierFile.getDossierFileNo(),
+						syncDossierFile.getDossierFileDate(),
+						syncDossierFile.getOriginal(),
+						syncDossierFile.getSyncStatus(), folder.getFolderId(),
+						syncDLFileEntry.getName() + StringPool.PERIOD +
+							syncDLFileEntry.getExtension(),
+						syncDLFileEntry.getMimeType(),
+						syncDLFileEntry.getTitle(),
+						syncDLFileEntry.getDescription(), StringPool.BLANK,
+						bytes, serviceContext);
 				}
 			}
 		}
@@ -1409,6 +1357,8 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 			dossier.getUserId(), dossier.getGroupId(), dossier.getCompanyId(),
 			dossier.getDossierId(), fileGroupId, dossierStatus, actor, actorId, actorName,
 			requestCommand, actionInfo, messageInfo, level);
+
+		System.out.println("Done syncDossierStatus /////////////////////////////////////////");
 
 		dossierPersistence.update(dossier);
 
@@ -2094,63 +2044,6 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 			actionInfo, messageInfo, level);
 
 		dossierPersistence.update(dossier);
-	}
-
-	/**
-	 * @param oId
-	 * @param fileGroupIds
-	 * @param syncStatus
-	 * @throws SystemException
-	 * @throws NoSuchDossierStatusException
-	 * @throws PortalException
-	 */
-	public void updateSyncStatus(
-		String oId, List<Long> fileGroupIds, int syncStatus)
-		throws SystemException, NoSuchDossierStatusException, PortalException {
-
-		Date now = new Date();
-
-		Dossier dossier = dossierLocalService.getByoid(oId);
-
-		int flagStatus = PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC;
-
-		if (syncStatus == PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS ||
-			syncStatus == PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCERROR) {
-			flagStatus = PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC;
-		}
-
-		if (fileGroupIds != null) {
-			for (long fileGroupId : fileGroupIds) {
-				FileGroup fileGroup =
-					fileGroupLocalService.getFileGroup(fileGroupId);
-				List<DossierFile> dossierFiles =
-					dossierFileLocalService.findByF_D_S_R(
-						fileGroupId, dossier.getDossierId(), flagStatus, 0);
-				if (dossierFiles != null) {
-					for (DossierFile dossierFile : dossierFiles) {
-						dossierFile.setSyncStatus(syncStatus);
-						dossierFile.setModifiedDate(now);
-						dossierFileLocalService.updateDossierFile(dossierFile);
-					}
-				}
-				fileGroup.setSyncStatus(syncStatus);
-				fileGroup.setModifiedDate(now);
-				fileGroupLocalService.updateFileGroup(fileGroup);
-			}
-		}
-
-		List<DossierFile> dossierFiles =
-			dossierFileLocalService.findByF_D_S_R(
-				0, dossier.getDossierId(), flagStatus, 0);
-		if (dossierFiles != null) {
-			for (DossierFile dossierFile : dossierFiles) {
-				dossierFile.setSyncStatus(syncStatus);
-				dossierFile.setModifiedDate(now);
-
-				dossierFileLocalService.updateDossierFile(dossierFile);
-			}
-		}
-
 	}
 
 	/**
