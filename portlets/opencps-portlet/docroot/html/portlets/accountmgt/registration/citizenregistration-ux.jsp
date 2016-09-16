@@ -234,7 +234,7 @@
 	 				>
 	 				</liferay-ui:input-date>
 	 				<div  id="<portlet:namespace/>defErrBirthDate" style="text-align: left; color: #b50303; margin-left:7px; margin-bottom: 10px; display: none;">
-						<liferay-ui:message key="required"/>
+						<liferay-ui:message key="required-field"/>
 					</div>
 				</aui:row>
 				
@@ -410,7 +410,7 @@
 		var temp = A.one("#<portlet:namespace/>telNo");
 		var isphone = /^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/;
 		if(isphone.test(numRegex) && num>=10){
-			A.one("#<portlet:namespace/>def").removeClass('changeDefErr');
+			A.one("#<portlet:namespace/>telNo").removeClass('changeDefErr');
 			A.one("#<portlet:namespace/>defErr").removeClass('displayDefErr');
 			A.one("#<portlet:namespace/>defErr2").removeClass('displayDefErr');
 			return true;
@@ -419,12 +419,12 @@
 			  if(num==0){return true;}
 			  else {
 				 if(num<10){
-				  A.one("#<portlet:namespace/>def").addClass('changeDefErr');
+				  A.one("#<portlet:namespace/>telNo").addClass('changeDefErr');
 				  A.one("#<portlet:namespace/>defErr").removeClass('displayDefErr');
 				  A.one("#<portlet:namespace/>defErr2").addClass('displayDefErr');
 				  return false;
 			  } else if(!isphone.test(numRegex)) {
-				  A.one("#<portlet:namespace/>def").addClass('changeDefErr');
+				  A.one("#<portlet:namespace/>telNo").addClass('changeDefErr');
 				  A.one("#<portlet:namespace/>defErr").addClass('displayDefErr');
 				  A.one("#<portlet:namespace/>defErr2").removeClass('displayDefErr');
 			  }
