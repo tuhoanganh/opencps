@@ -1,5 +1,3 @@
-<%@page import="java.util.ArrayList"%>
-<%@page import="java.util.List"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -42,6 +40,8 @@
 <%@page import="java.util.Date"%>
 <%@page import="org.opencps.util.PortletUtil"%>
 <%@page import="org.opencps.util.DateTimeUtil"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
 
 <%@ include file="../init.jsp" %>
 
@@ -233,9 +233,7 @@
 	 					
 	 				>
 	 				</liferay-ui:input-date>
-				</aui:row>
-				<aui:row>
-					<div  id="<portlet:namespace/>defErrBirthDate" style="text-align: left; color: #b50303; margin-left:7px; margin-bottom: 10px; display: none;">
+	 				<div  id="<portlet:namespace/>defErrBirthDate" style="text-align: left; color: #b50303; margin-left:7px; margin-bottom: 10px; display: none;">
 						<liferay-ui:message key="required"/>
 					</div>
 				</aui:row>
@@ -391,6 +389,7 @@
 	},['aui-io','liferay-portlet-url']);
 	
 	function checkBirthDate() {
+			
 		var birthDate = A.one('#<portlet:namespace />birthDate');
 		if(birthDate.val() === "") {
 			birthDate.addClass('changeDefErr');
