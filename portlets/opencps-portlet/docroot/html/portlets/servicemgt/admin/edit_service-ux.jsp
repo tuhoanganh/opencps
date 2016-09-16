@@ -176,7 +176,7 @@
 								index += "_";
 							}
 							%>
-								<aui:option value="<%=dictItem.getItemCode() %>"><%=index + dictItem.getItemName(locale) %></aui:option>
+								<aui:option value="<%=dictItem.getDictItemId() %>"><%=index + dictItem.getItemName(locale) %></aui:option>
 							<%
 						}
 					}
