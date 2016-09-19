@@ -366,29 +366,31 @@ public class PortletUtil {
 
 		String name = StringPool.BLANK;
 		DictItem dictItem = null;
-		
-		try  {
+
+		try {
 			dictItem = DictItemLocalServiceUtil.getDictItemByCode(itemCode);
-			if(Validator.isNotNull(dictItem)) {
+			if (Validator.isNotNull(dictItem)) {
 				name = dictItem.getItemName(locale);
 			}
 		}
 		catch (Exception e) {
 			_log.error(e);
 		}
-		
+
 		return name;
 	}
 
-	public static List<DictItem> getDossierStatus(long groupId) throws NoSuchDictCollectionException, SystemException {
+	public static List<DictItem> getDossierStatus(long groupId)
+		throws NoSuchDictCollectionException, SystemException {
 
-		DictCollection dictCollection = DictCollectionLocalServiceUtil.getDictCollection(groupId, "DOSSIER_STATUS");
-		
-		
-		List<DictItem> result = DictItemLocalServiceUtil
-			.getDictItemsInUseByDictCollectionIdAndParentItemId(
-					dictCollection.getDictCollectionId(), 0);
-		
+		DictCollection dictCollection =
+			DictCollectionLocalServiceUtil.getDictCollection(
+				groupId, "DOSSIER_STATUS");
+
+		List<DictItem> result =
+			DictItemLocalServiceUtil.getDictItemsInUseByDictCollectionIdAndParentItemId(
+				dictCollection.getDictCollectionId(), 0);
+
 		return result;
 	}
 
@@ -397,6 +399,7 @@ public class PortletUtil {
 		return StringUtil.merge(folderNames, StringPool.FORWARD_SLASH);
 	}
 
+	@Deprecated
 	public static String getCitizenDossierDestinationFolder(
 		long groupId, long userId) {
 
@@ -405,6 +408,7 @@ public class PortletUtil {
 			String.valueOf(userId);
 	}
 
+	@Deprecated
 	public static String getBusinessDossierDestinationFolder(
 		long groupId, long orgId) {
 
@@ -428,6 +432,17 @@ public class PortletUtil {
 			StringPool.SLASH + String.valueOf(year) + StringPool.SLASH +
 			String.valueOf(month) + StringPool.SLASH + String.valueOf(day) +
 			StringPool.SLASH + oid;
+	}
+
+	public static String getPaymentDestinationFolder(
+		long groupId, int year, int month, int day, long ownId,
+		String accountType) {
+
+		return String.valueOf(groupId) + StringPool.SLASH + "Payments" +
+			StringPool.SLASH + accountType + StringPool.SLASH +
+			String.valueOf(year) + StringPool.SLASH + String.valueOf(month) +
+			StringPool.SLASH + String.valueOf(day) + StringPool.SLASH +
+			String.valueOf(ownId);
 	}
 
 	public static DictItem getDictItem(
