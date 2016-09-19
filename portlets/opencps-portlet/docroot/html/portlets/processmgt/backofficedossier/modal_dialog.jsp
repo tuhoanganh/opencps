@@ -21,7 +21,9 @@
 <%@ include file="../init.jsp"%>
 
 <%
+
 	String content = ParamUtil.getString(request, "content", "upload");
+
 %>
 
 <c:choose>
