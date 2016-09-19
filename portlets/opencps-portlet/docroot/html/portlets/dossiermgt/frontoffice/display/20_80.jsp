@@ -113,7 +113,7 @@
 				PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN, 
 				"0", 
 				LanguageUtil.get(locale, "filter-by-service-domain-left") , 
-				1, 
+				2, 
 				"radio",
 				false,
 				renderRequest);
