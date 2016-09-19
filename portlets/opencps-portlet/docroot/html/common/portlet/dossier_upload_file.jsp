@@ -77,28 +77,19 @@
 	
 	DossierFile dossierFile = null;
 	
-	String templateFileNo = StringPool.BLANK;
-	
 	if(dossierFileId > 0){
 		try{
-			dossierFile = DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
 			
-			templateFileNo = dossierFile.getTemplateFileNo();
+			dossierFile = DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
 			
 		}catch(Exception e){}
 		
 	}
 	
-	TemplateFile templateFile = null;
 	String dossierPartName = StringPool.BLANK; 
 	if(dossierPartId > 0){
 		DossierPart dossierPart = DossierPartLocalServiceUtil.fetchDossierPart(dossierPartId);
 		dossierPartName = Validator.isNotNull(dossierPart)?dossierPart.getPartName():StringPool.BLANK;
-		if(Validator.isNotNull(dossierPart)){
-			
-			templateFile = TemplateFileLocalServiceUtil.getTemplateFileByNo(themeDisplay.getScopeGroupId(), templateFileNo);
-			
-		}
 	}
 	
 	Date defaultDossierFileDate = dossierFile != null && dossierFile.getDossierFileDate() != null ? 
@@ -172,25 +163,6 @@
 	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_TYPE %>" type="hidden" value="<%=String.valueOf(renderResponse.getNamespace().equals(StringPool.UNDERLINE + WebKeys.DOSSIER_MGT_PORTLET + StringPool.UNDERLINE)  ? PortletConstants.DOSSIER_FILE_TYPE_INPUT : PortletConstants.DOSSIER_FILE_TYPE_OUTPUT) %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.GROUP_NAME %>" type="hidden" value="<%=groupName %>"/>
 	
-	<%
-		String url = StringPool.BLANK;
-				
-		DLFileEntry dlFileEntry = null;
-		try {
-			if(Validator.isNotNull(templateFile)){
-				dlFileEntry = DLFileEntryLocalServiceUtil.getDLFileEntry(templateFile.getFileEntryId());
-				url = themeDisplay.getPortalURL()+"/c/document_library/get_file?uuid="+dlFileEntry.getUuid()+"&groupId="+themeDisplay.getScopeGroupId();
-			}
-		} catch (Exception e) {}
-	%>
-	<c:if test="<%=Validator.isNotNull(url) %>">
-		<aui:row>
-			<aui:col width="100">
-				<liferay-ui:message key="file-name" /> : 
-					<a href="<%=url%>"><span style="color: blue"><liferay-ui:message key="url.file.entry" /> - <liferay-ui:message key="download-file-entry" /> </span></a>
-			</aui:col>
-		</aui:row>
-	</c:if>
 	<aui:row>
 		<aui:col width="100">
 			<aui:input name="<%= DossierFileDisplayTerms.DISPLAY_NAME %>" type="text" value="<%=dossierPartName %>">
