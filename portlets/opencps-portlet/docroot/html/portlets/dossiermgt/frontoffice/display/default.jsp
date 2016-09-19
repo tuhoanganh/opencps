@@ -51,6 +51,8 @@
 
 <liferay-ui:success  key="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>" message="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>"/>
 
+<liferay-ui:success  key="<%=MessageKeys.DEFAULT_SUCCESS_KEY_X %>" message="<%=MessageKeys.DEFAULT_SUCCESS_KEY_X %>"/>
+
 <liferay-ui:error 
 	exception="<%= NoSuchDossierException.class %>" 
 	message="<%=NoSuchDossierException.class.getName() %>"
