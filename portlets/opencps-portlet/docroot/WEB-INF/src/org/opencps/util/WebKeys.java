@@ -38,7 +38,7 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String PROCESS_ORDER_PORTLET = "16_WAR_opencpsportlet";
 	
 	public static final String DOSSIER_BACKOFFICE_MANAGEMENT_PORTLET = "18_WAR_opencpsportlet";
-
+	
 	public static final String DICT_COLLECTION_ENTRY = "DICT_COLLECTION_ENTRY";
 
 	public static final String DICT_VERSION_ENTRY = "DICT_VERSION_ENTRY";
