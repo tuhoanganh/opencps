@@ -193,9 +193,9 @@
 		<%
 			String serviceDomainJsonData = ProcessOrderUtils.generateTreeView(
 				PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN, 
-				"0", 
+				PortletConstants.TREE_VIEW_DEFAULT_ITEM_CODE, 
 				LanguageUtil.get(locale, "filter-by-service-domain-left") , 
-				2, 
+				PortletConstants.TREE_VIEW_LEVER_2, 
 				"radio",
 				false,
 				renderRequest);
@@ -211,9 +211,9 @@
 
 			String governmentAgencyJsonData = ProcessOrderUtils.generateTreeView(
 				PortletPropsValues.DATAMGT_MASTERDATA_GOVERNMENT_AGENCY, 
-				"0", 
+				PortletConstants.TREE_VIEW_DEFAULT_ITEM_CODE, 
 				LanguageUtil.get(locale, "filter-by-gov-agency-left") , 
-				0, 
+				PortletConstants.TREE_VIEW_LEVER_0, 
 				"radio",
 				false,
 				renderRequest);

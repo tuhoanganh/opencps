@@ -1,4 +1,5 @@
 
+<%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="org.opencps.util.PortletPropsValues"%>
 <%@page import="com.liferay.portal.kernel.json.JSONFactoryUtil"%>
 <%@page import="com.liferay.portal.kernel.json.JSONObject"%>
@@ -111,9 +112,9 @@
 		
 		String serviceDomainJsonData = ProcessOrderUtils.generateTreeView(
 				PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN, 
-				"0", 
+				PortletConstants.TREE_VIEW_DEFAULT_ITEM_CODE, 
 				LanguageUtil.get(locale, "filter-by-service-domain-left") , 
-				2, 
+				PortletConstants.TREE_VIEW_LEVER_2, 
 				"radio",
 				false,
 				renderRequest);
@@ -127,9 +128,9 @@
 		<% 
 		String dossierStatusJsonData = ProcessOrderUtils.generateTreeView(
 				PortletPropsValues.DATAMGT_MASTERDATA_DOSSIER_STATUS, 
-				"0", 
+				PortletConstants.TREE_VIEW_DEFAULT_ITEM_CODE, 
 				LanguageUtil.get(locale, "dossier-status") , 
-				0, 
+				PortletConstants.TREE_VIEW_LEVER_0, 
 				"radio",
 				true,
 				renderRequest);
