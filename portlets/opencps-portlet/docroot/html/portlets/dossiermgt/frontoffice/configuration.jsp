@@ -50,6 +50,8 @@
 	
 	String templatesToDisplay_cfg = GetterUtil.getString(portletPreferences.getValue("templatesToDisplay", "default"));
 	
+	int timeToReLoad_cfg = GetterUtil.getInteger(portletPreferences.getValue("timeToReLoad", "0"));
+	
 %>
 
 <aui:form action="<%= configurationActionURL %>" method="post" name="configurationForm">
@@ -78,6 +80,18 @@
 			<aui:option selected="<%= templatesToDisplay_cfg.equals(\"default\") %>" value="default">default</aui:option>
 			
 			<aui:option selected="<%= templatesToDisplay_cfg.equals(\"20_80\") %>" value="20_80">20_80</aui:option>
+	
+	</aui:select>
+	
+	<aui:select name="timeToReLoad" id="timeToReLoad">
+			
+			<%
+				for (int iTems = 0 ; iTems < 60; iTems += 5) {
+			%>
+				<aui:option selected="<%= timeToReLoad_cfg == iTems %>" value="<%= iTems %>"><%= iTems %></aui:option>
+			<%
+				}
+			%>
 	
 	</aui:select>
 	
