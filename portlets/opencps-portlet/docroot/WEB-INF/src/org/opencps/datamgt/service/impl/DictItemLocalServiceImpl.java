@@ -29,6 +29,7 @@ import org.opencps.datamgt.model.DictCollection;
 import org.opencps.datamgt.model.DictItem;
 import org.opencps.datamgt.model.DictVersion;
 import org.opencps.datamgt.service.base.DictItemLocalServiceBaseImpl;
+import org.opencps.datamgt.service.persistence.DictItemFinderUtil;
 import org.opencps.util.PortletConstants;
 
 import com.liferay.counter.service.CounterLocalServiceUtil;
@@ -337,6 +338,21 @@ public class DictItemLocalServiceImpl extends DictItemLocalServiceBaseImpl {
 			.findByC_C_I(dictCollectionId, itemCode);
 	}
 
+
+	/**
+	 * @param dictCollectionId
+	 * @param groupId
+	 * @return
+	 * @throws SystemException
+	 */
+	public List<DictItem> getDictItemsByCollectionCode(String dictCollectionCode, long groupId)
+		throws SystemException {
+		
+		// dictItemFinder.getDictItems(dictCollectionCode, groupId)
+		
+		return DictItemFinderUtil.getDictItemsByCollectionCode(dictCollectionCode, groupId);
+	}
+	
 	/**
 	 * @param groupId
 	 * @param dictCollectionCode

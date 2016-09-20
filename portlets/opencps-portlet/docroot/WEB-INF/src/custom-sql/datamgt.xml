@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom-sql>
+	<sql id="org.opencps.datamgt.service.persistence.DictItemFinder.getDictItemsByCollectionCode">
+		<![CDATA[
+			SELECT 
+				* 
+			FROM 
+				opencps_dictitem 
+			LEFT JOIN 
+				opencps_dictcollection 
+			ON 
+				opencps_dictitem.dictcollectionid = opencps_dictcollection.dictcollectionid
+			WHERE 
+				(opencps_dictcollection.collectionCode= ?)
+			AND 
+				(opencps_dictcollection.groupid= ?)
+		]]>
+	</sql>
+</custom-sql>
