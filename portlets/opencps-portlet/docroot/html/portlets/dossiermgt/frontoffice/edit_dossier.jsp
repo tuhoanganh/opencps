@@ -65,7 +65,7 @@
 	
 	String[] dossierSections = dossier != null ? 
 		new String[]{"dossier_part", "dossier_info", "result", "history"} : 
-		new String[]{"dossier_part"};
+		new String[]{"dossier_info"};
 	
 	String[][] categorySections = {dossierSections};
 	
