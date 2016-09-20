@@ -24,6 +24,7 @@
 <%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
 <%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
 <%@ include file="init.jsp" %>
 <%
 	long serviceinfoId = ParamUtil.getLong(request, "serviceinfoId");
@@ -36,11 +37,17 @@
 	
 	String backURL = ParamUtil.getString(request, "backURL");
 	
-	boolean DVC_set = true;
+	ServiceConfig scf = null;
 	try {
-		ServiceConfigLocalServiceUtil.getServiceConfigByG_S(scopeGroupId, serviceinfoId);
+		scf = ServiceConfigLocalServiceUtil.getServiceConfigByG_S(scopeGroupId, serviceinfoId);
 	} catch(Exception e){
-		DVC_set = false;
+		//
+	}
+	boolean serviceIsConfiged;
+	if(Validator.isNotNull(scf)){
+		serviceIsConfiged = true;
+	} else {
+		serviceIsConfiged = false;
 	}
 %>
 
@@ -194,7 +201,7 @@
 					</td>
 				</tr>
 				<tr>
-					<c:if test="<%= DVC_set %>">
+					<c:if test="<%= serviceIsConfiged %>">
 						<td class="col-left" colspan="2">
 							<aui:button href="<%= renderToSubmitOnline.toString() %>" cssClass="des-sub-button radius20" value="online-url-button"></aui:button>
 						</td>
