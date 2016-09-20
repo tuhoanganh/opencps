@@ -61,7 +61,8 @@
 					String url = StringPool.BLANK;
 			
 					PortletURL editProfile = renderResponse.createRenderURL();
-					editProfile.setParameter("mvcPath", templatePath + "viewprofile.jsp");
+					editProfile.setParameter("mvcPath", templatePath + "edit_profile.jsp");
+					editProfile.setParameter("backURL", currentURL);
 					
 					if (citizen != null) {
 						editProfile.setParameter(
