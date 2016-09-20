@@ -91,7 +91,7 @@
 	
 	Date estimateDate = null;
 	
-	if(receiveDate != null && Validator.isNotNull(deadlinePattern)){
+	if(workflow != null && workflow.getGenerateDeadline() && receiveDate != null && Validator.isNotNull(deadlinePattern)){
 		estimateDate = BookingDateGenerator.dateGenerator(receiveDate, deadlinePattern);
 	}
 	
