@@ -64,8 +64,8 @@
 	String cmd = ParamUtil.getString(request, Constants.CMD, Constants.UPDATE);
 	
 	String[] dossierSections = dossier != null ? 
-		new String[]{"dossier_info", "dossier_part", "result", "history"} : 
-		new String[]{"dossier_info"};
+		new String[]{"dossier_part", "dossier_info", "result", "history"} : 
+		new String[]{"dossier_part"};
 	
 	String[][] categorySections = {dossierSections};
 	
