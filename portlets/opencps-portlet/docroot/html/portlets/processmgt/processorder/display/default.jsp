@@ -1,4 +1,5 @@
 
+<%@page import="com.sun.xml.internal.bind.v2.TODO"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
 <%
@@ -35,11 +36,15 @@
 
 <%
 	boolean success = false;
+	boolean stopRefresh = false;
 	
-	try{
-		success = !SessionMessages.isEmpty(renderRequest) && SessionErrors.isEmpty(renderRequest);
-	}catch(Exception e){
-		
+	success = ParamUtil.getBoolean(request, "success");
+	stopRefresh = ParamUtil.getBoolean(request, "stopRefresh");
+	
+	//TODO
+	//loading portlet 1 time
+	if(stopRefresh){
+		success = false;
 	}
 	
 	PortletURL iteratorURL = renderResponse.createRenderURL();
@@ -59,8 +64,14 @@
 	headerNames.add("col3");
 	
 	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
-	
+
 %>
+
+<c:if test="<%=stopRefresh %>">
+	<div class="alert alert-success">
+		<liferay-ui:message key="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>" />
+	</div>
+</c:if>
 
 <aui:form name="fm">
 	<div class="opencps-searchcontainer-wrapper">
@@ -202,18 +213,24 @@
 	</div>
 </aui:form>
 
-<aui:script use="aui-base,aui-io-plugin">
+<aui:script use="aui-base">
 
 AUI().ready(function(A){
 
 	var success = '<%=success%>';
 	
 	if(success == 'true'){
-	
-		Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.PROCESS_ORDER_PORTLET %>_');
+
+		var data = {
+
+		 <portlet:namespace />stopRefresh: true,
+		 
+		};
+
+		Liferay.Portlet.refresh('#p_p_id<portlet:namespace />', data);
 	
 	}
-
+	
 });
 </aui:script>
 
