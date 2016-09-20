@@ -63,7 +63,7 @@
 %>
 
 <aui:form name="fm">
-	<div class="opencps-searchcontainer-wrapper" id="<portlet:namespace />processOrderSearchContainer"">
+	<div class="opencps-searchcontainer-wrapper">
 		<liferay-ui:search-container 
 				searchContainer="<%= new ProcessOrderSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>"
 				rowChecker="<%=rowChecker%>"
@@ -202,30 +202,16 @@
 	</div>
 </aui:form>
 
-<liferay-portlet:renderURL var="processOrderURL" portletName="<%=WebKeys.PROCESS_ORDER_PORTLET %>" windowState="<%=LiferayWindowState.EXCLUSIVE.toString() %>">
-	<liferay-portlet:param name="mvcPath" value="/html/portlets/processmgt/processorder/ajax/_default.jsp" />
-	<liferay-portlet:param name="<%=ProcessOrderDisplayTerms.SERVICE_INFO_ID %>" value="{0}" />
-	<liferay-portlet:param name="<%=ProcessOrderDisplayTerms.PROCESS_STEP_ID %>" value="{1}" />
-</liferay-portlet:renderURL>
-
 <aui:script use="aui-base,aui-io-plugin">
 
 AUI().ready(function(A){
-	
+
 	var success = '<%=success%>';
 	
 	if(success == 'true'){
-		
-		var url = A.Lang.sub('<%= processOrderURL %>', ['<%=ParamUtil.getLong(request, ProcessOrderSearchTerms.SERVICE_INFO_ID) %>', '<%=ParamUtil.getLong(request, ProcessOrderSearchTerms.PROCESS_STEP_ID) %>']);
-		
-		$("#<portlet:namespace />processOrderSearchContainer").load( url, function () {
-			
-			selector: '#<portlet:namespace />processOrderSearchContainer > .lfr-search-container'
-			
-		});
-	
+		Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.PROCESS_ORDER_PORTLET %>_');
 	}
-	
+
 });
 </aui:script>
 
