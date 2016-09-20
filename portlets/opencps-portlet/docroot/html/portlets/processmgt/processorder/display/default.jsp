@@ -209,7 +209,9 @@ AUI().ready(function(A){
 	var success = '<%=success%>';
 	
 	if(success == 'true'){
+	
 		Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.PROCESS_ORDER_PORTLET %>_');
+	
 	}
 
 });
