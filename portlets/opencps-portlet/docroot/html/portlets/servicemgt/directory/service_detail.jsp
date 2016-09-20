@@ -1,4 +1,3 @@
-<%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -24,6 +23,7 @@
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
 <%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
 <%@ include file="init.jsp" %>
 <%
 	long serviceinfoId = ParamUtil.getLong(request, "serviceinfoId");
