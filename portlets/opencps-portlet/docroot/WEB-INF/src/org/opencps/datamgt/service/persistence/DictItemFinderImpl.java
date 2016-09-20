@@ -4,11 +4,14 @@ import java.util.List;
 
 import org.opencps.datamgt.model.DictItem;
 import org.opencps.datamgt.model.impl.DictItemImpl;
+import org.opencps.dossiermgt.service.persistence.DossierFileFinder;
 
 import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.util.dao.orm.CustomSQLUtil;
 
@@ -17,6 +20,10 @@ public class DictItemFinderImpl extends BasePersistenceImpl<DictItem> implements
 	
 	public static final String GET_DICTITEMS_BY_COLLECTION_CODE = DictItemFinder.class
 			.getName() + ".getDictItemsByCollectionCode";
+	
+	private Log _log = LogFactoryUtil
+			.getLog(DictItemFinder.class
+				.getName());
 	
 	public List<DictItem> getDictItemsByCollectionCode(String dictCollectionCode, long groupId)
 			throws SystemException{
@@ -28,9 +35,7 @@ public class DictItemFinderImpl extends BasePersistenceImpl<DictItem> implements
 			
 			String sql = CustomSQLUtil
 					.get(GET_DICTITEMS_BY_COLLECTION_CODE);
-			
-			System.out.println("============== sql: "+sql);
-			
+						
 			SQLQuery queryObject = session.createSQLQuery(sql);
 			queryObject.setCacheable(false);
 			queryObject.addEntity("DictItem", DictItemImpl.class);
@@ -41,8 +46,8 @@ public class DictItemFinderImpl extends BasePersistenceImpl<DictItem> implements
 			return (List<DictItem>) queryObject.list();
 			
 		}catch (Exception e) {
-			
-			e.printStackTrace();
+			_log
+				.error(e);
 			
 		} finally {
 			
