@@ -1,4 +1,7 @@
 
+<%@page import="com.sun.xml.internal.bind.v2.TODO"%>
+<%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
+<%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -32,6 +35,18 @@
 <liferay-ui:success  key="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>" message="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>"/>
 
 <%
+	boolean success = false;
+	boolean stopRefresh = false;
+	
+	success = ParamUtil.getBoolean(request, "success");
+	stopRefresh = ParamUtil.getBoolean(request, "stopRefresh");
+	
+	//TODO
+	//loading portlet 1 time
+	if(stopRefresh){
+		success = false;
+	}
+	
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "processordertodolist.jsp");
 	iteratorURL.setParameter("tabs1", ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS);
@@ -49,7 +64,14 @@
 	headerNames.add("col3");
 	
 	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
+
 %>
+
+<c:if test="<%=stopRefresh %>">
+	<div class="alert alert-success">
+		<liferay-ui:message key="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>" />
+	</div>
+</c:if>
 
 <aui:form name="fm">
 	<div class="opencps-searchcontainer-wrapper">
@@ -190,6 +212,28 @@
 			</liferay-ui:search-container>
 	</div>
 </aui:form>
+
+<aui:script use="aui-base">
+
+AUI().ready(function(A){
+
+	var success = '<%=success%>';
+	
+	if(success == 'true'){
+
+		var data = {
+
+		 <portlet:namespace />stopRefresh: true,
+		 
+		};
+
+		Liferay.Portlet.refresh('#p_p_id<portlet:namespace />', data);
+	
+	}
+	
+});
+</aui:script>
+
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.processmgt.processorder.processordertodolist.jsp");
 %>
