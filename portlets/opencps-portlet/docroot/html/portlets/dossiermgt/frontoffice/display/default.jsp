@@ -105,8 +105,6 @@
 	<!-- cap nhat thay doi moi nhat -->
 		<c:if test="<%= (Validator.isNull(keyword) && displayRecentlyResultWhenSearch) || displayRecentlyResultWhenSearch == false%>">
 			<div class="opencps-searchcontainer-wrapper default-box-shadow radius8 mrb25 " id="<portlet:namespace />is-hidden">
-			
-			1111111111111111
 				<div class="opcs-serviceinfo-list-label">
 					<div class="title_box">
 				           <p class="file_manage_title_new"><liferay-ui:message key="title-danh-sach-ho-so-thay-doi" /></p>
