@@ -1,6 +1,4 @@
 
-<%@page import="org.opencps.backend.util.DossierNoGenerator"%>
-<%@page import="org.opencps.processmgt.util.ProcessMgtUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -44,6 +42,9 @@
 <%@page import="org.opencps.dossiermgt.NoSuchDossierTemplateException"%>
 <%@page import="org.opencps.dossiermgt.NoSuchDossierException"%>
 <%@page import="org.opencps.dossiermgt.RequiredDossierPartException"%>
+<%@page import="org.opencps.backend.util.DossierNoGenerator"%>
+<%@page import="org.opencps.processmgt.util.ProcessMgtUtil"%>
+
 <%@ include file="../init.jsp"%>
 
 <%
