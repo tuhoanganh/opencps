@@ -1,4 +1,6 @@
 
+<%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
+<%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -32,6 +34,14 @@
 <liferay-ui:success  key="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>" message="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>"/>
 
 <%
+	boolean success = false;
+	
+	try{
+		success = !SessionMessages.isEmpty(renderRequest) && SessionErrors.isEmpty(renderRequest);
+	}catch(Exception e){
+		
+	}
+	
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "processordertodolist.jsp");
 	iteratorURL.setParameter("tabs1", ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS);
@@ -202,13 +212,19 @@
 
 AUI().ready(function(A){
 	
-	var url = A.Lang.sub('<%= processOrderURL %>', ['<%=ParamUtil.getLong(request, ProcessOrderSearchTerms.SERVICE_INFO_ID) %>', '<%=ParamUtil.getLong(request, ProcessOrderSearchTerms.PROCESS_STEP_ID) %>']);
+	var success = '<%=success%>';
 	
-	$("#<portlet:namespace />processOrderSearchContainer").load( url, function () {
+	if(success == 'true'){
 		
-		selector: '#<portlet:namespace />processOrderSearchContainer > .lfr-search-container'
+		var url = A.Lang.sub('<%= processOrderURL %>', ['<%=ParamUtil.getLong(request, ProcessOrderSearchTerms.SERVICE_INFO_ID) %>', '<%=ParamUtil.getLong(request, ProcessOrderSearchTerms.PROCESS_STEP_ID) %>']);
 		
-	});
+		$("#<portlet:namespace />processOrderSearchContainer").load( url, function () {
+			
+			selector: '#<portlet:namespace />processOrderSearchContainer > .lfr-search-container'
+			
+		});
+	
+	}
 	
 });
 </aui:script>
