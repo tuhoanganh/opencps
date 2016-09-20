@@ -1,3 +1,4 @@
+<%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -35,7 +36,12 @@
 	
 	String backURL = ParamUtil.getString(request, "backURL");
 	
-	
+	boolean DVC_set = true;
+	try {
+		ServiceConfigLocalServiceUtil.getServiceConfigByG_S(scopeGroupId, serviceinfoId);
+	} catch(Exception e){
+		DVC_set = false;
+	}
 %>
 
 <liferay-portlet:renderURL 
@@ -188,9 +194,11 @@
 					</td>
 				</tr>
 				<tr>
-					<td class="col-left" colspan="2">
-						<aui:button href="<%= renderToSubmitOnline.toString() %>" cssClass="des-sub-button radius20" value="online-url-button"></aui:button>
-					</td>
+					<c:if test="<%= DVC_set %>">
+						<td class="col-left" colspan="2">
+							<aui:button href="<%= renderToSubmitOnline.toString() %>" cssClass="des-sub-button radius20" value="online-url-button"></aui:button>
+						</td>
+					</c:if>
 				</tr>
 			</table>
 		</div>
