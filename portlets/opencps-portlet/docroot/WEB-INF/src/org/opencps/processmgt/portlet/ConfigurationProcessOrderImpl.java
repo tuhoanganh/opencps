@@ -56,6 +56,8 @@ public class ConfigurationProcessOrderImpl implements ConfigurationAction{
 		String portletResource =
 					    ParamUtil.getString(actionRequest, "portletResource");
 
+		String templatesToDisplay = ParamUtil.getString(actionRequest, "templatesToDisplay", "default");
+		
 		PortletPreferences preferences =
 		    PortletPreferencesFactoryUtil.getPortletSetup(
 		        actionRequest, portletResource);
@@ -64,6 +66,7 @@ public class ConfigurationProcessOrderImpl implements ConfigurationAction{
 		preferences.setValue("oderByJustFinish", String.valueOf(oderByJustFinish));
 		preferences.setValue("oderFieldToDo", oderFieldToDo);
 		preferences.setValue("oderFieldJustFinish", oderFieldJustFinish);
+		preferences.setValue("templatesToDisplay", String.valueOf(templatesToDisplay));
 		
 		preferences.store();
 

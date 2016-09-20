@@ -366,31 +366,34 @@ public class PortletUtil {
 
 		String name = StringPool.BLANK;
 		DictItem dictItem = null;
-
-		try {
+		
+		try  {
 			dictItem = DictItemLocalServiceUtil.getDictItemByCode(itemCode);
-			if (Validator.isNotNull(dictItem)) {
+			if(Validator.isNotNull(dictItem)) {
 				name = dictItem.getItemName(locale);
 			}
 		}
 		catch (Exception e) {
 			_log.error(e);
 		}
-
+		
 		return name;
 	}
 
-	public static List<DictItem> getDossierStatus(long groupId)
-		throws NoSuchDictCollectionException, SystemException {
+	public static List<DictItem> getDossierStatus(long groupId) {
 
-		DictCollection dictCollection =
-			DictCollectionLocalServiceUtil.getDictCollection(
-				groupId, "DOSSIER_STATUS");
-
-		List<DictItem> result =
-			DictItemLocalServiceUtil.getDictItemsInUseByDictCollectionIdAndParentItemId(
-				dictCollection.getDictCollectionId(), 0);
-
+		DictCollection dictCollection = null;
+		List<DictItem> result = new ArrayList<DictItem>();
+		try {
+			dictCollection = DictCollectionLocalServiceUtil.getDictCollection(groupId, "DOSSIER_STATUS");
+			if(Validator.isNotNull(dictCollection)) {
+				result = DictItemLocalServiceUtil
+								.getDictItemsByDictCollectionId(dictCollection.getDictCollectionId());
+			}
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+		}
 		return result;
 	}
 
@@ -433,7 +436,7 @@ public class PortletUtil {
 			String.valueOf(month) + StringPool.SLASH + String.valueOf(day) +
 			StringPool.SLASH + oid;
 	}
-
+	
 	public static String getPaymentDestinationFolder(
 		long groupId, int year, int month, int day, long ownId,
 		String accountType) {
