@@ -48,14 +48,15 @@
 	DossierBean dossierBean = (DossierBean) row.getObject();
 	
 	Dossier dossier = dossierBean.getDossier();
-	_log.info("===dossier.getDossierId()===" + dossier.getDossierId());
+
 	ProcessWorkflow workFlow = null;
+	
 	try {
 		ProcessOrder processOrder = ProcessOrderLocalServiceUtil.getProcessOrder(dossier.getDossierId(), 0);
 		workFlow = ProcessWorkflowLocalServiceUtil.getByS_PreP_AN(processOrder.getServiceProcessId(), processOrder.getProcessStepId(), PortletPropsValues.OPENCPS_CANCEL_DOSSIER_NOTICE);
 	}
 	catch (Exception e) {
-		_log.error(e);
+		
 	}	
 %> 
 
@@ -135,12 +136,18 @@
 		 	</c:if>
  		</c:when>
   		<c:when test="<%= (dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_PROCESSING) && workFlow != null) %>">
-		 		<portlet:actionURL var="cancelDossierURL" name="cancelDossier" >
-					<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
-					<portlet:param name="redirectURL" value="<%=currentURL %>"/>
-				</portlet:actionURL>
-		</c:when>  		
+			<portlet:actionURL var="cancelDossierURL" name="cancelDossier" >
+				<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
+				<portlet:param name="redirectURL" value="<%=currentURL %>"/>
+			</portlet:actionURL>
+			
+			<liferay-ui:icon-delete 
+				image="undo"
+				cssClass="search-container-action fa delete"
+				confirmation="are-you-sure-cancel-entry" 
+				message="cancel"  
+				url="<%=cancelDossierURL.toString() %>" 
+			/>
+		</c:when>
  	</c:choose>
-<%-- </liferay-ui:icon-menu> --%> 
-
-<%! private static Log _log = LogFactoryUtil.getLog("html.portlets.dossiermgt.frontoffice.dossier_action.jsp"); %>
+<%-- </liferay-ui:icon-menu> --%>
