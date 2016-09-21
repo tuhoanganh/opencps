@@ -901,11 +901,11 @@ public class DossierFileLocalServiceImpl
 	 * @return
 	 * @throws SystemException
 	 */
-	public List<DossierFile> findByF_D_S_R(
+	public List<DossierFile> getDossierFileByGFID_DID_SS_R(
 		long fileGroupId, long dossierId, int syncStatus, int removed)
 		throws SystemException {
 
-		return dossierFilePersistence.findByF_D_S_R(
+		return dossierFilePersistence.findByGFID_DID_SS_R(
 			fileGroupId, dossierId, syncStatus, removed);
 	}
 
