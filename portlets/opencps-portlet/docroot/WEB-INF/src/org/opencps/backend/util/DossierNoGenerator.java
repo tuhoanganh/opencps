@@ -33,7 +33,7 @@ public class DossierNoGenerator {
 	
 	public static void main(String[] args) {
 
-	    String numberString = genaratorNoReception("{%-BCT%}{nnnnnn}{yyyy}", 1);
+	    String numberString = genaratorNoReception("{%-BCT%}-{nnnnnn}/{yyyy}", 1);
 	    
 	    System.out.println(numberString);
     }
