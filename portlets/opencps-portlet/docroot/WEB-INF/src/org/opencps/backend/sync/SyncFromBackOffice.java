@@ -22,6 +22,7 @@ import java.util.List;
 import org.opencps.backend.message.SendToBackOfficeMsg;
 import org.opencps.backend.message.SendToCallbackMsg;
 import org.opencps.backend.util.BackendUtils;
+import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.processmgt.model.WorkflowOutput;
 import org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil;
@@ -85,7 +86,7 @@ public class SyncFromBackOffice implements MessageListener {
 					WorkflowOutputLocalServiceUtil.getByProcessWFPostback(
 						toBackOffice.getProcessWorkflowId(), true);
 
-				DossierLocalServiceUtil.updateDossierStatus(
+				DossierFileLocalServiceUtil.updateDossierFileSyncStatus(
 					0, toBackOffice.getDossierId(),
 					PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS,
 					workflowOutputs);
