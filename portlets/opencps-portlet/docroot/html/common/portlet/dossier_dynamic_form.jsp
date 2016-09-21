@@ -1,4 +1,5 @@
 
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="org.opencps.util.MessageKeys"%>
 <%
 /**
@@ -222,7 +223,25 @@
 				$(".saveForm").click(function(e) {
 					var formData = control.getValue();
 					$("#<portlet:namespace />formData" ).val(JSON.stringify(formData));
-					$("#<portlet:namespace />fm" ).submit();
+					
+					//Validate form submit
+					var errorMessage = '';
+					$('div[class*="has-error"] > label').each(function( index ) {
+						
+						errorMessage += ( index + 1 ) + ': ' + $( this ).text() + '\n';
+						  
+					});
+
+					if(errorMessage.length == 0){
+					
+						$("#<portlet:namespace />fm" ).submit();
+					
+					}else{
+						
+						alert( '<%=LanguageUtil.get(pageContext, "fields-required") %> :' + "\n" + errorMessage);
+						
+					}
+					
 			    });
 				
 				$(".alpaca-field-table").delegate('select.alpaca-control', 'change', function(){   
