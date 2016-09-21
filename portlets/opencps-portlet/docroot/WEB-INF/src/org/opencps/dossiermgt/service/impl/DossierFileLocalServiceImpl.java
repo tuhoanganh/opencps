@@ -945,11 +945,11 @@ public class DossierFileLocalServiceImpl
 	 * @return
 	 * @throws SystemException
 	 */
-	public List<DossierFile> getDossierFileByD_S_R(
+	public List<DossierFile> getDossierFileByDID_SS_R(
 		long dossierId, int syncStatus, int removed)
 		throws SystemException {
 
-		return dossierFilePersistence.findByD_S_R(
+		return dossierFilePersistence.findByDID_SS_R(
 			dossierId, syncStatus, removed);
 	}
 
