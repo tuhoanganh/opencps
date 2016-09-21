@@ -73,12 +73,11 @@
 	}
 	
 	int index = 0; 
-	
+	int stt = 1;
 	if(dossierPartsLevel1 != null){
 		for (DossierPart dossierPartLevel1 : dossierPartsLevel1){
 	
 			int partType = dossierPartLevel1.getPartType();
-			
 			List<DossierPart> dossierParts = DossierMgtUtil.getTreeDossierPart(dossierPartLevel1.getDossierpartId());
 			
 			if(dossierParts != null){
@@ -127,14 +126,28 @@
 								%>
 									<div class='<%="opencps dossiermgt dossier-part-row r-" + index%>'>
 										<span class='<%="level-" + level + " opencps dossiermgt dossier-part"%>'>
-											<span class="row-icon">
+											<span class="row-icon row-icon-stt-new">
 												<c:choose>
 													<c:when test="<%=(partType == PortletConstants.DOSSIER_PART_TYPE_OPTION ||
 														partType == PortletConstants.DOSSIER_PART_TYPE_OTHER) && level == 0%>"
 													>
+														<%
+															if(level == 0){
+														%>
+															<span class="dossier-part-stt"> <%=stt %></span>
+														<%
+															}
+														%>
 														<i class="fa fa-dot-circle-o" aria-hidden="true"></i>
 													</c:when>
 														<c:otherwise>
+														<%
+															if(level == 0){
+														%>
+															<span class="dossier-part-stt"> <%=stt %></span>
+														<%
+															}
+														%>
 														<i 
 															id='<%="rowcheck" + dossierPart.getDossierpartId() + StringPool.DASH + index %>' 
 															class='<%=dossierFile != null &&  dossierFile.getFileEntryId() > 0 ? "fa fa-check-square-o" : "fa fa-square-o" %>' 
@@ -205,6 +218,10 @@
 									
 								<%
 								index++;
+								if(level==0){
+										stt++;
+								}
+								
 							}
 							%>
 							
@@ -219,7 +236,7 @@
 											%>
 											<div class='<%="opencps dossiermgt dossier-part-row r-" + index%>'>
 												<span class='<%="level-1 opencps dossiermgt dossier-part"%>'>
-													<span class="row-icon">
+													<span class="row-icon ">
 														<i 
 															id='<%="rowcheck" + dossierFileOther.getDossierPartId() + StringPool.DASH + index %>' 
 															class='<%=dossierFileOther.getFileEntryId() > 0 ? "fa fa-check-square-o" : "fa fa-square-o" %>' 
