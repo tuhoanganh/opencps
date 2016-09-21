@@ -131,7 +131,13 @@
 													<c:when test="<%=(partType == PortletConstants.DOSSIER_PART_TYPE_OPTION ||
 														partType == PortletConstants.DOSSIER_PART_TYPE_OTHER) && level == 0%>"
 													>
-														<span class="dossier-part-stt"> <%=stt %></span>
+														<%
+															if(level == 0){
+														%>
+															<span class="dossier-part-stt"> <%=stt %></span>
+														<%
+															}
+														%>
 														<i class="fa fa-dot-circle-o" aria-hidden="true"></i>
 													</c:when>
 														<c:otherwise>

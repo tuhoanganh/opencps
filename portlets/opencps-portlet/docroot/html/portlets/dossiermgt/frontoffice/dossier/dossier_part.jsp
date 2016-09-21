@@ -150,11 +150,25 @@
 													<c:when test="<%=(partType == PortletConstants.DOSSIER_PART_TYPE_OPTION ||
 														partType == PortletConstants.DOSSIER_PART_TYPE_OTHER) && level == 0%>"
 													>
-														<span class="dossier-part-stt"> <%=stt %></span><i class="fa fa-circle" aria-hidden="true"></i>
+														<%
+															if(level == 0){
+														%>
+															<span class="dossier-part-stt"> <%=stt %></span>
+														<%
+															}
+														%>
+														<i class="fa fa-circle" aria-hidden="true"></i>
 														
 													</c:when>
 													<c:otherwise>
-														<span class="dossier-part-stt"> <%=stt %></span><i 
+														<%
+															if(level == 0){
+														%>
+															<span class="dossier-part-stt"> <%=stt %></span>
+														<%
+															}
+														%>
+														<i 
 															id='<%="rowcheck" + dossierPart.getDossierpartId() + StringPool.DASH + index %>' 
 															class='<%=dossierFile != null &&  dossierFile.getFileEntryId() > 0 ? "fa fa-check-square-o" : "fa fa-square-o" %>' 
 															aria-hidden="true"
@@ -221,7 +235,9 @@
 									
 								<%
 								index++;
-								stt ++;
+								if(level==0){
+									stt++;
+								}
 							}
 							%>
 							
