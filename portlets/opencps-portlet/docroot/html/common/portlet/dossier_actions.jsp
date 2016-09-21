@@ -1,5 +1,4 @@
 
-<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -23,6 +22,7 @@
 <%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 
 <%@ include file="/init.jsp"%>
 
@@ -501,18 +501,20 @@
 					</span>
 				</td>
 				<td width="10%" align="right">
-					<aui:a
-						cssClass="opencps dossiermgt part-file-ctr remove-dossier-file"
-						process-order="<%=String.valueOf(processOrderId) %>"
-						dossier-file="<%=String.valueOf(dossierFileId) %>"
-						level = "<%=level %>"
-						href="javascript:void(0);" 
-						id="<%=String.valueOf(dossierPartId) %>"
-						title="remove"
-					>
-						<i class="fa fa-times" aria-hidden="true"></i>
-						
-					</aui:a>
+					<c:if test="<%=isEditDossier %>">
+						<aui:a
+							cssClass="opencps dossiermgt part-file-ctr remove-dossier-file"
+							process-order="<%=String.valueOf(processOrderId) %>"
+							dossier-file="<%=String.valueOf(dossierFileId) %>"
+							level = "<%=level %>"
+							href="javascript:void(0);" 
+							id="<%=String.valueOf(dossierPartId) %>"
+							title="remove"
+						>
+							<i class="fa fa-times" aria-hidden="true"></i>
+							
+						</aui:a>
+					</c:if>
 				</td>
 			</c:when>
 			

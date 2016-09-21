@@ -34,6 +34,7 @@ import org.opencps.datamgt.model.DictCollection;
 import org.opencps.datamgt.model.DictItem;
 import org.opencps.datamgt.service.DictCollectionLocalServiceUtil;
 import org.opencps.datamgt.service.DictItemLocalServiceUtil;
+import org.opencps.dossiermgt.bean.ProcessOrderBean;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.model.ProcessStep;
@@ -499,6 +500,52 @@ public class ProcessOrderUtils {
 			return jsonArrayRoot.toString();
 		}
 	
+	public static String generateTreeView(List<ProcessOrderBean> dataSource, String myLabel , String type)		
+					throws SystemException, PortalException {
+		
+			JSONArray jsonArrayRoot = JSONFactoryUtil.createJSONArray();
+			JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+			
+			JSONObject jsonObjectRoot = JSONFactoryUtil
+					.createJSONObject();
+			JSONObject jsonObject = null;
+			
+			for (ProcessOrderBean item : dataSource) {
+				jsonObject = JSONFactoryUtil
+						.createJSONObject();
+				
+				if(item.getServiceInfoId() > 0){
+
+					jsonObject.put("id", String.valueOf(item.getServiceInfoId()));
+					
+					jsonObject.put("label", item.getServiceName());
+				
+				}else if(item.getProcessStepId() > 0){
+
+					jsonObject.put("id", String.valueOf(item.getProcessStepId()));
+					
+					jsonObject.put("label", item.getStepName());
+				
+				}
+				
+				jsonObject.put("type", type);
+				
+				jsonObject.put("leaf", true);
+				
+				jsonArray.put(jsonObject);
+			}
+			
+			jsonObjectRoot.put("children", jsonArray);
+			
+			jsonObjectRoot.put("expanded", true);
+			
+			jsonObjectRoot.put("label", myLabel);
+			
+			jsonArrayRoot.put(jsonObjectRoot);
+			
+			return jsonArrayRoot.toString();
+		}
+	
 	private static JSONObject doChildTreeJson(JSONObject jsonObject,String type, boolean isCode,
 			long dictCollectionId, long dictItemId, int level) throws SystemException{
 		List<DictItem> resultlv1 = null;
@@ -533,7 +580,7 @@ public class ProcessOrderUtils {
 					List<DictItem> resultlv2 = null;
 					resultlv2 = DictItemLocalServiceUtil
 							.getDictItemsInUseByDictCollectionIdAndParentItemId(
-									dictCollectionId, dictItemId);
+									dictCollectionId, dictItem2.getDictItemId());
 					JSONArray jsonArraylv2 = JSONFactoryUtil.createJSONArray();
 					for (DictItem dictItem3 : resultlv2) {
 						JSONObject jsonObjectlv2 = JSONFactoryUtil

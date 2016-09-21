@@ -358,7 +358,12 @@
 		var success = '<%=success%>';
 		
 		if(success == 'true'){
-			var backURL = '<%=backURL%>';
+			var backURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
+			backURL.setParameter("mvcPath", "/html/portlets/processmgt/processorder/processordertodolist.jsp");
+			backURL.setWindowState("<%=LiferayWindowState.NORMAL.toString()%>"); 
+			backURL.setPortletMode("normal");
+			backURL.setParameter("success", true);
+			
 			var Util = Liferay.Util;
 			<portlet:namespace/>closeDialog();
 			Util.getOpener().Liferay.fire('redirect', {responseData:{backURL:backURL}});

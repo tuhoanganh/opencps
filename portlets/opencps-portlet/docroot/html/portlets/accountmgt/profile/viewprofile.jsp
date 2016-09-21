@@ -92,13 +92,19 @@
 		<liferay-ui:error 
 			exception="<%= OutOfLengthBusinessEnNameException.class %>" 
 			message="<%= OutOfLengthBusinessEnNameException.class.getName() %>" 
-		/><liferay-ui:error 
+		/>
+		
+		<liferay-ui:error 
 			exception="<%= OutOfLengthBusinessShortNameException.class %>" 
 			message="<%= OutOfLengthBusinessShortNameException.class.getName() %>" 
-		/><liferay-ui:error 
+		/>
+		
+		<liferay-ui:error 
 			exception="<%= OutOfLengthBusinessRepresentativeNameException.class %>" 
 			message="<%= OutOfLengthBusinessRepresentativeNameException.class.getName() %>" 
-		/><liferay-ui:error 
+		/>
+		
+		<liferay-ui:error 
 			exception="<%= OutOfLengthBusinessRepresentativeRoleException.class %>" 
 			message="<%= OutOfLengthBusinessRepresentativeRoleException.class.getName() %>" 
 		/>
@@ -107,6 +113,7 @@
 			key="<%=MessageKeys.DATAMGT_SYSTEM_EXCEPTION_OCCURRED %>" 
 			message="system.exception.occured" 
 		/>
+		
 		<portlet:actionURL var="updateCitizenProfileURL" name="updateCitizenProfile" >
 			<portlet:param name="returnURL" value="<%=currentURL %>"/>
 		</portlet:actionURL>
@@ -114,6 +121,7 @@
 		<portlet:actionURL var="updateBusinessProfileURL" name="updateBusinessProfile" >
 			<portlet:param name="returnURL" value="<%=currentURL %>"/>
 		</portlet:actionURL>
+		
 		<%
 
 			String path = StringPool.BLANK;
