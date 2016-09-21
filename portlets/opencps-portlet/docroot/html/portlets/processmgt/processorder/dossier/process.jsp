@@ -188,7 +188,7 @@
 								}
 								
 								//Toi uu thuat toan tim kiem sau
-								boolean hasProcecssOrderResult = true;
+								boolean hasProcecssOrderResult = false;
 								if(workflowOutputs != null){
 									for(WorkflowOutput workflowOutput : workflowOutputs){
 										if(workflowOutput.getDossierPartId() == dossierPart.getDossierpartId()){
@@ -296,7 +296,7 @@
 								
 								//Toi uu thuat toan tim kiem sau
 
-								boolean hasProcecssOrderResult = true;
+								boolean hasProcecssOrderResult = false;
 
 								if(workflowOutputs != null){
 									for(WorkflowOutput workflowOutput : workflowOutputs){
