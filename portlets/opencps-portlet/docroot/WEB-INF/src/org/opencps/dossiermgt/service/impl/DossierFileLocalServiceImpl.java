@@ -901,7 +901,6 @@ public class DossierFileLocalServiceImpl
 	}
 
 	/**
-	 * @param fileGroupId
 	 * @param dossierId
 	 * @param syncStatus
 	 * @param dossierPartId
@@ -910,8 +909,7 @@ public class DossierFileLocalServiceImpl
 	 * @throws SystemException
 	 */
 	public List<DossierFile> getDossierFileByDID_SS_DPID_R(
-		long fileGroupId, long dossierId, int syncStatus, long dossierPartId,
-		int removed)
+		long dossierId, int syncStatus, long dossierPartId, int removed)
 		throws SystemException {
 
 		return dossierFilePersistence.findByDID_SS_DPID_R(
