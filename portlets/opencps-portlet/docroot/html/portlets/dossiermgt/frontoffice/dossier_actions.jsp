@@ -1,3 +1,4 @@
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -32,6 +33,10 @@
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
 <%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
+<%@page import="com.liferay.portal.kernel.log.Log"%>
+<%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
+<%@page import="org.opencps.util.PortletPropsValues"%>
+
 <%@page pageEncoding="UTF-8"%>
 
 <%@ include file="../init.jsp"%>
@@ -43,14 +48,14 @@
 	DossierBean dossierBean = (DossierBean) row.getObject();
 	
 	Dossier dossier = dossierBean.getDossier();
-	ProcessOrder processOrder = null;
+	_log.info("===dossier.getDossierId()===" + dossier.getDossierId());
 	ProcessWorkflow workFlow = null;
 	try {
-		processOrder = ProcessOrderLocalServiceUtil.getProcessOrder(dossier.getDossierId(), 0);
-		workFlow = ProcessWorkflowLocalServiceUtil.getByS_PreP_AN(processOrder.getServiceProcessId(), processOrder.getProcessStepId(), "Thông báo hủy hồ sơ");
+		ProcessOrder processOrder = ProcessOrderLocalServiceUtil.getProcessOrder(dossier.getDossierId(), 0);
+		workFlow = ProcessWorkflowLocalServiceUtil.getByS_PreP_AN(processOrder.getServiceProcessId(), processOrder.getProcessStepId(), PortletPropsValues.OPENCPS_CANCEL_DOSSIER_NOTICE);
 	}
 	catch (Exception e) {
-		
+		_log.error(e);
 	}	
 %> 
 
@@ -137,3 +142,5 @@
 		</c:when>  		
  	</c:choose>
 <%-- </liferay-ui:icon-menu> --%> 
+
+<%! private static Log _log = LogFactoryUtil.getLog("html.portlets.dossiermgt.frontoffice.dossier_action.jsp"); %>
