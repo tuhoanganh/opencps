@@ -1648,70 +1648,6 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		return dossier;
 	}
 
-	/**
-	 * @param userId
-	 * @param dossierId
-	 * @param syncStatus
-	 * @param worklows
-	 * @throws SystemException
-	 * @throws NoSuchDossierStatusException
-	 * @throws PortalException
-	 */
-	public void updateDossierStatus(
-		long userId, long dossierId, int syncStatus,
-		List<WorkflowOutput> worklows)
-		throws SystemException, NoSuchDossierStatusException, PortalException {
-
-		Date now = new Date();
-
-		for (WorkflowOutput output : worklows) {
-
-			DossierFile dossierFile =
-				dossierFileLocalService.getDossierFileInUse(
-					dossierId, output.getDossierPartId());
-
-			dossierFile.setSyncStatus(syncStatus);
-			dossierFile.setModifiedDate(now);
-
-			if (userId != 0) {
-				dossierFile.setUserId(userId);
-			}
-
-			dossierFileLocalService.updateDossierFile(dossierFile);
-
-		}
-
-	}
-
-	/**
-	 * @param userId
-	 * @param dossierId
-	 * @param syncStatus
-	 * @throws SystemException
-	 * @throws NoSuchDossierStatusException
-	 * @throws PortalException
-	 */
-	public void updateDossierStatus(
-		long userId, long dossierId, long fileGroupId, int syncStatus)
-		throws SystemException, NoSuchDossierStatusException, PortalException {
-
-		Date now = new Date();
-
-		List<DossierFile> dossierFiles =
-			dossierFileLocalService.getDossierFileByD_GF(dossierId, 0);
-
-		if (dossierFiles != null) {
-			for (DossierFile dossierFile : dossierFiles) {
-				dossierFile.setSyncStatus(syncStatus);
-				dossierFile.setModifiedDate(now);
-				if (userId != 0) {
-					dossierFile.setUserId(userId);
-				}
-				dossierFileLocalService.updateDossierFile(dossierFile);
-			}
-		}
-
-	}
 
 	/**
 	 * @param userId
@@ -1793,7 +1729,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 			FileGroup fileGroup =
 				fileGroupLocalService.getFileGroup(fileGroupId);
 			List<DossierFile> dossierFiles =
-				dossierFileLocalService.findByF_D_S_R(
+				dossierFileLocalService.getDossierFileByGFID_DID_SS_R(
 					fileGroupId, dossierId, flagStatus, 0);
 			if (dossierFiles != null) {
 				for (DossierFile dossierFile : dossierFiles) {
@@ -1810,7 +1746,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		}
 
 		List<DossierFile> dossierFiles =
-			dossierFileLocalService.findByF_D_S_R(0, dossierId, flagStatus, 0);
+			dossierFileLocalService.getDossierFileByGFID_DID_SS_R(0, dossierId, flagStatus, 0);
 		if (dossierFiles != null) {
 			for (DossierFile dossierFile : dossierFiles) {
 				dossierFile.setSyncStatus(syncStatus);
@@ -1859,7 +1795,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 			FileGroup fileGroup =
 				fileGroupLocalService.getFileGroup(fileGroupId);
 			List<DossierFile> dossierFiles =
-				dossierFileLocalService.findByF_D_S_R(
+				dossierFileLocalService.getDossierFileByGFID_DID_SS_R(
 					fileGroupId, dossierId, flagStatus, 0);
 			if (dossierFiles != null) {
 				for (DossierFile dossierFile : dossierFiles) {
@@ -1876,7 +1812,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		}
 
 		List<DossierFile> dossierFiles =
-			dossierFileLocalService.findByF_D_S_R(0, dossierId, flagStatus, 0);
+			dossierFileLocalService.getDossierFileByGFID_DID_SS_R(0, dossierId, flagStatus, 0);
 		if (dossierFiles != null) {
 			for (DossierFile dossierFile : dossierFiles) {
 				dossierFile.setSyncStatus(syncStatus);
@@ -1998,7 +1934,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 			FileGroup fileGroup =
 				fileGroupLocalService.getFileGroup(fileGroupId);
 			List<DossierFile> dossierFiles =
-				dossierFileLocalService.findByF_D_S_R(
+				dossierFileLocalService.getDossierFileByGFID_DID_SS_R(
 					fileGroupId, dossierId, flagStatus, 0);
 			if (dossierFiles != null) {
 				for (DossierFile dossierFile : dossierFiles) {
@@ -2015,7 +1951,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		}
 
 		List<DossierFile> dossierFiles =
-			dossierFileLocalService.findByF_D_S_R(0, dossierId, flagStatus, 0);
+			dossierFileLocalService.getDossierFileByGFID_DID_SS_R(0, dossierId, flagStatus, 0);
 
 		if (dossierFiles != null) {
 			for (DossierFile dossierFile : dossierFiles) {
@@ -2071,7 +2007,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 				FileGroup fileGroup =
 					fileGroupLocalService.getFileGroup(fileGroupId);
 				List<DossierFile> dossierFiles =
-					dossierFileLocalService.findByF_D_S_R(
+					dossierFileLocalService.getDossierFileByGFID_DID_SS_R(
 						fileGroupId, dossier.getDossierId(), flagStatus, 0);
 				if (dossierFiles != null) {
 					for (DossierFile dossierFile : dossierFiles) {
@@ -2087,7 +2023,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		}
 
 		List<DossierFile> dossierFiles =
-			dossierFileLocalService.findByF_D_S_R(
+			dossierFileLocalService.getDossierFileByGFID_DID_SS_R(
 				0, dossier.getDossierId(), flagStatus, 0);
 		if (dossierFiles != null) {
 			for (DossierFile dossierFile : dossierFiles) {
