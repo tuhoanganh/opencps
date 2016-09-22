@@ -55,7 +55,7 @@
 	
 	int level = ParamUtil.getInteger(request, DossierFileDisplayTerms.LEVEL);
 	
-	boolean showVersionItemReference = ParamUtil.getBoolean(request, "showVersionItemReference");
+	boolean showVersionItemReference = ParamUtil.getBoolean(request, "showVersionItemReference", true);
 	
 	String groupName = ParamUtil.getString(request, DossierFileDisplayTerms.GROUP_NAME);
 	
@@ -153,8 +153,9 @@
 						</c:otherwise>
 					</c:choose>
 				</td>
-				<c:if test="<%=showVersionItemReference %>">
-					<td width="10%" align="right">
+				
+				<td width="10%" align="right">
+					<c:if test="<%=showVersionItemReference %>">
 						<span class="dossier-version-counter">
 							<span class="counter-value" title='<%=LanguageUtil.get(pageContext, "version") %>'>
 								<aui:a 
@@ -172,8 +173,8 @@
 								</aui:a>
 							</span>
 						</span>
-					</td>
-				</c:if>
+					</c:if>
+				</td>
 				
 				<td width="10%" align="right">
 					<c:if test="<%=isEditDossier %>">
@@ -256,8 +257,8 @@
 					</c:choose>
 				</td>
 				
-				<c:if test="<%=showVersionItemReference %>">
-					<td width="10%" align="right">
+				<td width="10%" align="right">
+					<c:if test="<%=showVersionItemReference %>">
 						<span class="dossier-version-counter">
 							<span class="counter-value" title='<%=LanguageUtil.get(pageContext, "version") %>'>
 								<aui:a 
@@ -275,8 +276,8 @@
 								</aui:a>
 							</span>
 						</span>
-					</td>
-				</c:if>
+					</c:if>
+				</td>
 				
 				<td width="10%" align="right">
 					<c:if test="<%=isEditDossier %>">
@@ -376,8 +377,8 @@
 					</c:choose>
 				</td>
 				
-				<c:if test="<%=showVersionItemReference %>">
-					<td width="10%" align="right">
+				<td width="10%" align="right">
+					<c:if test="<%=showVersionItemReference %>">
 						<span class="dossier-version-counter">
 							<span class="counter-value" title='<%=LanguageUtil.get(pageContext, "version") %>'>
 								<aui:a 
@@ -395,8 +396,8 @@
 								</aui:a>
 							</span>
 						</span>
-					</td>
-				</c:if>
+					</c:if>
+				</td>
 				
 				<td width="10%" align="right">
 					<c:if test="<%=isEditDossier %>">
@@ -490,8 +491,9 @@
 						</c:otherwise>
 					</c:choose>
 				</td>
-				<c:if test="<%=showVersionItemReference %>">
-					<td width="10%" align="right">
+				
+				<td width="10%" align="right">
+					<c:if test="<%=showVersionItemReference %>">
 						<span class="dossier-version-counter">
 							<span class="counter-value" title='<%=LanguageUtil.get(pageContext, "version") %>'>
 								<aui:a 
@@ -509,8 +511,9 @@
 								</aui:a>
 							</span>
 						</span>
-					</td>
-				</c:if>
+					</c:if>
+				</td>
+				
 				<td width="10%" align="right">
 					<c:if test="<%=isEditDossier %>">
 						<aui:a

@@ -94,8 +94,6 @@
 	
 	int index = 0; 
 	
-	System.out.println("============ showVersionItem: "+showVersionItem);
-	
 	if(dossierPartsLevel1 != null){
 		for (DossierPart dossierPartLevel1 : dossierPartsLevel1){
 	
