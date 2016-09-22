@@ -168,7 +168,6 @@ long cssLastModified = ServletContextUtil.getLastModified(application, "/html/cs
 <link href="<%= HtmlUtil.escapeAttribute(PortalUtil.getStaticResourceURL(request, themeDisplay.getCDNDynamicResourcesHost() + themeDisplay.getPathContext() + "/html/css/alpaca.min.css")) %>" rel="stylesheet" type="text/css" />
 <link href="<%= HtmlUtil.escapeAttribute(PortalUtil.getStaticResourceURL(request, themeDisplay.getCDNDynamicResourcesHost() + themeDisplay.getPathContext() + "/html/css/bootstrap-datetimepicker.css")) %>" rel="stylesheet" type="text/css" />
 <link href="<%= HtmlUtil.escapeAttribute(PortalUtil.getStaticResourceURL(request, themeDisplay.getCDNDynamicResourcesHost() + themeDisplay.getPathContext() + "/html/css/bootstrap-multiselect.css")) %>" rel="stylesheet" type="text/css" />
-<link href="<%= HtmlUtil.escapeAttribute(PortalUtil.getStaticResourceURL(request, themeDisplay.getCDNDynamicResourcesHost() + themeDisplay.getPathContext() + "/html/css/jquery-ui.theme.css")) %>" rel="stylesheet" type="text/css" />
 <link href='<%= PortalUtil.getStaticResourceURL(request, themeDisplay.getCDNHost() + "/html/css/jquery-ui.theme.css", cssLastModified) %>' rel="stylesheet" type="text/css" />
 <%-- User Inputted Layout CSS --%>
 

@@ -373,7 +373,7 @@
 					  },
 					  function(obj) {
 							
-						  var dkm = $.map(obj, function (value, key) {         
+						  var arrayData = $.map(obj, function (value, key) {         
 							  return {                
 							 	label: value,                                                
 							 	value:  key                                            
@@ -383,7 +383,7 @@
 									
 									delay: 1000,
 									
-									source: dkm,
+									source: arrayData,
 									
 									focus: function(event, ui) {
 										// prevent autocomplete from updating the textbox
