@@ -153,7 +153,7 @@
 				</td>
 				
 				<td width="10%" align="right">
-					<span class="dossier-version-counter">
+					<span class='dossier-version-counter <%=version <= 0 ? "required-highlight":"" %>'>
 						<span class="counter-value" title='<%=LanguageUtil.get(pageContext, "version") %>'>
 							<aui:a 
 								id="<%=String.valueOf(dossierPartId) %>"
@@ -254,7 +254,7 @@
 				</td>
 				
 				<td width="10%" align="right">
-					<span class="dossier-version-counter">
+					<span class='dossier-version-counter <%=version <= 0 ? "required-highlight":"" %>'>
 						<span class="counter-value" title='<%=LanguageUtil.get(pageContext, "version") %>'>
 							<aui:a 
 								id="<%=String.valueOf(dossierPartId) %>"
@@ -371,7 +371,7 @@
 				</td>
 				
 				<td width="10%" align="right">
-					<span class="dossier-version-counter">
+					<span class='dossier-version-counter <%=version <= 0 ? "required-highlight":"" %>'>
 						<span class="counter-value" title='<%=LanguageUtil.get(pageContext, "version") %>'>
 							<aui:a 
 								id="<%=String.valueOf(dossierPartId) %>"
@@ -482,7 +482,7 @@
 					</c:choose>
 				</td>
 				<td width="10%" align="right">
-					<span class="dossier-version-counter">
+					<span class='dossier-version-counter <%=version <= 0 ? "required-highlight":"" %>'>
 						<span class="counter-value" title='<%=LanguageUtil.get(pageContext, "version") %>'>
 							<aui:a 
 								id="<%=String.valueOf(dossierPartId) %>"
@@ -519,3 +519,4 @@
 		</c:choose>
 	</tr>
 </table>
+
