@@ -146,9 +146,18 @@
 	
 	if (processStepDossierParts != null) {
 		for (ProcessStepDossierPart processStepDossierPart : processStepDossierParts) {
-			DossierPart dossierPart = DossierPartLocalServiceUtil.getDossierPart(processStepDossierPart.getDossierPartId());
+			DossierPart dossierPart = null;
 			
-			dossierParts.add(dossierPart);
+			if(processStepDossierPart.getDossierPartId() > 0){
+				try{
+					dossierPart = DossierPartLocalServiceUtil.getDossierPart(processStepDossierPart.getDossierPartId());
+				}catch(Exception e){}
+			}
+			
+			if(dossierPart != null){
+				dossierParts.add(dossierPart);
+			}
+			
 		}
 	}
 %>
