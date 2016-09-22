@@ -2216,6 +2216,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				e instanceof RequiredDossierPartException) {
 
 				SessionErrors.add(actionRequest, e.getClass());
+				actionResponse.setRenderParameter("jspPage", "/html/portlets/dossiermgt/frontoffice/edit_dossier.jsp");
 			}
 			else {
 				SessionErrors.add(
@@ -2226,9 +2227,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			_log.error(e);
 		}
 		finally {
-			if (Validator.isNotNull(redirectURL)) {
-				actionResponse.sendRedirect(redirectURL);
-			}
+//			if (Validator.isNotNull(redirectURL)) {
+//				actionResponse.sendRedirect(redirectURL);
+//			}
 		}
 	}
 

@@ -1,3 +1,4 @@
+<%@page import="org.opencps.dossiermgt.search.DossierPartDisplayTerms"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -48,8 +49,24 @@
 <%@page import="org.opencps.processmgt.service.ProcessOrderLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.model.ProcessWorkflow"%>
 <%@page import="org.opencps.processmgt.model.ProcessOrder"%>
+<%@page import="org.opencps.dossiermgt.NoSuchDossierException"%>
+<%@page import="org.opencps.dossiermgt.NoSuchDossierTemplateException"%>
+<%@page import="org.opencps.dossiermgt.RequiredDossierPartException"%>
 
 <%@ include file="../init.jsp"%>
+
+<liferay-ui:error 
+	exception="<%= NoSuchDossierException.class %>" 
+	message="<%=NoSuchDossierException.class.getName() %>"
+/>
+<liferay-ui:error 
+	exception="<%= NoSuchDossierTemplateException.class %>" 
+	message="<%=NoSuchDossierTemplateException.class.getName() %>"
+/>
+<liferay-ui:error 
+	exception="<%= RequiredDossierPartException.class %>" 
+	message="<%=RequiredDossierPartException.class.getName() %>"
+/>
 
 <%
 	
