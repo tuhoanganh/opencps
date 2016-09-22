@@ -396,7 +396,6 @@
 									// prevent autocomplete from updating the textbox
 									event.preventDefault();
 									// binding value to control
-									dkm = ui.item.label;
 									$("#"+controlId).val(ui.item.label);
 									$("#"+controlId+"Id").val(ui.item.value);
 									$("#"+controlId+"Text").val(ui.item.label);

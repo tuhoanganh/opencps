@@ -639,7 +639,7 @@ public class DictItemLocalServiceImpl extends DictItemLocalServiceBaseImpl {
 	
 	//alpacajs only
 	public List<DictItem> searchDictItemByName_like(String collectionCode, String itemCode, String keyword, long groupId, 
-			int start, int end, OrderByComparator obc) {
+			int start, int end, OrderByComparator obc) throws SystemException {
 		
 		return dictItemFinder.searchDictItemByName_like(collectionCode, itemCode, keyword, groupId, start, end, obc);
 		

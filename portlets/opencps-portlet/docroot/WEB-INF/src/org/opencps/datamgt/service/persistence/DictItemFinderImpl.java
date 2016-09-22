@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.Type;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
@@ -60,10 +61,11 @@ public class DictItemFinderImpl extends BasePersistenceImpl<DictItem>
 	 * @param end
 	 * @param obc
 	 * @return
+	 * @throws SystemException 
 	 */
 	public List<DictItem> searchDictItemByName_like(
 			String collectionCode, String itemCode, String keyword, long groupId, 
-			int start, int end, OrderByComparator obc) {
+			int start, int end, OrderByComparator obc) throws SystemException {
 
 		String[] keywords = null;
 		boolean andOperator = false;
@@ -83,9 +85,11 @@ public class DictItemFinderImpl extends BasePersistenceImpl<DictItem>
 
 	private List<DictItem> searchDictItemByName_like(String collectionCode,
 			String itemCode, String[] keywords, long groupId,
-			boolean andOperator, int start, int end, OrderByComparator obc) {
+			boolean andOperator, int start, int end, OrderByComparator obc) throws SystemException {
 		// TODO Auto-generated method stub
 		Session session = null;
+		
+		List<DictItem> results = new ArrayList<DictItem>();
 
 		try {
 			session = openSession();
@@ -157,18 +161,18 @@ public class DictItemFinderImpl extends BasePersistenceImpl<DictItem>
 
 			}
 			
-			return (List<DictItem>) QueryUtil.list(q, getDialect(), start, end);
+			results = (List<DictItem>) QueryUtil.list(q, getDialect(), start, end);
 
 		}
 		catch (Exception e) {
-			_log
-				.error(e);
+			throw new SystemException();
 		}
 		finally {
 			closeSession(session);
 		}
+		
+		return results;
 
-		return null;
 	}
 	
 	private Log _log = LogFactoryUtil.getLog(DictItemFinderImpl.class.getName());
