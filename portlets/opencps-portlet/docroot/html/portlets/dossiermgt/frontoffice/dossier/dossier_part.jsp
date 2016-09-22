@@ -153,7 +153,7 @@
 														<%
 															if(level == 0){
 														%>
-															<span class="dossier-part-stt"> <%=stt %></span>
+															<span class="dossier-part-stt"> <%=dossierPart.getSibling() %></span>
 														<%
 															}
 														%>
@@ -164,7 +164,7 @@
 														<%
 															if(level == 0){
 														%>
-															<span class="dossier-part-stt"> <%=stt %></span>
+															<span class="dossier-part-stt"> <%=dossierPart.getSibling() %></span>
 														<%
 															}
 														%>
