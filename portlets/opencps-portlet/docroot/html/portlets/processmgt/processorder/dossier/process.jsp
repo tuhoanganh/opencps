@@ -147,6 +147,8 @@
 	if (processStepDossierParts != null) {
 		for (ProcessStepDossierPart processStepDossierPart : processStepDossierParts) {
 			DossierPart dossierPart = DossierPartLocalServiceUtil.getDossierPart(processStepDossierPart.getDossierPartId());
+			
+			dossierParts.add(dossierPart);
 		}
 	}
 %>
