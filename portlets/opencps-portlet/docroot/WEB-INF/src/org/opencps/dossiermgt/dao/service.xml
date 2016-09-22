@@ -487,15 +487,21 @@
         <finder name="Oid" return-type="DossierFile">
             <finder-column name="oid"></finder-column>
         </finder>
-        <finder name="D_S_R" return-type="Collection">
+        <finder name="DID_SS_R" return-type="Collection">
             <finder-column name="dossierId"></finder-column>
             <finder-column name="syncStatus"></finder-column>
             <finder-column name="removed"></finder-column>
         </finder>
-        <finder name="F_D_S_R" return-type="Collection">
+        <finder name="GFID_DID_SS_R" return-type="Collection">
             <finder-column name="groupFileId"></finder-column>
             <finder-column name="dossierId"></finder-column>
             <finder-column name="syncStatus"></finder-column>
+            <finder-column name="removed"></finder-column>
+        </finder>
+        <finder name="DID_SS_DPID_R" return-type="Collection">
+            <finder-column name="dossierId"></finder-column>
+            <finder-column name="syncStatus"></finder-column>
+            <finder-column name="dossierPartId"></finder-column>
             <finder-column name="removed"></finder-column>
         </finder>
         

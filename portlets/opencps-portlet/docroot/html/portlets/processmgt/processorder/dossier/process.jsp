@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -44,6 +43,9 @@
 <%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%@page import="org.opencps.dossiermgt.model.FileGroup"%>
 <%@page import="org.opencps.processmgt.model.ProcessOrder"%>
+<%@page import="org.opencps.processmgt.model.ProcessStepDossierPart"%>
+<%@page import="org.opencps.processmgt.util.ProcessUtils"%>
+<%@page import="com.liferay.portal.kernel.process.ProcessUtil"%>
 
 <%@ include file="../../init.jsp"%>
 
@@ -103,7 +105,7 @@
 	try{
 		postProcessWorkflows = ProcessWorkflowLocalServiceUtil.getPostProcessWorkflow(processOrder.getServiceProcessId(), processWorkflow.getPostProcessStepId());
 	}catch(Exception e){}
-	
+/* 	
 	List<WorkflowOutput> workflowOutputs = null;
 	
 	if(processWorkflow != null){
@@ -114,6 +116,12 @@
 			//Nothing todo
 		}
 	}
+	 */
+	long processStepId = Validator.isNotNull(processStep) ? processStep.getProcessStepId() : 0l;
+	
+	System.out.println("****************************processStepId____"+processStepId);
+	
+	List<ProcessStepDossierPart> processDossierParts = ProcessUtils.getDossierPartByStep(processStepId);
 	
 %>
 <div class="ocps-dossier-process">
@@ -144,6 +152,10 @@
   </tr>
 </table>
 
+
+
+
+>>>>>>>>>>>>>>>>>>>>
 
 <%
 
@@ -188,15 +200,20 @@
 								}
 								
 								//Toi uu thuat toan tim kiem sau
-								boolean hasProcecssOrderResult = true;
-								if(workflowOutputs != null){
-									for(WorkflowOutput workflowOutput : workflowOutputs){
-										if(workflowOutput.getDossierPartId() == dossierPart.getDossierpartId()){
-											hasProcecssOrderResult = true;
-											break;
-										}
+								boolean hasProcecssOrderResult = false;
+								if(processDossierParts.size() != 0){
+									for (ProcessStepDossierPart pdp : processDossierParts) {
+										if(pdp.getDossierPartId() == dossierPart.getDossierpartId());
+										hasProcecssOrderResult = true;
+										break;
 									}
+									
+
 								}
+								
+								System.out.println("****************************hasProcecssOrderResult___TYPE1"+hasProcecssOrderResult);
+
+								
 								if(hasProcecssOrderResult){
 									int level = 1;
 									
@@ -296,17 +313,18 @@
 								
 								//Toi uu thuat toan tim kiem sau
 
-								boolean hasProcecssOrderResult = true;
-
-								if(workflowOutputs != null){
-									for(WorkflowOutput workflowOutput : workflowOutputs){
-										if(workflowOutput.getDossierPartId() == dossierPartLevel1.getDossierpartId()){
-											hasProcecssOrderResult = true;
-											break;
-										}
+								boolean hasProcecssOrderResult = false;
+								if(processDossierParts.size() != 0){
+									for (ProcessStepDossierPart pdp : processDossierParts) {
+										if(pdp.getDossierPartId() == dossierPartLevel1.getDossierpartId());
+										hasProcecssOrderResult = true;
+										break;
 									}
+									
+	
 								}
-								
+								System.out.println("****************************hasProcecssOrderResult___TYPE2"+hasProcecssOrderResult);
+
 								if(hasProcecssOrderResult){
 									
 									cssRequired = dossierPartLevel1.getRequired() ? "cssRequired" : StringPool.BLANK;
