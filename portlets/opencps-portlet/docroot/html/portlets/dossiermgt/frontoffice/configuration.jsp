@@ -106,6 +106,13 @@
 		name="displayRecentlyResultWhenSearch" 
 		value='<%= displayRecentlyResultWhenSearch %>'
 	/>
+	
+	<aui:input 
+		type="checkbox"
+		name="showVersionItem" 
+		value="<%= showVersionItem %>"
+	/>
+	
 	<aui:button type="submit" name="Save" value="save"></aui:button>
 
 </aui:form>

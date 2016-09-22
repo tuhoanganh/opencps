@@ -94,6 +94,8 @@
 	
 	int index = 0; 
 	
+	System.out.println("============ showVersionItem: "+showVersionItem);
+	
 	if(dossierPartsLevel1 != null){
 		for (DossierPart dossierPartLevel1 : dossierPartsLevel1){
 	
@@ -177,6 +179,12 @@
 												page="/html/common/portlet/dossier_actions.jsp" 
 												servletContext="<%=application %>"
 											>
+												
+												<portlet:param 
+													name="showVersionItemReference" 
+													value="<%=String.valueOf(showVersionItem) %>"
+												/>
+											
 												<portlet:param 
 													name="<%=DossierDisplayTerms.DOSSIER_ID %>" 
 													value="<%=String.valueOf(dossier != null ? dossier.getDossierId() : 0) %>"
@@ -253,6 +261,11 @@
 														page="/html/common/portlet/dossier_actions.jsp" 
 														servletContext="<%=application %>"
 													>
+														<portlet:param 
+															name="showVersionItemReference" 
+															value="<%=String.valueOf(showVersionItem) %>"
+														/>
+													
 														<portlet:param 
 															name="<%=DossierDisplayTerms.DOSSIER_ID %>" 
 															value="<%=String.valueOf(dossier != null ? dossier.getDossierId() : 0) %>"
