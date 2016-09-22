@@ -116,14 +116,14 @@ public class DictItemFinderImpl extends BasePersistenceImpl<DictItem>
 	
 				sql = CustomSQLUtil
 					.replaceKeywords(sql,
-						"lower(ExtractValue(itemName, '//ItemName[1]'))",
+						"lower(ExtractValue(itemName, '//ItemName'))",
 						StringPool.LIKE, true, keywords);
 
 			}
 			else {
 				sql = StringUtil
 					.replace(sql,
-						"and (lower(ExtractValue(itemName, '//ItemName[1]')) LIKE ? [$AND_OR_NULL_CHECK$])",
+						"and (lower(ExtractValue(itemName, '//ItemName')) LIKE ? [$AND_OR_NULL_CHECK$])",
 						StringPool.BLANK);
 			}
 

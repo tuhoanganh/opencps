@@ -17,7 +17,7 @@
 			
 			and opencps_dictitem.groupId = ?
 			
-			and (lower(ExtractValue(itemName, '//ItemName[1]')) LIKE ? [$AND_OR_NULL_CHECK$])
+			and (lower(ExtractValue(itemName, '//ItemName')) LIKE ? [$AND_OR_NULL_CHECK$])
 		]]>
 	</sql>
 </custom-sql>

@@ -361,6 +361,7 @@
 				  }
 				);
 	}
+	
 	function openCPSAutoCompletebildDataSource(controlId, minLength, dictCollectionId, parentItemId, keywords) {
 		if(keywords.length >= minLength){
 			Liferay.Service(
@@ -373,34 +374,47 @@
 					  },
 					  function(obj) {
 							
-						  var arrayData = $.map(obj, function (value, key) {         
+						  var arrayParam = $.map(obj, function (value, key) {         
 							  return {                
-							 	label: value,                                                
-							 	value:  key                                            
-							 }                                        
+							 		label: value,                                                
+							 		value:  key                                            
+							 	}                                        
 							 });
-							  $("#"+controlId).autocomplete({
+							  
+						  $("#"+controlId).autocomplete({
 									
-									delay: 1000,
+								delay: 200,
 									
-									source: arrayData,
+								source: arrayParam,
 									
-									focus: function(event, ui) {
+								focus: function(event, ui) {
 										// prevent autocomplete from updating the textbox
-										event.preventDefault();
-									},
+									event.preventDefault();
+								},
 									
-									select: function(event, ui) {
-										// prevent autocomplete from updating the textbox
-										event.preventDefault();
-										// binding value to control
-										$("#"+controlId).val(ui.item.label);
-										$("#"+controlId+"Id").val(ui.item.value);
+								select: function(event, ui) {
+									// prevent autocomplete from updating the textbox
+									event.preventDefault();
+									// binding value to control
+									dkm = ui.item.label;
+									$("#"+controlId).val(ui.item.label);
+									$("#"+controlId+"Id").val(ui.item.value);
+									$("#"+controlId+"Text").val(ui.item.label);
+								},
+									
+								change: function(event, ui) {
+									// prevent autocomplete from updating the textbox
+									event.preventDefault();
+									// binding value to control
+									if($("#"+controlId).val() != $("#"+controlId+"Text").val()){ 
+										$("#"+controlId).val('');
+										$("#"+controlId+"Id").val('');
+										$("#"+controlId+"Text").val('');
 									}
+								}
 									
-								});
-					  }
-					);
+							});
+				  });
 		}else{
 			console.log(" more character -->");
 		}
