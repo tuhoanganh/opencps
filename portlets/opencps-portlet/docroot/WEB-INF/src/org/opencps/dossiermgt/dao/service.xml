@@ -465,7 +465,7 @@
             <finder-column name="dossierId"></finder-column>
             <finder-column name="groupFileId"></finder-column>
         </finder>
-        <finder name="DossierFileInUse" return-type="DossierFile" where="removed=0">
+        <finder name="DossierFileInUse" return-type="DossierFile" where="removed=0 AND syncStatus=2">
             <finder-column name="dossierId"></finder-column>
             <finder-column name="dossierPartId"></finder-column>
         </finder>
@@ -475,7 +475,7 @@
             <finder-column name="dossierPartId"></finder-column>
             <finder-column name="groupFileId"></finder-column>
         </finder>
-        <finder name="DossierFileInUseByGroupFileId" return-type="DossierFile" where="removed=0">
+        <finder name="DossierFileInUseByGroupFileId" return-type="DossierFile" where="removed=0 AND syncStatus=2">
             <finder-column name="dossierId"></finder-column>
             <finder-column name="dossierPartId"></finder-column>
             <finder-column name="groupFileId"></finder-column>
