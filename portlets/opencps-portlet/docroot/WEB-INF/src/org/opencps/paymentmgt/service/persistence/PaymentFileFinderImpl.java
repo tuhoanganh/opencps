@@ -22,11 +22,9 @@ import java.util.List;
 
 import org.opencps.paymentmgt.model.PaymentFile;
 import org.opencps.paymentmgt.model.impl.PaymentFileImpl;
-
 import org.opencps.processmgt.model.ServiceProcess;
 import org.opencps.processmgt.model.impl.ServiceProcessImpl;
 import org.opencps.processmgt.service.persistence.ServiceProcessFinder;
-
 
 import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
@@ -69,7 +67,11 @@ implements PaymentFileFinder {
 		String[] names = null;
 		boolean andOperator = false;
 		if (Validator.isNotNull(keywords)) {
-			names = CustomSQLUtil.keywords(keywords);
+			
+			names = new String[]{
+					StringUtil.quote(
+						StringUtil.toLowerCase(keywords).trim(), 
+						StringPool.PERCENT)};
 		}
 		else {
 			andOperator = true;
@@ -89,7 +91,11 @@ implements PaymentFileFinder {
 		String[] names = null;
 		boolean andOperator = false;
 		if (Validator.isNotNull(keywords)) {
-			names = CustomSQLUtil.keywords(keywords);
+			
+			names = new String[]{
+					StringUtil.quote(
+						StringUtil.toLowerCase(keywords).trim(), 
+						StringPool.PERCENT)};
 		}
 		else {
 			andOperator = true;
@@ -99,36 +105,28 @@ implements PaymentFileFinder {
 
 	private List<PaymentFile> _searchPaymentFiles(
 		long groupId, String paymentStatus, boolean andOperator, String[] keywords, int start, int end) {
-
-		keywords = CustomSQLUtil.keywords(keywords);
-		System.out.println("PaymentFileFinderImpl.groupId()"+groupId);
-		System.out.println("PaymentFileFinderImpl.groupId()"+paymentStatus);
-		System.out.println("PaymentFileFinderImpl.groupId()"+keywords);
+		
 		Session session = null;
 		try {
 			session = openSession();
-			String sql = CustomSQLUtil.get(SQL_PAYMENT_FINDER);
+ 			String sql = CustomSQLUtil.get(SQL_PAYMENT_FINDER);
 			
-			sql = CustomSQLUtil.replaceKeywords(
-						        sql, "lower(opencps_payment_file.paymentName)",
-						        StringPool.LIKE, true, keywords);
+			sql = CustomSQLUtil.replaceKeywords(sql, "lower(opencps_payment_file.receptionNo)",StringPool.LIKE, true, keywords);
 			
-			sql = CustomSQLUtil.replaceKeywords(
-		        sql, "lower(opencps_acc_citizen.fullName)",
-		        StringPool.LIKE, true, keywords);
 			
-			sql = CustomSQLUtil.replaceKeywords(
-		        sql, "lower(opencps_acc_business.name)",
-		        StringPool.LIKE, true, keywords);
+			sql = CustomSQLUtil.replaceKeywords(sql, "lower(opencps_payment_file.paymentName)",StringPool.LIKE, true, keywords);
 			
-//				sql = StringUtil
-//							    .replace(
-//							        sql, "AND (opencps_payment_file.paymentStatus = ?)",
-//							        StringPool.BLANK);
+			
+			sql = CustomSQLUtil.replaceKeywords(sql, "lower(opencps_acc_citizen.fullName)",StringPool.LIKE, true, keywords);
+			
+			sql = CustomSQLUtil.replaceKeywords(sql, "lower(opencps_acc_business.name)",StringPool.LIKE, true, keywords);
+			
+			if(paymentStatus.equals("-1") || Validator.isNull(paymentStatus)) {
+				sql = StringUtil.replace(sql, "AND (opencps_payment_file.paymentStatus = ?)", StringPool.BLANK);
+			}		
 			
 			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
-
-			System.out.println("PaymentFileFinderImpl._searchPaymentFiles()"+sql);
+						
 			SQLQuery q = session.createSQLQuery(sql);
 
 			q.setCacheable(false);
@@ -139,7 +137,10 @@ implements PaymentFileFinder {
 
 			qPos.add(keywords, 8);
 			
-			qPos.add(paymentStatus);
+			
+			if(Validator.isNotNull(paymentStatus) && !paymentStatus.equals("-1")) {
+				qPos.add(paymentStatus);
+			}
 			
 			return (List<PaymentFile>) QueryUtil.list(
 						    q, getDialect(), start, end);
@@ -160,12 +161,12 @@ implements PaymentFileFinder {
 	private int _countPaymentFiles(
 		long groupId, String paymentStatus, boolean andOperator, String[] keywords) {
 
-		keywords = CustomSQLUtil.keywords(keywords);
-
 		Session session = null;
 		try {
 			session = openSession();
 			String sql = CustomSQLUtil.get(SQL_PAYMENT_COUNT);
+			
+			sql = CustomSQLUtil.replaceKeywords(sql, "lower(opencps_payment_file.receptionNo)",StringPool.LIKE, true, keywords);
 			
 			sql = CustomSQLUtil.replaceKeywords(
 						        sql, "lower(opencps_payment_file.paymentName)",
@@ -179,10 +180,9 @@ implements PaymentFileFinder {
 		        sql, "lower(opencps_acc_business.name)",
 		        StringPool.LIKE, true, keywords);
 			
-//				sql = StringUtil
-//							    .replace(
-//							        sql, "AND (opencps_payment_file.paymentStatus = ?)",
-//							        StringPool.BLANK);
+			if(paymentStatus.equals("-1") || Validator.isNull(paymentStatus)) {
+				sql = StringUtil.replace(sql, "AND (opencps_payment_file.paymentStatus = ?)", StringPool.BLANK);
+			}
 			
 			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
 
@@ -196,7 +196,9 @@ implements PaymentFileFinder {
 
 			qPos.add(keywords, 8);
 
-			qPos.add(paymentStatus);
+			if(Validator.isNotNull(paymentStatus) && !paymentStatus.equals("-1")) {
+				qPos.add(paymentStatus);
+			}
 			
 			Iterator<Integer> itr = q.iterate();
 
