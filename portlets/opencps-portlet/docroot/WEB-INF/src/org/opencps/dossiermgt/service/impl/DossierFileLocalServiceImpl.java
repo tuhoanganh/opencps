@@ -977,6 +977,7 @@ public class DossierFileLocalServiceImpl
 	/**
 	 * @param dossierId
 	 * @param dossierPartId
+	 * @param syncStatus
 	 * @return DossierFile
 	 * @throws PortalException
 	 * @throws SystemException
