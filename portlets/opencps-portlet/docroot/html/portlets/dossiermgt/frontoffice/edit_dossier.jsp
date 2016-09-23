@@ -148,12 +148,15 @@
 					 		<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/frontoffice/frontofficedossierlist.jsp"/>
 					 	</liferay-portlet:renderURL>
 					 	
-					 	<liferay-ui:icon
+					 	<c:if test="<%=showBackToListButton %>">
+					 		<liferay-ui:icon
 								image="back"
 								cssClass="search-container-action fa forward"
 								message="back-dossier-list"  
 								url="<%= backDossierList.toString() %>" 
-						/>
+							/>
+					 	</c:if>
+					 	
 			 		</c:if>
 			  		<c:if test="<%= (dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_PROCESSING) && workFlow != null) %>">
 					 		<portlet:actionURL var="cancelDossierURL" name="cancelDossier" >
