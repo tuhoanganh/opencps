@@ -37,5 +37,7 @@
 	boolean displayDossierNo =  GetterUtil.getBoolean(preferences.getValue("displayDossierNo", "false"), false);
 			
 	boolean showVersionItem = GetterUtil.getBoolean(preferences.getValue("showVersionItem", "true"), true);
+	
+	boolean showBackToListButton = GetterUtil.getBoolean(preferences.getValue("showBackToListButton", "true"), true);
 %>
 
