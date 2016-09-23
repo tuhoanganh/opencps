@@ -981,11 +981,11 @@ public class DossierFileLocalServiceImpl
 	 * @throws PortalException
 	 * @throws SystemException
 	 */
-	public DossierFile getDossierFileInUseSyncStatus(long dossierId, long dossierPartId)
+	public DossierFile getDossierFileInUse(long dossierId, long dossierPartId, int syncStatus)
 		throws PortalException, SystemException {
 
-		return dossierFilePersistence.findByDossierFileInUse(
-			dossierId, dossierPartId, 0, 2);
+		return dossierFilePersistence.findByDossierFileInUseSyncStatus(
+			dossierId, dossierPartId, 0, syncStatus);
 	}
 
 	/**
