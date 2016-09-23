@@ -226,19 +226,29 @@
 					
 					//Validate form submit
 					var errorMessage = '';
-					$('div[class*="has-error"] > label').each(function( index ) {
+// 					$('div[class*="has-error"] > label').each(function( index ) {
 						
-						errorMessage += ( index + 1 ) + ': ' + $( this ).text() + '\n';
+// 						errorMessage += ( index + 1 ) + ': ' + $( this ).text() + '\n';
 						  
-					});
+// 					});
 
+					$('div[class*="has-error"] :input').each(function( index ) {
+						
+						if($(this).val() != null){
+							errorMessage += ( index + 1 ) + '\n';
+						}
+					  
+					});
+					
+					console.log("Alpacajs-required: "+errorMessage);
+					
 					if(errorMessage.length == 0){
 					
 						$("#<portlet:namespace />fm" ).submit();
 					
 					}else{
 						
-						alert( '<%=LanguageUtil.get(pageContext, "fields-required") %> :' + "\n" + errorMessage);
+						alert( '<%=LanguageUtil.get(pageContext, "fields-required") %>');
 						
 					}
 					

@@ -92,6 +92,8 @@
 	
 	List<ProcessOrderBean> processOrderSteps = new ArrayList<ProcessOrderBean>();
 	
+	
+	
 	long serviceInfoId = ParamUtil.getLong(request, "serviceInfoId");
 	
 	long processStepId = ParamUtil.getLong(request, "processStepId");
@@ -100,11 +102,21 @@
 		
 		if(tabs1.equals(ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS)){
 			processOrderServices = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getProcessOrderServiceByUser(themeDisplay.getUserId());
+			
+			for(ProcessOrderBean ett : processOrderServices){
+				processOrderSteps.addAll((List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getUserProcessStep(themeDisplay.getUserId(), ett.getServiceInfoId()));
+			}
+			
 			if(serviceInfoId > 0){
 				processOrderSteps = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getUserProcessStep(themeDisplay.getUserId(), serviceInfoId);
 			}
 		}else{
 			processOrderServices = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getProcessOrderServiceJustFinishedByUser(themeDisplay.getUserId());
+			
+			for(ProcessOrderBean ett : processOrderServices){
+				processOrderSteps.addAll((List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getUserProcessStep(themeDisplay.getUserId(), ett.getServiceInfoId()));
+			}
+			
 			if(serviceInfoId > 0){
 				processOrderSteps = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getUserProcessStepJustFinished(themeDisplay.getUserId(), serviceInfoId);
 			}
@@ -129,13 +141,11 @@
 <aui:row>
 	<aui:col width="25">
 	
-	<c:if test="<%=serviceInfoId > 0 %>">
 		<div style="margin-bottom: 25px;" class="opencps-searchcontainer-wrapper default-box-shadow radius8">
 		
 			<div id="processStepIdTree" class="openCPSTree"></div>
-		
+			
 		</div>
-	</c:if>
 	
 	<div class="opencps-searchcontainer-wrapper default-box-shadow radius8">
 		

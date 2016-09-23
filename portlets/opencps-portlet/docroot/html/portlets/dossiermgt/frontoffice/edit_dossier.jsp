@@ -151,7 +151,7 @@
 					 	
 					 	<liferay-ui:icon
 								image="back"
-								cssClass="search-container-action fa forward"
+								cssClass="search-container-action fa forward input100"
 								message="back-dossier-list"  
 								url="<%= backDossierList.toString() %>" 
 						/>
