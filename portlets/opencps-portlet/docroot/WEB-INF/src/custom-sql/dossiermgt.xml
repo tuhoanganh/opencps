@@ -113,7 +113,7 @@
 	<sql id="org.opencps.dossiermgt.service.persistence.DossierFinder.searchDossierByKeywordDomainAndStatus">	
 		<![CDATA[
 			SELECT
-				*
+				opencps_dossier.*
 			FROM
 				opencps_dossier
 			INNER JOIN
@@ -133,10 +133,10 @@
 			OR 
 				(lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$])
 			OR 
-				(lower(opencps_dossier.subjectName) LIKE ? [$AND_OR_NULL_CHECK$]))				
+				(lower(opencps_dossier.subjectName) LIKE ? [$AND_OR_NULL_CHECK$]))
 			AND 
 				(opencps_dossier.dossierStatus = ?)
-				
+
 			AND (opencps_dossier.serviceDomainIndex LIKE ?)
 			
 			AND 

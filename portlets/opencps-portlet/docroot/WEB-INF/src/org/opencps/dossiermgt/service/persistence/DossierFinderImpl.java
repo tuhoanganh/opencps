@@ -526,15 +526,16 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 
 			String sql =
 				CustomSQLUtil.get(SEARCH_DOSSIER_BY_KEYWORDDOMAINANDSTATUS);
+			
 			if (keywords != null && keywords.length > 0) {
 				sql =
 					CustomSQLUtil.replaceKeywords(
 						sql, "lower(opencps_serviceinfo.serviceName)",
-						StringPool.LIKE, true, keywords);
+						StringPool.LIKE, false, keywords);
 
-				sql = CustomSQLUtil
-					.replaceKeywords(sql,
-						"lower(opencps_service_config.govAgencyName)",
+				sql =
+					CustomSQLUtil.replaceKeywords(
+						sql, "lower(opencps_service_config.govAgencyName)",
 						StringPool.LIKE, false, keywords);
 				
 				sql = CustomSQLUtil
@@ -546,6 +547,7 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 					.replaceKeywords(sql, "lower(opencps_dossier.subjectName)",
 						StringPool.LIKE, true, keywords);
 			}
+
 			if (keywords == null || keywords.length == 0) {
 
 				sql = StringUtil
@@ -568,6 +570,7 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 						"OR (lower(opencps_dossier.subjectName) LIKE ? [$AND_OR_NULL_CHECK$]))",
 						StringPool.BLANK);
 			}
+
 			if (Validator.isNull(domainCode)) {
 				sql =
 					StringUtil.replace(
@@ -582,7 +585,7 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 						StringPool.BLANK);
 			}
 
-			if (Validator.isNull(govAgencyCodes) || govAgencyCodes.isEmpty()) {
+			if (Validator.isNull(govAgencyCodes) ||govAgencyCodes.isEmpty()) {
 				sql =
 					StringUtil.replace(
 						sql, "AND opencps_dossier.govAgencyCode IN (?)",
@@ -610,15 +613,17 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 					.add(keywords, 2);
 			}
 
-			if (Validator
-					.isNotNull(domainCode)){
-				qPos
-					.add(domainCode + StringPool.PERCENT);
-			}
-
 			if (Validator.isNotNull(dossierStatus)) {
+				qPos.add(dossierStatus);
+			}
+			
+			if (Validator
+					.isNotNull(domainCode)) {
+					
 				qPos
-					.add(dossierStatus);
+					.add(domainCode +
+						StringPool.PERCENT);
+
 			}
 			
 			if (Validator.isNotNull(govAgencyCodes) && !govAgencyCodes.isEmpty()) {
