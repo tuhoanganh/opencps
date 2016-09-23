@@ -448,8 +448,14 @@ public class AccountUtil {
 			PortalUtil.getHttpServletRequest(actionRequest);
 		HttpSession session = request.getSession();
 
-		AccountBean accountBean =
-			(AccountBean) session.getAttribute(WebKeys.ACCOUNT_BEAN);
+		AccountBean accountBean = null;
+		
+		try {
+			accountBean = (AccountBean) session.getAttribute(WebKeys.ACCOUNT_BEAN);
+		} catch(Exception e) {
+			_log.error(e);
+			//TODO: init accountBean
+		}
 
 		return accountBean;
 	}
