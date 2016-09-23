@@ -106,7 +106,7 @@
 	
 	<div style="margin-bottom: 25px;" class="opencps-searchcontainer-wrapper default-box-shadow radius8">
 		
-		<div id="serviceDomainIdTree" class="openCPSTree"></div>
+		<div id="serviceDomainIdTree" class="openCPSTree scrollable"></div>
 		
 		<%
 		
@@ -246,7 +246,7 @@
 										<liferay-ui:message key="dossier-no"/>
 									</div>
 									
-									<div class="span9"><%= PortletUtil.intToString(dossier.getDossierId(), 15) %></div>
+									<div class="span9"><%= dossier.getDossierId() %></div>
 								</div>
 								
 								<div class="row-fluid">
@@ -276,17 +276,11 @@
 						<div class="row-fluid">
 							<div class="span1"></div>
 							
-							<div class="span2 bold-label">
-								<liferay-ui:message key="service-name"/>
-							</div>
-							
 							<div class="span9"><%=dossierBean.getServiceName() %></div>
 						</div>
 						
 						<div class="row-fluid">
 							<div class="span1"></div>
-							
-							<div class="span2 bold-label"><liferay-ui:message key="gov-agency-name"/></div>
 							
 							<div class="span9"><%=dossier.getGovAgencyName() %></div>
 						</div>
