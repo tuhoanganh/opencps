@@ -29,7 +29,7 @@ import org.opencps.datamgt.model.DictCollection;
 import org.opencps.datamgt.model.DictItem;
 import org.opencps.datamgt.model.DictVersion;
 import org.opencps.datamgt.service.base.DictItemLocalServiceBaseImpl;
-import org.opencps.datamgt.service.persistence.DictItemFinderUtil;
+import org.opencps.datamgt.util.DataMgtUtil;
 import org.opencps.util.PortletConstants;
 
 import com.liferay.counter.service.CounterLocalServiceUtil;
@@ -345,12 +345,12 @@ public class DictItemLocalServiceImpl extends DictItemLocalServiceBaseImpl {
 	 * @return
 	 * @throws SystemException
 	 */
-	public List<DictItem> getDictItemsByCollectionCode(String dictCollectionCode, long groupId)
+	public List<DictItem> findDictItemsByG_DC_S(long groupId, String dictCollectionCode)
 		throws SystemException {
 		
 		// dictItemFinder.getDictItems(dictCollectionCode, groupId)
 		
-		return DictItemFinderUtil.getDictItemsByCollectionCode(dictCollectionCode, groupId);
+		return dictItemFinder.findDictItemsByG_DC_S(groupId, dictCollectionCode, DataMgtUtil.ISSUE_STATUS_INUSE);
 	}
 	
 	/**
