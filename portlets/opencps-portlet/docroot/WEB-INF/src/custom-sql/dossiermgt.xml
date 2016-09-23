@@ -103,7 +103,7 @@
 			AND 
 				(opencps_dossier.dossierStatus = ?)
 
-			AND (opencps_serviceinfo.domainCode = ?)
+			AND (opencps_dossier.serviceDomainIndex LIKE ?)
 			
 			AND 
 				(opencps_dossier.govAgencyCode IN (?))
@@ -113,7 +113,7 @@
 	<sql id="org.opencps.dossiermgt.service.persistence.DossierFinder.searchDossierByKeywordDomainAndStatus">	
 		<![CDATA[
 			SELECT
-				*
+				opencps_dossier.*
 			FROM
 				opencps_dossier
 			INNER JOIN
@@ -133,11 +133,11 @@
 			OR 
 				(lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$])
 			OR 
-				(lower(opencps_dossier.subjectName) LIKE ? [$AND_OR_NULL_CHECK$]))				
+				(lower(opencps_dossier.subjectName) LIKE ? [$AND_OR_NULL_CHECK$]))
 			AND 
 				(opencps_dossier.dossierStatus = ?)
-				
-			AND (opencps_serviceinfo.domainCode = ?)
+
+			AND (opencps_dossier.serviceDomainIndex LIKE ?)
 			
 			AND 
 				(opencps_dossier.govAgencyCode IN (?))
@@ -161,9 +161,9 @@
 			OR 
 				(lower(opencps_dossier_file.dossierFileNo) LIKE ? [$AND_OR_NULL_CHECK$])
 			AND 
-				(opencps_dossier_file.fileEntryId IS NOT NULL AND opencps_dossier_file.fileEntryId = ?)
+				(opencps_dossier_file.fileEntryId = ?)
 			AND 
-				(opencps_dossier_file.fileEntryId IS NULL)
+				(opencps_dossier_file.fileEntryId > 0)
 			AND
 				(opencps_dossier_file.dossierFileType = ?)
 			AND
@@ -188,9 +188,9 @@
 			OR 
 				(lower(opencps_dossier_file.dossierFileNo) LIKE ? [$AND_OR_NULL_CHECK$])
 			AND 
-				(opencps_dossier_file.fileEntryId IS NOT NULL AND opencps_dossier_file.fileEntryId = ?)
+				(opencps_dossier_file.fileEntryId = ?)
 			AND 
-				(opencps_dossier_file.fileEntryId IS NULL)
+				(opencps_dossier_file.fileEntryId > 0)
 			AND
 				(opencps_dossier_file.dossierFileType = ?)
 			AND
