@@ -123,7 +123,12 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 		boolean andOperator = false;
 
 		if (Validator.isNotNull(keyword)) {
-			keywords = CustomSQLUtil.keywords(keyword);
+			
+			keywords = new String[]{
+					StringUtil.quote(
+						StringUtil.toLowerCase(keyword).trim(), 
+						StringPool.PERCENT)};
+			
 		}
 		else {
 			andOperator = true;
@@ -201,7 +206,7 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 			if (Validator.isNull(domainCode)) {
 				sql =
 					StringUtil.replace(
-						sql, "AND (opencps_serviceinfo.domainCode = ?)",
+						sql, "AND (opencps_dossier.serviceDomainIndex LIKE ?)",
 						StringPool.BLANK);
 			}
 
@@ -243,9 +248,14 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 			if (Validator.isNotNull(dossierStatus)) {
 				qPos.add(dossierStatus);
 			}
-			if (Validator.isNotNull(domainCode)) {
+			
+			if (Validator
+					.isNotNull(domainCode)) {
+					
 				qPos
-					.add(domainCode);
+					.add(domainCode +
+						StringPool.PERCENT);
+
 			}
 			
 			if (Validator.isNotNull(govAgencyCodes) && !govAgencyCodes.isEmpty()) {
@@ -480,7 +490,10 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 		boolean andOperator = false;
 		String[] keywords = null;
 		if (Validator.isNotNull(keyword)) {
-			keywords = CustomSQLUtil.keywords(keyword);
+			keywords = new String[]{
+					StringUtil.quote(
+						StringUtil.toLowerCase(keyword).trim(), 
+						StringPool.PERCENT)};
 		}
 		else {
 			andOperator = true;
@@ -558,7 +571,7 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 			if (Validator.isNull(domainCode)) {
 				sql =
 					StringUtil.replace(
-						sql, "AND (opencps_serviceinfo.domainCode = ?)",
+						sql, "AND (opencps_dossier.serviceDomainIndex LIKE ?)",
 						StringPool.BLANK);
 			}
 
@@ -597,10 +610,17 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 					.add(keywords, 2);
 			}
 
-			if (Validator.isNotNull(domainCode)) {
-				qPos.add(domainCode);
+			if (Validator
+					.isNotNull(domainCode)){
+				qPos
+					.add(domainCode + StringPool.PERCENT);
 			}
 
+			if (Validator.isNotNull(dossierStatus)) {
+				qPos
+					.add(dossierStatus);
+			}
+			
 			if (Validator.isNotNull(govAgencyCodes) && !govAgencyCodes.isEmpty()) {
 				String govCodes = StringUtil.merge(govAgencyCodes);
 				qPos.add(govCodes);
