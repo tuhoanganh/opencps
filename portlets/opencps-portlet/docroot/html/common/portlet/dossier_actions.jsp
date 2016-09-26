@@ -116,6 +116,20 @@
 								cssClass="label opencps dossiermgt part-file-ctr view-form"
 								title="view-form"
 							/>
+							<c:if test="<%=!showVersionItemReference %>">
+								<aui:a 
+									id="<%=String.valueOf(dossierPartId) %>"
+									dossier-part="<%=String.valueOf(isChildDossierPart ? childDossierPartId : dossierPartId) %>"
+									dossier-file="<%=String.valueOf(dossierFileId) %>"
+									group-dossier-part="<%=String.valueOf(groupDossierPartId) %>"
+									group-name="<%=groupName %>"
+									href="javascript:void(0);" 
+									label="view-content" 
+									cssClass="label opencps dossiermgt part-file-ctr view-attachment"
+									title="view-attachment"
+								/>
+							</c:if>
+							
 						</c:when>
 						<c:otherwise>
 							<c:choose>
@@ -452,6 +466,32 @@
 								label="view-form" 
 								cssClass="label opencps dossiermgt part-file-ctr view-form"
 								title="view-form"
+							/>
+							
+							<c:if test="<%=!showVersionItemReference %>">
+								<aui:a 
+									id="<%=String.valueOf(dossierPartId) %>"
+									dossier-part="<%=String.valueOf(isChildDossierPart ? childDossierPartId : dossierPartId) %>"
+									dossier-file="<%=String.valueOf(dossierFileId) %>"
+									group-dossier-part="<%=String.valueOf(groupDossierPartId) %>"
+									group-name="<%=groupName %>"
+									href="javascript:void(0);" 
+									label="view-content" 
+									cssClass="label opencps dossiermgt part-file-ctr view-attachment"
+									title="view-attachment"
+								/>
+							</c:if>
+							
+							<aui:a 
+								id="<%=String.valueOf(dossierPartId) %>"
+								dossier-part="<%=String.valueOf(isChildDossierPart ? childDossierPartId : dossierPartId) %>"
+								dossier-file="<%=String.valueOf(dossierFileId) %>"
+								group-dossier-part="<%=String.valueOf(groupDossierPartId) %>"
+								group-name="<%=groupName %>"
+								href="javascript:void(0);" 
+								label="view-content" 
+								cssClass="label opencps dossiermgt part-file-ctr view-attachment"
+								title="view-attachment"
 							/>
 						</c:when>
 						<c:otherwise>

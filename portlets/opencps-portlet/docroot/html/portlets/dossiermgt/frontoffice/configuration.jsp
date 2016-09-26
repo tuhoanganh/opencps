@@ -113,6 +113,12 @@
 		value="<%= showVersionItem %>"
 	/>
 	
+	<aui:input 
+		type="checkbox"
+		name="showBackToListButton" 
+		value="<%= showBackToListButton %>"
+	/>
+	
 	<aui:button type="submit" name="Save" value="save"></aui:button>
 
 </aui:form>
