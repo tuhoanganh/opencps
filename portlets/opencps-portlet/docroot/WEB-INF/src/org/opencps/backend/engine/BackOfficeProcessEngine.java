@@ -199,7 +199,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 				curStepId = processOrder.getProcessStepId();
 			}
 			
-			
+			long assignToUserId = toEngineMsg.getAssignToUserId();
 			
 			ProcessWorkflow processWorkflow = null;
 
@@ -209,9 +209,14 @@ public class BackOfficeProcessEngine implements MessageListener {
 				    ProcessWorkflowLocalServiceUtil.getProcessWorkflowByEvent(
 				        serviceProcessId, toEngineMsg.getEvent(), curStepId);
 				
-				_log.info("#############################serviceProcessId " + serviceProcessId);
-				_log.info("#############################toEngineMsg.getEvent() " + toEngineMsg.getEvent());
-				_log.info("#############################curStepId " + curStepId);
+				if (Validator.isNull(assignToUserId)) {
+
+					assignToUserId = processWorkflow.getActionUserId();
+					
+					_log.info("#############################assignToUserId " + assignToUserId);
+
+				}
+
 				
 				_log.info("######################## CREATE WORKFLOW ###############");
 			}
@@ -255,6 +260,8 @@ public class BackOfficeProcessEngine implements MessageListener {
 				} else {
 					changeStatus = PortletConstants.DOSSIER_STATUS_DONE;
 				}
+				
+				
 
 				// Update process order to SYSTEM
 				ProcessOrderLocalServiceUtil.updateProcessOrderStatus(
@@ -267,7 +274,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 				    toEngineMsg.getActionUserId(),
 				    toEngineMsg.getActionDatetime(),
 				    toEngineMsg.getActionNote(),
-				    toEngineMsg.getAssignToUserId(), stepName, actionName, 0,
+				    assignToUserId, stepName, actionName, 0,
 				    0, PortletConstants.DOSSIER_STATUS_SYSTEM);
 				
 				toBackOffice.setProcessOrderId(processOrderId);
