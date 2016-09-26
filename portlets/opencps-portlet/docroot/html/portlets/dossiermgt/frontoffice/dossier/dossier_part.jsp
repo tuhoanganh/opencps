@@ -93,7 +93,6 @@
 	}
 	
 	int index = 0; 
-	int stt = 1;
 	if(dossierPartsLevel1 != null){
 		for (DossierPart dossierPartLevel1 : dossierPartsLevel1){
 	
@@ -150,24 +149,12 @@
 													<c:when test="<%=(partType == PortletConstants.DOSSIER_PART_TYPE_OPTION ||
 														partType == PortletConstants.DOSSIER_PART_TYPE_OTHER) && level == 0%>"
 													>
-														<%
-															if(level == 0){
-														%>
-															<span class="dossier-part-stt"> <%=dossierPart.getSibling() %></span>
-														<%
-															}
-														%>
+														<span class="dossier-part-stt"> <%=dossierPart.getSibling() %></span>
 														<i class="fa fa-circle" aria-hidden="true"></i>
 														
 													</c:when>
 													<c:otherwise>
-														<%
-															if(level == 0){
-														%>
 															<span class="dossier-part-stt"> <%=dossierPart.getSibling() %></span>
-														<%
-															}
-														%>
 														<i 
 															id='<%="rowcheck" + dossierPart.getDossierpartId() + StringPool.DASH + index %>' 
 															class='<%=dossierFile != null &&  dossierFile.getFileEntryId() > 0 ? "fa fa-check-square-o" : "fa fa-square-o" %>' 
@@ -235,9 +222,6 @@
 									
 								<%
 								index++;
-								if(level==0){
-									stt++;
-								}
 							}
 							%>
 							
