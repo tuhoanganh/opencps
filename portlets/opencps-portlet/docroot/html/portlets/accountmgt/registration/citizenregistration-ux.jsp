@@ -292,17 +292,35 @@
 				</aui:row>
 				
 				<aui:row>
-					<datamgt:ddr 
-						cssClass="input100"
-						depthLevel="3" 
-						dictCollectionCode="ADMINISTRATIVE_REGION"
-						itemNames="cityId,districtId,wardId"
-						itemsEmptyOption="true,true,true"
-						displayStyle="vertical"
-						emptyOptionLabels="cityId,districtId,wardId"
-						showLabel="false"
-						selectedItems="<%= StringUtil.merge(cdw, StringPool.COMMA) %>"
-					/>	
+				
+					<c:choose>
+						<c:when test="<%=!showLabelTaglibDatamgt %>">
+							<datamgt:ddr 
+								cssClass="input100"
+								depthLevel="3" 
+								dictCollectionCode="ADMINISTRATIVE_REGION"
+								itemNames="cityId,districtId,wardId"
+								itemsEmptyOption="true,true,true"
+								displayStyle="vertical"
+								emptyOptionLabels="cityId,districtId,wardId"
+								showLabel="false"
+								selectedItems="<%= StringUtil.merge(cdw, StringPool.COMMA) %>"
+							/>	
+						</c:when>
+						<c:otherwise>
+							<datamgt:ddr 
+								cssClass="input100"
+								depthLevel="3" 
+								dictCollectionCode="ADMINISTRATIVE_REGION"
+								itemNames="cityId,districtId,wardId"
+								itemsEmptyOption="true,true,true"
+								displayStyle="vertical"
+								emptyOptionLabels="cityId,districtId,wardId"
+								showLabel="true"
+								selectedItems="<%= StringUtil.merge(cdw, StringPool.COMMA) %>"
+							/>
+						</c:otherwise>
+					</c:choose>
 				</aui:row>
 				<div class="term-user">
 					<aui:row>
