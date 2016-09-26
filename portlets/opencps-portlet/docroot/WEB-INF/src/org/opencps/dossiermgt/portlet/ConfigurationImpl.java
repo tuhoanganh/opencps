@@ -63,6 +63,8 @@ public class ConfigurationImpl implements ConfigurationAction{
 		
 		boolean displayRecentlyResultWhenSearch = ParamUtil.getBoolean(actionRequest, "displayRecentlyResultWhenSearch");
 		
+		boolean showVersionItem = ParamUtil.getBoolean(actionRequest, "showVersionItem");
+		
 		PortletURL redirectURL =
 		    PortletURLFactoryUtil.create(
 		        PortalUtil.getHttpServletRequest(actionRequest),
@@ -86,6 +88,8 @@ public class ConfigurationImpl implements ConfigurationAction{
 		preferences.setValue("itemsToDisplay", String.valueOf(itemsToDisplay));
 		preferences.setValue("templatesToDisplay", String.valueOf(templatesToDisplay));
 		preferences.setValue("timeToReLoad", String.valueOf(timeToReLoad));
+		
+		preferences.setValue("showVersionItem", String.valueOf(showVersionItem));
 		
 		preferences.store();
 
