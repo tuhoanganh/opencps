@@ -18,9 +18,11 @@
 
 package org.opencps.backend.engine;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.opencps.backend.message.SendToBackOfficeMsg;
 import org.opencps.backend.message.SendToEngineMsg;
@@ -370,11 +372,19 @@ public class BackOfficeProcessEngine implements MessageListener {
 					toBackOffice.setPaymentFile(paymentFile);
 					
 					
+					Locale vnLocale = new Locale("vi", "VN");
+
+					NumberFormat vnFormat = NumberFormat.getCurrencyInstance(vnLocale);
+
 					//setPayment message in pattern in message Info
 					
 					StringBuffer sb = new StringBuffer();
 					
+					
 					sb.append(paymentMessages.get(0));
+					sb.append(StringPool.OPEN_PARENTHESIS);
+					sb.append(vnFormat.format(totalPayment));
+					sb.append(StringPool.CLOSE_PARENTHESIS);
 					sb.append(StringPool.SEMICOLON);
 					sb.append(toEngineMsg.getActionNote());
 					
@@ -451,75 +461,6 @@ public class BackOfficeProcessEngine implements MessageListener {
 		catch (Exception e) {
 
 		}
-	}
-	
-	/**
-	 * @param actor
-	 * @param actorId
-	 * @param actorName
-	 * @param userActionId
-	 */
-	private void setActor(int actor, long actorId, String actorName, long userActionId) {
-		
-		try {
-			if (userActionId != 0) {
-				User user = UserLocalServiceUtil.fetchUser(userActionId);
-				
-				actor = WebKeys.DOSSIER_ACTOR_EMPLOYEE;
-				
-				actorId = userActionId;
-				
-				actorName = user.getFullName();
-			} else {
-				actor = 0;
-				actorId = 0;
-				actorName = WebKeys.DOSSIER_ACTOR_SYSTEM_NAME;
-			}
-        }
-        catch (Exception e) {
-	        _log.error(e);
-        }
-		
-	}
-	
-	
-	/**
-	 * @param serviceInfoId
-	 * @param dossierTemplateId
-	 * @param govAgencyCode
-	 * @param govAgencyName
-	 * @param govAgencyOrganizationId
-	 * @param serviceProcessId
-	 * @param groupId
-	 * @param dossier
-	 */
-	private void setExtraInfoDossier(
-	    long serviceInfoId, long dossierTemplateId, String govAgencyCode,
-	    String govAgencyName, long govAgencyOrganizationId,
-	    long serviceProcessId, long groupId, Dossier dossier) {
-
-		if (Validator.isNotNull(dossier)) {
-			serviceInfoId = dossier.getServiceInfoId();
-			dossierTemplateId = dossier.getDossierTemplateId();
-			govAgencyCode = dossier.getGovAgencyCode();
-			govAgencyName = dossier.getGovAgencyName();
-			govAgencyOrganizationId = dossier.getGovAgencyOrganizationId();
-			
-			
-			try {
-
-				ServiceConfig serviceConfig =
-				    ServiceConfigLocalServiceUtil.getServiceConfigByG_S_G(
-				        groupId, serviceInfoId, govAgencyCode);
-				serviceProcessId = serviceConfig.getServiceProcessId();
-				
-
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
-
 	}
 
 	/**
