@@ -216,7 +216,7 @@
 				
 				<aui:row>
 					<label class="control-label custom-lebel" for='<portlet:namespace/><%=CitizenDisplayTerms.CITIZEN_BIRTHDATE %>'>
-	 					<liferay-ui:message key="birth-date"/>
+	 					<liferay-ui:message key="birth-date-full"/>
 	 				</label>
 	 				<liferay-ui:input-date 
 	 					nullable="true"
@@ -315,7 +315,6 @@
 								itemNames="cityId,districtId,wardId"
 								itemsEmptyOption="true,true,true"
 								displayStyle="vertical"
-								emptyOptionLabels="cityId,districtId,wardId"
 								showLabel="true"
 								selectedItems="<%= StringUtil.merge(cdw, StringPool.COMMA) %>"
 							/>

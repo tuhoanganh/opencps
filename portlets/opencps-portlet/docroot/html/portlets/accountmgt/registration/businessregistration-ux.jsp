@@ -335,7 +335,6 @@
 								itemNames="cityId,districtId,wardId"
 								itemsEmptyOption="true,true,true"	
 								displayStyle="vertical"
-								emptyOptionLabels="cityId,districtId,wardId"
 								showLabel="true"
 								selectedItems="<%= StringUtil.merge(cdw, StringPool.COMMA) %>"
 							/>
@@ -364,7 +363,6 @@
 								dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_BUSINESS_TYPE %>"
 								itemNames="businessType"
 								itemsEmptyOption="true"	
-								emptyOptionLabels="business-type"
 								showLabel="true"
 								selectedItems="<%= typeID %>"
 							/>
