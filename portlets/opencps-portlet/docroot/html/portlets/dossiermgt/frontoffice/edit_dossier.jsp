@@ -149,12 +149,15 @@
 					 		</c:if>
 					 	</c:if>
 					 	
-					 	<liferay-ui:icon
+					 	<c:if test="<%=showBackToListButton %>">
+					 		<liferay-ui:icon
 								image="back"
 								cssClass="search-container-action fa forward input100"
 								message="back-dossier-list"  
 								url="<%= backDossierList.toString() %>" 
-						/>
+							/>
+					 	</c:if>
+					 	
 			 		</c:if>
 			  		<c:if test="<%= (dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_PROCESSING) && workFlow != null) %>">
 					 		<portlet:actionURL var="cancelDossierURL" name="cancelDossier" >
