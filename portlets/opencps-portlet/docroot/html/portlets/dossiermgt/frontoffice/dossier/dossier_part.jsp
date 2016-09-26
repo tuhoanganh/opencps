@@ -178,6 +178,12 @@
 												page="/html/common/portlet/dossier_actions.jsp" 
 												servletContext="<%=application %>"
 											>
+												
+												<portlet:param 
+													name="showVersionItemReference" 
+													value="<%=String.valueOf(showVersionItem) %>"
+												/>
+											
 												<portlet:param 
 													name="<%=DossierDisplayTerms.DOSSIER_ID %>" 
 													value="<%=String.valueOf(dossier != null ? dossier.getDossierId() : 0) %>"
@@ -254,6 +260,11 @@
 														page="/html/common/portlet/dossier_actions.jsp" 
 														servletContext="<%=application %>"
 													>
+														<portlet:param 
+															name="showVersionItemReference" 
+															value="<%=String.valueOf(showVersionItem) %>"
+														/>
+													
 														<portlet:param 
 															name="<%=DossierDisplayTerms.DOSSIER_ID %>" 
 															value="<%=String.valueOf(dossier != null ? dossier.getDossierId() : 0) %>"

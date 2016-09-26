@@ -25,7 +25,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.portlet.ActionRequest;
@@ -576,27 +575,37 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	 * @param actionRequest
 	 * @param actionResponse
 	 * @throws IOException
+	 * @throws SystemException 
+	 * @throws PortalException 
 	 */
 	public void cancelDossier(
 		ActionRequest actionRequest, ActionResponse actionResponse)
-		throws IOException {
+		throws IOException, PortalException, SystemException {
 
-		ServiceContext serviceContext =
-			ServiceContextThreadLocal.getServiceContext();
-		AccountBean accountBean = AccountUtil.getAccountBean(actionRequest);
-		if (accountBean.isBusiness() || accountBean.isCitizen()) {
-			long dossierId =
-				ParamUtil.getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
-			try {
+		long dossierId = ParamUtil.getLong(
+			actionRequest, DossierDisplayTerms.DOSSIER_ID);
+		
+		try {
+			ServiceContext serviceContext =
+				ServiceContextFactory.getInstance(actionRequest);
+			
+			AccountBean accountBean = AccountUtil.getAccountBean(actionRequest);
+			
+			if (accountBean != null && (accountBean.isBusiness() || accountBean.isCitizen())) {
+				
 				Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
+				
 				ProcessOrder processOrder =
 					ProcessOrderLocalServiceUtil.getProcessOrder(dossierId, 0);
+				
 				ProcessWorkflow workFlow =
-					ProcessWorkflowLocalServiceUtil.getByS_PreP_AN(
+					ProcessWorkflowLocalServiceUtil.findByS_PreP_AN(
 						processOrder.getServiceProcessId(),
 						processOrder.getProcessStepId(),
 						PortletPropsValues.OPENCPS_CANCEL_DOSSIER_NOTICE);
+				
 				Message message = new Message();
+				
 				if (Validator.isNotNull(workFlow.getAutoEvent())) {
 					message.put(
 						ProcessOrderDisplayTerms.EVENT, workFlow.getAutoEvent());
@@ -650,33 +659,31 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				sendToEngineMsg.setReceptionNo(Validator.isNotNull(dossier.getReceptionNo())
 					? dossier.getReceptionNo() : StringPool.BLANK);
 				sendToEngineMsg.setSignature(0);
+				
 				if (Validator.isNotNull(workFlow.getAutoEvent())) {
 					sendToEngineMsg.setEvent(workFlow.getAutoEvent());
 				}
 				else {
 					sendToEngineMsg.setProcessWorkflowId(workFlow.getProcessWorkflowId());
 				}
+				
 				sendToEngineMsg.setGroupId(serviceContext.getScopeGroupId());
 				sendToEngineMsg.setUserId(serviceContext.getUserId());
+				
 				message.put("msgToEngine", sendToEngineMsg);
+				
 				MessageBusUtil.sendMessage(
 					"opencps/backoffice/engine/destination", message);
-				addProcessActionSuccessMessage = false;
+				
 				SessionMessages.add(actionRequest, "cancel-dossier-success");
 			}
-			catch (PortalException e) {
-				_log.error(e);
+			else {
 				SessionErrors.add(
 					actionRequest, "user-not-have-permission-cancel-dossier");
 			}
-			catch (SystemException e) {
-				_log.error(e);
-				SessionErrors.add(
-					actionRequest, "user-not-have-permission-cancel-dossier");
-			}
-
 		}
-		else {
+		catch (Exception e) {
+			_log.error(e);
 			SessionErrors.add(
 				actionRequest, "user-not-have-permission-cancel-dossier");
 		}
@@ -1515,7 +1522,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		// HttpSession session = request.getSession();
 
-		validatePermission(renderRequest, renderResponse);
+		// validatePermission(renderRequest, renderResponse);
 
 		if (_hasPermission) {
 
@@ -2206,13 +2213,16 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			MessageBusUtil.sendMessage(
 				"opencps/frontoffice/out/destination", message);
 
-			ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest
-					.getAttribute(WebKeys.THEME_DISPLAY);
+			ThemeDisplay themeDisplay =
+				(ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
 			// add default message success
-			SessionMessages.add(actionRequest, 
-					MessageKeys.DEFAULT_SUCCESS_KEY_X, 
-					LanguageUtil.format(themeDisplay.getLocale(), MessageKeys.DEFAULT_SUCCESS_KEY_X, String.valueOf(dossier.getDossierId())));
+			SessionMessages.add(
+				actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY_X,
+				LanguageUtil.format(
+					themeDisplay.getLocale(),
+					MessageKeys.DEFAULT_SUCCESS_KEY_X,
+					String.valueOf(dossier.getDossierId())));
 
 		}
 		catch (Exception e) {
@@ -3097,7 +3107,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			obj.put("counter", String.valueOf(counterVal));
 			jsonArray.put(obj);
 		}
-		
+
 		jsonObject.put("badge", jsonArray);
 		PortletUtil.writeJSON(actionRequest, actionResponse, jsonObject);
 	}
