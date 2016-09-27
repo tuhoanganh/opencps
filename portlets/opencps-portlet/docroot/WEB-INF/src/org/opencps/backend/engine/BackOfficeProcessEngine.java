@@ -42,6 +42,7 @@ import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
 import org.opencps.processmgt.service.SchedulerJobsLocalServiceUtil;
+import org.opencps.processmgt.util.ProcessMgtUtil;
 import org.opencps.util.PortletConstants;
 import org.opencps.util.WebKeys;
 
@@ -209,13 +210,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 				    ProcessWorkflowLocalServiceUtil.getProcessWorkflowByEvent(
 				        serviceProcessId, toEngineMsg.getEvent(), curStepId);
 				
-				if (Validator.isNull(assignToUserId)) {
 
-					assignToUserId = processWorkflow.getActionUserId();
-					
-					_log.info("#############################assignToUserId " + assignToUserId);
-
-				}
 
 				
 				_log.info("######################## CREATE WORKFLOW ###############");
@@ -224,6 +219,16 @@ public class BackOfficeProcessEngine implements MessageListener {
 				processWorkflow =
 				    ProcessWorkflowLocalServiceUtil.fetchProcessWorkflow(processWorkflowId);
 				_log.info("######################## GET WORKFLOW ###############");
+				
+			}
+			
+			if (Validator.isNull(assignToUserId)) {
+
+				assignToUserId = ProcessMgtUtil.getAssignUser(processWorkflow.getProcessWorkflowId(), processOrderId, processWorkflow.getPostProcessStepId());
+								
+								//processWorkflow.getActionUserId();
+				
+				_log.info("#############################assignToUserId " + assignToUserId);
 
 			}
 
