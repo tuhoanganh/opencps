@@ -649,8 +649,10 @@ public class DictItemLocalServiceImpl extends DictItemLocalServiceBaseImpl {
 	public List<DictItem> getDictItemsByTreeIndex(long dictItemId, long dictParentItemId, int status, int start, int end, OrderByComparator orderByComparator)
 			throws SystemException, NoSuchDictItemException{
 
-			String treeIndex = getTreeIndex(dictItemId, dictParentItemId);
-			return dictItemPersistence
+		//TODO
+		//--> search: treeIndex + StringPool.PERIOD + StringPool.PERCENT
+		String treeIndex = getTreeIndex(dictItemId, dictParentItemId);
+		return dictItemPersistence
 				.findByF_TreeIndex_Status(treeIndex + StringPool.PERCENT, status, start, end, orderByComparator);
 	}
 	

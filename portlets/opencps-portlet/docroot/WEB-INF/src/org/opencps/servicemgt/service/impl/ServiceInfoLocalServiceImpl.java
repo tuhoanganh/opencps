@@ -429,6 +429,8 @@ public class ServiceInfoLocalServiceImpl
 
 		List<ServiceInfo> results = new ArrayList<ServiceInfo>();
 		
+		//TODO
+		//--> search: treeIndex + StringPool.PERIOD + StringPool.PERCENT
 		if(Validator.isNotNull(treeIndex)){
 			
 			results = serviceInfoPersistence.findByG_DI_Status(groupId, treeIndex + StringPool.PERCENT, StringPool.PERCENT + keyword + StringPool.PERCENT, status, start, end, orderByComparator);
@@ -445,6 +447,9 @@ public class ServiceInfoLocalServiceImpl
 	public int countServiceInFosByG_DI_Status (long groupId, 
 			String treeIndex, int status, String keyword) throws SystemException {
 		int result = 0;
+		
+		//TODO
+		//--> search: treeIndex + StringPool.PERIOD + StringPool.PERCENT
 		if(Validator.isNotNull(treeIndex)){
 			
 			result = serviceInfoPersistence.countByG_DI_Status(groupId, treeIndex+ StringPool.PERCENT, StringPool.PERCENT + keyword + StringPool.PERCENT, status);
@@ -461,13 +466,16 @@ public class ServiceInfoLocalServiceImpl
 	private List<ServiceInfo> getServiceInFosG_FullName_Status (long groupId, 
 			int status, String keyword, int start, int end, OrderByComparator orderByComparator) throws SystemException {
 
+		//TODO
+		//--> search: treeIndex + StringPool.PERIOD + StringPool.PERCENT
 		return serviceInfoPersistence.findByG_FullName_Status(groupId, StringPool.PERCENT + keyword + StringPool.PERCENT, status, start, end, orderByComparator);
 			
 	}
 	
 	private int countServiceInFosG_FullName_Status (long groupId, 
 			int status, String keyword) throws SystemException {
-
+		//TODO
+		//--> search: treeIndex + StringPool.PERIOD + StringPool.PERCENT
 		return serviceInfoPersistence.countByG_FullName_Status(groupId, StringPool.PERCENT + keyword + StringPool.PERCENT, status);
 			
 	}
