@@ -47,6 +47,9 @@ public class DictItemFinderImpl extends BasePersistenceImpl<DictItem>
 	public static final String SEARCH_DICT_ITEM_BY_NAME_LIKE = DictItemFinder.class
 			.getName() + ".searchDictItemByNameLike";
 	
+	public static final String FIND_DICTITEMS_BY_G_DC_S = DictItemFinder.class
+			.getName() + ".findDictItemsByG_DC_S";
+	
 	/**
 	 * @param collectionCode
 	 * @param itemCode
@@ -170,17 +173,13 @@ public class DictItemFinderImpl extends BasePersistenceImpl<DictItem>
 
 	}
 	
-	
-	public static final String FIND_DICTITEMS_BY_G_DC_S = DictItemFinder.class
-			.getName() + ".findDictItemsByG_DC_S";
-	
-	
-	public List<DictItem> findDictItemsByG_DC_S(long groupId, String dictCollectionCode , int issueStatus){
+
+	public List<DictItem> findDictItemsByG_DC_S(long groupId, String dictCollectionCode , int issueStatus) throws SystemException{
 		
 		return _findDictItemsByG_DC_S(groupId, dictCollectionCode, issueStatus);
 	}
 	
-	private List<DictItem> _findDictItemsByG_DC_S(long groupId, String dictCollectionCode, int issueStatus){
+	private List<DictItem> _findDictItemsByG_DC_S(long groupId, String dictCollectionCode, Integer issueStatus) throws SystemException{
 		
 		Session session = null;
 		
@@ -194,7 +193,7 @@ public class DictItemFinderImpl extends BasePersistenceImpl<DictItem>
 				sql = StringUtil.replace(sql, "AND (opencps_dictcollection.collectionCode = ?)", StringPool.BLANK);
 			}
 			
-			if(issueStatus < 0 && issueStatus > 2){
+			if(issueStatus == null && issueStatus < 0){
 				sql = StringUtil.replace(sql, "AND (opencps_dictitem.issueStatus = ?)", StringPool.BLANK);
 			}
 			
@@ -209,24 +208,24 @@ public class DictItemFinderImpl extends BasePersistenceImpl<DictItem>
 				qPos.add(dictCollectionCode);
 			}
 			
-			if(!(issueStatus < 0 && issueStatus > 2)){
+			if(!(issueStatus == null && issueStatus < 0)){
 				qPos.add(issueStatus);
 			}
 			
 			return (List<DictItem>) queryObject.list();
 			
 		}catch (Exception e) {
-			_log.error(e);
+			throw new SystemException(e);
 			
 		} finally {
 			
 			closeSession(session);
 		}
 		
-		return null;
+		//return new ArrayList<DictItem>();
 	}
 			
 	
-	private Log _log = LogFactoryUtil.getLog(DictItemFinderImpl.class.getName());
+	private static Log _log = LogFactoryUtil.getLog(DictItemFinderImpl.class.getName());
 	
 }
