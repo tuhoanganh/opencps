@@ -137,9 +137,10 @@
 									<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
 									<portlet:param name="<%=DossierDisplayTerms.DOSSIER_STATUS %>" value="<%=String.valueOf(PortletConstants.DOSSIER_STATUS_NEW) %>"/>
 									<portlet:param name="backURL" value="<%=currentURL %>"/>
+									<portlet:param name="redirectURL" value="<%=currentURL %>"/>
 								</portlet:actionURL> 
 						 		<liferay-ui:icon
-						 			cssClass="search-container-action fa forward"
+						 			cssClass="search-container-action fa forward check-before-send"
 						 			image="forward"
 						 			message="send" 
 						 			url="<%=updateDossierStatusURL.toString() %>" 
@@ -151,9 +152,10 @@
 									<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
 									<portlet:param name="<%=DossierDisplayTerms.DOSSIER_STATUS %>" value="<%=String.valueOf(PortletConstants.DOSSIER_STATUS_WAITING) %>"/>
 									<portlet:param name="backURL" value="<%=currentURL %>"/>
+									<portlet:param name="redirectURL" value="<%=currentURL %>"/>
 								</portlet:actionURL> 
 						 		<liferay-ui:icon
-						 			cssClass="search-container-action fa forward"
+						 			cssClass="search-container-action fa forward check-before-send"
 						 			image="reply"
 						 			message="resend" 
 						 			url="<%=updateDossierStatusURL.toString() %>" 
@@ -335,3 +337,16 @@
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.dossiermgt.frontoffice.edit_dossier.jsp");
 %>
+
+<script type="text/javascript">
+	$(document).ready(function () {
+    
+	var x,y;
+	
+	x = $("span .dossier-version-counter").hasClass("required-highlight");
+	if(x){
+    	
+    	$(".check-before-send").hide();
+	}
+});
+</script>

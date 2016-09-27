@@ -1,3 +1,4 @@
+<%@page import="org.opencps.dossiermgt.search.DossierPartDisplayTerms"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -203,6 +204,10 @@
 												<portlet:param 
 													name="<%=DossierFileDisplayTerms.PART_TYPE %>" 
 													value="<%=String.valueOf(dossierPart.getPartType()) %>"
+												/>
+												<portlet:param 
+													name="<%=DossierPartDisplayTerms.DOSSIERPART_REQUIRED %>" 
+													value="<%=String.valueOf(dossierPart.getRequired() ? cssRequired : StringPool.BLANK) %>"
 												/>
 												<portlet:param 
 													name="isEditDossier" 

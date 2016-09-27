@@ -1,4 +1,7 @@
 
+<%@page import="org.opencps.dossiermgt.search.DossierPartDisplayTerms"%>
+<%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%
 /**
@@ -56,6 +59,16 @@
 	int level = ParamUtil.getInteger(request, DossierFileDisplayTerms.LEVEL);
 	
 	String groupName = ParamUtil.getString(request, DossierFileDisplayTerms.GROUP_NAME);
+	
+	String cssRequired = ParamUtil.getString(request, DossierPartDisplayTerms.DOSSIERPART_REQUIRED, StringPool.BLANK);
+	
+	
+	boolean partRequired = false;
+	
+	if(cssRequired.equals("cssRequired")){
+		partRequired = true;
+	}
+	
 	
 	int version  = 0;
 	
@@ -153,7 +166,7 @@
 				</td>
 				
 				<td width="10%" align="right">
-					<span class='dossier-version-counter <%=version <= 0 ? "required-highlight":"" %>'>
+					<span class='dossier-version-counter <%=(version <= 0) && (partRequired) ? "required-highlight":"" %>'>
 						<span class="counter-value" title='<%=LanguageUtil.get(pageContext, "version") %>'>
 							<aui:a 
 								id="<%=String.valueOf(dossierPartId) %>"
@@ -254,7 +267,7 @@
 				</td>
 				
 				<td width="10%" align="right">
-					<span class='dossier-version-counter <%=version <= 0 ? "required-highlight":"" %>'>
+					<span class='dossier-version-counter <%=(version <= 0) && (partRequired)? "required-highlight":"" %>'>
 						<span class="counter-value" title='<%=LanguageUtil.get(pageContext, "version") %>'>
 							<aui:a 
 								id="<%=String.valueOf(dossierPartId) %>"
@@ -371,7 +384,7 @@
 				</td>
 				
 				<td width="10%" align="right">
-					<span class='dossier-version-counter <%=version <= 0 ? "required-highlight":"" %>'>
+					<span class='dossier-version-counter <%=(version <= 0) && (partRequired) ? "required-highlight":"" %>'>
 						<span class="counter-value" title='<%=LanguageUtil.get(pageContext, "version") %>'>
 							<aui:a 
 								id="<%=String.valueOf(dossierPartId) %>"
@@ -482,7 +495,7 @@
 					</c:choose>
 				</td>
 				<td width="10%" align="right">
-					<span class='dossier-version-counter <%=version <= 0 ? "required-highlight":"" %>'>
+					<span class='dossier-version-counter <%=(version <= 0) && (partRequired) ? "required-highlight":"" %>'>
 						<span class="counter-value" title='<%=LanguageUtil.get(pageContext, "version") %>'>
 							<aui:a 
 								id="<%=String.valueOf(dossierPartId) %>"
