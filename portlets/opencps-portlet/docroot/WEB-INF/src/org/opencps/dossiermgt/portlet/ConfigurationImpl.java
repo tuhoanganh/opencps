@@ -65,6 +65,8 @@ public class ConfigurationImpl implements ConfigurationAction{
 		
 		boolean showVersionItem = ParamUtil.getBoolean(actionRequest, "showVersionItem");
 		
+		boolean showBackToListButton = ParamUtil.getBoolean(actionRequest, "showBackToListButton");
+		
 		PortletURL redirectURL =
 		    PortletURLFactoryUtil.create(
 		        PortalUtil.getHttpServletRequest(actionRequest),
@@ -90,6 +92,8 @@ public class ConfigurationImpl implements ConfigurationAction{
 		preferences.setValue("timeToReLoad", String.valueOf(timeToReLoad));
 		
 		preferences.setValue("showVersionItem", String.valueOf(showVersionItem));
+		
+		preferences.setValue("showBackToListButton", String.valueOf(showBackToListButton));
 		
 		preferences.store();
 

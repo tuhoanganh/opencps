@@ -2100,7 +2100,16 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 		List<ProcessOrderBean> processOrderSteps =
 			new ArrayList<ProcessOrderBean>();
+		
+		List<ProcessOrderBean> processOrderServices = new ArrayList<ProcessOrderBean>();
+		
 		if (tabs1.equals(ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS)) {
+			
+			processOrderServices = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getProcessOrderServiceByUser(themeDisplay.getUserId());
+			
+			for(ProcessOrderBean ett : processOrderServices){
+				processOrderSteps.addAll((List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getUserProcessStep(themeDisplay.getUserId(), ett.getServiceInfoId()));
+			}
 			if (serviceInfoId > 0) {
 				processOrderSteps =
 					(List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getUserProcessStep(
@@ -2108,6 +2117,13 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			}
 		}
 		else {
+
+			processOrderServices = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getProcessOrderServiceJustFinishedByUser(themeDisplay.getUserId());
+			
+			for(ProcessOrderBean ett : processOrderServices){
+				processOrderSteps.addAll((List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getUserProcessStep(themeDisplay.getUserId(), ett.getServiceInfoId()));
+			}
+			
 			if (serviceInfoId > 0) {
 				processOrderSteps =
 					(List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getUserProcessStepJustFinished(
