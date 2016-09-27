@@ -193,7 +193,7 @@ public class DictItemFinderImpl extends BasePersistenceImpl<DictItem>
 				sql = StringUtil.replace(sql, "AND (opencps_dictcollection.collectionCode = ?)", StringPool.BLANK);
 			}
 			
-			if(issueStatus == null || issueStatus < 0){
+			if(issueStatus == null){
 				sql = StringUtil.replace(sql, "AND (opencps_dictitem.issueStatus = ?)", StringPool.BLANK);
 			}
 			
@@ -208,7 +208,7 @@ public class DictItemFinderImpl extends BasePersistenceImpl<DictItem>
 				qPos.add(dictCollectionCode);
 			}
 			
-			if(issueStatus != null && issueStatus >= 0){
+			if(issueStatus != null){
 				qPos.add(issueStatus);
 			}
 			
