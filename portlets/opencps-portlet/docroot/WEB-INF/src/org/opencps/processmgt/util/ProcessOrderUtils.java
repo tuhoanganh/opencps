@@ -30,6 +30,7 @@ import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.WindowStateException;
 
+import org.opencps.backend.util.AutoFillFormData;
 import org.opencps.datamgt.model.DictCollection;
 import org.opencps.datamgt.model.DictItem;
 import org.opencps.datamgt.service.DictCollectionLocalServiceUtil;
@@ -43,6 +44,7 @@ import org.opencps.processmgt.search.ProcessOrderDisplayTerms;
 import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
 import org.opencps.processmgt.service.StepAllowanceLocalServiceUtil;
 import org.opencps.processmgt.util.comparator.ProcessOrderModifiedDateComparator;
+import org.opencps.util.PortletConstants;
 import org.opencps.util.PortletUtil;
 //import org.opencps.processmgt.util.comparator.BuocXuLyComparator;
 //import org.opencps.processmgt.util.comparator.ChuHoSoComparator;
@@ -57,6 +59,8 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
@@ -433,23 +437,7 @@ public class ProcessOrderUtils {
 				.getScopeGroupId();
 			
 			//get chirentDataSource
-			
-			DictCollection dictCollection = DictCollectionLocalServiceUtil.getDictCollection(groupId, collectionCode);
-			
-			long parentId = 0;
-			
-			if(!itemCode.equalsIgnoreCase("0")){
-				
-				DictItem ett = DictItemLocalServiceUtil
-						.getDictItemInuseByItemCode(dictCollection.getDictCollectionId(), itemCode);
-				
-				parentId = ett.getDictItemId();
-				
-			}
-			
-			List<DictItem> result = DictItemLocalServiceUtil
-				.getDictItemsInUseByDictCollectionIdAndParentItemId(
-						dictCollection.getDictCollectionId(), parentId);
+			List<DictItem> result = PortletUtil.getDictItemInUseByCode(groupId, collectionCode, itemCode);
 			
 			JSONArray jsonArrayRoot = JSONFactoryUtil.createJSONArray();
 			JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
@@ -458,36 +446,59 @@ public class ProcessOrderUtils {
 					.createJSONObject();
 			JSONObject jsonObject = null;
 			
-			for (DictItem dictItem : result) {
-				jsonObject = JSONFactoryUtil
-						.createJSONObject();
-				
-				jsonObject.put("label",
-						dictItem.getItemName(Locale.getDefault()));
-				
-				jsonObject.put("type", type);
-				
-				if(isCode){
-					jsonObject.put("id", dictItem.getItemCode());
-				}else{
-					jsonObject.put("id", StringUtil.valueOf(dictItem.getDictItemId()));
-				}
-				
-				if(level > 0){
-				
-					jsonObject.put("leaf", false);
+			int countPeriod = 0;
+			
+				for (DictItem dictItem : result) {
 					
-					jsonObject = doChildTreeJson(jsonObject, type, isCode,
-							dictCollection.getDictCollectionId(), dictItem.getDictItemId(), level);
-				
-				}else{
+					jsonObject = JSONFactoryUtil
+							.createJSONObject();
+					String[] treeIn = dictItem.getTreeIndex().split(StringPool.BACK_SLASH+StringPool.PERIOD);
 					
-					jsonObject.put("leaf", true);
-				
+					countPeriod = StringUtil.count(dictItem.getTreeIndex(), StringPool.PERIOD);
+					
+					if(countPeriod <= level){
+						
+						jsonObject.put("label",
+								dictItem.getItemName(Locale.getDefault()));
+						
+						jsonObject.put("type", type);
+						
+						if(isCode){
+							jsonObject.put("id", dictItem.getItemCode());
+						}else{
+							jsonObject.put("id", StringUtil.valueOf(dictItem.getDictItemId()));
+						}
+						
+						jsonObject.put("expanded", true);
+						
+						if(countPeriod < level){
+							
+							jsonObject.put("leaf", false);
+							
+						}else{
+							jsonObject.put("leaf", true);
+						}
+						
+						
+						jsonObject.put("children", JSONFactoryUtil.createJSONArray());
+						
+						if(countPeriod > 0){
+							
+							jsonObject.put("parentId", StringUtil.valueOf(treeIn[countPeriod-1]));
+							
+							for (int y = 0; y < jsonArray.length(); y++) {
+								
+								buildChildJsonTreeData(jsonObject, 0, jsonArray.getJSONObject(y));
+								
+							}
+						}else{
+							
+							jsonArray.put(jsonObject);
+							
+						}
+						
+					}
 				}
-
-				jsonArray.put(jsonObject);
-			}
 			
 			jsonObjectRoot.put("children", jsonArray);
 			
@@ -499,6 +510,38 @@ public class ProcessOrderUtils {
 			
 			return jsonArrayRoot.toString();
 		}
+	
+	public static void buildChildJsonTreeData(JSONObject newJsonObject, int i, JSONObject compareJsonObject) {
+		
+			JSONObject childObj = compareJsonObject;
+			
+			if(Validator.isNotNull(compareJsonObject.getJSONArray("children").getJSONObject(i)) && i > 0){
+				childObj = compareJsonObject.getJSONArray("children").getJSONObject(i);
+			}
+			JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+			
+			if(childObj != null){
+
+				jsonArray = childObj.getJSONArray("children");
+				
+				if(newJsonObject.getString("parentId").equals(childObj.getString("id"))){
+	
+					jsonArray.put(newJsonObject);
+					
+					childObj.put("children", jsonArray);
+				}
+				
+				i++;
+					
+				JSONObject objChk = compareJsonObject.getJSONArray("children").getJSONObject(i);
+					
+				if(Validator.isNotNull(objChk)){
+					
+					buildChildJsonTreeData(newJsonObject, i, compareJsonObject);
+				}
+				
+			}		
+	}
 	
 	public static String generateTreeView(List<ProcessOrderBean> dataSource, String myLabel , String type)		
 					throws SystemException, PortalException {
@@ -621,4 +664,6 @@ public class ProcessOrderUtils {
 		return jsonObject;
 	}
 
+	private static Log _log =
+    		LogFactoryUtil.getLog(ProcessOrderUtils.class.getName());
 }

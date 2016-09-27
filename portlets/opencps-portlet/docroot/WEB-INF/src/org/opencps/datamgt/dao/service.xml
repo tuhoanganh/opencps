@@ -158,6 +158,10 @@
             <finder-column name="parentItemId"></finder-column>
         </finder>
 
+		<finder name="F_TreeIndex_Status" return-type="Collection">
+			<finder-column name="treeIndex" comparator="LIKE" />
+			<finder-column name="issueStatus" />
+		</finder>
 	</entity>
 
 	<exceptions>
