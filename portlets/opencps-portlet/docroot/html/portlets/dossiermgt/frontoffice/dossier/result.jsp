@@ -258,7 +258,7 @@
 			</aui:row>
 		</c:if>
 		
-		<c:if test="<%=dossierPartsLevel1 != null && !dossierPartsLevel1.isEmpty() %>">
+		<c:if test="<%= dossierPartsLevel1 != null && !dossierPartsLevel1.isEmpty() %>">
 		
 			<aui:row cssClass="bottom-line mg-l-30 pd_b20 pd_t20 pd-r60"></aui:row>
 			
@@ -272,37 +272,43 @@
 						
 						int partType = dossierPartLevel1.getPartType();
 					
-						List<DossierPart> dossierParts = DossierMgtUtil.getTreeDossierPart(dossierPartLevel1.getDossierpartId());
-						
-						if(dossierParts != null){
-							for(DossierPart dossierPart : dossierParts){
-								DossierFile dossierFile = null;
-								try{
-									dossierFile = DossierFileLocalServiceUtil.getDossierFileInUse(dossier.getDossierId(), dossierPart.getDossierpartId());
-								}catch(Exception e){
-									continue;
-								}
-								
-								if(dossierFile.getFileEntryId() <= 0 || dossierFile.getSyncStatus() != PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS){
-									continue;
-								}
-								
-								
-								String fileURL = StringPool.BLANK;
-								
-								try{
-									FileEntry fileEntry = DLFileEntryUtil.getFileEntry(dossierFile.getFileEntryId());
-									if(fileEntry != null){
-										fileURL = DLUtil.getPreviewURL(fileEntry, fileEntry.getFileVersion(), 
-												themeDisplay, StringPool.BLANK);
+				%>
+					
+				<c:choose>
+					<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_RESULT%>">
+						<%
+							List<DossierPart> dossierParts = DossierMgtUtil.getTreeDossierPart(dossierPartLevel1.getDossierpartId());
+							
+							if(dossierParts != null){
+								for(DossierPart dossierPart : dossierParts){
+									DossierFile dossierFile = null;
+									try{
+										dossierFile = DossierFileLocalServiceUtil.getDossierFileInUse(dossier.getDossierId(), dossierPart.getDossierpartId());
+									}catch(Exception e){
+										continue;
 									}
-								}catch(Exception e){
-									continue;
 									
-								}
-
-								%>
-									<aui:row cssClass='<%=count > 1 ? "top-line pd_b20 pd_t20" : "pd_b20 pd_t20" %>'>
+									if(dossierFile.getFileEntryId() <= 0 || dossierFile.getSyncStatus() != PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS){
+										continue;
+									}
+									
+									
+									String fileURL = StringPool.BLANK;
+									
+									try{
+										FileEntry fileEntry = DLFileEntryUtil.getFileEntry(dossierFile.getFileEntryId());
+										if(fileEntry != null){
+											fileURL = DLUtil.getPreviewURL(fileEntry, fileEntry.getFileVersion(), 
+													themeDisplay, StringPool.BLANK);
+										}
+									}catch(Exception e){
+										continue;
+										
+									}
+							
+							%>
+							
+								<aui:row cssClass='<%=count > 1 ? "top-line pd_b20 pd_t20" : "pd_b20 pd_t20" %>'>
 										<aui:col width="50">
 											<aui:row>
 												<aui:col width="50">
@@ -350,9 +356,87 @@
 								count++;
 							}
 						}
+					%>
+							
+					</c:when>
+					
+					<c:when test="<%= partType == PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT%>">
+						<%
+							List<DossierFile> dossierFiles = DossierFileLocalServiceUtil.
+							getDossierFileByD_DP(dossier.getDossierId(), dossierPartLevel1.getDossierpartId());
+							int index = 0;
+							if (Validator.isNotNull(dossierFiles)) 
+							{
+								for(DossierFile df : dossierFiles) {
+								index++;
+								String fileURL = StringPool.BLANK;
+								
+								try{
+									FileEntry fileEntry = DLFileEntryUtil.getFileEntry(df.getFileEntryId());
+									if(fileEntry != null){
+										fileURL = DLUtil.getPreviewURL(fileEntry, fileEntry.getFileVersion(), 
+												themeDisplay, StringPool.BLANK);
+									}
+								}catch(Exception e){
+									continue;
+									
+								}
+
+						%>
+									<aui:row cssClass='<%=index > 1 ? "top-line pd_b20 pd_t20" : "pd_b20 pd_t20" %>'>
+										<aui:col width="50">
+											<aui:row>
+												<aui:col width="50">
+													<span class="span1">
+														<i class="fa fa-circle blue sx10"></i>
+													</span>
+													<span class="span2">
+														<%=index %>
+													</span>
+													<span class="span9">
+														<%=
+															Validator.isNotNull(df.getDossierFileDate()) ? 
+															DateTimeUtil.convertDateToString(df.getDossierFileDate(), DateTimeUtil._VN_DATE_TIME_FORMAT) : 
+															DateTimeUtil._EMPTY_DATE_TIME
+														%>
+													</span>
+												</aui:col>
+												<aui:col width="50">
+													<span class="span5 bold">
+														<liferay-ui:message key="dossier-file-no"/>
+													</span>
+													<span class="span7">
+														<%=Validator.isNotNull(df.getDossierFileNo()) ? df.getDossierFileNo() : StringPool.DASH %>
+													</span>
+												</aui:col>
+											</aui:row>
+										</aui:col>
+										<aui:col width="50">
+											<span class="span3 bold">
+												<liferay-ui:message key="dossier-file-name"/>
+											</span>
+											<span class="span6">
+												<a class="blue" href="<%=fileURL%>" target="_blank">
+													<%=Validator.isNotNull(df.getDisplayName()) ? df.getDisplayName() : StringPool.BLANK  %>
+												</a>
+											</span>
+											<span class="span3">
+												
+											</span>
+										</aui:col>
+									</aui:row>
+								
+						<%
+								}
+							}
+						%>
+					</c:when>
+				</c:choose>
+				<%
 					}
 				%>
 			</aui:row>
+				
 		</c:if>
 		
 	</c:when>
