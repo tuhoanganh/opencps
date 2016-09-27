@@ -35,8 +35,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.opencps.datamgt.NoSuchDictCollectionException;
+import org.opencps.datamgt.model.AdministrationServicedomain;
 import org.opencps.datamgt.model.DictCollection;
 import org.opencps.datamgt.model.DictItem;
+import org.opencps.datamgt.service.AdministrationServicedomainLocalServiceUtil;
 import org.opencps.datamgt.service.DictCollectionLocalServiceUtil;
 import org.opencps.datamgt.service.DictItemLocalServiceUtil;
 import org.opencps.dossiermgt.model.Dossier;
@@ -425,6 +427,37 @@ public class PortletUtil {
 		}
 		catch (Exception e) {
 			// TODO: handle exception
+		}
+		return result;
+	}
+	
+	public static List<DictItem> getDictItemInUseByCodeMappingAdminCode(long groupId, String dictCollectionCode, String itemCode) {
+
+		List<DictItem> result = new ArrayList<DictItem>();
+		
+		List<AdministrationServicedomain> adServicedomains = new ArrayList<AdministrationServicedomain>();
+		try {
+			
+			adServicedomains = AdministrationServicedomainLocalServiceUtil.getMappingAdministrationCode(groupId, dictCollectionCode, itemCode);
+			
+			DictItem dictItem = null;
+			for (AdministrationServicedomain administrationServicedomain : adServicedomains) {
+				
+				dictItem = DictItemLocalServiceUtil.getDictItemInuseByItemCode(administrationServicedomain.getGroupId(), 
+						administrationServicedomain.getServiceDomainCollectionCode(), 
+						administrationServicedomain.getServiceDomainCode());
+				if(Validator.isNotNull(dictItem)){
+					
+					result.add(dictItem);
+					
+				}
+				
+			}
+			
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+			_log.error(e);
 		}
 		return result;
 	}
