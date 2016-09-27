@@ -93,7 +93,6 @@
 	}
 	
 	int index = 0; 
-	
 	if(dossierPartsLevel1 != null){
 		for (DossierPart dossierPartLevel1 : dossierPartsLevel1){
 	
@@ -110,8 +109,8 @@
 							partType == PortletConstants.DOSSIER_PART_TYPE_OTHER %>"
 						>
 							<%
+							
 							for(DossierPart dossierPart : dossierParts){
-								
 								boolean isDynamicForm = false;
 								
 								if(Validator.isNotNull(dossierPart.getFormReport()) && Validator.isNotNull(dossierPart.getFormScript())){
@@ -145,15 +144,17 @@
 								%>
 									<div class='<%="opencps dossiermgt dossier-part-row r-" + index%>'>
 										<span class='<%="level-" + level + " opencps dossiermgt dossier-part"%>'>
-											<span class="row-icon">
+											<span class="row-icon row-icon-stt-new">
 												<c:choose>
 													<c:when test="<%=(partType == PortletConstants.DOSSIER_PART_TYPE_OPTION ||
 														partType == PortletConstants.DOSSIER_PART_TYPE_OTHER) && level == 0%>"
 													>
+														<span class="dossier-part-stt"> <%=dossierPart.getSibling() %></span>
 														<i class="fa fa-circle" aria-hidden="true"></i>
 														
 													</c:when>
-														<c:otherwise>
+													<c:otherwise>
+															<span class="dossier-part-stt"> <%=dossierPart.getSibling() %></span>
 														<i 
 															id='<%="rowcheck" + dossierPart.getDossierpartId() + StringPool.DASH + index %>' 
 															class='<%=dossierFile != null &&  dossierFile.getFileEntryId() > 0 ? "fa fa-check-square-o" : "fa fa-square-o" %>' 
