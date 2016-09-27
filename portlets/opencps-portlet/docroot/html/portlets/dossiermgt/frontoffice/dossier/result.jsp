@@ -359,11 +359,11 @@
 					%>
 							
 					</c:when>
-					
+
 					<c:when test="<%= partType == PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT%>">
 						<%
 							List<DossierFile> dossierFiles = DossierFileLocalServiceUtil.
-							getDossierFileByD_DP(dossier.getDossierId(), dossierPartLevel1.getDossierpartId());
+							getDossierFileByD_DP_Config(dossier.getDossierId(), dossierPartLevel1.getDossierpartId(), DossierMgtUtil.getDossierTemplateFileOrderByComparator(orderFieldDossierFile, orderBydDossierFile));
 							int index = 0;
 							if (Validator.isNotNull(dossierFiles)) 
 							{
