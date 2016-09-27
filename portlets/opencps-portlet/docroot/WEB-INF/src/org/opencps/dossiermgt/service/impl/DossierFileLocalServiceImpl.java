@@ -893,10 +893,10 @@ public class DossierFileLocalServiceImpl
 	 * @throws SystemException
 	 */
 	public List<DossierFile> getDossierFileByD_DP_Config(
-		long dossierId, long dossierPartId, OrderByComparator byComparator)
+		long dossierId, long dossierPartId, OrderByComparator byComparator, int start, int end)
 		throws NoSuchDossierFileException, SystemException {
 
-		return dossierFilePersistence.findByD_DP(dossierId, dossierPartId);
+		return dossierFilePersistence.findByD_DP(dossierId, dossierPartId, start, end, byComparator);
 	}
 	
 

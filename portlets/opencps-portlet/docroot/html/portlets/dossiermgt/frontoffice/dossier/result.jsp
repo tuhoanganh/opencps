@@ -469,7 +469,9 @@
 								getDossierFileByD_DP(dossier.getDossierId(), dossierPartLevel1.getDossierpartId());
 							} else {
 								DossierFileLocalServiceUtil.
-								getDossierFileByD_DP_Config(dossier.getDossierId(), dossierPartLevel1.getDossierpartId(), DossierMgtUtil.getDossierFileOrderByComparator(orderFieldDossierFile, orderBydDossierFile));
+								getDossierFileByD_DP_Config(dossier.getDossierId(), dossierPartLevel1.getDossierpartId(),
+										DossierMgtUtil.getDossierFileOrderByComparator(orderFieldDossierFile, orderBydDossierFile),
+										WebKeys.SEARCH_START, WebKeys.SEARCH_END);
 							}
 							
 							int index = 0;
