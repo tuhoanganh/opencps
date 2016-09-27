@@ -92,8 +92,8 @@
 		
 		<%
 		
-		String serviceDomainJsonData = ProcessOrderUtils.generateTreeView(
-				PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN, 
+		String serviceDomainJsonData = ProcessOrderUtils.generateTreeViewMappingAdminCode(
+				PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION, 
 				dictItemCode, 
 				LanguageUtil.get(locale, "filter-by-service-domain-left") , 
 				PortletConstants.TREE_VIEW_LEVER_2, 

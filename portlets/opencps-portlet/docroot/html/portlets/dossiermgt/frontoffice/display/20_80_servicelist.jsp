@@ -66,7 +66,7 @@
 	searchURL.setParameter("isListServiceConfig", String.valueOf(true));
 	searchURL.setParameter("backURL", currentURL);
 	List<DictItem> dictItems = PortletUtil.getDictItemInUseByCode(themeDisplay.getScopeGroupId(), 
-			PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN, 
+			PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION, 
 			PortletConstants.TREE_VIEW_DEFAULT_ITEM_CODE);
 %>
 
