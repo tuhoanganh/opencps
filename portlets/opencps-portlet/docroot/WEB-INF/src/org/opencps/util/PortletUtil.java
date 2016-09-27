@@ -677,6 +677,7 @@ public class PortletUtil {
 			break;
 		case PaymentMgtUtil.PAYMENT_STATUS_REJECTED:
 			statusLabel = LanguageUtil.get(locale, "rejected");
+			break;
 		default:
 			statusLabel = LanguageUtil.get(locale, "on-processing");
 			break;

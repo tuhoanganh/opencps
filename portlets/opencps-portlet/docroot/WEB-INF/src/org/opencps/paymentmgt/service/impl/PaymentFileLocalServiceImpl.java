@@ -148,14 +148,14 @@ public class PaymentFileLocalServiceImpl extends PaymentFileLocalServiceBaseImpl
 	}
 	
 	public List<PaymentFile> searchPaymentFiles(
-	    long groupId, String paymentStatus, String keywords, int start, int end) {
+	    long groupId, int paymentStatus, String keywords, int start, int end) {
 
 		return paymentFileFinder.searchPaymentFiles(
 		    groupId, paymentStatus, keywords, start, end);
 	}
 
 	public int countPaymentFiles(
-	    long groupId, String paymentStatus, String keywords) {
+	    long groupId, int paymentStatus, String keywords) {
 
 		return paymentFileFinder.countPaymentFiles(
 		    groupId, paymentStatus, keywords);

@@ -50,10 +50,8 @@
 <%@ include file="../init.jsp"%>
 <liferay-util:include page="/html/portlets/paymentmgt/backoffice/toolbar.jsp" servletContext="<%=application %>" />
 <%
-	String paymentStatus = ParamUtil.getString(request, "paymentStatus");
-	if(Validator.isNull(paymentStatus)){
-		paymentStatus = "-1";	
-	}
+	int paymentStatus = ParamUtil.getInteger(request, "paymentStatus",-1);
+
 	String keywords = ParamUtil.getString(request, "keywords");
 
 	PortletURL iteratorURL = renderResponse.createRenderURL();
@@ -84,7 +82,7 @@
 			}
 			List<PaymentFile> dossierFiles = null;
 			Integer totalCount = 0;
-			if (keywordArrs != null || !paymentStatus.equalsIgnoreCase("-1")) {
+			if (keywordArrs != null || paymentStatus >-1) {
 				try {
 					dossierFiles = PaymentFileLocalServiceUtil.searchPaymentFiles(themeDisplay.getScopeGroupId(), paymentStatus, keywords, searchContainer.getStart(), searchContainer.getEnd());
 					totalCount = PaymentFileLocalServiceUtil.countPaymentFiles(themeDisplay.getScopeGroupId(), paymentStatus, keywords);
@@ -152,12 +150,14 @@
 				detailURLXem.setParameter("redirect", currentURL);
 				
 				String classColor = "chothanhtoan";
-				if(paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_REQUESTED || paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_REJECTED){
+				if(paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_REQUESTED ){
 					classColor = "chothanhtoan";
 				}else if(paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_CONFIRMED){
 					classColor = "datiepnhan";
 				}else if(paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_APPROVED){
 					classColor = "hoanthanh";
+				}else if(paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_REJECTED){
+					classColor = "loi";
 				}
 				
 				// no column
