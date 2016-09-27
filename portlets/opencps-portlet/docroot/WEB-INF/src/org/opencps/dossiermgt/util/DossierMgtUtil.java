@@ -136,26 +136,27 @@ public class DossierMgtUtil {
 	public static List<DossierFile> orderDossierFileByDossierFileDate(String orderByType, List<DossierFile> dossierFiles) {
 		int value = 0;
 		DossierFile dossierFileTemp = null;
+		
 		if(orderByType.equals(WebKeys.ORDER_BY_ASC)) {
 			for(int i=0; i<dossierFiles.size()-1; i++) {
-				for(int j=i+1; i<dossierFiles.size(); j++) {
+				for(int j=i+1; j<dossierFiles.size(); j++) {
 					value = dossierFiles.get(i).getDossierFileDate().compareTo(dossierFiles.get(j).getDossierFileDate());
 					if(value >= 0) {
 						dossierFileTemp = dossierFiles.get(i);
-						dossierFiles.set(j, dossierFiles.get(i));
-						dossierFiles.set(i, dossierFileTemp);
+						dossierFiles.set(i, dossierFiles.get(j));
+						dossierFiles.set(j, dossierFileTemp);
 					}
 				}
 			}
 			return dossierFiles;
 		} else if (orderByType.equals(WebKeys.ORDER_BY_DESC)){
 			for(int i=0; i<dossierFiles.size()-1; i++) {
-				for(int j=i+1; i<dossierFiles.size(); j++) {
+				for(int j=i+1; j<dossierFiles.size(); j++) {
 					value = dossierFiles.get(i).getDossierFileDate().compareTo(dossierFiles.get(j).getDossierFileDate());
 					if(value < 0) {
 						dossierFileTemp = dossierFiles.get(i);
-						dossierFiles.set(j, dossierFiles.get(i));
-						dossierFiles.set(i, dossierFileTemp);
+						dossierFiles.set(i, dossierFiles.get(j));
+						dossierFiles.set(j, dossierFileTemp);
 					}
 				}
 			}
