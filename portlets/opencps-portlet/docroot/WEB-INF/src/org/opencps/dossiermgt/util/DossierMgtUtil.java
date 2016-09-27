@@ -22,9 +22,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Stack;
 
+import org.opencps.dossiermgt.comparator.DossierFileDossierFileDateComparator;
 import org.opencps.dossiermgt.comparator.DossierTemplateNameComparator;
 import org.opencps.dossiermgt.comparator.DossierTemplateNoComparator;
 import org.opencps.dossiermgt.model.DossierPart;
+import org.opencps.dossiermgt.search.DossierFileDisplayTerms;
 import org.opencps.dossiermgt.search.DossierTemplateDisplayTerms;
 import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
 import org.opencps.servicemgt.model.TemplateFile;
@@ -101,6 +103,25 @@ public class DossierMgtUtil {
 			orderByComparator = new DossierTemplateNameComparator(orderByAsc);
 		}
 
+		return orderByComparator;
+	}
+	
+	public static OrderByComparator getDossierTemplateFileOrderByComparator(
+		String orderByCol, String orderByType) {
+		
+
+		boolean orderByAsc = false;
+
+		if (orderByType.equals("asc")) {
+			orderByAsc = true;
+		}
+
+		OrderByComparator orderByComparator = null;
+		
+		if (orderByCol.equals(DossierFileDisplayTerms.DOSSIER_FILE_DATE)) {
+			orderByComparator = new DossierFileDossierFileDateComparator(orderByAsc);
+		}
+		
 		return orderByComparator;
 	}
 

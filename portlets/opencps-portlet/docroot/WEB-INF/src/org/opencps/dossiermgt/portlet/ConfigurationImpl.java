@@ -58,7 +58,11 @@ public class ConfigurationImpl implements ConfigurationAction{
 		long timeToReLoad = ParamUtil.getLong(actionRequest, "timeToReLoad", 0);
 		
 		String templatesToDisplay = ParamUtil.getString(actionRequest, "templatesToDisplay", "default");
-
+		
+		String orderFieldDossierFile = ParamUtil.getString(actionRequest, "orderFieldDossierFile");
+		
+		String orderBydDossierFile = ParamUtil.getString(actionRequest, "orderBydDossierFile");
+		
 		boolean displayDossierNo = ParamUtil.getBoolean(actionRequest, "displayDossierNo");
 		
 		boolean displayRecentlyResultWhenSearch = ParamUtil.getBoolean(actionRequest, "displayRecentlyResultWhenSearch");
@@ -94,6 +98,10 @@ public class ConfigurationImpl implements ConfigurationAction{
 		preferences.setValue("showVersionItem", String.valueOf(showVersionItem));
 		
 		preferences.setValue("showBackToListButton", String.valueOf(showBackToListButton));
+		
+		preferences.setValue("orderFieldDossierFile", orderFieldDossierFile);
+		
+		preferences.setValue("orderBydDossierFile", orderBydDossierFile);
 		
 		preferences.store();
 
