@@ -837,6 +837,7 @@ public class DossierFileLocalServiceImpl
 
 		DossierFile dossierFile =
 			DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
+		
 
 		dossierFile.setRemoved(1);
 		dossierFile.setModifiedDate(new Date());
@@ -844,6 +845,10 @@ public class DossierFileLocalServiceImpl
 		indexer.reindex(dossierFile);
 
 		dossierFilePersistence.update(dossierFile);
+		
+		dossierFilePersistence.clearCache();
+		
+		dossierFilePersistence.clearCache(dossierFile);
 	}
 
 	/**
