@@ -60,6 +60,8 @@
 
 	long serviceDomainId = ParamUtil.getLong(request, "serviceDomainId");
 	
+	long administrationId = ParamUtil.getLong(request, "administrationId");
+	
 	String tabs1 = ParamUtil.getString(request, "tabs1", DossierMgtUtil.TOP_TABS_DOSSIER);
 
 	PortletURL iteratorURL = renderResponse.createRenderURL();
@@ -106,27 +108,41 @@
 						
 						String treeIndex = StringPool.BLANK;
 						
+						String administrationIndex = StringPool.BLANK;
+						
 						int totalCount = 0;
 						
 						List<ServiceInfo> result = new ArrayList<ServiceInfo>();
 						
 						try{
 							if(serviceDomainId > 0){
+								
 								domainItem = DictItemLocalServiceUtil.getDictItem(serviceDomainId);
 								
 								treeIndex = domainItem.getTreeIndex();
-							}
-								result = ServiceInfoLocalServiceUtil.getServiceInFosByG_DI_Status(themeDisplay.getScopeGroupId(), 
-										treeIndex, 
-										1, 
-										searchTerms.getKeywords(),
-										QueryUtil.ALL_POS, QueryUtil.ALL_POS, searchContainer.getOrderByComparator());
 								
-								totalCount = ServiceInfoLocalServiceUtil.countServiceInFosByG_DI_Status(themeDisplay.getScopeGroupId(), 
-										treeIndex, 
-										1,
-										searchTerms.getKeywords());
+							}
+							if(administrationId > 0){
+								
+								domainItem = DictItemLocalServiceUtil.getDictItem(administrationId);
+								
+								administrationIndex = domainItem.getTreeIndex();
+								
+							}
 							
+							result = ServiceInfoLocalServiceUtil.getServiceInFosByG_DI_Status(themeDisplay.getScopeGroupId(), 
+									treeIndex, 
+									administrationIndex, 
+									1, 
+									searchTerms.getKeywords(),
+									QueryUtil.ALL_POS, QueryUtil.ALL_POS, searchContainer.getOrderByComparator());
+							
+							totalCount = ServiceInfoLocalServiceUtil.countServiceInFosByG_DI_Status(themeDisplay.getScopeGroupId(), 
+									treeIndex, 
+									administrationIndex, 
+									1, 
+									searchTerms.getKeywords());
+									
 						}catch(Exception e){
 							_log.error(e);
 						}

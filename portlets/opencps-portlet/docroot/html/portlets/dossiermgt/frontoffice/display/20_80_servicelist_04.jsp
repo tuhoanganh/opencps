@@ -57,6 +57,8 @@
 
 	long serviceDomainId = ParamUtil.getLong(request, "serviceDomainId");
 	
+	long administrationId = ParamUtil.getLong(request, "administrationId");
+	
 	String dictItemCode = ParamUtil.getString(request, "dictItemCode");
 	
 	long govAgencyId = ParamUtil.getLong(request, "govAgencyId");
@@ -72,6 +74,7 @@
 	JSONObject arrayParam = JSONFactoryUtil
 		    .createJSONObject();
 	arrayParam.put(DossierDisplayTerms.SERVICE_DOMAIN_ID, (serviceDomainId > 0) ? String.valueOf(serviceDomainId):StringPool.BLANK);
+	arrayParam.put("administrationId", (administrationId > 0) ? String.valueOf(administrationId):StringPool.BLANK);
 	arrayParam.put("backURL", currentURL);
 	arrayParam.put("isListServiceConfig", String.valueOf(true));
 %>

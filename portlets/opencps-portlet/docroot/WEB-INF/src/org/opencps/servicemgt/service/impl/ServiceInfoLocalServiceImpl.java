@@ -425,7 +425,7 @@ public class ServiceInfoLocalServiceImpl
 	}
 
 	public List<ServiceInfo> getServiceInFosByG_DI_Status (long groupId, 
-			String treeIndex, int status, String keyword, int start, int end, OrderByComparator orderByComparator) throws SystemException {
+			String treeIndex, String administrationIndex, int status, String keyword, int start, int end, OrderByComparator orderByComparator) throws SystemException {
 
 		List<ServiceInfo> results = new ArrayList<ServiceInfo>();
 		
@@ -433,7 +433,7 @@ public class ServiceInfoLocalServiceImpl
 		//--> search: treeIndex + StringPool.PERIOD + StringPool.PERCENT
 		if(Validator.isNotNull(treeIndex)){
 			
-			results = serviceInfoPersistence.findByG_DI_Status(groupId, treeIndex + StringPool.PERCENT, StringPool.PERCENT + keyword + StringPool.PERCENT, status, start, end, orderByComparator);
+			results = serviceInfoPersistence.findByG_DI_Status(groupId, treeIndex + StringPool.PERCENT, StringPool.PERCENT + keyword + StringPool.PERCENT, status, administrationIndex + StringPool.PERCENT, start, end, orderByComparator);
 			
 		}else{
 			
@@ -445,14 +445,14 @@ public class ServiceInfoLocalServiceImpl
 	}
 	
 	public int countServiceInFosByG_DI_Status (long groupId, 
-			String treeIndex, int status, String keyword) throws SystemException {
+			String treeIndex, String administrationIndex, int status, String keyword) throws SystemException {
 		int result = 0;
 		
 		//TODO
 		//--> search: treeIndex + StringPool.PERIOD + StringPool.PERCENT
 		if(Validator.isNotNull(treeIndex)){
 			
-			result = serviceInfoPersistence.countByG_DI_Status(groupId, treeIndex+ StringPool.PERCENT, StringPool.PERCENT + keyword + StringPool.PERCENT, status);
+			result = serviceInfoPersistence.countByG_DI_Status(groupId, treeIndex+ StringPool.PERCENT, StringPool.PERCENT + keyword + StringPool.PERCENT, status, administrationIndex + StringPool.PERCENT);
 			
 		}else{
 			
