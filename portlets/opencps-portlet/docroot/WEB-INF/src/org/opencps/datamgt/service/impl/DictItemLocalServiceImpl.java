@@ -348,8 +348,6 @@ public class DictItemLocalServiceImpl extends DictItemLocalServiceBaseImpl {
 	public List<DictItem> findDictItemsByG_DC_S(long groupId, String dictCollectionCode)
 		throws SystemException {
 		
-		// dictItemFinder.getDictItems(dictCollectionCode, groupId)
-		
 		return dictItemFinder.findDictItemsByG_DC_S(groupId, dictCollectionCode, DataMgtUtil.ISSUE_STATUS_INUSE);
 	}
 	
