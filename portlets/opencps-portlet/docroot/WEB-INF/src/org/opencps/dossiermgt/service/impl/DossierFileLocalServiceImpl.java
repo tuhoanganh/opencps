@@ -888,6 +888,22 @@ public class DossierFileLocalServiceImpl
 
 		return dossierFilePersistence.findByD_DP(dossierId, dossierPartId);
 	}
+	
+	/**
+	 * @param dossierId
+	 * @param dossierPartId
+	 * @param byComparator
+	 * @return
+	 * @throws NoSuchDossierFileException
+	 * @throws SystemException
+	 */
+	public List<DossierFile> getDossierFileByD_DP_Config(
+		long dossierId, long dossierPartId, OrderByComparator byComparator)
+		throws NoSuchDossierFileException, SystemException {
+
+		return dossierFilePersistence.findByD_DP(dossierId, dossierPartId);
+	}
+	
 
 	/**
 	 * @param fileGroupId

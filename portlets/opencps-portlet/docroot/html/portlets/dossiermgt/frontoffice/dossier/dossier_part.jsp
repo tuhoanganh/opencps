@@ -1,3 +1,6 @@
+<%@page import="org.opencps.util.PortletPropsValues"%>
+<%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="org.opencps.datamgt.model.DictItem"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -66,10 +69,11 @@
 	exception="<%= EmptyDossierFileException.class %>" 
 	message="<%=EmptyDossierFileException.class.getName() %>"
 />
-<div class="ocps-dossier-process">
-<%
-	Dossier dossier = (Dossier) request.getAttribute(WebKeys.DOSSIER_ENTRY);
 
+<%
+
+	Dossier dossier = (Dossier) request.getAttribute(WebKeys.DOSSIER_ENTRY);
+	
 	ServiceConfig serviceConfig = (ServiceConfig) request.getAttribute(WebKeys.SERVICE_CONFIG_ENTRY);
 	
 	ServiceInfo serviceInfo = (ServiceInfo) request.getAttribute(WebKeys.SERVICE_INFO_ENTRY);
@@ -86,6 +90,32 @@
 	
 	String urlDownload = StringPool.BLANK;
 	
+	DictItem adminAction = PortletUtil.getDictItem(PortletPropsValues.DATAMGT_MASTERDATA_GOVERNMENT_AGENCY, 
+			serviceConfig.getGovAgencyCode(), 
+			scopeGroupId);
+
+%>
+<div class="ocps-dossier-process">
+
+	<div class="opencps dossiermgt dossier-part-row r-0">
+					
+		<div class="level-0 opencps dossiermgt dossier-part dossier-part-title-left">
+			<div class="">
+				<div class="span3 bold-label"><liferay-ui:message key="service-name"/></div>
+				<div class="span9"><%=HtmlUtil.escape(serviceInfo.getServiceName()) %></div>
+			</div>
+		</div>
+				
+		<div class="opencps dossiermgt dossier-part-control border-left dossier-part-title-right">
+			<div class="">
+				<div class="span3 bold-label"><liferay-ui:message key="service-administration-action"/></div>
+				<div class="span9"><%=Validator.isNotNull(adminAction) ? adminAction.getItemName(locale,true) : StringPool.BLANK %></div>
+			</div>
+		</div>
+			
+	</div>
+<%
+	
 	if(dossierTemplate != null){
 		try{
 			dossierPartsLevel1 = DossierPartLocalServiceUtil.getDossierPartsByT_P(dossierTemplate.getDossierTemplateId(), 0);
@@ -93,7 +123,6 @@
 	}
 	
 	int index = 0; 
-	
 	if(dossierPartsLevel1 != null){
 		for (DossierPart dossierPartLevel1 : dossierPartsLevel1){
 	
@@ -103,6 +132,7 @@
 			
 			if(dossierParts != null){
 				%>
+				
 				<div class="opencps dossiermgt dossier-part-tree" id='<%= renderResponse.getNamespace() + "tree" + dossierParts.get(0).getDossierpartId()%>'>
 					<c:choose>
 						<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_OPTION ||
@@ -110,8 +140,8 @@
 							partType == PortletConstants.DOSSIER_PART_TYPE_OTHER %>"
 						>
 							<%
+							
 							for(DossierPart dossierPart : dossierParts){
-								
 								boolean isDynamicForm = false;
 								
 								if(Validator.isNotNull(dossierPart.getFormReport()) && Validator.isNotNull(dossierPart.getFormScript())){
@@ -145,15 +175,17 @@
 								%>
 									<div class='<%="opencps dossiermgt dossier-part-row r-" + index%>'>
 										<span class='<%="level-" + level + " opencps dossiermgt dossier-part"%>'>
-											<span class="row-icon">
+											<span class="row-icon row-icon-stt-new">
 												<c:choose>
 													<c:when test="<%=(partType == PortletConstants.DOSSIER_PART_TYPE_OPTION ||
 														partType == PortletConstants.DOSSIER_PART_TYPE_OTHER) && level == 0%>"
 													>
+														<span class="dossier-part-stt"> <%=dossierPart.getSibling() %></span>
 														<i class="fa fa-circle" aria-hidden="true"></i>
 														
 													</c:when>
-														<c:otherwise>
+													<c:otherwise>
+															<span class="dossier-part-stt"> <%=dossierPart.getSibling() %></span>
 														<i 
 															id='<%="rowcheck" + dossierPart.getDossierpartId() + StringPool.DASH + index %>' 
 															class='<%=dossierFile != null &&  dossierFile.getFileEntryId() > 0 ? "fa fa-check-square-o" : "fa fa-square-o" %>' 
