@@ -99,14 +99,14 @@
 
 	<div class="opencps dossiermgt dossier-part-row r-0">
 					
-		<div class="level-0 opencps dossiermgt dossier-part">
+		<div class="level-0 opencps dossiermgt dossier-part dossier-part-title-left">
 			<div class="">
 				<div class="span3 bold-label"><liferay-ui:message key="service-name"/></div>
 				<div class="span9"><%=HtmlUtil.escape(serviceInfo.getServiceName()) %></div>
 			</div>
 		</div>
 				
-		<div class="opencps dossiermgt dossier-part-control border-left">
+		<div class="opencps dossiermgt dossier-part-control border-left dossier-part-title-right">
 			<div class="">
 				<div class="span3 bold-label"><liferay-ui:message key="service-administration-action"/></div>
 				<div class="span9"><%=Validator.isNotNull(adminAction) ? adminAction.getItemName(locale,true) : StringPool.BLANK %></div>
