@@ -63,6 +63,13 @@
 	border: 1px solid #cbcbcb;
 }
 
-	.required-highlight{
-		background-color:red !important;
-	}
+.required-highlight{
+	background-color:red !important;
+}
+a.a-disabled{
+	pointer-events: none;
+}
+
+.ocps-disabled {
+	background-color:rgba(0, 144, 255, 0.54) !important;
+}

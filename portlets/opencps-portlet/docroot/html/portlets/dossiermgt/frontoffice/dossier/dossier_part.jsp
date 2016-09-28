@@ -206,10 +206,6 @@
 													value="<%=String.valueOf(dossierPart.getPartType()) %>"
 												/>
 												<portlet:param 
-													name="<%=DossierPartDisplayTerms.DOSSIERPART_REQUIRED %>" 
-													value="<%=String.valueOf(dossierPart.getRequired() ? cssRequired : StringPool.BLANK) %>"
-												/>
-												<portlet:param 
 													name="isEditDossier" 
 													value="<%=String.valueOf(isEditDossier) %>"
 												/>

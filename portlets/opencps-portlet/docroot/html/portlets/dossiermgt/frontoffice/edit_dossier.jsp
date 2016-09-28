@@ -343,10 +343,10 @@
     
 	var x,y;
 	
-	x = $("span .dossier-version-counter").hasClass("required-highlight");
+	x = $("span .dossier-version-counter").parent().hasClass("required-highlight");
 	if(x){
-    	
-    	$(".check-before-send").hide();
+ 		$(".check-before-send").addClass("ocps-disabled");
+     	$(".check-before-send a").addClass("a-disabled");
 	}
 });
 </script>
