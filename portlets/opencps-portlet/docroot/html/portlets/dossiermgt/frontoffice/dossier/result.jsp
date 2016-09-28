@@ -471,7 +471,7 @@
 								DossierFileLocalServiceUtil.
 								getDossierFileByD_DP_Config(dossier.getDossierId(), dossierPartLevel1.getDossierpartId(),
 									DossierSearchUtil.getDossierFileOrderByComparator(orderFieldDossierFile, orderBydDossierFile),
-										WebKeys.SEARCH_START, QueryUtil.ALL_POS);
+									QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 							}
 							
 							int index = 0;

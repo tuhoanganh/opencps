@@ -239,5 +239,4 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String DOSSIER_ACTOR_SYSTEM_NAME = "SYSTEM"; 
 	public static final int DOSSIER_ACTOR_CITIZEN = 1; 
 	public static final int DOSSIER_ACTOR_EMPLOYEE = 2;
-	public static final int SEARCH_START = 0;	
 }
