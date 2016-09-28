@@ -146,6 +146,12 @@
 		value="<%= showBackToListButton %>"
 	/>
 	
+	<aui:input 
+		type="checkbox"
+		name="showServiceDomainIdTree" 
+		value="<%= showServiceDomainIdTree %>"
+	/>
+	
 	<aui:button type="submit" name="Save" value="save"></aui:button>
 
 </aui:form>
