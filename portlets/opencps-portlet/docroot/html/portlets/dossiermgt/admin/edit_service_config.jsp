@@ -335,7 +335,7 @@
 			<aui:col width="100">
 				<%-- <aui:input name="<%= ServiceConfigDisplayTerms.SERVICE_INSTRUCTION%>" cssClass="input100"/> --%>
 				<liferay-ui:input-editor name="<%= ServiceConfigDisplayTerms.SERVICE_INSTRUCTION %>" 
-					toolbarSet="simple" initMethod="initInstructions"/>
+					initMethod="initInstructions"/>
 			</aui:col>
 		</aui:row>
 		
