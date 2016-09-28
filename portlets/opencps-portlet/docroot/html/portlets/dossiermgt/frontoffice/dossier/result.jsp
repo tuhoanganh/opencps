@@ -54,6 +54,7 @@
 			List<DossierLog> dossierLogs = DossierLogLocalServiceUtil.findRequiredProcessDossier(dossier.getDossierId(), actors, requestCommands);
 			List<DossierPart> dossierPartsLevel1 = new ArrayList<DossierPart>();
 			
+			int countDossierFileConfig = 0;
 			
 			ServiceInfo info = null;
 			String serviceInfoName = StringPool.BLANK;
@@ -378,7 +379,6 @@
 					<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_RESULT && Validator.isNull(orderFieldDossierFile)%>">
 						<%
 									List<DossierPart> dossierParts = DossierMgtUtil.getTreeDossierPart(dossierPartLevel1.getDossierpartId());
-									
 									if(dossierParts != null){
 										for(DossierPart dossierPart : dossierParts){
 											DossierFile dossierFile = null;
@@ -468,10 +468,11 @@
 								DossierFileLocalServiceUtil.
 								getDossierFileByD_DP(dossier.getDossierId(), dossierPartLevel1.getDossierpartId());
 							} else {
+								countDossierFileConfig = DossierFileLocalServiceUtil.countDossierFileByD_DP_Config(dossier.getDossierId(), dossierPartLevel1.getDossierpartId());
 								DossierFileLocalServiceUtil.
 								getDossierFileByD_DP_Config(dossier.getDossierId(), dossierPartLevel1.getDossierpartId(),
 										DossierMgtUtil.getDossierFileOrderByComparator(orderFieldDossierFile, orderBydDossierFile),
-										WebKeys.SEARCH_START, WebKeys.SEARCH_END);
+										WebKeys.SEARCH_START, countDossierFileConfig);
 							}
 							
 							int index = 0;
