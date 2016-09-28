@@ -109,11 +109,8 @@
 	%>
 	<c:if test="<%=showServiceDomainIdTree %>">
 		<div style="margin-bottom: 25px;" class="opencps-searchcontainer-wrapper default-box-shadow radius8">
-			
 			<div id="serviceDomainIdTree" class="openCPSTree scrollable"></div>
-			
 			<%
-			
 			serviceDomainJsonData = ProcessOrderUtils.generateTreeView(
 					PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN, 
 					PortletConstants.TREE_VIEW_ALL_ITEM, 
@@ -123,7 +120,6 @@
 					false,
 					renderRequest);
 			%>
-			
 		</div>
 	</c:if>
 	
@@ -154,6 +150,17 @@
 	var arrayParam = '<%=arrayParam.toString() %>';
 	var showServiceDomainIdTree = '<%=showServiceDomainIdTree %>'
 	AUI().ready(function(A){
+		buildTreeView("dossierStatusTree", 
+				'<%=DossierDisplayTerms.DOSSIER_STATUS %>', 
+				dossierStatusJsonData, 
+				arrayParam, 
+				'<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>', 
+				'<%=templatePath + "frontofficedossierlist.jsp" %>', 
+				'<%=LiferayWindowState.NORMAL.toString() %>', 
+				'normal',
+				'<%=menuCounterUrl.toString() %>',
+				dossierStatus,
+				'<%=renderResponse.getNamespace() %>');
 		if (showServiceDomainIdTree){
 			buildTreeView("serviceDomainIdTree", 
 					"<%=DossierDisplayTerms.SERVICE_DOMAIN_ID %>", 
@@ -167,18 +174,6 @@
 					serviceDomainId,
 					'<%=renderResponse.getNamespace() %>');
 		}
-		buildTreeView("dossierStatusTree", 
-				'<%=DossierDisplayTerms.DOSSIER_STATUS %>', 
-				dossierStatusJsonData, 
-				arrayParam, 
-				'<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>', 
-				'<%=templatePath + "frontofficedossierlist.jsp" %>', 
-				'<%=LiferayWindowState.NORMAL.toString() %>', 
-				'normal',
-				'<%=menuCounterUrl.toString() %>',
-				dossierStatus,
-				'<%=renderResponse.getNamespace() %>');
-		
 	});
 	
 </aui:script>
