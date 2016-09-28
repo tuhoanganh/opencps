@@ -173,6 +173,8 @@
 								
 								if(dossierPart.getRequired() && dossierFile == null) {
 									cssDossierPartRequired = "dossierPartRequired";
+								} else {
+									cssDossierPartRequired = StringPool.BLANK;
 								}
 								
 								urlDownload = DossierMgtUtil.getURLDownloadTemplateFile(themeDisplay, dossierPart.getTemplateFileNo());
@@ -356,6 +358,8 @@
 								//TODO: kiem tra lai dieu kien dossierPartRequired voi truong hop nay
 								if(dossierPartLevel1.getRequired() && (fileGroups == null || (fileGroups != null && fileGroups.size() > 0))) {
 									cssDossierPartRequired = "dossierPartRequired";
+								} else {
+									cssDossierPartRequired = StringPool.BLANK;
 								}
 								
 								urlDownload = DossierMgtUtil.getURLDownloadTemplateFile(themeDisplay, dossierPartLevel1.getTemplateFileNo());
