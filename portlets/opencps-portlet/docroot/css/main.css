@@ -64,12 +64,12 @@
 }
 
 .required-highlight{
-	background-color:red !important;
+	background-color:red important;
 }
 a.a-disabled{
 	pointer-events: none;
 }
 
 .ocps-disabled {
-	background-color:rgba(0, 144, 255, 0.54) !important;
+	background-color:rgba(0, 144, 255, 0.54) important;
 }
