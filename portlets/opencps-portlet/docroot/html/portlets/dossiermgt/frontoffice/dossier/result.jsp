@@ -19,6 +19,8 @@
 %>
 <%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
 <%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
+<%@page import="org.opencps.dossiermgt.search.DossierSearchUtil"%>
+<%@page import="com.liferay.portal.kernel.dao.orm.QueryUtil"%>
 <%@page import="com.liferay.portlet.documentlibrary.util.DLUtil"%>
 <%@page import="org.opencps.util.DLFileEntryUtil"%>
 <%@page import="com.liferay.portal.kernel.repository.model.FileEntry"%>
@@ -53,8 +55,6 @@
 													StringPool.APOSTROPHE + WebKeys.DOSSIER_LOG_PAYMENT_REQUEST + StringPool.APOSTROPHE};
 			List<DossierLog> dossierLogs = DossierLogLocalServiceUtil.findRequiredProcessDossier(dossier.getDossierId(), actors, requestCommands);
 			List<DossierPart> dossierPartsLevel1 = new ArrayList<DossierPart>();
-			
-			int countDossierFileConfig = 0;
 			
 			ServiceInfo info = null;
 			String serviceInfoName = StringPool.BLANK;
@@ -468,11 +468,10 @@
 								DossierFileLocalServiceUtil.
 								getDossierFileByD_DP(dossier.getDossierId(), dossierPartLevel1.getDossierpartId());
 							} else {
-								countDossierFileConfig = DossierFileLocalServiceUtil.countDossierFileByD_DP_Config(dossier.getDossierId(), dossierPartLevel1.getDossierpartId());
 								DossierFileLocalServiceUtil.
 								getDossierFileByD_DP_Config(dossier.getDossierId(), dossierPartLevel1.getDossierpartId(),
-										DossierMgtUtil.getDossierFileOrderByComparator(orderFieldDossierFile, orderBydDossierFile),
-										WebKeys.SEARCH_START, countDossierFileConfig);
+									DossierSearchUtil.getDossierFileOrderByComparator(orderFieldDossierFile, orderBydDossierFile),
+										WebKeys.SEARCH_START, QueryUtil.ALL_POS);
 							}
 							
 							int index = 0;
