@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -356,7 +357,7 @@ Liferay.provide(
 		
 		if(cnt > 0) {
 			A.all('#<portlet:namespace/>fm .dossierPartRequired').toggleClass('dossierPartRequired-error');
-			alert('please-upload-dossier-part-required-before-send');
+			alert('<%= LanguageUtil.get("please-upload-dossier-part-required-before-send") %>');
 		} else {
 			location.href = '<%= updateDossierStatusURL %>';
 		}
