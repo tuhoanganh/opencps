@@ -898,10 +898,24 @@ public class DossierFileLocalServiceImpl
 	 * @throws SystemException
 	 */
 	public List<DossierFile> getDossierFileByD_DP_Config(
-		long dossierId, long dossierPartId, OrderByComparator byComparator)
+		long dossierId, long dossierPartId, OrderByComparator byComparator, int start, int end)
 		throws NoSuchDossierFileException, SystemException {
 
-		return dossierFilePersistence.findByD_DP(dossierId, dossierPartId);
+		return dossierFilePersistence.findByD_DP(dossierId, dossierPartId, start, end, byComparator);
+	}
+	
+	/**
+	 * @param dossierId
+	 * @param dossierPartId
+	 * @return
+	 * @throws NoSuchDossierFileException
+	 * @throws SystemException
+	 */
+	public int countDossierFileByD_DP_Config(
+		long dossierId, long dossierPartId)
+		throws NoSuchDossierFileException, SystemException {
+
+		return dossierFilePersistence.countByD_DP(dossierId, dossierPartId);
 	}
 	
 

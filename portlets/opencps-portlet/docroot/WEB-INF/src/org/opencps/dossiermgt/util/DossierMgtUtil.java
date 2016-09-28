@@ -108,26 +108,6 @@ public class DossierMgtUtil {
 		return orderByComparator;
 	}
 	
-	public static OrderByComparator getDossierFileOrderByComparator(
-		String orderByCol, String orderByType) {
-		
-
-		boolean orderByAsc = false;
-
-		if (orderByType.equals("asc")) {
-			orderByAsc = true;
-		}
-
-		OrderByComparator orderByComparator = null;
-		
-		if (orderByCol.equals(DossierFileDisplayTerms.DOSSIER_FILE_DATE)) {
-			orderByComparator = new DossierFileDossierFileDateComparator(orderByAsc);
-		}
-		
-		return orderByComparator;
-	}
-	
-	
 	/**
 	 * @param orderByType
 	 * @param dossierFiles
