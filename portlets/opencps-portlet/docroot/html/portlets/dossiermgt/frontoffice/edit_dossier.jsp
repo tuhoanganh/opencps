@@ -87,7 +87,6 @@
 		
 	}
 %>
-
 <liferay-portlet:renderURL var="backDossierList">
 	<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/frontoffice/frontofficedossierlist.jsp"/>
 </liferay-portlet:renderURL>
