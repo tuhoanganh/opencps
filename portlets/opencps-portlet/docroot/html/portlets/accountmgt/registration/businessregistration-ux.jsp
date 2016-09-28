@@ -45,7 +45,6 @@
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
-<%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%@ include file="../init.jsp" %>
 
 <%
