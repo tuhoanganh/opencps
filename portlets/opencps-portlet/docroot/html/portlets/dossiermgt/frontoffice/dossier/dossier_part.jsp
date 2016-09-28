@@ -171,7 +171,7 @@
 								
 								cssRequired = dossierPart.getRequired() ? "cssRequired" : StringPool.BLANK;
 								
-								if(dossierPart.getRequired() && dossierFile != null) {
+								if(dossierPart.getRequired() && dossierFile == null) {
 									cssDossierPartRequired = "dossierPartRequired";
 								}
 								
@@ -354,7 +354,7 @@
 								cssRequired = dossierPartLevel1.getRequired() ? "cssRequired" : StringPool.BLANK;
 								
 								//TODO: kiem tra lai dieu kien dossierPartRequired voi truong hop nay
-								if(dossierPartLevel1.getRequired() && fileGroups != null && fileGroups.size() > 0) {
+								if(dossierPartLevel1.getRequired() && (fileGroups == null || (fileGroups != null && fileGroups.size() > 0))) {
 									cssDossierPartRequired = "dossierPartRequired";
 								}
 								
