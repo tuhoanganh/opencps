@@ -25,6 +25,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.portlet.ActionRequest;
@@ -107,6 +108,7 @@ import org.opencps.util.PortletUtil;
 import org.opencps.util.PortletUtil.SplitDate;
 import org.opencps.util.WebKeys;
 
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -3112,6 +3114,37 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		PortletUtil.writeJSON(actionRequest, actionResponse, jsonObject);
 	}
 
+	public void keywordsAutoComplete(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+			throws PortalException, SystemException, IOException {
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+		
+		ThemeDisplay themeDisplay =
+			(ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+
+		String keywords =
+			ParamUtil.getString(actionRequest, "keywords");
+		
+		List<ServiceInfo> serviceInfos = new ArrayList<ServiceInfo>();
+		
+		serviceInfos = ServiceInfoLocalServiceUtil.getServiceInFosByG_DI_Status(themeDisplay.getScopeGroupId(), 
+				StringPool.BLANK, 
+				StringPool.BLANK, 
+				1, 
+				keywords,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+		
+		for (ServiceInfo serviceInfo : serviceInfos) {
+			jsonObject.put(
+					String.valueOf(serviceInfo.getServiceinfoId()),
+					
+					serviceInfo.getServiceName());
+		}
+		
+		PortletUtil.writeJSON(actionRequest, actionResponse, jsonObject);
+	}
+	
 	private boolean _hasPermission = true;
 
 	public boolean hasPermission() {
