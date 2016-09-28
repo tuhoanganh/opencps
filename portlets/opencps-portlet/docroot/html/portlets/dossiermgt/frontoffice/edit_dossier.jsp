@@ -356,8 +356,8 @@ Liferay.provide(
 		var cnt = A.all('#<portlet:namespace/>fm .dossierPartRequired').size();
 		
 		if(cnt > 0) {
-			A.all('#<portlet:namespace/>fm .dossierPartRequired').toggleClass('dossierPartRequired-error');
-			alert('<%= LanguageUtil.get("please-upload-dossier-part-required-before-send") %>');
+			A.all('#<portlet:namespace/>fm .dossierPartRequired').addClass('dossierPartRequired-error');
+			alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-required-before-send") %>');
 		} else {
 			location.href = '<%= updateDossierStatusURL %>';
 		}
