@@ -115,6 +115,7 @@
 
 <portlet:renderURL var="referToSubmitOnline" windowState="<%=LiferayWindowState.EXCLUSIVE.toString() %>">
 	<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/submit/ajax/url_online.jsp"/>
+	<portlet:param name="backURL" value="<%=backURL1 %>"/>
 </portlet:renderURL>
 <liferay-portlet:renderURL 
 		var="detailServiceURL" 
