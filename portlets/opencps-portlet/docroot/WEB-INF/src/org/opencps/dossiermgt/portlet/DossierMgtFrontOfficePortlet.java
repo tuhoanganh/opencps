@@ -3126,11 +3126,25 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		String keywords =
 			ParamUtil.getString(actionRequest, "keywords");
 		
+		long administrationId = ParamUtil.getLong(actionRequest, "administrationId");
+		
 		List<ServiceInfo> serviceInfos = new ArrayList<ServiceInfo>();
+		
+		DictItem domainItem = null;
+		
+		String administrationIndex = StringPool.BLANK;
+		
+		if(administrationId > 0){
+			
+			domainItem = DictItemLocalServiceUtil.getDictItem(administrationId);
+			
+			administrationIndex = domainItem.getTreeIndex();
+			
+		}
 		
 		serviceInfos = ServiceInfoLocalServiceUtil.getServiceInFosByG_DI_Status(themeDisplay.getScopeGroupId(), 
 				StringPool.BLANK, 
-				StringPool.BLANK, 
+				administrationIndex, 
 				1, 
 				keywords,
 				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);

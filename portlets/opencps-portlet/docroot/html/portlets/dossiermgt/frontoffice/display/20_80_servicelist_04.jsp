@@ -144,7 +144,8 @@ $("#<portlet:namespace/>keywords1").autocomplete({
             dataType: "json",
             type : 'POST',
             data: {
-            	<portlet:namespace/>keywords: request.term
+            	<portlet:namespace/>keywords: request.term,
+            	<portlet:namespace/>administrationId: '<%=administrationId %>'
             },
             url: '<%=keywordsAutoCompleteURL.toString() %>',
             success: function(data) {
