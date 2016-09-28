@@ -83,7 +83,7 @@
 					searchURL.setParameter("dictItemCode", dictItem.getItemCode());
 			%>
 			
-			<li>
+			<li onclick="window.location.href='<%=searchURL.toString() %>'">
 				
 				<div class="img-<%=dictItem.getItemCode() %>"> 
 					<div> 
