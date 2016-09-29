@@ -33,6 +33,8 @@ import org.opencps.util.PortletConstants;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
@@ -1211,19 +1213,24 @@ public class DossierFileLocalServiceImpl
 		Date now = new Date();
 
 		for (WorkflowOutput output : worklows) {
+			try {
+				DossierFile dossierFile =
+				    dossierFileLocalService.getDossierFileInUse(
+				        dossierId, output.getDossierPartId());
 
-			DossierFile dossierFile =
-				dossierFileLocalService.getDossierFileInUse(
-					dossierId, output.getDossierPartId());
+				dossierFile.setSyncStatus(syncStatus);
+				dossierFile.setModifiedDate(now);
 
-			dossierFile.setSyncStatus(syncStatus);
-			dossierFile.setModifiedDate(now);
+				if (userId != 0) {
+					dossierFile.setUserId(userId);
+				}
 
-			if (userId != 0) {
-				dossierFile.setUserId(userId);
-			}
+				dossierFileLocalService.updateDossierFile(dossierFile);
 
-			dossierFileLocalService.updateDossierFile(dossierFile);
+            }
+            catch (Exception e) {
+	            _log.error("NO FILE RESULT UPLOAD..............");
+            }
 
 		}
 	}
@@ -1298,4 +1305,6 @@ public class DossierFileLocalServiceImpl
 
 		return sbFileName.toString();
 	}
+	
+	private static Log _log = LogFactoryUtil.getLog(DossierFileLocalServiceImpl.class.getName());
 }
