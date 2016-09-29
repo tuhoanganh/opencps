@@ -17,6 +17,7 @@
 
 package org.opencps.dossiermgt.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -49,6 +50,58 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 	 * {@link org.opencps.dossiermgt.service.DossierLogLocalServiceUtil} to
 	 * access the dossier log local service.
 	 */
+	
+
+	/* (non-Javadoc)
+	 * @see org.opencps.dossiermgt.service.DossierLogLocalService#countDossierLog(int, long)
+	 */
+	public int countDossierLog(int actor, long dossierId)
+	    throws PortalException, SystemException {
+		
+		int count = 0;
+		switch (actor) {
+		case 0:
+			count = dossierLogPersistence.countByDossierId(dossierId);
+			break;
+		case 1:
+			count = dossierLogFinder.countDossierLogByCitizen(dossierId);
+		case 2:
+			count = dossierLogFinder.countDossierLogByEmployee(dossierId);
+		default:
+			break;
+		}
+		
+		return count;
+	}
+	
+	/**
+	 * @param actor
+	 * @param dossierId
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public List<DossierLog> findDossierLog(int actor, long dossierId, int start, int end)
+	    throws PortalException, SystemException {
+		
+		List<DossierLog> ls = new ArrayList<DossierLog>();
+		
+		switch (actor) {
+		case 0:
+			ls = dossierLogPersistence.findByDossierId(dossierId);
+			break;
+		case 1:
+			ls = dossierLogFinder.findDossierLogByCitizen(dossierId, start, end);
+		case 2:
+			ls = dossierLogFinder.findDossierLogByEmployee(dossierId, start, end);
+		default:
+			break;
+		}
+		
+		return ls;
+
+	}
+	
 	/**
 	 * @param dossierLogId
 	 * @param status
