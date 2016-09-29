@@ -84,7 +84,7 @@
 	
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "dossier_file.jsp");
-	iteratorURL.setParameter("tab1", "select-file");
+	iteratorURL.setParameter("tab1", "select-file-store");
 	
 	iteratorURL.setParameter("dossierId", String.valueOf(dossierId));
 	iteratorURL.setParameter("dossierPartId", String.valueOf(dossierPartId));
@@ -98,7 +98,7 @@
 
 	PortletURL searchURL = renderResponse.createRenderURL();
 	searchURL.setParameter("mvcPath", templatePath + "dossier_file.jsp");
-	searchURL.setParameter("tab1", "select-file");
+	searchURL.setParameter("tab1", "select-file-store");
 	
 	searchURL.setParameter("dossierId", String.valueOf(dossierId));
 	searchURL.setParameter("dossierPartId", String.valueOf(dossierPartId));
@@ -226,6 +226,8 @@
 				
 					total = totalCount;
 					results = dossierFiles;
+					
+					System.out.println("-----------------------totalCount------------------------" + totalCount);
 					
 					pageContext.setAttribute("results", results);
 					pageContext.setAttribute("total", total);				
