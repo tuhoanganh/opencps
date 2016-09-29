@@ -227,8 +227,6 @@
 					total = totalCount;
 					results = dossierFiles;
 					
-					System.out.println("-----------------------totalCount------------------------" + totalCount);
-					
 					pageContext.setAttribute("results", results);
 					pageContext.setAttribute("total", total);				
 			%>
