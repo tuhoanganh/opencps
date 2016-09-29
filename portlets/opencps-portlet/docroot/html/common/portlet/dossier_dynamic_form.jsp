@@ -392,60 +392,35 @@
 	}
 	
 	function openCPSAutoCompletebildDataSource(controlId, minLength, dictCollectionId, parentItemId, keywords) {
-		if(keywords.length >= minLength){
-			Liferay.Service(
-					  '/opencps-portlet.dictitem/get-dictitems_itemCode_keywords_datasource',
-					  {
-						  collectionCode: dictCollectionId,
-						  itemCode: parentItemId,
-						  keywords: keywords,
-						  groupId: Liferay.ThemeDisplay.getScopeGroupId()
-					  },
-					  function(obj) {
-							
-						  var arrayParam = $.map(obj, function (value, key) {         
-							  return {                
-							 		label: value,                                                
-							 		value:  key                                            
-							 	}                                        
-							 });
-							  
-						  $("#"+controlId).autocomplete({
-									
-								delay: 200,
-									
-								source: arrayParam,
-									
-								focus: function(event, ui) {
-										// prevent autocomplete from updating the textbox
-									event.preventDefault();
-								},
-									
-								select: function(event, ui) {
-									// prevent autocomplete from updating the textbox
-									event.preventDefault();
-									// binding value to control
-									$("#"+controlId).val(ui.item.label);
-									$("#"+controlId+"Id").val(ui.item.value);
-									$("#"+controlId+"Text").val(ui.item.label);
-								},
-									
-								change: function(event, ui) {
-									// prevent autocomplete from updating the textbox
-									event.preventDefault();
-									// binding value to control
-									if($("#"+controlId).val() != $("#"+controlId+"Text").val()){ 
-										$("#"+controlId).val('');
-										$("#"+controlId+"Id").val('');
-										$("#"+controlId+"Text").val('');
-									}
-								}
-									
-							});
-				  });
-		}else{
-			console.log(" more character -->");
-		}
+		
+		$("#"+controlId).typeahead({
+	        source: function (query, process) {
+	            var cangbens_tk = [];
+	            map = {};
+	            // This is going to make an HTTP post request to the controller
+	            return Liferay.Service(
+						  '/opencps-portlet.dictitem/get-dictitems_itemCode_keywords_datasource',
+						  {
+							  collectionCode: dictCollectionId,
+							  itemCode: parentItemId,
+							  keywords: keywords,
+							  groupId: Liferay.ThemeDisplay.getScopeGroupId()
+						  },
+						  function(obj) {
+								
+							  $.each(obj, function (i, cangbentk) {
+				                    map[cangbentk.itemNameCurrentValue] = cangbentk;
+				                    cangbens_tk.push(cangbentk.itemNameCurrentValue);
+				                });
+
+				                // Process the details
+				                process(cangbens_tk);
+					  });
+	        },
+	        updater: function (item) {
+	            return item;
+	        }
+	    });
 		
 	}
 </script>
