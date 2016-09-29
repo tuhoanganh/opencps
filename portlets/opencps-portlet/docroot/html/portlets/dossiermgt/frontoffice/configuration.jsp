@@ -108,17 +108,18 @@
 			</aui:select>
 		</aui:col>
 		<aui:col width="50">
-		
-			<aui:select name="orderBydDossierFile">
-				<aui:option value="<%=StringPool.BLANK %>" />
-				<aui:option value="<%= WebKeys.ORDER_BY_ASC %>" selected='<%= orderBydDossierFile.equals(WebKeys.ORDER_BY_ASC) %>'>
-					<liferay-ui:message key="order-by-old-dossier-file"/>
-				</aui:option>
-				
-				<aui:option value="<%= WebKeys.ORDER_BY_DESC %>" selected='<%= orderBydDossierFile.equals(WebKeys.ORDER_BY_DESC) %>'>
-					<liferay-ui:message key="order-by-new-dossier-file"/>
-				</aui:option>
-			</aui:select>
+			<div id = '<portlet:namespace/>hideOrderBydDossierFile' >
+				<aui:select name="orderBydDossierFile">
+					<aui:option value="<%=StringPool.BLANK %>" />
+					<aui:option value="<%= WebKeys.ORDER_BY_ASC %>" selected='<%= orderBydDossierFile.equals(WebKeys.ORDER_BY_ASC) %>'>
+						<liferay-ui:message key="order-by-old-dossier-file"/>
+					</aui:option>
+					
+					<aui:option value="<%= WebKeys.ORDER_BY_DESC %>" selected='<%= orderBydDossierFile.equals(WebKeys.ORDER_BY_DESC) %>'>
+						<liferay-ui:message key="order-by-new-dossier-file"/>
+					</aui:option>
+				</aui:select>
+			</div>	
 		</aui:col>
 	</aui:row>
 	
@@ -156,3 +157,27 @@
 
 </aui:form>
 
+<aui:script>
+	
+	AUI().ready(function(A) {
+		var orderFieldDossierFile = A.one('#<portlet:namespace />orderFieldDossierFile');
+		var orderBydDossierFile = A.one('#<portlet:namespace />orderBydDossierFile');
+		var hideOrderBydDossierFile = A.one('#<portlet:namespace />hideOrderBydDossierFile');
+		<portlet:namespace />checkHideOrderBydDossierFile(orderFieldDossierFile, orderBydDossierFile, hideOrderBydDossierFile);
+		if(orderFieldDossierFile) {
+			orderFieldDossierFile.on('change', function() {
+				<portlet:namespace />checkHideOrderBydDossierFile(orderFieldDossierFile, orderBydDossierFile, hideOrderBydDossierFile);
+			});
+		}
+		
+	});
+	
+	 Liferay.provide(window, '<portlet:namespace />checkHideOrderBydDossierFile', 
+			 function(orderFieldDossierFile, orderBydDossierFile, hideOrderBydDossierFile) {
+			if(orderFieldDossierFile.val() == '') {
+				hideOrderBydDossierFile.hide();
+			} else {
+				hideOrderBydDossierFile.show();
+			}
+	});
+</aui:script>
