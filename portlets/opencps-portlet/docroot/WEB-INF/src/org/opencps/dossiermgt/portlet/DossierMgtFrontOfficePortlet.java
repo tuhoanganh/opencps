@@ -2121,6 +2121,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				actionRequest, DossierDisplayTerms.DOSSIER_STATUS);
 
 		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
+		
+		//String holdPosition = ParamUtil.getString(actionRequest, "hold");
 
 		Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
 
@@ -2230,12 +2232,12 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		catch (Exception e) {
 
 			if (e instanceof NoSuchDossierException ||
-				e instanceof NoSuchDossierTemplateException ||
+				e instanceof NoSuchDossierTemplateException||
 				e instanceof RequiredDossierPartException) {
-
+				
 				SessionErrors.add(actionRequest, e.getClass());
-			}
-			else {
+				
+			}else {
 				SessionErrors.add(
 					actionRequest,
 					MessageKeys.DOSSIER_SYSTEM_EXCEPTION_OCCURRED);
