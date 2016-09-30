@@ -466,9 +466,6 @@ for (String analyticsType : analyticsTypes) {
 <script type="text/javascript" src="<%= themeDisplay.getCDNHost() %>/html/extensions/bootstrap-datetimepicker.min.js"></script>
 <script type="text/javascript" src='<%= PortalUtil.getStaticResourceURL(request, themeDisplay.getCDNHost() + "/html/extensions/opencps-tree-view.js", extensionLastModified) %>'></script>
 <script type="text/javascript" src='<%= PortalUtil.getStaticResourceURL(request, themeDisplay.getCDNHost() + "/html/extensions/bootstrap-multiselect.js", extensionLastModified) %>'></script>
-<script type="text/javascript" src='<%= PortalUtil.getStaticResourceURL(request, themeDisplay.getCDNHost() + "/html/extensions/typeahead.bundle.js", extensionLastModified) %>'></script>
-
-<script type="text/javascript" src="<%= themeDisplay.getCDNHost() %>/html/extensions/jquery-ui.min.js"></script>
 <!-- bootstrap -->
 <!-- <link type="text/css" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />
 <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script> -->
@@ -484,3 +481,4 @@ for (String analyticsType : analyticsTypes) {
 
 <script type="text/javascript" src="<%= themeDisplay.getCDNHost() %>/html/extensions/opencps-pki.js"></script>
 <script type="text/javascript" src="<%= themeDisplay.getCDNHost() %>/html/extensions/hex2base.js"></script>
+<script type="text/javascript" src="<%= themeDisplay.getCDNHost() %>/html/extensions/typeahead.bundle.min.js"></script>
