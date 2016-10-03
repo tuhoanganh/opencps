@@ -51,9 +51,6 @@
 
 <%@ include file="../../init.jsp"%>
 
-<!-- TODO -->
-<script type="text/javascript" src="<%= themeDisplay.getCDNHost() %>/html/extensions/typeahead.bundle.min.js"></script>
-
 <%
 	
 	String backURL = ParamUtil.getString(request, "backURL");
@@ -132,9 +129,11 @@
 </aui:script>
 	</aui:col>
 </aui:row>
+
 <portlet:actionURL var="keywordsAutoCompleteURL" name="keywordsAutoComplete">
 	<portlet:param name="administrationId" value="<%=String.valueOf(administrationId) %>"/>
 </portlet:actionURL>
+
 <script type="text/javascript">
 
 AUI().ready(function(A){

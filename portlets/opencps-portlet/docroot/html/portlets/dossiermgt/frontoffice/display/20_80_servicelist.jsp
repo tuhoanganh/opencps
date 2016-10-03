@@ -51,9 +51,6 @@
 
 <%@ include file="../../init.jsp"%>
 
-<!-- TODO -->
-<script type="text/javascript" src="<%= themeDisplay.getCDNHost() %>/html/extensions/typeahead.bundle.min.js"></script>
-
 <%
 	long serviceDomainId = ParamUtil.getLong(request, "serviceDomainId");
 	
