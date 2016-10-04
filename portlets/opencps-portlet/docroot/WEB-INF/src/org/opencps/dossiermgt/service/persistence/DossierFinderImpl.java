@@ -167,7 +167,7 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 
 				sql =
 					CustomSQLUtil.replaceKeywords(
-						sql, "lower(opencps_service_config.govAgencyName)",
+						sql, "lower(opencps_serviceinfo.fullName)",
 						StringPool.LIKE, false, keywords);
 				
 				sql = CustomSQLUtil
@@ -189,7 +189,7 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 
 				sql = StringUtil
 					.replace(sql,
-						"OR (lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$])",
+						"OR (lower(opencps_serviceinfo.fullName) LIKE ? [$AND_OR_NULL_CHECK$])",
 						StringPool.BLANK);
 				
 				sql = StringUtil
@@ -541,7 +541,7 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 
 				sql =
 					CustomSQLUtil.replaceKeywords(
-						sql, "lower(opencps_service_config.govAgencyName)",
+						sql, "lower(opencps_serviceinfo.fullName)",
 						StringPool.LIKE, false, keywords);
 				
 				sql = CustomSQLUtil
@@ -563,7 +563,7 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 
 				sql = StringUtil
 					.replace(sql,
-						"OR (lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$])",
+						"OR (lower(opencps_serviceinfo.fullName) LIKE ? [$AND_OR_NULL_CHECK$])",
 						StringPool.BLANK);
 				
 				sql = StringUtil
