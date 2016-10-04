@@ -142,6 +142,8 @@ public class PortletConstants {
 	public static final String DOSSIER_ACTION_REPAIR_DOSSIER = "repair";
 	public static final String DOSSIER_ACTION_CANCEL_DOSSIER = "cancel";
 	public static final String DOSSIER_ACTION_REQUEST_PAYMENT = "request-payment";
+	public static final String DOSSIER_ACTION_CONFIRM_PAYMENT = "confirm-payment";
+	public static final String DOSSIER_ACTION_ONLINE_PAYMENT = "online-payment";
 
 
 	public static final String DOSSIER_ACTION_CREATE_PROCESS_ORDER = "create-process-order";

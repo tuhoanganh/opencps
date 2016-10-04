@@ -138,7 +138,6 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 			// TODO Auto-generated catch block
 			_log.error(e);
 		}
-		System.out.println("----REDIRECT KEYPAY----");
 		if (paymentConfig != null) {
 			Date curDate = new Date();
 			boolean updatePaymentFile = false;
