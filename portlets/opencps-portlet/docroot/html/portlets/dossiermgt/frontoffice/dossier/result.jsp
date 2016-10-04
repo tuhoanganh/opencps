@@ -281,7 +281,7 @@
 						for(DossierPart dossierPart : dossierParts){
 							DossierFile dossierFile = null;
 							try{
-								dossierFile = DossierFileLocalServiceUtil.getDossierFileInUse(dossier.getDossierId(), dossierPart.getDossierpartId());
+								dossierFile = DossierFileLocalServiceUtil.getDossierFileInUse(dossier.getDossierId(), dossierPart.getDossierpartId(), PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS);
 							}catch(Exception e){
 								continue;
 							}
@@ -383,7 +383,7 @@
 										for(DossierPart dossierPart : dossierParts){
 											DossierFile dossierFile = null;
 											try{
-												dossierFile = DossierFileLocalServiceUtil.getDossierFileInUse(dossier.getDossierId(), dossierPart.getDossierpartId());
+												dossierFile = DossierFileLocalServiceUtil.getDossierFileInUse(dossier.getDossierId(), dossierPart.getDossierpartId(), PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS);
 											}catch(Exception e){
 												continue;
 											}

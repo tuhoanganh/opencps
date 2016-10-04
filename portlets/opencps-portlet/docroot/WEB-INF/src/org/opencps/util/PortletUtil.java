@@ -34,7 +34,6 @@ import javax.portlet.ResourceRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.opencps.datamgt.NoSuchDictCollectionException;
 import org.opencps.datamgt.model.AdministrationServicedomain;
 import org.opencps.datamgt.model.DictCollection;
 import org.opencps.datamgt.model.DictItem;
@@ -743,7 +742,7 @@ public class PortletUtil {
 		case PaymentMgtUtil.PAYMENT_STATUS_REJECTED:
 			statusLabel = LanguageUtil.get(locale, "rejected");
 		default:
-			statusLabel = LanguageUtil.get(locale, "requested");
+			statusLabel = LanguageUtil.get(locale, "on-processing");
 			break;
 		}
 
