@@ -971,14 +971,29 @@ public class DossierFileLocalServiceImpl
 	 * @param dossierId
 	 * @param dossierPartId
 	 * @return DossierFile
-	 * @throws NoSuchDossierFileException
+	 * @throws PortalException
 	 * @throws SystemException
 	 */
 	public DossierFile getDossierFileInUse(long dossierId, long dossierPartId)
-		throws NoSuchDossierFileException, SystemException {
+		throws PortalException, SystemException {
 
 		return dossierFilePersistence.findByDossierFileInUse(
-			dossierId, dossierPartId);
+			dossierId, dossierPartId, 0);
+	}
+	
+	/**
+	 * @param dossierId
+	 * @param dossierPartId
+	 * @param syncStatus
+	 * @return DossierFile
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public DossierFile getDossierFileInUse(long dossierId, long dossierPartId, int syncStatus)
+		throws PortalException, SystemException {
+
+		return dossierFilePersistence.findByDossierFileInUseSyncStatus(
+			dossierId, dossierPartId, 0, syncStatus);
 	}
 
 	/**

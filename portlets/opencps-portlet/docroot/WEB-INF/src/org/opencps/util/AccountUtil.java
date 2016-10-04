@@ -62,6 +62,15 @@ import com.liferay.portal.util.PortalUtil;
 public class AccountUtil {
 
 	private static AccountBean _accountBean;
+	
+	public static void initAccount(HttpServletRequest request) {
+		
+		try {
+			initAccount(request, null);
+		} catch (Exception e) {
+			_log.error(e);
+		}
+	}
 
 	public static void initAccount(
 		HttpServletRequest request, HttpServletResponse response)
@@ -448,8 +457,15 @@ public class AccountUtil {
 			PortalUtil.getHttpServletRequest(actionRequest);
 		HttpSession session = request.getSession();
 
-		AccountBean accountBean =
-			(AccountBean) session.getAttribute(WebKeys.ACCOUNT_BEAN);
+		AccountBean accountBean = null;
+		
+		try {
+			accountBean = (AccountBean) session.getAttribute(WebKeys.ACCOUNT_BEAN);
+		} catch(Exception e) {
+			_log.error(e);
+			
+			initAccount(request);
+		}
 
 		return accountBean;
 	}
