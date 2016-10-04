@@ -275,10 +275,10 @@ public class AccountRegPortlet extends MVCPortlet {
 					    actionRequest,
 							MessageKeys.ACCOUNT_UPDATE_CUCCESS);
 					// Gui email thong bao toi quan tri sau khi thuc hien dang ky thanh cong
-					MessageBusUtil.sendEmailConfirmToAdmin(business.getUuid(),
-							mappingUser, email, emailConfirmToAdmin,
-							PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS, business,
-							serviceContext);
+						MessageBusUtil.sendEmailConfirmToAdmin(business.getUuid(),
+								mappingUser, email, emailConfirmToAdmin,
+								PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS, business,
+								serviceContext);
 					// Gui email thong bao toi quan tri sau khi thuc hien dang ky thanh cong -----END-----
 				}
 			} else {
@@ -377,7 +377,6 @@ public class AccountRegPortlet extends MVCPortlet {
 				    MessageKeys.ACCOUNT_SYSTEM_EXCEPTION_OCCURRED);
 				_log.error(e);
 			}
-			
 			
 		}finally {
 			if(registered){
