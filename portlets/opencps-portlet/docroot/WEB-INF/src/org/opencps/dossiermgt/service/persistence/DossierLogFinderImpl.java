@@ -177,6 +177,8 @@ public class DossierLogFinderImpl extends BasePersistenceImpl<DossierLog>
 			session = openSession();
 
 			String sql = CustomSQLUtil.get(FIND_LOG_CITIZEN);
+			
+			_log.info(FIND_LOG_CITIZEN);
 
 			SQLQuery q = session.createSQLQuery(sql);
 

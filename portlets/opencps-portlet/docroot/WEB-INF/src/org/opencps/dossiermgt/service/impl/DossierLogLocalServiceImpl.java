@@ -28,6 +28,7 @@ import org.opencps.dossiermgt.service.base.DossierLogLocalServiceBaseImpl;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.ServiceContext;
 
 /**
@@ -152,7 +153,9 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 
 		dossierLog.setDossierId(dossierId);
 		dossierLog.setFileGroupId(fileGroupId);
-		dossierLog.setDossierStatus(status);
+		if (Validator.isNotNull(status)) {
+			dossierLog.setDossierStatus(status);
+		}
 		dossierLog.setActionInfo(actionInfo);
 		dossierLog.setMessageInfo(messageInfo);
 		dossierLog.setUpdateDatetime(updateDatetime);
