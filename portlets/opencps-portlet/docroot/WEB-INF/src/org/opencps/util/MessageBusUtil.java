@@ -19,6 +19,8 @@ package org.opencps.util;
 
 import javax.portlet.PortletPreferences;
 
+import org.opencps.accountmgt.model.Business;
+
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -36,6 +38,7 @@ import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.TicketLocalServiceUtil;
 import com.liferay.portal.util.SubscriptionSender;
+import com.liferay.util.ContentUtil;
 import com.liferay.util.PwdGenerator;
 
 /**
@@ -300,4 +303,104 @@ public class MessageBusUtil {
 		    .flushNotificationsAsync();
 	}
 
+	public static void sendEmailConfirmToAdmin(String uuid, User user,
+			String emailAddress, String emailConfirmToAdmin, String type, Business business,
+			ServiceContext serviceContext) throws PortalException,
+			SystemException {
+		// Đoạn này chưa biết làm gì
+		if (user.isEmailAddressVerified()
+				&& StringUtil.equalsIgnoreCase(emailAddress,
+						user.getEmailAddress())) {
+
+			return;
+		}
+
+		Ticket ticket = TicketLocalServiceUtil.addDistinctTicket(
+				user.getCompanyId(), User.class.getName(), user.getUserId(),
+				TicketConstants.TYPE_EMAIL_ADDRESS, emailAddress, null,
+				serviceContext);
+
+		String verifyEmailAddressURL = serviceContext.getPortalURL()
+				+ "/opencps-portlet/verify/email?token=" + uuid + "&ticketKey="
+				+ ticket.getKey() + "&type=" + type;
+
+		long plid = serviceContext.getPlid();
+
+		if (plid > 0) {
+			Layout layout = LayoutLocalServiceUtil.fetchLayout(plid);
+
+			if (layout != null) {
+				Group group = layout.getGroup();
+
+				if (!layout.isPrivateLayout() && !group.isUser()) {
+					verifyEmailAddressURL += "&p_l_id="
+							+ serviceContext.getPlid();
+				}
+			}
+		}
+		// Đoạn này chưa biết làm gì -----END-----
+		String emailAdmins[] = null;
+		if (Validator.isNotNull(emailConfirmToAdmin)) {
+			emailAdmins = emailConfirmToAdmin.split(";");
+			for (int i = 0; i < emailAdmins.length; i++) {
+				
+				String fromName = PrefsPropsUtil.getString(user.getCompanyId(),
+						PropsKeys.ADMIN_EMAIL_FROM_NAME);
+				
+				String fromAddress = PrefsPropsUtil
+						.getString(user.getCompanyId(),
+								PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
+				
+				String toName = user.getFullName();
+				
+				String toAddress = emailAdmins[i];
+				
+				PortletPreferences preferences = PrefsPropsUtil.getPreferences(
+						serviceContext.getCompanyId(), true);
+
+				String subject = GetterUtil.getString(preferences.getValue(
+						"EMAIL_CONFIRM_TO_ADMIN_SUBJECT", StringPool.BLANK));
+				
+				String body = GetterUtil.getString(preferences.getValue(
+						"EMAIL_CONFIRM_TO_ADMIN_BODY", StringPool.BLANK));
+				
+				SubscriptionSender subscriptionSender = new SubscriptionSender();
+
+				subscriptionSender.setBody(body);
+				System.out.println("##### body:"+body);
+				subscriptionSender.setCompanyId(user.getCompanyId());
+				
+				subscriptionSender.setContextAttributes("[$URL_APPROVE$]",
+						verifyEmailAddressURL, "[$TIME_REGISTER$]",
+						business.getCreateDate(), "[$EMAIL_REGISTER$]",
+						emailAddress, "[$PHONE_NUMBER$]",
+						business.getTelNo(), "[$HO_TEN_NGUOI_DK$]",
+						toName, "[$USER_ID$]", user
+			            .getUserId());
+				System.out.println("##### getTelNo:"+business.getTelNo());
+				System.out.println("##### getCreateDate:"+business.getCreateDate());
+				subscriptionSender.setFrom(fromAddress, fromName);
+				
+				subscriptionSender
+				    .setMailId("user", user
+				        .getUserId(), System
+				            .currentTimeMillis(),
+				        PwdGenerator
+				            .getPassword());
+				
+				subscriptionSender.setHtmlFormat(true);
+				
+				subscriptionSender.setServiceContext(serviceContext);
+				
+				subscriptionSender.setSubject(subject);
+				
+				subscriptionSender.setUserId(user.getUserId());
+				System.out.println("##### getUserId:"+user.getUserId());
+				subscriptionSender.addRuntimeSubscribers(toAddress, toName);
+
+				subscriptionSender.flushNotificationsAsync();
+				System.out.println("##### END #####");
+			}
+		}
+	}
 }
