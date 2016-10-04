@@ -294,7 +294,21 @@ public class DictItemServiceImpl extends DictItemServiceBaseImpl {
 		
 		result = dictItemLocalService
 			.searchDictItemByName_like(
-					collectionCode, itemCode, keywords, groupId, 0, 10, null);
+					collectionCode, itemCode, keywords, groupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+		
+		return result;
+	}
+	
+	@JSONWebService(value = "get-dictitems_itemCode_keywords_datasource")
+	@AccessControlled(guestAccessEnabled = true)
+	public List<DictItem> getDictItemsByItemCodeDataSourceFitter(
+			String collectionCode, String itemCode, String keywords, long groupId, int start, int end) throws SystemException, PortalException {
+
+		List<DictItem> result = new ArrayList<DictItem>();
+		
+		result = dictItemLocalService
+			.searchDictItemByName_like(
+					collectionCode, itemCode, keywords, groupId, start, end, null);
 		
 		return result;
 	}
