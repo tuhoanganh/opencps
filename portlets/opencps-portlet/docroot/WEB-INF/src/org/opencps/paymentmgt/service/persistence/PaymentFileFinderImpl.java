@@ -153,12 +153,9 @@ implements PaymentFileFinder {
 				return (List<PaymentFile>) QueryUtil.list(
 							    q, getDialect(), start, end);
 			}catch (Exception e) {
-				try {
-					throw new SystemException(e);
-				}
-				catch (SystemException se) {
-					se.printStackTrace();
-				}
+
+					e.printStackTrace();
+				
 			}
 			finally {
 				closeSession(session);
@@ -240,18 +237,10 @@ implements PaymentFileFinder {
 			}
 			
 			catch (Exception e) {
-			
-				try {
+
 				
-					throw new SystemException(e);
+					e.printStackTrace();
 					
-				}
-				
-				catch (SystemException se) {
-				
-					se.printStackTrace();
-					
-				}
 				
 			}
 			
