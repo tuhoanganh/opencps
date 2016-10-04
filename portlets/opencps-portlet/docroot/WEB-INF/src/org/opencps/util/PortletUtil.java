@@ -34,12 +34,10 @@ import javax.portlet.ResourceRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.opencps.datamgt.NoSuchDictCollectionException;
 import org.opencps.datamgt.model.DictCollection;
 import org.opencps.datamgt.model.DictItem;
 import org.opencps.datamgt.service.DictCollectionLocalServiceUtil;
 import org.opencps.datamgt.service.DictItemLocalServiceUtil;
-import org.opencps.dossiermgt.search.DossierDisplayTerms;
 import org.opencps.paymentmgt.util.PaymentMgtUtil;
 
 import com.liferay.portal.kernel.exception.SystemException;
