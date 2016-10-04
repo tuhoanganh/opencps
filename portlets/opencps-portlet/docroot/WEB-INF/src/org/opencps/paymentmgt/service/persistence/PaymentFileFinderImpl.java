@@ -153,15 +153,16 @@ implements PaymentFileFinder {
 				return (List<PaymentFile>) QueryUtil.list(
 							    q, getDialect(), start, end);
 			}catch (Exception e) {
-
+				
+					throw new SystemException(e);
 					e.printStackTrace();
 				
 			}
 			finally {
 				closeSession(session);
 			}
-				return null;
-			}
+		return null;
+		}
 
 	private int _countPaymentFiles(
 			long groupId, int paymentStatus, boolean andOperator, String[] keywords) {
@@ -238,10 +239,8 @@ implements PaymentFileFinder {
 			
 			catch (Exception e) {
 
-				
+					throw new SystemException(e);
 					e.printStackTrace();
-					
-				
 			}
 			
 			finally {
@@ -250,7 +249,7 @@ implements PaymentFileFinder {
 				
 			}
 
-			return 0;
+		return 0;
 
 
 		}
