@@ -62,7 +62,7 @@ implements PaymentFileFinder {
 	 * @return
 				 */
 	public List<PaymentFile> searchPaymentFiles(
-		   long groupId, int paymentStatus, String keywords, int start, int end) {
+		   long groupId, int paymentStatus, String keywords, int start, int end)throws SystemException {
 
 		String[] names = null;
 		boolean andOperator = false;
@@ -87,7 +87,7 @@ implements PaymentFileFinder {
 	 * @param keywords
 	 * @return
 	 */
-	public int countPaymentFiles(long groupId, int paymentStatus, String keywords) {
+	public int countPaymentFiles(long groupId, int paymentStatus, String keywords)throws SystemException {
 		String[] names = null;
 		boolean andOperator = false;
 		if (Validator.isNotNull(keywords)) {
@@ -104,7 +104,7 @@ implements PaymentFileFinder {
 	}
 
 	private List<PaymentFile> _searchPaymentFiles(
-			long groupId, int paymentStatus, boolean andOperator, String[] keywords, int start, int end) {
+			long groupId, int paymentStatus, boolean andOperator, String[] keywords, int start, int end)throws SystemException {
 			
 			Session session = null;
 			try {
@@ -160,11 +160,10 @@ implements PaymentFileFinder {
 			finally {
 				closeSession(session);
 			}
-		return null;
 		}
 
 	private int _countPaymentFiles(
-			long groupId, int paymentStatus, boolean andOperator, String[] keywords) {
+			long groupId, int paymentStatus, boolean andOperator, String[] keywords)throws SystemException {
 
 			Session session = null;
 			try {
@@ -245,8 +244,6 @@ implements PaymentFileFinder {
 				closeSession(session);
 				
 			}
-
-		return 0;
 
 
 		}

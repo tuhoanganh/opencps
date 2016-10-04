@@ -148,18 +148,30 @@ public class PaymentFileLocalServiceImpl extends PaymentFileLocalServiceBaseImpl
 	}
 	
 	public List<PaymentFile> searchPaymentFiles(
-	    long groupId, int paymentStatus, String keywords, int start, int end) {
+		    long groupId, int paymentStatus, String keywords, int start, int end) {
 
-		return paymentFileFinder.searchPaymentFiles(
-		    groupId, paymentStatus, keywords, start, end);
-	}
+			try {
+				return paymentFileFinder.searchPaymentFiles(
+				    groupId, paymentStatus, keywords, start, end);
+			} catch (SystemException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return null;
+		}
 
-	public int countPaymentFiles(
-	    long groupId, int paymentStatus, String keywords) {
+		public int countPaymentFiles(
+		    long groupId, int paymentStatus, String keywords) {
 
-		return paymentFileFinder.countPaymentFiles(
-		    groupId, paymentStatus, keywords);
-	}
+			try {
+				return paymentFileFinder.countPaymentFiles(
+				    groupId, paymentStatus, keywords);
+			} catch (SystemException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return 0;
+		}
 
 	public int countCustomerPaymentFile(
 	    long groupId, String keyword, boolean isCitizen, long customerId,
