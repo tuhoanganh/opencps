@@ -375,7 +375,7 @@
 				  {
 					  collectionCode: dictCollectionId,
 					  itemCode: parentItemId,
-					  groupId: Liferay.ThemeDisplay.getScopeGroupId()
+					  groupId: themeDisplay.getScopeGroupId()
 				  },
 				  function(obj) {
 					var comboTarget = document.getElementById(controlId); 
@@ -410,7 +410,7 @@
 					  	url: '/api/jsonws/opencps-portlet.dictitem/get-dictitems_itemCode_keywords_datasource/collection-code/'+dictCollectionId
 		  				+'/item-code/'+parentItemId
 		  				+'/-keywords'
-		  				+'/group-id/'+Liferay.ThemeDisplay.getScopeGroupId()
+		  				+'/group-id/'+themeDisplay.getScopeGroupId()
 		  				+'?p_auth='+Liferay.authToken,
 		  			wildcard: '%QUERY',
 				  	filter: function (item) {
@@ -427,7 +427,7 @@
 				  	url: '/api/jsonws/opencps-portlet.dictitem/get-dictitems_itemCode_keywords_datasource/collection-code/'+dictCollectionId
 		  				+'/item-code/'+parentItemId
 		  				+'/keywords/%QUERY'
-		  				+'/group-id/'+Liferay.ThemeDisplay.getScopeGroupId()
+		  				+'/group-id/'+themeDisplay.getScopeGroupId()
 		  				+'?p_auth='+Liferay.authToken,
 		  			wildcard: '%QUERY',
 				  	filter: function (item) {
@@ -521,7 +521,7 @@
 					  	url: '/api/jsonws/opencps-portlet.dictitem/get-dictitems_itemCode_keywords_datasource/collection-code/'+dictCollectionId
 		  				+'/item-code/'+parentItemId
 		  				+'/-keywords'
-		  				+'/group-id/'+Liferay.ThemeDisplay.getScopeGroupId()
+		  				+'/group-id/'+themeDisplay.getScopeGroupId()
 		  				+'/start/'+start
 		  				+'/end/'+end
 		  				+'?p_auth='+Liferay.authToken,
@@ -540,7 +540,7 @@
 				  	url: '/api/jsonws/opencps-portlet.dictitem/get-dictitems_itemCode_keywords_datasource/collection-code/'+dictCollectionId
 		  				+'/item-code/'+parentItemId
 		  				+'/keywords/%QUERY'
-		  				+'/group-id/'+Liferay.ThemeDisplay.getScopeGroupId()
+		  				+'/group-id/'+themeDisplay.getScopeGroupId()
 		  				+'/start/'+start
 		  				+'/end/'+end
 		  				+'?p_auth='+Liferay.authToken,
