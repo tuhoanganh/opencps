@@ -29,7 +29,6 @@ import javax.portlet.ActionResponse;
 
 import org.opencps.accountmgt.model.Citizen;
 import org.opencps.accountmgt.service.CitizenLocalServiceUtil;
-import org.opencps.dossiermgt.bean.AccountBean;
 import org.opencps.dossiermgt.service.DossierLogLocalServiceUtil;
 import org.opencps.dossiermgt.util.ActorBean;
 import org.opencps.jasperreport.util.JRReportUtil;
@@ -44,7 +43,6 @@ import org.opencps.usermgt.model.Employee;
 import org.opencps.usermgt.model.WorkingUnit;
 import org.opencps.usermgt.service.EmployeeLocalServiceUtil;
 import org.opencps.usermgt.service.WorkingUnitLocalServiceUtil;
-import org.opencps.util.AccountUtil;
 import org.opencps.util.DLFolderUtil;
 import org.opencps.util.DateTimeUtil;
 import org.opencps.util.MessageKeys;
@@ -129,7 +127,6 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 				
 				ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
 				
-
 				ActorBean actorBean =
 							    new ActorBean(2, serviceContext.getUserId());
 				
@@ -194,8 +191,6 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 		long paymentFileId = ParamUtil
 		    .getLong(actionRequest, "paymentFileId");
 		
-		AccountBean accountBean = AccountUtil
-					    .getAccountBean(actionRequest);
 		File file = null;
 
 		InputStream inputStream = null;
@@ -416,6 +411,22 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 			paymentFile.setPaymentMethod(PaymentMgtUtil.PAYMENT_METHOD_BANK);
 			paymentFile.setModifiedDate(new Date());
 			PaymentFileLocalServiceUtil.updatePaymentFile(paymentFile);
+			ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
+			
+			ActorBean actorBean =
+						    new ActorBean(2, serviceContext.getUserId());
+			
+			// Add dossierLog for confirm payment
+			DossierLogLocalServiceUtil.addDossierLog(
+			    serviceContext.getUserId(), serviceContext.getScopeGroupId(),
+			    serviceContext.getCompanyId(), paymentFile.getDossierId(),
+			    paymentFile.getFileGroupId(), null,
+			    PortletConstants.DOSSIER_ACTION_CONFIRM_PAYMENT,
+			    PortletConstants.DOSSIER_ACTION_CONFIRM_PAYMENT, new Date(), 1,
+			    2, actorBean.getActor(), actorBean.getActorId(),
+			    actorBean.getActorName(),
+			    PaymentMgtBackOfficePortlet.class.getName());
+
 			addProcessActionSuccessMessage = false;
 			SessionMessages.add(actionRequest, "confirm-payment-cash-success");
 		}
@@ -444,6 +455,22 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 			paymentFile.setModifiedDate(new Date());
 			PaymentFileLocalServiceUtil.updatePaymentFile(paymentFile);
 			addProcessActionSuccessMessage = false;
+
+			ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
+
+			ActorBean actorBean =
+						    new ActorBean(2, serviceContext.getUserId());
+			
+			// Add dossierLog for confirm payment
+			DossierLogLocalServiceUtil.addDossierLog(
+			    serviceContext.getUserId(), serviceContext.getScopeGroupId(),
+			    serviceContext.getCompanyId(), paymentFile.getDossierId(),
+			    paymentFile.getFileGroupId(), null,
+			    PortletConstants.DOSSIER_ACTION_CONFIRM_CASH_PAYMENT,
+			    PortletConstants.DOSSIER_ACTION_CONFIRM_PAYMENT, new Date(), 1,
+			    2, actorBean.getActor(), actorBean.getActorId(),
+			    actorBean.getActorName(),
+			    PaymentMgtBackOfficePortlet.class.getName());
 			SessionMessages.add(actionRequest, "confirm-payment-cash-success");
 		}
 		catch (PortalException e) {
