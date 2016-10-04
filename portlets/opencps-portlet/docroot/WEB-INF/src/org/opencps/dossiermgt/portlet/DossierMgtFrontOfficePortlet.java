@@ -609,26 +609,29 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		if (accountBean.isBusiness() || accountBean.isCitizen()) {
 			long dossierId =
 				ParamUtil.getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
+			
+			_log.error("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF" + dossierId + "FFFFFFFFFFFFFFFFFFFFFFF");
+			
 			try {
 				Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
 				ProcessOrder processOrder =
 					ProcessOrderLocalServiceUtil.getProcessOrder(dossierId, 0);
-				ProcessWorkflow workFlow =
-					ProcessWorkflowLocalServiceUtil.getByS_PreP_AN(
-						processOrder.getServiceProcessId(),
-						processOrder.getProcessStepId(),
-						PortletPropsValues.OPENCPS_CANCEL_DOSSIER_NOTICE);
+//				ProcessWorkflow workFlow =
+//					ProcessWorkflowLocalServiceUtil.getByS_PreP_AN(
+//						processOrder.getServiceProcessId(),
+//						processOrder.getProcessStepId(),
+//						PortletPropsValues.OPENCPS_CANCEL_DOSSIER_NOTICE);
 				Message message = new Message();
-				if (Validator.isNotNull(workFlow.getAutoEvent())) {
+/*				if (Validator.isNotNull(workFlow.getAutoEvent())) {
 					message.put(
-						ProcessOrderDisplayTerms.EVENT, workFlow.getAutoEvent());
+					    ProcessOrderDisplayTerms.EVENT, workFlow.getAutoEvent());
 				}
 				else {
 					message.put(
-						ProcessOrderDisplayTerms.PROCESS_WORKFLOW_ID,
-						workFlow.getProcessWorkflowId());
+					    ProcessOrderDisplayTerms.PROCESS_WORKFLOW_ID,
+					    workFlow.getProcessWorkflowId());
 				}
-
+*/
 				message.put(
 					ProcessOrderDisplayTerms.ACTION_NOTE,
 					PortletPropsValues.OPENCPS_PERSON_MAKE_PROCEDURE_CANCEL);
@@ -672,12 +675,12 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				sendToEngineMsg.setReceptionNo(Validator.isNotNull(dossier.getReceptionNo())
 					? dossier.getReceptionNo() : StringPool.BLANK);
 				sendToEngineMsg.setSignature(0);
-				if (Validator.isNotNull(workFlow.getAutoEvent())) {
-					sendToEngineMsg.setEvent(workFlow.getAutoEvent());
-				}
-				else {
-					sendToEngineMsg.setProcessWorkflowId(workFlow.getProcessWorkflowId());
-				}
+//				if (Validator.isNotNull(workFlow.getAutoEvent())) {
+//					sendToEngineMsg.setEvent(workFlow.getAutoEvent());
+//				}
+//				else {
+//					sendToEngineMsg.setProcessWorkflowId(workFlow.getProcessWorkflowId());
+//				}
 				sendToEngineMsg.setGroupId(serviceContext.getScopeGroupId());
 				sendToEngineMsg.setUserId(serviceContext.getUserId());
 				message.put("msgToEngine", sendToEngineMsg);
