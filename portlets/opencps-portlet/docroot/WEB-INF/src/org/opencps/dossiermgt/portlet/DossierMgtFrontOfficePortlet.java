@@ -2485,11 +2485,15 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			}
 
 			ActorBean actor = new ActorBean(1, serviceContext.getUserId());
+			
+			String msgInfo = StringPool.BLANK;
+			
+			msgInfo = dossier.getNote();
 
 			DossierLocalServiceUtil.updateDossierStatus(
 				dossierId, fileGroupId, PortletConstants.DOSSIER_STATUS_SYSTEM,
 				WebKeys.DOSSIER_ACTOR_CITIZEN, actor.getActorId(),
-				actor.getActorName(), StringPool.BLANK,
+				actor.getActorName(), msgInfo,
 				PortletUtil.getActionInfo(
 					PortletConstants.DOSSIER_STATUS_SYSTEM,
 					actionRequest.getLocale()), StringPool.BLANK,
