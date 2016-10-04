@@ -212,9 +212,7 @@
 							}
 							
 							%>
-								<c:if test="<%=!dossierStatusCHKInit.equals(\"-1\") %>">
 									<%@include file="/html/portlets/dossiermgt/frontoffice/dosier_search_results.jspf" %>
-								</c:if>
 							<%
 						}catch(Exception e){
 							_log.error(e);
