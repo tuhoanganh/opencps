@@ -154,8 +154,7 @@ implements PaymentFileFinder {
 							    q, getDialect(), start, end);
 			}catch (Exception e) {
 				
-					throw new SystemException(e);
-					e.printStackTrace();
+				throw new SystemException(e);
 				
 			}
 			finally {
@@ -238,9 +237,7 @@ implements PaymentFileFinder {
 			}
 			
 			catch (Exception e) {
-
 					throw new SystemException(e);
-					e.printStackTrace();
 			}
 			
 			finally {
