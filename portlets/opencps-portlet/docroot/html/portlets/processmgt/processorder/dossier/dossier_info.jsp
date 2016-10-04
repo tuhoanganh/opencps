@@ -41,7 +41,7 @@
 			<liferay-ui:message key="dossier-no"/>
 		</td>
 		<td >
-			<%=dossier != null ? dossier.getReceptionNo() :  StringPool.BLANK %>
+			<%=dossier != null ? dossier.getDossierId() :  StringPool.BLANK %>
 		</td>
 	</tr>
 	<tr>
