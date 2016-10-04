@@ -624,10 +624,10 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 					ProcessOrderLocalServiceUtil.getProcessOrder(dossierId, 0);
 
 				ProcessWorkflow workFlow =
-					ProcessWorkflowLocalServiceUtil.findByS_PreP_AN(
+					ProcessWorkflowLocalServiceUtil.getProcessWorkflowByEvent(
 						processOrder.getServiceProcessId(),
-						processOrder.getProcessStepId(),
-						PortletPropsValues.OPENCPS_CANCEL_DOSSIER_NOTICE);
+						WebKeys.PRE_CONDITION_CANCEL,
+						processOrder.getProcessStepId());
 
 				Message message = new Message();
 

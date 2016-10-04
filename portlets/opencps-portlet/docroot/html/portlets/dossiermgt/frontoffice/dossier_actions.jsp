@@ -53,7 +53,10 @@
 	
 	try {
 		ProcessOrder processOrder = ProcessOrderLocalServiceUtil.getProcessOrder(dossier.getDossierId(), 0);
-		workFlow = ProcessWorkflowLocalServiceUtil.getByS_PreP_AN(processOrder.getServiceProcessId(), processOrder.getProcessStepId(), PortletPropsValues.OPENCPS_CANCEL_DOSSIER_NOTICE);
+		
+		if(processOrder != null) {
+			workFlow = ProcessWorkflowLocalServiceUtil.getProcessWorkflowByEvent(processOrder.getServiceProcessId(), WebKeys.PRE_CONDITION_CANCEL, processOrder.getProcessStepId());
+		}
 	}
 	catch (Exception e) {
 		
