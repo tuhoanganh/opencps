@@ -67,14 +67,10 @@
 	
 	String tabs1 = ParamUtil.getString(request, "tabs1", DossierMgtUtil.TOP_TABS_DOSSIER);
 	
-	List<DictItem> dictItems = PortletUtil.getDictItemInUseByCode(themeDisplay.getScopeGroupId(), 
-			PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN, 
-			PortletConstants.TREE_VIEW_DEFAULT_ITEM_CODE);
-	
 	JSONObject arrayParam = JSONFactoryUtil
 		    .createJSONObject();
 	arrayParam.put(DossierDisplayTerms.SERVICE_DOMAIN_ID, (serviceDomainId > 0) ? String.valueOf(serviceDomainId):StringPool.BLANK);
-	arrayParam.put("administrationId", (administrationId > 0) ? String.valueOf(administrationId):StringPool.BLANK);
+	arrayParam.put("serviceDomainId", (serviceDomainId > 0) ? String.valueOf(serviceDomainId):StringPool.BLANK);
 	arrayParam.put("backURL", currentURL);
 	arrayParam.put("isListServiceConfig", String.valueOf(true));
 %>
@@ -95,8 +91,8 @@
 		
 		<%
 		
-		String serviceDomainJsonData = ProcessOrderUtils.generateTreeViewMappingAdminCode(
-				PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION, 
+		String serviceDomainJsonData = ProcessOrderUtils.generateTreeView(
+				PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN, 
 				dictItemCode, 
 				LanguageUtil.get(locale, "filter-by-service-domain-left") , 
 				PortletConstants.TREE_VIEW_LEVER_2, 

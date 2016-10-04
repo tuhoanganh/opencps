@@ -65,8 +65,9 @@
 	searchURL.setParameter("tabs1", DossierMgtUtil.TOP_TABS_DOSSIER);
 	searchURL.setParameter("isListServiceConfig", String.valueOf(true));
 	searchURL.setParameter("backURL", currentURL);
+	
 	List<DictItem> dictItems = PortletUtil.getDictItemInUseByCode(themeDisplay.getScopeGroupId(), 
-			PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION, 
+			PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN, 
 			PortletConstants.TREE_VIEW_DEFAULT_ITEM_CODE);
 %>
 
