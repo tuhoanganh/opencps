@@ -352,7 +352,7 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 						        file.length(),
 						        serviceContext);
 						fileExportDir = getURL(fileEntry);
-						String tenFileExport = "defaultPDF.pdfs";
+						//String tenFileExport = "defaultPDF.pdfs";
 						if(fileExportDir.contains(".pdfs")){
 							urlFileDowLoad = fileExportDir.replace(".pdfs", ".pdf") + "#view=FitH&scrollbar=0&page=1&toolbar=0&statusbar=0&messages=0&navpanes=0";
 						} else if(fileExportDir.contains(".doc")){
