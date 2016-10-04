@@ -134,7 +134,6 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
-import com.liferay.portal.service.ServiceContextThreadLocal;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.DuplicateFileException;
@@ -277,28 +276,30 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				dossier.getFolderId(), sourceFileName, contentType,
 				displayName, StringPool.BLANK, StringPool.BLANK, inputStream,
 				size, serviceContext);
-			//Add DossierLog for Add File
-			
+			// Add DossierLog for Add File
+
 			int actor = 0;
-			
+
 			if (accountBean.isEmployee()) {
 				actor = 2;
-			} else if (accountBean.isBusiness() || accountBean.isCitizen()){
+			}
+			else if (accountBean.isBusiness() || accountBean.isCitizen()) {
 				actor = 1;
 			}
-			
-			ActorBean actorBean = new ActorBean(actor, serviceContext.getUserId());
-			
+
+			ActorBean actorBean =
+				new ActorBean(actor, serviceContext.getUserId());
+
 			DossierLogLocalServiceUtil.addDossierLog(
-			    serviceContext.getUserId(), serviceContext.getScopeGroupId(),
-			    serviceContext.getCompanyId(), dossierId, fileGroupId,
-			    dossier.getDossierStatus(),
-			    PortletConstants.DOSSIER_ACTION_ADD_ATTACHMENT_FILE,
-			    PortletConstants.DOSSIER_ACTION_ADD_ATTACHMENT_FILE +
-			        StringPool.SPACE + StringPool.COLON + StringPool.SPACE +
-			        displayName, new Date(), 0, 0, actorBean.getActor(),
-			    actorBean.getActorId(), actorBean.getActorName(),
-			    ProcessOrderPortlet.class.getName() + ".addAttachmentFile()");
+				serviceContext.getUserId(), serviceContext.getScopeGroupId(),
+				serviceContext.getCompanyId(), dossierId, fileGroupId,
+				dossier.getDossierStatus(),
+				PortletConstants.DOSSIER_ACTION_ADD_ATTACHMENT_FILE,
+				PortletConstants.DOSSIER_ACTION_ADD_ATTACHMENT_FILE +
+					StringPool.SPACE + StringPool.COLON + StringPool.SPACE +
+					displayName, new Date(), 0, 0, actorBean.getActor(),
+				actorBean.getActorId(), actorBean.getActorName(),
+				ProcessOrderPortlet.class.getName() + ".addAttachmentFile()");
 
 			updated = true;
 
@@ -598,37 +599,38 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	 * @param actionRequest
 	 * @param actionResponse
 	 * @throws IOException
-	 * @throws SystemException 
-	 * @throws PortalException 
+	 * @throws SystemException
+	 * @throws PortalException
 	 */
 	public void cancelDossier(
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException, PortalException, SystemException {
 
-		long dossierId = ParamUtil.getLong(
-			actionRequest, DossierDisplayTerms.DOSSIER_ID);
-		
+		long dossierId =
+			ParamUtil.getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
+
 		try {
 			ServiceContext serviceContext =
 				ServiceContextFactory.getInstance(actionRequest);
-			
+
 			AccountBean accountBean = AccountUtil.getAccountBean(actionRequest);
-			
-			if (accountBean != null && (accountBean.isBusiness() || accountBean.isCitizen())) {
-				
+
+			if (accountBean != null &&
+				(accountBean.isBusiness() || accountBean.isCitizen())) {
+
 				Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
-				
+
 				ProcessOrder processOrder =
 					ProcessOrderLocalServiceUtil.getProcessOrder(dossierId, 0);
-				
+
 				ProcessWorkflow workFlow =
 					ProcessWorkflowLocalServiceUtil.findByS_PreP_AN(
 						processOrder.getServiceProcessId(),
 						processOrder.getProcessStepId(),
 						PortletPropsValues.OPENCPS_CANCEL_DOSSIER_NOTICE);
-				
+
 				Message message = new Message();
-				
+
 				if (Validator.isNotNull(workFlow.getAutoEvent())) {
 					message.put(
 						ProcessOrderDisplayTerms.EVENT, workFlow.getAutoEvent());
@@ -682,48 +684,50 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				sendToEngineMsg.setReceptionNo(Validator.isNotNull(dossier.getReceptionNo())
 					? dossier.getReceptionNo() : StringPool.BLANK);
 				sendToEngineMsg.setSignature(0);
-				
+
 				if (Validator.isNotNull(workFlow.getAutoEvent())) {
 					sendToEngineMsg.setEvent(workFlow.getAutoEvent());
 				}
 				else {
 					sendToEngineMsg.setProcessWorkflowId(workFlow.getProcessWorkflowId());
 				}
-				
+
 				sendToEngineMsg.setGroupId(serviceContext.getScopeGroupId());
 				sendToEngineMsg.setUserId(serviceContext.getUserId());
-				
+
 				message.put("msgToEngine", sendToEngineMsg);
-				
+
 				MessageBusUtil.sendMessage(
 					"opencps/backoffice/engine/destination", message);
-				
+
 				SessionMessages.add(actionRequest, "cancel-dossier-success");
-				
-				//Add DossierLog for cancelDossier
-				
+
+				// Add DossierLog for cancelDossier
+
 				int actor = 0;
-				
+
 				if (accountBean.isEmployee()) {
 					actor = 2;
-				} else if (accountBean.isBusiness() || accountBean.isCitizen()){
+				}
+				else if (accountBean.isBusiness() || accountBean.isCitizen()) {
 					actor = 1;
 				}
-				
-				ActorBean actorBean = new ActorBean(actor, serviceContext.getUserId());
-				
+
+				ActorBean actorBean =
+					new ActorBean(actor, serviceContext.getUserId());
+
 				long fileGroupId = 0;
-				
+
 				DossierLogLocalServiceUtil.addDossierLog(
-				    serviceContext.getUserId(),
-				    serviceContext.getScopeGroupId(),
-				    serviceContext.getCompanyId(), dossierId, fileGroupId,
-				    dossier.getDossierStatus(),
-				    PortletConstants.DOSSIER_ACTION_CANCEL_DOSSER_REQUEST,
-				    PortletConstants.DOSSIER_ACTION_CANCEL_DOSSER_REQUEST,
-				    new Date(), 0, 0, actorBean.getActor(),
-				    actorBean.getActorId(), actorBean.getActorName(),
-				    ProcessOrderPortlet.class.getName() + ".cencelDossier()");
+					serviceContext.getUserId(),
+					serviceContext.getScopeGroupId(),
+					serviceContext.getCompanyId(), dossierId, fileGroupId,
+					dossier.getDossierStatus(),
+					PortletConstants.DOSSIER_ACTION_CANCEL_DOSSER_REQUEST,
+					PortletConstants.DOSSIER_ACTION_CANCEL_DOSSER_REQUEST,
+					new Date(), 0, 0, actorBean.getActor(),
+					actorBean.getActorId(), actorBean.getActorName(),
+					ProcessOrderPortlet.class.getName() + ".cencelDossier()");
 
 			}
 			else {
@@ -820,30 +824,32 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				StringPool.BLANK, StringPool.BLANK,
 				fileEntry.getContentStream(), fileEntry.getSize(),
 				serviceContext);
-			
-			//TODO add dossierLog for payment file
-			
+
+			// TODO add dossierLog for payment file
+
 			int actor = 0;
-			
+
 			if (accountBean.isEmployee()) {
 				actor = 2;
-			} else if (accountBean.isBusiness() || accountBean.isCitizen()){
+			}
+			else if (accountBean.isBusiness() || accountBean.isCitizen()) {
 				actor = 1;
 			}
-			
-			ActorBean actorBean = new ActorBean(actor, serviceContext.getUserId());
-			
-			DossierLogLocalServiceUtil.addDossierLog(
-			    serviceContext.getUserId(), serviceContext.getScopeGroupId(),
-			    serviceContext.getCompanyId(), dossierId, fileGroupId,
-			    dossier.getDossierStatus(),
-			    PortletConstants.DOSSIER_ACTION_CLONE_ATTACHMENT_FILE,
-			    PortletConstants.DOSSIER_ACTION_CLONE_ATTACHMENT_FILE +
-			        StringPool.SPACE + StringPool.COLON + StringPool.SPACE +
-			        dossierFile.getDisplayName(), new Date(), 0, 0, actorBean.getActor(),
-			    actorBean.getActorId(), actorBean.getActorName(),
-			    ProcessOrderPortlet.class.getName() + ".cloneDossierFile()");			
 
+			ActorBean actorBean =
+				new ActorBean(actor, serviceContext.getUserId());
+
+			DossierLogLocalServiceUtil.addDossierLog(
+				serviceContext.getUserId(), serviceContext.getScopeGroupId(),
+				serviceContext.getCompanyId(), dossierId, fileGroupId,
+				dossier.getDossierStatus(),
+				PortletConstants.DOSSIER_ACTION_CLONE_ATTACHMENT_FILE,
+				PortletConstants.DOSSIER_ACTION_CLONE_ATTACHMENT_FILE +
+					StringPool.SPACE + StringPool.COLON + StringPool.SPACE +
+					dossierFile.getDisplayName(), new Date(), 0, 0,
+				actorBean.getActor(), actorBean.getActorId(),
+				actorBean.getActorName(), ProcessOrderPortlet.class.getName() +
+					".cloneDossierFile()");
 
 			updated = true;
 
@@ -984,18 +990,21 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 							fileExportDir.lastIndexOf(StringPool.SLASH) + 1,
 							fileExportDir.length());
 					String mimeType = MimeTypesUtil.getContentType(file);
-					
+
 					int actor = 0;
-					
+
 					if (accountBean.isEmployee()) {
 						actor = 2;
-					} else if (accountBean.isBusiness() || accountBean.isCitizen()){
+					}
+					else if (accountBean.isBusiness() ||
+						accountBean.isCitizen()) {
 						actor = 1;
 					}
-					
+
 					long fileGroupId = 0;
-					
-					ActorBean actorBean = new ActorBean(actor, serviceContext.getUserId());
+
+					ActorBean actorBean =
+						new ActorBean(actor, serviceContext.getUserId());
 
 					// Add new version
 					if (dossierFile.getFileEntryId() > 0) {
@@ -1005,18 +1014,23 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 							dossierFile.getDisplayName(), StringPool.BLANK,
 							StringPool.BLANK, inputStream, file.length(),
 							serviceContext);
-						
+
 						// Add Log exportFile
 						DossierLogLocalServiceUtil.addDossierLog(
-						    serviceContext.getUserId(), serviceContext.getScopeGroupId(),
-						    serviceContext.getCompanyId(), dossierFile.getDossierId(), fileGroupId,
-						    dossier.getDossierStatus(),
-						    PortletConstants.DOSSIER_ACTION_EXPORT_FILE,
-						    PortletConstants.DOSSIER_ACTION_EXPORT_FILE +
-						        StringPool.SPACE + StringPool.COLON + StringPool.SPACE +
-						        dossierFile.getDisplayName(), new Date(), 0, 0, actorBean.getActor(),
-						    actorBean.getActorId(), actorBean.getActorName(),
-						    ProcessOrderPortlet.class.getName() + ".exportFile()");
+							serviceContext.getUserId(),
+							serviceContext.getScopeGroupId(),
+							serviceContext.getCompanyId(),
+							dossierFile.getDossierId(),
+							fileGroupId,
+							dossier.getDossierStatus(),
+							PortletConstants.DOSSIER_ACTION_EXPORT_FILE,
+							PortletConstants.DOSSIER_ACTION_EXPORT_FILE +
+								StringPool.SPACE + StringPool.COLON +
+								StringPool.SPACE + dossierFile.getDisplayName(),
+							new Date(), 0, 0, actorBean.getActor(),
+							actorBean.getActorId(), actorBean.getActorName(),
+							ProcessOrderPortlet.class.getName() +
+								".exportFile()");
 
 					}
 					else {
@@ -1029,15 +1043,21 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 							serviceContext);
 						// Update Log UpdateVersion File
 						DossierLogLocalServiceUtil.addDossierLog(
-						    serviceContext.getUserId(), serviceContext.getScopeGroupId(),
-						    serviceContext.getCompanyId(), dossierFile.getDossierId(), fileGroupId,
-						    dossier.getDossierStatus(),
-						    PortletConstants.DOSSIER_ACTION_UPDATE_VERSION_FILE,
-						    PortletConstants.DOSSIER_ACTION_UPDATE_VERSION_FILE +
-						        StringPool.SPACE + StringPool.COLON + StringPool.SPACE +
-						        dossierFile.getDisplayName(), new Date(), 0, 0, actorBean.getActor(),
-						    actorBean.getActorId(), actorBean.getActorName(),
-						    ProcessOrderPortlet.class.getName() + ".updateVersionFile()");
+							serviceContext.getUserId(),
+							serviceContext.getScopeGroupId(),
+							serviceContext.getCompanyId(),
+							dossierFile.getDossierId(),
+							fileGroupId,
+							dossier.getDossierStatus(),
+							PortletConstants.DOSSIER_ACTION_UPDATE_VERSION_FILE,
+							PortletConstants.DOSSIER_ACTION_UPDATE_VERSION_FILE +
+								StringPool.SPACE +
+								StringPool.COLON +
+								StringPool.SPACE + dossierFile.getDisplayName(),
+							new Date(), 0, 0, actorBean.getActor(),
+							actorBean.getActorId(), actorBean.getActorName(),
+							ProcessOrderPortlet.class.getName() +
+								".updateVersionFile()");
 
 					}
 				}
@@ -1117,42 +1137,49 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		try {
 			if (dossierFileId > 0) {
 				jsonObject = JSONFactoryUtil.createJSONObject();
-				AccountBean accountBean = AccountUtil.getAccountBean(actionRequest);
-				ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
+				AccountBean accountBean =
+					AccountUtil.getAccountBean(actionRequest);
+				ServiceContext serviceContext =
+					ServiceContextFactory.getInstance(actionRequest);
 
 				dossierFile =
 					DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
-				Dossier dossier = DossierLocalServiceUtil.fetchDossier(dossierFile.getDossierId());
+				Dossier dossier =
+					DossierLocalServiceUtil.fetchDossier(dossierFile.getDossierId());
 
 				long fileEntryId = dossierFile.getFileEntryId();
 				DossierFileLocalServiceUtil.deleteDossierFile(
 					dossierFileId, fileEntryId);
 				jsonObject.put("deleted", Boolean.TRUE);
-				
+
 				int actor = 0;
-				
+
 				if (accountBean.isEmployee()) {
 					actor = 2;
-				} else if (accountBean.isBusiness() || accountBean.isCitizen()){
+				}
+				else if (accountBean.isBusiness() || accountBean.isCitizen()) {
 					actor = 1;
 				}
-				
-				ActorBean actorBean = new ActorBean(actor, serviceContext.getUserId());
-				
+
+				ActorBean actorBean =
+					new ActorBean(actor, serviceContext.getUserId());
+
 				long fileGroupId = 0;
-				
+
 				// Add DossierLog Delete File
-				
+
 				DossierLogLocalServiceUtil.addDossierLog(
-				    serviceContext.getUserId(), serviceContext.getScopeGroupId(),
-				    serviceContext.getCompanyId(), dossierFile.getDossierId(), fileGroupId,
-				    dossier.getDossierStatus(),
-				    PortletConstants.DOSSIER_ACTION_REMOVE_ATTACTMENT_FILE,
-				    PortletConstants.DOSSIER_ACTION_REMOVE_ATTACTMENT_FILE +
-				        StringPool.SPACE + StringPool.COLON + StringPool.SPACE +
-				        dossierFile.getDisplayName(), new Date(), 0, 0, actorBean.getActor(),
-				    actorBean.getActorId(), actorBean.getActorName(),
-				    ProcessOrderPortlet.class.getName() + ".delDossierFile()");
+					serviceContext.getUserId(),
+					serviceContext.getScopeGroupId(),
+					serviceContext.getCompanyId(), dossierFile.getDossierId(),
+					fileGroupId, dossier.getDossierStatus(),
+					PortletConstants.DOSSIER_ACTION_REMOVE_ATTACTMENT_FILE,
+					PortletConstants.DOSSIER_ACTION_REMOVE_ATTACTMENT_FILE +
+						StringPool.SPACE + StringPool.COLON + StringPool.SPACE +
+						dossierFile.getDisplayName(), new Date(), 0, 0,
+					actorBean.getActor(), actorBean.getActorId(),
+					actorBean.getActorName(),
+					ProcessOrderPortlet.class.getName() + ".delDossierFile()");
 
 			}
 
@@ -1194,7 +1221,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				validateDeleteDossier(dossierId, accountBean);
 
 				DossierLocalServiceUtil.deleteDossierByDossierId(dossierId);
-				
 
 			}
 
@@ -1271,37 +1297,46 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 					catch (Exception e) {
 						// nothing to do
 					}
-					
-					Dossier dossier = DossierLocalServiceUtil.fetchDossier(dossierFile.getDossierId());
+
+					Dossier dossier =
+						DossierLocalServiceUtil.fetchDossier(dossierFile.getDossierId());
 
 					DossierFileLocalServiceUtil.deleteDossierFile(dossierFile);
-					
-					AccountBean accountBean = AccountUtil.getAccountBean(actionRequest);
-					ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
+
+					AccountBean accountBean =
+						AccountUtil.getAccountBean(actionRequest);
+					ServiceContext serviceContext =
+						ServiceContextFactory.getInstance(actionRequest);
 					long fileGroupId = 0;
-					
+
 					int actor = 0;
-					
+
 					if (accountBean.isEmployee()) {
 						actor = 2;
-					} else if (accountBean.isBusiness() || accountBean.isCitizen()){
+					}
+					else if (accountBean.isBusiness() ||
+						accountBean.isCitizen()) {
 						actor = 1;
 					}
-					
-					ActorBean actorBean = new ActorBean(actor, serviceContext.getUserId());
+
+					ActorBean actorBean =
+						new ActorBean(actor, serviceContext.getUserId());
 
 					DossierLogLocalServiceUtil.addDossierLog(
-					    serviceContext.getUserId(), serviceContext.getScopeGroupId(),
-					    serviceContext.getCompanyId(), dossierFile.getDossierId(), fileGroupId,
-					    dossier.getDossierStatus(),
-					    PortletConstants.DOSSIER_ACTION_REMOVE_ATTACTMENT_FILE,
-					    PortletConstants.DOSSIER_ACTION_REMOVE_ATTACTMENT_FILE +
-					        StringPool.SPACE + StringPool.COLON + StringPool.SPACE +
-					        dossierFile.getDisplayName(), new Date(), 0, 0, actorBean.getActor(),
-					    actorBean.getActorId(), actorBean.getActorName(),
-					    ProcessOrderPortlet.class.getName() + ".delDossierFile()");
+						serviceContext.getUserId(),
+						serviceContext.getScopeGroupId(),
+						serviceContext.getCompanyId(),
+						dossierFile.getDossierId(), fileGroupId,
+						dossier.getDossierStatus(),
+						PortletConstants.DOSSIER_ACTION_REMOVE_ATTACTMENT_FILE,
+						PortletConstants.DOSSIER_ACTION_REMOVE_ATTACTMENT_FILE +
+							StringPool.SPACE + StringPool.COLON +
+							StringPool.SPACE + dossierFile.getDisplayName(),
+						new Date(), 0, 0, actorBean.getActor(),
+						actorBean.getActorId(), actorBean.getActorName(),
+						ProcessOrderPortlet.class.getName() +
+							".delDossierFile()");
 
-					
 					jsonObject.put("deleted", Boolean.TRUE);
 				}
 
@@ -1599,8 +1634,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 			DossierFile dossierFile =
 				DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
-			
-			Dossier dossier = DossierLocalServiceUtil.fetchDossier(dossierFile.getDossierId());
+
+			Dossier dossier =
+				DossierLocalServiceUtil.fetchDossier(dossierFile.getDossierId());
 
 			DossierPart dossierPart =
 				DossierPartLocalServiceUtil.getDossierPart(dossierFile.getDossierPartId());
@@ -1617,37 +1653,40 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 					dossierFileId, dossierFile.getFileEntryId());
 
 			}
-			
+
 			// Add dossierLog for removeDossierFile
 			AccountBean accountBean = AccountUtil.getAccountBean(actionRequest);
-			
-			ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
 
+			ServiceContext serviceContext =
+				ServiceContextFactory.getInstance(actionRequest);
 
 			int actor = 0;
-			
+
 			if (accountBean.isEmployee()) {
 				actor = 2;
-			} else if (accountBean.isBusiness() || accountBean.isCitizen()){
+			}
+			else if (accountBean.isBusiness() || accountBean.isCitizen()) {
 				actor = 1;
 			}
-			
-			ActorBean actorBean = new ActorBean(actor, serviceContext.getUserId());
-			
+
+			ActorBean actorBean =
+				new ActorBean(actor, serviceContext.getUserId());
+
 			long fileGroupId = 0;
-			
+
 			// Add DossierLog Delete File
-			
+
 			DossierLogLocalServiceUtil.addDossierLog(
-			    serviceContext.getUserId(), serviceContext.getScopeGroupId(),
-			    serviceContext.getCompanyId(), dossierFile.getDossierId(), fileGroupId,
-			    dossier.getDossierStatus(),
-			    PortletConstants.DOSSIER_ACTION_REMOVE_ATTACTMENT_FILE,
-			    PortletConstants.DOSSIER_ACTION_REMOVE_ATTACTMENT_FILE +
-			        StringPool.SPACE + StringPool.COLON + StringPool.SPACE +
-			        dossierFile.getDisplayName(), new Date(), 0, 0, actorBean.getActor(),
-			    actorBean.getActorId(), actorBean.getActorName(),
-			    ProcessOrderPortlet.class.getName() + ".delDossierFile()");
+				serviceContext.getUserId(), serviceContext.getScopeGroupId(),
+				serviceContext.getCompanyId(), dossierFile.getDossierId(),
+				fileGroupId, dossier.getDossierStatus(),
+				PortletConstants.DOSSIER_ACTION_REMOVE_ATTACTMENT_FILE,
+				PortletConstants.DOSSIER_ACTION_REMOVE_ATTACTMENT_FILE +
+					StringPool.SPACE + StringPool.COLON + StringPool.SPACE +
+					dossierFile.getDisplayName(), new Date(), 0, 0,
+				actorBean.getActor(), actorBean.getActorId(),
+				actorBean.getActorName(), ProcessOrderPortlet.class.getName() +
+					".delDossierFile()");
 			jsonObject.put("deleted", Boolean.TRUE);
 
 			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
@@ -1726,7 +1765,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		// HttpSession session = request.getSession();
 
-		// validatePermission(renderRequest, renderResponse);
+		validatePermission(renderRequest, renderResponse);
+
+		AccountBean accountBean = AccountUtil.getAccountBean(renderRequest);
 
 		if (_hasPermission) {
 
@@ -1776,16 +1817,26 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 				}
 				else {
+
 					if (accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN)) {
+
+						// Citizen citizen =
+						// (Citizen)
+						// session.getAttribute(WebKeys.CITIZEN_ENTRY);
+
 						Citizen citizen =
-							(Citizen) session.getAttribute(WebKeys.CITIZEN_ENTRY);
+							(Citizen) accountBean.getAccountInstance();
 						selectedItems =
 							getSelectedItems(citizen, dictCollection);
 
 					}
 					else if (accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS)) {
+						// Business business =
+						// (Business)
+						// session.getAttribute(WebKeys.BUSINESS_ENTRY);
+
 						Business business =
-							(Business) session.getAttribute(WebKeys.BUSINESS_ENTRY);
+							(Business) accountBean.getAccountInstance();
 						selectedItems =
 							getSelectedItems(business, dictCollection);
 
@@ -1999,9 +2050,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 					serviceContext.getScopeGroupId(), false, 0,
 					dossierDestinationFolder, StringPool.BLANK, false,
 					serviceContext);
-			
+
 			ActorBean actor = new ActorBean(1, serviceContext.getUserId());
-			
+
 			if (dossierId == 0) {
 				dossier =
 					DossierLocalServiceUtil.addDossier(
@@ -2017,23 +2068,21 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 						PortletConstants.DOSSIER_STATUS_NEW,
 						dossierFolder.getFolderId(), redirectPaymentURL,
 						serviceContext);
-				
-				// Add DossierLog (for Add dossier)
-				
 
-				
+				// Add DossierLog (for Add dossier)
+
 				DossierLogLocalServiceUtil.addDossierLog(
-				    serviceContext.getUserId(),
-				    serviceContext.getScopeGroupId(),
-				    serviceContext.getCompanyId(), dossier.getDossierId(), 0,
-				    PortletConstants.DOSSIER_STATUS_NEW,
-				    
-				        PortletConstants.DOSSIER_STATUS_NEW, 
-				        PortletConstants.DOSSIER_STATUS_NEW, new Date(), 0, 0,
-				    actor.getActor(), actor.getActorId(), actor.getActorName(),
-				    DossierMgtFrontOfficePortlet.class.getName() +
-				        ".updateDossier()");
-					
+					serviceContext.getUserId(),
+					serviceContext.getScopeGroupId(),
+					serviceContext.getCompanyId(), dossier.getDossierId(), 0,
+					PortletConstants.DOSSIER_STATUS_NEW,
+
+					PortletConstants.DOSSIER_STATUS_NEW,
+					PortletConstants.DOSSIER_STATUS_NEW, new Date(), 0, 0,
+					actor.getActor(), actor.getActorId(), actor.getActorName(),
+					DossierMgtFrontOfficePortlet.class.getName() +
+						".updateDossier()");
+
 			}
 			else {
 				dossier =
@@ -2048,19 +2097,19 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 						contactTelNo, contactEmail, note,
 
 						dossierFolder.getFolderId(), serviceContext);
-				
+
 				// Add DossierLog (for Update dossier)
-				
+
 				DossierLogLocalServiceUtil.addDossierLog(
-				    serviceContext.getUserId(),
-				    serviceContext.getScopeGroupId(),
-				    serviceContext.getCompanyId(), dossierId, 0,
-				    PortletConstants.DOSSIER_STATUS_NEW,
-				        PortletConstants.DOSSIER_STATUS_UPDATE,
-				        PortletConstants.DOSSIER_STATUS_UPDATE, new Date(), 0, 0,
-				    actor.getActor(), actor.getActorId(), actor.getActorName(),
-				    DossierMgtFrontOfficePortlet.class.getName() +
-				        ".updateDossier()");
+					serviceContext.getUserId(),
+					serviceContext.getScopeGroupId(),
+					serviceContext.getCompanyId(), dossierId, 0,
+					PortletConstants.DOSSIER_STATUS_NEW,
+					PortletConstants.DOSSIER_STATUS_UPDATE,
+					PortletConstants.DOSSIER_STATUS_UPDATE, new Date(), 0, 0,
+					actor.getActor(), actor.getActorId(), actor.getActorName(),
+					DossierMgtFrontOfficePortlet.class.getName() +
+						".updateDossier()");
 
 			}
 
@@ -2365,7 +2414,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			UserActionMsg actionMsg = new UserActionMsg();
 
 			Message message = new Message();
-			
+
 			boolean isSend = true;
 
 			switch (dossierStatus) {
@@ -2396,9 +2445,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				actionMsg.setGovAgencyCode(dossier.getGovAgencyCode());
 
 				actionMsg.setDossierOId(dossier.getOid());
-				
+
 				actionMsg.setDossierStatus(dossierStatus);
-				
+
 				isSend = false;
 
 				message.put("msgToEngine", actionMsg);
@@ -2424,7 +2473,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				actionMsg.setGovAgencyCode(dossier.getGovAgencyCode());
 
 				actionMsg.setCompanyId(dossier.getCompanyId());
-				
+
 				actionMsg.setDossierStatus(dossierStatus);
 
 				message.put("msgToEngine", actionMsg);
@@ -2439,8 +2488,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 			DossierLocalServiceUtil.updateDossierStatus(
 				dossierId, fileGroupId, PortletConstants.DOSSIER_STATUS_SYSTEM,
-				WebKeys.DOSSIER_ACTOR_CITIZEN, actor.getActorId(), actor.getActorName(),
-				StringPool.BLANK, PortletUtil.getActionInfo(
+				WebKeys.DOSSIER_ACTOR_CITIZEN, actor.getActorId(),
+				actor.getActorName(), StringPool.BLANK,
+				PortletUtil.getActionInfo(
 					PortletConstants.DOSSIER_STATUS_SYSTEM,
 					actionRequest.getLocale()), StringPool.BLANK,
 				PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC,
@@ -2448,20 +2498,20 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 			MessageBusUtil.sendMessage(
 				"opencps/frontoffice/out/destination", message);
-			
-			//Add DossierLog
+
+			// Add DossierLog
 
 			DossierLogLocalServiceUtil.addDossierLog(
-			    serviceContext.getUserId(), serviceContext.getScopeGroupId(),
-			    serviceContext.getCompanyId(), dossierId, fileGroupId,
-			    PortletConstants.DOSSIER_STATUS_SYSTEM, isSend
-			        ? PortletConstants.DOSSIER_ACTION_SEND
-			        : PortletConstants.DOSSIER_ACTION_RESEND, isSend
-			        ? PortletConstants.DOSSIER_ACTION_SEND
-			        : PortletConstants.DOSSIER_ACTION_RESEND, new Date(), 0, 2,
-			    actor.getActor(), actor.getActorId(), actor.getActorName(),
-			    DossierMgtFrontOfficePortlet.class.getName() +
-			        ".updateDossierStatus()");
+				serviceContext.getUserId(), serviceContext.getScopeGroupId(),
+				serviceContext.getCompanyId(), dossierId, fileGroupId,
+				PortletConstants.DOSSIER_STATUS_SYSTEM, isSend
+					? PortletConstants.DOSSIER_ACTION_SEND
+					: PortletConstants.DOSSIER_ACTION_RESEND, isSend
+					? PortletConstants.DOSSIER_ACTION_SEND
+					: PortletConstants.DOSSIER_ACTION_RESEND, new Date(), 0, 2,
+				actor.getActor(), actor.getActorId(), actor.getActorName(),
+				DossierMgtFrontOfficePortlet.class.getName() +
+					".updateDossierStatus()");
 
 			ThemeDisplay themeDisplay =
 				(ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
