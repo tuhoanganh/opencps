@@ -1260,7 +1260,7 @@ public class DossierFileLocalServiceImpl
 	 * @throws NoSuchDossierStatusException
 	 * @throws PortalException
 	 */
-	public void updateDossierFileSyncStatus(
+	public void updateDossierFileResultSyncStatus(
 		long userId, long dossierId, int syncStatus,
 		List<WorkflowOutput> worklows)
 		throws SystemException, NoSuchDossierStatusException, PortalException {
@@ -1284,7 +1284,7 @@ public class DossierFileLocalServiceImpl
 
 			}
 			catch (Exception e) {
-				_log.error("NO FILE RESULT UPLOAD..............");
+				_log.info("NO FILE RESULT UPLOAD..............");
 			}
 
 		}
