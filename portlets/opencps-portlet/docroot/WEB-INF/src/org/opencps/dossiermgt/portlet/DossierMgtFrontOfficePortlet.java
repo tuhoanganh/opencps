@@ -2510,9 +2510,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				serviceContext.getCompanyId(), dossierId, fileGroupId,
 				PortletConstants.DOSSIER_STATUS_SYSTEM, isSend
 					? PortletConstants.DOSSIER_ACTION_SEND
-					: PortletConstants.DOSSIER_ACTION_RESEND, isSend
-					? PortletConstants.DOSSIER_ACTION_SEND
-					: PortletConstants.DOSSIER_ACTION_RESEND, new Date(), 0, 2,
+					: PortletConstants.DOSSIER_ACTION_RESEND,msgInfo, new Date(), 0, 2,
 				actor.getActor(), actor.getActorId(), actor.getActorName(),
 				DossierMgtFrontOfficePortlet.class.getName() +
 					".updateDossierStatus()");
