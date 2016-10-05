@@ -928,6 +928,36 @@ public class DossierFileLocalServiceImpl
 		return dossierFilePersistence.findByDID_DP_R(
 			dossierId, dossierPartId, removed);
 	}
+	
+	/**
+	 * @param dossierId
+	 * @param dossierPartId
+	 * @param byComparator
+	 * @return
+	 * @throws NoSuchDossierFileException
+	 * @throws SystemException
+	 */
+	public List<DossierFile> getDossierFileByD_DP_Config(
+		long dossierId, long dossierPartId, OrderByComparator byComparator, int start, int end)
+		throws NoSuchDossierFileException, SystemException {
+
+		return dossierFilePersistence.findByDID_DP(dossierId, dossierPartId, start, end, byComparator);
+	}
+	
+	/**
+	 * @param dossierId
+	 * @param dossierPartId
+	 * @return
+	 * @throws NoSuchDossierFileException
+	 * @throws SystemException
+	 */
+	public int countDossierFileByD_DP_Config(
+		long dossierId, long dossierPartId)
+		throws NoSuchDossierFileException, SystemException {
+
+		return dossierFilePersistence.countByDID_DP(dossierId, dossierPartId);
+	}
+	
 
 	/**
 	 * @param fileGroupId
