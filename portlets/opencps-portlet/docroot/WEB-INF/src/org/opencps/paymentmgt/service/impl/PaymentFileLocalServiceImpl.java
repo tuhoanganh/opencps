@@ -14,11 +14,13 @@
 
 package org.opencps.paymentmgt.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.opencps.paymentmgt.model.PaymentFile;
 import org.opencps.paymentmgt.service.base.PaymentFileLocalServiceBaseImpl;
+
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -150,15 +152,17 @@ public class PaymentFileLocalServiceImpl extends PaymentFileLocalServiceBaseImpl
 	
 	public List<PaymentFile> searchPaymentFiles(
 		    long groupId, int paymentStatus, String keywords, int start, int end) {
+			
+			List<PaymentFile> listPaymentFile = new ArrayList<PaymentFile>();
 
 			try {
-				return paymentFileFinder.searchPaymentFiles(
+				listPaymentFile = paymentFileFinder.searchPaymentFiles(
 				    groupId, paymentStatus, keywords, start, end);
 			} catch (SystemException e) {
 				// TODO Auto-generated catch block
 				_log.error(e);
 			}
-			return null;
+			return listPaymentFile;
 		}
 
 	public int countPaymentFiles(
