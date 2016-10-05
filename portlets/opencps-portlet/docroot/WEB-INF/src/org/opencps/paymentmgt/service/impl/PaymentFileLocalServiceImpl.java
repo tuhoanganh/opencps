@@ -19,7 +19,8 @@ import java.util.List;
 
 import org.opencps.paymentmgt.model.PaymentFile;
 import org.opencps.paymentmgt.service.base.PaymentFileLocalServiceBaseImpl;
-
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.repository.model.FileEntry;
@@ -155,23 +156,23 @@ public class PaymentFileLocalServiceImpl extends PaymentFileLocalServiceBaseImpl
 				    groupId, paymentStatus, keywords, start, end);
 			} catch (SystemException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				_log.error(e);
 			}
 			return null;
 		}
 
-		public int countPaymentFiles(
-		    long groupId, int paymentStatus, String keywords) {
+	public int countPaymentFiles(
+	    long groupId, int paymentStatus, String keywords) {
 
-			try {
-				return paymentFileFinder.countPaymentFiles(
-				    groupId, paymentStatus, keywords);
-			} catch (SystemException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return 0;
+		try {
+			return paymentFileFinder.countPaymentFiles(
+			    groupId, paymentStatus, keywords);
+		} catch (SystemException e) {
+			// TODO Auto-generated catch block
+			_log.error(e);
 		}
+		return 0;
+	}
 
 	public int countCustomerPaymentFile(
 	    long groupId, String keyword, boolean isCitizen, long customerId,
@@ -346,5 +347,7 @@ public class PaymentFileLocalServiceImpl extends PaymentFileLocalServiceBaseImpl
 		return paymentFile;
 
 	}
+	
+	private Log _log = LogFactoryUtil.getLog(PaymentFileLocalServiceImpl.class);
 	
 }
