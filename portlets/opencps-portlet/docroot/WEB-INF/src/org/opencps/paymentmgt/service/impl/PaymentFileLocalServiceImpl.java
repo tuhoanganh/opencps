@@ -163,7 +163,7 @@ public class PaymentFileLocalServiceImpl extends PaymentFileLocalServiceBaseImpl
 				_log.error(e);
 			}
 			return listPaymentFile;
-		}
+	}
 
 	public int countPaymentFiles(
 	    long groupId, int paymentStatus, String keywords) {
