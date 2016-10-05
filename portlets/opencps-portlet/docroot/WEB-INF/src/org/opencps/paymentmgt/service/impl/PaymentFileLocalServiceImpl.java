@@ -153,16 +153,16 @@ public class PaymentFileLocalServiceImpl extends PaymentFileLocalServiceBaseImpl
 	public List<PaymentFile> searchPaymentFiles(
 		    long groupId, int paymentStatus, String keywords, int start, int end) {
 			
-			List<PaymentFile> listPaymentFile = new ArrayList<PaymentFile>();
+		List<PaymentFile> listPaymentFile = new ArrayList<PaymentFile>();
 
-			try {
-				listPaymentFile = paymentFileFinder.searchPaymentFiles(
-				    groupId, paymentStatus, keywords, start, end);
-			} catch (SystemException e) {
-				// TODO Auto-generated catch block
-				_log.error(e);
-			}
-			return listPaymentFile;
+		try {
+			listPaymentFile = paymentFileFinder.searchPaymentFiles(
+			    groupId, paymentStatus, keywords, start, end);
+		} catch (SystemException e) {
+			// TODO Auto-generated catch block
+			_log.error(e);
+		}
+		return listPaymentFile;
 	}
 
 	public int countPaymentFiles(
@@ -196,20 +196,20 @@ public class PaymentFileLocalServiceImpl extends PaymentFileLocalServiceBaseImpl
 	}
 
 	public int countCustomerPaymentFileNewRequest(
-		    long groupId, String keyword, boolean isCitizen, long customerId,
-		    int[] paymentStatus) {
+	    long groupId, String keyword, boolean isCitizen, long customerId,
+	    int[] paymentStatus) {
 
-			return paymentFileFinder.countCustomerPaymentFileNewRequest(
-			    groupId, keyword, isCitizen, customerId, paymentStatus);
-		}
+		return paymentFileFinder.countCustomerPaymentFileNewRequest(
+		    groupId, keyword, isCitizen, customerId, paymentStatus);
+	}
 
 	public List<PaymentFile> searchCustomerPaymentFileNewRequest(
-		    long groupId, String keyword, boolean isCitizen, long customerId,
-		    int[] paymentStatus, int start, int end, OrderByComparator obc) {
+	    long groupId, String keyword, boolean isCitizen, long customerId,
+	    int[] paymentStatus, int start, int end, OrderByComparator obc) {
 
-			return paymentFileFinder.searchCustomerPaymentFileNewRequest(
-			    groupId, keyword, isCitizen, customerId, paymentStatus, start, end,
-			    obc);
+		return paymentFileFinder.searchCustomerPaymentFileNewRequest(
+		    groupId, keyword, isCitizen, customerId, paymentStatus, start, end,
+		    obc);
 	}
 		
 	public PaymentFile getPaymentFileByGoodCode(

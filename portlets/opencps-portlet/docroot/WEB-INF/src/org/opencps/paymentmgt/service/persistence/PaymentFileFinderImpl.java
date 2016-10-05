@@ -64,20 +64,20 @@ implements PaymentFileFinder {
 	public List<PaymentFile> searchPaymentFiles(
 		   long groupId, int paymentStatus, String keywords, int start, int end)throws SystemException {
 
-		String[] names = null;
-		boolean andOperator = false;
-		if (Validator.isNotNull(keywords)) {
-			
-			names = new String[]{
-					StringUtil.quote(
-						StringUtil.toLowerCase(keywords).trim(), 
-						StringPool.PERCENT)};
-		}
-		else {
-			andOperator = true;
-		}
+			String[] names = null;
+			boolean andOperator = false;
+			if (Validator.isNotNull(keywords)) {
+				
+				names = new String[]{
+						StringUtil.quote(
+							StringUtil.toLowerCase(keywords).trim(), 
+							StringPool.PERCENT)};
+			}
+			else {
+				andOperator = true;
+			}
 
-		return _searchPaymentFiles(groupId, paymentStatus, andOperator, names, start, end);
+			return _searchPaymentFiles(groupId, paymentStatus, andOperator, names, start, end);
 	}
 
 	/**
@@ -88,18 +88,18 @@ implements PaymentFileFinder {
 	 * @return
 	 */
 	public int countPaymentFiles(long groupId, int paymentStatus, String keywords)throws SystemException {
-		String[] names = null;
-		boolean andOperator = false;
-		if (Validator.isNotNull(keywords)) {
-			
-			names = new String[]{
-					StringUtil.quote(
-						StringUtil.toLowerCase(keywords).trim(), 
-						StringPool.PERCENT)};
-		}
-		else {
-			andOperator = true;
-		}
+			String[] names = null;
+			boolean andOperator = false;
+			if (Validator.isNotNull(keywords)) {
+				
+				names = new String[]{
+						StringUtil.quote(
+							StringUtil.toLowerCase(keywords).trim(), 
+							StringPool.PERCENT)};
+			}
+			else {
+				andOperator = true;
+			}
 			return _countPaymentFiles(groupId, paymentStatus, andOperator, names);
 	}
 
@@ -165,85 +165,85 @@ implements PaymentFileFinder {
 	private int _countPaymentFiles(
 			long groupId, int paymentStatus, boolean andOperator, String[] keywords)throws SystemException {
 
-			Session session = null;
-			try {
-				session = openSession();
-				String sql = CustomSQLUtil.get(SQL_PAYMENT_COUNT);
+		Session session = null;
+		try {
+			session = openSession();
+			String sql = CustomSQLUtil.get(SQL_PAYMENT_COUNT);
+			
+			if(Validator.isNotNull(keywords) && keywords.length >0){
+			
+				sql = CustomSQLUtil.replaceKeywords(sql, "lower(opencps_payment_file.receptionNo)",StringPool.LIKE, true, keywords);
 				
-				if(Validator.isNotNull(keywords) && keywords.length >0){
+				sql = CustomSQLUtil.replaceKeywords(
+							        sql, "lower(opencps_payment_file.paymentName)",
+							        StringPool.LIKE, true, keywords);
 				
-					sql = CustomSQLUtil.replaceKeywords(sql, "lower(opencps_payment_file.receptionNo)",StringPool.LIKE, true, keywords);
-					
-					sql = CustomSQLUtil.replaceKeywords(
-								        sql, "lower(opencps_payment_file.paymentName)",
-								        StringPool.LIKE, true, keywords);
-					
-					sql = CustomSQLUtil.replaceKeywords(
-				        sql, "lower(opencps_acc_citizen.fullName)",
-				        StringPool.LIKE, true, keywords);
-					
-					sql = CustomSQLUtil.replaceKeywords(
-				        sql, "lower(opencps_acc_business.name)",
-				        StringPool.LIKE, true, keywords);
-				}else{
-		 				sql = StringUtil.replace(sql,
-		 						"AND ((lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_acc_citizen.fullName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_acc_business.name) LIKE ? [$AND_OR_NULL_CHECK$]))"
-		 						,StringPool.BLANK);
-		 			}
+				sql = CustomSQLUtil.replaceKeywords(
+			        sql, "lower(opencps_acc_citizen.fullName)",
+			        StringPool.LIKE, true, keywords);
 				
-				if(paymentStatus <0) {
-					sql = StringUtil.replace(sql, "AND (opencps_payment_file.paymentStatus = ?)", StringPool.BLANK);
-				}
-				
-				sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
-
-				SQLQuery q = session.createSQLQuery(sql);
-				
-				q.setCacheable(false);
-
-				q.addScalar(COUNT_COLUMN_NAME, Type.INTEGER);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if(Validator.isNotNull(keywords) && keywords.length >0){
-
-					qPos.add(keywords, 8);
-				}
-
-				if(paymentStatus>-1) {
-					qPos.add(paymentStatus);
-				}
-				
-				Iterator<Integer> itr = q.iterate();
-
-				
-				if (itr.hasNext()) {
-				
-					Integer count = itr.next();
-
-					
-					if (count != null) {
-					
-						return count.intValue();
-						
-					}
-					
-				}
-
-				
-				return 0;
-				
+				sql = CustomSQLUtil.replaceKeywords(
+			        sql, "lower(opencps_acc_business.name)",
+			        StringPool.LIKE, true, keywords);
+			}else{
+	 				sql = StringUtil.replace(sql,
+	 						"AND ((lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_acc_citizen.fullName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_acc_business.name) LIKE ? [$AND_OR_NULL_CHECK$]))"
+	 						,StringPool.BLANK);
+	 			}
+			
+			if(paymentStatus <0) {
+				sql = StringUtil.replace(sql, "AND (opencps_payment_file.paymentStatus = ?)", StringPool.BLANK);
 			}
 			
-			catch (Exception e) {
-					throw new SystemException(e);
+			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
+
+			SQLQuery q = session.createSQLQuery(sql);
+			
+			q.setCacheable(false);
+
+			q.addScalar(COUNT_COLUMN_NAME, Type.INTEGER);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			if(Validator.isNotNull(keywords) && keywords.length >0){
+
+				qPos.add(keywords, 8);
+			}
+
+			if(paymentStatus>-1) {
+				qPos.add(paymentStatus);
 			}
 			
-			finally {
+			Iterator<Integer> itr = q.iterate();
+
 			
-				closeSession(session);
+			if (itr.hasNext()) {
+			
+				Integer count = itr.next();
+
+				
+				if (count != null) {
+				
+					return count.intValue();
+					
+				}
 				
 			}
+
+			
+			return 0;
+			
+		}
+		
+		catch (Exception e) {
+				throw new SystemException(e);
+		}
+		
+		finally {
+		
+			closeSession(session);
+			
+		}
 
 
 	}
@@ -486,8 +486,7 @@ implements PaymentFileFinder {
 			SQLQuery q = session
 			    .createSQLQuery(sql);
 
-			q
-			    .addEntity("PaymentFile", PaymentFileImpl.class);
+			q.addEntity("PaymentFile", PaymentFileImpl.class);
 
 			QueryPos qPos = QueryPos
 			    .getInstance(q);
