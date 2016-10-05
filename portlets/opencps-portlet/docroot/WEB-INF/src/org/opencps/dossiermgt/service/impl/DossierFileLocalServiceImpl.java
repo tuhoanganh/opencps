@@ -941,7 +941,7 @@ public class DossierFileLocalServiceImpl
 		long dossierId, long dossierPartId, OrderByComparator byComparator, int start, int end)
 		throws NoSuchDossierFileException, SystemException {
 
-		return dossierFilePersistence.findByD_DP(dossierId, dossierPartId, start, end, byComparator);
+		return dossierFilePersistence.findByDID_DP(dossierId, dossierPartId, start, end, byComparator);
 	}
 	
 	/**
@@ -955,7 +955,7 @@ public class DossierFileLocalServiceImpl
 		long dossierId, long dossierPartId)
 		throws NoSuchDossierFileException, SystemException {
 
-		return dossierFilePersistence.countByD_DP(dossierId, dossierPartId);
+		return dossierFilePersistence.countByDID_DP(dossierId, dossierPartId);
 	}
 	
 
