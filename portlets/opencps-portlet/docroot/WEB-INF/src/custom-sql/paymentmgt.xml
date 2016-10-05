@@ -17,6 +17,8 @@
 	    	AND ((lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_acc_citizen.fullName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_acc_business.name) LIKE ? [$AND_OR_NULL_CHECK$]))
 	    	AND
 				(opencps_payment_file.paymentStatus = ?)
+			AND
+				opencps_payment_file.govAgencyOrganizationId = ?
 		]]>
 	</sql>	
 	
@@ -37,6 +39,8 @@
 	    	AND ((lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_payment_file.paymentName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_acc_citizen.fullName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_acc_business.name) LIKE ? [$AND_OR_NULL_CHECK$]))
 	    	AND
 				(opencps_payment_file.paymentStatus = ?)
+			AND 
+				opencps_payment_file.govAgencyOrganizationId = ?
 			ORDER BY opencps_payment_file.modifiedDate DESC
 		]]>
 	</sql>
