@@ -1,4 +1,3 @@
-<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -52,6 +51,7 @@
 <%@page import="org.opencps.dossiermgt.NoSuchDossierException"%>
 <%@page import="org.opencps.dossiermgt.NoSuchDossierTemplateException"%>
 <%@page import="org.opencps.dossiermgt.RequiredDossierPartException"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 
 <%@ include file="../init.jsp"%>
 
@@ -116,6 +116,7 @@
 	<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value='<%=dossier != null ? String.valueOf(dossier.getDossierId()) : "" %>'/>
 	<portlet:param name="<%=DossierDisplayTerms.DOSSIER_STATUS %>" value="<%=String.valueOf(PortletConstants.DOSSIER_STATUS_NEW) %>"/>
 	<portlet:param name="backURL" value="<%=currentURL %>"/>
+	<portlet:param name="redirectURL" value="<%=backDossierList %>"/>
 </portlet:actionURL>
 
 <c:choose>
