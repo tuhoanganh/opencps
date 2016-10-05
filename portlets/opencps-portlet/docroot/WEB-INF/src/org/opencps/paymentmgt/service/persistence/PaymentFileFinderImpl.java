@@ -160,7 +160,7 @@ implements PaymentFileFinder {
 			finally {
 				closeSession(session);
 			}
-		}
+	}
 
 	private int _countPaymentFiles(
 			long groupId, int paymentStatus, boolean andOperator, String[] keywords)throws SystemException {
@@ -246,7 +246,7 @@ implements PaymentFileFinder {
 			}
 
 
-		}
+	}
 	
 	public int countCustomerPaymentFile(long groupId, String keyword, boolean isCitizen, long customerId, int paymentStatus) {
 
