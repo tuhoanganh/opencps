@@ -363,7 +363,7 @@
 					<c:when test="<%= partType == PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT%>">
 						<%
 							List<DossierFile> dossierFiles = DossierFileLocalServiceUtil.
-							getDossierFileByD_DP(dossier.getDossierId(), dossierPartLevel1.getDossierpartId());
+								getDossierFileByDID_SS_DPID_R(dossier.getDossierId(), PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS, dossierPartLevel1.getDossierpartId(), 0);
 							int index = 0;
 							if (Validator.isNotNull(dossierFiles)) 
 							{
