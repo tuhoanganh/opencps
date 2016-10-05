@@ -239,7 +239,4 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final int DOSSIER_ACTOR_CITIZEN = 1; 
 	public static final int DOSSIER_ACTOR_EMPLOYEE = 2;
 	
-	public static final int DEPTH_LEVEL_1 = 1;
-	public static final int DEPTH_LEVEL_2 = 2;
-	public static final int DEPTH_LEVEL_3 = 3;
 }
