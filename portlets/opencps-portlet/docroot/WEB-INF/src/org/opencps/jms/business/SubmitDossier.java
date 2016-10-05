@@ -163,6 +163,8 @@ public class SubmitDossier {
 			engineMsg.setGroupId(serviceContext.getScopeGroupId());
 
 			engineMsg.setCompanyId(serviceContext.getCompanyId());
+			
+			engineMsg.setDossierStatus(dossierStatus);
 
 			ProcessOrder processOrder =
 				ProcessOrderLocalServiceUtil.getProcessOrder(
@@ -187,6 +189,8 @@ public class SubmitDossier {
 			engineMsg.setGroupId(serviceContext.getScopeGroupId());
 
 			engineMsg.setUserId(serviceContext.getUserId());
+			
+			engineMsg.setDossierStatus(dossierStatus);
 			
 		}
 
