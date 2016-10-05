@@ -84,7 +84,10 @@
 	try {
 		if(Validator.isNotNull(dossier)) {
 			processOrder = ProcessOrderLocalServiceUtil.getProcessOrder(dossier.getDossierId(), 0);
-			workFlow = ProcessWorkflowLocalServiceUtil.getByS_PreP_AN(processOrder.getServiceProcessId(), processOrder.getProcessStepId(), "Thông báo hủy hồ sơ");
+			
+			if(processOrder != null) {
+				workFlow = ProcessWorkflowLocalServiceUtil.getProcessWorkflowByEvent(processOrder.getServiceProcessId(), WebKeys.PRE_CONDITION_CANCEL, processOrder.getProcessStepId());
+			}
 		}
 	}
 	catch (Exception e) {
