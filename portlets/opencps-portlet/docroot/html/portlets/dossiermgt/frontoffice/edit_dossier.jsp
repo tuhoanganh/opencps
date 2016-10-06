@@ -71,10 +71,10 @@
 		new String[]{"dossier_part", "dossier_info", "result", "history"} : 
 		new String[]{"dossier_info"};
 
-	// show only 2 tab dossier_part & info on create new dossier
+/* 	// show only 2 tab dossier_part & info on create new dossier
 	if(cmd.equals(Constants.ADD)){
 		dossierSections = new String[]{"dossier_part", "dossier_info"};
-	}
+	} */
 	String[][] categorySections = {dossierSections};
 	
 	boolean isEditDossier = ParamUtil.getBoolean(request, "isEditDossier");
@@ -112,12 +112,12 @@
 	<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/frontoffice/frontofficedossierlist.jsp"/>
 </liferay-portlet:renderURL>
 
-<portlet:actionURL var="updateDossierStatusURL" name="updateDossierStatus">
+<%-- <portlet:actionURL var="updateDossierStatusURL" name="updateDossierStatus">
 	<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value='<%=dossier != null ? String.valueOf(dossier.getDossierId()) : "" %>'/>
 	<portlet:param name="<%=DossierDisplayTerms.DOSSIER_STATUS %>" value="<%=String.valueOf(PortletConstants.DOSSIER_STATUS_NEW) %>"/>
 	<portlet:param name="backURL" value="<%=currentURL %>"/>
 </portlet:actionURL>
-
+ --%>
 <c:choose>
 	<c:when test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) && Validator.isNotNull(accountType) &&
 				(accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN) ||
