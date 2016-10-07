@@ -88,11 +88,6 @@
 						scopeGroupId, searchTerms.getKeywords(),
 						treeIndex, govAgencyCodes, dossierStatus);
 
-				System.out.println("========keyword "+keyword);
-				for (String string : govAgencyCodes){
-					System.out.println("========govAgencyCodes "+string);
-				}
-				System.out.println("========scopeGroupId "+scopeGroupId);
 				results =
 					DossierLocalServiceUtil.searchDossierByKeywordDomainAndStatus(
 						scopeGroupId, searchTerms.getKeywords(),
