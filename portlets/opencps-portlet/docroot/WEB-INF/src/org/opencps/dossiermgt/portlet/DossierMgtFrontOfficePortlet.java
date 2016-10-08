@@ -687,6 +687,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 					sendToEngineMsg.setReceptionNo(Validator.isNotNull(dossier.getReceptionNo())
 						? dossier.getReceptionNo() : StringPool.BLANK);
 					sendToEngineMsg.setSignature(0);
+					sendToEngineMsg.setDossierStatus(dossier.getDossierStatus());
 	
 					if (Validator.isNotNull(workFlow.getAutoEvent())) {
 						sendToEngineMsg.setEvent(workFlow.getAutoEvent());

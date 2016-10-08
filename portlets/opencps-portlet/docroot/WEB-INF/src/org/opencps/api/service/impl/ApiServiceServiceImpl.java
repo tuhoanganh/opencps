@@ -612,6 +612,8 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 					.getReceptionNo()) ? dossier.getReceptionNo()
 					: StringPool.BLANK);
 			sendToEngineMsg.setSignature(0);
+			sendToEngineMsg.setDossierStatus(dossier.getDossierStatus());
+			
 			if (Validator.isNotNull(processWorkflow.getAutoEvent())) {
 				sendToEngineMsg.setEvent(processWorkflow.getAutoEvent());
 			}
