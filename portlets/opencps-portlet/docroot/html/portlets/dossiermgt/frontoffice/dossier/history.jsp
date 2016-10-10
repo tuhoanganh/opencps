@@ -62,6 +62,7 @@
 	
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", "/html/portlets/dossiermgt/frontoffice/dossier/history.jsp");
+
 %>
 
 <aui:row>
@@ -85,7 +86,7 @@
 <liferay-ui:search-container 
 	emptyResultsMessage="no-history-were-found"
 	iteratorURL="<%=iteratorURL %>"
-	delta="<%=20 %>"
+	delta="<%= PAGINATE_NUMBER %>"
 	deltaConfigurable="true"
 >
 	<liferay-ui:search-container-results>
@@ -166,3 +167,8 @@
 	</liferay-ui:search-container-row>
 	<liferay-ui:search-iterator paginate="false"/>
 </liferay-ui:search-container>
+
+<%!
+	private int PAGINATE_NUMBER = 200;
+%>
+

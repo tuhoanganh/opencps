@@ -2492,7 +2492,17 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			
 			String msgInfo = StringPool.BLANK;
 			
-			msgInfo = dossier.getNote();
+			msgInfo =
+			    isSend
+			        ? LanguageUtil.get(
+			            serviceContext.getLocale(), "send-dossier")
+			        : LanguageUtil.get(
+			            serviceContext.getLocale(), "send-dossier") +
+			            StringPool.COLON +
+			            ParamUtil.getString(
+			                actionRequest, DossierDisplayTerms.NOTE);
+			
+			_log.info("SSSSSSSSSSSSSSSSSSSSSSSEND DOSSIER_________________________________________");
 
 			DossierLocalServiceUtil.updateDossierStatus(
 				dossierId, fileGroupId, PortletConstants.DOSSIER_STATUS_SYSTEM,
@@ -2514,9 +2524,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				serviceContext.getCompanyId(), dossierId, fileGroupId,
 				PortletConstants.DOSSIER_STATUS_SYSTEM, isSend
 					? PortletConstants.DOSSIER_ACTION_SEND
-					: PortletConstants.DOSSIER_ACTION_RESEND, isSend
-					? PortletConstants.DOSSIER_ACTION_SEND
-					: PortletConstants.DOSSIER_ACTION_RESEND, new Date(), 0, 2,
+					: PortletConstants.DOSSIER_ACTION_RESEND,msgInfo, new Date(), 0, 2,
 				actor.getActor(), actor.getActorId(), actor.getActorName(),
 				DossierMgtFrontOfficePortlet.class.getName() +
 					".updateDossierStatus()");
@@ -2589,7 +2597,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		int dossierFileType = PortletConstants.DOSSIER_FILE_TYPE_INPUT;
 		int syncStatus = PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC;
 		int original = PortletConstants.DOSSIER_FILE_ORIGINAL;
-
+		
 		String formData =
 			ParamUtil.getString(
 				actionRequest, DossierFileDisplayTerms.FORM_DATA);

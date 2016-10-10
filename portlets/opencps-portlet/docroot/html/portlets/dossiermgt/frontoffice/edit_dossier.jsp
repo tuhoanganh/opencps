@@ -71,10 +71,10 @@
 		new String[]{"dossier_part", "dossier_info", "result", "history"} : 
 		new String[]{"dossier_info"};
 
-	// show only 2 tab dossier_part & info on create new dossier
+/* 	// show only 2 tab dossier_part & info on create new dossier
 	if(cmd.equals(Constants.ADD)){
 		dossierSections = new String[]{"dossier_part", "dossier_info"};
-	}
+	} */
 	String[][] categorySections = {dossierSections};
 	
 	boolean isEditDossier = ParamUtil.getBoolean(request, "isEditDossier");
@@ -162,12 +162,7 @@
 					 		</c:if>
 					 		
 					 		<c:if test="<%=dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_WAITING) %>">
-						 		<portlet:actionURL var="updateDossierStatusURL" name="updateDossierStatus">
-									<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
-									<portlet:param name="<%=DossierDisplayTerms.DOSSIER_STATUS %>" value="<%=String.valueOf(PortletConstants.DOSSIER_STATUS_WAITING) %>"/>
-									<portlet:param name="backURL" value="<%=currentURL %>"/>
-									<portlet:param name="redirectURL" value="<%=backDossierList %>"/>
-								</portlet:actionURL> 
+
 						 		<liferay-ui:icon
 						 			cssClass="search-container-action fa forward check-before-send"
 						 			image="reply"
