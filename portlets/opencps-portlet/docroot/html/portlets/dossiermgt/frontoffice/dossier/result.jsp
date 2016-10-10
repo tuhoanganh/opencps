@@ -466,7 +466,7 @@
 							List<DossierFile> dossierFiles = new ArrayList<DossierFile>();
 							if(Validator.isNull(orderFieldDossierFile)) {
 								dossierFiles = DossierFileLocalServiceUtil.
-									getDossierFileByD_DP(dossier.getDossierId(), dossierPartLevel1.getDossierpartId());
+									getDossierFileByDID_DP(dossier.getDossierId(), dossierPartLevel1.getDossierpartId());
 							} else {
 								dossierFiles = DossierFileLocalServiceUtil.
 									getDossierFileByD_DP_Config(dossier.getDossierId(), dossierPartLevel1.getDossierpartId(),
