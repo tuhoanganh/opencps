@@ -138,12 +138,14 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 					msgInfo = lyDo;
 				}
 				
+				String dossierStatus = PaymentMgtUtil.getDossierStatus(paymentFile);
+				
 				// Add dossierLog for confirm payment
 				DossierLogLocalServiceUtil.addDossierLog(
 				    serviceContext.getUserId(),
 				    serviceContext.getScopeGroupId(),
 				    serviceContext.getCompanyId(), paymentFile.getDossierId(),
-				    paymentFile.getFileGroupId(), null,
+				    paymentFile.getFileGroupId(), dossierStatus,
 				    PortletConstants.DOSSIER_ACTION_CONFIRM_PAYMENT, msgInfo,
 				    new Date(), 1, 2, actorBean.getActor(),
 				    actorBean.getActorId(), actorBean.getActorName(),

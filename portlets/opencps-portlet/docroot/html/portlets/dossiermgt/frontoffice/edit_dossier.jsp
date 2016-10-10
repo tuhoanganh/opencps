@@ -112,12 +112,12 @@
 	<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/frontoffice/frontofficedossierlist.jsp"/>
 </liferay-portlet:renderURL>
 
-<%-- <portlet:actionURL var="updateDossierStatusURL" name="updateDossierStatus">
+<portlet:actionURL var="updateDossierStatusURL" name="updateDossierStatus">
 	<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value='<%=dossier != null ? String.valueOf(dossier.getDossierId()) : "" %>'/>
 	<portlet:param name="<%=DossierDisplayTerms.DOSSIER_STATUS %>" value="<%=String.valueOf(PortletConstants.DOSSIER_STATUS_NEW) %>"/>
 	<portlet:param name="backURL" value="<%=currentURL %>"/>
 </portlet:actionURL>
- --%>
+
 <c:choose>
 	<c:when test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) && Validator.isNotNull(accountType) &&
 				(accountType.equals(PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN) ||
@@ -162,12 +162,7 @@
 					 		</c:if>
 					 		
 					 		<c:if test="<%=dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_WAITING) %>">
-						 		<portlet:actionURL var="updateDossierStatusURL" name="updateDossierStatus">
-									<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
-									<portlet:param name="<%=DossierDisplayTerms.DOSSIER_STATUS %>" value="<%=String.valueOf(PortletConstants.DOSSIER_STATUS_WAITING) %>"/>
-									<portlet:param name="backURL" value="<%=currentURL %>"/>
-									<portlet:param name="redirectURL" value="<%=backDossierList %>"/>
-								</portlet:actionURL> 
+
 						 		<liferay-ui:icon
 						 			cssClass="search-container-action fa forward check-before-send"
 						 			image="reply"

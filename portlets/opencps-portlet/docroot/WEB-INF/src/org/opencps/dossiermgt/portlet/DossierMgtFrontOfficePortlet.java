@@ -2492,7 +2492,17 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			
 			String msgInfo = StringPool.BLANK;
 			
-			msgInfo = dossier.getNote();
+			msgInfo =
+			    isSend
+			        ? LanguageUtil.get(
+			            serviceContext.getLocale(), "send-dossier")
+			        : LanguageUtil.get(
+			            serviceContext.getLocale(), "send-dossier") +
+			            StringPool.COLON +
+			            ParamUtil.getString(
+			                actionRequest, DossierDisplayTerms.NOTE);
+			
+			_log.info("SSSSSSSSSSSSSSSSSSSSSSSEND DOSSIER_________________________________________");
 
 			DossierLocalServiceUtil.updateDossierStatus(
 				dossierId, fileGroupId, PortletConstants.DOSSIER_STATUS_SYSTEM,
