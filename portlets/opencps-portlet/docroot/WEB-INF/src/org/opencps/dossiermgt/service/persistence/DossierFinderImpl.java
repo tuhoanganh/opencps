@@ -599,6 +599,8 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 			}
 
 			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
+			
+			sql = CustomSQLUtil.replaceOrderBy(sql, obc);
 
 			SQLQuery q = session.createSQLQuery(sql);
 
@@ -639,10 +641,8 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 
 			List<Dossier> results =
 				(List<Dossier>) QueryUtil.list(q, getDialect(), start, end);
-			List<Dossier> clones = new ArrayList<Dossier>(results);
-			Collections.sort(clones, obc);
 
-			return clones;
+			return results;
 		}
 		catch (Exception e) {
 			_log.error(e);
