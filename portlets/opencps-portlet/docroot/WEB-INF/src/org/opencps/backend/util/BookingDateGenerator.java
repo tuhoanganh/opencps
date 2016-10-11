@@ -42,7 +42,11 @@ public class BookingDateGenerator {
 		
 		Calendar cal = Calendar.getInstance();
 		
+		
+		
 		cal.setTime(receiveDate);
+		
+		System.out.println("REVICE DATE ****************************************************" + receiveDate);
 		
 		String [] splitPattern = StringUtil.split(pattern, StringPool.SPACE);
 		
