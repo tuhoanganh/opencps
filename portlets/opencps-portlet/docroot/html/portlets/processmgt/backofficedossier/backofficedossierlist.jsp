@@ -1,4 +1,3 @@
-<%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%@page import="org.opencps.util.PortletUtil"%>
 <%@page import="org.opencps.util.DateTimeUtil"%>
 <%@page import="org.opencps.usermgt.service.WorkingUnitLocalServiceUtil"%>
@@ -95,9 +94,7 @@
 						searchContainer.getStart(),
 						searchContainer.getEnd(),
 						searchContainer.getOrderByComparator());
-				
-				
-				
+
 				pageContext.setAttribute("results", results);
 				pageContext.setAttribute("total", total);
 			%>
