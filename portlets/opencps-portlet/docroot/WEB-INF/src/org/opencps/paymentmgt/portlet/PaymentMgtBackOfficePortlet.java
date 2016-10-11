@@ -88,22 +88,6 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 		LogFactoryUtil.getLog(PaymentMgtBackOfficePortlet.class.getName());
 
 	/**
-	 * @param jrxmlTemplate
-	 * @param formData
-	 * @param map
-	 * @param outputDestination
-	 * @param fileName
-	 * @return
-	 */
-	protected String exportToPDFFile(
-		String jrxmlTemplate, String formData, Map<String, Object> map,
-		String outputDestination, String fileName) {
-
-		return JRReportUtil.createReportPDFfFile(
-			jrxmlTemplate, formData, map, outputDestination, fileName);
-	}
-
-	/**
 	 * @param actionRequest
 	 * @param actionResponse
 	 * @throws IOException
@@ -113,11 +97,13 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 		throws IOException {
 
 		long paymentFileId =
-			    ParamUtil.getLong(actionRequest, PaymentFileDisplayTerms.PAYMENT_FILE_ID);
-		int confirmHopLe = ParamUtil.getInteger(actionRequest, "confirmHopLeHidden", 0);
-		
+			ParamUtil.getLong(
+				actionRequest, PaymentFileDisplayTerms.PAYMENT_FILE_ID);
+		int confirmHopLe =
+			ParamUtil.getInteger(actionRequest, "confirmHopLeHidden", 0);
+
 		String lyDo = ParamUtil.getString(actionRequest, "lyDo");
-		
+
 		PaymentFile paymentFile = null;
 
 		try {
@@ -180,8 +166,8 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 					msgInfo = lyDo;
 				}
 
-				//String dossierStatus =
-				//	PaymentMgtUtil.getDossierStatus(paymentFile);
+				// String dossierStatus =
+				// PaymentMgtUtil.getDossierStatus(paymentFile);
 
 				// Add dossierLog for confirm payment
 				DossierLogLocalServiceUtil.addDossierLog(
@@ -482,6 +468,22 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 		}
 	}
 
+	/**
+	 * @param jrxmlTemplate
+	 * @param formData
+	 * @param map
+	 * @param outputDestination
+	 * @param fileName
+	 * @return
+	 */
+	protected String exportToPDFFile(
+		String jrxmlTemplate, String formData, Map<String, Object> map,
+		String outputDestination, String fileName) {
+
+		return JRReportUtil.createReportPDFfFile(
+			jrxmlTemplate, formData, map, outputDestination, fileName);
+	}
+
 	private String getURL(FileEntry fileEntry) {
 
 		try {
@@ -502,6 +504,7 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 	 * @param actionRequest
 	 * @param actionResponse
 	 */
+	@Deprecated
 	public void updateConfirmPayment(
 		ActionRequest actionRequest, ActionResponse actionResponse) {
 
@@ -554,6 +557,34 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 		try {
 			paymentFile =
 				PaymentFileLocalServiceUtil.getPaymentFile(paymentFileId);
+
+			boolean trustServiceMode =
+				BackendUtils.checkServiceMode(paymentFile.getDossierId());
+
+			if (!trustServiceMode) {
+				Dossier dossier =
+					DossierLocalServiceUtil.getDossier(paymentFile.getDossierId());
+				SendToBackOfficeMsg toBackOffice = new SendToBackOfficeMsg();
+
+				Message sendToBackOffice = new Message();
+
+				toBackOffice.setActorName(WebKeys.ACTION_PAY_VALUE);
+
+				toBackOffice.setDossierId(paymentFile.getDossierId());
+
+				toBackOffice.setPaymentFile(paymentFile);
+
+				toBackOffice.setCompanyId(dossier.getCompanyId());
+
+				toBackOffice.setGovAgencyCode(dossier.getGovAgencyCode());
+
+				sendToBackOffice.put("toBackOffice", toBackOffice);
+
+				MessageBusUtil.sendMessage(
+					"opencps/backoffice/out/destination", sendToBackOffice);
+
+			}
+			
 			paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_APPROVED);
 			paymentFile.setPaymentMethod(PaymentMgtUtil.PAYMENT_METHOD_CASH);
 			paymentFile.setModifiedDate(new Date());
