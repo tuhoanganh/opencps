@@ -223,34 +223,20 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 			// Find workflow
 			if (Validator.isNull(processWorkflowId)) {
-				_log.info("################################1processWorkflowId" +
-					processWorkflowId);
-				_log.info("################################curStepId" +
-					curStepId);
 
-				_log.info("################################serviceProcessId" +
-					serviceProcessId);
-				_log.info("################################toEngineMsg.getEvent()" +
-					toEngineMsg.getEvent());
 				processWorkflow =
 					ProcessWorkflowLocalServiceUtil.getProcessWorkflowByEvent(
 						serviceProcessId, toEngineMsg.getEvent(), curStepId);
 			}
 			else {
-				_log.info("################################2processWorkflowId" +
-					processWorkflowId);
+
 				processWorkflow =
 					ProcessWorkflowLocalServiceUtil.fetchProcessWorkflow(processWorkflowId);
 
 			}
 
 			if (Validator.isNull(assignToUserId)) {
-				_log.info("################################getProcessWorkflowId" +
-					processWorkflow.getProcessWorkflowId());
-				_log.info("################################processOrderId" +
-					processOrderId);
-				_log.info("################################processWorkflow.getPostProcessStepId()" +
-					processWorkflow.getPostProcessStepId());
+
 				assignToUserId =
 					ProcessMgtUtil.getAssignUser(
 						processWorkflow.getProcessWorkflowId(), processOrderId,
