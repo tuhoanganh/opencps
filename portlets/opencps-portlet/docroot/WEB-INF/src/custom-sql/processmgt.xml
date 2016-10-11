@@ -185,7 +185,7 @@
                 (
                     opencps_processorder.assignToUserId != 0 
                     AND stepallowance.userId != opencps_processorder.assignToUserId 
-                    AND opencps_stepallowance.readOnly = TRUE
+                    AND stepallowance.readOnly = TRUE
                 )
             )
             OR
@@ -260,7 +260,7 @@
 				(
 					opencps_processorder.assignToUserId != 0 
 					AND stepallowance.userId != opencps_processorder.assignToUserId 
-					AND opencps_stepallowance.readOnly = TRUE
+					AND stepallowance.readOnly = TRUE
 				)
 			)
 	
