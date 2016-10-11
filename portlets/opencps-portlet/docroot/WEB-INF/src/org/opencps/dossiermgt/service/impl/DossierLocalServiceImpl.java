@@ -2118,4 +2118,27 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		return dossierFinder.searchDossierByUserNewRequest(
 			groupId, userId, start, end, obc);
 	}
+	
+	/**
+	 * @param dossierId
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public Dossier updateDossierNote(long dossierId, String note)
+	    throws PortalException, SystemException {
+		
+		Dossier dossier = null;
+		
+		if (dossierId != 0) {
+			dossier = dossierPersistence.fetchByPrimaryKey(dossierId);
+			
+			dossier.setNote(note);
+			
+			dossierPersistence.update(dossier);
+		}
+		
+		return dossier;
+		
+	}
 }

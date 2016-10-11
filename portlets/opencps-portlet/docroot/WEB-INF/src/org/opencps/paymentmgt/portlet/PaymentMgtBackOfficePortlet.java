@@ -136,14 +136,14 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 
 				if (!trustServiceMode) {
 					Dossier dossier =
-									DossierLocalServiceUtil.getDossier(paymentFile.getDossierId());
+						DossierLocalServiceUtil.getDossier(paymentFile.getDossierId());
 					SendToBackOfficeMsg toBackOffice =
 						new SendToBackOfficeMsg();
 
 					Message sendToBackOffice = new Message();
 
 					toBackOffice.setActorName(WebKeys.ACTION_PAY_VALUE);
-					
+
 					toBackOffice.setDossierId(paymentFile.getDossierId());
 
 					toBackOffice.setPaymentFile(paymentFile);
@@ -186,8 +186,12 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 					msgInfo = lyDo;
 				}
 
+				//String dossierStatus =
+				//	PaymentMgtUtil.getDossierStatus(paymentFile);
+
 				// Add dossierLog for confirm payment
 				DossierLogLocalServiceUtil.addDossierLog(
+
 					serviceContext.getUserId(),
 					serviceContext.getScopeGroupId(),
 					serviceContext.getCompanyId(), paymentFile.getDossierId(),
