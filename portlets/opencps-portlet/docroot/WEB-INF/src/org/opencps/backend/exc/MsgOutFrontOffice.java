@@ -90,7 +90,9 @@ public class MsgOutFrontOffice implements MessageListener {
 						PaymentFileLocalServiceUtil.getPaymentFile(userActionMgs.getPaymentFileId());
 
 					submitPaymentFileMessage.sendMessageByHornetq(
-						paymentFile, WebKeys.SYNC_PAY_SEND_CONFIRM);
+						paymentFile, paymentFile.getConfirmFileEntryId() > 0
+							? WebKeys.SYNC_PAY_SEND_CONFIRM
+							: WebKeys.SYNC_PAY_CONFIRM);
 
 				}
 				else {
