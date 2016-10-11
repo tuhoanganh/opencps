@@ -380,11 +380,13 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 				msgInforSb.append(StringPool.SPACE);
 				msgInforSb.append(DossierMgtUtil.getServiceName(paymentFile.getDossierId()));
 				
+				Dossier dossier = DossierLocalServiceUtil.fetchDossier(paymentFile.getDossierId());
+				
 				DossierLogLocalServiceUtil.addDossierLog(
 				    serviceContext.getUserId(),
 				    serviceContext.getScopeGroupId(),
 				    serviceContext.getCompanyId(), paymentFile.getDossierId(),
-				    paymentFile.getFileGroupId(), null,
+				    paymentFile.getFileGroupId(), dossier.getDossierStatus(),
 				    PortletConstants.DOSSIER_ACTION_REQUEST_PAYMENT,
 				    msgInforSb.toString(), new Date(), 1, 2,
 				    actorBean.getActor(), actorBean.getActorId(),
