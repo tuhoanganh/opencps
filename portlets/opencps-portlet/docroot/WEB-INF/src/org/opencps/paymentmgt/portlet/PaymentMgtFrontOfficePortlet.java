@@ -354,7 +354,6 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 					dlFolder.getFolderId(), actionRequest, serviceContext);
 
 			if (paymentFileId > 0) {
-				_log.info("##################################Get Payment");
 				paymentFile =
 					PaymentFileLocalServiceUtil.getPaymentFile(paymentFileId);
 
@@ -386,7 +385,6 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 
 				}
 
-				_log.info("##################################Update Payment Status");
 
 				paymentFile.setConfirmFileEntryId(fileEntry.getFileEntryId());
 				paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_CONFIRMED);
@@ -415,18 +413,22 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 					serviceContext.getLocale(), "for-dossier"));
 				msgInforSb.append(StringPool.SPACE);
 				msgInforSb.append(DossierMgtUtil.getServiceName(paymentFile.getDossierId()));
+				
+				Dossier dossier = DossierLocalServiceUtil.fetchDossier(paymentFile.getDossierId());
 
 				DossierLogLocalServiceUtil.addDossierLog(
-					serviceContext.getUserId(),
-					serviceContext.getScopeGroupId(),
-					serviceContext.getCompanyId(), paymentFile.getDossierId(),
-					paymentFile.getFileGroupId(), null,
-					PortletConstants.DOSSIER_ACTION_REQUEST_PAYMENT,
-					msgInforSb.toString(), new Date(), 1, 2,
-					actorBean.getActor(), actorBean.getActorId(),
-					actorBean.getActorName(),
-					PaymentMgtFrontOfficePortlet.class.getName() +
-						".requestBankPayment()");
+				    serviceContext.getUserId(),
+				    serviceContext.getScopeGroupId(),
+				    serviceContext.getCompanyId(), paymentFile.getDossierId(),
+				    paymentFile.getFileGroupId(), dossier.getDossierStatus(),
+				    PortletConstants.DOSSIER_ACTION_REQUEST_PAYMENT,
+				    msgInforSb.toString(), new Date(), 1, 2,
+				    actorBean.getActor(), actorBean.getActorId(),
+				    actorBean.getActorName(),
+				    PaymentMgtFrontOfficePortlet.class.getName() +
+				        ".requestBankPayment()");
+				
+
 
 				SessionMessages.add(
 					actionRequest,

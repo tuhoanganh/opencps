@@ -113,17 +113,11 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 		throws IOException {
 
 		long paymentFileId =
-			ParamUtil.getLong(
-				actionRequest, PaymentFileDisplayTerms.PAYMENT_FILE_ID);
-		int confirmHopLe =
-			ParamUtil.getInteger(actionRequest, "confirmHopLeHidden", 0);
-
-		String lyDo = StringPool.BLANK;
-
-		if (confirmHopLe == 0) {
-			lyDo = ParamUtil.getString(actionRequest, "lyDo");
-		}
-
+			    ParamUtil.getLong(actionRequest, PaymentFileDisplayTerms.PAYMENT_FILE_ID);
+		int confirmHopLe = ParamUtil.getInteger(actionRequest, "confirmHopLeHidden", 0);
+		
+		String lyDo = ParamUtil.getString(actionRequest, "lyDo");
+		
 		PaymentFile paymentFile = null;
 
 		try {

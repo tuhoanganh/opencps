@@ -2184,10 +2184,10 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			throw new NoSuchDossierException();
 		}
 
-		if (processStepId <= 0) {
+/*		if (processStepId <= 0) {
 			throw new NoSuchProcessStepException();
 		}
-
+*/
 		List<WorkflowOutput> workflowOutputs = new ArrayList<WorkflowOutput>();
 
 		List<ProcessStepDossierPart> processStepDossierParts =
