@@ -46,7 +46,7 @@ public class DossierSearchTerms extends DossierDisplayTerms {
 				.getDateTimeFormat(DateTimeUtil._VN_DATE_TIME_FORMAT));
 		dossierStatus = ParamUtil
 			.getString(portletRequest, DOSSIER_STATUS,
-				PortletConstants.DOSSIER_STATUS_NEW);
+				StringPool.BLANK);
 
 		serviceName = DAOParamUtil
 			.getString(portletRequest, SERVICE_NAME);
@@ -63,6 +63,9 @@ public class DossierSearchTerms extends DossierDisplayTerms {
 
 		govAgencyName = DAOParamUtil
 			.getString(portletRequest, GOVAGENCY_NAME);
+		
+		serviceDomainId = DAOParamUtil
+				.getString(portletRequest, "serviceDomainId");
 
 	}
 
@@ -144,4 +147,13 @@ public class DossierSearchTerms extends DossierDisplayTerms {
 	protected String receptionNo;
 	protected Date createDate;
 	protected Date receiveDatetime;
+	protected String serviceDomainId;
+
+	public String getServiceDomainId() {
+		return serviceDomainId;
+	}
+
+	public void setServiceDomainId(String serviceDomainId) {
+		this.serviceDomainId = serviceDomainId;
+	}
 }

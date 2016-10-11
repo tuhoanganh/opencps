@@ -44,13 +44,15 @@
 	String tabs1 = ParamUtil.getString(request, "tabs1", DossierMgtUtil.TOP_TABS_DOSSIER_TEMPLATE);
 	PortletURL searchURL = renderResponse.createRenderURL();
 	
+	long domainCode = ParamUtil.getLong(request, ServiceDisplayTerms.SERVICE_DOMAINCODE);
+	
 	/* Long dossierTemplateId = (Long) session.getAttribute(DossierTemplateDisplayTerms.DOSSIERTEMPLATE_DOSSIERTEMPLATEID); */
 	DictCollection dictCollectionServiceAdmin = null;
 	List<DictItem> dictItemsServiceAdmin = new ArrayList<DictItem>();
 	String currURL = ParamUtil.getString(request, "currURL");
 	try {
 		dictCollectionServiceAdmin = DictCollectionLocalServiceUtil
-	                    .getDictCollection(scopeGroupId, PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION);
+	                    .getDictCollection(scopeGroupId, PortletPropsValues.DATAMGT_MASTERDATA_GOVERNMENT_AGENCY);
 		if(Validator.isNotNull(dictCollectionServiceAdmin)) {
 			dictItemsServiceAdmin = DictItemLocalServiceUtil
 							.getDictItemsByDictCollectionId(dictCollectionServiceAdmin.getDictCollectionId());
@@ -60,8 +62,19 @@
 		//no thing to do
 	}
 	
-	DictCollectionLocalServiceUtil
-					.getDictCollection(scopeGroupId, PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION);
+	DictCollection collectionDomain = null;
+	DictItem curDictItem = null;
+	try {
+		collectionDomain = DictCollectionLocalServiceUtil.getDictCollection(scopeGroupId, WebKeys.SERVICE_DOMAIN);
+	} catch (Exception e) {
+		
+	}
+	
+	List<DictItem> dictItems = new ArrayList<DictItem>();
+	
+	if(Validator.isNotNull(collectionDomain)) {
+		dictItems = DictItemLocalServiceUtil.getDictItemsByDictCollectionId(collectionDomain.getDictCollectionId());
+	}
 %>
 <aui:nav-bar cssClass="opencps-toolbar custom-toolbar">
 	<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left" >
@@ -165,7 +178,7 @@
 										<liferay-ui:input-search 
 											id="keywords1"
 											name="keywords"
-											title="keywords"
+											title='<%= LanguageUtil.get(locale, "keywords") %>'
 											placeholder='<%= LanguageUtil.get(locale, "name") %>' 
 											cssClass="search-input input-keyword"
 										/>
@@ -198,15 +211,43 @@
 									</aui:col>
 									<aui:col width="30" cssClass="search-col">
 
-										<datamgt:ddr
+										<%-- <datamgt:ddr
 											cssClass="search-input select-box"
 											depthLevel="1" 
 											dictCollectionCode="SERVICE_DOMAIN"
 											itemNames="<%= ServiceDisplayTerms.SERVICE_DOMAINCODE %>"
-											itemsEmptyOption="false"
+											itemsEmptyOption="true"
 											emptyOptionLabels="fill-domain-code"	
+											showLabel="false"
+											selectedItems="<%=String.valueOf(domainCode)%>"
 										>
-										</datamgt:ddr>
+										</datamgt:ddr> --%>
+										
+										<aui:select name="<%=ServiceDisplayTerms.SERVICE_DOMAINCODE %>" label="">
+										<aui:option value="">
+											<liferay-ui:message key="<%=ServiceDisplayTerms.SERVICE_DOMAINCODE %>"/>
+										</aui:option>
+										<%
+											if(dictItems != null){
+												for(DictItem dictItem : dictItems){
+													if((curDictItem != null && dictItem.getDictItemId() == curDictItem.getDictItemId())||
+															(curDictItem != null && dictItem.getTreeIndex().contains(curDictItem.getDictItemId() + StringPool.PERIOD))){
+														continue;
+													}
+													
+													int level = StringUtil.count(dictItem.getTreeIndex(), StringPool.PERIOD);
+													String index = "|";
+													for(int i = 0; i < level; i++){
+														index += "_";
+													}
+													%>
+														<aui:option value="<%=dictItem.getDictItemId() %>"><%=index + dictItem.getItemName(locale) %></aui:option>
+													<%
+												}
+											}
+										%>
+									</aui:select>
+										
 
 									</aui:col>
 									<aui:col width="30" cssClass="search-col">
@@ -214,7 +255,7 @@
 											<liferay-ui:input-search 
 												id="keywords1"
 												name="keywords"
-												title="keywords"
+												title='<%= LanguageUtil.get(locale, "keywords") %>'
 												placeholder='<%= LanguageUtil.get(locale, "name") %>' 
 												cssClass="search-input input-keyword"
 											/>

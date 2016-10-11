@@ -18,8 +18,8 @@ import org.opencps.api.service.base.ApiServiceServiceBaseImpl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,19 +30,16 @@ import org.opencps.api.service.ApiServiceLocalServiceUtil;
 import org.opencps.api.util.APIServiceConstants;
 import org.opencps.backend.message.SendToEngineMsg;
 import org.opencps.dossiermgt.NoSuchDossierException;
+import org.opencps.dossiermgt.NoSuchDossierFileException;
 import org.opencps.dossiermgt.NoSuchDossierPartException;
 import org.opencps.dossiermgt.bean.ProcessOrderBean;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.DossierPart;
-import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
-import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
 import org.opencps.processmgt.NoSuchProcessOrderException;
+import org.opencps.processmgt.NoSuchProcessWorkflowException;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.model.ProcessWorkflow;
-import org.opencps.processmgt.search.ProcessOrderDisplayTerms;
-import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
-import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.util.DLFolderUtil;
 import org.opencps.util.DateTimeUtil;
@@ -60,15 +57,17 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextThreadLocal;
-import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
@@ -90,6 +89,21 @@ import com.liferay.portlet.documentlibrary.util.DLUtil;
  */
 public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 	
+	@JSONWebService(value = "sms", method = "GET")
+	public void receiveSMS(String phone, String message) 
+		throws SystemException, PortalException {
+		
+		ServiceContext serviceContext = getServiceContext();
+		
+		JSONObject inputObj = JSONFactoryUtil.createJSONObject();
+		inputObj.put("phone", phone);
+		inputObj.put("message", message);
+		
+		ApiServiceLocalServiceUtil.addLog(getUserId(), APIServiceConstants.CODE_06, 
+			serviceContext.getRemoteAddr(), phone, inputObj.toString(), 
+			APIServiceConstants.IN, serviceContext);
+	}
+	
 	@JSONWebService(value = "dossiers", method = "GET")
 	public JSONObject searchDossierByUserAssignProcessOrder(String username)
 			throws SystemException {
@@ -106,16 +120,18 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 			JSONObject inputObj = JSONFactoryUtil.createJSONObject();
 			inputObj.put("username", username);
 			
-			ApiServiceLocalServiceUtil.addLog(userId, APIServiceConstants.CODE_02, 
-				serviceContext.getRemoteAddr(), "", inputObj.toString(), 
-				APIServiceConstants.IN, serviceContext);
+			if(_log.isDebugEnabled()) {
+				ApiServiceLocalServiceUtil.addLog(userId, APIServiceConstants.CODE_02, 
+					serviceContext.getRemoteAddr(), "", inputObj.toString(), 
+					APIServiceConstants.IN, serviceContext);
+			}
 			
 			int serviceInfoId = 0;
 			int processStepId = 0;
 			
 			//int count = ProcessOrderLocalServiceUtil.countProcessOrder(serviceInfoId, processStepId, userId, userId);
 			
-			List<ProcessOrderBean> processOrders = ProcessOrderLocalServiceUtil.searchProcessOrder(
+			List<ProcessOrderBean> processOrders = processOrderLocalService.searchProcessOrder(
 					serviceInfoId, processStepId, userId, userId,
 					QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 			
@@ -142,9 +158,11 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 			resultObj.put("message", e.getClass().getName());
 		}	
 		
-		ApiServiceLocalServiceUtil.addLog(userId, APIServiceConstants.CODE_02, 
-			serviceContext.getRemoteAddr(), "", resultObj.toString(), 
-			APIServiceConstants.OUT, serviceContext);
+		if(_log.isDebugEnabled()) {
+			ApiServiceLocalServiceUtil.addLog(userId, APIServiceConstants.CODE_02, 
+				serviceContext.getRemoteAddr(), "", resultObj.toString(), 
+				APIServiceConstants.OUT, serviceContext);
+		}
 			
 		return resultObj;
 	}
@@ -167,9 +185,11 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 			inputObj.put("stepno", stepno);
 			inputObj.put("username", username);
 			
-			ApiServiceLocalServiceUtil.addLog(userId, APIServiceConstants.CODE_01, 
-				serviceContext.getRemoteAddr(), "", inputObj.toString(), 
-				APIServiceConstants.IN, serviceContext);
+			if(_log.isDebugEnabled()) {
+				ApiServiceLocalServiceUtil.addLog(userId, APIServiceConstants.CODE_01, 
+					serviceContext.getRemoteAddr(), "", inputObj.toString(), 
+					APIServiceConstants.IN, serviceContext);
+			}
 			
 			/*int count = dossierLocalService.countDossierByP_PS_U(processno, stepno,
 					username);*/
@@ -198,9 +218,11 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 			resultObj.put("message", e.getClass().getName());
 		}
 		
-		ApiServiceLocalServiceUtil.addLog(userId, APIServiceConstants.CODE_01, 
-			serviceContext.getRemoteAddr(), "", resultObj.toString(), 
-			APIServiceConstants.OUT, serviceContext);
+		if(_log.isDebugEnabled()) {
+			ApiServiceLocalServiceUtil.addLog(userId, APIServiceConstants.CODE_01, 
+				serviceContext.getRemoteAddr(), "", resultObj.toString(), 
+				APIServiceConstants.OUT, serviceContext);
+		}
 
 		return resultObj;
 	}
@@ -235,8 +257,15 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 			_log.error(e);
 			
 			jsonObject = JSONFactoryUtil.createJSONObject();
-			jsonObject.put("statusCode", "DossierNotFound");
-			jsonObject.put("message", e.getClass().getName());
+			
+			jsonObject.put("statusCode", "Error");
+			
+			if(e instanceof NoSuchDossierException) {
+				jsonObject.put("message", "DossierNotFound");
+			} else {
+				jsonObject.put("message", e.getClass().getName());
+			}
+			
 		}
 		
 		ApiServiceLocalServiceUtil.addLog(userId,
@@ -280,13 +309,13 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 			
 			long dossierId = dossier.getDossierId();
 			
-			DossierPart dossierPart = DossierPartLocalServiceUtil
+			DossierPart dossierPart = dossierPartLocalService
 				.getDossierPartByT_PN(dossier.getDossierTemplateId(), dossierPartNo);
 			
 			DossierFile dossierFile = null;
 			
 			if(Validator.isNotNull(dossierFileOid)) {
-				dossierFile = DossierFileLocalServiceUtil.getByOid(dossierFileOid);
+				dossierFile = dossierFilePersistence.findByOid(dossierFileOid);
 			}
 			
 			DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -311,7 +340,7 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 
 					serviceContext.setUserId(dossier.getUserId());
 					
-					DossierFileLocalServiceUtil
+					dossierFileLocalService
 							.addDossierFile(
 									dossier.getUserId(),
 									dossierId,
@@ -335,28 +364,33 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 
 					
 				} else if (dossierFileContent.equals("") || dossierFileContent.equals("{}")) {
-					URL fileURL = new URL(dossierFileURL);
-					InputStream is = fileURL.openStream();
-					long size = is.available();
-					String mimeType = StringPool.BLANK;
+					byte[] bytes = getFileFromURL(dossierFileURL);
 					
-					try {
-						mimeType = URLConnection.guessContentTypeFromStream(is);
+					String sourceFileName = dossierFileName;
+					
+					String extension = FileUtil.getExtension(sourceFileName);
+					
+					if(Validator.isNull(extension)) {
+						extension = StringUtil.replace(FileUtil.getExtension(dossierFileURL), 
+							StringPool.FORWARD_SLASH, StringPool.BLANK);
+						
+						if(Validator.isNotNull(extension)) {
+							sourceFileName = dossierFileName.concat(StringPool.UNDERLINE)
+									.concat(String.valueOf(System.nanoTime()))
+									.concat(StringPool.PERIOD).concat(extension);
+						}
 					}
-					catch (IOException ioe) {
-						_log.error(ioe);
-					}
+					
+					String mimeType = MimeTypesUtil.getExtensionContentType(extension);
 					
 					serviceContext.setUserId(dossier.getUserId());
 					
-					DLFolder dossierFolder = DLFolderUtil
-							.getDossierFolder(
-									serviceContext.getScopeGroupId(),
-									dossier.getUserId(),
-									dossier.getCounter(),
-									serviceContext);
+					DLFolder dossierFolder = DLFolderUtil.getDossierFolder(
+							serviceContext.getScopeGroupId(),
+							null, dossier.getOid(),
+							serviceContext);
 					
-					DossierFileLocalServiceUtil
+					dossierFileLocalService
 							.addDossierFile(
 									dossier.getUserId(),
 									dossierId,
@@ -368,10 +402,7 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 									dossier.getUserId(),
 									dossier.getOwnerOrganizationId(),
 									dossierFileName,
-									//StringPool.BLANK,
 									mimeType,
-									dossierFile != null ? dossierFile
-											.getFileEntryId() : 0,
 									PortletConstants.DOSSIER_FILE_MARK_UNKNOW,
 									2,
 									dossierFileNo,
@@ -379,15 +410,15 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 									1,
 									PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS,
 									dossierFolder.getFolderId(),
-									dossierFileNo, "", dossierFileName,
+									sourceFileName, mimeType, dossierFileName,
 									StringPool.BLANK, StringPool.BLANK,
-									is, size, serviceContext);
+									bytes, serviceContext);
 				}
 			} else {
 				if (Validator.isNull(dossierFileURL)) {
 					serviceContext.setUserId(dossier.getUserId());
 
-					DossierFileLocalServiceUtil
+					dossierFileLocalService
 							.addDossierFile(
 									dossier.getUserId(),
 									dossierId,
@@ -411,16 +442,24 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 									serviceContext);
 
 				} else {
-					URL fileURL = new URL(dossierFileURL);
-					InputStream is = fileURL.openStream();
-					long size = is.available();
-					String mimeType = StringPool.BLANK;
-					try {
-						mimeType = URLConnection.guessContentTypeFromStream(is);
+					byte[] bytes = getFileFromURL(dossierFileURL);
+					
+					String sourceFileName = dossierFileName;
+					
+					String extension = FileUtil.getExtension(sourceFileName);
+					
+					if(Validator.isNull(extension)) {
+						extension = StringUtil.replace(FileUtil.getExtension(dossierFileURL), 
+							StringPool.FORWARD_SLASH, StringPool.BLANK);
+						
+						if(Validator.isNotNull(extension)) {
+							sourceFileName = dossierFileName.concat(StringPool.UNDERLINE)
+									.concat(String.valueOf(System.nanoTime()))
+									.concat(StringPool.PERIOD).concat(extension);
+						}
 					}
-					catch (IOException ioe) {
-						_log.error(ioe);
-					}
+					
+					String mimeType = MimeTypesUtil.getExtensionContentType(extension);
 
 					serviceContext.setScopeGroupId(dossier.getGroupId());
 					serviceContext.setCompanyId(dossier.getCompanyId());
@@ -428,13 +467,13 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 
 					DLFolder dossierFolder = DLFolderUtil.getDossierFolder(
 							serviceContext.getScopeGroupId(),
-							dossier.getUserId(), dossier.getCounter(),
+							null, dossier.getOid(),
 							serviceContext);
 					
-					dossierPart = DossierPartLocalServiceUtil
+					dossierPart = dossierPartLocalService
 							.getDossierPartByPartNo(dossierPartNo);
 					
-					DossierFileLocalServiceUtil
+					dossierFileLocalService
 							.addDossierFile(
 									dossier.getUserId(),
 									dossierId,
@@ -446,23 +485,16 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 									dossier.getUserId(),
 									dossier.getOwnerOrganizationId(),
 									dossierFileName,
-									//StringPool.BLANK,
 									mimeType,
-									dossierFile != null ? dossierFile
-											.getFileEntryId() : 0,
 									PortletConstants.DOSSIER_FILE_MARK_UNKNOW,
 									2,
 									dossierFileNo,
 									new Date(),
 									1,
-									PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS,
+									PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
 									dossierFolder.getFolderId(),
-									dossierFileNo, "", dossierFileName,
-									StringPool.BLANK, StringPool.BLANK, is,
-									size, serviceContext);
-
-						
-					
+									sourceFileName, mimeType, dossierFileName,
+									StringPool.BLANK, StringPool.BLANK, bytes, serviceContext);
 				}
 			}
 			
@@ -471,16 +503,17 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 			_log.error(e);
 			
 			resultObj = JSONFactoryUtil.createJSONObject();
+			resultObj.put("statusCode", "Error");
 			
 			if(e instanceof NoSuchDossierException) {
-				resultObj.put("statusCode", "DossierNotFound");
+				resultObj.put("message", "DossierNotFound");
 			} else if(e instanceof NoSuchDossierPartException) {
-				resultObj.put("statusCode", "DossierPartNotFound");
+				resultObj.put("message", "DossierPartNotFound");
+			} else if(e instanceof NoSuchDossierFileException) {
+				resultObj.put("message", "DossierFileNotFound");
 			} else {
-				resultObj.put("statusCode", "CanNotUpdate");
+				resultObj.put("message", e.getClass().getName());
 			}
-			
-			resultObj.put("message", e.getClass().getName());
 		}
 		
 		ApiServiceLocalServiceUtil.addLog(userId, APIServiceConstants.CODE_04, 
@@ -493,133 +526,7 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 	@JSONWebService(value = "processorder", method = "POST")
 	public JSONObject nextStep(String oid, String actioncode, String username) {
 		
-		JSONObject resultObj = JSONFactoryUtil.createJSONObject();
-		
-		Dossier dossier = null;
-		long userId = 0;
-		
-		ServiceContext serviceContext = getServiceContext();
-		
-		try {
-			JSONObject input = JSONFactoryUtil.createJSONObject();
-			input.put("oid", oid);
-			input.put("actioncode", actioncode);
-			input.put("username", username);
-			
-			// insert log received
-			ApiServiceLocalServiceUtil.addLog(userId, APIServiceConstants.CODE_05, 
-				serviceContext.getRemoteAddr(), oid, 
-				input.toString(), APIServiceConstants.IN,
-				serviceContext);
-			
-			dossier = dossierPersistence.findByOID(oid);
-			
-			userId = dossier.getUserId();
-			
-			ProcessOrder processOrder = ProcessOrderLocalServiceUtil
-					.getProcessOrder(dossier.getDossierId(), 0);
-			
-			User user = UserLocalServiceUtil.getUserByScreenName(
-					dossier.getCompanyId(), username);
-			
-			ProcessWorkflow processWorkflow = ProcessWorkflowLocalServiceUtil.getByActionCode(actioncode);
-			
-			if(processWorkflow == null) {
-				resultObj.put("statusCode", "ActionNotFound");
-			} else {
-				Message message = new Message();
-				
-				if (Validator.isNotNull(processWorkflow.getAutoEvent())) {
-					message.put(ProcessOrderDisplayTerms.EVENT, processWorkflow.getAutoEvent());
-				}
-				else {
-					message.put(ProcessOrderDisplayTerms.PROCESS_WORKFLOW_ID,
-							processWorkflow.getProcessWorkflowId());
-				}
-				message.put(ProcessOrderDisplayTerms.ACTION_NOTE,
-						"Chuyển trạng thái");
-				message.put(ProcessOrderDisplayTerms.PROCESS_STEP_ID,
-						processOrder.getProcessStepId());
-				message.put(ProcessOrderDisplayTerms.ASSIGN_TO_USER_ID, 0);
-				message.put(ProcessOrderDisplayTerms.SERVICE_PROCESS_ID,
-						processOrder.getServiceProcessId());
-				message.put(ProcessOrderDisplayTerms.PAYMENTVALUE, 0);
-				/*
-				message.put(ProcessOrderDisplayTerms.PROCESS_WORKFLOW_ID,
-						processWorkflow.getProcessWorkflowId());
-				*/
-				message.put(ProcessOrderDisplayTerms.ACTION_USER_ID,
-						user.getUserId());
-	
-				message.put(ProcessOrderDisplayTerms.PROCESS_ORDER_ID,
-						processOrder.getProcessOrderId());
-				message.put(ProcessOrderDisplayTerms.FILE_GROUP_ID, 0);
-				message.put(ProcessOrderDisplayTerms.DOSSIER_ID,
-						dossier.getDossierId());
-	
-				message.put(ProcessOrderDisplayTerms.GROUP_ID, dossier.getGroupId());
-	
-				message.put(ProcessOrderDisplayTerms.COMPANY_ID,
-						dossier.getCompanyId());
-	
-				SendToEngineMsg sendToEngineMsg = new SendToEngineMsg();
-	
-				// sendToEngineMsg.setAction(WebKeys.ACTION);
-				sendToEngineMsg.setCompanyId(dossier.getCompanyId());
-				sendToEngineMsg.setGroupId(dossier.getGroupId());
-				sendToEngineMsg.setActionNote("Chuyển trạng thái");
-				sendToEngineMsg.setAssignToUserId(0);
-				sendToEngineMsg.setActionUserId(user.getUserId());
-				sendToEngineMsg.setDossierId(dossier.getDossierId());
-				sendToEngineMsg.setFileGroupId(0);
-				sendToEngineMsg.setPaymentValue(GetterUtil.getDouble(0));
-				sendToEngineMsg.setProcessOrderId(processOrder.getProcessOrderId());
-				/*
-				sendToEngineMsg.setProcessWorkflowId(processWorkflow
-						.getProcessWorkflowId());
-				*/
-				sendToEngineMsg.setReceptionNo(Validator.isNotNull(dossier
-						.getReceptionNo()) ? dossier.getReceptionNo()
-						: StringPool.BLANK);
-				sendToEngineMsg.setSignature(0);
-				if (Validator.isNotNull(processWorkflow.getAutoEvent())) {
-					sendToEngineMsg.setEvent(processWorkflow.getAutoEvent());				
-				}
-				else {
-					sendToEngineMsg.setProcessWorkflowId(processWorkflow
-							.getProcessWorkflowId());				
-				}
-				
-				message.put("msgToEngine", sendToEngineMsg);
-				
-				MessageBusUtil.sendMessage("opencps/backoffice/engine/destination",
-						message);
-				
-				resultObj.put("statusCode", "Success");
-			}
-			
-		} catch(Exception e) {
-			_log.error(e);
-			
-			resultObj = JSONFactoryUtil.createJSONObject();
-			
-			if(e instanceof NoSuchDossierException) {
-				resultObj.put("statusCode", "DossierNotFound");
-			} else if(e instanceof NoSuchProcessOrderException) {
-				resultObj.put("statusCode", "ActionNotFound");
-			} else {
-				resultObj.put("statusCode", e.getClass().getName());
-			}
-			
-			resultObj.put("message", e.getClass().getName());
-		}
-		
-		// insert log return
-		ApiServiceLocalServiceUtil.addLog(userId, APIServiceConstants.CODE_05,
-				serviceContext.getRemoteAddr(), oid, resultObj.toString(), APIServiceConstants.OUT,
-			serviceContext);
-		
-		return resultObj;
+		return apiServiceService.nextStep(oid, actioncode, StringPool.BLANK, username);
 	}
 
 	@JSONWebService(value = "processorder", method = "POST")
@@ -629,10 +536,11 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 		
 		ServiceContext serviceContext = getServiceContext();
 		
-		Dossier dossier = null;
 		long userId = 0;
 		
 		try {
+			userId = getUserId();
+			
 			JSONObject input = JSONFactoryUtil.createJSONObject();
 			input.put("oid", oid);
 			input.put("actioncode", actioncode);
@@ -645,105 +553,101 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 				input.toString(), APIServiceConstants.IN,
 				serviceContext);
 			
-			dossier = dossierPersistence.findByOID(oid);
-			userId = dossier.getUserId();
+			Dossier dossier = dossierPersistence.findByOID(oid);
 			
-			ProcessOrder processOrder = ProcessOrderLocalServiceUtil
-					.getProcessOrder(dossier.getDossierId(), 0);
+			ProcessOrder processOrder = processOrderPersistence.findByD_F(
+					dossier.getDossierId(), 0);
 			
-			User user = UserLocalServiceUtil.getUserByScreenName(
+			User user = userLocalService.getUserByScreenName(
 					dossier.getCompanyId(), username);
 
-			ProcessWorkflow processWorkflow = ProcessWorkflowLocalServiceUtil
-					.getByActionCode(actioncode);
+			ProcessWorkflow processWorkflow = processWorkflowPersistence
+					.findByActionCode(actioncode);
+
+			Message message = new Message();
 			
-			if (processWorkflow == null) {
-				resultObj.put("statusCode", "ActionNotFound");
+			/*if (Validator.isNotNull(processWorkflow.getAutoEvent())) {
+				message.put(ProcessOrderDisplayTerms.EVENT, 
+						processWorkflow.getAutoEvent());
 			} else {
+				message.put(ProcessOrderDisplayTerms.PROCESS_WORKFLOW_ID,
+						processWorkflow.getProcessWorkflowId());
+			}
 			
-				Message message = new Message();
-				
-				if (Validator.isNotNull(processWorkflow.getAutoEvent())) {
-					message.put(ProcessOrderDisplayTerms.EVENT, processWorkflow.getAutoEvent());
-				} else {
-					message.put(ProcessOrderDisplayTerms.PROCESS_WORKFLOW_ID,
-							processWorkflow.getProcessWorkflowId());
-				}
-				
-				message.put(ProcessOrderDisplayTerms.ACTION_NOTE, actionnote);
-				message.put(ProcessOrderDisplayTerms.PROCESS_STEP_ID,
-						processOrder.getProcessStepId());
-				message.put(ProcessOrderDisplayTerms.ASSIGN_TO_USER_ID, 0);
-				message.put(ProcessOrderDisplayTerms.SERVICE_PROCESS_ID,
-						processOrder.getServiceProcessId());
-				message.put(ProcessOrderDisplayTerms.PAYMENTVALUE, 0);
-				
-				message.put(ProcessOrderDisplayTerms.ACTION_USER_ID,
-						user.getUserId());
-	
-				message.put(ProcessOrderDisplayTerms.PROCESS_ORDER_ID,
-						processOrder.getProcessOrderId());
-				message.put(ProcessOrderDisplayTerms.FILE_GROUP_ID, 0);
-				message.put(ProcessOrderDisplayTerms.DOSSIER_ID,
-						dossier.getDossierId());
-	
-				message.put(ProcessOrderDisplayTerms.GROUP_ID, dossier.getGroupId());
-	
-				message.put(ProcessOrderDisplayTerms.COMPANY_ID,
-						dossier.getCompanyId());
-	
-				SendToEngineMsg sendToEngineMsg = new SendToEngineMsg();
-	
-				// sendToEngineMsg.setAction(WebKeys.ACTION);
-				sendToEngineMsg.setCompanyId(dossier.getCompanyId());
-				sendToEngineMsg.setGroupId(dossier.getGroupId());
-				sendToEngineMsg.setActionNote(actionnote);
-				sendToEngineMsg.setAssignToUserId(0);
-				sendToEngineMsg.setActionUserId(user.getUserId());
-				sendToEngineMsg.setDossierId(dossier.getDossierId());
-				sendToEngineMsg.setFileGroupId(0);
-				sendToEngineMsg.setPaymentValue(GetterUtil.getDouble(0));
-				sendToEngineMsg.setProcessOrderId(processOrder.getProcessOrderId());
-				/*
+			message.put(ProcessOrderDisplayTerms.ACTION_NOTE, actionnote);
+			message.put(ProcessOrderDisplayTerms.PROCESS_STEP_ID,
+					processOrder.getProcessStepId());
+			message.put(ProcessOrderDisplayTerms.ASSIGN_TO_USER_ID, 0);
+			message.put(ProcessOrderDisplayTerms.SERVICE_PROCESS_ID,
+					processOrder.getServiceProcessId());
+			message.put(ProcessOrderDisplayTerms.PAYMENTVALUE, 0);
+			
+			message.put(ProcessOrderDisplayTerms.ACTION_USER_ID,
+					user.getUserId());
+
+			message.put(ProcessOrderDisplayTerms.PROCESS_ORDER_ID,
+					processOrder.getProcessOrderId());
+			message.put(ProcessOrderDisplayTerms.FILE_GROUP_ID, 0);
+			message.put(ProcessOrderDisplayTerms.DOSSIER_ID,
+					dossier.getDossierId());
+
+			message.put(ProcessOrderDisplayTerms.GROUP_ID, dossier.getGroupId());
+
+			message.put(ProcessOrderDisplayTerms.COMPANY_ID,
+					dossier.getCompanyId());*/
+
+			SendToEngineMsg sendToEngineMsg = new SendToEngineMsg();
+
+			// sendToEngineMsg.setAction(WebKeys.ACTION);
+			sendToEngineMsg.setCompanyId(dossier.getCompanyId());
+			sendToEngineMsg.setGroupId(dossier.getGroupId());
+			sendToEngineMsg.setActionNote(actionnote);
+			sendToEngineMsg.setAssignToUserId(0);
+			sendToEngineMsg.setActionUserId(user.getUserId());
+			sendToEngineMsg.setDossierId(dossier.getDossierId());
+			sendToEngineMsg.setFileGroupId(0);
+			sendToEngineMsg.setPaymentValue(GetterUtil.getDouble(0));
+			sendToEngineMsg.setProcessOrderId(processOrder.getProcessOrderId());
+			/*
+			sendToEngineMsg.setProcessWorkflowId(processWorkflow
+					.getProcessWorkflowId());
+			*/
+			sendToEngineMsg.setReceptionNo(Validator.isNotNull(dossier
+					.getReceptionNo()) ? dossier.getReceptionNo()
+					: StringPool.BLANK);
+			sendToEngineMsg.setSignature(0);
+			sendToEngineMsg.setDossierStatus(dossier.getDossierStatus());
+			
+			if (Validator.isNotNull(processWorkflow.getAutoEvent())) {
+				sendToEngineMsg.setEvent(processWorkflow.getAutoEvent());
+			}
+			else {
 				sendToEngineMsg.setProcessWorkflowId(processWorkflow
 						.getProcessWorkflowId());
-				*/
-				sendToEngineMsg.setReceptionNo(Validator.isNotNull(dossier
-						.getReceptionNo()) ? dossier.getReceptionNo()
-						: StringPool.BLANK);
-				sendToEngineMsg.setSignature(0);
-				if (Validator.isNotNull(processWorkflow.getAutoEvent())) {
-					sendToEngineMsg.setEvent(processWorkflow.getAutoEvent());				
-				}
-				else {
-					sendToEngineMsg.setProcessWorkflowId(processWorkflow
-							.getProcessWorkflowId());				
-				}
-	
-				message.put("msgToEngine", sendToEngineMsg);
-				
-				_log.debug("BEFORE SEND============" + message);
-				
-				MessageBusUtil.sendMessage("opencps/backoffice/engine/destination",
-						message);
-				
-				resultObj.put("statusCode", "Success");
 			}
+
+			message.put("msgToEngine", sendToEngineMsg);
+			
+			MessageBusUtil.sendMessage("opencps/backoffice/engine/destination",
+					message);
+			
+			resultObj.put("statusCode", "Success");
 			
 		} catch (Exception e) {
 			_log.error(e);
 			
 			resultObj = JSONFactoryUtil.createJSONObject();
+			resultObj.put("statusCode", "Error");
 			
 			if(e instanceof NoSuchDossierException) {
-				resultObj.put("statusCode", "DossierNotFound");
+				resultObj.put("message", "DossierNotFound");
 			} else if(e instanceof NoSuchProcessOrderException) {
-				resultObj.put("statusCode", "ActionNotFound");
+				resultObj.put("message", "ProcessOrderNotFound");
+			} else if(e instanceof NoSuchProcessWorkflowException) {
+				resultObj.put("message", "ActionCodeNotFound");
 			} else {
-				resultObj.put("statusCode", e.getClass().getName());
+				resultObj.put("message", e.getClass().getName());
 			}
-			
-			resultObj.put("message", e.getClass().getName());
 		}
 		
 		ApiServiceLocalServiceUtil.addLog(userId, APIServiceConstants.CODE_05,
@@ -1020,6 +924,79 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 		String fileURL = portalURL + DLUtil.getPreviewURL(fileEntry, fileEntry.getFileVersion(), null, "");
 		
 		return fileURL;
+	}
+	
+	private byte[] getFileFromURL(String fileURL) throws IOException {
+		
+		HttpURLConnection connection = null;
+		byte[] bytes = null;
+		if(Validator.isNotNull(fileURL)) {
+			
+			try {
+				URL url = new URL(fileURL);
+				
+				connection = (HttpURLConnection) url.openConnection();
+				connection.addRequestProperty("Accept-Language", "en-US,en;q=0.8");
+				connection.addRequestProperty("User-Agent", "Mozilla");
+				connection.addRequestProperty("Referer", "google.com");
+				
+				connection.setInstanceFollowRedirects(false);
+				connection.setConnectTimeout(5000);	// 5s
+				connection.setReadTimeout(5000);	// 5s
+				
+				int status = connection.getResponseCode();
+				
+				boolean redirect = false;
+
+				// normally, 3xx is redirect
+				if (status != HttpURLConnection.HTTP_OK) {
+					if (status == HttpURLConnection.HTTP_MOVED_TEMP
+						|| status == HttpURLConnection.HTTP_MOVED_PERM
+							|| status == HttpURLConnection.HTTP_SEE_OTHER)
+					redirect = true;
+				}
+				
+				if (redirect) {
+
+					// get redirect url from "location" header field
+					String newUrl = connection.getHeaderField("Location");
+
+					// get the cookie if need, for login
+					String cookies = connection.getHeaderField("Set-Cookie");
+
+					// open the new connnection again
+					connection = (HttpURLConnection) new URL(newUrl).openConnection();
+					
+					connection.setRequestProperty("Cookie", cookies);
+					connection.addRequestProperty("Accept-Language", "en-US,en;q=0.8");
+					connection.addRequestProperty("User-Agent", "Mozilla");
+					connection.addRequestProperty("Referer", "google.com");
+					
+					connection.setConnectTimeout(5000);	// 5s
+					connection.setReadTimeout(5000);	// 5s
+											
+					status = connection.getResponseCode();
+				}
+			
+				if(status == HttpURLConnection.HTTP_OK) {
+					InputStream is = connection.getInputStream();
+					//File file = FileUtil.createTempFile(is);
+					//long size = connection.getContentLengthLong();
+					//_log.info("===fileURL===" + fileURL + "===" + file.getAbsolutePath());
+					//_log.info("===fileURL===" + fileURL + "===" + size);
+					
+					bytes = FileUtil.getBytes(is);
+					
+					//FileUtil.createTempFile(bytes);
+				}
+			} catch(IOException ioe) {
+				throw new IOException(ioe.getMessage());
+			}finally{
+				connection.disconnect();
+			}
+		}
+		
+		return bytes;
 	}
 	
 	private static Log _log = LogFactoryUtil.getLog(ApiServiceServiceImpl.class.getName());	

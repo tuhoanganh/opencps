@@ -33,7 +33,12 @@
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
 <%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
+<%@page import="com.liferay.portal.kernel.log.Log"%>
+<%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
+<%@page import="org.opencps.util.PortletPropsValues"%>
+
 <%@page pageEncoding="UTF-8"%>
+
 <%@ include file="../init.jsp"%>
 
  
@@ -43,11 +48,15 @@
 	DossierBean dossierBean = (DossierBean) row.getObject();
 	
 	Dossier dossier = dossierBean.getDossier();
-	ProcessOrder processOrder = null;
+
 	ProcessWorkflow workFlow = null;
+	
 	try {
-		processOrder = ProcessOrderLocalServiceUtil.getProcessOrder(dossier.getDossierId(), 0);
-		workFlow = ProcessWorkflowLocalServiceUtil.getByS_PreP_AN(processOrder.getServiceProcessId(), processOrder.getProcessStepId(), "Thông báo hủy hồ sơ");
+		ProcessOrder processOrder = ProcessOrderLocalServiceUtil.getProcessOrder(dossier.getDossierId(), 0);
+		
+		if(processOrder != null) {
+			workFlow = ProcessWorkflowLocalServiceUtil.getProcessWorkflowByEvent(processOrder.getServiceProcessId(), WebKeys.PRE_CONDITION_CANCEL, processOrder.getProcessStepId());
+		}
 	}
 	catch (Exception e) {
 		
@@ -61,7 +70,7 @@
 		<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
 		<portlet:param name="<%=Constants.CMD %>" value="<%=Constants.VIEW %>"/>
 		<portlet:param name="isEditDossier" value="<%=String.valueOf(false) %>"/>
-		<portlet:param name="backURL" value="<%=currentURL %>"/>
+		<portlet:param name="redirectURL" value="<%=currentURL %>"/>
 	</portlet:renderURL> 
 	<liferay-ui:icon 
 		cssClass="search-container-action fa view" 
@@ -76,6 +85,7 @@
 		 		<portlet:renderURL var="updateDossierURL">
 					<portlet:param name="mvcPath" value='<%=templatePath + "edit_dossier.jsp" %>'/>
 					<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
+					<portlet:param name="redirectURL" value="<%=currentURL %>"/>
 					<portlet:param name="backURL" value="<%=currentURL %>"/>
 					<portlet:param name="isEditDossier" value="<%=String.valueOf(true) %>"/>
 				</portlet:renderURL> 
@@ -89,7 +99,7 @@
 			 		<portlet:actionURL var="updateDossierStatusURL" name="updateDossierStatus">
 						<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
 						<portlet:param name="<%=DossierDisplayTerms.DOSSIER_STATUS %>" value="<%=String.valueOf(PortletConstants.DOSSIER_STATUS_NEW) %>"/>
-						<portlet:param name="backURL" value="<%=currentURL %>"/>
+						<portlet:param name="redirectURL" value="<%=currentURL %>"/>
 					</portlet:actionURL> 
 			 		<liferay-ui:icon
 			 			cssClass="search-container-action fa forward"
@@ -103,7 +113,7 @@
 			 		<portlet:actionURL var="updateDossierStatusURL" name="updateDossierStatus">
 						<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
 						<portlet:param name="<%=DossierDisplayTerms.DOSSIER_STATUS %>" value="<%=String.valueOf(PortletConstants.DOSSIER_STATUS_WAITING) %>"/>
-						<portlet:param name="backURL" value="<%=currentURL %>"/>
+						<portlet:param name="redirectURL" value="<%=currentURL %>"/>
 					</portlet:actionURL> 
 			 		<liferay-ui:icon
 			 			cssClass="search-container-action fa forward"
@@ -129,18 +139,19 @@
 				/>
 		 	</c:if>
  		</c:when>
-  		<c:when test="<%= (dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_PROCESSING) && workFlow != null) %>">
-		 		<portlet:actionURL var="cancelDossierURL" name="cancelDossier" >
-					<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
-					<portlet:param name="redirectURL" value="<%=currentURL %>"/>
-				</portlet:actionURL> 
-				<liferay-ui:icon-delete 
-					image="undo"
-					cssClass="search-container-action fa undo"
-					confirmation="are-you-sure-cancel-entry" 
-					message="cancel"  
-					url="<%=cancelDossierURL.toString() %>" 
-				/>
-		</c:when>  		
+  		<c:when test="<%= (dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_PROCESSING)) %>">
+			<portlet:actionURL var="cancelDossierURL" name="cancelDossier" >
+				<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID %>" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
+				<portlet:param name="redirectURL" value="<%=currentURL %>"/>
+			</portlet:actionURL>
+			
+			<liferay-ui:icon-delete 
+				image="undo"
+				cssClass="search-container-action fa delete"
+				confirmation="are-you-sure-cancel-entry" 
+				message="cancel"  
+				url="<%=cancelDossierURL.toString() %>" 
+			/>
+		</c:when>
  	</c:choose>
-<%-- </liferay-ui:icon-menu> --%> 
+<%-- </liferay-ui:icon-menu> --%>

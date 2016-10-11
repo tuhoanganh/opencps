@@ -52,7 +52,29 @@ public class ConfigurationImpl implements ConfigurationAction{
 	    throws Exception {
 
 		long plid = ParamUtil.getLong(actionRequest, "plid");
-
+		
+		long itemsToDisplay = ParamUtil.getLong(actionRequest, "itemsToDisplay");
+		
+		long timeToReLoad = ParamUtil.getLong(actionRequest, "timeToReLoad", 0);
+		
+		String templatesToDisplay = ParamUtil.getString(actionRequest, "templatesToDisplay", "default");
+		
+		String orderFieldDossierFile = ParamUtil.getString(actionRequest, "orderFieldDossierFile");
+		
+		String orderBydDossierFile = ParamUtil.getString(actionRequest, "orderBydDossierFile");
+		
+		boolean displayDossierNo = ParamUtil.getBoolean(actionRequest, "displayDossierNo");
+		
+		boolean displayRecentlyResultWhenSearch = ParamUtil.getBoolean(actionRequest, "displayRecentlyResultWhenSearch");
+		
+		boolean showVersionItem = ParamUtil.getBoolean(actionRequest, "showVersionItem");
+		
+		boolean showBackToListButton = ParamUtil.getBoolean(actionRequest, "showBackToListButton");
+		
+		boolean showServiceDomainIdTree = ParamUtil.getBoolean(actionRequest, "showServiceDomainIdTree");
+		
+		boolean hideTabDossierFile = ParamUtil.getBoolean(actionRequest, "hideTabDossierFile");
+		
 		PortletURL redirectURL =
 		    PortletURLFactoryUtil.create(
 		        PortalUtil.getHttpServletRequest(actionRequest),
@@ -70,6 +92,25 @@ public class ConfigurationImpl implements ConfigurationAction{
 		        actionRequest, portletResource);
 
 		preferences.setValue("redirectPaymentURL", redirectURL.toString());
+		preferences.setValue("displayDossierNo", String.valueOf(displayDossierNo));
+		preferences.setValue("displayRecentlyResultWhenSearch", String.valueOf(displayRecentlyResultWhenSearch));
+		
+		preferences.setValue("itemsToDisplay", String.valueOf(itemsToDisplay));
+		preferences.setValue("templatesToDisplay", String.valueOf(templatesToDisplay));
+		preferences.setValue("timeToReLoad", String.valueOf(timeToReLoad));
+		
+		preferences.setValue("showVersionItem", String.valueOf(showVersionItem));
+		
+		preferences.setValue("showBackToListButton", String.valueOf(showBackToListButton));
+		
+		preferences.setValue("orderFieldDossierFile", orderFieldDossierFile);
+		
+		preferences.setValue("orderBydDossierFile", orderBydDossierFile);
+		
+		preferences.setValue("showServiceDomainIdTree", String.valueOf(showServiceDomainIdTree));
+		
+		preferences.setValue("hideTabDossierFile", String.valueOf(hideTabDossierFile));
+		
 		preferences.store();
 
 		SessionMessages.add(actionRequest, "potlet-config-saved");

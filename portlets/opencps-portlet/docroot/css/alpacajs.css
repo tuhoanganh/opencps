@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 .alpaca-field legend{
     margin-bottom: none !important;
     font-size: 100% !important;
@@ -200,7 +202,7 @@ padding: 0px !important;
   color: #a94442;
 }
 .has-error .form-control {
-  border-color: #a94442;
+  border-color: #a94442 !important;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
           box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
 }
@@ -278,4 +280,18 @@ tr.alpaca-field-tablerow > td.alpaca-container-item input{
 #_13_WAR_opencpsportlet_dossier-dynamic-form_iframe_ .portlet-body,
 #_16_WAR_opencpsportlet_dossier-dynamic-form_iframe_ .portlet-body {
     background-color: #fff !important;
+}
+.alpaca-array-toolbar-action.btn.btn-default.btn-sm {
+    text-indent: -9999px;
+    line-height: 0;
+    padding: 5px 25px 5px 25px;
+}
+
+.alpaca-array-toolbar-action.btn.btn-default.btn-sm::after {
+    content: "Thêm mới";
+    text-indent: 0;
+    display: block;
+    line-height: 0;
+    position: relative;
+    top: -7px;
 }

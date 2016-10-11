@@ -1,5 +1,4 @@
-<%@page import="org.opencps.dossiermgt.DuplicateServiceConfigGovCodeAndServiceInFoException"%>
-<%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="com.liferay.portal.kernel.util.UnicodeFormatter"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -48,6 +47,9 @@
 <%@page import="org.opencps.dossiermgt.InvalidServiceConfigGovCodeException"%>
 <%@page import="org.opencps.dossiermgt.OutOfLengthServiceConfigGovNameException"%>
 <%@page import="org.opencps.dossiermgt.OutOfLengthServiceConfigGovCodeException"%>
+<%@page import="org.opencps.dossiermgt.ServiceUrlHasExistedException"%>
+<%@page import="org.opencps.dossiermgt.DuplicateServiceConfigGovCodeAndServiceInFoException"%>
+<%@page import="org.opencps.util.PortletUtil"%>
 <%
 	ServiceConfig serviceConfig = (ServiceConfig) 
 		request.getAttribute(WebKeys.SERVICE_CONFIG_ENTRY);
@@ -77,7 +79,20 @@
 	}
 	
 	List<ServiceInfo> serviceInfos = new ArrayList<ServiceInfo>();
-	List<DossierTemplate> dossierTemplates = new ArrayList<DossierTemplate>();;
+	List<DossierTemplate> dossierTemplates = new ArrayList<DossierTemplate>();
+	
+	DictCollection collectionDomain = null;
+	DictItem curDictItem = null;
+	List<DictItem> dictItems = new ArrayList<DictItem>();
+	try {
+		collectionDomain = DictCollectionLocalServiceUtil.getDictCollection(scopeGroupId, WebKeys.SERVICE_DOMAIN);
+	} catch (Exception e) {
+		
+	}
+	
+	if(Validator.isNotNull(collectionDomain)) {
+		dictItems = DictItemLocalServiceUtil.getDictItemsByDictCollectionId(collectionDomain.getDictCollectionId());
+	}
 	
 	//govAgencyId as serviceAdmin
 	DictItem govAgencyItem = null;
@@ -85,10 +100,13 @@
 	if(Validator.isNotNull(serviceConfig)) {
 		//get GovAgency by GovAgenCyCode
 		govAgencyItem = PortletUtil
-			.getDictItem(PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION ,
+			.getDictItem(PortletPropsValues.DATAMGT_MASTERDATA_GOVERNMENT_AGENCY ,
 			serviceConfig.getGovAgencyCode(), scopeGroupId);
 		//get Id
-		dictItemGovAgencyId = String.valueOf(govAgencyItem.getDictItemId());
+		if(Validator.isNotNull(govAgencyItem)) {
+			dictItemGovAgencyId = String.valueOf(govAgencyItem.getDictItemId());
+		}
+		
 	}
 	
 	try {
@@ -156,6 +174,11 @@
 	message="<%= DuplicateServiceConfigGovCodeAndServiceInFoException.class.getName() %>"
 />
 
+<liferay-ui:error 
+	exception="<%= ServiceUrlHasExistedException.class%>"
+	message="<%= ServiceUrlHasExistedException.class.getName() %>"
+/>
+
 <portlet:renderURL 
 	var="renderToDictItemServiceAdmin" 
 	windowState="<%=LiferayWindowState.EXCLUSIVE.toString() %>" 
@@ -179,143 +202,191 @@
 	<portlet:param name="backURL" value="<%=backURL %>"/>
 </portlet:actionURL>
 
-<aui:form 
-	action="<%=updateServiceConfigURL.toString() %>"
-	method="post"
-	name="fm"
->
-	<aui:model-context bean="<%=serviceConfig%>" model="<%=ServiceConfig.class%>" />
+<div class="opencps-bound-wrapper pd20 default-box-shadow">
 	
-	<aui:row>
-		<aui:col width="50">
-			<datamgt:ddr
-				cssClass="input100"
-				depthLevel="1" 
-				dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN %>"
-				itemNames="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_DOMAINCODE %>"
-				itemsEmptyOption="true"	
-				selectedItems="<%=dictItemServiceDomainId%>"
-			/>	
-		</aui:col>
-	</aui:row>
 	
-	<div id = "<portlet:namespace />responseServiceConfig"></div>
-	
-	<!-- govAgenci -->
-	<aui:row>
-		<aui:col width="50">
-			<datamgt:ddr
-				cssClass="input100"
-				depthLevel="1" 
-				dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_ADMINISTRATION %>"
-				itemNames="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_GOVAGENCYCODE %>"
-				itemsEmptyOption="true"
-				selectedItems="<%=dictItemGovAgencyId%>"
-			/>
-		</aui:col>
-	</aui:row>
-	
-	<aui:row>
-		<aui:col width="50">
-			<aui:select name="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_SERVICELEVEL %>" required="true"
-				showEmptyOption="true" cssClass="input100"
-			>
-				<aui:option value="<%=PortletConstants.SERVICE_CONFIG_LEVEL_1 %>">
-					<liferay-ui:message key="level-1" />
-				</aui:option>
-				
-				<aui:option value="<%=PortletConstants.SERVICE_CONFIG_LEVEL_2 %>">
-					<liferay-ui:message key="level-2" />
-				</aui:option>
+	<aui:form 
+		action="<%=updateServiceConfigURL.toString() %>"
+		method="post"
+		name="fm"
+	>
+		<aui:model-context bean="<%=serviceConfig%>" model="<%=ServiceConfig.class%>" />
+		
+		<aui:row>
+			<%-- <aui:col>
+				<datamgt:ddr
+					cssClass="input100"
+					depthLevel="1" 
+					dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN %>"
+					itemNames="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_DOMAINCODE %>"
+					itemsEmptyOption="true"	
+					selectedItems="<%=dictItemServiceDomainId%>"
+				/>	
+			</aui:col> --%>
 			
-				<aui:option value="<%=PortletConstants.SERVICE_CONFIG_LEVEL_3 %>">
-					<liferay-ui:message key="level-3" />
-				</aui:option>
+			<aui:select name="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_DOMAINCODE %>" 
+						label="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_DOMAINCODE %>" 
+						cssClass="input100"
+			>
+				<aui:option value=""></aui:option>
+				<%
+					if(dictItems != null){
+						for(DictItem dictItem : dictItems){
+							if((curDictItem != null && dictItem.getDictItemId() == curDictItem.getDictItemId())||
+									(curDictItem != null && dictItem.getTreeIndex().contains(curDictItem.getDictItemId() + StringPool.PERIOD))){
+								continue;
+							}
+							
+							int level = StringUtil.count(dictItem.getTreeIndex(), StringPool.PERIOD);
+							String index = "|";
+							for(int i = 0; i < level; i++){
+								index += "_";
+							}
+							%>
+								<aui:option value="<%=dictItem.getDictItemId()%>"><%=index + dictItem.getItemName(locale) %></aui:option>
+							<%
+						}
+					}
+				%>
+			</aui:select>
+		</aui:row>
+		
+		
+		
+		<div id = "<portlet:namespace />responseServiceConfig"></div>
+		
+		<!-- govAgenci -->
+		<aui:row>
+			<aui:col width="50">
+				<datamgt:ddr
+					cssClass="input100"
+					depthLevel="1" 
+					dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_GOVERNMENT_AGENCY %>"
+					itemNames="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_GOVAGENCYCODE %>"
+					itemsEmptyOption="true"
+					selectedItems="<%=dictItemGovAgencyId%>"
+				/>
+			</aui:col>
+		</aui:row>
+		
+		<aui:row>
+			<aui:col width="50">
+				<aui:select name="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_SERVICELEVEL %>" required="true"
+					showEmptyOption="true" cssClass="input100"
+				>
+					<aui:option value="<%=PortletConstants.SERVICE_CONFIG_LEVEL_1 %>">
+						<liferay-ui:message key="level-1" />
+					</aui:option>
+					
+					<aui:option value="<%=PortletConstants.SERVICE_CONFIG_LEVEL_2 %>">
+						<liferay-ui:message key="level-2" />
+					</aui:option>
 				
-				<aui:option value="<%= PortletConstants.SERVICE_CONFIG_LEVEL_4 %>" >
-					<liferay-ui:message key="level-4" />
-				</aui:option>
-			</aui:select>
-		</aui:col>
-	</aui:row>
-	
-	<aui:row>
-		<aui:col width="50">
-			<aui:select name="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_DOSSIERTEMPLATEID %>" cssClass="input100">
-						<c:choose>
-						   <c:when test="<%=! tabs1.equals(DossierMgtUtil.TOP_TABS_SERVICE_CONFIG) && dossierTemplateId != 0 %>">
-						       <aui:option value="<%= dossierTemplateId %>">
-						           <%= dossierTemplateFromRenderRequest.getTemplateName() %>
-						       </aui:option>
-						   </c:when>
-						   
-						   <c:when test="<%=Validator.isNotNull(tabs1) && tabs1.equals(DossierMgtUtil.TOP_TABS_SERVICE_CONFIG) %>">
-						       <%
-			                        for(DossierTemplate dossierTemplate : dossierTemplates) {
-			                            %>
-			                                <aui:option value="<%=dossierTemplate.getDossierTemplateId() %>">
-			                                    <%=dossierTemplate.getTemplateName() %>
-			                                </aui:option>
-			                            <%
-			                        }
-			                    %>
-						   </c:when>
-						   
-						   <c:otherwise>
-						       <%
-			                        for(DossierTemplate dossierTemplate : dossierTemplates) {
-			                            %>
-			                                <aui:option value="<%=dossierTemplate.getDossierTemplateId() %>">
-			                                    <%=dossierTemplate.getTemplateName() %>
-			                                </aui:option>
-			                            <%
-			                        }
-			                    %>
-						   </c:otherwise>
-						</c:choose>
-			</aui:select>
-		</aui:col>
-	</aui:row>
-	
-	<aui:row>
-		<aui:col width="100">
-			<aui:input name="<%= ServiceConfigDisplayTerms.SERVICE_INSTRUCTION%>" cssClass="input100"/>
-		</aui:col>
-	</aui:row>
-	
-	<aui:row>
-		<aui:col width="25">
-			<aui:input type="checkbox" name="<%= ServiceConfigDisplayTerms.SERVICE_PORTAL%>" 
-				checked="<%=Validator.isNotNull(serviceConfig) ? (serviceConfig.getServicePortal()) : false %>"/>
-			<aui:input type="checkbox" name="<%= ServiceConfigDisplayTerms.SERVICE_ONEGATE%>" 
-				checked="<%=Validator.isNotNull(serviceConfig) ? (serviceConfig.getServiceOnegate()) : false %>"/>
-			<aui:input type="checkbox" name="<%= ServiceConfigDisplayTerms.SERVICE_BACKOFFICE%>" 
-				checked="<%=Validator.isNotNull(serviceConfig) ? (serviceConfig.getServiceBackoffice()) : false %>"/>
-		</aui:col>
+					<aui:option value="<%=PortletConstants.SERVICE_CONFIG_LEVEL_3 %>">
+						<liferay-ui:message key="level-3" />
+					</aui:option>
+					
+					<aui:option value="<%= PortletConstants.SERVICE_CONFIG_LEVEL_4 %>" >
+						<liferay-ui:message key="level-4" />
+					</aui:option>
+				</aui:select>
+			</aui:col>
+		</aui:row>
 		
-		<aui:col width="25">
-			<aui:input type="checkbox" name="<%= ServiceConfigDisplayTerms.SERVICE_CITIZEN%>" 
-				checked="<%=Validator.isNotNull(serviceConfig) ? (serviceConfig.getServiceCitizen()) : false %>"/>
-			<aui:input type="checkbox" name="<%= ServiceConfigDisplayTerms.SERVICE_BUSINEES%>" 
-				checked="<%=Validator.isNotNull(serviceConfig) ? (serviceConfig.getServiceBusinees()) : false %>"/>
-		</aui:col>
-	</aui:row>
-	
-	
-	<!-- comment this, choose in datatitem, no find by service info -->
-	<%-- <div id = "<portlet:namespace />serviceConfigGovNameCode">
+		<aui:row>
+			<aui:col width="50">
+				<aui:select name="<%=ServiceConfigDisplayTerms.SERVICE_CONFIG_DOSSIERTEMPLATEID %>" cssClass="input100">
+							<c:choose>
+							   <c:when test="<%=! tabs1.equals(DossierMgtUtil.TOP_TABS_SERVICE_CONFIG) && dossierTemplateId != 0 %>">
+							       <aui:option value="<%= dossierTemplateId %>">
+							           <%= dossierTemplateFromRenderRequest.getTemplateName() %>
+							       </aui:option>
+							   </c:when>
+							   
+							   <c:when test="<%=Validator.isNotNull(tabs1) && tabs1.equals(DossierMgtUtil.TOP_TABS_SERVICE_CONFIG) %>">
+							       <%
+				                        for(DossierTemplate dossierTemplate : dossierTemplates) {
+				                            %>
+				                                <aui:option value="<%=dossierTemplate.getDossierTemplateId() %>">
+				                                    <%=dossierTemplate.getTemplateName() %>
+				                                </aui:option>
+				                            <%
+				                        }
+				                    %>
+							   </c:when>
+							   
+							   <c:otherwise>
+							       <%
+				                        for(DossierTemplate dossierTemplate : dossierTemplates) {
+				                            %>
+				                                <aui:option value="<%=dossierTemplate.getDossierTemplateId() %>">
+				                                    <%=dossierTemplate.getTemplateName() %>
+				                                </aui:option>
+				                            <%
+				                        }
+				                    %>
+							   </c:otherwise>
+							</c:choose>
+				</aui:select>
+			</aui:col>
+		</aui:row>
 		
-	</div> --%>
+		<aui:row>
+			<aui:col width="100">
+				<%-- <aui:input name="<%= ServiceConfigDisplayTerms.SERVICE_INSTRUCTION%>" cssClass="input100"/> --%>
+				<liferay-ui:input-editor name="<%= ServiceConfigDisplayTerms.SERVICE_INSTRUCTION %>" 
+					initMethod="initInstructions"/>
+			</aui:col>
+		</aui:row>
+		
+		<aui:row>
+			<aui:col width="100">
+				<aui:input name="<%= ServiceConfigDisplayTerms.SERVICE_URL%>" cssClass="input100">
+					<aui:validator name="url" />
+				</aui:input>
+			</aui:col>
+		</aui:row>
+		
+		<aui:row>
+			<aui:col width="25">
+				<aui:input type="checkbox" name="<%= ServiceConfigDisplayTerms.SERVICE_PORTAL%>" 
+					checked="<%=Validator.isNotNull(serviceConfig) ? (serviceConfig.getServicePortal()) : false %>"/>
+				<aui:input type="checkbox" name="<%= ServiceConfigDisplayTerms.SERVICE_ONEGATE%>" 
+					checked="<%=Validator.isNotNull(serviceConfig) ? (serviceConfig.getServiceOnegate()) : false %>"/>
+				<aui:input type="checkbox" name="<%= ServiceConfigDisplayTerms.SERVICE_BACKOFFICE%>" 
+					checked="<%=Validator.isNotNull(serviceConfig) ? (serviceConfig.getServiceBackoffice()) : false %>"/>
+			</aui:col>
+			
+			<aui:col width="25">
+				<aui:input type="checkbox" name="<%= ServiceConfigDisplayTerms.SERVICE_CITIZEN%>" 
+					checked="<%=Validator.isNotNull(serviceConfig) ? (serviceConfig.getServiceCitizen()) : false %>"/>
+				<aui:input type="checkbox" name="<%= ServiceConfigDisplayTerms.SERVICE_BUSINEES%>" 
+					checked="<%=Validator.isNotNull(serviceConfig) ? (serviceConfig.getServiceBusinees()) : false %>"/>
+			</aui:col>
+		</aui:row>
+		
+		
+		<!-- comment this, choose in datatitem, no find by service info -->
+		<%-- <div id = "<portlet:namespace />serviceConfigGovNameCode">
+			
+		</div> --%>
+		
 	
+		
+		<aui:row>
+			<aui:button name="submit" type="submit" value="submit"/>
+			<aui:button type="reset" value="clear"/>
+		</aui:row>
+	</aui:form>
 
-	
-	<aui:row>
-		<aui:button name="submit" type="submit" value="submit"/>
-		<aui:button type="reset" value="clear"/>
-	</aui:row>
-</aui:form>
+
+</div>
 
 <aui:script use = "aui-base">
+
+function <portlet:namespace />initInstructions() {
+	return "<%= Validator.isNotNull(serviceConfig) ? UnicodeFormatter.toString(serviceConfig.getServiceInstruction()) : StringPool.BLANK %>";
+}
 	
 AUI().ready(function(A) {
 		

@@ -36,7 +36,7 @@
 				<div class="toolbar_search_input">
 					<aui:row>
 						<aui:col width="30">
-						
+							<aui:button cssClass="paymentBtnAll" type="button" onClick='<%= renderResponse.getNamespace() + \"addPaymentItems();\" %>' name="thanhToan" value="thanh-toan" ></aui:button>
 						</aui:col>
 						<aui:col width="35" cssClass="search-input select-box search-col">
 							<div class="select">
@@ -48,7 +48,7 @@
 									<liferay-ui:message key="requested"></liferay-ui:message>
 								</aui:option>
 								<aui:option value="<%= PaymentMgtUtil.PAYMENT_STATUS_CONFIRMED %>">
-									<liferay-ui:message key="confirmed"></liferay-ui:message>
+									<liferay-ui:message key="payment-confirmed"></liferay-ui:message>
 								</aui:option>
 								<aui:option value="<%= PaymentMgtUtil.PAYMENT_STATUS_APPROVED %>">
 									<liferay-ui:message key="approved"></liferay-ui:message>

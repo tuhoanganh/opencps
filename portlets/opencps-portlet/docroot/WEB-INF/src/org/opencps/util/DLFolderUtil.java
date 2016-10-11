@@ -17,11 +17,15 @@
 
 package org.opencps.util;
 
+import java.util.Date;
+
 import org.opencps.accountmgt.model.Business;
 import org.opencps.accountmgt.model.Citizen;
 import org.opencps.accountmgt.service.BusinessLocalServiceUtil;
 import org.opencps.accountmgt.service.CitizenLocalServiceUtil;
+import org.opencps.util.PortletUtil.SplitDate;
 
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
@@ -102,11 +106,11 @@ public class DLFolderUtil {
 
 		try {
 			dlFolder =
-				DLFolderLocalServiceUtil.getFolder(
+				DLFolderLocalServiceUtil.fetchFolder(
 					groupId, parentFolderId, name);
 		}
-		catch (Exception e) {
-			_log.warn(e.getMessage());
+		catch (SystemException e) {
+			_log.error(e);
 		}
 
 		return dlFolder;
@@ -180,11 +184,11 @@ public class DLFolderUtil {
 
 		try {
 			dlFolder =
-				DLFolderLocalServiceUtil.getFolder(
+				DLFolderLocalServiceUtil.fetchFolder(
 					groupId, parentFolderId, name);
 		}
-		catch (Exception e) {
-			_log.warn(e.getMessage());
+		catch (SystemException e) {
+			_log.error(e);
 		}
 
 		result = dlFolder != null ? true : false;
@@ -207,6 +211,7 @@ public class DLFolderUtil {
 		}
 	}
 
+	@Deprecated
 	public static DLFolder getAccountFolder(
 		long groupId, long userId, ServiceContext serviceContext) {
 
@@ -222,6 +227,7 @@ public class DLFolderUtil {
 			}
 		}
 		catch (Exception e) {
+			_log.error(e);
 		}
 
 		if (Validator.isNull(destination)) {
@@ -235,6 +241,7 @@ public class DLFolderUtil {
 				}
 			}
 			catch (Exception e) {
+				_log.error(e);
 			}
 		}
 
@@ -250,6 +257,7 @@ public class DLFolderUtil {
 		return dlFolder;
 	}
 
+	@Deprecated
 	public static DLFolder getDossierFolder(
 		long groupId, long userId, int dossierCount,
 		ServiceContext serviceContext) {
@@ -266,6 +274,7 @@ public class DLFolderUtil {
 			}
 		}
 		catch (Exception e) {
+			_log.error(e);
 		}
 
 		if (Validator.isNull(destination)) {
@@ -279,6 +288,7 @@ public class DLFolderUtil {
 				}
 			}
 			catch (Exception e) {
+				_log.error(e);
 			}
 		}
 
@@ -289,6 +299,82 @@ public class DLFolderUtil {
 					serviceContext.getScopeGroupId(),
 					serviceContext.getScopeGroupId(), false, 0, destination +
 						StringPool.SLASH + String.valueOf(dossierCount),
+					StringPool.BLANK, false, serviceContext);
+		}
+
+		return dlFolder;
+	}
+
+	public static DLFolder getDossierFolder(
+		long groupId, Date date, String oid, ServiceContext serviceContext) {
+
+		DLFolder dlFolder = null;
+
+		String destination = StringPool.BLANK;
+		SplitDate splitDate = PortletUtil.splitDate(new Date());
+
+		destination =
+			PortletUtil.getDossierDestinationFolder(
+				groupId, splitDate.getYear(), splitDate.getMonth(),
+				splitDate.getDayOfMoth(), oid);
+
+		if (Validator.isNotNull(destination)) {
+			dlFolder =
+				DLFolderUtil.getTargetFolder(
+					serviceContext.getUserId(),
+					serviceContext.getScopeGroupId(),
+					serviceContext.getScopeGroupId(), false, 0, destination,
+					StringPool.BLANK, false, serviceContext);
+		}
+
+		return dlFolder;
+	}
+
+	public static DLFolder getPaymentFolder(
+		long groupId, Date date, long ownId, String accountType,
+		ServiceContext serviceContext) {
+
+		DLFolder dlFolder = null;
+
+		String destination = StringPool.BLANK;
+		SplitDate splitDate = PortletUtil.splitDate(new Date());
+
+		destination =
+			PortletUtil.getPaymentDestinationFolder(
+				groupId, splitDate.getYear(), splitDate.getMonth(),
+				splitDate.getDayOfMoth(), ownId, accountType);
+
+		if (Validator.isNotNull(destination)) {
+			dlFolder =
+				DLFolderUtil.getTargetFolder(
+					serviceContext.getUserId(),
+					serviceContext.getScopeGroupId(),
+					serviceContext.getScopeGroupId(), false, 0, destination,
+					StringPool.BLANK, false, serviceContext);
+		}
+
+		return dlFolder;
+	}
+
+	public static DLFolder getSyncPaymentFolder(
+		long groupId, Date date, String oId, ServiceContext serviceContext) {
+
+		DLFolder dlFolder = null;
+
+		String destination = StringPool.BLANK;
+		SplitDate splitDate = PortletUtil.splitDate(new Date());
+
+		destination =
+			PortletUtil.getSyncPaymentDestinationFolder(
+				groupId, splitDate.getYear(), splitDate.getMonth(),
+				splitDate.getDayOfMoth(), oId);
+
+		if (Validator.isNotNull(destination)) {
+			dlFolder =
+				DLFolderUtil.getTargetFolder(
+					serviceContext.getUserId(),
+					serviceContext.getScopeGroupId(),
+					serviceContext.getScopeGroupId(), false, 0, destination,
 					StringPool.BLANK, false, serviceContext);
 		}
 

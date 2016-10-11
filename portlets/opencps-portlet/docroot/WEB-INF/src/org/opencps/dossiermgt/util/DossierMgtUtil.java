@@ -18,24 +18,41 @@
 package org.opencps.dossiermgt.util;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Stack;
 
+import org.opencps.dossiermgt.comparator.DossierFileDossierFileDateComparator;
+import org.opencps.dossiermgt.comparator.DossierSubmitDateComparator;
 import org.opencps.dossiermgt.comparator.DossierTemplateNameComparator;
 import org.opencps.dossiermgt.comparator.DossierTemplateNoComparator;
+import org.opencps.dossiermgt.model.Dossier;
+import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.DossierPart;
+import org.opencps.dossiermgt.model.ServiceConfig;
+import org.opencps.dossiermgt.search.DossierDisplayTerms;
+import org.opencps.dossiermgt.search.DossierFileDisplayTerms;
 import org.opencps.dossiermgt.search.DossierTemplateDisplayTerms;
+import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
-import org.opencps.paymentmgt.util.PaymentMgtUtil;
+import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
+import org.opencps.servicemgt.model.ServiceInfo;
+import org.opencps.servicemgt.model.TemplateFile;
+import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
+import org.opencps.servicemgt.service.TemplateFileLocalServiceUtil;
+import org.opencps.util.PortletConstants;
+import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portlet.documentlibrary.model.DLFileEntry;
+import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
 
 /**
  * @author trungnt
@@ -97,6 +114,67 @@ public class DossierMgtUtil {
 		}
 
 		return orderByComparator;
+	}
+	
+	/**
+	 * @param orderByCol
+	 * @param orderByType
+	 * @return
+	 */
+	public static OrderByComparator getDossierOrderByComparator(
+		String orderByCol, String orderByType) {
+
+		boolean orderByAsc = false;
+
+		if (orderByType.equals("asc")) {
+			orderByAsc = true;
+		}
+
+		OrderByComparator orderByComparator = null;
+
+		if (orderByCol.equals(DossierDisplayTerms.SUBMIT_DATETIME)) {
+			orderByComparator = new DossierSubmitDateComparator(orderByAsc);
+		}
+
+		return orderByComparator;
+	}
+	
+	/**
+	 * @param orderByType
+	 * @param dossierFiles
+	 * @return
+	 */
+	public static List<DossierFile> orderDossierFileByDossierFileDate(String orderByType, List<DossierFile> dossierFiles) {
+		int value = 0;
+		DossierFile dossierFileTemp = null;
+		
+		if(orderByType.equals(WebKeys.ORDER_BY_ASC)) {
+			for(int i=0; i<dossierFiles.size()-1; i++) {
+				for(int j=i+1; j<dossierFiles.size(); j++) {
+					value = dossierFiles.get(i).getDossierFileDate().compareTo(dossierFiles.get(j).getDossierFileDate());
+					if(value >= 0) {
+						dossierFileTemp = dossierFiles.get(i);
+						dossierFiles.set(i, dossierFiles.get(j));
+						dossierFiles.set(j, dossierFileTemp);
+					}
+				}
+			}
+			return dossierFiles;
+		} else if (orderByType.equals(WebKeys.ORDER_BY_DESC)){
+			for(int i=0; i<dossierFiles.size()-1; i++) {
+				for(int j=i+1; j<dossierFiles.size(); j++) {
+					value = dossierFiles.get(i).getDossierFileDate().compareTo(dossierFiles.get(j).getDossierFileDate());
+					if(value < 0) {
+						dossierFileTemp = dossierFiles.get(i);
+						dossierFiles.set(i, dossierFiles.get(j));
+						dossierFiles.set(j, dossierFileTemp);
+					}
+				}
+			}
+			return dossierFiles;
+		}
+		
+		return dossierFiles;
 	}
 
 	/**
@@ -252,6 +330,97 @@ public class DossierMgtUtil {
 		}
 
 		return statusLabel;
+	}
+	
+	public static String getURLDownloadTemplateFile(ThemeDisplay themeDisplay, String templateFileNo) {
+		
+		String result = StringPool.BLANK;
+		
+		DLFileEntry dlFileEntry = null;
+		
+		TemplateFile templateFile = null;
+		
+		try {
+		
+			templateFile = TemplateFileLocalServiceUtil.getTemplateFileByNo(themeDisplay.getScopeGroupId(), templateFileNo);
+			
+			if(Validator.isNotNull(templateFile)){
+		
+				dlFileEntry = DLFileEntryLocalServiceUtil.getDLFileEntry(templateFile.getFileEntryId());
+		
+				result = themeDisplay.getPortalURL()+"/c/document_library/get_file?uuid="+dlFileEntry.getUuid()+"&groupId="+themeDisplay.getScopeGroupId();
+		
+			}
+		
+		} catch (Exception e) {
+			
+			_log.error(e);
+			
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * @param requestCommand
+	 * @param messageInfo
+	 * @return
+	 */
+	public static String getDossierLogs(
+	    String requestCommand, String messageInfo) {
+
+		String dossierLog = StringPool.BLANK;
+		
+		if (Validator.isNotNull(messageInfo)) {
+			if (Validator.equals(
+			    requestCommand, PortletConstants.REQUEST_COMMAND_PAYMENT)) {
+
+				String[] arrMsgInfo =
+				    StringUtil.split(messageInfo, StringPool.SEMICOLON);
+
+				if (arrMsgInfo.length != 0) {
+					dossierLog = arrMsgInfo[0];
+				}
+
+			}
+			else {
+				dossierLog = messageInfo;
+			}
+
+		}
+
+		return dossierLog;
+	}
+
+	/**
+	 * Get service name by dossierId
+	 * 
+	 * @param dossierId maso ho so
+	 * @return (String) serviceName
+	 */
+	public static String getServiceName(long dossierId) {
+
+		String serviceName = StringPool.BLANK;
+
+		if (Validator.isNotNull(dossierId) && dossierId != 0) {
+			try {
+				Dossier dossier =
+				    DossierLocalServiceUtil.fetchDossier(dossierId);
+
+				ServiceConfig serviceConfig =
+				    ServiceConfigLocalServiceUtil.fetchServiceConfig(dossier.getServiceConfigId());
+
+				ServiceInfo serviceInfo =
+				    ServiceInfoLocalServiceUtil.fetchServiceInfo(serviceConfig.getServiceInfoId());
+
+				serviceName = serviceInfo.getServiceName();
+			}
+			catch (Exception e) {
+				_log.error("dossierId is not validator");
+			}
+		}
+
+		return serviceName;
 	}
 	
 	private static Log _log =

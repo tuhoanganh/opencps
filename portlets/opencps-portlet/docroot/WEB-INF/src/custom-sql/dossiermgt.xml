@@ -17,10 +17,8 @@
 			
 			WHERE
 				(opencps_service_config.groupId = ?)
-			AND (
-				(lower(opencps_dossiertemplate.templateName) LIKE ? [$AND_OR_NULL_CHECK$]))
-			OR (
-				(lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))	
+			AND ((lower(opencps_dossiertemplate.templateName) LIKE ? [$AND_OR_NULL_CHECK$])
+			OR (lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))	
 			AND (opencps_service_config.govAgencyCode = ?)
 			AND (opencps_service_config.domainCode = ?)
 		]]>
@@ -33,6 +31,7 @@
 			FROM
 				opencps_service_config
 			WHERE
+			
 				groupId = ?
 			AND 
 				opencps_service_config.serviceMode IN (?)
@@ -57,10 +56,8 @@
 				opencps_service_config.dossierTemplateId = opencps_dossiertemplate.dossierTemplateId
 			WHERE
 				(opencps_service_config.groupId = ?)
-			AND (
-				(lower(opencps_dossiertemplate.templateName) LIKE ? [$AND_OR_NULL_CHECK$]))
-			OR (
-				(lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))
+			AND ((lower(opencps_dossiertemplate.templateName) LIKE ? [$AND_OR_NULL_CHECK$])
+			OR (lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))
 			AND (opencps_service_config.govAgencyCode = ?)
 			AND (opencps_service_config.domainCode = ?)
 		]]>
@@ -79,65 +76,6 @@
 		]]>
 	</sql>
 	
-	<sql id="org.opencps.dossiermgt.service.persistence.DossierFinder.countDossier">	
-		<![CDATA[
-			SELECT
-				count(*) AS COUNT_VALUE
-			FROM
-				opencps_dossier
-			LEFT JOIN
-				opencps_serviceinfo
-			ON
-				opencps_dossier.serviceInfoId = opencps_serviceinfo.serviceInfoId
-			LEFT JOIN
-				opencps_service_config
-			ON
-				opencps_dossier.serviceConfigId = opencps_service_config.serviceConfigId
-			WHERE
-				(opencps_dossier.groupId = ?)
-			AND
-				(lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$])
-			OR 
-				(lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$])
-			OR
-				(lower(opencps_dossier.subjectName) LIKE ? [$AND_OR_NULL_CHECK$])
-			OR
-				(lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$])
-			AND 
-				(opencps_dossier.dossierStatus = ?)
-		]]>
-	</sql>
-	
-	<sql id="org.opencps.dossiermgt.service.persistence.DossierFinder.searchDossier">	
-		<![CDATA[
-			SELECT
-				*
-			FROM
-				opencps_dossier
-			LEFT JOIN
-				opencps_serviceinfo
-			ON
-				opencps_dossier.serviceInfoId = opencps_serviceinfo.serviceInfoId
-			LEFT JOIN
-				opencps_service_config
-			ON
-				opencps_dossier.serviceConfigId = opencps_service_config.serviceConfigId
-			WHERE
-				(opencps_dossier.groupId = ?)
-			AND
-				(lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$])
-			OR 
-				(lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$])
-			OR
-				(lower(opencps_dossier.subjectName) LIKE ? [$AND_OR_NULL_CHECK$])
-			OR
-				(lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$])
-			AND 
-				(opencps_dossier.dossierStatus = ?)
-			ORDER BY opencps_dossier.modifiedDate DESC
-		]]>
-	</sql>
-
 	<sql id="org.opencps.dossiermgt.service.persistence.DossierFinder.countDossierByKeywordDomainAndStatus">	
 		<![CDATA[
 			SELECT
@@ -148,51 +86,55 @@
 				opencps_serviceinfo
 			ON
 				opencps_dossier.serviceInfoId = opencps_serviceinfo.serviceInfoId
-			LEFT JOIN
-				opencps_service_config
-			ON
-				opencps_service_config.serviceInfoId = opencps_serviceinfo.serviceInfoId
 			WHERE
 				(opencps_dossier.groupId = ?)
 			AND
-				(lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$])
+				((lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$])
 			OR 
-				(lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$])
+				(lower(opencps_serviceinfo.fullName) LIKE ? [$AND_OR_NULL_CHECK$])
 			OR 
-				(lower(opencps_dossier.subjectName) LIKE ? [$AND_OR_NULL_CHECK$])
+				(lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$])
+			OR 
+				(lower(opencps_dossier.subjectName) LIKE ? [$AND_OR_NULL_CHECK$]))
 			AND 
 				(opencps_dossier.dossierStatus = ?)
-			AND (opencps_serviceinfo.domainCode = ?)
+
+			AND (opencps_dossier.serviceDomainIndex LIKE ?)
+			
+			AND 
+				(opencps_dossier.govAgencyCode IN (?))
 		]]>
 	</sql>	
 	
 	<sql id="org.opencps.dossiermgt.service.persistence.DossierFinder.searchDossierByKeywordDomainAndStatus">	
 		<![CDATA[
 			SELECT
-				*
+				opencps_dossier.*
 			FROM
 				opencps_dossier
 			INNER JOIN
 				opencps_serviceinfo
 			ON
 				opencps_dossier.serviceInfoId = opencps_serviceinfo.serviceInfoId
-			LEFT JOIN
-				opencps_service_config
-			ON
-				opencps_service_config.serviceInfoId = opencps_serviceinfo.serviceInfoId
 			WHERE
 				(opencps_dossier.groupId = ?)
 			AND
-				(lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$])
+				((lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$])
 			OR 
-				(lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$])
+				(lower(opencps_serviceinfo.fullName) LIKE ? [$AND_OR_NULL_CHECK$])
 			OR 
-				(lower(opencps_dossier.subjectName) LIKE ? [$AND_OR_NULL_CHECK$])				
+				(lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$])
+			OR 
+				(lower(opencps_dossier.subjectName) LIKE ? [$AND_OR_NULL_CHECK$]))
 			AND 
 				(opencps_dossier.dossierStatus = ?)
-			AND (opencps_serviceinfo.domainCode = ?)
+
+			AND (opencps_dossier.serviceDomainIndex LIKE ?)
+			
+			AND 
+				(opencps_dossier.govAgencyCode IN (?))
 		]]>
-	</sql>	
+	</sql>
 
 	<sql id="org.opencps.dossiermgt.service.persistence.DossierFileFinder.countDossierFile">	
 		<![CDATA[
@@ -211,9 +153,9 @@
 			OR 
 				(lower(opencps_dossier_file.dossierFileNo) LIKE ? [$AND_OR_NULL_CHECK$])
 			AND 
-				(opencps_dossier_file.fileEntryId IS NOT NULL AND opencps_dossier_file.fileEntryId = ?)
+				(opencps_dossier_file.fileEntryId = ?)
 			AND 
-				(opencps_dossier_file.fileEntryId IS NULL)
+				(opencps_dossier_file.fileEntryId > 0)
 			AND
 				(opencps_dossier_file.dossierFileType = ?)
 			AND
@@ -238,9 +180,9 @@
 			OR 
 				(lower(opencps_dossier_file.dossierFileNo) LIKE ? [$AND_OR_NULL_CHECK$])
 			AND 
-				(opencps_dossier_file.fileEntryId IS NOT NULL AND opencps_dossier_file.fileEntryId = ?)
+				(opencps_dossier_file.fileEntryId = ?)
 			AND 
-				(opencps_dossier_file.fileEntryId IS NULL)
+				(opencps_dossier_file.fileEntryId > 0)
 			AND
 				(opencps_dossier_file.dossierFileType = ?)
 			AND
@@ -380,9 +322,10 @@
 				opencps_service_config.serviceInfoId = opencps_serviceinfo.serviceInfoId
 			WHERE
 				opencps_service_config.groupId = ?
-				
-			AND ((lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))
-			
+			AND 
+				(lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$])
+			OR 
+				(lower(opencps_serviceinfo.serviceNo) LIKE ? [$AND_OR_NULL_CHECK$])
 			AND 
 				opencps_service_config.servicePortal = ?
 			AND 
@@ -417,8 +360,10 @@
 				opencps_service_config.serviceInfoId = opencps_serviceinfo.serviceInfoId
 			WHERE
 				opencps_service_config.groupId = ?
-			AND ((lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))
-			
+			AND 
+				(lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$])
+			OR 
+				(lower(opencps_serviceinfo.serviceNo) LIKE ? [$AND_OR_NULL_CHECK$])
 			AND 
 				opencps_service_config.servicePortal = ?
 			AND 
@@ -508,7 +453,11 @@
 			AND
 				(opencps_dossier.userId = ?)
 			AND
-				((lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_dossier.subjectName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$]))
+				((lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]) 
+					OR (lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$]) 
+					OR (lower(opencps_dossier.subjectName) LIKE ? [$AND_OR_NULL_CHECK$]) 
+					OR (lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$]) 
+					OR (lower(opencps_dossier.dossierId) LIKE ? [$AND_OR_NULL_CHECK$]))
 			AND 
 				(opencps_dossier.dossierStatus = ?)
 			AND 
@@ -537,7 +486,11 @@
 			AND
 				(opencps_dossier.userId = ?)
 			AND
-				((lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_dossier.subjectName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$]))
+				((lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]) 
+					OR (lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$]) 
+					OR (lower(opencps_dossier.subjectName) LIKE ? [$AND_OR_NULL_CHECK$]) 
+					OR (lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$]) 
+					OR (lower(opencps_dossier.dossierId) LIKE ? [$AND_OR_NULL_CHECK$]))
 			AND 
 				(opencps_dossier.dossierStatus = ?)
 			AND 
@@ -933,6 +886,10 @@
 			WHERE
 				1
 			AND
+				opencps_dossier.receptionNo IS NOT NULL
+			AND 
+				opencps_dossier.receptionNo <> ''
+			AND
 				opencps_serviceprocess.processNo = ?
 			AND
 				opencps_processstep.processStepNo = ?
@@ -940,4 +897,131 @@
 				opencps_processorder.assignToUserId = ?	
 		]]>
 	</sql>	
+	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierFinder.countDossierByUserNewRequest">	
+		<![CDATA[
+			SELECT
+				COUNT(opencps_dossier.dossierId) AS COUNT_VALUE
+			FROM
+				opencps_dossier
+			INNER JOIN
+				opencps_serviceinfo
+			ON
+				opencps_dossier.serviceInfoId = opencps_serviceinfo.serviceInfoId
+			INNER JOIN
+				opencps_service_config
+			ON
+				opencps_dossier.serviceConfigId = opencps_service_config.serviceConfigId
+			INNER JOIN
+				opencps_processorder
+			ON
+				opencps_processorder.dossierId = opencps_dossier.dossierId
+			WHERE
+				(opencps_dossier.groupId = ?)
+			AND
+				(opencps_dossier.userId = ?)
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierFinder.searchDossierByUserNewRequest">	
+		<![CDATA[
+			SELECT
+				opencps_dossier.*,
+				opencps_serviceinfo.serviceName AS SERVICE_NAME
+			FROM
+				opencps_dossier
+			INNER JOIN
+				opencps_serviceinfo
+			ON
+				opencps_dossier.serviceInfoId = opencps_serviceinfo.serviceInfoId
+			INNER JOIN
+				opencps_service_config
+			ON
+				opencps_dossier.serviceConfigId = opencps_service_config.serviceConfigId
+			INNER JOIN
+				opencps_processorder
+			ON
+				opencps_processorder.dossierId = opencps_dossier.dossierId
+			WHERE
+				(opencps_dossier.groupId = ?)
+			AND
+				(opencps_dossier.userId = ?)
+				
+			ORDER BY opencps_processorder.actionDatetime DESC
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierLogFinder.findDossierLogByCitizen">
+		<![CDATA[
+			SELECT
+				opencps_dossier_log.*
+			FROM
+				opencps_dossier_log
+			WHERE
+				opencps_dossier_log.dossierId = ?
+			AND 
+				((
+					opencps_dossier_log.actor = 1
+					AND opencps_dossier_log.actionInfo NOT IN("add-attachment-file","remove-attachment-file","clone-attachment-file")
+				)
+				OR opencps_dossier_log.syncStatus = 2)
+			
+			ORDER BY modifiedDate DESC
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierLogFinder.countDossierLogByCitizen">
+		<![CDATA[
+			SELECT
+				COUNT(*) AS COUNT_VALUE
+			FROM
+				opencps_dossier_log
+			WHERE
+				opencps_dossier_log.dossierId = ?
+			AND 
+				((
+					opencps_dossier_log.actor = 1
+					AND opencps_dossier_log.actionInfo NOT IN("add-attachment-file","remove-attachment-file","clone-attachment-file")
+				)
+				OR opencps_dossier_log.syncStatus = 2)
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierLogFinder.findDossierLogByEmployee">
+		<![CDATA[
+
+			SELECT
+				opencps_dossier_log.*
+			FROM
+				opencps_dossier_log
+			WHERE
+				opencps_dossier_log.dossierId = ?
+			AND 
+				(
+					(opencps_dossier_log.actor = 1 OR opencps_dossier_log.actor = 2)
+					AND opencps_dossier_log.actionInfo NOT IN("add-attachment-file","remove-attachment-file","clone-attachment-file")
+				
+				)
+			
+			ORDER BY modifiedDate DESC
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierLogFinder.countDossierLogByEmployee">
+		<![CDATA[
+			SELECT
+				COUNT(*) AS COUNT_VALUE
+			FROM
+				opencps_dossier_log
+			WHERE
+				opencps_dossier_log.dossierId = ?
+			AND 
+				(
+					(opencps_dossier_log.actor = 1 OR opencps_dossier_log.actor = 2)
+					AND opencps_dossier_log.actionInfo NOT IN("add-attachment-file","remove-attachment-file","clone-attachment-file")
+				
+				)
+		]]>
+	</sql>
+	
 </custom-sql>

@@ -16,6 +16,13 @@
 */
 package org.opencps.processmgt.util;
 
+import java.util.List;
+
+import org.opencps.processmgt.model.ActionHistory;
+import org.opencps.processmgt.model.ProcessWorkflow;
+import org.opencps.processmgt.service.ActionHistoryLocalServiceUtil;
+import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
+
 public class ProcessMgtUtil {
 	public static final String TOP_TABS_DOSSIERLIST = "top_tabs_dossierlist";
 	public static final String TOP_TABS_DOSSIERFILELIST = "top_tabs_dossierfilelist";
@@ -29,4 +36,66 @@ public class ProcessMgtUtil {
 	public static final String[] _PROCESS_ORDER_CATEGORY_NAMES = {
 		"process-order"
 	};	
+	
+	
+	/**
+	 * @param processWorkflowId
+	 * @return
+	 */
+	public static long getAssignUser(
+	    long processWorkflowId, long processOrderId, long preProcessStepId) {
+
+		long userId = 0;
+
+		try {
+			if (processWorkflowId > 0) {
+				ProcessWorkflow processWorkflow =
+				    ProcessWorkflowLocalServiceUtil.getProcessWorkflow(processWorkflowId);
+
+				userId = processWorkflow.getActionUserId();
+
+				if (userId == 0) {
+					List<ActionHistory> actionList =
+					    ActionHistoryLocalServiceUtil.getActionHistoryRecent(
+					        processOrderId, preProcessStepId);
+					
+					System.out.println("######ACTIONLISSSSSSSSSSSSSS" + actionList.size());
+					
+					for (ActionHistory actionHis : actionList) {
+						System.out.println("######ACTIONLISSSSSSSSSSSSSS" + actionHis.getActionUserId() + "_" + actionHis.getActionDatetime());
+
+					}
+					
+					if (actionList.size() != 0) {
+						userId = actionList.get(0).getActionUserId();
+					}
+				}
+			}
+		}
+		catch (Exception e) {
+			userId = 0;
+		}
+
+		return userId;
+	}
+	
+	/**
+	 * @param processWorkflowId
+	 * @return
+	 */
+	public static ProcessWorkflow getProcessWorkflow (long processWorkflowId) {
+		
+		ProcessWorkflow workflow = null;
+		try {
+			
+			if (processWorkflowId != 0) {
+				workflow = ProcessWorkflowLocalServiceUtil.getProcessWorkflow(processWorkflowId);
+			}
+        }
+        catch (Exception e) {
+	       
+        }
+		
+		return workflow;
+	}
 }

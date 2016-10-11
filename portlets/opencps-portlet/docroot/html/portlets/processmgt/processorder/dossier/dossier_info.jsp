@@ -20,6 +20,7 @@
 
 <%@page import="org.opencps.util.PortletUtil"%>
 <%@page import="org.opencps.util.DateTimeUtil"%>
+<%@page import="org.opencps.util.DictItemUtil"%>
 <%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
 <%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%@page import="org.opencps.processmgt.model.ProcessOrder"%>
@@ -40,7 +41,7 @@
 			<liferay-ui:message key="dossier-no"/>
 		</td>
 		<td >
-			<%=dossier != null ? dossier.getReceptionNo() :  StringPool.BLANK %>
+			<%=dossier != null ? dossier.getDossierId() :  StringPool.BLANK %>
 		</td>
 	</tr>
 	<tr>
@@ -144,7 +145,7 @@
 			<liferay-ui:message key="note"/>
 		</td>
 		<td >
-			<%=processOrder != null && Validator.isNotNull(processOrder.getActionNote()) ? processOrder.getActionNote() : StringPool.BLANK%>
+			<%=dossier != null && Validator.isNotNull(dossier.getNote()) ? dossier.getNote() : StringPool.BLANK%>
 		</td>
 	</tr>
 </table>

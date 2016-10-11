@@ -22,6 +22,7 @@
 <%@page import="org.opencps.util.PortletUtil"%>
 <%@page import="java.util.Date"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
+
 <%@ include file="../init.jsp"%>
 
 <%
@@ -36,9 +37,12 @@
 	
 	PortletUtil.SplitDate spdNow = new PortletUtil.SplitDate(defautDateNow);
 %>
+
 <portlet:renderURL var="referentToSeachContaner" windowState="<%=LiferayWindowState.EXCLUSIVE.toString() %>">
 	<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/log/ajax/search_result.jsp"/>
 </portlet:renderURL>
+
+<div class="opencps-bound-wrapper pd20 mg-b-20 default-box-shadow">
 	<aui:row>
 		<aui:col width="25">
 		<label><liferay-ui:message key="from-date"/></label>
@@ -104,10 +108,10 @@
 			<aui:select name="dossierStatus">
 				<aui:option value="<%= StringPool.BLANK %>"></aui:option>
 				<%
-					for(String stt : PortletUtil.getDossierStatus()) {
+					for(DictItem stt : PortletUtil.getDossierStatus(scopeGroupId)) {
 						%>
-							<aui:option value="<%=stt %>">
-								<liferay-ui:message key="<%= PortletUtil.getActionInfoByKey(stt, themeDisplay.getLocale()) %>"/>
+							<aui:option value="<%=stt.getItemCode() %>">
+								<%=stt.getItemName(locale, true) %>
 							</aui:option>
 						<%
 					}
@@ -118,10 +122,11 @@
 	</aui:row>
 	
 	<aui:input  name="isAutoLoad" type="checkbox"/>
+	
 	<aui:button name="seach" value="search"/>
-	</br>
-	</br>
-	<div id="<portlet:namespace />loadSearchLog" ></div>
+</div>
+
+<div id="<portlet:namespace />loadSearchLog" ></div>
 
 <aui:script>
 
@@ -165,7 +170,7 @@
 		}
 	});
 	
-Liferay.provide(window, '<portlet:namespace />sentParamToSearch',
+	Liferay.provide(window, '<portlet:namespace />sentParamToSearch',
 		function(fromDate, toDate, level, status, fromday,frommonth, fromyear
 				, today, tomonth,toyear, currentURL ){
 		

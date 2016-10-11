@@ -63,14 +63,14 @@ public class DossierStateMenuPortlet extends MVCPortlet {
         
 		long counterVal = 0;
 		
-		for (String item : PortletUtil.getDossierStatus()){
-		
-			counterVal = DossierLocalServiceUtil.countDossier(groupId, 
-				StringPool.BLANK, item);
-			
-			par.put("badge_" + item, String.valueOf(counterVal));
-		
-		}
+//		for (String item : PortletUtil.getDossierStatus()){
+//		
+//			counterVal = DossierLocalServiceUtil.countDossier(groupId, 
+//				StringPool.BLANK, item);
+//			
+//			par.put("badge_" + item, String.valueOf(counterVal));
+//		
+//		}
 		
 		ajaxReturn(actionRequest ,actionResponse, par);
 	}
@@ -100,7 +100,6 @@ public class DossierStateMenuPortlet extends MVCPortlet {
 		
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 }

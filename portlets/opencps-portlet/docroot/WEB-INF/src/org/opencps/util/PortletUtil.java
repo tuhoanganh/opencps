@@ -34,12 +34,16 @@ import javax.portlet.ResourceRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.opencps.datamgt.model.AdministrationServicedomain;
 import org.opencps.datamgt.model.DictCollection;
 import org.opencps.datamgt.model.DictItem;
+import org.opencps.datamgt.service.AdministrationServicedomainLocalServiceUtil;
 import org.opencps.datamgt.service.DictCollectionLocalServiceUtil;
 import org.opencps.datamgt.service.DictItemLocalServiceUtil;
+import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.paymentmgt.util.PaymentMgtUtil;
 
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -360,74 +364,117 @@ public class PortletUtil {
 		return leaderLabel;
 	}
 
-	public static String getDossierStatusLabel(String value, Locale locale) {
+	public static String getDossierStatusLabel(String itemCode, Locale locale) {
 
-		String statusLabel = StringPool.BLANK;
+		String name = StringPool.BLANK;
+		DictItem dictItem = null;
 
-		switch (value) {
-		case PortletConstants.DOSSIER_STATUS_NEW:
-			statusLabel = LanguageUtil.get(locale, "new");
-			break;
-		case PortletConstants.DOSSIER_STATUS_RECEIVING:
-			statusLabel = LanguageUtil.get(locale, "receiving");
-			break;
-		case PortletConstants.DOSSIER_STATUS_WAITING:
-			statusLabel = LanguageUtil.get(locale, "waiting");
-			break;
-		case PortletConstants.DOSSIER_STATUS_PAYING:
-			statusLabel = LanguageUtil.get(locale, "paying");
-			break;
-		case PortletConstants.DOSSIER_STATUS_DENIED:
-			statusLabel = LanguageUtil.get(locale, "denied");
-			break;
-		case PortletConstants.DOSSIER_STATUS_RECEIVED:
-			statusLabel = LanguageUtil.get(locale, "received");
-			break;
-		case PortletConstants.DOSSIER_STATUS_PROCESSING:
-			statusLabel = LanguageUtil.get(locale, "processing");
-			break;
-		case PortletConstants.DOSSIER_STATUS_CANCELED:
-			statusLabel = LanguageUtil.get(locale, "canceled");
-			break;
-		case PortletConstants.DOSSIER_STATUS_DONE:
-			statusLabel = LanguageUtil.get(locale, "done");
-			break;
-		case PortletConstants.DOSSIER_STATUS_ARCHIVED:
-			statusLabel = LanguageUtil.get(locale, "archived");
-			break;
-		case PortletConstants.DOSSIER_STATUS_SYSTEM:
-			statusLabel = LanguageUtil.get(locale, "system");
-			break;
-		case PortletConstants.DOSSIER_STATUS_ENDED:
-			statusLabel = LanguageUtil.get(locale, "Ended");
-			break;
-		case PortletConstants.DOSSIER_STATUS_ERROR:
-			statusLabel = LanguageUtil.get(locale, "error");
-			break;
-		default:
-			statusLabel = LanguageUtil.get(locale, "new");
-			break;
+		try {
+			dictItem = DictItemLocalServiceUtil.getDictItemByCode(itemCode);
+			if (Validator.isNotNull(dictItem)) {
+				name = dictItem.getItemName(locale);
+			}
+		}
+		catch (Exception e) {
+			_log.error(e);
 		}
 
-		return statusLabel;
+		return name;
 	}
 
-	public static List<String> getDossierStatus() {
+	public static List<DictItem> getDossierStatus(long groupId) {
 
-		List<String> dossierStatus = new ArrayList<String>();
-		dossierStatus.add(PortletConstants.DOSSIER_STATUS_NEW);
-		dossierStatus.add(PortletConstants.DOSSIER_STATUS_RECEIVING);
-		dossierStatus.add(PortletConstants.DOSSIER_STATUS_WAITING);
-		dossierStatus.add(PortletConstants.DOSSIER_STATUS_PAYING);
-		dossierStatus.add(PortletConstants.DOSSIER_STATUS_DENIED);
-		dossierStatus.add(PortletConstants.DOSSIER_STATUS_RECEIVED);
-		dossierStatus.add(PortletConstants.DOSSIER_STATUS_PROCESSING);
-		dossierStatus.add(PortletConstants.DOSSIER_STATUS_CANCELED);
-		dossierStatus.add(PortletConstants.DOSSIER_STATUS_DONE);
-		dossierStatus.add(PortletConstants.DOSSIER_STATUS_ARCHIVED);
-		dossierStatus.add(PortletConstants.DOSSIER_STATUS_SYSTEM);
-		dossierStatus.add(PortletConstants.DOSSIER_STATUS_ERROR);
-		return dossierStatus;
+		DictCollection dictCollection = null;
+		List<DictItem> result = new ArrayList<DictItem>();
+		try {
+			dictCollection =
+				DictCollectionLocalServiceUtil.getDictCollection(
+					groupId, "DOSSIER_STATUS");
+			if (Validator.isNotNull(dictCollection)) {
+				result =
+					DictItemLocalServiceUtil.getDictItemsByDictCollectionId(dictCollection.getDictCollectionId());
+			}
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+		}
+		return result;
+	}
+
+	public static List<DictItem> getDictItemInUseByCode(
+		long groupId, String dictCollectionCode, String itemCode) {
+
+		DictCollection dictCollection = null;
+		List<DictItem> result = new ArrayList<DictItem>();
+		try {
+			dictCollection =
+				DictCollectionLocalServiceUtil.getDictCollection(
+					groupId, dictCollectionCode);
+			if (Validator.isNotNull(dictCollection) &&
+				(Validator.isNull(itemCode) || itemCode.equals(PortletConstants.TREE_VIEW_DEFAULT_ITEM_CODE))) {
+				result =
+					DictItemLocalServiceUtil.getDictItemsInUseByDictCollectionIdAndParentItemId(
+						dictCollection.getDictCollectionId(), 0);
+			}
+			else if (Validator.isNotNull(dictCollection) &&
+				(Validator.isNotNull(itemCode) && itemCode.equals(PortletConstants.TREE_VIEW_ALL_ITEM))) {
+				result =
+					DictItemLocalServiceUtil.getDictItemsInUseByDictCollectionId(dictCollection.getDictCollectionId());
+			}
+			else {
+				// TODO
+				// get treedata from itemCode
+				DictItem dictItem =
+					DictItemLocalServiceUtil.getDictItemInuseByItemCode(
+						dictCollection.getDictCollectionId(), itemCode);
+
+				result =
+					DictItemLocalServiceUtil.getDictItemsByTreeIndex(
+						dictItem.getDictItemId(), dictItem.getParentItemId(),
+						1, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+			}
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+		}
+		return result;
+	}
+
+	public static List<DictItem> getDictItemInUseByCodeMappingAdminCode(
+		long groupId, String dictCollectionCode, String itemCode) {
+
+		List<DictItem> result = new ArrayList<DictItem>();
+
+		List<AdministrationServicedomain> adServicedomains =
+			new ArrayList<AdministrationServicedomain>();
+		try {
+
+			adServicedomains =
+				AdministrationServicedomainLocalServiceUtil.getMappingAdministrationCode(
+					groupId, dictCollectionCode, itemCode);
+
+			DictItem dictItem = null;
+			for (AdministrationServicedomain administrationServicedomain : adServicedomains) {
+
+				dictItem =
+					DictItemLocalServiceUtil.getDictItemInuseByItemCode(
+						administrationServicedomain.getGroupId(),
+						administrationServicedomain.getServiceDomainCollectionCode(),
+						administrationServicedomain.getServiceDomainCode());
+				if (Validator.isNotNull(dictItem)) {
+
+					result.add(dictItem);
+
+				}
+
+			}
+
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+			_log.error(e);
+		}
+		return result;
 	}
 
 	public static String getDestinationFolder(String[] folderNames) {
@@ -435,6 +482,7 @@ public class PortletUtil {
 		return StringUtil.merge(folderNames, StringPool.FORWARD_SLASH);
 	}
 
+	@Deprecated
 	public static String getCitizenDossierDestinationFolder(
 		long groupId, long userId) {
 
@@ -443,6 +491,7 @@ public class PortletUtil {
 			String.valueOf(userId);
 	}
 
+	@Deprecated
 	public static String getBusinessDossierDestinationFolder(
 		long groupId, long orgId) {
 
@@ -466,6 +515,27 @@ public class PortletUtil {
 			StringPool.SLASH + String.valueOf(year) + StringPool.SLASH +
 			String.valueOf(month) + StringPool.SLASH + String.valueOf(day) +
 			StringPool.SLASH + oid;
+	}
+
+	public static String getSyncPaymentDestinationFolder(
+		long groupId, int year, int month, int day, String oId) {
+
+		return String.valueOf(groupId) + StringPool.SLASH + "Payments" +
+			StringPool.SLASH + "SYNC" + StringPool.SLASH +
+			String.valueOf(year) + StringPool.SLASH + String.valueOf(month) +
+			StringPool.SLASH + String.valueOf(day) + StringPool.SLASH +
+			String.valueOf(oId);
+	}
+
+	public static String getPaymentDestinationFolder(
+		long groupId, int year, int month, int day, long ownId,
+		String accountType) {
+
+		return String.valueOf(groupId) + StringPool.SLASH + "Payments" +
+			StringPool.SLASH + accountType + StringPool.SLASH +
+			String.valueOf(year) + StringPool.SLASH + String.valueOf(month) +
+			StringPool.SLASH + String.valueOf(day) + StringPool.SLASH +
+			String.valueOf(ownId);
 	}
 
 	public static DictItem getDictItem(
@@ -697,6 +767,7 @@ public class PortletUtil {
 			break;
 		case PaymentMgtUtil.PAYMENT_STATUS_REJECTED:
 			statusLabel = LanguageUtil.get(locale, "rejected");
+			break;
 		default:
 			statusLabel = LanguageUtil.get(locale, "on-processing");
 			break;
@@ -785,7 +856,7 @@ public class PortletUtil {
 		String queueName, String lookup, String mom)
 		throws SystemException {
 
-		Properties properties = new Properties();
+		Properties properties = null;
 
 		PortletPreferences preferences =
 			PrefsPropsUtil.getPreferences(companyId, true);
@@ -800,6 +871,7 @@ public class PortletUtil {
 
 		try {
 
+			properties = new Properties();
 			// Create json object from string
 			JSONObject jmsJSONObject =
 				JSONFactoryUtil.createJSONObject(jmsJSON);
@@ -890,6 +962,55 @@ public class PortletUtil {
 		}
 
 		return properties;
+	}
+
+	public static String intToString(long number, int stringLength) {
+
+		int numberOfDigits = String.valueOf(number).length();
+		int numberOfLeadingZeroes = stringLength - numberOfDigits;
+		StringBuilder sb = new StringBuilder();
+		if (numberOfLeadingZeroes > 0) {
+			for (int i = 0; i < numberOfLeadingZeroes; i++) {
+				sb.append("0");
+			}
+		}
+		sb.append(number);
+		return sb.toString();
+	}
+
+	public static String getDossierProcessStateLabel(
+		Dossier dossier, Locale locale) {
+
+		String statusLabel = StringPool.BLANK;
+
+		if (Validator.isNotNull(dossier.getFinishDatetime()) &&
+			Validator.isNotNull(dossier.getEstimateDatetime())) {
+			if (dossier.getFinishDatetime().after(dossier.getEstimateDatetime())) {
+				statusLabel = LanguageUtil.get(locale, "status-late");
+			}
+			else if (dossier.getFinishDatetime().before(
+				dossier.getEstimateDatetime())) {
+				statusLabel = LanguageUtil.get(locale, "status-soon");
+			}
+			else if (dossier.getFinishDatetime().equals(
+				dossier.getEstimateDatetime())) {
+				statusLabel = LanguageUtil.get(locale, "status-ontime");
+			}
+		}
+		else {
+			Date now = new Date();
+
+			if (Validator.isNotNull(dossier.getEstimateDatetime())) {
+				if (dossier.getEstimateDatetime().before(now)) {
+					statusLabel = LanguageUtil.get(locale, "status-toosoon");
+				}
+				else if (dossier.getEstimateDatetime().after(now)) {
+					statusLabel = LanguageUtil.get(locale, "status-toolate");
+				}
+			}
+		}
+
+		return statusLabel;
 	}
 
 	private static Log _log =

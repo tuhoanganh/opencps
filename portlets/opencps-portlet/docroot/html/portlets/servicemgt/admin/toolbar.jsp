@@ -18,6 +18,7 @@
  */
 %>
 
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 
 <%@ include file="../init.jsp"%>
 
@@ -33,11 +34,24 @@
 	
 	request.setAttribute(ServiceDisplayTerms.SERVICE_DOMAINCODE, domainCode);
 	
+	DictCollection collectionDomain = null;
+	DictItem curDictItem = null;
+	try {
+		collectionDomain = DictCollectionLocalServiceUtil.getDictCollection(scopeGroupId, WebKeys.SERVICE_DOMAIN);
+	} catch (Exception e) {
+		
+	}
+	
+	List<DictItem> dictItems = new ArrayList<DictItem>();
+	
+	if(Validator.isNotNull(collectionDomain)) {
+		dictItems = DictItemLocalServiceUtil.getDictItemsByDictCollectionId(collectionDomain.getDictCollectionId());
+	}
+	
 %>
 <aui:nav-bar cssClass="opencps-toolbar custom-toolbar">
 	<aui:nav id="toolbarContainer" cssClass="nav-display-style-buttons pull-left" >
 		<c:choose>
-			
 			<c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_SERVICE) %>">
 				<%
 					searchURL.setParameter("mvcPath", templatePath + "serviceinfolist.jsp");
@@ -51,15 +65,8 @@
 				</portlet:renderURL>
 				
 				<c:if test="<%=ServicePermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_SERVICE) %>">
-					<%-- <aui:nav-item 
-						id="addService" 
-						label="add-service" 
-						iconCssClass="icon-plus icon-config"  
-						href="<%=editServiceURL %>"
-					/> --%>
 					<aui:button icon="icon-plus" href="<%=editServiceURL %>" cssClass="action-button" value="add-service"/>
 				</c:if>
-				
 			</c:when>
 			
 			<c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_TEMPLATE) %>">
@@ -76,23 +83,57 @@
 				
 				<aui:row>
 					<c:if test="<%= ServiceTemplatePermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_TEMPLATE) %>">
-						<%-- <aui:nav-item 
-							id="addTemplate" 
-							label="add-template" 
-							iconCssClass="icon-plus"  
-							href="<%=editTemplateURL %>"
-						/> --%>
 						<aui:button icon="icon-plus" href="<%=editTemplateURL %>" cssClass="action-button" value="add-template"/>
 					</c:if>
 				</aui:row>
 			</c:when>
 			
 			<c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_DOMAIN) %>">
-				
+				<portlet:renderURL var="editDomainURL" windowState="<%=LiferayWindowState.POP_UP.toString() %>">
+					<portlet:param name="mvcPath" value='<%= templatePath + "edit_domain.jsp" %>'/>
+					<portlet:param name="backURL" value="<%=currentURL %>"/>
+					<portlet:param name="tabs1" value="<%=tabs1 %>"/>
+				</portlet:renderURL>
+							
+				<c:if test="<%= ServiceTemplatePermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_TEMPLATE) %>">
+					
+					<aui:button 
+						icon="icon-plus" 
+						href="<%=
+								\"javascript:\" +  \"openDialog('\" + 
+								editDomainURL + \"','\" + 
+								renderResponse.getNamespace() + \"updateServiceDomain\" + \"','\" +
+								UnicodeLanguageUtil.get(pageContext, \"update-service-domain\") +
+								\"');\" 
+							%>"
+						cssClass="action-button" 
+						value="add-domain"
+					/>
+				</c:if>
 			</c:when>
 			
-			<c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_SERVICE) %>">
+			<c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_ADMINISTRATION) %>">
+				<portlet:renderURL var="editServiceAdministrationURL" windowState="<%=LiferayWindowState.POP_UP.toString() %>">
+					<portlet:param name="mvcPath" value='<%= templatePath + "edit_administration.jsp" %>'/>
+					<portlet:param name="backURL" value="<%=currentURL %>"/>
+					<portlet:param name="tabs1" value="<%=tabs1 %>"/>
+				</portlet:renderURL>
+							
+				<c:if test="<%= ServiceTemplatePermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_TEMPLATE) %>">
 				
+					<aui:button 
+						icon="icon-plus" 
+						href="<%=
+								\"javascript:\" +  \"openDialog('\" + 
+								editServiceAdministrationURL + \"','\" + 
+								renderResponse.getNamespace() + \"updateServiceAdministration\" + \"','\" +
+								UnicodeLanguageUtil.get(pageContext, \"update-service-administration\") +
+								\"');\" 
+							%>"
+						cssClass="action-button" 
+						value="add-administration"
+					/>
+				</c:if>
 			</c:when>
 			
 		</c:choose>
@@ -103,101 +144,88 @@
 			<aui:form action="<%= searchURL %>" method="post" name="fm">
 				<div class="toolbar_search_input">
 					<c:choose>
-						
 						<c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_SERVICE) %>">
-								
-								<aui:row>
-									<aui:col width="25" cssClass="search-col">
-										<datamgt:ddr
-											cssClass="search-input select-box"
-											depthLevel="1" 
-											dictCollectionCode="SERVICE_ADMINISTRATION"
-											itemNames="<%= ServiceDisplayTerms.SERVICE_ADMINISTRATION %>"
-											itemsEmptyOption="true"
-											selectedItems="<%= administrationCode %>"	
-										>
-										</datamgt:ddr>
-		
-									</aui:col>
-									<aui:col width="25" cssClass="search-col">
-										<datamgt:ddr
-											cssClass="search-input select-box"
-											depthLevel="1" 
-											dictCollectionCode="SERVICE_DOMAIN"
-											itemNames="<%= ServiceDisplayTerms.SERVICE_DOMAINCODE %>"
-											itemsEmptyOption="true"	
-											selectedItems="<%= domainCode %>"
-										>
-										</datamgt:ddr>
+							<aui:row>
+								<aui:col width="30" cssClass="search-col">
+									<datamgt:ddr
+										cssClass="search-input select-box"
+										depthLevel="1" 
+										dictCollectionCode="SERVICE_ADMINISTRATION"
+										itemNames="<%= ServiceDisplayTerms.SERVICE_ADMINISTRATION %>"
+										itemsEmptyOption="true"
+										showLabel="<%=false %>"
+										selectedItems="<%= administrationCode %>"	
+										emptyOptionLabels="<%= ServiceDisplayTerms.SERVICE_ADMINISTRATION %>"
+									>
+									</datamgt:ddr>
+	
+								</aui:col>
+								<aui:col width="30" cssClass="search-col">
+									<%-- <datamgt:ddr
+										cssClass="search-input select-box"
+										depthLevel="1" 
+										dictCollectionCode="SERVICE_DOMAIN"
+										itemNames="<%= ServiceDisplayTerms.SERVICE_DOMAINCODE %>"
+										itemsEmptyOption="true"	
+										showLabel="<%=false %>"
+										selectedItems="<%= domainCode %>"
+										emptyOptionLabels="<%= ServiceDisplayTerms.SERVICE_DOMAINCODE %>"
+									>
+									</datamgt:ddr> --%>
+									<aui:select name="<%=ServiceDisplayTerms.SERVICE_DOMAINCODE %>" label="">
+										<aui:option value="">
+											<liferay-ui:message key="<%=ServiceDisplayTerms.SERVICE_DOMAINCODE %>"/>
+										</aui:option>
+										<%
+											if(dictItems != null){
+												for(DictItem dictItem : dictItems){
+													if((curDictItem != null && dictItem.getDictItemId() == curDictItem.getDictItemId())||
+															(curDictItem != null && dictItem.getTreeIndex().contains(curDictItem.getDictItemId() + StringPool.PERIOD))){
+														continue;
+													}
+													
+													int level = StringUtil.count(dictItem.getTreeIndex(), StringPool.PERIOD);
+													String index = "|";
+													for(int i = 0; i < level; i++){
+														index += "_";
+													}
+													%>
+														<aui:option value="<%=dictItem.getDictItemId() %>"><%=index + dictItem.getItemName(locale) %></aui:option>
+													<%
+												}
+											}
+										%>
+									</aui:select>
+								</aui:col>
+								<aui:col width="30" cssClass="search-col">
+									<liferay-ui:input-search 
+										id="keywords1"
+										name="keywords"
+										title='<%= LanguageUtil.get(locale, "keywords") %>'
+										placeholder='<%= LanguageUtil.get(locale, "name") %>' 
+										cssClass="search-input input-keyword"
+									/>
+								</aui:col>
+							</aui:row>
 
-									</aui:col>
-									<aui:col width="45" cssClass="search-col">
-										<liferay-ui:input-search 
-											id="keywords1"
-											name="keywords"
-											title="keywords"
-											placeholder='<%= LanguageUtil.get(locale, "name") %>' 
-											cssClass="search-input input-keyword"
-										/>
-									</aui:col>
-								</aui:row>
-								
 						</c:when>
 						
 						<c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_TEMPLATE) %>">
 							<liferay-ui:input-search 
 								id="keywords1" 
 								name="keywords" 
+								title='<%= LanguageUtil.get(locale, "keywords") %>'
 								placeholder='<%= LanguageUtil.get(locale, "name") %>' 
 								cssClass="search-input input-keyword"
 							/>
 						</c:when>
 						
 						<c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_DOMAIN) %>">
-							
-							<portlet:renderURL var="editDomainURL" windowState="<%=LiferayWindowState.POP_UP.toString() %>">
-								<portlet:param name="mvcPath" value='<%= templatePath + "edit_domain.jsp" %>'/>
-								<portlet:param name="backURL" value="<%=currentURL %>"/>
-								<portlet:param name="tabs1" value="<%=tabs1 %>"/>
-							</portlet:renderURL>
-							
-							<c:if test="<%= ServiceTemplatePermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_TEMPLATE) %>">
-								<%-- <aui:nav-item 
-									id="addDomain" 
-									label="add-domain" 
-									iconCssClass="icon-plus"  
-									href="<%= \"javascript:\" + renderResponse.getNamespace() + \"showPopup('\" + editDomainURL +\"');\" %>"
-								/> --%>
-								<aui:button icon="icon-plus" 
-											href="<%= \"javascript:\" + renderResponse.getNamespace() + \"showPopup('\" + editDomainURL +\"');\" %>" 
-											cssClass="action-button" 
-											value="add-domain"
-								/>
-							</c:if>
-						
+	
 						</c:when>
 						
 						<c:when test="<%= tabs1.contentEquals(ServiceUtil.TOP_TABS_ADMINISTRATION) %>">
-							<portlet:renderURL var="editDomainURL" windowState="<%=LiferayWindowState.POP_UP.toString() %>">
-								<portlet:param name="mvcPath" value='<%= templatePath + "edit_domain.jsp" %>'/>
-								<portlet:param name="backURL" value="<%=currentURL %>"/>
-								<portlet:param name="tabs1" value="<%=tabs1 %>"/>
-							</portlet:renderURL>
-							
-							<c:if test="<%= ServiceTemplatePermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_TEMPLATE) %>">
-								<%-- <aui:nav-item 
-									id="addDomain" 
-									label="add-administration" 
-									iconCssClass="icon-plus"  
-									href="<%= \"javascript:\" + renderResponse.getNamespace() + \"showPopup('\" + editDomainURL +\"');\" %>"
-								/> --%>
-								
-								<aui:button icon="icon-plus" 
-											href="<%= \"javascript:\" + renderResponse.getNamespace() + \"showPopup('\" + editDomainURL +\"');\" %>" 
-											cssClass="action-button" 
-											value="add-administration"
-								/>
-							</c:if>
+			
 						</c:when>
 						
 					</c:choose>
@@ -206,21 +234,7 @@
 		</div>
 	</aui:nav-bar-search>
 </aui:nav-bar>
-<aui:script>
-	Liferay.provide(window, '<portlet:namespace />showPopup', function(url){
-		Liferay.Util.openWindow({
-			dialog : {
-				centered : true,
-				height : 800,
-				modal : true,
-				width : 800
-			},
-			id : '<portlet:namespace/>dialog',
-			title : '',
-			uri : url
-		});
-	});
-</aui:script>
+
 
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.servicemgt.admin.toolbar.jsp");

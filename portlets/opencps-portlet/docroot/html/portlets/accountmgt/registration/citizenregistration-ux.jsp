@@ -1,9 +1,3 @@
-
-<%@page import="javax.portlet.PortletRequest"%>
-<%@page import="javax.portlet.WindowState"%>
-<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
-<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
-<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -22,7 +16,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
-
+<%@page import="javax.portlet.PortletRequest"%>
+<%@page import="javax.portlet.WindowState"%>
+<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="org.opencps.accountmgt.DuplicateCitizenEmailException"%>
 <%@page import="org.opencps.accountmgt.OutOfLengthCitizenEmailException"%>
 <%@page import="org.opencps.accountmgt.OutOfLengthCitizenAddressException"%>
@@ -42,6 +40,8 @@
 <%@page import="java.util.Date"%>
 <%@page import="org.opencps.util.PortletUtil"%>
 <%@page import="org.opencps.util.DateTimeUtil"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
 
 <%@ include file="../init.jsp" %>
 
@@ -55,6 +55,17 @@
 	Date defaultBirthDate = DateTimeUtil.convertStringToDate("01/01/1970");
  		
  	PortletUtil.SplitDate spd = new PortletUtil.SplitDate(defaultBirthDate);
+ 	
+ 	Citizen citizenValidate = (Citizen) request.getAttribute("citizenValidate");
+ 	List<String> cdw = new ArrayList<String>();
+ 	if(Validator.isNotNull(citizenValidate)) {
+ 		String cityId = citizenValidate.getCityCode();
+ 		String districtId = citizenValidate.getDistrictCode();
+ 		String wardId = citizenValidate.getWardCode();
+ 		cdw.add(cityId);
+ 		cdw.add(districtId);
+ 		cdw.add(wardId);
+ 	}
 %>
 
 
@@ -108,7 +119,20 @@
 	<liferay-ui:error 
 		exception="<%= OutOfSizeFileUploadException.class %>" 
 		message="<%= OutOfSizeFileUploadException.class.getName() %>" 
-	/>	
+	/>
+	
+	<%
+		String ACCOUNT_UPDATE_CUCCESS = StringPool.BLANK;
+		if (Validator.isNotNull(messageSuccessfullRegistration)){
+			ACCOUNT_UPDATE_CUCCESS = messageSuccessfullRegistration;
+		} else {
+			ACCOUNT_UPDATE_CUCCESS = MessageKeys.ACCOUNT_UPDATE_CUCCESS;
+		}
+	%>
+	<liferay-ui:success 
+		key="<%=MessageKeys.ACCOUNT_UPDATE_CUCCESS %>" 
+		message="<%=ACCOUNT_UPDATE_CUCCESS %>"
+	/>
 	
 	<portlet:actionURL var="updateCitizenURL" name="updateCitizen">
 		<portlet:param 
@@ -126,6 +150,7 @@
 		onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "registerAccount();" %>'
 	>
 	
+		<aui:model-context bean='<%=citizenValidate %>' model='<%=Citizen.class %>'/>
 		<aui:input name="citizenRegStep_cfg" value="<%=citizenRegStep_cfg %>" type="hidden"></aui:input>
 			
 		<div class="register-content">
@@ -158,7 +183,7 @@
 					<aui:input 
 	 					name="<%=CitizenDisplayTerms.CITIZEN_FULLNAME %>" 
 	 					cssClass="input100"
-	 					placeholder="citizen-full-name"
+	 					placeholder="citizen-full-name-require"
 	 				>
 		 				<aui:validator name="required" />
 		 				<aui:validator name="maxLength">255</aui:validator>
@@ -169,7 +194,7 @@
 					<aui:input 
 						name="<%=CitizenDisplayTerms.CITIZEN_EMAIL %>"
 						cssClass="input100"
-						placeholder="<%=CitizenDisplayTerms.CITIZEN_EMAIL %>"
+						placeholder="email-require"
 					>
 						<aui:validator name="required" />
 						<aui:validator name="email" />
@@ -186,14 +211,20 @@
 				</aui:row>
 				
 				<aui:row>
-					<aui:input name="<%=CitizenDisplayTerms.CITIZEN_TELNO %>" cssClass="input100" placeholder="<%=CitizenDisplayTerms.CITIZEN_TELNO %>">
-						<aui:validator name="minLength">10</aui:validator>
-					</aui:input>
+					<div id = "<portlet:namespace/>def">
+					<aui:input name="<%=CitizenDisplayTerms.CITIZEN_TELNO %>" cssClass="input100" placeholder="<%=CitizenDisplayTerms.CITIZEN_TELNO %>" />
+					</div>
+					<div  id="<portlet:namespace/>defErr" style="text-align: left; color: #b50303; margin-left:7px; margin-bottom: 10px; display: none;">
+						<liferay-ui:message key="Error_TelNo_message"/>
+					</div>
+					<div  id="<portlet:namespace/>defErr2" style="text-align: left; color: #b50303; margin-left:7px; margin-bottom: 10px; display: none;">
+						<liferay-ui:message key="Error_TelNo_message2"/>
+					</div>
 				</aui:row>
 				
 				<aui:row>
 					<label class="control-label custom-lebel" for='<portlet:namespace/><%=CitizenDisplayTerms.CITIZEN_BIRTHDATE %>'>
-	 					<liferay-ui:message key="birth-date"/>
+	 					<liferay-ui:message key="birth-date-full"/>
 	 				</label>
 	 				<liferay-ui:input-date 
 	 					nullable="true"
@@ -210,6 +241,9 @@
 	 					
 	 				>
 	 				</liferay-ui:input-date>
+	 				<div  id="<portlet:namespace/>defErrBirthDate" style="text-align: left; color: #b50303; margin-left:7px; margin-bottom: 10px; display: none;">
+						<liferay-ui:message key="required-field"/>
+					</div>
 				</aui:row>
 				
 				<aui:row cssClass="input-file">
@@ -261,20 +295,39 @@
 						placeholder="<%=CitizenDisplayTerms.CITIZEN_ADDRESS %>"
 					>
 						<aui:validator name="maxLength">255</aui:validator>
+						<aui:validator name="required"/>
 					</aui:input>
 				</aui:row>
 				
 				<aui:row>
-					<datamgt:ddr 
-						cssClass="input100"
-						depthLevel="3" 
-						dictCollectionCode="ADMINISTRATIVE_REGION"
-						itemNames="cityId,districtId,wardId"
-						itemsEmptyOption="true,true,true"
-						displayStyle="vertical"
-						emptyOptionLabels="cityId,districtId,wardId"
-						showLabel="false"
-					/>	
+				
+					<c:choose>
+						<c:when test="<%=!showLabelTaglibDatamgt %>">
+							<datamgt:ddr 
+								cssClass="input100"
+								depthLevel="3" 
+								dictCollectionCode="ADMINISTRATIVE_REGION"
+								itemNames="cityId,districtId,wardId"
+								itemsEmptyOption="true,true,true"
+								displayStyle="vertical"
+								emptyOptionLabels="cityId,districtId,wardId"
+								showLabel="false"
+								selectedItems="<%= StringUtil.merge(cdw, StringPool.COMMA) %>"
+							/>	
+						</c:when>
+						<c:otherwise>
+							<datamgt:ddr 
+								cssClass="input100"
+								depthLevel="3" 
+								dictCollectionCode="ADMINISTRATIVE_REGION"
+								itemNames="cityId,districtId,wardId"
+								itemsEmptyOption="true,true,true"
+								displayStyle="vertical"
+								showLabel="true"
+								selectedItems="<%= StringUtil.merge(cdw, StringPool.COMMA) %>"
+							/>
+						</c:otherwise>
+					</c:choose>
 				</aui:row>
 				<div class="term-user">
 					<aui:row>
@@ -336,14 +389,17 @@
 			});
 		}
 		A.one('#<portlet:namespace />birthDate').setAttribute("placeholder", '<%=LanguageUtil.get(pageContext, "ngay-sinh-placehoder") %>');
+	
+	
 	});
 
 	Liferay.provide(window, '<portlet:namespace />registerAccount', function() {
 		A = AUI();
 		var register = A.one('#<portlet:namespace />register');
 		var termsOfUse = A.one('#<portlet:namespace />termsOfUse');
-		
-		if(termsOfUse.val() == 'true'){
+		var checkTel = telephoneCheck();
+		var checkDate = checkBirthDate();
+		if(termsOfUse.val() == 'true' && checkTel == true && checkDate == true 	){
 			submitForm(document.<portlet:namespace />fm);
 		}else{
 			return;
@@ -357,4 +413,50 @@
 		
 	},['aui-io','liferay-portlet-url']);
 	
+	function checkBirthDate() {
+			
+		var birthDate = A.one('#<portlet:namespace />birthDate');
+		if(birthDate.val() === "") {
+			birthDate.addClass('changeDefErr');
+			A.one("#<portlet:namespace/>defErrBirthDate").addClass('displayDefErr');
+			return false;
+		} else {
+			birthDate.removeClass('changeDefErr');
+			A.one("#<portlet:namespace/>defErrBirthDate").removeClass('displayDefErr');
+			return true;
+		}
+	}
+	
+	function telephoneCheck() {
+		var numRegex = A.one("#<portlet:namespace/>telNo").val();
+		
+		var num = A.one("#<portlet:namespace/>telNo").val().toString().length;
+		
+		var temp = A.one("#<portlet:namespace/>telNo");
+		var isphone = /^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/;
+		if(isphone.test(numRegex) && num>=10){
+			A.one("#<portlet:namespace/>telNo").removeClass('changeDefErr');
+			A.one("#<portlet:namespace/>defErr").removeClass('displayDefErr');
+			A.one("#<portlet:namespace/>defErr2").removeClass('displayDefErr');
+			return true;
+		  }  
+		  else {
+			  if(num==0){return true;}
+			  else {
+				 if(num<10){
+				  A.one("#<portlet:namespace/>telNo").addClass('changeDefErr');
+				  A.one("#<portlet:namespace/>defErr").removeClass('displayDefErr');
+				  A.one("#<portlet:namespace/>defErr2").addClass('displayDefErr');
+				  return false;
+			  } else if(!isphone.test(numRegex)) {
+				  A.one("#<portlet:namespace/>telNo").addClass('changeDefErr');
+				  A.one("#<portlet:namespace/>defErr").addClass('displayDefErr');
+				  A.one("#<portlet:namespace/>defErr2").removeClass('displayDefErr');
+			  }
+				 }
+			  
+			  
+			}
+		}
+ 
 </aui:script>

@@ -157,7 +157,7 @@
     color: white;
 }
 
-.searchcontainer-content .readonly td input{
+.searchcontainer-content .readonly td input[type="checkbox"]{
     display: none !important;
 }
 
@@ -186,3 +186,11 @@
     color: #455677;
     cursor: pointer;
 }
+
+.dossier-part-stt {
+  margin-right: 3px; }
+
+.row-icon-stt-new {
+    width: 40px;
+    text-align: right; 
+ }

@@ -60,7 +60,6 @@ if (Validator.isNotNull(historyKey)) {
 	curSection = historyKey;
 }
 
-System.out.println(displayStyle + " ###################################################");
 %>
 
 <div class="taglib-form-navigator" id="<portlet:namespace />tabsBoundingBox">

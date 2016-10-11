@@ -42,6 +42,9 @@
 <%@page import="org.opencps.dossiermgt.NoSuchDossierTemplateException"%>
 <%@page import="org.opencps.dossiermgt.NoSuchDossierException"%>
 <%@page import="org.opencps.dossiermgt.RequiredDossierPartException"%>
+<%@page import="org.opencps.backend.util.DossierNoGenerator"%>
+<%@page import="org.opencps.processmgt.util.ProcessMgtUtil"%>
+
 <%@ include file="../init.jsp"%>
 
 <%
@@ -65,9 +68,15 @@
 	long serviceProcessId = ParamUtil.getLong(request, ProcessOrderDisplayTerms.SERVICE_PROCESS_ID);
 	long processStepId = ParamUtil.getLong(request, ProcessOrderDisplayTerms.PROCESS_STEP_ID);
 	
+	ProcessWorkflow workflow = ProcessMgtUtil.getProcessWorkflow(processWorkflowId);
+	
 	String actionNote = ParamUtil.getString(request, ProcessOrderDisplayTerms.ACTION_NOTE);
 	String event = ParamUtil.getString(request, ProcessOrderDisplayTerms.EVENT);
 	String receptionNo = ParamUtil.getString(request, ProcessOrderDisplayTerms.RECEPTION_NO);
+		
+	if (Validator.isNull(receptionNo) && Validator.isNotNull(workflow) && workflow.getGenerateReceptionNo()) {
+		receptionNo = DossierNoGenerator.genaratorNoReception(workflow.getReceptionNoPattern(), dossierId);
+	}
 	
 	String strReceiveDate = ParamUtil.getString(request, "receiveDate");
 	
@@ -83,7 +92,7 @@
 	
 	Date estimateDate = null;
 	
-	if(receiveDate != null && Validator.isNotNull(deadlinePattern)){
+	if(workflow != null && workflow.getGenerateDeadline() && receiveDate != null && Validator.isNotNull(deadlinePattern)){
 		estimateDate = BookingDateGenerator.dateGenerator(receiveDate, deadlinePattern);
 	}
 	
@@ -105,6 +114,8 @@
 	}
 	
 	boolean esign = false;
+	
+	long assigerToUserId = ProcessMgtUtil.getAssignUser(processWorkflowId, processOrderId, workflow.getPostProcessStepId());
 	
 %>
 
@@ -185,60 +196,70 @@
 		value="<%=backURL %>" 
 		type="hidden"
 	/>
-	<aui:select 
-		name="<%=ProcessOrderDisplayTerms.ASSIGN_TO_USER_ID %>" 
-		label="assign-to-next-user" 
-		showEmptyOption="true"
-	>
-		<%
-			List<User> assignUsers = ProcessUtils.getAssignUsers(processStepId, 0);
-			for (User userSel : assignUsers) {
-		%>	
-			<aui:option value="<%= userSel.getUserId() %>"><%= userSel.getFullName() %></aui:option>
-		<%
-			}
-		%>
-	</aui:select>
-	
-	<c:if test="<%=processWorkflow != null &&  processWorkflow.isRequestPayment()%>">
-		<aui:input 
-			name="<%=ProcessOrderDisplayTerms.PAYMENTVALUE %>" 
-			label="requirement-to-pay-charges" 
-			type="text"
-			value="<%=Validator.isNotNull(processWorkflow.getPaymentFee()) ? PaymentRequestGenerator.getTotalPayment(processWorkflow.getPaymentFee(), dossierId) : StringPool.BLANK %>"
-		/>
-	</c:if>
-	
-	<aui:input 
-		name="<%=ProcessOrderDisplayTerms.RECEPTION_NO %>" 
-		label="reception-no" 
-		value="<%=receptionNo %>"
-		type="text"
-	/>
-	
-	<label class="control-label custom-lebel" 
-		for='<portlet:namespace/><%="deadline" %>'
-	>
-		<liferay-ui:message key="return-date"/>
-	</label>
-	
-	<liferay-ui:input-date
-		dayParam="<%=ProcessOrderDisplayTerms.ESTIMATE_DATETIME_DAY %>"
-		disabled="<%= false %>"
-		monthParam="<%=ProcessOrderDisplayTerms.ESTIMATE_DATETIME_MONTH %>"
-		name="<%=ProcessOrderDisplayTerms.ESTIMATE_DATETIME %>"
-		yearParam="<%=ProcessOrderDisplayTerms.ESTIMATE_DATETIME_YEAR %>"
-		formName="fm"
-		autoFocus="<%=true %>"
-		dayValue="<%=spd != null ? spd.getDayOfMoth() : 0 %>"
-		monthValue="<%=spd != null ? spd.getMonth() : 0 %>"
-		yearValue="<%=spd != null ? spd.getYear() : 0 %>"
-		nullable="<%=spd == null ? true: false %>"
-	/>
-	
-	
-	
-	<aui:input name="<%=ProcessOrderDisplayTerms.ACTION_NOTE %>" label="action-note" type="textarea"/>
+	<div class="row-fluid">
+		<div class="span3">
+			<aui:select 
+				name="<%=ProcessOrderDisplayTerms.ASSIGN_TO_USER_ID %>" 
+				label="assign-to-next-user" 
+				showEmptyOption="true"
+			>
+				<%
+					List<User> assignUsers = ProcessUtils.getAssignUsers(processStepId, 0);
+					
+					for (User userSel : assignUsers) {
+				%>	
+					<aui:option selected="<%= assigerToUserId == userSel.getUserId() ? true : false  %>" value="<%= userSel.getUserId() %>"><%= userSel.getFullName() %></aui:option>
+				<%
+					}
+				%>
+			</aui:select>
+		</div>
+		<div class="span3">
+			<c:if test="<%=processWorkflow != null &&  processWorkflow.isRequestPayment()%>">
+				<aui:input 
+					name="<%=ProcessOrderDisplayTerms.PAYMENTVALUE %>" 
+					label="requirement-to-pay-charges" 
+					type="text"
+					value="<%=Validator.isNotNull(processWorkflow.getPaymentFee()) ? PaymentRequestGenerator.getTotalPayment(processWorkflow.getPaymentFee(), dossierId) : StringPool.BLANK %>"
+				/>
+			</c:if>
+		
+		</div>
+		<div class="span3">
+			<aui:input 
+				name="<%=ProcessOrderDisplayTerms.RECEPTION_NO %>" 
+				label="reception-no" 
+				value="<%=receptionNo %>"
+				type="text"
+			/>
+		</div>
+		
+		<div class="span3">
+			<label class="control-label custom-lebel"  for='<portlet:namespace/><%="deadline" %>'>
+				<liferay-ui:message key="return-date"/>
+			</label>
+		
+			<liferay-ui:input-date
+				dayParam="<%=ProcessOrderDisplayTerms.ESTIMATE_DATETIME_DAY %>"
+				disabled="<%= false %>"
+				monthParam="<%=ProcessOrderDisplayTerms.ESTIMATE_DATETIME_MONTH %>"
+				name="<%=ProcessOrderDisplayTerms.ESTIMATE_DATETIME %>"
+				yearParam="<%=ProcessOrderDisplayTerms.ESTIMATE_DATETIME_YEAR %>"
+				formName="fm"
+				autoFocus="<%=true %>"
+				dayValue="<%=spd != null ? spd.getDayOfMoth() : 0 %>"
+				monthValue="<%=spd != null ? spd.getMonth() : 0 %>"
+				yearValue="<%=spd != null ? spd.getYear() : 0 %>"
+				nullable="<%=spd == null ? true: false %>"
+			/>
+			
+		</div>
+	</div>
+	<div class="row-fluid">
+		<div class="span12">
+			<aui:input name="<%=ProcessOrderDisplayTerms.ACTION_NOTE %>" label="action-note" type="textarea"/>
+		</div>
+	</div>
 	
 	<c:if test="<%=workflowOutputs != null && !workflowOutputs.isEmpty() %>">
 	
@@ -338,7 +359,12 @@
 		var success = '<%=success%>';
 		
 		if(success == 'true'){
-			var backURL = '<%=backURL%>';
+			var backURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
+			backURL.setParameter("mvcPath", "/html/portlets/processmgt/processorder/processordertodolist.jsp");
+			backURL.setWindowState("<%=LiferayWindowState.NORMAL.toString()%>"); 
+			backURL.setPortletMode("normal");
+			backURL.setParameter("success", true);
+			
 			var Util = Liferay.Util;
 			<portlet:namespace/>closeDialog();
 			Util.getOpener().Liferay.fire('redirect', {responseData:{backURL:backURL}});
@@ -461,6 +487,8 @@
 		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.ACTION_PHASE) %>');
 		portletURL.setParameter("javax.portlet.action", "signature");
 		portletURL.setWindowState('<%=WindowState.NORMAL%>');
+		console.log(hex);
+		console.log(resources);
 		
 		$.sign({
 		    hash: {
@@ -475,7 +503,9 @@
 		        // do something
 		    },
 		    afterSign: function(signer, signature) {
-		    	//console.log(signature);
+		    	console.log(signature.value);
+				console.log(signature.certificate);
+		    	console.log(signature);
 		       $.ajax({
 			   		type: "POST",
 		       		url : portletURL.toString(),

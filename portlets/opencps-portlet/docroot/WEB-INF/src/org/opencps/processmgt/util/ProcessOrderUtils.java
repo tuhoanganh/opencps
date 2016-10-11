@@ -21,19 +21,22 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import javax.portlet.PortletModeException;
 import javax.portlet.RenderRequest;
 import javax.portlet.WindowStateException;
 
+import org.opencps.datamgt.model.DictItem;
+import org.opencps.dossiermgt.bean.ProcessOrderBean;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.model.ProcessStep;
 import org.opencps.processmgt.model.StepAllowance;
+import org.opencps.processmgt.search.ProcessOrderDisplayTerms;
 import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
 import org.opencps.processmgt.service.StepAllowanceLocalServiceUtil;
+import org.opencps.processmgt.util.comparator.ProcessOrderModifiedDateComparator;
 import org.opencps.util.PortletUtil;
 //import org.opencps.processmgt.util.comparator.BuocXuLyComparator;
 //import org.opencps.processmgt.util.comparator.ChuHoSoComparator;
@@ -42,10 +45,17 @@ import org.opencps.util.PortletUtil;
 //import org.opencps.processmgt.util.comparator.ThuTucComparator;
 import org.opencps.util.WebKeys;
 
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -74,7 +84,11 @@ public class ProcessOrderUtils {
 		}
 
 		OrderByComparator orderByComparator = null;
-
+		
+		if(orderByCol.equals(ProcessOrderDisplayTerms.MODIFIEDDATE)) {
+			orderByComparator = new ProcessOrderModifiedDateComparator(orderByAsc);
+		}
+		
 		// if(orderByCol.equals(ProcessOrderDisplayTerms.MA_TIEP_NHAN)) {
 		// orderByComparator = new MaTiepNhanComparator(orderByAsc);
 		// } else if(orderByCol.equals(ProcessOrderDisplayTerms.CHU_HO_SO)) {
@@ -400,64 +414,257 @@ public class ProcessOrderUtils {
 
 	}
 
-	public static String generateMenuTrangThaiHoSo(
-		RenderRequest renderRequest, long[] roleIds, String active,
-		boolean counter, String renderURL)
-		throws WindowStateException, PortletModeException {
+	public static String generateTreeView(String collectionCode, String itemCode,
+			String myLabel, int level, String type,
+			boolean isCode ,RenderRequest renderRequest)		
+					throws SystemException, PortalException {
+		
+			ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest
+				.getAttribute(WebKeys.THEME_DISPLAY);
 
-		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest
-			.getAttribute(WebKeys.THEME_DISPLAY);
-
-		long groupId = themeDisplay
-			.getScopeGroupId();
-
-		// now read your parameters, e.g. like this:
-		// long someParameter = ParamUtil.getLong(request, "someParameter");
-
-		StringBuilder sbHtml = new StringBuilder();
-
-		sbHtml
-			.append("<ul class=\"menu-opencps\">");
-
-		for (String ett : PortletUtil
-			.getDossierStatus()) {
-			String mnClass = (Validator
-				.isNotNull(active) && active
-					.equalsIgnoreCase(String
-						.valueOf(ett)) ? "active-menu" : "");
-
-			sbHtml
-				.append("<li class=\"menu-opencps-li " + mnClass +
-					"\" onclick=\"openCPS_menu_submit('" + renderURL + "','" +
-					ett + "')\" >");
-
-			sbHtml
-				.append("<a>");
-
-			if (counter)
-				sbHtml
-					.append("<span id=\"" + "badge_" + ett +
-						"\" class=\"badge\">0</span>");
-
-			sbHtml
-				.append(HtmlUtil
-					.escape(PortletUtil
-						.getDossierStatusLabel(ett, Locale
-							.getDefault())));
-
-			sbHtml
-				.append("</a>");
-
-			sbHtml
-				.append("</li>");
-
+			long groupId = themeDisplay
+				.getScopeGroupId();
+			
+			//get chirentDataSource
+			List<DictItem> result = PortletUtil.getDictItemInUseByCode(groupId, collectionCode, itemCode);
+			
+			JSONArray jsonArrayRoot = JSONFactoryUtil.createJSONArray();
+			JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+			
+			JSONObject jsonObjectRoot = JSONFactoryUtil
+					.createJSONObject();
+			JSONObject jsonObject = null;
+			
+			int countPeriod = 0;
+			
+				for (DictItem dictItem : result) {
+					
+					jsonObject = JSONFactoryUtil
+							.createJSONObject();
+					String[] treeIn = dictItem.getTreeIndex().split(StringPool.BACK_SLASH+StringPool.PERIOD);
+					
+					countPeriod = StringUtil.count(dictItem.getTreeIndex(), StringPool.PERIOD);
+					
+					if(countPeriod <= level){
+						
+						jsonObject.put("label",
+								dictItem.getItemName(themeDisplay.getLocale()));
+						
+						jsonObject.put("type", type);
+						
+						if(isCode){
+							jsonObject.put("id", dictItem.getItemCode());
+						}else{
+							jsonObject.put("id", StringUtil.valueOf(dictItem.getDictItemId()));
+						}
+						
+						jsonObject.put("expanded", true);
+						
+						if(countPeriod < level){
+							
+							jsonObject.put("leaf", false);
+							
+						}else{
+							jsonObject.put("leaf", true);
+						}
+						
+						
+						jsonObject.put("children", JSONFactoryUtil.createJSONArray());
+						
+						if(countPeriod > 0){
+							
+							jsonObject.put("parentId", StringUtil.valueOf(treeIn[countPeriod-1]));
+							
+							for (int y = 0; y < jsonArray.length(); y++) {
+								
+								buildChildJsonTreeData(jsonObject, 0, jsonArray.getJSONObject(y));
+								
+							}
+						}else{
+							
+							jsonArray.put(jsonObject);
+							
+						}
+						
+					}
+				}
+			
+			jsonObjectRoot.put("children", jsonArray);
+			
+			jsonObjectRoot.put("expanded", true);
+			
+			jsonObjectRoot.put("label", myLabel);
+			
+			jsonArrayRoot.put(jsonObjectRoot);
+			
+			return jsonArrayRoot.toString();
 		}
+	
+	public static String generateTreeViewMappingAdminCode(String collectionCode, String itemCode,
+			String myLabel, int level, String type,
+			boolean isCode ,RenderRequest renderRequest)		
+					throws SystemException, PortalException {
+		
+			ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest
+				.getAttribute(WebKeys.THEME_DISPLAY);
 
-		sbHtml
-			.append("</ul>");
+			long groupId = themeDisplay
+				.getScopeGroupId();
+			
+			//get chirentDataSource
+			List<DictItem> result = PortletUtil.getDictItemInUseByCodeMappingAdminCode(groupId, collectionCode, itemCode);
+			
+			JSONArray jsonArrayRoot = JSONFactoryUtil.createJSONArray();
+			JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+			
+			JSONObject jsonObjectRoot = JSONFactoryUtil
+					.createJSONObject();
+			JSONObject jsonObject = null;
+			
+			int countPeriod = 0;
+			
+				for (DictItem dictItem : result) {
+					
+					jsonObject = JSONFactoryUtil
+							.createJSONObject();
+					String[] treeIn = dictItem.getTreeIndex().split(StringPool.BACK_SLASH+StringPool.PERIOD);
+					
+					countPeriod = StringUtil.count(dictItem.getTreeIndex(), StringPool.PERIOD);
+					
+					if(countPeriod <= level){
+						
+						jsonObject.put("label",
+								dictItem.getItemName(themeDisplay.getLocale()));
+						
+						jsonObject.put("type", type);
+						
+						if(isCode){
+							jsonObject.put("id", dictItem.getItemCode());
+						}else{
+							jsonObject.put("id", StringUtil.valueOf(dictItem.getDictItemId()));
+						}
+						
+						jsonObject.put("expanded", true);
+						
+						if(countPeriod < level){
+							
+							jsonObject.put("leaf", false);
+							
+						}else{
+							jsonObject.put("leaf", true);
+						}
+						
+						
+						jsonObject.put("children", JSONFactoryUtil.createJSONArray());
+						
+						if(countPeriod > 0){
+							
+							jsonObject.put("parentId", StringUtil.valueOf(treeIn[countPeriod-1]));
+							
+							for (int y = 0; y < jsonArray.length(); y++) {
+								
+								buildChildJsonTreeData(jsonObject, 0, jsonArray.getJSONObject(y));
+								
+							}
+						}else{
+							
+							jsonArray.put(jsonObject);
+							
+						}
+						
+					}
+				}
+			
+			jsonObjectRoot.put("children", jsonArray);
+			
+			jsonObjectRoot.put("expanded", true);
+			
+			jsonObjectRoot.put("label", myLabel);
+			
+			jsonArrayRoot.put(jsonObjectRoot);
+			
+			return jsonArrayRoot.toString();
+		}
+	
+	public static void buildChildJsonTreeData(JSONObject newJsonObject, int i, JSONObject compareJsonObject) {
+		
+			JSONObject childObj = compareJsonObject;
+			
+			if(Validator.isNotNull(compareJsonObject.getJSONArray("children").getJSONObject(i)) && i > 0){
+				childObj = compareJsonObject.getJSONArray("children").getJSONObject(i);
+			}
+			JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+			
+			if(childObj != null){
 
-		return sbHtml
-			.toString();
+				jsonArray = childObj.getJSONArray("children");
+				
+				if(newJsonObject.getString("parentId").equals(childObj.getString("id"))){
+	
+					jsonArray.put(newJsonObject);
+					
+					childObj.put("children", jsonArray);
+				}
+				
+				i++;
+					
+				JSONObject objChk = compareJsonObject.getJSONArray("children").getJSONObject(i);
+					
+				if(Validator.isNotNull(objChk)){
+					
+					buildChildJsonTreeData(newJsonObject, i, compareJsonObject);
+				}
+				
+			}		
 	}
+	
+	public static String generateTreeView(List<ProcessOrderBean> dataSource, String myLabel , String type)		
+					throws SystemException, PortalException {
+		
+			JSONArray jsonArrayRoot = JSONFactoryUtil.createJSONArray();
+			JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+			
+			JSONObject jsonObjectRoot = JSONFactoryUtil
+					.createJSONObject();
+			JSONObject jsonObject = null;
+			
+			for (ProcessOrderBean item : dataSource) {
+				jsonObject = JSONFactoryUtil
+						.createJSONObject();
+				
+				if(item.getServiceInfoId() > 0){
 
+					jsonObject.put("id", String.valueOf(item.getServiceInfoId()));
+					
+					jsonObject.put("label", item.getServiceName());
+				
+				}else if(item.getProcessStepId() > 0){
+
+					jsonObject.put("id", String.valueOf(item.getProcessStepId()));
+					
+					jsonObject.put("label", item.getStepName());
+				
+				}
+				
+				jsonObject.put("type", type);
+				
+				jsonObject.put("leaf", true);
+				
+				jsonArray.put(jsonObject);
+			}
+			
+			jsonObjectRoot.put("children", jsonArray);
+			
+			jsonObjectRoot.put("expanded", true);
+			
+			jsonObjectRoot.put("label", myLabel);
+			
+			jsonArrayRoot.put(jsonObjectRoot);
+			
+			return jsonArrayRoot.toString();
+		}
+	
+
+	private static Log _log =
+    		LogFactoryUtil.getLog(ProcessOrderUtils.class.getName());
 }

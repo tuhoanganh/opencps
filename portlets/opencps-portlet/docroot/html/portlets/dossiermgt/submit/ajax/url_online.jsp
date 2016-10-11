@@ -1,9 +1,4 @@
-<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
-<%@page import="org.opencps.util.WebKeys"%>
-<%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
-<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
+<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -23,12 +18,19 @@
  */
 %>
 <%@ include file="../init.jsp"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
+<%@page import="org.opencps.util.WebKeys"%>
+<%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
+<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
 
 <%
 	long serviceInfoId = ParamUtil.getLong(request, "serviceinfoId");
 	String govAdmin = ParamUtil.getString(request, "administrationCode");
 	ServiceInfo serviceInfo = null;
 	ServiceConfig serviceConfig = null;
+	String backURL = ParamUtil.getString(request, "backURL");
 	
 	try {
 		
@@ -51,15 +53,17 @@
 	
 %>
 
-<liferay-portlet:renderURL 
-		var="servieOnlinePopURL" 
-		portletName="<%=WebKeys.DOSSIER_MGT_PORTLET %>"
+<liferay-portlet:renderURL var="servieOnlinePopURL"
+ 		portletName="<%=WebKeys.DOSSIER_MGT_PORTLET %>"
 		plid="<%=plidSubmit %>"
 		portletMode="VIEW"
 		windowState="<%=LiferayWindowState.NORMAL.toString() %>"
-	>
-		<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/frontoffice/edit_dossier.jsp"/>
-		<portlet:param name="serviceConfigId" value="<%=(serviceConfig != null) ? String.valueOf(serviceConfig.getServiceConfigId()) : String.valueOf(0) %>"/>
+		>
+			<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/frontoffice/edit_dossier.jsp"/>
+			<portlet:param name="<%=DossierDisplayTerms.SERVICE_CONFIG_ID %>" value="<%=String.valueOf(serviceConfig.getServiceConfigId()) %>"/>
+			<portlet:param name="<%=Constants.CMD %>" value="<%=Constants.ADD %>"/>
+			<portlet:param name="backURL" value="<%=backURL %>"/>
+			<portlet:param name="isEditDossier" value="<%=String.valueOf(true) %>"/>
 </liferay-portlet:renderURL>
 
 <aui:row cssClass="serice-des">
@@ -71,7 +75,7 @@
 		<c:when test="<%=Validator.isNotNull(serviceConfig) %>">
 			<c:choose>
 				<c:when test="<%=serviceConfig.getServiceInstruction().equalsIgnoreCase(StringPool.BLANK) %>">
-					<liferay-ui:message key="service-no-description"/>
+					
 				</c:when>
 				<c:otherwise>
 					<%= serviceConfig.getServiceInstruction() %>
@@ -86,8 +90,8 @@
 
 <aui:row cssClass="btn-submit-online">
 	<c:if test = "<%=Validator.isNotNull(serviceConfig) && Validator.isNotNull(serviceInfo) && (serviceConfig.getServiceLevel() >= 3)%>">
-	<aui:button name="submitonline" value="dossier-submit-online" href="<%=servieOnlinePopURL.toString() %>" />
-</c:if>
+		<aui:button type="button" name="submitonline" value="dossier-submit-online" href="<%=Validator.isNotNull(serviceConfig.getServiceUrl()) ? serviceConfig.getServiceUrl() : servieOnlinePopURL.toString() %>" />
+	</c:if>
 </aui:row>
 
 

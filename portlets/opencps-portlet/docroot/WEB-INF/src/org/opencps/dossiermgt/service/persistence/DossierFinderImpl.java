@@ -22,14 +22,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import org.opencps.dossiermgt.bean.DossierBean;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.impl.DossierImpl;
-import org.opencps.util.DateTimeUtil;
 
 import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
@@ -51,22 +49,21 @@ import com.liferay.util.dao.orm.CustomSQLUtil;
 public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 	implements DossierFinder {
 
-	public static final String COUNT_DOSSIER = DossierFinder.class
-		.getName() + ".countDossier";
-
 	public static final String COUNT_DOSSIER_BY_USER = DossierFinder.class
 		.getName() + ".countDossierByUser";
 
+	public static final String COUNT_DOSSIER_BY_USER_NEW_REQUEST = DossierFinder.class
+			.getName() + ".countDossierByUserNewRequest";
+	
 	public static final String COUNT_DOSSIER_BY_KEYWORDDOMAINANDSTATUS =
 		DossierFinder.class
 			.getName() + ".countDossierByKeywordDomainAndStatus";
 
-	public static final String SEARCH_DOSSIER = DossierFinder.class
-		.getName() + ".searchDossier";
-
 	public static final String SEARCH_DOSSIER_BY_USER = DossierFinder.class
 		.getName() + ".searchDossierByUser";
 
+	public static final String SEARCH_DOSSIER_BY_USER_NEW_REQUEST = DossierFinder.class
+			.getName() + ".searchDossierByUserNewRequest";
 	public static final String SEARCH_DOSSIER_BY_KEYWORDDOMAINANDSTATUS =
 		DossierFinder.class
 			.getName() + ".searchDossierByKeywordDomainAndStatus";
@@ -113,182 +110,33 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 	/**
 	 * @param groupId
 	 * @param keyword
-	 * @param dossierStatus
-	 * @return
-	 */
-	public int countDossier(
-		long groupId, String keyword, String dossierStatus) {
-
-		String[] keywords = null;
-
-		boolean andOperator = false;
-
-		if (Validator
-			.isNotNull(keyword)) {
-			keywords = CustomSQLUtil
-				.keywords(keyword);
-		}
-		else {
-			andOperator = true;
-		}
-
-		return countDossier(groupId, keywords, dossierStatus, andOperator);
-	}
-
-	/**
-	 * @param groupId
-	 * @param keywords
-	 * @param dossierStatus
-	 * @param andOperator
-	 * @return
-	 */
-	private int countDossier(
-		long groupId, String[] keywords, String dossierStatus,
-		boolean andOperator) {
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			String sql = CustomSQLUtil
-				.get(COUNT_DOSSIER);
-
-			if (keywords != null && keywords.length > 0) {
-				sql = CustomSQLUtil
-					.replaceKeywords(sql,
-						"lower(opencps_serviceinfo.serviceName)",
-						StringPool.LIKE, true, keywords);
-
-				sql = CustomSQLUtil
-					.replaceKeywords(sql,
-						"lower(opencps_service_config.govAgencyName)",
-						StringPool.LIKE, true, keywords);
-			}
-
-			if (keywords == null || keywords.length == 0) {
-				sql = StringUtil
-					.replace(sql,
-						"INNER JOIN opencps_serviceinfo ON opencps_dossier.serviceInfoId = opencps_serviceinfo.serviceInfoId",
-						StringPool.BLANK);
-				sql = StringUtil
-					.replace(sql,
-						"INNER JOIN opencps_service_config ON opencps_dossier.serviceConfigId = opencps_service_config.serviceConfigId",
-						StringPool.BLANK);
-
-				sql = StringUtil
-					.replace(sql,
-						"AND (lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$])",
-						StringPool.BLANK);
-
-				sql = StringUtil
-					.replace(sql,
-						"OR (lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$])",
-						StringPool.BLANK);
-
-				sql = StringUtil
-					.replace(sql,
-						"OR (lower(opencps_dossier.subjectName) LIKE ? [$AND_OR_NULL_CHECK$])",
-						StringPool.BLANK);
-
-				sql = StringUtil
-					.replace(sql,
-						"OR (lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$])",
-						StringPool.BLANK);
-			}
-
-			if (Validator
-				.isNull(dossierStatus)) {
-				sql = StringUtil
-					.replace(sql, "AND (opencps_dossier.dossierStatus = ?)",
-						StringPool.BLANK);
-			}
-
-			sql = CustomSQLUtil
-				.replaceAndOperator(sql, andOperator);
-
-			SQLQuery q = session
-				.createSQLQuery(sql);
-
-			q
-				.addScalar(COUNT_COLUMN_NAME, Type.INTEGER);
-
-			QueryPos qPos = QueryPos
-				.getInstance(q);
-
-			qPos
-				.add(groupId);
-
-			if (keywords != null && keywords.length > 0) {
-				qPos
-					.add(keywords, 2);
-				qPos
-					.add(keywords, 2);
-				qPos
-					.add(keywords, 2);
-				qPos
-					.add(keywords, 2);
-			}
-
-			if (Validator
-				.isNotNull(dossierStatus)) {
-				qPos
-					.add(dossierStatus);
-			}
-
-			Iterator<Integer> itr = q
-				.iterate();
-
-			if (itr
-				.hasNext()) {
-				Integer count = itr
-					.next();
-
-				if (count != null) {
-					return count
-						.intValue();
-				}
-			}
-
-			return 0;
-
-		}
-		catch (Exception e) {
-			_log
-				.error(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		return 0;
-	}
-
-	/**
-	 * @param groupId
-	 * @param keyword
 	 * @param domainCode
 	 * @param dossierStatus
 	 * @return
 	 */
 	public int countDossierByKeywordDomainAndStatus(
-		long groupId, String keyword, String domainCode, String dossierStatus) {
+		long groupId, String keyword, String domainCode,
+		List<String> govAgencyCodes, String dossierStatus) {
 
 		String[] keywords = null;
 
 		boolean andOperator = false;
 
-		if (Validator
-			.isNotNull(keyword)) {
-			keywords = CustomSQLUtil
-				.keywords(keyword);
+		if (Validator.isNotNull(keyword)) {
+			
+			keywords = new String[]{
+					StringUtil.quote(
+						StringUtil.toLowerCase(keyword).trim(), 
+						StringPool.PERCENT)};
+			
 		}
 		else {
 			andOperator = true;
 		}
 
-		return countDossierByKeywordDomainAndStatus(groupId, keywords,
-			domainCode, dossierStatus, andOperator);
+		return countDossierByKeywordDomainAndStatus(
+			groupId, keywords, domainCode, govAgencyCodes, dossierStatus,
+			andOperator);
 	}
 
 	/**
@@ -301,81 +149,90 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 	 */
 	private int countDossierByKeywordDomainAndStatus(
 		long groupId, String[] keywords, String domainCode,
-		String dossierStatus, boolean andOperator) {
+		List<String> govAgencyCodes, String dossierStatus, boolean andOperator) {
 
 		Session session = null;
 
 		try {
 			session = openSession();
 
-			String sql = CustomSQLUtil
-				.get(COUNT_DOSSIER_BY_KEYWORDDOMAINANDSTATUS);
+			String sql =
+				CustomSQLUtil.get(COUNT_DOSSIER_BY_KEYWORDDOMAINANDSTATUS);
 
 			if (keywords != null && keywords.length > 0) {
-				sql = CustomSQLUtil
-					.replaceKeywords(sql,
-						"lower(opencps_serviceinfo.serviceName)",
-						StringPool.LIKE, true, keywords);
+				sql =
+					CustomSQLUtil.replaceKeywords(
+						sql, "lower(opencps_serviceinfo.serviceName)",
+						StringPool.LIKE, false, keywords);
 
+				sql =
+					CustomSQLUtil.replaceKeywords(
+						sql, "lower(opencps_serviceinfo.fullName)",
+						StringPool.LIKE, false, keywords);
+				
 				sql = CustomSQLUtil
-					.replaceKeywords(sql,
-						"lower(opencps_service_config.govAgencyName)",
-						StringPool.LIKE, true, keywords);
+						.replaceKeywords(sql,
+							"lower(opencps_dossier.receptionNo)",
+							StringPool.LIKE, false, keywords);
+				
 				sql = CustomSQLUtil
 					.replaceKeywords(sql, "lower(opencps_dossier.subjectName)",
 						StringPool.LIKE, true, keywords);
 			}
 
 			if (keywords == null || keywords.length == 0) {
-				sql = StringUtil
-					.replace(sql,
-						"INNER JOIN opencps_service_config ON opencps_dossier.serviceConfigId = opencps_service_config.serviceConfigId",
-						StringPool.BLANK);
 
 				sql = StringUtil
 					.replace(sql,
-						"AND (lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$])",
+						"AND ((lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$])",
 						StringPool.BLANK);
 
 				sql = StringUtil
 					.replace(sql,
-						"OR (lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$])",
+						"OR (lower(opencps_serviceinfo.fullName) LIKE ? [$AND_OR_NULL_CHECK$])",
 						StringPool.BLANK);
+				
+				sql = StringUtil
+						.replace(sql,
+							"OR (lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$])",
+							StringPool.BLANK);
+				
 				sql = StringUtil
 					.replace(sql,
-						"OR (lower(opencps_dossier.subjectName) LIKE ? [$AND_OR_NULL_CHECK$])",
+						"OR (lower(opencps_dossier.subjectName) LIKE ? [$AND_OR_NULL_CHECK$]))",
 						StringPool.BLANK);
 			}
 
-			if (""
-				.equals(domainCode)) {
-				sql = StringUtil
-					.replace(sql, "AND (opencps_serviceinfo.domainCode = ?)",
-						StringPool.BLANK);
-			}
-			else {
-			}
-			if (Validator
-				.isNull(dossierStatus)) {
-				sql = StringUtil
-					.replace(sql, "AND (opencps_dossier.dossierStatus = ?)",
+			if (Validator.isNull(domainCode)) {
+				sql =
+					StringUtil.replace(
+						sql, "AND (opencps_dossier.serviceDomainIndex LIKE ?)",
 						StringPool.BLANK);
 			}
 
-			sql = CustomSQLUtil
-				.replaceAndOperator(sql, andOperator);
+			if (Validator.isNull(dossierStatus)) {
+				sql =
+					StringUtil.replace(
+						sql, "AND (opencps_dossier.dossierStatus = ?)",
+						StringPool.BLANK);
+			}
 
-			SQLQuery q = session
-				.createSQLQuery(sql);
+			if (Validator.isNull(govAgencyCodes) ||govAgencyCodes.isEmpty()) {
+				sql =
+					StringUtil.replace(
+						sql, "AND opencps_dossier.govAgencyCode IN (?)",
+						StringPool.BLANK);
+			}
 
-			q
-				.addScalar(COUNT_COLUMN_NAME, Type.INTEGER);
+			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
 
-			QueryPos qPos = QueryPos
-				.getInstance(q);
+			SQLQuery q = session.createSQLQuery(sql);
 
-			qPos
-				.add(groupId);
+			q.addScalar(COUNT_COLUMN_NAME, Type.INTEGER);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
 
 			if (keywords != null && keywords.length > 0) {
 				qPos
@@ -384,33 +241,35 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 					.add(keywords, 2);
 				qPos
 					.add(keywords, 2);
+				qPos
+					.add(keywords, 2);
 			}
 
+			if (Validator.isNotNull(dossierStatus)) {
+				qPos.add(dossierStatus);
+			}
+			
 			if (Validator
-				.isNotNull(dossierStatus)) {
+					.isNotNull(domainCode)) {
+					
 				qPos
-					.add(dossierStatus);
-			}
-			if (!""
-				.equals(domainCode)) {
-				qPos
-					.add(domainCode);
-			}
-			else {
+					.add(domainCode +
+						StringPool.PERCENT);
 
 			}
+			
+			if (Validator.isNotNull(govAgencyCodes) && !govAgencyCodes.isEmpty()) {
+				String govCodes = StringUtil.merge(govAgencyCodes);
+				qPos.add(govCodes);
+			}
 
-			Iterator<Integer> itr = q
-				.iterate();
+			Iterator<Integer> itr = q.iterate();
 
-			if (itr
-				.hasNext()) {
-				Integer count = itr
-					.next();
+			if (itr.hasNext()) {
+				Integer count = itr.next();
 
 				if (count != null) {
-					return count
-						.intValue();
+					return count.intValue();
 				}
 			}
 
@@ -418,8 +277,7 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 
 		}
 		catch (Exception e) {
-			_log
-				.error(e);
+			_log.error(e);
 		}
 		finally {
 			closeSession(session);
@@ -444,10 +302,11 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 
 		boolean andOperator = false;
 
-		if (Validator
-			.isNotNull(keyword)) {
-			keywords = CustomSQLUtil
-				.keywords(keyword);
+		if (Validator.isNotNull(keyword)) {
+			keywords = new String[]{
+				StringUtil.quote(
+					StringUtil.toLowerCase(keyword).trim(), 
+					StringPool.PERCENT)};
 		}
 		else {
 			andOperator = true;
@@ -497,25 +356,28 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 				sql = CustomSQLUtil
 					.replaceKeywords(sql, "lower(opencps_dossier.receptionNo)",
 						StringPool.LIKE, true, keywords);
+				
+				sql = CustomSQLUtil
+						.replaceKeywords(sql, "lower(opencps_dossier.dossierId)",
+							StringPool.LIKE, true, keywords);
 			}
 			else {
 				sql = StringUtil
 					.replace(sql,
-						"AND ((lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_dossier.subjectName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$]))",
+							"AND ((lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_dossier.subjectName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_dossier.dossierId) LIKE ? [$AND_OR_NULL_CHECK$]))",
 						StringPool.BLANK);
 			}
 
 			if (Validator
 				.isNull(serviceDomainTreeIndex)) {
-
+				
 				sql = StringUtil
-					.replace(sql,
-						"AND (opencps_dossier.serviceDomainIndex LIKE ? OR opencps_dossier.serviceDomainIndex = ?)",
-						StringPool.BLANK);
+						.replace(sql,
+								"AND (opencps_dossier.serviceDomainIndex LIKE ? OR opencps_dossier.serviceDomainIndex = ?)",
+							StringPool.BLANK);
 			}
 			else {
-				if (StringUtil
-					.contains(serviceDomainTreeIndex, StringPool.PERIOD)) {
+				if (serviceDomainTreeIndex.contains(StringPool.PERIOD)) {
 					sql = StringUtil
 						.replace(sql,
 							"AND (opencps_dossier.serviceDomainIndex LIKE ? OR opencps_dossier.serviceDomainIndex = ?)",
@@ -538,7 +400,7 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 
 			sql = CustomSQLUtil
 				.replaceAndOperator(sql, andOperator);
-
+			
 			SQLQuery q = session
 				.createSQLQuery(sql);
 
@@ -554,24 +416,9 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 			qPos
 				.add(userId);
 
-			if (Validator
-				.isNotNull(serviceDomainTreeIndex) && StringUtil
-					.contains(serviceDomainTreeIndex, StringPool.PERIOD)) {
-				qPos
-					.add(serviceDomainTreeIndex + StringPool.PERCENT);
-
-			}
-			else if (Validator
-				.isNotNull(serviceDomainTreeIndex) && !StringUtil
-					.contains(serviceDomainTreeIndex, StringPool.PERIOD)) {
-				qPos
-					.add(serviceDomainTreeIndex + StringPool.PERIOD +
-						StringPool.PERCENT);
-				qPos
-					.add(serviceDomainTreeIndex);
-			}
-
 			if (keywords != null && keywords.length > 0) {
+				qPos
+					.add(keywords, 2);
 				qPos
 					.add(keywords, 2);
 				qPos
@@ -586,6 +433,21 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 				.isNotNull(dossierStatus)) {
 				qPos
 					.add(dossierStatus);
+			}
+			
+			if (Validator
+				.isNotNull(serviceDomainTreeIndex) && serviceDomainTreeIndex.contains(StringPool.PERIOD)) {
+				qPos
+					.add(serviceDomainTreeIndex + StringPool.PERCENT);
+
+			}
+			else if (Validator
+				.isNotNull(serviceDomainTreeIndex) && !serviceDomainTreeIndex.contains(StringPool.PERIOD)) {
+				qPos
+					.add(serviceDomainTreeIndex + StringPool.PERIOD +
+						StringPool.PERCENT);
+				qPos
+					.add(serviceDomainTreeIndex);
 			}
 
 			Iterator<Integer> itr = q
@@ -619,151 +481,6 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 	/**
 	 * @param groupId
 	 * @param keyword
-	 * @param dossierStatus
-	 * @param start
-	 * @param end
-	 * @param obc
-	 * @return
-	 */
-	public List<Dossier> searchDossier(
-		long groupId, String keyword, String dossierStatus, int start, int end,
-		OrderByComparator obc) {
-
-		String[] keywords = null;
-		boolean andOperator = false;
-		if (Validator
-			.isNotNull(keyword)) {
-			keywords = CustomSQLUtil
-				.keywords(keyword);
-		}
-		else {
-			andOperator = true;
-		}
-		return searchDossier(groupId, keywords, dossierStatus, andOperator,
-			start, end, obc);
-	}
-
-	/**
-	 * @param groupId
-	 * @param keywords
-	 * @param dossierStatus
-	 * @param andOperator
-	 * @param start
-	 * @param end
-	 * @param obc
-	 * @return
-	 */
-	private List<Dossier> searchDossier(
-		long groupId, String[] keywords, String dossierStatus,
-		boolean andOperator, int start, int end, OrderByComparator obc) {
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			String sql = CustomSQLUtil
-				.get(SEARCH_DOSSIER);
-
-			if (keywords != null && keywords.length > 0) {
-				sql = CustomSQLUtil
-					.replaceKeywords(sql,
-						"lower(opencps_serviceinfo.serviceName)",
-						StringPool.LIKE, true, keywords);
-
-				sql = CustomSQLUtil
-					.replaceKeywords(sql,
-						"lower(opencps_service_config.govAgencyName)",
-						StringPool.LIKE, true, keywords);
-			}
-
-			if (keywords == null || keywords.length == 0) {
-				sql = StringUtil
-					.replace(sql,
-						"INNER JOIN opencps_serviceinfo ON opencps_dossier.serviceInfoId = opencps_serviceinfo.serviceInfoId",
-						StringPool.BLANK);
-				sql = StringUtil
-					.replace(sql,
-						"INNER JOIN opencps_service_config ON opencps_dossier.serviceConfigId = opencps_service_config.serviceConfigId",
-						StringPool.BLANK);
-
-				sql = StringUtil
-					.replace(sql,
-						"AND (lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$])",
-						StringPool.BLANK);
-
-				sql = StringUtil
-					.replace(sql,
-						"OR (lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$])",
-						StringPool.BLANK);
-
-				sql = StringUtil
-					.replace(sql,
-						"OR (lower(opencps_dossier.subjectName) LIKE ? [$AND_OR_NULL_CHECK$])",
-						StringPool.BLANK);
-
-				sql = StringUtil
-					.replace(sql,
-						"OR (lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$])",
-						StringPool.BLANK);
-			}
-
-			if (Validator
-				.isNull(dossierStatus)) {
-				sql = StringUtil
-					.replace(sql, "AND (opencps_dossier.dossierStatus = ?)",
-						StringPool.BLANK);
-			}
-
-			sql = CustomSQLUtil
-				.replaceAndOperator(sql, andOperator);
-
-			SQLQuery q = session
-				.createSQLQuery(sql);
-
-			q
-				.addEntity("Dossier", DossierImpl.class);
-
-			QueryPos qPos = QueryPos
-				.getInstance(q);
-
-			qPos
-				.add(groupId);
-
-			if (keywords != null && keywords.length > 0) {
-				qPos
-					.add(keywords, 2);
-				qPos
-					.add(keywords, 2);
-				qPos
-					.add(keywords, 2);
-				qPos
-					.add(keywords, 2);
-			}
-
-			if (Validator
-				.isNotNull(dossierStatus)) {
-				qPos
-					.add(dossierStatus);
-			}
-
-			return (List<Dossier>) QueryUtil
-				.list(q, getDialect(), start, end);
-		}
-		catch (Exception e) {
-			_log
-				.error(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		return null;
-	}
-
-	/**
-	 * @param groupId
-	 * @param keyword
 	 * @param domainCode
 	 * @param dossierStatus
 	 * @param start
@@ -772,21 +489,24 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 	 * @return
 	 */
 	public List<Dossier> searchDossierByKeywordDomainAndStatus(
-		long groupId, String keyword, String domainCode, String dossierStatus,
-		int start, int end, OrderByComparator obc) {
+		long groupId, String keyword, String domainCode,
+		List<String> govAgencyCodes, String dossierStatus, int start, int end,
+		OrderByComparator obc) {
 
 		boolean andOperator = false;
 		String[] keywords = null;
-		if (Validator
-			.isNotNull(keyword)) {
-			keywords = CustomSQLUtil
-				.keywords(keyword);
+		if (Validator.isNotNull(keyword)) {
+			keywords = new String[]{
+					StringUtil.quote(
+						StringUtil.toLowerCase(keyword).trim(), 
+						StringPool.PERCENT)};
 		}
 		else {
 			andOperator = true;
 		}
-		return searchDossierByKeywordDomainAndStatus(groupId, keywords,
-			domainCode, dossierStatus, start, end, obc, andOperator);
+		return searchDossierByKeywordDomainAndStatus(
+			groupId, keywords, domainCode, govAgencyCodes, dossierStatus,
+			start, end, obc, andOperator);
 	}
 
 	/**
@@ -802,77 +522,93 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 	 */
 	private List<Dossier> searchDossierByKeywordDomainAndStatus(
 		long groupId, String[] keywords, String domainCode,
-		String dossierStatus, int start, int end, OrderByComparator obc,
-		boolean andOperator) {
+		List<String> govAgencyCodes, String dossierStatus, int start, int end,
+		OrderByComparator obc, boolean andOperator) {
 
 		Session session = null;
 
 		try {
 			session = openSession();
 
-			String sql = CustomSQLUtil
-				.get(SEARCH_DOSSIER_BY_KEYWORDDOMAINANDSTATUS);
+			String sql =
+				CustomSQLUtil.get(SEARCH_DOSSIER_BY_KEYWORDDOMAINANDSTATUS);
+			
 			if (keywords != null && keywords.length > 0) {
-				sql = CustomSQLUtil
-					.replaceKeywords(sql,
-						"lower(opencps_serviceinfo.serviceName)",
-						StringPool.LIKE, true, keywords);
+				sql =
+					CustomSQLUtil.replaceKeywords(
+						sql, "lower(opencps_serviceinfo.serviceName)",
+						StringPool.LIKE, false, keywords);
 
+				sql =
+					CustomSQLUtil.replaceKeywords(
+						sql, "lower(opencps_serviceinfo.fullName)",
+						StringPool.LIKE, false, keywords);
+				
 				sql = CustomSQLUtil
-					.replaceKeywords(sql,
-						"lower(opencps_service_config.govAgencyName)",
-						StringPool.LIKE, true, keywords);
+						.replaceKeywords(sql,
+							"lower(opencps_dossier.receptionNo)",
+							StringPool.LIKE, false, keywords);
+				
 				sql = CustomSQLUtil
 					.replaceKeywords(sql, "lower(opencps_dossier.subjectName)",
 						StringPool.LIKE, true, keywords);
 			}
+
 			if (keywords == null || keywords.length == 0) {
-				sql = StringUtil
-					.replace(sql,
-						"INNER JOIN opencps_service_config ON opencps_dossier.serviceConfigId = opencps_service_config.serviceConfigId",
-						StringPool.BLANK);
 
 				sql = StringUtil
 					.replace(sql,
-						"AND (lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$])",
+						"AND ((lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$])",
 						StringPool.BLANK);
 
 				sql = StringUtil
 					.replace(sql,
-						"OR (lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$])",
+						"OR (lower(opencps_serviceinfo.fullName) LIKE ? [$AND_OR_NULL_CHECK$])",
 						StringPool.BLANK);
+				
+				sql = StringUtil
+						.replace(sql,
+							"OR (lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$])",
+							StringPool.BLANK);
+				
 				sql = StringUtil
 					.replace(sql,
-						"OR (lower(opencps_dossier.subjectName) LIKE ? [$AND_OR_NULL_CHECK$])",
+						"OR (lower(opencps_dossier.subjectName) LIKE ? [$AND_OR_NULL_CHECK$]))",
 						StringPool.BLANK);
 			}
-			if (""
-				.equals(domainCode)) {
-				sql = StringUtil
-					.replace(sql, "AND (opencps_serviceinfo.domainCode = ?)",
+
+			if (Validator.isNull(domainCode)) {
+				sql =
+					StringUtil.replace(
+						sql, "AND (opencps_dossier.serviceDomainIndex LIKE ?)",
 						StringPool.BLANK);
 			}
-			else {
-			}
-			if (Validator
-				.isNull(dossierStatus)) {
-				sql = StringUtil
-					.replace(sql, "AND (opencps_dossier.dossierStatus = ?)",
+
+			if (Validator.isNull(dossierStatus)) {
+				sql =
+					StringUtil.replace(
+						sql, "AND (opencps_dossier.dossierStatus = ?)",
 						StringPool.BLANK);
 			}
-			sql = CustomSQLUtil
-				.replaceAndOperator(sql, andOperator);
-			SQLQuery q = session
-				.createSQLQuery(sql);
 
-			q
-				.addEntity("Dossier", DossierImpl.class);
+			if (Validator.isNull(govAgencyCodes) ||govAgencyCodes.isEmpty()) {
+				sql =
+					StringUtil.replace(
+						sql, "AND opencps_dossier.govAgencyCode IN (?)",
+						StringPool.BLANK);
+			}
 
-			QueryPos qPos = QueryPos
-				.getInstance(q);
+			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
+			
+			sql = CustomSQLUtil.replaceOrderBy(sql, obc);
 
-			qPos
-				.add(groupId);
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addEntity("Dossier", DossierImpl.class);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
 
 			if (keywords != null && keywords.length > 0) {
 				qPos
@@ -881,34 +617,35 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 					.add(keywords, 2);
 				qPos
 					.add(keywords, 2);
+				qPos
+					.add(keywords, 2);
 			}
 
+			if (Validator.isNotNull(dossierStatus)) {
+				qPos.add(dossierStatus);
+			}
+			
 			if (Validator
-				.isNotNull(dossierStatus)) {
+					.isNotNull(domainCode)) {
+					
 				qPos
-					.add(dossierStatus);
-			}
-
-			if (!""
-				.equals(domainCode)) {
-				qPos
-					.add(domainCode);
-			}
-			else {
+					.add(domainCode +
+						StringPool.PERCENT);
 
 			}
+			
+			if (Validator.isNotNull(govAgencyCodes) && !govAgencyCodes.isEmpty()) {
+				String govCodes = StringUtil.merge(govAgencyCodes);
+				qPos.add(govCodes);
+			}
 
-			List<Dossier> results = (List<Dossier>) QueryUtil
-				.list(q, getDialect(), start, end);
-			List<Dossier> clones = new ArrayList<Dossier>(results);
-			Collections
-				.sort(clones, obc);
+			List<Dossier> results =
+				(List<Dossier>) QueryUtil.list(q, getDialect(), start, end);
 
-			return clones;
+			return results;
 		}
 		catch (Exception e) {
-			_log
-				.error(e);
+			_log.error(e);
 		}
 		finally {
 			closeSession(session);
@@ -935,10 +672,11 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 
 		String[] keywords = null;
 		boolean andOperator = false;
-		if (Validator
-			.isNotNull(keyword)) {
-			keywords = CustomSQLUtil
-				.keywords(keyword);
+		if (Validator.isNotNull(keyword)) {
+			keywords = new String[]{
+					StringUtil.quote(
+						StringUtil.toLowerCase(keyword).trim(), 
+						StringPool.PERCENT)};
 		}
 		else {
 			andOperator = true;
@@ -987,15 +725,19 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 				sql = CustomSQLUtil
 					.replaceKeywords(sql, "lower(opencps_dossier.subjectName)",
 						StringPool.LIKE, true, keywords);
-
+				
 				sql = CustomSQLUtil
 					.replaceKeywords(sql, "lower(opencps_dossier.receptionNo)",
 						StringPool.LIKE, true, keywords);
+				
+				sql = CustomSQLUtil
+						.replaceKeywords(sql, "lower(opencps_dossier.dossierId)",
+							StringPool.LIKE, true, keywords);
 			}
 			else {
 				sql = StringUtil
 					.replace(sql,
-						"AND ((lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_dossier.subjectName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$]))",
+						"AND ((lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_service_config.govAgencyName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_dossier.subjectName) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_dossier.receptionNo) LIKE ? [$AND_OR_NULL_CHECK$]) OR (lower(opencps_dossier.dossierId) LIKE ? [$AND_OR_NULL_CHECK$]))",
 						StringPool.BLANK);
 			}
 
@@ -1008,8 +750,7 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 						StringPool.BLANK);
 			}
 			else {
-				if (StringUtil
-					.contains(serviceDomainTreeIndex, StringPool.PERIOD)) {
+				if (serviceDomainTreeIndex.contains(StringPool.PERIOD)) {
 					sql = StringUtil
 						.replace(sql,
 							"AND (opencps_dossier.serviceDomainIndex LIKE ? OR opencps_dossier.serviceDomainIndex = ?)",
@@ -1032,7 +773,7 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 
 			sql = CustomSQLUtil
 				.replaceAndOperator(sql, andOperator);
-
+			
 			SQLQuery q = session
 				.createSQLQuery(sql);
 
@@ -1050,24 +791,9 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 			qPos
 				.add(userId);
 
-			if (Validator
-				.isNotNull(serviceDomainTreeIndex) && StringUtil
-					.contains(serviceDomainTreeIndex, StringPool.PERIOD)) {
-				qPos
-					.add(serviceDomainTreeIndex + StringPool.PERCENT);
-
-			}
-			else if (Validator
-				.isNotNull(serviceDomainTreeIndex) && !StringUtil
-					.contains(serviceDomainTreeIndex, StringPool.PERIOD)) {
-				qPos
-					.add(serviceDomainTreeIndex + StringPool.PERIOD +
-						StringPool.PERCENT);
-				qPos
-					.add(serviceDomainTreeIndex);
-			}
-
 			if (keywords != null && keywords.length > 0) {
+				qPos
+					.add(keywords, 2);
 				qPos
 					.add(keywords, 2);
 				qPos
@@ -1082,6 +808,21 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 				.isNotNull(dossierStatus)) {
 				qPos
 					.add(dossierStatus);
+			}
+			
+			if (Validator
+				.isNotNull(serviceDomainTreeIndex) && serviceDomainTreeIndex.contains(StringPool.PERIOD)) {
+				qPos
+					.add(serviceDomainTreeIndex + StringPool.PERCENT);
+
+			}
+			else if (Validator
+				.isNotNull(serviceDomainTreeIndex) && !serviceDomainTreeIndex.contains(StringPool.PERIOD)) {
+				qPos
+					.add(serviceDomainTreeIndex + StringPool.PERIOD +
+						StringPool.PERCENT);
+				qPos
+					.add(serviceDomainTreeIndex);
 			}
 
 			Iterator<Object[]> itr = (Iterator<Object[]>) QueryUtil
@@ -1205,7 +946,6 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 
 			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
 
-			_log.info("Count sql: " + sql);
 			SQLQuery q = session.createSQLQuery(sql);
 
 			q.addScalar(COUNT_COLUMN_NAME, Type.INTEGER);
@@ -1216,7 +956,6 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 			if (!"-1".equals(dossiertype)) {
 				qPos.add(dossiertype);
 			}
-			_log.info("Gov agency code: " + organizationcode);
 			if (Validator.isNotNull(processStepId)
 					&& !"-1".equals(processStepId)) {
 				qPos.add(processStepId);
@@ -1337,7 +1076,6 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 
 			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
 
-			_log.info("Search dossier sql: " + sql);
 			SQLQuery q = session.createSQLQuery(sql);
 			q.addEntity("Dossier", DossierImpl.class);
 
@@ -1366,7 +1104,6 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 				qPos.add(documentyear);
 			}
 			if (keywords != null && keywords.length > 0) {
-				_log.info("Keyword: " + Arrays.toString(keywords));
 				qPos.add(keywords, 2);
 			}
 			return (List<Dossier>) QueryUtil.list(q, getDialect(), start, end);
@@ -1827,7 +1564,6 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 				
 			}
 
-			_log.info("SEARCH DOSSIER DS RD=============" + sql);
 			SQLQuery q = session.createSQLQuery(sql);
 			q.addEntity("Dossier", DossierImpl.class);
 
@@ -1986,4 +1722,199 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier>
 
 		return null;
 	} 	
+	
+	/**
+	 * @param groupId
+	 * @param userId
+	 * @param keyword
+	 * @param serviceDomainTreeIndex
+	 * @param dossierStatus
+	 * @return
+	 */
+	public int countDossierByUserNewRequest(
+		long groupId, long userId) {
+
+		boolean andOperator = false;
+
+		return countDossierByUserNewRequest(groupId, userId, andOperator);
+	}
+	
+	/**
+	 * @param groupId
+	 * @param userId
+	 * @param keywords
+	 * @param serviceDomainTreeIndex
+	 * @param dossierStatus
+	 * @param andOperator
+	 * @return
+	 */
+	private int countDossierByUserNewRequest(
+		long groupId, long userId, 
+		boolean andOperator) {
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			String sql = CustomSQLUtil
+				.get(COUNT_DOSSIER_BY_USER_NEW_REQUEST);
+
+			sql = CustomSQLUtil
+				.replaceAndOperator(sql, andOperator);
+
+			SQLQuery q = session
+				.createSQLQuery(sql);
+
+			q
+				.addScalar(COUNT_COLUMN_NAME, Type.INTEGER);
+
+			QueryPos qPos = QueryPos
+				.getInstance(q);
+
+			qPos
+				.add(groupId);
+
+			qPos
+				.add(userId);
+
+			Iterator<Integer> itr = q
+				.iterate();
+
+			if (itr
+				.hasNext()) {
+				Integer count = itr
+					.next();
+
+				if (count != null) {
+					return count
+						.intValue();
+				}
+			}
+
+			return 0;
+
+		}
+		catch (Exception e) {
+			_log
+				.error(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		return 0;
+	}
+
+
+/**
+	 * @param groupId
+	 * @param userId
+	 * @param keyword
+	 * @param serviceDomainTreeIndex
+	 * @param dossierStatus
+	 * @param start
+	 * @param end
+	 * @param obc
+	 * @return
+	 */
+	public List searchDossierByUserNewRequest(
+		long groupId, long userId, int start, int end,
+		OrderByComparator obc) {
+
+		boolean andOperator = false;
+
+		return searchDossierByUserNewRequest(groupId, userId, andOperator, start, end,
+			obc);
+	}
+
+	/**
+	 * @param groupId
+	 * @param userId
+	 * @param keywords
+	 * @param serviceDomainTreeIndex
+	 * @param dossierStatus
+	 * @param andOperator
+	 * @param start
+	 * @param end
+	 * @param obc
+	 * @return
+	 */
+	private List<DossierBean> searchDossierByUserNewRequest(
+		long groupId, long userId,
+		boolean andOperator, int start, int end, OrderByComparator obc) {
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			String sql = CustomSQLUtil
+				.get(SEARCH_DOSSIER_BY_USER_NEW_REQUEST);
+
+			sql = CustomSQLUtil
+				.replaceAndOperator(sql, andOperator);
+
+			SQLQuery q = session
+				.createSQLQuery(sql);
+
+			q
+				.addEntity("Dossier", DossierImpl.class);
+			q
+				.addScalar("SERVICE_NAME", Type.STRING);
+
+			QueryPos qPos = QueryPos
+				.getInstance(q);
+
+			qPos
+				.add(groupId);
+
+			qPos
+				.add(userId);
+
+			Iterator<Object[]> itr = (Iterator<Object[]>) QueryUtil
+				.list(q, getDialect(), start, end).iterator();
+
+			List<DossierBean> dossierBeans = new ArrayList<DossierBean>();
+
+			if (itr
+				.hasNext()) {
+				while (itr
+					.hasNext()) {
+					DossierBean dossierBean = new DossierBean();
+
+					Object[] objects = itr
+						.next();
+
+					Dossier dossier = (Dossier) objects[0];
+
+					String serviceName = (String) objects[1];
+
+					dossierBean
+						.setDossierId(dossier
+							.getDossierId());
+					dossierBean
+						.setDossier(dossier);
+					dossierBean
+						.setServiceName(serviceName);
+
+					dossierBeans
+						.add(dossierBean);
+
+				}
+			}
+
+			return dossierBeans;
+
+		}
+		catch (Exception e) {
+			_log
+				.error(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		return null;
+	}
 }

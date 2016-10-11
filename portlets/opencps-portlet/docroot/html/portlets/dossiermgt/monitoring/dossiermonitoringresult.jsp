@@ -67,7 +67,6 @@
 </style>
 <%
 	String keywordSearch = ParamUtil.getString(request, "keywords", StringPool.BLANK);
-	System.out.println("----KEY WORDS----" + keywordSearch);
 %>
 
 <c:if test="<%= !StringPool.BLANK.equals(keywordSearch) %>">

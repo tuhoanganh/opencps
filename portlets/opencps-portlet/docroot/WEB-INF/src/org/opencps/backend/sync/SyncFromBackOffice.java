@@ -17,15 +17,20 @@
 
 package org.opencps.backend.sync;
 
+import java.util.Date;
 import java.util.List;
 
 import org.opencps.backend.message.SendToBackOfficeMsg;
 import org.opencps.backend.message.SendToCallbackMsg;
+import org.opencps.backend.util.BackendUtils;
+import org.opencps.dossiermgt.model.Dossier;
+import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
+import org.opencps.dossiermgt.service.DossierLogLocalServiceUtil;
+import org.opencps.dossiermgt.util.ActorBean;
 import org.opencps.processmgt.model.WorkflowOutput;
 import org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil;
 import org.opencps.util.PortletConstants;
-import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -33,96 +38,101 @@ import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.MessageListenerException;
-import com.liferay.portal.kernel.util.Validator;
-
 
 /**
  * @author khoavd
- *
  */
-public class SyncFromBackOffice implements MessageListener{
+public class SyncFromBackOffice implements MessageListener {
 
-	/* (non-Javadoc)
-     * @see com.liferay.portal.kernel.messaging.MessageListener#receive(com.liferay.portal.kernel.messaging.Message)
-     */
-    @Override
-    public void receive(Message message)
-        throws MessageListenerException {
-    	
-    	_doRecevie(message);
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * com.liferay.portal.kernel.messaging.MessageListener#receive(com.liferay
+	 * .portal.kernel.messaging.Message)
+	 */
+	@Override
+	public void receive(Message message)
+		throws MessageListenerException {
 
-    }
-    
-    
+		_doRecevie(message);
+
+	}
+
 	private void _doRecevie(Message message) {
 
 		SendToBackOfficeMsg toBackOffice =
-		    (SendToBackOfficeMsg) message.get("toBackOffice");
+			(SendToBackOfficeMsg) message.get("toBackOffice");
 
-		boolean statusUpdate = false;
-
-		String actor = _getActor(toBackOffice.getRequestCommand());
-
-		try {
-			statusUpdate =
-			    DossierLocalServiceUtil.updateDossierStatus(
-			        toBackOffice.getDossierId(), toBackOffice.getFileGroupId(),
-			        toBackOffice.getDossierStatus(),
-			        toBackOffice.getReceptionNo(),
-			        toBackOffice.getEstimateDatetime(),
-			        toBackOffice.getSubmitDateTime(),
-			        toBackOffice.getReceiveDatetime(),
-			        toBackOffice.getFinishDatetime(), actor,
-			        toBackOffice.getRequestCommand(),
-			        toBackOffice.getActionInfo(), toBackOffice.getMessageInfo());
-
-			List<WorkflowOutput> workflowOutputs =
-			    WorkflowOutputLocalServiceUtil.getByProcessWFPostback(toBackOffice.getProcessWorkflowId(), true);
-
-			DossierLocalServiceUtil.updateDossierStatus(
-			    0, toBackOffice.getDossierId(),
-			    PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS,
-			    workflowOutputs);
-		}
-		catch (Exception e) {
-			_log.error(e);
-		}
-
-		SendToCallbackMsg toCallBack = new SendToCallbackMsg();
-
-		toCallBack.setProcessOrderId(toBackOffice.getProcessOrderId());
-		toCallBack.setSyncStatus(statusUpdate ? "ok" : "error");
-		toCallBack.setDossierStatus(toBackOffice.getDossierStatus());
-		Message sendToCallBack = new Message();
-
-		sendToCallBack.put("toCallback", toCallBack);
-
-		MessageBusUtil.sendMessage(
-		    "opencps/backoffice/engine/callback", sendToCallBack);
-	}    
-    
-    /**
-     * @param requestComand
-     * @return
-     */
-    private String _getActor(String requestComand) {
-    	
-    	String actor = WebKeys.ACTOR_ACTION_SYSTEM;
-    	
-		if (Validator.equals(WebKeys.DOSSIER_LOG_PAYMENT_REQUEST, requestComand) ||
-		    Validator.equals(
-		        WebKeys.DOSSIER_LOG_RESUBMIT_REQUEST, requestComand)) {
-			actor = WebKeys.ACTOR_ACTION_EMPLOYEE;
-		} 
+		boolean trustServiceMode =
+			BackendUtils.checkServiceMode(toBackOffice.getDossierId());
 		
-		if (Validator.equals(WebKeys.DOSSIER_LOG_CANCEL_REQUEST, requestComand) ||
-		    Validator.equals(WebKeys.DOSSIER_LOG_CHANGE_REQUEST, requestComand)) {
-			actor = WebKeys.ACTOR_ACTION_CITIZEN;
-		}
 		
-		return actor;
-    }
-    
-    private Log _log = LogFactoryUtil.getLog(SyncFromBackOffice.class);
+		if (trustServiceMode) {
+			boolean statusUpdate = false;
+
+			try {
+				statusUpdate =
+					DossierLocalServiceUtil.updateDossierStatus(
+						toBackOffice.getDossierId(),
+						toBackOffice.getFileGroupId(),
+						toBackOffice.getDossierStatus(),
+						toBackOffice.getReceptionNo(),
+						toBackOffice.getEstimateDatetime(),
+						toBackOffice.getSubmitDateTime(),
+						toBackOffice.getReceiveDatetime(),
+						toBackOffice.getFinishDatetime(),
+						toBackOffice.getActor(), toBackOffice.getActorId(),
+						toBackOffice.getActorName(),
+						toBackOffice.getRequestCommand(),
+						toBackOffice.getActionInfo(),
+						toBackOffice.getMessageInfo());
+
+				List<WorkflowOutput> workflowOutputs =
+					WorkflowOutputLocalServiceUtil.getByProcessWFPostback(
+						toBackOffice.getProcessWorkflowId(), true);
+
+				DossierFileLocalServiceUtil.updateDossierFileResultSyncStatus(
+					0, toBackOffice.getDossierId(),
+					PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS,
+					workflowOutputs);
+				
+				//Update DossierLog 
+				
+				Dossier dossier = DossierLocalServiceUtil.fetchDossier(toBackOffice.getDossierId());
+				
+				ActorBean actorBean = new ActorBean(toBackOffice.getActor(), toBackOffice.getActorId());
+				
+				DossierLogLocalServiceUtil.addDossierLog(
+				    dossier.getUserId(), dossier.getGroupId(),
+				    dossier.getCompanyId(), toBackOffice.getDossierId(),
+				    toBackOffice.getFileGroupId(),
+				    toBackOffice.getDossierStatus(),
+				    toBackOffice.getActionInfo(),
+				    toBackOffice.getMessageInfo(), new Date(), 0,
+				    toBackOffice.getSyncStatus(), actorBean.getActor(),
+				    actorBean.getActorId(), actorBean.getActorName(),
+				    SyncFromBackOffice.class.getName());
+			}
+			catch (Exception e) {
+				_log.error(e);
+			}
+
+			SendToCallbackMsg toCallBack = new SendToCallbackMsg();
+
+			toCallBack.setProcessOrderId(toBackOffice.getProcessOrderId());
+			toCallBack.setSyncStatus(statusUpdate ? "ok" : "error");
+			toCallBack.setDossierStatus(toBackOffice.getDossierStatus());
+			Message sendToCallBack = new Message();
+
+			sendToCallBack.put("toCallback", toCallBack);
+
+			MessageBusUtil.sendMessage(
+				"opencps/backoffice/engine/callback", sendToCallBack);
+
+		}
+
+	}
+
+	private Log _log = LogFactoryUtil.getLog(SyncFromBackOffice.class);
 
 }

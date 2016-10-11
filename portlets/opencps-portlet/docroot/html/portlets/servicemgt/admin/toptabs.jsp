@@ -25,7 +25,6 @@
 	String[] names = new String[]{ServiceUtil.TOP_TABS_SERVICE, 
 		ServiceUtil.TOP_TABS_TEMPLATE, ServiceUtil.TOP_TABS_DOMAIN,
 		ServiceUtil.TOP_TABS_ADMINISTRATION};
-	System.out.print(names);
 	String value = 
 		ParamUtil.getString(request, "tabs1", ServiceUtil.TOP_TABS_SERVICE);
 
