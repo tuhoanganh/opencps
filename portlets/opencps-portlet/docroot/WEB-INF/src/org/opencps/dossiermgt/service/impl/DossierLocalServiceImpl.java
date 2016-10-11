@@ -1018,7 +1018,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 
 		Date now = new Date();
 
-		dossier.setUserId(0); // Sync from another system
+		dossier.setUserId(syncDossier.getUserId()); // Sync from another system
 		dossier.setGroupId(serviceContext.getScopeGroupId());
 		dossier.setCompanyId(serviceContext.getCompanyId());
 		dossier.setCreateDate(now);
@@ -1040,7 +1040,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		dossier.setGovAgencyName(syncDossier.getGovAgencyName());
 		dossier.setGovAgencyOrganizationId(syncDossier.getGovAgencyOrganizationId());
 		dossier.setNote(syncDossier.getNote());
-		dossier.setOwnerOrganizationId(0);// Sync from another system
+		dossier.setOwnerOrganizationId(syncDossier.getOwnerOrganizationId());// Sync from another system
 		dossier.setReceptionNo(syncDossier.getReceptionNo());
 		// dossier.setReceiveDatetime(receiveDatetime);
 		dossier.setServiceAdministrationIndex(syncDossier.getServiceAdministrationIndex());
@@ -1365,13 +1365,9 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		if (paymentFile != null) {
 			System.out.println("SyncDossierStatus Add Payment File//////////////////");
 
-			paymentFileLocalService.addPaymentFile(
+			paymentFileLocalService.syncPaymentFile(
 				dossier.getDossierId(), paymentFile.getFileGroupId(),
-				dossier.getUserId(), dossier.getOwnerOrganizationId(),
-				paymentFile.getGovAgencyOrganizationId(),
-				paymentFile.getPaymentName(), paymentFile.getRequestDatetime(),
-				paymentFile.getAmount(), paymentFile.getRequestNote(),
-				paymentFile.getPlaceInfo(), paymentFile.getPaymentOptions());
+				paymentFile);
 
 		}
 

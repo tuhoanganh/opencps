@@ -28,7 +28,6 @@ import org.opencps.jms.message.SubmitPaymentFileMessage;
 import org.opencps.jms.util.JMSMessageUtil;
 import org.opencps.paymentmgt.model.PaymentFile;
 import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
-import org.opencps.util.PortletConstants;
 import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.log.Log;
@@ -80,16 +79,18 @@ public class MsgOutFrontOffice implements MessageListener {
 						WebKeys.JMS_QUEUE_OPENCPS_FRONTOFFICE.toLowerCase(),
 						"remote", "hornetq");
 
-				if (userActionMgs.getAction().contentEquals(
-					PortletConstants.PAYMENT_TYPE)) {
+				if (userActionMgs.getAction().equals(WebKeys.ACTION_PAY_VALUE)) {
+
+					_log.info("############################################## Send Sync Payment File");
 
 					SubmitPaymentFileMessage submitPaymentFileMessage =
 						new SubmitPaymentFileMessage(context);
 
 					PaymentFile paymentFile =
-						PaymentFileLocalServiceUtil.fetchPaymentFile(userActionMgs.getPaymentFileId());
+						PaymentFileLocalServiceUtil.getPaymentFile(userActionMgs.getPaymentFileId());
 
-					submitPaymentFileMessage.sendHornetMessage(paymentFile);
+					submitPaymentFileMessage.sendMessageByHornetq(
+						paymentFile, WebKeys.SYNC_PAY_SEND_CONFIRM);
 
 				}
 				else {

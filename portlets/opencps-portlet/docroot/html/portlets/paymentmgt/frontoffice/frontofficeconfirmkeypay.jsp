@@ -1,10 +1,4 @@
-<%@page import="java.util.Date"%>
-<%@page import="org.opencps.util.PortletConstants"%>
-<%@page import="org.opencps.dossiermgt.util.ActorBean"%>
-<%@page import="org.opencps.dossiermgt.bean.AccountBean"%>
-<%@page import="com.liferay.portal.kernel.mail.Account"%>
-<%@page import="org.opencps.dossiermgt.service.DossierLogLocalServiceUtil"%>
-<%@page import="org.opencps.util.WebKeys"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -23,6 +17,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+
+<%@page import="java.util.Date"%>
+<%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.dossiermgt.util.ActorBean"%>
+<%@page import="org.opencps.dossiermgt.bean.AccountBean"%>
+<%@page import="com.liferay.portal.kernel.mail.Account"%>
+<%@page import="org.opencps.dossiermgt.service.DossierLogLocalServiceUtil"%>
+<%@page import="org.opencps.util.WebKeys"%>
 
 <%@ include file="../init.jsp"%>
 
@@ -64,8 +66,10 @@
 %>
 
 <portlet:renderURL var="backURL">
-	<portlet:param name="mvcPath"
-		value="/html/portlets/paymentmgt/frontoffice/frontofficepaymentlist.jsp" />	
+	<portlet:param 
+		name="mvcPath"
+		value="/html/portlets/paymentmgt/frontoffice/frontofficepaymentlist.jsp" 
+	/>	
 </portlet:renderURL>
 
 <liferay-ui:header
