@@ -72,7 +72,8 @@
 		<portlet:param name="isEditDossier" value="<%=String.valueOf(false) %>"/>
 		<portlet:param name="redirectURL" value="<%=currentURL %>"/>
 	</portlet:renderURL>
-	<c:when test="<%=showTabDossierResultFirst %>">
+	<c:choose>
+		<c:when test="<%=showTabDossierResultFirst %>">
 			<%
 				String viewResultDossierURL = viewDossierURL.toString() + "#" +renderResponse.getNamespace() +"tab="+ renderResponse.getNamespace() + "result";
 			%> 
