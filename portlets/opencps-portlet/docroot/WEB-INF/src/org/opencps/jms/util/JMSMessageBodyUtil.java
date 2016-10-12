@@ -19,6 +19,7 @@ package org.opencps.jms.util;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -30,18 +31,22 @@ import javax.jms.StreamMessage;
 import javax.jms.TextMessage;
 import javax.naming.NamingException;
 
+import org.opencps.backend.sync.SyncFromFrontOffice;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.DossierPart;
 import org.opencps.dossiermgt.model.DossierTemplate;
 import org.opencps.dossiermgt.model.FileGroup;
 import org.opencps.dossiermgt.model.ServiceConfig;
+import org.opencps.dossiermgt.model.impl.DossierImpl;
 import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
+import org.opencps.dossiermgt.service.DossierLogLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil;
 import org.opencps.dossiermgt.service.FileGroupLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
+import org.opencps.dossiermgt.util.ActorBean;
 import org.opencps.jms.context.JMSContext;
 import org.opencps.jms.context.JMSHornetqContext;
 import org.opencps.jms.message.SubmitDossierMessage;
@@ -56,6 +61,7 @@ import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
 import org.opencps.util.DLFileEntryUtil;
 import org.opencps.util.PortletConstants;
+import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -164,6 +170,32 @@ public class JMSMessageBodyUtil {
 		}
 		else if (jsmMessage instanceof ObjectMessage) {
 			_log.info("####################JMSMessageBodyUtil: Starting parse object message");
+			ObjectMessage objectMessage = (ObjectMessage) jsmMessage;
+
+			Object object = objectMessage.getObject();
+
+			if (object instanceof DossierImpl) {
+				Dossier syncDossier = (Dossier) object;
+				_log.info("####################JMSMessageBodyUtil: Starting receive Dossier object");
+				Dossier dossier =
+					DossierLocalServiceUtil.getByoid(syncDossier.getOid());
+
+				ActorBean actorBean = new ActorBean(1, dossier.getUserId());
+
+				DossierLogLocalServiceUtil.addCommandRequest(
+					dossier.getUserId(), dossier.getGroupId(),
+					dossier.getCompanyId(), dossier.getDossierId(), 0,
+					dossier.getDossierStatus(),
+					PortletConstants.DOSSIER_ACTION_CANCEL_DOSSIER,
+					PortletConstants.DOSSIER_ACTION_CANCEL_DOSSIER, new Date(),
+					0, 2, actorBean.getActor(), actorBean.getActorId(),
+					actorBean.getActorName(),
+					JMSMessageBodyUtil.class.getName() + ".repairDossier()",
+					WebKeys.ACTION_CANCEL_VALUE);
+			}
+			else {
+				_log.info("####################JMSMessageBodyUtil: Unknown object type");
+			}
 		}
 		else if (jsmMessage instanceof BytesMessage) {
 
@@ -231,7 +263,7 @@ public class JMSMessageBodyUtil {
 
 		try {
 			Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
-			
+
 			DossierTemplate dossierTemplate =
 				DossierTemplateLocalServiceUtil.getDossierTemplate(dossier.getDossierTemplateId());
 			ServiceConfig serviceConfig =

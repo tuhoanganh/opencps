@@ -17,25 +17,18 @@
 
 package org.opencps.backend.exc;
 
-import java.util.Date;
-
 import javax.jms.JMSException;
 import javax.naming.NamingException;
 
 import org.opencps.backend.message.UserActionMsg;
-import org.opencps.backend.sync.SyncFromFrontOffice;
 import org.opencps.backend.util.BackendUtils;
-import org.opencps.dossiermgt.model.Dossier;
-import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
-import org.opencps.dossiermgt.service.DossierLogLocalServiceUtil;
-import org.opencps.dossiermgt.util.ActorBean;
 import org.opencps.jms.context.JMSHornetqContext;
+import org.opencps.jms.message.CancelDossierMessage;
 import org.opencps.jms.message.SubmitDossierMessage;
 import org.opencps.jms.message.SubmitPaymentFileMessage;
 import org.opencps.jms.util.JMSMessageUtil;
 import org.opencps.paymentmgt.model.PaymentFile;
 import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
-import org.opencps.util.PortletConstants;
 import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.log.Log;
@@ -107,22 +100,14 @@ public class MsgOutFrontOffice implements MessageListener {
 				}
 				else if (userActionMgs.getAction().equals(
 					WebKeys.ACTION_CANCEL_VALUE)) {
-					Dossier dossier =
-						DossierLocalServiceUtil.fetchDossier(userActionMgs.getDossierId());
 
-					ActorBean actorBean = new ActorBean(1, dossier.getUserId());
-
-					DossierLogLocalServiceUtil.addCommandRequest(
-						dossier.getUserId(), dossier.getGroupId(),
-						dossier.getCompanyId(), dossierId, 0,
-						dossier.getDossierStatus(),
-						PortletConstants.DOSSIER_ACTION_CANCEL_DOSSIER,
-						PortletConstants.DOSSIER_ACTION_CANCEL_DOSSIER,
-						new Date(), 0, 2, actorBean.getActor(),
-						actorBean.getActorId(), actorBean.getActorName(),
-						SyncFromFrontOffice.class.getName() +
-							".repairDossier()", WebKeys.ACTION_CANCEL_VALUE);
-
+					CancelDossierMessage cancelDossierMessage =
+						new CancelDossierMessage(context);
+					cancelDossierMessage.sendMessage(
+						userActionMgs.getDossierId(),
+						userActionMgs.getFileGroupId());
+					// TODO add log
+					_log.info("####################MsgOutFrontOffice: Sended Synchronized JMSCancelDossierMessage");
 				}
 				else {
 					SubmitDossierMessage submitDossierMessage =
