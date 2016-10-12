@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.opencps.dossiermgt.NoSuchDossierLogException;
 import org.opencps.dossiermgt.comparator.DossierLogUpdateDatetimeComparator;
 import org.opencps.dossiermgt.model.DossierLog;
 import org.opencps.dossiermgt.service.base.DossierLogLocalServiceBaseImpl;
@@ -448,6 +449,17 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 		throws SystemException {
 
 		return dossierLogPersistence.countByDossierId(dossierId);
+	}
+	
+	/**
+	 * @param oId
+	 * @return
+	 * @throws NoSuchDossierLogException
+	 * @throws SystemException
+	 */
+	public DossierLog getDossierLogByOId(String oId)
+		throws NoSuchDossierLogException, SystemException{
+		return dossierLogPersistence.findByOId(oId);
 	}
 
 	public List<DossierLog> findDossierByRequestCommand(
