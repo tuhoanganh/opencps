@@ -359,6 +359,7 @@
         <column name="actorId" type="long"></column>
         <column name="actorName" type="String"></column>
         <column name="syncStatus" type="int"></column>
+        <column name="oId" type="String"></column>
         <order by="desc">
             <order-column name="modifiedDate" order-by="desc"></order-column>
         </order>
