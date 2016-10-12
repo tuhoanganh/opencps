@@ -71,20 +71,30 @@ import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
  */
 public class JMSMessageBodyUtil {
 
+	/**
+	 * @param context
+	 * @param jsmMessage
+	 * @throws JMSException
+	 * @throws IOException
+	 * @throws NamingException
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
 	public synchronized static void receiveMessage(
 		JMSContext context, Message jsmMessage)
 		throws JMSException, IOException, NamingException, PortalException,
 		SystemException {
 
 		if (jsmMessage instanceof TextMessage) {
-
+			_log.info("####################JMSMessageBodyUtil: Starting parse text message");
 		}
 		else if (jsmMessage instanceof ObjectMessage) {
+			_log.info("####################JMSMessageBodyUtil: Starting parse object message");
 		}
 		else if (jsmMessage instanceof BytesMessage) {
-			BytesMessage bytesMessage = (BytesMessage) jsmMessage;
+			_log.info("####################JMSMessageBodyUtil: Starting parse byte message");
 
-			_log.info("BytesMessage/////////////////////////////////////");
+			BytesMessage bytesMessage = (BytesMessage) jsmMessage;
 
 			byte[] result = new byte[(int) bytesMessage.getBodyLength()];
 
@@ -101,54 +111,8 @@ public class JMSMessageBodyUtil {
 					new SyncFromBackOfficeMessage(context);
 
 				syncFromBackOfficeMessage.receiveLocalMessage(syncFromBackOfficeMsgBody);
-			}
-			else if (object instanceof DossierMsgBody) {
-				DossierMsgBody dossierMsgBody = (DossierMsgBody) object;
-				_log.info("Msg is Dossier x");
-				SubmitDossierMessage submitDossierMessage =
-					new SubmitDossierMessage(context);
 
-				submitDossierMessage.receiveLocalMessage(dossierMsgBody);
-			}
-		}
-		else if (jsmMessage instanceof StreamMessage) {
-		}
-		else {
-			_log.info("No message...");
-
-		}
-	}
-
-	public synchronized static void receiveMessage(
-		JMSHornetqContext context, Message jsmMessage)
-		throws JMSException, IOException, NamingException, PortalException,
-		SystemException {
-
-		if (jsmMessage instanceof TextMessage) {
-
-		}
-		else if (jsmMessage instanceof ObjectMessage) {
-		}
-		else if (jsmMessage instanceof BytesMessage) {
-			BytesMessage bytesMessage = (BytesMessage) jsmMessage;
-
-			_log.info("BytesMessage/////////////////////////////////////");
-
-			byte[] result = new byte[(int) bytesMessage.getBodyLength()];
-
-			bytesMessage.readBytes(result);
-
-			Object object = JMSMessageUtil.convertByteArrayToObject(result);
-
-			if (object instanceof SyncFromBackOfficeMsgBody) {
-
-				SyncFromBackOfficeMsgBody syncFromBackOfficeMsgBody =
-					(SyncFromBackOfficeMsgBody) object;
-
-				SyncFromBackOfficeMessage syncFromBackOfficeMessage =
-					new SyncFromBackOfficeMessage(context);
-
-				syncFromBackOfficeMessage.receiveLocalMessage(syncFromBackOfficeMsgBody);
+				_log.info("####################JMSMessageBodyUtil: Starting receive SyncFromBackOfficeMsgBody");
 			}
 			else if (object instanceof DossierMsgBody) {
 				DossierMsgBody dossierMsgBody = (DossierMsgBody) object;
@@ -158,10 +122,10 @@ public class JMSMessageBodyUtil {
 
 				submitDossierMessage.receiveLocalMessage(dossierMsgBody);
 
-				//
+				_log.info("####################JMSMessageBodyUtil: Starting receive DossierMsgBody");
+
 			}
 			else if (object instanceof PaymentFileMsgBody) {
-				_log.info("////// /////////////////// PaymentFileMgsBody");
 
 				PaymentFileMsgBody paymentMsgBody = (PaymentFileMsgBody) object;
 
@@ -170,13 +134,89 @@ public class JMSMessageBodyUtil {
 
 				submitPaymentFileMessage.reviceLocalMessage(paymentMsgBody);
 
+				_log.info("####################JMSMessageBodyUtil: Starting receive PaymentFileMsgBody");
 			}
 		}
 		else if (jsmMessage instanceof StreamMessage) {
+			_log.info("####################JMS: Starting parse stream message");
 		}
 		else {
-			_log.info("No message...");
+			_log.info("####################JMS: No jms message content");
+		}
+	}
 
+	/**
+	 * @param context
+	 * @param jsmMessage
+	 * @throws JMSException
+	 * @throws IOException
+	 * @throws NamingException
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public synchronized static void receiveMessage(
+		JMSHornetqContext context, Message jsmMessage)
+		throws JMSException, IOException, NamingException, PortalException,
+		SystemException {
+
+		if (jsmMessage instanceof TextMessage) {
+			_log.info("####################JMSMessageBodyUtil: Starting parse text message");
+		}
+		else if (jsmMessage instanceof ObjectMessage) {
+			_log.info("####################JMSMessageBodyUtil: Starting parse object message");
+		}
+		else if (jsmMessage instanceof BytesMessage) {
+
+			_log.info("####################JMSMessageBodyUtil: Starting parse byte message");
+
+			BytesMessage bytesMessage = (BytesMessage) jsmMessage;
+
+			byte[] result = new byte[(int) bytesMessage.getBodyLength()];
+
+			bytesMessage.readBytes(result);
+
+			Object object = JMSMessageUtil.convertByteArrayToObject(result);
+
+			if (object instanceof SyncFromBackOfficeMsgBody) {
+
+				SyncFromBackOfficeMsgBody syncFromBackOfficeMsgBody =
+					(SyncFromBackOfficeMsgBody) object;
+
+				SyncFromBackOfficeMessage syncFromBackOfficeMessage =
+					new SyncFromBackOfficeMessage(context);
+
+				syncFromBackOfficeMessage.receiveLocalMessage(syncFromBackOfficeMsgBody);
+
+				_log.info("####################JMSMessageBodyUtil: Starting receive SyncFromBackOfficeMsgBody");
+			}
+			else if (object instanceof DossierMsgBody) {
+				DossierMsgBody dossierMsgBody = (DossierMsgBody) object;
+
+				SubmitDossierMessage submitDossierMessage =
+					new SubmitDossierMessage(context);
+
+				submitDossierMessage.receiveLocalMessage(dossierMsgBody);
+
+				_log.info("####################JMSMessageBodyUtil: Starting receive DossierMsgBody");
+
+			}
+			else if (object instanceof PaymentFileMsgBody) {
+
+				PaymentFileMsgBody paymentMsgBody = (PaymentFileMsgBody) object;
+
+				SubmitPaymentFileMessage submitPaymentFileMessage =
+					new SubmitPaymentFileMessage(context);
+
+				submitPaymentFileMessage.reviceLocalMessage(paymentMsgBody);
+
+				_log.info("####################JMSMessageBodyUtil: Starting receive PaymentFileMsgBody");
+			}
+		}
+		else if (jsmMessage instanceof StreamMessage) {
+			_log.info("####################JMS: Starting parse stream message");
+		}
+		else {
+			_log.info("####################JMS: No jms message content");
 		}
 	}
 
@@ -191,6 +231,7 @@ public class JMSMessageBodyUtil {
 
 		try {
 			Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
+			
 			DossierTemplate dossierTemplate =
 				DossierTemplateLocalServiceUtil.getDossierTemplate(dossier.getDossierTemplateId());
 			ServiceConfig serviceConfig =
@@ -203,9 +244,6 @@ public class JMSMessageBodyUtil {
 				DossierFileLocalServiceUtil.getDossierFileByDID_SS_R(
 					dossierId,
 					PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC, 0);
-
-			_log.info("##################################################### SIZE" +
-				dossierFiles.size());
 
 			List<DossierFileMsgBody> dossierFileMsgBodies =
 				new ArrayList<DossierFileMsgBody>();
@@ -227,9 +265,6 @@ public class JMSMessageBodyUtil {
 						DossierPartLocalServiceUtil.getDossierPart(dossierFile.getDossierPartId());
 
 					if (dossierFile.getFileEntryId() > 0) {
-
-						_log.info("#####################################################" +
-							dossierFile.getFileEntryId());
 
 						DLFileEntry dlFileEntry =
 							DLFileEntryUtil.getDLFileEntry(dossierFile.getFileEntryId());
@@ -344,7 +379,7 @@ public class JMSMessageBodyUtil {
 				paymentFileMsgBody.setFileName(dlFileEntry.getName());
 				paymentFileMsgBody.setFileTitle(dlFileEntry.getTitle());
 				paymentFileMsgBody.setMimeType(dlFileEntry.getMimeType());
-				
+
 			}
 
 		}
