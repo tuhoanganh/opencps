@@ -379,6 +379,9 @@
             <finder-column name="dossierId"/>
             <finder-column name="actor"/>
         </finder>
+        <finder name="OId" return-type="DossierLog">
+            <finder-column name="oId"></finder-column>
+        </finder>
     </entity>
     
     <entity name="FileGroup" local-service="true" table="opencps_file_group">
