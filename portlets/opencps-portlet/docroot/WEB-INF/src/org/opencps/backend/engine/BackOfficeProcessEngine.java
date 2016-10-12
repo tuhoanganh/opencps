@@ -385,12 +385,14 @@ public class BackOfficeProcessEngine implements MessageListener {
 							paymentName, StringPool.BLANK, paymentOptions);
 
 					if (paymentMethods.contains(PaymentRequestGenerator.PAY_METHOD_KEYPAY)) {
-						KeypayUrlGenerator.generatorKeypayURL(
-							processWorkflow.getGroupId(),
-							govAgencyOrganizationId,
-							paymentFile.getPaymentFileId(),
-							processWorkflow.getPaymentFee(),
-							toEngineMsg.getDossierId());
+						paymentFile =
+							KeypayUrlGenerator.generatorKeypayURL(
+								processWorkflow.getGroupId(),
+								govAgencyOrganizationId,
+								paymentFile.getPaymentFileId(),
+								processWorkflow.getPaymentFee(),
+								toEngineMsg.getDossierId());
+
 					}
 
 					toBackOffice.setRequestCommand(WebKeys.DOSSIER_LOG_PAYMENT_REQUEST);
