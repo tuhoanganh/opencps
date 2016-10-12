@@ -332,6 +332,9 @@
 		<finder return-type="Collection" name="ProcessOrderId" where="stepName != ''">
 			<finder-column name="processOrderId"/>
 		</finder>
+        <finder name="OId" return-type="ActionHistory">
+            <finder-column name="oId"></finder-column>
+        </finder>
 		
 		
 	</entity>
