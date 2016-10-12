@@ -89,31 +89,46 @@
 			String receptionNo = good_code;
 			Dossier dossier = null;
 			try {
-				dossier = DossierLocalServiceUtil.fetchDossier(dossierId);
+				dossier =
+					DossierLocalServiceUtil.fetchDossier(dossierId);
 			}
 			catch (SystemException e) {
-				
+
 			}
 			ServiceInfo serviceInfo = null;
 			try {
 				if (dossier != null)
-					serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(dossier.getServiceInfoId());
+					serviceInfo =
+						ServiceInfoLocalServiceUtil.getServiceInfo(dossier.getServiceInfoId());
 			}
 			catch (NoSuchServiceInfoException e) {
-				
+
 			}
+
 			PaymentFile paymentFile = null;
+
 			try {
-				paymentFile = PaymentFileLocalServiceUtil.getPaymentFileByMerchantResponse(Long.parseLong(merchant_trans_id), good_code, Double.parseDouble(net_cost));
-				if (paymentFile != null) {
-					PaymentConfig paymentConfig = PaymentConfigLocalServiceUtil.getPaymentConfigByGovAgency(scopeGroupId, paymentFile.getGovAgencyOrganizationId());
+
+				paymentFile =
+					PaymentFileLocalServiceUtil.getPaymentFileByMerchantResponse(
+						Long.parseLong(merchant_trans_id), good_code,
+						Double.parseDouble(net_cost));
+				if (paymentFile != null &&
+					paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_REQUESTED) {
+
+					PaymentConfig paymentConfig =
+						PaymentConfigLocalServiceUtil.getPaymentConfigByGovAgency(
+							scopeGroupId,
+							paymentFile.getGovAgencyOrganizationId());
 					if (paymentConfig != null) {
+
 						if (keyPay.checkSecureHash(secure_hash)) {
-							
+
 							boolean trustServiceMode =
 								BackendUtils.checkServiceMode(paymentFile.getDossierId());
 
 							if (!trustServiceMode) {
+
 								UserActionMsg actionMsg =
 									new UserActionMsg();
 
