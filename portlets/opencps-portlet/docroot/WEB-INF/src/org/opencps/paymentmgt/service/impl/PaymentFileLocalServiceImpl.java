@@ -323,7 +323,7 @@ public class PaymentFileLocalServiceImpl
 	 * @throws PortalException
 	 * @throws SystemException
 	 */
-	public PaymentFile getByTransactionId(String keypayTransactionId)
+	public PaymentFile getByTransactionId(long keypayTransactionId)
 		throws PortalException, SystemException {
 
 		return paymentFilePersistence.fetchByT_I(keypayTransactionId);
@@ -361,7 +361,7 @@ public class PaymentFileLocalServiceImpl
 	 * @throws SystemException
 	 */
 	public PaymentFile getPaymentFileByMerchantResponse(
-		String keypayTransactionId, String keypayGoodCode, double amount)
+		long keypayTransactionId, String keypayGoodCode, double amount)
 		throws SystemException {
 
 		return paymentFilePersistence.fetchByMerchantResponse(
@@ -542,7 +542,7 @@ public class PaymentFileLocalServiceImpl
 	 * @throws SystemException
 	 */
 	public PaymentFile updatePaymentFile(
-		long paymentFileId, String keypayUrl, String keypayTransactionId,
+		long paymentFileId, String keypayUrl, long keypayTransactionId,
 		String keypayGoodCode, String keypayMerchantCode)
 		throws PortalException, SystemException {
 
