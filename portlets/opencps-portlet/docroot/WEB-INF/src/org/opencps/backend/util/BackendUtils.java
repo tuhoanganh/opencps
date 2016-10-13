@@ -500,10 +500,8 @@ public class BackendUtils {
 				}
 			}
 			catch (Exception e) {
-				_log.info("Can't get ");
 			}
 		}
-		_log.info("IS CANCELLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL" + isCancel + dossierId);
 
 		return isCancel;
 
@@ -526,7 +524,6 @@ public class BackendUtils {
 				
 				String dossierStatus = processOrder.getDossierStatus();
 				
-				_log.info("DOSSIERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR" + dossierStatus + dossierId);
 				
 				if (Validator.equals(dossierStatus, PortletConstants.DOSSIER_STATUS_DONE)) {
 					isChange = true;
@@ -534,7 +531,6 @@ public class BackendUtils {
 				
 			}
 			catch (Exception e) {
-				_log.error(e);
 			}
 		}
 
