@@ -20,8 +20,6 @@
 %>
 <%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
 <%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
-<%@page import="org.opencps.dossiermgt.search.DossierSearchUtil"%>
-<%@page import="com.liferay.portal.kernel.dao.orm.QueryUtil"%>
 <%@page import="com.liferay.portlet.documentlibrary.util.DLUtil"%>
 <%@page import="org.opencps.util.DLFileEntryUtil"%>
 <%@page import="com.liferay.portal.kernel.repository.model.FileEntry"%>
@@ -44,11 +42,12 @@
 <%@ include file="../../init.jsp"%>
 
 <%
-	Dossier dossier = (Dossier) request.getAttribute(WebKeys.DOSSIER_ENTRY);
-	DossierTemplate dossierTemplate = (DossierTemplate) request.getAttribute(WebKeys.DOSSIER_TEMPLATE_ENTRY);
+    Dossier dossier = (Dossier) request.getAttribute(WebKeys.DOSSIER_ENTRY);
+    DossierTemplate dossierTemplate = (DossierTemplate) request.getAttribute(WebKeys.DOSSIER_TEMPLATE_ENTRY);
 %>
 
 <c:choose>
+<<<<<<< HEAD
 	<c:when test="<%=dossier != null && dossier.getDossierStatus() != PortletConstants.DOSSIER_STATUS_NEW %>">
 		<%
 			String[] actors = new String[]{};
@@ -268,13 +267,10 @@
 				<%@ include file="/html/portlets/dossiermgt/frontoffice/dossier/result_display/result_default.jsp" %>
 			</c:otherwise>
 		</c:choose>
-
 	</c:when>
-	
 	<c:otherwise>
 		<div class="portlet-msg-info">
 			<liferay-ui:message key="no-dossier-result-info"/>
 		</div>
 	</c:otherwise>
-	
 </c:choose>
