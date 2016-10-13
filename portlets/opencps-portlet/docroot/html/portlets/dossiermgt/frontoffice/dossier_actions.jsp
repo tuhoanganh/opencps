@@ -87,6 +87,7 @@
 </portlet:renderURL>
 <liferay-ui:icon cssClass="search-container-action fa view" image="view"
 	message="view" url="<%=viewDossierURL.toString()%>" />
+
 <c:choose>
 	<c:when
 		test="<%=dossier.getDossierStatus().equals(
@@ -167,10 +168,10 @@
 			<portlet:param name="redirectURL" value="<%=currentURL%>" />
 		</portlet:actionURL>
 
-		<liferay-ui:icon-delete image="undo"
-			cssClass="search-container-action fa delete"
-			confirmation="are-you-sure-cancel-dossier-entry" message="cancel"
+		<liferay-ui:icon cssClass="search-container-action fa forward"
+			image="reply" message="cancel-dossier"
 			url="<%=cancelDossierURL.toString()%>" />
+
 	</c:when>
 	
 	<c:when test="<%= BackendUtils.isDossierChange(dossier.getDossierId()) %>">
@@ -179,11 +180,10 @@
 				value="<%=String.valueOf(dossier.getDossierId())%>" />
 			<portlet:param name="redirectURL" value="<%=currentURL%>" />
 		</portlet:actionURL>
-
-		<liferay-ui:icon-delete image="update"
-			cssClass="search-container-action fa delete"
-			confirmation="are-you-sure-change-dossier-entry" message="cancel"
+		<liferay-ui:icon cssClass="search-container-action fa forward"
+			image="reply" message="change-dossier"
 			url="<%=changeDossierURL.toString()%>" />
+
 	</c:when>
 	
 </c:choose>
