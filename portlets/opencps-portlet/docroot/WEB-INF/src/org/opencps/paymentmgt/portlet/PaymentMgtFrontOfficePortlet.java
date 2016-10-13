@@ -149,7 +149,7 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 				String.valueOf(paymentFile.getKeypayTransactionId());
 			if (Validator.isNull(paymentFile.getKeypayTransactionId())) {
 				SimpleDateFormat transFormat = new SimpleDateFormat("HHmmss");
-				paymentFile.setKeypayTransactionId(transFormat.format(curDate));
+				paymentFile.setKeypayTransactionId(Integer.parseInt(transFormat.format(curDate)));
 				updatePaymentFile = true;
 			}
 			String merchant_code = paymentConfig.getKeypayMerchantCode();

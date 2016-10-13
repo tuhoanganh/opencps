@@ -687,7 +687,7 @@
 		<field name="requestNote" type="String" />
 		<field name="paymentOptions" type="String" />
 		<field name="keypayUrl" type="String" />
-		<field name="keypayTransactionId" type="String">
+		<field name="keypayTransactionId" type="long">
 			<hint name="max-length">6</hint>
 		</field>
 		<field name="keypayGoodCode" type="String">
@@ -709,6 +709,7 @@
 		<field name="invoiceNo" type="String" />
 		<field name="syncStatus" type="int" />
 		<field name="oid" type="String" />
+		<field name="dossierOId" type="String" />
 	</model>
 	<model name="org.opencps.api.model.ApiService">
 		<field name="apiLogId" type="long" />
