@@ -233,6 +233,9 @@ public class BackOfficeProcessEngine implements MessageListener {
 				processWorkflow =
 					ProcessWorkflowLocalServiceUtil.getProcessWorkflowByEvent(
 						serviceProcessId, toEngineMsg.getEvent(), curStepId);
+				
+				
+				_log.error("ProcessWorkflow" + processWorkflow.getActionName() + processWorkflow.getPostProcessStepId());
 			}
 			else {
 
@@ -264,6 +267,8 @@ public class BackOfficeProcessEngine implements MessageListener {
 				long changeStepId = processWorkflow.getPostProcessStepId();
 
 				String changeStatus = StringPool.BLANK;
+				
+				boolean isResubmit = false;
 
 				if (changeStepId != 0) {
 					ProcessStep changeStep =
@@ -271,6 +276,15 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 					if (Validator.isNotNull(changeStep)) {
 						changeStatus = changeStep.getDossierStatus();
+						
+
+						if (Validator.equals(
+						    changeStep.getDossierStatus(),
+						    PortletConstants.DOSSIER_STATUS_RECEIVING)) {
+							
+							isResubmit = true;
+						}
+						
 
 						// Get AutoEvent of change step
 						_updateSchedulerJob(
@@ -361,7 +375,9 @@ public class BackOfficeProcessEngine implements MessageListener {
 				else {
 					ownerUserId = dossier.getUserId();
 				}
-
+				
+				boolean isPayment = false;
+				
 				// Update Paying
 				if (processWorkflow.getRequestPayment()) {
 
@@ -400,6 +416,8 @@ public class BackOfficeProcessEngine implements MessageListener {
 								toEngineMsg.getDossierId());
 
 					}
+					
+					isPayment = true;
 
 					toBackOffice.setRequestCommand(WebKeys.DOSSIER_LOG_PAYMENT_REQUEST);
 					toBackOffice.setPaymentFile(paymentFile);
@@ -427,6 +445,9 @@ public class BackOfficeProcessEngine implements MessageListener {
 					toBackOffice.setRequestPayment(0);
 					toBackOffice.setMessageInfo(toEngineMsg.getActionNote());
 				}
+				
+				toBackOffice.setPayment(isPayment);
+				toBackOffice.setResubmit(isResubmit);
 
 				Message sendToBackOffice = new Message();
 
