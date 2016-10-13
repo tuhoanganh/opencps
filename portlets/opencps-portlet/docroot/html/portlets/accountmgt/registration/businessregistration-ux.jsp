@@ -189,6 +189,8 @@
 		
 		<aui:input name="businessRegStep_cfg" value="<%=businessRegStep_cfg %>" type="hidden"></aui:input>
 		
+		<aui:input name="emailConfirmToAdmin" value="<%=emailConfirmToAdmin %>" type="hidden"></aui:input>
+		
 		<div class="register-content">
 			<div class="opencps accountmgt fm-registration header">
 				<aui:row>
@@ -323,7 +325,7 @@
 						<c:when test="<%=!showLabelTaglibDatamgt %>">
 							<datamgt:ddr 
 								cssClass="input100"
-								depthLevel="<%=WebKeys.DEPTH_LEVEL_3 %>" 
+								depthLevel="3" 
 								dictCollectionCode="ADMINISTRATIVE_REGION"
 								itemNames="cityId,districtId,wardId"
 								itemsEmptyOption="true,true,true"	
@@ -336,7 +338,7 @@
 						<c:otherwise>
 							<datamgt:ddr 
 								cssClass="input100"
-								depthLevel="<%=WebKeys.DEPTH_LEVEL_3 %>" 
+								depthLevel="3" 
 								dictCollectionCode="ADMINISTRATIVE_REGION"
 								itemNames="cityId,districtId,wardId"
 								itemsEmptyOption="true,true,true"	
@@ -353,7 +355,7 @@
 						<c:when test="<%=!showLabelTaglibDatamgt %>">
 							<datamgt:ddr
 								cssClass="input100"
-								depthLevel="<%=WebKeys.DEPTH_LEVEL_1 %>" 
+								depthLevel="1" 
 								dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_BUSINESS_TYPE %>"
 								itemNames="businessType"
 								itemsEmptyOption="true"	
@@ -365,7 +367,7 @@
 						<c:otherwise>
 							<datamgt:ddr
 								cssClass="input100"
-								depthLevel="<%=WebKeys.DEPTH_LEVEL_1 %>" 
+								depthLevel="1" 
 								dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_BUSINESS_TYPE %>"
 								itemNames="businessType"
 								itemsEmptyOption="true"	

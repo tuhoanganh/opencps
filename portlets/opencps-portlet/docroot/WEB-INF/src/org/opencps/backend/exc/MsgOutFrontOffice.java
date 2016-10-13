@@ -21,13 +21,14 @@ import javax.jms.JMSException;
 import javax.naming.NamingException;
 
 import org.opencps.backend.message.UserActionMsg;
+import org.opencps.backend.util.BackendUtils;
 import org.opencps.jms.context.JMSHornetqContext;
+import org.opencps.jms.message.CancelDossierMessage;
 import org.opencps.jms.message.SubmitDossierMessage;
 import org.opencps.jms.message.SubmitPaymentFileMessage;
 import org.opencps.jms.util.JMSMessageUtil;
 import org.opencps.paymentmgt.model.PaymentFile;
 import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
-import org.opencps.util.PortletConstants;
 import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.log.Log;
@@ -45,64 +46,95 @@ public class MsgOutFrontOffice implements MessageListener {
 	public void receive(Message message)
 		throws MessageListenerException {
 
-		JMSHornetqContext context = null;
-		try {
+		_doReceiveDossier(message);
+	}
 
-			System.out.println("DONE MSGOUT_FO///////////////////////////////");
+	private void _doReceiveDossier(Message message) {
 
-			UserActionMsg userActionMgs =
-				(UserActionMsg) message.get("msgToEngine");
-			
-			
+		_log.info("####################MsgOutFrontOffice: Started receive message bus");
 
-			/*
-			 * JMSContext context = JMSMessageUtil.createProducer(
-			 * userActionMgs.getCompanyId(), userActionMgs.getGovAgencyCode(),
-			 * true, WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(),
-			 * WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "remote", "jmscore");
-			 */
+		UserActionMsg userActionMgs =
+			(UserActionMsg) message.get("msgToEngine");
 
-			context =
-				JMSMessageUtil.createHornetqProducer(
-					userActionMgs.getCompanyId(),
-					userActionMgs.getGovAgencyCode(), true,
-					WebKeys.JMS_QUEUE_OPENCPS_FRONTOFFICE.toLowerCase(),
-					WebKeys.JMS_QUEUE_OPENCPS_FRONTOFFICE.toLowerCase(), "remote",
-					"hornetq");
-			
-			if (userActionMgs.getAction().contentEquals(
-			    PortletConstants.PAYMENT_TYPE)) {
-				
-				SubmitPaymentFileMessage submitPaymentFileMessage = new SubmitPaymentFileMessage(context);
-				
-				PaymentFile paymentFile = PaymentFileLocalServiceUtil.fetchPaymentFile(userActionMgs.getPaymentFileId());
-				
-				submitPaymentFileMessage.sendHornetMessage(paymentFile);
-				
+		long dossierId = userActionMgs.getDossierId();
+
+		boolean trustServiceMode = BackendUtils.checkServiceMode(dossierId);
+
+		if (!trustServiceMode) {
+			JMSHornetqContext context = null;
+			try {
+
+				// JMSContext context =
+				// JMSMessageUtil.createProducer(
+				// userActionMgs.getCompanyId(),
+				// userActionMgs.getGovAgencyCode(), true,
+				// WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(),
+				// WebKeys.JMS_QUEUE_OPENCPS.toLowerCase(), "remote",
+				// "jmscore");
+
+				context =
+					JMSMessageUtil.createHornetqProducer(
+						userActionMgs.getCompanyId(),
+						userActionMgs.getGovAgencyCode(), true,
+						WebKeys.JMS_QUEUE_OPENCPS_FRONTOFFICE.toLowerCase(),
+						WebKeys.JMS_QUEUE_OPENCPS_FRONTOFFICE.toLowerCase(),
+						"remote", "hornetq");
+
+				if (userActionMgs.getAction().equals(WebKeys.ACTION_PAY_VALUE)) {
+
+					SubmitPaymentFileMessage submitPaymentFileMessage =
+						new SubmitPaymentFileMessage(context);
+
+					PaymentFile paymentFile =
+						PaymentFileLocalServiceUtil.getPaymentFile(userActionMgs.getPaymentFileId());
+
+					submitPaymentFileMessage.sendMessageByHornetq(
+						paymentFile, paymentFile.getConfirmFileEntryId() > 0
+							? WebKeys.SYNC_PAY_SEND_CONFIRM
+							: WebKeys.SYNC_PAY_CONFIRM);
+
+					// TODO add log
+
+					_log.info("####################MsgOutFrontOffice: Sended Synchronized JMSPaymentMessage");
+
+				}
+				else if (userActionMgs.getAction().equals(
+					WebKeys.ACTION_CANCEL_VALUE)) {
+
+					CancelDossierMessage cancelDossierMessage =
+						new CancelDossierMessage(context);
+					cancelDossierMessage.sendMessage(
+						userActionMgs.getDossierId(),
+						userActionMgs.getFileGroupId());
+					// TODO add log
+					_log.info("####################MsgOutFrontOffice: Sended Synchronized JMSCancelDossierMessage");
+				}
+				else {
+					SubmitDossierMessage submitDossierMessage =
+						new SubmitDossierMessage(context);
+
+					submitDossierMessage.sendMessageByHornetq(
+						userActionMgs.getDossierId(),
+						userActionMgs.getFileGroupId());
+					// TODO add log
+					_log.info("####################MsgOutFrontOffice: Sended Synchronized JMSDossierMessage");
+				}
+
 			}
-			else {
-				SubmitDossierMessage submitDossierMessage =
-				    new SubmitDossierMessage(context);
-
-				submitDossierMessage.sendMessageByHornetq(
-				    userActionMgs.getDossierId(),
-				    userActionMgs.getFileGroupId());
-			}			
-
-		}
-		catch (Exception e) {
-			_log.error(e);
-		}
-		finally {
-			if (context != null) {
-				try {
-					context.destroy();
-				}
-				catch (JMSException e) {
-					_log.error(e);
-				}
-				catch (NamingException e) {
-					_log.error(e);
+			catch (Exception e) {
+				_log.error(e);
+			}
+			finally {
+				if (context != null) {
+					try {
+						context.destroy();
+					}
+					catch (JMSException e) {
+						_log.error(e);
+					}
+					catch (NamingException e) {
+						_log.error(e);
+					}
 				}
 			}
 		}
