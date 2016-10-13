@@ -1,4 +1,5 @@
 
+<%@page import="org.opencps.backend.util.BackendUtils"%>
 <%
 	/**
 	 * OpenCPS is the open source Core Public Services software
@@ -158,12 +159,8 @@
 				url="<%=deleteDossierURL.toString()%>" />
 		</c:if>
 	</c:when>
-	<c:when
-		test="<%=(dossier.getDossierStatus().equals(
-						PortletConstants.DOSSIER_STATUS_PROCESSING) ||
-						dossier.getDossierStatus().equals(
-							PortletConstants.DOSSIER_STATUS_RECEIVED) || dossier.getDossierStatus().equals(
-						PortletConstants.DOSSIER_STATUS_RECEIVING))%>">
+
+	<c:when test="<%= BackendUtils.isDossierCancel(dossier.getDossierId()) %>">
 		<portlet:actionURL var="cancelDossierURL" name="cancelDossier">
 			<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID%>"
 				value="<%=String.valueOf(dossier.getDossierId())%>" />
@@ -172,8 +169,22 @@
 
 		<liferay-ui:icon-delete image="undo"
 			cssClass="search-container-action fa delete"
-			confirmation="are-you-sure-cancel-entry" message="cancel"
+			confirmation="are-you-sure-cancel-dossier-entry" message="cancel"
 			url="<%=cancelDossierURL.toString()%>" />
 	</c:when>
+	
+	<c:when test="<%= BackendUtils.isDossierChange(dossier.getDossierId()) %>">
+		<portlet:actionURL var="changeDossierURL" name="changeDossier">
+			<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID%>"
+				value="<%=String.valueOf(dossier.getDossierId())%>" />
+			<portlet:param name="redirectURL" value="<%=currentURL%>" />
+		</portlet:actionURL>
+
+		<liferay-ui:icon-delete image="update"
+			cssClass="search-container-action fa delete"
+			confirmation="are-you-sure-change-dossier-entry" message="cancel"
+			url="<%=changeDossierURL.toString()%>" />
+	</c:when>
+	
 </c:choose>
 <%-- </liferay-ui:icon-menu> --%>
