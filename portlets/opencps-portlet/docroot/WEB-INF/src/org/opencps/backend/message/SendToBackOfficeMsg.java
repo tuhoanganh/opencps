@@ -435,10 +435,33 @@ public class SendToBackOfficeMsg{
      */
     public void setSyncStatus(int syncStatus) {
     
-    	this.syncStatus = syncStatus;
-    }
-	protected String requestCommand;
+		this.syncStatus = syncStatus;
+	}
+    
+	public String getDossierLogOId() {
+	
+		return dossierLogOId;
+	}
 
+	
+	public void setDossierLogOId(String dossierLogOId) {
+	
+		this.dossierLogOId = dossierLogOId;
+	}
+
+	
+	public String getActionHistoryOId() {
+	
+		return actionHistoryOId;
+	}
+
+	
+	public void setActionHistoryOId(String actionHistoryOId) {
+	
+		this.actionHistoryOId = actionHistoryOId;
+	}
+
+	protected String requestCommand;
 	protected long processOrderId;
 	protected long dossierId;
 	protected long fileGroupId;
@@ -462,5 +485,7 @@ public class SendToBackOfficeMsg{
 	protected long actorId;
 	protected String actorName;
 	protected int syncStatus;
+	protected String dossierLogOId;
+	protected String actionHistoryOId;
 
 }

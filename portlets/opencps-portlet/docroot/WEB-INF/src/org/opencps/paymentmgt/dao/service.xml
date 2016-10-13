@@ -21,7 +21,7 @@
         <column name="requestNote" type="String"></column>
         <column name="paymentOptions" type="String"></column>
         <column name="keypayUrl" type="String"></column>
-        <column name="keypayTransactionId" type="long"></column>
+        <column name="keypayTransactionId" type="String"></column>
         <column name="keypayGoodCode" type="String"></column>
         <column name="keypayMerchantCode" type="String"></column>
         <column name="bankInfo" type="String"></column>

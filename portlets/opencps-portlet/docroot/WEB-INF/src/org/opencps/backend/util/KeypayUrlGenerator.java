@@ -196,7 +196,7 @@ public class KeypayUrlGenerator {
 				paymentFile =
 					PaymentFileLocalServiceUtil.updatePaymentFile(
 						paymentFileId, keypayURL,
-						GetterUtil.getLong(merchant_trans_id, 0), good_code,
+						merchant_trans_id, good_code,
 						paymentConfig.getKeypayMerchantCode());
 
 			}

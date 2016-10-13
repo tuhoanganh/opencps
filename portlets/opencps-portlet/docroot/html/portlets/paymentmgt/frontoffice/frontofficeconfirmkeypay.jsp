@@ -112,7 +112,7 @@
 
 				paymentFile =
 					PaymentFileLocalServiceUtil.getPaymentFileByMerchantResponse(
-						Long.parseLong(merchant_trans_id), good_code,
+						merchant_trans_id, good_code,
 						Double.parseDouble(net_cost));
 				if (dossier != null &&
 					paymentFile != null &&
