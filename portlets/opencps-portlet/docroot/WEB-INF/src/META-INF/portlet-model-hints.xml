@@ -291,6 +291,7 @@
 		<field name="actionUserId" type="long" />
 		<field name="daysDoing" type="int" />
 		<field name="daysDelay" type="int" />
+		<field name="oId" type="String" />
 	</model>
 	<model name="org.opencps.processmgt.model.ProcessOrder">
 		<field name="processOrderId" type="long" />
@@ -530,6 +531,7 @@
 		<field name="actorId" type="long" />
 		<field name="actorName" type="String" />
 		<field name="syncStatus" type="int" />
+		<field name="oId" type="String" />
 	</model>
 	<model name="org.opencps.dossiermgt.model.DossierPart">
 		<field name="dossierpartId" type="long" />
@@ -685,7 +687,7 @@
 		<field name="requestNote" type="String" />
 		<field name="paymentOptions" type="String" />
 		<field name="keypayUrl" type="String" />
-		<field name="keypayTransactionId" type="long">
+		<field name="keypayTransactionId" type="String">
 			<hint name="max-length">6</hint>
 		</field>
 		<field name="keypayGoodCode" type="String">

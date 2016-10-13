@@ -30,6 +30,7 @@ import org.opencps.backend.util.DossierNoGenerator;
 import org.opencps.backend.util.KeypayUrlGenerator;
 import org.opencps.backend.util.PaymentRequestGenerator;
 import org.opencps.dossiermgt.model.Dossier;
+import org.opencps.dossiermgt.model.DossierLog;
 import org.opencps.dossiermgt.model.ServiceConfig;
 import org.opencps.dossiermgt.service.DossierLogLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
@@ -191,17 +192,22 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 					ActorBean actorBean = new ActorBean(0, 0);
 
-					DossierLogLocalServiceUtil.addDossierLog(
-						toEngineMsg.getUserId(), toEngineMsg.getGroupId(),
-						toEngineMsg.getCompanyId(), toEngineMsg.getDossierId(),
-						toEngineMsg.getFileGroupId(),
-						PortletConstants.DOSSIER_STATUS_SYSTEM,
-						PortletConstants.DOSSIER_ACTION_CREATE_PROCESS_ORDER,
-						PortletConstants.DOSSIER_ACTION_CREATE_PROCESS_ORDER,
-						new Date(), 0, 0, actorBean.getActor(),
-						actorBean.getActorId(), actorBean.getActorName(),
-						BackOfficeProcessEngine.class.getName() +
-							".createProcessOrder()");
+					DossierLog dossierLog =
+						DossierLogLocalServiceUtil.addDossierLog(
+							toEngineMsg.getUserId(),
+							toEngineMsg.getGroupId(),
+							toEngineMsg.getCompanyId(),
+							toEngineMsg.getDossierId(),
+							toEngineMsg.getFileGroupId(),
+							PortletConstants.DOSSIER_STATUS_SYSTEM,
+							PortletConstants.DOSSIER_ACTION_CREATE_PROCESS_ORDER,
+							PortletConstants.DOSSIER_ACTION_CREATE_PROCESS_ORDER,
+							new Date(), 0, 0, actorBean.getActor(),
+							actorBean.getActorId(), actorBean.getActorName(),
+							BackOfficeProcessEngine.class.getName() +
+								".createProcessOrder()");
+
+					toBackOffice.setDossierLogOId(dossierLog.getOId());
 				}
 
 				processOrderId = processOrder.getProcessOrderId();

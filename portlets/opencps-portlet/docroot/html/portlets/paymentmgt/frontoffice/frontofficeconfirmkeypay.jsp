@@ -64,7 +64,7 @@
 	String p_p_lifecycle = PortalUtil.getOriginalServletRequest(r).getParameter("p_p_id");
 	KeyPay keyPay = new KeyPay(PortalUtil.getOriginalServletRequest(r));
 	
-	long dossierId = GetterUtil.getLong(merchant_trans_id);
+	String oId = merchant_trans_id;
 
 %>
 
@@ -87,10 +87,11 @@
 		</div>
 		<%
 			String receptionNo = good_code;
+
 			Dossier dossier = null;
+
 			try {
-				dossier =
-					DossierLocalServiceUtil.fetchDossier(dossierId);
+				dossier = DossierLocalServiceUtil.getDossierByOId(oId);
 			}
 			catch (SystemException e) {
 
@@ -111,9 +112,10 @@
 
 				paymentFile =
 					PaymentFileLocalServiceUtil.getPaymentFileByMerchantResponse(
-						Long.parseLong(merchant_trans_id), good_code,
+						merchant_trans_id, good_code,
 						Double.parseDouble(net_cost));
-				if (paymentFile != null &&
+				if (dossier != null &&
+					paymentFile != null &&
 					paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_REQUESTED) {
 
 					PaymentConfig paymentConfig =
