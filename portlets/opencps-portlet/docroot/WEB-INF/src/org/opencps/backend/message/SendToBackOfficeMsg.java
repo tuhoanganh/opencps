@@ -437,6 +437,41 @@ public class SendToBackOfficeMsg{
     
     	this.syncStatus = syncStatus;
     }
+	
+    /**
+     * @return the isPayment
+     */
+    public boolean isPayment() {
+    
+    	return isPayment;
+    }
+
+	
+    /**
+     * @param isPayment the isPayment to set
+     */
+    public void setPayment(boolean isPayment) {
+    
+    	this.isPayment = isPayment;
+    }
+
+	
+    /**
+     * @return the isResubmit
+     */
+    public boolean isResubmit() {
+    
+    	return isResubmit;
+    }
+
+	
+    /**
+     * @param isResubmit the isResubmit to set
+     */
+    public void setResubmit(boolean isResubmit) {
+    
+    	this.isResubmit = isResubmit;
+    }
 	protected String requestCommand;
 
 	protected long processOrderId;
@@ -462,5 +497,7 @@ public class SendToBackOfficeMsg{
 	protected long actorId;
 	protected String actorName;
 	protected int syncStatus;
+	protected boolean isPayment;
+	protected boolean isResubmit;
 
 }
