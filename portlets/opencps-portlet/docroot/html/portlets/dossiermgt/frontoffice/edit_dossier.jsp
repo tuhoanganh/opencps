@@ -146,6 +146,11 @@
 	/>
 	<portlet:param 
 		name="backURL" 
+		value="<%=backDossierList %>"
+	/>
+	
+	<portlet:param 
+		name="redirectURL" 
 		value="<%=currentURL %>"
 	/>
 </portlet:actionURL>
@@ -367,7 +372,7 @@
 				value="<%= scopeGroupId%>" 
 			/>
 			
-			<aui:input 
+			<aui:input
 				name="<%=DossierDisplayTerms.COMPANY_ID %>" type="hidden"
 				value="<%= company.getCompanyId()%>"
 			/>
