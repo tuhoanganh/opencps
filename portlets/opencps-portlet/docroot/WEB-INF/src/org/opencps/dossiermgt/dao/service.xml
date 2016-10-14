@@ -360,6 +360,9 @@
         <column name="actorName" type="String"></column>
         <column name="syncStatus" type="int"></column>
         <column name="oId" type="String"></column>
+        <column name="stepId" type="long"></column>
+        <column name="stepName" type="String"></column>
+        
         <order by="desc">
             <order-column name="modifiedDate" order-by="desc"></order-column>
         </order>

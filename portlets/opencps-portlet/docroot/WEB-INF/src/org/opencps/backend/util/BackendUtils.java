@@ -492,8 +492,8 @@ public class BackendUtils {
 				        serviceProcessId, processStepId);
 
 				for (ProcessWorkflow prc_wf : lsPRC_WFL) {
-					if (Validator.equals(
-					    prc_wf.getPreCondition(), WebKeys.ACTION_CANCEL_VALUE)) {
+					if (Validator.isNotNull(prc_wf.getPreCondition()) &&
+					    (StringUtil.trim(prc_wf.getPreCondition()).contains(WebKeys.ACTION_CANCEL_VALUE))) {
 						isCancel = true;
 						break;
 					}
