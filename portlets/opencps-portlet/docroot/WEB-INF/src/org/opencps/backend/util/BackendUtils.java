@@ -29,6 +29,7 @@ import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.model.ProcessStep;
 import org.opencps.processmgt.model.ProcessWorkflow;
+import org.opencps.processmgt.model.impl.ProcessStepImpl;
 import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
@@ -538,6 +539,31 @@ public class BackendUtils {
 
 	}
 
+	/**
+	 * Get processStepById
+	 * 
+	 * @param dossierId
+	 * @return
+	 */
+	public static ProcessStep getProcessStepByDossierId(long dossierId) {
 
+		ProcessStep processStep = new ProcessStepImpl();
+
+		try {
+			ProcessOrder processOrder =
+			    ProcessOrderLocalServiceUtil.getProcessOrder(dossierId, 0);
+
+			long processStepId = processOrder.getProcessStepId();
+
+			processStep =
+			    ProcessStepLocalServiceUtil.getProcessStep(processStepId);
+		}
+		catch (Exception e) {
+
+		}
+
+		return processStep;
+	}
+	
 	private static Log _log = LogFactoryUtil.getLog(BackendUtils.class);
 }

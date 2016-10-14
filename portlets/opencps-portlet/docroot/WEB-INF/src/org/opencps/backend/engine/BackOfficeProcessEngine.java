@@ -280,7 +280,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 						if (Validator.equals(
 						    changeStep.getDossierStatus(),
-						    PortletConstants.DOSSIER_STATUS_RECEIVING)) {
+						    PortletConstants.DOSSIER_STATUS_WAITING)) {
 							
 							isResubmit = true;
 						}
@@ -346,7 +346,8 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 						toBackOffice.setReceptionNo(DossierNoGenerator.genaratorNoReception(
 							pattern, toEngineMsg.getDossierId()));
-
+						// Add log create dossier
+						
 					}
 					else {
 						toBackOffice.setReceptionNo(dossier.getReceptionNo());

@@ -2512,6 +2512,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		long dossierId =
 			ParamUtil.getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
+		
+		String note = ParamUtil.getString(actionRequest, DossierDisplayTerms.NOTE);
 
 		long fileGroupId =
 			ParamUtil.getLong(
@@ -2607,16 +2609,22 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			ActorBean actor = new ActorBean(1, serviceContext.getUserId());
 
 			String msgInfo = StringPool.BLANK;
+			
+			if (Validator.isNotNull(note)) {
+				msgInfo = note;
+			}
+			else {
+				msgInfo =
+				    isSend
+				        ? LanguageUtil.get(
+				            serviceContext.getLocale(), "send-dossier")
+				        : LanguageUtil.get(
+				            serviceContext.getLocale(), "resend-dossier") +
+				            StringPool.COLON +
+				            ParamUtil.getString(
+				                actionRequest, DossierDisplayTerms.NOTE);
 
-			msgInfo =
-				isSend
-					? LanguageUtil.get(
-						serviceContext.getLocale(), "send-dossier")
-					: LanguageUtil.get(
-						serviceContext.getLocale(), "send-dossier") +
-						StringPool.COLON +
-						ParamUtil.getString(
-							actionRequest, DossierDisplayTerms.NOTE);
+			}
 
 			DossierLocalServiceUtil.updateDossierStatus(
 				dossierId, fileGroupId, PortletConstants.DOSSIER_STATUS_SYSTEM,

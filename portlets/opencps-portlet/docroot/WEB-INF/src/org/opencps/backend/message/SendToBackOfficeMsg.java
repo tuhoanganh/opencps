@@ -488,6 +488,114 @@ public class SendToBackOfficeMsg {
 		this.actionHistoryOId = actionHistoryOId;
 	}
 
+	
+    /**
+     * @return the isCreateProcessOrder
+     */
+    public boolean isCreateProcessOrder() {
+    
+    	return isCreateProcessOrder;
+    }
+
+	
+    /**
+     * @param isCreateProcessOrder the isCreateProcessOrder to set
+     */
+    public void setCreateProcessOrder(boolean isCreateProcessOrder) {
+    
+    	this.isCreateProcessOrder = isCreateProcessOrder;
+    }
+
+	
+    /**
+     * @return the isCreateReceptionNo
+     */
+    public boolean isCreateReceptionNo() {
+    
+    	return isCreateReceptionNo;
+    }
+
+	
+    /**
+     * @param isCreateReceptionNo the isCreateReceptionNo to set
+     */
+    public void setCreateReceptionNo(boolean isCreateReceptionNo) {
+    
+    	this.isCreateReceptionNo = isCreateReceptionNo;
+    }
+
+	
+    /**
+     * @return the paymentDate
+     */
+    public Date getPaymentDate() {
+    
+    	return paymentDate;
+    }
+
+	
+    /**
+     * @param paymentDate the paymentDate to set
+     */
+    public void setPaymentDate(Date paymentDate) {
+    
+    	this.paymentDate = paymentDate;
+    }
+
+	
+    /**
+     * @return the resubmitDate
+     */
+    public Date getResubmitDate() {
+    
+    	return resubmitDate;
+    }
+
+	
+    /**
+     * @param resubmitDate the resubmitDate to set
+     */
+    public void setResubmitDate(Date resubmitDate) {
+    
+    	this.resubmitDate = resubmitDate;
+    }
+
+	
+    /**
+     * @return the createProcessOrderDate
+     */
+    public Date getCreateProcessOrderDate() {
+    
+    	return createProcessOrderDate;
+    }
+
+	
+    /**
+     * @param createProcessOrderDate the createProcessOrderDate to set
+     */
+    public void setCreateProcessOrderDate(Date createProcessOrderDate) {
+    
+    	this.createProcessOrderDate = createProcessOrderDate;
+    }
+
+	
+    /**
+     * @return the createRecptionDate
+     */
+    public Date getCreateRecptionDate() {
+    
+    	return createRecptionDate;
+    }
+
+	
+    /**
+     * @param createRecptionDate the createRecptionDate to set
+     */
+    public void setCreateRecptionDate(Date createRecptionDate) {
+    
+    	this.createRecptionDate = createRecptionDate;
+    }
+
 	protected String requestCommand;
 	protected long processOrderId;
 	protected long dossierId;
@@ -516,5 +624,12 @@ public class SendToBackOfficeMsg {
 	protected String actionHistoryOId;
 	protected boolean isPayment;
 	protected boolean isResubmit;
+	protected boolean isCreateProcessOrder;
+	protected boolean isCreateReceptionNo;
+	
+	protected Date paymentDate;
+	protected Date resubmitDate;
+	protected Date createProcessOrderDate;
+	protected Date createRecptionDate;
 
 }

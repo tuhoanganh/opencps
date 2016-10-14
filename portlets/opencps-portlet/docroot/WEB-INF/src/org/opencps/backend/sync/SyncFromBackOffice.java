@@ -20,25 +20,42 @@ package org.opencps.backend.sync;
 import java.util.Date;
 import java.util.List;
 
+import javax.portlet.PortletPreferences;
+
 import org.opencps.backend.message.SendToBackOfficeMsg;
 import org.opencps.backend.message.SendToCallbackMsg;
 import org.opencps.backend.util.BackendUtils;
+import org.opencps.dossiermgt.bean.AccountBean;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLogLocalServiceUtil;
 import org.opencps.dossiermgt.util.ActorBean;
+import org.opencps.jms.SyncServiceContext;
 import org.opencps.processmgt.model.WorkflowOutput;
 import org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil;
 import org.opencps.util.PortletConstants;
+import org.opencps.util.PortletPropsValues;
 import org.opencps.util.WebKeys;
 
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.MessageListenerException;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.PrefsPropsUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.User;
+import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.util.SubscriptionSender;
+import com.liferay.util.PwdGenerator;
 
 /**
  * @author khoavd
@@ -104,7 +121,7 @@ public class SyncFromBackOffice implements MessageListener {
 
 				ActorBean actorBean =
 				    new ActorBean(
-				        toBackOffice.getActor(), toBackOffice.getActorId());				
+				        toBackOffice.getActor(), toBackOffice.getActorId());
 				
 				boolean isPayment = toBackOffice.isPayment();
 				
@@ -171,7 +188,86 @@ public class SyncFromBackOffice implements MessageListener {
 		}
 
 	}
+	
+	
+	/**
+	 * @param dossierId
+	 */
+	public void sendEmailCustomer(long dossierId) {
+		
+		try {
+			Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
+			
+			SyncServiceContext syncServiceContext =
+			    new SyncServiceContext(
+			        dossier.getCompanyId(), dossier.getGroupId(),
+			        dossier.getUserId(), true, true);
 
+			long userId = 0;
+			
+			if (dossier.getOwnerOrganizationId() != 0) {
+				userId = dossier.getOwnerOrganizationId();
+			} else {
+				userId = dossier.getUserId();
+			}
+			
+			User user = UserLocalServiceUtil.getUser(userId);
+			
+			String fromName = PrefsPropsUtil
+			    .getString(dossier.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
+			
+			String fromAddress = PrefsPropsUtil
+			    .getString(dossier.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
+
+			String toName = user
+			    .getFullName();
+			String toAddress = user
+			    .getEmailAddress();
+
+			String subject = PortletPropsValues.SUBJECT_TO_CUSTOMER;
+			
+			String emailBody = PortletPropsValues.CONTENT_TO_CUSTOMER;
+			
+			emailBody = StringUtil.replace(emailBody, "{receptionNo}", Long.toString(dossierId));
+
+
+			SubscriptionSender subscriptionSender = new SubscriptionSender();
+
+			subscriptionSender
+			    .setBody(emailBody);
+			subscriptionSender
+			    .setCompanyId(dossier.getCompanyId());
+			
+			subscriptionSender
+			    .setFrom(fromAddress, fromName);
+			subscriptionSender
+			    .setHtmlFormat(true);
+			subscriptionSender
+			    .setMailId("user", user
+			        .getUserId(), System
+			            .currentTimeMillis(),
+			        PwdGenerator
+			            .getPassword());
+			subscriptionSender
+			    .setServiceContext(syncServiceContext.getServiceContext());
+			subscriptionSender
+			    .setSubject(subject);
+			subscriptionSender
+			    .setUserId(user
+			        .getUserId());
+
+			subscriptionSender
+			    .addRuntimeSubscribers(toAddress, toName);
+
+			subscriptionSender
+			    .flushNotificationsAsync();
+	        
+        }
+        catch (Exception e) {
+	      _log.info("Cant'n send email *************************************");
+        }
+		
+	}
 	private Log _log = LogFactoryUtil.getLog(SyncFromBackOffice.class);
 
 }

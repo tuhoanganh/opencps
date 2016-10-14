@@ -532,6 +532,8 @@
 		<field name="actorName" type="String" />
 		<field name="syncStatus" type="int" />
 		<field name="oId" type="String" />
+		<field name="stepId" type="long" />
+		<field name="stepName" type="String" />
 	</model>
 	<model name="org.opencps.dossiermgt.model.DossierPart">
 		<field name="dossierpartId" type="long" />
