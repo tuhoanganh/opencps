@@ -184,6 +184,10 @@ public class SyncFromBackOffice implements MessageListener {
 
 			MessageBusUtil.sendMessage(
 				"opencps/backoffice/engine/callback", sendToCallBack);
+			
+			if (toBackOffice.getSyncStatus() == 2) {
+				sendEmailCustomer(toBackOffice.getDossierId());
+			}
 
 		}
 
@@ -221,8 +225,8 @@ public class SyncFromBackOffice implements MessageListener {
 
 			String toName = user
 			    .getFullName();
-			String toAddress = user
-			    .getEmailAddress();
+			
+			String toAddress = dossier.getContactEmail();
 
 			String subject = PortletPropsValues.SUBJECT_TO_CUSTOMER;
 			
