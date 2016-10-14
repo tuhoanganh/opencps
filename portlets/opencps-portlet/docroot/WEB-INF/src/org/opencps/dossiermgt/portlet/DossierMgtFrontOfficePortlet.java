@@ -2425,10 +2425,15 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				actionRequest, DossierDisplayTerms.DOSSIER_STATUS);
 
 		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
+		
+		String backURL =
+						ParamUtil.getString(actionRequest, "backURL");
 
 		// String holdPosition = ParamUtil.getString(actionRequest, "hold");
 
 		Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
+		
+		boolean isUpdateStatusSuccessFlag = false;
 
 		try {
 			ServiceContext serviceContext =
@@ -2556,7 +2561,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 					themeDisplay.getLocale(),
 					MessageKeys.DEFAULT_SUCCESS_KEY_X,
 					String.valueOf(dossier.getDossierId())));
-
+			//lat co
+			isUpdateStatusSuccessFlag = true;
 		}
 		catch (Exception e) {
 
@@ -2576,8 +2582,17 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			_log.error(e);
 		}
 		finally {
-			if (Validator.isNotNull(redirectURL)) {
-				actionResponse.sendRedirect(redirectURL);
+			if (!isUpdateStatusSuccessFlag) {
+				
+				if(Validator.isNotNull(redirectURL)) {
+					actionResponse.sendRedirect(redirectURL);
+				}
+				
+			} else {
+				
+				if(Validator.isNotNull(backURL)) {
+					actionResponse.sendRedirect(backURL);
+				}
 			}
 		}
 	}
