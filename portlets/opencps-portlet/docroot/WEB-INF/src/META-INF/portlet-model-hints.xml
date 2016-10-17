@@ -711,7 +711,6 @@
 		<field name="invoiceNo" type="String" />
 		<field name="syncStatus" type="int" />
 		<field name="oid" type="String" />
-		<field name="dossierOId" type="String" />
 	</model>
 	<model name="org.opencps.api.model.ApiService">
 		<field name="apiLogId" type="long" />

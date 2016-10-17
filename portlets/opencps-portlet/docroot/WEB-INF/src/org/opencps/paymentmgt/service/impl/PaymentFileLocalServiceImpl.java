@@ -18,16 +18,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.opencps.dossiermgt.NoSuchDossierException;
 import org.opencps.paymentmgt.NoSuchPaymentFileException;
 import org.opencps.paymentmgt.model.PaymentFile;
 import org.opencps.paymentmgt.service.base.PaymentFileLocalServiceBaseImpl;
 import org.opencps.util.DLFolderUtil;
 import org.opencps.util.WebKeys;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.Validator;
@@ -84,7 +85,7 @@ public class PaymentFileLocalServiceImpl
 		long paymentFileId =
 			counterLocalService.increment(PaymentFile.class.getName());
 		PaymentFile paymentFile = paymentFilePersistence.create(paymentFileId);
-
+		
 		Date now = new Date();
 
 		paymentFile.setUserId(userId);
@@ -144,7 +145,7 @@ public class PaymentFileLocalServiceImpl
 		long paymentFileId =
 			counterLocalService.increment(PaymentFile.class.getName());
 		PaymentFile paymentFile = paymentFilePersistence.create(paymentFileId);
-
+		
 		Date now = new Date();
 
 		paymentFile.setCreateDate(now);
@@ -165,7 +166,7 @@ public class PaymentFileLocalServiceImpl
 		paymentFile.setPaymentStatus(0);
 		paymentFile.setPaymentOptions(paymentOptions);
 		paymentFile.setGovAgencyOrganizationId(govAgencyOrganizationId);
-
+		
 		return paymentFilePersistence.update(paymentFile);
 	}
 
@@ -175,17 +176,16 @@ public class PaymentFileLocalServiceImpl
 	 * @param syncPaymentFile
 	 * @return
 	 * @throws SystemException
+	 * @throws NoSuchDossierException 
 	 */
 	public PaymentFile syncPaymentFile(
 		long dossierId, long fileGroupId, PaymentFile syncPaymentFile)
 		throws SystemException {
 
-		System.out.println("##########################################syncPaymentFile.getKeypayUrl() " +
-			syncPaymentFile.getKeypayUrl());
 		long paymentFileId =
 			counterLocalService.increment(PaymentFile.class.getName());
 		PaymentFile paymentFile = paymentFilePersistence.create(paymentFileId);
-
+		
 		Date now = new Date();
 
 		paymentFile.setAccountUserName(syncPaymentFile.getAccountUserName());
@@ -224,7 +224,7 @@ public class PaymentFileLocalServiceImpl
 		paymentFile.setRequestNote(syncPaymentFile.getRequestNote());
 		paymentFile.setSyncStatus(2);
 		paymentFile.setUserId(syncPaymentFile.getUserId());
-
+		
 		return paymentFilePersistence.update(paymentFile);
 	}
 
