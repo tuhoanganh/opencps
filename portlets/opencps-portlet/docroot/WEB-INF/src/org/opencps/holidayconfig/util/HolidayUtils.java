@@ -55,6 +55,7 @@ public class HolidayUtils {
 			int saturdayIsNotHoliday = 0;
 			int sundayIsNotHoliday = 0;
 			
+			/*Kiểm tra xem flag sunday,saturday có được tính là ngày nghỉ không*/
 	    	List<HolidayConfigExtend> holidayConfigExtendList = HolidayConfigExtendLocalServiceUtil
 	    			.getHolidayConfigExtends(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 	    	
@@ -104,6 +105,8 @@ public class HolidayUtils {
 			{
 	    	
 		    	baseDateCal = isHolidayCal(baseDateCal,holidayConfigList);
+		    	
+		    	/*Nếu flag saturday,sunday bật thì ko tính là ngày nghỉ*/
 		    	
 		    	if(saturdayIsNotHoliday == ACTIVE){
 		    	
