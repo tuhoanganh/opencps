@@ -17,4 +17,13 @@
  */
 %>
 
-<h2>Hello Holiday Config</h2>
+<%@ include file="../init.jsp"%>
+
+<table>
+	
+
+</table>
+
+<%!
+	private Log _log = LogFactoryUtil.getLog("html.portlets.holidayconfig.admin.holidayconfig_list.jsp");
+%>
