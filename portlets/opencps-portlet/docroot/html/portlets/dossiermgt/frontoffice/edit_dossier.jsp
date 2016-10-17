@@ -154,6 +154,10 @@
 		name="redirectURL" 
 		value="<%=currentURL %>"
 	/>
+	<portlet:param 
+		name="redirectURL" 
+		value="<%=backDossierList %>"
+	/>
 </portlet:actionURL>
 
 <c:choose>
