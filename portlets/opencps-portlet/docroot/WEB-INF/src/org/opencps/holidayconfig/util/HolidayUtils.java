@@ -29,40 +29,6 @@ public class HolidayUtils {
 	
 	private static Log _log = LogFactoryUtil.getLog(HolidayUtils.class);
 	
-	public static Date getNgayHenTraHoSo(Date baseDate, long numberOfDays) {
-		
-		if(baseDate == null){
-	        baseDate = new Date();
-	    }
-	    
-	    Calendar baseDateCal = Calendar.getInstance();
-	    baseDateCal.setTime(baseDate);
-	    
-	    HolidayConfig holiday = null;
-	        
-	    try{
-		    
-		    	
-		    	for(int i=0;i<numberOfDays;i++){			    	
-		    		
-			    	baseDateCal.add(Calendar.DATE,1);
-			    	
-		    		//holiday = checkHoliday1(baseDateCal);
-		    		
-		    		if(baseDateCal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || baseDateCal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY ||Validator.isNotNull(holiday)){
-		    			//baseDateCal = checkDay(baseDateCal);
-		    			
-		    		}		    	
-			    }    	
-		      	
-	    }catch(Exception e){
-	    	_log.error(e);
-	    }
-	    
-	    return baseDateCal.getTime();
- 
-	}
-	
 	public static Calendar getEndDate(Date baseDate,long daysDuration){
 		
 		if(baseDate == null){
@@ -72,21 +38,14 @@ public class HolidayUtils {
 		Calendar baseDateCal = Calendar.getInstance();
 	    baseDateCal.setTime(baseDate);
 		
-		boolean isHoliday = false;
 		
 		try{
 		
 			for(int i=0;i<daysDuration;i++){
+				
 				baseDateCal.add(Calendar.DATE,1);
 				
-				isHoliday = isHoliday(baseDateCal);
-				
-				if(baseDateCal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY 
-						|| baseDateCal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY 
-						||isHoliday){
-	    			baseDateCal = checkDay(baseDateCal,baseDate);
-	    			
-	    		}
+				baseDateCal = checkDay(baseDateCal,baseDate,null);
 				
 			}
 		}catch(Exception e){
@@ -96,25 +55,36 @@ public class HolidayUtils {
 		return baseDateCal;
 	}
 	
-	private static Calendar checkDay (Calendar baseDateCal,Date baseDate){
+	private static Calendar checkDay (Calendar baseDateCal,Date baseDate,List<HolidayConfig> holidayConfigList){
 		
 		
 		boolean isHoliday = false;
-		isHoliday = isHoliday(baseDateCal);
-    	
 		
-		if(baseDateCal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || baseDateCal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || isHoliday)
-		{
-    	
-	    	baseDateCal = isHolidayCal(baseDateCal);
-	    	
-	    	baseDateCal = checkSaturday(baseDateCal);
-	    	
-	    	baseDateCal = checkSunday(baseDateCal);
-	    	
-	    	checkDay(baseDateCal,baseDate);
-		}else{
+		try{
+		
+			if(Validator.isNull(holidayConfigList) || (holidayConfigList.size() <= 0)){
+				holidayConfigList = HolidayConfigLocalServiceUtil.getHolidayConfig(1);
+			}
 			
+			isHoliday = isHoliday(baseDateCal,holidayConfigList);
+	    	
+			
+			if(baseDateCal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY 
+					|| baseDateCal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || isHoliday)
+			{
+	    	
+		    	baseDateCal = isHolidayCal(baseDateCal,holidayConfigList);
+		    	
+		    	baseDateCal = checkSaturday(baseDateCal);
+		    	
+		    	baseDateCal = checkSunday(baseDateCal);
+		    	
+		    	checkDay(baseDateCal,baseDate,holidayConfigList);
+			}else{
+				
+			}
+		}catch (Exception e){
+			_log.error(e);
 		}
 		
 		return baseDateCal;
@@ -138,7 +108,7 @@ public class HolidayUtils {
 	
 	
 	
-	private static Calendar isHolidayCal(Calendar baseDateCal){
+	private static Calendar isHolidayCal(Calendar baseDateCal,List<HolidayConfig> holidayConfigList){
 		
        
        int baseDate = 0;
@@ -147,7 +117,10 @@ public class HolidayUtils {
         
        try {
     	   
-    	   List<HolidayConfig> holidayConfigList = HolidayConfigLocalServiceUtil.getHolidayConfig(1);
+    	   if(Validator.isNull(holidayConfigList) || (holidayConfigList.size() <=0)){
+   			
+				holidayConfigList = HolidayConfigLocalServiceUtil.getHolidayConfig(1);
+			}
 			
 			for(int i =0;i<holidayConfigList.size();i++){
 				
@@ -170,7 +143,7 @@ public class HolidayUtils {
 	
 	
 	
-	private static boolean isHoliday(Calendar baseDateCal){
+	private static boolean isHoliday(Calendar baseDateCal,List<HolidayConfig> holidayConfigList){
 		
 		
 		int baseDate = 0;
@@ -179,12 +152,12 @@ public class HolidayUtils {
 
 		try{
 			
-			List<HolidayConfig> holidayConfigList = HolidayConfigLocalServiceUtil.getHolidayConfig(1);
+			if(Validator.isNull(holidayConfigList) || (holidayConfigList.size() <=0)){
+			
+				holidayConfigList = HolidayConfigLocalServiceUtil.getHolidayConfig(1);
+			}
 			
 			for(int i =0;i<holidayConfigList.size();i++){
-				
-	    		
-				
 				
 				holidayCal.setTime(holidayConfigList.get(i).getHoliday());
 				
