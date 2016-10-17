@@ -19,6 +19,7 @@ package org.opencps.backend.sync;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.opencps.backend.message.SendToBackOfficeMsg;
 import org.opencps.backend.message.SendToCallbackMsg;
@@ -35,6 +36,7 @@ import org.opencps.util.PortletConstants;
 import org.opencps.util.PortletPropsValues;
 import org.opencps.util.WebKeys;
 
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
@@ -44,8 +46,6 @@ import com.liferay.portal.kernel.messaging.MessageListenerException;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.model.User;
-import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.util.SubscriptionSender;
 import com.liferay.util.PwdGenerator;
 
@@ -69,6 +69,8 @@ public class SyncFromBackOffice implements MessageListener {
 	}
 
 	private void _doRecevie(Message message) {
+		
+		
 
 		SendToBackOfficeMsg toBackOffice =
 			(SendToBackOfficeMsg) message.get("toBackOffice");
@@ -198,16 +200,8 @@ public class SyncFromBackOffice implements MessageListener {
 			    new SyncServiceContext(
 			        dossier.getCompanyId(), dossier.getGroupId(),
 			        dossier.getUserId(), true, true);
+			Locale locale = new Locale("vi", "VN");
 
-			long userId = 0;
-			
-			if (dossier.getOwnerOrganizationId() != 0) {
-				userId = dossier.getOwnerOrganizationId();
-			} else {
-				userId = dossier.getUserId();
-			}
-			
-			User user = UserLocalServiceUtil.getUser(userId);
 			
 			String fromName = PrefsPropsUtil
 			    .getString(dossier.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
@@ -215,18 +209,19 @@ public class SyncFromBackOffice implements MessageListener {
 			String fromAddress = PrefsPropsUtil
 			    .getString(dossier.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
 
-			String toName = user
-			    .getFullName();
+			String toName = dossier.getContactName();
 			
 			String toAddress = dossier.getContactEmail();
 
-			String subject = PortletPropsValues.SUBJECT_TO_CUSTOMER;
+			String subject = PortletPropsValues.SUBJECT_TO_CUSTOMER + LanguageUtil.get(locale, dossier.getDossierStatus());
 			
 			String emailBody = PortletPropsValues.CONTENT_TO_CUSTOMER;
 			
 			emailBody = StringUtil.replace(emailBody, "{receptionNo}", Long.toString(dossierId));
 
-
+			
+			emailBody = emailBody + LanguageUtil.get(locale, dossier.getDossierStatus());
+			
 			SubscriptionSender subscriptionSender = new SubscriptionSender();
 
 			subscriptionSender
@@ -239,8 +234,7 @@ public class SyncFromBackOffice implements MessageListener {
 			subscriptionSender
 			    .setHtmlFormat(true);
 			subscriptionSender
-			    .setMailId("user", user
-			        .getUserId(), System
+			    .setMailId("user", dossier.getUserId(), System
 			            .currentTimeMillis(),
 			        PwdGenerator
 			            .getPassword());
@@ -249,8 +243,7 @@ public class SyncFromBackOffice implements MessageListener {
 			subscriptionSender
 			    .setSubject(subject);
 			subscriptionSender
-			    .setUserId(user
-			        .getUserId());
+			    .setUserId(dossier.getUserId());
 
 			subscriptionSender
 			    .addRuntimeSubscribers(toAddress, toName);
@@ -260,7 +253,7 @@ public class SyncFromBackOffice implements MessageListener {
 	        
         }
         catch (Exception e) {
-	      _log.info("Cant'n send email *************************************");
+	      _log.error(e);
         }
 		
 	}
