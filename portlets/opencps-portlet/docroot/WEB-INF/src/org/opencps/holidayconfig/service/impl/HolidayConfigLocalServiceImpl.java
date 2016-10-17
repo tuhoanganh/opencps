@@ -47,8 +47,9 @@ public class HolidayConfigLocalServiceImpl
 	 * Never reference this interface directly. Always use {@link org.opencps.holidayconfig.service.HolidayConfigLocalServiceUtil} to access the holiday config local service.
 	 */
 	
-	public List<HolidayConfig> getHolidayConfig(int remove)throws PortalException, SystemException{
-		
+	public List<HolidayConfig> getHolidayConfig(int remove)
+	    throws PortalException, SystemException {
+
 		return holidayConfigFinder.getHolidayConfig(remove);
 	}
 }

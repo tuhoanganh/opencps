@@ -290,3 +290,4 @@ portlets/opencps-portlet/docroot/WEB-INF/lib/jasperreports-fonts-6.2.2.jar
 
 portlets/StudentLiferayMVC-portlet/
 portlets/vidu-portlet/
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/holidayconfig/model/impl/
