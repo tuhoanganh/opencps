@@ -195,6 +195,7 @@ portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/processmgt/service/http
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/holidayconfig/impl
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/holidayconfig/service/base
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/holidayconfig/service/persistence/HolidayConfigPersistenceImpl.java
+portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/holidayconfig/service/persistence/HolidayConfigExtendPersistenceImpl.java
 
 hooks/opencps-hook/docroot/WEB-INF/classes/.gitignore
 

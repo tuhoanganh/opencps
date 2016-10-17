@@ -15,12 +15,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 
-package org.opencps.holidayconfigextend.model.impl;
+package org.opencps.holidayconfig.model.impl;
 
 import com.liferay.portal.kernel.exception.SystemException;
 
-import org.opencps.holidayconfigextend.model.HolidayConfigExtend;
-import org.opencps.holidayconfigextend.service.HolidayConfigExtendLocalServiceUtil;
+import org.opencps.holidayconfig.model.HolidayConfigExtend;
+import org.opencps.holidayconfig.service.HolidayConfigExtendLocalServiceUtil;
 
 /**
  * The extended model base implementation for the HolidayConfigExtend service. Represents a row in the &quot;opencps_holidayconfig_extend&quot; database table, with each column mapped to a property of this class.
@@ -31,7 +31,7 @@ import org.opencps.holidayconfigextend.service.HolidayConfigExtendLocalServiceUt
  *
  * @author nhanhoang
  * @see HolidayConfigExtendImpl
- * @see org.opencps.holidayconfigextend.model.HolidayConfigExtend
+ * @see org.opencps.holidayconfig.model.HolidayConfigExtend
  * @generated
  */
 public abstract class HolidayConfigExtendBaseImpl

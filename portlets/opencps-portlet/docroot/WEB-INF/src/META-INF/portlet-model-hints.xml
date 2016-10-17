@@ -732,7 +732,7 @@
 		<field name="modifiedDate" type="Date" />
 		<field name="remove" type="int" />
 	</model>
-	<model name="org.opencps.holidayconfigextend.model.HolidayConfigExtend">
+	<model name="org.opencps.holidayconfig.model.HolidayConfigExtend">
 		<field name="holidayExtendId" type="long" />
 		<field name="key" type="String" />
 		<field name="description" type="String" />

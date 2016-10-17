@@ -15,13 +15,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 
-package org.opencps.holidayconfigextend.model.impl;
+package org.opencps.holidayconfig.model.impl;
 
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.CacheModel;
 
-import org.opencps.holidayconfigextend.model.HolidayConfigExtend;
+import org.opencps.holidayconfig.model.HolidayConfigExtend;
 
 import java.io.Externalizable;
 import java.io.IOException;
