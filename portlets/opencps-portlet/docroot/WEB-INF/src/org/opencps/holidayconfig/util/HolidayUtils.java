@@ -93,9 +93,11 @@ public class HolidayUtils {
 		try{
 		
 			if(Validator.isNull(holidayConfigList) || (holidayConfigList.size() <= 0)){
-				holidayConfigList = HolidayConfigLocalServiceUtil.getHolidayConfig(1);
+				holidayConfigList = HolidayConfigLocalServiceUtil.getHolidayConfig(ACTIVE);
 			}
 			
+			/*Kiểm tra ngày xử lý có trùng vào list ngày nghỉ đã config hay chưa
+			 * Nếu trùng thì sẽ + thêm ngày xử lý*/
 			isHoliday = isHoliday(baseDateCal,holidayConfigList);
 			
 			
@@ -157,7 +159,7 @@ public class HolidayUtils {
     	   
     	   if(Validator.isNull(holidayConfigList) || (holidayConfigList.size() <=0)){
    			
-				holidayConfigList = HolidayConfigLocalServiceUtil.getHolidayConfig(1);
+				holidayConfigList = HolidayConfigLocalServiceUtil.getHolidayConfig(ACTIVE);
 			}
 			
 			for(int i =0;i<holidayConfigList.size();i++){
@@ -192,7 +194,7 @@ public class HolidayUtils {
 			
 			if(Validator.isNull(holidayConfigList) || (holidayConfigList.size() <=0)){
 			
-				holidayConfigList = HolidayConfigLocalServiceUtil.getHolidayConfig(1);
+				holidayConfigList = HolidayConfigLocalServiceUtil.getHolidayConfig(ACTIVE);
 			}
 			
 			for(int i =0;i<holidayConfigList.size();i++){
