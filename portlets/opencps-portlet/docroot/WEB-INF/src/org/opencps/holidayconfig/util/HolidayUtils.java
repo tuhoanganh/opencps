@@ -17,9 +17,16 @@ import javax.portlet.ActionResponse;
 
 
 
+
+
+
+
 import org.opencps.holidayconfig.model.HolidayConfig;
 import org.opencps.holidayconfig.service.HolidayConfigLocalServiceUtil;
+import org.opencps.holidayconfigextend.model.HolidayConfigExtend;
+import org.opencps.holidayconfigextend.service.HolidayConfigExtendLocalServiceUtil;
 
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -28,6 +35,10 @@ import com.liferay.portal.kernel.util.Validator;
 public class HolidayUtils {
 	
 	private static Log _log = LogFactoryUtil.getLog(HolidayUtils.class);
+	
+	private final static String SATURDAY = "SATURDAY";
+	private final static String SUNDAY = "SUNDAY";
+	private final static int ACTIVE = 1;
 	
 	public static Calendar getEndDate(Date baseDate,long daysDuration){
 		
@@ -40,12 +51,29 @@ public class HolidayUtils {
 		
 		
 		try{
+			
+			int saturdayIsNotHoliday = 0;
+			int sundayIsNotHoliday = 0;
+			
+	    	List<HolidayConfigExtend> holidayConfigExtendList = HolidayConfigExtendLocalServiceUtil
+	    			.getHolidayConfigExtends(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+	    	
+	    	for(HolidayConfigExtend holidayConfigExtend:holidayConfigExtendList){
+	    		
+	    		if(holidayConfigExtend.equals(SATURDAY)){
+	    			saturdayIsNotHoliday = holidayConfigExtend.getActive();
+	    		}
+	    		
+	    		if(holidayConfigExtend.equals(SUNDAY)){
+	    			sundayIsNotHoliday = holidayConfigExtend.getActive();
+	    		}
+	    	}
 		
 			for(int i=0;i<daysDuration;i++){
 				
 				baseDateCal.add(Calendar.DATE,1);
 				
-				baseDateCal = checkDay(baseDateCal,baseDate,null);
+				baseDateCal = checkDay(baseDateCal,baseDate,null,saturdayIsNotHoliday,sundayIsNotHoliday);
 				
 			}
 		}catch(Exception e){
@@ -55,7 +83,8 @@ public class HolidayUtils {
 		return baseDateCal;
 	}
 	
-	private static Calendar checkDay (Calendar baseDateCal,Date baseDate,List<HolidayConfig> holidayConfigList){
+	private static Calendar checkDay (Calendar baseDateCal,Date baseDate,List<HolidayConfig> holidayConfigList,
+			int saturdayIsNotHoliday,int sundayIsNotHoliday){
 		
 		
 		boolean isHoliday = false;
@@ -67,7 +96,8 @@ public class HolidayUtils {
 			}
 			
 			isHoliday = isHoliday(baseDateCal,holidayConfigList);
-	    	
+			
+			
 			
 			if(baseDateCal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY 
 					|| baseDateCal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || isHoliday)
@@ -75,11 +105,16 @@ public class HolidayUtils {
 	    	
 		    	baseDateCal = isHolidayCal(baseDateCal,holidayConfigList);
 		    	
-		    	baseDateCal = checkSaturday(baseDateCal);
+		    	if(saturdayIsNotHoliday == ACTIVE){
 		    	
-		    	baseDateCal = checkSunday(baseDateCal);
+		    		baseDateCal = checkSaturday(baseDateCal);
+		    	}
 		    	
-		    	checkDay(baseDateCal,baseDate,holidayConfigList);
+		    	if(sundayIsNotHoliday == ACTIVE){
+		    		baseDateCal = checkSunday(baseDateCal);
+		    	}
+		    	
+		    	checkDay(baseDateCal,baseDate,holidayConfigList,saturdayIsNotHoliday,sundayIsNotHoliday);
 			}else{
 				
 			}
