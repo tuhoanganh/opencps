@@ -724,4 +724,12 @@
 		</field>
 		<field name="status" type="String" />
 	</model>
+	<model name="org.opencps.holidayconfig.model.HolidayConfig">
+		<field name="holidayId" type="long" />
+		<field name="holiday" type="Date" />
+		<field name="description" type="String" />
+		<field name="createdDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="remove" type="int" />
+	</model>
 </model-hints>

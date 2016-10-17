@@ -147,6 +147,16 @@
 								<%=date%>
 							</span>
 						</aui:row>
+						
+						<aui:row>
+							<span class="span4 bold">
+								<liferay-ui:message key="action-date-over" />
+							</span>
+							
+							<span class="span8">
+								<%=String.valueOf(actionHistory.getDaysDelay())%>
+							</span>
+						</aui:row>
 					</aui:col>
 					<aui:col width="50">
 						<aui:row>
