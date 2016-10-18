@@ -62,7 +62,7 @@ implements PaymentFileFinder {
 	 * @return
 				 */
 	public List<PaymentFile> searchPaymentFiles(
-		   long groupId, int paymentStatus, String keywords, int start, int end)throws SystemException {
+		   long groupId, int paymentStatus, long govAgencyOrganizationId, String keywords, int start, int end)throws SystemException {
 
 			String[] names = null;
 			boolean andOperator = false;
@@ -77,7 +77,7 @@ implements PaymentFileFinder {
 				andOperator = true;
 			}
 
-			return _searchPaymentFiles(groupId, paymentStatus, andOperator, names, start, end);
+			return _searchPaymentFiles(groupId, paymentStatus,govAgencyOrganizationId, andOperator, names, start, end);
 	}
 
 	/**
@@ -87,7 +87,7 @@ implements PaymentFileFinder {
 	 * @param keywords
 	 * @return
 	 */
-	public int countPaymentFiles(long groupId, int paymentStatus, String keywords)throws SystemException {
+	public int countPaymentFiles(long groupId, int paymentStatus, long govAgencyOrganizationId, String keywords)throws SystemException {
 			String[] names = null;
 			boolean andOperator = false;
 			if (Validator.isNotNull(keywords)) {
@@ -100,11 +100,11 @@ implements PaymentFileFinder {
 			else {
 				andOperator = true;
 			}
-			return _countPaymentFiles(groupId, paymentStatus, andOperator, names);
+			return _countPaymentFiles(groupId, paymentStatus, govAgencyOrganizationId, andOperator, names);
 	}
 
 	private List<PaymentFile> _searchPaymentFiles(
-			long groupId, int paymentStatus, boolean andOperator, String[] keywords, int start, int end)throws SystemException {
+			long groupId, int paymentStatus, long govAgencyOrganizationId, boolean andOperator, String[] keywords, int start, int end)throws SystemException {
 			
 			Session session = null;
 			try {
@@ -133,7 +133,7 @@ implements PaymentFileFinder {
 				}		
 				
 				sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
-							
+				
 				SQLQuery q = session.createSQLQuery(sql);
 
 				q.setCacheable(false);
@@ -150,6 +150,8 @@ implements PaymentFileFinder {
 					qPos.add(paymentStatus);
 				}
 				
+				qPos.add(govAgencyOrganizationId);
+				
 				return (List<PaymentFile>) QueryUtil.list(
 							    q, getDialect(), start, end);
 			}catch (Exception e) {
@@ -163,7 +165,7 @@ implements PaymentFileFinder {
 	}
 
 	private int _countPaymentFiles(
-			long groupId, int paymentStatus, boolean andOperator, String[] keywords)throws SystemException {
+			long groupId, int paymentStatus, long govAgencyOrganizationId, boolean andOperator, String[] keywords)throws SystemException {
 
 		Session session = null;
 		try {
@@ -213,6 +215,8 @@ implements PaymentFileFinder {
 			if(paymentStatus>-1) {
 				qPos.add(paymentStatus);
 			}
+			
+			qPos.add(govAgencyOrganizationId);
 			
 			Iterator<Integer> itr = q.iterate();
 

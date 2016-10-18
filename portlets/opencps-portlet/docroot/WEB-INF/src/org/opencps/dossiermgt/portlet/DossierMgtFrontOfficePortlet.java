@@ -750,7 +750,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 				MessageBusUtil.sendMessage(
 					"opencps/frontoffice/out/destination", message);
-
 			}
 			else {
 				SessionErrors.add(
@@ -2522,10 +2521,15 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				actionRequest, DossierDisplayTerms.DOSSIER_STATUS);
 
 		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
+		
+		String backURL =
+						ParamUtil.getString(actionRequest, "backURL");
 
 		// String holdPosition = ParamUtil.getString(actionRequest, "hold");
 
 		Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
+		
+		boolean isUpdateStatusSuccessFlag = false;
 
 		try {
 			ServiceContext serviceContext =
@@ -2653,7 +2657,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 					themeDisplay.getLocale(),
 					MessageKeys.DEFAULT_SUCCESS_KEY_X,
 					String.valueOf(dossier.getDossierId())));
-
+			//lat co
+			isUpdateStatusSuccessFlag = true;
 		}
 		catch (Exception e) {
 
@@ -2673,8 +2678,17 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			_log.error(e);
 		}
 		finally {
-			if (Validator.isNotNull(redirectURL)) {
-				actionResponse.sendRedirect(redirectURL);
+			if (!isUpdateStatusSuccessFlag) {
+				
+				if(Validator.isNotNull(redirectURL)) {
+					actionResponse.sendRedirect(redirectURL);
+				}
+				
+			} else {
+				
+				if(Validator.isNotNull(backURL)) {
+					actionResponse.sendRedirect(backURL);
+				}
 			}
 		}
 	}
@@ -2712,7 +2726,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		int dossierFileType = PortletConstants.DOSSIER_FILE_TYPE_INPUT;
 		int syncStatus = PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC;
 		int original = PortletConstants.DOSSIER_FILE_ORIGINAL;
-
+		
 		String formData =
 			ParamUtil.getString(
 				actionRequest, DossierFileDisplayTerms.FORM_DATA);
@@ -2743,7 +2757,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				displayName = dossierPart.getPartName();
 			}
 
-			if (dossierFileId == 0) {
+			//#/issues/1112 create new dossierFile any case
+//			if (dossierFileId == 0) {
 				dossierFile =
 					DossierFileLocalServiceUtil.addDossierFile(
 						serviceContext.getUserId(), dossierId, dossierPartId,
@@ -2753,35 +2768,35 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 						formData, fileEntryId, dossierFileMark,
 						dossierFileType, dossierFileNo, dossierFileDate,
 						original, syncStatus, serviceContext);
-			}
-			else {
-				dossierFile =
-					DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
-				dossierFileMark = dossierFile.getDossierFileMark();
-				dossierFileType = dossierFile.getDossierFileType();
-				syncStatus = dossierFile.getSyncStatus();
-				original = dossierFile.getOriginal();
-
-				dossierFileNo =
-					Validator.isNotNull(dossierFile.getDossierFileNo())
-						? dossierFile.getDossierFileNo() : StringPool.BLANK;
-				templateFileNo =
-					Validator.isNotNull(dossierFile.getTemplateFileNo())
-						? dossierFile.getTemplateFileNo() : StringPool.BLANK;
-				displayName =
-					Validator.isNotNull(dossierFile.getDisplayName())
-						? dossierFile.getDisplayName() : StringPool.BLANK;
-
-				dossierFile =
-					DossierFileLocalServiceUtil.updateDossierFile(
-						dossierFileId, serviceContext.getUserId(), dossierId,
-						dossierPartId, templateFileNo, fileGroupId,
-						accountBean.getOwnerUserId(),
-						accountBean.getOwnerOrganizationId(), displayName,
-						formData, fileEntryId, dossierFileMark,
-						dossierFileType, dossierFileNo, dossierFileDate,
-						original, syncStatus, serviceContext);
-			}
+//			}
+//			else {
+//				dossierFile =
+//					DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
+//				dossierFileMark = dossierFile.getDossierFileMark();
+//				dossierFileType = dossierFile.getDossierFileType();
+//				syncStatus = dossierFile.getSyncStatus();
+//				original = dossierFile.getOriginal();
+//
+//				dossierFileNo =
+//					Validator.isNotNull(dossierFile.getDossierFileNo())
+//						? dossierFile.getDossierFileNo() : StringPool.BLANK;
+//				templateFileNo =
+//					Validator.isNotNull(dossierFile.getTemplateFileNo())
+//						? dossierFile.getTemplateFileNo() : StringPool.BLANK;
+//				displayName =
+//					Validator.isNotNull(dossierFile.getDisplayName())
+//						? dossierFile.getDisplayName() : StringPool.BLANK;
+//
+//				dossierFile =
+//					DossierFileLocalServiceUtil.updateDossierFile(
+//						dossierFileId, serviceContext.getUserId(), dossierId,
+//						dossierPartId, templateFileNo, fileGroupId,
+//						accountBean.getOwnerUserId(),
+//						accountBean.getOwnerOrganizationId(), displayName,
+//						formData, fileEntryId, dossierFileMark,
+//						dossierFileType, dossierFileNo, dossierFileDate,
+//						original, syncStatus, serviceContext);
+//			}
 
 			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 
@@ -3544,54 +3559,56 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	}
 
 	public void keywordsAutoComplete(
-		ActionRequest actionRequest, ActionResponse actionResponse)
-		throws PortalException, SystemException, IOException {
+			ActionRequest actionRequest, ActionResponse actionResponse)
+			throws PortalException, SystemException, IOException {
 
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
-
+		
 		ThemeDisplay themeDisplay =
 			(ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
-		String keywords = ParamUtil.getString(actionRequest, "keywords");
-
-		long administrationId =
-			ParamUtil.getLong(actionRequest, "administrationId");
-
+		String keywords =
+			ParamUtil.getString(actionRequest, "keywords");
+		
+		long administrationId = ParamUtil.getLong(actionRequest, "administrationId");
+		
 		List<ServiceInfo> serviceInfos = new ArrayList<ServiceInfo>();
-
+		
 		DictItem domainItem = null;
-
+		
 		String administrationIndex = StringPool.BLANK;
-
-		if (administrationId > 0) {
-
+		
+		if(administrationId > 0){
+			
 			domainItem = DictItemLocalServiceUtil.getDictItem(administrationId);
-
+			
 			administrationIndex = domainItem.getTreeIndex();
-
+			
 		}
-
-		serviceInfos =
-			ServiceInfoLocalServiceUtil.getServiceInFosByG_DI_Status(
-				themeDisplay.getScopeGroupId(), StringPool.BLANK,
-				administrationIndex, 1, keywords, QueryUtil.ALL_POS,
-				QueryUtil.ALL_POS, null);
-
+		
+		serviceInfos = ServiceInfoLocalServiceUtil.getServiceInFosByG_DI_Status(themeDisplay.getScopeGroupId(), 
+				StringPool.BLANK, 
+				administrationIndex, 
+				1, 
+				keywords,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+		
 		for (ServiceInfo serviceInfo : serviceInfos) {
 
 			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
-
-			jsonObject.put(
-				"serviceinfoId", String.valueOf(serviceInfo.getServiceinfoId()));
-
-			jsonObject.put("serviceName", serviceInfo.getServiceName());
-
+			
+			jsonObject.put("serviceinfoId",
+					String.valueOf(serviceInfo.getServiceinfoId()));
+					
+			jsonObject.put("serviceName",
+					serviceInfo.getServiceName());
+			
 			jsonArray.put(jsonObject);
 		}
-
+		
 		PortletUtil.writeJSON(actionRequest, actionResponse, jsonArray);
 	}
-
+	
 	private boolean _hasPermission = true;
 
 	public boolean hasPermission() {

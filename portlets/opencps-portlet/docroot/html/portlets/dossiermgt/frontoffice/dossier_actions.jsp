@@ -84,6 +84,7 @@
 	<portlet:param name="<%=Constants.CMD%>" value="<%=Constants.VIEW%>" />
 	<portlet:param name="isEditDossier" value="<%=String.valueOf(false)%>" />
 	<portlet:param name="redirectURL" value="<%=currentURL%>" />
+	<portlet:param name="backURL" value="<%=currentURL %>"/>
 </portlet:renderURL>
 <liferay-ui:icon cssClass="search-container-action fa view" image="view"
 	message="view" url="<%=viewDossierURL.toString()%>" />

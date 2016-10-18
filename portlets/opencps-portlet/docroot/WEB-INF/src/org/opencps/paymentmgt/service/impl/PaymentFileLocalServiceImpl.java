@@ -292,11 +292,11 @@ public class PaymentFileLocalServiceImpl
 	 * @return
 	 */
 	public int countPaymentFiles(
-		long groupId, int paymentStatus, String keywords) {
+		long groupId, int paymentStatus, long govAgencyOrganizationId, String keywords) {
 
 		try {
 			return paymentFileFinder.countPaymentFiles(
-				groupId, paymentStatus, keywords);
+				groupId, paymentStatus, govAgencyOrganizationId, keywords);
 		}
 		catch (SystemException e) {
 			// TODO Auto-generated catch block
@@ -429,14 +429,14 @@ public class PaymentFileLocalServiceImpl
 	 * @return
 	 */
 	public List<PaymentFile> searchPaymentFiles(
-		long groupId, int paymentStatus, String keywords, int start, int end) {
+		long groupId, int paymentStatus, long govAgencyOrganizationId, String keywords, int start, int end) {
 
 		List<PaymentFile> listPaymentFile = new ArrayList<PaymentFile>();
 
 		try {
 			listPaymentFile =
 				paymentFileFinder.searchPaymentFiles(
-					groupId, paymentStatus, keywords, start, end);
+					groupId, paymentStatus, govAgencyOrganizationId, keywords, start, end);
 		}
 		catch (SystemException e) {
 			// TODO Auto-generated catch block
