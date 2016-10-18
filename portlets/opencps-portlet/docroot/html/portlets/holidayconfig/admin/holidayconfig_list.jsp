@@ -19,8 +19,29 @@
 
 <%@ include file="../init.jsp"%>
 
-<table>
+<%
 	
+%>
+
+<table>
+		
+	<tbody>
+		<tr>
+			<th>STT</th>
+			<th>Holiday‰</th>
+			<th>Description</th>
+			<th>Status</th>
+			<th>Edit</th>
+		</tr>
+		<tr>
+			<td>1</td>
+			<td>16/10/2016</td>
+			<td></td>
+			<td></td>
+			<td>Edit</td>
+		</tr>
+		<tr></tr>
+	</tbody>
 
 </table>
 
