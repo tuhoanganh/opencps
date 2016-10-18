@@ -1,3 +1,5 @@
+<%@page import="org.opencps.util.AccountUtil"%>
+<%@page import="org.opencps.dossiermgt.bean.AccountBean"%>
 <%@page import="org.opencps.paymentmgt.util.PaymentMgtUtil"%>
 <%@page import="java.util.Locale"%>
 <%@page import="java.text.NumberFormat"%>
@@ -82,22 +84,18 @@
 			}
 			List<PaymentFile> dossierFiles = null;
 			Integer totalCount = 0;
-			if (keywordArrs != null || paymentStatus >-1) {
-				try {
-					dossierFiles = PaymentFileLocalServiceUtil.searchPaymentFiles(themeDisplay.getScopeGroupId(), paymentStatus, keywords, searchContainer.getStart(), searchContainer.getEnd());
-					totalCount = PaymentFileLocalServiceUtil.countPaymentFiles(themeDisplay.getScopeGroupId(), paymentStatus, keywords);
-				} catch(Exception e){
-					_log.error(e);
-				}
-				
-			}else{
-				try {
-					dossierFiles = PaymentFileLocalServiceUtil.getPaymentFiles(searchContainer.getStart(), searchContainer.getEnd());
-					totalCount = PaymentFileLocalServiceUtil.getPaymentFilesCount();
-				} catch(Exception e){
-					_log.error(e);
-				}
+			
+			AccountBean accBean = AccountUtil.getAccountBean(request);
+			
+			long govOrganizationId = accBean.getOwnerOrganizationId();
+			
+			try {
+				dossierFiles = PaymentFileLocalServiceUtil.searchPaymentFiles(themeDisplay.getScopeGroupId(), paymentStatus, govOrganizationId, keywords, searchContainer.getStart(), searchContainer.getEnd());
+				totalCount = PaymentFileLocalServiceUtil.countPaymentFiles(themeDisplay.getScopeGroupId(), paymentStatus, govOrganizationId, keywords);
+			} catch(Exception e){
+				_log.error(e);
 			}
+			
 			total = totalCount;
 			results = dossierFiles;
 			
