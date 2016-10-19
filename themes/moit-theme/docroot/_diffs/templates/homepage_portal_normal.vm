@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+
+<html class="$root_css_class" dir="#language ("lang.dir")" lang="$w3c_language_id">
+
+<head>
+	<title>$the_title - $company_name</title>
+
+	<meta content="initial-scale=1.0, width=device-width" name="viewport" />
+
+	$theme.include($top_head_include)
+</head>
+
+<body class="$css_class mBody">
+
+<a href="#main-content" id="skip-to-content">#language ("skip-to-content")</a>
+
+$theme.include($body_top_include)
+
+#if ($is_signed_in)
+	#dockbar()
+#end
+
+<div class="container-fluid home-theme">
+	<header id="banner" role="banner">
+		<div class="header container">
+			<a class="logo" href="$site_default_url" title="#language_format ("go-to-x", [$site_name])"></a>
+			<div class="side-head">
+				<div class="sub-menu">
+					#if ($has_navigation || $is_signed_in)
+						#parse ("$full_templates_path/navigation_public_page.vm")
+					#end
+				</div>
+				<div class="info">
+					<ul>
+						<li>Điện thoại: <span>(04) 22202222</span></li>
+						<li>Fax: <span>(04) 22202525</span></li>
+						<li>Email: <span>bbt@moit.gov.vn</span></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		#* #if (!$is_signed_in)
+			<a data-redirect="$is_login_redirect_required" href="$sign_in_url" id="sign-in" rel="nofollow">$sign_in_text</a>
+		#end *#
+
+		#if ($has_navigation || $is_signed_in)
+			#parse ("$full_templates_path/navigation.vm")
+		#end
+	</header>
+
+	<div id="content">
+		<div class="container">
+			#if ($selectable)
+				$theme.include($content_include)
+			#else
+				$portletDisplay.recycle()
+	
+				$portletDisplay.setTitle($the_title)
+	
+				$theme.wrapPortlet("portlet.vm", $content_include)
+			#end
+		</div>
+	</div>
+
+	<footer id="footer" role="contentinfo">
+		<div class="site-info">
+			<div class="container">
+				<div class="row">
+					<div class="danhmuc col-sm-3">
+			            <p class="title">#language ("danhmuc-key")</p>
+			            <ul>
+			                <li><a href="">#language ("home-page-key")</a></li>
+			                <li><a href="">#language ("notifier-key")</a></li>
+			                <li><a href="">#language ("van-ban-phap-luat-key")</a></li>
+			                <li><a href="">#language ("serviceinfo-key")</a></li>
+			            </ul>
+			        </div>
+			        <div class="huongdan col-sm-3">
+			            <p class="title">#language ("conduct-key")</p>
+			            <ul>
+			                <li><a href="">#language ("account-register-key")</a></li>
+			                <li><a href="">#language ("system-login-key")</a></li>
+			                <li><a href="">#language ("nop-hstt-key")</a></li>
+			                <li><a href="">#language ("tracuu-ketqua-key")</a></li>
+			                <li><a href="">#language ("cbxl-nophs-key")</a></li>
+			            </ul>
+			        </div>
+			        <div class="lienhehotro col-sm-3">
+			            <p class="title">#language ("lienhehotro-key")</p>
+			            <p class="diachi"><i class="fa fa-map-marker"></i> #language ("nhavapa-key") #language ("tonthatthuyet-street-key")</p>
+			            <p class="phone"><i class="fa fa-phone"></i> (04) 22202222</p>
+			            <p class="fax"><i class="fa fa-print"></i> (04) 22202525</p>
+			            <p class="mail"><i class="fa fa-envelope-o"></i> bbt@moit.gov.vn</p>
+			        </div>
+			        <div class="lienketwebsite col-sm-3">
+			            <p class="title">#language ("lienketwebsite-key")</p>
+			            <div class="select">
+			                <select>
+			                    <option>#language ("chon-lienketwebsite-key")</option>
+			                </select>
+			            </div>
+			        </div>
+			    </div>
+			</div>
+		</div>
+		<div class="footer">
+			<div class="container">
+				<span><i class="fa fa-copyright"></i> Bản quyền thuộc Bộ Công Thương</span>
+			</div>
+		</div>
+	</footer>
+</div>
+
+$theme.include($body_bottom_include)
+
+$theme.include($bottom_include)
+
+</body>
+
+</html>
