@@ -212,6 +212,7 @@
 
 <aui:row cssClass="nav-content-row">
 	<aui:col width="100">
+		<p class=address-hint><liferay-ui:message key="address-hint"/></p>
 		<aui:input 
 			name="<%=DossierDisplayTerms.ADDRESS %>" 
 			cssClass="" 

@@ -263,3 +263,10 @@
 .opencps-theme.ux .opencps-form-navigator-container .nav-content-row.hidden-option {
     display: none;
 }
+
+.opencps-theme.ux .opencps-form-navigator-container .nav-content-row .address-hint {
+    color: #005dff;
+	font-size: small;
+	font-style: italic;
+	margin-left: 130px;
+}
