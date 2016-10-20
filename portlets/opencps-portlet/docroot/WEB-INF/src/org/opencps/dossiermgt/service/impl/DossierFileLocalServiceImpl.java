@@ -32,7 +32,6 @@ import org.opencps.dossiermgt.service.base.DossierFileLocalServiceBaseImpl;
 import org.opencps.processmgt.model.WorkflowOutput;
 import org.opencps.util.PortletConstants;
 
-import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
