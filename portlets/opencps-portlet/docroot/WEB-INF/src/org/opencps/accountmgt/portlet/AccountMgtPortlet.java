@@ -61,6 +61,7 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.util.PwdGenerator;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 /**
@@ -173,6 +174,9 @@ public class AccountMgtPortlet extends MVCPortlet {
 
 		int accountStatus = -1;
 		
+		String password = PwdGenerator
+			    .getPassword();
+		
 		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
 		
 		try {
@@ -235,9 +239,7 @@ public class AccountMgtPortlet extends MVCPortlet {
 				    .getUser(mappingUserId);
 
 				if (mappingUser != null) {
-
-					MessageBusUtil
-					    .sendEmailWelcomeNewUser(mappingUser, serviceContext);
+					MessageBusUtil.sendEmailActiveAccount(mappingUser, password, serviceContext);
 				}
 
 			}

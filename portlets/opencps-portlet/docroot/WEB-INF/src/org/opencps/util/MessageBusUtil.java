@@ -47,7 +47,7 @@ import com.liferay.util.PwdGenerator;
 public class MessageBusUtil {
 
 	public static void sendEmailAddressVerification(
-	    String uuid, User user, String emailAddress, String type,
+	    String uuid, User user, String emailAddress, String type, String emailConfigStep,
 	    ServiceContext serviceContext)
 	    throws PortalException, SystemException {
 
@@ -72,7 +72,7 @@ public class MessageBusUtil {
 		    .getPortalURL() + "/opencps-portlet/verify/email?token=" + uuid +
 		    "&ticketKey=" + ticket
 		        .getKey() +
-		    "&type=" + type;
+		    "&type=" + type + "&emailConfigStep=" + emailConfigStep;
 
 		long plid = serviceContext
 		    .getPlid();
