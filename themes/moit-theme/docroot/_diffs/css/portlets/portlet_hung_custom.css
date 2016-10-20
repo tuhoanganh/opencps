@@ -419,16 +419,21 @@
 
 .portlet-boundary_73_ .portlet-body ul {
 	background-color: transparent;
-	border-bottom: 1px solid #555;
-	padding: 5px 10px;
-	font-size: 14px;
+	padding: 5px 0;
 }
- .portlet-boundary_73_ .portlet-body ul li .divider {
+.portlet-boundary_73_ .portlet-body ul li .divider {
  	color: #555;
- }
- .portlet-boundary_73_ .portlet-body ul li:last-child .divider {
+}
+.portlet-boundary_73_ .portlet-body ul li:before {
+ 	content: "";
+ 	padding: 0;
+}
+.portlet-boundary_73_ .portlet-body ul li:last-child .divider {
  	display: none;
- }
+}
+.portlet-boundary_73_ .portlet-body ul li:last-child a {
+	color: #1977d2
+}
  
 /*---------- CSS th table ----------*/
 

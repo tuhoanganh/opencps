@@ -60,7 +60,7 @@
 .opencps-theme.ux #main-content {
 	padding: 25px 0px;
 	margin: auto;
-	width: 1170px;
+	width: 100%;
 }
 
 @media (max-width: 1000px) {

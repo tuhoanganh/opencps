@@ -3,14 +3,18 @@ body.mBody {
 	font-family: 'Roboto-Regular';
 	padding-bottom: 20px;
 }
-.home-theme.container {
+.moit-theme .portlet-column-content.empty {
+	padding: 0;
+}
+.moit-theme.container {
 	padding: 0 !important;
 }
-.home-theme {
-	background-color: white;
+.moit-theme {
+	background-color: #fafafa;
 	-webkit-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75);
 	-moz-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75);
 	box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75);
+	border-radius: 0 0 7px 7px;
 }
 
 /*--------------------
@@ -41,82 +45,62 @@ body.mBody {
 --------------------*/
  
 /*----- Home -----*/
-.home-theme nav {
+.moit-theme nav {
 	height: 42px;
 }
-.home-theme nav ul {
+.moit-theme nav ul {
 	margin: auto;
 	padding: 0;
 	width: 1170px;
 	overflow: hidden;
 	background-image: url("../images/bg_menu.jpg");
 }
-.home-theme nav ul li {
+.moit-theme nav ul li {
 	float: left;
 	list-style: none;
 }
-.home-theme nav ul li a {
+.moit-theme nav ul li a {
 	padding: 0 20px;
 	line-height: 42px;
 	color: white;
 	font-family: 'Roboto-Bold';
 	display: block;
 }
-.home-theme nav ul li.selected a, .home-theme nav ul li:hover a {
+.moit-theme nav ul li.selected a, .moit-theme nav ul li:hover a {
 	text-decoration: none;
 	color: white;
 	background-color: transparent;
 }
 
 /*----- Pages -----*/
-.opencps-theme.page-theme nav {
-    height: auto;
-    background-color: #06537c;
-    font-family: 'Roboto-Bold';
-}
-.opencps-theme.page-theme nav ul {
-    overflow: hidden;
-    margin-bottom: 0;
-}
-.opencps-theme.page-theme nav ul > li {
-    float: left;
-}
-.opencps-theme.page-theme nav ul > li > a {
-    line-height: 43px;
-    padding: 13px 30px;
-    color: white;
-}
-.opencps-theme.page-theme nav ul .floatright {
+.moit-theme nav ul .floatright {
 	float: right;
 }
-.opencps-theme.page-theme nav ul > li.selected > a, .opencps-theme.page-theme nav ul > li:hover > a {
+.moit-theme nav ul > li.selected > a, .moit-theme nav ul > li:hover > a {
 	background-color: #007db7;
 	color: white;
 	text-decoration: none;
 }
-.opencps-theme.page-theme.ux nav .logout{
+.moit-theme nav .logout{
     display: inline-block;
-    padding: 11px 0px 0px 0px;
 }
-.opencps-theme.page-theme.ux nav .logout a{
+.moit-theme nav .logout a{
       color: white;
 }
-.opencps-theme.page-theme.ux nav .logout a:before {
+.moit-theme nav .logout a:before {
     content: "\f08b";
     font-family: FontAwesome;
     margin-right: 5px;
 }
-.opencps-theme.page-theme nav ul > li.account-info > a {
-	text-indent: -9999px;
+.moit-theme nav ul > li.account-info > a {
 	background: transparent url("../images/welcome_h.png") no-repeat scroll left center;
-	height: 18px;
 	cursor: pointer;
+	padding-left: 25px;
 }
-.opencps-theme.page-theme nav ul > li.account-info > a:hover{
-	text-indent: -9999px;
+.moit-theme nav ul > li.account-info > a:hover{
 	background: transparent url("../images/welcome_new.png") no-repeat scroll left center;
-	height: 18px;
 	cursor: pointer;
+	color: white;
 }
 
 
@@ -124,7 +108,8 @@ body.mBody {
 /*--------------------
 		Content
 --------------------*/
-.Layout_BCT_Home > div {
+.Layout_BCT_Home > div, 
+.home-theme #main-content > div:last-child {
 	display: -webkit-box;
 	display: -webkit-flex;
 	display: -ms-flexbox;
@@ -135,15 +120,18 @@ body.mBody {
 }
 .Layout_BCT_Home div[id^="column-"] > div, 
 .Layout_BCT_Home div[id^="column-"] > div > div,
-.Layout_BCT_Home div[id^="column-"] section {
+.Layout_BCT_Home div[id^="column-"] section, 
+.home-theme #main-content > div:last-child div[id^="column-"] > div, 
+.home-theme #main-content > div:last-child div[id^="column-"] > div > div,
+.home-theme #main-content > div:last-child div[id^="column-"] section  {
 	height: 100%;
 }
 
 .home-theme .portlet {
 	border-radius: 7px;
-	-webkit-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75);
-	-moz-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75);
-	box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75);
+	-webkit-box-shadow: 2px 2px 5px 0px rgba(50, 50, 50, 0.75);
+	-moz-box-shadow: 2px 2px 5px 0px rgba(50, 50, 50, 0.75);
+	box-shadow: 2px 2px 5px 0px rgba(50, 50, 50, 0.75);
 }
 .home-theme .portlet header {
 	height: 50px;
@@ -306,6 +294,31 @@ body.mBody {
 	font-family: FontAwesome;
 }
 
+/*----- Portlet Manual -----*/
+.manual {
+	margin: -15px -15px -10px !important;
+}
+.manual li:nth-child(even) {
+	background-color: #F6F6F6;
+}
+.manual li a {
+	display: block;
+	font-family: 'Roboto-Medium';
+	line-height: 50px;
+	padding: 0 20px;
+}
+.manual li a:hover {
+	color: #1c87e3;
+	text-decoration: none;
+}
+.manual li span {
+	display: none;
+}
+.home-theme .link-download, .home-theme .link-download:hover {
+	text-decoration: underline;
+	color: #1c87e3;
+}
+
 
  
 /*--------------------
@@ -316,12 +329,41 @@ footer {
 }
 footer p {
 	font-family: 'Roboto-Bold';
+	color: #1977d2;
 }
-footer span {
+footer .lH60 {
  	line-height: 60px;
 }
-footer .blue {
-	color: #1977d2;
+footer .footer {
+	padding: 20px 0 10px;
+}
+footer .footer span {
+	line-height: normal;
+	margin-bottom: 5px;
+	display: block;
+}
+footer .footer p:first-child {
+	position: relative;
+}
+footer .footer p:first-child span {
+	background-color: #fafafa;
+	padding: 0 10px;
+	position: relative;
+	display: inline-block;
+}
+footer .footer p:first-child:before {
+	content: "";
+	position: absolute;
+	height: 1px;
+	width: 100%;
+    top: 50%;
+    left: 0;
+    background-color: #ccc;
+}
+
+body.home_bg footer .footer, 
+body:not(.home_bg) footer .lH60 {
+	display: none;
 }
 
 
@@ -330,8 +372,148 @@ footer .blue {
 		Login
 --------------------*/
 .ux-sign-in-wrapper {}
-.ux-sign-in-wrapper .advance-signin {
+.ux-sign-in-wrapper .default-sign-in {
+	border-radius: 7px;
+	-webkit-box-shadow: 2px 2px 5px 0px rgba(50, 50, 50, 0.75);
+	-moz-box-shadow: 2px 2px 5px 0px rgba(50, 50, 50, 0.75);
+	box-shadow: 2px 2px 5px 0px rgba(50, 50, 50, 0.75);
+	border: 1px solid #666;
+    padding: 20px;
+    overflow: hidden;
+}
+.ux-sign-in-wrapper .advance-signin, 
+.ux-sign-in-wrapper .title {
 	display: none;
+}
+.ux-sign-in-wrapper .input-prepend {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	margin-bottom: 15px;
+}
+.ux-sign-in-wrapper .input-prepend .add-on {
+    display: none
+}
+.ux-sign-in-wrapper .input-prepend .control-group {
+	margin: 0;
+	width: 100%;
+}
+.moit-theme .ux-sign-in-wrapper .forgot-password a {
+	line-height: 33px;
+	color: #666;
+}
+.moit-theme .ux-sign-in-wrapper .button-holder {
+	float: right;
+	margin: 0;
+}
+.moit-theme .ux-sign-in-wrapper .button-holder button {
+	background: url("../images/bg_register.png") 0 0 no-repeat;
+	background-size: 100% 100%;
+	border: 0;
+	color: #1c87e3;
+	font-family: 'Roboto-Medium';
+	position: relative;
+}
+.moit-theme .ux-sign-in-wrapper .button-holder button:before {
+	content: "";
+	position: absolute;
+	right: 32px;
+	top: 0;
+	height: 100%;
+	width: 1px;
+	background-color: #666
+}
+.moit-theme .ux-sign-in-wrapper .button-holder button:after {
+	content: "\f090";
+	font-family: FontAwesome;
+	padding-left: 14px;	
+}
+
+
+
+/*--------------------
+		Register
+--------------------*/
+.portlet-boundary_5_WAR_opencpsportlet_ {
+    width: 80%;
+    margin: auto;
+    background-color: white;
+}
+.home-theme .portlet-boundary_5_WAR_opencpsportlet_ .portlet-content {
+    padding: 30px;
+}
+.portlet-boundary_5_WAR_opencpsportlet_ .portlet-content .register-content .title-text, 
+.portlet-boundary_5_WAR_opencpsportlet_ .portlet-content .register-content .login-redirect {
+    visibility: hidden;
+}
+.portlet-boundary_5_WAR_opencpsportlet_ .portlet-content .register-content .content-part {
+    float: left;
+    width: 48%;
+}
+.portlet-boundary_5_WAR_opencpsportlet_ .portlet-content .register-content .content-part.left {
+    margin-right: 4%;
+}
+.portlet-boundary_5_WAR_opencpsportlet_ .portlet-content .register-content .content-part .row-fluid, 
+.portlet-boundary_5_WAR_opencpsportlet_ .portlet-content .register-content .content-part .span12 {
+    margin: 0;
+    padding: 0;
+}
+.portlet-boundary_5_WAR_opencpsportlet_ .portlet-content .register-content .content-part label, 
+.portlet-boundary_5_WAR_opencpsportlet_ .portlet-content .register-content .content-part input[type="file"] {
+    display: none;
+}
+.portlet-boundary_5_WAR_opencpsportlet_ .portlet-content .register-content .content-part .control-group {
+	margin-bottom: 0;
+}
+.portlet-boundary_5_WAR_opencpsportlet_ .portlet-content .register-content .content-part .control-group input[type="text"], 
+.portlet-boundary_5_WAR_opencpsportlet_ .portlet-content .register-content .content-part .control-group select, 
+.home-theme .portlet-boundary_5_WAR_opencpsportlet_ .portlet-content .header {
+    margin-bottom: 25px;
+}
+.portlet-boundary_5_WAR_opencpsportlet_ .portlet-content .register-content .content-part input[type="text"], 
+.portlet-boundary_5_WAR_opencpsportlet_ .portlet-content .register-content .content-part select {
+    height: 40px !important;
+    width: 100%;
+}
+.portlet-boundary_5_WAR_opencpsportlet_ .portlet-content .register-content .help-inline {
+	position: absolute;
+	color: #a94442;
+}
+.portlet-boundary_5_WAR_opencpsportlet_ .portlet-content .register-content .input-text-wrapper label, 
+.portlet-boundary_5_WAR_opencpsportlet_ .portlet-content .register-content .term-user label {
+	display: inline-block;
+}
+.portlet-boundary_5_WAR_opencpsportlet_ .portlet-content .register-content > .row-fluid {
+	text-align: center;
+	clear: both;
+}
+.portlet-boundary_5_WAR_opencpsportlet_ .portlet-content .register-content button {
+	width: 230px;
+	height: 40px;
+	background-color: #1977D1;
+	font-family: 'Roboto-Medium';
+	font-size: 16px;
+	margin-top: 25px;
+}
+.register-content .ocps-fake_textarea-bound, 
+.home-theme .portlet-boundary_5_WAR_opencpsportlet_ .portlet-content .register-content .ocps-fake_textarea-bound * {
+    display: inline-block;
+}
+.home-theme .portlet-boundary_5_WAR_opencpsportlet_ .portlet-content .register-content .ocps-fake_textarea-bound .fake_textarea .control-group {
+	margin-bottom: 5px;
+	display: block;
+}
+.home-theme .register-content .ocps-fake_textarea-bound .fake_textarea {
+    float: right;
+    height: 90px;
+    overflow: auto;
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+    padding: 10px;
+}
+.home-theme .register-content .ocps-fake_textarea-bound .fake_textarea label{
+	font-weight: normal;
 }
 
 
