@@ -24,6 +24,7 @@ import org.opencps.backend.message.SendToBackOfficeMsg;
 import org.opencps.backend.message.SendToCallbackMsg;
 import org.opencps.backend.util.BackendUtils;
 import org.opencps.dossiermgt.model.Dossier;
+import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLogLocalServiceUtil;
@@ -66,8 +67,7 @@ public class SyncFromBackOffice implements MessageListener {
 
 		boolean trustServiceMode =
 			BackendUtils.checkServiceMode(toBackOffice.getDossierId());
-		
-		
+
 		if (trustServiceMode) {
 			boolean statusUpdate = false;
 
@@ -91,82 +91,88 @@ public class SyncFromBackOffice implements MessageListener {
 				List<WorkflowOutput> workflowOutputs =
 					WorkflowOutputLocalServiceUtil.getByProcessWFPostback(
 						toBackOffice.getProcessWorkflowId(), true);
+				// Lat co trang thai dossier file
+				List<DossierFile> dossierFiles =
+					DossierFileLocalServiceUtil.updateDossierFileResultSyncStatus(
+						0, toBackOffice.getDossierId(),
+						PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
+						PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC,
+						0, workflowOutputs);
 
-				DossierFileLocalServiceUtil.updateDossierFileResultSyncStatus(
-					0, toBackOffice.getDossierId(),
-					PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS,
-					workflowOutputs);
-				
-				//Update DossierLog 
-				
+				// Update DossierLog
+
 				Dossier dossier =
-				    DossierLocalServiceUtil.fetchDossier(toBackOffice.getDossierId());
+					DossierLocalServiceUtil.fetchDossier(toBackOffice.getDossierId());
 
 				ActorBean actorBean =
-				    new ActorBean(
-				        toBackOffice.getActor(), toBackOffice.getActorId());				
-				
+					new ActorBean(
+						toBackOffice.getActor(), toBackOffice.getActorId());
+
 				boolean isPayment = toBackOffice.isPayment();
-				
+
 				boolean isResubmit = toBackOffice.isResubmit();
-				
+
 				if (isPayment) {
 					DossierLogLocalServiceUtil.addCommandRequest(
-					    dossier.getUserId(), dossier.getGroupId(),
-					    dossier.getCompanyId(), toBackOffice.getDossierId(),
-					    toBackOffice.getFileGroupId(),
-					    toBackOffice.getDossierStatus(),
-					    toBackOffice.getActionInfo(),
-					    toBackOffice.getMessageInfo(), new Date(), 0,
-					    toBackOffice.getSyncStatus(), actorBean.getActor(),
-					    actorBean.getActorId(), actorBean.getActorName(),
-					    SyncFromBackOffice.class.getName(),
-					    WebKeys.DOSSIER_LOG_PAYMENT_REQUEST);
+						dossier.getUserId(), dossier.getGroupId(),
+						dossier.getCompanyId(), toBackOffice.getDossierId(),
+						toBackOffice.getFileGroupId(),
+						toBackOffice.getDossierStatus(),
+						toBackOffice.getActionInfo(),
+						toBackOffice.getMessageInfo(), new Date(), 0,
+						toBackOffice.getSyncStatus(), actorBean.getActor(),
+						actorBean.getActorId(), actorBean.getActorName(),
+						SyncFromBackOffice.class.getName(),
+						WebKeys.DOSSIER_LOG_PAYMENT_REQUEST);
 
 				}
 
 				if (isResubmit) {
 					DossierLogLocalServiceUtil.addCommandRequest(
-					    dossier.getUserId(), dossier.getGroupId(),
-					    dossier.getCompanyId(), toBackOffice.getDossierId(),
-					    toBackOffice.getFileGroupId(),
-					    toBackOffice.getDossierStatus(),
-					    toBackOffice.getActionInfo(),
-					    toBackOffice.getMessageInfo(), new Date(), 0,
-					    toBackOffice.getSyncStatus(), actorBean.getActor(),
-					    actorBean.getActorId(), actorBean.getActorName(),
-					    SyncFromBackOffice.class.getName(),
-					    WebKeys.DOSSIER_LOG_RESUBMIT_REQUEST);
+						dossier.getUserId(), dossier.getGroupId(),
+						dossier.getCompanyId(), toBackOffice.getDossierId(),
+						toBackOffice.getFileGroupId(),
+						toBackOffice.getDossierStatus(),
+						toBackOffice.getActionInfo(),
+						toBackOffice.getMessageInfo(), new Date(), 0,
+						toBackOffice.getSyncStatus(), actorBean.getActor(),
+						actorBean.getActorId(), actorBean.getActorName(),
+						SyncFromBackOffice.class.getName(),
+						WebKeys.DOSSIER_LOG_RESUBMIT_REQUEST);
 				}
-				
+
 				if (!isResubmit && !isPayment) {
 					DossierLogLocalServiceUtil.addDossierLog(
-					    dossier.getUserId(), dossier.getGroupId(),
-					    dossier.getCompanyId(), toBackOffice.getDossierId(),
-					    toBackOffice.getFileGroupId(),
-					    toBackOffice.getDossierStatus(),
-					    toBackOffice.getActionInfo(),
-					    toBackOffice.getMessageInfo(), new Date(), 0,
-					    toBackOffice.getSyncStatus(), actorBean.getActor(),
-					    actorBean.getActorId(), actorBean.getActorName(),
-					    SyncFromBackOffice.class.getName());
+						dossier.getUserId(), dossier.getGroupId(),
+						dossier.getCompanyId(), toBackOffice.getDossierId(),
+						toBackOffice.getFileGroupId(),
+						toBackOffice.getDossierStatus(),
+						toBackOffice.getActionInfo(),
+						toBackOffice.getMessageInfo(), new Date(), 0,
+						toBackOffice.getSyncStatus(), actorBean.getActor(),
+						actorBean.getActorId(), actorBean.getActorName(),
+						SyncFromBackOffice.class.getName());
 				}
+
+				SendToCallbackMsg toCallBack = new SendToCallbackMsg();
+
+				toCallBack.setProcessOrderId(toBackOffice.getProcessOrderId());
+				toCallBack.setSyncStatus(statusUpdate ? "ok" : "error");
+				toCallBack.setDossierStatus(toBackOffice.getDossierStatus());
+				Message sendToCallBack = new Message();
+
+				sendToCallBack.put("toCallback", toCallBack);
+
+				MessageBusUtil.sendMessage(
+					"opencps/backoffice/engine/callback", sendToCallBack);
+				// Lat co trang thai dossier file
+				DossierFileLocalServiceUtil.updateDossierFileSyncStatus(
+					0, PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS,
+					dossierFiles);
 			}
 			catch (Exception e) {
 				_log.error(e);
 			}
-
-			SendToCallbackMsg toCallBack = new SendToCallbackMsg();
-
-			toCallBack.setProcessOrderId(toBackOffice.getProcessOrderId());
-			toCallBack.setSyncStatus(statusUpdate ? "ok" : "error");
-			toCallBack.setDossierStatus(toBackOffice.getDossierStatus());
-			Message sendToCallBack = new Message();
-
-			sendToCallBack.put("toCallback", toCallBack);
-
-			MessageBusUtil.sendMessage(
-				"opencps/backoffice/engine/callback", sendToCallBack);
 
 		}
 

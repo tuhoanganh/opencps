@@ -28,10 +28,8 @@ import org.opencps.backend.message.SendToCallbackMsg;
 import org.opencps.backend.util.BackendUtils;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierFile;
-import org.opencps.dossiermgt.model.DossierPart;
 import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
-import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
 import org.opencps.jms.context.JMSHornetqContext;
 import org.opencps.jms.message.SubmitPaymentFileMessage;
 import org.opencps.jms.message.SyncFromBackOfficeMessage;
@@ -128,17 +126,14 @@ public class MsgOutBackOffice implements MessageListener {
 
 					// Check file return
 					for (WorkflowOutput workflowOutput : workflowOutputs) {
-
 						List<DossierFile> dossierFilesTemp = null;
 						try {
-							DossierPart dossierPart =
 
-								DossierPartLocalServiceUtil.getDossierPart(workflowOutput.getDossierPartId());
 							dossierFilesTemp =
 								DossierFileLocalServiceUtil.getDossierFileByDID_SS_DPID_R(
 									toBackOffice.getDossierId(),
 									PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC,
-									dossierPart.getDossierpartId(), 0);
+									workflowOutput.getDossierPartId(), 0);
 
 							dossierFiles.addAll(dossierFilesTemp);
 						}
@@ -146,11 +141,6 @@ public class MsgOutBackOffice implements MessageListener {
 							_log.error(e);
 						}
 					}
-
-					DossierFileLocalServiceUtil.updateDossierFileResultSyncStatus(
-						0, toBackOffice.getDossierId(),
-						PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS,
-						workflowOutputs);
 
 					List<DossierFileMsgBody> lstDossierFileMsgBody =
 						JMSMessageBodyUtil.getDossierFileMsgBody(dossierFiles);
@@ -178,13 +168,13 @@ public class MsgOutBackOffice implements MessageListener {
 					syncFromBackOfficeMsgBody.setMessageInfo(toBackOffice.getMessageInfo());
 					syncFromBackOfficeMsgBody.setFileGroupId(toBackOffice.getFileGroupId());
 					syncFromBackOfficeMsgBody.setRequestCommand(toBackOffice.getRequestCommand());
-					
-					if(Validator.isNotNull(toBackOffice.getDossierLogOId())){
-						
+
+					if (Validator.isNotNull(toBackOffice.getDossierLogOId())) {
+
 					}
-					//syncFromBackOfficeMsgBody.setActionHistory(actionHistory);
-					//syncFromBackOfficeMsgBody.setDossierLog(dossierLog);
-					
+					// syncFromBackOfficeMsgBody.setActionHistory(actionHistory);
+					// syncFromBackOfficeMsgBody.setDossierLog(dossierLog);
+
 					syncFromBackoffice.sendMessageByHornetq(syncFromBackOfficeMsgBody);
 
 					// Send to Callback
@@ -199,6 +189,14 @@ public class MsgOutBackOffice implements MessageListener {
 
 					MessageBusUtil.sendMessage(
 						"opencps/backoffice/engine/callback", sendToCallBack);
+
+					// Lat co trang trai sau khi gui thanh cong len jms va
+					// engine
+					DossierFileLocalServiceUtil.updateDossierFileResultSyncStatus(
+						0, toBackOffice.getDossierId(),
+						PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC,
+						PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS,
+						0, workflowOutputs);
 
 					_log.info("####################MsgOutBackOffice: Sended Synchronized JMSSyncFromBackOffice");
 				}

@@ -557,6 +557,16 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			MessageBusUtil.sendMessage(
 				"opencps/backoffice/engine/destination", message);
 
+			List<WorkflowOutput> workflowOutputs =
+				WorkflowOutputLocalServiceUtil.getByProcessWF(processWorkflowId);
+
+			// Lat co trang trai sau khi gui thanh cong len jms va
+			// engine
+			DossierFileLocalServiceUtil.updateDossierFileResultSyncStatus(
+				0, dossierId, PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
+				PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC, 0,
+				workflowOutputs);
+
 			/*
 			 * //Add DossierLog (employee send msg to Engine) ActorBean
 			 * actorBean = new ActorBean(2, actionUserId);

@@ -101,7 +101,7 @@
 					paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_REQUESTED) {
 
 					dossier =
-						DossierLocalServiceUtil.getDossierByOId(paymentFile.getDossierOId());
+						DossierLocalServiceUtil.getDossier(paymentFile.getDossierId());
 
 					serviceInfo =
 						ServiceInfoLocalServiceUtil.getServiceInfo(dossier.getServiceInfoId());

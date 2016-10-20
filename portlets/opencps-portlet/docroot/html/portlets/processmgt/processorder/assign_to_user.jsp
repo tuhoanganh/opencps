@@ -1,4 +1,5 @@
 
+<%@page import="javax.portlet.PortletMode"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -118,6 +119,13 @@
 	boolean esign = false;
 	
 	long assigerToUserId = ProcessMgtUtil.getAssignUser(processWorkflowId, processOrderId, workflow.getPostProcessStepId());
+	
+	PortletURL backTodoListURL =PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
+
+	backTodoListURL.setParameter("mvcPath", "/html/portlets/processmgt/processorder/processordertodolist.jsp");
+	backTodoListURL.setParameter("success", String.valueOf(true));
+	backTodoListURL.setWindowState(LiferayWindowState.NORMAL);
+	backTodoListURL.setPortletMode(PortletMode.VIEW);
 	
 %>
 
@@ -388,11 +396,7 @@
 		var success = '<%=success%>';
 		
 		if(success == 'true'){
-			var backURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
-			backURL.setParameter("mvcPath", "/html/portlets/processmgt/processorder/processordertodolist.jsp");
-			backURL.setWindowState("<%=LiferayWindowState.NORMAL.toString()%>"); 
-			backURL.setPortletMode("normal");
-			backURL.setParameter("success", true);
+			var backURL = '<%=backTodoListURL.toString() %>';
 			
 			var Util = Liferay.Util;
 			<portlet:namespace/>closeDialog();
