@@ -20,7 +20,7 @@ $theme.include($body_top_include)
 	#dockbar()
 #end
 
-<div class="container home-theme">
+<div class="container home-theme moit-theme">
 	<header id="banner" role="banner">
 		<div class="header container">
 			<a class="logo" href="$site_default_url" title="#language_format ("go-to-x", [$site_name])"></a>
@@ -50,7 +50,16 @@ $theme.include($body_top_include)
 	</div>
 
 	<footer id="footer" role="contentinfo">
-		<span class="blue"><i class="fa fa-copyright"></i> #language ("copyright-bct-key")</span>
+		<div class="footer">
+			<div class="container">
+				<p><span>#language ("portal-bct-key")</span></p>
+				<span><b>#language ("location-key"):</b> #language ("address-key")</span>
+				<span><b>#language ("phone-number-key"):</b> (04) 22202222,<b>Fax:</b> (04) 22202525</span>
+				<span><b>Email:</b> bbt@moit.gov.vn</span>
+				<p><i class="fa fa-copyright"></i> #language ("copyright-bct-key")</p>
+			</div>
+		</div>
+		<p class="lH60"><i class="fa fa-copyright"></i> #language ("copyright-bct-key")</p>
 	</footer>
 </div>
 
