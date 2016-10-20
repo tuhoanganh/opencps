@@ -57,4 +57,9 @@ public class HolidayCheckUtils{
 		return dateOverNumbers;
 	}
 	
+	public static int getDayDelay(long processOrderId,long processWorkflowId){
+		return 0;
+		
+	}
+	
 }

@@ -17,11 +17,89 @@
 
 package org.opencps.holidayconfig.portlet;
 
+import java.io.IOException;
+import java.util.Date;
+
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
+
+import org.opencps.datamgt.DuplicateItemException;
+import org.opencps.datamgt.EmptyItemCodeException;
+import org.opencps.datamgt.OutOfLengthItemCodeException;
+import org.opencps.datamgt.OutOfLengthItemNameException;
+import org.opencps.holidayconfig.model.HolidayConfig;
+import org.opencps.holidayconfig.search.HolidayConfigDisplayTerms;
+import org.opencps.holidayconfig.service.HolidayConfigLocalServiceUtil;
+import org.opencps.util.DateTimeUtil;
+import org.opencps.util.MessageKeys;
+import org.opencps.util.PortletPropsValues;
+import org.opencps.util.WebKeys;
+
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.servlet.SessionMessages;
+import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 public class HolidayConfigPortlet extends MVCPortlet {
-	
+
 	private static Log _log = LogFactoryUtil.getLog(HolidayConfigPortlet.class);
+
+	public void updateHoliday(ActionRequest actionRequest,
+			ActionResponse actionResponse) throws IOException {
+
+		long holidayId = ParamUtil.getLong(actionRequest,
+				HolidayConfigDisplayTerms.HOLIDAY_ID, 0L);
+
+		Date holidayDate = ParamUtil.getDate(actionRequest,
+				HolidayConfigDisplayTerms.HOLIDAY_DATE,
+				DateTimeUtil.getDateTimeFormat(DateTimeUtil._VN_DATE_FORMAT));
+
+		String description = ParamUtil.getString(actionRequest,
+				HolidayConfigDisplayTerms.DESCRIPTION);
+
+		int status = ParamUtil.getInteger(actionRequest,
+				HolidayConfigDisplayTerms.HOLIDAY_STATUS,0);
+
+		String redirectURL = ParamUtil.getString(actionRequest, WebKeys.REDIRECT_URL);
+		String returnURL = ParamUtil.getString(actionRequest, WebKeys.RETURN_URL);
+		try {
+
+			ServiceContext serviceContext = ServiceContextFactory
+					.getInstance(actionRequest);
+
+			if (holidayId == 0) {
+
+				HolidayConfigLocalServiceUtil.addHoliday(holidayDate,
+						description,status,serviceContext);
+
+				SessionMessages.add(actionRequest,
+						MessageKeys.HOLIDAYCONFIG_ADD_SUCESS);
+			} else {
+				HolidayConfigLocalServiceUtil.updateHoliday(holidayId,
+						holidayDate, description, status);
+
+				SessionMessages.add(actionRequest,
+						MessageKeys.HOLIDAYCONFIG_UPDATE_SUCESS);
+			}
+		} catch (Exception e) {
+
+			SessionErrors.add(actionRequest,
+					MessageKeys.HOLIDAYCONFIG_SYSTEM_EXCEPTION_OCCURRED);
+
+			redirectURL = returnURL;
+
+		} finally {
+			if (Validator.isNotNull(redirectURL)) {
+				actionResponse.sendRedirect(redirectURL);
+			}
+		}
+	}
+
 }

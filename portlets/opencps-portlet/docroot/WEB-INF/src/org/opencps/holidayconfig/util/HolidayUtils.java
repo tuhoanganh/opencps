@@ -80,11 +80,11 @@ public class HolidayUtils {
 	    	for(HolidayConfigExtend holidayConfigExtend:holidayConfigExtendList){
 	    		
 	    		if(holidayConfigExtend.equals(SATURDAY)){
-	    			saturdayIsNotHoliday = holidayConfigExtend.getActive();
+	    			saturdayIsNotHoliday = holidayConfigExtend.getStatus();
 	    		}
 	    		
 	    		if(holidayConfigExtend.equals(SUNDAY)){
-	    			sundayIsNotHoliday = holidayConfigExtend.getActive();
+	    			sundayIsNotHoliday = holidayConfigExtend.getStatus();
 	    		}
 	    	}
 		
