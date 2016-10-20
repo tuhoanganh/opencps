@@ -494,7 +494,7 @@ public class AccountUtil {
 		}
 		catch (Exception e) {
 
-			_log.error(e);
+			//_log.error(e);
 			AccountUtil.destroy(request, false);
 			// reInitAccount
 			accountBean = initAccount(request);
@@ -523,7 +523,7 @@ public class AccountUtil {
 		}
 		catch (Exception e) {
 
-			_log.error(e);
+			//_log.error(e);
 			AccountUtil.destroy(request, false);
 			// reInitAccount
 			accountBean = initAccount(request);
@@ -552,7 +552,7 @@ public class AccountUtil {
 		}
 		catch (Exception e) {
 
-			_log.error(e);
+			//_log.error(e);
 			AccountUtil.destroy(request, false);
 			// reInitAccount
 			accountBean = initAccount(request);
@@ -581,7 +581,7 @@ public class AccountUtil {
 		}
 		catch (Exception e) {
 
-			_log.error(e);
+			//_log.error(e);
 			AccountUtil.destroy(request, false);
 			// reInitAccount
 			accountBean = initAccount(request);

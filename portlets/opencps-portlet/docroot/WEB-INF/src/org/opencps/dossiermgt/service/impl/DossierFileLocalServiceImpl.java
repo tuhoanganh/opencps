@@ -18,6 +18,7 @@
 package org.opencps.dossiermgt.service.impl;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -920,7 +921,7 @@ public class DossierFileLocalServiceImpl
 		return dossierFilePersistence.findByDID_DP_R(
 			dossierId, dossierPartId, removed);
 	}
-	
+
 	/**
 	 * @param dossierId
 	 * @param dossierPartId
@@ -930,12 +931,14 @@ public class DossierFileLocalServiceImpl
 	 * @throws SystemException
 	 */
 	public List<DossierFile> getDossierFileByD_DP_Config(
-		long dossierId, long dossierPartId, OrderByComparator byComparator, int start, int end)
+		long dossierId, long dossierPartId, OrderByComparator byComparator,
+		int start, int end)
 		throws NoSuchDossierFileException, SystemException {
 
-		return dossierFilePersistence.findByDID_DP(dossierId, dossierPartId, start, end, byComparator);
+		return dossierFilePersistence.findByDID_DP(
+			dossierId, dossierPartId, start, end, byComparator);
 	}
-	
+
 	/**
 	 * @param dossierId
 	 * @param dossierPartId
@@ -943,13 +946,11 @@ public class DossierFileLocalServiceImpl
 	 * @throws NoSuchDossierFileException
 	 * @throws SystemException
 	 */
-	public int countDossierFileByD_DP_Config(
-		long dossierId, long dossierPartId)
+	public int countDossierFileByD_DP_Config(long dossierId, long dossierPartId)
 		throws NoSuchDossierFileException, SystemException {
 
 		return dossierFilePersistence.countByDID_DP(dossierId, dossierPartId);
 	}
-	
 
 	/**
 	 * @param fileGroupId
@@ -1282,34 +1283,79 @@ public class DossierFileLocalServiceImpl
 	 * @throws NoSuchDossierStatusException
 	 * @throws PortalException
 	 */
-	public void updateDossierFileResultSyncStatus(
-		long userId, long dossierId, int syncStatus,
-		List<WorkflowOutput> worklows)
+	public List<DossierFile> updateDossierFileResultSyncStatus(
+		long userId, long dossierId, int currentSyncStatus, int syncStatus,
+		int removed, List<WorkflowOutput> workflowOutputs)
 		throws SystemException, NoSuchDossierStatusException, PortalException {
 
+		List<DossierFile> dossierFiles = new ArrayList<DossierFile>();
 		Date now = new Date();
+		try {
+			if (workflowOutputs != null) {
+				for (WorkflowOutput workflowOutput : workflowOutputs) {
 
-		for (WorkflowOutput output : worklows) {
-			try {
-				DossierFile dossierFile =
-					dossierFileLocalService.getDossierFileInUse(
-						dossierId, output.getDossierPartId());
+					List<DossierFile> dossierFileTemps =
+						dossierFileLocalService.getDossierFileByDID_SS_DPID_R(
+							dossierId, currentSyncStatus,
+							workflowOutput.getDossierPartId(), removed);
+					if (dossierFileTemps != null) {
+						for (DossierFile dossierFile : dossierFileTemps) {
+							dossierFile.setSyncStatus(syncStatus);
+							dossierFile.setModifiedDate(now);
+							if (userId != 0) {
+								dossierFile.setUserId(userId);
+							}
+							dossierFileLocalService.updateDossierFile(dossierFile);
+							dossierFiles.add(dossierFile);
+						}
+					}
 
-				dossierFile.setSyncStatus(syncStatus);
-				dossierFile.setModifiedDate(now);
-
-				if (userId != 0) {
-					dossierFile.setUserId(userId);
 				}
-
-				dossierFileLocalService.updateDossierFile(dossierFile);
-
-			}
-			catch (Exception e) {
-				_log.info("NO FILE RESULT UPLOAD..............");
 			}
 
 		}
+
+		catch (Exception e) {
+			_log.info("//////////////////////////////////////////////////NO FILE RESULT UPLOAD");
+		}
+
+		return dossierFiles;
+	}
+
+	/**
+	 * @param userId
+	 * @param syncStatus
+	 * @param dossierFiles
+	 * @return
+	 * @throws SystemException
+	 * @throws NoSuchDossierStatusException
+	 * @throws PortalException
+	 */
+	public List<DossierFile> updateDossierFileSyncStatus(
+		long userId, int syncStatus, List<DossierFile> dossierFiles)
+		throws SystemException, NoSuchDossierStatusException, PortalException {
+
+		Date now = new Date();
+		try {
+			if (dossierFiles != null) {
+				for (DossierFile dossierFile : dossierFiles) {
+
+					dossierFile.setSyncStatus(syncStatus);
+					dossierFile.setModifiedDate(now);
+					if (userId != 0) {
+						dossierFile.setUserId(userId);
+					}
+					dossierFileLocalService.updateDossierFile(dossierFile);
+				}
+			}
+
+		}
+
+		catch (Exception e) {
+			_log.info("//////////////////////////////////////////////////NO FILE RESULT UPLOAD");
+		}
+
+		return dossierFiles;
 	}
 
 	/**

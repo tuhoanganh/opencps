@@ -438,9 +438,17 @@ public class JMSMessageBodyUtil {
 					DossierFileMsgBody dossierFileMsgBody =
 						new DossierFileMsgBody();
 
+					if (dossierFile.getSyncStatus() == PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC) {
+						dossierFile.setSyncStatus(PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS);
+					}
+
 					if (dossierFile.getGroupFileId() > 0) {
 						FileGroup fileGroup =
 							FileGroupLocalServiceUtil.getFileGroup(dossierFile.getGroupFileId());
+						if (fileGroup.getSyncStatus() == PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC) {
+							fileGroup.setSyncStatus(PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS);
+						}
+
 						dossierFileMsgBody.setFileGroup(fileGroup);
 						DossierPart fileGroupDossierPart =
 							DossierPartLocalServiceUtil.getDossierPart(fileGroup.getDossierPartId());
