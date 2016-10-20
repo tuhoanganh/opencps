@@ -36,7 +36,6 @@ ivy-settings-publisher.xml
 ivy-settings.xml
 ivy.xml
 ivy.xml.MD5
-layouttpl/
 lib/
 misc/
 modules/
@@ -57,7 +56,6 @@ ext/create.sh
 hooks/build-common-hook.xml
 hooks/create.bat
 hooks/create.sh
-layouttpl/
 portlets/build-common-alloy-portlet.xml
 portlets/build-common-portlet.xml
 portlets/create.bat
@@ -277,5 +275,11 @@ portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/api/model/impl/
 themes/opencps-ux-theme/docroot/WEB-INF/liferay-look-and-feel.xml
 portlets/opencps-portlet/ivy.xml.MD5
 portlets/opencps-portlet/docroot/WEB-INF/lib/jasperreports-fonts-6.2.2.jar
+
+layouttpl/layout-8.4-4.4.4-layouttpl/opencps-home-layouttpl
+layouttpl/layout-8.4-4.4.4-layouttpl/.classpath
+layouttpl/layout-8.4-4.4.4-layouttpl/.project
+layouttpl/layout-8.4-4.4.4-layouttpl/.settings
+
 CONTRIBUTING.markdown
 README.markdown
