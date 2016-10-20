@@ -16,6 +16,7 @@ build.*.properties
 ci.properties
 common.bnd
 copyright.txt
+themes/moit-theme/.classpath
 themes/opencps-theme/.classpath
 dependencies/
 themes/opencps-theme/.settings/org.eclipse.wst.common.project.facet.core.xml
