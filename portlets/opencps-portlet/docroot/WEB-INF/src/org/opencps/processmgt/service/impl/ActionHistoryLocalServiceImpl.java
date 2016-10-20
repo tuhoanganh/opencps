@@ -188,10 +188,8 @@ public class ActionHistoryLocalServiceImpl
 	}
 	
 	public ActionHistory getLatestActionHistory(
-	    long processOrderId, long processWorkflowId)
+	    long processOrderId, long processWorkflowId,boolean orderByAsc)
 	    throws NoSuchActionHistoryException, SystemException {
-
-		boolean orderByAsc = false;	
 
 		OrderByComparator orderByComparator =
 		    new ActionHistoryCreateDateComparator(orderByAsc);

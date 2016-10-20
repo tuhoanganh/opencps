@@ -112,7 +112,8 @@
 	latestWorkflowActionHistory =
 		ActionHistoryLocalServiceUtil.getLatestActionHistory(
 			processOrder.getProcessOrderId(),
-			processOrder.getProcessWorkflowId());
+			processOrder.getProcessWorkflowId(),
+			false);
 		}
 	}
 	catch (Exception e) {
