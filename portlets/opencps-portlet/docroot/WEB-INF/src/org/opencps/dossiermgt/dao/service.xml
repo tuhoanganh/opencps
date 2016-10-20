@@ -290,6 +290,7 @@
         <reference package-path="com.liferay.portlet.documentlibrary" entity="DLFolder" />
         <reference package-path="com.liferay.portlet.asset" entity="AssetEntry" />
         <reference package-path="org.opencps.paymentmgt.dao" entity="PaymentFile" />
+        <reference package-path="org.opencps.servicemgt.dao" entity="ServiceInfo"></reference>
     </entity>
     
     <entity name="DossierStatus" local-service="true" table="opencps_dossier_status">
