@@ -166,10 +166,27 @@ public class SyncFromBackOffice implements MessageListener {
 				}
 
 				SendToCallbackMsg toCallBack = new SendToCallbackMsg();
-
+				
+				int dayDelay = 0;
+				int daysDoing = 0;
+				
 				toCallBack.setProcessOrderId(toBackOffice.getProcessOrderId());
-				toCallBack.setSyncStatus(statusUpdate ? "ok" : "error");
 				toCallBack.setDossierStatus(toBackOffice.getDossierStatus());
+				toCallBack.setUserId(toBackOffice.getActorId());
+				toCallBack.setGroupId(dossier.getGroupId());
+				toCallBack.setCompanyId(dossier.getCompanyId());
+				toCallBack.setProcessWorkflowId(toBackOffice.getProcessWorkflowId());
+				toCallBack.setActionDatetime(new Date());
+				toCallBack.setStepName(toBackOffice.getStepName());
+				toCallBack.setActionName(toBackOffice.getActionInfo());
+				toCallBack.setActionNote(toBackOffice.getMessageInfo());
+				toCallBack.setActionUserId(actorBean.getActorId());
+				toCallBack.setDaysDoing(daysDoing);
+				toCallBack.setDaysDelay(dayDelay);
+				toCallBack.setSyncStatus(statusUpdate ? "ok" : "error");
+				
+				_log.error("CALLLLLLLLLLLLLLLLLLLLLLLLLLLBACKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
+				
 				Message sendToCallBack = new Message();
 
 				sendToCallBack.put("toCallback", toCallBack);
@@ -185,17 +202,28 @@ public class SyncFromBackOffice implements MessageListener {
 				_log.error(e);
 			}
 
-			SendToCallbackMsg toCallBack = new SendToCallbackMsg();
+/*			SendToCallbackMsg toCallBack = new SendToCallbackMsg();
 
 			toCallBack.setProcessOrderId(toBackOffice.getProcessOrderId());
 			toCallBack.setSyncStatus(statusUpdate ? "ok" : "error");
 			toCallBack.setDossierStatus(toBackOffice.getDossierStatus());
+			toCallBack.setUserId(dossier.getUserId());
+			toCallBack.setGroupId(dossier.getUserId());
+			toCallBack.setCompanyId(dossier.getCompanyId());
+			toCallBack.setProcessWorkflowId(toBackOffice.getProcessWorkflowId());
+			toCallBack.setActionDatetime(new Date());
+			toCallBack.setStepName(toBackOffice.getStepName());
+			toCallBack.setActionName(toBackOffice.getActionInfo());
+			toCallBack.setActionNote(toBackOffice.getMessageInfo());
+			toCallBack.setActionUserId(actorBean.getActorId());
+			toCallBack.setDaysDoing(daysDoing);
+			toCallBack.setDaysDelay(dayDelay);
 			Message sendToCallBack = new Message();
 
 			sendToCallBack.put("toCallback", toCallBack);
 
 			MessageBusUtil.sendMessage(
-				"opencps/backoffice/engine/callback", sendToCallBack);
+				"opencps/backoffice/engine/callback", sendToCallBack);*/
 			
 			if (toBackOffice.getSyncStatus() == 2) {
 				sendEmailCustomer(toBackOffice.getDossierId());
