@@ -63,10 +63,14 @@ public class VerifyEmailAddressAction extends Action {
 		    .getPassword();
 		try {
 			verifyEmailAddress(request, response, themeDisplay);
+			
 			String token = request
 			    .getParameter("token");
+			
 			String userType = request
 			    .getParameter("type");
+			
+			String emailConfigStep = request.getParameter("emailConfigStep");
 			if (userType
 			    .equals(PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN)) {
 				Citizen citizen = CitizenLocalServiceUtil
@@ -78,23 +82,29 @@ public class VerifyEmailAddressAction extends Action {
 					User mappingUser = UserLocalServiceUtil
 					    .updatePassword(citizen
 					        .getMappingUserId(), password, password, false);
-
-					if(citizen.getAccountStatus() != PortletConstants.ACCOUNT_STATUS_APPROVED){
-						
+					//Neu cau hinh = 2 thi cap nhat 
+					if(PortletConstants.EMAIL_CONFIG_2_STEP.equals(emailConfigStep)){
+						citizen
+					    .setAccountStatus(
+					        PortletConstants.ACCOUNT_STATUS_APPROVED);
+					}else{
 						citizen
 					    .setAccountStatus(
 					        PortletConstants.ACCOUNT_STATUS_CONFIRMED);
-					
 					}
 					
 					citizen
 					    .setModifiedDate(new Date());
 					CitizenLocalServiceUtil
 					    .updateCitizen(citizen);
-
-					MessageBusUtil
+					//Neu la cau hinh 2 buoc thi gui thang mail thong tin tai khoan cho nguoi dung
+					//Neu la 3 buoc thi khong gui cho nguoi dung, chi gui cho quan tri.
+					if(PortletConstants.EMAIL_CONFIG_2_STEP.equals(emailConfigStep)){
+						MessageBusUtil
 					    .sendEmailActiveAccount(
 					        mappingUser, password, serviceContext);
+					}
+					
 				}
 				else {
 					return mapping
@@ -113,22 +123,27 @@ public class VerifyEmailAddressAction extends Action {
 					    .updatePassword(business
 					        .getMappingUserId(), password, password, false);
 					
-					if(business.getAccountStatus() != PortletConstants.ACCOUNT_STATUS_APPROVED){
-						
+					if(PortletConstants.EMAIL_CONFIG_2_STEP.equals(emailConfigStep)){
+						business
+					    .setAccountStatus(
+					        PortletConstants.ACCOUNT_STATUS_APPROVED);
+					}else{
 						business
 					    .setAccountStatus(
 					        PortletConstants.ACCOUNT_STATUS_CONFIRMED);
-					
 					}
 					
 					business
 					    .setModifiedDate(new Date());
 					BusinessLocalServiceUtil
 					    .updateBusiness(business);
-
-					MessageBusUtil
+					//Neu la cau hinh 2 buoc thi gui thang mail thong tin tai khoan cho nguoi dung
+					//Neu la 3 buoc thi khong gui cho nguoi dung, chi gui cho quan tri.
+					if(PortletConstants.EMAIL_CONFIG_2_STEP.equals(emailConfigStep)){
+						MessageBusUtil
 					    .sendEmailActiveAccount(
 					        mappingUser, password, serviceContext);
+					}
 				}
 				else {
 					return mapping

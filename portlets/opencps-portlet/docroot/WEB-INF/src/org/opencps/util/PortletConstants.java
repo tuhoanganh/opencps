@@ -209,4 +209,9 @@ public class PortletConstants {
 	public static final String REQUEST_COMMAND_PAYMENT = "paymentRequest";
 	
 	public static final String REQUEST_COMMAND_RESUBMIT = "resubmitRequest";
+	
+	public static final String EMAIL_CONFIG_2_STEP = "2";
+	
+	public static final String EMAIL_CONFIG_3_STEP = "3";
+	
 }
