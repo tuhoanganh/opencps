@@ -2511,6 +2511,10 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		long dossierId =
 			ParamUtil.getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
+		
+		String note = ParamUtil.getString(actionRequest, DossierDisplayTerms.NOTE);
+		
+		_log.info("NOTE NOTE _________________________________" + note);
 
 		long fileGroupId =
 			ParamUtil.getLong(
@@ -2558,19 +2562,12 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 				actionMsg.setCompanyId(dossier.getCompanyId());
 
-				// Phan nay phai xu ly lay trong backend do phia cong trong mo
-				// hinh phan tan khong co ProcessOrder
-				// ProcessOrder processOrder =
-				// ProcessOrderLocalServiceUtil.getProcessOrder(
-				// dossierId, fileGroupId);
-
-				// actionMsg.setProcessOrderId(processOrder.getProcessOrderId());
-
 				actionMsg.setGovAgencyCode(dossier.getGovAgencyCode());
 
 				actionMsg.setDossierOId(dossier.getOid());
 
 				actionMsg.setDossierStatus(dossierStatus);
+				
 
 				isSend = false;
 
@@ -2599,6 +2596,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				actionMsg.setCompanyId(dossier.getCompanyId());
 
 				actionMsg.setDossierStatus(dossierStatus);
+				
 
 				message.put("msgToEngine", actionMsg);
 
@@ -2611,17 +2609,26 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			ActorBean actor = new ActorBean(1, serviceContext.getUserId());
 
 			String msgInfo = StringPool.BLANK;
+			
+			if (Validator.isNotNull(note)) {
+				msgInfo = note;
+			}
+			
+			else {
+				msgInfo =
+				    isSend
+				        ? LanguageUtil.get(
+				            serviceContext.getLocale(), "send-dossier")
+				        : LanguageUtil.get(
+				            serviceContext.getLocale(), "resend-dossier") +
+				            StringPool.COLON +
+				            ParamUtil.getString(
+				                actionRequest, DossierDisplayTerms.NOTE);
 
-			msgInfo =
-				isSend
-					? LanguageUtil.get(
-						serviceContext.getLocale(), "send-dossier")
-					: LanguageUtil.get(
-						serviceContext.getLocale(), "send-dossier") +
-						StringPool.COLON +
-						ParamUtil.getString(
-							actionRequest, DossierDisplayTerms.NOTE);
-
+			}
+			
+			actionMsg.setActionNote(msgInfo);
+			
 			DossierLocalServiceUtil.updateDossierStatus(
 				dossierId, fileGroupId, PortletConstants.DOSSIER_STATUS_SYSTEM,
 				WebKeys.DOSSIER_ACTOR_CITIZEN, actor.getActorId(),
