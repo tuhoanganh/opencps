@@ -62,3 +62,14 @@
 	padding: 5px;
 	border: 1px solid #cbcbcb;
 }
+
+#waiting .badge,
+#NLKTTT .badge,
+#NLHDCHS .badge,
+#NLDD .badge,
+#paying .badge,
+#done .badge,
+#HSBTC .badge,
+#canceled .badge{
+	background-color: #e1576b !important; 
+}
