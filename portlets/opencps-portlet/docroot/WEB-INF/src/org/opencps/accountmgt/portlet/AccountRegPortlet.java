@@ -265,8 +265,8 @@ public class AccountRegPortlet extends MVCPortlet {
 					User mappingUser =
 					    UserLocalServiceUtil.getUser(business.getMappingUserId());
 					MessageBusUtil.sendEmailAddressVerification(
-					    business.getUuid(), mappingUser, email, emailConfigStep,
-					    PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS,
+					    business.getUuid(), mappingUser, email,
+					    PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS, emailConfigStep,
 					    serviceContext);
 					//check reg cfg
 					if(step == 2){
