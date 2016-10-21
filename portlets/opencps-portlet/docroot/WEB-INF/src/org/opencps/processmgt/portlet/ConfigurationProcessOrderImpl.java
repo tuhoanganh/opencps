@@ -60,6 +60,8 @@ public class ConfigurationProcessOrderImpl implements ConfigurationAction{
 		
 		boolean hiddenTreeNodeEqualNone = ParamUtil.getBoolean(actionRequest, "hiddenTreeNodeEqualNone");
 		
+		int configDisplayAssignToUser = ParamUtil.getInteger(actionRequest, "configDisplayAssignToUser");
+		
 		PortletPreferences preferences =
 		    PortletPreferencesFactoryUtil.getPortletSetup(
 		        actionRequest, portletResource);
@@ -71,7 +73,7 @@ public class ConfigurationProcessOrderImpl implements ConfigurationAction{
 		preferences.setValue("templatesToDisplay", String.valueOf(templatesToDisplay));
 		
 		preferences.setValue("hiddenTreeNodeEqualNone", String.valueOf(hiddenTreeNodeEqualNone));
-		
+		preferences.setValue("configDisplayAssignToUser", String.valueOf(configDisplayAssignToUser));
 		preferences.store();
 
 		SessionMessages.add(actionRequest, "potlet-config-saved");

@@ -47,7 +47,7 @@
 <%@page import="org.opencps.processmgt.util.ProcessUtils"%>
 <%@page import="com.liferay.portal.kernel.process.ProcessUtil"%>
 
-<%@ include file="../../init.jsp"%>
+<%@ include file="../init.jsp"%>
 
 <portlet:renderURL var="updateDossierFileURL" windowState="<%=LiferayWindowState.POP_UP.toString() %>">
 	<portlet:param name="mvcPath" value='<%=templatePath + "upload_dossier_file.jsp" %>'/>
@@ -514,6 +514,10 @@
 	%>
 </aui:row>
 
+<aui:row>
+	<div id = "<portlet:namespace />assignToUserMoit" ></div>
+</aui:row>
+
 </div>
 <aui:script use="aui-base,liferay-portlet-url,aui-io">
 
@@ -522,6 +526,8 @@
 		var A = AUI();
 		
 		var instance = A.one(e);
+		
+		var configDisplayAssignToUser = <%= configDisplayAssignToUser %>;
 		
 		var processWorkflowId = instance.attr('process-workflow');
 		
@@ -544,25 +550,71 @@
 		var fileGroupId = A.one('#<portlet:namespace/>fileGroupId').val();
 		
 		var receptionNo = A.one('#<portlet:namespace/>receptionNo').val();
-		
 		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
 		portletURL.setParameter("mvcPath", "/html/portlets/processmgt/processorder/assign_to_user.jsp");
-		portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
 		portletURL.setPortletMode("normal");
-		portletURL.setParameter("processWorkflowId", processWorkflowId);
-		portletURL.setParameter("serviceProcessId", serviceProcessId);
-		portletURL.setParameter("autoEvent", autoEvent);
-		portletURL.setParameter("dossierId", dossierId);
-		portletURL.setParameter("processStepId", processStepId);
-		portletURL.setParameter("processOrderId", processOrderId);
-		portletURL.setParameter("actionUserId", actionUserId);
-		portletURL.setParameter("fileGroupId", fileGroupId);
-		portletURL.setParameter("receptionNo", receptionNo);
-		portletURL.setParameter("receiveDate", receiveDate);
-		portletURL.setParameter("deadlinePattern", deadlinePattern);
-		portletURL.setParameter("backURL", '<%=backURL%>');
-	
-		openDialog(portletURL.toString(), '<portlet:namespace />assignToUser', '<%= UnicodeLanguageUtil.get(pageContext, "handle") %>');
+		
+		//display default - popup
+		if(configDisplayAssignToUser == <%= PortletConstants.DISPLAY_ASSIGN_TO_USER_DEFAULT %>) {
+			portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
+			portletURL.setParameter("processWorkflowId", processWorkflowId);
+			portletURL.setParameter("serviceProcessId", serviceProcessId);
+			portletURL.setParameter("autoEvent", autoEvent);
+			portletURL.setParameter("dossierId", dossierId);
+			portletURL.setParameter("processStepId", processStepId);
+			portletURL.setParameter("processOrderId", processOrderId);
+			portletURL.setParameter("actionUserId", actionUserId);
+			portletURL.setParameter("fileGroupId", fileGroupId);
+			portletURL.setParameter("receptionNo", receptionNo);
+			portletURL.setParameter("receiveDate", receiveDate);
+			portletURL.setParameter("deadlinePattern", deadlinePattern);
+			portletURL.setParameter("backURL", '<%=backURL%>');
+		
+			openDialog(portletURL.toString(), '<portlet:namespace />assignToUser', '<%= UnicodeLanguageUtil.get(pageContext, "handle") %>');
+		} 
+		// Display assign to user - moit
+		else if (configDisplayAssignToUser == <%= PortletConstants.DISPLAY_ASSIGN_TO_USER_MOIT %>) {
+			portletURL.setWindowState("<%=LiferayWindowState.EXCLUSIVE.toString()%>"); 
+			A.io.request(
+					portletURL.toString(),
+					{
+						dataType : 'text/html',
+						method : 'POST',
+					    data:{    	
+					    	"<portlet:namespace />processWorkflowId" : processWorkflowId,
+					    	"<portlet:namespace />serviceProcessId" : serviceProcessId,
+					    	"<portlet:namespace />autoEvent" : autoEvent,
+					    	"<portlet:namespace />dossierId" : dossierId,
+					    	"<portlet:namespace />processStepId" : processStepId,
+					    	"<portlet:namespace />processOrderId" : processOrderId,
+					    	"<portlet:namespace />actionUserId" : actionUserId,
+					    	"<portlet:namespace />fileGroupId" : fileGroupId,
+					    	"<portlet:namespace />receptionNo" : receptionNo,
+					    	"<portlet:namespace />receiveDate" : receiveDate,
+					    	"<portlet:namespace />deadlinePattern" : deadlinePattern,
+					    	"<portlet:namespace />backURL" : '<%=backURL%>'
+					    },   
+					    on: {
+					    	success: function(event, id, obj) {
+					    		
+								var instance = this;
+								var res = instance.get('responseData');
+								
+								var assignToUserMoit = A.one("#<portlet:namespace/>assignToUserMoit");
+								
+								if(assignToUserMoit){
+									assignToUserMoit.empty();
+									assignToUserMoit.html(res);
+								}
+									
+							},
+					    	error: function(){}
+						}
+					}
+				);
+		}
+		
+		
 	});
 	
 AUI().ready('aui-base','liferay-portlet-url','aui-io', function(A){

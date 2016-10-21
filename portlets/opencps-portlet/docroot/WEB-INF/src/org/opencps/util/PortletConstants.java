@@ -209,4 +209,8 @@ public class PortletConstants {
 	public static final String REQUEST_COMMAND_PAYMENT = "paymentRequest";
 	
 	public static final String REQUEST_COMMAND_RESUBMIT = "resubmitRequest";
+	
+	public static final int DISPLAY_ASSIGN_TO_USER_DEFAULT = 0;
+	
+	public static final int DISPLAY_ASSIGN_TO_USER_MOIT = 1;
 }
