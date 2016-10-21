@@ -86,8 +86,29 @@
 	<portlet:param name="redirectURL" value="<%=currentURL%>" />
 	<portlet:param name="backURL" value="<%=currentURL %>"/>
 </portlet:renderURL>
-<liferay-ui:icon cssClass="search-container-action fa view" image="view"
-	message="view" url="<%=viewDossierURL.toString()%>" />
+	<c:choose>
+		<c:when test="<%=showTabDossierResultFirst %>">
+			<%
+				String viewResultDossierURL = viewDossierURL.toString() + "#" +renderResponse.getNamespace() +"tab="+ renderResponse.getNamespace() + "result";
+			%> 
+			<liferay-ui:icon 
+				cssClass="search-container-action fa view" 
+				image="view" 
+				message="view" 
+				url="<%=viewResultDossierURL.toString()%>" 
+			/>
+		</c:when>
+		<c:otherwise>
+			<liferay-ui:icon 
+				cssClass="search-container-action fa view" 
+				image="view" 
+				message="view" 
+				url="<%=viewDossierURL.toString() %>" 
+			/>
+			<%
+			%>
+		</c:otherwise>
+	</c:choose>
 
 <c:choose>
 	<c:when
