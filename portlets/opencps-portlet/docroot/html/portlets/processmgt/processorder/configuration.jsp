@@ -82,16 +82,16 @@
 	
 	</aui:select>
 	
-	<aui:select name="configDisplayAssignToUser">
+	<aui:select name="assignFormDisplayStyle">
 		<aui:option 
-				value="<%=0 %>"
-				selected="<%=configDisplayAssignToUser ==  0 %>"
-			>
-				Popup
-			</aui:option>
+			value="popup"
+			selected='<%=assignFormDisplayStyle.equals("popup") %>'
+		>
+			Popup
+		</aui:option>
 		<aui:option 
-			value="<%=1 %>"
-			selected="<%=configDisplayAssignToUser ==  1 %>"		
+			value="form"
+			selected='<%=assignFormDisplayStyle.equals("form") %>'
 		>
 			Form
 		</aui:option>

@@ -527,7 +527,7 @@
 		
 		var instance = A.one(e);
 		
-		var configDisplayAssignToUser = <%= configDisplayAssignToUser %>;
+		var assignFormDisplayStyle = '<%= assignFormDisplayStyle %>';
 		
 		var processWorkflowId = instance.attr('process-workflow');
 		
@@ -553,46 +553,31 @@
 		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
 		portletURL.setParameter("mvcPath", "/html/portlets/processmgt/processorder/assign_to_user.jsp");
 		portletURL.setPortletMode("normal");
-		
+		portletURL.setParameter("processWorkflowId", processWorkflowId);
+		portletURL.setParameter("serviceProcessId", serviceProcessId);
+		portletURL.setParameter("autoEvent", autoEvent);
+		portletURL.setParameter("dossierId", dossierId);
+		portletURL.setParameter("processStepId", processStepId);
+		portletURL.setParameter("processOrderId", processOrderId);
+		portletURL.setParameter("actionUserId", actionUserId);
+		portletURL.setParameter("fileGroupId", fileGroupId);
+		portletURL.setParameter("receptionNo", receptionNo);
+		portletURL.setParameter("receiveDate", receiveDate);
+		portletURL.setParameter("deadlinePattern", deadlinePattern);
 		//display default - popup
-		if(configDisplayAssignToUser == 0) {
+		if(assignFormDisplayStyle == 'popup' ) {
 			portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
-			portletURL.setParameter("processWorkflowId", processWorkflowId);
-			portletURL.setParameter("serviceProcessId", serviceProcessId);
-			portletURL.setParameter("autoEvent", autoEvent);
-			portletURL.setParameter("dossierId", dossierId);
-			portletURL.setParameter("processStepId", processStepId);
-			portletURL.setParameter("processOrderId", processOrderId);
-			portletURL.setParameter("actionUserId", actionUserId);
-			portletURL.setParameter("fileGroupId", fileGroupId);
-			portletURL.setParameter("receptionNo", receptionNo);
-			portletURL.setParameter("receiveDate", receiveDate);
-			portletURL.setParameter("deadlinePattern", deadlinePattern);
-			portletURL.setParameter("backURL", '<%=backURL%>');
-		
 			openDialog(portletURL.toString(), '<portlet:namespace />assignToUser', '<%= UnicodeLanguageUtil.get(pageContext, "handle") %>');
 		} 
 		// Display assign to user - moit
-		else if (configDisplayAssignToUser == 1 ) {
+		else if (assignFormDisplayStyle == 'form' ) {
 			portletURL.setWindowState("<%=LiferayWindowState.EXCLUSIVE.toString()%>"); 
 			A.io.request(
 					portletURL.toString(),
 					{
 						dataType : 'text/html',
 						method : 'POST',
-					    data:{    	
-					    	"<portlet:namespace />processWorkflowId" : processWorkflowId,
-					    	"<portlet:namespace />serviceProcessId" : serviceProcessId,
-					    	"<portlet:namespace />autoEvent" : autoEvent,
-					    	"<portlet:namespace />dossierId" : dossierId,
-					    	"<portlet:namespace />processStepId" : processStepId,
-					    	"<portlet:namespace />processOrderId" : processOrderId,
-					    	"<portlet:namespace />actionUserId" : actionUserId,
-					    	"<portlet:namespace />fileGroupId" : fileGroupId,
-					    	"<portlet:namespace />receptionNo" : receptionNo,
-					    	"<portlet:namespace />receiveDate" : receiveDate,
-					    	"<portlet:namespace />deadlinePattern" : deadlinePattern,
-					    	"<portlet:namespace />backURL" : '<%=backURL%>'
+					    data:{
 					    },   
 					    on: {
 					    	success: function(event, id, obj) {

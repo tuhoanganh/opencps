@@ -36,6 +36,6 @@
 	
 	boolean hiddenTreeNodeEqualNone = GetterUtil.getBoolean(preferences.getValue("hiddenTreeNodeEqualNone", "false"), false);
 	
-	int configDisplayAssignToUser = GetterUtil.getInteger(preferences.getValue("configDisplayAssignToUser", "0"), 0);
+	String assignFormDisplayStyle = preferences1.getValue("assignFormDisplayStyle", "popup");
 	
 %>
