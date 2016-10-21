@@ -130,7 +130,7 @@
 					value="<%=String.valueOf(true)%>" />
 			</portlet:renderURL>
 			<liferay-ui:icon cssClass="search-container-action fa edit"
-				image="edit" message="edit" url="<%=updateDossierURL.toString()%>" />
+				image="edit" message="edit-on-action" url="<%=updateDossierURL.toString()%>" />
 			<c:if
 				test="<%=dossier.getDossierStatus().equals(
 								PortletConstants.DOSSIER_STATUS_NEW)%>">
