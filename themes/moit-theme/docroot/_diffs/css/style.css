@@ -24,6 +24,7 @@ body.mBody {
  /*----- Home -----*/
  #banner {
 	margin-bottom: 25px;
+	position: relative;
  }
 #banner .header {
 	height: 105px;
@@ -36,6 +37,21 @@ body.mBody {
 	background: url("../images/logo.png") 0 0 no-repeat;
 	background-size: cover;
 	margin-top: 11px;
+}
+
+/*----- Pages -----*/
+.page-theme {
+	position: relative;
+}
+.page-theme:before {
+	content: "";
+	background-color: #0678BE;
+	height: 145px;
+	width: 100%;
+	position: absolute;
+}
+.page-theme header {
+	padding-top: 40px;
 }
 
 
@@ -115,6 +131,37 @@ body.mBody {
 	background: transparent url("../images/welcome_new.png") no-repeat scroll left center;
 	cursor: pointer;
 	color: white;
+}
+
+.page-theme #banner > ul {
+	position: absolute;
+    top: 0;
+	background: transparent none;
+}
+.page-theme #banner > ul li {
+	float: left;
+}
+.page-theme #banner > ul li a {
+	display: block;
+	color: white;
+	line-height: 42px;
+	padding: 0 15px;
+	font-family: 'Roboto-Medium';
+}
+.page-theme #banner > ul li a:after {
+	content: "";
+	font-family: FontAwesome;
+	margin-left: 5px;
+	font-size: 16px;
+}
+.page-theme #banner > ul li:nth-child(1) a:after {
+	content: "\f015";
+}
+.page-theme #banner > ul li:nth-child(2) a:after {
+	content: "\f15c";
+}
+.page-theme #banner > ul li:nth-child(3) a:after {
+	content: "\f0ee";
 }
 
 
@@ -689,4 +736,69 @@ body:not(.home_bg) footer .lH60 {
 --------------------*/
 .opencps-theme #content section header span img {
 	display: none;
+}
+
+/*----- Portlet 13 -----*/
+.portlet-boundary_13_WAR_opencpsportlet_ ul li .img-lv-cnn {
+	background: url("../images/img-lvtt/congnghiepnhe00.png") 0 0 no-repeat;
+	background-size: 100% 100%;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.portlet-boundary_13_WAR_opencpsportlet_ ul li .img-lv-dvtm {
+	background: url("../images/img-lvtt/dichvuthuongmai00.png") 0 0 no-repeat;
+	background-size: 100% 100%;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.portlet-boundary_13_WAR_opencpsportlet_ ul li .img-lv-dtdl {
+	background: url("../images/img-lvtt/dieutietdienluc00.png") 0 0 no-repeat;
+	background-size: 100% 100%;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.portlet-boundary_13_WAR_opencpsportlet_ ul li .img-lv-lthhtn {
+	background: url("../images/img-lvtt/luuthonghanghoa00.png") 0 0 no-repeat;
+	background-size: 100% 100%;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.portlet-boundary_13_WAR_opencpsportlet_ ul li .img-lv-nl {
+	background: url("../images/img-lvtt/nangluong00.png") 0 0 no-repeat;
+	background-size: 100% 100%;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.portlet-boundary_13_WAR_opencpsportlet_ ul li .img-lv-vlncn {
+	background: url("../images/img-lvtt/nocongnghiep00.png") 0 0 no-repeat;
+	background-size: 100% 100%;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.portlet-boundary_13_WAR_opencpsportlet_ ul li .img-LV-QLCT {
+	background: url("../images/img-lvtt/quanlycanhtranh00.png") 0 0 no-repeat;
+	background-size: 100% 100%;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.portlet-boundary_13_WAR_opencpsportlet_ ul li .img-lv-tmdt {
+	background: url("../images/img-lvtt/thuongmaidientu00.png") 0 0 no-repeat;
+	background-size: 100% 100%;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.portlet-boundary_13_WAR_opencpsportlet_ ul li .img-lv-xnk {
+	background: url("../images/img-lvtt/xuatnhaukhau00.png") 0 0 no-repeat;
+	background-size: 100% 100%;
+    display: block;
+    width: 100%;
+    height: 100%;
 }
