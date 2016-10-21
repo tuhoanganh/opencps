@@ -555,7 +555,7 @@
 		portletURL.setPortletMode("normal");
 		
 		//display default - popup
-		if(configDisplayAssignToUser == <%= PortletConstants.DISPLAY_ASSIGN_TO_USER_DEFAULT %>) {
+		if(configDisplayAssignToUser == 0) {
 			portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
 			portletURL.setParameter("processWorkflowId", processWorkflowId);
 			portletURL.setParameter("serviceProcessId", serviceProcessId);
@@ -573,7 +573,7 @@
 			openDialog(portletURL.toString(), '<portlet:namespace />assignToUser', '<%= UnicodeLanguageUtil.get(pageContext, "handle") %>');
 		} 
 		// Display assign to user - moit
-		else if (configDisplayAssignToUser == <%= PortletConstants.DISPLAY_ASSIGN_TO_USER_MOIT %>) {
+		else if (configDisplayAssignToUser == 1 ) {
 			portletURL.setWindowState("<%=LiferayWindowState.EXCLUSIVE.toString()%>"); 
 			A.io.request(
 					portletURL.toString(),

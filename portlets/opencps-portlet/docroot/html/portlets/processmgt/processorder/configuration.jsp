@@ -84,16 +84,16 @@
 	
 	<aui:select name="configDisplayAssignToUser">
 		<aui:option 
-				value="<%=PortletConstants.DISPLAY_ASSIGN_TO_USER_DEFAULT %>"
-				selected="<%=configDisplayAssignToUser ==  PortletConstants.DISPLAY_ASSIGN_TO_USER_DEFAULT%>"
+				value="<%=0 %>"
+				selected="<%=configDisplayAssignToUser ==  0 %>"
 			>
-				default
+				Popup
 			</aui:option>
 		<aui:option 
-			value="<%=PortletConstants.DISPLAY_ASSIGN_TO_USER_MOIT %>"
-			selected="<%=configDisplayAssignToUser ==  PortletConstants.DISPLAY_ASSIGN_TO_USER_MOIT%>"		
+			value="<%=1 %>"
+			selected="<%=configDisplayAssignToUser ==  1 %>"		
 		>
-			moit
+			Form
 		</aui:option>
 	</aui:select>
 	
