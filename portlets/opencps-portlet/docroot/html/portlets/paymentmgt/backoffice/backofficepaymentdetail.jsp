@@ -72,6 +72,7 @@
     cssClass="upercase"
 />
 <div class="payment-ld">
+
 <div class="content overfolow">
                 <div class="box50">
                     <div>
