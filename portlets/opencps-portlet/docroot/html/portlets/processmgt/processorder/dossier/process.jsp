@@ -566,7 +566,8 @@
 		portletURL.setParameter("deadlinePattern", deadlinePattern);
 		//display default - popup
 		if(assignFormDisplayStyle == 'popup' ) {
-			portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
+			portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>");
+			portletURL.setParameter("backURL", '<%=backURL%>');
 			openDialog(portletURL.toString(), '<portlet:namespace />assignToUser', '<%= UnicodeLanguageUtil.get(pageContext, "handle") %>');
 		} 
 		// Display assign to user - moit
