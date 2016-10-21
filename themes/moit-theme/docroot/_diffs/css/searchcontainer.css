@@ -44,6 +44,7 @@
 
 .opencps-theme.ux .opencps-searchcontainer-wrapper .searchcontainer-content table tr.opencps-searchcontainer-row td .row-fluid {
 	min-width: 300px;
+	margin: 0;
 }
 
 .opencps-theme.ux .opencps-searchcontainer-wrapper .searchcontainer-content table tr.opencps-searchcontainer-row td .bold-label {
