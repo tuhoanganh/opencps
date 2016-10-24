@@ -232,6 +232,7 @@ String emailBody = PrefsParamUtil.getString(portletPreferences, request, emailBo
 				<aui:select label="display-stype" name="preferences--displayStyle--">
 					<aui:option label="default" value="default" />
 					<aui:option label="UX" selected='<%= displayStyle.equals("ux") %>' value="ux"/>
+					<aui:option label="COMPACT" selected='<%= displayStyle.equals("compact") %>' value="compact"/>
 				</aui:select>
 			</aui:fieldset>
 		</c:when>
