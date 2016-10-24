@@ -212,7 +212,14 @@
 					</c:when>
 					<c:otherwise>
 						<aui:col width="30" cssClass="register-options">
-							<liferay-ui:message key="business" />
+							<aui:row>
+								<aui:col width="50">
+									<aui:input type="radio" name="typeOfRegister" value="citizen" disabled="true" inlineLabel="right" label="citizen"/>
+								</aui:col>
+								<aui:col width="50">
+									<aui:input type="radio" name="typeOfRegister" value="business" disabled="true" inlineLabel="right" label="business" checked="true"/>
+								</aui:col>
+							</aui:row>
 						</aui:col>
 					</c:otherwise>
 					</c:choose>
