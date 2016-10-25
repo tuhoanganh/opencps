@@ -21,10 +21,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.opencps.backend.util.BackendUtils;
 import org.opencps.dossiermgt.NoSuchDossierLogException;
 import org.opencps.dossiermgt.comparator.DossierLogUpdateDatetimeComparator;
 import org.opencps.dossiermgt.model.DossierLog;
 import org.opencps.dossiermgt.service.base.DossierLogLocalServiceBaseImpl;
+import org.opencps.processmgt.model.ProcessOrder;
+import org.opencps.processmgt.model.ProcessStep;
+import org.opencps.processmgt.model.impl.ProcessStepImpl;
+import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
+import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -84,6 +90,8 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 		long dossierLogId =
 			counterLocalService.increment(DossierLog.class.getName());
 		DossierLog dossierLog = dossierLogPersistence.create(dossierLogId);
+		
+		ProcessStep processStep = BackendUtils.getProcessStepByDossierId(dossierId);
 
 		dossierLog.setGroupId(groupId);
 		dossierLog.setCompanyId(companyId);
@@ -109,7 +117,9 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 		dossierLog.setClassName(className);
 		dossierLog.setSyncStatus(syncStatus);
 		dossierLog.setRequestCommand(commandRequest);
-
+		dossierLog.setStepId(processStep.getProcessStepId());
+		dossierLog.setStepName(processStep.getStepName());
+		
 		return dossierLogPersistence.update(dossierLog);
 
 	}
@@ -231,6 +241,7 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 		long dossierLogId =
 			counterLocalService.increment(DossierLog.class.getName());
 		DossierLog dossierLog = dossierLogPersistence.create(dossierLogId);
+		ProcessStep processStep = BackendUtils.getProcessStepByDossierId(dossierId);
 
 		dossierLog.setGroupId(groupId);
 		dossierLog.setCompanyId(companyId);
@@ -257,6 +268,8 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 		dossierLog.setActorName(actorName);
 		dossierLog.setClassName(className);
 		dossierLog.setSyncStatus(syncStatus);
+		dossierLog.setStepId(processStep.getProcessStepId());
+		dossierLog.setStepName(processStep.getStepName());
 
 		return dossierLogPersistence.update(dossierLog);
 
