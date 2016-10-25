@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 public class HolidayCheckUtils {
 
@@ -80,7 +81,7 @@ public class HolidayCheckUtils {
 	 */
 	public static int getDayDelay(long processOrderId,
 			long latestProcessWorkflowId, long preProcessWorkflowId)
-			throws PortalException {
+			throws PortalException,SystemException {
 
 		ActionHistory preActionHistory = new ActionHistoryImpl();
 
@@ -104,19 +105,29 @@ public class HolidayCheckUtils {
 						.getLatestActionHistory(processOrderId,
 								latestProcessWorkflowId, false);
 
-				processWorkflow = ProcessWorkflowLocalServiceUtil
-						.getProcessWorkflow(latestActionHistory
-								.getProcessWorkflowId());
+				if (Validator.isNotNull(preActionHistory.getCreateDate())
+						&& Validator.isNotNull(latestActionHistory
+								.getCreateDate())) {
 
-				processStep = ProcessStepLocalServiceUtil
-						.getProcessStep(processWorkflow.getPostProcessStepId());
+					processWorkflow = ProcessWorkflowLocalServiceUtil
+							.getProcessWorkflow(latestActionHistory
+									.getProcessWorkflowId());
 
-				dayDelay = checkActionDateOver(
-						preActionHistory.getCreateDate(),
-						latestActionHistory.getCreateDate(),
-						processStep.getDaysDuration());
+					if (processWorkflow.getPostProcessStepId() > 0) {
+						processStep = ProcessStepLocalServiceUtil
+								.getProcessStep(processWorkflow
+										.getPostProcessStepId());
+
+						if (processStep.getDaysDuration() > 0) {
+							dayDelay = checkActionDateOver(
+									preActionHistory.getCreateDate(),
+									latestActionHistory.getCreateDate(),
+									processStep.getDaysDuration());
+						}
+					}
+				}
 			}
-		} catch (SystemException e) {
+		} catch (PortalException e) {
 			// TODO Auto-generated catch block
 			_log.error(e);
 		}
