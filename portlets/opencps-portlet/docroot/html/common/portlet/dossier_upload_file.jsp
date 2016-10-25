@@ -171,25 +171,32 @@
 			</aui:input>
 		</aui:col>
 	</aui:row>
-	
 	<aui:row>
-		<aui:col width="100">
+		<aui:col width="50">
 			<aui:input name="<%= DossierFileDisplayTerms.DOSSIER_FILE_NO %>" type="text" inlineLabel="true"/>
-			<label class="control-label custom-lebel" for='<portlet:namespace/><%=DossierFileDisplayTerms.DOSSIER_FILE_DATE %>'>
-				<liferay-ui:message key="dossier-file-date"/>
-			</label>
-			<liferay-ui:input-date
-				dayParam="<%=DossierFileDisplayTerms.DOSSIER_FILE_DATE_DAY %>"
-				dayValue="<%=spd.getDayOfMoth() %>"
-				disabled="<%= false %>"
-				monthParam="<%=DossierFileDisplayTerms.DOSSIER_FILE_DATE_MONTH %>"
-				monthValue="<%=spd.getMonth() %>"
-				name="<%=DossierFileDisplayTerms.DOSSIER_FILE_DATE%>"
-				yearParam="<%=DossierFileDisplayTerms.DOSSIER_FILE_DATE_YEAR %>"
-				yearValue="<%=spd.getYear() %>"
-				formName="fm"
-				autoFocus="<%=true %>"
-				nullable="<%=dossierFile == null || dossierFile.getDossierFileDate() == null ? true : false %>"/>
+		</aui:col>
+		<aui:col width="50">
+			<aui:row>
+				<aui:col width="50">
+					<label class="control-label custom-lebel" for='<portlet:namespace/><%=DossierFileDisplayTerms.DOSSIER_FILE_DATE %>'>
+						<liferay-ui:message key="dossier-file-date"/>
+					</label>
+				</aui:col>
+				<aui:col width="50">
+					<liferay-ui:input-date
+						dayParam="<%=DossierFileDisplayTerms.DOSSIER_FILE_DATE_DAY %>"
+						dayValue="<%=spd.getDayOfMoth() %>"
+						disabled="<%= false %>"
+						monthParam="<%=DossierFileDisplayTerms.DOSSIER_FILE_DATE_MONTH %>"
+						monthValue="<%=spd.getMonth() %>"
+						name="<%=DossierFileDisplayTerms.DOSSIER_FILE_DATE%>"
+						yearParam="<%=DossierFileDisplayTerms.DOSSIER_FILE_DATE_YEAR %>"
+						yearValue="<%=spd.getYear() %>"
+						formName="fm"
+						autoFocus="<%=true %>"
+						nullable="<%=dossierFile == null || dossierFile.getDossierFileDate() == null ? true : false %>"/>
+				</aui:col>
+			</aui:row>
 		</aui:col>
 	</aui:row>
 	<aui:row>
