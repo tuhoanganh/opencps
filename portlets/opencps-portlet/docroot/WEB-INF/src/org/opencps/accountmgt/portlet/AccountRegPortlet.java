@@ -207,8 +207,6 @@ public class AccountRegPortlet extends MVCPortlet {
 		
 		String emailConfirmToAdmin = ParamUtil.getString(uploadPortletRequest, "emailConfirmToAdmin");
 		
-		String adminEmailUserAddedBody = ParamUtil.getString(uploadPortletRequest, "adminEmailUserAddedBody");
-		
 		int step = ParamUtil.getInteger(uploadPortletRequest, "businessRegStep_cfg");
 		
 		String emailConfigStep = String.valueOf(step);
@@ -267,7 +265,7 @@ public class AccountRegPortlet extends MVCPortlet {
 					MessageBusUtil.sendEmailAddressVerification(
 					    business.getUuid(), mappingUser, email,
 					    PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS, emailConfigStep,
-					    serviceContext);
+					    emailConfirmToAdmin, serviceContext);
 					//check reg cfg
 					if(step == 2){
 						BusinessLocalServiceUtil
@@ -277,12 +275,6 @@ public class AccountRegPortlet extends MVCPortlet {
 					SessionMessages.add(
 					    actionRequest,
 							MessageKeys.ACCOUNT_UPDATE_CUCCESS);
-					// Gui email thong bao toi quan tri sau khi thuc hien dang ky thanh cong
-						MessageBusUtil.sendEmailConfirmToAdmin(business.getUuid(),
-								mappingUser, email, emailConfirmToAdmin,
-								PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS, business,
-								serviceContext);
-					// Gui email thong bao toi quan tri sau khi thuc hien dang ky thanh cong -----END-----
 				}
 			} else {
 
@@ -462,6 +454,8 @@ public class AccountRegPortlet extends MVCPortlet {
 		        
         int step = ParamUtil.getInteger(uploadPortletRequest, "citizenRegStep_cfg");
         
+        String emailConfirmToAdmin = ParamUtil.getString(uploadPortletRequest, "citizenEmailConfirmToAdmin");
+        
         String emailConfigStep = String.valueOf(step);
         
 		String title = "Personal File";
@@ -515,7 +509,7 @@ public class AccountRegPortlet extends MVCPortlet {
 					MessageBusUtil.sendEmailAddressVerification(
 					    citizen.getUuid(), mappingUser, email,
 					    PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN, emailConfigStep,
-					    serviceContext);
+					    emailConfirmToAdmin, serviceContext);
 					//check reg cfg
 					if(step == 2){
 						CitizenLocalServiceUtil

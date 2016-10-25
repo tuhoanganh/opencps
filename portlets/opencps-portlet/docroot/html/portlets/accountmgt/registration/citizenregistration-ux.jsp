@@ -152,6 +152,8 @@
 	
 		<aui:model-context bean='<%=citizenValidate %>' model='<%=Citizen.class %>'/>
 		<aui:input name="citizenRegStep_cfg" value="<%=citizenRegStep_cfg %>" type="hidden"></aui:input>
+		
+		<aui:input name="citizenEmailConfirmToAdmin" value="<%=emailConfirmToAdmin %>" type="hidden"></aui:input>
 			
 		<div class="register-content">
 		
