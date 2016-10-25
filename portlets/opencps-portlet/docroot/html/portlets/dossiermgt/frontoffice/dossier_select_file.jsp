@@ -276,13 +276,8 @@
 	<aui:input name="<%=DossierFileDisplayTerms.GROUP_NAME %>" type="hidden" value="<%=groupName %>"/>
 	<aui:input name="receiveHiddenDossierFile" type="hidden" />
 	<aui:row>
-		<aui:col width="50">
-			<aui:button name="btnCancel" value="cancel"/>
-		</aui:col>
-		
-		<aui:col width="50">
-			<aui:button  name="btnAccept" value="accept"/>
-		</aui:col>
+		<aui:button name="btnCancel" value="cancel"/>
+		<aui:button  name="btnAccept" value="agree"/>
 	</aui:row>
 </aui:form>
 
@@ -311,9 +306,8 @@
 				var childNode = instance.one('.first input');
 				var circle = instance.one('.first i');
 				
-				
 				receiveHiddenDossierFile.val(childNode.val());
-				if(receiveHiddenDossierFile != '') {
+				if(receiveHiddenDossierFile.val() != '') {
 					btnAccept.removeClass('disabled');
 					btnAccept.removeAttribute('disabled');
 					
