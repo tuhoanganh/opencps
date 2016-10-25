@@ -134,7 +134,7 @@
 							</span>
 							
 							<span class="span8">
-								<%=actionHistory.getStepName()%>
+								<%= actionHistory.getStepName() %>
 							</span>
 						</aui:row>
 						
