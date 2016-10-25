@@ -175,8 +175,15 @@
 					</c:when>
 					<c:otherwise>
 						<aui:col width="30" cssClass="register-options">
-							<liferay-ui:message key="citizen" />
-						</aui:col>
+							<aui:row>
+								<aui:col width="50">
+									<aui:input type="radio" name="typeOfRegister" disabled="true" value="citizen" inlineLabel="right" label="citizen" checked="true"/>
+								</aui:col>
+								<aui:col width="50">
+									<aui:input type="radio" name="typeOfRegister" disabled="true" value="business" inlineLabel="right" label="business"/>
+								</aui:col>
+							</aui:row>
+						</aui:col>	
 					</c:otherwise>
 					</c:choose>
 					<aui:col width="30" cssClass="login-redirect">

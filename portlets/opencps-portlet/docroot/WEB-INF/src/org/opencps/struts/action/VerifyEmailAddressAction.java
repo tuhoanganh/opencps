@@ -79,32 +79,31 @@ public class VerifyEmailAddressAction extends Action {
 				    .getAccountStatus() == PortletConstants.ACCOUNT_STATUS_REGISTERED ||
 				    citizen.getAccountStatus() == PortletConstants.ACCOUNT_STATUS_APPROVED)) {
 
-					User mappingUser = UserLocalServiceUtil
-					    .updatePassword(citizen
-					        .getMappingUserId(), password, password, false);
-					//Neu cau hinh = 2 thi cap nhat 
+					//Neu cau hinh = 2 thi cap nhat mat khau va trang thai gui email thong tin user cho nguoi dung
+					//Neu cau hinh = 3 thi cap nhat trang thai thanh confirm de quan tri vao xac nhan
 					if(PortletConstants.EMAIL_CONFIG_2_STEP.equals(emailConfigStep)){
+						User mappingUser = UserLocalServiceUtil
+								.updatePassword(citizen
+										.getMappingUserId(), password, password, false);
 						citizen
 					    .setAccountStatus(
 					        PortletConstants.ACCOUNT_STATUS_APPROVED);
+						citizen
+						.setModifiedDate(new Date());
+						CitizenLocalServiceUtil
+						.updateCitizen(citizen);
+						
+						MessageBusUtil
+						.sendEmailActiveAccount(
+								mappingUser, password, serviceContext);
 					}else{
 						citizen
 					    .setAccountStatus(
 					        PortletConstants.ACCOUNT_STATUS_CONFIRMED);
+						
+						CitizenLocalServiceUtil
+						.updateCitizen(citizen);
 					}
-					
-					citizen
-					    .setModifiedDate(new Date());
-					CitizenLocalServiceUtil
-					    .updateCitizen(citizen);
-					//Neu la cau hinh 2 buoc thi gui thang mail thong tin tai khoan cho nguoi dung
-					//Neu la 3 buoc thi khong gui cho nguoi dung, chi gui cho quan tri.
-					if(PortletConstants.EMAIL_CONFIG_2_STEP.equals(emailConfigStep)){
-						MessageBusUtil
-					    .sendEmailActiveAccount(
-					        mappingUser, password, serviceContext);
-					}
-					
 				}
 				else {
 					return mapping
@@ -118,31 +117,34 @@ public class VerifyEmailAddressAction extends Action {
 				if (business != null && ( business
 				    .getAccountStatus() == PortletConstants.ACCOUNT_STATUS_REGISTERED ||
 				    business.getAccountStatus() == PortletConstants.ACCOUNT_STATUS_APPROVED)) {
-
-					User mappingUser = UserLocalServiceUtil
-					    .updatePassword(business
-					        .getMappingUserId(), password, password, false);
+					
+					business
+				    .setModifiedDate(new Date());
 					
 					if(PortletConstants.EMAIL_CONFIG_2_STEP.equals(emailConfigStep)){
+						
+						User mappingUser = UserLocalServiceUtil
+							    .updatePassword(business
+							        .getMappingUserId(), password, password, false);
+						
 						business
 					    .setAccountStatus(
 					        PortletConstants.ACCOUNT_STATUS_APPROVED);
-					}else{
-						business
-					    .setAccountStatus(
-					        PortletConstants.ACCOUNT_STATUS_CONFIRMED);
-					}
-					
-					business
-					    .setModifiedDate(new Date());
-					BusinessLocalServiceUtil
-					    .updateBusiness(business);
-					//Neu la cau hinh 2 buoc thi gui thang mail thong tin tai khoan cho nguoi dung
-					//Neu la 3 buoc thi khong gui cho nguoi dung, chi gui cho quan tri.
-					if(PortletConstants.EMAIL_CONFIG_2_STEP.equals(emailConfigStep)){
+						
 						MessageBusUtil
 					    .sendEmailActiveAccount(
 					        mappingUser, password, serviceContext);
+						
+						BusinessLocalServiceUtil
+					    .updateBusiness(business);
+					}else{
+						
+						business
+					    .setAccountStatus(
+					        PortletConstants.ACCOUNT_STATUS_CONFIRMED);
+						
+						BusinessLocalServiceUtil
+					    .updateBusiness(business);
 					}
 				}
 				else {
