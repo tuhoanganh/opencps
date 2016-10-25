@@ -29,6 +29,10 @@
 	padding-left: 0;
 	padding-right: 0;
 }
+.opencps-theme.ux .opencps-toolbar .navbar-inner > .container {
+	padding: 0;
+	margin-top: 20px;
+}
 
 /* .opencps-theme.ux .opencps-toolbar div.search-input.input-keyword{
 	display: flex;
