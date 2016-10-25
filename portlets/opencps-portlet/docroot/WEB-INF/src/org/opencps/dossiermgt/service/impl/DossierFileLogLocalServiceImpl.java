@@ -81,9 +81,9 @@ public class DossierFileLogLocalServiceImpl
 
 		int count =
 		    dossierFileLogPersistence.countByD_F_S(
-		        dossierId, fileGroupId, stepId) + 1;
+		        dossierId, fileGroupId, stepId);
 
-		dossierFileLog.setCount_(count);
+		dossierFileLog.setCount_(count); 
 
 		dossierFileLog.setUserId(userId);
 		dossierFileLog.setUserName(userName);
