@@ -1,5 +1,4 @@
 
-<%@page import="com.liferay.portal.RolePermissionsException"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -43,6 +42,7 @@
 <%@page import="org.opencps.accountmgt.NoSuchAccountException"%>
 <%@page import="org.opencps.dossiermgt.NoSuchDossierPartException"%>
 <%@page import="org.opencps.dossiermgt.NoSuchDossierException"%>
+<%@page import="com.liferay.portal.RolePermissionsException"%>
 <%@ include file="/init.jsp"%>
 
 <%
@@ -166,7 +166,7 @@
 	
 	<aui:row>
 		<aui:col width="100">
-			<aui:input name="<%= DossierFileDisplayTerms.DISPLAY_NAME %>" type="textarea" value="<%=dossierPartName %>">
+			<aui:input name="<%= DossierFileDisplayTerms.DISPLAY_NAME %>" type="textarea" value="<%=dossierPartName %>" inlineLabel="true">
 				<aui:validator name="required"/>
 			</aui:input>
 		</aui:col>
@@ -174,11 +174,7 @@
 	
 	<aui:row>
 		<aui:col width="100">
-			<aui:input name="<%= DossierFileDisplayTerms.DOSSIER_FILE_NO %>" type="text"/>
-		</aui:col>
-	</aui:row>
-	<aui:row>
-		<aui:col width="100">
+			<aui:input name="<%= DossierFileDisplayTerms.DOSSIER_FILE_NO %>" type="text" inlineLabel="true"/>
 			<label class="control-label custom-lebel" for='<portlet:namespace/><%=DossierFileDisplayTerms.DOSSIER_FILE_DATE %>'>
 				<liferay-ui:message key="dossier-file-date"/>
 			</label>
