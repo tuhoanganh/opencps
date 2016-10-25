@@ -57,8 +57,6 @@ import com.liferay.portal.kernel.messaging.MessageListenerException;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.model.User;
-import com.liferay.portal.service.UserLocalServiceUtil;
 
 /**
  * @author khoavd
@@ -96,41 +94,9 @@ public class BackOfficeProcessEngine implements MessageListener {
 		long govAgencyOrganizationId = 0;
 		long serviceProcessId = 0;
 
-		int actor = 0;
-		long actorId = 0;
-		String actorName = StringPool.BLANK;
-
 		long actionUserId = toEngineMsg.getActionUserId();
 
-		// Set actor
-		// setActor(actor, actorId, actorName, actionUserId);
-		try {
-			if (actionUserId != 0) {
-				User user = UserLocalServiceUtil.fetchUser(actionUserId);
-
-				actor = WebKeys.DOSSIER_ACTOR_EMPLOYEE;
-
-				actorId = actionUserId;
-
-				actorName = user.getFullName();
-			}
-			else {
-				actor = 0;
-				actorId = 0;
-				actorName = WebKeys.DOSSIER_ACTOR_SYSTEM_NAME;
-			}
-
-			/*
-			 * DossierLogLocalServiceUtil.addDossierLog( 0, 0, 0,
-			 * toEngineMsg.getDossierId(), toEngineMsg.getFileGroupId(),
-			 * toEngineMsg.getDossierStatus(), "send-to-engine",
-			 * "send-to-engine", new Date(), 0, 0, actor, actorId, actorName,
-			 * BackOfficeProcessEngine.class.getName());
-			 */
-		}
-		catch (Exception e) {
-			_log.error(e);
-		}
+		ActorBean actorBean = new ActorBean(toEngineMsg.getActorType(), actionUserId);
 
 		if (Validator.isNotNull(dossier)) {
 			serviceInfoId = dossier.getServiceInfoId();
@@ -153,12 +119,14 @@ public class BackOfficeProcessEngine implements MessageListener {
 		}
 
 		SendToBackOfficeMsg toBackOffice = new SendToBackOfficeMsg();
-
+		
 		toBackOffice.setSubmitDateTime(now);
-		toBackOffice.setReceiveDatetime(now);
-		toBackOffice.setActor(actor);
-		toBackOffice.setActorId(actorId);
-		toBackOffice.setActorName(actorName);
+		
+		toBackOffice.setActor(actorBean.getActor());
+		toBackOffice.setActorId(actorBean.getActorId());
+		toBackOffice.setActorName(actorBean.getActorName());
+		
+		
 		long processWorkflowId = toEngineMsg.getProcessWorkflowId();
 
 		long processOrderId = toEngineMsg.getProcessOrderId();
@@ -190,7 +158,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 					// Add DossierLog for create ProcessOrder
 
-					ActorBean actorBean = new ActorBean(0, 0);
+					ActorBean actorBeanSys = new ActorBean(0, 0);
 
 					DossierLog dossierLog =
 						DossierLogLocalServiceUtil.addDossierLog(
@@ -202,8 +170,8 @@ public class BackOfficeProcessEngine implements MessageListener {
 							PortletConstants.DOSSIER_STATUS_SYSTEM,
 							PortletConstants.DOSSIER_ACTION_CREATE_PROCESS_ORDER,
 							PortletConstants.DOSSIER_ACTION_CREATE_PROCESS_ORDER,
-							new Date(), 0, 0, actorBean.getActor(),
-							actorBean.getActorId(), actorBean.getActorName(),
+							new Date(), 0, 0, actorBeanSys.getActor(),
+							actorBeanSys.getActorId(), actorBeanSys.getActorName(),
 							BackOfficeProcessEngine.class.getName() +
 								".createProcessOrder()");
 
@@ -273,6 +241,12 @@ public class BackOfficeProcessEngine implements MessageListener {
 				if (changeStepId != 0) {
 					ProcessStep changeStep =
 						ProcessStepLocalServiceUtil.getProcessStep(changeStepId);
+					
+					//Set Receive Date
+					
+					if (changeStep.getDossierStatus().contains("processing")) {
+						toBackOffice.setReceiveDatetime(new Date());
+					}
 
 					if (Validator.isNotNull(changeStep)) {
 						changeStatus = changeStep.getDossierStatus();
@@ -280,7 +254,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 						if (Validator.equals(
 						    changeStep.getDossierStatus(),
-						    PortletConstants.DOSSIER_STATUS_RECEIVING)) {
+						    PortletConstants.DOSSIER_STATUS_WAITING)) {
 							
 							isResubmit = true;
 						}
@@ -316,6 +290,9 @@ public class BackOfficeProcessEngine implements MessageListener {
 					toEngineMsg.getActionDatetime(),
 					toEngineMsg.getActionNote(), assignToUserId, stepName,
 					actionName, 0, 0, PortletConstants.DOSSIER_STATUS_SYSTEM);
+				
+				toBackOffice.setStepName(stepName);
+				toBackOffice.setProcessWorkflowId(processWorkflow.getProcessWorkflowId());
 
 				toBackOffice.setProcessOrderId(processOrderId);
 				toBackOffice.setDossierId(toEngineMsg.getDossierId());
@@ -346,7 +323,8 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 						toBackOffice.setReceptionNo(DossierNoGenerator.genaratorNoReception(
 							pattern, toEngineMsg.getDossierId()));
-
+						// Add log create dossier
+						
 					}
 					else {
 						toBackOffice.setReceptionNo(dossier.getReceptionNo());
@@ -362,7 +340,6 @@ public class BackOfficeProcessEngine implements MessageListener {
 					toBackOffice.setFinishDatetime(new Date());
 				}
 
-				toBackOffice.setProcessWorkflowId(processWorkflowId);
 				toBackOffice.setCompanyId(toEngineMsg.getCompanyId());
 				toBackOffice.setGovAgencyCode(govAgencyCode);
 
@@ -443,12 +420,13 @@ public class BackOfficeProcessEngine implements MessageListener {
 				}
 				else {
 					toBackOffice.setRequestPayment(0);
+					
 					toBackOffice.setMessageInfo(toEngineMsg.getActionNote());
 				}
 				
 				toBackOffice.setPayment(isPayment);
 				toBackOffice.setResubmit(isResubmit);
-
+				
 				Message sendToBackOffice = new Message();
 
 				sendToBackOffice.put("toBackOffice", toBackOffice);
@@ -467,6 +445,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 				toBackOffice.setGovAgencyCode(govAgencyCode);
 				toBackOffice.setReceptionNo(toEngineMsg.getReceptionNo());
 				toBackOffice.setUserActorAction(toEngineMsg.getActionUserId());
+				toBackOffice.setStepName(stepName);
 
 				Message sendToBackOffice = new Message();
 
