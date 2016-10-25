@@ -1,13 +1,24 @@
 .opencps-theme.ux  .portlet-boundary_13_WAR_opencpsportlet_ .opencps-toptabs,
 .opencps-theme.ux  .portlet-boundary_16_WAR_opencpsportlet_ .opencps-toptabs {
-	background-color: #2ea4ff;
+	/* background-color: #2ea4ff;
 	height: 39px;
 	color: white;
-	font-family: 'Roboto-Bold';
+	font-family: 'Roboto-Bold'; */
 	margin-bottom: 30px;
-	margin-top: -25px;
 }
 
+@media screen and (-webkit-min-device-pixel-ratio:0) {  
+    .opencps-theme.ux .portlet-boundary_13_WAR_opencpsportlet_ .opencps-toptabs {
+        margin-top: -25px;
+    }
+}
+.opencps-theme.ux .portlet-boundary_13_WAR_opencpsportlet_ .opencps-toptabs > .container, 
+.opencps-theme.ux .portlet-boundary_16_WAR_opencpsportlet_ .opencps-toptabs > .container, 
+.opencps-theme.ux .portlet-boundary_18_WAR_opencpsportlet_ .opencps-toptabs > .container {
+	margin: 0 -15px;
+}
+
+/*
 .opencps-theme.ux  .portlet-boundary_13_WAR_opencpsportlet_ .opencps-toptabs ul {
 	margin: 0;
 	border-bottom: 0;
@@ -64,20 +75,11 @@
 	color: #fff;
 	background-color: rgba(255, 0, 0, 0);
 	border-color: rgba(255, 0, 0, 0);
-}
+} */
 
 /*portlet 16*/
 
-.opencps-theme.ux  .portlet-boundary_16_WAR_opencpsportlet_ .opencps-toptabs {
-	background-color: #2ea4ff;
-	height: 39px;
-	color: white;
-	font-family: 'Roboto-Bold';
-	margin-bottom: 30px;
-/* 	margin-top: -25px; */
-}
-
-.opencps-theme.ux  .portlet-boundary_16_WAR_opencpsportlet_ .opencps-toptabs ul {
+/* .opencps-theme.ux  .portlet-boundary_16_WAR_opencpsportlet_ .opencps-toptabs ul {
 	margin: 0
 }
 
@@ -132,20 +134,11 @@
 	color: #fff;
 	background-color: rgba(255, 0, 0, 0);
 	border-color: rgba(255, 0, 0, 0);
-}
+} */
 
 /*portlet 18*/
 
-.opencps-theme.ux  .portlet-boundary_18_WAR_opencpsportlet_ .opencps-toptabs {
-	background-color: #2ea4ff;
-	height: 39px;
-	color: white;
-	font-family: 'Roboto-Bold';
-	margin-bottom: 30px;
-/* 	margin-top: -25px; */
-}
-
-.opencps-theme.ux  .portlet-boundary_18_WAR_opencpsportlet_ .opencps-toptabs ul {
+/* .opencps-theme.ux  .portlet-boundary_18_WAR_opencpsportlet_ .opencps-toptabs ul {
 	margin: 0
 }
 
@@ -200,4 +193,4 @@
 	color: #fff;
 	background-color: rgba(255, 0, 0, 0);
 	border-color: rgba(255, 0, 0, 0);
-}
+} */
