@@ -489,16 +489,16 @@ div.payment-ld:nth-child(2){
 .opencps-theme.ux  .portlet-boundary_18_WAR_opencpsportlet_ .opencps-toptabs {
 	margin-top: -25px;
 }
-.opencps-theme.ux .portlet-boundary_13_WAR_opencpsportlet_ ul.nav-tabs li a,
+/* .opencps-theme.ux .portlet-boundary_13_WAR_opencpsportlet_ ul.nav-tabs li a,
 .opencps-theme.ux .portlet-boundary_16_WAR_opencpsportlet_ ul.nav-tabs li a,
 .opencps-theme.ux .portlet-boundary_18_WAR_opencpsportlet_ ul.nav-tabs li a{
 	border: 0px !important;
 	background: none !important;
 	margin-right: 15px !important;
 	border-bottom: 0 !important;
-}
+} */
 
-.opencps-theme.ux .portlet-boundary_13_WAR_opencpsportlet_ ul.nav-tabs li.active a:before,
+/* .opencps-theme.ux .portlet-boundary_13_WAR_opencpsportlet_ ul.nav-tabs li.active a:before,
 .opencps-theme.ux .portlet-boundary_16_WAR_opencpsportlet_ ul.nav-tabs li.active a:before,
 .opencps-theme.ux .portlet-boundary_18_WAR_opencpsportlet_ ul.nav-tabs li.active a:before {
 	content: "" ; 
@@ -510,7 +510,7 @@ div.payment-ld:nth-child(2){
 	width: 1px !important; 
 	height: 1px !important; 
 	background-color: none !important; 
-}
+} */
 .opencps-theme.ux .opencps.dossiermgt.dossier-part-name.cssRequired:after{
     content:"*";
     color:red;

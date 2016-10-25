@@ -10,7 +10,7 @@
 	$theme.include($top_head_include)
 </head>
 
-<body class="$css_class opencps-theme ux mBody">
+<body class="$css_class opencps-theme ux mBody page-theme">
 	
 	$theme.include($body_top_include)
 	
@@ -18,8 +18,12 @@
 		#dockbar()
 	#end
 
-<div class="container page-theme moit-theme">
+<div class="container moit-theme">
 	<header id="banner" role="banner">
+		#if ($has_navigation || $is_signed_in)
+			#parse ("$full_templates_path/navigation_public_page.vm")
+		#end
+		
 		<div class="header container">
 			<a class="logo" href="$site_default_url" title="#language_format ("go-to-x", [$site_name])"></a>
 		</div>
