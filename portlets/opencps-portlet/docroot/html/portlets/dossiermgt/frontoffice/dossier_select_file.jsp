@@ -285,6 +285,7 @@
 		</aui:col>
 	</aui:row>
 </aui:form>
+
 <aui:script>
 
 	AUI().ready(function(A){
