@@ -32,9 +32,12 @@ import org.opencps.dossiermgt.model.DossierStatus;
 import org.opencps.dossiermgt.model.DossierTemplate;
 import org.opencps.dossiermgt.model.FileGroup;
 import org.opencps.dossiermgt.model.ServiceConfig;
+import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
 import org.opencps.dossiermgt.service.base.DossierLocalServiceBaseImpl;
 import org.opencps.paymentmgt.model.PaymentFile;
 import org.opencps.servicemgt.model.ServiceInfo;
+import org.opencps.usermgt.model.WorkingUnit;
+import org.opencps.usermgt.service.WorkingUnitLocalServiceUtil;
 import org.opencps.util.DLFolderUtil;
 import org.opencps.util.PortletConstants;
 import org.opencps.util.PortletUtil;
@@ -1309,6 +1312,11 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 				serviceContext.getScopeGroupId(),
 				serviceInfo.getServiceinfoId(), syncDossier.getGovAgencyCode());
 
+		WorkingUnit workingUnit =
+			WorkingUnitLocalServiceUtil.getWorkingUnit(
+				serviceContext.getScopeGroupId(),
+				syncDossier.getGovAgencyCode());
+
 		long dossierId = counterLocalService.increment(Dossier.class.getName());
 
 		Dossier dossier = dossierPersistence.create(dossierId);
@@ -1336,12 +1344,12 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		dossier.setDossierStatus(syncDossier.getDossierStatus());
 		dossier.setDossierTemplateId(dossierTemplate.getDossierTemplateId());
 		dossier.setGovAgencyCode(syncDossier.getGovAgencyCode());
-		dossier.setGovAgencyName(syncDossier.getGovAgencyName());
-		// Sync from another system
-		dossier.setGovAgencyOrganizationId(syncDossier.getGovAgencyOrganizationId());
+		dossier.setGovAgencyName(workingUnit.getName());
+		dossier.setGovAgencyOrganizationId(workingUnit.getMappingOrganisationId());
 		dossier.setNote(syncDossier.getNote());
 		// Sync from another system
 		dossier.setOwnerOrganizationId(syncDossier.getOwnerOrganizationId());
+		
 		dossier.setReceptionNo(syncDossier.getReceptionNo());
 		// dossier.setReceiveDatetime(receiveDatetime);
 		dossier.setServiceAdministrationIndex(syncDossier.getServiceAdministrationIndex());
