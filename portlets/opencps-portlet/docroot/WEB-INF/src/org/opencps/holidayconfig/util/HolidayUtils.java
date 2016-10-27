@@ -49,35 +49,80 @@ public class HolidayUtils {
 	 * @return Date has been check holiday
 	 */
 	public static Date getEndDate(Date baseDate, String pattern) {
-		
+
+		/* format pattern = "3 -10:30", pattern = "3 +10:30" */
+
 		Date estimateDate = null;
-	
-		
-		int bookingDays = 0;
-		int bookingHour = 0;
-		int bookingMinutes = 0;
-		
-		String [] splitPattern = StringUtil.split(pattern, StringPool.SPACE);
-		
-		if (splitPattern.length == 2) {
-		
-			bookingDays = GetterUtil.getInteger(splitPattern[0],0);
-			
-			String [] splitHour = StringUtil.split(splitPattern[1], StringPool.COLON);
-			
-			if (splitHour.length == 2) {
-				bookingHour = GetterUtil.getInteger(splitHour[0]);
-				bookingMinutes = GetterUtil.getInteger(splitHour[1]);
+
+		try {
+
+			if (baseDate == null) {
+				baseDate = new Date();
 			}
+
+			Calendar baseDateCal = Calendar.getInstance();
+			baseDateCal.setTime(baseDate);
+
+			int bookingDays = 0;
+			int bookingHour = 0;
+			int bookingMinutes = 0;
+
+			String[] splitPattern = StringUtil.split(pattern, StringPool.SPACE);
+
+			if (splitPattern.length == 2) {
+
+				bookingDays = GetterUtil.getInteger(splitPattern[0], 0);
+
+				String[] splitHour = StringUtil.split(splitPattern[1], StringPool.COLON);
+
+				if (splitHour.length == 2) {
+					bookingHour = GetterUtil.getInteger(splitHour[0]);
+					bookingMinutes = GetterUtil.getInteger(splitHour[1]);
+				}
+			}
+
+			int saturdayIsHoliday = 0;
+			int sundayIsHoliday = 0;
+
+			/* Kiem tra xem flag sunday,saturday co duoc tinh la ngay nghi khong */
+			List<HolidayConfigExtend> holidayConfigExtendList =
+				HolidayConfigExtendLocalServiceUtil.getHolidayConfigExtends(
+					QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+
+			for (HolidayConfigExtend holidayConfigExtend : holidayConfigExtendList) {
+
+				if (holidayConfigExtend.getKey().equals(SATURDAY)) {
+					saturdayIsHoliday = holidayConfigExtend.getStatus();
+				}
+
+				if (holidayConfigExtend.getKey().equals(SUNDAY)) {
+					sundayIsHoliday = holidayConfigExtend.getStatus();
+				}
+			}
+
+			for (int i = 0; i < bookingDays; i++) {
+
+				baseDateCal.add(Calendar.DATE, 1);
+
+				baseDateCal =
+					checkDay(baseDateCal, baseDate, null, saturdayIsHoliday, sundayIsHoliday);
+
+			}
+
+			baseDateCal.add(Calendar.HOUR, bookingHour);
+			baseDateCal.add(Calendar.MINUTE, bookingMinutes);
+
+			estimateDate = baseDateCal.getTime();
+
 		}
-		
-		/////////////////////////////////////
-		
+		catch (Exception e) {
+			_log.error(e);
+		}
+
 		return estimateDate;
 
 	}
-
-
+	
 	public static Calendar getEndDate(Date baseDate, long daysDuration) {
 
 		if (baseDate == null) {
@@ -92,7 +137,8 @@ public class HolidayUtils {
 			int saturdayIsHoliday = 0;
 			int sundayIsHoliday = 0;
 
-			/* Kiểm tra xem flag sunday,saturday có được tính là ngày nghỉ không */
+			/* Kiem tra xem flag sunday,saturday co duoc tinh la ngay nghi khong */
+			
 			List<HolidayConfigExtend> holidayConfigExtendList = HolidayConfigExtendLocalServiceUtil
 					.getHolidayConfigExtends(QueryUtil.ALL_POS,
 							QueryUtil.ALL_POS);
@@ -138,8 +184,8 @@ public class HolidayUtils {
 			}
 
 			/*
-			 * Kiểm tra ngày xử lý có trùng vào list ngày nghỉ đã config hay
-			 * chưa Nếu trùng thì sẽ + thêm ngày xử lý
+			 * Kiem tra ngay xu ly co trung vao list ngay nghi da config 
+			 * hay chua, Neu trung thi + them ngay xu ly
 			 */
 			isHoliday = isHoliday(baseDateCal, holidayConfigList);
 
@@ -149,7 +195,7 @@ public class HolidayUtils {
 
 				baseDateCal = isHolidayCal(baseDateCal, holidayConfigList);
 
-				/* Nếu flag saturday,sunday bật thì ko tính là ngày nghỉ */
+				/* Neu flag saturday,sunday bat thi tinh la ngay nghi, + them ngay xu ly */
 
 				if (saturdayIsHoliday == ACTIVE) {
 
