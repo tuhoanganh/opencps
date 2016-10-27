@@ -2298,15 +2298,12 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 
 			Dossier dossier = dossierPersistence.findByPrimaryKey(dossierId);
 			dossier.setReceptionNo(receptionNo);
+			
 			dossier.setEstimateDatetime(estimateDatetime);
 
-			if (Validator.isNull(dossier.getReceiveDatetime())) {
-				dossier.setReceiveDatetime(receiveDatetime);
-			}
-
-			if (Validator.isNull(dossier.getSubmitDatetime())) {
-				dossier.setSubmitDatetime(submitDatetime);
-			}
+			dossier.setReceiveDatetime(receiveDatetime);
+		
+			dossier.setSubmitDatetime(submitDatetime);
 
 			dossier.setFinishDatetime(finishDatetime);
 

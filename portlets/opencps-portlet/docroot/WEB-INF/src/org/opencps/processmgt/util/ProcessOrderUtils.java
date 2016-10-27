@@ -33,14 +33,16 @@ import org.opencps.dossiermgt.bean.ProcessOrderBean;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.impl.DossierImpl;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
-import org.opencps.dossiermgt.service.impl.DossierLocalServiceImpl;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.model.ProcessStep;
+import org.opencps.processmgt.model.ProcessWorkflow;
 import org.opencps.processmgt.model.StepAllowance;
 import org.opencps.processmgt.search.ProcessOrderDisplayTerms;
 import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
+import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
 import org.opencps.processmgt.service.StepAllowanceLocalServiceUtil;
 import org.opencps.processmgt.util.comparator.ProcessOrderModifiedDateComparator;
+import org.opencps.util.PortletConstants;
 import org.opencps.util.PortletUtil;
 //import org.opencps.processmgt.util.comparator.BuocXuLyComparator;
 //import org.opencps.processmgt.util.comparator.ChuHoSoComparator;
@@ -727,6 +729,53 @@ public class ProcessOrderUtils {
 		}
 
 		return dossierDate;
+	}
+	
+	/**
+	 * @param dossierId
+	 * @param processWorkflowId
+	 * @param processStepId
+	 * @return
+	 */
+	public static Date getRecevieDate(
+	    long dossierId, long processWorkflowId, long processStepId) {
+
+		Date recevieDate = null;
+
+		try {
+
+			Dossier dossier = DossierLocalServiceUtil.fetchDossier(dossierId);
+
+			if (Validator.isNotNull(dossier.getReceiveDatetime())) {
+				recevieDate = dossier.getReceiveDatetime();
+			}
+			else {
+				ProcessWorkflow processWorkflow =
+				    ProcessWorkflowLocalServiceUtil.fetchProcessWorkflow(processWorkflowId);
+
+				ProcessStep currStep =
+				    ProcessStepLocalServiceUtil.fetchProcessStep(processWorkflow.getPreProcessStepId());
+
+				ProcessStep nextStep =
+				    ProcessStepLocalServiceUtil.fetchProcessStep(processWorkflow.getPostProcessStepId());
+				
+				_log.info("CURR_STEP: " + currStep.getStepName() + "NEXT_STEP: " + nextStep.getStepName());
+
+				if (currStep.getDossierStatus().contains(
+				    PortletConstants.DOSSIER_STATUS_RECEIVING) &&
+				    nextStep.getDossierStatus().contains(
+				        PortletConstants.DOSSIER_STATUS_PROCESSING)) {
+					recevieDate = new Date();
+				}
+
+			}
+
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
+		return recevieDate;
+
 	}
 
 	private static Log _log =

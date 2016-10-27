@@ -13,10 +13,13 @@
 		<!-- Group instance -->
 
 		<column name="holiday" type="Date"></column>
+		<column name="companyId" type="long" />
+		<column name="groupId" type="long" />
+		<column name="userId" type="long" />
 		<column name="description"  type="String" />
 		<column name="createdDate"  type="Date" />
 		<column name="modifiedDate"  type="Date" />
-		<column name="remove"  type="int" />
+		<column name="status"  type="int" />
 
 
 		<!-- Order -->
@@ -40,7 +43,10 @@
 
 	<column name="key" type="String"></column>
 	<column name="description"  type="String" />
-	<column name="active"  type="int" />
+	<column name="status"  type="int" />
+	<column name="companyId" type="long" />
+	<column name="groupId" type="long" />
+	<column name="userId" type="long" />
 
 
 	<!-- Order -->

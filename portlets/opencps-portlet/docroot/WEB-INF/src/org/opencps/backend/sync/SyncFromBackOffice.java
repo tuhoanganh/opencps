@@ -83,6 +83,11 @@ public class SyncFromBackOffice implements MessageListener {
 			boolean statusUpdate = false;
 
 			try {
+				_log.info("Estimate date:" + toBackOffice.getEstimateDatetime());
+				_log.info("Submit date:" + toBackOffice.getSubmitDateTime());
+				_log.info("Fisnished date:" + toBackOffice.getFinishDatetime());
+				_log.info("Receive date:" + toBackOffice.getReceiveDatetime());
+				
 				statusUpdate =
 					DossierLocalServiceUtil.updateDossierStatus(
 						toBackOffice.getDossierId(),
