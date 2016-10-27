@@ -138,7 +138,7 @@
 			<liferay-ui:message key="modified-date"/>
 		</td>
 		<td >
-			<%=processOrder != null ? DateTimeUtil.convertDateToString(processOrder.getModifiedDate(), DateTimeUtil._VN_DATE_TIME_FORMAT) :  StringPool.BLANK %>
+			<%= ProcessOrderUtils.getDossierDate(dossier.getDossierId(), 4, "dd/MM/yyyy hh:mm") %>
 		</td>
 	</tr>
 	<tr>

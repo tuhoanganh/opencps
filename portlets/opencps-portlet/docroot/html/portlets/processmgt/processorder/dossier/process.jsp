@@ -464,7 +464,7 @@
 
 <aui:input 
 	name="<%=DossierDisplayTerms.RECEPTION_NO %>" 
-	value="<%=dossier != null && Validator.isNotNull(dossier.getReceptionNo()) ? dossier.getReceptionNo() : 0 %>" 
+	value="<%=dossier != null && Validator.isNotNull(dossier.getReceptionNo()) ? dossier.getReceptionNo() : StringPool.BLANK %>" 
 	type="hidden"
 />
 
@@ -543,7 +543,6 @@
 		
 		var fileGroupId = A.one('#<portlet:namespace/>fileGroupId').val();
 		
-		var receptionNo = A.one('#<portlet:namespace/>receptionNo').val();
 		
 		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
 		portletURL.setParameter("mvcPath", "/html/portlets/processmgt/processorder/assign_to_user.jsp");
@@ -557,8 +556,6 @@
 		portletURL.setParameter("processOrderId", processOrderId);
 		portletURL.setParameter("actionUserId", actionUserId);
 		portletURL.setParameter("fileGroupId", fileGroupId);
-		portletURL.setParameter("receptionNo", receptionNo);
-		portletURL.setParameter("receiveDate", receiveDate);
 		portletURL.setParameter("deadlinePattern", deadlinePattern);
 		portletURL.setParameter("backURL", '<%=backURL%>');
 	
