@@ -25,7 +25,6 @@ import org.opencps.backend.message.SendToBackOfficeMsg;
 import org.opencps.backend.message.SendToCallbackMsg;
 import org.opencps.backend.util.BackendUtils;
 import org.opencps.dossiermgt.model.Dossier;
-import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLogLocalServiceUtil;
@@ -83,10 +82,10 @@ public class SyncFromBackOffice implements MessageListener {
 			boolean statusUpdate = false;
 
 			try {
-				_log.info("Estimate date:" + toBackOffice.getEstimateDatetime());
-				_log.info("Submit date:" + toBackOffice.getSubmitDateTime());
-				_log.info("Fisnished date:" + toBackOffice.getFinishDatetime());
-				_log.info("Receive date:" + toBackOffice.getReceiveDatetime());
+				_log.info("Estimate date________________________________________:" + toBackOffice.getEstimateDatetime());
+				_log.info("Submit date________________________________________:" + toBackOffice.getSubmitDateTime());
+				_log.info("Fisnished date________________________________________:" + toBackOffice.getFinishDatetime());
+				_log.info("Receive date________________________________________:" + toBackOffice.getReceiveDatetime());
 				
 				statusUpdate =
 					DossierLocalServiceUtil.updateDossierStatus(
@@ -107,12 +106,14 @@ public class SyncFromBackOffice implements MessageListener {
 				List<WorkflowOutput> workflowOutputs =
 					WorkflowOutputLocalServiceUtil.getByProcessWFPostback(
 						toBackOffice.getProcessWorkflowId(), true);
+				
+				System.out.println("PROCESS_WORKFLOWWWWWWWWWWWWW" + workflowOutputs.size());
+				
 				// Lat co trang thai dossier file
-				List<DossierFile> dossierFiles =
-					DossierFileLocalServiceUtil.updateDossierFileResultSyncStatus(
+				DossierFileLocalServiceUtil.updateDossierFileResultSyncStatus(
 						0, toBackOffice.getDossierId(),
-						PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
 						PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC,
+						PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS,
 						0, workflowOutputs);
 
 				// Update DossierLog
@@ -199,9 +200,9 @@ public class SyncFromBackOffice implements MessageListener {
 				MessageBusUtil.sendMessage(
 					"opencps/backoffice/engine/callback", sendToCallBack);
 				// Lat co trang thai dossier file
-				DossierFileLocalServiceUtil.updateDossierFileSyncStatus(
+/*				DossierFileLocalServiceUtil.updateDossierFileSyncStatus(
 					0, PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS,
-					dossierFiles);
+					dossierFiles);*/
 			}
 			catch (Exception e) {
 				_log.error(e);
