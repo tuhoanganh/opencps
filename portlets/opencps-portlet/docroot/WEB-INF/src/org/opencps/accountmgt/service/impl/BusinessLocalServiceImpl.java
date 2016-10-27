@@ -465,7 +465,6 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		business.setWardCode(wardCode);
 
 		business = businessPersistence.update(business);
-		organizationPersistence.update(organization);
 
 		if (businessDomainCodes != null && businessDomainCodes.length > 0) {
 			businessDomainLocalService.addBusinessDomains(businessId, businessDomainCodes);
