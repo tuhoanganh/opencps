@@ -28,6 +28,9 @@ import org.opencps.holidayconfig.service.HolidayConfigLocalServiceUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 public class HolidayUtils {
@@ -37,6 +40,43 @@ public class HolidayUtils {
 	public final static String SATURDAY = "SATURDAY";
 	public final static String SUNDAY = "SUNDAY";
 	private final static int ACTIVE = 1;
+	
+	/**
+	 * Check estimateDate
+	 * 
+	 * @param baseDate
+	 * @param pattern
+	 * @return Date has been check holiday
+	 */
+	public static Date getEndDate(Date baseDate, String pattern) {
+		
+		Date estimateDate = null;
+	
+		
+		int bookingDays = 0;
+		int bookingHour = 0;
+		int bookingMinutes = 0;
+		
+		String [] splitPattern = StringUtil.split(pattern, StringPool.SPACE);
+		
+		if (splitPattern.length == 2) {
+		
+			bookingDays = GetterUtil.getInteger(splitPattern[0],0);
+			
+			String [] splitHour = StringUtil.split(splitPattern[1], StringPool.COLON);
+			
+			if (splitHour.length == 2) {
+				bookingHour = GetterUtil.getInteger(splitHour[0]);
+				bookingMinutes = GetterUtil.getInteger(splitHour[1]);
+			}
+		}
+		
+		/////////////////////////////////////
+		
+		return estimateDate;
+
+	}
+
 
 	public static Calendar getEndDate(Date baseDate, long daysDuration) {
 
