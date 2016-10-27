@@ -436,7 +436,10 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 					parentFolder.getFolderId(), serviceContext);
 			}
 		}
-
+		
+		Organization organization = organizationPersistence.findByPrimaryKey(business.getMappingOrganizationId());
+		organization.setName(fullName);
+		organizationPersistence.update(organization);
 		
 		business.setAddress(address);
 
@@ -462,6 +465,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		business.setWardCode(wardCode);
 
 		business = businessPersistence.update(business);
+		organizationPersistence.update(organization);
 
 		if (businessDomainCodes != null && businessDomainCodes.length > 0) {
 			businessDomainLocalService.addBusinessDomains(businessId, businessDomainCodes);
@@ -549,6 +553,10 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 				contact = ContactLocalServiceUtil.updateContact(contact);
 			}
 		}
+		
+		Organization organization = organizationPersistence.findByPrimaryKey(business.getMappingOrganizationId());
+		organization.setName(fullName);
+		organizationPersistence.update(organization);
 
 		business.setAddress(address);
 
