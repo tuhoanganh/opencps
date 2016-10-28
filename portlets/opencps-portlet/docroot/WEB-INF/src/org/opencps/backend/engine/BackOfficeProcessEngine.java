@@ -74,8 +74,12 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 		SendToEngineMsg toEngineMsg =
 			(SendToEngineMsg) message.get("msgToEngine");
+		
+		Date submitDate = null;
+		Date estimateDate = null;
+		Date finishedDate = null;
+		Date receiveDate = null;
 
-		Date now = new Date();
 		String actionName = StringPool.BLANK;
 		String stepName = StringPool.BLANK;
 		ProcessOrder processOrder = null;
@@ -120,7 +124,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 		SendToBackOfficeMsg toBackOffice = new SendToBackOfficeMsg();
 		
-		toBackOffice.setSubmitDateTime(now);
+		toBackOffice.setSubmitDateTime(toEngineMsg.getActionDatetime());
 		
 		toBackOffice.setActor(actorBean.getActor());
 		toBackOffice.setActorId(actorBean.getActorId());
@@ -201,9 +205,6 @@ public class BackOfficeProcessEngine implements MessageListener {
 				processWorkflow =
 					ProcessWorkflowLocalServiceUtil.getProcessWorkflowByEvent(
 						serviceProcessId, toEngineMsg.getEvent(), curStepId);
-				
-				
-				_log.error("ProcessWorkflow" + processWorkflow.getActionName() + processWorkflow.getPostProcessStepId());
 			}
 			else {
 
