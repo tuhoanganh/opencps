@@ -155,6 +155,11 @@
 			index++;
 			String fileURL = StringPool.BLANK;
 			
+			if(df.getFileEntryId() <= 0 || df.getSyncStatus() != PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS){
+				continue;
+			}
+			
+			
 			try{
 				FileEntry fileEntry = DLFileEntryUtil.getFileEntry(df.getFileEntryId());
 				if(fileEntry != null){

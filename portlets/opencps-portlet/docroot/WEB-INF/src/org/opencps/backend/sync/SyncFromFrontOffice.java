@@ -99,7 +99,7 @@ public class SyncFromFrontOffice implements MessageListener {
 					    userActionMgs.getDossierId(), govAgencyOrgId,
 					    PortletConstants.DOSSIER_STATUS_SYSTEM,
 					    PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS,
-					    userActionMgs.getFileGroupId(), logLevel,
+					    userActionMgs.getFileGroupId(),	PortletConstants.DOSSIER_FILE_TYPE_INPUT, logLevel,
 					    userActionMgs.getLocale(), actor, actorId, actorName);
 
 					// Create message
@@ -162,8 +162,10 @@ public class SyncFromFrontOffice implements MessageListener {
 					    userActionMgs.getDossierId(), govAgencyOrgId,
 					    PortletConstants.DOSSIER_STATUS_SYSTEM,
 					    PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS,
-					    userActionMgs.getFileGroupId(), logLevel,
+					    userActionMgs.getFileGroupId(), PortletConstants.DOSSIER_FILE_TYPE_INPUT, logLevel,
 					    userActionMgs.getLocale(), actor, actorId, actorName);
+					
+
 
 					engineMsg.setDossierId(userActionMgs.getDossierId());
 					engineMsg.setFileGroupId(userActionMgs.getFileGroupId());
