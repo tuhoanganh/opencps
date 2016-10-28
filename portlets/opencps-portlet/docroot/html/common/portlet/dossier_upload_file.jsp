@@ -1,5 +1,4 @@
 
-<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -45,6 +44,8 @@
 <%@page import="org.opencps.dossiermgt.NoSuchDossierException"%>
 <%@page import="com.liferay.portal.RolePermissionsException"%>
 <%@page import="javax.portlet.PortletPreferences"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
+<%@page import="org.opencps.util.PortletPropsValues"%>
 <%@ include file="/init.jsp"%>
 
 <%
@@ -207,7 +208,22 @@
 	</aui:row>
 	<aui:row>
 		<aui:col width="100">
-			<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD %>" type="file"/>
+			<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD %>" type="file">
+				<aui:validator name="acceptFiles">
+					<%
+						if (fileTypes == StringPool.BLANK){
+					%>
+							'<%= StringUtil.merge(PortletPropsValues.ACCOUNTMGT_FILE_TYPE) %>'
+					<%
+						} else {
+							String[] fileTypeArr = fileTypes.split("\\W+");
+					%>
+							'<%= StringUtil.merge(fileTypeArr) %>'
+					<%
+						}
+					%>
+				</aui:validator>
+			</aui:input>
 		</aui:col>
 	</aui:row>
 	
@@ -236,26 +252,13 @@
 		
 		// Validate size and type file upload
 		
-		var fileTypes = '<%=fileTypes %>';
 		var maxUploadFileSizeInMb = <%=maxUploadFileSizeInMb %>;
 		var maxUploadFileSizeInByte = maxUploadFileSizeInMb*1024*1024;
 		
 		var fileUploadSizeInByte = 0;
-		var fileUploadName = '';
-		
-		var fileTypeArr = fileTypes.split(/\W+/);
-		var fileUploadTypeIsAgreed = false;
 		
 		$('#<portlet:namespace />dossierFileUpload').on('change', function() {
-			
 			fileUploadSizeInByte = this.files[0].size;
-			fileUploadName = this.files[0].name;
-
-			for (var i = 0; i < fileTypeArr.length; i++) {
-				if (fileUploadName.endsWith(fileTypeArr[i])){
-					fileUploadTypeIsAgreed = true;
-				}
-			}
 		});
 		
 		if(agreeButton) {
@@ -266,9 +269,7 @@
 				} else
 				if (fileUploadSizeInByte > maxUploadFileSizeInByte && maxUploadFileSizeInByte > 0) {
 					alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-size-smaller-than") %>' + ' ' + maxUploadFileSizeInMb + ' Mb');
-				}else if (!fileUploadTypeIsAgreed) {
-					alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-type-in") %>' + ' ' + fileTypes);
-				} else {
+				}else {
 					submitForm(document.<portlet:namespace />fm);
 				}
 				
