@@ -1,4 +1,5 @@
 
+<%@page import="org.opencps.processmgt.util.ProcessOrderUtils"%>
 <%@page import="javax.portlet.PortletMode"%>
 <%
 /**
@@ -71,12 +72,22 @@
 	
 	ProcessWorkflow workflow = ProcessMgtUtil.getProcessWorkflow(processWorkflowId);
 	
+
 	String actionNote = ParamUtil.getString(request, ProcessOrderDisplayTerms.ACTION_NOTE);
 	String event = ParamUtil.getString(request, ProcessOrderDisplayTerms.EVENT);
 	String receptionNo = ParamUtil.getString(request, ProcessOrderDisplayTerms.RECEPTION_NO);
 		
-	if (Validator.isNull(receptionNo) && Validator.isNotNull(workflow) && workflow.getGenerateReceptionNo()) {
+	System.out.println("RECEPTION_NOOOOOOOOO _______________________ = "+ receptionNo);
+	System.out.println("WORKFLOW_NAME _______________________ = "+ workflow.getReceptionNoPattern());
+	System.out.println("WORKFLOW_NAME RECEPTION NO _______________________ = "+ workflow.getGenerateReceptionNo());
+
+	
+	
+	if ((Validator.isNull(receptionNo) || (receptionNo.length() == 0)) && Validator.isNotNull(workflow) && workflow.getGenerateReceptionNo()) {
 		receptionNo = DossierNoGenerator.genaratorNoReception(workflow.getReceptionNoPattern(), dossierId);
+		
+		System.out.println("NEWWWWWWWWWWWWWWWW RECEPTION_NOOOOOOOOO _______________________ = "+ receptionNo);
+
 	}
 	
 	String strReceiveDate = ParamUtil.getString(request, "receiveDate");
@@ -85,11 +96,7 @@
 	
 	String backURL = ParamUtil.getString(request, "backURL");
 	
-	Date receiveDate = null;
-	
-	if(Validator.isNotNull(strReceiveDate)){
-		receiveDate = DateTimeUtil.convertStringToDate(strReceiveDate);
-	}
+	Date receiveDate = ProcessOrderUtils.getRecevieDate(dossierId, processWorkflowId, processStepId);
 	
 	Date estimateDate = null;
 	
@@ -97,7 +104,6 @@
 		estimateDate = BookingDateGenerator.dateGenerator(receiveDate, deadlinePattern);
 	}
 	
-	System.out.println("ESIMATEEEEEEEEEEEEEEEEEEEEEEE DATE _______________________ = "+ estimateDate);
 	
 	PortletUtil.SplitDate spd = null;
 	
@@ -109,9 +115,11 @@
 	
 	List<WorkflowOutput> workflowOutputs = new ArrayList<WorkflowOutput>();
 	
+	
 	if(processWorkflowId > 0){
 		try{
 			processWorkflow = ProcessWorkflowLocalServiceUtil.getProcessWorkflow(processWorkflowId);
+
 			workflowOutputs = WorkflowOutputLocalServiceUtil.getProcessByE_S_ID_PB(processWorkflowId, true);
 		}catch(Exception e){};
 	}
@@ -231,7 +239,6 @@
 			</aui:select>
 		</div>
 		
-		<c:if test="<%=processWorkflow != null &&  processWorkflow.isRequestPayment()%>">
 			<div class="<%=cssCol%>">
 				<aui:input 
 					cssClass="input100"
@@ -241,55 +248,59 @@
 					value="<%=Validator.isNotNull(processWorkflow.getPaymentFee()) ? PaymentRequestGenerator.getTotalPayment(processWorkflow.getPaymentFee(), dossierId) : StringPool.BLANK %>"
 				/>
 			</div>
-		</c:if>
 		
-		<div class="<%=cssCol%>">
-			<aui:input 
-				name="<%=ProcessOrderDisplayTerms.RECEPTION_NO %>" 
-				label="reception-no" 
-				value="<%=receptionNo %>"
-				type="text"
-				cssClass="input100"
-			/>
-		</div>
+			<div class="<%=cssCol%>">
+				<aui:input 
+					name="<%=ProcessOrderDisplayTerms.RECEPTION_NO %>" 
+					label="reception-no" 
+					value="<%= receptionNo %>"
+				/>
+			</div>
 		
-		<div class="<%=cssCol%>">
-			<aui:row>
-				<label class="control-label custom-lebel" for='<portlet:namespace/><%="deadline" %>'>
-					<liferay-ui:message key="return-date"/>
-				</label>
-			</aui:row>
-			
-			<aui:row>
-				<span class="span8">
-					<liferay-ui:input-date
-						dayParam="<%=ProcessOrderDisplayTerms.ESTIMATE_DATETIME_DAY %>"
-						disabled="<%= false %>"
-						monthParam="<%=ProcessOrderDisplayTerms.ESTIMATE_DATETIME_MONTH %>"
-						name="<%=ProcessOrderDisplayTerms.ESTIMATE_DATE %>"
-						yearParam="<%=ProcessOrderDisplayTerms.ESTIMATE_DATETIME_YEAR %>"
-						formName="fm"
-						autoFocus="<%=true %>"
-						dayValue="<%=spd != null ? spd.getDayOfMoth() : 0 %>"
-						monthValue="<%=spd != null ? spd.getMonth() : 0 %>"
-						yearValue="<%=spd != null ? spd.getYear() : 0 %>"
-						nullable="<%=spd == null ? true: false %>"
-						cssClass="input100"
-					/>
-				</span>
+		
+		
+		
+			<div class="<%=cssCol%>">
+				<aui:row>
+					<label class="control-label custom-lebel" for='<portlet:namespace/><%="deadline" %>'>
+						<liferay-ui:message key="return-date"/>
+					</label>
+				</aui:row>
 				
-				<span class="span4">
-					<liferay-ui:input-time 
-						minuteParam="00" 
-						amPmParam="AM" 
-						hourParam="00"
-						cssClass="input100"
-						name="<%=ProcessOrderDisplayTerms.ESTIMATE_TIME %>"
-					/>
-				</span>
-			</aui:row>
+				<aui:row>
+					<span class="span8">
+						<liferay-ui:input-date
+							dayParam="<%=ProcessOrderDisplayTerms.ESTIMATE_DATETIME_DAY %>"
+							disabled="<%= false %>"
+							monthParam="<%=ProcessOrderDisplayTerms.ESTIMATE_DATETIME_MONTH %>"
+							name="<%=ProcessOrderDisplayTerms.ESTIMATE_DATE %>"
+							yearParam="<%=ProcessOrderDisplayTerms.ESTIMATE_DATETIME_YEAR %>"
+							formName="fm"
+							autoFocus="<%=true %>"
+							dayValue="<%=Validator.isNotNull(spd) ? spd.getDayOfMoth() : 0 %>"
+							monthValue="<%=Validator.isNotNull(spd) ? spd.getMonth() : 0 %>"
+							yearValue="<%=Validator.isNotNull(spd) ? spd.getYear() : 0 %>"
+							nullable="<%=spd == null ? true: false %>"
+							cssClass="input100"
+						/>
+					</span>
+					
+					<span class="span4">
+						<liferay-ui:input-time 
+							minuteParam="<%= ProcessOrderDisplayTerms.ESTIMATE_DATETIME_HOUR %>"
+							amPmParam="AM" 
+							hourParam="<%= ProcessOrderDisplayTerms.ESTIMATE_DATETIME_MINUTE %>"
+							cssClass="input100"
+							hourValue="<%= Validator.isNotNull(spd) ? spd.getHour() : 0 %>"
+							minuteValue="<%= Validator.isNotNull(spd) ? spd.getMinute() : 0 %>"
+							name="<%=ProcessOrderDisplayTerms.ESTIMATE_TIME %>"
+						/>
+					</span>
+				</aui:row>
+			</div>
 		</div>
-	</div>
+	
+	
 	<div class="row-fluid">
 		<div class="span12">
 			<aui:input name="<%=ProcessOrderDisplayTerms.ACTION_NOTE %>" label="action-note" type="textarea" cssClass="input100"/>
