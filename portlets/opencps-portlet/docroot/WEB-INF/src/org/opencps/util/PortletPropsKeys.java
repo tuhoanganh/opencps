@@ -142,4 +142,6 @@ public class PortletPropsKeys {
 	public static final String SUBJECT_TO_CUSTOMER = "subject.email.to.customer";
 	public static final String CONTENT_TO_CUSTOMER = "content.email.to.customer";
 	
+	public static final String HOLIDAYCONFIG_DESCRIPTION_LENGTH = "opencps.holidayconfig.description.lengths";
+	
 }
