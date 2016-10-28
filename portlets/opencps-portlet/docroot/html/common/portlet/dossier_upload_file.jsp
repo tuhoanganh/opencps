@@ -1,5 +1,5 @@
 
-<%@page import="com.liferay.portal.RolePermissionsException"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -43,6 +43,8 @@
 <%@page import="org.opencps.accountmgt.NoSuchAccountException"%>
 <%@page import="org.opencps.dossiermgt.NoSuchDossierPartException"%>
 <%@page import="org.opencps.dossiermgt.NoSuchDossierException"%>
+<%@page import="com.liferay.portal.RolePermissionsException"%>
+<%@page import="javax.portlet.PortletPreferences"%>
 <%@ include file="/init.jsp"%>
 
 <%
@@ -92,8 +94,15 @@
 		dossierFile.getDossierFileDate() : DateTimeUtil.convertStringToDate("01/01/1970");
 		
 	PortletUtil.SplitDate spd = new PortletUtil.SplitDate(defaultDossierFileDate);
-
 	
+	PortletPreferences preferences = renderRequest.getPreferences();
+
+	if (Validator.isNotNull(portletResource)) {
+		preferences = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
+	}
+	
+	String fileTypes = preferences.getValue("fileTypes", StringPool.BLANK);
+	float maxUploadFileSizeInMb = GetterUtil.getFloat(preferences.getValue("maxUploadFileSizeInMb", StringPool.BLANK));
 %>
 
 <portlet:actionURL var="addAttachmentFileURL" name="addAttachmentFile"/>
@@ -203,7 +212,7 @@
 	</aui:row>
 	
 	<aui:row>
-		<aui:button name="agree" type="submit" value="agree"/>
+		<aui:button name="agree" value="agree"/>
 		<aui:button name="cancel" type="button" value="cancel"/>
 	</aui:row>
 </aui:form>
@@ -212,7 +221,7 @@
 	AUI().ready(function(A){
 		
 		var cancelButton = A.one('#<portlet:namespace/>cancel');
-		
+		var agreeButton = A.one('#<portlet:namespace/>agree');
 		var success = '<%=success%>';
 		
 		if(cancelButton){
@@ -223,6 +232,47 @@
 		
 		if(success == 'true'){
 			<portlet:namespace/>closeDialog();
+		}
+		
+		// Validate size and type file upload
+		
+		var fileTypes = '<%=fileTypes %>';
+		var maxUploadFileSizeInMb = <%=maxUploadFileSizeInMb %>;
+		var maxUploadFileSizeInByte = maxUploadFileSizeInMb*1024*1024;
+		
+		var fileUploadSizeInByte = 0;
+		var fileUploadName = '';
+		
+		var fileTypeArr = fileTypes.split(/\W+/);
+		var fileUploadTypeIsAgreed = false;
+		
+		$('#<portlet:namespace />dossierFileUpload').on('change', function() {
+			
+			fileUploadSizeInByte = this.files[0].size;
+			fileUploadName = this.files[0].name;
+
+			for (var i = 0; i < fileTypeArr.length; i++) {
+				if (fileUploadName.endsWith(fileTypeArr[i])){
+					fileUploadTypeIsAgreed = true;
+				}
+			}
+		});
+		
+		if(agreeButton) {
+			agreeButton.on('click', function() {
+				
+				if (fileUploadSizeInByte == 0){
+					alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-required-before-send") %>');
+				} else
+				if (fileUploadSizeInByte > maxUploadFileSizeInByte && maxUploadFileSizeInByte > 0) {
+					alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-size-smaller-than") %>' + ' ' + maxUploadFileSizeInMb + ' Mb');
+				}else if (!fileUploadTypeIsAgreed) {
+					alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-type-in") %>' + ' ' + fileTypes);
+				} else {
+					submitForm(document.<portlet:namespace />fm);
+				}
+				
+			});
 		}
 		
 	});

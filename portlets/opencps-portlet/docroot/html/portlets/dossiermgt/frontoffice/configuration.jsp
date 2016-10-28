@@ -171,6 +171,29 @@
 		name="hiddenTreeNodeEqualNone" 
 		value="<%=hiddenTreeNodeEqualNone %>"
 	/>
+	
+	<aui:input 
+		type="text"
+		name="fileTypes" 
+		value="<%=fileTypes %>"
+	/>
+	
+	<aui:input 
+		type="text"
+		name="maxTatalUploadFileSizeInMb" 
+		value="<%=maxTatalUploadFileSizeInMb %>"
+	>
+		<aui:validator name="number"></aui:validator>
+	</aui:input>
+	
+	<aui:input 
+		type="text"
+		name="maxUploadFileSizeInMb" 
+		value="<%=maxUploadFileSizeInMb %>"
+	>
+		<aui:validator name="number"></aui:validator>
+	</aui:input>
+	
 	<aui:button type="submit" name="Save" value="save"></aui:button>
 
 </aui:form>
