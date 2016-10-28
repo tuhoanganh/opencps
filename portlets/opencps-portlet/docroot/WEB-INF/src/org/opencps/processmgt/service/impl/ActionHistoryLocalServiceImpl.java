@@ -186,10 +186,8 @@ public class ActionHistoryLocalServiceImpl
 	}
 	
 	public ActionHistory getLatestActionHistory(
-	    long processOrderId, long processWorkflowId)
+	    long processOrderId, long processWorkflowId,boolean orderByAsc)
 	    throws NoSuchActionHistoryException, SystemException {
-
-		boolean orderByAsc = false;	
 
 		OrderByComparator orderByComparator =
 		    new ActionHistoryCreateDateComparator(orderByAsc);
@@ -198,7 +196,7 @@ public class ActionHistoryLocalServiceImpl
 		    .findByPOID_PWID_First(
 		        processOrderId, processWorkflowId, orderByComparator);
 	}
-
+	
 	public List<ActionHistory> getActionHistory(
 	    long processOrderId, long processWorkflowId)
 	    throws NoSuchActionHistoryException, SystemException {

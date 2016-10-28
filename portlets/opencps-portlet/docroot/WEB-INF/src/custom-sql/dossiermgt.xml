@@ -213,7 +213,7 @@
 			AND 
 				opencps_dossierpart.partType IN (? , ?)
 			ORDER BY 
-				opencps_dev.opencps_dossier_file.dossierFileDate DESC
+				opencps_dossier_file.dossierFileDate DESC
 		]]>
 	</sql>
 	
