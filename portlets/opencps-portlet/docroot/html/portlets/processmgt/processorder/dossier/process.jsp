@@ -73,7 +73,7 @@
 	ProcessWorkflow processWorkflow =
 		(ProcessWorkflow) request.getAttribute(WebKeys.PROCESS_WORKFLOW_ENTRY);
 	
-	long processStepId =
+	long processStepId = 
 	Validator.isNotNull(processStep)
 		? processStep.getProcessStepId() : 0l;
 
@@ -84,24 +84,6 @@
 
 	String cssRequired = StringPool.BLANK;
 
-	/* if (accountRoles != null && processStep != null) {
-		for (int r = 0; r < accountRoles.size(); r++) {
-	try {
-		StepAllowance stepAllowance =
-	StepAllowanceLocalServiceUtil.getStepAllowance(
-		processStep.getProcessStepId(),
-		((Role) accountRoles.get(r)).getRoleId());
-
-		if (!stepAllowance.isReadOnly()) {
-	isEditDossier = true;
-	break;
-		}
-	}
-	catch (Exception e) {
-		continue;
-	}
-		}
-	} */
 
 	//Get ActionHistory
 	ActionHistory latestWorkflowActionHistory = null;

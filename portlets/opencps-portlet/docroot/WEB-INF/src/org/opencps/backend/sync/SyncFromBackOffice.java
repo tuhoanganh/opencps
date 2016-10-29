@@ -85,7 +85,7 @@ public class SyncFromBackOffice implements MessageListener {
 				_log.info("Estimate date________________________________________:" + toBackOffice.getEstimateDatetime());
 				_log.info("Submit date________________________________________:" + toBackOffice.getSubmitDateTime());
 				_log.info("Fisnished date________________________________________:" + toBackOffice.getFinishDatetime());
-				_log.info("Receive date________________________________________:" + toBackOffice.getReceiveDatetime());
+				_log.info("Receive dateXXXXXXXXXXXXXXXXXXXXXXXX_________________:" + toBackOffice.getReceiveDatetime());
 				
 				statusUpdate =
 					DossierLocalServiceUtil.updateDossierStatus(
@@ -93,8 +93,8 @@ public class SyncFromBackOffice implements MessageListener {
 						toBackOffice.getFileGroupId(),
 						toBackOffice.getDossierStatus(),
 						toBackOffice.getReceptionNo(),
-						toBackOffice.getEstimateDatetime(),
 						toBackOffice.getSubmitDateTime(),
+						toBackOffice.getEstimateDatetime(),
 						toBackOffice.getReceiveDatetime(),
 						toBackOffice.getFinishDatetime(),
 						toBackOffice.getActor(), toBackOffice.getActorId(),

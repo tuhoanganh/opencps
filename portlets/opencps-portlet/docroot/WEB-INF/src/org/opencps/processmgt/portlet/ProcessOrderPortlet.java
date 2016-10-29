@@ -22,6 +22,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -443,7 +444,9 @@ public class ProcessOrderPortlet extends MVCPortlet {
 	public void assignToUser(
 		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
-
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+		
 		Dossier dossier = null;
 
 		long assignToUserId =
@@ -489,17 +492,14 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		String estimateTime =
 			ParamUtil.getString(
 				actionRequest, ProcessOrderDisplayTerms.ESTIMATE_TIME);
+		
+		Date receiveDate = ParamUtil.getDate(actionRequest, ProcessOrderDisplayTerms.RECEIVE_DATE, sdf);
 
 		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
 
 		String backURL = ParamUtil.getString(actionRequest, "backURL");
 
-		/*
-		 * long serviceProcessId = ParamUtil.getLong(actionRequest,
-		 * ProcessOrderDisplayTerms.SERVICE_PROCESS_ID); long processStepId =
-		 * ParamUtil.getLong(actionRequest,
-		 * ProcessOrderDisplayTerms.PROCESS_STEP_ID);
-		 */
+
 
 		String actionNote =
 			ParamUtil.getString(
@@ -520,10 +520,10 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				DateTimeUtil.convertStringToFullDate(estimateDate +
 					StringPool.SPACE + estimateTime + StringPool.COLON + "00");
 		}
-
+		
+		_log.info("NGAYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY HEN TRA ********** :" + deadline);
+		
 		try {
-			// ProcessWorkflow processWorkflow =
-			// ProcessWorkflowLocalServiceUtil.fetchProcessWorkflow(processWorkflowId);
 
 			dossier = DossierLocalServiceUtil.getDossier(dossierId);
 
@@ -553,6 +553,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			sendToEngineMsg.setDossierStatus(dossier.getDossierStatus());
 			sendToEngineMsg.setActionDatetime(new Date());
 			sendToEngineMsg.setActorType(WebKeys.DOSSIER_ACTOR_EMPLOYEE);
+			sendToEngineMsg.setReceiveDate(receiveDate);
 
 			message.put("msgToEngine", sendToEngineMsg);
 
