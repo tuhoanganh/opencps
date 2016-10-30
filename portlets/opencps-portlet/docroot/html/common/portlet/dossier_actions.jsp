@@ -36,6 +36,8 @@
 
 	boolean isEditDossier = ParamUtil.getBoolean(request, "isEditDossier");
 
+	boolean isReadOnly = ParamUtil.getBoolean(request, "isReadOnly");
+	
 	boolean isChildDossierPart = GetterUtil.getBoolean(ParamUtil.getBoolean(request, "isChildDossierPart"), false);
 
 	long dossierId = ParamUtil.getLong(request, DossierDisplayTerms.DOSSIER_ID);
@@ -80,6 +82,11 @@
 		}catch(Exception e){}
 					
 	}
+	
+	if(isReadOnly){
+		isEditDossier = false;
+	}
+	
 %>
 
 <table class="dossier-actions-wraper">

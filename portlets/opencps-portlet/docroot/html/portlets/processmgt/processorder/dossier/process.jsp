@@ -143,6 +143,7 @@
 	
 	//Get list DossierPart
 	List<DossierPart> dossierParts = new ArrayList<DossierPart>();
+	Map<Long, Boolean> dossierPartsReadOnly = new HashMap<Long, Boolean>();
 	
 	if (processStepDossierParts != null) {
 		for (ProcessStepDossierPart processStepDossierPart : processStepDossierParts) {
@@ -155,12 +156,14 @@
 			}
 			
 			if(dossierPart != null){
+				dossierPartsReadOnly.put(processStepDossierPart.getDossierPartId(), processStepDossierPart.getReadOnly());
 				dossierParts.add(dossierPart);
 			}
 			
 		}
 	}
 %>
+
 <div class="ocps-dossier-process">
 
 	<table class="process-workflow-info">
@@ -301,6 +304,10 @@
 											name="isEditDossier" 
 											value="<%=String.valueOf(isEditDossier) %>"
 										/>
+										<portlet:param 
+											name="isReadOnly" 
+											value="<%=String.valueOf(dossierPartsReadOnly.get(dossierPart.getDossierpartId())) %>"
+										/>
 									</liferay-util:include>
 								</span>
 							</div>
@@ -365,6 +372,10 @@
 											name="isEditDossier" 
 											value="<%=String.valueOf(isEditDossier) %>"
 										/>
+										<portlet:param 
+											name="isReadOnly" 
+											value="<%=String.valueOf(dossierPartsReadOnly.get(dossierPart.getDossierpartId())) %>"
+										/>
 									</liferay-util:include>
 								</span>
 							</div>
@@ -427,6 +438,10 @@
 													<portlet:param 
 														name="isEditDossier" 
 														value="<%=String.valueOf(isEditDossier) %>"
+													/>
+													<portlet:param 
+														name="isReadOnly" 
+														value="<%=String.valueOf(dossierPartsReadOnly.get(dossierFileOther.getDossierPartId())) %>"
 													/>
 												</liferay-util:include>
 											</span>

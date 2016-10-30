@@ -20,6 +20,7 @@ package org.opencps.processmgt.service.impl;
 import java.util.List;
 
 import org.opencps.processmgt.model.ProcessStepDossierPart;
+import org.opencps.processmgt.model.StepAllowance;
 import org.opencps.processmgt.service.base.ProcessStepDossierPartLocalServiceBaseImpl;
 import org.opencps.processmgt.service.persistence.ProcessStepDossierPartPK;
 
@@ -83,7 +84,7 @@ public class ProcessStepDossierPartLocalServiceImpl
 	 * @throws PortalException
 	 * @throws SystemException
 	 */
-	public ProcessStepDossierPart addPSDP(long processStepId, long dossierPartId)
+	public ProcessStepDossierPart addPSDP(long processStepId, long dossierPartId, boolean readOnly)
 	    throws PortalException, SystemException {
 		
 		ProcessStepDossierPart psdp = null;
@@ -94,10 +95,41 @@ public class ProcessStepDossierPartLocalServiceImpl
 		
 		if (Validator.isNull(psdp)) {
 			psdp = processStepDossierPartPersistence.create(pk);
+			psdp.setReadOnly(readOnly);
 		}
 		
 		processStepDossierPartPersistence.update(psdp);
 		
 		return psdp;
+	}
+	
+	/**
+	 * update ProcessServiceDossierPart
+	 * 
+	 * @param dossierPartId
+	 * @param processStepId
+	 * @param dossierPartId
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public ProcessStepDossierPart updatePSDP(long processStepId, long dossierPartId, boolean readOnly)
+	    throws PortalException, SystemException {
+
+		ProcessStepDossierPartPK pk = new ProcessStepDossierPartPK(processStepId, dossierPartId);
+		
+		ProcessStepDossierPart psdp =
+				processStepDossierPartPersistence.fetchByPrimaryKey(pk);
+
+		if (Validator.isNull(psdp)) {
+			psdp = processStepDossierPartPersistence.create(pk);
+		}
+
+		psdp.setReadOnly(readOnly);
+		
+		processStepDossierPartPersistence.update(psdp);
+		
+		return psdp;
+
 	}
 }

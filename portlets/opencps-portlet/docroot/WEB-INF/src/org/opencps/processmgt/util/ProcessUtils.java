@@ -253,10 +253,11 @@ public class ProcessUtils {
 			ProcessStepDossierPart doisserPart = new ProcessStepDossierPartImpl();
 			
 			long dossierPartId = ParamUtil.getLong(actionRequest, "dossierPart" + dossierIndex);
+			boolean readOnly = ParamUtil.getBoolean(actionRequest, "readOnlyDossier" + dossierIndex);
 			
 			doisserPart.setDossierPartId(dossierPartId);
 			doisserPart.setProcessStepId(processStepId);
-			
+			doisserPart.setReadOnly(readOnly);
 			ls.add(doisserPart);
 		}
 		
