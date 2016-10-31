@@ -17,6 +17,10 @@
 <%@page import="com.liferay.portal.kernel.util.StringPool"%>
 <%@ include file="/html/portlet/login/init.jsp" %>
 
+<%
+	String linkToRegister = themeDisplay.getPortalURL() + "/register";
+%>
+
 <c:choose>
 	<c:when test="<%= themeDisplay.isSignedIn() %>">
 
@@ -223,7 +227,7 @@
 								<aui:col width = "50">
 									<span class="create-account">
 										<liferay-portlet:renderURL var="linkToPage"></liferay-portlet:renderURL>
-										<aui:a href="<%=linkToPage %>">
+										<aui:a href="<%=linkToRegister %>">
 											<liferay-ui:message key="create-account"/>
 										</aui:a>
 									</span>
@@ -251,7 +255,7 @@
 								</span>
 								<span class="create-account">
 									<liferay-portlet:renderURL var="linkToPage"></liferay-portlet:renderURL>
-									<aui:a href="<%=linkToPage %>">
+									<aui:a href="<%=linkToRegister %>">
 										<liferay-ui:message key="create-account"/>
 									</aui:a>
 								</span>
