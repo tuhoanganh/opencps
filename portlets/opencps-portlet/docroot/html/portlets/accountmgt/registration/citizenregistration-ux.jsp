@@ -310,7 +310,7 @@
 					<aui:input 
 						name="<%=CitizenDisplayTerms.CITIZEN_ADDRESS %>" 
 						cssClass="input100"
-						placeholder="<%=CitizenDisplayTerms.CITIZEN_ADDRESS %>"
+						placeholder="address-place-holder"
 					>
 						<aui:validator name="maxLength">255</aui:validator>
 						<aui:validator name="required"/>
