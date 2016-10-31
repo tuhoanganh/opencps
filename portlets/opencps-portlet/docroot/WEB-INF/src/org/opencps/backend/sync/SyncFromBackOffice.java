@@ -29,6 +29,7 @@ import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLogLocalServiceUtil;
 import org.opencps.dossiermgt.util.ActorBean;
+import org.opencps.holidayconfig.util.HolidayCheckUtils;
 import org.opencps.jms.SyncServiceContext;
 import org.opencps.processmgt.model.WorkflowOutput;
 import org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil;
@@ -173,7 +174,7 @@ public class SyncFromBackOffice implements MessageListener {
 
 				SendToCallbackMsg toCallBack = new SendToCallbackMsg();
 				
-				int dayDelay = 0;
+				int dayDelay = HolidayCheckUtils.getDayDelay(toBackOffice.getProcessOrderId(), toBackOffice.getProcessWorkflowId());
 				int daysDoing = 0;
 				
 				toCallBack.setProcessOrderId(toBackOffice.getProcessOrderId());
