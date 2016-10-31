@@ -194,7 +194,7 @@
 				</aui:row>
 				
 		</liferay-ui:search-container-row>
-		<liferay-ui:search-iterator type="opencs_page_iterator"/>
+		<liferay-ui:search-iterator type="normal"/>
 	</liferay-ui:search-container>
 </div>
 

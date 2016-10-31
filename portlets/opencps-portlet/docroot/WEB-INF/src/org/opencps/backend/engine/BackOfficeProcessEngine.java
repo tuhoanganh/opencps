@@ -256,12 +256,12 @@ public class BackOfficeProcessEngine implements MessageListener {
 							isResubmit = true;
 						}
 						
-
+/*
 						// Get AutoEvent of change step
 						_updateSchedulerJob(
 							processStepId, serviceProcessId,
 							processOrder.getDossierId(),
-							processOrder.getFileGroupId());
+							processOrder.getFileGroupId());*/
 					}
 
 				}

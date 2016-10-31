@@ -29,6 +29,7 @@ import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLogLocalServiceUtil;
 import org.opencps.dossiermgt.util.ActorBean;
+import org.opencps.holidayconfig.util.HolidayCheckUtils;
 import org.opencps.jms.SyncServiceContext;
 import org.opencps.processmgt.model.WorkflowOutput;
 import org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil;
@@ -141,7 +142,6 @@ public class SyncFromBackOffice implements MessageListener {
 						actorBean.getActorId(), actorBean.getActorName(),
 						SyncFromBackOffice.class.getName(),
 						WebKeys.DOSSIER_LOG_PAYMENT_REQUEST);
-
 				}
 
 				if (isResubmit) {
@@ -173,7 +173,7 @@ public class SyncFromBackOffice implements MessageListener {
 
 				SendToCallbackMsg toCallBack = new SendToCallbackMsg();
 				
-				int dayDelay = 0;
+				int dayDelay = 0;//HolidayCheckUtils.getDayDelay(processOrderId, latestProcessWorkflowId, preProcessWorkflowId);
 				int daysDoing = 0;
 				
 				toCallBack.setProcessOrderId(toBackOffice.getProcessOrderId());
@@ -191,7 +191,6 @@ public class SyncFromBackOffice implements MessageListener {
 				toCallBack.setDaysDelay(dayDelay);
 				toCallBack.setSyncStatus(statusUpdate ? "ok" : "error");
 				
-				_log.error("CALLLLLLLLLLLLLLLLLLLLLLLLLLLBACKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
 				
 				Message sendToCallBack = new Message();
 
