@@ -204,10 +204,27 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 				serviceContext);
 
 		int status = WorkflowConstants.STATUS_INACTIVE;
-
+		
+		Organization groupOrgBusiness = null;
+		
+		try {
+			groupOrgBusiness = organizationPersistence.findByC_N(serviceContext.getCompanyId(), PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS);
+		} catch (Exception e) {
+			_log.error(e);
+		}
+				
+		if(groupOrgBusiness == null) {
+			groupOrgBusiness = OrganizationLocalServiceUtil.addOrganization(
+				mappingUser.getUserId(), OrganizationConstants.DEFAULT_PARENT_ORGANIZATION_ID,
+				PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS,
+				OrganizationConstants.TYPE_REGULAR_ORGANIZATION, 0, 0,
+				ListTypeConstants.ORGANIZATION_STATUS_DEFAULT, 
+				PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS, true,serviceContext);
+		}
+		
 		Organization org =
 			OrganizationLocalServiceUtil.addOrganization(
-				mappingUser.getUserId(), 0, fullName +
+				mappingUser.getUserId(), groupOrgBusiness.getOrganizationId(), fullName +
 					StringPool.OPEN_PARENTHESIS + idNumber +
 					StringPool.CLOSE_PARENTHESIS,
 				OrganizationConstants.TYPE_REGULAR_ORGANIZATION, 0, 0,
