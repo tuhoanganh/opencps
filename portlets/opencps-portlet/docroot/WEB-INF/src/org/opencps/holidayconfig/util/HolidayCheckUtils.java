@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
+
 package org.opencps.holidayconfig.util;
 
 import java.util.Calendar;
@@ -45,8 +46,7 @@ public class HolidayCheckUtils {
 	 * @param daysDuration
 	 * @return
 	 */
-	public static int checkActionDateOver(Date startDate, Date endDate,
-			int daysDuration) {
+	public static int checkActionDateOver(Date startDate, Date endDate, int daysDuration) {
 
 		int dateOverNumbers = 0;
 
@@ -55,8 +55,7 @@ public class HolidayCheckUtils {
 			Calendar endDayCal = Calendar.getInstance();
 			endDayCal.setTime(endDate);
 
-			Calendar endDateMax = HolidayUtils.getEndDate(startDate,
-					daysDuration);
+			Calendar endDateMax = HolidayUtils.getEndDate(startDate, daysDuration);
 
 			int endDay = endDayCal.get(Calendar.DATE);
 			int endDayMax = endDateMax.get(Calendar.DATE);
@@ -65,7 +64,8 @@ public class HolidayCheckUtils {
 
 			if (dateOverNumbers > 0) {
 				return 0;
-			} else {
+			}
+			else {
 				return Math.abs(dateOverNumbers);
 			}
 		}
@@ -74,18 +74,15 @@ public class HolidayCheckUtils {
 
 	/**
 	 * @param processOrderId
-	 * @param latestProcessWorkflowId
-	 * @param preProcessWorkflowId
+	 * @param processWorkflowId
 	 * @return
 	 * @throws PortalException
+	 * @throws SystemException
 	 */
-	public static int getDayDelay(long processOrderId,
-			long latestProcessWorkflowId, long preProcessWorkflowId)
-			throws PortalException,SystemException {
+	public static int getDayDelay(long processOrderId, long processWorkflowId)
+		throws PortalException, SystemException {
 
-		ActionHistory preActionHistory = new ActionHistoryImpl();
-
-		ActionHistory latestActionHistory = new ActionHistoryImpl();
+		ActionHistory actionHistoryNewest = new ActionHistoryImpl();
 
 		ProcessWorkflow processWorkflow = new ProcessWorkflowImpl();
 
@@ -94,40 +91,32 @@ public class HolidayCheckUtils {
 		int dayDelay = 0;
 
 		try {
-			if (processOrderId > 0 && latestProcessWorkflowId > 0
-					&& preProcessWorkflowId > 0) {
+			if (processOrderId > 0 && processWorkflowId > 0) {
 
-				preActionHistory = ActionHistoryLocalServiceUtil
-						.getLatestActionHistory(processOrderId,
-								preProcessWorkflowId, false);
+				actionHistoryNewest =
+					ActionHistoryLocalServiceUtil.getActionHistoryByProcessOrderId(
+						processWorkflowId, 1, 1, false).get(0);
 
-				latestActionHistory = ActionHistoryLocalServiceUtil
-						.getLatestActionHistory(processOrderId,
-								latestProcessWorkflowId, false);
+				if (Validator.isNotNull(actionHistoryNewest.getCreateDate())) {
 
-				if (Validator.isNotNull(preActionHistory.getCreateDate())
-						&& Validator.isNotNull(latestActionHistory
-								.getCreateDate())) {
-
-					processWorkflow = ProcessWorkflowLocalServiceUtil
-							.getProcessWorkflow(latestActionHistory
-									.getProcessWorkflowId());
+					processWorkflow =
+						ProcessWorkflowLocalServiceUtil.getProcessWorkflow(processWorkflowId);
 
 					if (processWorkflow.getPostProcessStepId() > 0) {
-						processStep = ProcessStepLocalServiceUtil
-								.getProcessStep(processWorkflow
-										.getPostProcessStepId());
+						processStep =
+							ProcessStepLocalServiceUtil.getProcessStep(processWorkflow.getPostProcessStepId());
 
 						if (processStep.getDaysDuration() > 0) {
-							dayDelay = checkActionDateOver(
-									preActionHistory.getCreateDate(),
-									latestActionHistory.getCreateDate(),
+							dayDelay =
+								checkActionDateOver(
+									actionHistoryNewest.getCreateDate(), new Date(),
 									processStep.getDaysDuration());
 						}
 					}
 				}
 			}
-		} catch (PortalException e) {
+		}
+		catch (PortalException e) {
 			// TODO Auto-generated catch block
 			_log.error(e);
 		}
