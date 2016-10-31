@@ -77,6 +77,7 @@ import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.DossierPart;
 import org.opencps.dossiermgt.model.DossierTemplate;
+import org.opencps.dossiermgt.model.FileGroup;
 import org.opencps.dossiermgt.model.ServiceConfig;
 import org.opencps.dossiermgt.search.DossierDisplayTerms;
 import org.opencps.dossiermgt.search.DossierFileDisplayTerms;
@@ -3479,40 +3480,82 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		}
 
 		boolean requiredFlag = false;
-
+		List<String> requiredDossierPartIds = new ArrayList<String>();
 		if (dossierPartsLevel1 != null) {
 			for (DossierPart dossierPartLevel1 : dossierPartsLevel1) {
 				List<DossierPart> dossierParts =
 					DossierMgtUtil.getTreeDossierPart(dossierPartLevel1.getDossierpartId());
-
+				int partType = dossierPartLevel1.getPartType();
+/*				
 				if (requiredFlag) {
 					break;
-				}
-
-				for (DossierPart dossierPart : dossierParts) {
-					if (dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_RESULT &&
-						dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT &&
-						dossierPart.getRequired()) {
+				}*/
+				if (partType == PortletConstants.DOSSIER_PART_TYPE_OPTION ||
+						partType == PortletConstants.DOSSIER_PART_TYPE_SUBMIT || 
+						partType == PortletConstants.DOSSIER_PART_TYPE_OTHER) {
+					for (DossierPart dossierPart : dossierParts) {
+						
 						DossierFile dossierFile = null;
-						try {
-							dossierFile =
-								DossierFileLocalServiceUtil.getDossierFileInUse(
-									dossierId, dossierPart.getDossierpartId());
+						
+						try{
+							dossierFile = DossierFileLocalServiceUtil.getDossierFileInUse(dossier.getDossierId(), 
+									dossierPart.getDossierpartId());
+							
+						}catch(Exception e){
+							
 						}
-						catch (Exception e) {
-							// TODO: handle exception
+						
+						if(partType == PortletConstants.DOSSIER_PART_TYPE_SUBMIT) {
+							if(dossierPart.getRequired() && dossierFile == null) {
+								requiredDossierPartIds.add(String.valueOf(dossierPart.getDossierpartId()));
+							}
+							
+							if (dossierPart.getRequired() && dossierFile != null) {
+								if(requiredDossierPartIds.contains(String.valueOf(dossierPart.getDossierpartId()))) {
+									requiredDossierPartIds.remove(String.valueOf(dossierPart.getDossierpartId()));
+								}
+							}
+						} else {
+							if(dossierPartLevel1.getRequired()) {
+								
+								if(dossierPartLevel1.getDossierpartId() == dossierPart.getDossierpartId()) {
+									requiredDossierPartIds.add(String.valueOf(dossierPartLevel1.getDossierpartId()));
+								}
+								
+								if(dossierPartLevel1.getDossierpartId() != dossierPart.getDossierpartId() && Validator.isNotNull(dossierFile)) {
+									if(requiredDossierPartIds.contains(String.valueOf(dossierPartLevel1.getDossierpartId()))) {
+										requiredDossierPartIds.remove(String.valueOf(dossierPartLevel1.getDossierpartId()));
+									}
+								}
+							}
 						}
-
-						if (dossierFile == null) {
-							requiredFlag = true;
-							break;
+					}
+				} else if(partType == PortletConstants.DOSSIER_PART_TYPE_PRIVATE && dossier != null) {
+					List<FileGroup> fileGroups = new ArrayList<FileGroup>();
+					
+					try{
+						fileGroups = FileGroupLocalServiceUtil.getFileGroupByD_DP(dossier.getDossierId(), dossierPartLevel1.getDossierpartId());
+					}catch(Exception e){}
+					
+					//TODO: kiem tra lai dieu kien dossierPartRequired voi truong hop nay
+					if(dossierPartLevel1.getRequired() && (fileGroups == null || (fileGroups != null && fileGroups.size() > 0))) {
+						//cssDossierPartRequired = "dossierPartRequired";
+						requiredDossierPartIds.add(String.valueOf(dossierPartLevel1.getDossierpartId()));
+					} else {
+						//cssDossierPartRequired = StringPool.BLANK;
+						if(requiredDossierPartIds.contains(String.valueOf(dossierPartLevel1.getDossierpartId()))) {
+							requiredDossierPartIds.remove(String.valueOf(dossierPartLevel1.getDossierpartId()));
 						}
-
 					}
 				}
-			}
+				
+			} 
+		} 
+		
+		if(requiredDossierPartIds.size() > 0) {
+			requiredFlag = true;
 		}
-
+		
 		if (requiredFlag) {
 			throw new RequiredDossierPartException();
 		}
