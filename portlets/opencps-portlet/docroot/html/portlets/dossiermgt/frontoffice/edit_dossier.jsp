@@ -1,5 +1,4 @@
 
-<%@page import="org.opencps.backend.util.BackendUtils"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -19,6 +18,8 @@
  */
 %>
 
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
+<%@page import="org.opencps.backend.util.BackendUtils"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
@@ -110,6 +111,8 @@
 	catch (Exception e) {
 
 	}
+
+	boolean quickCreateDossier = dossier == null ? true : false;
 %>
 
 <liferay-ui:error 
