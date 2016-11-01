@@ -172,8 +172,8 @@ public class SyncFromBackOffice implements MessageListener {
 				}
 
 				SendToCallbackMsg toCallBack = new SendToCallbackMsg();
-				
-				int dayDelay = 0;//HolidayCheckUtils.getDayDelay(processOrderId, latestProcessWorkflowId, preProcessWorkflowId);
+
+				int dayDelay = HolidayCheckUtils.getDayDelay(toBackOffice.getProcessOrderId(), toBackOffice.getProcessWorkflowId());
 				int daysDoing = 0;
 				
 				toCallBack.setProcessOrderId(toBackOffice.getProcessOrderId());

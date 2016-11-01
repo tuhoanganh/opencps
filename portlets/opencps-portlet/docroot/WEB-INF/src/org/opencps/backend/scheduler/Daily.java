@@ -29,11 +29,12 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 
 
-public class Weekly implements MessageListener{
+public class Daily implements MessageListener{
+    
 	@Override
     public void receive(Message message)
         throws MessageListenerException {
-		_log.info("RUNNING _WEEKY $$$$$" );
+		_log.info("RUNNING _DAILY $$$$$" );
 
 		List<ProcessWorkflow> processWorkflows =
 		    new ArrayList<ProcessWorkflow>();
@@ -56,7 +57,7 @@ public class Weekly implements MessageListener{
 				if (processOrders.size() != 0) {
 					for (ProcessOrder processOrder : processOrders) {
 						
-						_log.info("Scheduler _WEEKLY ########" + processWorkflow.getActionName() + "_" + processOrder.getDossierId());
+						_log.info("Scheduler _DAILY ########" + processWorkflow.getActionName() + "_" + processOrder.getDossierId());
 						
 						long processWorkflowId = processWorkflow.getProcessWorkflowId();
 						
@@ -131,6 +132,5 @@ public class Weekly implements MessageListener{
 
     }
 
-    private Log _log = LogFactoryUtil.getLog(Weekly.class);
-
+    private Log _log = LogFactoryUtil.getLog(Daily.class);
 }

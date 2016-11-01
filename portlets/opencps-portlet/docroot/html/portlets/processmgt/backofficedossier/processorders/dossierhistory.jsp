@@ -1,12 +1,3 @@
-
-<%@page import="org.opencps.dossiermgt.service.FileGroupLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.model.FileGroup"%>
-<%@page import="org.opencps.processmgt.service.ProcessOrderLocalServiceUtil"%>
-<%@page import="org.opencps.processmgt.service.ProcessOrderLocalService"%>
-<%@page import="org.opencps.dossiermgt.NoSuchDossierException"%>
-<%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -31,6 +22,14 @@
 <%@page import="org.opencps.processmgt.service.ActionHistoryLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.model.ActionHistory"%>
 <%@page import="org.opencps.processmgt.model.ProcessOrder"%>
+<%@page import="org.opencps.dossiermgt.service.FileGroupLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.FileGroup"%>
+<%@page import="org.opencps.processmgt.service.ProcessOrderLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.service.ProcessOrderLocalService"%>
+<%@page import="org.opencps.dossiermgt.NoSuchDossierException"%>
+<%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%@ include file="../../init.jsp"%>
 
 <%
@@ -102,13 +101,16 @@
 		>
 		<liferay-ui:search-container-results>
 			<%
-				actionHistories =  ActionHistoryLocalServiceUtil.getActionHistoryByProcessOrderId(processOrderId, searchContainer.getStart(), searchContainer.getEnd());
-				
-				results = actionHistories;
-				total = ActionHistoryLocalServiceUtil
-					.countActionHistoryByProcessId(processOrderId);
-				pageContext.setAttribute("results", results);
-				pageContext.setAttribute("total", total);
+				actionHistories = ActionHistoryLocalServiceUtil
+								.getActionHistoryByProcessOrderId(processOrderId,
+										searchContainer.getStart(),
+										searchContainer.getEnd(), false);
+
+						results = actionHistories;
+						total = ActionHistoryLocalServiceUtil
+								.countActionHistoryByProcessId(processOrderId);
+						pageContext.setAttribute("results", results);
+						pageContext.setAttribute("total", total);
 			%>
 		</liferay-ui:search-container-results>
 		<liferay-ui:search-container-row 
