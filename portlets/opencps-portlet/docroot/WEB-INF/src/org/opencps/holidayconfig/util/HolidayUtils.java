@@ -16,6 +16,7 @@
  */
 package org.opencps.holidayconfig.util;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -40,7 +41,19 @@ public class HolidayUtils {
 	public final static String SATURDAY = "SATURDAY";
 	public final static String SUNDAY = "SUNDAY";
 	private final static int ACTIVE = 1;
+	public long dayGoing =0;
 	
+	public long getDayGoing() {
+	
+		return dayGoing;
+	}
+
+	
+	public void setDayGoing(long dayGoing2) {
+	
+		this.dayGoing = dayGoing2;
+	}
+
 	/**
 	 * Check estimateDate
 	 * 
@@ -51,6 +64,7 @@ public class HolidayUtils {
 	public static Date getEndDate(Date baseDate, String pattern) {
 
 		/* format pattern = "3 -10:30", pattern = "3 +10:30" */
+		
 
 		Date estimateDate = null;
 
@@ -301,5 +315,174 @@ public class HolidayUtils {
 
 		return false;
 
+	}
+	
+	
+	public long getDayGoing(Date startDate, Date endDate) {
+
+		if (startDate == null) {
+			startDate = new Date();
+		}
+		
+		SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+
+		Calendar startDateCal = Calendar.getInstance();
+		startDateCal.setTime(startDate);
+		
+		Calendar endDateCal = Calendar.getInstance();
+		endDateCal.setTime(endDate);
+		
+		long dayGoing = endDateCal.getTimeInMillis() - startDateCal.getTimeInMillis();
+		dayGoing =	dayGoing/ (24 * 60 * 60 * 1000);
+		
+		setDayGoing(dayGoing);
+
+		try {
+
+			int saturdayIsHoliday = 0;
+			int sundayIsHoliday = 0;
+
+			/* Kiem tra xem flag sunday,saturday co duoc tinh la ngay nghi khong */
+			
+			List<HolidayConfigExtend> holidayConfigExtendList = HolidayConfigExtendLocalServiceUtil
+					.getHolidayConfigExtends(QueryUtil.ALL_POS,
+							QueryUtil.ALL_POS);
+
+			for (HolidayConfigExtend holidayConfigExtend : holidayConfigExtendList) {
+
+				if (holidayConfigExtend.getKey().equals(SATURDAY)) {
+					saturdayIsHoliday = holidayConfigExtend.getStatus();
+				}
+
+				if (holidayConfigExtend.getKey().equals(SUNDAY)) {
+					sundayIsHoliday = holidayConfigExtend.getStatus();
+				}
+			}
+			
+			
+
+			for (int i = 0; i < dayGoing; i++) {
+
+				startDateCal.add(Calendar.DATE, 1);
+
+				dayGoing = checkDayNumber(startDateCal, startDate, null,
+						saturdayIsHoliday, sundayIsHoliday);
+
+			}
+		} catch (Exception e) {
+			_log.error(e);
+		}
+
+		return getDayGoing();
+	}
+	
+	private long checkDayNumber(
+		Calendar baseDateCal, Date baseDate, List<HolidayConfig> holidayConfigList,
+		int saturdayIsHoliday, int sundayIsHoliday) {
+
+		boolean isHoliday = false;
+
+		try {
+
+			if (Validator.isNull(holidayConfigList) || (holidayConfigList.size() <= 0)) {
+				holidayConfigList = HolidayConfigLocalServiceUtil.getHolidayConfig(ACTIVE);
+			}
+
+			/*
+			 * Kiem tra ngay xu ly co trung vao list ngay nghi da config hay
+			 * chua, Neu trung thi + them ngay xu ly
+			 */
+			isHoliday = isHoliday(baseDateCal, holidayConfigList);
+
+			if (baseDateCal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY ||
+				baseDateCal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || isHoliday) {
+
+				baseDateCal = isHolidayCalNumber(baseDateCal, holidayConfigList);
+
+				/*
+				 * Neu flag saturday,sunday bat thi tinh la ngay nghi, + them
+				 * ngay xu ly
+				 */
+
+				if (saturdayIsHoliday == ACTIVE) {
+
+					baseDateCal = checkSaturdayNumber(baseDateCal);
+				}
+
+				if (sundayIsHoliday == ACTIVE) {
+					baseDateCal = checkSundayNumber(baseDateCal);
+				}
+
+				checkDayNumber(
+					baseDateCal, baseDate, holidayConfigList, saturdayIsHoliday,
+					sundayIsHoliday);
+			}
+			else {
+
+			}
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
+
+		return dayGoing;
+	}
+	
+	private  Calendar isHolidayCalNumber(Calendar baseDateCal, List<HolidayConfig> holidayConfigList) {
+
+		int baseDate = 0;
+		int holidayDate = 0;
+		Calendar holidayCal = Calendar.getInstance();
+		
+		long dayGoing = getDayGoing();
+
+		try {
+
+			if (Validator.isNull(holidayConfigList) || (holidayConfigList.size() <= 0)) {
+
+				holidayConfigList = HolidayConfigLocalServiceUtil.getHolidayConfig(ACTIVE);
+			}
+
+			for (int i = 0; i < holidayConfigList.size(); i++) {
+
+				holidayCal.setTime(holidayConfigList.get(i).getHoliday());
+
+				baseDate = baseDateCal.get(Calendar.DATE);
+				holidayDate = holidayCal.get(Calendar.DATE);
+
+				if (baseDate == holidayDate) {
+					baseDateCal.add(Calendar.DATE, 1);
+					--dayGoing;
+				}
+			}
+		}
+		catch (Exception e) {
+			// TODO Auto-generated catch block
+			_log.error(e);
+		}
+		return baseDateCal;
+	}
+	
+	private Calendar checkSaturdayNumber(Calendar baseDateCal) {
+		
+		long dayGoing = getDayGoing();
+
+		if (baseDateCal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+			baseDateCal.add(Calendar.DATE, 2);
+			--dayGoing;
+			--dayGoing;
+		}
+		return baseDateCal;
+	}
+
+	private Calendar checkSundayNumber(Calendar baseDateCal) {
+		
+		long dayGoing = getDayGoing();
+
+		if (baseDateCal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+			baseDateCal.add(Calendar.DATE, 1);
+			--dayGoing;
+		}
+		return baseDateCal;
 	}
 }
