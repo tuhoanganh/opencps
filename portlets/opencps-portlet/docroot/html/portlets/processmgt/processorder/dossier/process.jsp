@@ -515,7 +515,7 @@
 </aui:row>
 
 <aui:row>
-	<div id = "<portlet:namespace />assignToUserMoit" ></div>
+	<div id = "<portlet:namespace />assignTaskContainer" ></div>
 </aui:row>
 
 </div>
@@ -574,33 +574,31 @@
 		else if (assignFormDisplayStyle == 'form' ) {
 			portletURL.setWindowState("<%=LiferayWindowState.EXCLUSIVE.toString()%>"); 
 			A.io.request(
-					portletURL.toString(),
-					{
-						dataType : 'text/html',
-						method : 'POST',
-					    data:{
-					    },   
-					    on: {
-					    	success: function(event, id, obj) {
-					    		
-								var instance = this;
-								var res = instance.get('responseData');
+				portletURL.toString(),
+				{
+					dataType : 'text/html',
+					method : 'POST',
+				    data:{
+				    },   
+				    on: {
+				    	success: function(event, id, obj) {
+				    		
+							var instance = this;
+							var res = instance.get('responseData');
+							
+							var assignTaskContainer = A.one("#<portlet:namespace/>assignTaskContainer");
+							
+							if(assignTaskContainer){
+								assignTaskContainer.empty();
+								assignTaskContainer.html(res);
+							}
 								
-								var assignToUserMoit = A.one("#<portlet:namespace/>assignToUserMoit");
-								
-								if(assignToUserMoit){
-									assignToUserMoit.empty();
-									assignToUserMoit.html(res);
-								}
-									
-							},
-					    	error: function(){}
-						}
+						},
+				    	error: function(){}
 					}
-				);
+				}
+			);
 		}
-		
-		
 	});
 	
 AUI().ready('aui-base','liferay-portlet-url','aui-io', function(A){
