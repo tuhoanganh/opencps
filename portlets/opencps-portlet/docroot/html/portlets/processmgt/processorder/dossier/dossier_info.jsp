@@ -106,15 +106,15 @@
 			<liferay-ui:message key="reception-no"/>
 		</td>
 		<td >
-			<%=dossier != null &&  Validator.isNotNull(dossier.getReceptionNo())? dossier.getReceptionNo() :  StringPool.BLANK %>
+			<%= dossier != null &&  Validator.isNotNull(dossier.getReceptionNo())? dossier.getReceptionNo() :  StringPool.BLANK %>
 		</td>
 	</tr>
 	<tr>
 		<td >
-			<%= ProcessOrderUtils.getDossierDate(dossier.getDossierId(), 2, "dd/MM/yyyy hh:mm") %>
+			<liferay-ui:message key="estimate-date"/>
 		</td>
 		<td >
-			<%=StringPool.BLANK %>
+			<%= ProcessOrderUtils.getDossierDate(dossier.getDossierId(), 2, "dd/MM/yyyy hh:mm") %>
 		</td>
 	</tr>
 	<tr>

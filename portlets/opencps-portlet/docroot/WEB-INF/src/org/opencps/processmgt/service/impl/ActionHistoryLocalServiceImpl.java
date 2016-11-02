@@ -243,11 +243,13 @@ public class ActionHistoryLocalServiceImpl
 	
 	
 	public List<ActionHistory> getActionHistoryByProcessOrderId(
-	    long processId, int start, int end)
-	    throws PortalException, SystemException {
+		long processId, int start, int end, boolean orderByAsc)
+		throws PortalException, SystemException {
+
+		OrderByComparator orderByComparator = new ActionHistoryCreateDateComparator(orderByAsc);
 
 		return actionHistoryPersistence.findByProcessOrderId(
-		    processId, start, end);
+			processId, start, end, orderByComparator);
 	}
 	
 	public int countActionHistoryByProcessId(long processId) throws PortalException, SystemException {

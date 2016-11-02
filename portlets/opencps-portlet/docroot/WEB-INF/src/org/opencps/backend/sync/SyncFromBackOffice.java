@@ -29,6 +29,7 @@ import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLogLocalServiceUtil;
 import org.opencps.dossiermgt.util.ActorBean;
+import org.opencps.holidayconfig.util.HolidayCheckUtils;
 import org.opencps.jms.SyncServiceContext;
 import org.opencps.processmgt.model.WorkflowOutput;
 import org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil;
@@ -85,7 +86,7 @@ public class SyncFromBackOffice implements MessageListener {
 				_log.info("Estimate date________________________________________:" + toBackOffice.getEstimateDatetime());
 				_log.info("Submit date________________________________________:" + toBackOffice.getSubmitDateTime());
 				_log.info("Fisnished date________________________________________:" + toBackOffice.getFinishDatetime());
-				_log.info("Receive date________________________________________:" + toBackOffice.getReceiveDatetime());
+				_log.info("Receive dateXXXXXXXXXXXXXXXXXXXXXXXX_________________:" + toBackOffice.getReceiveDatetime());
 				
 				statusUpdate =
 					DossierLocalServiceUtil.updateDossierStatus(
@@ -93,8 +94,8 @@ public class SyncFromBackOffice implements MessageListener {
 						toBackOffice.getFileGroupId(),
 						toBackOffice.getDossierStatus(),
 						toBackOffice.getReceptionNo(),
-						toBackOffice.getEstimateDatetime(),
 						toBackOffice.getSubmitDateTime(),
+						toBackOffice.getEstimateDatetime(),
 						toBackOffice.getReceiveDatetime(),
 						toBackOffice.getFinishDatetime(),
 						toBackOffice.getActor(), toBackOffice.getActorId(),
@@ -141,7 +142,6 @@ public class SyncFromBackOffice implements MessageListener {
 						actorBean.getActorId(), actorBean.getActorName(),
 						SyncFromBackOffice.class.getName(),
 						WebKeys.DOSSIER_LOG_PAYMENT_REQUEST);
-
 				}
 
 				if (isResubmit) {
@@ -172,8 +172,8 @@ public class SyncFromBackOffice implements MessageListener {
 				}
 
 				SendToCallbackMsg toCallBack = new SendToCallbackMsg();
-				
-				int dayDelay = 0;
+
+				int dayDelay = HolidayCheckUtils.getDayDelay(toBackOffice.getProcessOrderId(), toBackOffice.getProcessWorkflowId());
 				int daysDoing = 0;
 				
 				toCallBack.setProcessOrderId(toBackOffice.getProcessOrderId());
@@ -191,7 +191,6 @@ public class SyncFromBackOffice implements MessageListener {
 				toCallBack.setDaysDelay(dayDelay);
 				toCallBack.setSyncStatus(statusUpdate ? "ok" : "error");
 				
-				_log.error("CALLLLLLLLLLLLLLLLLLLLLLLLLLLBACKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
 				
 				Message sendToCallBack = new Message();
 
