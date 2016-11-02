@@ -66,6 +66,7 @@ public class ProcessOrderDisplayTerms extends DisplayTerms {
 	public static String ESTIMATE_TIME = "estimateTime";
 	public static String SIGNATURE = "signature";
 	public static String REQUIRED = "required";
+	public static String RECEIVE_DATE = "receiveDate";
 	
 	
 	/**
