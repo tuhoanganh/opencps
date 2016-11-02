@@ -16,8 +16,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-<%@ include file="../init.jsp"%>
 <%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
+
+<%@ include file="../init.jsp"%>
+
 
 <%
 	PortletPreferences preferences1 = renderRequest.getPreferences();
