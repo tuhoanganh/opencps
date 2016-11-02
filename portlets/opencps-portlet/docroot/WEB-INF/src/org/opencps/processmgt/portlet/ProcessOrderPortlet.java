@@ -409,6 +409,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 	 * @param actionResponse
 	 * @throws IOException
 	 */
+
 	public void assignToUser(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException {
 
@@ -461,10 +462,11 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		String event = ParamUtil.getString(actionRequest,
 				ProcessOrderDisplayTerms.EVENT);
 
+		String assignFormDisplayStyle = ParamUtil.getString(actionRequest,
+				"assignFormDisplayStyle");
+
 		boolean signature = ParamUtil.getBoolean(actionRequest,
 				ProcessOrderDisplayTerms.SIGNATURE);
-
-		boolean isPopup = ParamUtil.getBoolean(actionRequest, "isPopup");
 
 		boolean sending = false;
 
@@ -475,6 +477,9 @@ public class ProcessOrderPortlet extends MVCPortlet {
 					.convertStringToFullDate(estimateDate + StringPool.SPACE
 							+ estimateTime + StringPool.COLON + "00");
 		}
+
+		_log.info("NGAYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY HEN TRA ********** :"
+				+ deadline);
 
 		try {
 
@@ -544,13 +549,13 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			_log.error(e);
 		} finally {
 
-			if (isPopup && sending) {
+			if (assignFormDisplayStyle.equals("popup") && sending) {
 				actionResponse
 						.setRenderParameter("jspPage",
 								"/html/portlets/processmgt/processorder/assign_to_user.jsp");
 				actionResponse.setRenderParameter("backURL", backURL);
 
-			} else if (isPopup && !sending) {
+			} else if (assignFormDisplayStyle.equals("popup") && !sending) {
 				if (Validator.isNotNull(redirectURL)) {
 					actionResponse.sendRedirect(redirectURL);
 				}

@@ -522,7 +522,6 @@
 		
 		var fileGroupId = A.one('#<portlet:namespace/>fileGroupId').val();
 		
-		var receptionNo = A.one('#<portlet:namespace/>receptionNo').val();
 		
 		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
 		portletURL.setParameter("mvcPath", "/html/portlets/processmgt/processorder/assign_to_user.jsp");
