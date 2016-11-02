@@ -1,4 +1,7 @@
 
+<%@page import="org.opencps.holidayconfig.util.HolidayUtils"%>
+<%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,7 +20,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
+<%@page import="org.opencps.processmgt.util.ProcessOrderUtils"%>
+<%@page import="javax.portlet.PortletMode"%>
 <%@page import="javax.portlet.PortletMode"%>
 <%@page import="org.opencps.processmgt.NoSuchWorkflowOutputException"%>
 <%@page import="org.opencps.util.PortletPropsValues"%>
@@ -54,9 +58,8 @@
 	try{
 		success = !SessionMessages.isEmpty(renderRequest) && SessionErrors.isEmpty(renderRequest);
 		
-	}catch(Exception e){
-		
-	}
+	}catch(Exception e){}
+	
 	ProcessOrder processOrder = (ProcessOrder) request.getAttribute(WebKeys.PROCESS_ORDER_ENTRY);
 	
 	DossierFile  dossierFile = (DossierFile) request.getAttribute(WebKeys.DOSSIER_FILE_ENTRY);
