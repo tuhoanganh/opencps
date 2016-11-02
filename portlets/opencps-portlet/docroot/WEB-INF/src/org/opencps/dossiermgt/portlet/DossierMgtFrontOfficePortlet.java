@@ -2574,7 +2574,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		long dossierId =
 			ParamUtil.getLong(actionRequest, DossierDisplayTerms.DOSSIER_ID);
 		
-		String note = ParamUtil.getString(actionRequest, DossierDisplayTerms.NOTE);
 		
 		long fileGroupId =
 			ParamUtil.getLong(

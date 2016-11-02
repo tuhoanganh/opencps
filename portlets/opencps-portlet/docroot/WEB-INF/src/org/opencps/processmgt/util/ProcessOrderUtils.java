@@ -759,8 +759,6 @@ public class ProcessOrderUtils {
 				ProcessStep nextStep =
 				    ProcessStepLocalServiceUtil.fetchProcessStep(processWorkflow.getPostProcessStepId());
 				
-				_log.info("CURR_STEP: " + currStep.getStepName() + "NEXT_STEP: " + nextStep.getStepName());
-
 				if (currStep.getDossierStatus().contains(
 				    PortletConstants.DOSSIER_STATUS_RECEIVING) &&
 				    nextStep.getDossierStatus().contains(
