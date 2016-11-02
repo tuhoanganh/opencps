@@ -370,7 +370,7 @@
 		</div>
 	</c:if>
 
-	<aui:button type="submit" value="submit" name="submit"/>
+	<aui:button type="button" value="submit" name="submit"/>
 	
 	<c:if test="<%=esign %>">
 		<aui:button type="button" value="esign" name="esign"/>
@@ -382,10 +382,18 @@
 
 <aui:script>
 	AUI().ready(function(A){
+		
+		var submitButton = A.one('#<portlet:namespace/>submit');
 
 		var cancelButton = A.one('#<portlet:namespace/>cancel');
 		
 		var esign = A.one('#<portlet:namespace/>esign');
+		
+		if(submitButton){
+			submitButton.on('click', function(){
+				submitForm(document.<portlet:namespace />fm);
+			});
+		}
 		
 		if(cancelButton){
 			cancelButton.on('click', function(){

@@ -584,6 +584,7 @@
 				    	success: function(event, id, obj) {
 				    		
 							var instance = this;
+							
 							var res = instance.get('responseData');
 							
 							var assignTaskContainer = A.one("#<portlet:namespace/>assignTaskContainer");
@@ -591,6 +592,21 @@
 							if(assignTaskContainer){
 								assignTaskContainer.empty();
 								assignTaskContainer.html(res);
+								
+								var submitButton = A.one('#<portlet:namespace/>submit');
+								var cancelButton = A.one('#<portlet:namespace/>cancel');
+								
+								if(submitButton){
+									submitButton.on('click', function(){
+										submitForm(document.<portlet:namespace />fm);
+									});
+								}
+								
+								if(cancelButton){
+									cancelButton.on('click', function(){
+										<portlet:namespace/>closeDialog();
+									});
+								}
 							}
 								
 						},
