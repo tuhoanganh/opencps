@@ -723,4 +723,16 @@ public class ProcessOrderLocalServiceImpl
 					throws SystemException {
 		return processOrderPersistence.findByServiceInfoId(serviceinfoId);
 	}
+	
+	/**
+	 * @param processStepId
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public List<ProcessOrder> getProcessOrderByStep(long processStepId)
+	    throws PortalException, SystemException {
+
+		return processOrderPersistence.findByprocessStepId(processStepId);
+	}
 }

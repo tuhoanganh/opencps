@@ -75,10 +75,6 @@ public class BackOfficeProcessEngine implements MessageListener {
 		SendToEngineMsg toEngineMsg =
 			(SendToEngineMsg) message.get("msgToEngine");
 		
-		Date submitDate = null;
-		Date estimateDate = null;
-		Date finishedDate = null;
-		Date receiveDate = null;
 
 		String actionName = StringPool.BLANK;
 		String stepName = StringPool.BLANK;
@@ -260,12 +256,12 @@ public class BackOfficeProcessEngine implements MessageListener {
 							isResubmit = true;
 						}
 						
-
+/*
 						// Get AutoEvent of change step
 						_updateSchedulerJob(
 							processStepId, serviceProcessId,
 							processOrder.getDossierId(),
-							processOrder.getFileGroupId());
+							processOrder.getFileGroupId());*/
 					}
 
 				}
@@ -335,7 +331,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 					toBackOffice.setReceptionNo(toEngineMsg.getReceptionNo());
 				}
 
-				toBackOffice.setEstimateDatetime(toEngineMsg.getEstimateDatetime());
+				
 
 				if (processWorkflow.getIsFinishStep()) {
 					toBackOffice.setFinishDatetime(new Date());
@@ -427,7 +423,11 @@ public class BackOfficeProcessEngine implements MessageListener {
 				
 				toBackOffice.setPayment(isPayment);
 				toBackOffice.setResubmit(isResubmit);
+				toBackOffice.setEstimateDatetime(toEngineMsg.getEstimateDatetime());
+				toBackOffice.setReceiveDatetime(toEngineMsg.getReceiveDate());
 				
+				_log.error("ESSSSSSSSSSSTIME__DATE" + toEngineMsg.getEstimateDatetime());
+
 				Message sendToBackOffice = new Message();
 
 				sendToBackOffice.put("toBackOffice", toBackOffice);
