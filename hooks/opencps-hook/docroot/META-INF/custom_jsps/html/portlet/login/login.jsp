@@ -157,6 +157,7 @@
 						</aui:button-row>
 					</div>
 				</c:when>
+
 				<c:when test='<%=displayStyle.equals("compact") %>'>
 					
 					<div class="compact-sign-in-wrapper">
@@ -246,6 +247,7 @@
 					</div>
 					
 				</c:when>
+
 				<c:otherwise>
 					<div class="ux-sign-in-wrapper">
 						<div class="default-sign-in">

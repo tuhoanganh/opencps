@@ -113,6 +113,7 @@
 				<div class="span9"><%=Validator.isNotNull(adminAction) ? adminAction.getItemName(locale,true) : StringPool.BLANK %></div>
 			</div>
 		</div>
+
 	</div>
 <%
 	
@@ -122,11 +123,13 @@
 		}catch(Exception e){}
 	}
 	
+
 	int index = 0;
 	
 	List<String> requiredDossierPartIds = new ArrayList<String>();
 	String [] requiredDossierPartIdsArr = new String[]{};
 	int requiredIndex = 0;
+
 	if(dossierPartsLevel1 != null){
 		for (DossierPart dossierPartLevel1 : dossierPartsLevel1){
 	
@@ -197,18 +200,14 @@
 									}
 								}
 								
-								 cssRequired = dossierPart.getRequired() ? "cssRequired" : StringPool.BLANK;
-								
-								/* if(dossierPart.getRequired() && dossierFile == null) {
-									cssDossierPartRequired = "dossierPartRequired";
-								} else {
-									cssDossierPartRequired = StringPool.BLANK;
-								} */
+								cssRequired = dossierPart.getRequired() ? "cssRequired" : StringPool.BLANK;
 								
 								urlDownload = DossierMgtUtil.getURLDownloadTemplateFile(themeDisplay, dossierPart.getTemplateFileNo());
 								
 								%>
+
 									<div class='<%="opencps dossiermgt dossier-part-row r-" + index + " " + String.valueOf(dossierPart.getDossierpartId())%>'>
+
 										<span class='<%="level-" + level + " opencps dossiermgt dossier-part"%>'>
 											<span class="row-icon row-icon-stt-new">
 												<c:choose>
@@ -385,6 +384,7 @@
 								
 								//TODO: kiem tra lai dieu kien dossierPartRequired voi truong hop nay
 								if(dossierPartLevel1.getRequired() && (fileGroups == null || (fileGroups != null && fileGroups.size() > 0))) {
+
 									//cssDossierPartRequired = "dossierPartRequired";
 									requiredDossierPartIds.add(String.valueOf(dossierPartLevel1.getDossierpartId()));
 								} else {
@@ -392,6 +392,7 @@
 									if(requiredDossierPartIds.contains(String.valueOf(dossierPartLevel1.getDossierpartId()))) {
 										requiredDossierPartIds.remove(String.valueOf(dossierPartLevel1.getDossierpartId()));
 									}
+
 								}
 								
 								urlDownload = DossierMgtUtil.getURLDownloadTemplateFile(themeDisplay, dossierPartLevel1.getTemplateFileNo());
@@ -482,6 +483,7 @@
 			<%
 			}
 		}
+
 		requiredDossierPartIdsArr = new String[requiredDossierPartIds.size()]; 
 		for(String str : requiredDossierPartIds) {
 			requiredDossierPartIdsArr[requiredIndex] = str;
@@ -494,6 +496,7 @@
 			<aui:input name="requiredDossierPart" type="hidden" value="<%= StringUtil.merge(requiredDossierPartIdsArr) %>"/>
 		<%
 	}	
+
 %>
 </div>
 <aui:script>

@@ -2394,6 +2394,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	 * @throws SystemException
 	 * @throws PortalException
 	 */
+
 	public void updateDossierStatus(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortalException,
 			SystemException {
