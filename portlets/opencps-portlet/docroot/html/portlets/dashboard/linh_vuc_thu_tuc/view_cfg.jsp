@@ -46,8 +46,19 @@
 
 <%
 
+	List<Layout> privLayouts = LayoutLocalServiceUtil.getLayouts(scopeGroupId, true);
 	List<Layout> pubLayouts = LayoutLocalServiceUtil.getLayouts(scopeGroupId, false);
 	
+	List<Layout> allLayout = new ArrayList<Layout>();
+	
+	for (Layout privLayout : privLayouts) {
+		allLayout.add(privLayout);
+	}
+	
+	for (Layout pubLayout : pubLayouts) {
+		allLayout.add(pubLayout);
+	}
+
 	List<DictItem> dictItems = PortletUtil.getDictItemInUseByCode(themeDisplay.getScopeGroupId(), 
 		PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN, 
 		PortletConstants.TREE_VIEW_DEFAULT_ITEM_CODE);
