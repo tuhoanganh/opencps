@@ -1,5 +1,4 @@
 
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -166,6 +165,11 @@
 		type="hidden"
 	/>
 	
+	<aui:input 
+		name="assignActionURL" 
+		value="<%=assignToUserURL.toString() %>" 
+		type="hidden"
+	/>
 	<aui:input 
 		name="redirectURL" 
 		value="<%=currentURL %>" 
