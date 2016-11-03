@@ -77,10 +77,7 @@
 			</portlet:actionURL>
 	
 			<liferay-ui:icon
-<<<<<<< HEAD
 				message="deactivate"
-=======
->>>>>>> merge-all-async-branch
 			 	label="deactivate"
 			 	cssClass="search-container-action fa deactivate"
 				url="<%= updateStatusURL.toString()%>" 
