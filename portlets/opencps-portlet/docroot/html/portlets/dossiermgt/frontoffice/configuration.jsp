@@ -171,6 +171,13 @@
 		name="hiddenTreeNodeEqualNone" 
 		value="<%=hiddenTreeNodeEqualNone %>"
 	/>
+	
+	<aui:input 
+		type="checkbox"
+		name="allowResultQuickView" 
+		value="<%=allowResultQuickView %>"
+	/>
+	
 	<aui:button type="submit" name="Save" value="save"></aui:button>
 
 </aui:form>
