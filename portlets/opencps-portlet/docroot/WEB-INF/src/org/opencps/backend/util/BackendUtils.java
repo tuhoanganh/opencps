@@ -29,6 +29,7 @@ import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.model.ProcessStep;
 import org.opencps.processmgt.model.ProcessWorkflow;
+import org.opencps.processmgt.model.impl.ProcessStepImpl;
 import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
@@ -83,7 +84,7 @@ public class BackendUtils {
 		boolean validPreCondition = true;
 
 		List<String> lsCondition =
-			ListUtil.toList(StringUtil.split(pattern, StringPool.SPACE));
+			ListUtil.toList(StringUtil.split(pattern, StringPool.COMMA));
 
 		boolean validPayok = true;
 		boolean validCancel = true;
@@ -92,6 +93,8 @@ public class BackendUtils {
 		boolean validOnline = true;
 		boolean validOnegate = true;
 		boolean validRepair = true;
+		boolean validDelay = true;
+		boolean validWaiting = true;
 
 		for (String condition : lsCondition) {
 			if (StringUtil.equalsIgnoreCase(
@@ -274,16 +277,16 @@ public class BackendUtils {
 
 		int countAllPayment = 0;
 
-		int countPaymentComplated = 0;
+		int countPaymentCompleted = 0;
 
 		try {
 			countAllPayment =
 				PaymentFileLocalServiceUtil.countAllPaymentFile(dossierId);
 
-			countPaymentComplated =
+			countPaymentCompleted =
 				PaymentFileLocalServiceUtil.countPaymentFile(dossierId, 2);
 
-			if (!((countAllPayment - countPaymentComplated) == 0)) {
+			if (!((countAllPayment - countPaymentCompleted) == 0)) {
 				paymentStatus = false;
 			}
 		}
@@ -492,8 +495,8 @@ public class BackendUtils {
 				        serviceProcessId, processStepId);
 
 				for (ProcessWorkflow prc_wf : lsPRC_WFL) {
-					if (Validator.equals(
-					    prc_wf.getPreCondition(), WebKeys.ACTION_CANCEL_VALUE)) {
+					if (Validator.isNotNull(prc_wf.getPreCondition()) &&
+					    (StringUtil.trim(prc_wf.getPreCondition()).contains(WebKeys.ACTION_CANCEL_VALUE))) {
 						isCancel = true;
 						break;
 					}
@@ -538,6 +541,31 @@ public class BackendUtils {
 
 	}
 
+	/**
+	 * Get processStepById
+	 * 
+	 * @param dossierId
+	 * @return
+	 */
+	public static ProcessStep getProcessStepByDossierId(long dossierId) {
 
+		ProcessStep processStep = new ProcessStepImpl();
+
+		try {
+			ProcessOrder processOrder =
+			    ProcessOrderLocalServiceUtil.getProcessOrder(dossierId, 0);
+
+			long processStepId = processOrder.getProcessStepId();
+
+			processStep =
+			    ProcessStepLocalServiceUtil.getProcessStep(processStepId);
+		}
+		catch (Exception e) {
+
+		}
+
+		return processStep;
+	}
+	
 	private static Log _log = LogFactoryUtil.getLog(BackendUtils.class);
 }

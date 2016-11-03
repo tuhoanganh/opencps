@@ -192,6 +192,10 @@
 			<finder-column name="autoEvent"/>
 			<finder-column name="preProcessStepId"/>
 		</finder>
+		
+		<finder return-type="Collection" name="AutoEvent">
+			<finder-column name="autoEvent"/>
+		</finder>
 
         <finder name="ActionCode" return-type="ProcessWorkflow">
             <finder-column name="actionCode"></finder-column>
@@ -329,7 +333,7 @@
 			<finder-column name="processOrderId"/>
 		</finder>
 		
-		<finder return-type="Collection" name="ProcessOrderId" where="stepName != ''">
+		<finder return-type="Collection" name="ProcessOrderId">
 			<finder-column name="processOrderId"/>
 		</finder>
         <finder name="OId" return-type="ActionHistory">
