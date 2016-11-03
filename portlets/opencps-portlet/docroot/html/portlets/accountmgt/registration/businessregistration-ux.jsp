@@ -330,7 +330,7 @@
 					<aui:input 
 						name="<%=BusinessDisplayTerms.BUSINESS_ADDRESS %>" 
 						cssClass="input100"
-						placeholder="<%=BusinessDisplayTerms.BUSINESS_ADDRESS %>"
+						placeholder="address-place-holder"
 					>
 						<aui:validator name="maxLength">500</aui:validator>
 					</aui:input>

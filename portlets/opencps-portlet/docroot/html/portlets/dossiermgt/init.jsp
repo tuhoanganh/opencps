@@ -1,4 +1,5 @@
 
+<%@page import="java.text.DecimalFormat"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -22,6 +23,8 @@
 <%@ include file="/init.jsp" %>
 
 <%
+	DecimalFormat doubleFomart=new DecimalFormat("#,###.#");
+
 	PortletPreferences preferences = renderRequest.getPreferences();
 	
 	portletResource = ParamUtil.getString(request, "portletResource");
@@ -51,5 +54,7 @@
 	boolean showTabDossierResultFirst = GetterUtil.getBoolean(preferences.getValue("showTabDossierResultFirst", "false"), false);
 	
 	boolean hiddenTreeNodeEqualNone = GetterUtil.getBoolean(preferences.getValue("hiddenTreeNodeEqualNone", "false"), false);
+	
+	boolean allowResultQuickView = GetterUtil.getBoolean(preferences.getValue("allowResultQuickView", "false"), false);
 %>
 
