@@ -79,7 +79,7 @@
 					int layout_cfg = GetterUtil.getInteger(portletPreferences.getValue(dictItem.getItemCode()+"_plid", ""));
 
 			%>
-			<li onclick="window.location.href='<%=LayoutLocalServiceUtil.getLayout(layout_cfg).getFriendlyURL() %>'">
+			<li onclick="window.location.href='/group/guest<%=LayoutLocalServiceUtil.getLayout(layout_cfg).getFriendlyURL() %>'">
 				
 				<div class="img-<%=dictItem.getItemCode() %>"> 
 					<div> 
