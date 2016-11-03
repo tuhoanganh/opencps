@@ -40,8 +40,8 @@ public class HolidayUtils {
 	public final static String SATURDAY = "SATURDAY";
 	public final static String SUNDAY = "SUNDAY";
 	private final static int ACTIVE = 1;
-	private static long dayGoing =0;
-	private static long minutesGoing = 0;
+	private static int dayGoing =0;
+	private static int minutesGoing = 0;
 	private static Calendar baseCalendar = Calendar.getInstance();
 	private static List<HolidayConfig> holidayConfigList1 =null;
 
@@ -314,7 +314,7 @@ public class HolidayUtils {
 	 * @param endDate
 	 * @return minutesGoing
 	 */
-	public long getDayGoing(Date startDate, Date endDate) {
+	public int getDurationMinutes(Date startDate, Date endDate) {
 
 		if (Validator.isNull(startDate)) {
 			startDate = new Date();
@@ -343,8 +343,8 @@ public class HolidayUtils {
 		long diffMinutes = timeInMillis1 / (60 * 1000);
 		long diffDays = timeInMillis / (24 * 60 * 60 * 1000);
 
-		minutesGoing = diffMinutes;
-		dayGoing = diffDays;
+		minutesGoing = (int) diffMinutes;
+		dayGoing = (int) diffDays;
 
 		try {
 
@@ -380,8 +380,8 @@ public class HolidayUtils {
 			_log.error(e);
 		}
 
-		long minutesReturn = minutesGoing;
-		long daysReturn = dayGoing;
+		int minutesReturn = minutesGoing;
+		int daysReturn = dayGoing;
 
 		return minutesReturn;
 	}
