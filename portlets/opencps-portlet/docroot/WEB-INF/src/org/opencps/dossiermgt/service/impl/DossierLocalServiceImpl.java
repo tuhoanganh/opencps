@@ -2300,36 +2300,21 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 			Dossier dossier = dossierPersistence.findByPrimaryKey(dossierId);
 			dossier.setReceptionNo(receptionNo);
 			
-			dossier.setEstimateDatetime(estimateDatetime);
+			if (Validator.isNotNull(estimateDatetime)) {
+				dossier.setEstimateDatetime(estimateDatetime);
+			}
 
-			dossier.setReceiveDatetime(receiveDatetime);
-		
-			dossier.setSubmitDatetime(submitDatetime);
+			if (Validator.isNotNull(receiveDatetime) &&
+			    Validator.isNotNull(dossier.getEstimateDatetime())) {
+				dossier.setReceiveDatetime(receiveDatetime);
+			}
 
-			dossier.setFinishDatetime(finishDatetime);
+			if (Validator.isNotNull(finishDatetime)) {
+				dossier.setFinishDatetime(finishDatetime);
+			}
 
 			dossier.setDossierStatus(dossierStatus);
 
-			// int level = 0;
-			// if (dossier.getDossierStatus().equals(
-			// PortletConstants.DOSSIER_STATUS_ERROR)) {
-			// level = 2;
-			// }
-			// else if (dossier.getDossierStatus().equals(
-			// PortletConstants.DOSSIER_STATUS_WAITING) ||
-			// dossier.getDossierStatus().equals(
-			// PortletConstants.DOSSIER_STATUS_PAYING)) {
-			// level = 1;
-			// }
-
-			// Remove DossierLog
-
-			/*
-			 * dossierLogLocalService.addDossierLog( dossier.getUserId(),
-			 * dossier.getGroupId(), dossier.getCompanyId(), dossierId,
-			 * fileGroupId, dossierStatus, actor, actorId, actorName,
-			 * requestCommand, actionInfo, messageInfo, level);
-			 */
 			dossierPersistence.update(dossier);
 
 			result = true;

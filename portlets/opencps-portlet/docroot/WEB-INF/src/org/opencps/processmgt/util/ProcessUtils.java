@@ -15,6 +15,7 @@ import org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil;
 import org.opencps.processmgt.model.ActionHistory;
 import org.opencps.processmgt.model.ProcessStep;
 import org.opencps.processmgt.model.ProcessStepDossierPart;
+import org.opencps.processmgt.model.ProcessWorkflow;
 import org.opencps.processmgt.model.ServiceProcess;
 import org.opencps.processmgt.model.StepAllowance;
 import org.opencps.processmgt.model.WorkflowOutput;
@@ -24,6 +25,7 @@ import org.opencps.processmgt.model.impl.WorkflowOutputImpl;
 import org.opencps.processmgt.service.ActionHistoryLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessStepDossierPartLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
+import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
 import org.opencps.processmgt.service.ServiceProcessLocalServiceUtil;
 import org.opencps.processmgt.service.StepAllowanceLocalServiceUtil;
 import org.opencps.processmgt.service.impl.ActionHistoryLocalServiceImpl;
@@ -485,6 +487,48 @@ public class ProcessUtils {
 	public static String[] _PROCESS_ORDER_CATEGORY_NAMES = {
 	    "process-order"
 	};
+	
+	/**
+	 * @param processWorkflowId
+	 * @return
+	 */
+	public static String getCssClass(long processWorkflowId) {
+	
+		String cssClass = StringPool.BLANK;
+		
+		int count = 0;
+		
+		try {
+			ProcessWorkflow processWorkflow = ProcessWorkflowLocalServiceUtil.fetchProcessWorkflow(processWorkflowId);
+			
+			if (processWorkflow.getAssignUser()) {
+	            count = count + 1;
+            }
+			
+			if (processWorkflow.getGenerateDeadline()) {
+	            count = count + 1;
+            }
+
+			if (processWorkflow.getGenerateReceptionNo()) {
+	            count = count + 1;
+            }
+			
+			if (processWorkflow.getRequestPayment()) {
+	            count = count + 1;
+            }
+			
+			if (count != 0) {
+				cssClass = "span" + Integer.toString(12/count);
+			}
+
+        }
+        catch (Exception e) {
+	        
+        }
+		
+		return cssClass;
+		
+	}
 	
 	private static Log _log = LogFactoryUtil.getLog(ProcessUtils.class.getName());
 }
