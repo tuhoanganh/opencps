@@ -49,12 +49,12 @@
 
 <%
 	//get config to load jsp display dossier
-	String templatesToDisplay_cfg = GetterUtil.getString(portletPreferences.getValue("templatesToDisplay", "default"));
+	String dashBoardCFGType_cfg = GetterUtil.getString(portletPreferences.getValue("dashBoardCFGType", "default"));
 
 %>
 
-<liferay-util:include page='<%=templatePath + "display/" + templatesToDisplay_cfg + "_servicelist.jsp" %>' servletContext="<%=application %>" />
+<liferay-util:include page='<%=templatePath + dashBoardCFGType_cfg + "/view.jsp" %>' servletContext="<%=application %>" />
 
 <%!
-	private Log _log = LogFactoryUtil.getLog("html.portlets.dossiermgt.frontoffice.frontofficeservicelist.jsp");
+	private Log _log = LogFactoryUtil.getLog("html.portlets.dashboard.view.jsp");
 %>

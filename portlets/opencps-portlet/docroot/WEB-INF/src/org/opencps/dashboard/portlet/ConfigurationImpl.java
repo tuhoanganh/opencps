@@ -61,6 +61,8 @@ public class ConfigurationImpl implements ConfigurationAction{
 		String portletResource =
 		    ParamUtil.getString(actionRequest, "portletResource");
 
+		String dashBoardCFGType = ParamUtil.getString(actionRequest, "dashBoardCFGType");
+		
 		PortletPreferences preferences =
 		    PortletPreferencesFactoryUtil.getPortletSetup(
 		        actionRequest, portletResource);
@@ -71,9 +73,6 @@ public class ConfigurationImpl implements ConfigurationAction{
 		List<DictItem> dictItems = PortletUtil.getDictItemInUseByCode(themeDisplay.getScopeGroupId(), 
 				PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN, 
 				PortletConstants.TREE_VIEW_DEFAULT_ITEM_CODE);
-		String dkm = ParamUtil.getString(actionRequest, "dkm");
-		String dkm2 = ParamUtil.getString(actionRequest, "dkm2");
-		System.out.println("ConfigurationImpl.processAction()"+dkm2);
 		for (DictItem dictItem : dictItems) {
 			long plid_cfg = ParamUtil.getLong(actionRequest, dictItem.getItemCode()+"_plid");
 			boolean isShow_cfg = ParamUtil.getBoolean(actionRequest, dictItem.getItemCode()+"_isShow");
@@ -84,6 +83,7 @@ public class ConfigurationImpl implements ConfigurationAction{
 			preferences.setValue(dictItem.getItemCode()+"_isShowOrder", String.valueOf(isShowOrder_cfg));
 		}
 		
+		preferences.setValue("dashBoardCFGType", dashBoardCFGType);
 		preferences.store();
 
 		SessionMessages.add(actionRequest, "potlet-config-saved");

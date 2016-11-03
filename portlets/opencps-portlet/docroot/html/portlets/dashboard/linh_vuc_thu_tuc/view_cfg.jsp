@@ -75,7 +75,7 @@
     %>
     <tr>
     	<td>
-			<input name='<%="_86_"+dictItem.getItemCode()+"_isShow" %>' id='<%="_86_"+dictItem.getItemCode()+"_isShow" %>' value="<%=isShow_cfg %>" checked="<%=isShow_cfg%>" type="checkbox" label=""></input>
+			<input name='<%="_86_"+dictItem.getItemCode()+"_isShow" %>' id='<%="_86_"+dictItem.getItemCode()+"_isShow" %>' value="true" <%=isShow_cfg?"checked":""%> type="checkbox" label=""></input>
 		</td>
 		<td>
 			<input name='<%="_86_"+dictItem.getItemCode()+"_isShowOrder" %>' id='<%="_86_"+dictItem.getItemCode()+"_isShowOrder" %>' value="<%=isShowOrder_cfg %>" type="text" label=""></input>
@@ -87,7 +87,7 @@
 				<%
 					for (Layout lout : pubLayouts) {
 				%>
-					<option selected="<%= lout.getPlid() == layout_cfg %>" value="<%= lout.getPlid() %>"><%= lout.getName(locale) %></option>
+					<option <%= lout.getPlid() == layout_cfg ? "selected":"" %> value="<%= lout.getPlid() %>"><%= lout.getName(locale) %></option>
 				<%
 					}
 				%>

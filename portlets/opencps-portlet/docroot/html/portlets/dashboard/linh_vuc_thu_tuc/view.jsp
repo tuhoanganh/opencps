@@ -1,3 +1,11 @@
+<%@page import="com.liferay.portal.service.LayoutLocalServiceUtil"%>
+<%@page import="javax.portlet.PortletRequest"%>
+<%@page import="org.opencps.util.WebKeys"%>
+<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
+<%@page import="java.util.Comparator"%>
+<%@page import="java.util.Collections"%>
+<%@page import="org.opencps.util.PortletPropsValues"%>
+<%@page import="org.opencps.util.PortletUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -39,22 +47,53 @@
 
 <%
 	
-	String backURL = ParamUtil.getString(request, "backURL");
+	List<DictItem> dictItems = PortletUtil.getDictItemInUseByCode(themeDisplay.getScopeGroupId(), 
+		PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN, 
+		PortletConstants.TREE_VIEW_DEFAULT_ITEM_CODE);
+
+	List<DictItem> dictItemsResult = new ArrayList<DictItem>();
+	for(DictItem dictItem: dictItems){
+		boolean isShow_cfg = GetterUtil.getBoolean(portletPreferences.getValue(dictItem.getItemCode()+"_isShow", "false"));
+		int isShowOrder_cfg = GetterUtil.getInteger(portletPreferences.getValue(dictItem.getItemCode()+"_isShowOrder", "0"));
+		if(isShow_cfg){
+			dictItem.setCompanyId(isShowOrder_cfg);
+			dictItemsResult.add(dictItem);
+		}
+	}
 	
-%>
-<liferay-ui:header
-	backURL="<%= backURL %>"
-	title="service-list"
-/>
+	Collections.sort(dictItemsResult, new Comparator<DictItem>() {
 
-<%
-	//get config to load jsp display dossier
-	String templatesToDisplay_cfg = GetterUtil.getString(portletPreferences.getValue("templatesToDisplay", "default"));
-
+        public int compare(DictItem o1, DictItem o2) {
+        	return String.valueOf(o1.getCompanyId()).compareTo(String.valueOf(o2.getCompanyId()));
+        }
+    });
 %>
 
-<liferay-util:include page='<%=templatePath + "display/" + templatesToDisplay_cfg + "_servicelist.jsp" %>' servletContext="<%=application %>" />
+<aui:row>
+	<aui:col width="100" >
 
-<%!
-	private Log _log = LogFactoryUtil.getLog("html.portlets.dossiermgt.frontoffice.frontofficeservicelist.jsp");
-%>
+		<ul class="sitemap-class opencps-horizontal">
+		
+			<%
+				for(DictItem dictItem: dictItemsResult){
+					int layout_cfg = GetterUtil.getInteger(portletPreferences.getValue(dictItem.getItemCode()+"_plid", ""));
+
+			%>
+			<li onclick="window.location.href='<%=LayoutLocalServiceUtil.getLayout(layout_cfg).getFriendlyURL() %>'">
+				
+				<div class="img-<%=dictItem.getItemCode() %>"> 
+					<div> 
+						<a href="<%=LayoutLocalServiceUtil.getLayout(layout_cfg).getFriendlyURL() %>"><%=dictItem.getItemName(locale) %></a> 
+					</div>
+				</div>
+				
+			</li>
+			
+			<%
+				}
+			%>
+		
+		</ul>
+		
+	</aui:col>
+</aui:row>
