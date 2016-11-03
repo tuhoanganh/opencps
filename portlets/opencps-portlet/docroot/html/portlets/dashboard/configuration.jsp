@@ -60,7 +60,6 @@
 <liferay-portlet:actionURL var="configurationActionURL" portletConfiguration="true"/>
 
 <aui:form action="<%= configurationActionURL %>" method="post" name="configurationForm">
-	<aui:input name="dkm" value="22222" type="text" label="222"></aui:input>
 	
 	<aui:select name="dashBoardCFGType" id="dashBoardCFGType" onChange="DashBoardPickType();">
 		<aui:option value=""></aui:option>

@@ -73,7 +73,7 @@ public class ConfigurationImpl implements ConfigurationAction{
 				PortletConstants.TREE_VIEW_DEFAULT_ITEM_CODE);
 		String dkm = ParamUtil.getString(actionRequest, "dkm");
 		String dkm2 = ParamUtil.getString(actionRequest, "dkm2");
-		System.out.println("ConfigurationImpl.processAction()"+dkm);
+		System.out.println("ConfigurationImpl.processAction()"+dkm2);
 		for (DictItem dictItem : dictItems) {
 			long plid_cfg = ParamUtil.getLong(actionRequest, dictItem.getItemCode()+"_plid");
 			boolean isShow_cfg = ParamUtil.getBoolean(actionRequest, dictItem.getItemCode()+"_isShow");

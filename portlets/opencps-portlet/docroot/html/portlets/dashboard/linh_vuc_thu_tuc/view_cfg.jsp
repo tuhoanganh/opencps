@@ -54,9 +54,6 @@
 %>
 
 	
-<aui:input name="dkm" value="33333333" type="text" label="222"></aui:input>
-	
-	
 <div class="table-responsive">
   <table class="table">
     <tr>
@@ -78,26 +75,27 @@
     %>
     <tr>
     	<td>
-			<aui:input name="<%=dictItem.getItemCode()+\"_isShow\" %>" value="<%=isShow_cfg %>" checked="<%=isShow_cfg%>" type="checkbox" label=""></aui:input>
+			<input name='<%="_86_"+dictItem.getItemCode()+"_isShow" %>' id='<%="_86_"+dictItem.getItemCode()+"_isShow" %>' value="<%=isShow_cfg %>" checked="<%=isShow_cfg%>" type="checkbox" label=""></input>
 		</td>
 		<td>
-			<aui:input name="<%=dictItem.getItemCode()+\"_isShowOrder\" %>" value="<%=isShowOrder_cfg %>" type="text" label=""></aui:input>
+			<input name='<%="_86_"+dictItem.getItemCode()+"_isShowOrder" %>' id='<%="_86_"+dictItem.getItemCode()+"_isShowOrder" %>' value="<%=isShowOrder_cfg %>" type="text" label=""></input>
 		</td>
     	<td><%=HtmlUtil.escape(dictItem.getItemCode()) %></td>
     	<td><%=HtmlUtil.escape(dictItem.getItemName(locale)) %></td>
     	<td>
-			<aui:select name="<%=dictItem.getItemCode()+\"_plid\" %>" id="<%=dictItem.getItemCode()+\"_plid\" %>" label="">
+			<select name='<%="_86_"+dictItem.getItemCode()+"_plid" %>' id='<%="_86_"+dictItem.getItemCode()+"_plid" %>' label="">
 				<%
 					for (Layout lout : pubLayouts) {
 				%>
-					<aui:option selected="<%= lout.getPlid() == layout_cfg %>" value="<%= lout.getPlid() %>"><%= lout.getName(locale) %></aui:option>
+					<option selected="<%= lout.getPlid() == layout_cfg %>" value="<%= lout.getPlid() %>"><%= lout.getName(locale) %></option>
 				<%
 					}
 				%>
-			</aui:select>
+			</select>
 			
 		</td>
     </tr>
     <%} %>
   </table>
 </div>
+
