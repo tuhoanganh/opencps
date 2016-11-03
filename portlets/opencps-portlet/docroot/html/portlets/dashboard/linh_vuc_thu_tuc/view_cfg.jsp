@@ -96,7 +96,7 @@
     	<td>
 			<select name='<%="_86_"+dictItem.getItemCode()+"_plid" %>' id='<%="_86_"+dictItem.getItemCode()+"_plid" %>' label="">
 				<%
-					for (Layout lout : pubLayouts) {
+					for (Layout lout : allLayout) {
 				%>
 					<option <%= lout.getPlid() == layout_cfg ? "selected":"" %> value="<%= lout.getPlid() %>"><%= lout.getName(locale) %></option>
 				<%
