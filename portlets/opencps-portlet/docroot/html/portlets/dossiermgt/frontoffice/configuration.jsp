@@ -1,4 +1,8 @@
 
+<%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.util.PortletPropsValues"%>
+<%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="org.opencps.datamgt.model.DictItem"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
 <%
@@ -47,6 +51,10 @@
 	for (Layout pubLayout : pubLayouts) {
 		allLayout.add(pubLayout);
 	}
+	
+	List<DictItem> dictItems = PortletUtil.getDictItemInUseByCode(themeDisplay.getScopeGroupId(), 
+			PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN, 
+			PortletConstants.TREE_VIEW_DEFAULT_ITEM_CODE);
 	
 	int itemsToDisplay_cfg = GetterUtil.getInteger(portletPreferences.getValue("itemsToDisplay", "2"));
 	
@@ -171,6 +179,24 @@
 		name="hiddenTreeNodeEqualNone" 
 		value="<%=hiddenTreeNodeEqualNone %>"
 	/>
+	
+	<aui:input 
+		type="checkbox"
+		name="allowResultQuickView" 
+		value="<%=allowResultQuickView %>"
+	/>
+	
+	<aui:select name="itemCode_cfg" id="itemCode_cfg">
+		<aui:option selected="<%= Validator.isNull(itemCode_cfg)  %>" value=""> </aui:option>
+		<%
+			for (DictItem dictItem : dictItems) {
+		%>
+			<aui:option selected="<%= itemCode_cfg == dictItem.getItemCode() %>" value="<%= dictItem.getItemCode() %>"><%= dictItem.getItemName(locale) %></aui:option>
+		<%
+			}
+		%>
+	</aui:select>
+	
 	<aui:button type="submit" name="Save" value="save"></aui:button>
 
 </aui:form>

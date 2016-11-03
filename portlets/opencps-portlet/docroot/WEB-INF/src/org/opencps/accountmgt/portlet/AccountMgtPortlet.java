@@ -236,14 +236,12 @@ public class AccountMgtPortlet extends MVCPortlet {
 				}
 
 				mappingUser = UserLocalServiceUtil
-				    .getUser(mappingUserId);
-
+						.updatePassword(mappingUserId, password, password, false);
+				
 				if (mappingUser != null) {
 					MessageBusUtil.sendEmailActiveAccount(mappingUser, password, serviceContext);
 				}
-
 			}
-
 		}
 		catch (Exception e) {
 			_log
