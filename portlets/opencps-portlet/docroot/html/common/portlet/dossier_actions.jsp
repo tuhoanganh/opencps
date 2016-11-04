@@ -118,7 +118,9 @@
 								label="view-form" 
 								cssClass="label opencps dossiermgt part-file-ctr view-form"
 								title="view-form"
-							/>
+							>
+							<i class="fa fa-search"></i>
+							</aui:a>
 							<c:if test="<%=!showVersionItemReference %>">
 								<aui:a 
 									id="<%=String.valueOf(dossierPartId) %>"
@@ -469,7 +471,9 @@
 								label="view-form" 
 								cssClass="label opencps dossiermgt part-file-ctr view-form"
 								title="view-form"
-							/>
+							>
+							<i class="fa fa-search"></i>
+							</aui:a>
 							
 							<c:if test="<%=!showVersionItemReference %>">
 								<aui:a 

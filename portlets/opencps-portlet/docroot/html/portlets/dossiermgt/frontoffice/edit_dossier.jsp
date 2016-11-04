@@ -202,7 +202,7 @@
 							<c:if test="<%=dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_NEW) %>">
 								<liferay-ui:icon 
 									cssClass="search-container-action fa forward"
-									image="forward" message="send"
+									image="forward" message="send-dossier"
 									url="<%=jsUpdateDossierStatus %>" 
 								/>
 							</c:if>
@@ -262,7 +262,7 @@
 						<liferay-ui:icon-delete 
 							image="delete"
 							cssClass="search-container-action fa delete"
-							confirmation="are-you-sure-delete-entry" message="delete"
+							confirmation="are-you-sure-delete-entry" message="delete-dossier"
 							url="<%=deleteDossierURL.toString() %>" 
 						/>
 					</c:if>
@@ -272,10 +272,11 @@
 				<div>
 					<aui:button 
 						type="submit" 
-						cssClass="btn des-sub-button radius20"
-						icon="add" 
+						cssClass="btn des-sub-button radius20 input100 textAlignLeft"
 						value="edit-dossier-btn" 
-					/>
+					>
+						<i class="fa fa-floppy-o" style="padding-right: 5px;"></i>
+					</aui:button>
 				</div>
 			</c:if>
 

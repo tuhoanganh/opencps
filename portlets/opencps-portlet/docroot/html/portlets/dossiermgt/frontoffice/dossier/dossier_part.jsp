@@ -452,6 +452,8 @@
 		}
 	}
 %>
+
+	<font class="requiredStyleCSS"><liferay-ui:message key="dossier-part-with-star-is-required"/></font>
 </div>
 <aui:script>
 	
