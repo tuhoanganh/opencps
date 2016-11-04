@@ -465,6 +465,8 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		String assignFormDisplayStyle = ParamUtil.getString(actionRequest,
 				"assignFormDisplayStyle");
 
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
 		boolean signature = ParamUtil.getBoolean(actionRequest,
 				ProcessOrderDisplayTerms.SIGNATURE);
 
@@ -477,9 +479,6 @@ public class ProcessOrderPortlet extends MVCPortlet {
 					.convertStringToFullDate(estimateDate + StringPool.SPACE
 							+ estimateTime + StringPool.COLON + "00");
 		}
-
-		_log.info("NGAYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY HEN TRA ********** :"
-				+ deadline);
 
 		try {
 
@@ -534,6 +533,10 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 
+			if (assignFormDisplayStyle.equals("popup")) {
+				jsonObject.put("msg", MessageKeys.DEFAULT_SUCCESS_KEY);
+			}
+
 		} catch (Exception e) {
 			sending = false;
 			if (e instanceof NoSuchDossierException
@@ -541,9 +544,17 @@ public class ProcessOrderPortlet extends MVCPortlet {
 					|| e instanceof RequiredDossierPartException) {
 
 				SessionErrors.add(actionRequest, e.getClass());
+
+				if (assignFormDisplayStyle.equals("popup")) {
+					jsonObject.put("msg", e.getClass().getName());
+				}
 			} else {
 				SessionErrors.add(actionRequest,
 						MessageKeys.DOSSIER_SYSTEM_EXCEPTION_OCCURRED);
+				if (assignFormDisplayStyle.equals("popup")) {
+					jsonObject.put("msg",
+							MessageKeys.DOSSIER_SYSTEM_EXCEPTION_OCCURRED);
+				}
 			}
 
 			_log.error(e);
@@ -560,12 +571,6 @@ public class ProcessOrderPortlet extends MVCPortlet {
 					actionResponse.sendRedirect(redirectURL);
 				}
 			} else {
-				JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
-				if (sending) {
-					jsonObject.put("sending", "success");
-				} else {
-					jsonObject.put("sending", "error");
-				}
 
 				PortletUtil
 						.writeJSON(actionRequest, actionResponse, jsonObject);
