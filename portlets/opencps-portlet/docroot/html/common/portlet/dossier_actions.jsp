@@ -64,7 +64,7 @@
 	
 	String groupName = ParamUtil.getString(request, DossierFileDisplayTerms.GROUP_NAME);
 	
-	boolean isCBXL = ParamUtil.getBoolean(request, "isCBXL");
+	boolean isCBXL = ParamUtil.getBoolean(request, "isCBXL", false);
 	
 	int version  = 0;
 	
@@ -77,7 +77,7 @@
 					version = 1;
 				}else{
 					if(isCBXL){
-						version = DossierFileLocalServiceUtil.countDossierFileByDID_DP(dossierId, dossierPartId);
+						version = DossierFileLocalServiceUtil.countDossierFileByDID_SS_DP(dossierId, dossierPartId, PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS);
 					}else{
 						version = DossierFileLocalServiceUtil.countDossierFileByDID_DP(dossierId, dossierPartId);
 					}
