@@ -16,16 +16,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-<%@page import="org.opencps.dossiermgt.service.FileGroupLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.model.FileGroup"%>
-<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
-<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
-<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
 <%@page import="java.util.List"%>
-<%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
+<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
+<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
+<%@page import="org.opencps.dossiermgt.model.FileGroup"%>
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
-<%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
+<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.service.FileGroupLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 
 <%@ include file="/init.jsp"%>
 
