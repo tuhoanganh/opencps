@@ -274,9 +274,7 @@
 						type="submit" 
 						cssClass="btn des-sub-button radius20 input100 textAlignLeft"
 						value="edit-dossier-btn" 
-					>
-						<i class="fa fa-floppy-o" style="padding-right: 5px;"></i>
-					</aui:button>
+					/>
 				</div>
 			</c:if>
 
