@@ -533,7 +533,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 
-			if (assignFormDisplayStyle.equals("popup")) {
+			if (assignFormDisplayStyle.equals("form")) {
 				jsonObject.put("msg", MessageKeys.DEFAULT_SUCCESS_KEY);
 			}
 
@@ -545,13 +545,13 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 				SessionErrors.add(actionRequest, e.getClass());
 
-				if (assignFormDisplayStyle.equals("popup")) {
+				if (assignFormDisplayStyle.equals("form")) {
 					jsonObject.put("msg", e.getClass().getName());
 				}
 			} else {
 				SessionErrors.add(actionRequest,
 						MessageKeys.DOSSIER_SYSTEM_EXCEPTION_OCCURRED);
-				if (assignFormDisplayStyle.equals("popup")) {
+				if (assignFormDisplayStyle.equals("form")) {
 					jsonObject.put("msg",
 							MessageKeys.DOSSIER_SYSTEM_EXCEPTION_OCCURRED);
 				}
