@@ -121,6 +121,16 @@
 				serviceDomainId,
 				'<%=renderResponse.getNamespace() %>',
 				'<%=hiddenTreeNodeEqualNone%>');
+		
+		if(JSON.parse(serviceDomainJsonData)[0]["children"].length === 1){
+			var portletTempURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
+			portletTempURL.setParameter("mvcPath", '<%=templatePath + "display/20_80_servicelist_05.jsp" %>');
+			portletTempURL.setWindowState('<%=LiferayWindowState.NORMAL.toString() %>'); 
+			portletTempURL.setPortletMode('normal');
+			portletTempURL.setParameter("serviceDomainId", '<%=serviceDomainId %>');
+			portletTempURL.setParameter("dictItemCode", '<%=dictItemCode %>');
+			window.location = portletTempURL.toString();
+		}
 	});
 	
 </aui:script>
