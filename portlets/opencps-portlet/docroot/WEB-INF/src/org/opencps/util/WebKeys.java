@@ -244,4 +244,11 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String SYNC_PAY_SEND_CONFIRM = "SYNC_PAY_SEND_CONFIRM";
 	public static final String SYNC_PAY_CONFIRM = "SYNC_PAY_CONFIRM";
 	
+	public static final int DISABLE = 0;
+	public static final int ACTIVE = 1;
+	
+	public static final String BACK_URL= "backURL";
+	public static final String RETURN_URL= "returnURL";
+	public static final String REDIRECT_URL= "redirectURL";
+	
 }

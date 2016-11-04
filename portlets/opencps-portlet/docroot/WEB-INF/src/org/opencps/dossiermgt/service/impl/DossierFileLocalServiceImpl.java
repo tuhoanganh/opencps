@@ -32,7 +32,6 @@ import org.opencps.dossiermgt.service.base.DossierFileLocalServiceBaseImpl;
 import org.opencps.processmgt.model.WorkflowOutput;
 import org.opencps.util.PortletConstants;
 
-import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
@@ -906,7 +905,35 @@ public class DossierFileLocalServiceImpl
 
 		return dossierFilePersistence.findByDID_DP(dossierId, dossierPartId);
 	}
+	/**
+	 * @param dossierId
+	 * @param dossierPartId
+	 * @param syncStatus
+	 * @return
+	 * @throws NoSuchDossierFileException
+	 * @throws SystemException
+	 */
+	public List<DossierFile> getDossierFileByDID_SS_DP(
+		long dossierId, long dossierPartId, int syncStatus)
+		throws NoSuchDossierFileException, SystemException {
 
+		return dossierFilePersistence.findByDID_SS_DP(dossierId, dossierPartId, syncStatus);
+	}
+	
+	/**
+	 * @param dossierId
+	 * @param dossierPartId
+	 * @param syncStatus
+	 * @return
+	 * @throws NoSuchDossierFileException
+	 * @throws SystemException
+	 */
+	public int countDossierFileByDID_SS_DP(
+		long dossierId, long dossierPartId, int syncStatus)
+		throws NoSuchDossierFileException, SystemException {
+
+		return dossierFilePersistence.countByDID_SS_DP(dossierId, dossierPartId, syncStatus);
+	}
 	/**
 	 * @param dossierId
 	 * @param dossierPartId
@@ -1293,11 +1320,17 @@ public class DossierFileLocalServiceImpl
 		try {
 			if (workflowOutputs != null) {
 				for (WorkflowOutput workflowOutput : workflowOutputs) {
-
+					
+					
 					List<DossierFile> dossierFileTemps =
 						dossierFileLocalService.getDossierFileByDID_SS_DPID_R(
 							dossierId, currentSyncStatus,
 							workflowOutput.getDossierPartId(), removed);
+					
+					System.out.println("FUCLLLLLLLLLLLLLLLLLLL" + dossierFileTemps.size());
+					
+					
+					
 					if (dossierFileTemps != null) {
 						for (DossierFile dossierFile : dossierFileTemps) {
 							dossierFile.setSyncStatus(syncStatus);
@@ -1334,7 +1367,9 @@ public class DossierFileLocalServiceImpl
 	public List<DossierFile> updateDossierFileSyncStatus(
 		long userId, int syncStatus, List<DossierFile> dossierFiles)
 		throws SystemException, NoSuchDossierStatusException, PortalException {
-
+		
+		System.out.println("DOSSSSSSSSSSSSSIERRRRRRRRRRR" + dossierFiles.size());
+		
 		Date now = new Date();
 		try {
 			if (dossierFiles != null) {

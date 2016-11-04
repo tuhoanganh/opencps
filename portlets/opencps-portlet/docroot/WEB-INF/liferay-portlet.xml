@@ -306,6 +306,17 @@
 		<css-class-wrapper>26-portlet</css-class-wrapper>
 	</portlet>
 	<portlet>
+		<portlet-name>27</portlet-name>
+		<icon>/icon.png</icon>
+		<instanceable>true</instanceable>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<header-portlet-javascript>/js/portlets/holidayconfig/main.js</header-portlet-javascript>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>27-portlet</css-class-wrapper>
+	</portlet>
+	<portlet>
 		<portlet-name>1001</portlet-name>
 		<icon>/icon.png</icon>
 		<configuration-action-class>org.opencps.dashboard.portlet.ConfigurationImpl</configuration-action-class>

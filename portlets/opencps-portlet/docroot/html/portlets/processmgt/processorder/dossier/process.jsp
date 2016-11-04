@@ -73,9 +73,9 @@
 	ProcessWorkflow processWorkflow =
 		(ProcessWorkflow) request.getAttribute(WebKeys.PROCESS_WORKFLOW_ENTRY);
 	
-	long processStepId =
-			Validator.isNotNull(processStep)
-				? processStep.getProcessStepId() : 0l;
+	long processStepId = 
+	Validator.isNotNull(processStep)
+		? processStep.getProcessStepId() : 0l;
 
 	boolean isEditDossier =
 		ParamUtil.getBoolean(request, "isEditDossier");
@@ -84,83 +84,59 @@
 
 	String cssRequired = StringPool.BLANK;
 
-	/* if (accountRoles != null && processStep != null) {
-		for (int r = 0; r < accountRoles.size(); r++) {
-	try {
-		StepAllowance stepAllowance =
-			StepAllowanceLocalServiceUtil.getStepAllowance(
-				processStep.getProcessStepId(),
-				((Role) accountRoles.get(r)).getRoleId());
-
-		if (!stepAllowance.isReadOnly()) {
-			isEditDossier = true;
-			break;
-		}
-	}
-	catch (Exception e) {
-		continue;
-	}
-		}
-	} */
 
 	//Get ActionHistory
 	ActionHistory latestWorkflowActionHistory = null;
 
 	try {
 		if (processWorkflow != null) {
-
-	latestWorkflowActionHistory =
-		ActionHistoryLocalServiceUtil.getLatestActionHistory(
-			processOrder.getProcessOrderId(),
-			processOrder.getProcessWorkflowId());
+			latestWorkflowActionHistory 
+				= ActionHistoryLocalServiceUtil.getLatestActionHistory(
+					processOrder.getProcessOrderId(), 
+					processOrder.getProcessWorkflowId(), false);
 		}
-	}
-	catch (Exception e) {
-	}
+	} catch (Exception e) {}
 
 	//Get list ProcessWorkflow
-	List<ProcessWorkflow> postProcessWorkflows =
-		new ArrayList<ProcessWorkflow>();
+	List<ProcessWorkflow> postProcessWorkflows = new ArrayList<ProcessWorkflow>();
 
 	try {
-		postProcessWorkflows =
-	ProcessWorkflowLocalServiceUtil.getPostProcessWorkflow(
-		processOrder.getServiceProcessId(),
-		processWorkflow.getPostProcessStepId());
-	}
-	catch (Exception e) {
-	}
+		postProcessWorkflows = ProcessWorkflowLocalServiceUtil.getPostProcessWorkflow(
+				processOrder.getServiceProcessId(), processWorkflow.getPostProcessStepId());
+	} catch (Exception e) {}
 
-	
 	//Get list ProcessStepDossierPart
-	List<ProcessStepDossierPart> processStepDossierParts =
-		new ArrayList<ProcessStepDossierPart>();
+	List<ProcessStepDossierPart> processStepDossierParts = new ArrayList<ProcessStepDossierPart>();
 
 	if (processStepId > 0) {
-		processStepDossierParts =
-			ProcessUtils.getDossierPartByStep(processStepId);
+		processStepDossierParts = ProcessUtils.getDossierPartByStep(processStepId);
 	}
-	
+
 	//Get list DossierPart
 	List<DossierPart> dossierParts = new ArrayList<DossierPart>();
+	Map<Long, Boolean> dossierPartsReadOnly = new HashMap<Long, Boolean>();
 	
 	if (processStepDossierParts != null) {
 		for (ProcessStepDossierPart processStepDossierPart : processStepDossierParts) {
 			DossierPart dossierPart = null;
-			
-			if(processStepDossierPart.getDossierPartId() > 0){
-				try{
-					dossierPart = DossierPartLocalServiceUtil.getDossierPart(processStepDossierPart.getDossierPartId());
-				}catch(Exception e){}
+
+			if (processStepDossierPart.getDossierPartId() > 0) {
+				try {
+					dossierPart = DossierPartLocalServiceUtil
+							.getDossierPart(processStepDossierPart.getDossierPartId());
+				} catch (Exception e) {
+				}
 			}
 			
 			if(dossierPart != null){
+				dossierPartsReadOnly.put(processStepDossierPart.getDossierPartId(), processStepDossierPart.getReadOnly());
 				dossierParts.add(dossierPart);
 			}
-			
+
 		}
 	}
 %>
+
 <div class="ocps-dossier-process">
 
 	<table class="process-workflow-info">
@@ -301,6 +277,10 @@
 											name="isEditDossier" 
 											value="<%=String.valueOf(isEditDossier) %>"
 										/>
+										<portlet:param 
+											name="isReadOnly" 
+											value="<%=String.valueOf(dossierPartsReadOnly.get(dossierPart.getDossierpartId())) %>"
+										/>
 									</liferay-util:include>
 								</span>
 							</div>
@@ -365,6 +345,10 @@
 											name="isEditDossier" 
 											value="<%=String.valueOf(isEditDossier) %>"
 										/>
+										<portlet:param 
+											name="isReadOnly" 
+											value="<%=String.valueOf(dossierPartsReadOnly.get(dossierPart.getDossierpartId())) %>"
+										/>
 									</liferay-util:include>
 								</span>
 							</div>
@@ -428,6 +412,10 @@
 														name="isEditDossier" 
 														value="<%=String.valueOf(isEditDossier) %>"
 													/>
+													<portlet:param 
+														name="isReadOnly" 
+														value="<%=String.valueOf(dossierPartsReadOnly.get(dossierFileOther.getDossierPartId())) %>"
+													/>
 												</liferay-util:include>
 											</span>
 										</div>
@@ -464,7 +452,7 @@
 
 <aui:input 
 	name="<%=DossierDisplayTerms.RECEPTION_NO %>" 
-	value="<%=dossier != null && Validator.isNotNull(dossier.getReceptionNo()) ? dossier.getReceptionNo() : 0 %>" 
+	value="<%=dossier != null && Validator.isNotNull(dossier.getReceptionNo()) ? dossier.getReceptionNo() : StringPool.BLANK %>" 
 	type="hidden"
 />
 
@@ -543,7 +531,6 @@
 		
 		var fileGroupId = A.one('#<portlet:namespace/>fileGroupId').val();
 		
-		var receptionNo = A.one('#<portlet:namespace/>receptionNo').val();
 		
 		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
 		portletURL.setParameter("mvcPath", "/html/portlets/processmgt/processorder/assign_to_user.jsp");
@@ -557,8 +544,6 @@
 		portletURL.setParameter("processOrderId", processOrderId);
 		portletURL.setParameter("actionUserId", actionUserId);
 		portletURL.setParameter("fileGroupId", fileGroupId);
-		portletURL.setParameter("receptionNo", receptionNo);
-		portletURL.setParameter("receiveDate", receiveDate);
 		portletURL.setParameter("deadlinePattern", deadlinePattern);
 		portletURL.setParameter("backURL", '<%=backURL%>');
 	
