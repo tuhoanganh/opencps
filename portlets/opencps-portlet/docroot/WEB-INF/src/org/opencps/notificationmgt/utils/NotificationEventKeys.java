@@ -1,44 +1,67 @@
-
+/**
+ * OpenCPS is the open source Core Public Services software
+ * Copyright (C) 2016-present OpenCPS community
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>
+ */
 package org.opencps.notificationmgt.utils;
+
+/**
+ * @author nhanhoang
+ */
 
 public class NotificationEventKeys {
 
 	public class OFFICIALS {
 		
-		public static final String EVENT1= "101";//Hồ sơ mới gửi chờ tiếp nhận
-		public static final String EVENT2= "102";//Hồ sơ được bổ sung thêm tài liệu
-		public static final String EVENT3= "103";//Hồ sơ nhận thông báo thanh toán mới
-		public static final String EVENT4= "104";//Hồ sơ có yêu cầu được rút
-		public static final String EVENT5= "105";//Hồ sơ có thông báo lỗi kết quả trả về
-		public static final String EVENT6= "106";//Hồ sơ chuyển tới cán bộ xử lý
-		public static final String EVENT7= "107";//Hồ sơ sắp hết hạn xử lý
-		public static final String EVENT8= "108";//Hồ sơ đã quá hạn xử lý
-		public static final String EVENT9= "109";//Hồ sơ cần trả kết quả bởi bộ phận một cửa
+		public static final String EVENT1= "101";
+		public static final String EVENT2= "102";
+		public static final String EVENT3= "103";
+		public static final String EVENT4= "104";
+		public static final String EVENT5= "105";
+		public static final String EVENT6= "106";
+		public static final String EVENT7= "107";
+		public static final String EVENT8= "108";
+		public static final String EVENT9= "109";
 
 	}
 
 	public class USERS_AND_ENTERPRISE {
 		
-		public static final String EVENT1= "201";//Hồ sơ mới gửi chờ tiếp nhận
-		public static final String EVENT2= "202";//Hồ sơ đã được tiếp nhận xử lý
-		public static final String EVENT3= "203";//Hồ sơ bị từ chối tiếp nhận
-		public static final String EVENT4= "204";//Hồ sơ có yêu cầu bổ sung
-		public static final String EVENT5= "205";//Hồ sơ có yêu cầu thanh toán
-		public static final String EVENT6= "206";//Hồ sơ đã hoàn thành xử lý
-		public static final String EVENT7= "207";//Hồ sơ đã được trả kết quả
-		public static final String EVENT8= "208";//Hồ sơ được chấp thuận rút
-		public static final String EVENT9= "209";//Hồ sơ được xử lý cấp lại kết quả
+		public static final String EVENT1= "201";
+		public static final String EVENT2= "202";
+		public static final String EVENT3= "203";
+		public static final String EVENT4= "204";
+		public static final String EVENT5= "205";
+		public static final String EVENT6= "206";
+		public static final String EVENT7= "207";
+		public static final String EVENT8= "208";
+		public static final String EVENT9= "209";
 
 	}
 
 	public class ADMINTRATOR {
-		public static final String EVENT1= "301";//Hồ sơ bị lỗi xử lý
-		public static final String EVENT2= "302";//Hồ sơ bị delay trong hệ thống
+		public static final String EVENT1= "301";
+		public static final String EVENT2= "302";
 	}
 	
 	public static final String GROUP1 = "/xu-ly-ho-so";
-	public static final String GROUP2 = "/yeu-cau-thanh-toan";
-	public static final String GROUP3 = "";
+	public static final String GROUP2 = "/quan-ly-ho-so";
+	public static final String GROUP3 = "/yeu-cau-thanh-toan";
 	public static final String GROUP4 = "";
+	
+	public static final String SMS = "SMS";
+	public static final String EMAIL = "EMAIL";
+	public static final String INBOX = "INBOX";
 	
 }

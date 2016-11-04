@@ -36,7 +36,9 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.UserNotificationEvent;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
-
+/**
+ * @author nhanhoang
+ */
 public class UserNotificationHandler extends BaseUserNotificationHandler {
 
 	private static Log _log = LogFactoryUtil.getLog(UserNotificationHandler.class);
@@ -100,7 +102,7 @@ public class UserNotificationHandler extends BaseUserNotificationHandler {
 		
 		LiferayPortletURL viewURL = null;
 		
-		String friendlyType = jsonObject.getString("friendlyType");
+		String friendlyType = jsonObject.getString("friendlyUrl");
 		long plId = 0;
 		
 		if(friendlyType.equals(NotificationEventKeys.GROUP1)){

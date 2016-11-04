@@ -26,7 +26,9 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 
 import org.opencps.notificationmgt.engine.UserNotificationHandler;
+import org.opencps.notificationmgt.message.SendNotificationMessage;
 import org.opencps.notificationmgt.utils.NotificationEventKeys;
+import org.opencps.util.MessageBusKeys;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -35,6 +37,7 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.User;
@@ -43,7 +46,9 @@ import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
-
+/**
+ * @author nhanhoang
+ */
 public class NotificationPortlet extends MVCPortlet {
 
 	private static Log _log = LogFactoryUtil.getLog(NotificationPortlet.class);
@@ -55,6 +60,13 @@ public class NotificationPortlet extends MVCPortlet {
 						ServiceContextFactory.getInstance(actionRequest);
 		
 		Message message = new Message();
+		
+		SendNotificationMessage notificationMessage = new SendNotificationMessage();
+		
+		message.put(MessageBusKeys.Message.NOTIFICATIONS, notificationMessage);
+		
+		MessageBusUtil.sendMessage(
+			MessageBusKeys.Destination.NOTIFICATIONS, message);
 		
 //		UserActionMsg actionMsg = new UserActionMsg();
 //		
