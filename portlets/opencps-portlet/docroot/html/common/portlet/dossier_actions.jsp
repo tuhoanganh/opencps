@@ -64,6 +64,8 @@
 	
 	String groupName = ParamUtil.getString(request, DossierFileDisplayTerms.GROUP_NAME);
 	
+	boolean isCBXL = ParamUtil.getBoolean(request, "isCBXL", false);
+	
 	int version  = 0;
 	
 	if(dossierId > 0 && dossierPartId > 0){
@@ -74,7 +76,14 @@
 				if(partType == PortletConstants.DOSSIER_PART_TYPE_OTHER || partType==PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT){
 					version = 1;
 				}else{
-					version = DossierFileLocalServiceUtil.countDossierFileByDID_DP(dossierId, dossierPartId);
+					
+					if(isCBXL){
+						version = DossierFileLocalServiceUtil..countDossierFileByDID_SS_DP(dossierId, dossierPartId, PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS);
+					}else{
+						version = DossierFileLocalServiceUtil.countDossierFileByDID_DP(dossierId, dossierPartId);
+					}
+					
+					
 				}
 				
 			}

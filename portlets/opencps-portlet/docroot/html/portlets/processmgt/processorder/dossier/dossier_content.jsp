@@ -199,6 +199,10 @@
 													value="<%=String.valueOf(isOnlineData) %>"
 												/>
 												
+												<portlet:param 
+													name="isCBXL" 
+													value="true"
+												/>
 											</liferay-util:include>
 										</span>
 									</div>
@@ -268,6 +272,11 @@
 														<portlet:param 
 															name="isEditDossier" 
 															value="<%=String.valueOf(isEditDossier) %>"
+														/>
+														
+														<portlet:param 
+															name="isCBXL" 
+															value="true"
 														/>
 													</liferay-util:include>
 												</span>
@@ -349,6 +358,11 @@
 												<portlet:param 
 													name="isEditDossier" 
 													value="<%=String.valueOf(isEditDossier) %>"
+												/>
+												
+												<portlet:param 
+													name="isCBXL" 
+													value="true"
 												/>
 											</liferay-util:include>
 											<%
