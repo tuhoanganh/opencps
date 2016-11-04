@@ -1,20 +1,3 @@
-/**
- * OpenCPS is the open source Core Public Services software
- * Copyright (C) 2016-present OpenCPS community
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>
- */
-
 package org.opencps.backend.scheduler;
 
 import java.util.ArrayList;
@@ -46,19 +29,12 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 
 
-/**
- * @author khoavd
- *
- */
-public class OneMinute implements MessageListener{
-
-	/* (non-Javadoc)
-     * @see com.liferay.portal.kernel.messaging.MessageListener#receive(com.liferay.portal.kernel.messaging.Message)
-     */
-    @Override
-	public void receive(Message message)
-	    throws MessageListenerException {
-		_log.info("RUNNING _ONE_MINUTELY $$$$$" );
+public class Daily implements MessageListener{
+    
+	@Override
+    public void receive(Message message)
+        throws MessageListenerException {
+		_log.info("RUNNING _DAILY $$$$$" );
 
 		List<ProcessWorkflow> processWorkflows =
 		    new ArrayList<ProcessWorkflow>();
@@ -71,7 +47,7 @@ public class OneMinute implements MessageListener{
 		
 		try {
 			processWorkflows =
-			    ProcessWorkflowLocalServiceUtil.getProcessWorkflowByEvent(SchedulerKeys.ONE_MIUTELY);
+			    ProcessWorkflowLocalServiceUtil.getProcessWorkflowByEvent(SchedulerKeys.DAILY);
 
 			for (ProcessWorkflow processWorkflow : processWorkflows) {
 
@@ -81,7 +57,7 @@ public class OneMinute implements MessageListener{
 				if (processOrders.size() != 0) {
 					for (ProcessOrder processOrder : processOrders) {
 						
-						_log.info("Scheduler _ONE_MINUTELY ########" + processWorkflow.getActionName() + "_" + processOrder.getDossierId());
+						_log.info("Scheduler _DAILY ########" + processWorkflow.getActionName() + "_" + processOrder.getDossierId());
 						
 						long processWorkflowId = processWorkflow.getProcessWorkflowId();
 						
@@ -154,9 +130,7 @@ public class OneMinute implements MessageListener{
 			// TODO: handle exception
 		}
 
-	}
-    
+    }
 
-	private Log _log = LogFactoryUtil.getLog(OneMinute.class);
-
+    private Log _log = LogFactoryUtil.getLog(Daily.class);
 }

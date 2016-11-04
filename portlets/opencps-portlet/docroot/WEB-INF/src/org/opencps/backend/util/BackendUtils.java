@@ -84,7 +84,7 @@ public class BackendUtils {
 		boolean validPreCondition = true;
 
 		List<String> lsCondition =
-			ListUtil.toList(StringUtil.split(pattern, StringPool.SPACE));
+			ListUtil.toList(StringUtil.split(pattern, StringPool.COMMA));
 
 		boolean validPayok = true;
 		boolean validCancel = true;
@@ -93,6 +93,8 @@ public class BackendUtils {
 		boolean validOnline = true;
 		boolean validOnegate = true;
 		boolean validRepair = true;
+		boolean validDelay = true;
+		boolean validWaiting = true;
 
 		for (String condition : lsCondition) {
 			if (StringUtil.equalsIgnoreCase(
@@ -275,16 +277,16 @@ public class BackendUtils {
 
 		int countAllPayment = 0;
 
-		int countPaymentComplated = 0;
+		int countPaymentCompleted = 0;
 
 		try {
 			countAllPayment =
 				PaymentFileLocalServiceUtil.countAllPaymentFile(dossierId);
 
-			countPaymentComplated =
+			countPaymentCompleted =
 				PaymentFileLocalServiceUtil.countPaymentFile(dossierId, 2);
 
-			if (!((countAllPayment - countPaymentComplated) == 0)) {
+			if (!((countAllPayment - countPaymentCompleted) == 0)) {
 				paymentStatus = false;
 			}
 		}

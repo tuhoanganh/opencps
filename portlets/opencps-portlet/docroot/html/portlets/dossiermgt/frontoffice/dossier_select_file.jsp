@@ -45,6 +45,7 @@
 <%@page import="org.opencps.dossiermgt.search.DossierFileSearch"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
+
 <%@ include file="../init.jsp"%>
 
 <%
@@ -74,6 +75,7 @@
 	String redirectURL = ParamUtil.getString(request, "redirectURL");
 
 	List<String> headerNames = new ArrayList<String>();
+
 	headerNames.add("");
 	headerNames.add("#");
 	headerNames.add("dossier-file-no");
@@ -236,6 +238,7 @@
 				modelVar="dossierFile" 
 				keyProperty="dossierFileId"
 			>
+
 				<%-- <div class="row-fluid min-width10">
 						<div class="span12 bold">
 							<%=row.getPos() + 1 %>
@@ -248,7 +251,7 @@
 				</liferay-util:buffer>
 				<%
 					row.addText(rowTicker);
-					// no column
+
 					row.addText(String.valueOf(row.getPos() + 1 + searchContainer.getStart()));
 					
 					// dossier file no column
@@ -256,8 +259,9 @@
 									
 					// dossier display name column
 					row.addText(dossierFile.getDisplayName());
-					
+
 				//	row.addButton(LanguageUtil.get(locale, "select"), "javascript:" + renderResponse.getNamespace() + "selectDossierFile(" + dossierFile.getDossierFileId() +")");
+
 					
 				%>	
 			</liferay-ui:search-container-row> 
@@ -274,6 +278,7 @@
 	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_ORIGINAL %>" type="hidden" value="<%=String.valueOf(PortletConstants.DOSSIER_FILE_ORIGINAL) %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_TYPE %>" type="hidden" value="<%=String.valueOf(PortletConstants.DOSSIER_FILE_TYPE_INPUT) %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.GROUP_NAME %>" type="hidden" value="<%=groupName %>"/>
+
 	<aui:input name="receiveHiddenDossierFile" type="hidden" />
 	<aui:row>
 		<aui:button name="btnCancel" value="cancel"/>
@@ -281,11 +286,13 @@
 	</aui:row>
 </aui:form>
 
+
 <aui:script>
 
 	AUI().ready(function(A){
 		
 		var success = '<%=success%>';
+
 		var receiveHiddenDossierFile = A.one('#<portlet:namespace />receiveHiddenDossierFile');
 		var btnAccept = A.one('#<portlet:namespace />btnAccept');
 		var btnCancel = A.one('#<portlet:namespace />btnCancel');
@@ -295,10 +302,11 @@
 		
 		btnAccept.addClass('disabled');
 		btnAccept.setAttribute('disabled' , 'true');
-		
+
 		if(success == 'true'){
 			<portlet:namespace/>closeDialog();
 		}
+
 		
 		allRows.each(function(taskNode) {
 			taskNode.on('click', function(){

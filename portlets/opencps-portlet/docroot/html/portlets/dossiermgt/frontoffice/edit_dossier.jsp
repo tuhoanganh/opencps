@@ -1,5 +1,4 @@
 
-<%@page import="org.opencps.backend.util.BackendUtils"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -19,6 +18,8 @@
  */
 %>
 
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
+<%@page import="org.opencps.backend.util.BackendUtils"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
@@ -75,14 +76,9 @@
 	String[] dossierSections = dossier != null ? new String[] {
 		"dossier_part", "dossier_info", "result", "history"
 	} : new String[] {
-		"dossier_info"
+		"dossier_part", "dossier_info"
 	};
-		
-	// show only 2 tab dossier_part & info on create new dossier
-	//if(cmd.equals(Constants.ADD)){
-	//	dossierSections = new String[]{"dossier_part", "dossier_info"};
-	//}
-	
+
 	String[][] categorySections = {
 		dossierSections
 	};
@@ -110,6 +106,9 @@
 	catch (Exception e) {
 
 	}
+
+	boolean quickCreateDossier = dossier == null ? true : false;
+
 %>
 
 <liferay-ui:error 
@@ -175,6 +174,8 @@
 		/>
 
 		<portlet:actionURL var="updateDossierURL" name="updateDossier" />
+		
+		<portlet:actionURL var="quickUpdateDossierURL" name="quickUpdateDossier"/>
 
 		<liferay-util:buffer var="htmlTop">
 			<c:if test="<%= dossier != null %>">
@@ -281,7 +282,8 @@
 
 		</liferay-util:buffer>
 
-		<aui:form name="fm" action="<%=updateDossierURL %>" method="post">
+		<aui:form name="fm" action="<%=dossier != null ? updateDossierURL : quickUpdateDossierURL %>" method="post">
+
 
 			<aui:model-context bean="<%= dossier %>" model="<%= Dossier.class %>" />
 
@@ -392,6 +394,24 @@
 				/>
 			</div>
 		</aui:form>
+
+		<aui:script use="aui-loading-mask-deprecated">
+			AUI().ready(function(A){
+				var quickCreateDossier = '<%=quickCreateDossier%>';
+				if(quickCreateDossier ==='true'){
+					var loadingMask = new A.LoadingMask(
+						{
+							'strings.loading': '<%= UnicodeLanguageUtil.get(pageContext, "rending...") %>',
+							target: A.one('#<portlet:namespace/>fm')
+						}
+					);
+					
+					loadingMask.show();
+					submitForm(document.<portlet:namespace />fm);
+				}
+			});
+		</aui:script>
+
 	</c:when>
 
 	<c:otherwise>
@@ -410,13 +430,14 @@
 					var A = AUI(); 
 					// validate dossier part required
 					
-					var cnt = A.all('#<portlet:namespace/>fm .dossierPartRequired').size();
+					var requiredDossierPart = A.one('#<portlet:namespace/>requiredDossierPart');
 					
-					if(cnt > 0) {
-						A.all('#<portlet:namespace/>fm .dossierPartRequired').addClass('dossierPartRequired-error');
-						alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-required-before-send") %>');
-					} else {
-						location.href = '<%= updateDossierStatusURL %>';
+					if(requiredDossierPart) {
+						if(requiredDossierPart.val().toString().length == 0) {
+							location.href = '<%= updateDossierStatusURL %>';
+						} else {
+							alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-required-before-send") %>');
+						}
 					}
 				},
 			['aui-base']

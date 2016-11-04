@@ -17,7 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
+<%@page import="com.liferay.portal.RolePermissionsException"%>
 <%@page import="org.opencps.dossiermgt.model.DossierPart"%>
 <%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
@@ -42,7 +42,7 @@
 <%@page import="org.opencps.accountmgt.NoSuchAccountException"%>
 <%@page import="org.opencps.dossiermgt.NoSuchDossierPartException"%>
 <%@page import="org.opencps.dossiermgt.NoSuchDossierException"%>
-<%@page import="com.liferay.portal.RolePermissionsException"%>
+
 <%@ include file="/init.jsp"%>
 
 <%
@@ -171,6 +171,7 @@
 			</aui:input>
 		</aui:col>
 	</aui:row>
+
 	<aui:row>
 		<aui:col width="50">
 			<aui:input name="<%= DossierFileDisplayTerms.DOSSIER_FILE_NO %>" type="text" inlineLabel="true"/>
@@ -180,7 +181,7 @@
 			<label class="control-label custom-lebel" for='<portlet:namespace/><%=DossierFileDisplayTerms.DOSSIER_FILE_DATE %>'>
 				<liferay-ui:message key="dossier-file-date"/>
 			</label>
-		
+
 			<liferay-ui:input-date
 				dayParam="<%=DossierFileDisplayTerms.DOSSIER_FILE_DATE_DAY %>"
 				dayValue="<%=spd.getDayOfMoth() %>"
@@ -239,3 +240,4 @@
 	});
 
 </aui:script>
+

@@ -17,8 +17,6 @@
  */
 %>
 
-<%@ include file="/init.jsp" %>
-
 <%@page import="org.opencps.util.ActionKeys"%>
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="com.liferay.portal.service.permission.PortletPermissionUtil"%>
@@ -47,6 +45,9 @@
 <%@page import="org.opencps.processmgt.search.StepSearch"%>
 <%@page import="org.opencps.processmgt.model.ServiceProcess"%>
 <%@page import="org.opencps.processmgt.model.ProcessStep"%>
+
+<%@ include file="/init.jsp" %>
+
 <%
 	PortletPreferences preferences = renderRequest.getPreferences();
 	
