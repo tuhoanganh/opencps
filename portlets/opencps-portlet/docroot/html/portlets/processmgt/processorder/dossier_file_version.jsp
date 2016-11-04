@@ -87,8 +87,8 @@
 		try{			
 			if(dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_OTHER &&
 				dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT){
-				dossierFiles = DossierFileLocalServiceUtil.getDossierFileByDID_DP(dossierId, dossierPartId);
-				totalCount = DossierFileLocalServiceUtil.countDossierFileByDID_DP(dossierId, dossierPartId);
+				dossierFiles = DossierFileLocalServiceUtil.getDossierFileByDID_SS_DP(dossierId, dossierPartId, PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS);
+				totalCount = DossierFileLocalServiceUtil.countDossierFileByDID_SS_DP(dossierId, dossierPartId, PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS);
 			}else{
 				
 				if(dossierFileId > 0){
