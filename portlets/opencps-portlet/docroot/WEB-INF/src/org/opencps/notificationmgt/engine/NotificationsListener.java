@@ -58,8 +58,6 @@ public class NotificationsListener implements MessageListener {
 
 	private static Log _log = LogFactoryUtil.getLog(NotificationsListener.class);
 
-	private static int YES = 1;
-	private static int NO = 0;
 
 	@Override
 	public void receive(Message message)
@@ -83,42 +81,24 @@ public class NotificationsListener implements MessageListener {
 			for (SendNotificationMessage item : notifications) {
 
 				event = item.getNotificationEventName();
-				group = item.getGroup();
 
-				if (event.equals(NotificationEventKeys.OFFICIALS.EVENT1)) {
+				List<InfoList> infoList = item.getInfoList();
 
-					List<InfoList> infoList = item.getInfoList();
+				for (InfoList info : infoList) {
 
-					for (InfoList info : infoList) {
+					group = info.getGroup();
 
-						int userId = Integer.parseInt(info.getUserId());
+					int userId = Integer.parseInt(info.getUserId());
 
-						JSONArray payloadJSON =
-							NotificationUtils.createNotification(item, event, group, userId, true);
-
-						if (sendType.equals(NotificationEventKeys.EMAIL)) {
-
-						}
-						if (sendType.equals(NotificationEventKeys.INBOX)) {
-
-							NotificationUtils.addUserNotificationEvent(item, payloadJSON, userId);
-						}
-					}
-
-				}
-
-				if (event.equals(NotificationEventKeys.USERS_AND_ENTERPRISE.EVENT1)) {
-
-					// JSONArray payloadJSON =
-					// NotificationUtils.createNotification(notification,event,group,false);
+					JSONArray payloadJSON =
+						NotificationUtils.createNotification(item, event, group, userId, true);
 
 					if (sendType.equals(NotificationEventKeys.EMAIL)) {
 
 					}
 					if (sendType.equals(NotificationEventKeys.INBOX)) {
 
-						// NotificationUtils.addUserNotificationEvent(item,
-						// payloadJSON,userId);
+						NotificationUtils.addUserNotificationEvent(item, payloadJSON, userId);
 					}
 				}
 
