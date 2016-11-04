@@ -92,7 +92,7 @@ public class NotificationUtils {
 			title = LanguageUtil.get(locale, event) + "["+processOrder.getDossierId()+"]";
 			
 			long plId = 0;
-			plId = LayoutLocalServiceUtil.getFriendlyURLLayout(20182, privatePage, message.getGroup()).getPlid();
+			plId = LayoutLocalServiceUtil.getFriendlyURLLayout(20182, privatePage, group).getPlid();
 			
 			ServiceContext serviceContext = new ServiceContext();
 			LiferayPortletResponse liferayPortletResponse = serviceContext.getLiferayPortletResponse();
@@ -101,21 +101,21 @@ public class NotificationUtils {
 			
 			
 			
-				if(message.getGroup().equals(NotificationEventKeys.GROUP1)){
+				if(group.equals(NotificationEventKeys.GROUP1)){
 	
 					LiferayPortletURL viewURL =liferayPortletResponse.createRenderURL(WebKeys.PROCESS_ORDER_PORTLET);
 					viewURL.setParameter("mvcPath", "/html/portlets/processmgt/processorder/process_order_detail.jsp");
 					viewURL.setParameter(ProcessOrderDisplayTerms.PROCESS_ORDER_ID, String.valueOf(message.getProcessOrderId()));
-					viewURL.setParameter("backURL", "/group/guest/"+message.getGroup());
+					viewURL.setParameter("backURL", "/group/guest"+group);
 					viewURL.setParameter("isEditDossier", String.valueOf(true));
 					viewURL.setPlid(plId);
 					viewURL.setWindowState(WindowState.NORMAL);
 						
 					
-					payloadJSONObject.put(ProcessOrderDisplayTerms.PROCESS_ORDER_ID, message.getProcessOrderId());
+					payloadJSONObject.put("processOrderId",message.getProcessOrderId());
 					payloadJSONObject.put("linkTo",viewURL.toString());
 				
-				}else if(message.getGroup().equals(NotificationEventKeys.GROUP2)){
+				}else if(group.equals(NotificationEventKeys.GROUP2)){
 					
 					LiferayPortletURL viewURL =liferayPortletResponse.createRenderURL(WebKeys.DOSSIER_MGT_PORTLET);
 					viewURL.setParameter("mvcPath", "/html/portlets/dossiermgt/frontoffice/edit_dossier.jsp");
@@ -127,10 +127,10 @@ public class NotificationUtils {
 					viewURL.setPlid(plId);
 					viewURL.setWindowState(WindowState.NORMAL);
 					
-					payloadJSONObject.put("dossierId", message.getProcessOrderId());
+					payloadJSONObject.put("dossierId", message.getDossierId());
 					payloadJSONObject.put("linkTo",viewURL.toString());
 					
-				}else if(message.getGroup().equals(NotificationEventKeys.GROUP3)){
+				}else if(group.equals(NotificationEventKeys.GROUP3)){
 					
 					PaymentFile paymentFile = PaymentFileLocalServiceUtil.getPaymentFile(processOrder.getDossierId());
 					
@@ -138,13 +138,13 @@ public class NotificationUtils {
 					viewURL.setParameter("mvcPath", "/html/portlets/paymentmgt/frontoffice/frontofficeconfirmbank.jsp");
 					viewURL.setParameter(PaymentFileDisplayTerms.PAYMENT_FILE_ID, String.valueOf(paymentFile.getPaymentFileId()));
 					viewURL.setParameter(Constants.CMD, Constants.VIEW);
-					viewURL.setParameter(WebKeys.BACK_URL, "/group/guest"+message.getGroup());
-					viewURL.setParameter(WebKeys.REDIRECT_URL, "/group/guest/"+message.getGroup());
+					viewURL.setParameter(WebKeys.BACK_URL, "/group/guest"+group);
+					viewURL.setParameter(WebKeys.REDIRECT_URL, "/group/guest"+group);
 					viewURL.setPlid(plId);
 					viewURL.setWindowState(WindowState.NORMAL);
 					
 					
-					payloadJSONObject.put("paymentFileId", message.getProcessOrderId());
+					payloadJSONObject.put("paymentFileId", message.getPaymentFileId());
 					payloadJSONObject.put("linkTo",viewURL.toString());
 					
 				}
@@ -152,7 +152,7 @@ public class NotificationUtils {
 				payloadJSONObject.put("title", title);
 				payloadJSONObject.put("notificationText", message.getNotificationContent());
 				payloadJSONObject.put("plId",plId);
-				payloadJSONObject.put("friendlyUrl",message.getGroup());
+				payloadJSONObject.put("friendlyUrl",group);
 			
 			
 			
