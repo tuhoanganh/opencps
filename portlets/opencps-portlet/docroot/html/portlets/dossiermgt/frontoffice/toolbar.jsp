@@ -101,7 +101,7 @@
 					&& tabs1.equals(DossierMgtUtil.TOP_TABS_DOSSIER)%>">
 					
 					<portlet:renderURL var="addDossierURL" windowState="<%=LiferayWindowState.NORMAL.toString() %>">
-						<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/frontoffice/frontofficeservicelist.jsp"/>
+						
 						<portlet:param name="isListServiceConfig" value="<%=String.valueOf(true) %>"/>
 						<portlet:param name="tabs1" value="<%=DossierMgtUtil.TOP_TABS_DOSSIER %>"/>
 						<portlet:param name="backURL" value="<%=currentURL %>"/>
@@ -118,8 +118,10 @@
 						<%
 							}
 							
-						}
+						}else{
 						%>
+						<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/frontoffice/frontofficeservicelist.jsp"/>
+						<%} %>
 						<portlet:param name="backURLFromList" value="<%=currentURL %>"/>
 					</portlet:renderURL>
 					<%-- <aui:nav-item 
