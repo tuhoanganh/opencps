@@ -205,7 +205,7 @@
 				</aui:validator>
 			</aui:input>
 			<div class="alert alert-info" role="alert">
-				<%= StringUtil.merge(PortletPropsValues.ACCOUNTMGT_FILE_TYPE) %> --- <%= (PortletPropsValues.ACCOUNTMGT_FILE_SIZE/1024)/1024 %> MB
+				<liferay-ui:message key="dossier-file-type-excep"/>: <%= StringUtil.merge(PortletPropsValues.ACCOUNTMGT_FILE_TYPE) %> --- <liferay-ui:message key="dossier-file-size-excep"/>: <%= (PortletPropsValues.ACCOUNTMGT_FILE_SIZE/1024)/1024 %> MB
 			</div>
 		</aui:col>
 	</aui:row>
