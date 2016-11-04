@@ -261,7 +261,7 @@
 								
 									String deadlineVal = Validator.isNotNull(processOrder.getDealine()) ? processOrder.getDealine() : StringPool.DASH;
 									
-									String hrefFix = "location.href='" + processURL.toString()+"'";
+									String hrefFix = "location.href='" + processURL.toString()+ "#" +renderResponse.getNamespace() +"tab="+ renderResponse.getNamespace() + "process"+"'";
 									String cssStatusColor = "status-color-" + processOrder.getDossierStatus();
 								%>
 								
