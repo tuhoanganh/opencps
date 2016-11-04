@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -89,13 +88,16 @@
 		>
 		<liferay-ui:search-container-results>
 			<%
-				actionHistories =  ActionHistoryLocalServiceUtil.getActionHistoryByProcessOrderId(processOrderId, searchContainer.getStart(), searchContainer.getEnd());
-				
-				results = actionHistories;
-				total = ActionHistoryLocalServiceUtil
-					.countActionHistoryByProcessId(processOrderId);
-				pageContext.setAttribute("results", results);
-				pageContext.setAttribute("total", total);
+				actionHistories = ActionHistoryLocalServiceUtil
+								.getActionHistoryByProcessOrderId(processOrderId,
+										searchContainer.getStart(),
+										searchContainer.getEnd(), false);
+
+						results = actionHistories;
+						total = ActionHistoryLocalServiceUtil
+								.countActionHistoryByProcessId(processOrderId);
+						pageContext.setAttribute("results", results);
+						pageContext.setAttribute("total", total);
 			%>
 		</liferay-ui:search-container-results>
 		<liferay-ui:search-container-row 
@@ -194,7 +196,7 @@
 				</aui:row>
 				
 		</liferay-ui:search-container-row>
-		<liferay-ui:search-iterator type="opencs_page_iterator"/>
+		<liferay-ui:search-iterator type="normal"/>
 	</liferay-ui:search-container>
 </div>
 
