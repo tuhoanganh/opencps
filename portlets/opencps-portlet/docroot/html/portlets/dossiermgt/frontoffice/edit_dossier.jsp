@@ -395,7 +395,7 @@
 					
 					var required = false;
 					
-					var requiredDossierParts = A.all('#<portlet:namespace/>requiredDossierParts');
+					var requiredDossierParts = A.all('#<portlet:namespace/>requiredDossierPart');
 					
 					if(requiredDossierParts) {
 						
