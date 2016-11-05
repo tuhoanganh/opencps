@@ -1,6 +1,4 @@
-<%@page import="org.opencps.util.PortletPropsValues"%>
-<%@page import="org.opencps.util.PortletUtil"%>
-<%@page import="org.opencps.datamgt.model.DictItem"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -21,22 +19,15 @@
 %>
 <%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
-<%@page import="com.liferay.portal.kernel.util.Constants"%>
-<%@page import="com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil"%>
 <%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="java.util.LinkedHashMap"%>
-<%@page import="java.util.LinkedList"%>
 <%@page import="java.util.List"%>
-<%@page import="java.util.Map"%>
 <%@page import="javax.portlet.PortletRequest"%>
 <%@page import="javax.portlet.WindowState"%>
 <%@page import="org.opencps.dossiermgt.EmptyDossierFileException"%>
 <%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%@page import="org.opencps.dossiermgt.model.DossierPart"%>
 <%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
-<%@page import="org.opencps.dossiermgt.model.impl.DossierPartImpl"%>
 <%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
 <%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
 <%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
@@ -50,6 +41,9 @@
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
 <%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
+<%@page import="org.opencps.util.PortletPropsValues"%>
+<%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="org.opencps.datamgt.model.DictItem"%>
 
 <%@ include file="../../init.jsp"%>
 
@@ -124,9 +118,8 @@
 	
 	int index = 0;
 	
-	List<String> requiredDossierPartIds = new ArrayList<String>();
-	String [] requiredDossierPartIdsArr = new String[]{};
-	int requiredIndex = 0;
+	List<Long> requiredDossierPartIds = new ArrayList<Long>();
+	
 	if(dossierPartsLevel1 != null){
 		for (DossierPart dossierPartLevel1 : dossierPartsLevel1){
 	
@@ -172,43 +165,16 @@
 									}
 								}
 								
-								if(partType == PortletConstants.DOSSIER_PART_TYPE_SUBMIT) {
-									if(dossierPart.getRequired() && dossierFile == null) {
-										requiredDossierPartIds.add(String.valueOf(dossierPart.getDossierpartId()));
-									}
-									
-									if (dossierPart.getRequired() && dossierFile != null) {
-										if(requiredDossierPartIds.contains(String.valueOf(dossierPart.getDossierpartId()))) {
-											requiredDossierPartIds.remove(String.valueOf(dossierPart.getDossierpartId()));
-										}
-									}
-								} else {
-									if(dossierPartLevel1.getRequired()) {
-										
-										if(dossierPartLevel1.getDossierpartId() == dossierPart.getDossierpartId()) {
-											requiredDossierPartIds.add(String.valueOf(dossierPartLevel1.getDossierpartId()));
-										}
-										
-										if(dossierPartLevel1.getDossierpartId() != dossierPart.getDossierpartId() && Validator.isNotNull(dossierFile)) {
-											if(requiredDossierPartIds.contains(String.valueOf(dossierPartLevel1.getDossierpartId()))) {
-												requiredDossierPartIds.remove(String.valueOf(dossierPartLevel1.getDossierpartId()));
-											}
-										}
-									}
-								}
+								requiredDossierPartIds = PortletUtil.getDossierPartRequired(requiredDossierPartIds, dossierPartLevel1, 
+										dossierPart, dossierFile);
 								
-								 cssRequired = dossierPart.getRequired() ? "cssRequired" : StringPool.BLANK;
+								cssRequired = dossierPart.getRequired() ? "cssRequired" : StringPool.BLANK;
 								
-								/* if(dossierPart.getRequired() && dossierFile == null) {
-									cssDossierPartRequired = "dossierPartRequired";
-								} else {
-									cssDossierPartRequired = StringPool.BLANK;
-								} */
 								
 								urlDownload = DossierMgtUtil.getURLDownloadTemplateFile(themeDisplay, dossierPart.getTemplateFileNo());
 								
 								%>
-									<div class='<%="opencps dossiermgt dossier-part-row r-" + index + " " + String.valueOf(dossierPart.getDossierpartId())%>'>
+									<div class='<%="opencps dossiermgt dossier-part-row r-" + index + StringPool.SPACE + "dpid-" + String.valueOf(dossierPart.getDossierpartId())%>'>
 										<span class='<%="level-" + level + " opencps dossiermgt dossier-part"%>'>
 											<span class="row-icon row-icon-stt-new">
 												<c:choose>
@@ -382,18 +348,7 @@
 								}catch(Exception e){}
 								
 								cssRequired = dossierPartLevel1.getRequired() ? "cssRequired" : StringPool.BLANK;
-								
-								//TODO: kiem tra lai dieu kien dossierPartRequired voi truong hop nay
-								if(dossierPartLevel1.getRequired() && (fileGroups == null || (fileGroups != null && fileGroups.size() > 0))) {
-									//cssDossierPartRequired = "dossierPartRequired";
-									requiredDossierPartIds.add(String.valueOf(dossierPartLevel1.getDossierpartId()));
-								} else {
-									//cssDossierPartRequired = StringPool.BLANK;
-									if(requiredDossierPartIds.contains(String.valueOf(dossierPartLevel1.getDossierpartId()))) {
-										requiredDossierPartIds.remove(String.valueOf(dossierPartLevel1.getDossierpartId()));
-									}
-								}
-								
+
 								urlDownload = DossierMgtUtil.getURLDownloadTemplateFile(themeDisplay, dossierPartLevel1.getTemplateFileNo());
 								
 							%>
@@ -425,7 +380,7 @@
 								<%index++; %>
 							</div>
 							<c:choose>
-								<c:when test="<%=fileGroups != null && ! fileGroups.isEmpty() %>">
+								<c:when test="<%=fileGroups != null && !fileGroups.isEmpty() %>">
 									<%
 										for(FileGroup fileGroup : fileGroups){
 											%>
@@ -482,16 +437,9 @@
 			<%
 			}
 		}
-		requiredDossierPartIdsArr = new String[requiredDossierPartIds.size()]; 
-		for(String str : requiredDossierPartIds) {
-			requiredDossierPartIdsArr[requiredIndex] = str;
-			requiredIndex ++;
-		}
-		
-		requiredIndex = 0;
 		
 		%>
-			<aui:input name="requiredDossierPart" type="hidden" value="<%= StringUtil.merge(requiredDossierPartIdsArr) %>"/>
+			<aui:input name="requiredDossierPart" type="hidden" value="<%= StringUtil.merge(requiredDossierPartIds) %>"/>
 		<%
 	}	
 %>

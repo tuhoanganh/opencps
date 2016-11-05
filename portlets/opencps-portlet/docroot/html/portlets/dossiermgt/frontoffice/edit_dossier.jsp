@@ -392,24 +392,34 @@
 			'<portlet:namespace/>updateDossierStatus',
 				function(actionURL) {
 					var A = AUI(); 
-					// validate dossier part required
 					
-				 	/* var cnt = A.all('#<portlet:namespace/>fm .dossierPartRequired').size();
+					var required = false;
 					
-					if(cnt > 0) {
-						A.all('#<portlet:namespace/>fm .dossierPartRequired').addClass('dossierPartRequired-error');
-						alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-required-before-send") %>');
-					} else {
-						location.href = '<%= updateDossierStatusURL %>';
-					} */
+					var requiredDossierParts = A.all('#<portlet:namespace/>requiredDossierParts');
 					
-					var requiredDossierPart = A.one('#<portlet:namespace/>requiredDossierPart');
-					
-					if(requiredDossierPart) {
-						if(requiredDossierPart.val().toString().length == 0) {
-							location.href = '<%= updateDossierStatusURL %>';
-						} else {
+					if(requiredDossierParts) {
+						
+						requiredDossierParts.each(function(requiredDossierPart){
+							var requiredDossierPartIds = requiredDossierPart.val().trim().split(",");
+							if(requiredDossierPartIds != ''){
+								requiredDossierPartIds.each(dossierPartId){
+									console.log(dossierPartId);
+									if(parseInt(dossierPartId) > 0){
+										required = true;
+										var row = A.one('.dossier-part-row .dpid-' + dossierPartId);
+										if(row){
+											row.attr('style', 'color:red');
+										}
+									}
+								}
+							}
+						});
+						
+						
+						if(required === true) {
 							alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-required-before-send") %>');
+						} else {
+							location.href = '<%= updateDossierStatusURL %>';
 						}
 					}
 				},
