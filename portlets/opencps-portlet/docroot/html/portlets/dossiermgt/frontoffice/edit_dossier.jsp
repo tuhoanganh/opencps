@@ -422,12 +422,14 @@
 						
 						requiredDossierParts.each(function(requiredDossierPart){
 							var requiredDossierPartIds = requiredDossierPart.val().trim().split(",");
+							console.log(dossierPartId);
 							if(requiredDossierPartIds != ''){
-								requiredDossierPartIds.each(dossierPartId){
+								for(var i = 0; i < requiredDossierPartIds.length; i++){
+									var dossierPartId = requiredDossierPartIds[i];
 									console.log(dossierPartId);
 									if(parseInt(dossierPartId) > 0){
 										required = true;
-										var row = A.one('.dossier-part-row .dpid-' + dossierPartId);
+										var row = A.one('.dossier-part-row.dpid-' + dossierPartId);
 										if(row){
 											row.attr('style', 'color:red');
 										}

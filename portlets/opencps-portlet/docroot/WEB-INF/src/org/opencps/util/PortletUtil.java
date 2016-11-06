@@ -1010,6 +1010,8 @@ public class PortletUtil {
 
 		int partType = parentDossierPart != null ? parentDossierPart
 				.getPartType() : 0;
+				
+		System.out.println(partType + "-----" + parentDossierPart.getDossierpartId() + "-----" + childDossierPart.getDossierpartId());
 
 		switch (partType) {
 		case PortletConstants.DOSSIER_PART_TYPE_SUBMIT:
@@ -1022,13 +1024,15 @@ public class PortletUtil {
 			break;
 		case PortletConstants.DOSSIER_PART_TYPE_OTHER:
 			if (parentDossierPart.getDossierpartId() == childDossierPart
-					.getDossierpartId()
-					&& childDossierPart.isRequired()
-					&& !requiredDossierPartIds.contains(childDossierPart
-							.getDossierpartId())) {
-				requiredDossierPartIds.add(childDossierPart.getDossierpartId());
-			} else if (parentDossierPart.getDossierpartId() != childDossierPart
 					.getDossierpartId()) {
+				if (childDossierPart.isRequired()
+						&& !requiredDossierPartIds.contains(childDossierPart
+								.getDossierpartId())) {
+					requiredDossierPartIds.add(childDossierPart
+							.getDossierpartId());
+				}
+
+			} else {
 				if (dossierFile != null) {
 					if (requiredDossierPartIds.contains(parentDossierPart
 							.getDossierpartId())) {
@@ -1043,7 +1047,8 @@ public class PortletUtil {
 					}
 				} else {
 					if (!requiredDossierPartIds.contains(childDossierPart
-							.getDossierpartId())) {
+							.getDossierpartId())
+							&& childDossierPart.isRequired()) {
 						requiredDossierPartIds.add(childDossierPart
 								.getDossierpartId());
 					}

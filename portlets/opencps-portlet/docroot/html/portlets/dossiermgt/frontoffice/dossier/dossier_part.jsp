@@ -419,6 +419,7 @@
 													name="isEditDossier" 
 													value="<%=String.valueOf(isEditDossier) %>"
 												/>
+												
 											</liferay-util:include>
 											<%
 											index ++;
