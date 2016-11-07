@@ -107,6 +107,7 @@
 				<div class="span9"><%=Validator.isNotNull(adminAction) ? adminAction.getItemName(locale,true) : StringPool.BLANK %></div>
 			</div>
 		</div>
+
 	</div>
 <%
 	
@@ -116,6 +117,7 @@
 		}catch(Exception e){}
 	}
 	
+
 	int index = 0;
 	
 	List<Long> requiredDossierPartIds = new ArrayList<Long>();
@@ -170,11 +172,12 @@
 								
 								cssRequired = dossierPart.getRequired() ? "cssRequired" : StringPool.BLANK;
 								
-								
 								urlDownload = DossierMgtUtil.getURLDownloadTemplateFile(themeDisplay, dossierPart.getTemplateFileNo());
 								
 								%>
+
 									<div class='<%="opencps dossiermgt dossier-part-row r-" + index + StringPool.SPACE + "dpid-" + String.valueOf(dossierPart.getDossierpartId())%>'>
+
 										<span class='<%="level-" + level + " opencps dossiermgt dossier-part"%>'>
 											<span class="row-icon row-icon-stt-new">
 												<c:choose>
@@ -416,6 +419,7 @@
 													name="isEditDossier" 
 													value="<%=String.valueOf(isEditDossier) %>"
 												/>
+												
 											</liferay-util:include>
 											<%
 											index ++;
@@ -442,6 +446,7 @@
 			<aui:input name="requiredDossierPart" type="hidden" value="<%= StringUtil.merge(requiredDossierPartIds) %>"/>
 		<%
 	}	
+
 %>
 </div>
 <aui:script>

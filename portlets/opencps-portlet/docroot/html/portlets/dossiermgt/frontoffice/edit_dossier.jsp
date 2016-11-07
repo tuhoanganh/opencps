@@ -1,3 +1,4 @@
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -388,42 +389,43 @@
 
 <aui:script>
 	Liferay.provide(
-			window,
-			'<portlet:namespace/>updateDossierStatus',
-				function(actionURL) {
-					var A = AUI(); 
-					
-					var required = false;
-					
-					var requiredDossierParts = A.all('#<portlet:namespace/>requiredDossierPart');
-					
-					if(requiredDossierParts) {
-						
-						requiredDossierParts.each(function(requiredDossierPart){
-							var requiredDossierPartIds = requiredDossierPart.val().trim().split(",");
-							if(requiredDossierPartIds != ''){
-								requiredDossierPartIds.each(dossierPartId){
-									console.log(dossierPartId);
-									if(parseInt(dossierPartId) > 0){
-										required = true;
-										var row = A.one('.dossier-part-row .dpid-' + dossierPartId);
-										if(row){
-											row.attr('style', 'color:red');
-										}
-									}
+		window,
+		'<portlet:namespace/>updateDossierStatus',
+		function(actionURL) {
+			var A = AUI(); 
+			
+			var required = false;
+			
+			var requiredDossierParts = A.all('#<portlet:namespace/>requiredDossierPart');
+			
+			if(requiredDossierParts) {
+				
+				requiredDossierParts.each(function(requiredDossierPart){
+					var requiredDossierPartIds = requiredDossierPart.val().trim().split(",");
+					console.log(dossierPartId);
+					if(requiredDossierPartIds != ''){
+						for(var i = 0; i < requiredDossierPartIds.length; i++){
+							var dossierPartId = requiredDossierPartIds[i];
+							
+							if(parseInt(dossierPartId) > 0){
+								required = true;
+								var row = A.one('.dossier-part-row.dpid-' + dossierPartId);
+								if(row){
+									row.attr('style', 'color:red');
 								}
 							}
-						});
-						
-						
-						if(required === true) {
-							alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-required-before-send") %>');
-						} else {
-							location.href = '<%= updateDossierStatusURL %>';
 						}
 					}
-				},
-			['aui-base']
+				});
+				
+				
+				if(required === true) {
+					alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-required-before-send") %>');
+				} else {
+					location.href = '<%= updateDossierStatusURL %>';
+				}
+			}
+		},['aui-base']
 	);
 </aui:script>
 
