@@ -1010,8 +1010,6 @@ public class PortletUtil {
 
 		int partType = parentDossierPart != null ? parentDossierPart
 				.getPartType() : 0;
-				
-		System.out.println(partType + "-----" + parentDossierPart.getDossierpartId() + "-----" + childDossierPart.getDossierpartId());
 
 		switch (partType) {
 		case PortletConstants.DOSSIER_PART_TYPE_SUBMIT:

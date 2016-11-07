@@ -737,3 +737,6 @@ body > #main-content{
 	background-color: #fff !important;
 }
 
+.payment-ld .content .box50 > div, .payment-ld .content .box100 > div {
+box-sizing: border-box;
+}

@@ -338,8 +338,19 @@
 							</div>
 							
 							<div class='<%="span7 " + cssStatusColor %>'>
-								<%-- <%=PortletUtil.getDossierStatusLabel(dossier.getDossierStatus(), locale) %> --%>
-								<%= PortletUtil.getDossierStatusLabel(dossier.getDossierStatus(), locale) %>
+								<c:choose>
+									<c:when test="<%=allowResultQuickView %>">
+										<liferay-util:include page="/html/portlets/dossiermgt/frontoffice/dossier/result_display/result_quick_view.jsp"
+																servletContext="<%=application %>">
+											<portlet:param name="dossierId" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
+											<portlet:param name="dossierTemplateId" value="<%=String.valueOf(dossier.getDossierTemplateId()) %>"/>
+											<portlet:param name="statusName" value="<%= PortletUtil.getDossierStatusLabel(dossier.getDossierStatus(), locale) %>"/>
+										</liferay-util:include>
+									</c:when>
+									<c:otherwise>
+										<%= PortletUtil.getDossierStatusLabel(dossier.getDossierStatus(), locale) %>
+									</c:otherwise>
+								</c:choose>
 							</div>
 						</div>
 					</liferay-util:buffer>

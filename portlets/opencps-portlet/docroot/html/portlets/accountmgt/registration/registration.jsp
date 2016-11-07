@@ -28,24 +28,42 @@
 %>
 
 <c:choose>
-	<c:when test='<%=type.equals("citizen") %>'>
+	<c:when test='<%= allowBussinessRegistration && allowCitizenRegistration %>'>
+		<c:choose>
+			<c:when test='<%=type.equals("citizen")%>'>
+				<liferay-util:include 
+					page="/html/portlets/accountmgt/registration/citizenregistration-ux.jsp" 
+					servletContext="<%=application %>" 
+				/> 
+			</c:when>
+			
+			<c:when test='<%=type.equals("business")%>'>
+				<liferay-util:include 
+					page="/html/portlets/accountmgt/registration/businessregistration-ux.jsp" 
+					servletContext="<%=application %>" 
+				/> 
+			</c:when>
+		</c:choose>
+	</c:when>
+	
+	<c:when test='<%= !allowBussinessRegistration && allowCitizenRegistration%>'>
 		<liferay-util:include 
 			page="/html/portlets/accountmgt/registration/citizenregistration-ux.jsp" 
 			servletContext="<%=application %>" 
 		/> 
 	</c:when>
 	
-	<c:when test='<%=type.equals("business") %>'>
+	<c:when test='<%= allowBussinessRegistration && !allowCitizenRegistration%>'>
 		<liferay-util:include 
 			page="/html/portlets/accountmgt/registration/businessregistration-ux.jsp" 
 			servletContext="<%=application %>" 
 		/> 
 	</c:when>
-	<c:otherwise>
+	<c:when test='<%= !allowBussinessRegistration && !allowCitizenRegistration %>'>
 		<liferay-util:include 
-			page="/html/portlets/accountmgt/registration/citizenregistration-ux.jsp" 
+			page="/html/portlets/accountmgt/registration/confirmPageBlank.jsp" 
 			servletContext="<%=application %>" 
 		/> 
-	</c:otherwise>
+	</c:when>
 </c:choose>
 
