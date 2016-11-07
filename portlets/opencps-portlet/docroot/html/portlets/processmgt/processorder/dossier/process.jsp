@@ -416,8 +416,6 @@
 		}
 	%>
 
-<<<<<<< HEAD
-=======
 	<aui:input 
 		name="<%=ProcessOrderDisplayTerms.DOSSIER_ID %>" 
 		value="<%=dossier != null ? dossier.getDossierId() : 0 %>" 
@@ -489,7 +487,6 @@
 
 	<div id = "<portlet:namespace />assignTaskContainer" class="assign-task-container"></div>
 
->>>>>>> sync-core#rc-1.5.1-issue-fix
 </div>
 
 <aui:script use="aui-base,liferay-portlet-url,aui-io">
