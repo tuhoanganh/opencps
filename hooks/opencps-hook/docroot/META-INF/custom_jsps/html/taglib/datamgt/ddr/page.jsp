@@ -266,16 +266,16 @@
 				selectedItem = selectItems<%=randomInstance %>[parseInt(level) - 1];
 			}
 		
-			if(optionValueType<%=randomInstance %> ==='code'){
-				if(opt.itemCode == selectedItem){
+			if((parseInt(opt.dictItemId) == selectedItem || opt.itemCode === selectedItem) && clearChild == false){
+				if(optionValueType<%=randomInstance %> ==='code'){
 					opts += '<option value="' + opt.itemCode + '" selected="selected">' + itemName + '</option>'
 				}else{
 					opts += '<option value="' + opt.itemCode + '">' + itemName + '</option>'
 				}
 				
 			}else{
-				if(opt.dictItemId == selectedItem){
-					opts += '<option value="' + opt.dictItemId + '" selected="selected">' + itemName + '</option>'
+				if(optionValueType<%=randomInstance %> ==='code'){
+					opts += '<option value="' + opt.itemCode + '" >' + itemName + '</option>'
 				}else{
 					opts += '<option value="' + opt.dictItemId + '">' + itemName + '</option>'
 				}
