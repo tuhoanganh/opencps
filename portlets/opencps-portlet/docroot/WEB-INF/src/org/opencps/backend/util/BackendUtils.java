@@ -18,6 +18,7 @@
 package org.opencps.backend.util;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.opencps.dossiermgt.model.Dossier;
@@ -172,6 +173,24 @@ public class BackendUtils {
 		}
 
 		return validPreCondition;
+	}
+	
+	private static boolean _checkWaitingCondition(long dossierId, String pattern) {
+		boolean isCondition = true;
+		
+		try {
+	        Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
+	        
+	        String dossierStatus = dossier.getDossierStatus();
+	        
+	        if (dossierStatus.contains(PortletConstants.DOSSIER_STATUS_WAITING)) {
+	        }
+        }
+        catch (Exception e) {
+	        // TODO: handle exception
+        }
+		
+		return isCondition;
 	}
 
 	private static boolean _checkPayOkCondition(long dossierId) {

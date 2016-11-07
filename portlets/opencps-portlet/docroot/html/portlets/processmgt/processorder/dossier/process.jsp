@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
-
+<%@page import="org.opencps.util.MessageKeys"%>
 <%@page import="javax.portlet.PortletRequest"%>
 <%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
@@ -590,11 +590,11 @@
 													success: function(event, id, obj) {
 														var response = this.get('responseData');
 														
-														if(response.sending == 'success'){
+														alert(Liferay.Language.get(response.msg));
+														
+														if(response.msg == '<%=MessageKeys.DEFAULT_SUCCESS_KEY%>'){
 															var redirectURL = A.one('#<portlet:namespace/>redirectURL').val();
 															window.location = redirectURL;
-														}else{
-															alert(response.sending);
 														}
 													}
 												}
