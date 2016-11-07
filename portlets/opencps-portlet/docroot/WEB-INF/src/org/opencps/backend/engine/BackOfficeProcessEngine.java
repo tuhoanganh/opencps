@@ -39,9 +39,9 @@ import org.opencps.dossiermgt.service.DossierLogLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
 import org.opencps.dossiermgt.util.ActorBean;
 import org.opencps.notificationmgt.message.SendNotificationMessage;
-import org.opencps.notificationmgt.message.SendNotificationMessage.InfoList;
 import org.opencps.notificationmgt.utils.NotificationEventKeys;
 import org.opencps.paymentmgt.model.PaymentFile;
+import org.opencps.paymentmgt.model.impl.PaymentFileImpl;
 import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.model.ProcessStep;
@@ -55,6 +55,7 @@ import org.opencps.util.AccountUtil;
 import org.opencps.util.PortletConstants;
 import org.opencps.util.WebKeys;
 
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
@@ -86,9 +87,6 @@ public class BackOfficeProcessEngine implements MessageListener {
 		
 		List<String> employEvents = new ArrayList<String>();
 		List<String> citizenEvents = new ArrayList<String>();
-		
-		 
-		
 		
 		String actionName = StringPool.BLANK;
 		String stepName = StringPool.BLANK;
@@ -420,6 +418,8 @@ public class BackOfficeProcessEngine implements MessageListener {
 				
 				boolean isPayment = false;
 				
+				PaymentFile paymentFile = new PaymentFileImpl();
+				
 				// Update Paying
 				if (processWorkflow.getRequestPayment()) {
 
@@ -440,7 +440,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 						(paymentMessages.size() != 0)
 							? paymentMessages.get(0) : StringPool.BLANK;
 
-					PaymentFile paymentFile =
+					paymentFile =
 						PaymentFileLocalServiceUtil.addPaymentFile(
 							toEngineMsg.getDossierId(),
 							toEngineMsg.getFileGroupId(), ownerUserId,
@@ -497,6 +497,16 @@ public class BackOfficeProcessEngine implements MessageListener {
 				toBackOffice.setEstimateDatetime(toEngineMsg.getEstimateDatetime());
 				toBackOffice.setReceiveDatetime(toEngineMsg.getReceiveDate());
 				
+				lsNotification =
+							    getListNoties(
+							        citizenEvents, employEvents, dossier.getUserId(), dossier.getUserId(),
+							        assignToUserId, processWorkflow, dossier.getDossierId(), paymentFile.getPaymentFileId() ,
+							        processOrderId);
+				
+				_log.info("%%%%%%%%%%%%% LIST ::::::" + lsNotification.size());
+				
+				toBackOffice.setListNotifications(lsNotification);
+
 
 				Message sendToBackOffice = new Message();
 
@@ -504,6 +514,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 				MessageBusUtil.sendMessage(
 					"opencps/backoffice/out/destination", sendToBackOffice);
+				
 
 			}
 			else {
@@ -517,14 +528,31 @@ public class BackOfficeProcessEngine implements MessageListener {
 				toBackOffice.setReceptionNo(toEngineMsg.getReceptionNo());
 				toBackOffice.setUserActorAction(toEngineMsg.getActionUserId());
 				toBackOffice.setStepName(stepName);
+				
+				citizenEvents.add(NotificationEventKeys.ADMINTRATOR.EVENT1);
 
+				lsNotification =
+							    getListNoties(
+							        citizenEvents, employEvents, dossier.getUserId(), dossier.getUserId(),
+							        assignToUserId, processWorkflow, dossier.getDossierId(), 0 ,
+							        processOrderId);
+				
+				
+				
+				toBackOffice.setListNotifications(lsNotification);
+				
 				Message sendToBackOffice = new Message();
 
 				sendToBackOffice.put("toBackOffice", toBackOffice);
-
+				
+				
 				MessageBusUtil.sendMessage(
 					"opencps/backoffice/out/destination", sendToBackOffice);
+				
+
 			}
+			
+
 
 		}
 		catch (Exception e) {
@@ -536,69 +564,88 @@ public class BackOfficeProcessEngine implements MessageListener {
 	public List<SendNotificationMessage> getListNoties(
 	    List<String> citizenEvents, List<String> employEvents,
 	    long citizenUserId, long groupId, long assignToUserId,
-	    ProcessWorkflow processWorkflow, long dossierId, long paymentFileId) {
+	    ProcessWorkflow processWorkflow, long dossierId, long paymentFileId,
+	    long processOrderId) {
 
 		List<SendNotificationMessage> ls =
 		    new ArrayList<SendNotificationMessage>();
-		
-		List<SendNotificationMessage.InfoList> infoCitizens = new ArrayList<SendNotificationMessage.InfoList>();
-		List<SendNotificationMessage.InfoList> infoEmploys = new ArrayList<SendNotificationMessage.InfoList>();
 
-		List<SendNotificationMessage.InfoList> employInfoList = new ArrayList<SendNotificationMessage.InfoList>();
-		
-		AccountBean accountBean= AccountUtil.getAccountBean(citizenUserId, groupId, null);
-		
+		List<SendNotificationMessage.InfoList> infoCitizens =
+		    new ArrayList<SendNotificationMessage.InfoList>();
+		List<SendNotificationMessage.InfoList> infoEmploys =
+		    new ArrayList<SendNotificationMessage.InfoList>();
+
+		List<SendNotificationMessage.InfoList> employInfoList =
+		    new ArrayList<SendNotificationMessage.InfoList>();
+
+		AccountBean accountBean =
+		    AccountUtil.getAccountBean(citizenUserId, groupId, null);
+
 		Citizen citizen = null;
 		Business bussines = null;
-		
+
 		if (accountBean.isCitizen()) {
 			citizen = (Citizen) accountBean.getAccountInstance();
 		}
 		if (accountBean.isBusiness()) {
 			bussines = (Business) accountBean.getAccountInstance();
 		}
-		
-		for (String citizenEvent : citizenEvents) {
+
+		for (String event : citizenEvents) {
 			
-			SendNotificationMessage notiMsg = null;
+			_log.info("INFORRRRRRRRRRRRRRR + " + event);
 			
-			notiMsg.setDossierId(Long.toString(dossierId));
-			notiMsg.setInfoList(infoList);
-			notiMsg.setNotificationContent(value);
-			notiMsg.setNotificationEventName(value);
-			notiMsg.setProcessOrderId(value);
+			SendNotificationMessage notiMsg = new SendNotificationMessage();
+
+			notiMsg.setDossierId(dossierId);
+			notiMsg.setNotificationEventName(event);
+			notiMsg.setProcessOrderId(processOrderId);
 			notiMsg.setType("SMS, INBOX, EMAIL");
-			
-			SendNotificationMessage.InfoList info = new SendNotificationMessage.InfoList();
-			
-			List<SendNotificationMessage.InfoList> infoLists = ArrayList<SendNotificationMessage.InfoList>();
-			infoLists.add(info);
-			
+
+			SendNotificationMessage.InfoList info =
+			    new SendNotificationMessage.InfoList();
+
+			List<SendNotificationMessage.InfoList> infoList =
+			    new ArrayList<SendNotificationMessage.InfoList>();
+
+			infoList.add(info);
+
+			notiMsg.setInfoList(infoList);
+
 			if (Validator.isNotNull(citizen)) {
-				info.setUserId(Long.toString(citizen.getUserId()));
+				info.setUserId(citizen.getUserId());
 				info.setUserMail(citizen.getEmail());
 				info.setUserPhone(citizen.getTelNo());
-				
+
 			}
 
 			if (Validator.isNotNull(bussines)) {
-				info.setUserId(Long.toString(bussines.getUserId()));
+				info.setUserId(bussines.getUserId());
 				info.setUserMail(bussines.getEmail());
 				info.setUserPhone(bussines.getTelNo());
 
 			}
-			
-			if (citizenEvent.contains(NotificationEventKeys.USERS_AND_ENTERPRISE.EVENT5)) {
-				info.setGroup(NotificationEventKeys.GROUP3);
 
-			} else {
-				info.setGroup(NotificationEventKeys.GROUP2);
+			if (event.contains(NotificationEventKeys.USERS_AND_ENTERPRISE.EVENT5)) {
+				info.setGroup(NotificationEventKeys.GROUP3);
+				Locale vnLocale = new Locale("vi", "VN");
+
+				notiMsg.setNotificationContent(LanguageUtil.get(
+				    vnLocale, "phieu-yeu-cau-thanh-toan"));
+
 			}
+			else {
+				info.setGroup(NotificationEventKeys.GROUP2);
+				notiMsg.setNotificationContent(processWorkflow.getActionName());
+
+			}
+			
+			ls.add(notiMsg);
 
 		}
-		
+
 		for (String employEvent : employEvents) {
-			
+
 		}
 
 		return ls;

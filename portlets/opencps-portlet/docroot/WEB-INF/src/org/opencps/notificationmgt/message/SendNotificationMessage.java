@@ -82,10 +82,6 @@ public class SendNotificationMessage {
     @XmlElement(name = "InfoList", required = true)
     protected List<SendNotificationMessage.InfoList> infoList;
     
-	public void setInfoList(List<SendNotificationMessage.InfoList> infoList) {
-	
-		this.infoList = infoList;
-	}
 
 
 	@XmlElement(name = "NotificationContent", required = true)
