@@ -3311,6 +3311,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		boolean requiredFlag = false;
 
+		List<Long> requiredDossierPartIds = new ArrayList<Long>();
+
 		if (dossierPartsLevel1 != null) {
 			for (DossierPart dossierPartLevel1 : dossierPartsLevel1) {
 				List<DossierPart> dossierParts = DossierMgtUtil
@@ -3334,17 +3336,18 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 							// TODO: handle exception
 						}
 
-						if (dossierFile == null) {
-							requiredFlag = true;
-							break;
-						}
+						requiredDossierPartIds = PortletUtil
+								.getDossierPartRequired(requiredDossierPartIds,
+										dossierPartLevel1, dossierPart,
+										dossierFile);
 
 					}
+
 				}
 			}
 		}
 
-		if (requiredFlag) {
+		if (requiredDossierPartIds != null && !requiredDossierPartIds.isEmpty()) {
 			throw new RequiredDossierPartException();
 		}
 	}
