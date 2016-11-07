@@ -80,7 +80,7 @@
 		
 			<%
 				for(DictItem dictItem: dictItems){
-					searchURL.setParameter("administrationId", String.valueOf(dictItem.getDictItemId()));
+					searchURL.setParameter("serviceDomainId", String.valueOf(dictItem.getDictItemId()));
 					searchURL.setParameter("dictItemCode", dictItem.getItemCode());
 			%>
 			

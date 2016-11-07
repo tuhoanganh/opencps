@@ -17,9 +17,12 @@
 
 package org.opencps.util;
 
+import java.util.Date;
+
 import javax.portlet.PortletPreferences;
 
 import org.opencps.accountmgt.model.Business;
+import org.opencps.accountmgt.model.Citizen;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -47,10 +50,9 @@ import com.liferay.util.PwdGenerator;
 public class MessageBusUtil {
 
 	public static void sendEmailAddressVerification(
-	    String uuid, User user, String emailAddress, String type,
-	    ServiceContext serviceContext)
+	    String uuid, User user, String emailAddress, String type, String emailConfigStep,
+	    String emailConfirmToAdmin, ServiceContext serviceContext)
 	    throws PortalException, SystemException {
-
 		if (user
 		    .isEmailAddressVerified() && StringUtil
 		        .equalsIgnoreCase(emailAddress, user
@@ -72,7 +74,7 @@ public class MessageBusUtil {
 		    .getPortalURL() + "/opencps-portlet/verify/email?token=" + uuid +
 		    "&ticketKey=" + ticket
 		        .getKey() +
-		    "&type=" + type;
+		    "&type=" + type + "&emailConfigStep=" + emailConfigStep + "&emailConfirmToAdmin="+emailConfirmToAdmin;
 
 		long plid = serviceContext
 		    .getPlid();
@@ -304,11 +306,25 @@ public class MessageBusUtil {
 	}
 
 	public static void sendEmailConfirmToAdmin(String uuid, User user,
-			String emailAddress, String emailConfirmToAdmin, String type, Business business,
-			ServiceContext serviceContext) throws PortalException,
+			String emailAddress, String emailConfirmToAdmin, Business business,
+			Citizen citizen, ServiceContext serviceContext) throws PortalException,
 			SystemException {
 		
 		String emailAdmins[] = null;
+		
+		String telNo = StringPool.BLANK;
+		
+		Date createDate = new Date();
+		
+		if(Validator.isNotNull(business)){
+			createDate = business.getCreateDate();
+			telNo = business.getTelNo();
+		}
+		
+		if(Validator.isNotNull(citizen)){
+			createDate = citizen.getCreateDate();
+			telNo = citizen.getTelNo();
+		}
 		
 		if (Validator.isNotNull(emailConfirmToAdmin)) {
 			
@@ -348,9 +364,9 @@ public class MessageBusUtil {
 					subscriptionSender.setCompanyId(user.getCompanyId());
 
 					subscriptionSender.setContextAttributes("[$TIME_REGISTER$]",
-							business.getCreateDate(), "[$EMAIL_REGISTER$]",
+							createDate, "[$EMAIL_REGISTER$]",
 							emailAddress, "[$PHONE_NUMBER$]",
-							business.getTelNo(), "[$HO_TEN_NGUOI_DK$]", toName,
+							telNo, "[$HO_TEN_NGUOI_DK$]", toName,
 							"[$USER_ID$]", user.getUserId());
 
 					subscriptionSender.setFrom(fromAddress, fromName);

@@ -57,6 +57,17 @@
 		value="<%=emailConfirmToAdmin %>"
 		>
 	</aui:input>
+	
+	<aui:row>
+		<aui:col width="30">
+			<aui:input type="checkbox" name="allowBussinessRegistration" value="<%= allowBussinessRegistration %>" />
+		</aui:col>
+		<aui:col width="30">
+			<aui:input type="checkbox" name="allowCitizenRegistration" value="<%= allowCitizenRegistration %>" />
+		</aui:col>
+		<aui:col width="40"></aui:col>
+	</aui:row>
+	
 	<aui:input 
 		type="checkbox"
 		name="showLabelTaglibDatamgt" 
