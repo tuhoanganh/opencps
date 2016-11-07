@@ -19,6 +19,7 @@
 
 <%
 	String linkToRegister = themeDisplay.getPortalURL() + "/register";
+	String linkDescriptToUse = themeDisplay.getPortalURL() + "/huong-dan-su-dung";
 %>
 
 <c:choose>
@@ -235,7 +236,7 @@
 								</aui:col>
 								<aui:col width = "50">
 									<span class="create-account">
-										<aui:a href="#">
+										<aui:a href="<%=linkDescriptToUse %>">
 											<liferay-ui:message key="descript-to-use"/>
 										</aui:a>
 									</span>
