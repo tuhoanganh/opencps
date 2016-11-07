@@ -34,6 +34,7 @@
 
 package org.opencps.notificationmgt.engine;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.opencps.notificationmgt.message.SendNotificationMessage;
@@ -58,7 +59,6 @@ public class NotificationsListener implements MessageListener {
 
 	private static Log _log = LogFactoryUtil.getLog(NotificationsListener.class);
 
-
 	@Override
 	public void receive(Message message)
 		throws MessageListenerException {
@@ -74,11 +74,21 @@ public class NotificationsListener implements MessageListener {
 			List<SendNotificationMessage> notifications =
 				(List<SendNotificationMessage>) message.get(MessageBusKeys.Message.NOTIFICATIONS);
 
-			String sendType = StringPool.BLANK;
 			String event = StringPool.BLANK;
 			String group = StringPool.BLANK;
+			String email = StringPool.BLANK;
+			String phone = StringPool.BLANK;
+
+			/*
+			 * 1 notification message co the gui cho nhieu user, 1 user co the
+			 * nhan notice theo nhieu kenh
+			 */
 
 			for (SendNotificationMessage item : notifications) {
+
+				String[] typeArray = item.getType().split(",");
+
+				List<String> typeList = Arrays.asList(typeArray);
 
 				event = item.getNotificationEventName();
 
@@ -86,19 +96,30 @@ public class NotificationsListener implements MessageListener {
 
 				for (InfoList info : infoList) {
 
-					group = info.getGroup();
+					for (String sendType : typeList) {
 
-					int userId = Integer.parseInt(info.getUserId());
+						if (sendType.equals(NotificationEventKeys.EMAIL)) {
+							email = info.getUserMail();
 
-					JSONArray payloadJSON =
-						NotificationUtils.createNotification(item, event, group, userId, true);
+							NotificationUtils.sendEmailNotification(item, email);
 
-					if (sendType.equals(NotificationEventKeys.EMAIL)) {
+						}
+						if (sendType.equals(NotificationEventKeys.INBOX)) {
 
-					}
-					if (sendType.equals(NotificationEventKeys.INBOX)) {
+							group = info.getGroup();
 
-						NotificationUtils.addUserNotificationEvent(item, payloadJSON, userId);
+							int userId = Integer.parseInt(info.getUserId());
+
+							JSONArray payloadJSON =
+								NotificationUtils.createNotification(
+									item, event, group, userId, true);
+
+							NotificationUtils.addUserNotificationEvent(item, payloadJSON, userId);
+						}
+						if (sendType.equals(NotificationEventKeys.SMS)) {
+							phone = info.getUserPhone();
+
+						}
 					}
 				}
 
@@ -106,7 +127,7 @@ public class NotificationsListener implements MessageListener {
 
 		}
 		catch (Exception e) {
-
+			_log.error(e);
 		}
 	}
 
