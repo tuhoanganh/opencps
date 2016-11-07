@@ -45,7 +45,7 @@
 					
 					String emptyOptionLabel = StringPool.BLANK;
 					
-					long selectedItem = 0;
+					String selectedItem = "0";
 					
 					boolean itemEmptyOption = false;
 					
@@ -266,7 +266,7 @@
 				selectedItem = selectItems<%=randomInstance %>[parseInt(level) - 1];
 			}
 		
-			if(parseInt(opt.dictItemId) == selectedItem && clearChild == false){
+			if((parseInt(opt.dictItemId) == selectedItem || opt.itemCode === selectedItem) && clearChild == false){
 				if(optionValueType<%=randomInstance %> ==='code'){
 					opts += '<option value="' + opt.itemCode + '" selected="selected">' + itemName + '</option>'
 				}else{
@@ -275,7 +275,7 @@
 				
 			}else{
 				if(optionValueType<%=randomInstance %> ==='code'){
-					opts += '<option value="' + opt.itemCode + '">' + itemName + '</option>'
+					opts += '<option value="' + opt.itemCode + '" >' + itemName + '</option>'
 				}else{
 					opts += '<option value="' + opt.dictItemId + '">' + itemName + '</option>'
 				}
