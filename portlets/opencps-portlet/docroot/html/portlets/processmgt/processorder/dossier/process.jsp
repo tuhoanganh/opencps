@@ -1,4 +1,4 @@
-<%@page import="org.opencps.util.PortletUtil"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,10 +17,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
-<%@page import="org.opencps.util.MessageKeys"%>
+
 <%@page import="javax.portlet.PortletRequest"%>
 <%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
+<%@page import="org.opencps.util.MessageKeys"%>
+<%@page import="org.opencps.util.PortletUtil"%>
 <%@page import="org.opencps.backend.util.BackendUtils"%>
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
 <%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
