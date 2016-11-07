@@ -23,7 +23,9 @@
 	String businessRegStep_cfg = GetterUtil.getString(portletPreferences.getValue("businessRegStep", "3"));
 	String citizenRegStep_cfg = GetterUtil.getString(portletPreferences.getValue("citizenRegStep", "3"));
 	String emailConfirmToAdmin = GetterUtil.getString(portletPreferences.getValue("emailConfirmToAdmin", ""));
-
+	boolean allowBussinessRegistration = GetterUtil.getBoolean(portletPreferences.getValue("allowBussinessRegistration", "false"));
+	boolean allowCitizenRegistration = GetterUtil.getBoolean(portletPreferences.getValue("allowCitizenRegistration", "false"));
+	
 	boolean showLabelTaglibDatamgt = GetterUtil.getBoolean(portletPreferences.getValue("showLabelTaglibDatamgt", "false"), false);
 	
 	String messageSuccessfullRegistration = GetterUtil.getString(portletPreferences.getValue("messageSuccessfullRegistration", StringPool.BLANK));

@@ -207,7 +207,9 @@ public class AccountRegPortlet extends MVCPortlet {
 		
 		String emailConfirmToAdmin = ParamUtil.getString(uploadPortletRequest, "emailConfirmToAdmin");
 		
-		String adminEmailUserAddedBody = ParamUtil.getString(uploadPortletRequest, "adminEmailUserAddedBody");
+		int step = ParamUtil.getInteger(uploadPortletRequest, "businessRegStep_cfg");
+		
+		String emailConfigStep = String.valueOf(step);
 
 		DictItem city = null;
 
@@ -262,10 +264,9 @@ public class AccountRegPortlet extends MVCPortlet {
 					    UserLocalServiceUtil.getUser(business.getMappingUserId());
 					MessageBusUtil.sendEmailAddressVerification(
 					    business.getUuid(), mappingUser, email,
-					    PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS,
-					    serviceContext);
+					    PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS, emailConfigStep,
+					    emailConfirmToAdmin, serviceContext);
 					//check reg cfg
-					int step = ParamUtil.getInteger(uploadPortletRequest, "businessRegStep_cfg");
 					if(step == 2){
 						BusinessLocalServiceUtil
 					    .updateStatus(business.getBusinessId(), serviceContext
@@ -274,12 +275,6 @@ public class AccountRegPortlet extends MVCPortlet {
 					SessionMessages.add(
 					    actionRequest,
 							MessageKeys.ACCOUNT_UPDATE_CUCCESS);
-					// Gui email thong bao toi quan tri sau khi thuc hien dang ky thanh cong
-						MessageBusUtil.sendEmailConfirmToAdmin(business.getUuid(),
-								mappingUser, email, emailConfirmToAdmin,
-								PortletPropsValues.USERMGT_USERGROUP_NAME_BUSINESS, business,
-								serviceContext);
-					// Gui email thong bao toi quan tri sau khi thuc hien dang ky thanh cong -----END-----
 				}
 			} else {
 
@@ -456,12 +451,19 @@ public class AccountRegPortlet extends MVCPortlet {
 		contentType =
 		    Validator.isNotNull(contentType)
 		        ? MimeTypesUtil.getContentType(contentType) : StringPool.BLANK;
+		        
+        int step = ParamUtil.getInteger(uploadPortletRequest, "citizenRegStep_cfg");
+        
+        String emailConfirmToAdmin = ParamUtil.getString(uploadPortletRequest, "citizenEmailConfirmToAdmin");
+        
+        String emailConfigStep = String.valueOf(step);
+        
 		String title = "Personal File";
 
 		DictItem city = null;
-
+	
 		DictItem district = null;
-
+	
 		DictItem ward = null;
 
 		InputStream inputStream = null;
@@ -506,10 +508,9 @@ public class AccountRegPortlet extends MVCPortlet {
 					    UserLocalServiceUtil.getUser(citizen.getMappingUserId());
 					MessageBusUtil.sendEmailAddressVerification(
 					    citizen.getUuid(), mappingUser, email,
-					    PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN,
-					    serviceContext);
+					    PortletPropsValues.USERMGT_USERGROUP_NAME_CITIZEN, emailConfigStep,
+					    emailConfirmToAdmin, serviceContext);
 					//check reg cfg
-					int step = ParamUtil.getInteger(uploadPortletRequest, "citizenRegStep_cfg");
 					if(step == 2){
 						CitizenLocalServiceUtil
 					    .updateStatus(citizen.getCitizenId(), serviceContext

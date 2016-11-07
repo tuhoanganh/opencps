@@ -79,6 +79,8 @@ public class ConfigurationImpl implements ConfigurationAction{
 		
 		boolean hiddenTreeNodeEqualNone = ParamUtil.getBoolean(actionRequest, "hiddenTreeNodeEqualNone");
 		
+		boolean allowResultQuickView = ParamUtil.getBoolean(actionRequest, "allowResultQuickView");
+		
 		PortletURL redirectURL =
 		    PortletURLFactoryUtil.create(
 		        PortalUtil.getHttpServletRequest(actionRequest),
@@ -118,6 +120,8 @@ public class ConfigurationImpl implements ConfigurationAction{
 		preferences.setValue("showTabDossierResultFirst", String.valueOf(showTabDossierResultFirst));
 		
 		preferences.setValue("hiddenTreeNodeEqualNone", String.valueOf(hiddenTreeNodeEqualNone));
+		
+		preferences.setValue("allowResultQuickView", String.valueOf(allowResultQuickView));
 		
 		preferences.store();
 

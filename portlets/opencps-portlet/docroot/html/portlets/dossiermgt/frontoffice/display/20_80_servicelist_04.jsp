@@ -129,6 +129,7 @@
 
 <portlet:actionURL var="keywordsAutoCompleteURL" name="keywordsAutoComplete">
 	<portlet:param name="administrationId" value="<%=String.valueOf(administrationId) %>"/>
+	<portlet:param name="serviceDomainId" value="<%=String.valueOf(serviceDomainId) %>"/>
 </portlet:actionURL>
 
 <script type="text/javascript">

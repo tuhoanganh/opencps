@@ -1,6 +1,4 @@
-<%@page import="org.opencps.holidayconfig.util.HolidayUtils"%>
-<%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.model.Dossier"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -19,6 +17,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+
+<%@page import="org.opencps.holidayconfig.util.HolidayUtils"%>
+<%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%@page import="org.opencps.processmgt.util.ProcessOrderUtils"%>
 <%@page import="javax.portlet.PortletMode"%>
 <%@page import="org.opencps.processmgt.NoSuchWorkflowOutputException"%>
@@ -47,8 +49,9 @@
 <%@page import="org.opencps.dossiermgt.RequiredDossierPartException"%>
 <%@page import="org.opencps.backend.util.DossierNoGenerator"%>
 <%@page import="org.opencps.processmgt.util.ProcessMgtUtil"%>
+<%@page import="org.opencps.util.WebKeys"%>
 
-<%@ include file="../init.jsp"%>
+<%@ include file="init.jsp"%>
 
 <%
 	boolean success = false;
@@ -149,6 +152,24 @@
 <portlet:actionURL var="assignToUserURL" name="assignToUser"/>
 
 <aui:form name="fm" action="<%=assignToUserURL.toString() %>" method="post">
+
+	<aui:input 
+		name="assignFormDisplayStyle" 
+		value="<%=assignFormDisplayStyle %>" 
+		type="hidden"
+	/>
+	
+	<aui:input 
+		name="assignActionURL" 
+		value="<%=assignToUserURL.toString() %>" 
+		type="hidden"
+	/>
+	
+	<aui:input 
+		name="assignActionURL" 
+		value="<%=assignToUserURL.toString() %>" 
+		type="hidden"
+	/>
 	<aui:input 
 		name="redirectURL" 
 		value="<%=currentURL %>" 
@@ -391,7 +412,7 @@
 		</div>
 	</c:if>
 
-	<aui:button type="submit" value="submit" name="submit"/>
+	<aui:button type="button" value="submit" name="submit"/>
 	
 	<c:if test="<%=esign %>">
 		<aui:button type="button" value="esign" name="esign"/>
@@ -403,10 +424,18 @@
 
 <aui:script>
 	AUI().ready(function(A){
+		
+		var submitButton = A.one('#<portlet:namespace/>submit');
 
 		var cancelButton = A.one('#<portlet:namespace/>cancel');
 		
 		var esign = A.one('#<portlet:namespace/>esign');
+		
+		if(submitButton){
+			submitButton.on('click', function(){
+				submitForm(document.<portlet:namespace />fm);
+			});
+		}
 		
 		if(cancelButton){
 			cancelButton.on('click', function(){
