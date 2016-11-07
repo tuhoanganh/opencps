@@ -34,7 +34,6 @@
 
 package org.opencps.notificationmgt.engine;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.opencps.notificationmgt.message.SendNotificationMessage;
@@ -86,9 +85,7 @@ public class NotificationsListener implements MessageListener {
 
 			for (SendNotificationMessage item : notifications) {
 
-				String[] typeArray = item.getType().split(",");
-
-				List<String> typeList = Arrays.asList(typeArray);
+				String sendType = item.getType(); 
 
 				event = item.getNotificationEventName();
 
@@ -96,15 +93,13 @@ public class NotificationsListener implements MessageListener {
 
 				for (InfoList info : infoList) {
 
-					for (String sendType : typeList) {
-
-						if (sendType.equals(NotificationEventKeys.EMAIL)) {
+						if (sendType.contains(NotificationEventKeys.EMAIL)) {
 							email = info.getUserMail();
 
 							NotificationUtils.sendEmailNotification(item, email);
 
 						}
-						if (sendType.equals(NotificationEventKeys.INBOX)) {
+						if (sendType.contains(NotificationEventKeys.INBOX)) {
 
 							group = info.getGroup();
 
@@ -116,11 +111,11 @@ public class NotificationsListener implements MessageListener {
 
 							NotificationUtils.addUserNotificationEvent(item, payloadJSON, userId);
 						}
-						if (sendType.equals(NotificationEventKeys.SMS)) {
+						if (sendType.contains(NotificationEventKeys.SMS)) {
 							phone = info.getUserPhone();
 
 						}
-					}
+					
 				}
 
 			}

@@ -58,7 +58,7 @@ public class NotificationEventKeys {
 	public static final String GROUP1 = "/xu-ly-ho-so";
 	public static final String GROUP2 = "/quan-ly-ho-so";
 	public static final String GROUP3 = "/yeu-cau-thanh-toan";
-	public static final String GROUP4 = "";
+	public static final String GROUP4 = "/quan-ly-thu-phi";
 	
 	public static final String SMS = "SMS";
 	public static final String EMAIL = "EMAIL";

@@ -23,31 +23,39 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import org.opencps.accountmgt.model.Business;
+import org.opencps.accountmgt.model.Citizen;
 import org.opencps.backend.message.SendToBackOfficeMsg;
 import org.opencps.backend.message.SendToEngineMsg;
 import org.opencps.backend.util.BackendUtils;
 import org.opencps.backend.util.DossierNoGenerator;
 import org.opencps.backend.util.KeypayUrlGenerator;
 import org.opencps.backend.util.PaymentRequestGenerator;
+import org.opencps.dossiermgt.bean.AccountBean;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierLog;
 import org.opencps.dossiermgt.model.ServiceConfig;
 import org.opencps.dossiermgt.service.DossierLogLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
 import org.opencps.dossiermgt.util.ActorBean;
+import org.opencps.notificationmgt.message.SendNotificationMessage;
+import org.opencps.notificationmgt.utils.NotificationEventKeys;
 import org.opencps.paymentmgt.model.PaymentFile;
+import org.opencps.paymentmgt.model.impl.PaymentFileImpl;
 import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.model.ProcessStep;
 import org.opencps.processmgt.model.ProcessWorkflow;
+import org.opencps.processmgt.model.impl.ProcessStepImpl;
 import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
-import org.opencps.processmgt.service.SchedulerJobsLocalServiceUtil;
 import org.opencps.processmgt.util.ProcessMgtUtil;
+import org.opencps.util.AccountUtil;
 import org.opencps.util.PortletConstants;
 import org.opencps.util.WebKeys;
 
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
@@ -75,7 +83,11 @@ public class BackOfficeProcessEngine implements MessageListener {
 		SendToEngineMsg toEngineMsg =
 			(SendToEngineMsg) message.get("msgToEngine");
 		
-
+		List<SendNotificationMessage> lsNotification = new ArrayList<SendNotificationMessage>();
+		
+		List<String> employEvents = new ArrayList<String>();
+		List<String> citizenEvents = new ArrayList<String>();
+		
 		String actionName = StringPool.BLANK;
 		String stepName = StringPool.BLANK;
 		ProcessOrder processOrder = null;
@@ -224,31 +236,92 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 				processStepId = processWorkflow.getPostProcessStepId();
 
+				long changeStepId = processWorkflow.getPostProcessStepId();
+
+				ProcessStep changeStep =
+								ProcessStepLocalServiceUtil.getProcessStep(changeStepId);
+				
+				ProcessStep currStep = new ProcessStepImpl();
+				
 				if (curStepId != 0) {
 					stepName =
 						ProcessStepLocalServiceUtil.fetchProcessStep(curStepId).getStepName();
+				} 
+				
+				// Add noti's events
+				
+				if(changeStep.getDossierStatus().contains(PortletConstants.DOSSIER_STATUS_RECEIVING)) {
+					// dossier receiving
+					employEvents.add(NotificationEventKeys.OFFICIALS.EVENT1);
+					
+					citizenEvents.add(NotificationEventKeys.USERS_AND_ENTERPRISE.EVENT1);
+				}
+				
+				if (currStep.getDossierStatus().contains(PortletConstants.DOSSIER_STATUS_WAITING)) {
+					// Dossier add new documents
+					employEvents.add(NotificationEventKeys.OFFICIALS.EVENT2);
 				}
 
-				long changeStepId = processWorkflow.getPostProcessStepId();
+				if ((Validator.isNotNull(currStep.getDossierStatus()) ||
+				    !currStep.getDossierStatus().contains(
+				        PortletConstants.DOSSIER_STATUS_WAITING) || !currStep.getDossierStatus().contains(
+				    PortletConstants.DOSSIER_STATUS_RECEIVING)) &&
+				    changeStep.getDossierStatus().contains(
+				        PortletConstants.DOSSIER_STATUS_PROCESSING)) {
+					
+					employEvents.add(NotificationEventKeys.OFFICIALS.EVENT6);
+				}
+				
+				if (currStep.getDossierStatus().contains(
+				    PortletConstants.DOSSIER_STATUS_RECEIVING) &&
+				    changeStep.getDossierStatus().contains(
+				        PortletConstants.DOSSIER_STATUS_PROCESSING)) {
+
+					citizenEvents.add(NotificationEventKeys.USERS_AND_ENTERPRISE.EVENT2);
+
+				}
+				
+				if (currStep.getDossierStatus().contains(
+				    PortletConstants.DOSSIER_STATUS_RECEIVING) &&
+				    !changeStep.getDossierStatus().contains(
+				        PortletConstants.DOSSIER_STATUS_PROCESSING)) {
+
+					citizenEvents.add(NotificationEventKeys.USERS_AND_ENTERPRISE.EVENT3);
+
+				}
+				
+				if (changeStep.getDossierStatus().contains(
+				    PortletConstants.DOSSIER_STATUS_WAITING)) {
+
+					citizenEvents.add(NotificationEventKeys.USERS_AND_ENTERPRISE.EVENT4);
+
+				}
+				
+				if (changeStep.getDossierStatus().contains(
+				    PortletConstants.DOSSIER_STATUS_DONE)) {
+
+					citizenEvents.add(NotificationEventKeys.USERS_AND_ENTERPRISE.EVENT6);
+
+				}
+
 
 				String changeStatus = StringPool.BLANK;
-				
+
 				boolean isResubmit = false;
 
 				if (changeStepId != 0) {
-					ProcessStep changeStep =
-						ProcessStepLocalServiceUtil.getProcessStep(changeStepId);
 					
 					//Set Receive Date
 					
-					if (changeStep.getDossierStatus().contains("processing")) {
+					if (currStep.getDossierStatus().contains(
+					    PortletConstants.DOSSIER_STATUS_RECEIVING) &&
+					    changeStep.getDossierStatus().contains("processing")) {
 						toBackOffice.setReceiveDatetime(new Date());
 					}
 
 					if (Validator.isNotNull(changeStep)) {
 						changeStatus = changeStep.getDossierStatus();
 						
-
 						if (Validator.equals(
 						    changeStep.getDossierStatus(),
 						    PortletConstants.DOSSIER_STATUS_WAITING)) {
@@ -256,14 +329,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 							isResubmit = true;
 						}
 						
-/*
-						// Get AutoEvent of change step
-						_updateSchedulerJob(
-							processStepId, serviceProcessId,
-							processOrder.getDossierId(),
-							processOrder.getFileGroupId());*/
 					}
-
 				}
 				else {
 					changeStatus = PortletConstants.DOSSIER_STATUS_DONE;
@@ -352,6 +418,8 @@ public class BackOfficeProcessEngine implements MessageListener {
 				
 				boolean isPayment = false;
 				
+				PaymentFile paymentFile = new PaymentFileImpl();
+				
 				// Update Paying
 				if (processWorkflow.getRequestPayment()) {
 
@@ -372,7 +440,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 						(paymentMessages.size() != 0)
 							? paymentMessages.get(0) : StringPool.BLANK;
 
-					PaymentFile paymentFile =
+					paymentFile =
 						PaymentFileLocalServiceUtil.addPaymentFile(
 							toEngineMsg.getDossierId(),
 							toEngineMsg.getFileGroupId(), ownerUserId,
@@ -390,6 +458,9 @@ public class BackOfficeProcessEngine implements MessageListener {
 								toEngineMsg.getDossierId());
 
 					}
+					
+					citizenEvents.add(NotificationEventKeys.USERS_AND_ENTERPRISE.EVENT5);
+
 					
 					isPayment = true;
 
@@ -426,7 +497,16 @@ public class BackOfficeProcessEngine implements MessageListener {
 				toBackOffice.setEstimateDatetime(toEngineMsg.getEstimateDatetime());
 				toBackOffice.setReceiveDatetime(toEngineMsg.getReceiveDate());
 				
-				_log.error("ESSSSSSSSSSSTIME__DATE" + toEngineMsg.getEstimateDatetime());
+				lsNotification =
+							    getListNoties(
+							        citizenEvents, employEvents, dossier.getUserId(), dossier.getUserId(),
+							        assignToUserId, processWorkflow, dossier.getDossierId(), paymentFile.getPaymentFileId() ,
+							        processOrderId);
+				
+				_log.info("%%%%%%%%%%%%% LIST ::::::" + lsNotification.size());
+				
+				toBackOffice.setListNotifications(lsNotification);
+
 
 				Message sendToBackOffice = new Message();
 
@@ -434,6 +514,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 				MessageBusUtil.sendMessage(
 					"opencps/backoffice/out/destination", sendToBackOffice);
+				
 
 			}
 			else {
@@ -447,14 +528,31 @@ public class BackOfficeProcessEngine implements MessageListener {
 				toBackOffice.setReceptionNo(toEngineMsg.getReceptionNo());
 				toBackOffice.setUserActorAction(toEngineMsg.getActionUserId());
 				toBackOffice.setStepName(stepName);
+				
+				citizenEvents.add(NotificationEventKeys.ADMINTRATOR.EVENT1);
 
+				lsNotification =
+							    getListNoties(
+							        citizenEvents, employEvents, dossier.getUserId(), dossier.getUserId(),
+							        assignToUserId, processWorkflow, dossier.getDossierId(), 0 ,
+							        processOrderId);
+				
+				
+				
+				toBackOffice.setListNotifications(lsNotification);
+				
 				Message sendToBackOffice = new Message();
 
 				sendToBackOffice.put("toBackOffice", toBackOffice);
-
+				
+				
 				MessageBusUtil.sendMessage(
 					"opencps/backoffice/out/destination", sendToBackOffice);
+				
+
 			}
+			
+
 
 		}
 		catch (Exception e) {
@@ -462,76 +560,97 @@ public class BackOfficeProcessEngine implements MessageListener {
 		}
 	}
 
-	/**
-	 * @param processStepId
-	 * @param serviceProcessId
-	 * @param dossierId
-	 * @param fileGroupId
-	 */
-	private void _updateSchedulerJob(
-		long processStepId, long serviceProcessId, long dossierId,
-		long fileGroupId) {
+	
+	public List<SendNotificationMessage> getListNoties(
+	    List<String> citizenEvents, List<String> employEvents,
+	    long citizenUserId, long groupId, long assignToUserId,
+	    ProcessWorkflow processWorkflow, long dossierId, long paymentFileId,
+	    long processOrderId) {
 
-		List<ProcessWorkflow> ls = new ArrayList<ProcessWorkflow>();
+		List<SendNotificationMessage> ls =
+		    new ArrayList<SendNotificationMessage>();
 
-		try {
-			ls =
-				ProcessWorkflowLocalServiceUtil.findInScheduler(
-					processStepId, serviceProcessId);
+		List<SendNotificationMessage.InfoList> infoCitizens =
+		    new ArrayList<SendNotificationMessage.InfoList>();
+		List<SendNotificationMessage.InfoList> infoEmploys =
+		    new ArrayList<SendNotificationMessage.InfoList>();
 
-			for (ProcessWorkflow processWorkflow : ls) {
-				SchedulerJobsLocalServiceUtil.addScheduler(
-					dossierId, fileGroupId,
-					processWorkflow.getProcessWorkflowId(),
-					_getSchedulerType(processWorkflow.getAutoEvent()), 0,
-					processWorkflow.getPreCondition());
+		List<SendNotificationMessage.InfoList> employInfoList =
+		    new ArrayList<SendNotificationMessage.InfoList>();
+
+		AccountBean accountBean =
+		    AccountUtil.getAccountBean(citizenUserId, groupId, null);
+
+		Citizen citizen = null;
+		Business bussines = null;
+
+		if (accountBean.isCitizen()) {
+			citizen = (Citizen) accountBean.getAccountInstance();
+		}
+		if (accountBean.isBusiness()) {
+			bussines = (Business) accountBean.getAccountInstance();
+		}
+
+		for (String event : citizenEvents) {
+			
+			_log.info("INFORRRRRRRRRRRRRRR + " + event);
+			
+			SendNotificationMessage notiMsg = new SendNotificationMessage();
+
+			notiMsg.setDossierId(dossierId);
+			notiMsg.setNotificationEventName(event);
+			notiMsg.setProcessOrderId(processOrderId);
+			notiMsg.setType("SMS, INBOX, EMAIL");
+
+			SendNotificationMessage.InfoList info =
+			    new SendNotificationMessage.InfoList();
+
+			List<SendNotificationMessage.InfoList> infoList =
+			    new ArrayList<SendNotificationMessage.InfoList>();
+
+			infoList.add(info);
+
+			notiMsg.setInfoList(infoList);
+
+			if (Validator.isNotNull(citizen)) {
+				info.setUserId(citizen.getUserId());
+				info.setUserMail(citizen.getEmail());
+				info.setUserPhone(citizen.getTelNo());
+
 			}
 
-		}
-		catch (Exception e) {
+			if (Validator.isNotNull(bussines)) {
+				info.setUserId(bussines.getUserId());
+				info.setUserMail(bussines.getEmail());
+				info.setUserPhone(bussines.getTelNo());
+
+			}
+
+			if (event.contains(NotificationEventKeys.USERS_AND_ENTERPRISE.EVENT5)) {
+				info.setGroup(NotificationEventKeys.GROUP3);
+				Locale vnLocale = new Locale("vi", "VN");
+
+				notiMsg.setNotificationContent(LanguageUtil.get(
+				    vnLocale, "phieu-yeu-cau-thanh-toan"));
+
+			}
+			else {
+				info.setGroup(NotificationEventKeys.GROUP2);
+				notiMsg.setNotificationContent(processWorkflow.getActionName());
+
+			}
+			
+			ls.add(notiMsg);
 
 		}
+
+		for (String employEvent : employEvents) {
+
+		}
+
+		return ls;
 	}
-
-	/**
-	 * @param autoEvent
-	 * @return
-	 */
-	private int _getSchedulerType(String autoEvent) {
-
-		int type = 0;
-
-		switch (autoEvent) {
-		case WebKeys.AUTO_EVENT_MINUTELY:
-			type = 1;
-
-			break;
-		case WebKeys.AUTO_EVENT_5_MINUTELY:
-			type = 2;
-
-			break;
-		case WebKeys.AUTO_EVENT_HOURLY:
-			type = 3;
-
-			break;
-		case WebKeys.AUTO_EVENT_DAILY:
-			type = 4;
-
-			break;
-
-		case WebKeys.AUTO_EVENT_WEEKLY:
-			type = 5;
-
-			break;
-
-		default:
-			break;
-		}
-
-		return type;
-
-	}
-
+	
 	private Log _log = LogFactoryUtil.getLog(BackOfficeProcessEngine.class);
 
 }
