@@ -17,7 +17,6 @@
  */
 %>
 
-<%@page import="org.opencps.util.PortletUtil"%>
 <%@ include file="init.jsp" %>
 
 <liferay-ui:success key="potlet-config-saved" message="portlet-configuration-have-been-successfully-saved" />
