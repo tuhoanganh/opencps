@@ -108,7 +108,7 @@ public class NotificationsListener implements MessageListener {
 
 							group = info.getGroup();
 
-							int userId = Integer.parseInt(info.getUserId());
+							long userId = info.getUserId();
 
 							JSONArray payloadJSON =
 								NotificationUtils.createNotification(

@@ -34,6 +34,8 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String P26_SUBMIT_ONLINE = "26_WAR_opencpsportlet";
 
 	public static final String PAYMENT_MGT_PORTLET = "20_WAR_opencpsportlet";
+	
+	public static final String PAYMENT_MANAGER_PORTLET = "22_WAR_opencpsportlet";
 
 	public static final String PROCESS_ORDER_PORTLET = "16_WAR_opencpsportlet";
 	
