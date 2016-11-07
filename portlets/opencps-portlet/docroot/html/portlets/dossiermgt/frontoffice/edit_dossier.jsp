@@ -425,6 +425,7 @@
 						if(requiredDossierPart.val().toString().length == 0) {
 							location.href = '<%= updateDossierStatusURL %>';
 						} else {
+							A.all('#<portlet:namespace/>fm .cssRequired').addClass('cssRequiredDossierPart-error');
 							alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-required-before-send") %>');
 						}
 					}
