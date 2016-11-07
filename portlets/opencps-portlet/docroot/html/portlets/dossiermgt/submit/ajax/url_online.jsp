@@ -17,6 +17,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+
+<%@page import="com.liferay.portal.kernel.util.Constants"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
+<%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
