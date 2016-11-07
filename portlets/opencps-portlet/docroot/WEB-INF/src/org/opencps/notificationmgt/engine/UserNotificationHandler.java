@@ -88,6 +88,11 @@ public class UserNotificationHandler extends BaseUserNotificationHandler {
 		
 		String viewURL = StringPool.BLANK;
 		
+		JSONObject jsonObject =
+						JSONFactoryUtil.createJSONObject(userNotificationEvent.getPayload());
+		
+		viewURL = jsonObject.getString("linkTo");
+		
 		return viewURL;
 	}
 }
