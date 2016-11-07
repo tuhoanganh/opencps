@@ -152,6 +152,8 @@
 	
 		<aui:model-context bean='<%=citizenValidate %>' model='<%=Citizen.class %>'/>
 		<aui:input name="citizenRegStep_cfg" value="<%=citizenRegStep_cfg %>" type="hidden"></aui:input>
+		
+		<aui:input name="citizenEmailConfirmToAdmin" value="<%=emailConfirmToAdmin %>" type="hidden"></aui:input>
 			
 		<div class="register-content">
 		
@@ -160,16 +162,32 @@
 					<aui:col width="30" cssClass="title-text">
 						<label ><liferay-ui:message key="register"></liferay-ui:message></label>
 					</aui:col>
-					<aui:col width="30" cssClass="register-options">
-						<aui:row>
-							<aui:col width="50">
-								<aui:input type="radio" name="typeOfRegister" value="citizen" inlineLabel="right" label="citizen" checked="true"/>
-							</aui:col>
-							<aui:col width="50">
-								<aui:input type="radio" name="typeOfRegister" value="business" inlineLabel="right" label="business"/>
-							</aui:col>
-						</aui:row>
-					</aui:col>
+					<c:choose>
+					<c:when test='<%=allowBussinessRegistration && allowCitizenRegistration %>'>
+						<aui:col width="30" cssClass="register-options">
+							<aui:row>
+								<aui:col width="50">
+									<aui:input type="radio" name="typeOfRegister" value="citizen" inlineLabel="right" label="citizen" checked="true"/>
+								</aui:col>
+								<aui:col width="50">
+									<aui:input type="radio" name="typeOfRegister" value="business" inlineLabel="right" label="business"/>
+								</aui:col>
+							</aui:row>
+						</aui:col>	
+					</c:when>
+					<c:otherwise>
+						<aui:col width="30" cssClass="register-options">
+							<aui:row>
+								<aui:col width="50">
+									<aui:input type="radio" name="typeOfRegister" disabled="true" value="citizen" inlineLabel="right" label="citizen" checked="true"/>
+								</aui:col>
+								<aui:col width="50">
+									<aui:input type="radio" name="typeOfRegister" disabled="true" value="business" inlineLabel="right" label="business"/>
+								</aui:col>
+							</aui:row>
+						</aui:col>	
+					</c:otherwise>
+					</c:choose>
 					<aui:col width="30" cssClass="login-redirect">
 						<a href='<%=themeDisplay.getURLSignIn() %>'><liferay-ui:message key="login" /></a>
 					</aui:col>
@@ -292,7 +310,7 @@
 					<aui:input 
 						name="<%=CitizenDisplayTerms.CITIZEN_ADDRESS %>" 
 						cssClass="input100"
-						placeholder="<%=CitizenDisplayTerms.CITIZEN_ADDRESS %>"
+						placeholder="address-place-holder"
 					>
 						<aui:validator name="maxLength">255</aui:validator>
 						<aui:validator name="required"/>
