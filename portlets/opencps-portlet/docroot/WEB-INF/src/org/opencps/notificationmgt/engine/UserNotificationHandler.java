@@ -32,6 +32,7 @@ import com.liferay.portal.kernel.notifications.BaseUserNotificationHandler;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.LiferayPortletURL;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.UserNotificationEvent;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
@@ -62,16 +63,7 @@ public class UserNotificationHandler extends BaseUserNotificationHandler {
 
 		String title = jsonObject.getString("title");
 		String bodyText = jsonObject.getString("notificationText");
-
-		LiferayPortletResponse liferayPortletResponse = serviceContext.getLiferayPortletResponse();
-
-		PortletURL redirectUrl =
-			liferayPortletResponse.createActionURL(UserNotificationHandler.PORTLET_ID);
-
-		redirectUrl.setParameter(ActionRequest.ACTION_NAME, "doSomethingGood");
-		redirectUrl.setParameter("dossierId", jsonObject.getString("dossierId"));
-		redirectUrl.setParameter("userNotificationEventId",String.valueOf(userNotificationEvent.getUserNotificationEventId()));
-		redirectUrl.setWindowState(WindowState.NORMAL);
+		
 
 
 		String body = StringUtil.replace(getBodyTemplate(), new String[] {
@@ -93,38 +85,14 @@ public class UserNotificationHandler extends BaseUserNotificationHandler {
 	@Override
 	protected String getLink(UserNotificationEvent userNotificationEvent,
 			ServiceContext serviceContext) throws Exception {
- 
-		JSONObject jsonObject = JSONFactoryUtil
-				.createJSONObject(userNotificationEvent.getPayload());
 		
-		LiferayPortletResponse liferayPortletResponse = serviceContext
-				.getLiferayPortletResponse();
+		String viewURL = StringPool.BLANK;
 		
-		LiferayPortletURL viewURL = null;
+		JSONObject jsonObject =
+						JSONFactoryUtil.createJSONObject(userNotificationEvent.getPayload());
 		
-		String friendlyType = jsonObject.getString("friendlyUrl");
-		long plId = 0;
+		viewURL = jsonObject.getString("linkTo");
 		
-		if(friendlyType.equals(NotificationEventKeys.GROUP1)){
-			
-			plId = LayoutLocalServiceUtil.getFriendlyURLLayout(20182, true, friendlyType).getPlid();
-			
-			_log.info("plId:"+plId);
-			
-//			long processOrderId = 17003;
-			
-			
-			viewURL = liferayPortletResponse.createRenderURL(WebKeys.PROCESS_ORDER_PORTLET);;
-			viewURL.setParameter("mvcPath", "/html/portlets/processmgt/processorder/process_order_detail.jsp");
-			viewURL.setParameter("processOrderId", jsonObject.getString("processOrderId"));
-			viewURL.setParameter("backURL", "/group/guest/"+String.valueOf(friendlyType));
-			viewURL.setParameter("isEditDossier", String.valueOf(true));
-			viewURL.setPlid(plId);
-			viewURL.setWindowState(WindowState.NORMAL);
-			
-		}else if(friendlyType.equals(NotificationEventKeys.GROUP2)){
-			
-		}
-		return viewURL.toString();
+		return viewURL;
 	}
 }

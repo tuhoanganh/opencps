@@ -66,15 +66,15 @@ public class NotificationUtils {
 	private static Log _log = LogFactoryUtil.getLog(NotificationUtils.class);
 
 	public static void addUserNotificationEvent(
-		SendNotificationMessage message, JSONArray payloadJSON, int userIdDelivery) {
+		SendNotificationMessage message, JSONArray payloadJSON, long userIdDelivery) {
 
 		try {
 
 			ServiceContext serviceContext = new ServiceContext();
 
 			UserNotificationEventLocalServiceUtil.addUserNotificationEvent(
-				Long.valueOf(userIdDelivery), UserNotificationHandler.PORTLET_ID,
-				(new Date()).getTime(), 0, payloadJSON.toString(), false, serviceContext);
+				userIdDelivery, UserNotificationHandler.PORTLET_ID, (new Date()).getTime(), 0,
+				payloadJSON.toString(), false, serviceContext);
 
 		}
 		catch (Exception e) {
@@ -83,7 +83,7 @@ public class NotificationUtils {
 	}
 
 	public static JSONArray createNotification(
-		SendNotificationMessage message, String event, String group, int userIdDelivery,
+		SendNotificationMessage message, String event, String group, long userIdDelivery,
 		boolean privatePage) {
 
 		JSONArray payloadJSONArray = JSONFactoryUtil.createJSONArray();
@@ -93,7 +93,7 @@ public class NotificationUtils {
 		try {
 
 			ProcessOrder processOrder =
-				ProcessOrderLocalServiceUtil.getProcessOrder(Long.parseLong(message.getProcessOrderId()));
+				ProcessOrderLocalServiceUtil.getProcessOrder(message.getProcessOrderId());
 
 			String title = StringPool.BLANK;
 			title = LanguageUtil.get(locale, event) + "[" + processOrder.getDossierId() + "]";
@@ -168,6 +168,29 @@ public class NotificationUtils {
 				payloadJSONObject.put("linkTo", viewURL.toString());
 
 			}
+			else if (group.equals(NotificationEventKeys.GROUP4)) {
+
+				plId = LayoutLocalServiceUtil.getFriendlyURLLayout(20182, true, group).getPlid();
+
+				PaymentFile paymentFile =
+					PaymentFileLocalServiceUtil.getPaymentFile(processOrder.getDossierId());
+
+				LiferayPortletURL viewURL =
+					liferayPortletResponse.createRenderURL(WebKeys.PAYMENT_MANAGER_PORTLET);
+				viewURL.setParameter(
+					"mvcPath", "/html/portlets/paymentmgt/backoffice/backofficepaymentdetail.jsp");
+				viewURL.setParameter(
+					PaymentFileDisplayTerms.PAYMENT_FILE_ID,
+					String.valueOf(paymentFile.getPaymentFileId()));
+				viewURL.setParameter(Constants.CMD, Constants.VIEW);
+				viewURL.setParameter(WebKeys.REDIRECT_URL, "/group/guest");
+				viewURL.setPlid(plId);
+				viewURL.setWindowState(WindowState.NORMAL);
+
+				payloadJSONObject.put("paymentFileId", message.getPaymentFileId());
+				payloadJSONObject.put("linkTo", viewURL.toString());
+
+			}
 			payloadJSONObject.put("userIdDelivery", userIdDelivery);
 			payloadJSONObject.put("title", title);
 			payloadJSONObject.put("notificationText", message.getNotificationContent());
@@ -199,7 +222,7 @@ public class NotificationUtils {
 		subject = PortletPropsValues.SUBJECT_TO_CUSTOMER;
 		body = PortletPropsValues.CONTENT_TO_CUSTOMER;
 
-		body = StringUtil.replace(body, "{receptionNo}", message.getDossierId());
+		body = StringUtil.replace(body, "{receptionNo}", String.valueOf(message.getDossierId()));
 		body =
 			StringUtil.replace(
 				body, "{event}", LanguageUtil.get(locale, message.getNotificationEventName()));
