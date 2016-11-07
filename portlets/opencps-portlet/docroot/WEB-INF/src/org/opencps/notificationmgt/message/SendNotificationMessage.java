@@ -96,7 +96,13 @@ public class SendNotificationMessage {
         return notificationEventName;
     }
 
-    /**
+    
+    public void setInfoList(List<SendNotificationMessage.InfoList> infoList) {
+    
+    	this.infoList = infoList;
+    }
+
+	/**
      * Sets the value of the notificationEventName property.
      * 
      * @param value
@@ -289,6 +295,7 @@ public class SendNotificationMessage {
         "group",
         "plid"
     })
+    
     public static class InfoList {
 
         @XmlElement(name = "UserId", required = true)
