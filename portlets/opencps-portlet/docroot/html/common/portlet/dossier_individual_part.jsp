@@ -1,3 +1,4 @@
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -16,16 +17,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-<%@page import="org.opencps.dossiermgt.service.FileGroupLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.model.FileGroup"%>
-<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
-<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
-<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
-<%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
+<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
+<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
+<%@page import="org.opencps.dossiermgt.model.FileGroup"%>
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
-<%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
+<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.service.FileGroupLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
+<%@page import="org.opencps.util.PortletUtil"%>
 
 <%@ include file="/init.jsp"%>
 
@@ -55,6 +57,8 @@
 				FileGroup fileGroup = FileGroupLocalServiceUtil.getFileGroup(fileGroupId);
 			
 				List<DossierPart> dossierParts = DossierMgtUtil.getTreeDossierPart(dossierPartId);
+				
+				List<Long> requiredDossierPartIds = new ArrayList<Long>();
 			
 				for(DossierPart dossierPart : dossierParts){
 					
@@ -77,12 +81,15 @@
 						}catch(Exception e){}
 					}
 					
+					requiredDossierPartIds = PortletUtil.getDossierPartRequired(requiredDossierPartIds, dossierParts.get(0), 
+							dossierPart, dossierFile);
+					
 					cssRequiredPage = dossierPart.getRequired() ? "cssRequired" : StringPool.BLANK;
 					
 					urlDownload = DossierMgtUtil.getURLDownloadTemplateFile(themeDisplay, dossierPart.getTemplateFileNo());
 					
 					%>
-						<div class='<%="opencps dossiermgt dossier-part-row r-" + index%>'>
+						<div class='<%="opencps dossiermgt dossier-part-row r-" + index + StringPool.SPACE + "dpid-" + String.valueOf(dossierPart.getDossierpartId())%>'>
 							<span class='<%="level-" + level + " opencps dossiermgt dossier-part"%>'>
 								<span class="row-icon">
 								
@@ -174,6 +181,10 @@
 					<%
 					index++;
 				}
+				
+				%>
+					<aui:input name="requiredDossierPart" type="hidden" value="<%= StringUtil.merge(requiredDossierPartIds) %>"/>
+				<%
 			%>
 		</c:when>
 		<c:otherwise>
