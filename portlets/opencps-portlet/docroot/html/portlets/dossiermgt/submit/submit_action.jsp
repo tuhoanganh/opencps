@@ -18,6 +18,7 @@
 %>
 <%@page import="com.liferay.portal.kernel.dao.search.ResultRow"%>
 <%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
+
 <%@ include file="init.jsp"%>
 <%
 	ResultRow row =

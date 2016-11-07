@@ -1,5 +1,4 @@
-<%@page import="org.opencps.util.PortletPropsValues"%>
-<%@page import="org.opencps.util.PortletUtil"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -18,17 +17,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-<%@ include file="init.jsp"%>
+
 <%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
 <%@page import="org.opencps.util.DictItemUtil"%>
 <%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
-<%@page import="javax.portlet.PortletURL"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
-<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
-<%@page import="java.util.List"%>
-<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
+
+<%@ include file="init.jsp"%>
+
 <liferay-util:include page='<%= templatePath + "toolbar.jsp"%>' servletContext="<%=application %>" />
 <%
 	String administrationCode = ParamUtil.getString(request, "administrationCode");
