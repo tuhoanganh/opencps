@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
+
 package org.opencps.notificationmgt.utils;
 
 import java.util.ArrayList;
@@ -35,6 +36,8 @@ import org.opencps.processmgt.search.ProcessOrderDisplayTerms;
 import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
 import org.opencps.util.MessageBusKeys;
 import org.opencps.util.PortletConstants;
+import org.opencps.util.PortletPropsValues;
+import org.opencps.util.SendMailUtils;
 import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.json.JSONArray;
@@ -49,6 +52,7 @@ import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.LiferayPortletURL;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
@@ -58,172 +62,203 @@ import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
  */
 
 public class NotificationUtils {
-	
+
 	private static Log _log = LogFactoryUtil.getLog(NotificationUtils.class);
-	
-	public static void addUserNotificationEvent(SendNotificationMessage message,JSONArray payloadJSON,int userIdDelivery){
-		
-		try{
-			
+
+	public static void addUserNotificationEvent(
+		SendNotificationMessage message, JSONArray payloadJSON, int userIdDelivery) {
+
+		try {
+
 			ServiceContext serviceContext = new ServiceContext();
-			
+
 			UserNotificationEventLocalServiceUtil.addUserNotificationEvent(
 				Long.valueOf(userIdDelivery), UserNotificationHandler.PORTLET_ID,
-				(new Date()).getTime(), 0, payloadJSON.toString(), false,
-				serviceContext);
-			
-		
-		}catch(Exception e){
+				(new Date()).getTime(), 0, payloadJSON.toString(), false, serviceContext);
+
+		}
+		catch (Exception e) {
 			_log.error(e);
 		}
 	}
-	
-	public static JSONArray createNotification(SendNotificationMessage message,String event,String group,int userIdDelivery,boolean privatePage){
-		
+
+	public static JSONArray createNotification(
+		SendNotificationMessage message, String event, String group, int userIdDelivery,
+		boolean privatePage) {
+
 		JSONArray payloadJSONArray = JSONFactoryUtil.createJSONArray();
 		JSONObject payloadJSONObject = JSONFactoryUtil.createJSONObject();
 		Locale locale = new Locale("vi", "VN");
-		
-		try{
-			
-			ProcessOrder processOrder = ProcessOrderLocalServiceUtil.getProcessOrder(Long.parseLong(message.getProcessOrderId()));
-			
+
+		try {
+
+			ProcessOrder processOrder =
+				ProcessOrderLocalServiceUtil.getProcessOrder(Long.parseLong(message.getProcessOrderId()));
+
 			String title = StringPool.BLANK;
-			title = LanguageUtil.get(locale, event) + "["+processOrder.getDossierId()+"]";
-			
+			title = LanguageUtil.get(locale, event) + "[" + processOrder.getDossierId() + "]";
+
 			long plId = 0;
-			plId = LayoutLocalServiceUtil.getFriendlyURLLayout(20182, privatePage, group).getPlid();
-			
+
 			ServiceContext serviceContext = new ServiceContext();
-			LiferayPortletResponse liferayPortletResponse = serviceContext.getLiferayPortletResponse();
-			
-			
-			
-			
-			
-				if(group.equals(NotificationEventKeys.GROUP1)){
-	
-					LiferayPortletURL viewURL =liferayPortletResponse.createRenderURL(WebKeys.PROCESS_ORDER_PORTLET);
-					viewURL.setParameter("mvcPath", "/html/portlets/processmgt/processorder/process_order_detail.jsp");
-					viewURL.setParameter(ProcessOrderDisplayTerms.PROCESS_ORDER_ID, String.valueOf(message.getProcessOrderId()));
-					viewURL.setParameter("backURL", "/group/guest"+group);
-					viewURL.setParameter("isEditDossier", String.valueOf(true));
-					viewURL.setPlid(plId);
-					viewURL.setWindowState(WindowState.NORMAL);
-						
-					
-					payloadJSONObject.put("processOrderId",message.getProcessOrderId());
-					payloadJSONObject.put("linkTo",viewURL.toString());
-				
-				}else if(group.equals(NotificationEventKeys.GROUP2)){
-					
-					LiferayPortletURL viewURL =liferayPortletResponse.createRenderURL(WebKeys.DOSSIER_MGT_PORTLET);
-					viewURL.setParameter("mvcPath", "/html/portlets/dossiermgt/frontoffice/edit_dossier.jsp");
-					viewURL.setParameter(DossierDisplayTerms.DOSSIER_ID, String.valueOf(processOrder.getDossierId()));
-					viewURL.setParameter(Constants.CMD, Constants.VIEW);
-					viewURL.setParameter(WebKeys.BACK_URL, "/group/guest/");
-					viewURL.setParameter(WebKeys.REDIRECT_URL, "/group/guest/");
-					viewURL.setParameter("isEditDossier", String.valueOf(false));
-					viewURL.setPlid(plId);
-					viewURL.setWindowState(WindowState.NORMAL);
-					
-					payloadJSONObject.put("dossierId", message.getDossierId());
-					payloadJSONObject.put("linkTo",viewURL.toString());
-					
-				}else if(group.equals(NotificationEventKeys.GROUP3)){
-					
-					PaymentFile paymentFile = PaymentFileLocalServiceUtil.getPaymentFile(processOrder.getDossierId());
-					
-					LiferayPortletURL viewURL =liferayPortletResponse.createRenderURL(WebKeys.PAYMENT_MGT_PORTLET);
-					viewURL.setParameter("mvcPath", "/html/portlets/paymentmgt/frontoffice/frontofficeconfirmbank.jsp");
-					viewURL.setParameter(PaymentFileDisplayTerms.PAYMENT_FILE_ID, String.valueOf(paymentFile.getPaymentFileId()));
-					viewURL.setParameter(Constants.CMD, Constants.VIEW);
-					viewURL.setParameter(WebKeys.BACK_URL, "/group/guest"+group);
-					viewURL.setParameter(WebKeys.REDIRECT_URL, "/group/guest"+group);
-					viewURL.setPlid(plId);
-					viewURL.setWindowState(WindowState.NORMAL);
-					
-					
-					payloadJSONObject.put("paymentFileId", message.getPaymentFileId());
-					payloadJSONObject.put("linkTo",viewURL.toString());
-					
-				}
-				payloadJSONObject.put("userIdDelivery", userIdDelivery);
-				payloadJSONObject.put("title", title);
-				payloadJSONObject.put("notificationText", message.getNotificationContent());
-				payloadJSONObject.put("plId",plId);
-				payloadJSONObject.put("friendlyUrl",group);
-			
-			
-			
-			
+			LiferayPortletResponse liferayPortletResponse =
+				serviceContext.getLiferayPortletResponse();
+
+			if (group.equals(NotificationEventKeys.GROUP1)) {
+
+				plId = LayoutLocalServiceUtil.getFriendlyURLLayout(20182, true, group).getPlid();
+
+				LiferayPortletURL viewURL =
+					liferayPortletResponse.createRenderURL(WebKeys.PROCESS_ORDER_PORTLET);
+				viewURL.setParameter(
+					"mvcPath", "/html/portlets/processmgt/processorder/process_order_detail.jsp");
+				viewURL.setParameter(
+					ProcessOrderDisplayTerms.PROCESS_ORDER_ID,
+					String.valueOf(message.getProcessOrderId()));
+				viewURL.setParameter(WebKeys.BACK_URL, "/group/guest" + group);
+				viewURL.setParameter("isEditDossier", String.valueOf(true));
+				viewURL.setPlid(plId);
+				viewURL.setWindowState(WindowState.NORMAL);
+
+				payloadJSONObject.put("processOrderId", message.getProcessOrderId());
+				payloadJSONObject.put("linkTo", viewURL.toString());
+
+			}
+			else if (group.equals(NotificationEventKeys.GROUP2)) {
+				plId = LayoutLocalServiceUtil.getFriendlyURLLayout(20182, false, group).getPlid();
+
+				LiferayPortletURL viewURL =
+					liferayPortletResponse.createRenderURL(WebKeys.DOSSIER_MGT_PORTLET);
+				viewURL.setParameter(
+					"mvcPath", "/html/portlets/dossiermgt/frontoffice/edit_dossier.jsp");
+				viewURL.setParameter(
+					DossierDisplayTerms.DOSSIER_ID, String.valueOf(processOrder.getDossierId()));
+				viewURL.setParameter(Constants.CMD, Constants.VIEW);
+				viewURL.setParameter(WebKeys.BACK_URL, "/group/guest/");
+				viewURL.setParameter(WebKeys.REDIRECT_URL, "/group/guest/");
+				viewURL.setParameter("isEditDossier", String.valueOf(false));
+				viewURL.setPlid(plId);
+				viewURL.setWindowState(WindowState.NORMAL);
+
+				payloadJSONObject.put("dossierId", message.getDossierId());
+				payloadJSONObject.put("linkTo", viewURL.toString());
+
+			}
+			else if (group.equals(NotificationEventKeys.GROUP3)) {
+
+				plId = LayoutLocalServiceUtil.getFriendlyURLLayout(20182, true, group).getPlid();
+
+				PaymentFile paymentFile =
+					PaymentFileLocalServiceUtil.getPaymentFile(processOrder.getDossierId());
+
+				LiferayPortletURL viewURL =
+					liferayPortletResponse.createRenderURL(WebKeys.PAYMENT_MGT_PORTLET);
+				viewURL.setParameter(
+					"mvcPath", "/html/portlets/paymentmgt/frontoffice/frontofficeconfirmbank.jsp");
+				viewURL.setParameter(
+					PaymentFileDisplayTerms.PAYMENT_FILE_ID,
+					String.valueOf(paymentFile.getPaymentFileId()));
+				viewURL.setParameter(Constants.CMD, Constants.VIEW);
+				viewURL.setParameter(WebKeys.BACK_URL, "/group/guest" + group);
+				viewURL.setParameter(WebKeys.REDIRECT_URL, "/group/guest" + group);
+				viewURL.setPlid(plId);
+				viewURL.setWindowState(WindowState.NORMAL);
+
+				payloadJSONObject.put("paymentFileId", message.getPaymentFileId());
+				payloadJSONObject.put("linkTo", viewURL.toString());
+
+			}
+			payloadJSONObject.put("userIdDelivery", userIdDelivery);
+			payloadJSONObject.put("title", title);
+			payloadJSONObject.put("notificationText", message.getNotificationContent());
+			payloadJSONObject.put("plId", plId);
+			payloadJSONObject.put("friendlyUrl", group);
+
 			payloadJSONArray.put(payloadJSONArray);
-			
-		}catch(Exception e){
+
+		}
+		catch (Exception e) {
 			_log.error(e);
 		}
-		
+
 		return payloadJSONArray;
 	}
-	
-	public static void triggerNotfication (SendToBackOfficeMsg message){
-		
+
+	public static void sendEmailNotification(SendNotificationMessage message, String email) {
+
+		String from = StringPool.BLANK;
+		String to = StringPool.BLANK;
+		String subject = StringPool.BLANK;
+		String body = StringPool.BLANK;
+		boolean htmlFormat = true;
+
+		Locale locale = new Locale("vi", "VN");
+
+		from = PortletPropsValues.SYSTEM_EMAIL;
+		to = email;
+		subject = PortletPropsValues.SUBJECT_TO_CUSTOMER;
+		body = PortletPropsValues.CONTENT_TO_CUSTOMER;
+
+		body = StringUtil.replace(body, "{receptionNo}", message.getDossierId());
+		body =
+			StringUtil.replace(
+				body, "{event}", LanguageUtil.get(locale, message.getNotificationEventName()));
+
+		SendMailUtils.sendEmail(from, to, subject, body, htmlFormat);
+	}
+
+	public static void triggerNotfication(SendToBackOfficeMsg message) {
+
 		String event = message.getDossierStatus();
 		Message commonMessage = new Message();
 		List<SendNotificationMessage> notificationList = new ArrayList<SendNotificationMessage>();
-		
+
 		SendNotificationMessage notification = new SendNotificationMessage();
-		
-		
-		if(event.equals(PortletConstants.DOSSIER_STATUS_NEW)){	
-			
+
+		if (event.equals(PortletConstants.DOSSIER_STATUS_NEW)) {
+
 		}
-		if(event.equals(PortletConstants.DOSSIER_STATUS_RECEIVING)){
-			
+		if (event.equals(PortletConstants.DOSSIER_STATUS_RECEIVING)) {
+
 			notification.setNotificationEventName(NotificationEventKeys.OFFICIALS.EVENT1);
-					
+
 		}
-		if(event.equals(PortletConstants.DOSSIER_STATUS_PAYING)){
-			
-			
+		if (event.equals(PortletConstants.DOSSIER_STATUS_PAYING)) {
+
 		}
-		if(event.equals(PortletConstants.DOSSIER_STATUS_DENIED)){
-			
-			
+		if (event.equals(PortletConstants.DOSSIER_STATUS_DENIED)) {
+
 		}
-		if(event.equals(PortletConstants.DOSSIER_STATUS_RECEIVED)){
-			
+		if (event.equals(PortletConstants.DOSSIER_STATUS_RECEIVED)) {
+
 		}
-		if(event.equals(PortletConstants.DOSSIER_STATUS_PROCESSING)){
-			
+		if (event.equals(PortletConstants.DOSSIER_STATUS_PROCESSING)) {
+
 		}
-		if(event.equals(PortletConstants.DOSSIER_STATUS_CANCELED)){
-			
-			
+		if (event.equals(PortletConstants.DOSSIER_STATUS_CANCELED)) {
+
 		}
-		if(event.equals(PortletConstants.DOSSIER_STATUS_DONE)){
-			
+		if (event.equals(PortletConstants.DOSSIER_STATUS_DONE)) {
+
 		}
-		if(event.equals(PortletConstants.DOSSIER_STATUS_ARCHIVED)){
-			
+		if (event.equals(PortletConstants.DOSSIER_STATUS_ARCHIVED)) {
+
 		}
-		if(event.equals(PortletConstants.DOSSIER_STATUS_ENDED)){
-			
+		if (event.equals(PortletConstants.DOSSIER_STATUS_ENDED)) {
+
 		}
-		if(event.equals(PortletConstants.DOSSIER_STATUS_SYSTEM)){
-			
+		if (event.equals(PortletConstants.DOSSIER_STATUS_SYSTEM)) {
+
 		}
-		if(event.equals(PortletConstants.DOSSIER_STATUS_ERROR)){
+		if (event.equals(PortletConstants.DOSSIER_STATUS_ERROR)) {
 		}
-		
-		
+
 		notificationList.add(notification);
-		
+
 		commonMessage.put(MessageBusKeys.Message.NOTIFICATIONS, notificationList);
-		
-		MessageBusUtil.sendMessage(
-			MessageBusKeys.Destination.NOTIFICATIONS, commonMessage);
-		
+
+		MessageBusUtil.sendMessage(MessageBusKeys.Destination.NOTIFICATIONS, commonMessage);
+
 	}
-	
+
 }
