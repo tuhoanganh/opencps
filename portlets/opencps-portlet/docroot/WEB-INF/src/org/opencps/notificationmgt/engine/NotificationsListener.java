@@ -78,6 +78,7 @@ public class NotificationsListener implements MessageListener {
 			String email = StringPool.BLANK;
 			String phone = StringPool.BLANK;
 			long groupId = 0;
+			long dossierId = 0;
 
 			/*
 			 * 1 notification message co the gui cho nhieu user, 1 user co the
@@ -96,8 +97,9 @@ public class NotificationsListener implements MessageListener {
 
 						if (sendType.contains(NotificationEventKeys.EMAIL)) {
 							email = info.getUserMail();
+							dossierId = item.getDossierId();
 
-							NotificationUtils.sendEmailNotification(item, email);
+							NotificationUtils.sendEmailNotification(item, email,dossierId);
 
 						}
 						if (sendType.contains(NotificationEventKeys.INBOX)) {

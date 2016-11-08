@@ -97,7 +97,6 @@ public class UserNotificationHandler extends BaseUserNotificationHandler {
 		String processOrderId = StringPool.BLANK;
 		String dossierId = StringPool.BLANK;
 		String paymentFileId = StringPool.BLANK;
-		
 
 		LiferayPortletResponse liferayPortletResponse = serviceContext.getLiferayPortletResponse();
 
@@ -109,12 +108,13 @@ public class UserNotificationHandler extends BaseUserNotificationHandler {
 		dossierId = jsonObject.getString("dossierId");
 		paymentFileId = jsonObject.getString("paymentFileId");
 		processOrderId = jsonObject.getString("processOrderId");
-		
+
 		long plId =
 			jsonObject.getString("plId").length() > 0
 				? Long.parseLong(jsonObject.getString("plId")) : 0;
-		long groupId = jsonObject.getString("groupId").length() > 0
-						? Long.parseLong(jsonObject.getString("plId")) : 0;;
+		long groupId =
+			jsonObject.getString("groupId").length() > 0
+				? Long.parseLong(jsonObject.getString("plId")) : 0;;
 
 		LiferayPortletURL viewURL = null;
 		Layout layOut = null;

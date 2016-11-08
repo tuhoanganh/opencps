@@ -20,6 +20,9 @@ package org.opencps.notificationmgt.utils;
 import java.util.Date;
 import java.util.Locale;
 
+import org.opencps.dossiermgt.model.Dossier;
+import org.opencps.dossiermgt.model.impl.DossierImpl;
+import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.notificationmgt.engine.UserNotificationHandler;
 import org.opencps.notificationmgt.message.SendNotificationMessage;
 import org.opencps.processmgt.model.ProcessOrder;
@@ -32,6 +35,8 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.PrefsPropsUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -67,7 +72,7 @@ public class NotificationUtils {
 
 	public static JSONObject createNotification(
 		SendNotificationMessage message, String event, String group, long userIdDelivery,
-		boolean privatePage,long groupId) {
+		boolean privatePage, long groupId) {
 
 		JSONObject payloadJSONObject = JSONFactoryUtil.createJSONObject();
 		Locale locale = new Locale("vi", "VN");
@@ -138,7 +143,8 @@ public class NotificationUtils {
 		return payloadJSONObject;
 	}
 
-	public static void sendEmailNotification(SendNotificationMessage message, String email) {
+	public static void sendEmailNotification(
+		SendNotificationMessage message, String email, long dossierId) {
 
 		String from = StringPool.BLANK;
 		String to = StringPool.BLANK;
@@ -148,17 +154,32 @@ public class NotificationUtils {
 
 		Locale locale = new Locale("vi", "VN");
 
-		from = PortletPropsValues.SYSTEM_EMAIL;
-		to = email;
-		subject = PortletPropsValues.SUBJECT_TO_CUSTOMER;
-		body = PortletPropsValues.CONTENT_TO_CUSTOMER;
+		try {
 
-		body = StringUtil.replace(body, "{receptionNo}", String.valueOf(message.getDossierId()));
-		body =
-			StringUtil.replace(
-				body, "{event}", LanguageUtil.get(locale, message.getNotificationEventName()));
+			Dossier dossier = new DossierImpl();
 
-		SendMailUtils.sendEmail(from, to, subject, body, htmlFormat);
+			if (dossierId > 0) {
+				dossier = DossierLocalServiceUtil.getDossier(dossierId);
+			}
+
+			from =
+				Validator.isNotNull(dossier) ? PrefsPropsUtil.getString(
+					dossier.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_ADDRESS) : StringPool.BLANK;
+			to = "hltn.works@gmail.com";
+			subject = PortletPropsValues.SUBJECT_TO_CUSTOMER;
+			body = PortletPropsValues.CONTENT_TO_CUSTOMER;
+
+			body =
+				StringUtil.replace(body, "{receptionNo}", String.valueOf(message.getDossierId()));
+			body =
+				StringUtil.replace(
+					body, "{event}", LanguageUtil.get(locale, message.getNotificationEventName()));
+
+			SendMailUtils.sendEmail(from, to, subject, body, htmlFormat);
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
 	}
 
 }
