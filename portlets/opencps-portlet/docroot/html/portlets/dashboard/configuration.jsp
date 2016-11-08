@@ -1,4 +1,6 @@
 
+<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
+<%@page import="javax.portlet.PortletRequest"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
@@ -64,6 +66,7 @@
 	<aui:select name="dashBoardCFGType" id="dashBoardCFGType" onChange="DashBoardPickType();">
 		<aui:option value=""></aui:option>
 		<aui:option value="linh_vuc_thu_tuc">linh_vuc_thu_tuc</aui:option>
+		<aui:option value="home_linh_vuc">home_linh_vuc</aui:option>
 	</aui:select>
 	
 	<div id="<portlet:namespace />is-hidden-cfg">
@@ -84,6 +87,14 @@
 		
 		Liferay.provide(window, 'DashBoardPickType', function(e) {
 			console.log("DashBoardPickType");
+			console.log($(e).val());
+// 			var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DASHBOARD_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
+// 			portletURL.setParameter("mvcPath", "/html/column_table_style_config.jsp");
+// 			portletURL.setParameter("tableViewHtml", currentViewBB.html());
+// 			portletURL.setParameter("viewBBID", viewBBID);
+// 			portletURL.setWindowState('<%=LiferayWindowState.POP_UP.toString() %>'); 
+// 			portletURL.setPortletMode('view');
+			
 			$("#<portlet:namespace />is-hidden-cfg").load( '<%= newLinhVucThuTucURL %>', function () {
 				
 				selector: '#<portlet:namespace />is-hidden-cfg > .lfr-search-container'
