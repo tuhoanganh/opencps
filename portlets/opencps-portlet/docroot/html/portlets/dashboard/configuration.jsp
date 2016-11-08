@@ -63,7 +63,7 @@
 
 <aui:form action="<%= configurationActionURL %>" method="post" name="configurationForm">
 	
-	<aui:select name="dashBoardCFGType" id="dashBoardCFGType" onChange="DashBoardPickType();">
+	<aui:select name="dashBoardCFGType" id="dashBoardCFGType" onChange="DashBoardPickType(this);">
 		<aui:option value=""></aui:option>
 		<aui:option value="linh_vuc_thu_tuc">linh_vuc_thu_tuc</aui:option>
 		<aui:option value="home_linh_vuc">home_linh_vuc</aui:option>
@@ -77,25 +77,18 @@
 
 
 </aui:form>
-<liferay-portlet:renderURL var="newLinhVucThuTucURL" portletName="<%=WebKeys.DASHBOARD_PORTLET %>" windowState="<%=LiferayWindowState.EXCLUSIVE.toString() %>">
-	<liferay-portlet:param name="mvcPath" value="/html/portlets/dashboard/linh_vuc_thu_tuc/view_cfg.jsp" />
-</liferay-portlet:renderURL>
 
 <aui:script>
 	
 	AUI().ready(function(A) {
 		
 		Liferay.provide(window, 'DashBoardPickType', function(e) {
-			console.log("DashBoardPickType");
-			console.log($(e).val());
-// 			var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DASHBOARD_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
-// 			portletURL.setParameter("mvcPath", "/html/column_table_style_config.jsp");
-// 			portletURL.setParameter("tableViewHtml", currentViewBB.html());
-// 			portletURL.setParameter("viewBBID", viewBBID);
-// 			portletURL.setWindowState('<%=LiferayWindowState.POP_UP.toString() %>'); 
-// 			portletURL.setPortletMode('view');
+			var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DASHBOARD_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
+			portletURL.setParameter("mvcPath", "/html/portlets/dashboard/"+$(e).val()+"/view_cfg.jsp");
+			portletURL.setWindowState('<%=LiferayWindowState.EXCLUSIVE.toString() %>'); 
+			portletURL.setPortletMode('view');
 			
-			$("#<portlet:namespace />is-hidden-cfg").load( '<%= newLinhVucThuTucURL %>', function () {
+			$("#<portlet:namespace />is-hidden-cfg").load( portletURL.toString(), function () {
 				
 				selector: '#<portlet:namespace />is-hidden-cfg > .lfr-search-container'
 				
