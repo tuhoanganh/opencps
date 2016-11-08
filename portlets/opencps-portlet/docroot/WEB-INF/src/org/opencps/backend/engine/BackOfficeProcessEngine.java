@@ -51,6 +51,8 @@ import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
 import org.opencps.processmgt.util.ProcessMgtUtil;
+import org.opencps.processmgt.util.ProcessUtils;
+import org.opencps.usermgt.model.Employee;
 import org.opencps.util.AccountUtil;
 import org.opencps.util.PortletConstants;
 import org.opencps.util.WebKeys;
@@ -65,6 +67,7 @@ import com.liferay.portal.kernel.messaging.MessageListenerException;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.User;
 
 /**
  * @author khoavd
@@ -503,7 +506,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 							        assignToUserId, processWorkflow, dossier.getDossierId(), paymentFile.getPaymentFileId() ,
 							        processOrderId);
 				
-				_log.info("%%%%%%%%%%%%% LIST ::::::" + lsNotification.size());
+				_log.info("%%%%%%%%%%%%% LIST :::::: FUCKKKKKKKING" + lsNotification.size());
 				
 				toBackOffice.setListNotifications(lsNotification);
 
@@ -537,8 +540,6 @@ public class BackOfficeProcessEngine implements MessageListener {
 							        assignToUserId, processWorkflow, dossier.getDossierId(), 0 ,
 							        processOrderId);
 				
-				
-				
 				toBackOffice.setListNotifications(lsNotification);
 				
 				Message sendToBackOffice = new Message();
@@ -561,7 +562,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 	}
 
 	
-	public List<SendNotificationMessage> getListNoties(
+	private List<SendNotificationMessage> getListNoties(
 	    List<String> citizenEvents, List<String> employEvents,
 	    long citizenUserId, long groupId, long assignToUserId,
 	    ProcessWorkflow processWorkflow, long dossierId, long paymentFileId,
@@ -569,14 +570,6 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 		List<SendNotificationMessage> ls =
 		    new ArrayList<SendNotificationMessage>();
-
-		List<SendNotificationMessage.InfoList> infoCitizens =
-		    new ArrayList<SendNotificationMessage.InfoList>();
-		List<SendNotificationMessage.InfoList> infoEmploys =
-		    new ArrayList<SendNotificationMessage.InfoList>();
-
-		List<SendNotificationMessage.InfoList> employInfoList =
-		    new ArrayList<SendNotificationMessage.InfoList>();
 
 		AccountBean accountBean =
 		    AccountUtil.getAccountBean(citizenUserId, groupId, null);
@@ -596,6 +589,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 			_log.info("INFORRRRRRRRRRRRRRR + " + event);
 			
 			SendNotificationMessage notiMsg = new SendNotificationMessage();
+			
 
 			notiMsg.setDossierId(dossierId);
 			notiMsg.setNotificationEventName(event);
@@ -604,7 +598,9 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 			SendNotificationMessage.InfoList info =
 			    new SendNotificationMessage.InfoList();
-
+			
+			info.setGroupId(groupId);
+			
 			List<SendNotificationMessage.InfoList> infoList =
 			    new ArrayList<SendNotificationMessage.InfoList>();
 
@@ -645,10 +641,128 @@ public class BackOfficeProcessEngine implements MessageListener {
 		}
 
 		for (String employEvent : employEvents) {
+			
+			SendNotificationMessage notiMsg = new SendNotificationMessage();
+			
+			notiMsg.setDossierId(dossierId);
+			notiMsg.setNotificationEventName(employEvent);
+			notiMsg.setProcessOrderId(processOrderId);
+			notiMsg.setType("SMS, INBOX, EMAIL");
 
+			
+			if (assignToUserId != 0) {
+				
+				SendNotificationMessage.InfoList infoEmploy =
+				    new SendNotificationMessage.InfoList();
+
+				List<SendNotificationMessage.InfoList> infoListEmploy =
+				    new ArrayList<SendNotificationMessage.InfoList>();
+
+				AccountBean accountEmploy =
+				    AccountUtil.getAccountBean(assignToUserId, groupId, null);
+
+				Employee employee = null;
+
+				if (accountEmploy.isEmployee()) {
+					employee = (Employee) accountEmploy.getAccountInstance();
+
+					infoEmploy.setUserId(employee.getUserId());
+					infoEmploy.setUserMail(employee.getEmail());
+					infoEmploy.setUserPhone(employee.getTelNo());
+
+				}
+
+				infoListEmploy.add(infoEmploy);
+
+				if (employEvent.contains(NotificationEventKeys.OFFICIALS.EVENT3)) {
+					infoEmploy.setGroup(NotificationEventKeys.GROUP4);
+
+					Locale vnLocale = new Locale("vi", "VN");
+					notiMsg.setNotificationContent(LanguageUtil.get(
+					    vnLocale, "phieu-yeu-cau-thanh-toan-moi-thuc-hien"));
+
+				}
+				else {
+					infoEmploy.setGroup(NotificationEventKeys.GROUP1);
+					notiMsg.setNotificationContent(processWorkflow.getActionName());
+				}
+
+				ls.add(notiMsg);
+				
+			} else {
+				List<SendNotificationMessage.InfoList> infoListEmploy =
+				    new ArrayList<SendNotificationMessage.InfoList>();
+
+				List<Employee> employees = getListEmploy(processWorkflow);
+				
+				for (Employee employee : employees) {
+					
+					SendNotificationMessage.InfoList infoEmploy =
+								    new SendNotificationMessage.InfoList();
+					
+					infoEmploy.setUserId(employee.getUserId());
+					infoEmploy.setUserMail(employee.getEmail());
+					infoEmploy.setUserPhone(employee.getTelNo());
+					infoEmploy.setGroupId(groupId);
+					
+					if (employEvent.contains(NotificationEventKeys.OFFICIALS.EVENT3)) {
+						infoEmploy.setGroup(NotificationEventKeys.GROUP4);
+					}
+					else {
+						infoEmploy.setGroup(NotificationEventKeys.GROUP1);
+					}
+					
+					infoListEmploy.add(infoEmploy);
+				}
+				
+				if (employEvent.contains(NotificationEventKeys.OFFICIALS.EVENT3)) {
+					
+					Locale vnLocale = new Locale("vi", "VN");
+					
+					notiMsg.setNotificationContent(LanguageUtil.get(
+					    vnLocale, "phieu-yeu-cau-thanh-toan-moi-thuc-hien"));
+				}
+				else {
+					notiMsg.setNotificationContent(processWorkflow.getActionName());
+				}
+				
+				ls.add(notiMsg);
+				
+			}
 		}
-
 		return ls;
+	}
+	
+	/**
+	 * @param processWorkflow
+	 * @param assignToUserId
+	 * @return
+	 */
+	private List<Employee> getListEmploy(
+	    ProcessWorkflow processWorkflow) {
+
+		List<Employee> ls = new ArrayList<>();
+		
+		try {
+			List<User> users = ProcessUtils.getAssignUsers(processWorkflow.getPostProcessStepId(), 3);
+			
+			for (User user : users) {
+				AccountBean accountEmploy =
+							    AccountUtil.getAccountBean(user.getUserId(), user.getGroupId(), null);
+				
+				Employee employee = (Employee) accountEmploy.getAccountInstance();
+				
+				ls.add(employee);
+
+			}
+
+        }
+        catch (Exception e) {
+	        
+        }
+		
+		return ls;
+
 	}
 	
 	private Log _log = LogFactoryUtil.getLog(BackOfficeProcessEngine.class);
