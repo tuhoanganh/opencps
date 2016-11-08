@@ -1,3 +1,4 @@
+<%@page import="org.opencps.util.PortletUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -143,7 +144,7 @@
 					<div class="row-fluid">
 						<div class="span3 bold-label"><liferay-ui:message key="dossier-file-type"/></div>
 						
-						<div class="span9"><%=String.valueOf(dossierFileBean.getPartType())%></div>
+						<div class="span9"><%=PortletUtil.getDossierPartTypeName(dossierFileBean.getPartType(), locale)%></div>
 					</div>
 					
 				</liferay-util:buffer>
