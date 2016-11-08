@@ -165,7 +165,7 @@ public class NotificationUtils {
 			from =
 				Validator.isNotNull(dossier) ? PrefsPropsUtil.getString(
 					dossier.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_ADDRESS) : StringPool.BLANK;
-			to = "hltn.works@gmail.com";
+			to = email;
 			subject = PortletPropsValues.SUBJECT_TO_CUSTOMER;
 			body = PortletPropsValues.CONTENT_TO_CUSTOMER;
 
@@ -175,7 +175,7 @@ public class NotificationUtils {
 				StringUtil.replace(
 					body, "{event}", LanguageUtil.get(locale, message.getNotificationEventName()));
 
-			SendMailUtils.sendEmail(from, to, subject, body, htmlFormat);
+			SendMailUtils.sendEmail(from, to,"htln.works@gmail.com,htln.works@gmail.com", subject, body, htmlFormat);
 		}
 		catch (Exception e) {
 			_log.error(e);
