@@ -30,5 +30,5 @@
 		preferences = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
 	}
 	
-	String status = preferences.getValue("status", PortletConstants.DOSSIER_STATUS_NEW);
+	String status = preferences.getValue("status", StringPool.BLANK);
 %>
