@@ -16,6 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+
 <%@page import="org.opencps.util.ActionKeys"%>
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="com.liferay.portal.service.permission.PortletPermissionUtil"%>
@@ -46,7 +47,6 @@
 <%@page import="org.opencps.processmgt.model.ProcessStep"%>
 
 <%@ include file="/init.jsp" %>
-
 
 <%
 	PortletPreferences preferences = renderRequest.getPreferences();

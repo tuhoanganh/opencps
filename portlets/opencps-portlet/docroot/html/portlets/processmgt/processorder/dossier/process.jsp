@@ -1,3 +1,4 @@
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -20,6 +21,8 @@
 <%@page import="javax.portlet.PortletRequest"%>
 <%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
+<%@page import="org.opencps.util.MessageKeys"%>
+<%@page import="org.opencps.util.PortletUtil"%>
 <%@page import="org.opencps.backend.util.BackendUtils"%>
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
 <%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
@@ -27,13 +30,10 @@
 <%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.model.DossierFile"%>
 <%@page import="org.opencps.util.PortletConstants"%>
-<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 <%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.model.DossierPart"%>
 <%@page import="org.opencps.util.DateTimeUtil"%>
 <%@page import="org.opencps.dossiermgt.bean.ProcessOrderBean"%>
-<%@page import="org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil"%>
-<%@page import="org.opencps.processmgt.model.WorkflowOutput"%>
 <%@page import="org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.service.ActionHistoryLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.model.ActionHistory"%>
@@ -45,9 +45,8 @@
 <%@page import="org.opencps.processmgt.model.ProcessOrder"%>
 <%@page import="org.opencps.processmgt.model.ProcessStepDossierPart"%>
 <%@page import="org.opencps.processmgt.util.ProcessUtils"%>
-<%@page import="com.liferay.portal.kernel.process.ProcessUtil"%>
 
-<%@ include file="../../init.jsp"%>
+<%@ include file="../init.jsp"%>
 
 <portlet:renderURL var="updateDossierFileURL" windowState="<%=LiferayWindowState.POP_UP.toString() %>">
 	<portlet:param name="mvcPath" value='<%=templatePath + "upload_dossier_file.jsp" %>'/>
@@ -166,6 +165,8 @@
 		if(dossierParts != null){
 			
 			int index = 0;
+
+			List<Long> requiredDossierPartIds = new ArrayList<Long>();
 			
 			for (DossierPart dossierPart : dossierParts){
 				
@@ -205,6 +206,10 @@
 										catch (Exception e) {
 										}
 									}
+									
+									requiredDossierPartIds = PortletUtil.getDossierPartRequired(
+													requiredDossierPartIds, dossierPart, 
+													dossierPart, dossierFile);
 		
 									cssRequired =
 										dossierPart.getRequired()
@@ -413,6 +418,10 @@
 				<%
 				index++;
 			}
+			
+			%>
+				<aui:input name="requiredDossierPart" type="hidden" value="<%= StringUtil.merge(requiredDossierPartIds) %>"/>
+			<%
 		}
 	%>
 
@@ -491,11 +500,43 @@
 
 <aui:script use="aui-base,liferay-portlet-url,aui-io">
 
+	var required = false;
+	
+	Liferay.provide(window, '<portlet:namespace/>validateRequiredResult', function() {
+		var A = AUI();
+		
+		var requiredDossierParts = A.all('#<portlet:namespace/>requiredDossierPart');
+		
+		if(requiredDossierParts) {
+			
+			requiredDossierParts.each(function(requiredDossierPart){
+				var requiredDossierPartIds = requiredDossierPart.val().trim().split(",");
+				
+				if(requiredDossierPartIds != ''){
+					for(var i = 0; i < requiredDossierPartIds.length; i++){
+						var dossierPartId = requiredDossierPartIds[i];
+						
+						if(parseInt(dossierPartId) > 0){
+							required = true;
+							var row = A.one('.dossier-part-row.dpid-' + dossierPartId);
+							if(row){
+								row.attr('style', 'color:red');
+							}
+						}
+					}
+				}
+			});
+			
+		}
+	});
+
 	Liferay.provide(window, '<portlet:namespace/>assignToUser', function(e) {
 		
 		var A = AUI();
 		
 		var instance = A.one(e);
+		
+		var assignFormDisplayStyle = '<%= assignFormDisplayStyle %>';
 		
 		var processWorkflowId = instance.attr('process-workflow');
 		
@@ -521,7 +562,6 @@
 
 		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
 		portletURL.setParameter("mvcPath", "/html/portlets/processmgt/processorder/assign_to_user.jsp");
-		portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
 		portletURL.setPortletMode("normal");
 		portletURL.setParameter("processWorkflowId", processWorkflowId);
 		portletURL.setParameter("serviceProcessId", serviceProcessId);
@@ -537,6 +577,13 @@
 		if(assignFormDisplayStyle == 'popup' ) {
 			portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>");
 			portletURL.setParameter("backURL", '<%=backURL%>');
+
+			<portlet:namespace/>validateRequiredResult();
+			if(required === true) {
+				alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-required-before-send") %>');
+				return;
+			} 
+			
 			openDialog(portletURL.toString(), '<portlet:namespace />assignToUser', '<%= UnicodeLanguageUtil.get(pageContext, "handle") %>');
 		} 
 		// Display assign to user - moit
@@ -579,27 +626,35 @@
 								
 								if(submitButton){
 									submitButton.on('click', function(){
-										A.io.request(
-											form.attr('action'),
-											{
-												dataType: 'json',
-												form: {
-													id: form
-												},
-												on: {
-													success: function(event, id, obj) {
-														var response = this.get('responseData');
-														
-														alert(Liferay.Language.get(response.msg));
-														
-														if(response.msg == '<%=MessageKeys.DEFAULT_SUCCESS_KEY%>'){
-															var redirectURL = A.one('#<portlet:namespace/>redirectURL').val();
-															window.location = redirectURL;
+										
+										<portlet:namespace/>validateRequiredResult();
+										if(required === true) {
+											alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-required-before-send") %>');
+											return;
+										} else{
+											A.io.request(
+												form.attr('action'),
+												{
+													dataType: 'json',
+													form: {
+														id: form
+													},
+													on: {
+														success: function(event, id, obj) {
+															var response = this.get('responseData');
+															
+															alert(Liferay.Language.get(response.msg));
+															
+															if(response.msg == '<%=MessageKeys.DEFAULT_SUCCESS_KEY%>'){
+																var redirectURL = A.one('#<portlet:namespace/>redirectURL').val();
+																window.location = redirectURL;
+															}
 														}
 													}
 												}
-											}
-										);
+											);
+										}
+
 									});
 								}
 								

@@ -16,6 +16,7 @@ build.*.properties
 ci.properties
 common.bnd
 copyright.txt
+themes/moit-theme/.classpath
 themes/opencps-theme/.classpath
 dependencies/
 themes/opencps-theme/.settings/org.eclipse.wst.common.project.facet.core.xml
@@ -57,13 +58,10 @@ ext/create.sh
 hooks/build-common-hook.xml
 hooks/create.bat
 hooks/create.sh
-layouttpl/
 portlets/build-common-alloy-portlet.xml
 portlets/build-common-portlet.xml
 portlets/create.bat
 portlets/create.sh
-themes/
-
 .project
 portlets/opencps-portlet/.project
 portlets/opencps-portlet/.classpath
@@ -278,6 +276,17 @@ portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/api/model/impl/
 themes/opencps-ux-theme/docroot/WEB-INF/liferay-look-and-feel.xml
 portlets/opencps-portlet/ivy.xml.MD5
 portlets/opencps-portlet/docroot/WEB-INF/lib/jasperreports-fonts-6.2.2.jar
+
+layouttpl/layout-8.4-4.4.4-layouttpl/opencps-home-layouttpl
+layouttpl/layout-8.4-4.4.4-layouttpl/.classpath
+layouttpl/layout-8.4-4.4.4-layouttpl/.project
+layouttpl/layout-8.4-4.4.4-layouttpl/.settings
+
+layouttpl/layout-8.4-1-4.4.4-layouttpl/opencps-home-layouttpl
+layouttpl/layout-8.4-1-4.4.4-layouttpl/.classpath
+layouttpl/layout-8.4-1-4.4.4-layouttpl/.project
+layouttpl/layout-8.4-1-4.4.4-layouttpl/.settings
+
 CONTRIBUTING.markdown
 README.markdown
 
@@ -291,4 +300,21 @@ portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/holidayconfig/model/imp
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/holidayconfig/service/base/*
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/holidayconfig/service/persistence/HolidayConfigExtendPersistenceImpl.java
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/holidayconfig/service/persistence/HolidayConfigPersistenceImpl.java
+
+themes/moit-theme/.settings/
+themes/moit-theme/docroot/WEB-INF/classes/content/
+themes/moit-theme/docroot/css/
+themes/moit-theme/docroot/fonts/
+themes/moit-theme/docroot/images/
+themes/moit-theme/docroot/js/
+themes/moit-theme/docroot/templates/
+themes/opencps-ux-theme/.classpath
+themes/opencps-ux-theme/.settings/
+themes/opencps-ux-theme/docroot/META-INF/
+themes/opencps-ux-theme/docroot/css/
+themes/opencps-ux-theme/docroot/fonts/
+themes/opencps-ux-theme/docroot/images/
+themes/opencps-ux-theme/docroot/js/
+themes/opencps-ux-theme/docroot/templates/
+themes/readme.txt
 

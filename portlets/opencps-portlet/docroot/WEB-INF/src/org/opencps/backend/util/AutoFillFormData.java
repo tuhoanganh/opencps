@@ -66,10 +66,12 @@ public class AutoFillFormData {
 	 	String _contactName = StringPool.BLANK;
 	 	String _contactTelNo = StringPool.BLANK;
 	 	String _contactEmail = StringPool.BLANK;
+
 	 	String _enName = StringPool.BLANK;
 	 	String _shortName = StringPool.BLANK;
 	 	String _representativeName = StringPool.BLANK;
 	 	String _representativeRole = StringPool.BLANK;
+
 	 	if(Validator.isNotNull(ownerCitizen)){
 	 		_subjectName = ownerCitizen.getFullName();
 	 		_subjectId = String.valueOf(ownerCitizen.getCitizenId());
@@ -127,10 +129,12 @@ public class AutoFillFormData {
 	 		_contactName = ownerBusiness.getShortName();
 	 		_contactTelNo = ownerBusiness.getTelNo();
 	 		_contactEmail = ownerBusiness.getEmail();
+
 	 		_enName = ownerBusiness.getEnName();
 	 		_shortName = ownerBusiness.getShortName();
 	 		_representativeName = ownerBusiness.getRepresentativeName();
 	 		_representativeRole = ownerBusiness.getRepresentativeRole();
+
 	 	}
 		
 		try {
@@ -167,6 +171,7 @@ public class AutoFillFormData {
 						jsonMap.put(entry.getKey(), _contactTelNo);
 					}else if(value.equals("_contactEmail")){
 						jsonMap.put(entry.getKey(), _contactEmail);
+
 					}else if(value.equals("_enName")){
 						jsonMap.put(entry.getKey(), _enName);
 					}else if(value.equals("_shortName")){
@@ -175,6 +180,7 @@ public class AutoFillFormData {
 						jsonMap.put(entry.getKey(), _representativeName);
 					}else if(value.equals("_representativeRole")){
 						jsonMap.put(entry.getKey(), _representativeRole);
+
 					}else if(value.equals("_ngayNopDon")){
 						jsonMap.put(entry.getKey(), ngayNopDon());
 					}else if(value.equals("_donViThucHien")){
@@ -238,6 +244,7 @@ public class AutoFillFormData {
 							resultBinding += ", " +  _contactTelNo;
 						}else if(string.equals("_contactEmail")){
 							resultBinding += ", " +  _contactEmail;
+
 						}else if(string.equals("_enName")){
 							resultBinding += ", " +  _enName;
 						}else if(string.equals("_shortName")){
@@ -246,6 +253,7 @@ public class AutoFillFormData {
 							resultBinding += ", " +  _representativeName;
 						}else if(string.equals("_representativeRole")){
 							resultBinding += ", " +  _representativeRole;
+
 						}else if(string.equals("_ngayNopDon")){
 							resultBinding += ", " + ngayNopDon();
 						}else if(string.equals("_donViThucHien")){

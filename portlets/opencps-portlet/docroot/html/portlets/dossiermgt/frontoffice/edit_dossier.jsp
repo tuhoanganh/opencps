@@ -1,5 +1,4 @@
 
-<%@page import="org.opencps.backend.util.BackendUtils"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -19,20 +18,12 @@
  */
 %>
 
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
+<%@page import="org.opencps.backend.util.BackendUtils"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
-<%@page import="com.liferay.portal.kernel.management.jmx.DoOperationAction"%>
-<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="com.liferay.portal.kernel.util.Constants"%>
-<%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
-<%@page import="com.liferay.util.dao.orm.CustomSQLUtil"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="java.util.List"%>
-<%@page import="javax.portlet.PortletURL"%>
-<%@page import="org.opencps.accountmgt.model.Business"%>
-<%@page import="org.opencps.accountmgt.model.Citizen"%>
-<%@page import="org.opencps.accountmgt.search.BusinessDisplayTerms"%>
 <%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%@page import="org.opencps.dossiermgt.model.DossierPart"%>
 <%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
@@ -41,16 +32,12 @@
 <%@page import="org.opencps.dossiermgt.permissions.DossierPermission"%>
 <%@page import="org.opencps.dossiermgt.RequiredDossierPartException"%>
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
-<%@page import="org.opencps.dossiermgt.search.DossierSearch"%>
-<%@page import="org.opencps.dossiermgt.search.DossierSearchTerms"%>
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 <%@page import="org.opencps.processmgt.model.ProcessOrder"%>
 <%@page import="org.opencps.processmgt.model.ProcessWorkflow"%>
 <%@page import="org.opencps.processmgt.service.ProcessOrderLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil"%>
-<%@page import="org.opencps.util.AccountUtil"%>
 <%@page import="org.opencps.util.ActionKeys"%>
-<%@page import="org.opencps.util.DateTimeUtil"%>
 <%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="org.opencps.util.PortletPropsValues"%>
 <%@page import="org.opencps.util.WebKeys"%>
@@ -75,14 +62,9 @@
 	String[] dossierSections = dossier != null ? new String[] {
 		"dossier_part", "dossier_info", "result", "history"
 	} : new String[] {
-		"dossier_info"
+		"dossier_part", "dossier_info"
 	};
-		
-	// show only 2 tab dossier_part & info on create new dossier
-	//if(cmd.equals(Constants.ADD)){
-	//	dossierSections = new String[]{"dossier_part", "dossier_info"};
-	//}
-	
+
 	String[][] categorySections = {
 		dossierSections
 	};
@@ -110,6 +92,9 @@
 	catch (Exception e) {
 
 	}
+
+	boolean quickCreateDossier = dossier == null ? true : false;
+
 %>
 
 <liferay-ui:error 
@@ -175,6 +160,8 @@
 		/>
 
 		<portlet:actionURL var="updateDossierURL" name="updateDossier" />
+		
+		<portlet:actionURL var="quickUpdateDossierURL" name="quickUpdateDossier"/>
 
 		<liferay-util:buffer var="htmlTop">
 			<c:if test="<%= dossier != null %>">
@@ -281,7 +268,7 @@
 
 		</liferay-util:buffer>
 
-		<aui:form name="fm" action="<%=updateDossierURL %>" method="post">
+		<aui:form name="fm" action="<%=dossier != null ? updateDossierURL : quickUpdateDossierURL %>" method="post">
 
 			<aui:model-context bean="<%= dossier %>" model="<%= Dossier.class %>" />
 
@@ -392,6 +379,24 @@
 				/>
 			</div>
 		</aui:form>
+
+		<aui:script use="aui-loading-mask-deprecated">
+			AUI().ready(function(A){
+				var quickCreateDossier = '<%=quickCreateDossier%>';
+				if(quickCreateDossier ==='true'){
+					var loadingMask = new A.LoadingMask(
+						{
+							'strings.loading': '<%= UnicodeLanguageUtil.get(pageContext, "rending...") %>',
+							target: A.one('#<portlet:namespace/>fm')
+						}
+					);
+					
+					loadingMask.show();
+					submitForm(document.<portlet:namespace />fm);
+				}
+			});
+		</aui:script>
+
 	</c:when>
 
 	<c:otherwise>
@@ -408,24 +413,36 @@
 			'<portlet:namespace/>updateDossierStatus',
 				function(actionURL) {
 					var A = AUI(); 
-					// validate dossier part required
 					
-				 	/* var cnt = A.all('#<portlet:namespace/>fm .dossierPartRequired').size();
+					var required = false;
 					
-					if(cnt > 0) {
-						A.all('#<portlet:namespace/>fm .dossierPartRequired').addClass('dossierPartRequired-error');
-						alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-required-before-send") %>');
-					} else {
-						location.href = '<%= updateDossierStatusURL %>';
-					} */
+					var requiredDossierParts = A.all('#<portlet:namespace/>requiredDossierPart');
 					
-					var requiredDossierPart = A.one('#<portlet:namespace/>requiredDossierPart');
-					
-					if(requiredDossierPart) {
-						if(requiredDossierPart.val().toString().length == 0) {
-							location.href = '<%= updateDossierStatusURL %>';
-						} else {
+					if(requiredDossierParts) {
+						
+						requiredDossierParts.each(function(requiredDossierPart){
+							var requiredDossierPartIds = requiredDossierPart.val().trim().split(",");
+							console.log(dossierPartId);
+							if(requiredDossierPartIds != ''){
+								for(var i = 0; i < requiredDossierPartIds.length; i++){
+									var dossierPartId = requiredDossierPartIds[i];
+									console.log(dossierPartId);
+									if(parseInt(dossierPartId) > 0){
+										required = true;
+										var row = A.one('.dossier-part-row.dpid-' + dossierPartId);
+										if(row){
+											row.attr('style', 'color:red');
+										}
+									}
+								}
+							}
+						});
+						
+						
+						if(required === true) {
 							alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-required-before-send") %>');
+						} else {
+							location.href = '<%= updateDossierStatusURL %>';
 						}
 					}
 				},
