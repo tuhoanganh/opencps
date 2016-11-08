@@ -53,6 +53,8 @@ import com.liferay.portal.kernel.portlet.LiferayPortletURL;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.model.Layout;
+import com.liferay.portal.service.LayoutFriendlyURLLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
@@ -66,7 +68,7 @@ public class NotificationUtils {
 	private static Log _log = LogFactoryUtil.getLog(NotificationUtils.class);
 
 	public static void addUserNotificationEvent(
-		SendNotificationMessage message, JSONArray payloadJSON, long userIdDelivery) {
+		SendNotificationMessage message, JSONObject payloadJSON, long userIdDelivery) {
 
 		try {
 
@@ -82,11 +84,11 @@ public class NotificationUtils {
 		}
 	}
 
-	public static JSONArray createNotification(
+	public static JSONObject createNotification(
 		SendNotificationMessage message, String event, String group, long userIdDelivery,
 		boolean privatePage) {
 
-		JSONArray payloadJSONArray = JSONFactoryUtil.createJSONArray();
+		
 		JSONObject payloadJSONObject = JSONFactoryUtil.createJSONObject();
 		Locale locale = new Locale("vi", "VN");
 
@@ -100,95 +102,70 @@ public class NotificationUtils {
 
 			long plId = 0;
 
-			ServiceContext serviceContext = new ServiceContext();
-			LiferayPortletResponse liferayPortletResponse =
-				serviceContext.getLiferayPortletResponse();
-
+			
+			
+			_log.info("GROUPPPPPPPPPPPPPPPPPPPPPPPPPP+" + group);
+			
+			
+			
 			if (group.equals(NotificationEventKeys.GROUP1)) {
-
-				plId = LayoutLocalServiceUtil.getFriendlyURLLayout(20182, true, group).getPlid();
-
-				LiferayPortletURL viewURL =
-					liferayPortletResponse.createRenderURL(WebKeys.PROCESS_ORDER_PORTLET);
-				viewURL.setParameter(
-					"mvcPath", "/html/portlets/processmgt/processorder/process_order_detail.jsp");
-				viewURL.setParameter(
-					ProcessOrderDisplayTerms.PROCESS_ORDER_ID,
-					String.valueOf(message.getProcessOrderId()));
-				viewURL.setParameter(WebKeys.BACK_URL, "/group/guest" + group);
-				viewURL.setParameter("isEditDossier", String.valueOf(true));
-				viewURL.setPlid(plId);
-				viewURL.setWindowState(WindowState.NORMAL);
+				
+				try {
+					plId = LayoutLocalServiceUtil.getFriendlyURLLayout(20182, true, group).getPlid();
+                }
+                catch (Exception e) {
+	                // TODO: handle exception
+                }
+				
+				
 
 				payloadJSONObject.put("processOrderId", message.getProcessOrderId());
-				payloadJSONObject.put("linkTo", viewURL.toString());
+				
 
 			}
 			else if (group.equals(NotificationEventKeys.GROUP2)) {
-				plId = LayoutLocalServiceUtil.getFriendlyURLLayout(20182, false, group).getPlid();
-
-				LiferayPortletURL viewURL =
-					liferayPortletResponse.createRenderURL(WebKeys.DOSSIER_MGT_PORTLET);
-				viewURL.setParameter(
-					"mvcPath", "/html/portlets/dossiermgt/frontoffice/edit_dossier.jsp");
-				viewURL.setParameter(
-					DossierDisplayTerms.DOSSIER_ID, String.valueOf(processOrder.getDossierId()));
-				viewURL.setParameter(Constants.CMD, Constants.VIEW);
-				viewURL.setParameter(WebKeys.BACK_URL, "/group/guest/");
-				viewURL.setParameter(WebKeys.REDIRECT_URL, "/group/guest/");
-				viewURL.setParameter("isEditDossier", String.valueOf(false));
-				viewURL.setPlid(plId);
-				viewURL.setWindowState(WindowState.NORMAL);
+				try {
+					plId = LayoutLocalServiceUtil.getFriendlyURLLayout(20182, false, group).getPlid();
+                }
+                catch (Exception e) {
+	                // TODO: handle exception
+                }
+				
+				
 
 				payloadJSONObject.put("dossierId", message.getDossierId());
-				payloadJSONObject.put("linkTo", viewURL.toString());
+				
 
 			}
 			else if (group.equals(NotificationEventKeys.GROUP3)) {
+				
+				try {
+					plId = LayoutLocalServiceUtil.getFriendlyURLLayout(20182, true, group).getPlid();
+                }
+                catch (Exception e) {
+	                // TODO: handle exception
+                }
 
-				plId = LayoutLocalServiceUtil.getFriendlyURLLayout(20182, true, group).getPlid();
-
-				PaymentFile paymentFile =
-					PaymentFileLocalServiceUtil.getPaymentFile(processOrder.getDossierId());
-
-				LiferayPortletURL viewURL =
-					liferayPortletResponse.createRenderURL(WebKeys.PAYMENT_MGT_PORTLET);
-				viewURL.setParameter(
-					"mvcPath", "/html/portlets/paymentmgt/frontoffice/frontofficeconfirmbank.jsp");
-				viewURL.setParameter(
-					PaymentFileDisplayTerms.PAYMENT_FILE_ID,
-					String.valueOf(paymentFile.getPaymentFileId()));
-				viewURL.setParameter(Constants.CMD, Constants.VIEW);
-				viewURL.setParameter(WebKeys.BACK_URL, "/group/guest" + group);
-				viewURL.setParameter(WebKeys.REDIRECT_URL, "/group/guest" + group);
-				viewURL.setPlid(plId);
-				viewURL.setWindowState(WindowState.NORMAL);
+				
 
 				payloadJSONObject.put("paymentFileId", message.getPaymentFileId());
-				payloadJSONObject.put("linkTo", viewURL.toString());
+				
 
 			}
 			else if (group.equals(NotificationEventKeys.GROUP4)) {
 
-				plId = LayoutLocalServiceUtil.getFriendlyURLLayout(20182, true, group).getPlid();
+				try {
+					plId = LayoutLocalServiceUtil.getFriendlyURLLayout(20182, true, group).getPlid();
+                }
+                catch (Exception e) {
+	                // TODO: handle exception
+                }
 
-				PaymentFile paymentFile =
-					PaymentFileLocalServiceUtil.getPaymentFile(processOrder.getDossierId());
 
-				LiferayPortletURL viewURL =
-					liferayPortletResponse.createRenderURL(WebKeys.PAYMENT_MANAGER_PORTLET);
-				viewURL.setParameter(
-					"mvcPath", "/html/portlets/paymentmgt/backoffice/backofficepaymentdetail.jsp");
-				viewURL.setParameter(
-					PaymentFileDisplayTerms.PAYMENT_FILE_ID,
-					String.valueOf(paymentFile.getPaymentFileId()));
-				viewURL.setParameter(Constants.CMD, Constants.VIEW);
-				viewURL.setParameter(WebKeys.REDIRECT_URL, "/group/guest");
-				viewURL.setPlid(plId);
-				viewURL.setWindowState(WindowState.NORMAL);
+				
 
 				payloadJSONObject.put("paymentFileId", message.getPaymentFileId());
-				payloadJSONObject.put("linkTo", viewURL.toString());
+				
 
 			}
 			payloadJSONObject.put("userIdDelivery", userIdDelivery);
@@ -197,14 +174,14 @@ public class NotificationUtils {
 			payloadJSONObject.put("plId", plId);
 			payloadJSONObject.put("friendlyUrl", group);
 
-			payloadJSONArray.put(payloadJSONArray);
+			
 
 		}
 		catch (Exception e) {
 			_log.error(e);
 		}
 
-		return payloadJSONArray;
+		return payloadJSONObject;
 	}
 
 	public static void sendEmailNotification(SendNotificationMessage message, String email) {
