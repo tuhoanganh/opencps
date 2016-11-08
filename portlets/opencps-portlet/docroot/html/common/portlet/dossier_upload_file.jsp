@@ -43,12 +43,9 @@
 <%@page import="org.opencps.dossiermgt.NoSuchDossierPartException"%>
 <%@page import="org.opencps.dossiermgt.NoSuchDossierException"%>
 <%@page import="com.liferay.portal.RolePermissionsException"%>
-<<<<<<< HEAD
 <%@page import="javax.portlet.PortletPreferences"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="org.opencps.util.PortletPropsValues"%>
-=======
->>>>>>> 00be72042673df59d73bb196104de1fc4efc625a
 <%@ include file="/init.jsp"%>
 
 <%

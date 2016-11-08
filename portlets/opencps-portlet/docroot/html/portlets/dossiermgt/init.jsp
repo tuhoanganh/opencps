@@ -52,12 +52,10 @@
 	
 	boolean hiddenTreeNodeEqualNone = GetterUtil.getBoolean(preferences.getValue("hiddenTreeNodeEqualNone", "false"), false);
 	
-<<<<<<< HEAD
+	boolean allowResultQuickView = GetterUtil.getBoolean(preferences.getValue("allowResultQuickView", "false"), false);
+
 	String fileTypes = preferences.getValue("fileTypes", StringPool.BLANK);
 	float maxTatalUploadFileSizeInMb = GetterUtil.getFloat(preferences.getValue("maxTatalUploadFileSizeInMb", StringPool.BLANK));
 	float maxUploadFileSizeInMb = GetterUtil.getFloat(preferences.getValue("maxUploadFileSizeInMb", StringPool.BLANK));
-=======
-	boolean allowResultQuickView = GetterUtil.getBoolean(preferences.getValue("allowResultQuickView", "false"), false);
->>>>>>> 00be72042673df59d73bb196104de1fc4efc625a
 %>
 
