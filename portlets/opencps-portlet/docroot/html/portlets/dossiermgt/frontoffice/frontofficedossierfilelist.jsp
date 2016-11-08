@@ -1,4 +1,4 @@
-<%@page import="org.opencps.util.PortletUtil"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -29,6 +29,7 @@
 <%@page import="org.opencps.dossiermgt.search.DossierFileSearch"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
+<%@page import="org.opencps.util.PortletUtil"%>
 <%@ include file="../init.jsp"%>
 
 <liferay-util:include page='<%=templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
