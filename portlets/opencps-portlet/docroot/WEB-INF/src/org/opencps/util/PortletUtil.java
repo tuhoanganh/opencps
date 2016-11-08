@@ -1089,7 +1089,7 @@ public class PortletUtil {
 		return requiredDossierPartIds;
 	}
 	
-	public static String getDossierPartTypeName(int dossierPartType, Locale locale) {
+	public static String getDossierPartName(int dossierPartType, Locale locale) {
 		
 		String dossierPartTypeName = StringPool.BLANK;
 		
