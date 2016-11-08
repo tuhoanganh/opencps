@@ -1,4 +1,6 @@
 
+<%@page import="java.util.Comparator"%>
+<%@page import="java.util.Collections"%>
 <%@page import="java.util.LinkedHashMap"%>
 <%@page import="org.opencps.processmgt.service.ProcessOrderLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.search.ProcessOrderSearchTerms"%>
@@ -133,6 +135,13 @@
 	     cleanMap.put(processOrderSteps.get(i).getProcessStepId()+"", processOrderSteps.get(i));
 	}
 	processOrderSteps = new ArrayList<ProcessOrderBean>(cleanMap.values());
+	
+	Collections.sort(processOrderSteps, new Comparator<ProcessOrderBean>() {
+
+        public int compare(ProcessOrderBean o1, ProcessOrderBean o2) {
+        	return String.valueOf(o1.getSequenceNo()).compareTo(String.valueOf(o2.getSequenceNo()));
+        }
+    });
 	
 	JSONObject arrayParam = JSONFactoryUtil
 		    .createJSONObject();

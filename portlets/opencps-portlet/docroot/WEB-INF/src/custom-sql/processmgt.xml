@@ -343,7 +343,8 @@
 			SELECT 
 				DISTINCT
                 opencps_processstep.processStepId, 
-				opencps_processstep.stepName
+				opencps_processstep.stepName,
+				opencps_processstep.sequenceNo
 			FROM 
 				opencps_processstep
 			LEFT JOIN
@@ -484,7 +485,8 @@
 			SELECT 
 				DISTINCT
                 opencps_processstep.processStepId, 
-				opencps_processstep.stepName
+				opencps_processstep.stepName,
+				opencps_processstep.sequenceNo
 			FROM 
 				opencps_processstep
 			INNER JOIN
