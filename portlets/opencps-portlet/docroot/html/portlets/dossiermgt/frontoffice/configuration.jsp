@@ -173,6 +173,7 @@
 	/>
 	
 	<aui:input 
+<<<<<<< HEAD
 		type="text"
 		name="fileTypes" 
 		value="<%=fileTypes %>"
@@ -194,6 +195,13 @@
 		<aui:validator name="number"></aui:validator>
 	</aui:input>
 	
+=======
+		type="checkbox"
+		name="allowResultQuickView" 
+		value="<%=allowResultQuickView %>"
+	/>
+	
+>>>>>>> 00be72042673df59d73bb196104de1fc4efc625a
 	<aui:button type="submit" name="Save" value="save"></aui:button>
 
 </aui:form>

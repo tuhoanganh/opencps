@@ -1,6 +1,4 @@
 
-<%@page import="org.opencps.processmgt.util.ProcessOrderUtils"%>
-<%@page import="javax.portlet.PortletMode"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -20,34 +18,37 @@
  */
 %>
 
-<%@page import="org.opencps.processmgt.NoSuchWorkflowOutputException"%>
-<%@page import="org.opencps.util.PortletPropsValues"%>
 <%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
-<%@page import="javax.portlet.PortletRequest"%>
-<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
-<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
-<%@page import="org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil"%>
-<%@page import="org.opencps.processmgt.model.WorkflowOutput"%>
-<%@page import="org.opencps.backend.util.PaymentRequestGenerator"%>
-<%@page import="org.opencps.util.PortletUtil"%>
-<%@page import="org.opencps.util.DateTimeUtil"%>
-<%@page import="org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil"%>
-<%@page import="org.opencps.processmgt.model.ProcessWorkflow"%>
-<%@page import="java.util.Date"%>
-<%@page import="org.opencps.backend.util.BookingDateGenerator"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
-<%@page import="org.opencps.processmgt.util.ProcessUtils"%>
-<%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
+<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
+<%@page import="java.util.Date"%>
+<%@page import="javax.portlet.PortletMode"%>
+<%@page import="javax.portlet.PortletRequest"%>
+<%@page import="org.opencps.backend.util.DossierNoGenerator"%>
+<%@page import="org.opencps.backend.util.PaymentRequestGenerator"%>
+<%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%@page import="org.opencps.dossiermgt.model.DossierFile"%>
-<%@page import="org.opencps.processmgt.model.ProcessOrder"%>
-<%@page import="org.opencps.dossiermgt.NoSuchDossierTemplateException"%>
 <%@page import="org.opencps.dossiermgt.NoSuchDossierException"%>
 <%@page import="org.opencps.dossiermgt.RequiredDossierPartException"%>
-<%@page import="org.opencps.backend.util.DossierNoGenerator"%>
+<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
+<%@page import="org.opencps.holidayconfig.util.HolidayUtils"%>
+<%@page import="org.opencps.processmgt.model.ProcessOrder"%>
+<%@page import="org.opencps.processmgt.model.ProcessWorkflow"%>
+<%@page import="org.opencps.processmgt.model.WorkflowOutput"%>
+<%@page import="org.opencps.processmgt.NoSuchWorkflowOutputException"%>
+<%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
+<%@page import="org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.util.ProcessMgtUtil"%>
+<%@page import="org.opencps.processmgt.util.ProcessOrderUtils"%>
+<%@page import="org.opencps.processmgt.util.ProcessUtils"%>
+<%@page import="org.opencps.util.PortletPropsValues"%>
+<%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="org.opencps.util.WebKeys"%>
 
-<%@ include file="../init.jsp"%>
+<%@ include file="init.jsp"%>
 
 <%
 	boolean success = false;
@@ -55,9 +56,8 @@
 	try{
 		success = !SessionMessages.isEmpty(renderRequest) && SessionErrors.isEmpty(renderRequest);
 		
-	}catch(Exception e){
-		
-	}
+	}catch(Exception e){}
+	
 	ProcessOrder processOrder = (ProcessOrder) request.getAttribute(WebKeys.PROCESS_ORDER_ENTRY);
 	
 	DossierFile  dossierFile = (DossierFile) request.getAttribute(WebKeys.DOSSIER_FILE_ENTRY);
@@ -72,22 +72,19 @@
 	
 	ProcessWorkflow workflow = ProcessMgtUtil.getProcessWorkflow(processWorkflowId);
 	
+	Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
 
 	String actionNote = ParamUtil.getString(request, ProcessOrderDisplayTerms.ACTION_NOTE);
 	String event = ParamUtil.getString(request, ProcessOrderDisplayTerms.EVENT);
-	String receptionNo = ParamUtil.getString(request, ProcessOrderDisplayTerms.RECEPTION_NO);
+	String receptionNo = Validator.isNotNull(dossier) ? dossier.getReceptionNo() : StringPool.BLANK; //ParamUtil.getString(request, ProcessOrderDisplayTerms.RECEPTION_NO);
+	
+	if ((Validator.isNull(receptionNo) || (receptionNo.length() == 0)) 
+			&& Validator.isNotNull(workflow) 
+			&& workflow.getGenerateReceptionNo()) {
 		
-	System.out.println("RECEPTION_NOOOOOOOOO _______________________ = "+ receptionNo);
-	System.out.println("WORKFLOW_NAME _______________________ = "+ workflow.getReceptionNoPattern());
-	System.out.println("WORKFLOW_NAME RECEPTION NO _______________________ = "+ workflow.getGenerateReceptionNo());
-
-	
-	
-	if ((Validator.isNull(receptionNo) || (receptionNo.length() == 0)) && Validator.isNotNull(workflow) && workflow.getGenerateReceptionNo()) {
+		// If doisser don't have receiveNo, create receiveNo
 		receptionNo = DossierNoGenerator.genaratorNoReception(workflow.getReceptionNoPattern(), dossierId);
 		
-		System.out.println("NEWWWWWWWWWWWWWWWW RECEPTION_NOOOOOOOOO _______________________ = "+ receptionNo);
-
 	}
 	
 	String strReceiveDate = ParamUtil.getString(request, "receiveDate");
@@ -101,9 +98,8 @@
 	Date estimateDate = null;
 	
 	if(workflow != null && workflow.getGenerateDeadline() && Validator.isNotNull(receiveDate) && Validator.isNotNull(deadlinePattern)){
-		estimateDate = BookingDateGenerator.dateGenerator(receiveDate, deadlinePattern);
+		estimateDate = HolidayUtils.getEndDate(receiveDate, deadlinePattern);
 	}
-	
 	
 	PortletUtil.SplitDate spd = null;
 	
@@ -153,6 +149,24 @@
 <portlet:actionURL var="assignToUserURL" name="assignToUser"/>
 
 <aui:form name="fm" action="<%=assignToUserURL.toString() %>" method="post">
+
+	<aui:input 
+		name="assignFormDisplayStyle" 
+		value="<%=assignFormDisplayStyle %>" 
+		type="hidden"
+	/>
+	
+	<aui:input 
+		name="assignActionURL" 
+		value="<%=assignToUserURL.toString() %>" 
+		type="hidden"
+	/>
+	
+	<aui:input 
+		name="assignActionURL" 
+		value="<%=assignToUserURL.toString() %>" 
+		type="hidden"
+	/>
 	<aui:input 
 		name="redirectURL" 
 		value="<%=currentURL %>" 
@@ -169,6 +183,13 @@
 		value="<%=scopeGroupId %>" 
 		type="hidden"
 	/>
+	
+	<aui:input 
+		name="<%=ProcessOrderDisplayTerms.RECEIVE_DATE %>" 
+		value="<%= receiveDate %>" 
+		type="hidden"
+	/>
+	
 	<aui:input 
 		name="<%=ProcessOrderDisplayTerms.COMPANY_ID %>" 
 		value="<%=company.getCompanyId() %>" 
@@ -216,28 +237,33 @@
 	/>
 	
 	<%
-		String cssCol = (processWorkflow != null &&  processWorkflow.isRequestPayment()) ? "span3" : "span4";
+		String cssCol = ProcessUtils.getCssClass(processWorkflowId);
 	%>
 	
 	<div class="row-fluid">
-		<div class="<%=cssCol%>">
-			<aui:select 
-				name="<%=ProcessOrderDisplayTerms.ASSIGN_TO_USER_ID %>" 
-				label="assign-to-next-user" 
-				showEmptyOption="true"
-				cssClass="input100"
-			>
-				<%
-					List<User> assignUsers = ProcessUtils.getAssignUsers(processStepId, 0);
-					
-					for (User userSel : assignUsers) {
-				%>	
-					<aui:option selected="<%= assigerToUserId == userSel.getUserId() ? true : false  %>" value="<%= userSel.getUserId() %>"><%= userSel.getFullName() %></aui:option>
-				<%
-					}
-				%>
-			</aui:select>
-		</div>
+	
+	<c:if test="<%= processWorkflow.getAssignUser() %>">
+			<div class="<%=cssCol%>">
+				<aui:select 
+					name="<%=ProcessOrderDisplayTerms.ASSIGN_TO_USER_ID %>" 
+					label="assign-to-next-user" 
+					showEmptyOption="true"
+					cssClass="input100"
+				>
+					<%
+						List<User> assignUsers = ProcessUtils.getAssignUsers(processStepId, 0);
+						
+						for (User userSel : assignUsers) {
+					%>	
+						<aui:option selected="<%= assigerToUserId == userSel.getUserId() ? true : false  %>" value="<%= userSel.getUserId() %>"><%= userSel.getFullName() %></aui:option>
+					<%
+						}
+					%>
+				</aui:select>
+			</div>
+		</c:if>
+		
+		<c:if test="<%= processWorkflow.getRequestPayment() %>">
 		
 			<div class="<%=cssCol%>">
 				<aui:input 
@@ -248,7 +274,9 @@
 					value="<%=Validator.isNotNull(processWorkflow.getPaymentFee()) ? PaymentRequestGenerator.getTotalPayment(processWorkflow.getPaymentFee(), dossierId) : StringPool.BLANK %>"
 				/>
 			</div>
+		</c:if>		
 		
+		<c:if test="<%= processWorkflow.getGenerateReceptionNo() %>">
 			<div class="<%=cssCol%>">
 				<aui:input 
 					name="<%=ProcessOrderDisplayTerms.RECEPTION_NO %>" 
@@ -256,10 +284,9 @@
 					value="<%= receptionNo %>"
 				/>
 			</div>
+		</c:if>
 		
-		
-		
-		
+		<c:if test="<%= processWorkflow.getGenerateDeadline() %>">
 			<div class="<%=cssCol%>">
 				<aui:row>
 					<label class="control-label custom-lebel" for='<portlet:namespace/><%="deadline" %>'>
@@ -298,7 +325,8 @@
 					</span>
 				</aui:row>
 			</div>
-		</div>
+		</c:if>
+	</div>
 	
 	
 	<div class="row-fluid">
@@ -381,7 +409,7 @@
 		</div>
 	</c:if>
 
-	<aui:button type="submit" value="submit" name="submit"/>
+	<aui:button type="button" value="submit" name="submit"/>
 	
 	<c:if test="<%=esign %>">
 		<aui:button type="button" value="esign" name="esign"/>
@@ -393,10 +421,18 @@
 
 <aui:script>
 	AUI().ready(function(A){
+		
+		var submitButton = A.one('#<portlet:namespace/>submit');
 
 		var cancelButton = A.one('#<portlet:namespace/>cancel');
 		
 		var esign = A.one('#<portlet:namespace/>esign');
+		
+		if(submitButton){
+			submitButton.on('click', function(){
+				submitForm(document.<portlet:namespace />fm);
+			});
+		}
 		
 		if(cancelButton){
 			cancelButton.on('click', function(){

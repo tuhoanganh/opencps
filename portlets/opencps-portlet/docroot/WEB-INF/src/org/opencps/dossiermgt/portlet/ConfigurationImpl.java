@@ -79,6 +79,8 @@ public class ConfigurationImpl implements ConfigurationAction{
 		
 		boolean hiddenTreeNodeEqualNone = ParamUtil.getBoolean(actionRequest, "hiddenTreeNodeEqualNone");
 		
+		boolean allowResultQuickView = ParamUtil.getBoolean(actionRequest, "allowResultQuickView");
+
 		String fileTypes = ParamUtil.getString(actionRequest, "fileTypes");
 		float maxTatalUploadFileSizeInMb = ParamUtil.getFloat(actionRequest, "maxTatalUploadFileSizeInMb");
 		float maxUploadFileSizeInMb = ParamUtil.getFloat(actionRequest, "maxUploadFileSizeInMb");
@@ -123,6 +125,8 @@ public class ConfigurationImpl implements ConfigurationAction{
 		
 		preferences.setValue("hiddenTreeNodeEqualNone", String.valueOf(hiddenTreeNodeEqualNone));
 		
+		preferences.setValue("allowResultQuickView", String.valueOf(allowResultQuickView));
+
 		preferences.setValue("fileTypes", fileTypes);
 		preferences.setValue("maxTatalUploadFileSizeInMb", String.valueOf(maxTatalUploadFileSizeInMb));
 		preferences.setValue("maxUploadFileSizeInMb", String.valueOf(maxUploadFileSizeInMb));
