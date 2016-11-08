@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -107,7 +106,6 @@
 				<div class="span9"><%=Validator.isNotNull(adminAction) ? adminAction.getItemName(locale,true) : StringPool.BLANK %></div>
 			</div>
 		</div>
-
 	</div>
 <%
 	
@@ -117,7 +115,6 @@
 		}catch(Exception e){}
 	}
 	
-
 	int index = 0;
 	
 	List<Long> requiredDossierPartIds = new ArrayList<Long>();
@@ -384,6 +381,7 @@
 							</div>
 							<c:choose>
 								<c:when test="<%=fileGroups != null && !fileGroups.isEmpty() %>">
+
 									<%
 										for(FileGroup fileGroup : fileGroups){
 											%>
@@ -419,7 +417,7 @@
 													name="isEditDossier" 
 													value="<%=String.valueOf(isEditDossier) %>"
 												/>
-												
+								
 											</liferay-util:include>
 											<%
 											index ++;
@@ -441,12 +439,11 @@
 			<%
 			}
 		}
-		
+
 		%>
 			<aui:input name="requiredDossierPart" type="hidden" value="<%= StringUtil.merge(requiredDossierPartIds) %>"/>
 		<%
 	}	
-
 %>
 </div>
 <aui:script>

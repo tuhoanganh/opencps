@@ -41,8 +41,10 @@ import org.opencps.datamgt.service.AdministrationServicedomainLocalServiceUtil;
 import org.opencps.datamgt.service.DictCollectionLocalServiceUtil;
 import org.opencps.datamgt.service.DictItemLocalServiceUtil;
 import org.opencps.dossiermgt.model.Dossier;
+
 import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.DossierPart;
+
 import org.opencps.paymentmgt.util.PaymentMgtUtil;
 
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
@@ -706,7 +708,6 @@ public class PortletUtil {
 
 		HttpServletResponse response = PortalUtil
 				.getHttpServletResponse(actionResponse);
-
 		response.setContentType(ContentTypes.APPLICATION_JSON);
 
 		ServletResponseUtil.write(response, json.toString());
@@ -780,7 +781,6 @@ public class PortletUtil {
 
 		return request.getSession().getServletContext().getRealPath("/")
 				.replace("/", File.separator).replace(File.separator + ".", "");
-
 	}
 
 	public static String getContextPath(ActionRequest actionRequest) {
@@ -989,6 +989,7 @@ public class PortletUtil {
 				if (dossier.getEstimateDatetime().before(now)) {
 					statusLabel = LanguageUtil.get(locale, "status-toosoon");
 				} else if (dossier.getEstimateDatetime().after(now)) {
+
 					statusLabel = LanguageUtil.get(locale, "status-toolate");
 				}
 			}

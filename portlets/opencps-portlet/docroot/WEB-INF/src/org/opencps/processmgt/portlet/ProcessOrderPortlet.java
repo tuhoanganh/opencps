@@ -89,6 +89,7 @@ import org.opencps.processmgt.service.ServiceProcessLocalServiceUtil;
 import org.opencps.processmgt.service.StepAllowanceLocalServiceUtil;
 import org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil;
 import org.opencps.processmgt.util.ProcessUtils;
+import org.opencps.util.BCYSignatureUtil;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
 import org.opencps.usermgt.model.Employee;
@@ -2497,6 +2498,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 						.fetchDossierFile(dossierFileId);
 				// DossierPart dossierPart = DossierPartLocalServiceUtil
 				// .fetchDossierPart(dossierPartId);
+
 				serviceContext.setAddGroupPermissions(true);
 				serviceContext.setAddGuestPermissions(true);
 				_log.info("serviceContext.getScopeGroupId()"
@@ -2506,6 +2508,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				// AccountBean accountBean = AccountUtil.getAccountBean(
 				// dossier.getUserId(), serviceContext.getScopeGroupId(),
 				// serviceContext);
+
 				_log.info("serviceContext.getScopeGroupId()"
 						+ serviceContext.getUserId());
 				_log.info("serviceContext.dossierId()" + dossierId);

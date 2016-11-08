@@ -482,11 +482,11 @@
 			});
 		}
 		
-		if(cancelButton){
-			cancelButton.on('click', function(){
-				<portlet:namespace/>closeDialog();
-			});
-		}
+ 		if(cancelButton){
+ 			cancelButton.on('click', function(){
+ 				<portlet:namespace/>closeDialog();
+ 			});
+ 		}
 		
  		var success = '<%=success%>';
 		

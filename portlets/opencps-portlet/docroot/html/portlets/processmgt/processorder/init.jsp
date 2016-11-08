@@ -16,7 +16,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
 <%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
 
 <%@ include file="../init.jsp"%>
@@ -39,5 +38,5 @@
 	boolean hiddenTreeNodeEqualNone = GetterUtil.getBoolean(preferences.getValue("hiddenTreeNodeEqualNone", "false"), false);
 
 	String assignFormDisplayStyle = preferences1.getValue("assignFormDisplayStyle", "popup");
-	
+
 %>

@@ -75,7 +75,7 @@
 	String redirectURL = ParamUtil.getString(request, "redirectURL");
 
 	List<String> headerNames = new ArrayList<String>();
-
+	
 	headerNames.add("");
 	headerNames.add("#");
 	headerNames.add("dossier-file-no");
@@ -261,7 +261,6 @@
 					row.addText(dossierFile.getDisplayName());
 
 				//	row.addButton(LanguageUtil.get(locale, "select"), "javascript:" + renderResponse.getNamespace() + "selectDossierFile(" + dossierFile.getDossierFileId() +")");
-
 					
 				%>	
 			</liferay-ui:search-container-row> 
@@ -286,13 +285,12 @@
 	</aui:row>
 </aui:form>
 
-
 <aui:script>
 
 	AUI().ready(function(A){
 		
 		var success = '<%=success%>';
-
+		
 		var receiveHiddenDossierFile = A.one('#<portlet:namespace />receiveHiddenDossierFile');
 		var btnAccept = A.one('#<portlet:namespace />btnAccept');
 		var btnCancel = A.one('#<portlet:namespace />btnCancel');

@@ -17,6 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+
 <%@page import="com.liferay.portal.RolePermissionsException"%>
 <%@page import="org.opencps.dossiermgt.model.DossierPart"%>
 <%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
@@ -167,6 +168,7 @@
 	<aui:row>
 		<aui:col width="100">
 			<aui:input name="<%= DossierFileDisplayTerms.DISPLAY_NAME %>" type="textarea" value="<%=dossierPartName %>" inlineLabel="true">
+
 				<aui:validator name="required"/>
 			</aui:input>
 		</aui:col>
@@ -240,4 +242,3 @@
 	});
 
 </aui:script>
-

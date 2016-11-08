@@ -1,4 +1,5 @@
 /**
+
  * OpenCPS is the open source Core Public Services software
  * Copyright (C) 2016-present OpenCPS community
 
@@ -14,9 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
-/**
- * 
- */
+
 package org.opencps.processmgt.portlet;
 
 import javax.portlet.ActionRequest;

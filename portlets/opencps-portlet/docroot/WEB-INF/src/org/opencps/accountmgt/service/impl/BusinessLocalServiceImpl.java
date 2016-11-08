@@ -130,6 +130,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 
 		// add default role
 		if (Validator.isNotNull(roleDefault)) {
+
 			roleIds = new long[] { roleDefault.getRoleId() };
 		}
 
@@ -218,7 +219,6 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 				OrganizationConstants.TYPE_REGULAR_ORGANIZATION, 0, 0,
 				ListTypeConstants.ORGANIZATION_STATUS_DEFAULT, enName, true,
 				serviceContext);
-
 		userService.addOrganizationUsers(org.getOrganizationId(),
 				new long[] { mappingUser.getUserId() });
 
@@ -236,11 +236,11 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		FileEntry fileEntry = null;
 
 		if (size > 0 && inputStream != null) {
+
 			DLFolder dlFolder = DLFolderUtil.getTargetFolder(
 					mappingUser.getUserId(), serviceContext.getScopeGroupId(),
 					repositoryId, false, 0, destination, StringPool.BLANK,
 					false, serviceContext);
-
 			fileEntry = DLAppServiceUtil.addFileEntry(repositoryId,
 					dlFolder.getFolderId(), sourceFileName, contentType, title,
 					StringPool.BLANK, StringPool.BLANK, inputStream, size,
@@ -249,6 +249,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 
 		business.setAccountStatus(PortletConstants.ACCOUNT_STATUS_REGISTERED);
 		business.setAddress(address);
+
 		business.setAttachFile(fileEntry != null ? fileEntry.getFileEntryId()
 				: 0);
 		business.setBusinessType(businessType);
@@ -279,17 +280,16 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		business = businessPersistence.update(business);
 
 		if (businessDomainCodes != null && businessDomainCodes.length > 0) {
-
 			businessDomainLocalService.addBusinessDomains(businessId,
 					businessDomainCodes);
-
 		}
 
 		return business;
 	}
 
 	public void deleteBusinessByBusinessId(long businessId)
-			throws SystemException, PortalException {
+
+	throws SystemException, PortalException {
 
 		Business business = businessPersistence.findByPrimaryKey(businessId);
 
@@ -331,6 +331,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 				organization = organizationLocalService
 						.getOrganization(mappingOrgId);
 			} catch (Exception e) {
+
 				_log.error(e);
 			}
 
@@ -455,6 +456,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		business = businessPersistence.update(business);
 
 		if (businessDomainCodes != null && businessDomainCodes.length > 0) {
+
 			businessDomainLocalService.addBusinessDomains(businessId,
 					businessDomainCodes);
 		} else if (businessDomainCodes != null
@@ -518,6 +520,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 				DLFolderLocalServiceUtil.moveFolder(mappingUser.getUserId(),
 						fileEntry.getFolderId(), parentFolder.getFolderId(),
 						serviceContext);
+
 			}
 
 			// Change user name
@@ -533,6 +536,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 			mappingUser = userLocalService.updateUser(mappingUser);
 
 			// update birth date
+
 			Contact contact = ContactLocalServiceUtil.getContact(mappingUser
 					.getContactId());
 
@@ -546,6 +550,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 				.findByPrimaryKey(business.getMappingOrganizationId());
 		organization.setName(fullName + StringPool.OPEN_PARENTHESIS + idNumber
 				+ StringPool.CLOSE_PARENTHESIS);
+
 		organizationPersistence.update(organization);
 
 		business.setAddress(address);
@@ -572,6 +577,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		business = businessPersistence.update(business);
 
 		if (businessDomainCodes != null && businessDomainCodes.length > 0) {
+
 			businessDomainLocalService.addBusinessDomains(businessId,
 					businessDomainCodes);
 		} else if (businessDomainCodes != null
@@ -581,6 +587,7 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 					.findByBusinessId(businessId);
 
 			for (BusinessDomain bdm : currentBusinessDomains) {
+
 				businessDomainPersistence.remove(bdm);
 			}
 		}
@@ -588,7 +595,8 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 	}
 
 	public Business updateStatus(long businessId, long userId, int accountStatus)
-			throws SystemException, PortalException {
+
+	throws SystemException, PortalException {
 
 		Business business = businessPersistence.findByPrimaryKey(businessId);
 
@@ -599,8 +607,10 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		}
 
 		if (business.getMappingUserId() > 0) {
+
 			userLocalService.updateStatus(business.getMappingUserId(),
 					userStatus);
+
 		}
 
 		business.setUserId(userId);
@@ -617,13 +627,15 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 	}
 
 	public List<Business> getBusinesses(long groupId, int accountStatus)
-			throws SystemException {
+
+	throws SystemException {
 
 		return businessPersistence.findByG_S(groupId, accountStatus);
 	}
 
 	public List<Business> getBusinesses(long groupId, String name)
-			throws SystemException {
+
+	throws SystemException {
 
 		return businessPersistence.findByG_N(groupId, name);
 	}
@@ -640,13 +652,15 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 	}
 
 	public int countByG_S(long groupId, int accountStatus)
-			throws SystemException {
+
+	throws SystemException {
 
 		return businessPersistence.countByG_S(groupId, accountStatus);
 	}
 
 	public Business getBymappingOrganizationId(long mappingOrganizationId)
-			throws SystemException {
+
+	throws SystemException {
 
 		return businessPersistence
 				.fetchBymappingOrganizationId(mappingOrganizationId);
@@ -676,4 +690,5 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 
 	private Log _log = LogFactoryUtil.getLog(BusinessLocalServiceImpl.class
 			.getName());
+
 }

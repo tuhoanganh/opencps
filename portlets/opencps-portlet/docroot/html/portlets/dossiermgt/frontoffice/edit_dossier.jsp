@@ -19,6 +19,7 @@
 %>
 
 <%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
+<%@page import="org.opencps.backend.util.BackendUtils"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
@@ -268,7 +269,6 @@
 		</liferay-util:buffer>
 
 		<aui:form name="fm" action="<%=dossier != null ? updateDossierURL : quickUpdateDossierURL %>" method="post">
-
 
 			<aui:model-context bean="<%= dossier %>" model="<%= Dossier.class %>" />
 
