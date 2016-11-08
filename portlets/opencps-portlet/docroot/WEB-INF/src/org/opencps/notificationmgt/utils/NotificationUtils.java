@@ -76,18 +76,24 @@ public class NotificationUtils {
 
 		JSONObject payloadJSONObject = JSONFactoryUtil.createJSONObject();
 		Locale locale = new Locale("vi", "VN");
+		
+		long plId = 0;
+		String title = StringPool.BLANK;
 
 		try {
 
 			ProcessOrder processOrder =
 				ProcessOrderLocalServiceUtil.getProcessOrder(message.getProcessOrderId());
 
-			String title = StringPool.BLANK;
+			
 			title = LanguageUtil.get(locale, event) + "[" + processOrder.getDossierId() + "]";
 
-			long plId = 0;
+			
 
 			Layout layOut = null;
+			
+			_log.info("groupId:"+groupId);
+			_log.info("group:"+group);
 
 			if (group.equals(NotificationEventKeys.GROUP1)) {
 
@@ -97,17 +103,17 @@ public class NotificationUtils {
 					plId = layOut.getPlid();
 				}
 
-				payloadJSONObject.put("processOrderId", message.getProcessOrderId());
+				
 			}
 			else if (group.equals(NotificationEventKeys.GROUP2)) {
 
-				layOut = LayoutLocalServiceUtil.getFriendlyURLLayout(groupId, false, group);
+				layOut = LayoutLocalServiceUtil.getFriendlyURLLayout(groupId, true, group);
 
 				if (Validator.isNotNull(layOut)) {
 					plId = layOut.getPlid();
 				}
 
-				payloadJSONObject.put("dossierId", message.getDossierId());
+				
 			}
 			else if (group.equals(NotificationEventKeys.GROUP3)) {
 
@@ -117,7 +123,7 @@ public class NotificationUtils {
 					plId = layOut.getPlid();
 				}
 
-				payloadJSONObject.put("paymentFileId", message.getPaymentFileId());
+				
 			}
 			else if (group.equals(NotificationEventKeys.GROUP4)) {
 
@@ -127,18 +133,23 @@ public class NotificationUtils {
 					plId = layOut.getPlid();
 				}
 
-				payloadJSONObject.put("paymentFileId", message.getPaymentFileId());
+				
 			}
-			payloadJSONObject.put("userIdDelivery", userIdDelivery);
-			payloadJSONObject.put("title", title);
-			payloadJSONObject.put("notificationText", message.getNotificationContent());
-			payloadJSONObject.put("plId", plId);
-			payloadJSONObject.put("friendlyUrl", group);
-			payloadJSONObject.put("groupId", groupId);
+			
 		}
 		catch (Exception e) {
 			_log.error(e);
 		}
+		
+		payloadJSONObject.put("processOrderId", message.getProcessOrderId());
+		payloadJSONObject.put("dossierId", message.getDossierId());
+		payloadJSONObject.put("paymentFileId", message.getPaymentFileId());
+		payloadJSONObject.put("userIdDelivery", userIdDelivery);
+		payloadJSONObject.put("title", title);
+		payloadJSONObject.put("notificationText", message.getNotificationContent());
+		payloadJSONObject.put("plId", plId);
+		payloadJSONObject.put("friendlyUrl", group);
+		payloadJSONObject.put("groupId", groupId);
 
 		return payloadJSONObject;
 	}

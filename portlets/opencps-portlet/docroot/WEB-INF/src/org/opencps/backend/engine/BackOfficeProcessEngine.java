@@ -247,11 +247,14 @@ public class BackOfficeProcessEngine implements MessageListener {
 				ProcessStep currStep = new ProcessStepImpl();
 				
 				if (curStepId != 0) {
-					stepName =
-						ProcessStepLocalServiceUtil.fetchProcessStep(curStepId).getStepName();
+					currStep = ProcessStepLocalServiceUtil.fetchProcessStep(curStepId);
+					stepName = currStep.getStepName();
 				} 
 				
 				// Add noti's events
+				
+				_log.info("changeStep.getDossierStatus():"+changeStep.getDossierStatus());
+				_log.info("currStep.getDossierStatus():"+currStep.getDossierStatus());
 				
 				if(changeStep.getDossierStatus().contains(PortletConstants.DOSSIER_STATUS_RECEIVING)) {
 					// dossier receiving
@@ -306,8 +309,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 					citizenEvents.add(NotificationEventKeys.USERS_AND_ENTERPRISE.EVENT6);
 
 				}
-
-
+				
 				String changeStatus = StringPool.BLANK;
 
 				boolean isResubmit = false;
@@ -500,11 +502,15 @@ public class BackOfficeProcessEngine implements MessageListener {
 				toBackOffice.setEstimateDatetime(toEngineMsg.getEstimateDatetime());
 				toBackOffice.setReceiveDatetime(toEngineMsg.getReceiveDate());
 				
+				_log.info("citizenEvents:"+citizenEvents);
+				_log.info("employEvents:"+employEvents);
+				
 				lsNotification =
 							    getListNoties(
-							        citizenEvents, employEvents, dossier.getUserId(), dossier.getUserId(),
+							        citizenEvents, employEvents, dossier.getUserId(), dossier.getGroupId(),
 							        assignToUserId, processWorkflow, dossier.getDossierId(), paymentFile.getPaymentFileId() ,
 							        processOrderId);
+
 				
 				_log.info("%%%%%%%%%%%%% LIST :::::: FUCKKKKKKKING" + lsNotification.size());
 				
@@ -533,10 +539,13 @@ public class BackOfficeProcessEngine implements MessageListener {
 				toBackOffice.setStepName(stepName);
 				
 				citizenEvents.add(NotificationEventKeys.ADMINTRATOR.EVENT1);
+				_log.info("XXXXXXXXXXXXXXxxxxGROUPSSSSSSSSSSSSSSSSSSS ID"+dossier.getGroupId());
+				_log.info("citizenEvents:"+citizenEvents);
+				_log.info("employEvents:"+employEvents);
 
 				lsNotification =
 							    getListNoties(
-							        citizenEvents, employEvents, dossier.getUserId(), dossier.getUserId(),
+							        citizenEvents, employEvents, dossier.getUserId(), dossier.getGroupId(),
 							        assignToUserId, processWorkflow, dossier.getDossierId(), 0 ,
 							        processOrderId);
 				
@@ -661,15 +670,19 @@ public class BackOfficeProcessEngine implements MessageListener {
 				AccountBean accountEmploy =
 				    AccountUtil.getAccountBean(assignToUserId, groupId, null);
 
-				Employee employee = null;
+				_log.info("GROUPSSSSSSSSSSSSSSSSSSS ID"+groupId);
+
 
 				if (accountEmploy.isEmployee()) {
-					employee = (Employee) accountEmploy.getAccountInstance();
-
-					infoEmploy.setUserId(employee.getUserId());
+					
+					Employee employee = (Employee) accountEmploy.getAccountInstance();
+					
+					_log.info("=======employee:"+employee);
+					
+					infoEmploy.setUserId(employee.getMappingUserId());
 					infoEmploy.setUserMail(employee.getEmail());
 					infoEmploy.setUserPhone(employee.getTelNo());
-
+					infoEmploy.setGroupId(groupId);
 				}
 
 				infoListEmploy.add(infoEmploy);
@@ -686,8 +699,13 @@ public class BackOfficeProcessEngine implements MessageListener {
 					infoEmploy.setGroup(NotificationEventKeys.GROUP1);
 					notiMsg.setNotificationContent(processWorkflow.getActionName());
 				}
+				
+				notiMsg.setInfoList(infoListEmploy);
 
 				ls.add(notiMsg);
+				
+				_log.info("SIZENOTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT:"+ls.size());
+
 				
 			} else {
 				List<SendNotificationMessage.InfoList> infoListEmploy =
@@ -700,7 +718,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 					SendNotificationMessage.InfoList infoEmploy =
 								    new SendNotificationMessage.InfoList();
 					
-					infoEmploy.setUserId(employee.getUserId());
+					infoEmploy.setUserId(employee.getMappingUserId());
 					infoEmploy.setUserMail(employee.getEmail());
 					infoEmploy.setUserPhone(employee.getTelNo());
 					infoEmploy.setGroupId(groupId);
@@ -725,6 +743,8 @@ public class BackOfficeProcessEngine implements MessageListener {
 				else {
 					notiMsg.setNotificationContent(processWorkflow.getActionName());
 				}
+				
+				notiMsg.setInfoList(infoListEmploy);
 				
 				ls.add(notiMsg);
 				

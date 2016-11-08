@@ -110,17 +110,17 @@ public class UserNotificationHandler extends BaseUserNotificationHandler {
 		processOrderId = jsonObject.getString("processOrderId");
 
 		long plId =
-			jsonObject.getString("plId").length() > 0
+			jsonObject.getString("plId").trim().length() > 0
 				? Long.parseLong(jsonObject.getString("plId")) : 0;
 		long groupId =
-			jsonObject.getString("groupId").length() > 0
+			jsonObject.getString("groupId").trim().length() > 0
 				? Long.parseLong(jsonObject.getString("plId")) : 0;;
 
 		LiferayPortletURL viewURL = null;
 		Layout layOut = null;
 
 		if (group.equals(NotificationEventKeys.GROUP1)) {
-
+			
 			if (plId <= 0) {
 
 				layOut = LayoutLocalServiceUtil.getFriendlyURLLayout(groupId, true, group);
@@ -145,7 +145,7 @@ public class UserNotificationHandler extends BaseUserNotificationHandler {
 
 			if (plId <= 0) {
 
-				layOut = LayoutLocalServiceUtil.getFriendlyURLLayout(groupId, false, group);
+				layOut = LayoutLocalServiceUtil.getFriendlyURLLayout(groupId, true, group);
 
 				if (Validator.isNotNull(layOut)) {
 					plId = layOut.getPlid();

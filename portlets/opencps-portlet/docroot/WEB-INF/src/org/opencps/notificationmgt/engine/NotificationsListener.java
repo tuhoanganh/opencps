@@ -72,6 +72,8 @@ public class NotificationsListener implements MessageListener {
 
 			List<SendNotificationMessage> notifications =
 				(List<SendNotificationMessage>) message.get(MessageBusKeys.Message.NOTIFICATIONS);
+			
+			_log.info("LITENSSSSSSSSS_SIZE_MSG" + notifications.size());
 
 			String event = StringPool.BLANK;
 			String group = StringPool.BLANK;
