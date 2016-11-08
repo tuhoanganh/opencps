@@ -62,6 +62,7 @@ public class ConfigurationImpl implements ConfigurationAction{
 		    ParamUtil.getString(actionRequest, "portletResource");
 
 		String isTypeCfg = ParamUtil.getString(actionRequest, "isTypeCfg");
+		String dashBoardCFGType = ParamUtil.getString(actionRequest, "dashBoardCFGType");
 		
 		PortletPreferences preferences =
 		    PortletPreferencesFactoryUtil.getPortletSetup(
@@ -93,8 +94,9 @@ public class ConfigurationImpl implements ConfigurationAction{
 		}
 		
 		
-//		preferences.setValue("dashBoardCFGType", dashBoardCFGType);
+		preferences.setValue("dashBoardCFGType", dashBoardCFGType);
 		
+//		preferences.setValue("isTypeCfg", isTypeCfg);
 		preferences.store();
 
 		SessionMessages.add(actionRequest, "potlet-config-saved");

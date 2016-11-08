@@ -45,11 +45,10 @@
 
 <%@ include file="../init.jsp"%>
 
-
 <aui:row>
 	<aui:col width="100" >
 
-		<ul class="sitemap-class opencps-horizontal">
+		<ul class="sitemap-class opencps-horizontal links-image">
 		
 			<%
 				for(int i=0 ; i<6 ; i++){
@@ -59,7 +58,7 @@
 			%>
 			<li onclick="window.location.href='<%=LayoutLocalServiceUtil.getLayout(layout_cfg).getFriendlyURL() %>'">
 				
-				<a class="<%=\"img-home-\"+i %>" href="<%=LayoutLocalServiceUtil.getLayout(layout_cfg).getFriendlyURL() %>">
+				<a class='<%="img-home-"+i %>' href="<%=LayoutLocalServiceUtil.getLayout(layout_cfg).getFriendlyURL() %>">
 				
 				</a> 
 				

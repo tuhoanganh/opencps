@@ -47,6 +47,16 @@
 
 <%
 	
+	String backURL = ParamUtil.getString(request, "backURL");
+	
+%>
+
+<liferay-ui:header
+	backURL="<%= backURL %>"
+	title="service-list"
+/>
+<%
+	
 	List<DictItem> dictItems = PortletUtil.getDictItemInUseByCode(themeDisplay.getScopeGroupId(), 
 		PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN, 
 		PortletConstants.TREE_VIEW_DEFAULT_ITEM_CODE);
