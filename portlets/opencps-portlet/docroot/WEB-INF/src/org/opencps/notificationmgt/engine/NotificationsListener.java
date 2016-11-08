@@ -77,6 +77,7 @@ public class NotificationsListener implements MessageListener {
 			String group = StringPool.BLANK;
 			String email = StringPool.BLANK;
 			String phone = StringPool.BLANK;
+			long groupId = 0;
 
 			/*
 			 * 1 notification message co the gui cho nhieu user, 1 user co the
@@ -102,14 +103,17 @@ public class NotificationsListener implements MessageListener {
 						if (sendType.contains(NotificationEventKeys.INBOX)) {
 
 							group = info.getGroup();
+							groupId = info.getGroupId();
 
 							long userId = info.getUserId();
 
 							JSONObject payloadJSON =
 								NotificationUtils.createNotification(
-									item, event, group, userId, true);
+									item, event, group, userId, true,groupId);
 
 							NotificationUtils.addUserNotificationEvent(item, payloadJSON, userId);
+							_log.info("addUserNotificationEvent Success");
+							_log.info("payloadJSON:"+payloadJSON);
 						}
 						if (sendType.contains(NotificationEventKeys.SMS)) {
 							phone = info.getUserPhone();

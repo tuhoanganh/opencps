@@ -67,47 +67,21 @@ public class NotificationPortlet extends MVCPortlet {
 		
 		MessageBusUtil.sendMessage(
 			MessageBusKeys.Destination.NOTIFICATIONS, message);
-		
-//		UserActionMsg actionMsg = new UserActionMsg();
-//		
-//		//actionMsg.setAction(WebKeys.ACTION_CANCEL_VALUE);
-//
-////		actionMsg.setDossierId(dossierId);
-////
-////		actionMsg.setLocale(serviceContext.getLocale());
-////
-////		actionMsg.setUserId(serviceContext.getUserId());
-////
-////		actionMsg.setGroupId(serviceContext.getScopeGroupId());
-////
-////		actionMsg.setGovAgencyCode(dossier.getGovAgencyCode());
-////
-////		actionMsg.setCompanyId(dossier.getCompanyId());
-		
-//		message.put(DestinationKeys.MessageName.NOTIFICATIONS, actionMsg);
-//		
-//		MessageBusUtil.sendMessage(
-//			DestinationKeys.Destination.NOTIFICATIONS, message);
 
 		try {
 
 			List<User> users =
 				UserLocalServiceUtil.getUsers(0, UserLocalServiceUtil.getUsersCount());
 			
-			//_log.info("users:"+users);
 			
 			String notificationText = ParamUtil.getString(actionRequest, "notifciationText");
-			
-			String[] notificationType = StringUtil.split(notificationText, ",");
-			
-			for(int i=0;i<notificationType.length;i++){
-				//notificationType.
-			}
+			String title = ParamUtil.getString(actionRequest, "title");
+			String userId = ParamUtil.getString(actionRequest,"userId");
 			
 			for (User user : users) {
 
 				JSONObject payloadJSON = JSONFactoryUtil.createJSONObject();
-				payloadJSON.put("title", "title");
+				payloadJSON.put("title", title);
 				payloadJSON.put("notificationText", notificationText);
 				payloadJSON.put("friendlyType", NotificationEventKeys.GROUP1);
 

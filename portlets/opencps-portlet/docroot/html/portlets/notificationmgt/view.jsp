@@ -49,6 +49,8 @@ layout = LayoutLocalServiceUtil.getFriendlyURLLayout(20182, true, friendlyUrl);
 <form action="<%=sendUserNotification%>" name="userNotificationForm"
 	method="POST">
 	<h4>Send User Notification</h4>
+	<b>Title</b><br />
+	<aui:input name="title" ></aui:input>
 	<b>Notification Text</b><br />
 	<textarea rows="4" cols="100"
 		name="<portlet:namespace/>notifciationText" style="width: 300px">
