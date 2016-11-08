@@ -64,7 +64,7 @@
 		PortletConstants.TREE_VIEW_DEFAULT_ITEM_CODE);
 %>
 
-	
+<input name="_86_isTypeCfg" id="_86_isTypeCfg" value="linh_vuc_thu_tuc" type="hidden" label=""></input>
 <div class="table-responsive">
   <table class="table">
     <tr>

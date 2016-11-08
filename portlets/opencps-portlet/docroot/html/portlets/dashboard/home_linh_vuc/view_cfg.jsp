@@ -60,7 +60,7 @@
 	}
 %>
 
-	
+<input name="_86_isTypeCfg" id="_86_isTypeCfg" value="home_linh_vuc" type="hidden" label=""></input>	
 <div class="table-responsive">
   <table class="table">
     <tr>

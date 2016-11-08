@@ -58,7 +58,6 @@
 	
 %>
 
-
 <liferay-portlet:actionURL var="configurationActionURL" portletConfiguration="true"/>
 
 <aui:form action="<%= configurationActionURL %>" method="post" name="configurationForm">
