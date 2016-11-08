@@ -367,6 +367,12 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 
 		return businessPersistence.findByEmail(email);
 	}
+	
+	public Business getBusinessByIdNumber(String idNumber)
+			throws NoSuchBusinessException, SystemException {
+
+			return businessPersistence.findByIdNumber(idNumber);
+		}
 
 	public Business getBusinessByUUID(String uuid)
 		throws SystemException, NoSuchBusinessException {
