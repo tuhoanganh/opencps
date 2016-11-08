@@ -42,7 +42,7 @@ import org.opencps.notificationmgt.utils.NotificationEventKeys;
 import org.opencps.notificationmgt.utils.NotificationUtils;
 import org.opencps.util.MessageBusKeys;
 
-import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
@@ -105,7 +105,7 @@ public class NotificationsListener implements MessageListener {
 
 							long userId = info.getUserId();
 
-							JSONArray payloadJSON =
+							JSONObject payloadJSON =
 								NotificationUtils.createNotification(
 									item, event, group, userId, true);
 
