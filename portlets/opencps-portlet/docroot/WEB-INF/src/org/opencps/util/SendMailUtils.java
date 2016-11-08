@@ -39,14 +39,21 @@ public class SendMailUtils {
 	 * @return
 	 */
 	public static boolean sendEmail(
-		String from, String to, String subject, String body, boolean htmlFormat) {
+		String from, String to,String cc, String subject, String body, boolean htmlFormat) {
 
 		try {
 			if (from.trim().length() > 0 && to.trim().length() > 0) {
-				MailMessage mailMessage =
-					new MailMessage(
-						new InternetAddress(from), new InternetAddress(to), subject, body,
-						htmlFormat);
+//				MailMessage mailMessage =
+//					new MailMessage(
+//						new InternetAddress(from), new InternetAddress(to),
+//						new InternetAddress[cc], subject, body, htmlFormat);
+				MailMessage mailMessage = new MailMessage();
+				mailMessage.setFrom(new InternetAddress(from));
+				mailMessage.setTo(new InternetAddress(to));
+				mailMessage.setCC(new InternetAddress(cc));
+				mailMessage.setSubject(subject);
+				mailMessage.setBody(body);
+				mailMessage.setHTMLFormat(htmlFormat);
 				MailServiceUtil.sendEmail(mailMessage);
 				return true;
 			}
