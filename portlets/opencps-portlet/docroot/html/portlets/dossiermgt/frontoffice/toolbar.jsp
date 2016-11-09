@@ -112,16 +112,17 @@
 							if(Validator.isNotNull(dictItem_cfg)){
 							
 						%>
-						<portlet:param name="mvcPath" value="<%=templatePath + \"display/20_80_servicelist_04.jsp\" %>"/>
-						<portlet:param name="serviceDomainId" value="<%=String.valueOf(dictItem_cfg.getDictItemId()) %>"/>
-						<portlet:param name="dictItemCode" value="<%=dictItem_cfg.getItemCode() %>"/>
+							<portlet:param name="mvcPath" value="<%=templatePath + \"display/20_80_servicelist_04.jsp\" %>"/>
+							<portlet:param name="serviceDomainId" value="<%=String.valueOf(dictItem_cfg.getDictItemId()) %>"/>
+							<portlet:param name="dictItemCode" value="<%=dictItem_cfg.getItemCode() %>"/>
 						<%
-							}
-							
-						}else{
+							}else{
+						%>		
+							<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/frontoffice/frontofficeservicelist.jsp"/>
+						<%
+						}}
 						%>
-						<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/frontoffice/frontofficeservicelist.jsp"/>
-						<%} %>
+						
 						<portlet:param name="backURLFromList" value="<%=currentURL %>"/>
 					</portlet:renderURL>
 					<%-- <aui:nav-item 
