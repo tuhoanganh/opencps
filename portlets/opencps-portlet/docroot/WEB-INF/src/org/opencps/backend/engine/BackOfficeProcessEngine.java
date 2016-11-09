@@ -38,6 +38,7 @@ import org.opencps.dossiermgt.model.ServiceConfig;
 import org.opencps.dossiermgt.service.DossierLogLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
 import org.opencps.dossiermgt.util.ActorBean;
+import org.opencps.holidayconfig.util.HolidayUtils;
 import org.opencps.notificationmgt.message.SendNotificationMessage;
 import org.opencps.notificationmgt.utils.NotificationEventKeys;
 import org.opencps.paymentmgt.model.PaymentFile;
@@ -469,8 +470,32 @@ public class BackOfficeProcessEngine implements MessageListener {
 				toBackOffice.setPayment(isPayment);
 				toBackOffice.setResubmit(isResubmit);
 				toBackOffice.setEstimateDatetime(toEngineMsg.getEstimateDatetime());
-				toBackOffice.setReceiveDatetime(toEngineMsg.getReceiveDate());
+				
+				long preProcessStepId = -1;
+				String autoEvent = StringPool.BLANK;
+				Date estimateDatetime = null;
 
+				preProcessStepId = processWorkflow.getPreProcessStepId();
+				autoEvent = processWorkflow.getAutoEvent();
+				
+				_log.info("=====preProcessStepId:"+preProcessStepId);
+				_log.info("=====autoEvent:"+autoEvent);
+				_log.info("=====dossier.getDossierStatus():"+dossier.getDossierStatus());
+				_log.info("=====processWorkflow.getGenerateDeadline():"+processWorkflow.getGenerateDeadline());
+				_log.info("=====date:"+new Date());
+
+				if (preProcessStepId == 0 
+					&& autoEvent.equals(WebKeys.AUTO_EVENT_SUBMIT)
+					&& processWorkflow.getGenerateDeadline()
+					&& changeStep.getDossierStatus().contains(PortletConstants.DOSSIER_STATUS_RECEIVING)
+					&& currStep.getDossierStatus().equals(StringPool.BLANK)) {
+					
+					estimateDatetime = HolidayUtils.getEndDate(new Date(), processWorkflow.getDeadlinePattern());
+					
+					toBackOffice.setEstimateDatetime(estimateDatetime);
+					
+				}
+				_log.info("======estimateDatetime:"+estimateDatetime);
 				_log.info("citizenEvents:" + citizenEvents);
 				_log.info("employEvents:" + employEvents);
 
