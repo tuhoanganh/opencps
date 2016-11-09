@@ -208,6 +208,14 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		String sourceFileName = uploadPortletRequest
 				.getFileName(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
+		
+		String fileTypes = ParamUtil.getString(uploadPortletRequest,
+				DossierFileDisplayTerms.FILE_TYPES);
+		
+		float maxUploadFileSizeInMb = ParamUtil.getFloat(uploadPortletRequest,
+				DossierFileDisplayTerms.MAX_UPLOAD_FILE_SIZE_IN_MB);
+		System.out.println("============== fileTypes: "+fileTypes);
+		System.out.println("============== maxUploadFileSizeInMb: "+maxUploadFileSizeInMb);
 
 		/*
 		 * sourceFileName = sourceFileName
@@ -226,24 +234,13 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			fileDate = DateTimeUtil.convertStringToDate(dossierFileDate);
 		}
 
-		String portletResource =
-			    ParamUtil.getString(actionRequest, "portletResource");
-
-		PortletPreferences preferences =
-		    PortletPreferencesFactoryUtil.getPortletSetup(
-		        actionRequest, portletResource);
-		
-		String fileTypes = preferences.getValue("fileTypes", StringPool.BLANK);
-		String[] fileTypeArr = fileTypes.split("\\W+");
-		float maxUploadFileSizeInMb = GetterUtil.getFloat(preferences.getValue("maxUploadFileSizeInMb", StringPool.BLANK));
-		
 		try {
 			inputStream = uploadPortletRequest
 					.getFileAsStream(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
 
 			validateAddAttachDossierFile(dossierId, dossierPartId,
 					dossierFileId, displayName, size, sourceFileName,
-					inputStream, accountBean, fileTypeArr, maxUploadFileSizeInMb);
+					inputStream, accountBean, fileTypes, maxUploadFileSizeInMb);
 
 			ServiceContext serviceContext = ServiceContextFactory
 					.getInstance(uploadPortletRequest);
@@ -1816,7 +1813,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	@Override
 	public void render(RenderRequest renderRequest,
 			RenderResponse renderResponse) throws PortletException, IOException {
-
 		// Reset check permission flag
 		setHasPermission(true);
 
@@ -2843,7 +2839,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	private void validateAddAttachDossierFile(long dossierId,
 			long dossierPartId, long dossierFileId, String displayName,
 			long size, String sourceFileName, InputStream inputStream,
-			AccountBean accountBean, String[] fileTypeArr, float maxUploadFileSizeInMb)
+			AccountBean accountBean, String fileTypes, float maxUploadFileSizeInMb)
 			throws NoSuchDossierException,
 			NoSuchDossierPartException, NoSuchAccountException,
 			NoSuchAccountTypeException, NoSuchAccountFolderException,
@@ -2887,6 +2883,22 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			throw new NoSuchDossierPartException();
 		}
 
+		String[] fileTypeArr = fileTypes.split("\\W+");
+		
+		if (fileTypeArr.length > 0){
+			
+			boolean fileTypeIsAgreed = false;
+			
+			for (String fileType : fileTypeArr) {
+				if (sourceFileName.endsWith(fileType)){
+					fileTypeIsAgreed = true;
+				}
+			}
+			
+			if (!fileTypeIsAgreed){
+				throw new FileExtensionException();
+			}
+		}
 		
 		float maxUploadFileSizeInByte = maxUploadFileSizeInMb*1024*1024;
 		if (size == 0) {
@@ -2895,16 +2907,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			throw new FileSizeException();
 		}
 		
-		boolean fileTypeIsAgreed = false;
-		for (String fileType : fileTypeArr) {
-			if (sourceFileName.endsWith(fileType)){
-				fileTypeIsAgreed = true;
-			}
-		}
-		
-		if (!fileTypeIsAgreed){
-			throw new FileExtensionException();
-		}
 	}
 
 	/**

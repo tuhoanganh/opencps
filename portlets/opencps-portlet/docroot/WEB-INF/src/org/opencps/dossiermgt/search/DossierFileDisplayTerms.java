@@ -62,6 +62,8 @@ public class DossierFileDisplayTerms extends DisplayTerms {
 	public static final String SUCCESS = "success";
 	public static final String SIZE = "size";
 	public static final String TEMP_FOLDER_NAME = "tempFolderName";
+	public static final String FILE_TYPES = "fileTypes";
+	public static final String MAX_UPLOAD_FILE_SIZE_IN_MB = "maxUploadFileSizeInMb";
 	
 	protected String displayName;
 	
