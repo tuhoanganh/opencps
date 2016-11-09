@@ -30,12 +30,14 @@ import java.util.Map;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
+import javax.portlet.PortletPreferences;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.junit.experimental.theories.PotentialAssignment;
 import org.opencps.accountmgt.NoSuchAccountException;
 import org.opencps.accountmgt.NoSuchAccountFolderException;
 import org.opencps.accountmgt.NoSuchAccountOwnOrgIdException;
@@ -134,8 +136,10 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portlet.documentlibrary.DuplicateFileException;
 import com.liferay.portlet.documentlibrary.DuplicateFolderNameException;
+import com.liferay.portlet.documentlibrary.FileExtensionException;
 import com.liferay.portlet.documentlibrary.FileSizeException;
 import com.liferay.portlet.documentlibrary.NoSuchFileEntryException;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
@@ -153,7 +157,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	 * @throws IOException
 	 */
 	public void addAttachmentFile(ActionRequest actionRequest,
-			ActionResponse actionResponse) throws IOException {
+			ActionResponse actionResponse) throws IOException, Exception {
 
 		AccountBean accountBean = AccountUtil.getAccountBean(actionRequest);
 
@@ -222,13 +226,24 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			fileDate = DateTimeUtil.convertStringToDate(dossierFileDate);
 		}
 
+		String portletResource =
+			    ParamUtil.getString(actionRequest, "portletResource");
+
+		PortletPreferences preferences =
+		    PortletPreferencesFactoryUtil.getPortletSetup(
+		        actionRequest, portletResource);
+		
+		String fileTypes = preferences.getValue("fileTypes", StringPool.BLANK);
+		String[] fileTypeArr = fileTypes.split("\\W+");
+		float maxUploadFileSizeInMb = GetterUtil.getFloat(preferences.getValue("maxUploadFileSizeInMb", StringPool.BLANK));
+		
 		try {
 			inputStream = uploadPortletRequest
 					.getFileAsStream(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
 
 			validateAddAttachDossierFile(dossierId, dossierPartId,
 					dossierFileId, displayName, size, sourceFileName,
-					inputStream, accountBean);
+					inputStream, accountBean, fileTypeArr, maxUploadFileSizeInMb);
 
 			ServiceContext serviceContext = ServiceContextFactory
 					.getInstance(uploadPortletRequest);
@@ -339,6 +354,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 						PermissionDossierException.class);
 			} else if (e instanceof FileSizeException) {
 				SessionErrors.add(actionRequest, FileSizeException.class);
+			} else if (e instanceof FileExtensionException) {
+				SessionErrors.add(actionRequest, FileExtensionException.class);
 			} else {
 				SessionErrors.add(actionRequest, "upload-error");
 
@@ -2826,11 +2843,12 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	private void validateAddAttachDossierFile(long dossierId,
 			long dossierPartId, long dossierFileId, String displayName,
 			long size, String sourceFileName, InputStream inputStream,
-			AccountBean accountBean) throws NoSuchDossierException,
+			AccountBean accountBean, String[] fileTypeArr, float maxUploadFileSizeInMb)
+			throws NoSuchDossierException,
 			NoSuchDossierPartException, NoSuchAccountException,
 			NoSuchAccountTypeException, NoSuchAccountFolderException,
 			NoSuchAccountOwnUserIdException, NoSuchAccountOwnOrgIdException,
-			PermissionDossierException, FileSizeException {
+			PermissionDossierException, FileSizeException, FileExtensionException {
 
 		validateAccount(accountBean);
 
@@ -2869,10 +2887,23 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			throw new NoSuchDossierPartException();
 		}
 
+		
+		float maxUploadFileSizeInByte = maxUploadFileSizeInMb*1024*1024;
 		if (size == 0) {
 			throw new FileSizeException();
-		} else if (size > 300000000) {
+		} else if (size > maxUploadFileSizeInByte && maxUploadFileSizeInByte > 0) {
 			throw new FileSizeException();
+		}
+		
+		boolean fileTypeIsAgreed = false;
+		for (String fileType : fileTypeArr) {
+			if (sourceFileName.endsWith(fileType)){
+				fileTypeIsAgreed = true;
+			}
+		}
+		
+		if (!fileTypeIsAgreed){
+			throw new FileExtensionException();
 		}
 	}
 

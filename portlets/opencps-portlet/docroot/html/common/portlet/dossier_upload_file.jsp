@@ -29,6 +29,7 @@
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.util.MessageKeys"%>
 <%@page import="com.liferay.portlet.documentlibrary.DuplicateFileException"%>
+<%@page import="com.liferay.portlet.documentlibrary.FileExtensionException"%>
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
 <%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
@@ -148,6 +149,12 @@
 	exception="<%= FileSizeException.class %>" 
 	message="<%= FileSizeException.class.getName() %>" 
 />
+
+<liferay-ui:error 
+	exception="<%= FileExtensionException.class %>" 
+	message="<%= FileExtensionException.class.getName() %>" 
+/>
+
 <liferay-ui:error 
 	exception="<%= DuplicateFileException.class %>" 
 	message="<%= MessageKeys.DOSSIER_FILE_DUPLICATE_NAME %>"
@@ -219,7 +226,7 @@
 						} else {
 							String[] fileTypeArr = fileTypes.split("\\W+");
 					%>
-							'<%= StringUtil.merge(fileTypeArr) %>'
+							'<%= StringUtil.merge(fileTypeArr, ", ") %>'
 					<%
 						}
 					%>
