@@ -100,7 +100,7 @@
 					for(DictItem dictItem: dictItems){
 					String itemCode_cfg = GetterUtil.getString(portletPreferences.getValue("_86_img-home-"+i+"_itemCode", ""));
 				%>
-					<option <%= dictItem.getItemCode().equals(itemCode_cfg) ? "selected":"" %> value="<%= dictItem.getItemCode() %>"><%= dictItem.getItemName(locale) %></option>
+					<option <%= String.valueOf(dictItem.getDictItemId()).equals(itemCode_cfg) ? "selected":"" %> value="<%= dictItem.getDictItemId() %>"><%= dictItem.getItemName(locale) %></option>
 				<%
 					}
 				%>
