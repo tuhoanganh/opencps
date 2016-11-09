@@ -101,12 +101,10 @@
 					&& tabs1.equals(DossierMgtUtil.TOP_TABS_DOSSIER)%>">
 					
 					<portlet:renderURL var="addDossierURL" windowState="<%=LiferayWindowState.NORMAL.toString() %>">
-						
 						<portlet:param name="isListServiceConfig" value="<%=String.valueOf(true) %>"/>
 						<portlet:param name="tabs1" value="<%=DossierMgtUtil.TOP_TABS_DOSSIER %>"/>
 						<portlet:param name="backURL" value="<%=currentURL %>"/>
 						<%
-						if(Validator.isNotNull(itemCode_cfg)){
 							DictItem dictItem_cfg = DictItemLocalServiceUtil.getDictItemInuseByItemCode(themeDisplay.getScopeGroupId(), PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN, itemCode_cfg);
 							
 							if(Validator.isNotNull(dictItem_cfg)){
@@ -120,9 +118,8 @@
 						%>		
 							<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/frontoffice/frontofficeservicelist.jsp"/>
 						<%
-						}}
+							}
 						%>
-						
 						<portlet:param name="backURLFromList" value="<%=currentURL %>"/>
 					</portlet:renderURL>
 					<%-- <aui:nav-item 
