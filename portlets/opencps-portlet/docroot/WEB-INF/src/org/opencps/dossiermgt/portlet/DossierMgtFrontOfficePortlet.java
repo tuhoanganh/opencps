@@ -214,8 +214,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		
 		float maxUploadFileSizeInMb = ParamUtil.getFloat(uploadPortletRequest,
 				DossierFileDisplayTerms.MAX_UPLOAD_FILE_SIZE_IN_MB);
-		System.out.println("============== fileTypes: "+fileTypes);
-		System.out.println("============== maxUploadFileSizeInMb: "+maxUploadFileSizeInMb);
 
 		/*
 		 * sourceFileName = sourceFileName
@@ -1813,6 +1811,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	@Override
 	public void render(RenderRequest renderRequest,
 			RenderResponse renderResponse) throws PortletException, IOException {
+
 		// Reset check permission flag
 		setHasPermission(true);
 
