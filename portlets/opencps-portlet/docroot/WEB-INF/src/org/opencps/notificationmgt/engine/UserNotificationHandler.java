@@ -21,9 +21,7 @@ import javax.portlet.WindowState;
 
 import org.opencps.dossiermgt.search.DossierDisplayTerms;
 import org.opencps.notificationmgt.utils.NotificationEventKeys;
-import org.opencps.paymentmgt.model.PaymentFile;
 import org.opencps.paymentmgt.search.PaymentFileDisplayTerms;
-import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
 import org.opencps.processmgt.search.ProcessOrderDisplayTerms;
 import org.opencps.util.WebKeys;
 

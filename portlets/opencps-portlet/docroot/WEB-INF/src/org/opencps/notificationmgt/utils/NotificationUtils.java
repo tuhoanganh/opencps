@@ -76,7 +76,7 @@ public class NotificationUtils {
 
 		JSONObject payloadJSONObject = JSONFactoryUtil.createJSONObject();
 		Locale locale = new Locale("vi", "VN");
-		
+
 		long plId = 0;
 		String title = StringPool.BLANK;
 
@@ -85,62 +85,21 @@ public class NotificationUtils {
 			ProcessOrder processOrder =
 				ProcessOrderLocalServiceUtil.getProcessOrder(message.getProcessOrderId());
 
-			
 			title = LanguageUtil.get(locale, event) + "[" + processOrder.getDossierId() + "]";
 
-			
-
 			Layout layOut = null;
-			
-			_log.info("groupId:"+groupId);
-			_log.info("group:"+group);
 
-			if (group.equals(NotificationEventKeys.GROUP1)) {
+			layOut = LayoutLocalServiceUtil.getFriendlyURLLayout(groupId, true, group);
 
-				layOut = LayoutLocalServiceUtil.getFriendlyURLLayout(groupId, true, group);
-
-				if (Validator.isNotNull(layOut)) {
-					plId = layOut.getPlid();
-				}
-
-				
+			if (Validator.isNotNull(layOut)) {
+				plId = layOut.getPlid();
 			}
-			else if (group.equals(NotificationEventKeys.GROUP2)) {
 
-				layOut = LayoutLocalServiceUtil.getFriendlyURLLayout(groupId, true, group);
-
-				if (Validator.isNotNull(layOut)) {
-					plId = layOut.getPlid();
-				}
-
-				
-			}
-			else if (group.equals(NotificationEventKeys.GROUP3)) {
-
-				layOut = LayoutLocalServiceUtil.getFriendlyURLLayout(groupId, true, group);
-
-				if (Validator.isNotNull(layOut)) {
-					plId = layOut.getPlid();
-				}
-
-				
-			}
-			else if (group.equals(NotificationEventKeys.GROUP4)) {
-
-				layOut = LayoutLocalServiceUtil.getFriendlyURLLayout(groupId, true, group);
-
-				if (Validator.isNotNull(layOut)) {
-					plId = layOut.getPlid();
-				}
-
-				
-			}
-			
 		}
 		catch (Exception e) {
 			_log.error(e);
 		}
-		
+
 		payloadJSONObject.put("processOrderId", message.getProcessOrderId());
 		payloadJSONObject.put("dossierId", message.getDossierId());
 		payloadJSONObject.put("paymentFileId", message.getPaymentFileId());
@@ -186,7 +145,8 @@ public class NotificationUtils {
 				StringUtil.replace(
 					body, "{event}", LanguageUtil.get(locale, message.getNotificationEventName()));
 
-			SendMailUtils.sendEmail(from, to,"htln.works@gmail.com,htln.works@gmail.com", subject, body, htmlFormat);
+			SendMailUtils.sendEmail(
+				from, to, StringPool.BLANK, subject, body, htmlFormat);
 		}
 		catch (Exception e) {
 			_log.error(e);

@@ -43,14 +43,15 @@ public class SendMailUtils {
 
 		try {
 			if (from.trim().length() > 0 && to.trim().length() > 0) {
-//				MailMessage mailMessage =
-//					new MailMessage(
-//						new InternetAddress(from), new InternetAddress(to),
-//						new InternetAddress[cc], subject, body, htmlFormat);
+				
+				InternetAddress CC = new InternetAddress();
+				
+				InternetAddress[] CCS = CC.parse(cc);
+
 				MailMessage mailMessage = new MailMessage();
 				mailMessage.setFrom(new InternetAddress(from));
 				mailMessage.setTo(new InternetAddress(to));
-				mailMessage.setCC(new InternetAddress(cc));
+				mailMessage.setCC(CCS);
 				mailMessage.setSubject(subject);
 				mailMessage.setBody(body);
 				mailMessage.setHTMLFormat(htmlFormat);

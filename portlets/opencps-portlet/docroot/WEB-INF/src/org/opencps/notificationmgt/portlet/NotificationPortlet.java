@@ -18,33 +18,17 @@
 package org.opencps.notificationmgt.portlet;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 
-import org.opencps.notificationmgt.engine.UserNotificationHandler;
-import org.opencps.notificationmgt.message.SendNotificationMessage;
-import org.opencps.notificationmgt.utils.NotificationEventKeys;
-import org.opencps.util.MessageBusKeys;
+import org.opencps.util.SendMailUtils;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.json.JSONFactoryUtil;
-import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.messaging.Message;
-import com.liferay.portal.kernel.messaging.MessageBusUtil;
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.model.User;
-import com.liferay.portal.service.ServiceContext;
-import com.liferay.portal.service.ServiceContextFactory;
-import com.liferay.portal.service.UserLocalServiceUtil;
-import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 /**
  * @author nhanhoang
@@ -56,45 +40,8 @@ public class NotificationPortlet extends MVCPortlet {
 	public void sendUserNotification(ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException, PortletException, PortalException, SystemException {
 		
-		ServiceContext serviceContext =
-						ServiceContextFactory.getInstance(actionRequest);
-		
-		Message message = new Message();
-		
-		SendNotificationMessage notificationMessage = new SendNotificationMessage();
-		
-		message.put(MessageBusKeys.Message.NOTIFICATIONS, notificationMessage);
-		
-		MessageBusUtil.sendMessage(
-			MessageBusKeys.Destination.NOTIFICATIONS, message);
 
-		try {
-
-			List<User> users =
-				UserLocalServiceUtil.getUsers(0, UserLocalServiceUtil.getUsersCount());
-			
-			
-			String notificationText = ParamUtil.getString(actionRequest, "notifciationText");
-			String title = ParamUtil.getString(actionRequest, "title");
-			String userId = ParamUtil.getString(actionRequest,"userId");
-			
-			for (User user : users) {
-
-				JSONObject payloadJSON = JSONFactoryUtil.createJSONObject();
-				payloadJSON.put("title", title);
-				payloadJSON.put("notificationText", notificationText);
-				payloadJSON.put("friendlyType", NotificationEventKeys.GROUP1);
-
-				UserNotificationEventLocalServiceUtil.addUserNotificationEvent(
-					user.getUserId(), UserNotificationHandler.PORTLET_ID,
-					(new Date()).getTime(), user.getUserId(), payloadJSON.toString(), false,
-					serviceContext);
-			}
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-
-		}
+		SendMailUtils.sendEmail("no-reply@fds.vn", "hltn.works@gmail.com", "skynetx001@gmail.com,nhanhlt@fds.vn", "subject", "body", true);
 	}
 
 }
