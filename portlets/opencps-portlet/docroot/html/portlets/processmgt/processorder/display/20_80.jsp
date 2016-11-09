@@ -129,6 +129,13 @@
 		
 	}catch(Exception e){}
 	
+	Collections.sort(processOrderSteps, new Comparator<ProcessOrderBean>() {
+
+        public int compare(ProcessOrderBean o1, ProcessOrderBean o2) {
+        	return String.valueOf(o1.getSequenceNo()).compareTo(String.valueOf(o2.getSequenceNo()));
+        }
+    });
+	
 	//remove duplicates process orders
 	Map<String, ProcessOrderBean> cleanMap = new LinkedHashMap<String, ProcessOrderBean>();
 	for (int i = 0; i < processOrderSteps.size(); i++) {
@@ -136,12 +143,6 @@
 	}
 	processOrderSteps = new ArrayList<ProcessOrderBean>(cleanMap.values());
 	
-	Collections.sort(processOrderSteps, new Comparator<ProcessOrderBean>() {
-
-        public int compare(ProcessOrderBean o1, ProcessOrderBean o2) {
-        	return String.valueOf(o1.getSequenceNo()).compareTo(String.valueOf(o2.getSequenceNo()));
-        }
-    });
 	
 	JSONObject arrayParam = JSONFactoryUtil
 		    .createJSONObject();

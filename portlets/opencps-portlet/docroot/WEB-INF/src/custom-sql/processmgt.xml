@@ -347,13 +347,13 @@
 				opencps_processstep.sequenceNo
 			FROM 
 				opencps_processstep
-			LEFT JOIN
+			INNER JOIN
 				opencps_processorder
 			ON 
 				opencps_processorder.processStepId = opencps_processstep.processStepId
 			AND opencps_processorder.serviceInfoId = ?
 			
-			LEFT JOIN
+			INNER JOIN
 				opencps_serviceinfo 
 			ON
 				opencps_processorder.serviceInfoId = opencps_serviceinfo.serviceinfoId
