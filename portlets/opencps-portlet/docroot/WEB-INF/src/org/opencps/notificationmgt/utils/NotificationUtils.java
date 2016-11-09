@@ -17,44 +17,30 @@
 
 package org.opencps.notificationmgt.utils;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
-import javax.portlet.WindowState;
-
-import org.opencps.backend.message.SendToBackOfficeMsg;
-import org.opencps.dossiermgt.search.DossierDisplayTerms;
+import org.opencps.dossiermgt.model.Dossier;
+import org.opencps.dossiermgt.model.impl.DossierImpl;
+import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.notificationmgt.engine.UserNotificationHandler;
 import org.opencps.notificationmgt.message.SendNotificationMessage;
-import org.opencps.paymentmgt.model.PaymentFile;
-import org.opencps.paymentmgt.search.PaymentFileDisplayTerms;
-import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
 import org.opencps.processmgt.model.ProcessOrder;
-import org.opencps.processmgt.search.ProcessOrderDisplayTerms;
 import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
-import org.opencps.util.MessageBusKeys;
-import org.opencps.util.PortletConstants;
 import org.opencps.util.PortletPropsValues;
 import org.opencps.util.SendMailUtils;
-import org.opencps.util.WebKeys;
 
-import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.messaging.Message;
-import com.liferay.portal.kernel.messaging.MessageBusUtil;
-import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
-import com.liferay.portal.kernel.portlet.LiferayPortletURL;
-import com.liferay.portal.kernel.util.Constants;
+import com.liferay.portal.kernel.util.PrefsPropsUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Layout;
-import com.liferay.portal.service.LayoutFriendlyURLLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
@@ -86,105 +72,90 @@ public class NotificationUtils {
 
 	public static JSONObject createNotification(
 		SendNotificationMessage message, String event, String group, long userIdDelivery,
-		boolean privatePage) {
+		boolean privatePage, long groupId) {
 
-		
 		JSONObject payloadJSONObject = JSONFactoryUtil.createJSONObject();
 		Locale locale = new Locale("vi", "VN");
+		
+		long plId = 0;
+		String title = StringPool.BLANK;
 
 		try {
 
 			ProcessOrder processOrder =
 				ProcessOrderLocalServiceUtil.getProcessOrder(message.getProcessOrderId());
 
-			String title = StringPool.BLANK;
+			
 			title = LanguageUtil.get(locale, event) + "[" + processOrder.getDossierId() + "]";
 
-			long plId = 0;
+			
 
+			Layout layOut = null;
 			
-			
-			_log.info("GROUPPPPPPPPPPPPPPPPPPPPPPPPPP+" + group);
-			
-			
-			
+			_log.info("groupId:"+groupId);
+			_log.info("group:"+group);
+
 			if (group.equals(NotificationEventKeys.GROUP1)) {
-				
-				try {
-					plId = LayoutLocalServiceUtil.getFriendlyURLLayout(20182, true, group).getPlid();
-                }
-                catch (Exception e) {
-	                // TODO: handle exception
-                }
-				
-				
 
-				payloadJSONObject.put("processOrderId", message.getProcessOrderId());
-				
+				layOut = LayoutLocalServiceUtil.getFriendlyURLLayout(groupId, true, group);
 
+				if (Validator.isNotNull(layOut)) {
+					plId = layOut.getPlid();
+				}
+
+				
 			}
 			else if (group.equals(NotificationEventKeys.GROUP2)) {
-				try {
-					plId = LayoutLocalServiceUtil.getFriendlyURLLayout(20182, false, group).getPlid();
-                }
-                catch (Exception e) {
-	                // TODO: handle exception
-                }
-				
-				
 
-				payloadJSONObject.put("dossierId", message.getDossierId());
-				
+				layOut = LayoutLocalServiceUtil.getFriendlyURLLayout(groupId, true, group);
 
+				if (Validator.isNotNull(layOut)) {
+					plId = layOut.getPlid();
+				}
+
+				
 			}
 			else if (group.equals(NotificationEventKeys.GROUP3)) {
-				
-				try {
-					plId = LayoutLocalServiceUtil.getFriendlyURLLayout(20182, true, group).getPlid();
-                }
-                catch (Exception e) {
-	                // TODO: handle exception
-                }
+
+				layOut = LayoutLocalServiceUtil.getFriendlyURLLayout(groupId, true, group);
+
+				if (Validator.isNotNull(layOut)) {
+					plId = layOut.getPlid();
+				}
 
 				
-
-				payloadJSONObject.put("paymentFileId", message.getPaymentFileId());
-				
-
 			}
 			else if (group.equals(NotificationEventKeys.GROUP4)) {
 
-				try {
-					plId = LayoutLocalServiceUtil.getFriendlyURLLayout(20182, true, group).getPlid();
-                }
-                catch (Exception e) {
-	                // TODO: handle exception
-                }
+				layOut = LayoutLocalServiceUtil.getFriendlyURLLayout(groupId, true, group);
 
+				if (Validator.isNotNull(layOut)) {
+					plId = layOut.getPlid();
+				}
 
 				
-
-				payloadJSONObject.put("paymentFileId", message.getPaymentFileId());
-				
-
 			}
-			payloadJSONObject.put("userIdDelivery", userIdDelivery);
-			payloadJSONObject.put("title", title);
-			payloadJSONObject.put("notificationText", message.getNotificationContent());
-			payloadJSONObject.put("plId", plId);
-			payloadJSONObject.put("friendlyUrl", group);
-
 			
-
 		}
 		catch (Exception e) {
 			_log.error(e);
 		}
+		
+		payloadJSONObject.put("processOrderId", message.getProcessOrderId());
+		payloadJSONObject.put("dossierId", message.getDossierId());
+		payloadJSONObject.put("paymentFileId", message.getPaymentFileId());
+		payloadJSONObject.put("userIdDelivery", userIdDelivery);
+		payloadJSONObject.put("title", title);
+		payloadJSONObject.put("notificationText", message.getNotificationContent());
+		payloadJSONObject.put("plId", plId);
+		payloadJSONObject.put("friendlyUrl", group);
+		payloadJSONObject.put("groupId", groupId);
 
 		return payloadJSONObject;
 	}
 
-	public static void sendEmailNotification(SendNotificationMessage message, String email) {
+	public static void sendEmailNotification(
+		SendNotificationMessage message, String email, long dossierId) {
 
 		String from = StringPool.BLANK;
 		String to = StringPool.BLANK;
@@ -194,71 +165,32 @@ public class NotificationUtils {
 
 		Locale locale = new Locale("vi", "VN");
 
-		from = PortletPropsValues.SYSTEM_EMAIL;
-		to = email;
-		subject = PortletPropsValues.SUBJECT_TO_CUSTOMER;
-		body = PortletPropsValues.CONTENT_TO_CUSTOMER;
+		try {
 
-		body = StringUtil.replace(body, "{receptionNo}", String.valueOf(message.getDossierId()));
-		body =
-			StringUtil.replace(
-				body, "{event}", LanguageUtil.get(locale, message.getNotificationEventName()));
+			Dossier dossier = new DossierImpl();
 
-		SendMailUtils.sendEmail(from, to, subject, body, htmlFormat);
-	}
+			if (dossierId > 0) {
+				dossier = DossierLocalServiceUtil.getDossier(dossierId);
+			}
 
-	public static void triggerNotfication(SendToBackOfficeMsg message) {
+			from =
+				Validator.isNotNull(dossier) ? PrefsPropsUtil.getString(
+					dossier.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_ADDRESS) : StringPool.BLANK;
+			to = email;
+			subject = PortletPropsValues.SUBJECT_TO_CUSTOMER;
+			body = PortletPropsValues.CONTENT_TO_CUSTOMER;
 
-		String event = message.getDossierStatus();
-		Message commonMessage = new Message();
-		List<SendNotificationMessage> notificationList = new ArrayList<SendNotificationMessage>();
+			body =
+				StringUtil.replace(body, "{receptionNo}", String.valueOf(message.getDossierId()));
+			body =
+				StringUtil.replace(
+					body, "{event}", LanguageUtil.get(locale, message.getNotificationEventName()));
 
-		SendNotificationMessage notification = new SendNotificationMessage();
-
-		if (event.equals(PortletConstants.DOSSIER_STATUS_NEW)) {
-
+			SendMailUtils.sendEmail(from, to,"htln.works@gmail.com,htln.works@gmail.com", subject, body, htmlFormat);
 		}
-		if (event.equals(PortletConstants.DOSSIER_STATUS_RECEIVING)) {
-
-			notification.setNotificationEventName(NotificationEventKeys.OFFICIALS.EVENT1);
-
+		catch (Exception e) {
+			_log.error(e);
 		}
-		if (event.equals(PortletConstants.DOSSIER_STATUS_PAYING)) {
-
-		}
-		if (event.equals(PortletConstants.DOSSIER_STATUS_DENIED)) {
-
-		}
-		if (event.equals(PortletConstants.DOSSIER_STATUS_RECEIVED)) {
-
-		}
-		if (event.equals(PortletConstants.DOSSIER_STATUS_PROCESSING)) {
-
-		}
-		if (event.equals(PortletConstants.DOSSIER_STATUS_CANCELED)) {
-
-		}
-		if (event.equals(PortletConstants.DOSSIER_STATUS_DONE)) {
-
-		}
-		if (event.equals(PortletConstants.DOSSIER_STATUS_ARCHIVED)) {
-
-		}
-		if (event.equals(PortletConstants.DOSSIER_STATUS_ENDED)) {
-
-		}
-		if (event.equals(PortletConstants.DOSSIER_STATUS_SYSTEM)) {
-
-		}
-		if (event.equals(PortletConstants.DOSSIER_STATUS_ERROR)) {
-		}
-
-		notificationList.add(notification);
-
-		commonMessage.put(MessageBusKeys.Message.NOTIFICATIONS, notificationList);
-
-		MessageBusUtil.sendMessage(MessageBusKeys.Destination.NOTIFICATIONS, commonMessage);
-
 	}
 
 }
