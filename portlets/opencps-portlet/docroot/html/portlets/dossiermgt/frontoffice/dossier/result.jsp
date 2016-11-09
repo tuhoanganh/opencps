@@ -173,8 +173,8 @@
 					</aui:col>
 					<aui:col width="70">
 						<%=
-							Validator.isNotNull(dossier.getSubmitDatetime()) ? 
-							DateTimeUtil.convertDateToString(dossier.getSubmitDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) : 
+							Validator.isNotNull(dossier.getReceiveDatetime()) ? 
+							DateTimeUtil.convertDateToString(dossier.getReceiveDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) : 
 							DateTimeUtil._EMPTY_DATE_TIME
 						%>
 					</aui:col>
