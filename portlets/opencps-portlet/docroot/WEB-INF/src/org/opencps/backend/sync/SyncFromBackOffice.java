@@ -31,8 +31,10 @@ import org.opencps.dossiermgt.service.DossierLogLocalServiceUtil;
 import org.opencps.dossiermgt.util.ActorBean;
 import org.opencps.holidayconfig.util.HolidayCheckUtils;
 import org.opencps.jms.SyncServiceContext;
+import org.opencps.notificationmgt.message.SendNotificationMessage;
 import org.opencps.processmgt.model.WorkflowOutput;
 import org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil;
+import org.opencps.util.MessageBusKeys;
 import org.opencps.util.PortletConstants;
 import org.opencps.util.PortletPropsValues;
 import org.opencps.util.WebKeys;
@@ -75,6 +77,8 @@ public class SyncFromBackOffice implements MessageListener {
 
 		SendToBackOfficeMsg toBackOffice =
 			(SendToBackOfficeMsg) message.get("toBackOffice");
+		
+		List<SendNotificationMessage> lsNotification = toBackOffice.getListNotifications();
 
 		boolean trustServiceMode =
 			BackendUtils.checkServiceMode(toBackOffice.getDossierId());
@@ -202,6 +206,13 @@ public class SyncFromBackOffice implements MessageListener {
 /*				DossierFileLocalServiceUtil.updateDossierFileSyncStatus(
 					0, PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS,
 					dossierFiles);*/
+				
+				Message msgNoti = new Message();
+				
+				msgNoti.put(MessageBusKeys.Message.NOTIFICATIONS, lsNotification);
+				
+				MessageBusUtil.sendMessage(MessageBusKeys.Destination.NOTIFICATIONS, msgNoti);
+				
 			}
 			catch (Exception e) {
 				_log.error(e);
