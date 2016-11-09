@@ -25,6 +25,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.portlet.ActionRequest;
@@ -1112,6 +1113,12 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 								StringPool.BLANK, inputStream, file.length(),
 								serviceContext);
 						// Update Log UpdateVersion File
+						
+						Locale locale = new Locale("vi", "VN");
+						
+						String dossierAcctionUpdateVersionFile = LanguageUtil.get(locale, 
+								PortletConstants.DOSSIER_ACTION_UPDATE_VERSION_FILE);
+						
 						DossierLogLocalServiceUtil
 								.addDossierLog(
 										serviceContext.getUserId(),
@@ -1121,7 +1128,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 										fileGroupId,
 										dossier.getDossierStatus(),
 										PortletConstants.DOSSIER_ACTION_UPDATE_VERSION_FILE,
-										PortletConstants.DOSSIER_ACTION_UPDATE_VERSION_FILE
+										dossierAcctionUpdateVersionFile
 												+ StringPool.SPACE
 												+ StringPool.COLON
 												+ StringPool.SPACE
