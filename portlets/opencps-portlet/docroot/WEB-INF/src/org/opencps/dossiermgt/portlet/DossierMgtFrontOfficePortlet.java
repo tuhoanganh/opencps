@@ -3321,9 +3321,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			throw new OutOfLengthDossierSubjectNameException();
 		}
 
-		if (Validator.isNull(subjectId)) {
-			throw new EmptyDossierSubjectIdException();
-		}
+//		if (Validator.isNull(subjectId)) {
+//			throw new EmptyDossierSubjectIdException();
+//		}
 
 		if (subjectId.trim().length() > PortletPropsValues.DOSSIERMGT_DOSSIER_SUBJECT_ID_LENGTH) {
 			throw new OutOfLengthDossierSubjectIdException();
