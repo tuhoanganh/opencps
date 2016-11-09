@@ -20,6 +20,7 @@ import org.opencps.processmgt.model.ServiceProcess;
 import org.opencps.processmgt.model.StepAllowance;
 import org.opencps.processmgt.model.WorkflowOutput;
 import org.opencps.processmgt.model.impl.ProcessStepDossierPartImpl;
+import org.opencps.processmgt.model.impl.ProcessStepImpl;
 import org.opencps.processmgt.model.impl.StepAllowanceImpl;
 import org.opencps.processmgt.model.impl.WorkflowOutputImpl;
 import org.opencps.processmgt.service.ActionHistoryLocalServiceUtil;
@@ -529,6 +530,26 @@ public class ProcessUtils {
 		return cssClass;
 		
 	}
+	
+	/**
+	 * @param processStepId
+	 * @return
+	 */
+	public static ProcessStep getPostProcessStep(long processStepId) {
+
+		ProcessStep step = new ProcessStepImpl();
+
+		try {
+			step = ProcessStepLocalServiceUtil.fetchProcessStep(processStepId);
+		}
+		catch (Exception e) {
+			
+		}
+
+
+		return step;
+	}
+
 	
 	private static Log _log = LogFactoryUtil.getLog(ProcessUtils.class.getName());
 }

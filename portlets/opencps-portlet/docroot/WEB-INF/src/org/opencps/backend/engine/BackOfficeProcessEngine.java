@@ -49,7 +49,6 @@ import org.opencps.processmgt.model.ProcessStep;
 import org.opencps.processmgt.model.ProcessWorkflow;
 import org.opencps.processmgt.model.impl.ProcessStepImpl;
 import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
-import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
 import org.opencps.processmgt.util.ProcessMgtUtil;
 import org.opencps.processmgt.util.ProcessUtils;
@@ -230,12 +229,12 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 				long changeStepId = processWorkflow.getPostProcessStepId();
 
-				ProcessStep changeStep = ProcessStepLocalServiceUtil.getProcessStep(changeStepId);
+				ProcessStep changeStep = ProcessUtils.getPostProcessStep(changeStepId);
 
 				ProcessStep currStep = new ProcessStepImpl();
 
 				if (curStepId != 0) {
-					currStep = ProcessStepLocalServiceUtil.fetchProcessStep(curStepId);
+					currStep = ProcessUtils.getPostProcessStep(curStepId);
 					stepName = currStep.getStepName();
 				}
 
