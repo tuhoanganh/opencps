@@ -68,7 +68,6 @@
  	}
 %>
 
-
 <div class="opencps-register-wrapper">
 	
 	<liferay-ui:error 
@@ -349,7 +348,9 @@
 				</aui:row>
 				<div class="term-user">
 					<aui:row>
-						<liferay-portlet:renderURL var="linkToPage" ></liferay-portlet:renderURL>
+						<liferay-portlet:renderURL var="linkToPage" windowState="<%=LiferayWindowState.EXCLUSIVE.toString() %>">
+							<liferay-portlet:param name="mvcPath" value="/html/portlets/accountmgt/registration/termOfUse.jsp"/>
+						</liferay-portlet:renderURL>
 						<aui:input name="linkToPageURL" value="<%=linkToPage %>" type="hidden"></aui:input>
 						<%
 							String chiTiet = StringPool.BLANK;
@@ -427,7 +428,7 @@
 	Liferay.provide(window, '<portlet:namespace/>openDialogTermOfUse', function() {
 		var A = AUI();
 		var linkToPageURL = A.one('#<portlet:namespace />linkToPageURL');
-		openDialog(linkToPageURL.val(), '<portlet:namespace />dieuKhoanSuDung', '<%= UnicodeLanguageUtil.get(pageContext, "dieu-khoan-su-dung") %>');
+		openDialog(linkToPageURL.val(), '', '<%= UnicodeLanguageUtil.get(pageContext, "dieu-khoan-su-dung") %>');
 		
 	},['aui-io','liferay-portlet-url']);
 	
