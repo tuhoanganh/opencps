@@ -51,10 +51,6 @@
 	
 %>
 
-<liferay-ui:header
-	backURL="<%= backURL %>"
-	title="service-list"
-/>
 <%
 	
 	List<DictItem> dictItems = PortletUtil.getDictItemInUseByCode(themeDisplay.getScopeGroupId(), 
