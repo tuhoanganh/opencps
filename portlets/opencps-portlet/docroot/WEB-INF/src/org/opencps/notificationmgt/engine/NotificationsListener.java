@@ -73,7 +73,7 @@ public class NotificationsListener implements MessageListener {
 			List<SendNotificationMessage> notifications =
 				(List<SendNotificationMessage>) message.get(MessageBusKeys.Message.NOTIFICATIONS);
 			
-			_log.info("LITENSSSSSSSSS_SIZE_MSG" + notifications.size());
+			_log.info("=====notifications.size():" + notifications.size());
 
 			String event = StringPool.BLANK;
 			String group = StringPool.BLANK;
@@ -94,6 +94,8 @@ public class NotificationsListener implements MessageListener {
 				event = item.getNotificationEventName();
 
 				List<InfoList> infoList = item.getInfoList();
+				
+				_log.info("=====infoList.size():" + infoList.size());
 
 				for (InfoList info : infoList) {
 

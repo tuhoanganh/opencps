@@ -76,7 +76,7 @@ public class NotificationUtils {
 
 		JSONObject payloadJSONObject = JSONFactoryUtil.createJSONObject();
 		Locale locale = new Locale("vi", "VN");
-		
+
 		long plId = 0;
 		String title = StringPool.BLANK;
 
@@ -85,62 +85,21 @@ public class NotificationUtils {
 			ProcessOrder processOrder =
 				ProcessOrderLocalServiceUtil.getProcessOrder(message.getProcessOrderId());
 
-			
 			title = LanguageUtil.get(locale, event) + "[" + processOrder.getDossierId() + "]";
 
-			
-
 			Layout layOut = null;
-			
-			_log.info("groupId:"+groupId);
-			_log.info("group:"+group);
 
-			if (group.equals(NotificationEventKeys.GROUP1)) {
+			layOut = LayoutLocalServiceUtil.getFriendlyURLLayout(groupId, true, group);
 
-				layOut = LayoutLocalServiceUtil.getFriendlyURLLayout(groupId, true, group);
-
-				if (Validator.isNotNull(layOut)) {
-					plId = layOut.getPlid();
-				}
-
-				
+			if (Validator.isNotNull(layOut)) {
+				plId = layOut.getPlid();
 			}
-			else if (group.equals(NotificationEventKeys.GROUP2)) {
 
-				layOut = LayoutLocalServiceUtil.getFriendlyURLLayout(groupId, true, group);
-
-				if (Validator.isNotNull(layOut)) {
-					plId = layOut.getPlid();
-				}
-
-				
-			}
-			else if (group.equals(NotificationEventKeys.GROUP3)) {
-
-				layOut = LayoutLocalServiceUtil.getFriendlyURLLayout(groupId, true, group);
-
-				if (Validator.isNotNull(layOut)) {
-					plId = layOut.getPlid();
-				}
-
-				
-			}
-			else if (group.equals(NotificationEventKeys.GROUP4)) {
-
-				layOut = LayoutLocalServiceUtil.getFriendlyURLLayout(groupId, true, group);
-
-				if (Validator.isNotNull(layOut)) {
-					plId = layOut.getPlid();
-				}
-
-				
-			}
-			
 		}
 		catch (Exception e) {
 			_log.error(e);
 		}
-		
+
 		payloadJSONObject.put("processOrderId", message.getProcessOrderId());
 		payloadJSONObject.put("dossierId", message.getDossierId());
 		payloadJSONObject.put("paymentFileId", message.getPaymentFileId());
@@ -157,7 +116,8 @@ public class NotificationUtils {
 	public static void sendEmailNotification(
 		SendNotificationMessage message, String email, long dossierId) {
 
-		String from = StringPool.BLANK;
+		String fromAddress = StringPool.BLANK;
+		String fromName = StringPool.BLANK;
 		String to = StringPool.BLANK;
 		String subject = StringPool.BLANK;
 		String body = StringPool.BLANK;
@@ -173,20 +133,31 @@ public class NotificationUtils {
 				dossier = DossierLocalServiceUtil.getDossier(dossierId);
 			}
 
-			from =
+			fromAddress =
 				Validator.isNotNull(dossier) ? PrefsPropsUtil.getString(
 					dossier.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_ADDRESS) : StringPool.BLANK;
+			fromName =
+				PrefsPropsUtil.getString(dossier.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
 			to = email;
 			subject = PortletPropsValues.SUBJECT_TO_CUSTOMER;
 			body = PortletPropsValues.CONTENT_TO_CUSTOMER;
+			
+			subject = StringUtil.replace(subject, "[OpenCPS]", "["+fromName+"]");
 
 			body =
 				StringUtil.replace(body, "{receptionNo}", String.valueOf(message.getDossierId()));
 			body =
 				StringUtil.replace(
 					body, "{event}", LanguageUtil.get(locale, message.getNotificationEventName()));
+			
+			_log.info("fromAddress:"+fromAddress);
+			_log.info("fromName:"+fromName);
+			_log.info("subject:"+subject);
+			_log.info("body:"+body);
+			_log.info("to:"+to);
 
-			SendMailUtils.sendEmail(from, to,"htln.works@gmail.com,htln.works@gmail.com", subject, body, htmlFormat);
+			SendMailUtils.sendEmail(
+				fromAddress,fromName, to, StringPool.BLANK, subject, body, htmlFormat);
 		}
 		catch (Exception e) {
 			_log.error(e);
