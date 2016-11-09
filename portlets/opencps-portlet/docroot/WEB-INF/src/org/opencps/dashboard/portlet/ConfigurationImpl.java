@@ -89,7 +89,10 @@ public class ConfigurationImpl implements ConfigurationAction{
 	    		
 	    		int layout_cfg = ParamUtil.getInteger(actionRequest, "img-home-"+i+"_plid");
 			
+	    		String itemCode_cfg = ParamUtil.getString(actionRequest, "img-home-"+i+"_itemCode");
+	    		
 				preferences.setValue("img-home-"+i+"_plid", String.valueOf(layout_cfg));
+				preferences.setValue("img-home-"+i+"_itemCode", String.valueOf(itemCode_cfg));
 			}
 		}
 		

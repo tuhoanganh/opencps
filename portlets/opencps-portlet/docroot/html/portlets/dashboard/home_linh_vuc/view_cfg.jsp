@@ -58,6 +58,10 @@
 	for (Layout pubLayout : pubLayouts) {
 		allLayout.add(pubLayout);
 	}
+	
+	List<DictItem> dictItems = PortletUtil.getDictItemInUseByCode(themeDisplay.getScopeGroupId(), 
+			PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN, 
+			PortletConstants.TREE_VIEW_DEFAULT_ITEM_CODE);
 %>
 
 <input name="_86_isTypeCfg" id="_86_isTypeCfg" value="home_linh_vuc" type="hidden" label=""></input>	
@@ -66,6 +70,7 @@
     <tr>
     	<th>#</th>
     	<th><%=LanguageUtil.get(pageContext, "url_cfg") %></th>
+    	<th><%=LanguageUtil.get(pageContext, "itemCode_cfg") %></th>
     </tr>
     
     <%
@@ -83,6 +88,19 @@
 					for (Layout lout : allLayout) {
 				%>
 					<option <%= lout.getPlid() == layout_cfg ? "selected":"" %> value="<%= lout.getPlid() %>"><%= lout.getName(locale) %></option>
+				<%
+					}
+				%>
+			</select>
+			
+		</td>
+		<td>
+			<select name='<%="_86_img-home-"+i+"_itemCode" %>' id='<%="_86_img-home-"+i+"_itemCode" %>' label="">
+				<%
+					for(DictItem dictItem: dictItems){
+					String itemCode_cfg = GetterUtil.getString(portletPreferences.getValue("_86_img-home-"+i+"_itemCode", ""));
+				%>
+					<option <%= dictItem.getItemCode().equals(itemCode_cfg) ? "selected":"" %> value="<%= dictItem.getItemCode() %>"><%= dictItem.getItemName(locale) %></option>
 				<%
 					}
 				%>

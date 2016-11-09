@@ -54,11 +54,16 @@
 				for(int i=0 ; i<6 ; i++){
 					
 					int layout_cfg = GetterUtil.getInteger(portletPreferences.getValue("img-home-"+i+"_plid", ""));
+					String itemCode_cfg = GetterUtil.getString(portletPreferences.getValue("img-home-"+i+"_itemCode", ""));
+					
+					PortletURL renderUrl = PortletURLFactoryUtil.create(request, WebKeys.P26_SUBMIT_ONLINE, layout_cfg, PortletRequest.RENDER_PHASE);
+					renderUrl.setParameter("mvcPath", "/html/portlets/dossiermgt/submit/submitinstruction.jsp");
+					renderUrl.setParameter("domainCode", itemCode_cfg);
 
 			%>
-			<li onclick="window.location.href='<%=LayoutLocalServiceUtil.getLayout(layout_cfg).getFriendlyURL() %>'">
+			<li onclick="window.location.href='<%=renderUrl.toString() %>'">
 				
-				<a class='<%="img-home-"+i %>' href="<%=LayoutLocalServiceUtil.getLayout(layout_cfg).getFriendlyURL() %>">
+				<a class='<%="img-home-"+i %>' href="<%=renderUrl.toString() %>">
 				
 				</a> 
 				
