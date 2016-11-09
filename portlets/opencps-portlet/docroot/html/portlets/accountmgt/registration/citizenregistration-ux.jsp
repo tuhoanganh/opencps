@@ -428,7 +428,7 @@
 	Liferay.provide(window, '<portlet:namespace/>openDialogTermOfUse', function() {
 		var A = AUI();
 		var linkToPageURL = A.one('#<portlet:namespace />linkToPageURL');
-		openDialog(linkToPageURL.val(), '', '<%= UnicodeLanguageUtil.get(pageContext, "dieu-khoan-su-dung") %>');
+		openDialog(linkToPageURL.val(), '<portlet:namespace />dieuKhoanSuDung', '<%= UnicodeLanguageUtil.get(pageContext, "dieu-khoan-su-dung") %>');
 		
 	},['aui-io','liferay-portlet-url']);
 	
