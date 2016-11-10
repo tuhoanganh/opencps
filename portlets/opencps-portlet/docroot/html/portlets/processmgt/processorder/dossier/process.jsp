@@ -114,25 +114,6 @@
 
 	//Get list DossierPart
 	List<DossierPart> dossierParts = new ArrayList<DossierPart>();
-
-	if (processStepDossierParts != null) {
-		for (ProcessStepDossierPart processStepDossierPart : processStepDossierParts) {
-			DossierPart dossierPart = null;
-
-			if (processStepDossierPart.getDossierPartId() > 0) {
-				try {
-					dossierPart = DossierPartLocalServiceUtil
-							.getDossierPart(processStepDossierPart.getDossierPartId());
-				} catch (Exception e) {
-				}
-			}
-
-			if (dossierPart != null) {
-				dossierParts.add(dossierPart);
-			}
-
-		}
-	}
 %>
 <div class="ocps-dossier-process">
 	<table class="process-workflow-info">
@@ -163,11 +144,22 @@
 	</table>
 
 	<%
-		if(dossierParts != null){
-			
-			int index = 0;
-			
-			for (DossierPart dossierPart : dossierParts){
+		int index = 0;
+		DossierPart dossierPart = null;
+		
+		if (processStepDossierParts != null) {
+		
+			for (ProcessStepDossierPart processStepDossierPart : processStepDossierParts){
+				
+				if (processStepDossierPart.getDossierPartId() > 0) {
+					try {
+						dossierPart = DossierPartLocalServiceUtil
+								.getDossierPart(processStepDossierPart.getDossierPartId());
+					} catch (Exception e) {
+					}
+				}
+				
+				if (Validator.isNotNull(dossierPart)) {
 				
 				int partType = dossierPart.getPartType();
 				
@@ -270,6 +262,10 @@
 												value="<%=String.valueOf(dossierPart.getPartType()) %>"
 											/>
 											<portlet:param 
+												name="<%=WebKeys.READ_ONLY %>" 
+												value="<%=String.valueOf(processStepDossierPart.getReadOnly()) %>"
+											/>
+											<portlet:param 
 												name="isEditDossier" 
 												value="<%=String.valueOf(isEditDossier) %>"
 											/>
@@ -332,6 +328,10 @@
 											<portlet:param 
 												name="<%=DossierFileDisplayTerms.PART_TYPE %>" 
 												value="<%=String.valueOf(dossierPart.getPartType()) %>"
+											/>
+											<portlet:param 
+												name="<%=WebKeys.READ_ONLY %>" 
+												value="<%=String.valueOf(processStepDossierPart.getReadOnly()) %>"
 											/>
 											<portlet:param 
 												name="isEditDossier" 
@@ -397,6 +397,10 @@
 															value="<%=String.valueOf(partType) %>"
 														/>
 														<portlet:param 
+														name="<%=WebKeys.READ_ONLY %>" 
+														value="<%=String.valueOf(processStepDossierPart.getReadOnly()) %>"
+														/>
+														<portlet:param 
 															name="isEditDossier" 
 															value="<%=String.valueOf(isEditDossier) %>"
 														/>
@@ -411,6 +415,7 @@
 					</c:choose>
 				</div>
 				<%
+				}
 				index++;
 			}
 		}

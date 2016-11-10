@@ -471,7 +471,8 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 					for (ProcessStepDossierPart stepDossierPart : stepDossiers) {
 						ProcessStepDossierPartLocalServiceUtil.addPSDP(
 						    stepDossierPart.getProcessStepId(),
-						    stepDossierPart.getDossierPartId());
+						    stepDossierPart.getDossierPartId(),
+						    stepDossierPart.getReadOnly());
 					}
 				}
 
@@ -542,7 +543,8 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 				for (ProcessStepDossierPart stepDossierPart : stepDossiers) {
 					ProcessStepDossierPartLocalServiceUtil.addPSDP(
 					    stepDossierPart.getProcessStepId(),
-					    stepDossierPart.getDossierPartId());
+					    stepDossierPart.getDossierPartId(),
+					    stepDossierPart.getReadOnly());
 				}
 
 				// Redirect page
