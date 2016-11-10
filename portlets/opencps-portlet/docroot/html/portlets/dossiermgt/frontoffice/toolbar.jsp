@@ -105,8 +105,10 @@
 						<portlet:param name="tabs1" value="<%=DossierMgtUtil.TOP_TABS_DOSSIER %>"/>
 						<portlet:param name="backURL" value="<%=currentURL %>"/>
 						<%
+							if(Validator.isNotNull(itemCode_cfg) && itemCode_cfg.length() > 0){
+								
 							DictItem dictItem_cfg = DictItemLocalServiceUtil.getDictItemInuseByItemCode(themeDisplay.getScopeGroupId(), PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN, itemCode_cfg);
-							
+								
 							if(Validator.isNotNull(dictItem_cfg)){
 							
 						%>
@@ -114,6 +116,7 @@
 							<portlet:param name="serviceDomainId" value="<%=String.valueOf(dictItem_cfg.getDictItemId()) %>"/>
 							<portlet:param name="dictItemCode" value="<%=dictItem_cfg.getItemCode() %>"/>
 						<%
+							}
 							}else{
 						%>		
 							<portlet:param name="mvcPath" value="/html/portlets/dossiermgt/frontoffice/frontofficeservicelist.jsp"/>
