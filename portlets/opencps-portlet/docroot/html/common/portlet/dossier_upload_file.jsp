@@ -214,6 +214,7 @@
 	<aui:input name="<%=DossierFileDisplayTerms.GROUP_NAME %>" type="hidden" value="<%=groupName %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.FILE_TYPES %>" type="hidden" value="<%=fileTypes %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.MAX_UPLOAD_FILE_SIZE_IN_MB %>" type="hidden" value="<%=maxUploadFileSizeInMb %>"/>
+	<aui:input name="<%=DossierFileDisplayTerms.MAX_TOTAL_UPLOAD_FILE_SIZE_IN_MB %>" type="hidden" value="<%=maxTotalUploadFileSizeInMb %>"/>
 	
 	<aui:row>
 		<aui:col width="100">

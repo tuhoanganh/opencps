@@ -142,8 +142,10 @@ import com.liferay.portlet.documentlibrary.DuplicateFolderNameException;
 import com.liferay.portlet.documentlibrary.FileExtensionException;
 import com.liferay.portlet.documentlibrary.FileSizeException;
 import com.liferay.portlet.documentlibrary.NoSuchFileEntryException;
+import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
+import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 /**
@@ -214,6 +216,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		
 		float maxUploadFileSizeInMb = ParamUtil.getFloat(uploadPortletRequest,
 				DossierFileDisplayTerms.MAX_UPLOAD_FILE_SIZE_IN_MB);
+		
+		float maxTotalUploadFileSizeInMb = ParamUtil.getFloat(uploadPortletRequest,
+				DossierFileDisplayTerms.MAX_TOTAL_UPLOAD_FILE_SIZE_IN_MB);
 
 		/*
 		 * sourceFileName = sourceFileName
@@ -238,7 +243,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 			validateAddAttachDossierFile(dossierId, dossierPartId,
 					dossierFileId, displayName, size, sourceFileName,
-					inputStream, accountBean, fileTypes, maxUploadFileSizeInMb);
+					inputStream, accountBean, fileTypes, maxUploadFileSizeInMb,
+					maxTotalUploadFileSizeInMb);
 
 			ServiceContext serviceContext = ServiceContextFactory
 					.getInstance(uploadPortletRequest);
@@ -2838,7 +2844,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	private void validateAddAttachDossierFile(long dossierId,
 			long dossierPartId, long dossierFileId, String displayName,
 			long size, String sourceFileName, InputStream inputStream,
-			AccountBean accountBean, String fileTypes, float maxUploadFileSizeInMb)
+			AccountBean accountBean, String fileTypes, float maxUploadFileSizeInMb,
+			float maxTotalUploadFileSizeInMb)
 			throws NoSuchDossierException,
 			NoSuchDossierPartException, NoSuchAccountException,
 			NoSuchAccountTypeException, NoSuchAccountFolderException,
@@ -2900,12 +2907,45 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		}
 		
 		float maxUploadFileSizeInByte = maxUploadFileSizeInMb*1024*1024;
+		float maxTotalUploadFileSizeInByte = maxTotalUploadFileSizeInMb*1024*1024;
+		
 		if (size == 0) {
 			throw new FileSizeException();
 		} else if (size > maxUploadFileSizeInByte && maxUploadFileSizeInByte > 0) {
 			throw new FileSizeException();
 		}
 		
+		List<DossierFile> dossierFileList = new ArrayList<DossierFile>();
+		if (dossierId > 0){
+			try {
+				dossierFileList = DossierFileLocalServiceUtil.getDossierFileByDossierId(dossierId);
+			} catch (Exception e){}
+		}
+		
+		float totalUploadFileSizeInByte = 0;
+		
+		if (!dossierFileList.isEmpty()){
+			for (DossierFile tempDossierFile : dossierFileList){
+				if (tempDossierFile.getRemoved() == 0){
+					long fileEntryId = tempDossierFile.getFileEntryId();
+					
+					DLFileEntry fileEntry = null;
+					try {
+						fileEntry = DLFileEntryLocalServiceUtil.getDLFileEntry(fileEntryId);
+					} catch (Exception e){}
+					
+					if (Validator.isNotNull(fileEntry)){
+						totalUploadFileSizeInByte += fileEntry.getSize();
+					}
+				}
+			}
+		}
+		
+		totalUploadFileSizeInByte += size;
+		
+		if (totalUploadFileSizeInByte > maxTotalUploadFileSizeInByte && maxTotalUploadFileSizeInByte > 0) {
+			throw new FileSizeException();
+		}
 	}
 
 	/**
