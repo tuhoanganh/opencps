@@ -33,10 +33,23 @@
 
 <liferay-util:include page='<%= templatePath + "toolbar.jsp"%>' servletContext="<%=application %>" />
 <%
-	String administrationCode = ParamUtil.getString(request, "administrationCode");
+	String administrationCode = StringPool.BLANK;
+	String domainCode = StringPool.BLANK;
+	
+	ParamUtil.getString(request, "administrationCode");
 
-	String domainCode = ParamUtil.getString(request, "domainCode");
-
+	ParamUtil.getString(request, "domainCode");
+			
+	long serviceDomainId = ParamUtil.getLong(request, "serviceDomainId", 0L);
+			
+	if (serviceDomainId <= 0) {
+		
+		administrationCode = ParamUtil.getString(request, "administrationCode", StringPool.BLANK);
+		domainCode = ParamUtil.getString(request, "domainCode", StringPool.BLANK);
+	} else {
+		domainCode = String.valueOf(serviceDomainId);	
+	}
+	
 
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "submitinstruction.jsp");
@@ -58,7 +71,6 @@
 	}
 	String govCode = Validator.isNotNull(dictItemGov) ? dictItemGov.getItemCode() : StringPool.BLANK;	
 	List<String> headerNames = new ArrayList<String>();
-	
 	headerNames.add("col1");
 	headerNames.add("col2");
 	headerNames.add("col3");
