@@ -62,7 +62,7 @@
 
 <aui:form action="<%= configurationActionURL %>" method="post" name="configurationForm">
 	
-	<aui:select name="dashBoardCFGType" id="dashBoardCFGType" onChange="DashBoardPickType(this);">
+	<aui:select name="dashBoardCFGType" id="dashBoardCFGType" onChange='<%="javavscript:" + renderResponse.getNamespace() + "DashBoardPickType(this)" %>'>
 		<aui:option value=""></aui:option>
 		<aui:option value="linh_vuc_thu_tuc">linh_vuc_thu_tuc</aui:option>
 		<aui:option value="home_linh_vuc">home_linh_vuc</aui:option>
@@ -77,11 +77,11 @@
 
 </aui:form>
 
-<aui:script>
+<aui:script use = "aui-base,liferay-portlet-url,aui-node">
 	
-	AUI().ready(function(A) {
+var A = AUI();
 		
-		Liferay.provide(window, 'DashBoardPickType', function(e) {
+		Liferay.provide(window, '<portlet:namespace />DashBoardPickType', function(e) {
 			var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DASHBOARD_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
 			portletURL.setParameter("mvcPath", "/html/portlets/dashboard/"+$(e).val()+"/view_cfg.jsp");
 			portletURL.setWindowState('<%=LiferayWindowState.EXCLUSIVE.toString() %>'); 
@@ -94,6 +94,5 @@
 			});
 		});
 		
-	});
 	
 </aui:script>

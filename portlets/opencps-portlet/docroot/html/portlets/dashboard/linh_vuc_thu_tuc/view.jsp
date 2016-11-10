@@ -83,13 +83,12 @@
 			<%
 				for(DictItem dictItem: dictItemsResult){
 					int layout_cfg = GetterUtil.getInteger(portletPreferences.getValue(dictItem.getItemCode()+"_plid", ""));
-
 			%>
-			<li onclick="window.location.href='/group/guest<%=LayoutLocalServiceUtil.getLayout(layout_cfg).getFriendlyURL() %>'">
+			<li onclick="window.location.href='<%=PortalUtil.getLayoutFullURL(LayoutLocalServiceUtil.getLayout(layout_cfg), themeDisplay) %>'">
 				
 				<div class="img-<%=dictItem.getItemCode() %>"> 
 					<div> 
-						<a href="<%=LayoutLocalServiceUtil.getLayout(layout_cfg).getFriendlyURL() %>"><%=dictItem.getItemName(locale) %></a> 
+						<a href="<%=PortalUtil.getLayoutFullURL(LayoutLocalServiceUtil.getLayout(layout_cfg), themeDisplay) %>"><%=dictItem.getItemName(locale) %></a> 
 					</div>
 				</div>
 				
