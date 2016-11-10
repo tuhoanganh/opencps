@@ -1,8 +1,5 @@
 
-<%@page import="com.liferay.portlet.documentlibrary.model.DLFileEntry"%>
-<%@page import="com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="java.util.List"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -51,6 +48,10 @@
 <%@page import="javax.portlet.PortletPreferences"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="org.opencps.util.PortletPropsValues"%>
+<%@page import="com.liferay.portlet.documentlibrary.model.DLFileEntry"%>
+<%@page import="com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
 <%@ include file="/init.jsp"%>
 
 <%
@@ -109,7 +110,7 @@
 	
 	String fileTypes = preferences.getValue("fileTypes", StringPool.BLANK);
 	float maxUploadFileSizeInMb = GetterUtil.getFloat(preferences.getValue("maxUploadFileSizeInMb", StringPool.BLANK));
-	float maxTatalUploadFileSizeInMb = GetterUtil.getFloat(preferences.getValue("maxTatalUploadFileSizeInMb", StringPool.BLANK));
+	float maxTotalUploadFileSizeInMb = GetterUtil.getFloat(preferences.getValue("maxTatalUploadFileSizeInMb", StringPool.BLANK));
 	
 	List<DossierFile> dossierFileList = new ArrayList<DossierFile>();
 	if (dossierId > 0){
@@ -136,7 +137,6 @@
 			}
 		}
 	}
-	System.out.println("============== totalUploadFileSizeInByte: "+totalUploadFileSizeInByte);
 %>
 
 <portlet:actionURL var="addAttachmentFileURL" name="addAttachmentFile"/>
@@ -297,10 +297,15 @@
 		var maxUploadFileSizeInMb = <%=maxUploadFileSizeInMb %>;
 		var maxUploadFileSizeInByte = maxUploadFileSizeInMb*1024*1024;
 		
+		var maxTotalUploadFileSizeInMb = <%=maxTotalUploadFileSizeInMb%>
+		var maxTotalUploadFileSizeInByte = maxTotalUploadFileSizeInMb*1024*1024;
+		
 		var fileUploadSizeInByte = 0;
+		var totalUploadFileSizeInByte = <%=totalUploadFileSizeInByte%>;
 		
 		$('#<portlet:namespace />dossierFileUpload').on('change', function() {
 			fileUploadSizeInByte = this.files[0].size;
+			totalUploadFileSizeInByte += fileUploadSizeInByte;
 		});
 		
 		if(agreeButton) {
@@ -311,7 +316,11 @@
 				} else
 				if (fileUploadSizeInByte > maxUploadFileSizeInByte && maxUploadFileSizeInByte > 0) {
 					alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-size-smaller-than") %>' + ' ' + maxUploadFileSizeInMb + ' Mb');
-				}else {
+				}else 
+				if (totalUploadFileSizeInByte > maxTotalUploadFileSizeInByte && maxTotalUploadFileSizeInByte > 0) {
+					alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "overload-total-file-upload-size") %>' + ' ' + maxTotalUploadFileSizeInMb + ' Mb');
+				}else 
+				{
 					submitForm(document.<portlet:namespace />fm);
 				}
 				
