@@ -94,7 +94,18 @@
 			<portlet:param name="backURL" value="<%=backURL %>"/>
 			<portlet:param name="isEditDossier" value="<%=String.valueOf(true) %>"/>
 		</liferay-portlet:renderURL>
-		<aui:button type="button" name="submitonline" value="dossier-submit-online" href="<%=Validator.isNotNull(serviceConfig.getServiceUrl()) ? serviceConfig.getServiceUrl() : servieOnlinePopURL.toString() %>" />
+		
+		<c:choose>
+			<c:when test='<%=Validator.isNotNull(serviceConfig) && ((serviceConfig.getServiceBusinees() && accountType.equalsIgnoreCase("business")) || (serviceConfig.getServiceCitizen() && accountType.equalsIgnoreCase("citizen")))%>'>
+				<aui:button type="button" name="submitonline" value="dossier-submit-online" href="<%=Validator.isNotNull(serviceConfig.getServiceUrl()) ? serviceConfig.getServiceUrl() : servieOnlinePopURL.toString() %>" />
+			</c:when>
+			<c:otherwise>
+				<div class="alert alert-warning">
+					<liferay-ui:message key="you-have-not-permission-to-submit-dossier"/>
+				</div>
+			</c:otherwise>
+		</c:choose>
+		
 	</c:if>
 </aui:row>
 

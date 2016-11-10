@@ -34,13 +34,6 @@
 		%>
 	</aui:select> --%>
 
-	<%-- <datamgt:ddr 
-		depthLevel="1" 
-		dictCollectionCode="DOSSIER_STATUS"
-		itemNames="status"
-		optionValueType="code"
-
-	/> --%>
 	
 	<datamgt:ddr 
 		depthLevel="1" 

@@ -17,6 +17,11 @@
 <%@page import="com.liferay.portal.kernel.util.StringPool"%>
 <%@ include file="/html/portlet/login/init.jsp" %>
 
+<%
+	String linkToRegister = themeDisplay.getPortalURL() + "/register";
+	String linkDescriptToUse = themeDisplay.getPortalURL() + "/huong-dan-su-dung";
+%>
+
 <c:choose>
 	<c:when test="<%= themeDisplay.isSignedIn() %>">
 
@@ -153,7 +158,6 @@
 						</aui:button-row>
 					</div>
 				</c:when>
-
 				<c:when test='<%=displayStyle.equals("compact") %>'>
 					
 					<div class="compact-sign-in-wrapper">
@@ -243,7 +247,6 @@
 					</div>
 					
 				</c:when>
-
 				<c:otherwise>
 					<div class="ux-sign-in-wrapper">
 						<div class="default-sign-in">
@@ -253,7 +256,7 @@
 								</span>
 								<span class="create-account">
 									<liferay-portlet:renderURL var="linkToPage"></liferay-portlet:renderURL>
-									<aui:a href="<%=linkToPage %>">
+									<aui:a href="<%=linkToRegister %>">
 										<liferay-ui:message key="create-account"/>
 									</aui:a>
 								</span>
