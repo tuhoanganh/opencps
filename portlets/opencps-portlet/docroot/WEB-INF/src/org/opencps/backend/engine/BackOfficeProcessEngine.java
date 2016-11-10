@@ -240,8 +240,6 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 				// Add noti's events
 
-				_log.info("changeStep.getDossierStatus():" + changeStep.getDossierStatus());
-				_log.info("currStep.getDossierStatus():" + currStep.getDossierStatus());
 
 				if (changeStep.getDossierStatus().contains(
 					PortletConstants.DOSSIER_STATUS_RECEIVING)) {

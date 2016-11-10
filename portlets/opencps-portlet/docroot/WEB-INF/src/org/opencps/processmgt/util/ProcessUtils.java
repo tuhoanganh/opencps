@@ -540,7 +540,7 @@ public class ProcessUtils {
 		ProcessStep step = new ProcessStepImpl();
 
 		try {
-			step = ProcessStepLocalServiceUtil.fetchProcessStep(processStepId);
+			step = ProcessStepLocalServiceUtil.getProcessStep(processStepId);
 		}
 		catch (Exception e) {
 			
