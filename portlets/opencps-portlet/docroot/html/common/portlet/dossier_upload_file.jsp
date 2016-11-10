@@ -1,4 +1,8 @@
 
+<%@page import="com.liferay.portlet.documentlibrary.model.DLFileEntry"%>
+<%@page import="com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -105,6 +109,34 @@
 	
 	String fileTypes = preferences.getValue("fileTypes", StringPool.BLANK);
 	float maxUploadFileSizeInMb = GetterUtil.getFloat(preferences.getValue("maxUploadFileSizeInMb", StringPool.BLANK));
+	float maxTatalUploadFileSizeInMb = GetterUtil.getFloat(preferences.getValue("maxTatalUploadFileSizeInMb", StringPool.BLANK));
+	
+	List<DossierFile> dossierFileList = new ArrayList<DossierFile>();
+	if (dossierId > 0){
+		try {
+			dossierFileList = DossierFileLocalServiceUtil.getDossierFileByDossierId(dossierId);
+		} catch (Exception e){}
+	}
+	
+	float totalUploadFileSizeInByte = 0;
+	
+	if (!dossierFileList.isEmpty()){
+		for (DossierFile tempDossierFile : dossierFileList){
+			if (tempDossierFile.getRemoved() == 0){
+				long fileEntryId = tempDossierFile.getFileEntryId();
+				
+				DLFileEntry fileEntry = null;
+				try {
+					fileEntry = DLFileEntryLocalServiceUtil.getDLFileEntry(fileEntryId);
+				} catch (Exception e){}
+				
+				if (Validator.isNotNull(fileEntry)){
+					totalUploadFileSizeInByte += fileEntry.getSize();
+				}
+			}
+		}
+	}
+	System.out.println("============== totalUploadFileSizeInByte: "+totalUploadFileSizeInByte);
 %>
 
 <portlet:actionURL var="addAttachmentFileURL" name="addAttachmentFile"/>
