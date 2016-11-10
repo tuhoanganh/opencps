@@ -58,5 +58,7 @@
 	boolean allowResultQuickView = GetterUtil.getBoolean(preferences.getValue("allowResultQuickView", "false"), false);
 	
 	String itemCode_cfg = GetterUtil.getString(preferences.getValue("itemCode_cfg", ""));
+	
+	String war_opencpsportlet_26_cfg = GetterUtil.getString(portletPreferences.getValue("war_opencpsportlet_26_cfg", ""));
 %>
 
