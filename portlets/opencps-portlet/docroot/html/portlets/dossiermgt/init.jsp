@@ -32,9 +32,13 @@
 	
 	String redirectPaymentURL = preferences.getValue("redirectPaymentURL",StringPool.BLANK);
 	
+	String dossierStatusConfig = preferences.getValue("dossierStatusConfig",StringPool.BLANK);
+	
 	String orderFieldDossierFile = preferences.getValue("orderFieldDossierFile",StringPool.BLANK);
 	
 	String orderBydDossierFile = preferences.getValue("orderBydDossierFile",StringPool.BLANK);
+	
+	long plidRes = GetterUtil.getLong(preferences.getValue("plid", "0"), 0);
 	
 	boolean displayRecentlyResultWhenSearch = GetterUtil.getBoolean(preferences.getValue("displayRecentlyResultWhenSearch", "false"), false);
 	
