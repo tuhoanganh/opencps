@@ -251,4 +251,6 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String RETURN_URL= "returnURL";
 	public static final String REDIRECT_URL= "redirectURL";
 	
+	public static final String READ_ONLY = "readOnly";
+	
 }

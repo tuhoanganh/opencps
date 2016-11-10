@@ -262,6 +262,12 @@
 							}
 						%>
 					</aui:select>
+					<aui:input checked="<%= stepDossier.getReadOnly() %>" 
+					fieldParam='<%= "readOnly" + dossierIndex %>' 
+					id='<%= "readOnly" + dossierIndex %>' 
+					label="read-only" inlineField="<%= true %>" 
+					name='<%= "partReadOnly" + dossierIndex %>' 
+					type="checkbox"/>
 				</div>
 			</div>
 		
