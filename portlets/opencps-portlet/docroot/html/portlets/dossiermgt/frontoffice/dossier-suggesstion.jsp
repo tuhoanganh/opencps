@@ -104,7 +104,6 @@
 			<portlet:actionURL var="updateDossierSuggestionURL" name="updateDossierSuggestion">
 				<portlet:param name="currentDossierId" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
 				<portlet:param name="dossierId" value="<%=String.valueOf(dossierId) %>"/>
-				<portlet:param name="currentURL" value="<%=currentURL %>"/>
 			</portlet:actionURL>
 			
 			<% 
@@ -175,17 +174,20 @@
 			</liferay-util:buffer>
 			
 			<liferay-util:buffer var="boundcol4">
-			
-				<aui:a href="<%=viewDossierUrlNomal.toString()%>" target="_blank" label="">
-					<i><liferay-ui:message key="view"/></i>
-				</aui:a>
+				<aui:row>
+					<aui:a href="<%=viewDossierUrlNomal.toString()%>" target="_blank" label="">
+						<i><liferay-ui:message key="view"/></i>
+					</aui:a>
+				</aui:row>
 				
-				<aui:a href="<%= renderResponse.getNamespace()+ \"loadingMark('\" + updateDossierSuggestionURL.toString() +\"')\" %>" 
-					   target="_blank" 
-					   label=""
-				>
-					<i><liferay-ui:message key="choose"/></i>
-				</aui:a>
+				<aui:row>
+					 <aui:a 
+						href="<%=\"javascript:\" + renderResponse.getNamespace()+ \"loadingMark('\" + updateDossierSuggestionURL.toString() +\"')\" %>" 
+					>
+						<i><liferay-ui:message key="choose"/></i>
+					</aui:a> 
+				</aui:row>
+				
 				
 				 <%-- <aui:button  
 					name="dossierSuggestion" 
@@ -230,6 +232,26 @@
 		
 		loadingMask.show();
 		
-		location.href = url;
+		A.io.request(
+			url,
+			{
+				on: {
+					success: function(event, id, obj) {
+						var response = this.get('responseData');
+						loadingMask.hide();
+						if(response){
+							response = JSON.parse(response);
+							if(response.msg == "success"){
+								closeDialog('submit-dossier-suggesstion', '<%=WebKeys.DOSSIER_MGT_PORTLET%>_');
+							}else{
+								alert('<%= UnicodeLanguageUtil.get(pageContext, "error-while-add-dossier-file") %>');
+								
+							}
+						}
+					}
+				}
+			}
+		);
+
 	});
 </aui:script>

@@ -3712,84 +3712,125 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		}
 	}
 
-	public void updateDossierSuggestion(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException {
-		long currentDossierId  = ParamUtil.getLong(actionRequest, "currentDossierId");
-		long dossierId  = ParamUtil.getLong(actionRequest, "dossierId");
-		String currentURL = ParamUtil.getString(actionRequest, "currentURL");
+	public void updateDossierSuggestion(ActionRequest actionRequest,
+			ActionResponse actionResponse) throws IOException {
+		long currentDossierId = ParamUtil.getLong(actionRequest,
+				"currentDossierId");
+		long dossierId = ParamUtil.getLong(actionRequest, "dossierId");
 		ServiceContext serviceContext;
+		boolean clone = false;
 		try {
-			serviceContext = ServiceContextFactory
-					.getInstance(actionRequest);
-			
-			if(currentDossierId > 0) {
-				Dossier dossierCurrent = DossierLocalServiceUtil.getDossier(currentDossierId);
+			serviceContext = ServiceContextFactory.getInstance(actionRequest);
+
+			if (currentDossierId > 0) {
+				Dossier dossierCurrent = DossierLocalServiceUtil
+						.getDossier(currentDossierId);
 				Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
-				DossierTemplate dossierTemplateCurr = DossierTemplateLocalServiceUtil.getDossierTemplate(dossierCurrent.getDossierTemplateId());
+				DossierTemplate dossierTemplateCurr = DossierTemplateLocalServiceUtil
+						.getDossierTemplate(dossierCurrent
+								.getDossierTemplateId());
 				DossierTemplate dossierTemplate = DossierTemplateLocalServiceUtil
 						.getDossierTemplate(dossier.getDossierTemplateId());
-				
-				
+
 				List<DossierPart> dossierPartCurrs = DossierPartLocalServiceUtil
-						.getDossierParts(dossierTemplateCurr.getDossierTemplateId());
+						.getDossierParts(dossierTemplateCurr
+								.getDossierTemplateId());
 				List<DossierPart> dossierParts = DossierPartLocalServiceUtil
 						.getDossierParts(dossierTemplate.getDossierTemplateId());
-			
-					
-				for(DossierPart dossierPartCurr : dossierPartCurrs) {
-					for(DossierPart dossierPart : dossierParts) {
-						
-						if(dossierPartCurr.getPartType() == dossierPart.getPartType() 
-								&& dossierPartCurr.getPartNo().equalsIgnoreCase(dossierPart.getPartNo())) {
-							
-								try {
-									DossierFile dossierFile = DossierFileLocalServiceUtil
-											.getDossierFileInUse(currentDossierId, dossierPartCurr.getDossierpartId());
-									
-									DLFileEntry fileEntryCur = DLFileEntryLocalServiceUtil.getDLFileEntry(dossierFile.getFileEntryId());
-									
-									DossierFileLocalServiceUtil.
-									addDossierFile(dossierFile.getUserId(), dossierId, dossierFile.getDossierPartId(), 
-											dossierFile.getTemplateFileNo(), StringPool.BLANK, dossierFile.getGroupFileId(),
-											0, dossierFile.getOwnerUserId(), dossierFile.getOwnerOrganizationId(), dossierFile.getDisplayName(), 
-											dossierFile.getFormData(), dossierFile != null ? dossierFile.getFileEntryId() : 0,
-											dossierFile.getDossierFileMark(), dossierFile.getDossierFileType(), 
-											dossierFile.getDossierFileNo(), dossierFile.getDossierFileDate(),
-											dossierFile.getOriginal(), dossierFile.getSyncStatus(), dossier.getFolderId(),
-											fileEntryCur.getTitle(), fileEntryCur.getMimeType(), fileEntryCur.getTitle(), 
-											fileEntryCur.getDescription(), StringPool.BLANK, fileEntryCur.getContentStream(),
+
+				for (DossierPart dossierPartCurr : dossierPartCurrs) {
+					for (DossierPart dossierPart : dossierParts) {
+
+						if (dossierPartCurr.getPartType() == dossierPart
+								.getPartType()
+								&& dossierPartCurr.getPartNo()
+										.equalsIgnoreCase(
+												dossierPart.getPartNo())) {
+
+							try {
+								DossierFile dossierFile = DossierFileLocalServiceUtil
+										.getDossierFileInUse(currentDossierId,
+												dossierPartCurr
+														.getDossierpartId());
+
+								DLFileEntry fileEntryCur = DLFileEntryLocalServiceUtil
+										.getDLFileEntry(dossierFile
+												.getFileEntryId());
+								
+								if(Validator.isNotNull(fileEntryCur.getContentStream())) {
+									DossierFileLocalServiceUtil.addDossierFile(
+											dossierFile.getUserId(),
+											dossierId,
+											dossierFile.getDossierPartId(),
+											dossierFile.getTemplateFileNo(),
+											StringPool.BLANK,
+											dossierFile.getGroupFileId(),
+											0,
+											dossierFile.getOwnerUserId(),
+											dossierFile.getOwnerOrganizationId(),
+											dossierFile.getDisplayName(),
+											dossierFile.getFormData(),
+											dossierFile != null ? dossierFile
+													.getFileEntryId() : 0,
+											dossierFile.getDossierFileMark(),
+											dossierFile.getDossierFileType(),
+											dossierFile.getDossierFileNo(),
+											dossierFile.getDossierFileDate(),
+											dossierFile.getOriginal(), dossierFile
+													.getSyncStatus(), dossier
+													.getFolderId(), fileEntryCur
+													.getTitle(), fileEntryCur
+													.getMimeType(), fileEntryCur
+													.getTitle(), fileEntryCur
+													.getDescription(),
+											StringPool.BLANK, fileEntryCur
+													.getContentStream(),
 											fileEntryCur.getSize(), serviceContext);
-								} catch (Exception e) {
-									_log.info(e.getMessage());
-									
-									continue;
 								}
+
+							} catch (Exception e) {
+								_log.info(e.getMessage());
+
+								continue;
+							}
 						}
 					}
 				}
 			}
-			
-			SessionMessages.add(actionRequest,
-					MessageKeys.SUGGEST_SUCESS);
-			
+			clone = true;
+			SessionMessages.add(actionRequest, MessageKeys.SUGGEST_SUCESS);
+
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			clone = false;
+			_log.error(e);
+		} finally {
+			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+			if (clone) {
+				jsonObject.put("msg", "success");
+
+			} else {
+				jsonObject.put("msg", "error");
+			}
+			PortletUtil.writeJSON(actionRequest, actionResponse, jsonObject);
+		}
+	}
+
+	public void deleteDossierSuggesstion(ActionRequest actionRequest,
+			ActionResponse actionResponse) throws IOException {
+		long dossierId = ParamUtil.getLong(actionRequest, "dossierId");
+		String currentURL = ParamUtil.getString(actionRequest, "currentURL");
+		try {
+			if (dossierId > 0) {
+				DossierLocalServiceUtil
+						.deleteAllDossierFilesByDossierId(dossierId);
+			}
+		} catch (Exception e) {
+			_log.error(e);
 		} finally {
 			actionResponse.sendRedirect(currentURL);
 		}
 	}
-	
-	public void deleteDossierSuggesstion(ActionRequest actionRequest, ActionResponse actionResponse) {
-		long dossierId = ParamUtil.getLong(actionRequest, "dossierId");
-		try {
-			if(dossierId > 0) {
-				DossierLocalServiceUtil.deleteAllDossierFilesByDossierId(dossierId);
-			}
-		} catch (Exception e) {
-			
-		}
-	}
-	
+
 	private boolean _hasPermission = true;
 
 	public boolean hasPermission() {

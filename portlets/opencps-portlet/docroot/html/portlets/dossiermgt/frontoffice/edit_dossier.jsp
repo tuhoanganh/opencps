@@ -136,6 +136,7 @@
 
 <portlet:actionURL var="deleteDossierSuggesstionURL" name="deleteDossierSuggesstion">
 	<portlet:param name="dossierId" value='<%= Validator.isNotNull(dossier) ? String.valueOf(dossier.getDossierId()) : "0"%>'/>
+	<portlet:param name="currentURL" value="<%=currentURL %>"/>
 </portlet:actionURL>
 <portlet:actionURL var="updateDossierStatusURL" name="updateDossierStatus">
 	<portlet:param 
