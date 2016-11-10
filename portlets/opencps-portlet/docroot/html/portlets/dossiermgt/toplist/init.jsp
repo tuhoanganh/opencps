@@ -31,5 +31,4 @@
 	}
 
 	String status = preferences.getValue("status", StringPool.BLANK);
-
 %>
