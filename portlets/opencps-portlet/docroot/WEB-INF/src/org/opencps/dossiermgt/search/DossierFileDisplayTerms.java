@@ -62,6 +62,7 @@ public class DossierFileDisplayTerms extends DisplayTerms {
 	public static final String SUCCESS = "success";
 	public static final String SIZE = "size";
 	public static final String TEMP_FOLDER_NAME = "tempFolderName";
+	public static final String FILE_EXTENSION = "extension";
 	
 	protected String displayName;
 	
