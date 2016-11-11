@@ -1,12 +1,4 @@
-<%@page import="org.opencps.util.WebKeys"%>
-<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="java.util.List"%>
-<%@page import="org.opencps.datamgt.service.DictCollectionLocalServiceUtil"%>
-<%@page import="org.opencps.datamgt.model.DictItem"%>
-<%@page import="org.opencps.datamgt.model.DictCollection"%>
-<%@page import="org.opencps.util.PortletPropsValues"%>
-<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -25,7 +17,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
+<%@page import="org.opencps.util.WebKeys"%>
+<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page import="org.opencps.datamgt.service.DictCollectionLocalServiceUtil"%>
+<%@page import="org.opencps.datamgt.model.DictItem"%>
+<%@page import="org.opencps.datamgt.model.DictCollection"%>
+<%@page import="org.opencps.util.PortletPropsValues"%>
+<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>

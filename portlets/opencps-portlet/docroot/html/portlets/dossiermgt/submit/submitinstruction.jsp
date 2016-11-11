@@ -42,9 +42,7 @@
 
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "submitinstruction.jsp");
-	iteratorURL.setParameter("administrationCode", administrationCode);
-	iteratorURL.setParameter("domainCode", domainCode);
-	
+
 	List<ServiceInfo> serviceInfos = new ArrayList<ServiceInfo>();
 	List<ServiceConfig> serviceConfigs = new ArrayList<ServiceConfig>();	
 

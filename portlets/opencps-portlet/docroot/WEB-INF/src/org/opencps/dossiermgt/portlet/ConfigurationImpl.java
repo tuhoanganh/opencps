@@ -63,6 +63,8 @@ public class ConfigurationImpl implements ConfigurationAction{
 		
 		String orderBydDossierFile = ParamUtil.getString(actionRequest, "orderBydDossierFile");
 		
+		String dossierStatusConfig = ParamUtil.getString(actionRequest, "dossierStatusConfig");
+		
 		boolean displayDossierNo = ParamUtil.getBoolean(actionRequest, "displayDossierNo");
 		
 		boolean displayRecentlyResultWhenSearch = ParamUtil.getBoolean(actionRequest, "displayRecentlyResultWhenSearch");
@@ -96,7 +98,8 @@ public class ConfigurationImpl implements ConfigurationAction{
 		PortletPreferences preferences =
 		    PortletPreferencesFactoryUtil.getPortletSetup(
 		        actionRequest, portletResource);
-
+		
+		preferences.setValue("plid", String.valueOf(plid));
 		preferences.setValue("redirectPaymentURL", redirectURL.toString());
 		preferences.setValue("displayDossierNo", String.valueOf(displayDossierNo));
 		preferences.setValue("displayRecentlyResultWhenSearch", String.valueOf(displayRecentlyResultWhenSearch));
@@ -110,6 +113,8 @@ public class ConfigurationImpl implements ConfigurationAction{
 		preferences.setValue("showBackToListButton", String.valueOf(showBackToListButton));
 		
 		preferences.setValue("orderFieldDossierFile", orderFieldDossierFile);
+		
+		preferences.setValue("dossierStatusConfig", dossierStatusConfig);
 		
 		preferences.setValue("orderBydDossierFile", orderBydDossierFile);
 		
