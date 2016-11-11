@@ -114,12 +114,14 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 
 		}
 		PaymentConfig paymentConfig = null;
+		
 		try {
 			if (paymentFile != null)
 				paymentConfig =
 					PaymentConfigLocalServiceUtil.getPaymentConfigByGovAgency(
 						PortalUtil.getScopeGroupId(actionRequest),
 						paymentFile.getGovAgencyOrganizationId(), true);
+			_log.info("paymentConfig:"+paymentConfig);
 		}
 		catch (NoSuchPaymentConfigException e) {
 
