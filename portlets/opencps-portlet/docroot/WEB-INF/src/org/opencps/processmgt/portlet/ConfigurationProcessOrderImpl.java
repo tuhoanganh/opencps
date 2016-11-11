@@ -34,7 +34,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portlet.PortletPreferencesFactoryUtil;
 
 /**
- * @author dunglt
+ * @author trungnt
  *
  */
 public class ConfigurationProcessOrderImpl implements ConfigurationAction {
@@ -106,7 +106,7 @@ public class ConfigurationProcessOrderImpl implements ConfigurationAction {
 			RenderRequest renderRequest, RenderResponse renderResponse)
 			throws Exception {
 
-		return "/html/portlets/processmgt/processorder/configuration.jsp";
+		return "/html/portlets/processmgt/processorder/configuration_.jsp";
 	}
 
 }
