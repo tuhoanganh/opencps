@@ -223,6 +223,8 @@ public class BackOfficeProcessEngine implements MessageListener {
 			// Do Workflow
 
 			if (Validator.isNotNull(processWorkflow)) {
+				
+				_log.info("=====processWorkflow:"+processWorkflow);
 				actionName = processWorkflow.getActionName();
 
 				processStepId = processWorkflow.getPostProcessStepId();
@@ -237,6 +239,8 @@ public class BackOfficeProcessEngine implements MessageListener {
 					currStep = ProcessUtils.getPostProcessStep(curStepId);
 					stepName = currStep.getStepName();
 				}
+				_log.info("=====changeStep.getProcessStepId():"+changeStep.getProcessStepId());
+				_log.info("=====currStep.getProcessStepId():"+currStep.getProcessStepId());
 
 				// Add noti's events
 
