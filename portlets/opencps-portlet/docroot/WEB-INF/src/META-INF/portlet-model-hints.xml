@@ -517,6 +517,8 @@
 		<field name="fileGroupId" type="long" />
 		<field name="stepId" type="long" />
 		<field name="isUpdate" type="boolean" />
+		<field name="actor" type="int" />
+		<field name="logId" type="long" />
 		<field name="fileName" type="String" />
 		<field name="fileVersion" type="int" />
 		<field name="fileLink" type="String" />

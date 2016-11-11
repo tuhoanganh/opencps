@@ -549,6 +549,8 @@
         <column name="fileGroupId" type="long"/>
         <column name="stepId" type="long"/>
         <column name="isUpdate" type="boolean"/>
+        <column name="actor" type="int"/>
+        <column name="logId" type="long"/>
 
         <column name="fileName" type="String"/>
         <column name="fileVersion" type="int"/>
@@ -557,6 +559,12 @@
         <column name="count_" type="int"/>
         <column name="oId" type="String"/>
         <column name="fileEntryId" type="long"/>
+        
+        <finder name="L_D" return-type="Collection">
+            <finder-column name="logId"/>
+            <finder-column name="dossierId"/>
+        </finder>
+        
         
         <finder name="D_F_S" return-type="Collection">
             <finder-column name="dossierId"/>
