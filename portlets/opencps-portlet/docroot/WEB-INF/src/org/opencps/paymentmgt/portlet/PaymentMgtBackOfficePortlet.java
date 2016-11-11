@@ -247,7 +247,7 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 				// govAgencyOrganizationId = 24787;
 				PaymentConfig paymentConfig =
 					PaymentConfigLocalServiceUtil.getPaymentConfigByGovAgency(
-						themeDisplay.getScopeGroupId(), govAgencyOrganizationId);
+						themeDisplay.getScopeGroupId(), govAgencyOrganizationId,true);
 				// Get account folder
 				String dossierDestinationFolder =
 					PortletUtil.getEmployeeDestinationFolder(
