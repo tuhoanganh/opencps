@@ -1022,9 +1022,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		String fileExtension = ParamUtil.getString(
 				actionRequest,
 				DossierFileDisplayTerms.FILE_EXTENSION,
-				StringPool.PERIOD
-						+ StringUtil.lowerCase(JRReportUtil.DocType.PDF
-								.toString()));
+						 StringUtil.lowerCase(JRReportUtil.DocType.PDF
+								.getValue()));
 
 		try {
 			validateCreateDynamicForm(dossierFileId, accountBean);

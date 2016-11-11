@@ -17,7 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
-<%@page import="org.opencps.util.MessageKeys"%>
+
 <%@page import="javax.portlet.PortletRequest"%>
 <%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
@@ -165,7 +165,7 @@
 		if(dossierParts != null){
 			
 			int index = 0;
-
+			
 			List<Long> requiredDossierPartIds = new ArrayList<Long>();
 			
 			for (DossierPart dossierPart : dossierParts){
@@ -418,7 +418,6 @@
 				<%
 				index++;
 			}
-			
 			%>
 				<aui:input name="requiredDossierPart" type="hidden" value="<%= StringUtil.merge(requiredDossierPartIds) %>"/>
 			<%
@@ -572,18 +571,15 @@
 		portletURL.setParameter("actionUserId", actionUserId);
 		portletURL.setParameter("fileGroupId", fileGroupId);
 		portletURL.setParameter("deadlinePattern", deadlinePattern);
-
 		//display default - popup
 		if(assignFormDisplayStyle == 'popup' ) {
 			portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>");
 			portletURL.setParameter("backURL", '<%=backURL%>');
-
 			<portlet:namespace/>validateRequiredResult();
 			if(required === true) {
 				alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-required-before-send") %>');
 				return;
 			} 
-			
 			openDialog(portletURL.toString(), '<portlet:namespace />assignToUser', '<%= UnicodeLanguageUtil.get(pageContext, "handle") %>');
 		} 
 		// Display assign to user - moit
@@ -673,7 +669,6 @@
 				}
 			);
 		}
-
 	});
 	
 	AUI().ready('aui-base','liferay-portlet-url','aui-io', function(A){
@@ -893,3 +888,132 @@
 	});
 
 </aui:script>
+
+<c:if test="<%=assignFormDisplayStyle.equals("form") %>">
+	<portlet:resourceURL var="getDataAjax"></portlet:resourceURL>
+	
+	<portlet:actionURL var="signatureURL" name="signatureBCY"></portlet:actionURL>
+	
+	<aui:script>
+		function plugin0() {
+			
+		  return document.getElementById('plugin0');
+		}
+		
+		plugin = plugin0;
+		
+		var complateSignatureURL = '<%=signatureURL%>';
+	
+		function getFileComputerHash(symbolType) {
+	
+			var url = '<%=getDataAjax%>';
+			
+			var nanoTime = $('#<portlet:namespace/>nanoTimePDF').val();
+			
+			url = url + "&nanoTimePDF="+nanoTime;
+			
+			var listFileToSigner = $("#<portlet:namespace/>listFileToSigner").val().split(","); 
+			var listDossierPartToSigner = $("#<portlet:namespace/>listDossierPartToSigner").val().split(","); 
+			var listDossierFileToSigner = $("#<portlet:namespace/>listDossierFileToSigner").val().split(","); 
+			
+			for ( var i = 0; i < listFileToSigner.length; i++) {
+				$.ajax({
+					type : 'POST',
+					url : url,
+					data : {
+						<portlet:namespace/>index: i,
+						<portlet:namespace/>indexSize: listFileToSigner.length,
+						<portlet:namespace/>symbolType: symbolType,
+						<portlet:namespace/>fileId: listFileToSigner[i],
+						<portlet:namespace/>dossierId: $("#<portlet:namespace/>dossierId").val(),
+						<portlet:namespace/>dossierPartId: listDossierPartToSigner[i],
+						<portlet:namespace/>dossierFileId: listDossierFileToSigner[i],
+						<portlet:namespace/>type: 'getComputerHash'
+					},
+					success : function(data) {
+						if(data){
+							var jsonData = JSON.parse(data);
+							var hashComputers = jsonData.hashComputers;
+							var signFieldNames = jsonData.signFieldNames;
+							var filePaths = jsonData.filePaths;
+							var msgs = jsonData.msg;
+							var fileNames = jsonData.fileNames;
+							var dossierFileIds = jsonData.dossierFileIds;
+							var dossierPartIds = jsonData.dossierPartIds;
+							var indexs = jsonData.indexs;
+							var indexSizes = jsonData.indexSizes;
+							for ( var i = 0; i < hashComputers.length; i++) {
+								var hashComputer = hashComputers[i];
+								var signFieldName = signFieldNames[i];
+								var filePath = filePaths[i];
+								var msg = msgs[i];
+								var fileName = fileNames[i];
+								var dossierFileId = dossierFileIds[i];
+								var dossierPartId = dossierPartIds[i];
+								var index = indexs[i];
+								var indexSize = indexSizes[i];
+								if(plugin().valid){
+									if(msg === 'success'){
+		 								var code = plugin().Sign(hashComputer);
+		 								if(code ===0 || code === 7){
+		 									var sign = plugin().Signature;
+											completeSignature(sign, signFieldName, filePath, fileName, $("#<portlet:namespace/>dossierId").val(), dossierFileId, dossierPartId, index, indexSize, '<%=signatureURL%>');
+											
+		 								}else{
+		 									alert("signer error");
+		 					            }
+									}else{
+										alert(msg);
+									}
+						        	
+						        } else {
+						         	alert("Plugin is not working");
+						        }
+							}
+						}
+					}
+				});
+			}
+		}
+	
+		function completeSignature(sign, signFieldName, filePath, fileName, dossierId, dossierFileId, dossierPartId, index, indexSize, urlFromSubmit) {
+			var msg = '';
+			var A = AUI();
+			A.io.request(
+					complateSignatureURL,
+					{
+					    dataType : 'json',
+					    data:{    	
+					    	<portlet:namespace/>sign : sign,
+							<portlet:namespace/>signFieldName : signFieldName,
+							<portlet:namespace/>filePath : filePath,
+							<portlet:namespace/>fileName : fileName,
+							<portlet:namespace/>dossierId : dossierId,
+							<portlet:namespace/>dossierFileId: dossierFileId,
+							<portlet:namespace/>dossierPartId : dossierPartId
+					    },   
+					    on: {
+					        success: function(event, id, obj) {
+					        	var instance = this;
+								var res = instance.get('responseData');
+								
+								var msg = res.msg;
+								var newis = indexSize-1;
+									if (msg === 'success') {
+										if(index == newis){
+											
+										}
+									} else {
+											alert("--------- vao day completeSignature- ky so ko dc-------------");
+									}
+							},
+					    	error: function(){
+					    		alert("--------- vao day completeSignature- ky so ko dc-------------");
+					    	}
+						}
+					}
+				);
+		}
+		
+	</aui:script>
+</c:if>

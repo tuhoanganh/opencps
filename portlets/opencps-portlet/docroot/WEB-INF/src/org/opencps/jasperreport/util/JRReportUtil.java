@@ -52,7 +52,6 @@ import net.sf.jasperreports.export.SimpleWriterExporterOutput;
 import org.opencps.jasperreport.compile.JRReportTemplate;
 import org.opencps.jasperreport.datasource.JRJSONDataSource;
 import org.opencps.util.JsonUtils;
-import org.opencps.util.PortletConstants.DestinationRoot;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
