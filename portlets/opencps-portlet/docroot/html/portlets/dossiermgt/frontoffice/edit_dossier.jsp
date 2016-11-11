@@ -1,4 +1,7 @@
-
+<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
+<%@page import="java.util.List"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,7 +20,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
+<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
+<%@page import="javax.portlet.PortletRequest"%>
 <%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@page import="org.opencps.backend.util.BackendUtils"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
@@ -53,6 +58,8 @@
 
 	DossierPart dossierPart =
 		(DossierPart) request.getAttribute(WebKeys.DOSSIER_PART_ENTRY);
+	
+	List<DossierFile> dossierFiles = new ArrayList<DossierFile>();
 
 	String backURL = ParamUtil.getString(request, "backURL");
 
@@ -92,6 +99,14 @@
 	catch (Exception e) {
 
 	}
+	
+	try {
+		if(Validator.isNotNull(dossier)) {
+			dossierFiles = DossierFileLocalServiceUtil.getDossierFileByDossierId(dossier.getDossierId());
+		}
+	} catch (Exception e) {
+		
+	}
 
 	boolean quickCreateDossier = dossier == null ? true : false;
 
@@ -119,6 +134,10 @@
 	/>
 </liferay-portlet:renderURL>
 
+<portlet:actionURL var="deleteDossierSuggesstionURL" name="deleteDossierSuggesstion">
+	<portlet:param name="dossierId" value='<%= Validator.isNotNull(dossier) ? String.valueOf(dossier.getDossierId()) : "0"%>'/>
+	<portlet:param name="currentURL" value="<%=currentURL %>"/>
+</portlet:actionURL>
 <portlet:actionURL var="updateDossierStatusURL" name="updateDossierStatus">
 	<portlet:param 
 		name="<%=DossierDisplayTerms.DOSSIER_ID %>" 
@@ -177,6 +196,25 @@
 		<liferay-util:buffer var="htmlBottom">
 
 			<c:if test="<%= cmd.equals(Constants.VIEW) ? false : true %>">
+				<c:choose>
+					<c:when test="<%= dossierFiles.size() == 0 %>">
+						<aui:button 
+							cssClass="btn des-sub-button radius20"
+							name="submitDossierSuggestion" 
+							value="dossier-suggestion">
+						</aui:button>
+					</c:when>
+					<c:otherwise>
+						<liferay-ui:icon-delete 
+							image="undo"
+							cssClass="search-container-action fa delete"
+							confirmation="are-you-sure-cancel-entry" message="delete-dossier-file"
+							url="<%=deleteDossierSuggesstionURL.toString() %>"
+						/>
+					</c:otherwise>
+				</c:choose>
+				
+				
 				<c:if test="<%=Validator.isNotNull(dossier)%>">
 					<c:if test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) %>">
 						<c:if test="<%=dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_NEW) || 
@@ -190,7 +228,7 @@
 								<liferay-ui:icon 
 									cssClass="search-container-action fa forward"
 									image="forward" message="send"
-									url="<%=jsUpdateDossierStatus %>" 
+									url="<%=jsUpdateDossierStatus %>"
 								/>
 							</c:if>
 
@@ -249,7 +287,7 @@
 						<liferay-ui:icon-delete 
 							image="delete"
 							cssClass="search-container-action fa delete"
-							confirmation="are-you-sure-delete-entry" message="delete"
+							confirmation="are-you-sure-delete-entry" message="delete-dossier"
 							url="<%=deleteDossierURL.toString() %>" 
 						/>
 					</c:if>
@@ -408,6 +446,25 @@
 </c:choose>
 
 <aui:script>
+	
+	AUI().ready(function(A){
+		var submitDossierSuggestion = A.one("#<portlet:namespace/>submitDossierSuggestion")
+		if(submitDossierSuggestion) {
+			submitDossierSuggestion.on('click', function() {
+				
+				var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
+				portletURL.setParameter("mvcPath", "/html/portlets/dossiermgt/frontoffice/dossier-suggesstion.jsp");
+				portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
+				portletURL.setPortletMode("normal");
+				portletURL.setParameter("dossierId", '<%= Validator.isNotNull(dossier) ? String.valueOf(dossier.getDossierId()) : "0" %>');
+				portletURL.setParameter("serviceConfigId", '<%= Validator.isNotNull(serviceConfig) ? String.valueOf(serviceConfig.getServiceConfigId()) : "0" %>');
+				portletURL.setParameter("dossierPartId", '<%= Validator.isNotNull(dossierPart) ? String.valueOf(dossierPart.getDossierpartId()) : "0" %>');
+				
+				openDialog(portletURL.toString(), 'submit-dossier-suggesstion', Liferay.Language.get("submit-dossier-suggesstion"));
+			});
+		}
+	});
+	
 	Liferay.provide(
 			window,
 			'<portlet:namespace/>updateDossierStatus',
@@ -448,6 +505,7 @@
 				},
 			['aui-base']
 	);
+	
 </aui:script>
 
 <%!

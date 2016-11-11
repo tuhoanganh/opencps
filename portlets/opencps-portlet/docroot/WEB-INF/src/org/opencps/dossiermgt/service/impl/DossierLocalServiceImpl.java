@@ -551,6 +551,31 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 
 		dossierPersistence.remove(dossier);
 	}
+	
+	public void deleteAllDossierFilesByDossierId(long dossierId)
+			throws NoSuchDossierException, SystemException {
+		
+			Dossier dossier = dossierPersistence.findByPrimaryKey(dossierId);
+		
+			List<FileGroup> fileGroups =
+				fileGroupLocalService.getFileGroupByDossierId(dossierId);
+			List<DossierFile> dossierFiles =
+				dossierFileLocalService.getDossierFileByDossierId(dossierId);
+
+			if (dossierFiles != null) {
+				for (DossierFile dossierFile : dossierFiles) {
+					dossierFileLocalService.deleteDossierFile(dossierFile);
+				}
+			}
+
+			if (fileGroups != null) {
+				for (FileGroup fileGroup : fileGroups) {
+
+					fileGroupLocalService.deleteFileGroup(fileGroup);
+
+				}
+			}
+	}
 
 	/**
 	 * @param dossierId
@@ -2452,4 +2477,13 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 
 	    return dossier;
 	  }
+	
+	public List<Dossier> getDossierByT_DS(long dossierTemplateId, String dossierStatus, int start, int end) throws SystemException {
+		return dossierPersistence.findByT_DS(dossierTemplateId, dossierStatus, start, end);
+	}
+	
+	public int countDossierByT_DS(long dossierTemplateId, String dossierStatus) throws SystemException {
+		return dossierPersistence.countByT_DS(dossierTemplateId, dossierStatus);
+	}
+
 }
