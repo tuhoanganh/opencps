@@ -196,7 +196,7 @@
 
 	</c:when>
 	
-	<c:when test="<%= BackendUtils.isDossierChange(dossier.getDossierId()) %>">
+	<c:when test="<%= BackendUtils.isDossierChange(dossier.getDossierId()) && 1==0 %>">
 		<portlet:actionURL var="changeDossierURL" name="changeDossier">
 			<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID%>"
 				value="<%=String.valueOf(dossier.getDossierId())%>" />
