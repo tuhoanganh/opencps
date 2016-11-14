@@ -449,6 +449,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 					StringBuffer sb = new StringBuffer();
 
 					sb.append(paymentMessages.get(0));
+					sb.append(StringPool.SPACE);
 					sb.append(StringPool.OPEN_PARENTHESIS);
 					sb.append(vnFormat.format(totalPayment));
 					sb.append(StringPool.CLOSE_PARENTHESIS);

@@ -241,10 +241,10 @@ public class BackendUtils {
 		}
 
 		if (countRequestCommand != 0) {
-			isCondition = true;
+			isCondition = false;
 		}
 		else {
-			isCondition = false;
+			isCondition = true;
 		}
 
 		return isCondition;

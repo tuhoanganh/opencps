@@ -28,11 +28,13 @@ import org.opencps.dossiermgt.comparator.DossierTemplateNameComparator;
 import org.opencps.dossiermgt.comparator.DossierTemplateNoComparator;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierFile;
+import org.opencps.dossiermgt.model.DossierFileLog;
 import org.opencps.dossiermgt.model.DossierPart;
 import org.opencps.dossiermgt.model.ServiceConfig;
 import org.opencps.dossiermgt.search.DossierDisplayTerms;
 import org.opencps.dossiermgt.search.DossierFileDisplayTerms;
 import org.opencps.dossiermgt.search.DossierTemplateDisplayTerms;
+import org.opencps.dossiermgt.service.DossierFileLogLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
@@ -421,6 +423,19 @@ public class DossierMgtUtil {
 		}
 
 		return serviceName;
+	}
+	
+	public static List<DossierFileLog> getFileLogs(long dossierLogId, long dossierId) {
+		List<DossierFileLog> ls = new ArrayList<DossierFileLog>();
+		
+		try {
+	        ls = DossierFileLogLocalServiceUtil.getFileLogs(dossierLogId, dossierId);
+        }
+        catch (Exception e) {
+	        // TODO: handle exception
+        }
+		
+		return ls;
 	}
 	
 	private static Log _log =

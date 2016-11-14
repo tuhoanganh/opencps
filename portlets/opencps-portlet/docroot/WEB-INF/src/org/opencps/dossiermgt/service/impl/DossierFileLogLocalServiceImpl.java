@@ -51,6 +51,12 @@ public class DossierFileLogLocalServiceImpl
 	 * Never reference this interface directly. Always use {@link org.opencps.dossiermgt.service.DossierFileLogLocalServiceUtil} to access the dossier file log local service.
 	 */
 	
+	public List<DossierFileLog> getFileLogs(long dossierLogId, long dossierId)
+	    throws PortalException, SystemException {
+
+		return dossierFileLogPersistence.findByL_D(dossierLogId, dossierId);
+	}
+
 	/**
 	 * @param dossierId
 	 * @param logId
