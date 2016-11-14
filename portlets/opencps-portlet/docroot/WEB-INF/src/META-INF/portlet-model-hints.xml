@@ -689,6 +689,8 @@
 		<field name="keypayMerchantCode" type="String" />
 		<field name="keypaySecureKey" type="String" />
 		<field name="reportTemplate" type="String" />
+		<field name="paymentGateType" type="long" />
+		<field name="status" type="boolean" />
 	</model>
 	<model name="org.opencps.paymentmgt.model.PaymentFile">
 		<field name="uuid" type="String" />
@@ -731,6 +733,10 @@
 		<field name="invoiceNo" type="String" />
 		<field name="syncStatus" type="int" />
 		<field name="oid" type="String" />
+	</model>
+	<model name="org.opencps.paymentmgt.model.PaymentGateConfig">
+		<field name="paymentGateId" type="long" />
+		<field name="paymentGateName" type="String" />
 	</model>
 	<model name="org.opencps.api.model.ApiService">
 		<field name="apiLogId" type="long" />
