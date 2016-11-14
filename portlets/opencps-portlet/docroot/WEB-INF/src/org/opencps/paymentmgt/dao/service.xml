@@ -106,13 +106,13 @@
 		<column name="paymentGateType" type="long"></column>
 		<column name="status" type="boolean"></column>
 
-		<finder name="GovAgency" return-type="PaymentConfig">
+		<finder name="GovAgencyPaymentType" return-type="PaymentConfig">
 			<finder-column name="groupId"></finder-column>
 			<finder-column name="govAgencyOrganizationId"></finder-column>
 			<finder-column name="paymentGateType"></finder-column>
 		</finder>
 		
-		<finder name="GovAgency" return-type="PaymentConfig">
+		<finder name="GovAgencyStatus" return-type="PaymentConfig">
 			<finder-column name="groupId"></finder-column>
 			<finder-column name="govAgencyOrganizationId"></finder-column>
 			<finder-column name="status"></finder-column>
