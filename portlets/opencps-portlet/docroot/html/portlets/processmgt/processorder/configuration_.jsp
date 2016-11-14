@@ -18,4 +18,9 @@
 %>
 <%@ include file="init.jsp"%>
 
-<liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
+<liferay-util:include 
+	page='<%=templatePath + "config_toptabs.jsp" %>' 
+	servletContext="<%=application %>"
+	portletId="<%=portletResource %>" 
+/>
+<h1>CONFIGURATION-1</h1>

@@ -889,7 +889,7 @@
 
 </aui:script>
 
-<c:if test="<%=assignFormDisplayStyle.equals("form") %>">
+<c:if test='<%=assignFormDisplayStyle.equals("form") %>'>
 	<portlet:resourceURL var="getDataAjax"></portlet:resourceURL>
 	
 	<portlet:actionURL var="signatureURL" name="signatureBCY"></portlet:actionURL>
