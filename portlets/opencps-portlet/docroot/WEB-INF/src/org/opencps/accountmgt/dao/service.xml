@@ -90,6 +90,9 @@
 			<finder-column name="fullName" comparator="LIKE" />
 			<finder-column name="accountStatus"/>
 		</finder>
+		<finder return-type="Citizen" name="PersonalId">
+			<finder-column name="personalId"></finder-column>
+		</finder>
 		<reference entity="User" package-path="com.liferay.portal" />
 		
 	</entity>
@@ -185,6 +188,9 @@
 		 <finder name="mappingOrganizationId" return-type="Business">
             <finder-column name="mappingOrganizationId"></finder-column>
         </finder>
+        <finder return-type="Business" name="IdNumber">
+			<finder-column name="idNumber"></finder-column>
+		</finder>
 		<reference package-path="com.liferay.portal" entity="Organization" />
 		<reference package-path="com.liferay.portal" entity="User" />
 	</entity>
@@ -279,5 +285,7 @@
         <exception>NoSuchAccountFolder</exception>
         <exception>NoSuchAccountOwnUserId</exception>
         <exception>NoSuchAccountOwnOrgId</exception>
+        <exception>DuplicateCitizenPersonalId</exception>
+        <exception>DuplicateBusinessIdNumber</exception>
 	</exceptions>
 </service-builder>

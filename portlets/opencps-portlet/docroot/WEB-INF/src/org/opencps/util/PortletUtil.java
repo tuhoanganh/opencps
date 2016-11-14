@@ -753,7 +753,7 @@ public class PortletUtil {
 			statusLabel = LanguageUtil.get(locale, "requested");
 			break;
 		case PaymentMgtUtil.PAYMENT_STATUS_CONFIRMED:
-			statusLabel = LanguageUtil.get(locale, "confirmed");
+			statusLabel = LanguageUtil.get(locale, "payment-confirmed");
 			break;
 		case PaymentMgtUtil.PAYMENT_STATUS_APPROVED:
 			statusLabel = LanguageUtil.get(locale, "approved");
@@ -1087,6 +1087,36 @@ public class PortletUtil {
 		}
 
 		return requiredDossierPartIds;
+	}
+	
+	public static String getDossierPartName(int dossierPartType, Locale locale) {
+		
+		String dossierPartTypeName = StringPool.BLANK;
+		
+		switch (dossierPartType) {
+		case PortletConstants.DOSSIER_PART_TYPE_SUBMIT:
+			dossierPartTypeName = LanguageUtil.get(locale, "dossier-part-type-submit");
+			break;
+		case PortletConstants.DOSSIER_PART_TYPE_OTHER:
+			dossierPartTypeName = LanguageUtil.get(locale, "dossier-part-type-other");
+			break;
+		case PortletConstants.DOSSIER_PART_TYPE_OPTION:
+			dossierPartTypeName = LanguageUtil.get(locale, "dossier-part-type-option");
+			break;
+		case PortletConstants.DOSSIER_PART_TYPE_PRIVATE:
+			dossierPartTypeName = LanguageUtil.get(locale, "dossier-part-type-private");
+			break;
+		case PortletConstants.DOSSIER_PART_TYPE_RESULT:
+			dossierPartTypeName = LanguageUtil.get(locale, "dossier-part-type-result");
+			break;
+		case PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT:
+			dossierPartTypeName = LanguageUtil.get(locale, "dossier-part-type-multiple-result");
+			break;
+		default:
+			break;
+		}
+		
+		return dossierPartTypeName;
 	}
 
 	private static Log _log = LogFactoryUtil
