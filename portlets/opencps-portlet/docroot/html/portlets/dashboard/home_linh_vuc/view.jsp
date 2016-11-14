@@ -47,7 +47,13 @@
 
 <aui:row>
 	<aui:col width="100" >
-
+	<div class="home-search-sologan">
+	
+		<p style="font-size: 19px;margin-left: -10px;margin-bottom: 0px;"><liferay-ui:message key="slogan-key-home-lv"/></p>
+		
+		<h2 style="font-size: 26px;padding-bottom: 5px;"></h2>
+		
+	</div>
 		<ul class="sitemap-class opencps-horizontal links-image">
 		
 			<%
