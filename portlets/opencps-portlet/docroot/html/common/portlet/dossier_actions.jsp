@@ -76,11 +76,14 @@
 				if(partType == PortletConstants.DOSSIER_PART_TYPE_OTHER || partType==PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT){
 					version = 1;
 				}else{
+					
 					if(isCBXL){
 						version = DossierFileLocalServiceUtil.countDossierFileByDID_SS_DP(dossierId, dossierPartId, PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS);
 					}else{
 						version = DossierFileLocalServiceUtil.countDossierFileByDID_DP(dossierId, dossierPartId);
 					}
+					
+					
 				}
 				
 			}
@@ -119,6 +122,7 @@
 							</c:if>
 						</c:when>
 						<c:when test="<%= ( isDynamicForm && fileEntryId > 0 ) || isOnlineData > 0  %>">
+							<c:if test="<%=!isReadOnly %>">
 							<aui:a 
 								id="<%=String.valueOf(dossierPartId) %>"
 								dossier="<%=String.valueOf(dossierId) %>"
@@ -134,6 +138,7 @@
 							>
 							<i class="fa fa-search"></i>
 							</aui:a>
+							</c:if>
 							<c:if test="<%=!showVersionItemReference %>">
 								<aui:a 
 									id="<%=String.valueOf(dossierPartId) %>"
@@ -472,6 +477,7 @@
 							</c:if>
 						</c:when>
 						<c:when test="<%=isDynamicForm && fileEntryId > 0  %>">
+							<c:if test="<%=!isReadOnly %>">
 							<aui:a 
 								id="<%=String.valueOf(dossierPartId) %>"
 								dossier="<%=String.valueOf(dossierId) %>"
@@ -487,7 +493,7 @@
 							>
 							<i class="fa fa-search"></i>
 							</aui:a>
-							
+							</c:if>
 							<c:if test="<%=!showVersionItemReference %>">
 								<aui:a 
 									id="<%=String.valueOf(dossierPartId) %>"
