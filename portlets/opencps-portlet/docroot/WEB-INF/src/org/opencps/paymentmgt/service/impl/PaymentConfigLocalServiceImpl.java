@@ -139,7 +139,7 @@ public class PaymentConfigLocalServiceImpl extends PaymentConfigLocalServiceBase
 		long groupId, long govAgencyOrganizationId, long paymentType)
 		throws SystemException {
 
-		return paymentConfigPersistence.fetchByGovAgency(
+		return paymentConfigPersistence.fetchByGovAgencyPaymentType(
 			groupId, govAgencyOrganizationId, paymentType);
 	}
 
@@ -147,6 +147,6 @@ public class PaymentConfigLocalServiceImpl extends PaymentConfigLocalServiceBase
 		long groupId, long govAgencyOrganizationId, boolean status)
 		throws SystemException {
 
-		return paymentConfigPersistence.fetchByGovAgency(groupId, govAgencyOrganizationId, status);
+		return paymentConfigPersistence.fetchByGovAgencyStatus(groupId, govAgencyOrganizationId, status);
 	}
 }
