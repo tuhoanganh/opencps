@@ -767,3 +767,8 @@ AUI().ready('aui-base','liferay-portlet-url','aui-io', function(A){
 	});
 
 </aui:script>
+<style>
+.label.opencps.dossiermgt.part-file-ctr.view-form .fa.fa-search{
+right: 215px !important;
+}
+</style>
