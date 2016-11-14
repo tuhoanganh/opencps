@@ -148,11 +148,14 @@
 						if(fileEntryId > 0) {
 							 FileEntry fileEntry =
 									DLFileEntryUtil.getFileEntry(fileEntryId);
-							 
-							 if(fileEntry != null) {
-								 urlDownload = DLUtil.getPreviewURL(
-											fileEntry, fileEntry.getFileVersion(),
-											themeDisplay, StringPool.BLANK);
+							 if(Validator.isNotNull(fileEntry) ) {
+								 try {
+									 urlDownload = DLUtil.getPreviewURL(
+												fileEntry, fileEntry.getFileVersion(),
+												themeDisplay, StringPool.BLANK);
+								 } catch(Exception e) {
+									 
+								 }
 							 }
 						}
 
