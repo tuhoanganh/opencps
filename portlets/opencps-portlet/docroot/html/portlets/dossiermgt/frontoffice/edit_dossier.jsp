@@ -1,7 +1,4 @@
-<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
-<%@page import="java.util.List"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -20,6 +17,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
+<%@page import="java.util.List"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
 <%@page import="javax.portlet.PortletRequest"%>
@@ -196,26 +197,9 @@
 		<liferay-util:buffer var="htmlBottom">
 
 			<c:if test="<%= cmd.equals(Constants.VIEW) ? false : true %>">
-				<c:choose>
-					<c:when test="<%= dossierFiles.size() == 0 %>">
-						<aui:button 
-							cssClass="btn des-sub-button radius20"
-							name="submitDossierSuggestion" 
-							value="dossier-suggestion">
-						</aui:button>
-					</c:when>
-					<c:otherwise>
-						<liferay-ui:icon-delete 
-							image="undo"
-							cssClass="search-container-action fa delete"
-							confirmation="are-you-sure-cancel-entry" message="delete-dossier-file"
-							url="<%=deleteDossierSuggesstionURL.toString() %>"
-						/>
-					</c:otherwise>
-				</c:choose>
-				
 				
 				<c:if test="<%=Validator.isNotNull(dossier)%>">
+					
 					<c:if test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) %>">
 						<c:if test="<%=dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_NEW) || 
 									dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_WAITING)%>">
@@ -223,8 +207,26 @@
 							<%
 								String jsUpdateDossierStatus = "javascript:" + renderResponse.getNamespace() + "updateDossierStatus()";
 							%>
-
 							<c:if test="<%=dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_NEW) %>">
+							
+								<c:choose>
+									<c:when test="<%= dossierFiles.size() == 0 %>">
+										<aui:button 
+											cssClass="btn des-sub-button radius20"
+											name="submitDossierSuggestion" 
+											value="dossier-suggestion">
+										</aui:button>
+									</c:when>
+									<c:otherwise>
+										<liferay-ui:icon-delete 
+											image="undo"
+											cssClass="search-container-action fa delete"
+											confirmation="are-you-sure-cancel-entry" message="delete-dossier-file"
+											url="<%=deleteDossierSuggesstionURL.toString() %>"
+										/>
+									</c:otherwise>
+								</c:choose>
+								
 								<liferay-ui:icon 
 									cssClass="search-container-action fa forward"
 									image="forward" message="send"
