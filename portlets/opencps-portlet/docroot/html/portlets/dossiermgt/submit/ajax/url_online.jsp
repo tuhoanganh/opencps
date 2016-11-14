@@ -97,7 +97,7 @@
 		</liferay-portlet:renderURL>
 		
 		<c:choose>
-			<c:when test='<%=Validator.isNotNull(serviceConfig) && ((serviceConfig.getServiceBusinees() && accountType.equalsIgnoreCase("business")) || (serviceConfig.getServiceCitizen() && accountType.equalsIgnoreCase("citizen")))%>'>
+			<c:when test='<%=Validator.isNotNull(serviceConfig) && ((serviceConfig.getServiceBusinees()) || (serviceConfig.getServiceCitizen()))%>'>
 				<aui:button type="button" name="submitonline" value="dossier-submit-online" href="<%=Validator.isNotNull(serviceConfig.getServiceUrl()) ? serviceConfig.getServiceUrl() : servieOnlinePopURL.toString() %>" />
 			</c:when>
 			<c:otherwise>
