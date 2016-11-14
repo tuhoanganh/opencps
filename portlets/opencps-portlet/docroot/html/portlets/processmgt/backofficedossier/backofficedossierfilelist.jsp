@@ -23,6 +23,7 @@
 <%@page import="com.liferay.portal.kernel.repository.model.FileEntry"%>
 <%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="org.opencps.util.DateTimeUtil"%>
+<%@page import="org.opencps.util.DLFileEntryUtil"%>
 <%@page import="com.liferay.portal.service.ServiceContextFactory"%>
 <%@page import="com.liferay.portal.service.ServiceContext"%>
 <%@page import="org.opencps.util.AccountUtil"%>
@@ -140,25 +141,21 @@
 						
 						Dossier dossier = DossierLocalServiceUtil.fetchDossier(dossierFile.getDossierId());
 						//url file download
-						FileEntry fileEntry = null;
-							try {
-								fileEntry = DLAppLocalServiceUtil.getFileEntry(dossierFile.getFileEntryId());
-							}
-						catch (Exception e) {
-									
-						}
-						String urlDownload = StringPool.BLANK;
-							if (fileEntry != null) {
-								FileVersion fileVersion = fileEntry.getFileVersion();
-										 
-								String queryString = "";							 
-								boolean appendFileEntryVersion = true;
-										 
-								boolean useAbsoluteURL = true;
-												 
-								urlDownload = DLUtil.getPreviewURL(fileEntry, fileVersion, themeDisplay, queryString, appendFileEntryVersion, useAbsoluteURL);							
-							}
+						String urlDownload = StringPool.BLANK;	
 						
+						long fileEntryId = dossierFile.getFileEntryId();
+						
+						if(fileEntryId > 0) {
+							 FileEntry fileEntry =
+									DLFileEntryUtil.getFileEntry(fileEntryId);
+							 
+							 if(fileEntry != null) {
+								 urlDownload = DLUtil.getPreviewURL(
+											fileEntry, fileEntry.getFileVersion(),
+											themeDisplay, StringPool.BLANK);
+							 }
+						}
+
 						// no column
 						row.addText(String.valueOf(row.getPos() + 1));
 						
