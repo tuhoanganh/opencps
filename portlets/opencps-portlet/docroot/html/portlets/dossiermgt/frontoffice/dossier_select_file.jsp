@@ -18,6 +18,10 @@
  */
 %>
 
+<%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.Dossier"%>
+<%@page import="org.opencps.util.DateTimeUtil"%>
+
 <%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
 <%@page import="org.opencps.util.WebKeys"%>
@@ -72,15 +76,6 @@
 	String modalDialogId = ParamUtil.getString(request, "modalDialogId");
 	
 	String redirectURL = ParamUtil.getString(request, "redirectURL");
-
-	List<String> headerNames = new ArrayList<String>();
-	headerNames.add("");
-	headerNames.add("#");
-	headerNames.add("dossier-file-no");
-	headerNames.add("display-name");
-	//headerNames.add("select");
-	
-	String headers = StringUtil.merge(headerNames);
 	
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "dossier_file.jsp");
@@ -116,18 +111,34 @@
 	templateFileNo = ParamUtil.getString(request, DossierDisplayTerms.TEMPLATE_FILE_NO);
 	
 	String templateFileNoTemp = StringPool.BLANK;
+	Dossier dossier = null;
+	try {
+		dossier = DossierLocalServiceUtil.getDossier(dossierId);
+	} catch (Exception e) {}
 	
 	try{
 		DossierPart dossierPart = DossierPartLocalServiceUtil.getDossierPart(dossierPartId);
 		if(dossierPart != null && Validator.isNotNull(dossierPart.getTemplateFileNo())){
 			templateFileNoTemp = dossierPart.getTemplateFileNo();
 		}
-	}catch(Exception e){}
+	}catch(Exception e){
+		e.printStackTrace();
+	}
 	
 	if(isSameTemplate){
 		templateFileNo = templateFileNoTemp;
 	}
 	
+	
+	List<String> headerNames = new ArrayList<String>();
+	headerNames.add("");
+	headerNames.add("#");
+	headerNames.add("template-info");
+	headerNames.add("template");
+	headerNames.add("dossier");
+	//headerNames.add("select");
+	
+	String headers = StringUtil.merge(headerNames);
 %>
 
 <liferay-ui:error message="upload-error" key="upload-error"/>
@@ -206,79 +217,124 @@
 <portlet:actionURL var="cloneDossierFileURL" name="cloneDossierFile"/>
 
 <aui:form action="<%=cloneDossierFileURL.toString() %>" method="post" name="fmSelectDossierFile">
-	<liferay-ui:search-container 
-		searchContainer="<%= new DossierFileSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" 
-		headerNames="<%= headers %>"
-	>
-	
-		<liferay-ui:search-container-results>
-			<%
-				DossierFileSearchTerms searchTerms = (DossierFileSearchTerms)searchContainer.getSearchTerms();
-							
-					List<DossierFile> dossierFiles = new ArrayList<DossierFile>();
-					int totalCount = 0;
-					try {
-						dossierFiles = DossierFileLocalServiceUtil.searchDossierFile(scopeGroupId, citizen != null ? citizen.getMappingUserId() : 0, business != null ? business.getMappingOrganizationId() : 0, searchTerms.getKeywords(), templateFileNo, 0, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-						totalCount = DossierFileLocalServiceUtil.countDossierFile(scopeGroupId, citizen != null ? citizen.getMappingUserId() : 0, business != null ? business.getMappingOrganizationId() : 0, searchTerms.getKeywords(), templateFileNo, 0);
-					} catch(Exception e){
-						
-					}
-				
-					total = totalCount;
-					results = dossierFiles;
-					
-					pageContext.setAttribute("results", results);
-					pageContext.setAttribute("total", total);				
-			%>
-		</liferay-ui:search-container-results>	
-			<liferay-ui:search-container-row 
-				className="org.opencps.dossiermgt.model.DossierFile" 
-				modelVar="dossierFile" 
-				keyProperty="dossierFileId"
-			>
-				<%-- <div class="row-fluid min-width10">
-						<div class="span12 bold">
-							<%=row.getPos() + 1 %>
-						</div>
-					</div> --%>
-				<liferay-util:buffer var="rowTicker">
-					<aui:input name="hiddenDossierFileId" type="hidden" value="<%=dossierFile.getDossierFileId() %>"	/>
-					<i class="fa fa-circle-o "></i>
-					
-				</liferay-util:buffer>
+	<div class="opencps-searchcontainer-wrapper">
+		<liferay-ui:search-container 
+			searchContainer="<%= new DossierFileSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" 
+			headerNames="<%= headers %>"
+		>
+			<liferay-ui:search-container-results>
 				<%
-					row.addText(rowTicker);
-					// no column
-					row.addText(String.valueOf(row.getPos() + 1 + searchContainer.getStart()));
+					DossierFileSearchTerms searchTerms = (DossierFileSearchTerms)searchContainer.getSearchTerms();
+								
+						List<DossierFile> dossierFiles = new ArrayList<DossierFile>();
+						int totalCount = 0;
+						try {
+							dossierFiles = DossierFileLocalServiceUtil.searchDossierFile(scopeGroupId, citizen != null ? citizen.getMappingUserId() : 0, business != null ? business.getMappingOrganizationId() : 0, searchTerms.getKeywords(), templateFileNo, 0, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
+							totalCount = DossierFileLocalServiceUtil.countDossierFile(scopeGroupId, citizen != null ? citizen.getMappingUserId() : 0, business != null ? business.getMappingOrganizationId() : 0, searchTerms.getKeywords(), templateFileNo, 0);
+						} catch(Exception e){
+							
+						}
 					
-					// dossier file no column
-					row.addText(dossierFile.getDossierFileNo());
-									
-					// dossier display name column
-					row.addText(dossierFile.getDisplayName());
+						total = totalCount;
+						results = dossierFiles;
+						
+						pageContext.setAttribute("results", results);
+						pageContext.setAttribute("total", total);				
+				%>
+			</liferay-ui:search-container-results>	
+				<liferay-ui:search-container-row 
+					className="org.opencps.dossiermgt.model.DossierFile" 
+					modelVar="dossierFile" 
+					keyProperty="dossierFileId"
+				>
+					<liferay-util:buffer var="rowTicker">
+						<aui:input name="hiddenDossierFileId" type="hidden" value="<%=dossierFile.getDossierFileId() %>"	/>
+						<i class="fa fa-circle-o "></i>
+					</liferay-util:buffer>
 					
-				//	row.addButton(LanguageUtil.get(locale, "select"), "javascript:" + renderResponse.getNamespace() + "selectDossierFile(" + dossierFile.getDossierFileId() +")");
+					<liferay-util:buffer var="boundCol1">
+						<div class="row-fluid">
+							<div class="span5 bold-label">
+								<liferay-ui:message key="template-file-no"/>
+							</div>
+							<div class="span7"><%=Validator.isNotNull(templateFileNo) ? templateFileNo : StringPool.DASH %></div>
+						</div>
+						
+						<div class="row-fluid">
+							<div class="span5 bold-label">
+								<liferay-ui:message key="dossier-file-no"/>
+							</div>
+							<div class="span7"><%=Validator.isNotNull(dossierFile.getDossierFileNo()) ? dossierFile.getDossierFileNo() : StringPool.DASH %></div>
+						</div>
+					</liferay-util:buffer>
 					
-				%>	
-			</liferay-ui:search-container-row> 
-		
-		<liferay-ui:search-iterator type="opencs_page_iterator"/>
-	</liferay-ui:search-container>
-	<aui:input name="cloneDossierFileId" type="hidden"/>
-	<aui:input name="redirectURL" type="hidden" value="<%=Validator.isNull(redirectURL) ? currentURL : redirectURL %>"/>
-	<aui:input name="<%=DossierDisplayTerms.DOSSIER_ID %>" type="hidden" value="<%=dossierId %>"/>
-	<aui:input name="groupDossierPartId" type="hidden" value="<%=groupDossierPartId %>"/>
-	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_ID %>" type="hidden" value="<%=dossierFileId %>"/>
-	<aui:input name="<%=DossierDisplayTerms.FILE_GROUP_ID %>" type="hidden" value="<%=fileGroupId %>"/>
-	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_PART_ID %>" type="hidden" value="<%=dossierPartId %>"/>
-	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_ORIGINAL %>" type="hidden" value="<%=String.valueOf(PortletConstants.DOSSIER_FILE_ORIGINAL) %>"/>
-	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_TYPE %>" type="hidden" value="<%=String.valueOf(PortletConstants.DOSSIER_FILE_TYPE_INPUT) %>"/>
-	<aui:input name="<%=DossierFileDisplayTerms.GROUP_NAME %>" type="hidden" value="<%=groupName %>"/>
-	<aui:input name="receiveHiddenDossierFile" type="hidden" />
-	<aui:row>
-		<aui:button name="btnCancel" value="cancel"/>
-		<aui:button  name="btnAccept" value="agree"/>
-	</aui:row>
+					<liferay-util:buffer var="boundCol2">
+						<div class="row-fluid">
+							<div class="span5 bold-label">
+								<liferay-ui:message key="dossier-file-date"/>
+							</div>
+							<div class="span7"><%=Validator.isNotNull(dossierFile.getDossierFileDate()) ? 
+									DateTimeUtil.convertDateToString(dossierFile.getDossierFileDate(), DateTimeUtil._VN_DATE_FORMAT) :
+										StringPool.DASH %>
+							</div>
+						</div>
+						<div class="row-fluid">
+							<div class="span5 bold-label">
+								<liferay-ui:message key="dossier-file-name"/>
+							</div>
+							<div class="span7"><%=Validator.isNotNull(dossierFile.getDisplayName()) ? dossierFile.getDisplayName() : StringPool.DASH %></div>
+						</div>
+						
+					</liferay-util:buffer>
+					
+					
+					<liferay-util:buffer var="boundCol3">
+						<div class="row-fluid">
+							<div class="span5 bold-label">
+								<liferay-ui:message key="reception-no"/>
+							</div>
+							<div class="span7"><%=Validator.isNotNull(dossier) ? dossier.getReceptionNo() : StringPool.DASH %></div>
+						</div>
+						
+						<div class="row-fluid">
+							<div class="span5 bold-label">
+								<liferay-ui:message key="dossier-no"/>
+							</div>
+							<div class="span7"><%=Validator.isNotNull(dossier) ? String.valueOf(dossier.getDossierId()) : StringPool.DASH %></div>
+						</div>
+					</liferay-util:buffer>
+					
+					<%
+						row.addText(rowTicker);
+						// no column
+						row.addText(String.valueOf(row.getPos() + 1 + searchContainer.getStart()));
+						row.addText(boundCol1);
+						row.addText(boundCol2);
+						row.addText(boundCol3);
+						
+					//	row.addButton(LanguageUtil.get(locale, "select"), "javascript:" + renderResponse.getNamespace() + "selectDossierFile(" + dossierFile.getDossierFileId() +")");
+						
+					%>	
+				</liferay-ui:search-container-row> 
+			
+			<liferay-ui:search-iterator type="opencs_page_iterator"/>
+		</liferay-ui:search-container>
+		<aui:input name="cloneDossierFileId" type="hidden"/>
+		<aui:input name="redirectURL" type="hidden" value="<%=Validator.isNull(redirectURL) ? currentURL : redirectURL %>"/>
+		<aui:input name="<%=DossierDisplayTerms.DOSSIER_ID %>" type="hidden" value="<%=dossierId %>"/>
+		<aui:input name="groupDossierPartId" type="hidden" value="<%=groupDossierPartId %>"/>
+		<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_ID %>" type="hidden" value="<%=dossierFileId %>"/>
+		<aui:input name="<%=DossierDisplayTerms.FILE_GROUP_ID %>" type="hidden" value="<%=fileGroupId %>"/>
+		<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_PART_ID %>" type="hidden" value="<%=dossierPartId %>"/>
+		<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_ORIGINAL %>" type="hidden" value="<%=String.valueOf(PortletConstants.DOSSIER_FILE_ORIGINAL) %>"/>
+		<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_TYPE %>" type="hidden" value="<%=String.valueOf(PortletConstants.DOSSIER_FILE_TYPE_INPUT) %>"/>
+		<aui:input name="<%=DossierFileDisplayTerms.GROUP_NAME %>" type="hidden" value="<%=groupName %>"/>
+		<aui:input name="receiveHiddenDossierFile" type="hidden" />
+		<aui:row>
+			<aui:button name="btnCancel" value="cancel"/>
+			<aui:button  name="btnAccept" value="agree"/>
+		</aui:row>
+	</div>
 </aui:form>
 
 <aui:script>
