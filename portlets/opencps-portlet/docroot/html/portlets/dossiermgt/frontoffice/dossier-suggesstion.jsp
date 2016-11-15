@@ -181,7 +181,7 @@
 				<aui:row>
 					<a href="<%=viewDossierUrlNomal.toString()%>" target="_blank" class="btn">
 						<i class="fa fa-eye"><liferay-ui:message key="view"/></i>
-					<a>
+					</a>
 				</aui:row>
 				
 				<aui:row>
