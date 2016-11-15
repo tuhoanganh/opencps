@@ -226,8 +226,8 @@
 											<liferay-ui:input-search 
 												id="keywords1"
 												name="keywords"
-												title='<%= LanguageUtil.get(locale, "keywords") %>'
-												placeholder='<%=LanguageUtil.get(locale, "keywords") %>'
+												title='<%= LanguageUtil.get(locale, "entering-dossier-id-receiveid-name-keyword") %>'
+												placeholder='<%=LanguageUtil.get(locale, "entering-dossier-id-receiveid-name-keyword") %>'
 												cssClass="search-input input-keyword"
 											/>
 										</aui:col>
