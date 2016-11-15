@@ -252,6 +252,14 @@
 					modelVar="dossierFile" 
 					keyProperty="dossierFileId"
 				>
+					<portlet:renderURL var="viewDossierURL">
+						<portlet:param name="mvcPath"
+							value='<%=templatePath + "edit_dossier.jsp"%>' />
+						<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID%>"
+							value="<%=String.valueOf(dossierFile.getDossierId())%>" />
+						<portlet:param name="<%=Constants.CMD%>" value="<%=Constants.VIEW%>" />
+						<portlet:param name="isEditDossier" value="<%=String.valueOf(false)%>" />
+					</portlet:renderURL>
 				
 					<%
 						String templateFileURL = StringPool.BLANK;
@@ -288,16 +296,12 @@
 								}
 							} catch(Exception e) {} 
 							
+							String viewDossierUrlNomal = viewDossierURL.toString();
+							if(viewDossierUrlNomal.contains("p_p_state=pop_up"))  {
+								viewDossierUrlNomal = StringUtil.replace(viewDossierUrlNomal, "p_p_state=pop_up", "p_p_state=nomal");
+							}
+							
 					%>
-					
-					<portlet:renderURL var="viewDossierURL">
-						<portlet:param name="mvcPath"
-							value='<%=templatePath + "edit_dossier.jsp"%>' />
-						<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID%>"
-							value="<%=String.valueOf(dossierFile.getDossierId())%>" />
-						<portlet:param name="<%=Constants.CMD%>" value="<%=Constants.VIEW%>" />
-						<portlet:param name="isEditDossier" value="<%=String.valueOf(false)%>" />
-					</portlet:renderURL>
 									
 					<liferay-util:buffer var="rowTicker">
 						<aui:input name="hiddenDossierFileId" type="hidden" value="<%=dossierFile.getDossierFileId() %>"	/>
@@ -361,7 +365,7 @@
 								<liferay-ui:message key="dossier-no"/>
 							</div>
 							<div class="span7">
-								<a href="<%=viewDossierURL.toString() %>" target="_blank">
+								<a href="<%=viewDossierUrlNomal %>" target="_blank">
 									<%=(dossierFile.getDossierId() > 0) ? String.valueOf(dossierFile.getDossierId()) : StringPool.DASH %>
 								</a>
 							</div>
