@@ -1,4 +1,6 @@
 
+<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
+<%@page import="org.opencps.servicemgt.model.TemplateFile"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -56,6 +58,8 @@
 	iteratorURL.setParameter("mvcPath", templatePath + "dossier-suggesstion.jsp");
 	iteratorURL.setParameter("dossierId", String.valueOf(dossierId));
 	
+	String dossierTemplateSuggesstion = DossierMgtUtil.getDossierTemplateSuggesstion(dossierId, scopeGroupId);
+	
 	boolean success = false;
 	
 	try{
@@ -76,8 +80,8 @@
 		
 		<liferay-ui:search-container-results>
 			<%
-				dossiers = DossierLocalServiceUtil.getDossierByT_DS(dossierTemplateId, "done", searchContainer.getStart(), searchContainer.getEnd());
-				totalCount = DossierLocalServiceUtil.countDossierByT_DS(dossierTemplateId, "done");
+				dossiers = DossierLocalServiceUtil.getDossierSuggesstion(dossierStatusConfig, dossierTemplateSuggesstion, searchContainer.getStart(), searchContainer.getEnd());
+				totalCount = DossierLocalServiceUtil.countDossierSuggesstion(dossierStatusConfig, dossierTemplateSuggesstion);
 				
 				results = dossiers;
 				total = totalCount;
@@ -175,16 +179,16 @@
 			
 			<liferay-util:buffer var="boundcol4">
 				<aui:row>
-					<aui:a href="<%=viewDossierUrlNomal.toString()%>" target="_blank" label="">
-						<i><liferay-ui:message key="view"/></i>
-					</aui:a>
+					<a href="<%=viewDossierUrlNomal.toString()%>" target="_blank" class="btn">
+						<i class="fa fa-eye"><liferay-ui:message key="view"/></i>
+					<a>
 				</aui:row>
 				
 				<aui:row>
-					 <aui:a 
+					 <aui:a cssClass="btn"
 						href="<%=\"javascript:\" + renderResponse.getNamespace()+ \"loadingMark('\" + updateDossierSuggestionURL.toString() +\"')\" %>" 
 					>
-						<i><liferay-ui:message key="choose"/></i>
+						<i class = "fa fa-check"><liferay-ui:message key="choose"/></i>
 					</aui:a> 
 				</aui:row>
 				
