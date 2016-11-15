@@ -3761,7 +3761,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 									DossierFileLocalServiceUtil.addDossierFile(
 											dossierFile.getUserId(),
 											dossierId,
-											dossierFile.getDossierPartId(),
+											dossierPart.getDossierpartId(),
 											dossierFile.getTemplateFileNo(),
 											StringPool.BLANK,
 											dossierFile.getGroupFileId(),
