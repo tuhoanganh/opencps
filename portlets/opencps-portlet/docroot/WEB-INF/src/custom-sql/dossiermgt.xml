@@ -1054,4 +1054,35 @@
 		]]>
 	</sql>
 	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierFinder.searchDossierSugesstion">	
+		<![CDATA[
+			SELECT
+				opencps_dossier.*
+			FROM
+				opencps_dossier
+			WHERE 
+				1 = 1
+			AND 
+				opencps_dossier.dossierStatus = ?
+			AND
+				opencps_dossier.dossierTemplateId IN (?)
+			
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierFinder.countDossierSugesstion">	
+		<![CDATA[
+			SELECT
+				COUNT(*) AS COUNT_VALUE
+			FROM
+				opencps_dossier
+			WHERE 
+				1 = 1
+			AND 
+				opencps_dossier.dossierStatus = ?
+			AND
+				opencps_dossier.dossierTemplateId IN (?)
+		]]>
+	</sql>
+	
 </custom-sql>
