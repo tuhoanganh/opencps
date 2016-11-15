@@ -19,6 +19,7 @@ package org.opencps.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -41,10 +42,8 @@ import org.opencps.datamgt.service.AdministrationServicedomainLocalServiceUtil;
 import org.opencps.datamgt.service.DictCollectionLocalServiceUtil;
 import org.opencps.datamgt.service.DictItemLocalServiceUtil;
 import org.opencps.dossiermgt.model.Dossier;
-
 import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.DossierPart;
-
 import org.opencps.paymentmgt.util.PaymentMgtUtil;
 
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
@@ -66,6 +65,7 @@ import com.liferay.portal.util.PortalUtil;
 
 /**
  * @author trungnt
+ *
  */
 public class PortletUtil {
 
@@ -1089,35 +1089,81 @@ public class PortletUtil {
 
 		return requiredDossierPartIds;
 	}
-	
+
 	public static String getDossierPartName(int dossierPartType, Locale locale) {
-		
+
 		String dossierPartTypeName = StringPool.BLANK;
-		
+
 		switch (dossierPartType) {
 		case PortletConstants.DOSSIER_PART_TYPE_SUBMIT:
-			dossierPartTypeName = LanguageUtil.get(locale, "dossier-part-type-submit");
+			dossierPartTypeName = LanguageUtil.get(locale,
+					"dossier-part-type-submit");
 			break;
 		case PortletConstants.DOSSIER_PART_TYPE_OTHER:
-			dossierPartTypeName = LanguageUtil.get(locale, "dossier-part-type-other");
+			dossierPartTypeName = LanguageUtil.get(locale,
+					"dossier-part-type-other");
 			break;
 		case PortletConstants.DOSSIER_PART_TYPE_OPTION:
-			dossierPartTypeName = LanguageUtil.get(locale, "dossier-part-type-option");
+			dossierPartTypeName = LanguageUtil.get(locale,
+					"dossier-part-type-option");
 			break;
 		case PortletConstants.DOSSIER_PART_TYPE_PRIVATE:
-			dossierPartTypeName = LanguageUtil.get(locale, "dossier-part-type-private");
+			dossierPartTypeName = LanguageUtil.get(locale,
+					"dossier-part-type-private");
 			break;
 		case PortletConstants.DOSSIER_PART_TYPE_RESULT:
-			dossierPartTypeName = LanguageUtil.get(locale, "dossier-part-type-result");
+			dossierPartTypeName = LanguageUtil.get(locale,
+					"dossier-part-type-result");
 			break;
 		case PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT:
-			dossierPartTypeName = LanguageUtil.get(locale, "dossier-part-type-multiple-result");
+			dossierPartTypeName = LanguageUtil.get(locale,
+					"dossier-part-type-multiple-result");
 			break;
 		default:
 			break;
 		}
-		
+
 		return dossierPartTypeName;
+	}
+
+	
+	/**
+	 * @param request
+	 * @param response
+	 * @param fileName
+	 * @param is
+	 * @param contentLength
+	 * @param contentType
+	 * @throws IOException
+	 */
+	public static void sendFile(HttpServletRequest request,
+			HttpServletResponse response, String fileName, InputStream is,
+			long contentLength, String contentType) throws IOException {
+		ServletResponseUtil.sendFile(request, response, fileName, is,
+				contentLength, contentType);
+	}
+
+	
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @param fileName
+	 * @param is
+	 * @param contentLength
+	 * @param contentType
+	 * @throws IOException
+	 */
+	public static void sendFile(ActionRequest actionRequest,
+			ActionResponse actionResponse, String fileName, InputStream is,
+			long contentLength, String contentType) throws IOException {
+
+		HttpServletResponse response = PortalUtil
+				.getHttpServletResponse(actionResponse);
+
+		HttpServletRequest request = PortalUtil
+				.getHttpServletRequest(actionRequest);
+		ServletResponseUtil.sendFile(request, response, fileName, is,
+				contentLength, contentType);
 	}
 
 	private static Log _log = LogFactoryUtil
