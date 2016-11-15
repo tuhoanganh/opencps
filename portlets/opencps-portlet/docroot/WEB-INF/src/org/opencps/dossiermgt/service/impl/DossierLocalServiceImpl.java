@@ -33,6 +33,7 @@ import org.opencps.dossiermgt.model.DossierTemplate;
 import org.opencps.dossiermgt.model.FileGroup;
 import org.opencps.dossiermgt.model.ServiceConfig;
 import org.opencps.dossiermgt.service.base.DossierLocalServiceBaseImpl;
+import org.opencps.dossiermgt.service.persistence.DossierFinderImpl;
 import org.opencps.paymentmgt.model.PaymentFile;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.usermgt.model.WorkingUnit;
@@ -2484,6 +2485,17 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	
 	public int countDossierByT_DS(long dossierTemplateId, String dossierStatus) throws SystemException {
 		return dossierPersistence.countByT_DS(dossierTemplateId, dossierStatus);
+	}
+
+	public List<Dossier> getDossierSuggesstion(String dossierStatus,
+			String dossierTempaleSuggesstion, int start, int end)
+			throws SystemException {
+		return dossierFinder.searchDossierSuggesstion(dossierStatus, dossierTempaleSuggesstion, start, end);
+	}
+	
+	public int countDossierSuggesstion(String dossierStatus,
+			String dossierTempaleSuggesstion) throws SystemException {
+		return dossierFinder.countDossierSuggesstion(dossierStatus, dossierTempaleSuggesstion);
 	}
 
 }
