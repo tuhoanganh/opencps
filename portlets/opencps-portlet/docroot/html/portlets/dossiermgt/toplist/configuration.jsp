@@ -44,7 +44,6 @@
 		selectedItems="<%=status%>"
 		optionValueType="code"
 		cssClass="search-input select-box input100"
-		
 	/>
 	<aui:button type="submit" name="Save" value="save"></aui:button>
 </aui:form>

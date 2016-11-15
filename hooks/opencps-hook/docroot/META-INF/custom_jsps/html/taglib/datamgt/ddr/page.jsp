@@ -272,7 +272,7 @@
 				
 					opts += '<option value="' + opt.itemCode + '" selected="selected">' + itemName + '</option>'
 				}else{
-			
+
 					opts += '<option value="' + opt.itemCode + '" >' + itemName + '</option>'
 				}
 			}else if(optionValueType<%=randomInstance %> ==='id'){

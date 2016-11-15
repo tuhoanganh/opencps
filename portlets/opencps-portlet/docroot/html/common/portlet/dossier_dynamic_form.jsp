@@ -1,6 +1,4 @@
 
-<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
-<%@page import="org.opencps.util.MessageKeys"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -20,34 +18,32 @@
  */
 %>
 
-
-<%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.model.Dossier"%>
-<%@page import="org.opencps.util.PortletPropsValues"%>
-<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
-<%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
-<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
-<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
-<%@page import="org.opencps.util.WebKeys"%>
-<%@page import="org.opencps.util.PortletConstants"%>
-<%@page import="javax.portlet.WindowState"%>
-<%@page import="javax.portlet.PortletRequest"%>
+<%@page import="com.liferay.portal.security.auth.AuthTokenUtil"%>
 <%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
-<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
-<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
+<%@page import="javax.portlet.PortletRequest"%>
+<%@page import="javax.portlet.WindowState"%>
 <%@page import="org.opencps.accountmgt.model.Business"%>
-<%@page import="org.opencps.dossiermgt.bean.AccountBean"%>
-<%@page import="org.opencps.util.AccountUtil"%>
-<%@page import="org.opencps.accountmgt.service.BusinessLocalServiceUtil"%>
-<%@page import="org.opencps.accountmgt.service.CitizenLocalServiceUtil"%>
 <%@page import="org.opencps.accountmgt.model.Citizen"%>
 <%@page import="org.opencps.backend.util.AutoFillFormData"%>
-<%@page import="org.opencps.backend.util.BackendUtils"%>
+<%@page import="org.opencps.dossiermgt.bean.AccountBean"%>
+<%@page import="org.opencps.dossiermgt.model.Dossier"%>
+<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
+<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
+<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
+<%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
+<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
+<%@page import="org.opencps.util.AccountUtil"%>
 <%@page import="org.opencps.util.JsonUtils"%>
-<%@page import="com.liferay.portal.security.auth.AuthTokenUtil"%>
+<%@page import="org.opencps.util.MessageKeys"%>
+<%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.util.PortletPropsValues"%>
+<%@page import="org.opencps.util.WebKeys"%>
 
 <%@ include file="/init.jsp"%>
 
@@ -81,6 +77,8 @@
 	String redirectURL = ParamUtil.getString(request, "redirectURL");
 	
 	String sampleData = StringPool.BLANK;
+	
+	String[] docTypes = StringUtil.split(ParamUtil.getString(request, "reportTypes", ".pdf"));
 	
 	if(primaryKey > 0){
 		dossierFileId = primaryKey;
@@ -196,8 +194,25 @@
 					
 				<c:if test="<%=dossierFileId > 0%>">
 					<aui:button type="button" value="preview" name="preview"/>
-					
-<%-- 					<aui:button type="button" value="create-file" name="create-file"/> --%>
+					<aui:nav id="dropdownContainer" cssClass="btn export-report">
+						<aui:nav-item dropdown="<%= true %>" label="download">
+						
+							<%
+								if(docTypes != null){
+									for(int i = 0; i < docTypes.length; i++){
+										String extension = docTypes[i];
+								
+										String taglibURL = "javascript:" + renderResponse.getNamespace() + "exportReport('"+ extension +"')";
+										%>
+											<aui:nav-item href="<%= taglibURL %>" label="<%=StringUtil.replace(extension, StringPool.PERIOD, StringPool.BLANK).toUpperCase() %>" />
+										<%
+									}
+								}
+							%>
+			
+						</aui:nav-item>
+					</aui:nav>
+<%-- 				<aui:button type="button" value="create-file" name="create-file"/> --%>
 				</c:if>
 			</c:when>
 		</c:choose>
@@ -340,6 +355,27 @@
 		);
 	},['aui-io','liferay-portlet-url', 'aui-loading-mask-deprecated']);
 	
+	Liferay.provide(window, '<portlet:namespace/>exportReport', function(ext) {
+		var A = AUI();
+		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, portleName, themeDisplay.getPlid(), PortletRequest.ACTION_PHASE) %>');
+		portletURL.setParameter("javax.portlet.action", "exportReport");
+		portletURL.setParameter("docType", ext);
+		portletURL.setParameter("dossierFileId", dossierFileId);
+		portletURL.setWindowState('<%=WindowState.NORMAL%>');
+		var loadingMask = new A.LoadingMask(
+			{
+				'strings.loading': '<%= UnicodeLanguageUtil.get(pageContext, "exporting-file") %>',
+				target: A.one('#<portlet:namespace/>fm')
+			}
+		);
+		
+		loadingMask.show();
+		
+		window.location.href = portletURL.toString();
+		
+		loadingMask.hide();
+	},['aui-io','liferay-portlet-url', 'aui-loading-mask-deprecated']);
+	
 	Liferay.provide(window, '<portlet:namespace/>previewForm', function(dossierFileId) {
 		var A = AUI();
 		var uri = '<%=PortletPropsValues.OPENCPS_SERVLET_PREVIEW_DOSSIER_FORM_URL%>' + dossierFileId;
@@ -376,22 +412,22 @@
 		optionBlank.value = "";
 		optionBlank.text = "<%=LanguageUtil.get(pageContext, "select-combo-blank") %>";
 		Liferay.Service(
-				  '/opencps-portlet.dictitem/get-dictitems_itemCode_datasource',
-				  {
-					  collectionCode: dictCollectionId,
-					  itemCode: parentItemId,
-					  groupId: themeDisplay.getScopeGroupId()
-				  },
-				  function(obj) {
-				    for(j in obj){
-	                    var sub_key = j;
-	                    var sub_val = obj[j];
-	                    var newOpt = comboTarget.appendChild(document.createElement('option'));
-						newOpt.value = sub_key;
-						newOpt.text = sub_val;
-	                }
-				  }
-				);
+			'/opencps-portlet.dictitem/get-dictitems_itemCode_datasource',
+			{
+			  collectionCode: dictCollectionId,
+			  itemCode: parentItemId,
+			  groupId: themeDisplay.getScopeGroupId()
+		  	},
+		  	function(obj) {
+			    for(j in obj){
+	                var sub_key = j;
+	                var sub_val = obj[j];
+	                var newOpt = comboTarget.appendChild(document.createElement('option'));
+					newOpt.value = sub_key;
+					newOpt.text = sub_val;
+		    	}
+			}
+		);
 	}
 	
 	function openCPSAutoCompletebildDataSource(controlId, minLength, dictCollectionId, parentItemId, keywords, bildingControlId, iconFa) {

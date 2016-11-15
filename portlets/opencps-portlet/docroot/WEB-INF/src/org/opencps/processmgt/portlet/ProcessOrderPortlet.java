@@ -69,6 +69,7 @@ import org.opencps.dossiermgt.service.FileGroupLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
 import org.opencps.dossiermgt.util.ActorBean;
 import org.opencps.jasperreport.util.JRReportUtil;
+import org.opencps.jasperreport.util.JRReportUtil.DocType;
 import org.opencps.pki.HashAlgorithm;
 import org.opencps.pki.Helper;
 import org.opencps.pki.PdfPkcs7Signer;
@@ -89,7 +90,6 @@ import org.opencps.processmgt.service.ServiceProcessLocalServiceUtil;
 import org.opencps.processmgt.service.StepAllowanceLocalServiceUtil;
 import org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil;
 import org.opencps.processmgt.util.ProcessUtils;
-import org.opencps.util.BCYSignatureUtil;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
 import org.opencps.usermgt.model.Employee;
@@ -1400,6 +1400,23 @@ public class ProcessOrderPortlet extends MVCPortlet {
 	}
 
 	/**
+	 * @param jrxmlTemplate
+	 * @param formData
+	 * @param map
+	 * @param outputDestination
+	 * @param fileName
+	 * @param docType
+	 * @return
+	 */
+	protected String exportReportFile(String jrxmlTemplate, String formData,
+			Map<String, Object> map, String outputDestination, String fileName,
+			DocType docType) {
+
+		return JRReportUtil.createReportFile(jrxmlTemplate, formData, map,
+				outputDestination, fileName, docType);
+	}
+
+	/**
 	 * @param path
 	 * @param renderRequest
 	 * @param renderResponse
@@ -2567,6 +2584,120 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			}
 		} else {
 			_log.info("Cannot sign the file: " + filePath);
+		}
+	}
+
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws IOException
+	 */
+	public void exportReport(ActionRequest actionRequest,
+			ActionResponse actionResponse) throws IOException {
+
+		AccountBean accountBean = AccountUtil.getAccountBean(actionRequest);
+
+		long dossierFileId = ParamUtil.getLong(actionRequest,
+				DossierFileDisplayTerms.DOSSIER_FILE_ID);
+
+		String docType = ParamUtil.getString(actionRequest, "docType");
+
+		InputStream inputStream = null;
+
+		File file = null;
+
+		//JSONObject responseJSON = JSONFactoryUtil.createJSONObject();
+
+		String fileExportDir = StringPool.BLANK;
+
+		try {
+			validateCreateDynamicForm(dossierFileId, accountBean);
+
+			ServiceContext serviceContext = ServiceContextFactory
+					.getInstance(actionRequest);
+			serviceContext.setAddGroupPermissions(true);
+			serviceContext.setAddGuestPermissions(true);
+
+			// Get dossier file
+			DossierFile dossierFile = DossierFileLocalServiceUtil
+					.getDossierFile(dossierFileId);
+
+			// Get dossier part
+			DossierPart dossierPart = DossierPartLocalServiceUtil
+					.getDossierPart(dossierFile.getDossierPartId());
+
+			String formData = dossierFile.getFormData();
+			String jrxmlTemplate = dossierPart.getFormReport();
+
+			// Validate json string
+
+			JSONFactoryUtil.createJSONObject(formData);
+
+			String outputDestination = PortletPropsValues.OPENCPS_FILE_SYSTEM_TEMP_DIR;
+			String fileName = System.currentTimeMillis() + StringPool.DASH
+					+ dossierFileId + StringPool.DASH
+					+ dossierPart.getDossierpartId() + docType;
+
+			DocType type = DocType.getEnum(docType);
+
+			fileExportDir = exportReportFile(jrxmlTemplate, formData, null,
+					outputDestination, fileName, type);
+
+			if (Validator.isNotNull(fileExportDir)) {
+
+				file = new File(fileExportDir);
+				inputStream = new FileInputStream(file);
+				String mimeType = MimeTypesUtil.getContentType(file);
+
+				PortletUtil.sendFile(actionRequest, actionResponse, fileName,
+						inputStream, file.length(), mimeType);
+
+			}
+
+			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+
+		} catch (Exception e) {
+			if (e instanceof NoSuchDossierFileException) {
+				SessionErrors.add(actionRequest,
+						NoSuchDossierFileException.class);
+			} else if (e instanceof NoSuchAccountException) {
+				SessionErrors.add(actionRequest, NoSuchAccountException.class);
+			} else if (e instanceof NoSuchAccountTypeException) {
+				SessionErrors.add(actionRequest,
+						NoSuchAccountTypeException.class);
+			} else if (e instanceof NoSuchAccountFolderException) {
+				SessionErrors.add(actionRequest,
+						NoSuchAccountFolderException.class);
+			} else if (e instanceof NoSuchAccountOwnUserIdException) {
+				SessionErrors.add(actionRequest,
+						NoSuchAccountOwnUserIdException.class);
+			} else if (e instanceof NoSuchAccountOwnOrgIdException) {
+				SessionErrors.add(actionRequest,
+						NoSuchAccountOwnOrgIdException.class);
+			} else if (e instanceof PermissionDossierException) {
+				SessionErrors.add(actionRequest,
+						PermissionDossierException.class);
+			} else if (e instanceof DuplicateFileException) {
+				SessionErrors.add(actionRequest, DuplicateFileException.class);
+			} else if (e instanceof RolePermissionsException) {
+				SessionErrors
+						.add(actionRequest, RolePermissionsException.class);
+			} else {
+				SessionErrors.add(actionRequest, PortalException.class);
+			}
+
+			_log.error(e);
+		} finally {
+			//responseJSON.put("fileExportDir", fileExportDir);
+			//PortletUtil.writeJSON(actionRequest, actionResponse, responseJSON);
+
+			if (inputStream != null) {
+				inputStream.close();
+			}
+
+			if (file.exists()) {
+				file.delete();
+			}
 		}
 	}
 
