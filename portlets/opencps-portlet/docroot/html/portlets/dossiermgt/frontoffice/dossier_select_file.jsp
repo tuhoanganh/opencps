@@ -342,8 +342,8 @@
 							<div class="span5 bold-label">
 								<liferay-ui:message key="dossier-file-name"/>
 							</div>
-							<div class="span7" target="_blank">
-								<a href="<%=dossierFileURL %>">
+							<div class="span7">
+								<a href="<%=dossierFileURL %>" target="_blank">
 									<%=Validator.isNotNull(dossierFile.getDisplayName()) ? dossierFile.getDisplayName() : StringPool.DASH %>
 								</a>
 							</div>
