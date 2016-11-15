@@ -38,6 +38,7 @@ import org.opencps.dossiermgt.model.ServiceConfig;
 import org.opencps.dossiermgt.service.DossierLogLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
 import org.opencps.dossiermgt.util.ActorBean;
+import org.opencps.holidayconfig.util.HolidayUtils;
 import org.opencps.notificationmgt.message.SendNotificationMessage;
 import org.opencps.notificationmgt.utils.NotificationEventKeys;
 import org.opencps.paymentmgt.model.PaymentFile;
@@ -48,7 +49,6 @@ import org.opencps.processmgt.model.ProcessStep;
 import org.opencps.processmgt.model.ProcessWorkflow;
 import org.opencps.processmgt.model.impl.ProcessStepImpl;
 import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
-import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
 import org.opencps.processmgt.util.ProcessMgtUtil;
 import org.opencps.processmgt.util.ProcessUtils;
@@ -223,25 +223,27 @@ public class BackOfficeProcessEngine implements MessageListener {
 			// Do Workflow
 
 			if (Validator.isNotNull(processWorkflow)) {
+				
+				_log.info("=====processWorkflow:"+processWorkflow);
 				actionName = processWorkflow.getActionName();
 
 				processStepId = processWorkflow.getPostProcessStepId();
 
 				long changeStepId = processWorkflow.getPostProcessStepId();
 
-				ProcessStep changeStep = ProcessStepLocalServiceUtil.getProcessStep(changeStepId);
+				ProcessStep changeStep = ProcessUtils.getPostProcessStep(changeStepId);
 
 				ProcessStep currStep = new ProcessStepImpl();
 
 				if (curStepId != 0) {
-					currStep = ProcessStepLocalServiceUtil.fetchProcessStep(curStepId);
+					currStep = ProcessUtils.getPostProcessStep(curStepId);
 					stepName = currStep.getStepName();
 				}
+				_log.info("=====changeStep.getProcessStepId():"+changeStep.getProcessStepId());
+				_log.info("=====currStep.getProcessStepId():"+currStep.getProcessStepId());
 
 				// Add noti's events
 
-				_log.info("changeStep.getDossierStatus():" + changeStep.getDossierStatus());
-				_log.info("currStep.getDossierStatus():" + currStep.getDossierStatus());
 
 				if (changeStep.getDossierStatus().contains(
 					PortletConstants.DOSSIER_STATUS_RECEIVING)) {
@@ -451,6 +453,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 					StringBuffer sb = new StringBuffer();
 
 					sb.append(paymentMessages.get(0));
+					sb.append(StringPool.SPACE);
 					sb.append(StringPool.OPEN_PARENTHESIS);
 					sb.append(vnFormat.format(totalPayment));
 					sb.append(StringPool.CLOSE_PARENTHESIS);
@@ -469,8 +472,32 @@ public class BackOfficeProcessEngine implements MessageListener {
 				toBackOffice.setPayment(isPayment);
 				toBackOffice.setResubmit(isResubmit);
 				toBackOffice.setEstimateDatetime(toEngineMsg.getEstimateDatetime());
-				toBackOffice.setReceiveDatetime(toEngineMsg.getReceiveDate());
+				
+				long preProcessStepId = -1;
+				String autoEvent = StringPool.BLANK;
+				Date estimateDatetime = null;
 
+				preProcessStepId = processWorkflow.getPreProcessStepId();
+				autoEvent = processWorkflow.getAutoEvent();
+				
+				_log.info("=====preProcessStepId:"+preProcessStepId);
+				_log.info("=====autoEvent:"+autoEvent);
+				_log.info("=====dossier.getDossierStatus():"+dossier.getDossierStatus());
+				_log.info("=====processWorkflow.getGenerateDeadline():"+processWorkflow.getGenerateDeadline());
+				_log.info("=====date:"+new Date());
+
+				if (preProcessStepId == 0 
+					&& autoEvent.equals(WebKeys.AUTO_EVENT_SUBMIT)
+					&& processWorkflow.getGenerateDeadline()
+					&& changeStep.getDossierStatus().contains(PortletConstants.DOSSIER_STATUS_RECEIVING)
+					&& currStep.getDossierStatus().equals(StringPool.BLANK)) {
+					
+					estimateDatetime = HolidayUtils.getEndDate(new Date(), processWorkflow.getDeadlinePattern());
+					
+					toBackOffice.setEstimateDatetime(estimateDatetime);
+					
+				}
+				_log.info("======estimateDatetime:"+estimateDatetime);
 				_log.info("citizenEvents:" + citizenEvents);
 				_log.info("employEvents:" + employEvents);
 

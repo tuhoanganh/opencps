@@ -39,17 +39,17 @@ public class SendMailUtils {
 	 * @return
 	 */
 	public static boolean sendEmail(
-		String from, String to,String cc, String subject, String body, boolean htmlFormat) {
+		String fromAddress,String fromName, String to,String cc, String subject, String body, boolean htmlFormat) {
 
 		try {
-			if (from.trim().length() > 0 && to.trim().length() > 0) {
+			if (fromAddress.trim().length() > 0 && to.trim().length() > 0) {
 				
 				InternetAddress CC = new InternetAddress();
 				
 				InternetAddress[] CCS = CC.parse(cc);
 
 				MailMessage mailMessage = new MailMessage();
-				mailMessage.setFrom(new InternetAddress(from));
+				mailMessage.setFrom(new InternetAddress(fromAddress,fromName));
 				mailMessage.setTo(new InternetAddress(to));
 				mailMessage.setCC(CCS);
 				mailMessage.setSubject(subject);

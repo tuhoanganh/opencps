@@ -249,7 +249,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			String contentType = uploadPortletRequest
 					.getContentType(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
 
-			DossierFileLocalServiceUtil.addDossierFile(
+			DossierFile dossierFileAdded = DossierFileLocalServiceUtil.addDossierFile(
 					serviceContext.getUserId(), dossierId, dossierPartId,
 					dossierPart.getTemplateFileNo(), groupName, fileGroupId,
 					groupDossierPartId, accountBean.getOwnerUserId(),
@@ -282,7 +282,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 					fileGroupId, processStep.getProcessStepId(), false,
 					displayName, 1, StringPool.BLANK,
 					PortletConstants.DOSSIER_FILE_ADD,
-					dossierFile != null ? dossierFile.getFileEntryId() : 0);
+					dossierFileAdded != null ? dossierFileAdded.getFileEntryId() : 0, WebKeys.ACTOR_CITIZEN);
 
 			// Add DossierLog for Add File
 			/*
@@ -922,7 +922,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 					dossierId, fileGroupId, processStep.getProcessStepId(),
 					false, dossierFile.getDisplayName(), 1, StringPool.BLANK,
 					PortletConstants.DOSSIER_FILE_DUPLICATE,
-					dossierFile != null ? dossierFile.getFileEntryId() : 0);
+					dossierFile != null ? dossierFile.getFileEntryId() : 0, WebKeys.ACTOR_CITIZEN);
 
 			/*
 			 * DossierLogLocalServiceUtil.addDossierLog(
@@ -1077,7 +1077,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 					// Add new version
 					if (dossierFile.getFileEntryId() > 0) {
-						DossierFileLocalServiceUtil.addDossierFile(
+						DossierFile dossierFileAdd = DossierFileLocalServiceUtil.addDossierFile(
 								dossierFile.getDossierFileId(),
 								dossier.getFolderId(), sourceFileName,
 								mimeType, dossierFile.getDisplayName(),
@@ -1085,7 +1085,17 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 								inputStream, file.length(), serviceContext);
 
 						// Add Log exportFile
-						DossierLogLocalServiceUtil.addDossierLog(
+						ProcessStep processStep = BackendUtils
+										.getProcessStepByDossierId(dossier.getDossierId());
+
+						DossierFileLogLocalServiceUtil.addFileLog(serviceContext
+							.getUserId(), actorBean.getActorName(), dossier.getDossierId(),
+							fileGroupId, processStep.getProcessStepId(), false,
+							dossierFileAdd.getDisplayName(), 1, StringPool.BLANK,
+							PortletConstants.DOSSIER_FILE_ADD,
+							dossierFileAdd != null ? dossierFileAdd.getFileEntryId() : 0, WebKeys.ACTOR_CITIZEN);
+
+/*						DossierLogLocalServiceUtil.addDossierLog(
 								serviceContext.getUserId(),
 								serviceContext.getScopeGroupId(),
 								serviceContext.getCompanyId(),
@@ -1101,18 +1111,30 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 								actorBean.getActorId(),
 								actorBean.getActorName(),
 								ProcessOrderPortlet.class.getName()
-										+ ".exportFile()");
+										+ ".exportFile()");*/
 
 					} else {
 						// Update version 1
-						DossierFileLocalServiceUtil.updateDossierFile(
+						DossierFile dossierFileAdd = DossierFileLocalServiceUtil.updateDossierFile(
 								dossierFileId, dossier.getFolderId(),
 								sourceFileName, mimeType,
 								dossierFile.getDisplayName(), StringPool.BLANK,
 								StringPool.BLANK, inputStream, file.length(),
 								serviceContext);
+						
+						ProcessStep processStep = BackendUtils
+										.getProcessStepByDossierId(dossier.getDossierId());
+
+						
+						DossierFileLogLocalServiceUtil.addFileLog(serviceContext
+							.getUserId(), actorBean.getActorName(), dossier.getDossierId(),
+							fileGroupId, processStep.getProcessStepId(), false,
+							dossierFileAdd.getDisplayName(), 1, StringPool.BLANK,
+							PortletConstants.DOSSIER_FILE_UPDATE,
+							dossierFileAdd != null ? dossierFileAdd.getFileEntryId() : 0, WebKeys.ACTOR_CITIZEN);
+
 						// Update Log UpdateVersion File
-						DossierLogLocalServiceUtil
+/*						DossierLogLocalServiceUtil
 								.addDossierLog(
 										serviceContext.getUserId(),
 										serviceContext.getScopeGroupId(),
@@ -1130,7 +1152,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 										actorBean.getActorId(),
 										actorBean.getActorName(),
 										ProcessOrderPortlet.class.getName()
-												+ ".updateVersionFile()");
+												+ ".updateVersionFile()");*/
 
 					}
 				}
@@ -1236,7 +1258,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 						processStep.getProcessStepId(), false,
 						dossierFile.getDisplayName(), 1, StringPool.BLANK,
 						PortletConstants.DOSSIER_FILE_REMOVE,
-						dossierFile != null ? dossierFile.getFileEntryId() : 0);
+						dossierFile != null ? dossierFile.getFileEntryId() : 0, WebKeys.ACTOR_CITIZEN);
 				/*
 				 * DossierLogLocalServiceUtil.addDossierLog(
 				 * serviceContext.getUserId(), serviceContext.getScopeGroupId(),
@@ -1386,7 +1408,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 							.getDisplayName(), 1, StringPool.BLANK,
 							PortletConstants.DOSSIER_FILE_REMOVE,
 							dossierFile != null ? dossierFile.getFileEntryId()
-									: 0);
+									: 0, WebKeys.ACTOR_CITIZEN);
 
 					/*
 					 * DossierLogLocalServiceUtil.addDossierLog(
@@ -1725,7 +1747,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 					.getDossierId(), fileGroupId, processStep
 					.getProcessStepId(), false, dossierFile.getDisplayName(),
 					1, StringPool.BLANK, PortletConstants.DOSSIER_FILE_REMOVE,
-					dossierFile != null ? dossierFile.getFileEntryId() : 0);
+					dossierFile != null ? dossierFile.getFileEntryId() : 0, WebKeys.ACTOR_CITIZEN);
 
 			/*
 			 * DossierLogLocalServiceUtil.addDossierLog(
@@ -2525,7 +2547,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 					serviceContext.getUserId(), serviceContext
 							.getScopeGroupId(), serviceContext.getCompanyId(),
 					dossierId, fileGroupId,
-					PortletConstants.DOSSIER_STATUS_SYSTEM,
+					isSend ? PortletConstants.DOSSIER_STATUS_NEW :  PortletConstants.DOSSIER_STATUS_WAITING,
 					isSend ? PortletConstants.DOSSIER_ACTION_SEND
 							: PortletConstants.DOSSIER_ACTION_RESEND, msgInfo,
 					new Date(), 0, 2, actor.getActor(), actor.getActorId(),

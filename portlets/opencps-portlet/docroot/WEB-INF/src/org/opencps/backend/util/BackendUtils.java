@@ -161,11 +161,13 @@ public class BackendUtils {
 					_checkRequestCommandlCondition(
 						dossierId, WebKeys.REQUEST_COMMAND_REPAIR);
 			}
-
+			
 		}
+		
+		
 
 		if (validPayok && validCancel && validOnline && validOnegate &&
-			validTagLabel && validService && validRepair) {
+			validTagLabel && validService && validRepair && validWaiting) {
 			validPreCondition = true;
 		}
 		else {
@@ -184,6 +186,12 @@ public class BackendUtils {
 	        String dossierStatus = dossier.getDossierStatus();
 	        
 	        if (dossierStatus.contains(PortletConstants.DOSSIER_STATUS_WAITING)) {
+	        	
+	        	// Lay duoc ngay waiting
+	        	
+	        	
+	        	// Kiem tra duoc thoa dk hay khong
+	        	
 	        }
         }
         catch (Exception e) {
@@ -241,10 +249,10 @@ public class BackendUtils {
 		}
 
 		if (countRequestCommand != 0) {
-			isCondition = true;
+			isCondition = false;
 		}
 		else {
-			isCondition = false;
+			isCondition = true;
 		}
 
 		return isCondition;

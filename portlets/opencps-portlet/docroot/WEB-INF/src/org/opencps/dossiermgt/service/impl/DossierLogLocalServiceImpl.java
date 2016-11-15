@@ -232,7 +232,7 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 		long fileGroupId, String status, String actionInfo, String messageInfo,
 		Date updateDatetime, int level, int syncStatus, int actor,
 		long actorId, String actorName, String className)
-		throws SystemException {
+		throws PortalException, SystemException {
 
 		long dossierLogId =
 			counterLocalService.increment(DossierLog.class.getName());
@@ -266,7 +266,9 @@ public class DossierLogLocalServiceImpl extends DossierLogLocalServiceBaseImpl {
 		dossierLog.setSyncStatus(syncStatus);
 		dossierLog.setStepId(processStep.getProcessStepId());
 		dossierLog.setStepName(processStep.getStepName());
-
+		
+		dossierFileLogLocalService.updateFileLog(dossierId, dossierLogId);
+		
 		return dossierLogPersistence.update(dossierLog);
 
 	}

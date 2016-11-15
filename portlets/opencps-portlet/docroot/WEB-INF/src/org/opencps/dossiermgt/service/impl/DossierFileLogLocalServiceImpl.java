@@ -17,12 +17,15 @@
 
 package org.opencps.dossiermgt.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import org.opencps.dossiermgt.model.DossierFileLog;
 import org.opencps.dossiermgt.service.base.DossierFileLogLocalServiceBaseImpl;
 
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 
@@ -48,6 +51,36 @@ public class DossierFileLogLocalServiceImpl
 	 * Never reference this interface directly. Always use {@link org.opencps.dossiermgt.service.DossierFileLogLocalServiceUtil} to access the dossier file log local service.
 	 */
 	
+	public List<DossierFileLog> getFileLogs(long dossierLogId, long dossierId)
+	    throws PortalException, SystemException {
+
+		return dossierFileLogPersistence.findByL_D(dossierLogId, dossierId);
+	}
+
+	/**
+	 * @param dossierId
+	 * @param logId
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public void updateFileLog(long dossierId, long logId)
+	    throws PortalException, SystemException {
+		
+		List<DossierFileLog> ls = new ArrayList<DossierFileLog>();
+		
+		ls = dossierFileLogPersistence.findByL_D(QueryUtil.ALL_POS, dossierId);
+		
+		for (DossierFileLog fileLog : ls) {
+			
+			fileLog.setLogId(logId);
+			
+			fileLog.setModifiedDate(new Date());
+			
+			dossierFileLogPersistence.update(fileLog);
+		}
+		
+	}
+	
 	/**
 	 * Add new DossierFileLog 
 	 * 
@@ -69,7 +102,7 @@ public class DossierFileLogLocalServiceImpl
 	public DossierFileLog addFileLog(
 	    long userId, String userName, long dossierId, long fileGroupId,
 	    long stepId, boolean isUpdate, String fileName, int fileVersion,
-	    String fileLink, int actionCode, long fileEntryId)
+	    String fileLink, int actionCode, long fileEntryId, int actor)
 	    throws PortalException, SystemException {
 
 		DossierFileLog dossierFileLog = null;
@@ -97,6 +130,8 @@ public class DossierFileLogLocalServiceImpl
 		dossierFileLog.setOId(UUID.randomUUID().toString());
 		dossierFileLog.setFileEntryId(fileEntryId);
 		dossierFileLog.setModifiedDate(new Date());
+		dossierFileLog.setActor(actor);
+		dossierFileLog.setLogId(-1);
 
 		dossierFileLogPersistence.update(dossierFileLog);
 
