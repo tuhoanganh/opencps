@@ -25,6 +25,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.portlet.ActionRequest;
@@ -94,6 +95,7 @@ import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
 import org.opencps.dossiermgt.util.ActorBean;
 import org.opencps.dossiermgt.util.DossierMgtUtil;
 import org.opencps.jasperreport.util.JRReportUtil;
+import org.opencps.jasperreport.util.JRReportUtil.DocType;
 import org.opencps.processmgt.model.ProcessStep;
 import org.opencps.processmgt.portlet.ProcessOrderPortlet;
 import org.opencps.servicemgt.model.ServiceInfo;
@@ -1035,6 +1037,13 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		String fileExportDir = StringPool.BLANK;
 
+		String fileExtension = ParamUtil.getString(
+				actionRequest,
+				DossierFileDisplayTerms.FILE_EXTENSION,
+				StringPool.PERIOD
+						+ StringUtil.lowerCase(JRReportUtil.DocType.PDF
+								.toString()));
+
 		try {
 			validateCreateDynamicForm(dossierFileId, accountBean);
 
@@ -1064,10 +1073,13 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			String outputDestination = PortletPropsValues.OPENCPS_FILE_SYSTEM_TEMP_DIR;
 			String fileName = System.currentTimeMillis() + StringPool.DASH
 					+ dossierFileId + StringPool.DASH
-					+ dossierPart.getDossierpartId() + ".pdf";
+					+ dossierPart.getDossierpartId() + fileExtension;
 
-			fileExportDir = exportToPDFFile(jrxmlTemplate, formData, null,
-					outputDestination, fileName);
+			//fileExportDir = exportToPDFFile(jrxmlTemplate, formData, null,
+			//		outputDestination, fileName);
+			
+			fileExportDir = exportReportFile(jrxmlTemplate, formData, null,
+			outputDestination, fileName, DocType.getEnum(fileExtension));
 
 			if (Validator.isNotNull(fileExportDir)) {
 
@@ -1130,6 +1142,13 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 								StringPool.BLANK, inputStream, file.length(),
 								serviceContext);
 						// Update Log UpdateVersion File
+
+						Locale locale = new Locale("vi", "VN");
+
+						String dossierAcctionUpdateVersionFile = LanguageUtil
+								.get(locale,
+										PortletConstants.DOSSIER_ACTION_UPDATE_VERSION_FILE);
+
 						DossierLogLocalServiceUtil
 								.addDossierLog(
 										serviceContext.getUserId(),
@@ -1139,7 +1158,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 										fileGroupId,
 										dossier.getDossierStatus(),
 										PortletConstants.DOSSIER_ACTION_UPDATE_VERSION_FILE,
-										PortletConstants.DOSSIER_ACTION_UPDATE_VERSION_FILE
+										dossierAcctionUpdateVersionFile
 												+ StringPool.SPACE
 												+ StringPool.COLON
 												+ StringPool.SPACE
@@ -1523,8 +1542,25 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	protected String exportToPDFFile(String jrxmlTemplate, String formData,
 			Map<String, Object> map, String outputDestination, String fileName) {
 
-		return JRReportUtil.createReportPDFfFile(jrxmlTemplate, formData, map,
+		return JRReportUtil.createReportPDFFile(jrxmlTemplate, formData, map,
 				outputDestination, fileName);
+	}
+
+	/**
+	 * @param jrxmlTemplate
+	 * @param formData
+	 * @param map
+	 * @param outputDestination
+	 * @param fileName
+	 * @param docType
+	 * @return
+	 */
+	protected String exportReportFile(String jrxmlTemplate, String formData,
+			Map<String, Object> map, String outputDestination, String fileName,
+			DocType docType) {
+
+		return JRReportUtil.createReportFile(jrxmlTemplate, formData, map,
+				outputDestination, fileName, docType);
 	}
 
 	/**

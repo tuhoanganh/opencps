@@ -86,7 +86,7 @@ public class PaymentMgtPaymentConfigPortlet extends MVCPortlet {
 	    String outputDestination, String fileName) {
 
 		return JRReportUtil
-		    .createReportPDFfFile(
+		    .createReportPDFFile(
 		        jrxmlTemplate, formData, map, outputDestination, fileName);
 	}
 
