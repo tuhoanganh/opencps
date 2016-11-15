@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -21,7 +20,12 @@
 <%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%@page import="org.opencps.util.DateTimeUtil"%>
-
+<%@page import="com.liferay.portal.kernel.util.Constants"%>
+<%@page import="com.liferay.portlet.documentlibrary.util.DLUtil"%>
+<%@page import="org.opencps.util.DLFileEntryUtil"%>
+<%@page import="com.liferay.portal.kernel.repository.model.FileEntry"%>
+<%@page import="org.opencps.servicemgt.service.TemplateFileLocalServiceUtil"%>
+<%@page import="org.opencps.servicemgt.model.TemplateFile"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
 <%@page import="org.opencps.util.WebKeys"%>
@@ -107,7 +111,6 @@
 	boolean isSameTemplate = ParamUtil.getBoolean(request, "isSameTemplate", true);
 					
 	String templateFileNo = StringPool.BLANK;
-	
 	templateFileNo = ParamUtil.getString(request, DossierDisplayTerms.TEMPLATE_FILE_NO);
 	
 	String templateFileNoTemp = StringPool.BLANK;
@@ -234,6 +237,8 @@
 						} catch(Exception e){
 							
 						}
+						
+						
 					
 						total = totalCount;
 						results = dossierFiles;
@@ -247,6 +252,53 @@
 					modelVar="dossierFile" 
 					keyProperty="dossierFileId"
 				>
+				
+					<%
+						String templateFileURL = StringPool.BLANK;
+						String dossierFileURL = StringPool.BLANK;
+							try {
+								if(Validator.isNotNull(dossierFile.getTemplateFileNo())) {
+									String tempNo = dossierFile.getTemplateFileNo();
+									TemplateFile templateFile = TemplateFileLocalServiceUtil
+											.getTemplateFileByNo(scopeGroupId, tempNo);
+										long templateFileEntryId = 0;
+										
+										if(Validator.isNotNull(templateFile)) {
+											templateFileEntryId = templateFile.getFileEntryId();
+											if(templateFileEntryId > 0) {
+												FileEntry templateFileEntry =
+														DLFileEntryUtil.getFileEntry(templateFileEntryId);
+												templateFileURL = DLUtil.getPreviewURL(
+														templateFileEntry, templateFileEntry.getFileVersion(),
+														themeDisplay, StringPool.BLANK);
+											}
+									}
+								}
+							} catch (Exception e) {}
+							
+							try {
+								long dossierFileEntryId = dossierFile.getFileEntryId();
+								
+								if(dossierFileEntryId > 0) {
+									FileEntry dossierFileEntry =
+											DLFileEntryUtil.getFileEntry(dossierFileEntryId);
+									dossierFileURL = DLUtil.getPreviewURL(
+											dossierFileEntry, dossierFileEntry.getFileVersion(),
+											themeDisplay, StringPool.BLANK);
+								}
+							} catch(Exception e) {} 
+							
+					%>
+					
+					<portlet:renderURL var="viewDossierURL">
+						<portlet:param name="mvcPath"
+							value='<%=templatePath + "edit_dossier.jsp"%>' />
+						<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID%>"
+							value="<%=String.valueOf(dossierFile.getDossierId())%>" />
+						<portlet:param name="<%=Constants.CMD%>" value="<%=Constants.VIEW%>" />
+						<portlet:param name="isEditDossier" value="<%=String.valueOf(false)%>" />
+					</portlet:renderURL>
+									
 					<liferay-util:buffer var="rowTicker">
 						<aui:input name="hiddenDossierFileId" type="hidden" value="<%=dossierFile.getDossierFileId() %>"	/>
 						<i class="fa fa-circle-o "></i>
@@ -257,7 +309,11 @@
 							<div class="span5 bold-label">
 								<liferay-ui:message key="template-file-no"/>
 							</div>
-							<div class="span7"><%=Validator.isNotNull(templateFileNo) ? templateFileNo : StringPool.DASH %></div>
+							<div class="span7">
+								<a href="<%=templateFileURL %>" target="_blank">
+									<%=Validator.isNotNull(templateFileNo) ? templateFileNo : StringPool.DASH %>
+								</a>
+							</div>
 						</div>
 						
 						<div class="row-fluid">
@@ -282,7 +338,11 @@
 							<div class="span5 bold-label">
 								<liferay-ui:message key="dossier-file-name"/>
 							</div>
-							<div class="span7"><%=Validator.isNotNull(dossierFile.getDisplayName()) ? dossierFile.getDisplayName() : StringPool.DASH %></div>
+							<div class="span7" target="_blank">
+								<a href="<%=dossierFileURL %>">
+									<%=Validator.isNotNull(dossierFile.getDisplayName()) ? dossierFile.getDisplayName() : StringPool.DASH %>
+								</a>
+							</div>
 						</div>
 						
 					</liferay-util:buffer>
@@ -300,7 +360,11 @@
 							<div class="span5 bold-label">
 								<liferay-ui:message key="dossier-no"/>
 							</div>
-							<div class="span7"><%=Validator.isNotNull(dossier) ? String.valueOf(dossier.getDossierId()) : StringPool.DASH %></div>
+							<div class="span7">
+								<a href="<%=viewDossierURL.toString() %>" target="_blank">
+									<%=(dossierFile.getDossierId() > 0) ? String.valueOf(dossierFile.getDossierId()) : StringPool.DASH %>
+								</a>
+							</div>
 						</div>
 					</liferay-util:buffer>
 					
