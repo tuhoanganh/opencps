@@ -1,3 +1,4 @@
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -21,22 +22,23 @@
 <%@ include file="../init.jsp"%>
 
 <%
-	PortletPreferences preferences1 = renderRequest.getPreferences();
 	
-	portletResource = ParamUtil.getString(request, "portletResource");
+	String todolistDisplayStyle = GetterUtil.getString(portletPreferences.getValue("todolistDisplayStyle", "default"));
 	
-	if (Validator.isNotNull(portletResource)) {
-		preferences1 = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
-	}
+	String justfinishedlistDisplayStyle = GetterUtil.getString(portletPreferences.getValue("justfinishedlistDisplayStyle", "default"));
 	
-	String oderByToDo = preferences1.getValue("oderByToDo", WebKeys.ORDER_BY_DESC);
-	String oderByJustFinish = preferences1.getValue("oderByJustFinish", WebKeys.ORDER_BY_DESC);
+	String todolistOrderByType = preferences.getValue("todolistOrderByType", WebKeys.ORDER_BY_DESC);
+	String justfinishedlistOrderByType = preferences.getValue("oderByJustFinish", WebKeys.ORDER_BY_DESC);
 	
-	String oderFieldToDo = preferences1.getValue("oderFieldToDo", ProcessOrderDisplayTerms.MODIFIEDDATE);
-	String oderFieldJustFinish = preferences1.getValue("oderFieldJustFinish", ProcessOrderDisplayTerms.MODIFIEDDATE);
+	String todolistOrderByField = preferences.getValue("todolistOrderByField", ProcessOrderDisplayTerms.MODIFIEDDATE);
+	String justfinishedlistOrderByField = preferences.getValue("justfinishedlistOrderByField", ProcessOrderDisplayTerms.MODIFIEDDATE);
 	
-	boolean hiddenTreeNodeEqualNone = GetterUtil.getBoolean(preferences.getValue("hiddenTreeNodeEqualNone", "false"), false);
+	boolean hiddenToDoListTreeMenuEmptyNode = GetterUtil.getBoolean(preferences.getValue("hiddenToDoListTreeMenuEmptyNode", "false"), false);
+	
+	boolean hiddenJustFinishedListEmptyNode = GetterUtil.getBoolean(preferences.getValue("hiddenJustFinishedListEmptyNode", "false"), false);
 
-	String assignFormDisplayStyle = preferences1.getValue("assignFormDisplayStyle", "popup");
+	String assignFormDisplayStyle = preferences.getValue("assignFormDisplayStyle", "popup");
+	
+	String[] reportTypes = StringUtil.split(preferences.getValue("reportTypes", ".pdf"));
 
 %>
