@@ -20,12 +20,10 @@
 <%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.model.DossierPart"%>
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
-<%@page import="org.opencps.servicemgt.model.TemplateFile"%>
 <%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
 <%@page import="org.opencps.util.WebKeys"%>
-<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="com.liferay.portal.kernel.util.Constants"%>
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
 <%@page import="org.opencps.util.DateTimeUtil"%>
@@ -35,8 +33,6 @@
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
-<%@page import="org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%@page import="java.util.List"%>
