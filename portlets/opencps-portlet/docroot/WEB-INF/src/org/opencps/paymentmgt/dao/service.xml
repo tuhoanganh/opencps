@@ -40,6 +40,9 @@
 		<column name="invoiceNo" type="String"></column>
 		<column name="syncStatus" type="int"></column>
 		<column name="oid" type="String" />
+		<column name="paymentConfig" type="long" />
+		<column name="paymentGateStatusCode" type="String" />
+		<column name="paymentGateResponseData" type="String" />
 
 		<finder name="GoodCode" return-type="PaymentFile">
 			<finder-column name="groupId"></finder-column>
@@ -122,12 +125,27 @@
 			<finder-column name="groupId"></finder-column>
 			<finder-column name="govAgencyOrganizationId"></finder-column>
 		</finder>
+		
+		<finder name="GovAgencyAndStatusList" return-type="Collection">
+			<finder-column name="groupId"></finder-column>
+			<finder-column name="govAgencyOrganizationId"></finder-column>
+			<finder-column name="status"></finder-column>
+		</finder>
 
 	</entity>
 	<entity name="PaymentGateConfig" local-service="true"
 		human-name="PaymentGate configuration" table="opencps_paymentgate_config">
 		<column name="paymentGateId" type="long" primary="true"></column>
 		<column name="paymentGateName" type="String"></column>
+	</entity>
+	
+	<entity name="PaymentStatusCode" local-service="true"
+		human-name="PaymentGate StatusCode" table="opencps_payment_statuscode">
+		<column name="paymentStatusCodeId" type="long" primary="true"></column>
+		<column name="statusCode" type="String"></column>
+		<column name="statusCodeMean" type="String"></column>
+		<column name="descripton" type="String"></column>
+		<column name="paymentGateId" type="String"></column>
 	</entity>
 
 </service-builder>

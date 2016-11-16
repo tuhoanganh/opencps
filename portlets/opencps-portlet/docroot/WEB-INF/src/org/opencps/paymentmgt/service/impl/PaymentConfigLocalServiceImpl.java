@@ -149,4 +149,11 @@ public class PaymentConfigLocalServiceImpl extends PaymentConfigLocalServiceBase
 
 		return paymentConfigPersistence.fetchByGovAgencyStatus(groupId, govAgencyOrganizationId, status);
 	}
+	public List<PaymentConfig> getPaymentConfigListByGovAgencyAndStatus(
+		long groupId, long govAgencyOrganizationId,boolean status)
+		throws SystemException {
+
+		return paymentConfigPersistence.findByGovAgencyAndStatusList(groupId, govAgencyOrganizationId, status);
+
+	}
 }
