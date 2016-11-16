@@ -31,6 +31,7 @@ import org.opencps.backend.util.BackendUtils;
 import org.opencps.backend.util.DossierNoGenerator;
 import org.opencps.backend.util.KeypayUrlGenerator;
 import org.opencps.backend.util.PaymentRequestGenerator;
+import org.opencps.backend.util.VtcPayUrlGenerator;
 import org.opencps.dossiermgt.bean.AccountBean;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierLog;
@@ -429,8 +430,14 @@ public class BackOfficeProcessEngine implements MessageListener {
 							(double) totalPayment, paymentName, StringPool.BLANK, paymentOptions);
 
 					if (paymentMethods.contains(PaymentRequestGenerator.PAY_METHOD_KEYPAY)) {
+//						paymentFile =
+//							KeypayUrlGenerator.generatorKeypayURL(
+//								processWorkflow.getGroupId(), govAgencyOrganizationId,
+//								paymentFile.getPaymentFileId(), processWorkflow.getPaymentFee(),
+//								toEngineMsg.getDossierId());
+						
 						paymentFile =
-							KeypayUrlGenerator.generatorKeypayURL(
+							VtcPayUrlGenerator.generatorPayURL(
 								processWorkflow.getGroupId(), govAgencyOrganizationId,
 								paymentFile.getPaymentFileId(), processWorkflow.getPaymentFee(),
 								toEngineMsg.getDossierId());

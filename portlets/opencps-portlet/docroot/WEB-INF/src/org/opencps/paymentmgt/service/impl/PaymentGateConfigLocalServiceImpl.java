@@ -17,7 +17,12 @@
 
 package org.opencps.paymentmgt.service.impl;
 
+import org.opencps.paymentmgt.NoSuchPaymentGateConfigException;
+import org.opencps.paymentmgt.model.PaymentGateConfig;
 import org.opencps.paymentmgt.service.base.PaymentGateConfigLocalServiceBaseImpl;
+import org.opencps.paymentmgt.service.persistence.PaymentGateConfigPersistence;
+
+import com.liferay.portal.kernel.exception.SystemException;
 
 /**
  * The implementation of the PaymentGate configuration local service.
