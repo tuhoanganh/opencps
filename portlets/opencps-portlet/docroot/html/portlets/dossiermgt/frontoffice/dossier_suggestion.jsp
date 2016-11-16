@@ -302,5 +302,5 @@
 			}
 		);
 
-	});
+	},['aui-loading-mask-deprecated']);
 </aui:script>
