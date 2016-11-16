@@ -65,6 +65,7 @@
 		<column name="stepName" type="String" />
 		<column name="sequenceNo" type="int" />
 		<column name="dossierStatus" type="String" />
+		<column name="dossierSubStatus" type="String" />
 		<column name="daysDuration" type="int" />
 		<column name="referenceDossierPartId" type="long" />
 		<column name="externalAppUrl" type="String" />

@@ -406,7 +406,10 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 		int sequenceNo = ParamUtil.getInteger(actionRequest, "sequenceNo");
 
 		String dossierStatus =
-		    ParamUtil.getString(actionRequest, "dossierStatus");
+					    ParamUtil.getString(actionRequest, "dossierStatus");
+		
+		String dossierSubStatus =
+					    ParamUtil.getString(actionRequest, "dossierSubStatus");
 
 		int daysDuration = ParamUtil.getInteger(actionRequest, "daysDuration");
 
@@ -428,7 +431,7 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 				// Add ProcessStep
 
 				ProcessStep step = ProcessStepLocalServiceUtil.addStep(
-				    serviceProcessId, stepName, sequenceNo, dossierStatus,
+				    serviceProcessId, stepName, sequenceNo, dossierStatus,dossierSubStatus,
 				    daysDuration, referenceDossierPartId, externalAppUrl,
 				    serviceContext);
 				
@@ -489,7 +492,7 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 				ProcessStep step =
 				    ProcessStepLocalServiceUtil.updateStep(
 				        processStepId, serviceProcessId, stepName, sequenceNo,
-				        dossierStatus, daysDuration, referenceDossierPartId,
+				        dossierStatus, dossierSubStatus, daysDuration, referenceDossierPartId,
 				        externalAppUrl, serviceContext);
 
 

@@ -329,6 +329,7 @@
 		<field name="stepName" type="String" />
 		<field name="sequenceNo" type="int" />
 		<field name="dossierStatus" type="String" />
+		<field name="dossierSubStatus" type="String" />
 		<field name="daysDuration" type="int" />
 		<field name="referenceDossierPartId" type="long" />
 		<field name="externalAppUrl" type="String" />
