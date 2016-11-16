@@ -22,34 +22,25 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Stack;
 
-import org.opencps.dossiermgt.comparator.DossierFileDossierFileDateComparator;
 import org.opencps.dossiermgt.comparator.DossierSubmitDateComparator;
 import org.opencps.dossiermgt.comparator.DossierTemplateNameComparator;
 import org.opencps.dossiermgt.comparator.DossierTemplateNoComparator;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.DossierPart;
-import org.opencps.dossiermgt.model.DossierTemplate;
 import org.opencps.dossiermgt.model.ServiceConfig;
 import org.opencps.dossiermgt.search.DossierDisplayTerms;
-import org.opencps.dossiermgt.search.DossierFileDisplayTerms;
 import org.opencps.dossiermgt.search.DossierTemplateDisplayTerms;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
-import org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
-import org.opencps.dossiermgt.service.persistence.DossierTemplateUtil;
-import org.opencps.servicemgt.model.ServiceFileTemplate;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.model.TemplateFile;
-import org.opencps.servicemgt.service.ServiceFileTemplateLocalServiceUtil;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
 import org.opencps.servicemgt.service.TemplateFileLocalServiceUtil;
-import org.opencps.servicemgt.service.impl.ServiceFileTemplateLocalServiceImpl;
 import org.opencps.util.PortletConstants;
 import org.opencps.util.WebKeys;
 
-import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -436,59 +427,6 @@ public class DossierMgtUtil {
 		return serviceName;
 	}
 
-	public static String getDossierTemplateSuggesstion(long dossierId,
-			long groupId) {
-		String dossierTemplateSuggesstion = StringPool.BLANK;
-
-		try {
-			Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
-
-			List<ServiceFileTemplate> serviceFileTemplatesFindByServiceInfoId = ServiceFileTemplateLocalServiceUtil
-					.getServiceFileTemplatesByServiceInfo(dossier
-							.getServiceInfoId());
-			List<TemplateFile> templateFiles = new ArrayList<TemplateFile>();
-			for (ServiceFileTemplate serviceFileTemplate : serviceFileTemplatesFindByServiceInfoId) {
-				TemplateFile templateFile = TemplateFileLocalServiceUtil
-						.getTemplateFile(serviceFileTemplate
-								.getTemplatefileId());
-
-				templateFiles.add(templateFile);
-			}
-
-			List<Long> serviceInfoIds = new ArrayList<Long>();
-
-			for (TemplateFile templateFile : templateFiles) {
-				List<ServiceFileTemplate> fileTemplates = ServiceFileTemplateLocalServiceUtil
-						.getServiceFileTemplatesByTemplateFile(templateFile
-								.getTemplatefileId());
-				for (ServiceFileTemplate fileTemplate : fileTemplates) {
-					if (!serviceInfoIds.contains(fileTemplate
-							.getServiceinfoId())) {
-						serviceInfoIds.add(fileTemplate.getServiceinfoId());
-					}
-				}
-
-			}
-
-			List<String> dossierTemplateIds = new ArrayList<String>();
-
-			for (Long serviceInfoId : serviceInfoIds) {
-				List<ServiceConfig> serviceConfigs = ServiceConfigLocalServiceUtil
-						.getServiceConfigsByS_G(serviceInfoId, groupId);
-				for(ServiceConfig serviceConfig : serviceConfigs) {
-					dossierTemplateIds.add(String.valueOf(serviceConfig.getDossierTemplateId()));
-				}
-			}
-			
-			dossierTemplateSuggesstion = StringUtil.merge(dossierTemplateIds);
-
-		} catch (Exception e) {
-			_log.error(e);
-		}
-
-		return dossierTemplateSuggesstion;
-
-	}
 
 	private static Log _log = LogFactoryUtil.getLog(DossierMgtUtil.class
 			.getName());

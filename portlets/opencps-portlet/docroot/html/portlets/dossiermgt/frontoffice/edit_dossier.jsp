@@ -455,7 +455,7 @@
 			submitDossierSuggestion.on('click', function() {
 				
 				var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
-				portletURL.setParameter("mvcPath", "/html/portlets/dossiermgt/frontoffice/dossier-suggesstion.jsp");
+				portletURL.setParameter("mvcPath", "/html/portlets/dossiermgt/frontoffice/dossier_suggestion.jsp");
 				portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
 				portletURL.setPortletMode("normal");
 				portletURL.setParameter("dossierId", '<%= Validator.isNotNull(dossier) ? String.valueOf(dossier.getDossierId()) : "0" %>');

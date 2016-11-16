@@ -1,3 +1,4 @@
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -16,48 +17,73 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-<%@page import="org.opencps.util.PortletConstants"%>
-<%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
-<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 <%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
+<%@page import="com.liferay.portal.kernel.management.jmx.ListDomainsAction"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
-<%@page import="org.opencps.util.WebKeys"%>
 <%@page import="com.liferay.portal.kernel.util.Constants"%>
-<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
-<%@page import="org.opencps.util.DateTimeUtil"%>
-<%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
-<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
-<%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
-<%@page import="javax.portlet.PortletURL"%>
-<%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%@page import="java.util.List"%>
+<%@page import="javax.portlet.PortletURL"%>
+<%@page import="org.opencps.dossiermgt.model.Dossier"%>
+<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
+<%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
+<%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
+<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
+<%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
+<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
+<%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
+<%@page import="org.opencps.util.DateTimeUtil"%>
+<%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.util.WebKeys"%>
+
 <%@ include file="../init.jsp"%>
 
 <%
 	long dossierId = ParamUtil.getLong(request, "dossierId");
-	long serviceConfigId = ParamUtil.getLong(request, "serviceConfigId");
-	long dossierPartId = ParamUtil.getLong(request, "dossierPartId");
+
+	List<Dossier> dossiersSuggestion = new ArrayList<Dossier>();
+
+	List<String> templateFileNos = new ArrayList<String>();
+	
+	List<Integer> dossierPartTypes = new ArrayList<Integer>();
+	
+	List<String> dossierPartNos = new ArrayList<String>();
+	
 	int totalCount = 0;
-	long dossierTemplateId = 0;
-	ServiceConfig serviceConfig = null;
-	List<Dossier> dossiers = new ArrayList<Dossier>();
-	Dossier dossierNeedAdd = null;
+
+	Dossier dossier = null;
 	try {
-		dossierNeedAdd = DossierLocalServiceUtil.getDossier(dossierId);
-		dossierTemplateId = dossierNeedAdd.getDossierTemplateId();
-	} catch (Exception e) {}
+		dossier = DossierLocalServiceUtil.getDossier(dossierId);
+		List<DossierPart> dossierParts = DossierPartLocalServiceUtil.getDossierParts(dossier.getDossierTemplateId());
+		
+		if(dossierParts != null){
+			for(DossierPart dossierPart : dossierParts){
+				if(Validator.isNotNull(dossierPart.getTemplateFileNo()) && !templateFileNos.contains(dossierPart.getTemplateFileNo())){
+					templateFileNos.add(dossierPart.getTemplateFileNo());
+				}
+				
+				if(!dossierPartTypes.contains(dossierPart.getPartType())){
+					dossierPartTypes.add(dossierPart.getPartType());
+				}
+				
+				if(Validator.isNotNull(dossierPart.getPartNo()) && !dossierPartNos.contains(dossierPart.getPartNo())){
+					dossierPartNos.add(dossierPart.getPartNo());
+				}
+			}
+		}
+	} catch (Exception e) {
+		
+	}
 	
 	PortletURL iteratorURL = renderResponse.createRenderURL();
-	iteratorURL.setParameter("mvcPath", templatePath + "dossier-suggesstion.jsp");
+	iteratorURL.setParameter("mvcPath", templatePath + "dossier_suggestion.jsp");
 	iteratorURL.setParameter("dossierId", String.valueOf(dossierId));
-	
-	String dossierTemplateSuggesstion = DossierMgtUtil.getDossierTemplateSuggesstion(dossierId, scopeGroupId);
-	
+
 	boolean success = false;
 	
 	try{
@@ -78,10 +104,10 @@
 		
 		<liferay-ui:search-container-results>
 			<%
-				dossiers = DossierLocalServiceUtil.getDossierSuggesstion(dossierStatusConfig, dossierTemplateSuggesstion, searchContainer.getStart(), searchContainer.getEnd());
-				totalCount = DossierLocalServiceUtil.countDossierSuggesstion(dossierStatusConfig, dossierTemplateSuggesstion);
+				dossiersSuggestion = DossierLocalServiceUtil.getDossierSuggesstion(dossierStatusConfig,dossierPartTypes , templateFileNos,dossierPartNos ,searchContainer.getStart(), searchContainer.getEnd());
+				totalCount = DossierLocalServiceUtil.countDossierSuggesstion(dossierStatusConfig,dossierPartTypes , templateFileNos,dossierPartNos);
 				
-				results = dossiers;
+				results = dossiersSuggestion;
 				total = totalCount;
 				pageContext.setAttribute("results", results);
 				pageContext.setAttribute("total", total);
@@ -90,29 +116,41 @@
 		
 		<liferay-ui:search-container-row 
 			className="org.opencps.dossiermgt.model.Dossier" 
-			modelVar="dossier" 
+			modelVar="dossierSuggestion" 
 			keyProperty="dossierId"
 		>
+
 			<portlet:renderURL var="viewDossierURL">
-				<portlet:param name="mvcPath"
-					value='<%=templatePath + "edit_dossier.jsp"%>' />
-				<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID%>"
-					value="<%=String.valueOf(dossier.getDossierId())%>" />
-				<portlet:param name="<%=Constants.CMD%>" value="<%=Constants.VIEW%>" />
-				<portlet:param name="isEditDossier" value="<%=String.valueOf(false)%>" />
+				<portlet:param 
+					name="mvcPath"
+					value='<%=templatePath + "edit_dossier.jsp"%>' 
+				/>
+				<portlet:param 
+					name="<%=DossierDisplayTerms.DOSSIER_ID%>"
+					value="<%=String.valueOf(dossierSuggestion.getDossierId())%>" 
+				/>
+				<portlet:param 
+					name="<%=Constants.CMD%>" 
+					value="<%=Constants.VIEW%>" 
+				/>
+				<portlet:param 
+					name="isEditDossier" 
+					value="<%=String.valueOf(false)%>" 
+				/>
 			</portlet:renderURL>
-			
+										
 			<portlet:actionURL var="updateDossierSuggestionURL" name="updateDossierSuggestion">
-				<portlet:param name="currentDossierId" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
+				<portlet:param name="dossierSuggestionId" value="<%=String.valueOf(dossierSuggestion.getDossierId()) %>"/>
 				<portlet:param name="dossierId" value="<%=String.valueOf(dossierId) %>"/>
 			</portlet:actionURL>
-			
+										
 			<% 
 				String serviceName = StringPool.BLANK;
+			
 				ServiceInfo serviceInfo = null;
 				try {
 					serviceInfo = ServiceInfoLocalServiceUtil.
-							getServiceInfo(ServiceConfigLocalServiceUtil.getServiceConfig(dossier.getServiceConfigId()).getServiceInfoId());
+							getServiceInfo(ServiceConfigLocalServiceUtil.getServiceConfig(dossierSuggestion.getServiceConfigId()).getServiceInfoId());
 					serviceName = serviceInfo.getServiceName();
 				} catch(Exception e) {
 					
@@ -129,7 +167,7 @@
 					<div class="span6 bold-label">
 						<liferay-ui:message key="dossier-no"/>
 					</div>
-					<div class="span6"><%=String.valueOf(dossier.getDossierId())%></div>
+					<div class="span6"><%=String.valueOf(dossierSuggestion.getDossierId())%></div>
 				</div>
 				
 				<div class="row-fluid">
@@ -138,7 +176,7 @@
 						<liferay-ui:message key="reception-no"/>
 					</div>
 					<div class="span6">
-						<%=Validator.isNotNull(dossier.getReceptionNo()) ? dossier.getReceptionNo() : StringPool.DASH%>
+						<%=Validator.isNotNull(dossierSuggestion.getReceptionNo()) ? dossierSuggestion.getReceptionNo() : StringPool.DASH%>
 					</div>
 				</div>
 				
@@ -161,8 +199,8 @@
 					
 					<div class="span7">
 						<%=
-							Validator.isNotNull(dossier.getSubmitDatetime()) ?
-							DateTimeUtil.convertDateToString(dossier.getSubmitDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) :
+							Validator.isNotNull(dossierSuggestion.getSubmitDatetime()) ?
+							DateTimeUtil.convertDateToString(dossierSuggestion.getSubmitDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) :
 								DateTimeUtil._EMPTY_DATE_TIME 
 						%> 
 					</div>
@@ -175,8 +213,8 @@
 					
 					<div class="span7">
 						<%= 
-							Validator.isNotNull(dossier.getFinishDatetime()) ?
-							DateTimeUtil.convertDateToString(dossier.getFinishDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) :
+							Validator.isNotNull(dossierSuggestion.getFinishDatetime()) ?
+							DateTimeUtil.convertDateToString(dossierSuggestion.getFinishDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) :
 								DateTimeUtil._EMPTY_DATE_TIME
 						%> 
 					</div>

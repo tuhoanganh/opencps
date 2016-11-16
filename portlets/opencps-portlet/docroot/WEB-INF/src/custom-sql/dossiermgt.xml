@@ -1065,13 +1065,12 @@
 			ON 
 				d.dossierId = df.dossierId
 			AND 
-				(df.removed = 0 AND df.syncStatus = 2 AND df.templateFileNo IN(?))
+				(df.removed = 0 AND df.syncStatus = 2 AND df.templateFileNo IN (?) AND d.dossierStatus = ?)
 			INNER JOIN 
 				opencps_dossierpart AS p
 			ON 
 				p.dossierpartId = df.dossierPartId
-			AND 
-				(p.partType IN (?) AND p.partNo IN (?))
+			AND p.partType IN (?) AND p.partNo IN (?)
 			ORDER BY 
 				d.modifiedDate DESC
 		]]>
@@ -1088,13 +1087,12 @@
 			ON 
 				d.dossierId = df.dossierId
 			AND 
-				(df.removed = 0 AND df.syncStatus = 2 AND df.templateFileNo IN(?))
+				(df.removed = 0 AND df.syncStatus = 2 AND df.templateFileNo IN (?) AND d.dossierStatus = ?)
 			INNER JOIN 
 				opencps_dossierpart AS p
 			ON 
 				p.dossierpartId = df.dossierPartId
-			AND 
-				(p.partType IN (?) AND p.partNo IN (?))
+			AND p.partType IN (?) AND p.partNo IN (?)
 			ORDER BY 
 				d.modifiedDate DESC
 		]]>
