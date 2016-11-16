@@ -25,6 +25,8 @@ import org.opencps.backend.message.SendToBackOfficeMsg;
 import org.opencps.backend.message.SendToCallbackMsg;
 import org.opencps.backend.util.BackendUtils;
 import org.opencps.dossiermgt.model.Dossier;
+import org.opencps.dossiermgt.model.DossierLog;
+import org.opencps.dossiermgt.model.impl.DossierLogImpl;
 import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLogLocalServiceUtil;
@@ -165,21 +167,21 @@ public class SyncFromBackOffice implements MessageListener {
 					    toBackOffice.getProcessOrderId(),
 					    toBackOffice.getProcessWorkflowId());
 				}
-
-				if (!isResubmit && !isPayment) {
-					DossierLogLocalServiceUtil.addDossierLog(
-						dossier.getUserId(), dossier.getGroupId(),
-						dossier.getCompanyId(), toBackOffice.getDossierId(),
-						toBackOffice.getFileGroupId(),
-						toBackOffice.getDossierStatus(),
-						toBackOffice.getActionInfo(),
-						toBackOffice.getMessageInfo(), new Date(), 0,
-						toBackOffice.getSyncStatus(), actorBean.getActor(),
-						actorBean.getActorId(), actorBean.getActorName(),
-						SyncFromBackOffice.class.getName(),
-					    toBackOffice.getProcessOrderId(),
-					    toBackOffice.getProcessWorkflowId(), true);
-				}
+				
+				DossierLog dossierLog = new DossierLogImpl();
+				
+				dossierLog = DossierLogLocalServiceUtil.addDossierLog(
+					dossier.getUserId(), dossier.getGroupId(),
+					dossier.getCompanyId(), toBackOffice.getDossierId(),
+					toBackOffice.getFileGroupId(),
+					toBackOffice.getDossierStatus(),
+					toBackOffice.getActionInfo(),
+					toBackOffice.getMessageInfo(), new Date(), 0,
+					toBackOffice.getSyncStatus(), actorBean.getActor(),
+					actorBean.getActorId(), actorBean.getActorName(),
+					SyncFromBackOffice.class.getName(),
+				    toBackOffice.getProcessOrderId(),
+				    toBackOffice.getProcessWorkflowId(), true);
 
 				SendToCallbackMsg toCallBack = new SendToCallbackMsg();
 
@@ -200,7 +202,7 @@ public class SyncFromBackOffice implements MessageListener {
 				toCallBack.setDaysDoing(daysDoing);
 				toCallBack.setDaysDelay(dayDelay);
 				toCallBack.setSyncStatus(statusUpdate ? "ok" : "error");
-				
+				toCallBack.setLogId(dossierLog.getDossierLogId());
 				
 				Message sendToCallBack = new Message();
 

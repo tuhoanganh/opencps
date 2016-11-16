@@ -292,6 +292,7 @@
 		<field name="daysDoing" type="int" />
 		<field name="daysDelay" type="int" />
 		<field name="oId" type="String" />
+		<field name="logId" type="long" />
 	</model>
 	<model name="org.opencps.processmgt.model.ProcessOrder">
 		<field name="processOrderId" type="long" />
@@ -328,6 +329,7 @@
 		<field name="stepName" type="String" />
 		<field name="sequenceNo" type="int" />
 		<field name="dossierStatus" type="String" />
+		<field name="dossierSubStatus" type="String" />
 		<field name="daysDuration" type="int" />
 		<field name="referenceDossierPartId" type="long" />
 		<field name="externalAppUrl" type="String" />

@@ -34,6 +34,7 @@ import org.opencps.processmgt.model.ProcessWorkflow;
 import org.opencps.processmgt.model.ServiceProcess;
 import org.opencps.processmgt.model.StepAllowance;
 import org.opencps.processmgt.model.WorkflowOutput;
+import org.opencps.processmgt.model.impl.ActionHistoryImpl;
 import org.opencps.processmgt.model.impl.ProcessStepDossierPartImpl;
 import org.opencps.processmgt.model.impl.ProcessStepImpl;
 import org.opencps.processmgt.model.impl.StepAllowanceImpl;
@@ -44,7 +45,6 @@ import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
 import org.opencps.processmgt.service.ServiceProcessLocalServiceUtil;
 import org.opencps.processmgt.service.StepAllowanceLocalServiceUtil;
-import org.opencps.processmgt.service.impl.ActionHistoryLocalServiceImpl;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -566,6 +566,19 @@ public class ProcessUtils {
 
 
 		return step;
+	}
+	
+	public static ActionHistory getActionHistoryByLogId(long logId) {
+		ActionHistory actionHistory = new ActionHistoryImpl();
+		
+		try {
+	        actionHistory = ActionHistoryLocalServiceUtil.getActionHistoryByLogId(logId);
+        }
+        catch (Exception e) {
+	        // TODO: handle exception
+        }
+		
+		return actionHistory;
 	}
 	
 	private static Log _log = LogFactoryUtil.getLog(ProcessUtils.class.getName());
