@@ -1022,11 +1022,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		String fileExportDir = StringPool.BLANK;
 
-		String fileExtension = ParamUtil.getString(
-				actionRequest,
+		String fileExtension = ParamUtil.getString(actionRequest,
 				DossierFileDisplayTerms.FILE_EXTENSION,
-						 StringUtil.lowerCase(JRReportUtil.DocType.PDF
-								.getValue()));
+				StringUtil.lowerCase(JRReportUtil.DocType.PDF.getValue()));
 
 		try {
 			validateCreateDynamicForm(dossierFileId, accountBean);
@@ -1059,11 +1057,11 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 					+ dossierFileId + StringPool.DASH
 					+ dossierPart.getDossierpartId() + fileExtension;
 
-			//fileExportDir = exportToPDFFile(jrxmlTemplate, formData, null,
-			//		outputDestination, fileName);
-			
+			// fileExportDir = exportToPDFFile(jrxmlTemplate, formData, null,
+			// outputDestination, fileName);
+
 			fileExportDir = exportReportFile(jrxmlTemplate, formData, null,
-			outputDestination, fileName, DocType.getEnum(fileExtension));
+					outputDestination, fileName, DocType.getEnum(fileExtension));
 
 			if (Validator.isNotNull(fileExportDir)) {
 
@@ -3749,83 +3747,105 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 	public void updateDossierSuggestion(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException {
-		long currentDossierId = ParamUtil.getLong(actionRequest,
-				"currentDossierId");
+		long dossierSuggestionId = ParamUtil.getLong(actionRequest,
+				"dossierSuggestionId");
 		long dossierId = ParamUtil.getLong(actionRequest, "dossierId");
+
 		ServiceContext serviceContext;
+
 		boolean clone = false;
+
 		try {
 			serviceContext = ServiceContextFactory.getInstance(actionRequest);
 
-			if (currentDossierId > 0) {
-				Dossier dossierCurrent = DossierLocalServiceUtil
-						.getDossier(currentDossierId);
+			if (dossierSuggestionId > 0 && dossierId > 0) {
+				Dossier dossierSuggestion = DossierLocalServiceUtil
+						.getDossier(dossierSuggestionId);
+
 				Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
-				DossierTemplate dossierTemplateCurr = DossierTemplateLocalServiceUtil
-						.getDossierTemplate(dossierCurrent
-								.getDossierTemplateId());
-				DossierTemplate dossierTemplate = DossierTemplateLocalServiceUtil
-						.getDossierTemplate(dossier.getDossierTemplateId());
 
-				List<DossierPart> dossierPartCurrs = DossierPartLocalServiceUtil
-						.getDossierParts(dossierTemplateCurr
+				List<DossierPart> dossierPartsSuggestion = DossierPartLocalServiceUtil
+						.getDossierParts(dossierSuggestion
 								.getDossierTemplateId());
+
 				List<DossierPart> dossierParts = DossierPartLocalServiceUtil
-						.getDossierParts(dossierTemplate.getDossierTemplateId());
+						.getDossierParts(dossier.getDossierTemplateId());
 
-				for (DossierPart dossierPartCurr : dossierPartCurrs) {
+				for (DossierPart dossierPartSuggestion : dossierPartsSuggestion) {
+
+					if (dossierPartSuggestion.getPartType() != PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT
+							&& dossierPartSuggestion.getPartType() != PortletConstants.DOSSIER_PART_TYPE_RESULT) {
+						continue;
+					}
+
 					for (DossierPart dossierPart : dossierParts) {
 
-						if (dossierPartCurr.getPartType() == dossierPart
+						if (dossierPartSuggestion.getPartType() == dossierPart
 								.getPartType()
-								&& dossierPartCurr.getPartNo()
+								&& dossierPartSuggestion.getPartNo()
 										.equalsIgnoreCase(
 												dossierPart.getPartNo())
 								&& dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT
 								&& dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_RESULT) {
 
 							try {
-								DossierFile dossierFile = DossierFileLocalServiceUtil
-										.getDossierFileInUse(currentDossierId,
-												dossierPartCurr
+								DossierFile dossierFileSuggestion = DossierFileLocalServiceUtil
+										.getDossierFileInUse(
+												dossierSuggestionId,
+												dossierPartSuggestion
 														.getDossierpartId());
 
-								DLFileEntry fileEntryCur = DLFileEntryLocalServiceUtil
-										.getDLFileEntry(dossierFile
+								DLFileEntry fileEntry = DLFileEntryLocalServiceUtil
+										.getDLFileEntry(dossierFileSuggestion
 												.getFileEntryId());
 
-								if (Validator.isNotNull(fileEntryCur
+								if (Validator.isNotNull(fileEntry
 										.getContentStream())) {
-									DossierFileLocalServiceUtil.addDossierFile(
-											dossierFile.getUserId(),
-											dossierId,
-											dossierPart.getDossierpartId(),
-											dossierFile.getTemplateFileNo(),
-											StringPool.BLANK,
-											dossierFile.getGroupFileId(),
-											0,
-											dossierFile.getOwnerUserId(),
-											dossierFile
-													.getOwnerOrganizationId(),
-											dossierFile.getDisplayName(),
-											dossierFile.getFormData(),
-											dossierFile != null ? dossierFile
-													.getFileEntryId() : 0,
-											dossierFile.getDossierFileMark(),
-											dossierFile.getDossierFileType(),
-											dossierFile.getDossierFileNo(),
-											dossierFile.getDossierFileDate(),
-											dossierFile.getOriginal(),
-											dossierFile.getSyncStatus(),
-											dossier.getFolderId(), fileEntryCur
-													.getTitle(), fileEntryCur
-													.getMimeType(),
-											fileEntryCur.getTitle(),
-											fileEntryCur.getDescription(),
-											StringPool.BLANK, fileEntryCur
-													.getContentStream(),
-											fileEntryCur.getSize(),
-											serviceContext);
+									DossierFileLocalServiceUtil
+											.addDossierFile(
+													dossierFileSuggestion
+															.getUserId(),
+													dossierId,
+													dossierPart
+															.getDossierpartId(),
+													dossierFileSuggestion
+															.getTemplateFileNo(),
+													StringPool.BLANK,
+													0,// dossierFile.getGroupFileId()
+													0,
+													dossierFileSuggestion
+															.getOwnerUserId(),
+													dossierFileSuggestion
+															.getOwnerOrganizationId(),
+													dossierFileSuggestion
+															.getDisplayName(),
+													dossierFileSuggestion
+															.getFormData(),
+													dossierFileSuggestion != null ? dossierFileSuggestion
+															.getFileEntryId()
+															: 0,
+													dossierFileSuggestion
+															.getDossierFileMark(),
+													dossierFileSuggestion
+															.getDossierFileType(),
+													dossierFileSuggestion
+															.getDossierFileNo(),
+													dossierFileSuggestion
+															.getDossierFileDate(),
+													dossierFileSuggestion
+															.getOriginal(),
+													dossierFileSuggestion
+															.getSyncStatus(),
+													dossier.getFolderId(),
+													fileEntry.getTitle(),
+													fileEntry.getMimeType(),
+													fileEntry.getTitle(),
+													fileEntry.getDescription(),
+													StringPool.BLANK,
+													fileEntry
+															.getContentStream(),
+													fileEntry.getSize(),
+													serviceContext);
 								}
 
 							} catch (Exception e) {
