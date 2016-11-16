@@ -3640,6 +3640,22 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 						dossierFolder.getFolderId(), serviceContext);
 			}
+			
+			// Add DossierLog (for Update dossier)
+			
+			ActorBean actor = new ActorBean(1, serviceContext.getUserId());
+
+			DossierLogLocalServiceUtil.addDossierLog(
+					serviceContext.getUserId(),
+					serviceContext.getScopeGroupId(),
+					serviceContext.getCompanyId(), dossierId, 0,
+					PortletConstants.DOSSIER_STATUS_UPDATE,
+					PortletConstants.DOSSIER_STATUS_UPDATE,
+					PortletConstants.DOSSIER_STATUS_UPDATE, new Date(), 0,
+					0, actor.getActor(), actor.getActorId(),
+					actor.getActorName(),
+					DossierMgtFrontOfficePortlet.class.getName()
+							+ ".updateDossier()");
 
 			SessionMessages.add(actionRequest,
 					MessageKeys.DOSSIER_UPDATE_SUCCESS);
