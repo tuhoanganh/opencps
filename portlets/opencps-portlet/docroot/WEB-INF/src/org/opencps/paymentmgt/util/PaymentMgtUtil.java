@@ -17,8 +17,12 @@
 
 package org.opencps.paymentmgt.util;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.opencps.backend.message.UserActionMsg;
 import org.opencps.dossiermgt.model.Dossier;
@@ -164,9 +168,9 @@ public class PaymentMgtUtil {
 	public static PaymentConfig validatePaymentConfig(long groupId, long govAgencyOrganizationId) {
 
 		PaymentConfig paymentConfigValid = null;
-		
-		_log.info("=====groupId:"+groupId);
-		_log.info("=====govAgencyOrganizationId:"+govAgencyOrganizationId);
+
+		_log.info("=====groupId:" + groupId);
+		_log.info("=====govAgencyOrganizationId:" + govAgencyOrganizationId);
 
 		List<PaymentConfig> paymentConfigList = new ArrayList<PaymentConfig>();
 
@@ -187,80 +191,95 @@ public class PaymentMgtUtil {
 
 	}
 
-	public static String runVTCGateData(VTCPay vtcPay, VTCPay vtcPayData) {
+	public static HttpServletResponse runVTCGateData(
+		HttpServletRequest request, HttpServletResponse response, VTCPay vtcPay) {
 
-		PaymentGateConfig paymentGateConfig = null;
-		Dossier dossier = null;
-		PaymentFile paymentFile = null;
+		try {
 
-		boolean isVerify = VTCPay.validateSign(vtcPay, vtcPayData);
-		
-		_log.info("=====vtcPay.getStatus():"+vtcPay.getStatus());
+			PaymentGateConfig paymentGateConfig = null;
+			Dossier dossier = null;
+			PaymentFile paymentFile = null;
 
-		if (isVerify) {
+			boolean isVerify = VTCPay.validateSign(vtcPay);
 
-			if (vtcPayData.getStatus().equals("1")) {
+			_log.info("=====vtcPay.getStatus():" + vtcPay.getStatus());
+
+			if (isVerify) {
+
 				try {
 					paymentFile =
-						PaymentFileLocalServiceUtil.getByTransactionId(Long.parseLong(vtcPayData.getReference_number()));
-
+						PaymentFileLocalServiceUtil.getByTransactionId(Long.parseLong(vtcPay.getReference_number()));
+					// dossier =
+					// DossierLocalServiceUtil.getDossier(paymentFile.getDossierId());
 					dossier = DossierLocalServiceUtil.getDossier(paymentFile.getDossierId());
 
 				}
-				catch (NumberFormatException | PortalException | SystemException e) {
+				catch (NumberFormatException | PortalException e) {
 					// TODO Auto-generated catch block
 					_log.info(e);
 				}
-				
-				if(Validator.isNotNull(paymentFile) && paymentFile.getPaymentGateStatusCode().equals("1")){
+
+				if (Validator.isNotNull(paymentFile) &&
+					vtcPay.getStatus().equals(VTCPayEventKeys.SUCCESS)) {
 
 					UserActionMsg actionMsg = new UserActionMsg();
-	
+
 					actionMsg.setAction(WebKeys.ACTION_PAY_VALUE);
-	
+
 					actionMsg.setPaymentFileId(paymentFile.getPaymentFileId());
-	
+
 					actionMsg.setDossierId(paymentFile.getDossierId());
-	
+
 					actionMsg.setCompanyId(dossier.getCompanyId());
-	
+
 					actionMsg.setGovAgencyCode(dossier.getGovAgencyCode());
-	
+
 					Message message = new Message();
-	
+
 					message.put("msgToEngine", actionMsg);
-	
+
 					MessageBusUtil.sendMessage("opencps/frontoffice/out/destination", message);
-	
+
 					paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_APPROVED);
 					paymentFile.setPaymentMethod(WebKeys.PAYMENT_METHOD_VTCPAY);
 				}
+
+				else {
+					paymentFile.setPaymentGateStatusCode(vtcPay.getStatus());
+				}
+
+				JSONObject jsonData = JSONFactoryUtil.createJSONObject();
+
+				jsonData.put("data", vtcPay.getData());
+				jsonData.put("signature", vtcPay.getSignature());
+
+				paymentFile.setPaymentGateResponseData(jsonData.toString());
+
+				PaymentFileLocalServiceUtil.updatePaymentFile(paymentFile);
+
+				response.sendRedirect(Validator.isNotNull(dossier)
+					? dossier.getKeypayRedirectUrl().toString() : StringPool.BLANK);
+
+				request.setAttribute("paymentFileId", Validator.isNotNull(paymentFile)
+					? paymentFile.getPaymentFileId() : "0");
+				request.setAttribute(
+					"dossierId", Validator.isNotNull(dossier) ? dossier.getDossierId() : "0");
+				request.setAttribute(
+					"serviceInfoId", Validator.isNotNull(dossier)
+						? dossier.getServiceInfoId() : "0");
+
 			}
 			else {
-				paymentFile.setPaymentGateStatusCode(vtcPayData.getStatus());
+				paymentFile.setPaymentGateStatusCode(VTCPayEventKeys.SIGN_NOT_VALID);
 			}
 
 		}
-		else {
-			paymentFile.setPaymentGateStatusCode("-100");
-		}
-
-		JSONObject jsonData = JSONFactoryUtil.createJSONObject();
-
-		jsonData.put("data", vtcPay.getData());
-		jsonData.put("signature", vtcPay.getSignature());
-
-		paymentFile.setPaymentGateResponseData(jsonData.toString());
-
-		try {
-			PaymentFileLocalServiceUtil.updatePaymentFile(paymentFile);
-		}
-		catch (SystemException e) {
+		catch (SystemException | IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			_log.error(e);
 		}
 
-		return null;
+		return response;
 	}
 
 	public static String runKeyPayGateData(KeyPay keyPay) {

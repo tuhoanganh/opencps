@@ -56,7 +56,7 @@ public class PaymentGateServlet extends HttpServlet {
 		String paymentGateName = request.getParameter("paymentGateName");
 
 		paymentGateName = "VTCPAY";
-		
+
 		String homeUrl = "";
 		try {
 			homeUrl = PortalUtil.getHomeURL(request);
@@ -65,27 +65,21 @@ public class PaymentGateServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		_log.info("homeUrl:"+homeUrl);
-		
+		_log.info("homeUrl:" + homeUrl);
 
 		if (paymentGateName.equals("VTCPAY")) {
 
 			VTCPay vtcPay = new VTCPay(request);
-			_log.info("=====vtcPay.getData():"+vtcPay.getData());
-			
+			_log.info("=====vtcPay:" + vtcPay);
 
-			VTCPay vtcPayData = new VTCPay(vtcPay.getData());
-
-			PaymentMgtUtil.runVTCGateData(vtcPay, vtcPayData);
+			response = PaymentMgtUtil.runVTCGateData(request, response, vtcPay);
 
 		}
 		else if (paymentGateName.equals("KEYPAY")) {
 
-			//KeyPay keyPay = new KeyPay(request);
+			// KeyPay keyPay = new KeyPay(request);
 
 		}
-		
-		response.sendRedirect("http://qa.opencps.vn/home");
 
 	}
 
@@ -105,11 +99,10 @@ public class PaymentGateServlet extends HttpServlet {
 
 		if (paymentGateName.equals("VTCPAY")) {
 
-			//VTCPay vtcPay = new VTCPay(request);
+			VTCPay vtcPay = new VTCPay(request);
+			_log.info("=====vtcPay:" + vtcPay);
 
-			//VTCPay vtcPayData = new VTCPay(vtcPay.getData());
-
-			//PaymentMgtUtil.runVTCGateData(vtcPay, vtcPayData);
+			PaymentMgtUtil.runVTCGateData(request, response, vtcPay);
 
 		}
 		else if (paymentGateName.equals("KEYPAY")) {

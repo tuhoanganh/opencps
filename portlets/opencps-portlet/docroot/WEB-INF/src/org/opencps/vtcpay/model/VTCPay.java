@@ -109,15 +109,23 @@ public class VTCPay {
 
 		String[] dataArrays = StringUtil.split(data, "|");
 
-		List<String> dataList = Arrays.asList(dataArrays);
+		_log.info("dataArrays:" + dataArrays.length);
+		if (dataArrays.length > 0) {
 
-		this.amount = dataList.get(0);
-		this.message = dataList.get(1);
-		this.paymentType = dataList.get(2);
-		this.reference_number = dataList.get(3);
-		this.status = dataList.get(4);
-		this.trans_ref_no = dataList.get(5);
-		this.website_id = dataList.get(6);
+			List<String> dataList = Arrays.asList(dataArrays);
+
+			_log.info("dataList:" + dataList);
+			if (dataList.size() > 0) {
+				this.amount = dataList.get(0);
+				this.message = dataList.get(1);
+				this.paymentType = dataList.get(2);
+				this.reference_number = dataList.get(3);
+				this.status = dataList.get(4);
+				this.trans_ref_no = dataList.get(5);
+				this.website_id = dataList.get(6);
+				this.secret_key = dataList.get(7);
+			}
+		}
 
 	}
 
@@ -126,53 +134,57 @@ public class VTCPay {
 		PaymentFile paymentFile = null;
 		PaymentConfig paymentConfig = null;
 
+		_log.info("=====vtcPay.getReference_number():" + vtcPay.getReference_number());
+
 		try {
 			paymentFile =
 				PaymentFileLocalServiceUtil.getByTransactionId(Long.parseLong(vtcPay.getReference_number()));
+
+			_log.info("=====paymentFile.getPaymentConfig():" + paymentFile.getPaymentConfig());
+
+			if (Validator.isNotNull(paymentFile)) {
+
+				paymentConfig =
+					PaymentConfigLocalServiceUtil.getPaymentConfig(paymentFile.getPaymentConfig());
+			}
+
 		}
 		catch (NumberFormatException | PortalException | SystemException e1) {
 			// TODO Auto-generated catch block
 			_log.error(e1);
 		}
 
-		if (Validator.isNotNull(paymentFile)) {
+		StringBuffer merchantSignBuffer = new StringBuffer();
+		merchantSignBuffer.append(vtcPay.getAmount());
+		merchantSignBuffer.append("|").append(vtcPay.getMessage());
+		merchantSignBuffer.append("|").append(vtcPay.getPaymentType());
+		merchantSignBuffer.append("|").append(vtcPay.getReference_number());
+		merchantSignBuffer.append("|").append(vtcPay.getStatus());
+		merchantSignBuffer.append("|").append(vtcPay.getTrans_ref_no());
+		merchantSignBuffer.append("|").append(vtcPay.getWebsite_id());
+		merchantSignBuffer.append("|").append(
+			Validator.isNotNull(paymentConfig)
+				? paymentConfig.getKeypayMerchantCode() : StringPool.BLANK);
 
-			try {
-				paymentConfig =
-					PaymentConfigLocalServiceUtil.getPaymentConfig(paymentFile.getPaymentConfig());
-			}
-			catch (PortalException | SystemException e) {
-				// TODO Auto-generated catch block
-				_log.error(e);
-			}
-
-		}
 		String merchantSign = StringPool.BLANK;
-		merchantSign += vtcPay.getAmount();
-		merchantSign += "|" + vtcPay.getMessage();
-		merchantSign += "|" + vtcPay.getPaymentType();
-		merchantSign += "|" + vtcPay.getWebsite_id();
-		merchantSign += "|" + vtcPay.getReference_number();
-		merchantSign += "|" + vtcPay.getStatus();
-		merchantSign += "|" + vtcPay.getTrans_ref_no();
-		merchantSign += "|" + vtcPay.getWebsite_id();
-		merchantSign += "|" + paymentConfig.getKeypaySecureKey();
+		merchantSign = merchantSignBuffer.toString();
+
 		merchantSign = VTCPay.sha256(merchantSign);
 
 		return merchantSign;
 	}
 
-	public static String getSecureHashCodeRequest(PaymentConfig paymentConfig,VTCPay vtcPay) {
+	public static String getSecureHashCodeRequest(PaymentConfig paymentConfig, VTCPay vtcPay) {
 
 		StringBuffer merchantSignBuffer = new StringBuffer();
-		
-		_log.info("amount:"+amount);
-		_log.info("currency:"+currency);
-		_log.info("receiver_account:"+receiver_account);
-		_log.info("reference_number:"+reference_number);
-		_log.info("url_return:"+url_return);
-		_log.info("website_id:"+website_id);
-		
+
+		_log.info("amount:" + amount);
+		_log.info("currency:" + currency);
+		_log.info("receiver_account:" + receiver_account);
+		_log.info("reference_number:" + reference_number);
+		_log.info("url_return:" + url_return);
+		_log.info("website_id:" + website_id);
+
 		merchantSignBuffer.append(vtcPay.getAmount());
 		merchantSignBuffer.append("|").append(vtcPay.getCurrency());
 		merchantSignBuffer.append("|").append(vtcPay.getReceiver_account());
@@ -180,19 +192,19 @@ public class VTCPay {
 		merchantSignBuffer.append("|").append(vtcPay.getUrl_return());
 		merchantSignBuffer.append("|").append(vtcPay.getWebsite_id());
 		merchantSignBuffer.append("|").append(paymentConfig.getKeypaySecureKey());
-		
+
 		String merchantSign = StringPool.BLANK;
 		merchantSign = merchantSignBuffer.toString();
-		
+
 		merchantSign = VTCPay.sha256(merchantSign);
 
 		return merchantSign;
 
 	}
 
-	public static boolean validateSign(VTCPay vtcPay, VTCPay vtcPayData) {
+	public static boolean validateSign(VTCPay vtcPay) {
 
-		String merchantSig = VTCPay.getSecureHashCodeResponse(vtcPayData);
+		String merchantSig = VTCPay.getSecureHashCodeResponse(vtcPay);
 
 		String signature = vtcPay.getSignature();
 
@@ -208,18 +220,24 @@ public class VTCPay {
 	public static String sha256(String base) {
 
 		try {
-			MessageDigest digest = MessageDigest.getInstance("SHA-256");
-			byte[] hash = digest.digest(base.getBytes("UTF-8"));
-			StringBuffer hexString = new StringBuffer();
 
-			for (int i = 0; i < hash.length; i++) {
-				String hex = Integer.toHexString(0xff & hash[i]);
-				if (hex.length() == 1)
-					hexString.append('0');
-				hexString.append(hex);
+			if (base.trim().length() > 0) {
+				MessageDigest digest = MessageDigest.getInstance("SHA-256");
+				byte[] hash = digest.digest(base.getBytes("UTF-8"));
+				StringBuffer hexString = new StringBuffer();
+
+				for (int i = 0; i < hash.length; i++) {
+					String hex = Integer.toHexString(0xff & hash[i]);
+					if (hex.length() == 1)
+						hexString.append('0');
+					hexString.append(hex);
+				}
+
+				return hexString.toString();
 			}
-
-			return hexString.toString();
+			else {
+				return StringPool.BLANK;
+			}
 		}
 		catch (Exception ex) {
 			throw new RuntimeException(ex);
@@ -235,7 +253,13 @@ public class VTCPay {
 	public VTCPay(HttpServletRequest request) {
 
 		try {
-			this.data = request.getParameter("website_id");
+			this.amount = request.getParameter("amount");
+			this.message = request.getParameter("message");
+			this.paymentType = request.getParameter("payment_type");
+			this.reference_number = request.getParameter("reference_number");
+			this.status = request.getParameter("status");
+			this.trans_ref_no = request.getParameter("trans_ref_no");
+			this.website_id = request.getParameter("website_id");
 			this.signature = request.getParameter("signature");
 
 		}
@@ -343,261 +367,214 @@ public class VTCPay {
 		return msg;
 	}
 
-	
 	public static String getWebsite_id() {
-	
+
 		return website_id;
 	}
 
-	
 	public static void setWebsite_id(String website_id) {
-	
+
 		VTCPay.website_id = website_id;
 	}
 
-	
 	public static String getReceiver_account() {
-	
+
 		return receiver_account;
 	}
 
-	
 	public static void setReceiver_account(String receiver_account) {
-	
+
 		VTCPay.receiver_account = receiver_account;
 	}
 
-	
 	public static String getLanguage() {
-	
+
 		return language;
 	}
 
-	
 	public static void setLanguage(String language) {
-	
+
 		VTCPay.language = language;
 	}
 
-	
 	public static String getUrl_return() {
-	
+
 		return url_return;
 	}
 
-	
 	public static void setUrl_return(String url_return) {
-	
+
 		VTCPay.url_return = url_return;
 	}
 
-	
 	public static String getReference_number() {
-	
+
 		return reference_number;
 	}
 
-	
 	public static void setReference_number(String reference_number) {
-	
+
 		VTCPay.reference_number = reference_number;
 	}
 
-	
 	public static String getAmount() {
-	
+
 		return amount;
 	}
 
-	
 	public static void setAmount(String amount) {
-	
+
 		VTCPay.amount = amount;
 	}
 
-	
 	public static String getCurrency() {
-	
+
 		return currency;
 	}
 
-	
 	public static void setCurrency(String currency) {
-	
+
 		VTCPay.currency = currency;
 	}
 
-	
 	public String getBill_to_email() {
-	
+
 		return bill_to_email;
 	}
 
-	
 	public void setBill_to_email(String bill_to_email) {
-	
+
 		this.bill_to_email = bill_to_email;
 	}
 
-	
 	public String getBill_to_phone() {
-	
+
 		return bill_to_phone;
 	}
 
-	
 	public void setBill_to_phone(String bill_to_phone) {
-	
+
 		this.bill_to_phone = bill_to_phone;
 	}
 
-	
 	public String getBill_to_address() {
-	
+
 		return bill_to_address;
 	}
 
-	
 	public void setBill_to_address(String bill_to_address) {
-	
+
 		this.bill_to_address = bill_to_address;
 	}
 
-	
 	public String getBill_to_address_city() {
-	
+
 		return bill_to_address_city;
 	}
 
-	
 	public void setBill_to_address_city(String bill_to_address_city) {
-	
+
 		this.bill_to_address_city = bill_to_address_city;
 	}
 
-	
 	public String getBill_to_surname() {
-	
+
 		return bill_to_surname;
 	}
 
-	
 	public void setBill_to_surname(String bill_to_surname) {
-	
+
 		this.bill_to_surname = bill_to_surname;
 	}
 
-	
 	public String getBill_to_forename() {
-	
+
 		return bill_to_forename;
 	}
 
-	
 	public void setBill_to_forename(String bill_to_forename) {
-	
+
 		this.bill_to_forename = bill_to_forename;
 	}
 
-	
 	public String getPaymentType() {
-	
+
 		return paymentType;
 	}
 
-	
 	public void setPaymentType(String paymentType) {
-	
+
 		this.paymentType = paymentType;
 	}
 
-	
 	public static String getSecret_key() {
-	
+
 		return secret_key;
 	}
 
-	
 	public static void setSecret_key(String secret_key) {
-	
+
 		VTCPay.secret_key = secret_key;
 	}
 
-	
 	public static String getRequest_url() {
-	
+
 		return request_url;
 	}
 
-	
 	public static void setRequest_url(String request_url) {
-	
+
 		VTCPay.request_url = request_url;
 	}
 
-	
 	public static String getTrans_ref_no() {
-	
+
 		return trans_ref_no;
 	}
 
-	
 	public static void setTrans_ref_no(String trans_ref_no) {
-	
+
 		VTCPay.trans_ref_no = trans_ref_no;
 	}
 
-	
 	public static String getMessage() {
-	
+
 		return message;
 	}
 
-	
 	public static void setMessage(String message) {
-	
+
 		VTCPay.message = message;
 	}
 
-	
 	public static String getStatus() {
-	
+
 		return status;
 	}
 
-	
 	public static void setStatus(String status) {
-	
+
 		VTCPay.status = status;
 	}
 
-	
 	public static String getData() {
-	
+
 		return data;
 	}
 
-	
 	public static void setData(String data) {
-	
+
 		VTCPay.data = data;
 	}
 
-	
 	public static String getSignature() {
-	
+
 		return signature;
 	}
 
-	
 	public static void setSignature(String signature) {
-	
+
 		VTCPay.signature = signature;
 	}
-
-	
-
-
-
 
 }
