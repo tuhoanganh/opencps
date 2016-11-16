@@ -1,5 +1,4 @@
 
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -109,8 +108,12 @@
 	}
 	
 	String fileTypes = preferences.getValue("fileTypes", StringPool.BLANK);
-	float maxUploadFileSizeInMb = GetterUtil.getFloat(preferences.getValue("maxUploadFileSizeInMb", StringPool.BLANK));
-	float maxTotalUploadFileSizeInMb = GetterUtil.getFloat(preferences.getValue("maxTatalUploadFileSizeInMb", StringPool.BLANK));
+	
+	float maxUploadFileSize = GetterUtil.getFloat(preferences.getValue("maxUploadFileSize", StringPool.BLANK));
+	String maxUploadFileSizeUnit = preferences.getValue("maxUploadFileSizeUnit", StringPool.BLANK);
+	
+	float maxTotalUploadFileSize = GetterUtil.getFloat(preferences.getValue("maxTotalUploadFileSize", StringPool.BLANK));
+	String maxTotalUploadFileSizeUnit = preferences.getValue("maxTotalUploadFileSizeUnit", StringPool.BLANK);
 	
 	List<DossierFile> dossierFileList = new ArrayList<DossierFile>();
 	if (dossierId > 0){
@@ -213,8 +216,10 @@
 	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_TYPE %>" type="hidden" value="<%=String.valueOf(renderResponse.getNamespace().equals(StringPool.UNDERLINE + WebKeys.DOSSIER_MGT_PORTLET + StringPool.UNDERLINE)  ? PortletConstants.DOSSIER_FILE_TYPE_INPUT : PortletConstants.DOSSIER_FILE_TYPE_OUTPUT) %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.GROUP_NAME %>" type="hidden" value="<%=groupName %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.FILE_TYPES %>" type="hidden" value="<%=fileTypes %>"/>
-	<aui:input name="<%=DossierFileDisplayTerms.MAX_UPLOAD_FILE_SIZE_IN_MB %>" type="hidden" value="<%=maxUploadFileSizeInMb %>"/>
-	<aui:input name="<%=DossierFileDisplayTerms.MAX_TOTAL_UPLOAD_FILE_SIZE_IN_MB %>" type="hidden" value="<%=maxTotalUploadFileSizeInMb %>"/>
+	<aui:input name="<%=DossierFileDisplayTerms.MAX_UPLOAD_FILE_SIZE %>" type="hidden" value="<%=maxUploadFileSize %>"/>
+	<aui:input name="<%=DossierFileDisplayTerms.MAX_UPLOAD_FILE_SIZE_UNIT %>" type="hidden" value="<%=maxUploadFileSizeUnit %>"/>
+	<aui:input name="<%=DossierFileDisplayTerms.MAX_TOTAL_UPLOAD_FILE_SIZE %>" type="hidden" value="<%=maxTotalUploadFileSize %>"/>
+	<aui:input name="<%=DossierFileDisplayTerms.MAX_TOTAL_UPLOAD_FILE_SIZE_UNIT %>" type="hidden" value="<%=maxTotalUploadFileSizeUnit %>"/>
 	
 	<aui:row>
 		<aui:col width="100">
@@ -295,11 +300,10 @@
 		
 		// Validate size and type file upload
 		
-		var maxUploadFileSizeInMb = <%=maxUploadFileSizeInMb %>;
-		var maxUploadFileSizeInByte = maxUploadFileSizeInMb*1024*1024;
 		
-		var maxTotalUploadFileSizeInMb = <%=maxTotalUploadFileSizeInMb%>
-		var maxTotalUploadFileSizeInByte = maxTotalUploadFileSizeInMb*1024*1024;
+		var maxUploadFileSizeInByte = <%=PortletUtil.convertSizeUnitToByte(maxUploadFileSize, maxUploadFileSizeUnit)%>;
+		
+		var maxTotalUploadFileSizeInByte = <%=PortletUtil.convertSizeUnitToByte(maxTotalUploadFileSize, maxTotalUploadFileSizeUnit)%>;
 		
 		var fileUploadSizeInByte = 0;
 		var totalUploadFileSizeInByte = <%=totalUploadFileSizeInByte%>;
@@ -316,10 +320,10 @@
 					alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-required-before-send") %>');
 				} else
 				if (fileUploadSizeInByte > maxUploadFileSizeInByte && maxUploadFileSizeInByte > 0) {
-					alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-size-smaller-than") %>' + ' ' + maxUploadFileSizeInMb + ' Mb');
+					alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-size-smaller-than") %>' + ' ' + '<%=maxUploadFileSize%>' + ' ' + '<%=maxUploadFileSizeUnit%>');
 				}else 
 				if (totalUploadFileSizeInByte > maxTotalUploadFileSizeInByte && maxTotalUploadFileSizeInByte > 0) {
-					alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "overload-total-file-upload-size") %>' + ' ' + maxTotalUploadFileSizeInMb + ' Mb');
+					alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "overload-total-file-upload-size") %>' + ' ' + '<%=maxTotalUploadFileSize%>' + ' ' + '<%=maxTotalUploadFileSizeUnit%>');
 				}else 
 				{
 					submitForm(document.<portlet:namespace />fm);

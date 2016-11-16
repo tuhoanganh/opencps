@@ -82,8 +82,14 @@ public class ConfigurationImpl implements ConfigurationAction{
 		boolean allowResultQuickView = ParamUtil.getBoolean(actionRequest, "allowResultQuickView");
 
 		String fileTypes = ParamUtil.getString(actionRequest, "fileTypes");
-		float maxTatalUploadFileSizeInMb = ParamUtil.getFloat(actionRequest, "maxTatalUploadFileSizeInMb");
-		float maxUploadFileSizeInMb = ParamUtil.getFloat(actionRequest, "maxUploadFileSizeInMb");
+		
+		float maxTotalUploadFileSize = ParamUtil.getFloat(actionRequest, "maxTotalUploadFileSize");
+		
+		String maxTotalUploadFileSizeUnit = ParamUtil.getString(actionRequest, "maxTotalUploadFileSizeUnit");
+		
+		float maxUploadFileSize = ParamUtil.getFloat(actionRequest, "maxUploadFileSize");
+		
+		String maxUploadFileSizeUnit = ParamUtil.getString(actionRequest, "maxUploadFileSizeUnit");
 		
 		PortletURL redirectURL =
 		    PortletURLFactoryUtil.create(
@@ -128,8 +134,14 @@ public class ConfigurationImpl implements ConfigurationAction{
 		preferences.setValue("allowResultQuickView", String.valueOf(allowResultQuickView));
 
 		preferences.setValue("fileTypes", fileTypes);
-		preferences.setValue("maxTatalUploadFileSizeInMb", String.valueOf(maxTatalUploadFileSizeInMb));
-		preferences.setValue("maxUploadFileSizeInMb", String.valueOf(maxUploadFileSizeInMb));
+		
+		preferences.setValue("maxTotalUploadFileSize", String.valueOf(maxTotalUploadFileSize));
+		
+		preferences.setValue("maxTotalUploadFileSizeUnit", maxTotalUploadFileSizeUnit);
+		
+		preferences.setValue("maxUploadFileSize", String.valueOf(maxUploadFileSize));
+		
+		preferences.setValue("maxUploadFileSizeUnit", maxUploadFileSizeUnit);
 		
 		preferences.store();
 

@@ -1,4 +1,5 @@
 
+<%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
 <%
@@ -184,21 +185,67 @@
 		value="<%=fileTypes %>"
 	/>
 	
-	<aui:input 
-		type="text"
-		name="maxTatalUploadFileSizeInMb" 
-		value="<%=maxTatalUploadFileSizeInMb %>"
-	>
-		<aui:validator name="number"></aui:validator>
-	</aui:input>
+	<aui:row>
+		<aui:col>
+			<aui:input 
+				type="text"
+				name="maxTotalUploadFileSize" 
+				value="<%=maxTotalUploadFileSize %>"
+			>
+				<aui:validator name="number"></aui:validator>
+			</aui:input>
+		</aui:col>
+		<aui:col>
+			<aui:select 
+				name="maxTotalUploadFileSizeUnit" 
+				id="maxTotalUploadFileSizeUnit"
+			>
+				<aui:option value="<%=PortletConstants.SIZE_UNIT_B %>"
+					selected="<%=maxTotalUploadFileSizeUnit.equals(PortletConstants.SIZE_UNIT_B)%>"
+				>B</aui:option>
+				<aui:option value="<%=PortletConstants.SIZE_UNIT_KB %>"
+					selected="<%=maxTotalUploadFileSizeUnit.equals(PortletConstants.SIZE_UNIT_KB)%>"
+				>kB</aui:option>
+				<aui:option value="<%=PortletConstants.SIZE_UNIT_MB %>" 
+					selected="<%=maxTotalUploadFileSizeUnit.equals(PortletConstants.SIZE_UNIT_MB)%>"
+				>MB</aui:option>
+				<aui:option value="<%=PortletConstants.SIZE_UNIT_GB %>"
+					selected="<%=maxTotalUploadFileSizeUnit.equals(PortletConstants.SIZE_UNIT_GB)%>"
+				>GB</aui:option>
+			</aui:select>
+		</aui:col>
+	</aui:row>
 	
-	<aui:input 
-		type="text"
-		name="maxUploadFileSizeInMb" 
-		value="<%=maxUploadFileSizeInMb %>"
-	>
-		<aui:validator name="number"></aui:validator>
-	</aui:input>
+	<aui:row>
+		<aui:col>
+			<aui:input 
+				type="text"
+				name="maxUploadFileSize" 
+				value="<%=maxUploadFileSize %>"
+			>
+				<aui:validator name="number"></aui:validator>
+			</aui:input>
+		</aui:col>
+		<aui:col>
+			<aui:select 
+				name="maxUploadFileSizeUnit" 
+				id="maxUploadFileSizeUnit"
+			>
+				<aui:option value="<%=PortletConstants.SIZE_UNIT_B %>"
+					selected="<%=maxTotalUploadFileSizeUnit.equals(PortletConstants.SIZE_UNIT_B)%>"
+				>B</aui:option>
+				<aui:option value="<%=PortletConstants.SIZE_UNIT_KB %>"
+					selected="<%=maxTotalUploadFileSizeUnit.equals(PortletConstants.SIZE_UNIT_KB)%>"
+				>kB</aui:option>
+				<aui:option value="<%=PortletConstants.SIZE_UNIT_MB %>" 
+					selected="<%=maxTotalUploadFileSizeUnit.equals(PortletConstants.SIZE_UNIT_MB)%>"
+				>MB</aui:option>
+				<aui:option value="<%=PortletConstants.SIZE_UNIT_GB %>"
+					selected="<%=maxTotalUploadFileSizeUnit.equals(PortletConstants.SIZE_UNIT_GB)%>"
+				>GB</aui:option>
+			</aui:select>
+		</aui:col>
+	</aui:row>
 	
 	<aui:button type="submit" name="Save" value="save"></aui:button>
 

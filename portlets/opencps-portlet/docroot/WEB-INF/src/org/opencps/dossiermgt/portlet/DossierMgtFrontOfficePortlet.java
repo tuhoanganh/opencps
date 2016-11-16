@@ -216,11 +216,17 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		String fileTypes = ParamUtil.getString(uploadPortletRequest,
 				DossierFileDisplayTerms.FILE_TYPES);
 		
-		float maxUploadFileSizeInMb = ParamUtil.getFloat(uploadPortletRequest,
-				DossierFileDisplayTerms.MAX_UPLOAD_FILE_SIZE_IN_MB);
+		float maxUploadFileSize = ParamUtil.getFloat(uploadPortletRequest,
+				DossierFileDisplayTerms.MAX_UPLOAD_FILE_SIZE);
 		
-		float maxTotalUploadFileSizeInMb = ParamUtil.getFloat(uploadPortletRequest,
-				DossierFileDisplayTerms.MAX_TOTAL_UPLOAD_FILE_SIZE_IN_MB);
+		String maxUploadFileSizeUnit = ParamUtil.getString(uploadPortletRequest, 
+				DossierFileDisplayTerms.MAX_UPLOAD_FILE_SIZE_UNIT);
+		
+		float maxTotalUploadFileSize = ParamUtil.getFloat(uploadPortletRequest,
+				DossierFileDisplayTerms.MAX_TOTAL_UPLOAD_FILE_SIZE);
+		
+		String maxTotalUploadFileSizeUnit = ParamUtil.getString(uploadPortletRequest, 
+				DossierFileDisplayTerms.MAX_TOTAL_UPLOAD_FILE_SIZE_UNIT);
 
 		/*
 		 * sourceFileName = sourceFileName
@@ -245,8 +251,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 			validateAddAttachDossierFile(dossierId, dossierPartId,
 					dossierFileId, displayName, size, sourceFileName,
-					inputStream, accountBean, fileTypes, maxUploadFileSizeInMb,
-					maxTotalUploadFileSizeInMb);
+					inputStream, accountBean, fileTypes, maxUploadFileSize,
+					maxUploadFileSizeUnit, maxTotalUploadFileSize,
+					maxTotalUploadFileSizeUnit);
 
 			ServiceContext serviceContext = ServiceContextFactory
 					.getInstance(uploadPortletRequest);
@@ -2880,8 +2887,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	private void validateAddAttachDossierFile(long dossierId,
 			long dossierPartId, long dossierFileId, String displayName,
 			long size, String sourceFileName, InputStream inputStream,
-			AccountBean accountBean, String fileTypes, float maxUploadFileSizeInMb,
-			float maxTotalUploadFileSizeInMb)
+			AccountBean accountBean, String fileTypes, float maxUploadFileSize,
+			String maxUploadFileSizeUnit, float maxTotalUploadFileSize,
+			String maxTotalUploadFileSizeUnit)
 			throws NoSuchDossierException,
 			NoSuchDossierPartException, NoSuchAccountException,
 			NoSuchAccountTypeException, NoSuchAccountFolderException,
@@ -2942,8 +2950,10 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			}
 		}
 		
-		float maxUploadFileSizeInByte = maxUploadFileSizeInMb*1024*1024;
-		float maxTotalUploadFileSizeInByte = maxTotalUploadFileSizeInMb*1024*1024;
+		float maxUploadFileSizeInByte = 
+				PortletUtil.convertSizeUnitToByte(maxUploadFileSize, maxUploadFileSizeUnit);
+		float maxTotalUploadFileSizeInByte = 
+				PortletUtil.convertSizeUnitToByte(maxTotalUploadFileSize, maxTotalUploadFileSizeUnit);
 		
 		if (size == 0) {
 			throw new FileSizeException();

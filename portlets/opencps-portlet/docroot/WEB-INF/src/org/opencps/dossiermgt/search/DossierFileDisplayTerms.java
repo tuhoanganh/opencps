@@ -64,8 +64,10 @@ public class DossierFileDisplayTerms extends DisplayTerms {
 	public static final String TEMP_FOLDER_NAME = "tempFolderName";
 	public static final String FILE_EXTENSION = "extension";
 	public static final String FILE_TYPES = "fileTypes";
-	public static final String MAX_UPLOAD_FILE_SIZE_IN_MB = "maxUploadFileSizeInMb";
-	public static final String MAX_TOTAL_UPLOAD_FILE_SIZE_IN_MB = "maxTotalUploadFileSizeInMb";
+	public static final String MAX_UPLOAD_FILE_SIZE = "maxUploadFileSize";
+	public static final String MAX_UPLOAD_FILE_SIZE_UNIT = "maxUploadFileSizeUnit";
+	public static final String MAX_TOTAL_UPLOAD_FILE_SIZE = "maxTotalUploadFileSize";
+	public static final String MAX_TOTAL_UPLOAD_FILE_SIZE_UNIT = "maxTotalUploadFileSizeUnit";
 	
 	protected String displayName;
 	

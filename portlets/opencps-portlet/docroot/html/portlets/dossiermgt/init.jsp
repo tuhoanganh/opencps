@@ -55,7 +55,13 @@
 	boolean allowResultQuickView = GetterUtil.getBoolean(preferences.getValue("allowResultQuickView", "false"), false);
 
 	String fileTypes = preferences.getValue("fileTypes", StringPool.BLANK);
-	float maxTatalUploadFileSizeInMb = GetterUtil.getFloat(preferences.getValue("maxTatalUploadFileSizeInMb", StringPool.BLANK));
-	float maxUploadFileSizeInMb = GetterUtil.getFloat(preferences.getValue("maxUploadFileSizeInMb", StringPool.BLANK));
+	
+	float maxTotalUploadFileSize = GetterUtil.getFloat(preferences.getValue("maxTotalUploadFileSize", StringPool.BLANK));
+	
+	String maxTotalUploadFileSizeUnit = preferences.getValue("maxTotalUploadFileSizeUnit", StringPool.BLANK);
+	
+	float maxUploadFileSize = GetterUtil.getFloat(preferences.getValue("maxUploadFileSize", StringPool.BLANK));
+	
+	String maxUploadFileSizeUnit = preferences.getValue("maxUploadFileSizeUnit", StringPool.BLANK);
 %>
 

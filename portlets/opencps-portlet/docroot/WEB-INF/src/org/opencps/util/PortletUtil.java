@@ -1118,6 +1118,24 @@ public class PortletUtil {
 		
 		return dossierPartTypeName;
 	}
+	
+	public static float convertSizeUnitToByte(float size, String fileUnit) {
+		
+		if (fileUnit.equals(PortletConstants.SIZE_UNIT_B) || Validator.isNull(fileUnit)) {
+			return size;
+		} else
+		if (fileUnit.equals(PortletConstants.SIZE_UNIT_KB)) {
+			return size*1024;
+		} else
+		if (fileUnit.equals(PortletConstants.SIZE_UNIT_MB)) {
+			return size*1024*1024;
+		} else
+		if (fileUnit.equals(PortletConstants.SIZE_UNIT_GB)) {
+			return size*1024*1024*1024;
+		}
+		
+		return 0;
+	}
 
 	private static Log _log = LogFactoryUtil
 			.getLog(PortletUtil.class.getName());
