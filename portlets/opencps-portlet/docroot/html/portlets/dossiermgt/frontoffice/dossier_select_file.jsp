@@ -53,6 +53,7 @@
 <%@page import="org.opencps.dossiermgt.search.DossierFileSearch"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
+
 <%@ include file="../init.jsp"%>
 
 <%
@@ -307,17 +308,19 @@
 						<aui:input name="hiddenDossierFileId" type="hidden" value="<%=dossierFile.getDossierFileId() %>"	/>
 						<i class="fa fa-circle-o "></i>
 					</liferay-util:buffer>
-					
+
 					<liferay-util:buffer var="boundCol1">
 						<div class="row-fluid">
 							<div class="span5 bold-label">
 								<liferay-ui:message key="template-file-no"/>
 							</div>
+
 							<div class="span7">
 								<a href="<%=templateFileURL %>" target="_blank">
 									<%=Validator.isNotNull(templateFileNo) ? templateFileNo : StringPool.DASH %>
 								</a>
 							</div>
+
 						</div>
 						
 						<div class="row-fluid">
@@ -399,10 +402,11 @@
 		<aui:input name="<%=DossierFileDisplayTerms.GROUP_NAME %>" type="hidden" value="<%=groupName %>"/>
 		<aui:input name="receiveHiddenDossierFile" type="hidden" />
 		<aui:row>
+			<aui:button  name="btnAccept" value="agree" cssClass="btn-primary"/>
 			<aui:button name="btnCancel" value="cancel"/>
-			<aui:button  name="btnAccept" value="agree"/>
 		</aui:row>
 	</div>
+
 </aui:form>
 
 <aui:script>
@@ -410,6 +414,7 @@
 	AUI().ready(function(A){
 		
 		var success = '<%=success%>';
+		
 		var receiveHiddenDossierFile = A.one('#<portlet:namespace />receiveHiddenDossierFile');
 		var btnAccept = A.one('#<portlet:namespace />btnAccept');
 		var btnCancel = A.one('#<portlet:namespace />btnCancel');
@@ -419,10 +424,11 @@
 		
 		btnAccept.addClass('disabled');
 		btnAccept.setAttribute('disabled' , 'true');
-		
+
 		if(success == 'true'){
 			<portlet:namespace/>closeDialog();
 		}
+
 		
 		allRows.each(function(taskNode) {
 			taskNode.on('click', function(){
