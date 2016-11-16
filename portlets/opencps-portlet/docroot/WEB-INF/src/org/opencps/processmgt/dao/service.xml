@@ -94,6 +94,7 @@
 
 		<column name="processStepId" type="long" primary="true" />
 		<column name="dossierPartId" type="long" primary="true" />
+		<column name="readOnly" type="boolean" />
 		
 		<finder return-type="Collection" name="ProcessStepId">
 			<finder-column name="processStepId"/>

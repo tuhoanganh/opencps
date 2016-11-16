@@ -1,4 +1,7 @@
 
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="org.opencps.dossiermgt.service.DossierFileLogLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.DossierFileLog"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -114,7 +117,7 @@
 		keyProperty="dossierLogId"
 	>
 		<aui:row cssClass="top-line pd_b20 pd_t20">
-			<aui:col width="60">
+			<aui:col width="50">
 				<span class="span1">
 					<i class="fa fa-circle blue sx10"></i>
 				</span>
@@ -131,7 +134,7 @@
 					%>
 				</span>
 			</aui:col>
-			<aui:col width="40">
+			<aui:col width="50">
 				<aui:row>
 					<span class="span4 bold">
 						<liferay-ui:message key="dossier-status" />
@@ -162,6 +165,47 @@
 					</span>
 					
 				</aui:row>
+				
+				<%
+					List<DossierFileLog> logFiles = DossierMgtUtil.getFileLogs(dossierLog.getDossierLogId(), dossierId);
+				
+				
+				%>
+				<c:if test="<%= logFiles.size() != 0 %>">
+					<aui:row>
+						<span class="span12 bold">
+							<liferay-ui:message key="file-modified" />
+						</span>
+						
+					</aui:row>
+				
+					<aui:row>
+						<span class="span12">
+							<%
+								SimpleDateFormat sdf = new SimpleDateFormat ("dd/MM/yy | hh:mm:ss");
+								for (DossierFileLog lf : logFiles) {
+									
+									String cssClass = "dossier-file-status-" + lf.getActionCode();
+									String actionCode = LanguageUtil.get(locale, cssClass);
+							%>
+								<div style="padding: 3px; ">
+									<%= StringPool.GREATER_THAN %> 
+										 <aui:a href="#" >
+										 	<%= lf.getFileName() %> 
+										 	<span style="font: smaller; color: #cbcbcb;">(<%= sdf.format(lf.getModifiedDate()) %> )</span>
+										 	
+										 </aui:a>
+								</div>
+							<%
+								}
+							%>
+							
+						</span>
+						
+					</aui:row>
+				
+				</c:if>
+				
 			</aui:col>
 		</aui:row>
 	</liferay-ui:search-container-row>

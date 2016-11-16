@@ -116,7 +116,8 @@ public class NotificationUtils {
 	public static void sendEmailNotification(
 		SendNotificationMessage message, String email, long dossierId) {
 
-		String from = StringPool.BLANK;
+		String fromAddress = StringPool.BLANK;
+		String fromName = StringPool.BLANK;
 		String to = StringPool.BLANK;
 		String subject = StringPool.BLANK;
 		String body = StringPool.BLANK;
@@ -132,21 +133,31 @@ public class NotificationUtils {
 				dossier = DossierLocalServiceUtil.getDossier(dossierId);
 			}
 
-			from =
+			fromAddress =
 				Validator.isNotNull(dossier) ? PrefsPropsUtil.getString(
 					dossier.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_ADDRESS) : StringPool.BLANK;
+			fromName =
+				PrefsPropsUtil.getString(dossier.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
 			to = email;
 			subject = PortletPropsValues.SUBJECT_TO_CUSTOMER;
 			body = PortletPropsValues.CONTENT_TO_CUSTOMER;
+			
+			subject = StringUtil.replace(subject, "[OpenCPS]", "["+fromName+"]");
 
 			body =
 				StringUtil.replace(body, "{receptionNo}", String.valueOf(message.getDossierId()));
 			body =
 				StringUtil.replace(
 					body, "{event}", LanguageUtil.get(locale, message.getNotificationEventName()));
+			
+			_log.info("fromAddress:"+fromAddress);
+			_log.info("fromName:"+fromName);
+			_log.info("subject:"+subject);
+			_log.info("body:"+body);
+			_log.info("to:"+to);
 
 			SendMailUtils.sendEmail(
-				from, to, StringPool.BLANK, subject, body, htmlFormat);
+				fromAddress,fromName, to, StringPool.BLANK, subject, body, htmlFormat);
 		}
 		catch (Exception e) {
 			_log.error(e);

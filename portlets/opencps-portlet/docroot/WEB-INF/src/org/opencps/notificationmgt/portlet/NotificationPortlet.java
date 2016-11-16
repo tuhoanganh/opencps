@@ -41,7 +41,7 @@ public class NotificationPortlet extends MVCPortlet {
 		throws IOException, PortletException, PortalException, SystemException {
 		
 
-		SendMailUtils.sendEmail("no-reply@fds.vn", "hltn.works@gmail.com", "skynetx001@gmail.com,nhanhlt@fds.vn", "subject", "body", true);
+		//SendMailUtils.sendEmail("no-reply@fds.vn", "hltn.works@gmail.com", "skynetx001@gmail.com,nhanhlt@fds.vn", "subject", "body", true);
 	}
 
 }
