@@ -243,7 +243,7 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 					PortletConstants.DOSSIER_ACTION_REQUEST_PAYMENT, msgInforSb.toString(),
 					new Date(), 1, 2, actorBean.getActor(), actorBean.getActorId(),
 					actorBean.getActorName(), PaymentMgtFrontOfficePortlet.class.getName() +
-						".requestBankPayment()");
+						".requestBankPayment()", 0, 0, false);
 
 				MessageBusUtil.sendMessage("opencps/frontoffice/out/destination", message);
 

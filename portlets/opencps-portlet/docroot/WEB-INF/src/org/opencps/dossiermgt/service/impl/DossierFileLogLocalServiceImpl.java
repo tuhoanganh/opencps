@@ -63,12 +63,12 @@ public class DossierFileLogLocalServiceImpl
 	 * @throws PortalException
 	 * @throws SystemException
 	 */
-	public void updateFileLog(long dossierId, long logId)
+	public void updateFileLog(long dossierId, long logId, int actor)
 	    throws PortalException, SystemException {
 		
 		List<DossierFileLog> ls = new ArrayList<DossierFileLog>();
 		
-		ls = dossierFileLogPersistence.findByL_D(QueryUtil.ALL_POS, dossierId);
+		ls = dossierFileLogPersistence.findByL_D_A(QueryUtil.ALL_POS, dossierId, actor);
 		
 		for (DossierFileLog fileLog : ls) {
 			

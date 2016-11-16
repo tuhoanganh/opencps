@@ -178,7 +178,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 							PortletConstants.DOSSIER_ACTION_CREATE_PROCESS_ORDER, new Date(), 0, 0,
 							actorBeanSys.getActor(), actorBeanSys.getActorId(),
 							actorBeanSys.getActorName(), BackOfficeProcessEngine.class.getName() +
-								".createProcessOrder()");
+								".createProcessOrder()", processOrder.getProcessOrderId(), 0, false);
 
 					toBackOffice.setDossierLogOId(dossierLog.getOId());
 				}
