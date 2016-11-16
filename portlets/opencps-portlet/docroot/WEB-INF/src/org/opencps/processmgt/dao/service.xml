@@ -315,12 +315,17 @@
 		<column name="actionUserId" type="long"/>
 		<column name="daysDoing" type="int"/>
 		<column name="daysDelay" type="int"/>
-        <column name="oId" type="String"></column>
+        <column name="oId" type="String"/>
+        <column name="logId" type="long"/>
 
         <order >
             <order-column name="createDate" order-by="desc"></order-column>
             <order-column name="actionHistoryId" order-by="asc"/>
         </order>
+        
+        <finder name="LOG_ID" return-type="ActionHistory">
+            <finder-column name="logId"/>
+        </finder>
 
 
         <finder name="POID_PWID" return-type="Collection">

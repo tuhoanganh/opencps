@@ -68,7 +68,7 @@ public class BackOfficeProcessCallback implements MessageListener{
 			    msgToCalback.getActionDatetime(), msgToCalback.getStepName(),
 			    msgToCalback.getActionName(), msgToCalback.getActionNote(),
 			    msgToCalback.getActionUserId(), msgToCalback.getDaysDoing(),
-			    msgToCalback.getDaysDelay(), msgToCalback.getDossierStatus());
+			    msgToCalback.getDaysDelay(), msgToCalback.getDossierStatus(), msgToCalback.getLogId());
 			
 		}
 		catch (Exception e) {

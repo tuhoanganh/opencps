@@ -2459,7 +2459,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 			// Add DossierLog
 
-			DossierLogLocalServiceUtil.addDossierLog(
+/*			DossierLogLocalServiceUtil.addDossierLog(
 					serviceContext.getUserId(), serviceContext
 							.getScopeGroupId(), serviceContext.getCompanyId(),
 					dossierId, fileGroupId,
@@ -2469,7 +2469,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 					new Date(), 0, 2, actor.getActor(), actor.getActorId(),
 					actor.getActorName(),
 					DossierMgtFrontOfficePortlet.class.getName()
-							+ ".updateDossierStatus()", 0, 0, true);
+							+ ".updateDossierStatus()", 0, 0, true);*/
 
 			ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest
 					.getAttribute(WebKeys.THEME_DISPLAY);
