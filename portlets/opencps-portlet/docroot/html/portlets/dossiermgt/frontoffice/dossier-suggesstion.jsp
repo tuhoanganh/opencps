@@ -1,6 +1,3 @@
-
-<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
-<%@page import="org.opencps.servicemgt.model.TemplateFile"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -19,6 +16,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+<%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
+<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
+<%@page import="org.opencps.servicemgt.model.TemplateFile"%>
 <%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
@@ -48,10 +50,10 @@
 	long dossierTemplateId = 0;
 	ServiceConfig serviceConfig = null;
 	List<Dossier> dossiers = new ArrayList<Dossier>();
-	Dossier dossierI = null;
+	Dossier dossierNeedAdd = null;
 	try {
-		dossierI = DossierLocalServiceUtil.getDossier(dossierId);
-		dossierTemplateId = dossierI.getDossierTemplateId();
+		dossierNeedAdd = DossierLocalServiceUtil.getDossier(dossierId);
+		dossierTemplateId = dossierNeedAdd.getDossierTemplateId();
 	} catch (Exception e) {}
 	
 	PortletURL iteratorURL = renderResponse.createRenderURL();
@@ -95,118 +97,155 @@
 			modelVar="dossier" 
 			keyProperty="dossierId"
 		>
-			
-			<portlet:renderURL var="viewDossierURL">
-				<portlet:param name="mvcPath"
-					value='<%=templatePath + "edit_dossier.jsp"%>' />
-				<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID%>"
-					value="<%=String.valueOf(dossier.getDossierId())%>" />
-				<portlet:param name="<%=Constants.CMD%>" value="<%=Constants.VIEW%>" />
-				<portlet:param name="isEditDossier" value="<%=String.valueOf(false)%>" />
-			</portlet:renderURL>
-			
-			<portlet:actionURL var="updateDossierSuggestionURL" name="updateDossierSuggestion">
-				<portlet:param name="currentDossierId" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
-				<portlet:param name="dossierId" value="<%=String.valueOf(dossierId) %>"/>
-			</portlet:actionURL>
-			
-			<% 
-				String serviceName = StringPool.BLANK;
-				ServiceInfo serviceInfo = null;
-				try {
-					serviceInfo = ServiceInfoLocalServiceUtil.
-							getServiceInfo(ServiceConfigLocalServiceUtil.getServiceConfig(dossier.getServiceConfigId()).getServiceInfoId());
-					serviceName = serviceInfo.getServiceName();
-				} catch(Exception e) {
-					
-				}
-				
-				String viewDossierUrlNomal = viewDossierURL.toString();
-				if(viewDossierUrlNomal.contains("p_p_state=pop_up"))  {
-					viewDossierUrlNomal = StringUtil.replace(viewDossierUrlNomal, "p_p_state=pop_up", "p_p_state=nomal");
-				}				
-			%>
-			<liferay-util:buffer var="boundcol1">
-				<div class="row-fluid">
-					
-					<div class="span6 bold-label">
-						<liferay-ui:message key="dossier-no"/>
-					</div>
-					<div class="span6"><%=String.valueOf(dossier.getDossierId())%></div>
-				</div>
-				
-				<div class="row-fluid">
-					
-					<div class="span6 bold-label">
-						<liferay-ui:message key="dossier-code"/>
-					</div>
-					<div class="span6"><%=dossier.getReceptionNo()%></div>
-				</div>
-				
-			</liferay-util:buffer>
-			
-			<liferay-util:buffer var="boundcol2">
-				<div class="row-fluid">
-					<div class="span5 bold-label">
-						<liferay-ui:message key="service-name"/>
-					</div>
-					<div class="span7"><%= serviceName %> </div>
-				</div>
-			</liferay-util:buffer>
-			
-			<liferay-util:buffer var="boundcol3">
-				<div class="row-fluid">
-					<div class="span5 bold-label">
-						<liferay-ui:message key="submit-date"/>
-					</div>
-					
-					<div class="span7">
-						<%= DateTimeUtil.convertDateToString(dossier.getSubmitDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) %> 
-					</div>
-				</div>
-				
-				<div class="row-fluid">
-					<div class="span5 bold-label">
-						<liferay-ui:message key="finish-date"/>
-					</div>
-					
-					<div class="span7">
-						<%= DateTimeUtil.convertDateToString(dossier.getFinishDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) %> 
-					</div>
-				</div>
-				
-			</liferay-util:buffer>
-			
-			<liferay-util:buffer var="boundcol4">
-				<aui:row>
-					<a href="<%=viewDossierUrlNomal.toString()%>" target="_blank" class="btn">
-						<i class="fa fa-eye"><liferay-ui:message key="view"/></i>
-					</a>
-				</aui:row>
-				
-				<aui:row>
-					 <aui:a cssClass="btn"
-						href="<%=\"javascript:\" + renderResponse.getNamespace()+ \"loadingMark('\" + updateDossierSuggestionURL.toString() +\"')\" %>" 
-					>
-						<i class = "fa fa-check"><liferay-ui:message key="choose"/></i>
-					</aui:a> 
-				</aui:row>
-				
-				
-				 <%-- <aui:button  
-					name="dossierSuggestion" 
-					value="choose" 
-					onClick="<%= renderResponse.getNamespace()+ \"loadingMark('\" + updateDossierSuggestionURL.toString() +\"')\" %>"
-				/> --%>
-			</liferay-util:buffer>
-			
+
 			<%
-				row.setClassName("opencps-searchcontainer-row");
-				row.addText(String.valueOf(row.getPos() + 1));
-				row.addText(boundcol1);
-				row.addText(boundcol2);
-				row.addText(boundcol3);
-				row.addText(boundcol4);
+				if(Validator.isNotNull(dossierNeedAdd)) {
+					try {
+						List<DossierPart> dossierParts = DossierPartLocalServiceUtil
+								.getDossierParts(dossierNeedAdd.getDossierTemplateId());
+						
+						List<DossierPart> dossierPartsCurr = DossierPartLocalServiceUtil
+								.getDossierParts(dossier.getDossierTemplateId());
+						
+						for(DossierPart dossierPartCurr : dossierPartsCurr) {
+							for(DossierPart dossierPart : dossierParts) {
+								if (dossierPartCurr.getPartType() == dossierPart
+										.getPartType()
+										&& dossierPartCurr.getPartNo()
+												.equalsIgnoreCase(
+														dossierPart.getPartNo())
+										&& dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT
+										&& dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_RESULT) {
+									%>
+										<portlet:renderURL var="viewDossierURL">
+											<portlet:param name="mvcPath"
+												value='<%=templatePath + "edit_dossier.jsp"%>' />
+											<portlet:param name="<%=DossierDisplayTerms.DOSSIER_ID%>"
+												value="<%=String.valueOf(dossier.getDossierId())%>" />
+											<portlet:param name="<%=Constants.CMD%>" value="<%=Constants.VIEW%>" />
+											<portlet:param name="isEditDossier" value="<%=String.valueOf(false)%>" />
+										</portlet:renderURL>
+										
+										<portlet:actionURL var="updateDossierSuggestionURL" name="updateDossierSuggestion">
+											<portlet:param name="currentDossierId" value="<%=String.valueOf(dossier.getDossierId()) %>"/>
+											<portlet:param name="dossierId" value="<%=String.valueOf(dossierId) %>"/>
+										</portlet:actionURL>
+										
+										<% 
+											String serviceName = StringPool.BLANK;
+											ServiceInfo serviceInfo = null;
+											try {
+												serviceInfo = ServiceInfoLocalServiceUtil.
+														getServiceInfo(ServiceConfigLocalServiceUtil.getServiceConfig(dossier.getServiceConfigId()).getServiceInfoId());
+												serviceName = serviceInfo.getServiceName();
+											} catch(Exception e) {
+												
+											}
+											
+											String viewDossierUrlNomal = viewDossierURL.toString();
+											if(viewDossierUrlNomal.contains("p_p_state=pop_up"))  {
+												viewDossierUrlNomal = StringUtil.replace(viewDossierUrlNomal, "p_p_state=pop_up", "p_p_state=nomal");
+											}				
+										%>
+										<liferay-util:buffer var="boundcol1">
+											<div class="row-fluid">
+												
+												<div class="span6 bold-label">
+													<liferay-ui:message key="dossier-no"/>
+												</div>
+												<div class="span6"><%=String.valueOf(dossier.getDossierId())%></div>
+											</div>
+											
+											<div class="row-fluid">
+												
+												<div class="span6 bold-label">
+													<liferay-ui:message key="reception-no"/>
+												</div>
+												<div class="span6">
+													<%=Validator.isNotNull(dossier.getReceptionNo()) ? dossier.getReceptionNo() : StringPool.DASH%>
+												</div>
+											</div>
+											
+										</liferay-util:buffer>
+										
+										<liferay-util:buffer var="boundcol2">
+											<div class="row-fluid">
+												<div class="span5 bold-label">
+													<liferay-ui:message key="service-name"/>
+												</div>
+												<div class="span7"><%= Validator.isNotNull(serviceName) ? serviceName : StringPool.DASH %> </div>
+											</div>
+										</liferay-util:buffer>
+										
+										<liferay-util:buffer var="boundcol3">
+											<div class="row-fluid">
+												<div class="span5 bold-label">
+													<liferay-ui:message key="submit-date"/>
+												</div>
+												
+												<div class="span7">
+													<%=
+														Validator.isNotNull(dossier.getSubmitDatetime()) ?
+														DateTimeUtil.convertDateToString(dossier.getSubmitDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) :
+															DateTimeUtil._EMPTY_DATE_TIME 
+													%> 
+												</div>
+											</div>
+											
+											<div class="row-fluid">
+												<div class="span5 bold-label">
+													<liferay-ui:message key="finish-date"/>
+												</div>
+												
+												<div class="span7">
+													<%= 
+														Validator.isNotNull(dossier.getFinishDatetime()) ?
+														DateTimeUtil.convertDateToString(dossier.getFinishDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) :
+															DateTimeUtil._EMPTY_DATE_TIME
+													%> 
+												</div>
+											</div>
+											
+										</liferay-util:buffer>
+										
+										<liferay-util:buffer var="boundcol4">
+											<aui:row>
+												<a href="<%=viewDossierUrlNomal.toString()%>" target="_blank" class="btn">
+													<i class="fa fa-eye"><liferay-ui:message key="view"/></i>
+												</a>
+											</aui:row>
+											
+											<aui:row>
+												 <aui:a cssClass="btn"
+													href="<%=\"javascript:\" + renderResponse.getNamespace()+ \"loadingMark('\" + updateDossierSuggestionURL.toString() +\"')\" %>" 
+												>
+													<i class = "fa fa-check"><liferay-ui:message key="choose"/></i>
+												</aui:a> 
+											</aui:row>
+											
+											
+											 <%-- <aui:button  
+												name="dossierSuggestion" 
+												value="choose" 
+												onClick="<%= renderResponse.getNamespace()+ \"loadingMark('\" + updateDossierSuggestionURL.toString() +\"')\" %>"
+											/> --%>
+										</liferay-util:buffer>
+										
+										<%
+											row.setClassName("opencps-searchcontainer-row");
+											row.addText(String.valueOf(row.getPos() + 1));
+											row.addText(boundcol1);
+											row.addText(boundcol2);
+											row.addText(boundcol3);
+											row.addText(boundcol4);
+										%>
+									
+									<%
+								}
+							}
+						}
+					} catch(Exception e) {}
+				}
 			%>
 				
 		</liferay-ui:search-container-row>
