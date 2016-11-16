@@ -3745,7 +3745,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 								.getPartType()
 								&& dossierPartCurr.getPartNo()
 										.equalsIgnoreCase(
-												dossierPart.getPartNo())) {
+												dossierPart.getPartNo())
+								&& dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT
+								&& dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_RESULT) {
 
 							try {
 								DossierFile dossierFile = DossierFileLocalServiceUtil
@@ -3756,8 +3758,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 								DLFileEntry fileEntryCur = DLFileEntryLocalServiceUtil
 										.getDLFileEntry(dossierFile
 												.getFileEntryId());
-								
-								if(Validator.isNotNull(fileEntryCur.getContentStream())) {
+
+								if (Validator.isNotNull(fileEntryCur
+										.getContentStream())) {
 									DossierFileLocalServiceUtil.addDossierFile(
 											dossierFile.getUserId(),
 											dossierId,
@@ -3767,7 +3770,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 											dossierFile.getGroupFileId(),
 											0,
 											dossierFile.getOwnerUserId(),
-											dossierFile.getOwnerOrganizationId(),
+											dossierFile
+													.getOwnerOrganizationId(),
 											dossierFile.getDisplayName(),
 											dossierFile.getFormData(),
 											dossierFile != null ? dossierFile
@@ -3776,16 +3780,17 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 											dossierFile.getDossierFileType(),
 											dossierFile.getDossierFileNo(),
 											dossierFile.getDossierFileDate(),
-											dossierFile.getOriginal(), dossierFile
-													.getSyncStatus(), dossier
-													.getFolderId(), fileEntryCur
+											dossierFile.getOriginal(),
+											dossierFile.getSyncStatus(),
+											dossier.getFolderId(), fileEntryCur
 													.getTitle(), fileEntryCur
-													.getMimeType(), fileEntryCur
-													.getTitle(), fileEntryCur
-													.getDescription(),
+													.getMimeType(),
+											fileEntryCur.getTitle(),
+											fileEntryCur.getDescription(),
 											StringPool.BLANK, fileEntryCur
 													.getContentStream(),
-											fileEntryCur.getSize(), serviceContext);
+											fileEntryCur.getSize(),
+											serviceContext);
 								}
 
 							} catch (Exception e) {
