@@ -3773,8 +3773,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 				for (DossierPart dossierPartSuggestion : dossierPartsSuggestion) {
 
-					if (dossierPartSuggestion.getPartType() != PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT
-							&& dossierPartSuggestion.getPartType() != PortletConstants.DOSSIER_PART_TYPE_RESULT) {
+					if (dossierPartSuggestion.getPartType() == PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT
+							&& dossierPartSuggestion.getPartType() == PortletConstants.DOSSIER_PART_TYPE_RESULT) {
 						continue;
 					}
 

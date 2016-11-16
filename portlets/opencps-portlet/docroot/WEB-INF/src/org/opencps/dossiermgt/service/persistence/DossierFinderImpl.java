@@ -1818,13 +1818,15 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier> implements
 	}
 
 	public List<Dossier> searchDossierSuggesstion(String dossierStatus,
-			String dossierTemplateIdsStr, int start, int end) throws SystemException {
-		return _searchDossierSuggesstion(dossierStatus, dossierTemplateIdsStr, start,
-				end);
+			String partTypes, String templateFileNos, String partNos,
+			int start, int end) throws SystemException {
+		return _searchDossierSuggesstion(dossierStatus, partTypes,
+				templateFileNos, partNos, start, end);
 	}
 
-	private List<Dossier> _searchDossierSuggesstion(String dosserStatus,
-			String dossierTemplateIdsStr, int start, int end) throws SystemException {
+	private List<Dossier> _searchDossierSuggesstion(String dossierStatus,
+			String partTypes, String templateFileNos, String partNos,
+			int start, int end) throws SystemException {
 		Session session = null;
 		try {
 
@@ -1832,31 +1834,56 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier> implements
 
 			String sql = CustomSQLUtil.get(SEARCH_DOSSIER_SUGGESSTION);
 
-			if (Validator.isNull(dosserStatus)) {
-				sql = StringUtil.replace(sql,
-						"AND opencps_dossier.dossierStatus = ?",
+			if (Validator.isNull(templateFileNos)) {
+				sql = StringUtil.replace(sql, "AND df.templateFileNo IN (?)",
+						StringPool.BLANK);
+			} else {
+				sql = StringUtil.replace(sql, "AND df.templateFileNo IN (?)",
+						"AND df.templateFileNo IN ('" + templateFileNos + "')");
+			}
+
+			if (Validator.isNull(dossierStatus)) {
+				sql = StringUtil.replace(sql, "AND d.dossierStatus = ?",
 						StringPool.BLANK);
 			}
 
-			if (Validator.isNull(dossierTemplateIdsStr)) {
-				sql = StringUtil
-						.replace(sql, "AND opencps_dossier.dossierTemplateId IN (?)",
-								StringPool.BLANK);
+			if (Validator.isNull(partNos)) {
+				sql = StringUtil.replace(sql, "AND p.partNo IN (?)",
+						StringPool.BLANK);
+			} else {
+				sql = StringUtil.replace(sql, "AND p.partNo IN (?)",
+						"AND p.partNo IN ('" + partNos + "')");
+			}
+			
+			if (Validator.isNotNull(partTypes)) {
+				sql = StringUtil.replace(sql, "AND p.partType IN (?)",
+						"AND p.partType IN (" + partTypes + ")");
 			}
 
 			SQLQuery q = session.createSQLQuery(sql);
+			
+			_log.info(sql);
+			
 			q.addEntity("Dossier", DossierImpl.class);
 
 			QueryPos qPos = QueryPos.getInstance(q);
 
-			if (Validator.isNotNull(dosserStatus)) {
-				qPos.add(dosserStatus);
+			/*if (Validator.isNotNull(templateFileNos)) {
+				qPos.add(templateFileNos);
 			}
 
-			if (Validator.isNotNull(dossierTemplateIdsStr)) {
-				qPos.add(dossierTemplateIdsStr);
-			}
+			if (Validator.isNotNull(dossierStatus)) {
+				qPos.add(dossierStatus);
+			}*/
 
+			if (Validator.isNotNull(dossierStatus)) {
+				qPos.add(dossierStatus);
+			}	
+			
+			/*if (Validator.isNotNull(partNos)) {
+				qPos.add(partNos);
+			}*/
+			
 			return (List<Dossier>) QueryUtil.list(q, getDialect(), start, end);
 		} catch (Exception e) {
 			throw new SystemException();
@@ -1864,64 +1891,80 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier> implements
 			closeSession(session);
 		}
 	}
-	
-	public int countDossierSuggesstion(String dosserStatus,
-			String dossierTemplateIdsStr) throws SystemException {
-		return _countDossierSuggesstion(dosserStatus, dossierTemplateIdsStr);
+
+	public int countDossierSuggesstion(String dossierStatus, String partTypes,
+			String templateFileNos, String partNos) throws SystemException {
+		return _countDossierSuggesstion(dossierStatus, partTypes,
+				templateFileNos, partNos);
 	}
-	
-	private int _countDossierSuggesstion(String dosserStatus,
-			String dossierTemplateIdsStr) throws SystemException {
+
+	private int _countDossierSuggesstion(String dossierStatus,
+			String partTypes, String templateFileNos, String partNos)
+			throws SystemException {
 		Session session = null;
-		
+
 		try {
 			session = openSession();
 
 			String sql = CustomSQLUtil.get(COUNT_DOSSIER_SUGGESSTION);
 
-			if (Validator.isNull(dosserStatus)) {
-				sql = StringUtil.replace(sql,
-						"AND opencps_dossier.dossierStatus = ?",
+			if (Validator.isNull(templateFileNos)) {
+				sql = StringUtil.replace(sql, "AND df.templateFileNo IN (?)",
+						StringPool.BLANK);
+			} else {
+				sql = StringUtil.replace(sql, "AND df.templateFileNo IN (?)",
+						"AND df.templateFileNo IN ('" + templateFileNos + "')");
+			}
+
+			if (Validator.isNull(dossierStatus)) {
+				sql = StringUtil.replace(sql, "AND d.dossierStatus = ?",
 						StringPool.BLANK);
 			}
 
-			if (Validator.isNull(dossierTemplateIdsStr)) {
-				sql = StringUtil
-						.replace(sql, "AND opencps_dossier.dossierTemplateId IN (?)",
-								StringPool.BLANK);
+			if (Validator.isNull(partNos)) {
+				sql = StringUtil.replace(sql, "AND p.partNo IN (?)",
+						StringPool.BLANK);
+			} else {
+				sql = StringUtil.replace(sql, "AND p.partNo IN (?)",
+						"AND p.partNo IN ('" + partNos + "')");
 			}
-
+			
+			if (Validator.isNotNull(partTypes)) {
+				sql = StringUtil.replace(sql, "AND p.partType IN (?)",
+						"AND p.partType IN (" + partTypes + ")");
+			}
+			
+			_log.info(sql);
+			
 			SQLQuery q = session.createSQLQuery(sql);
 
 			q.addScalar(COUNT_COLUMN_NAME, Type.INTEGER);
-			
+
 			QueryPos qPos = QueryPos.getInstance(q);
+
 			
-			if (Validator.isNotNull(dosserStatus)) {
-				qPos.add(dosserStatus);
+			if (Validator.isNotNull(dossierStatus)) {
+				qPos.add(dossierStatus);
 			}
 
-			if (Validator.isNotNull(dossierTemplateIdsStr)) {
-				qPos.add(dossierTemplateIdsStr);
-			}
-			
 			Iterator<Integer> itr = q.iterate();
 
 			if (itr.hasNext()) {
 				Integer count = itr.next();
 
 				if (count != null) {
+					_log.info("count.intValue()  " + count.intValue());
 					return count.intValue();
 				}
 			}
 
 			return 0;
-			
+
 		} catch (Exception e) {
 			throw new SystemException();
 		} finally {
 			closeSession(session);
 		}
 	}
-	
+
 }

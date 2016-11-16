@@ -104,8 +104,8 @@
 		
 		<liferay-ui:search-container-results>
 			<%
-				dossiersSuggestion = DossierLocalServiceUtil.getDossierSuggesstion(dossierStatusConfig, dossierTemplateSuggesstion, searchContainer.getStart(), searchContainer.getEnd());
-				totalCount = DossierLocalServiceUtil.countDossierSuggesstion(dossierStatusConfig, dossierTemplateSuggesstion);
+				dossiersSuggestion = DossierLocalServiceUtil.getDossierSuggesstion(dossierStatusConfig,dossierPartTypes , templateFileNos,dossierPartNos ,searchContainer.getStart(), searchContainer.getEnd());
+				totalCount = DossierLocalServiceUtil.countDossierSuggesstion(dossierStatusConfig,dossierPartTypes , templateFileNos,dossierPartNos);
 				
 				results = dossiersSuggestion;
 				total = totalCount;
