@@ -1083,6 +1083,8 @@
 				opencps_dossier.dossierStatus = ?
 			AND
 				opencps_dossier.dossierTemplateId IN (?)
+			ORDER BY 
+				opencps_dossier.modifiedDate DESC
 		]]>
 	</sql>
 	
