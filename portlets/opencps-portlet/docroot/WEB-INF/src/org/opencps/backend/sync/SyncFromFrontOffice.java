@@ -122,7 +122,7 @@ public class SyncFromFrontOffice implements MessageListener {
 					MessageBusUtil.sendMessage(
 					    "opencps/backoffice/engine/destination", msgToEngine);
 
-					// Update DossierLog (Listener revice mgs)
+					// Update DossierLog (Listener receive mgs)
 
 					ActorBean actorBean =
 					    new ActorBean(1, userActionMgs.getUserId());
@@ -135,7 +135,7 @@ public class SyncFromFrontOffice implements MessageListener {
 					    PortletConstants.DOSSIER_ACTION_REVICE, new Date(), 0,
 					    0, actorBean.getActor(), actorBean.getActorId(),
 					    actorBean.getActorName(),
-					    SyncFromFrontOffice.class.getName());
+					    SyncFromFrontOffice.class.getName(), 0, 0, false);
 
 				}
 				else if (Validator.equals(WebKeys.ACTION_RESUBMIT_VALUE, action) &&
@@ -165,8 +165,6 @@ public class SyncFromFrontOffice implements MessageListener {
 					    userActionMgs.getFileGroupId(), PortletConstants.DOSSIER_FILE_TYPE_INPUT, logLevel,
 					    userActionMgs.getLocale(), actor, actorId, actorName);
 					
-
-
 					engineMsg.setDossierId(userActionMgs.getDossierId());
 					engineMsg.setFileGroupId(userActionMgs.getFileGroupId());
 					engineMsg.setEvent(WebKeys.ACTION_CHANGE_VALUE);
@@ -194,7 +192,7 @@ public class SyncFromFrontOffice implements MessageListener {
 					    PortletConstants.DOSSIER_ACTION_REVICE, new Date(), 0,
 					    0, actorBean.getActor(), actorBean.getActorId(),
 					    actorBean.getActorName(),
-					    SyncFromFrontOffice.class.getName());
+					    SyncFromFrontOffice.class.getName(), 0, 0, false);
 
 				}
 				else if (Validator.equals(WebKeys.ACTION_REPAIR_VALUE, action)) {
@@ -214,7 +212,7 @@ public class SyncFromFrontOffice implements MessageListener {
 					    new Date(), 0, 2, actorBean.getActor(),
 					    actorBean.getActorId(), actorBean.getActorName(),
 					    SyncFromFrontOffice.class.getName() +
-					        ".repairDossier()", WebKeys.ACTION_REPAIR_VALUE);
+					        ".repairDossier()", WebKeys.ACTION_REPAIR_VALUE, 0, 0);
 				}
 				else if (Validator.equals(WebKeys.ACTION_CANCEL_VALUE, action)) {
 					Dossier dossier =
@@ -231,7 +229,7 @@ public class SyncFromFrontOffice implements MessageListener {
 					    new Date(), 0, 2, actorBean.getActor(),
 					    actorBean.getActorId(), actorBean.getActorName(),
 					    SyncFromFrontOffice.class.getName() +
-					        ".repairDossier()", WebKeys.ACTION_CANCEL_VALUE);
+					        ".repairDossier()", WebKeys.ACTION_CANCEL_VALUE, 0, 0);
 
 				}
 

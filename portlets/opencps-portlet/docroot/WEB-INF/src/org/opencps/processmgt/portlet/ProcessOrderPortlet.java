@@ -62,7 +62,6 @@ import org.opencps.dossiermgt.search.DossierFileDisplayTerms;
 import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierFileLogLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
-import org.opencps.dossiermgt.service.DossierLogLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil;
 import org.opencps.dossiermgt.service.FileGroupLocalServiceUtil;
@@ -799,8 +798,6 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 		try {
 
-			Dossier dossier = DossierLocalServiceUtil.fetchDossier(dossierId);
-
 			dossierFile = DossierFileLocalServiceUtil
 					.getDossierFile(dossierFileId);
 
@@ -987,55 +984,28 @@ public class ProcessOrderPortlet extends MVCPortlet {
 								dossierFileAdded.getDisplayName(), 1, StringPool.BLANK,
 								PortletConstants.DOSSIER_FILE_EXPORT,
 								dossierFile != null ? dossierFile.getFileEntryId() : 0, WebKeys.ACTOR_CITIZEN);
-					
-						// Add Log exportFile
-/*						DossierLogLocalServiceUtil.addDossierLog(
-								serviceContext.getUserId(),
-								serviceContext.getScopeGroupId(),
-								serviceContext.getCompanyId(),
-								dossierFile.getDossierId(),
-								fileGroupId,
-								dossier.getDossierStatus(),
-								PortletConstants.DOSSIER_ACTION_EXPORT_FILE,
-								PortletConstants.DOSSIER_ACTION_EXPORT_FILE
-										+ StringPool.SPACE + StringPool.COLON
-										+ StringPool.SPACE
-										+ dossierFile.getDisplayName(),
-								new Date(), 0, 0, actorBean.getActor(),
-								actorBean.getActorId(),
-								actorBean.getActorName(),
-								ProcessOrderPortlet.class.getName()
-										+ ".exportFile()");*/
+
 
 					} else {
 						// Update version 1
-						DossierFileLocalServiceUtil.updateDossierFile(
+						DossierFile dossierFileAdd = DossierFileLocalServiceUtil.updateDossierFile(
 								dossierFileId, dossier.getFolderId(),
 								sourceFileName, mimeType,
 								dossierFile.getDisplayName(), StringPool.BLANK,
 								StringPool.BLANK, inputStream, file.length(),
 								serviceContext);
+						
+						
+						ProcessStep processStep =
+						    BackendUtils.getProcessStepByDossierId(dossierFileAdd.getDossierId());
 
-						// Update Log UpdateVersion File
-						DossierLogLocalServiceUtil
-								.addDossierLog(
-										serviceContext.getUserId(),
-										serviceContext.getScopeGroupId(),
-										serviceContext.getCompanyId(),
-										dossierFile.getDossierId(),
-										fileGroupId,
-										dossier.getDossierStatus(),
-										PortletConstants.DOSSIER_ACTION_UPDATE_VERSION_FILE,
-										PortletConstants.DOSSIER_ACTION_UPDATE_VERSION_FILE
-												+ StringPool.SPACE
-												+ StringPool.COLON
-												+ StringPool.SPACE
-												+ dossierFile.getDisplayName(),
-										new Date(), 0, 0, actorBean.getActor(),
-										actorBean.getActorId(),
-										actorBean.getActorName(),
-										ProcessOrderPortlet.class.getName()
-												+ ".updateVersionFile()");
+						DossierFileLogLocalServiceUtil.addFileLog(
+						    serviceContext.getUserId(), actorBean.getActorName(),
+						    dossierFileAdd.getDossierId(), fileGroupId, processStep.getProcessStepId(), false,
+						    dossierFileAdd.getDisplayName(), 1, StringPool.BLANK,
+						    PortletConstants.DOSSIER_FILE_SIGN, dossierFile != null
+						        ? dossierFile.getFileEntryId() : 0, WebKeys.ACTOR_CITIZEN);
+
 					}
 				}
 			}

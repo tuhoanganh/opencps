@@ -38,6 +38,9 @@ import org.opencps.dossiermgt.service.DossierFileLogLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
+import org.opencps.processmgt.model.ProcessOrder;
+import org.opencps.processmgt.model.impl.ProcessOrderImpl;
+import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.model.TemplateFile;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
@@ -436,6 +439,21 @@ public class DossierMgtUtil {
         }
 		
 		return ls;
+	}
+	
+	public static ProcessOrder getProcessOrder(long dossierId) {
+		
+		ProcessOrder processOrder = new ProcessOrderImpl();
+		
+		try {
+	        processOrder = ProcessOrderLocalServiceUtil.getProcessOrder(dossierId, 0);
+        }
+        catch (Exception e) {
+	        // TODO: handle exception
+        }
+		
+		return processOrder;
+		
 	}
 	
 	private static Log _log =
