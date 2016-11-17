@@ -289,7 +289,7 @@
 							break;
 						case PaymentMgtUtil.PAYMENT_STATUS_CONFIRMED:
 							paymentStatusText =
-							    LanguageUtil.get(pageContext, "confirmed");
+							    LanguageUtil.get(pageContext, "payment-confirmed");
 							break;
 						case PaymentMgtUtil.PAYMENT_STATUS_APPROVED:
 							paymentStatusText =
