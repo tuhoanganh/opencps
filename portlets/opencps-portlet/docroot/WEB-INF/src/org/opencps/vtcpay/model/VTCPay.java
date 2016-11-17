@@ -137,10 +137,13 @@ public class VTCPay {
 		_log.info("=====vtcPay.getReference_number():" + vtcPay.getReference_number());
 
 		try {
-			paymentFile =
-				PaymentFileLocalServiceUtil.getByTransactionId(Long.parseLong(vtcPay.getReference_number()));
 
-			_log.info("=====paymentFile.getPaymentConfig():" + paymentFile.getPaymentConfig());
+			if (vtcPay.getReference_number().trim().length() > 0) {
+				paymentFile =
+					PaymentFileLocalServiceUtil.getByTransactionId(Long.parseLong(vtcPay.getReference_number()));
+
+				_log.info("=====paymentFile.getPaymentConfig():" + paymentFile.getPaymentConfig());
+			}
 
 			if (Validator.isNotNull(paymentFile)) {
 
@@ -156,24 +159,19 @@ public class VTCPay {
 
 		StringBuffer merchantSignBuffer = new StringBuffer();
 		merchantSignBuffer.append(vtcPay.getAmount());
-		if (vtcPay.getMessage().trim().length() > 0) {
-			merchantSignBuffer.append("|").append(vtcPay.getMessage());
-		}
-		if (vtcPay.getPaymentType().trim().length() > 0) {
-			merchantSignBuffer.append("|").append(vtcPay.getPaymentType());
-		}
-		if (vtcPay.getReference_number().trim().length() > 0) {
-			merchantSignBuffer.append("|").append(vtcPay.getReference_number());
-		}
-		if (vtcPay.getStatus().trim().length() > 0) {
-			merchantSignBuffer.append("|").append(vtcPay.getStatus());
-		}
-		if (vtcPay.getTrans_ref_no().trim().length() > 0) {
-			merchantSignBuffer.append("|").append(vtcPay.getTrans_ref_no());
-		}
-		if (vtcPay.getWebsite_id().trim().length() > 0) {
-			merchantSignBuffer.append("|").append(vtcPay.getWebsite_id());
-		}
+
+		merchantSignBuffer.append("|").append(vtcPay.getMessage());
+
+		merchantSignBuffer.append("|").append(vtcPay.getPaymentType());
+
+		merchantSignBuffer.append("|").append(vtcPay.getReference_number());
+
+		merchantSignBuffer.append("|").append(vtcPay.getStatus());
+
+		merchantSignBuffer.append("|").append(vtcPay.getTrans_ref_no());
+
+		merchantSignBuffer.append("|").append(vtcPay.getWebsite_id());
+
 		merchantSignBuffer.append("|").append(
 			Validator.isNotNull(paymentConfig)
 				? paymentConfig.getKeypaySecureKey() : StringPool.BLANK);
@@ -219,9 +217,15 @@ public class VTCPay {
 
 		String merchantSig = VTCPay.getSecureHashCodeResponse(vtcPay);
 
+		merchantSig = merchantSig.toUpperCase();
+
+		_log.info("=====merchantSig:" + merchantSig);
+
 		String signature = vtcPay.getSignature();
 
-		if (merchantSig.equals(signature)) {
+		_log.info("=====signature:" + signature);
+
+		if (merchantSig.contains(signature)) {
 			return true;
 		}
 		else {

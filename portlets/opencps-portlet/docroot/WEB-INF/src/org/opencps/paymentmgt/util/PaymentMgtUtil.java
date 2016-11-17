@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletURL;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -47,10 +49,14 @@ import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.Organization;
+import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.OrganizationLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portlet.PortletURLFactoryUtil;
 
 /**
  * @author trungdk
@@ -209,6 +215,8 @@ public class PaymentMgtUtil {
 				PaymentFileLocalServiceUtil.getByTransactionId(Long.parseLong(vtcPay.getReference_number()));
 
 			dossier = DossierLocalServiceUtil.getDossier(paymentFile.getDossierId());
+
+			
 			if (isVerify) {
 
 				if (Validator.isNotNull(paymentFile) &&
@@ -253,21 +261,45 @@ public class PaymentMgtUtil {
 
 			}
 
-			response.sendRedirect(Validator.isNotNull(dossier)
-				? dossier.getKeypayRedirectUrl().toString() : StringPool.BLANK);
+			if (Validator.isNotNull(dossier) && Validator.isNotNull(paymentFile)) {
+				long plId = 0;
+				long groupId = dossier.getGroupId();
 
-			request.setAttribute(
-				"paymentFileId", Validator.isNotNull(paymentFile)
-					? paymentFile.getPaymentFileId() : "0");
-			request.setAttribute("dossierId", Validator.isNotNull(dossier)
-				? dossier.getDossierId() : "0");
-			request.setAttribute(
-				"serviceInfoId", Validator.isNotNull(dossier) ? dossier.getServiceInfoId() : "0");
+				String group = "/yeu-cau-thanh-toan";
+				Layout layOut = null;
+
+				layOut = LayoutLocalServiceUtil.getFriendlyURLLayout(groupId, true, group);
+				
+				_log.info("=====layOut:"+layOut);
+
+				if (Validator.isNotNull(layOut)) {
+					plId = layOut.getPlid();
+				}
+
+				PortletURL renderUrl = PortletURLFactoryUtil.create(
+						request, "20_WAR_opencpsportlet", plId, PortletRequest.RENDER_PHASE);
+				
+				renderUrl.setParameter("paymentFileId", String.valueOf(paymentFile.getPaymentFileId()));
+				renderUrl.setParameter("dossierId", String.valueOf(dossier.getDossierId()));
+				renderUrl.setParameter("serviceInfoId", String.valueOf(dossier.getServiceInfoId()));
+				renderUrl.setParameter("mvcPath", "/html/portlets/paymentmgt/frontoffice/frontofficeconfirmkeypay.jsp");
+				
+				_log.info("=====renderUrl.toString():"+renderUrl.toString());
+				
+
+				response.sendRedirect(Validator.isNotNull(renderUrl)?renderUrl.toString():StringPool.BLANK);
+
+//				request.setAttribute("paymentFileId",paymentFile.getPaymentFileId());
+//				request.setAttribute(
+//					"dossierId", dossier.getDossierId());
+//				request.setAttribute(
+//					"serviceInfoId",dossier.getServiceInfoId());
+			}
 
 		}
 		catch (SystemException | IOException | NumberFormatException | PortalException e) {
 			// TODO Auto-generated catch block
-			_log.error(e);
+			e.printStackTrace();
 		}
 
 		return response;
