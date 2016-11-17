@@ -18,6 +18,7 @@
 package org.opencps.backend.util;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +27,7 @@ import org.opencps.dossiermgt.model.ServiceConfig;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLogLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
+import org.opencps.holidayconfig.util.HolidayUtils;
 import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.model.ProcessStep;
@@ -64,6 +66,8 @@ public class BackendUtils {
 
 	public static final String PRE_CONDITION_REPAIR = "repair";
 
+	public static final String PRE_CONDITION_WAITING = "waiting";
+
 	/**
 	 * @param pattern
 	 * @return
@@ -84,8 +88,8 @@ public class BackendUtils {
 
 		boolean validPreCondition = true;
 
-		List<String> lsCondition =
-			ListUtil.toList(StringUtil.split(pattern, StringPool.COMMA));
+		List<String> lsCondition = ListUtil.toList(StringUtil.split(pattern,
+				StringPool.COMMA));
 
 		boolean validPayok = true;
 		boolean validCancel = true;
@@ -99,8 +103,8 @@ public class BackendUtils {
 
 		for (String condition : lsCondition) {
 			if (StringUtil.equalsIgnoreCase(
-				StringUtil.split(condition, StringPool.UNDERLINE)[0],
-				PRE_CONDITION_PAYOK)) {
+					StringUtil.split(condition, StringPool.UNDERLINE)[0],
+					PRE_CONDITION_PAYOK)) {
 
 				validPayok = _checkPayOkCondition(dossierId);
 
@@ -108,19 +112,18 @@ public class BackendUtils {
 			}
 
 			if (StringUtil.equalsIgnoreCase(
-				StringUtil.split(condition, StringPool.UNDERLINE)[0],
-				PRE_CONDITION_CANCEL)) {
+					StringUtil.split(condition, StringPool.UNDERLINE)[0],
+					PRE_CONDITION_CANCEL)) {
 
-				validCancel =
-					_checkRequestCommandlCondition(
-						dossierId, WebKeys.REQUEST_COMMAND_CANCEL);
+				validCancel = _checkRequestCommandlCondition(dossierId,
+						WebKeys.REQUEST_COMMAND_CANCEL);
 
 				continue;
 			}
 
 			if (StringUtil.equalsIgnoreCase(
-				StringUtil.split(condition, StringPool.UNDERLINE)[0],
-				PRE_CONDITION_TAG_LABEL)) {
+					StringUtil.split(condition, StringPool.UNDERLINE)[0],
+					PRE_CONDITION_TAG_LABEL)) {
 
 				validTagLabel = _checkTagLabelCondition();
 
@@ -128,8 +131,8 @@ public class BackendUtils {
 			}
 
 			if (StringUtil.equalsIgnoreCase(
-				StringUtil.split(condition, StringPool.UNDERLINE)[0],
-				PRE_CONDITION_SERVICE_ID)) {
+					StringUtil.split(condition, StringPool.UNDERLINE)[0],
+					PRE_CONDITION_SERVICE_ID)) {
 
 				validService = _checkServiceCondition();
 
@@ -137,8 +140,8 @@ public class BackendUtils {
 			}
 
 			if (StringUtil.equalsIgnoreCase(
-				StringUtil.split(condition, StringPool.UNDERLINE)[0],
-				PRE_CONDITION_ONEGATE)) {
+					StringUtil.split(condition, StringPool.UNDERLINE)[0],
+					PRE_CONDITION_ONEGATE)) {
 
 				validOnegate = _checkOnegateCondition();
 
@@ -146,8 +149,8 @@ public class BackendUtils {
 			}
 
 			if (StringUtil.equalsIgnoreCase(
-				StringUtil.split(condition, StringPool.UNDERLINE)[0],
-				PRE_CONDITION_ONELINE)) {
+					StringUtil.split(condition, StringPool.UNDERLINE)[0],
+					PRE_CONDITION_ONELINE)) {
 
 				validOnline = _checkOnlineCondition();
 
@@ -155,49 +158,62 @@ public class BackendUtils {
 			}
 
 			if (StringUtil.equalsIgnoreCase(
-				StringUtil.split(condition, StringPool.UNDERLINE)[0],
-				PRE_CONDITION_REPAIR)) {
-				validRepair =
-					_checkRequestCommandlCondition(
-						dossierId, WebKeys.REQUEST_COMMAND_REPAIR);
-			}
-			
-		}
-		
-		
+					StringUtil.split(condition, StringPool.UNDERLINE)[0],
+					PRE_CONDITION_WAITING)) {
 
-		if (validPayok && validCancel && validOnline && validOnegate &&
-			validTagLabel && validService && validRepair && validWaiting) {
-			validPreCondition = true;
+				String[] splitCondition = StringUtil.split(condition,
+						StringPool.UNDERLINE);
+
+				String waitingTime = String.valueOf(0);
+
+				if (splitCondition.length == 2) {
+					waitingTime = splitCondition[1];
+				}
+
+				validWaiting = _checkWaitingCondition(dossierId,
+						waitingTime);
+				continue;
+			}
+
 		}
-		else {
+
+		if (validPayok && validCancel && validOnline && validOnegate
+				&& validTagLabel && validService && validRepair && validWaiting) {
+			validPreCondition = true;
+		} else {
 			validPreCondition = false;
 		}
 
 		return validPreCondition;
 	}
-	
+
 	private static boolean _checkWaitingCondition(long dossierId, String pattern) {
 		boolean isCondition = true;
-		
+
 		try {
-	        Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
-	        
-	        String dossierStatus = dossier.getDossierStatus();
-	        
-	        if (dossierStatus.contains(PortletConstants.DOSSIER_STATUS_WAITING)) {
-	        	
-	        	// Lay duoc ngay waiting
-	        	
-	        	
-	        	// Kiem tra duoc thoa dk hay khong
-	        	
-	        }
-        }
-        catch (Exception e) {
-	        // TODO: handle exception
-        }
-		
+			Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
+
+			String dossierStatus = dossier.getDossierStatus();
+
+			ProcessOrder processOrder = ProcessOrderLocalServiceUtil
+					.getProcessOrder(dossierId, dossier.getGroupId());
+
+			if (dossierStatus.contains(PortletConstants.DOSSIER_STATUS_WAITING)) {
+
+				Date endDate = HolidayUtils.getEndDate(processOrder.getActionDatetime(),
+						pattern);
+				
+				Date now = new Date();
+				
+				if(now.compareTo(endDate) >=0 ){
+					isCondition = false;
+				}
+
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
 		return isCondition;
 	}
 
@@ -210,17 +226,16 @@ public class BackendUtils {
 		int countPaymentComplated = 0;
 
 		try {
-			countAllPayment =
-				PaymentFileLocalServiceUtil.countAllPaymentFile(dossierId);
+			countAllPayment = PaymentFileLocalServiceUtil
+					.countAllPaymentFile(dossierId);
 
-			countPaymentComplated =
-				PaymentFileLocalServiceUtil.countPaymentFile(dossierId, 2);
+			countPaymentComplated = PaymentFileLocalServiceUtil
+					.countPaymentFile(dossierId, 2);
 
 			if (!((countAllPayment - countPaymentComplated) == 0)) {
 				isCondition = false;
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			isCondition = false;
 		}
 
@@ -232,26 +247,23 @@ public class BackendUtils {
 	 * @param requestCommand
 	 * @return
 	 */
-	private static boolean _checkRequestCommandlCondition(
-		long dossierId, String requestCommand) {
+	private static boolean _checkRequestCommandlCondition(long dossierId,
+			String requestCommand) {
 
 		boolean isCondition = true;
 
 		int countRequestCommand = 0;
 
 		try {
-			countRequestCommand =
-				DossierLogLocalServiceUtil.countDossierByRequestCommand(
-					dossierId, requestCommand);
-		}
-		catch (Exception e) {
+			countRequestCommand = DossierLogLocalServiceUtil
+					.countDossierByRequestCommand(dossierId, requestCommand);
+		} catch (Exception e) {
 			_log.error(e);
 		}
 
 		if (countRequestCommand != 0) {
 			isCondition = false;
-		}
-		else {
+		} else {
 			isCondition = true;
 		}
 
@@ -307,17 +319,16 @@ public class BackendUtils {
 		int countPaymentCompleted = 0;
 
 		try {
-			countAllPayment =
-				PaymentFileLocalServiceUtil.countAllPaymentFile(dossierId);
+			countAllPayment = PaymentFileLocalServiceUtil
+					.countAllPaymentFile(dossierId);
 
-			countPaymentCompleted =
-				PaymentFileLocalServiceUtil.countPaymentFile(dossierId, 2);
+			countPaymentCompleted = PaymentFileLocalServiceUtil
+					.countPaymentFile(dossierId, 2);
 
 			if (!((countAllPayment - countPaymentCompleted) == 0)) {
 				paymentStatus = false;
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			paymentStatus = false;
 		}
 
@@ -337,14 +348,13 @@ public class BackendUtils {
 
 			long serviceConfigId = dossier.getServiceConfigId();
 
-			ServiceConfig serviceConfig =
-				ServiceConfigLocalServiceUtil.fetchServiceConfig(serviceConfigId);
+			ServiceConfig serviceConfig = ServiceConfigLocalServiceUtil
+					.fetchServiceConfig(serviceConfigId);
 
 			if (Validator.isNotNull(serviceConfig)) {
 				govAgencyOrgId = serviceConfig.getGovAgencyOrganizationId();
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			// TODO: handle exception
 		}
 
@@ -361,8 +371,7 @@ public class BackendUtils {
 			if (Validator.isNotNull(dossier)) {
 				status = dossier.getDossierStatus();
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			// TODO: handle exception
 		}
 
@@ -374,15 +383,14 @@ public class BackendUtils {
 		int status = 0;
 
 		try {
-			ProcessStep step =
-				ProcessStepLocalServiceUtil.fetchProcessStep(stepId);
+			ProcessStep step = ProcessStepLocalServiceUtil
+					.fetchProcessStep(stepId);
 
 			if (Validator.isNotNull(step)) {
 				status = GetterUtil.getInteger(step.getDossierStatus());
 			}
 
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			return 0;
 		}
 
@@ -394,11 +402,10 @@ public class BackendUtils {
 		ProcessWorkflow flow = null;
 
 		try {
-			flow =
-				ProcessWorkflowLocalServiceUtil.getFirstProcessWorkflow(serviceProcessId);
+			flow = ProcessWorkflowLocalServiceUtil
+					.getFirstProcessWorkflow(serviceProcessId);
 
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 		}
 
 		return flow;
@@ -415,12 +422,11 @@ public class BackendUtils {
 		long stepId = 0;
 
 		try {
-			flow =
-				ProcessWorkflowLocalServiceUtil.getFirstProcessWorkflow(serviceProcessId);
+			flow = ProcessWorkflowLocalServiceUtil
+					.getFirstProcessWorkflow(serviceProcessId);
 
 			stepId = flow.getPostProcessStepId();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			// TODO: handle exception
 		}
 
@@ -439,8 +445,7 @@ public class BackendUtils {
 
 		try {
 			dossier = DossierLocalServiceUtil.fetchDossier(dossierId);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			_log.error(e);
 		}
 
@@ -459,11 +464,9 @@ public class BackendUtils {
 		ProcessOrder order = null;
 
 		try {
-			order =
-				ProcessOrderLocalServiceUtil.getProcessOrder(
-					dossierId, fileGroupId);
-		}
-		catch (Exception e) {
+			order = ProcessOrderLocalServiceUtil.getProcessOrder(dossierId,
+					fileGroupId);
+		} catch (Exception e) {
 			return order;
 		}
 		return order;
@@ -483,21 +486,20 @@ public class BackendUtils {
 
 			long serviceConfigId = dossier.getServiceConfigId();
 
-			ServiceConfig serviceConfig =
-				ServiceConfigLocalServiceUtil.fetchServiceConfig(serviceConfigId);
+			ServiceConfig serviceConfig = ServiceConfigLocalServiceUtil
+					.fetchServiceConfig(serviceConfigId);
 
-			if (serviceConfig.getServicePortal() &&
-				serviceConfig.getServiceBackoffice()) {
+			if (serviceConfig.getServicePortal()
+					&& serviceConfig.getServiceBackoffice()) {
 				trustServiceMode = true;
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			_log.error(e);
 		}
 
 		return trustServiceMode;
 	}
-	
+
 	/**
 	 * @param dossierId
 	 * @return
@@ -508,35 +510,33 @@ public class BackendUtils {
 
 		if (dossierId != 0) {
 			try {
-				ProcessOrder processOrder =
-				    ProcessOrderLocalServiceUtil.getProcessOrder(dossierId, 0);
+				ProcessOrder processOrder = ProcessOrderLocalServiceUtil
+						.getProcessOrder(dossierId, 0);
 
 				long processStepId = processOrder.getProcessStepId();
 				long serviceProcessId = processOrder.getServiceProcessId();
 
-				List<ProcessWorkflow> lsPRC_WFL =
-				    new ArrayList<ProcessWorkflow>();
+				List<ProcessWorkflow> lsPRC_WFL = new ArrayList<ProcessWorkflow>();
 
-				lsPRC_WFL =
-				    ProcessWorkflowLocalServiceUtil.getPostProcessWorkflow(
-				        serviceProcessId, processStepId);
+				lsPRC_WFL = ProcessWorkflowLocalServiceUtil
+						.getPostProcessWorkflow(serviceProcessId, processStepId);
 
 				for (ProcessWorkflow prc_wf : lsPRC_WFL) {
-					if (Validator.isNotNull(prc_wf.getPreCondition()) &&
-					    (StringUtil.trim(prc_wf.getPreCondition()).contains(WebKeys.ACTION_CANCEL_VALUE))) {
+					if (Validator.isNotNull(prc_wf.getPreCondition())
+							&& (StringUtil.trim(prc_wf.getPreCondition())
+									.contains(WebKeys.ACTION_CANCEL_VALUE))) {
 						isCancel = true;
 						break;
 					}
 				}
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 			}
 		}
 
 		return isCancel;
 
 	}
-	
+
 	/**
 	 * @param dossierId
 	 * @return
@@ -547,20 +547,17 @@ public class BackendUtils {
 
 		if (dossierId != 0) {
 			try {
-				ProcessOrder processOrder =
-				    ProcessOrderLocalServiceUtil.getProcessOrder(dossierId, 0);
-				
-			
-				
+				ProcessOrder processOrder = ProcessOrderLocalServiceUtil
+						.getProcessOrder(dossierId, 0);
+
 				String dossierStatus = processOrder.getDossierStatus();
-				
-				
-				if (Validator.equals(dossierStatus, PortletConstants.DOSSIER_STATUS_DONE)) {
+
+				if (Validator.equals(dossierStatus,
+						PortletConstants.DOSSIER_STATUS_DONE)) {
 					isChange = true;
 				}
-				
-			}
-			catch (Exception e) {
+
+			} catch (Exception e) {
 			}
 		}
 
@@ -579,20 +576,19 @@ public class BackendUtils {
 		ProcessStep processStep = new ProcessStepImpl();
 
 		try {
-			ProcessOrder processOrder =
-			    ProcessOrderLocalServiceUtil.getProcessOrder(dossierId, 0);
+			ProcessOrder processOrder = ProcessOrderLocalServiceUtil
+					.getProcessOrder(dossierId, 0);
 
 			long processStepId = processOrder.getProcessStepId();
 
-			processStep =
-			    ProcessStepLocalServiceUtil.getProcessStep(processStepId);
-		}
-		catch (Exception e) {
+			processStep = ProcessStepLocalServiceUtil
+					.getProcessStep(processStepId);
+		} catch (Exception e) {
 
 		}
 
 		return processStep;
 	}
-	
+
 	private static Log _log = LogFactoryUtil.getLog(BackendUtils.class);
 }
