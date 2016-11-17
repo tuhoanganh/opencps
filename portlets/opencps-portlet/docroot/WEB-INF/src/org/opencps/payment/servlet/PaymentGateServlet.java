@@ -65,7 +65,7 @@ public class PaymentGateServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		_log.info("homeUrl:" + homeUrl);
+		
 
 		if (paymentGateName.equals("VTCPAY")) {
 

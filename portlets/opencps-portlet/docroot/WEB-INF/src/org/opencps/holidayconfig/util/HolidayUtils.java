@@ -242,8 +242,14 @@ public class HolidayUtils {
 	private static Calendar isHolidayCal(Calendar baseDateCal,
 			List<HolidayConfig> holidayConfigList) {
 
-		int baseDate = 0;
-		int holidayDate = 0;
+		int baseDay = 0;
+		int baseMonth = 0;
+		int baseYear = 0;
+		
+		int holidayDay = 0;
+		int holidayMonth = 0;
+		int holidayYear = 0;
+		
 		Calendar holidayCal = Calendar.getInstance();
 
 		try {
@@ -259,10 +265,16 @@ public class HolidayUtils {
 
 				holidayCal.setTime(holidayConfigList.get(i).getHoliday());
 
-				baseDate = baseDateCal.get(Calendar.DATE);
-				holidayDate = holidayCal.get(Calendar.DATE);
+				baseDay = baseDateCal.get(Calendar.DATE);
+				holidayDay = holidayCal.get(Calendar.DATE);
+				
+				baseMonth = baseDateCal.get(Calendar.MONTH);
+				holidayMonth = holidayCal.get(Calendar.MONTH);
+				
+				baseYear = baseDateCal.get(Calendar.YEAR);
+				holidayYear = holidayCal.get(Calendar.YEAR);
 
-				if (baseDate == holidayDate) {
+				if (baseDay == holidayDay && baseMonth == holidayMonth && baseYear == holidayYear ) {
 					baseDateCal.add(Calendar.DATE, 1);
 				}
 			}
@@ -276,8 +288,14 @@ public class HolidayUtils {
 	private static boolean isHoliday(Calendar baseDateCal,
 			List<HolidayConfig> holidayConfigList) {
 
-		int baseDate = 0;
-		int holidayDate = 0;
+		int baseDay = 0;
+		int baseMonth = 0;
+		int baseYear = 0;
+		
+		int holidayDay = 0;
+		int holidayMonth = 0;
+		int holidayYear = 0;
+		
 		Calendar holidayCal = Calendar.getInstance();
 
 		try {
@@ -293,10 +311,16 @@ public class HolidayUtils {
 
 				holidayCal.setTime(holidayConfigList.get(i).getHoliday());
 
-				baseDate = baseDateCal.get(Calendar.DATE);
-				holidayDate = holidayCal.get(Calendar.DATE);
+				baseDay = baseDateCal.get(Calendar.DATE);
+				holidayDay = holidayCal.get(Calendar.DATE);
+				
+				baseMonth = baseDateCal.get(Calendar.MONTH);
+				holidayMonth = holidayCal.get(Calendar.MONTH);
+				
+				baseYear = baseDateCal.get(Calendar.YEAR);
+				holidayYear = holidayCal.get(Calendar.YEAR);
 
-				if (baseDate == holidayDate) {
+				if (baseDay == holidayDay && baseMonth == holidayMonth && baseYear == holidayYear) {
 					return true;
 				}
 			}
@@ -426,8 +450,14 @@ public class HolidayUtils {
 
 	private void isHolidayCal1() {
 
-		int baseDate = 0;
-		int holidayDate = 0;
+		int baseDay = 0;
+		int baseMonth = 0;
+		int baseYear = 0;
+		
+		int holidayDay = 0;
+		int holidayMonth = 0;
+		int holidayYear = 0;
+		
 		Calendar holidayCal = Calendar.getInstance();
 
 		try {
@@ -441,10 +471,17 @@ public class HolidayUtils {
 
 				holidayCal.setTime(holidayConfigList1.get(i).getHoliday());
 
-				baseDate = baseCalendar.get(Calendar.DATE);
-				holidayDate = holidayCal.get(Calendar.DATE);
+				
+				baseDay = baseCalendar.get(Calendar.DATE);
+				holidayDay = holidayCal.get(Calendar.DATE);
+				
+				baseMonth = baseCalendar.get(Calendar.MONTH);
+				holidayMonth = holidayCal.get(Calendar.MONTH);
+				
+				baseYear = baseCalendar.get(Calendar.YEAR);
+				holidayYear = holidayCal.get(Calendar.YEAR);
 
-				if (baseDate == holidayDate) {
+				if (baseDay == holidayDay && baseMonth == holidayMonth && baseYear == holidayYear) {
 					--dayGoing;
 					minutesGoing = minutesGoing - 1440;
 				}
