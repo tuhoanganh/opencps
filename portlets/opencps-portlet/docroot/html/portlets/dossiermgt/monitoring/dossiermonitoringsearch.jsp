@@ -47,9 +47,9 @@
 
 <div class="home-search-sologan">
 
-	<p style="font-size: 19px;margin-left: -10px;margin-bottom: 0px;"><liferay-ui:message key="slogan-key"/></p>
+	<p style="font-size: 16px;margin-left: 0px;margin-bottom: 0px;"><liferay-ui:message key="slogan-key"/></p>
 	
-	<h2 style="font-size: 26px;padding-bottom: 45px;"></h2>
+	<h2 style="font-size: 26px;padding-bottom: 25px;"></h2>
 	
 </div>
 
