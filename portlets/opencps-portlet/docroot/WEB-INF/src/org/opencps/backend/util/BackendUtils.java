@@ -18,6 +18,8 @@
 package org.opencps.backend.util;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.opencps.dossiermgt.model.Dossier;
@@ -198,8 +200,14 @@ public class BackendUtils {
 
 			if (dossierStatus.contains(PortletConstants.DOSSIER_STATUS_WAITING)) {
 
-				HolidayUtils.getEndDate(processOrder.getActionDatetime(),
+				Date endDate = HolidayUtils.getEndDate(processOrder.getActionDatetime(),
 						pattern);
+				
+				Date now = new Date();
+				
+				if(now.compareTo(endDate) >=0 ){
+					isCondition = false;
+				}
 
 			}
 		} catch (Exception e) {
