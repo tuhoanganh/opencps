@@ -333,6 +333,7 @@
 		<field name="daysDuration" type="int" />
 		<field name="referenceDossierPartId" type="long" />
 		<field name="externalAppUrl" type="String" />
+		<field name="processStepNo" type="int" />
 	</model>
 	<model name="org.opencps.processmgt.model.ProcessStepDossierPart">
 		<field name="processStepId" type="long" />

@@ -69,6 +69,7 @@
 		<column name="daysDuration" type="int" />
 		<column name="referenceDossierPartId" type="long" />
 		<column name="externalAppUrl" type="String" />
+		<column name="processStepNo" type="int" />
 		
 		<!-- Order -->
 		<order by="asc">

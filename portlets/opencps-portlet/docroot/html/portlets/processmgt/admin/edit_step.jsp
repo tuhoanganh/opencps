@@ -157,11 +157,15 @@
 	if(step != null) {
 		itemStatus = PortletUtil.getDictItem("DOSSIER_STATUS", step.getDossierStatus(), scopeGroupId);
 		
-		itemSubStatus = PortletUtil.getDictItem("DOSSIER_SUB_STATUS", step.getDossierStatus(), scopeGroupId);
+		itemSubStatus = PortletUtil.getDictItem("DOSSIER_SUB_STATUS", step.getDossierSubStatus(), scopeGroupId);
 		if(Validator.isNotNull(itemStatus)) {
 			dictStatusId = itemStatus.getDictItemId();
-			dictSubStatusId = itemStatus.getDictItemId();
 		}
+		
+		if(Validator.isNotNull(itemSubStatus)) {
+			dictSubStatusId = itemSubStatus.getDictItemId();
+		}
+
 	}
 %>
 
@@ -186,17 +190,17 @@
 		value="<%= Validator.isNotNull(step) ? step.getProcessStepId() : StringPool.BLANK %>"/>
 
 	<aui:row>
-		<aui:col width="70">
+		<aui:col width="50">
 			<liferay-ui:message key="step-name"/>
 			<aui:input name="stepName" inlineLabel="false" label="" inlineField="false"></aui:input>
 		</aui:col>
-		<aui:col width="30">
+		<aui:col width="50">
 			<liferay-ui:message key="sequence-no"/>
 			<aui:input name="sequenceNo" inlineLabel="false" label=""></aui:input>
 		</aui:col>
 	</aui:row>
 	<aui:row>
-		<aui:col width="30">
+		<aui:col width="50">
 			
 			<datamgt:ddr 
 				depthLevel="1" 
@@ -211,7 +215,7 @@
 			
 		</aui:col>
 		
-		<aui:col width="40">
+		<aui:col width="50">
 			
 			<datamgt:ddr 
 				depthLevel="1" 
@@ -225,13 +229,20 @@
 			/>
 			
 		</aui:col>
-		
-		<aui:col width="30">
-			<aui:input name="daysDuration" inlineField="false"></aui:input>
+
+	</aui:row>
+	
+	<aui:row>
+		<aui:col width="50">
+			<aui:input name="processStepNo" inlineField="false"/>		
+		</aui:col>
+		<aui:col width="50">
+			<aui:input name="daysDuration" inlineField="false"/>		
 		</aui:col>
 	</aui:row>
+	
 	<aui:row>
-		<aui:col width="70">
+		<aui:col width="50">
 			<aui:select name="referenceDossierPartId" showEmptyOption="true">
 				<%
 					for (DossierPart dossier : dossiers) {
@@ -244,7 +255,7 @@
 				%>
 			</aui:select>
 		</aui:col>
-		<aui:col width="30">
+		<aui:col width="50">
 			&nbsp;
 		</aui:col>
 	</aui:row>

@@ -412,6 +412,7 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 					    ParamUtil.getString(actionRequest, "dossierSubStatus");
 
 		int daysDuration = ParamUtil.getInteger(actionRequest, "daysDuration");
+		int processStepNo = ParamUtil.getInteger(actionRequest, "processStepNo");
 
 		long referenceDossierPartId =
 		    ParamUtil.getLong(actionRequest, "referenceDossierPartId");
@@ -432,7 +433,7 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 
 				ProcessStep step = ProcessStepLocalServiceUtil.addStep(
 				    serviceProcessId, stepName, sequenceNo, dossierStatus,dossierSubStatus,
-				    daysDuration, referenceDossierPartId, externalAppUrl,
+				    daysDuration, referenceDossierPartId, externalAppUrl, processStepNo, 
 				    serviceContext);
 				
 				if (Validator.isNotNull(step)) {
@@ -493,7 +494,7 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 				    ProcessStepLocalServiceUtil.updateStep(
 				        processStepId, serviceProcessId, stepName, sequenceNo,
 				        dossierStatus, dossierSubStatus, daysDuration, referenceDossierPartId,
-				        externalAppUrl, serviceContext);
+				        externalAppUrl,processStepNo , serviceContext);
 
 
 				//StepAllowanceLocalServiceUtil.removeProcessStepByProcessId(step.getProcessStepId());

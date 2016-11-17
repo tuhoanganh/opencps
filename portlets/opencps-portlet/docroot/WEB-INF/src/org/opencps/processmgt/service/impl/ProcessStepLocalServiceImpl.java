@@ -156,7 +156,7 @@ public class ProcessStepLocalServiceImpl
 	public ProcessStep addStep(
 	    long serviceProcessId, String stepName,
 	    int stepNo, String dossierStatus, String dossierSubStatus, int daysDuration,
-	    long referenceDossierPartId, String externalAppUrl, ServiceContext context)
+	    long referenceDossierPartId, String externalAppUrl, int processStepNo, ServiceContext context)
 	    throws PortalException, SystemException {
 		
 		ProcessStep step = null;
@@ -186,6 +186,7 @@ public class ProcessStepLocalServiceImpl
 			step.setExternalAppUrl(externalAppUrl);
 			step.setReferenceDossierPartId(referenceDossierPartId);
 			step.setDossierSubStatus(dossierSubStatus);
+			step.setProcessStepNo(processStepNo);
 			
 			processStepPersistence.update(step);
 		}
@@ -213,7 +214,7 @@ public class ProcessStepLocalServiceImpl
 	public ProcessStep updateStep(
 	    long processStepId, long serviceProcessId, String stepName,
 	    int stepNo, String dossierStatus, String dossierSubStatus, int daysDuration,
-	    long referenceDossierPartId, String externalAppUrl, ServiceContext context)
+	    long referenceDossierPartId, String externalAppUrl, int processStepNo, ServiceContext context)
 	    throws PortalException, SystemException {
 
 		ProcessStep step = null;
@@ -237,6 +238,7 @@ public class ProcessStepLocalServiceImpl
 			step.setExternalAppUrl(externalAppUrl);
 			step.setReferenceDossierPartId(referenceDossierPartId);
 			step.setDossierSubStatus(dossierSubStatus);
+			step.setProcessStepNo(processStepNo);
 
 			processStepPersistence.update(step);
 		}
