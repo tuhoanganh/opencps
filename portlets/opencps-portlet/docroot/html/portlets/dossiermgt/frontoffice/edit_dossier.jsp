@@ -236,7 +236,7 @@
 								value="<%=String.valueOf(dossier.getDossierId()) %>" 
 							/>
 							
-							<portlet:param name="redirectURL" value="<%=backURL %>" />
+							<portlet:param name="redirectURL" value="<%=backDossierList %>" />
 							
 							<portlet:param 
 								name="dossierStatus"
