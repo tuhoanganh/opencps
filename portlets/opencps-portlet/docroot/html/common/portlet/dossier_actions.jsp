@@ -78,7 +78,7 @@
 				}else{
 					
 					if(isCBXL){
-						version = DossierFileLocalServiceUtil..countDossierFileByDID_SS_DP(dossierId, dossierPartId, PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS);
+						version = DossierFileLocalServiceUtil.countDossierFileByDID_SS_DP(dossierId, dossierPartId, PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS);
 					}else{
 						version = DossierFileLocalServiceUtil.countDossierFileByDID_DP(dossierId, dossierPartId);
 					}
@@ -122,6 +122,7 @@
 							</c:if>
 						</c:when>
 						<c:when test="<%= ( isDynamicForm && fileEntryId > 0 ) || isOnlineData > 0  %>">
+							<c:if test="<%=!isReadOnly %>">
 							<aui:a 
 								id="<%=String.valueOf(dossierPartId) %>"
 								dossier="<%=String.valueOf(dossierId) %>"
@@ -134,7 +135,10 @@
 								label="view-form" 
 								cssClass="label opencps dossiermgt part-file-ctr view-form"
 								title="view-form"
-							/>
+							>
+							<i class="fa fa-search"></i>
+							</aui:a>
+							</c:if>
 							<c:if test="<%=!showVersionItemReference %>">
 								<aui:a 
 									id="<%=String.valueOf(dossierPartId) %>"
@@ -473,6 +477,7 @@
 							</c:if>
 						</c:when>
 						<c:when test="<%=isDynamicForm && fileEntryId > 0  %>">
+							<c:if test="<%=!isReadOnly %>">
 							<aui:a 
 								id="<%=String.valueOf(dossierPartId) %>"
 								dossier="<%=String.valueOf(dossierId) %>"
@@ -485,8 +490,10 @@
 								label="view-form" 
 								cssClass="label opencps dossiermgt part-file-ctr view-form"
 								title="view-form"
-							/>
-							
+							>
+							<i class="fa fa-search"></i>
+							</aui:a>
+							</c:if>
 							<c:if test="<%=!showVersionItemReference %>">
 								<aui:a 
 									id="<%=String.valueOf(dossierPartId) %>"

@@ -171,7 +171,7 @@
 
 		<liferay-ui:header 
 			backURL="<%= backURL %>"
-			title='<%= (dossier == null) ? "add-dossier" : (cmd.equals(Constants.VIEW) ? "view-dossier" : "update-dossier") %>' 
+			title='<%= (dossier == null) ? "dossier-submit-online-temp" : (cmd.equals(Constants.VIEW) ? "view-dossier" : "dossier-submit-online-temp") %>' 
 		/>
 
 		<portlet:actionURL var="updateDossierURL" name="updateDossier" />
@@ -202,7 +202,7 @@
 							<c:if test="<%=dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_NEW) %>">
 								<liferay-ui:icon 
 									cssClass="search-container-action fa forward"
-									image="forward" message="send"
+									image="forward" message="send-dossier"
 									url="<%=jsUpdateDossierStatus %>" 
 								/>
 							</c:if>
@@ -262,7 +262,7 @@
 						<liferay-ui:icon-delete 
 							image="delete"
 							cssClass="search-container-action fa delete"
-							confirmation="are-you-sure-delete-entry" message="delete"
+							confirmation="are-you-sure-delete-entry" message="delete-dossier"
 							url="<%=deleteDossierURL.toString() %>" 
 						/>
 					</c:if>
@@ -272,8 +272,7 @@
 				<div>
 					<aui:button 
 						type="submit" 
-						cssClass="btn des-sub-button radius20"
-						icon="add" 
+						cssClass="btn des-sub-button radius20 input100 textAlignLeft"
 						value="edit-dossier-btn" 
 					/>
 				</div>

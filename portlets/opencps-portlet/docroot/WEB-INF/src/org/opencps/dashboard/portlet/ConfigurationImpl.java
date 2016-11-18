@@ -61,6 +61,7 @@ public class ConfigurationImpl implements ConfigurationAction{
 		String portletResource =
 		    ParamUtil.getString(actionRequest, "portletResource");
 
+		String isTypeCfg = ParamUtil.getString(actionRequest, "isTypeCfg");
 		String dashBoardCFGType = ParamUtil.getString(actionRequest, "dashBoardCFGType");
 		
 		PortletPreferences preferences =
@@ -70,20 +71,35 @@ public class ConfigurationImpl implements ConfigurationAction{
 		ThemeDisplay themeDisplay =
 				(ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
-		List<DictItem> dictItems = PortletUtil.getDictItemInUseByCode(themeDisplay.getScopeGroupId(), 
-				PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN, 
-				PortletConstants.TREE_VIEW_DEFAULT_ITEM_CODE);
-		for (DictItem dictItem : dictItems) {
-			long plid_cfg = ParamUtil.getLong(actionRequest, dictItem.getItemCode()+"_plid");
-			boolean isShow_cfg = ParamUtil.getBoolean(actionRequest, dictItem.getItemCode()+"_isShow");
-			long isShowOrder_cfg = ParamUtil.getLong(actionRequest, dictItem.getItemCode()+"_isShowOrder");
-		
-			preferences.setValue(dictItem.getItemCode()+"_plid", String.valueOf(plid_cfg));
-			preferences.setValue(dictItem.getItemCode()+"_isShow", String.valueOf(isShow_cfg));
-			preferences.setValue(dictItem.getItemCode()+"_isShowOrder", String.valueOf(isShowOrder_cfg));
+		if(isTypeCfg.equals("linh_vuc_thu_tuc")){
+			List<DictItem> dictItems = PortletUtil.getDictItemInUseByCode(themeDisplay.getScopeGroupId(), 
+					PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN, 
+					PortletConstants.TREE_VIEW_DEFAULT_ITEM_CODE);
+			for (DictItem dictItem : dictItems) {
+				long plid_cfg = ParamUtil.getLong(actionRequest, dictItem.getItemCode()+"_plid");
+				boolean isShow_cfg = ParamUtil.getBoolean(actionRequest, dictItem.getItemCode()+"_isShow");
+				long isShowOrder_cfg = ParamUtil.getLong(actionRequest, dictItem.getItemCode()+"_isShowOrder");
+			
+				preferences.setValue(dictItem.getItemCode()+"_plid", String.valueOf(plid_cfg));
+				preferences.setValue(dictItem.getItemCode()+"_isShow", String.valueOf(isShow_cfg));
+				preferences.setValue(dictItem.getItemCode()+"_isShowOrder", String.valueOf(isShowOrder_cfg));
+			}
+		}else if(isTypeCfg.equals("home_linh_vuc")){
+			for(int i=0 ; i<6 ; i++){
+	    		
+	    		int layout_cfg = ParamUtil.getInteger(actionRequest, "img-home-"+i+"_plid");
+			
+	    		String itemCode_cfg = ParamUtil.getString(actionRequest, "img-home-"+i+"_itemCode");
+	    		
+				preferences.setValue("img-home-"+i+"_plid", String.valueOf(layout_cfg));
+				preferences.setValue("img-home-"+i+"_itemCode", String.valueOf(itemCode_cfg));
+			}
 		}
 		
+		
 		preferences.setValue("dashBoardCFGType", dashBoardCFGType);
+		
+//		preferences.setValue("isTypeCfg", isTypeCfg);
 		preferences.store();
 
 		SessionMessages.add(actionRequest, "potlet-config-saved");

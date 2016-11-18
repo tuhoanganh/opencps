@@ -1,4 +1,6 @@
 
+<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
+<%@page import="javax.portlet.PortletRequest"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
@@ -56,14 +58,14 @@
 	
 %>
 
-
 <liferay-portlet:actionURL var="configurationActionURL" portletConfiguration="true"/>
 
 <aui:form action="<%= configurationActionURL %>" method="post" name="configurationForm">
 	
-	<aui:select name="dashBoardCFGType" id="dashBoardCFGType" onChange="DashBoardPickType();">
+	<aui:select name="dashBoardCFGType" id="dashBoardCFGType" onChange='<%="javavscript:" + renderResponse.getNamespace() + "DashBoardPickType(this)" %>'>
 		<aui:option value=""></aui:option>
 		<aui:option value="linh_vuc_thu_tuc">linh_vuc_thu_tuc</aui:option>
+		<aui:option value="home_linh_vuc">home_linh_vuc</aui:option>
 	</aui:select>
 	
 	<div id="<portlet:namespace />is-hidden-cfg">
@@ -74,23 +76,23 @@
 
 
 </aui:form>
-<liferay-portlet:renderURL var="newLinhVucThuTucURL" portletName="<%=WebKeys.DASHBOARD_PORTLET %>" windowState="<%=LiferayWindowState.EXCLUSIVE.toString() %>">
-	<liferay-portlet:param name="mvcPath" value="/html/portlets/dashboard/linh_vuc_thu_tuc/view_cfg.jsp" />
-</liferay-portlet:renderURL>
 
-<aui:script>
+<aui:script use = "aui-base,liferay-portlet-url,aui-node">
 	
-	AUI().ready(function(A) {
+var A = AUI();
 		
-		Liferay.provide(window, 'DashBoardPickType', function(e) {
-			console.log("DashBoardPickType");
-			$("#<portlet:namespace />is-hidden-cfg").load( '<%= newLinhVucThuTucURL %>', function () {
+		Liferay.provide(window, '<portlet:namespace />DashBoardPickType', function(e) {
+			var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DASHBOARD_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
+			portletURL.setParameter("mvcPath", "/html/portlets/dashboard/"+$(e).val()+"/view_cfg.jsp");
+			portletURL.setWindowState('<%=LiferayWindowState.EXCLUSIVE.toString() %>'); 
+			portletURL.setPortletMode('view');
+			
+			$("#<portlet:namespace />is-hidden-cfg").load( portletURL.toString(), function () {
 				
 				selector: '#<portlet:namespace />is-hidden-cfg > .lfr-search-container'
 				
 			});
 		});
 		
-	});
 	
 </aui:script>

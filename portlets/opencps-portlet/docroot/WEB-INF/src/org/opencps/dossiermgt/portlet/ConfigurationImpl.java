@@ -83,6 +83,8 @@ public class ConfigurationImpl implements ConfigurationAction{
 		
 		String itemCode_cfg = ParamUtil.getString(actionRequest, "itemCode_cfg");
 		
+		String war_opencpsportlet_26_cfg = ParamUtil.getString(actionRequest, "war_opencpsportlet_26_cfg");
+		
 		PortletURL redirectURL =
 		    PortletURLFactoryUtil.create(
 		        PortalUtil.getHttpServletRequest(actionRequest),
@@ -126,6 +128,8 @@ public class ConfigurationImpl implements ConfigurationAction{
 		preferences.setValue("allowResultQuickView", String.valueOf(allowResultQuickView));
 		
 		preferences.setValue("itemCode_cfg", itemCode_cfg);
+		
+		preferences.setValue("war_opencpsportlet_26_cfg", war_opencpsportlet_26_cfg);
 		
 		preferences.store();
 

@@ -42,10 +42,6 @@
 	String backURL = ParamUtil.getString(request, "backURL");
 	
 %>
-<liferay-ui:header
-	backURL="<%= backURL %>"
-	title="service-list"
-/>
 
 <%
 	//get config to load jsp display dossier
@@ -53,7 +49,9 @@
 
 %>
 
-<liferay-util:include page='<%=templatePath + dashBoardCFGType_cfg + "/view.jsp" %>' servletContext="<%=application %>" />
+<liferay-util:include page='<%=templatePath + dashBoardCFGType_cfg + "/view.jsp" %>' servletContext="<%=application %>" >
+	<liferay-util:param name="backURL" value="<%=backURL %>"></liferay-util:param>
+</liferay-util:include>
 
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.dashboard.view.jsp");

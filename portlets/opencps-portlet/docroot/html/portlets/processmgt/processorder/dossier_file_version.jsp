@@ -87,8 +87,8 @@
 		try{			
 			if(dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_OTHER &&
 				dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT){
-				dossierFiles = DossierFileLocalServiceUtil.getDossierFileByDID_SS_DP(dossierId, dossierPartId, PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS);
-				totalCount = DossierFileLocalServiceUtil.countDossierFileByDID_SS_DP(dossierId, dossierPartId, PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS);
+				dossierFiles = DossierFileLocalServiceUtil.getDossierFileByDID_DP(dossierId, dossierPartId);
+				totalCount = DossierFileLocalServiceUtil.countDossierFileByDID_DP(dossierId, dossierPartId);
 			}else{
 				
 				if(dossierFileId > 0){
@@ -133,9 +133,9 @@
 						}
 					%>
 					<liferay-ui:search-container-column-text 
-						title="#"
-						name="#"
-						value="<%=String.valueOf(row.getPos() + searchContainer.getStart() + 1) %>"
+						title="version-stt"
+						name="version-stt"
+						value="<%=String.valueOf(dossierFile.getVersion()) + (access  ? StringPool.BLANK : StringPool.OPEN_PARENTHESIS +  LanguageUtil.get(locale, \"updating\") + StringPool.CLOSE_PARENTHESIS)%>"
 					/>
 					<liferay-ui:search-container-column-text 
 						title="create-date"
@@ -156,12 +156,6 @@
 						title="display-name"
 						name="display-name"
 						value="<%=Validator.isNotNull(dossierFile.getDisplayName()) ? dossierFile.getDisplayName() : StringPool.DASH %>"
-					/>
-					
-					<liferay-ui:search-container-column-text 
-						title="version"
-						name="version"
-						value="<%=String.valueOf(dossierFile.getVersion()) + (access  ? StringPool.BLANK : StringPool.OPEN_PARENTHESIS +  LanguageUtil.get(locale, \"updating\") + StringPool.CLOSE_PARENTHESIS)%>"
 					/>
 					
 					<%

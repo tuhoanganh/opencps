@@ -112,7 +112,7 @@
 				if (Validator.isNotNull(actionHistory.getCreateDate())) {
 					date = DateTimeUtil.
 									convertDateToString(actionHistory.getCreateDate(),
-										DateTimeUtil._VN_DATE_FORMAT);
+										DateTimeUtil._VN_DATE_TIME_FORMAT);
 				}
 				
 				String userActionName = StringPool.BLANK;
