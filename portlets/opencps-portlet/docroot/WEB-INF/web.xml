@@ -51,11 +51,19 @@
 		<url-pattern>/verify-sign/*</url-pattern>
 	</servlet-mapping>
 	<servlet>
-		<servlet-name>IPN_PayGate</servlet-name>
-		<servlet-class>org.opencps.payment.servlet.PaymentGateServlet</servlet-class>
+		<servlet-name>VTCPayServlet</servlet-name>
+		<servlet-class>org.opencps.payment.servlet.VTCPayServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>IPN_PayGate</servlet-name>
-		<url-pattern>/PaymentGateServlet/*</url-pattern>
+		<servlet-name>VTCPayServlet</servlet-name>
+		<url-pattern>/VTCPayServlet/*</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>KeyPayServlet</servlet-name>
+		<servlet-class>org.opencps.payment.servlet.KeyPayServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>KeyPayServlet</servlet-name>
+		<url-pattern>/KeyPayServlet/*</url-pattern>
 	</servlet-mapping>
 </web-app>

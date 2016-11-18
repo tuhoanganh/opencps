@@ -19,8 +19,6 @@ package org.opencps.payment.servlet;
 
 import java.io.IOException;
 
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -30,48 +28,32 @@ import org.opencps.keypay.model.KeyPay;
 import org.opencps.paymentmgt.util.PaymentMgtUtil;
 import org.opencps.vtcpay.model.VTCPay;
 
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.util.PortalUtil;
 
 /**
  * author nhanhoang
  */
 
-public class PaymentGateServlet extends HttpServlet {
+public class VTCPayServlet extends HttpServlet {
 
-	private static Log _log = LogFactoryUtil.getLog(PaymentGateServlet.class);
+	private static Log _log = LogFactoryUtil.getLog(VTCPayServlet.class);
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-		throws ServletException, IOException {
-
-		_log.info("=====doGet():"+request.getPathInfo());
-		String paymentGateName = request.getParameter("paymentGateName");
-
-		paymentGateName = "VTCPAY";
-		
-		if (paymentGateName.equals("VTCPAY")) {
-
-			VTCPay vtcPay = new VTCPay(request);
-			_log.info("=====vtcPay:" + vtcPay);
-
-			response = PaymentMgtUtil.runVTCGateData(request, response, vtcPay);
-
-		}
-		else if (paymentGateName.equals("KEYPAY")) {
-
-			// KeyPay keyPay = new KeyPay(request);
-
-		}
-
-	}
+//	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+//		throws ServletException, IOException {
+//
+//		_log.info("=====doGet():");
+//
+//		VTCPay vtcPay = new VTCPay(request);
+//
+//		PaymentMgtUtil.runVTCGateData(request, response, vtcPay);
+//
+//	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
@@ -80,26 +62,12 @@ public class PaymentGateServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 		throws ServletException, IOException {
 
-		String paymentGateName = request.getParameter("paymentGateName");
+		_log.info("=====doPost():");
 
-		paymentGateName = "VTCPAY";
+		VTCPay vtcPay = new VTCPay(request);
+		_log.info("=====vtcPay:" + vtcPay);
 
-		_log.info("=====doPost():" + request);
-		_log.info("=====paymentGateName:" + paymentGateName);
-
-		if (paymentGateName.equals("VTCPAY")) {
-
-			VTCPay vtcPay = new VTCPay(request);
-			_log.info("=====vtcPay:" + vtcPay);
-
-			PaymentMgtUtil.runVTCGateData(request, response, vtcPay);
-
-		}
-		else if (paymentGateName.equals("KEYPAY")) {
-
-			KeyPay keyPay = new KeyPay(request);
-
-		}
+		PaymentMgtUtil.runVTCGateData(request, response, vtcPay);
 
 	}
 

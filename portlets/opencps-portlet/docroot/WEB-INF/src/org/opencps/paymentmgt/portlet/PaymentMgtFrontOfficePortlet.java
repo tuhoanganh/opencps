@@ -19,36 +19,24 @@ package org.opencps.paymentmgt.portlet;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletURL;
 
 import org.opencps.backend.message.UserActionMsg;
 import org.opencps.backend.util.BackendUtils;
-import org.opencps.backend.util.VtcPayUrlGenerator;
-import org.opencps.dossiermgt.NoSuchDossierException;
+import org.opencps.backend.util.PaymentUrlGenerator;
 import org.opencps.dossiermgt.bean.AccountBean;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLogLocalServiceUtil;
 import org.opencps.dossiermgt.util.ActorBean;
 import org.opencps.dossiermgt.util.DossierMgtUtil;
-import org.opencps.keypay.model.KeyPay;
-import org.opencps.paymentmgt.NoSuchPaymentConfigException;
 import org.opencps.paymentmgt.NoSuchPaymentFileException;
-import org.opencps.paymentmgt.model.PaymentConfig;
 import org.opencps.paymentmgt.model.PaymentFile;
-import org.opencps.paymentmgt.model.PaymentGateConfig;
 import org.opencps.paymentmgt.search.PaymentFileDisplayTerms;
-import org.opencps.paymentmgt.service.PaymentConfigLocalServiceUtil;
 import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
-import org.opencps.paymentmgt.service.PaymentGateConfigLocalServiceUtil;
 import org.opencps.paymentmgt.util.PaymentMgtUtil;
 import org.opencps.servicemgt.DuplicateFileNameException;
 import org.opencps.servicemgt.DuplicateFileNoException;
@@ -58,9 +46,7 @@ import org.opencps.util.DLFolderUtil;
 import org.opencps.util.MessageKeys;
 import org.opencps.util.PortletConstants;
 import org.opencps.util.PortletUtil;
-import org.opencps.vtcpay.model.VTCPay;
 
-import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -87,7 +73,6 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.assetpublisher.util.AssetPublisherUtil;
 import com.liferay.portlet.documentlibrary.FileSizeException;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
@@ -119,27 +104,28 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 		catch (NoSuchPaymentFileException e) {
 
 		}
-		
+
 		String url_redirect = StringPool.BLANK;
-		
-		if(Validator.isNotNull(paymentFile)){
+
+		if (Validator.isNotNull(paymentFile)) {
 			url_redirect = paymentFile.getKeypayUrl();
-			
-			if(url_redirect.trim().length() <= 0){
-				paymentFile = VtcPayUrlGenerator.generatorPayURL(
-					PortalUtil.getScopeGroupId(actionRequest),
-					paymentFile.getGovAgencyOrganizationId(), paymentFile.getPaymentFileId(),
-					"", paymentFile.getDossierId());
-				
-				url_redirect = paymentFile.getKeypayUrl();
+
+			if (url_redirect.trim().length() <= 0) {
+//				paymentFile =
+//					PaymentUrlGenerator.generatorPayURL(
+//						PortalUtil.getScopeGroupId(actionRequest),
+//						paymentFile.getGovAgencyOrganizationId(), paymentFile.getPaymentFileId(),
+//						"", paymentFile.getDossierId());
+//
+//				url_redirect = paymentFile.getKeypayUrl();
 			}
-			
+
 			paymentFile.setModifiedDate(new Date());
 			paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_REQUESTED);
-			
+
 			PaymentFileLocalServiceUtil.updatePaymentFile(paymentFile);
 		}
-			
+
 		actionResponse.sendRedirect(url_redirect);
 	}
 
