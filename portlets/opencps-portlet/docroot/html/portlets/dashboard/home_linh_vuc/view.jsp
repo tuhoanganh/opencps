@@ -63,7 +63,7 @@
 					int layout_cfg = GetterUtil.getInteger(portletPreferences.getValue("img-home-"+i+"_plid", ""));
 					String itemCode_cfg = GetterUtil.getString(portletPreferences.getValue("img-home-"+i+"_itemCode", ""));
 					
-					PortletURL renderUrl = PortletURLFactoryUtil.create(request, WebKeys.P26_SUBMIT_ONLINE, layout_cfg, PortletRequest.RENDER_PHASE);
+					PortletURL renderUrl = PortletURLFactoryUtil.create(request, WebKeys.SERVICE_MGT_DIRECTORY, layout_cfg, PortletRequest.RENDER_PHASE);
 					renderUrl.setParameter("mvcPath", "/html/portlets/dossiermgt/submit/submitinstruction.jsp");
 					renderUrl.setParameter("domainCode", itemCode_cfg);
 
