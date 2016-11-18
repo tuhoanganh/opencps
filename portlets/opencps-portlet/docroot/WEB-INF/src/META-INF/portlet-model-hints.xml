@@ -696,6 +696,7 @@
 		<field name="reportTemplate" type="String" />
 		<field name="paymentGateType" type="long" />
 		<field name="status" type="boolean" />
+		<field name="returnUrl" type="String" />
 	</model>
 	<model name="org.opencps.paymentmgt.model.PaymentFile">
 		<field name="uuid" type="String" />

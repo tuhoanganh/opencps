@@ -141,7 +141,10 @@
 				                 				A.one('#<portlet:namespace /><%= PaymentConfigDisplayTerms.PAYMENT_STATUS %>').set('value', false);
 				                 				A.one('#<portlet:namespace /><%= PaymentConfigDisplayTerms.PAYMENT_STATUS+PaymentConfigDisplayTerms.CHECKBOX %>').set('checked', false);
 				                 			}
-				                 			
+				                 			if (obj.<%= PaymentConfigDisplayTerms.RETURN_URL %>)
+					                 			A.one('#<portlet:namespace /><%= PaymentConfigDisplayTerms.RETURN_URL %>').set('value', obj.<%= PaymentConfigDisplayTerms.RETURN_URL %>);
+				                 			else
+				                 				A.one('#<portlet:namespace /><%= PaymentConfigDisplayTerms.RETURN_URL %>').set('value', '');
 				                 				
 				                 		}
 				                 	});
@@ -361,6 +364,17 @@
 							<aui:validator name="required"></aui:validator>
 							<aui:validator name="maxLength"
 								errorMessage="no-more-than-7-characters">7</aui:validator>
+						</aui:input>
+					</aui:col>
+				</aui:row>
+				<aui:row>
+					<aui:col width="50">
+						<aui:input value="<%=c != null ? c.getReturnUrl() :\"\"%>"
+							id="<%=PaymentConfigDisplayTerms.RETURN_URL%>"
+							cssClass="input100"
+							name="<%=PaymentConfigDisplayTerms.RETURN_URL%>"
+							label="system-domain-url-return">
+							<aui:validator name="required"></aui:validator>
 						</aui:input>
 					</aui:col>
 				</aui:row>
