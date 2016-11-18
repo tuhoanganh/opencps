@@ -112,7 +112,7 @@
 
 		<!-- Order -->
 		<order by="asc">
-			<order-column name="treeIndex" />
+			<order-column name="itemName" />
 		</order>
 
 		<!-- Finder methods -->
