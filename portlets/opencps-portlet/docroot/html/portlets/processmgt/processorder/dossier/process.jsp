@@ -75,7 +75,8 @@
 	long processStepId = 
 	Validator.isNotNull(processStep)
 		? processStep.getProcessStepId() : 0l;
-
+	
+	long dossierId = (Validator.isNotNull(dossier)) ? dossier.getDossierId() : 0L;		
 	boolean isEditDossier =
 		ParamUtil.getBoolean(request, "isEditDossier");
 	
@@ -172,6 +173,17 @@
 				
 				int partType = dossierPart.getPartType();
 				
+				
+				
+				if(postProcessWorkflows != null && !postProcessWorkflows.isEmpty()){
+					for(ProcessWorkflow postProcessWorkflow : postProcessWorkflows){
+						String preCondition = Validator.isNotNull(postProcessWorkflow.getPreCondition()) ? 
+							postProcessWorkflow.getPreCondition() : StringPool.BLANK; 
+							requiredDossierPartIds = PortletUtil.getDossierPartRequired(requiredDossierPartIds,dossierPart,dossierPart, null,dossierId,
+									postProcessWorkflow.getProcessWorkflowId(), postProcessWorkflow.getPostProcessStepId());
+					}
+				}
+				
 				%>
 	                <div class="opencps dossiermgt dossier-part-tree" id='<%= renderResponse.getNamespace() + "tree" + dossierPart.getDossierpartId()%>'>
 					    <c:choose>
@@ -207,10 +219,6 @@
 										}
 									}
 									
-									requiredDossierPartIds = PortletUtil.getDossierPartRequired(
-													requiredDossierPartIds, dossierPart, 
-													dossierPart, dossierFile);
-		
 									cssRequired =
 										dossierPart.getRequired()
 											? "cssRequired" : StringPool.BLANK;
@@ -219,7 +227,7 @@
 									id='<%=renderResponse.getNamespace() + "row-" + dossierPart.getDossierpartId() + StringPool.DASH + index %>' 
 									index="<%=index %>"
 									dossier-part="<%=dossierPart.getDossierpartId() %>"
-									class="opencps dossiermgt dossier-part-row"
+									class='<%="opencps dossiermgt dossier-part-row r-" + index + StringPool.SPACE + "dpid-" + String.valueOf(dossierPart.getDossierpartId())%>'
 								>
 									<span class='<%="level-" + level + " opencps dossiermgt dossier-part"%>'>
 										<span class="row-icon">
@@ -287,6 +295,7 @@
 							<%
 			
 								cssRequired = dossierPart.getRequired() ? "cssRequired" : StringPool.BLANK;
+								System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbb");
 									
 							%>
 								<div 
@@ -622,7 +631,6 @@
 								
 								if(submitButton){
 									submitButton.on('click', function(){
-										
 										<portlet:namespace/>validateRequiredResult();
 										if(required === true) {
 											alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-required-before-send") %>');
