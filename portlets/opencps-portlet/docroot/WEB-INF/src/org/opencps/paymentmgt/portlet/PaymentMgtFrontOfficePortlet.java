@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -30,6 +31,7 @@ import javax.portlet.PortletURL;
 
 import org.opencps.backend.message.UserActionMsg;
 import org.opencps.backend.util.BackendUtils;
+import org.opencps.backend.util.VtcPayUrlGenerator;
 import org.opencps.dossiermgt.NoSuchDossierException;
 import org.opencps.dossiermgt.bean.AccountBean;
 import org.opencps.dossiermgt.model.Dossier;
@@ -42,9 +44,11 @@ import org.opencps.paymentmgt.NoSuchPaymentConfigException;
 import org.opencps.paymentmgt.NoSuchPaymentFileException;
 import org.opencps.paymentmgt.model.PaymentConfig;
 import org.opencps.paymentmgt.model.PaymentFile;
+import org.opencps.paymentmgt.model.PaymentGateConfig;
 import org.opencps.paymentmgt.search.PaymentFileDisplayTerms;
 import org.opencps.paymentmgt.service.PaymentConfigLocalServiceUtil;
 import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
+import org.opencps.paymentmgt.service.PaymentGateConfigLocalServiceUtil;
 import org.opencps.paymentmgt.util.PaymentMgtUtil;
 import org.opencps.servicemgt.DuplicateFileNameException;
 import org.opencps.servicemgt.DuplicateFileNoException;
@@ -54,7 +58,9 @@ import org.opencps.util.DLFolderUtil;
 import org.opencps.util.MessageKeys;
 import org.opencps.util.PortletConstants;
 import org.opencps.util.PortletUtil;
+import org.opencps.vtcpay.model.VTCPay;
 
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -113,126 +119,28 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 		catch (NoSuchPaymentFileException e) {
 
 		}
-		PaymentConfig paymentConfig = null;
 		
-		try {
-			if (paymentFile != null)
-				paymentConfig =
-					PaymentConfigLocalServiceUtil.getPaymentConfigByGovAgency(
-						PortalUtil.getScopeGroupId(actionRequest),
-						paymentFile.getGovAgencyOrganizationId(), true);
-			_log.info("paymentConfig:"+paymentConfig);
-		}
-		catch (NoSuchPaymentConfigException e) {
-
-		}
-
-		if (paymentConfig != null) {
-			Date curDate = new Date();
-			boolean updatePaymentFile = false;
-			String merchant_trans_id = String.valueOf(paymentFile.getKeypayTransactionId());
-			if (Validator.isNull(paymentFile.getKeypayTransactionId())) {
-				SimpleDateFormat transFormat = new SimpleDateFormat("HHmmss");
-				paymentFile.setKeypayTransactionId(Integer.parseInt(transFormat.format(curDate)));
-				updatePaymentFile = true;
+		String url_redirect = StringPool.BLANK;
+		
+		if(Validator.isNotNull(paymentFile)){
+			url_redirect = paymentFile.getKeypayUrl();
+			
+			if(url_redirect.trim().length() <= 0){
+				paymentFile = VtcPayUrlGenerator.generatorPayURL(
+					PortalUtil.getScopeGroupId(actionRequest),
+					paymentFile.getGovAgencyOrganizationId(), paymentFile.getPaymentFileId(),
+					"", paymentFile.getDossierId());
+				
+				url_redirect = paymentFile.getKeypayUrl();
 			}
-			String merchant_code = paymentConfig.getKeypayMerchantCode();
-			String good_code = paymentFile.getKeypayGoodCode();
-			if (Validator.isNull(paymentFile.getKeypayGoodCode()) ||
-				"".equals(paymentFile.getKeypayGoodCode())) {
-				Dossier dossier = null;
-				try {
-					dossier = DossierLocalServiceUtil.getDossier(paymentFile.getDossierId());
-					paymentFile.setKeypayGoodCode("GC_" + dossier.getReceptionNo());
-				}
-				catch (NoSuchDossierException e) {
-
-				}
-				good_code = paymentFile.getKeypayGoodCode();
-				updatePaymentFile = true;
-			}
-			String net_cost = String.valueOf((int) paymentFile.getAmount());
-			String ship_fee = "0";
-			String tax = "0";
-
-			String bank_code = ParamUtil.getString(actionRequest, "bankCode");
-			String service_code = "720";
-			String version = paymentConfig.getKeypayVersion();
-			String command = "pay";
-			String currency_code = "704";
-			String desc_1 = "";
-			String desc_2 = "";
-			String desc_3 = "";
-			String desc_4 = "";
-			String desc_5 = "";
-			String xml_description = "";
-			String current_locale = "vn";
-			String country_code = "+84";
-			String internal_bank = "all_card";
-			String merchant_secure_key = paymentConfig.getKeypaySecureKey();
+			
 			paymentFile.setModifiedDate(new Date());
 			paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_REQUESTED);
-			updatePaymentFile = true;
-			if (updatePaymentFile) {
-				try {
-					PaymentFileLocalServiceUtil.updatePaymentFile(paymentFile);
-				}
-				catch (SystemException e) {
-
-				}
-			}
-			ThemeDisplay themeDisplay =
-				(ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-			String portletName = (String) actionRequest.getAttribute(WebKeys.PORTLET_ID);
-			PortletURL redirectURL =
-				PortletURLFactoryUtil.create(
-					PortalUtil.getHttpServletRequest(actionRequest), portletName,
-					themeDisplay.getLayout().getPlid(), PortletRequest.RENDER_PHASE);
-			redirectURL.setParameter("jspPage", templatePath + "frontofficeconfirmkeypay.jsp");
-			String return_url = redirectURL.toString();
-			KeyPay keypay =
-				new KeyPay(
-					merchant_trans_id, merchant_code, good_code, net_cost, ship_fee, tax,
-					bank_code, service_code, version, command, currency_code, desc_1, desc_2,
-					desc_3, desc_4, desc_5, xml_description, current_locale, country_code,
-					return_url, internal_bank, merchant_secure_key);
-			keypay.setKeypay_url(paymentConfig.getKeypayDomain());
-
-			String url_redirect = paymentFile.getKeypayUrl();
-			String param = "";
-			param += "merchant_code=" + URLEncoder.encode(keypay.getMerchant_code(), "UTF-8") + "&";
-			param +=
-				"merchant_secure_key=" +
-					URLEncoder.encode(keypay.getMerchant_secure_key(), "UTF-8") + "&";
-			param += "bank_code=" + URLEncoder.encode(keypay.getBank_code(), "UTF-8") + "&";
-			param += "internal_bank=" + URLEncoder.encode(keypay.getInternal_bank(), "UTF-8") + "&";
-			param +=
-				"merchant_trans_id=" + URLEncoder.encode(keypay.getMerchant_trans_id(), "UTF-8") +
-					"&";
-			param += "good_code=" + URLEncoder.encode(keypay.getGood_code(), "UTF-8") + "&";
-			param += "net_cost=" + URLEncoder.encode(keypay.getNet_cost(), "UTF-8") + "&";
-			param += "ship_fee=" + URLEncoder.encode(keypay.getShip_fee(), "UTF-8") + "&";
-			param += "tax=" + URLEncoder.encode(keypay.getTax(), "UTF-8") + "&";
-			param += "return_url=" + URLEncoder.encode(keypay.getReturn_url(), "UTF-8") + "&";
-			param += "version=" + URLEncoder.encode(keypay.getVersion(), "UTF-8") + "&";
-			param += "command=" + URLEncoder.encode(keypay.getCommand(), "UTF-8") + "&";
-			param +=
-				"current_locale=" + URLEncoder.encode(keypay.getCurrent_locale(), "UTF-8") + "&";
-			param += "currency_code=" + URLEncoder.encode(keypay.getCurrency_code(), "UTF-8") + "&";
-			param += "service_code=" + URLEncoder.encode(keypay.getService_code(), "UTF-8") + "&";
-			param += "country_code=" + URLEncoder.encode(keypay.getCountry_code(), "UTF-8") + "&";
-			param += "desc_1=" + URLEncoder.encode(keypay.getDesc_1(), "UTF-8") + "&";
-			param += "desc_2=" + URLEncoder.encode(keypay.getDesc_2(), "UTF-8") + "&";
-			param += "desc_3=" + URLEncoder.encode(keypay.getDesc_3(), "UTF-8") + "&";
-			param += "desc_4=" + URLEncoder.encode(keypay.getDesc_4(), "UTF-8") + "&";
-			param += "desc_5=" + URLEncoder.encode(keypay.getDesc_5(), "UTF-8") + "&";
-			param +=
-				"xml_description=" + URLEncoder.encode(keypay.getXml_description(), "UTF-8") + "&";
-
-			url_redirect += param + "secure_hash=" + keypay.getSecure_hash();
-			System.out.println("----URL----" + url_redirect);
-			actionResponse.sendRedirect(url_redirect);
+			
+			PaymentFileLocalServiceUtil.updatePaymentFile(paymentFile);
 		}
+			
+		actionResponse.sendRedirect(url_redirect);
 	}
 
 	/**

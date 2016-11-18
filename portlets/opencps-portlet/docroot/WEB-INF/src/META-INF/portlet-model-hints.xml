@@ -292,6 +292,7 @@
 		<field name="daysDoing" type="int" />
 		<field name="daysDelay" type="int" />
 		<field name="oId" type="String" />
+		<field name="logId" type="long" />
 	</model>
 	<model name="org.opencps.processmgt.model.ProcessOrder">
 		<field name="processOrderId" type="long" />
@@ -328,9 +329,11 @@
 		<field name="stepName" type="String" />
 		<field name="sequenceNo" type="int" />
 		<field name="dossierStatus" type="String" />
+		<field name="dossierSubStatus" type="String" />
 		<field name="daysDuration" type="int" />
 		<field name="referenceDossierPartId" type="long" />
 		<field name="externalAppUrl" type="String" />
+		<field name="processStepNo" type="int" />
 	</model>
 	<model name="org.opencps.processmgt.model.ProcessStepDossierPart">
 		<field name="processStepId" type="long" />
@@ -735,10 +738,20 @@
 		<field name="invoiceNo" type="String" />
 		<field name="syncStatus" type="int" />
 		<field name="oid" type="String" />
+		<field name="paymentConfig" type="long" />
+		<field name="paymentGateStatusCode" type="String" />
+		<field name="paymentGateResponseData" type="String" />
 	</model>
 	<model name="org.opencps.paymentmgt.model.PaymentGateConfig">
 		<field name="paymentGateId" type="long" />
 		<field name="paymentGateName" type="String" />
+	</model>
+	<model name="org.opencps.paymentmgt.model.PaymentStatusCode">
+		<field name="paymentStatusCodeId" type="long" />
+		<field name="statusCode" type="String" />
+		<field name="statusCodeMean" type="String" />
+		<field name="descripton" type="String" />
+		<field name="paymentGateId" type="String" />
 	</model>
 	<model name="org.opencps.api.model.ApiService">
 		<field name="apiLogId" type="long" />

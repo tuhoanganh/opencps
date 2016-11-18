@@ -51,6 +51,17 @@ public class ActionHistoryLocalServiceImpl
 	 * {@link org.opencps.processmgt.service.ActionHistoryLocalServiceUtil} to
 	 * access the action history local service.
 	 */
+	
+	/**
+	 * @param logId
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public ActionHistory getActionHistoryByLogId(long logId) throws PortalException, SystemException
+	{
+		return actionHistoryPersistence.fetchByLOG_ID(logId);
+	}
 
 	/**
 	 * @param userId
@@ -72,7 +83,7 @@ public class ActionHistoryLocalServiceImpl
 	    long userId, long groupId, long companyId, long processOrderId,
 	    long processWorkflowId, Date actionDatetime, String stepName,
 	    String actionName, String actionNote, long actionUserId, int daysDoing,
-	    int daysDelay, String dossierStatus)
+	    int daysDelay, String dossierStatus, long logId)
 	    throws SystemException {
 
 		long actionHistoryId = counterLocalService
@@ -119,6 +130,8 @@ public class ActionHistoryLocalServiceImpl
 			actionHistory
 			    .setDaysDoing(daysDoing);
 		}
+		
+		actionHistory.setLogId(logId);
 
 		actionHistory
 		    .setDaysDelay(daysDelay);
