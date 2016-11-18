@@ -1,4 +1,5 @@
 
+<%@page import="org.opencps.util.WebKeys"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -62,6 +63,9 @@
 	
 	boolean showVersionItemReference = ParamUtil.getBoolean(request, "showVersionItemReference", true);
 	
+	boolean readOnly = false;
+	readOnly = ParamUtil.getBoolean(request,WebKeys.READ_ONLY);
+	
 	String groupName = ParamUtil.getString(request, DossierFileDisplayTerms.GROUP_NAME);
 	
 	boolean isCBXL = ParamUtil.getBoolean(request, "isCBXL", false);
@@ -92,7 +96,7 @@
 					
 	}
 	
-	if(isReadOnly){
+	if(readOnly){
 		isEditDossier = false;
 	}
 	

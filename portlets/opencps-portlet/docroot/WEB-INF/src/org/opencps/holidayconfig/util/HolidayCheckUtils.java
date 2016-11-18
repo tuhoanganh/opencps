@@ -117,7 +117,6 @@ public class HolidayCheckUtils {
 		}
 		catch (Exception e) {
 			// TODO Auto-generated catch block
-			_log.error(e);
 		}
 
 		return dayDelay;
