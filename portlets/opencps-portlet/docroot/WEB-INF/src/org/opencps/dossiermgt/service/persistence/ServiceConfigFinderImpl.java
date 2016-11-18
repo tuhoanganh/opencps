@@ -141,7 +141,7 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 				.equals("0") || domainCode
 					.equals(StringPool.BLANK)) {
 				sql = StringUtil
-					.replace(sql, "AND (opencps_service_config.domainCode = ?)",
+					.replace(sql, "AND ((opencps_service_config.domainCode = ?) OR (opencps_service_config.serviceDomainIndex like ?))",
 						StringPool.BLANK);
 			}
 			
@@ -178,6 +178,7 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 					.equals("0")) {
 				qPos
 					.add(domainCode);
+				qPos.add(StringPool.PERCENT+domainCode+StringPool.PERIOD+StringPool.PERCENT);
 			}
 
 			Iterator<Integer> itr = q
@@ -530,7 +531,7 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 				.equals("0") || domainCode
 					.equals(StringPool.BLANK)) {
 				sql = StringUtil
-					.replace(sql, "AND (opencps_service_config.domainCode = ?)",
+					.replace(sql, "AND ((opencps_service_config.domainCode = ?) OR (opencps_service_config.serviceDomainIndex like ?))",
 						StringPool.BLANK);
 			}
 			
@@ -567,6 +568,7 @@ public class ServiceConfigFinderImpl extends BasePersistenceImpl<ServiceConfig>
 					.equals("0")) {
 				qPos
 					.add(domainCode);
+				qPos.add(StringPool.PERCENT+domainCode+StringPool.PERIOD+StringPool.PERCENT);
 			}
 
 			return (List<ServiceConfig>) QueryUtil
