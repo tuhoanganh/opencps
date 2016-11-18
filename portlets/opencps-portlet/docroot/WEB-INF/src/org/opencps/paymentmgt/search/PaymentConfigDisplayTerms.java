@@ -45,6 +45,7 @@ public class PaymentConfigDisplayTerms extends DisplayTerms {
 	public static final String REPORT_TEMPLATE = "reportTemplate";
 	public static final String PAYMENT_GATE_TYPE= "paymentGateType";
 	public static final String PAYMENT_STATUS = "paymentStatus";
+	public static final String RETURN_URL = "returnFromPaymentGateUrl";
 	public static final String ACTIVE = "1";
 	public static final String DISABLE = "0";
 	public static final String CHECKBOX = "Checkbox";

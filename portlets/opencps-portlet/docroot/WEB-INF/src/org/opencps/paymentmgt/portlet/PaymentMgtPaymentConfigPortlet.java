@@ -217,9 +217,6 @@ public class PaymentMgtPaymentConfigPortlet extends MVCPortlet {
 					String sourceFileName =
 						fileExportDir.substring(
 							fileExportDir.lastIndexOf(StringPool.SLASH) + 1, fileExportDir.length());
-					System.out.println(sourceFileName);
-
-					System.out.println(file.getName());
 
 					String mimeType = MimeTypesUtil.getContentType(file);
 
@@ -323,6 +320,7 @@ public class PaymentMgtPaymentConfigPortlet extends MVCPortlet {
 			jsonObject.put(PaymentConfigDisplayTerms.REPORT_TEMPLATE, pc.getReportTemplate());
 			jsonObject.put(PaymentConfigDisplayTerms.PAYMENT_GATE_TYPE, pc.getPaymentGateType());
 			jsonObject.put(PaymentConfigDisplayTerms.PAYMENT_STATUS, pc.getStatus());
+			jsonObject.put(PaymentConfigDisplayTerms.RETURN_URL, pc.getReturnUrl());
 		}
 		paymentConfigsJsonArray.put(jsonObject);
 
@@ -381,6 +379,8 @@ public class PaymentMgtPaymentConfigPortlet extends MVCPortlet {
 			ParamUtil.getString(actionRequest, PaymentConfigDisplayTerms.KEYPAY_SECURE_KEY);
 		String reportTemplate =
 			ParamUtil.getString(actionRequest, PaymentConfigDisplayTerms.REPORT_TEMPLATE);
+		String returnFromPaymentGateUrl =
+						ParamUtil.getString(actionRequest, PaymentConfigDisplayTerms.RETURN_URL);
 		long paymentGateType =
 			ParamUtil.getLong(actionRequest, PaymentConfigDisplayTerms.PAYMENT_GATE_TYPE);
 		boolean paymentStatus =
@@ -400,13 +400,13 @@ public class PaymentMgtPaymentConfigPortlet extends MVCPortlet {
 				paymentConfiglist =
 					PaymentConfigLocalServiceUtil.getPaymentConfigListByGovAgency(
 						serviceContext.getScopeGroupId(), govAgencyOrganizationId);
-				
-				if(paymentConfiglist.size() >0){
-					for(PaymentConfig paymentConfig:paymentConfiglist){
-						
+
+				if (paymentConfiglist.size() > 0) {
+					for (PaymentConfig paymentConfig : paymentConfiglist) {
+
 						paymentConfig.setStatus(false);
 						PaymentConfigLocalServiceUtil.updatePaymentConfig(paymentConfig);
-						
+
 					}
 				}
 			}
@@ -416,7 +416,7 @@ public class PaymentMgtPaymentConfigPortlet extends MVCPortlet {
 						govAgencyOrganizationId, govAgencyName, govAgencyTaxNo, invoiceTemplateNo,
 						invoiceIssueNo, invoiceLastNo, bankInfo, placeInfo, keypayDomain,
 						keypayVersion, keypayMerchantCode, keypaySecureKey, reportTemplate,
-						paymentGateType, paymentStatus, serviceContext.getUserId(), serviceContext);
+						paymentGateType, paymentStatus, serviceContext.getUserId(),returnFromPaymentGateUrl, serviceContext);
 				paymentConfigId = c.getPaymentConfigId();
 			}
 			else {
@@ -424,7 +424,7 @@ public class PaymentMgtPaymentConfigPortlet extends MVCPortlet {
 					paymentConfigId, govAgencyOrganizationId, govAgencyName, govAgencyTaxNo,
 					invoiceTemplateNo, invoiceIssueNo, invoiceLastNo, bankInfo, placeInfo,
 					keypayDomain, keypayVersion, keypayMerchantCode, keypaySecureKey,
-					reportTemplate, paymentGateType, paymentStatus, serviceContext.getUserId(),
+					reportTemplate, paymentGateType, paymentStatus, serviceContext.getUserId(),returnFromPaymentGateUrl,
 					serviceContext);
 			}
 
