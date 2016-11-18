@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletURL;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -47,10 +49,14 @@ import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.Organization;
+import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.OrganizationLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portlet.PortletURLFactoryUtil;
 
 /**
  * @author trungdk
@@ -203,24 +209,18 @@ public class PaymentMgtUtil {
 			boolean isVerify = VTCPay.validateSign(vtcPay);
 
 			_log.info("=====vtcPay.getStatus():" + vtcPay.getStatus());
+			_log.info("=====isVerify:" + isVerify);
+
+			paymentFile =
+				PaymentFileLocalServiceUtil.getByTransactionId(Long.parseLong(vtcPay.getReference_number()));
+
+			dossier = DossierLocalServiceUtil.getDossier(paymentFile.getDossierId());
 
 			if (isVerify) {
 
-				try {
-					paymentFile =
-						PaymentFileLocalServiceUtil.getByTransactionId(Long.parseLong(vtcPay.getReference_number()));
-					// dossier =
-					// DossierLocalServiceUtil.getDossier(paymentFile.getDossierId());
-					dossier = DossierLocalServiceUtil.getDossier(paymentFile.getDossierId());
-
-				}
-				catch (NumberFormatException | PortalException e) {
-					// TODO Auto-generated catch block
-					_log.info(e);
-				}
-
 				if (Validator.isNotNull(paymentFile) &&
-					vtcPay.getStatus().equals(VTCPayEventKeys.SUCCESS)) {
+					vtcPay.getStatus().equals(VTCPayEventKeys.SUCCESS) &&
+					(paymentFile.getPaymentStatus() != PaymentMgtUtil.PAYMENT_STATUS_APPROVED)) {
 
 					UserActionMsg actionMsg = new UserActionMsg();
 
@@ -238,7 +238,8 @@ public class PaymentMgtUtil {
 
 					message.put("msgToEngine", actionMsg);
 
-					MessageBusUtil.sendMessage("opencps/frontoffice/out/destination", message);
+					// MessageBusUtil.sendMessage("opencps/frontoffice/out/destination",
+					// message);
 
 					paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_APPROVED);
 					paymentFile.setPaymentMethod(WebKeys.PAYMENT_METHOD_VTCPAY);
@@ -257,26 +258,21 @@ public class PaymentMgtUtil {
 
 				PaymentFileLocalServiceUtil.updatePaymentFile(paymentFile);
 
-				response.sendRedirect(Validator.isNotNull(dossier)
-					? dossier.getKeypayRedirectUrl().toString() : StringPool.BLANK);
-
-				request.setAttribute("paymentFileId", Validator.isNotNull(paymentFile)
-					? paymentFile.getPaymentFileId() : "0");
-				request.setAttribute(
-					"dossierId", Validator.isNotNull(dossier) ? dossier.getDossierId() : "0");
-				request.setAttribute(
-					"serviceInfoId", Validator.isNotNull(dossier)
-						? dossier.getServiceInfoId() : "0");
-
 			}
-			else {
-				paymentFile.setPaymentGateStatusCode(VTCPayEventKeys.SIGN_NOT_VALID);
+
+			if (Validator.isNotNull(dossier) && Validator.isNotNull(paymentFile)) {
+
+				response.sendRedirect(dossier.getKeypayRedirectUrl().toString());
+
+				request.setAttribute("paymentFileId", paymentFile.getPaymentFileId());
+				request.setAttribute("dossierId", dossier.getDossierId());
+				request.setAttribute("serviceInfoId", dossier.getServiceInfoId());
 			}
 
 		}
-		catch (SystemException | IOException e) {
+		catch (SystemException | IOException | NumberFormatException | PortalException e) {
 			// TODO Auto-generated catch block
-			_log.error(e);
+			e.printStackTrace();
 		}
 
 		return response;

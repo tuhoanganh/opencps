@@ -137,10 +137,13 @@ public class VTCPay {
 		_log.info("=====vtcPay.getReference_number():" + vtcPay.getReference_number());
 
 		try {
-			paymentFile =
-				PaymentFileLocalServiceUtil.getByTransactionId(Long.parseLong(vtcPay.getReference_number()));
 
-			_log.info("=====paymentFile.getPaymentConfig():" + paymentFile.getPaymentConfig());
+			if (vtcPay.getReference_number().trim().length() > 0) {
+				paymentFile =
+					PaymentFileLocalServiceUtil.getByTransactionId(Long.parseLong(vtcPay.getReference_number()));
+
+				_log.info("=====paymentFile.getPaymentConfig():" + paymentFile.getPaymentConfig());
+			}
 
 			if (Validator.isNotNull(paymentFile)) {
 
@@ -156,17 +159,25 @@ public class VTCPay {
 
 		StringBuffer merchantSignBuffer = new StringBuffer();
 		merchantSignBuffer.append(vtcPay.getAmount());
+
 		merchantSignBuffer.append("|").append(vtcPay.getMessage());
+
 		merchantSignBuffer.append("|").append(vtcPay.getPaymentType());
+
 		merchantSignBuffer.append("|").append(vtcPay.getReference_number());
+
 		merchantSignBuffer.append("|").append(vtcPay.getStatus());
+
 		merchantSignBuffer.append("|").append(vtcPay.getTrans_ref_no());
+
 		merchantSignBuffer.append("|").append(vtcPay.getWebsite_id());
+
 		merchantSignBuffer.append("|").append(
 			Validator.isNotNull(paymentConfig)
-				? paymentConfig.getKeypayMerchantCode() : StringPool.BLANK);
+				? paymentConfig.getKeypaySecureKey() : StringPool.BLANK);
 
 		String merchantSign = StringPool.BLANK;
+		_log.info("=====merchantSignBuffer.toString():" + merchantSignBuffer.toString());
 		merchantSign = merchantSignBuffer.toString();
 
 		merchantSign = VTCPay.sha256(merchantSign);
@@ -178,12 +189,6 @@ public class VTCPay {
 
 		StringBuffer merchantSignBuffer = new StringBuffer();
 
-		_log.info("amount:" + amount);
-		_log.info("currency:" + currency);
-		_log.info("receiver_account:" + receiver_account);
-		_log.info("reference_number:" + reference_number);
-		_log.info("url_return:" + url_return);
-		_log.info("website_id:" + website_id);
 
 		merchantSignBuffer.append(vtcPay.getAmount());
 		merchantSignBuffer.append("|").append(vtcPay.getCurrency());
@@ -206,9 +211,13 @@ public class VTCPay {
 
 		String merchantSig = VTCPay.getSecureHashCodeResponse(vtcPay);
 
+		merchantSig = merchantSig.toUpperCase();
+
+
 		String signature = vtcPay.getSignature();
 
-		if (merchantSig.equals(signature)) {
+
+		if (merchantSig.contains(signature)) {
 			return true;
 		}
 		else {

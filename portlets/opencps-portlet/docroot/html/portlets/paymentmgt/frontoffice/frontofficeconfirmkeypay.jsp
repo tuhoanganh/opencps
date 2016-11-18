@@ -25,10 +25,11 @@
 <%
 	HttpServletRequest r = PortalUtil.getHttpServletRequest(renderRequest);
 
-	long test = (long)r.getAttribute("paymentFileId");
+	String test = (String)r.getAttribute("paymentFileId");
 	System.out.println("test:"+test);
 	
 	long paymentFileId = ParamUtil.getLong(r, "paymentFileId",0);
+	System.out.println("paymentFileId:"+paymentFileId);
 	long dossierId = ParamUtil.getLong(r, "dossierId",0);
 	long serviceInfoId = ParamUtil.getLong(r, "serviceInfoId",0);
 	

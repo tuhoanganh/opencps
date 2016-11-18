@@ -52,21 +52,11 @@ public class PaymentGateServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 		throws ServletException, IOException {
 
-		_log.info("=====doGet():" + request);
+		_log.info("=====doGet():"+request.getPathInfo());
 		String paymentGateName = request.getParameter("paymentGateName");
 
 		paymentGateName = "VTCPAY";
-
-		String homeUrl = "";
-		try {
-			homeUrl = PortalUtil.getHomeURL(request);
-		}
-		catch (PortalException | SystemException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		_log.info("homeUrl:" + homeUrl);
-
+		
 		if (paymentGateName.equals("VTCPAY")) {
 
 			VTCPay vtcPay = new VTCPay(request);

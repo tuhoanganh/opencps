@@ -126,10 +126,12 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 			url_redirect = paymentFile.getKeypayUrl();
 			
 			if(url_redirect.trim().length() <= 0){
-				VtcPayUrlGenerator.generatorPayURL(
+				paymentFile = VtcPayUrlGenerator.generatorPayURL(
 					PortalUtil.getScopeGroupId(actionRequest),
 					paymentFile.getGovAgencyOrganizationId(), paymentFile.getPaymentFileId(),
 					"", paymentFile.getDossierId());
+				
+				url_redirect = paymentFile.getKeypayUrl();
 			}
 			
 			paymentFile.setModifiedDate(new Date());
