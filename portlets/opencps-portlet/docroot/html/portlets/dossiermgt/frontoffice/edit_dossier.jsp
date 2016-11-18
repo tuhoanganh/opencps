@@ -171,7 +171,7 @@
 
 		<liferay-ui:header 
 			backURL="<%= backURL %>"
-			title='<%= (dossier == null) ? "add-dossier" : (cmd.equals(Constants.VIEW) ? "view-dossier" : "update-dossier") %>' 
+			title='<%= (dossier == null) ? "dossier-submit-online-temp" : (cmd.equals(Constants.VIEW) ? "view-dossier" : "dossier-submit-online-temp") %>' 
 		/>
 
 		<portlet:actionURL var="updateDossierURL" name="updateDossier" />
