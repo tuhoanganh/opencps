@@ -1,3 +1,4 @@
+
 /**
  * OpenCPS is the open source Core Public Services software
  * Copyright (C) 2016-present OpenCPS community
@@ -28,8 +29,6 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String USER_MGT_PORTLET = "2_WAR_opencpsportlet";
 
 	public static final String DOSSIER_MGT_PORTLET = "13_WAR_opencpsportlet";
-	
-	public static final String DASHBOARD_PORTLET = "1001_WAR_opencpsportlet";
 
 	public static final String SERVICE_MGT_DIRECTORY = "10_WAR_opencpsportlet";
 
@@ -243,5 +242,12 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	
 	public static final String SYNC_PAY_SEND_CONFIRM = "SYNC_PAY_SEND_CONFIRM";
 	public static final String SYNC_PAY_CONFIRM = "SYNC_PAY_CONFIRM";
+	
+	public static final int DISABLE = 0;
+	public static final int ACTIVE = 1;
+	
+	public static final String BACK_URL= "backURL";
+	public static final String RETURN_URL= "returnURL";
+	public static final String REDIRECT_URL= "redirectURL";
 	
 }

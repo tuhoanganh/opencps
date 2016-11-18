@@ -54,7 +54,6 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
-import com.liferay.portal.kernel.messaging.MessageBus;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
@@ -470,9 +469,19 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 					 * step.getProcessStepId(), dossierPartId); }
 					 */
 					for (ProcessStepDossierPart stepDossierPart : stepDossiers) {
-						ProcessStepDossierPartLocalServiceUtil.addPSDP(
-						    stepDossierPart.getProcessStepId(),
-						    stepDossierPart.getDossierPartId());
+						
+						if(stepDossierPart.getDossierPartId() == 0){
+							ProcessStepDossierPartLocalServiceUtil.addPSDP(
+								    stepDossierPart.getProcessStepId(),
+								    stepDossierPart.getDossierPartId(),
+								    stepDossierPart.getReadOnly());
+						}else{
+							ProcessStepDossierPartLocalServiceUtil.updatePSDP(
+								    stepDossierPart.getProcessStepId(),
+								    stepDossierPart.getDossierPartId(),
+								    stepDossierPart.getReadOnly());
+						}
+						
 					}
 				}
 
@@ -541,9 +550,17 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 				
 				//Add dossierPart
 				for (ProcessStepDossierPart stepDossierPart : stepDossiers) {
-					ProcessStepDossierPartLocalServiceUtil.addPSDP(
-					    stepDossierPart.getProcessStepId(),
-					    stepDossierPart.getDossierPartId());
+					if(stepDossierPart.getDossierPartId() == 0){
+						ProcessStepDossierPartLocalServiceUtil.addPSDP(
+							    stepDossierPart.getProcessStepId(),
+							    stepDossierPart.getDossierPartId(),
+							    stepDossierPart.getReadOnly());
+					}else{
+						ProcessStepDossierPartLocalServiceUtil.updatePSDP(
+							    stepDossierPart.getProcessStepId(),
+							    stepDossierPart.getDossierPartId(),
+							    stepDossierPart.getReadOnly());
+					}
 				}
 
 				// Redirect page

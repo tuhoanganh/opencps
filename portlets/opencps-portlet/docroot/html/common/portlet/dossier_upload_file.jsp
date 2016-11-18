@@ -1,4 +1,5 @@
 
+<%@page import="org.opencps.util.PortletPropsValues"%>
 <%@page import="com.liferay.portal.RolePermissionsException"%>
 <%
 /**
@@ -198,7 +199,14 @@
 	</aui:row>
 	<aui:row>
 		<aui:col width="100">
-			<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD %>" type="file"/>
+			<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD %>" type="file">
+				<aui:validator name="acceptFiles">
+					'<%= StringUtil.merge(PortletPropsValues.ACCOUNTMGT_FILE_TYPE) %>'
+				</aui:validator>
+			</aui:input>
+			<div class="alert alert-info" role="alert">
+				<%= StringUtil.merge(PortletPropsValues.ACCOUNTMGT_FILE_TYPE) %> --- <%= (PortletPropsValues.ACCOUNTMGT_FILE_SIZE/1024)/1024 %> MB
+			</div>
 		</aui:col>
 	</aui:row>
 	

@@ -1,3 +1,4 @@
+<%@page import="java.text.DecimalFormat"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -48,6 +49,9 @@
 <%@page import="org.opencps.processmgt.model.ServiceProcess"%>
 <%@page import="org.opencps.processmgt.model.ProcessStep"%>
 <%
+
+	DecimalFormat doubleFomart=new DecimalFormat("#,###.#");
+
 	PortletPreferences preferences = renderRequest.getPreferences();
 	
 	portletResource = ParamUtil.getString(request, "portletResource");

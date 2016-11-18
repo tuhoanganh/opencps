@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -89,13 +88,16 @@
 		>
 		<liferay-ui:search-container-results>
 			<%
-				actionHistories =  ActionHistoryLocalServiceUtil.getActionHistoryByProcessOrderId(processOrderId, searchContainer.getStart(), searchContainer.getEnd());
-				
-				results = actionHistories;
-				total = ActionHistoryLocalServiceUtil
-					.countActionHistoryByProcessId(processOrderId);
-				pageContext.setAttribute("results", results);
-				pageContext.setAttribute("total", total);
+				actionHistories = ActionHistoryLocalServiceUtil
+								.getActionHistoryByProcessOrderId(processOrderId,
+										searchContainer.getStart(),
+										searchContainer.getEnd(), false);
+
+						results = actionHistories;
+						total = ActionHistoryLocalServiceUtil
+								.countActionHistoryByProcessId(processOrderId);
+						pageContext.setAttribute("results", results);
+						pageContext.setAttribute("total", total);
 			%>
 		</liferay-ui:search-container-results>
 		<liferay-ui:search-container-row 
@@ -134,7 +136,7 @@
 							</span>
 							
 							<span class="span8">
-								<%=actionHistory.getStepName()%>
+								<%= actionHistory.getStepName() %>
 							</span>
 						</aui:row>
 						
@@ -148,6 +150,15 @@
 							</span>
 						</aui:row>
 						
+						<aui:row>
+							<span class="span4 bold">
+								<liferay-ui:message key="action-date-over" />
+							</span>
+							
+							<span class="span8">
+								<%=String.valueOf(actionHistory.getDaysDelay())%>
+							</span>
+						</aui:row>
 					</aui:col>
 					<aui:col width="50">
 						<aui:row>
@@ -185,7 +196,7 @@
 				</aui:row>
 				
 		</liferay-ui:search-container-row>
-		<liferay-ui:search-iterator type="opencs_page_iterator"/>
+		<liferay-ui:search-iterator type="normal"/>
 	</liferay-ui:search-container>
 </div>
 
