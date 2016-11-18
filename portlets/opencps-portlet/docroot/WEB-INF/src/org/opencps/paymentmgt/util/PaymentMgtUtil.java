@@ -216,7 +216,6 @@ public class PaymentMgtUtil {
 
 			dossier = DossierLocalServiceUtil.getDossier(paymentFile.getDossierId());
 
-			
 			if (isVerify) {
 
 				if (Validator.isNotNull(paymentFile) &&
@@ -262,38 +261,12 @@ public class PaymentMgtUtil {
 			}
 
 			if (Validator.isNotNull(dossier) && Validator.isNotNull(paymentFile)) {
-				long plId = 0;
-				long groupId = dossier.getGroupId();
 
-				String group = "/yeu-cau-thanh-toan";
-				Layout layOut = null;
+				response.sendRedirect(dossier.getKeypayRedirectUrl().toString());
 
-				layOut = LayoutLocalServiceUtil.getFriendlyURLLayout(groupId, true, group);
-				
-				_log.info("=====layOut:"+layOut);
-
-				if (Validator.isNotNull(layOut)) {
-					plId = layOut.getPlid();
-				}
-
-				PortletURL renderUrl = PortletURLFactoryUtil.create(
-						request, "20_WAR_opencpsportlet", plId, PortletRequest.RENDER_PHASE);
-				
-				renderUrl.setParameter("paymentFileId", String.valueOf(paymentFile.getPaymentFileId()));
-				renderUrl.setParameter("dossierId", String.valueOf(dossier.getDossierId()));
-				renderUrl.setParameter("serviceInfoId", String.valueOf(dossier.getServiceInfoId()));
-				renderUrl.setParameter("mvcPath", "/html/portlets/paymentmgt/frontoffice/frontofficeconfirmkeypay.jsp");
-				
-				_log.info("=====renderUrl.toString():"+renderUrl.toString());
-				
-
-				response.sendRedirect(Validator.isNotNull(renderUrl)?renderUrl.toString():StringPool.BLANK);
-
-//				request.setAttribute("paymentFileId",paymentFile.getPaymentFileId());
-//				request.setAttribute(
-//					"dossierId", dossier.getDossierId());
-//				request.setAttribute(
-//					"serviceInfoId",dossier.getServiceInfoId());
+				request.setAttribute("paymentFileId", paymentFile.getPaymentFileId());
+				request.setAttribute("dossierId", dossier.getDossierId());
+				request.setAttribute("serviceInfoId", dossier.getServiceInfoId());
 			}
 
 		}

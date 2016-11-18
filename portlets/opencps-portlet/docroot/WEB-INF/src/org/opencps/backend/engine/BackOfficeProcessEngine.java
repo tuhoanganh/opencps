@@ -278,7 +278,9 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 				if (currStep.getDossierStatus().contains(PortletConstants.DOSSIER_STATUS_RECEIVING) &&
 					!changeStep.getDossierStatus().contains(
-						PortletConstants.DOSSIER_STATUS_PROCESSING)) {
+						PortletConstants.DOSSIER_STATUS_PROCESSING) 
+						&& processWorkflow.getPostProcessStepId() ==0
+						&& processWorkflow.getIsFinishStep()) {
 
 					citizenEvents.add(NotificationEventKeys.USERS_AND_ENTERPRISE.EVENT3);
 
@@ -507,6 +509,8 @@ public class BackOfficeProcessEngine implements MessageListener {
 				_log.info("======estimateDatetime:"+estimateDatetime);
 				_log.info("citizenEvents:" + citizenEvents);
 				_log.info("employEvents:" + employEvents);
+				_log.info("=====dossier.getGroupId():"+dossier.getGroupId());
+				_log.info("=====dossier.getUserId():"+dossier.getUserId());
 
 				lsNotification =
 					getListNoties(
@@ -514,7 +518,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 						assignToUserId, processWorkflow, dossier.getDossierId(),
 						paymentFile.getPaymentFileId(), processOrderId);
 
-				_log.info("=====lsNotification.size():" + lsNotification.size());
+				_log.info("=====lsNotification:"+lsNotification);
 
 				toBackOffice.setListNotifications(lsNotification);
 
@@ -546,7 +550,8 @@ public class BackOfficeProcessEngine implements MessageListener {
 					getListNoties(
 						citizenEvents, employEvents, dossier.getUserId(), dossier.getGroupId(),
 						assignToUserId, processWorkflow, dossier.getDossierId(), 0, processOrderId);
-
+				
+				_log.info("=====lsNotification:"+lsNotification);
 				toBackOffice.setListNotifications(lsNotification);
 
 				Message sendToBackOffice = new Message();
@@ -572,7 +577,9 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 		List<SendNotificationMessage> ls =
 		    new ArrayList<SendNotificationMessage>();
-
+		
+		_log.info("=====citizenUserId:"+citizenUserId);
+		_log.info("=====groupId:"+groupId);
 		AccountBean accountBean =
 		    AccountUtil.getAccountBean(citizenUserId, groupId, null);
 
@@ -651,7 +658,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 			notiMsg.setProcessOrderId(processOrderId);
 			notiMsg.setType("SMS, INBOX, EMAIL");
 
-			
+			_log.info("=====assignToUserId:"+assignToUserId);
 			if (assignToUserId != 0) {
 				
 				SendNotificationMessage.InfoList infoEmploy =
@@ -706,7 +713,13 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 				List<Employee> employees = getListEmploy(processWorkflow);
 				
+				
+				
+			
+				
 				for (Employee employee : employees) {
+					
+					_log.info("=====employee.getEmployeeId()"+employee.getEmployeeId());
 					
 					SendNotificationMessage.InfoList infoEmploy =
 								    new SendNotificationMessage.InfoList();

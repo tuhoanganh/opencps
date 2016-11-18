@@ -383,6 +383,9 @@ public class AccountUtil {
 		String accountType = StringPool.BLANK;
 
 		User user = null;
+		
+		_log.info("=====userId:"+userId);
+		_log.info("=====groupId:"+groupId);
 
 		try {
 

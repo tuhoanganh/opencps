@@ -189,12 +189,6 @@ public class VTCPay {
 
 		StringBuffer merchantSignBuffer = new StringBuffer();
 
-		_log.info("amount:" + amount);
-		_log.info("currency:" + currency);
-		_log.info("receiver_account:" + receiver_account);
-		_log.info("reference_number:" + reference_number);
-		_log.info("url_return:" + url_return);
-		_log.info("website_id:" + website_id);
 
 		merchantSignBuffer.append(vtcPay.getAmount());
 		merchantSignBuffer.append("|").append(vtcPay.getCurrency());
@@ -219,11 +213,9 @@ public class VTCPay {
 
 		merchantSig = merchantSig.toUpperCase();
 
-		_log.info("=====merchantSig:" + merchantSig);
 
 		String signature = vtcPay.getSignature();
 
-		_log.info("=====signature:" + signature);
 
 		if (merchantSig.contains(signature)) {
 			return true;
