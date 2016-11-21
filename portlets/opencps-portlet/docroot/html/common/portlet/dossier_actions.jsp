@@ -1,4 +1,6 @@
 
+<%@page import="org.opencps.dossiermgt.service.impl.DossierFileLocalServiceImpl"%>
+<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -69,12 +71,16 @@
 			if(isChildDossierPart && fileGroupId > 0){
 				version = DossierFileLocalServiceUtil.countDossierFileByDID_DP_GF(dossierId, childDossierPartId, fileGroupId);
 			}else{
-				if(partType == PortletConstants.DOSSIER_PART_TYPE_OTHER || partType==PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT){
-					version = 1;
+				if( partType == PortletConstants.DOSSIER_PART_TYPE_OTHER || partType==PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT){
+					
+					DossierFile dossierFile = DossierFileLocalServiceUtil.getDossierFileInUse(dossierId, dossierPartId);
+					
+					if(Validator.isNotNull(dossierFile)) {
+						version = 1;
+					}
 				}else{
 					version = DossierFileLocalServiceUtil.countDossierFileByDID_DP(dossierId, dossierPartId);
 				}
-				
 			}
 			
 		}catch(Exception e){}

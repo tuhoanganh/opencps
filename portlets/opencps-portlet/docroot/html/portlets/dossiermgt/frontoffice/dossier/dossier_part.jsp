@@ -168,7 +168,7 @@
 								}
 								
 								requiredDossierPartIds = PortletUtil.getDossierPartRequired(requiredDossierPartIds, dossierPartLevel1, 
-										dossierPart, dossierFile);
+										dossierPart, dossierFile, 0 , 0, 0);
 								
 								cssRequired = dossierPart.getRequired() ? "cssRequired" : StringPool.BLANK;
 								
