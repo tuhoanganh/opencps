@@ -43,7 +43,13 @@ import org.opencps.datamgt.service.DictItemLocalServiceUtil;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.DossierPart;
+import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
+import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
 import org.opencps.paymentmgt.util.PaymentMgtUtil;
+import org.opencps.processmgt.model.ProcessStepDossierPart;
+import org.opencps.processmgt.model.WorkflowOutput;
+import org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil;
+import org.opencps.processmgt.util.ProcessUtils;
 
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -1006,7 +1012,8 @@ public class PortletUtil {
 	 */
 	public static List<Long> getDossierPartRequired(
 			List<Long> requiredDossierPartIds, DossierPart parentDossierPart,
-			DossierPart childDossierPart, DossierFile dossierFile) {
+			DossierPart childDossierPart, DossierFile dossierFile,
+			long dossierId, long processWorkflowId, long processStepId) {
 
 		int partType = parentDossierPart != null ? parentDossierPart
 				.getPartType() : 0;
@@ -1058,29 +1065,24 @@ public class PortletUtil {
 			parentDossierPart
 					.setPartType(PortletConstants.DOSSIER_PART_TYPE_OTHER);
 			getDossierPartRequired(requiredDossierPartIds, parentDossierPart,
-					childDossierPart, dossierFile);
+					childDossierPart, dossierFile, dossierId,
+					processWorkflowId, processStepId);
 			break;
 		case PortletConstants.DOSSIER_PART_TYPE_PRIVATE:
 			parentDossierPart
 					.setPartType(PortletConstants.DOSSIER_PART_TYPE_OTHER);
 			getDossierPartRequired(requiredDossierPartIds, parentDossierPart,
-					childDossierPart, dossierFile);
+					childDossierPart, dossierFile, dossierId,
+					processWorkflowId, processStepId);
 			break;
 		case PortletConstants.DOSSIER_PART_TYPE_RESULT:
-			if (childDossierPart.isRequired()
-					&& dossierFile == null
-					&& !requiredDossierPartIds.contains(childDossierPart
-							.getDossierpartId())) {
-				requiredDossierPartIds.add(childDossierPart.getDossierpartId());
-			}
+
+			getRequiredDossierartIds(requiredDossierPartIds, dossierId,
+					processWorkflowId, processStepId);
 			break;
 		case PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT:
-			if (childDossierPart.isRequired()
-					&& dossierFile == null
-					&& !requiredDossierPartIds.contains(childDossierPart
-							.getDossierpartId())) {
-				requiredDossierPartIds.add(childDossierPart.getDossierpartId());
-			}
+			getRequiredDossierartIds(requiredDossierPartIds, dossierId,
+					processWorkflowId, processStepId);
 			break;
 		default:
 			break;
@@ -1088,53 +1090,121 @@ public class PortletUtil {
 
 		return requiredDossierPartIds;
 	}
-	
+
 	public static String getDossierPartName(int dossierPartType, Locale locale) {
-		
+
 		String dossierPartTypeName = StringPool.BLANK;
-		
+
 		switch (dossierPartType) {
 		case PortletConstants.DOSSIER_PART_TYPE_SUBMIT:
-			dossierPartTypeName = LanguageUtil.get(locale, "dossier-part-type-submit");
+			dossierPartTypeName = LanguageUtil.get(locale,
+					"dossier-part-type-submit");
 			break;
 		case PortletConstants.DOSSIER_PART_TYPE_OTHER:
-			dossierPartTypeName = LanguageUtil.get(locale, "dossier-part-type-other");
+			dossierPartTypeName = LanguageUtil.get(locale,
+					"dossier-part-type-other");
 			break;
 		case PortletConstants.DOSSIER_PART_TYPE_OPTION:
-			dossierPartTypeName = LanguageUtil.get(locale, "dossier-part-type-option");
+			dossierPartTypeName = LanguageUtil.get(locale,
+					"dossier-part-type-option");
 			break;
 		case PortletConstants.DOSSIER_PART_TYPE_PRIVATE:
-			dossierPartTypeName = LanguageUtil.get(locale, "dossier-part-type-private");
+			dossierPartTypeName = LanguageUtil.get(locale,
+					"dossier-part-type-private");
 			break;
 		case PortletConstants.DOSSIER_PART_TYPE_RESULT:
-			dossierPartTypeName = LanguageUtil.get(locale, "dossier-part-type-result");
+			dossierPartTypeName = LanguageUtil.get(locale,
+					"dossier-part-type-result");
 			break;
 		case PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT:
-			dossierPartTypeName = LanguageUtil.get(locale, "dossier-part-type-multiple-result");
+			dossierPartTypeName = LanguageUtil.get(locale,
+					"dossier-part-type-multiple-result");
 			break;
 		default:
 			break;
 		}
-		
+
 		return dossierPartTypeName;
 	}
-	
+
 	public static float convertSizeUnitToByte(float size, String fileUnit) {
-		
-		if (fileUnit.equals(PortletConstants.SIZE_UNIT_B) || Validator.isNull(fileUnit)) {
+
+		if (fileUnit.equals(PortletConstants.SIZE_UNIT_B)
+				|| Validator.isNull(fileUnit)) {
 			return size;
-		} else
-		if (fileUnit.equals(PortletConstants.SIZE_UNIT_KB)) {
-			return size*1024;
-		} else
-		if (fileUnit.equals(PortletConstants.SIZE_UNIT_MB)) {
-			return size*1024*1024;
-		} else
-		if (fileUnit.equals(PortletConstants.SIZE_UNIT_GB)) {
-			return size*1024*1024*1024;
+		} else if (fileUnit.equals(PortletConstants.SIZE_UNIT_KB)) {
+			return size * 1024;
+		} else if (fileUnit.equals(PortletConstants.SIZE_UNIT_MB)) {
+			return size * 1024 * 1024;
+		} else if (fileUnit.equals(PortletConstants.SIZE_UNIT_GB)) {
+			return size * 1024 * 1024 * 1024;
 		}
-		
+
 		return 0;
+	}
+
+	public static List<Long> getRequiredDossierartIds(
+			List<Long> requiredDossierPartIds, long dossierId,
+			long processWorkflowId, long processStepId) {
+		List<WorkflowOutput> workflowOutputs = new ArrayList<WorkflowOutput>();
+
+		List<ProcessStepDossierPart> processStepDossierParts = new ArrayList<ProcessStepDossierPart>();
+
+		if (processStepId > 0) {
+			processStepDossierParts = ProcessUtils
+					.getDossierPartByStep(processStepId);
+		}
+
+		if (processStepDossierParts != null) {
+			
+			for (ProcessStepDossierPart processStepDossierPart : processStepDossierParts) {
+
+				if (processStepDossierPart.getDossierPartId() > 0) {
+					try {
+
+						List<WorkflowOutput> workflowOutputsTemp = WorkflowOutputLocalServiceUtil
+								.getByProcessByPWID_DPID(processWorkflowId,
+										processStepDossierPart
+												.getDossierPartId());
+
+						if (workflowOutputsTemp != null) {
+							workflowOutputs.addAll(workflowOutputsTemp);
+						}
+					} catch (Exception e) {
+					}
+				}
+
+			}
+		}
+
+		if (workflowOutputs != null && !workflowOutputs.isEmpty()) {
+			for (WorkflowOutput workflowOutput : workflowOutputs) {
+				if (workflowOutput.getRequired()) {
+
+					DossierFile dossierFile = null;
+					DossierPart dossierPart = null;
+					try {
+						dossierPart = DossierPartLocalServiceUtil
+								.getDossierPart(workflowOutput
+										.getDossierPartId());
+						dossierFile = DossierFileLocalServiceUtil
+								.getDossierFileInUse(dossierId,
+										dossierPart.getDossierpartId());
+					} catch (Exception e) {
+						// TODO: handle exception
+					}
+
+					if (dossierFile == null && dossierPart != null) {
+						requiredDossierPartIds.add(dossierPart
+								.getDossierpartId());
+
+					}
+
+				}
+			}
+		}
+
+		return requiredDossierPartIds;
 	}
 
 	private static Log _log = LogFactoryUtil
