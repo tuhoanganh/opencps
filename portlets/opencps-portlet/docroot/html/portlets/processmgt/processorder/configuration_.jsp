@@ -24,7 +24,7 @@
 
 <%
 	String tabs2 = ParamUtil.getString(request, "tabs2", "todolist");
-	String tabs2Names = "todolist,justfinishedlist,processorder,signature";
+	String tabs2Names = "todolist,justfinishedlist,processorder,digital-signature";
 %>
 
 <liferay-portlet:renderURL portletConfiguration="true" var="configurationRenderURL">
@@ -257,8 +257,28 @@
 			</liferay-ui:panel-container>
 		</c:when>
 		
-		<c:when test='<%=tabs2.equalsIgnoreCase("signature") %>'>
+		<c:when test='<%=tabs2.equalsIgnoreCase("digital-signature") %>'>
+			<aui:fieldset>
+				<aui:input 
+					type="checkbox"
+					name="assign-task-after-sign" 
+					value="<%=assignTaskAfterSign %>"
+				/>
+			</aui:fieldset>
 			
+			<aui:fieldset>
+				<aui:row>
+					<aui:col width="30">
+						<aui:input name="imageZoom" value="<%=imageZoom %>"/>
+					</aui:col>
+					<aui:col width="30">
+						<aui:input name="offsetX" value="<%=offsetX %>"/>
+					</aui:col>
+					<aui:col width="30">
+						<aui:input name="offsetY" value="<%=offsetY %>"/>
+					</aui:col>
+				</aui:row>
+			</aui:fieldset>
 		</c:when>
 		
 		<c:otherwise>

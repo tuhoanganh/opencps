@@ -21,4 +21,4 @@
 
 <liferay-util:include page='<%=templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
 
-<liferay-util:include page='<%=templatePath + "display/todolist/" + justfinishedlistDisplayStyle + ".jsp" %>' servletContext="<%=application %>" />
+<liferay-util:include page='<%=templatePath + "display/justfinishedlist/" + justfinishedlistDisplayStyle + ".jsp" %>' servletContext="<%=application %>" />

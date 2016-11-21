@@ -67,6 +67,8 @@ public class ConfigurationProcessOrderImpl implements ConfigurationAction {
 			updateJustFinishedList(preferences, actionRequest, actionResponse);
 		} else if (tabs2.equals("processorder")) {
 			updateProcessOrder(preferences, actionRequest, actionResponse);
+		} else if (tabs2.equals("digital-signature")) {
+			updateDigitalSignature(preferences, actionRequest, actionResponse);
 		}
 
 		preferences.store();
@@ -133,6 +135,30 @@ public class ConfigurationProcessOrderImpl implements ConfigurationAction {
 
 		preferences.setValue("hiddenJustFinishedListEmptyNode",
 				String.valueOf(hiddenJustFinishedListEmptyNode));
+
+	}
+
+	protected void updateDigitalSignature(PortletPreferences preferences,
+			ActionRequest actionRequest, ActionResponse actionResponse)
+			throws ReadOnlyException {
+
+		boolean assignTaskAfterSign = ParamUtil.getBoolean(actionRequest,
+				"assignTaskAfterSign", false);
+
+		double offsetX = ParamUtil.getDouble(actionRequest, "offsetX", 0.0);
+
+		double offsetY = ParamUtil.getDouble(actionRequest, "offsetY", 0.0);
+
+		double imageZoom = ParamUtil.getDouble(actionRequest, "imageZoom", 1.0);
+
+		preferences.setValue("assignTaskAfterSign",
+				String.valueOf(assignTaskAfterSign));
+
+		preferences.setValue("offsetX", String.valueOf(offsetX));
+
+		preferences.setValue("offsetY", String.valueOf(offsetY));
+
+		preferences.setValue("imageZoom", String.valueOf(imageZoom));
 
 	}
 

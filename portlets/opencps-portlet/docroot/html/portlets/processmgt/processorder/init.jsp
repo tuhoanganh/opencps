@@ -36,9 +36,17 @@
 	boolean hiddenToDoListTreeMenuEmptyNode = GetterUtil.getBoolean(preferences.getValue("hiddenToDoListTreeMenuEmptyNode", "false"), false);
 	
 	boolean hiddenJustFinishedListEmptyNode = GetterUtil.getBoolean(preferences.getValue("hiddenJustFinishedListEmptyNode", "false"), false);
+	
+	boolean assignTaskAfterSign = GetterUtil.getBoolean(preferences.getValue("assignTaskAfterSign", "false"), false);
 
 	String assignFormDisplayStyle = preferences.getValue("assignFormDisplayStyle", "popup");
 	
 	String[] reportTypes = StringUtil.split(preferences.getValue("reportTypes", ".pdf"));
+	
+	double offsetX = GetterUtil.getDouble(preferences.getValue("offsetX", "0.0"), 0.0);
+	
+	double offsetY = GetterUtil.getDouble(preferences.getValue("offsetY", "0.0"), 0.0);
+	
+	double imageZoom = GetterUtil.getDouble(preferences.getValue("imageZoom", "1.0"), 1.0);
 
 %>
