@@ -24,7 +24,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.opencps.keypay.model.KeyPay;
 import org.opencps.paymentmgt.util.PaymentMgtUtil;
 import org.opencps.vtcpay.model.VTCPay;
 

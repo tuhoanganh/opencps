@@ -40,37 +40,34 @@ public class VTCPay {
 
 	// các tham số gửi đi
 
-	private static String website_id;
-	private static String receiver_account;
-	private static String language;
-	private static String url_return;
+	protected String website_id;
+	protected String receiver_account;
+	protected String language;
+	protected String url_return;
 
-	private static String reference_number;
-	private static String amount;
-	private static String currency;
-	private String bill_to_email;
-	private String bill_to_phone;
-	private String bill_to_address;
-	private String bill_to_address_city;
-	private String bill_to_surname;
-	private String bill_to_forename;
-	private String paymentType;
+	protected String reference_number;
+	protected String amount;
+	protected String currency;
+	protected String bill_to_email;
+	protected String bill_to_phone;
+	protected String bill_to_address;
+	protected String bill_to_address_city;
+	protected String bill_to_surname;
+	protected String bill_to_forename;
+	protected String paymentType;
 	// secure key
-	private static String secret_key;
+	protected String secret_key;
 	// pay url
-	private static String request_url;
+	protected String request_url;
 	// các tham số trả về từ VTCPay
-	private static String trans_ref_no;
-	private static String message;
-	private static String status;
+	protected String trans_ref_no;
+	protected String message;
+	protected String status;
 
 	//
-	private static String data;
-	private static String signature;
+	protected String data;
+	protected String signature;
 
-	public VTCPay() {
-
-	}
 
 	private static Log _log = LogFactoryUtil.getLog(VTCPay.class);
 
@@ -363,214 +360,257 @@ public class VTCPay {
 		return msg;
 	}
 
-	public static String getWebsite_id() {
-
+	
+	public String getWebsite_id() {
+	
 		return website_id;
 	}
 
-	public static void setWebsite_id(String website_id) {
-
-		VTCPay.website_id = website_id;
+	
+	public void setWebsite_id(String website_id) {
+	
+		this.website_id = website_id;
 	}
 
-	public static String getReceiver_account() {
-
+	
+	public String getReceiver_account() {
+	
 		return receiver_account;
 	}
 
-	public static void setReceiver_account(String receiver_account) {
-
-		VTCPay.receiver_account = receiver_account;
+	
+	public void setReceiver_account(String receiver_account) {
+	
+		this.receiver_account = receiver_account;
 	}
 
-	public static String getLanguage() {
-
+	
+	public String getLanguage() {
+	
 		return language;
 	}
 
-	public static void setLanguage(String language) {
-
-		VTCPay.language = language;
+	
+	public void setLanguage(String language) {
+	
+		this.language = language;
 	}
 
-	public static String getUrl_return() {
-
+	
+	public String getUrl_return() {
+	
 		return url_return;
 	}
 
-	public static void setUrl_return(String url_return) {
-
-		VTCPay.url_return = url_return;
+	
+	public void setUrl_return(String url_return) {
+	
+		this.url_return = url_return;
 	}
 
-	public static String getReference_number() {
-
+	
+	public String getReference_number() {
+	
 		return reference_number;
 	}
 
-	public static void setReference_number(String reference_number) {
-
-		VTCPay.reference_number = reference_number;
+	
+	public void setReference_number(String reference_number) {
+	
+		this.reference_number = reference_number;
 	}
 
-	public static String getAmount() {
-
+	
+	public String getAmount() {
+	
 		return amount;
 	}
 
-	public static void setAmount(String amount) {
-
-		VTCPay.amount = amount;
+	
+	public void setAmount(String amount) {
+	
+		this.amount = amount;
 	}
 
-	public static String getCurrency() {
-
+	
+	public String getCurrency() {
+	
 		return currency;
 	}
 
-	public static void setCurrency(String currency) {
-
-		VTCPay.currency = currency;
+	
+	public void setCurrency(String currency) {
+	
+		this.currency = currency;
 	}
 
+	
 	public String getBill_to_email() {
-
+	
 		return bill_to_email;
 	}
 
+	
 	public void setBill_to_email(String bill_to_email) {
-
+	
 		this.bill_to_email = bill_to_email;
 	}
 
+	
 	public String getBill_to_phone() {
-
+	
 		return bill_to_phone;
 	}
 
+	
 	public void setBill_to_phone(String bill_to_phone) {
-
+	
 		this.bill_to_phone = bill_to_phone;
 	}
 
+	
 	public String getBill_to_address() {
-
+	
 		return bill_to_address;
 	}
 
+	
 	public void setBill_to_address(String bill_to_address) {
-
+	
 		this.bill_to_address = bill_to_address;
 	}
 
+	
 	public String getBill_to_address_city() {
-
+	
 		return bill_to_address_city;
 	}
 
+	
 	public void setBill_to_address_city(String bill_to_address_city) {
-
+	
 		this.bill_to_address_city = bill_to_address_city;
 	}
 
+	
 	public String getBill_to_surname() {
-
+	
 		return bill_to_surname;
 	}
 
+	
 	public void setBill_to_surname(String bill_to_surname) {
-
+	
 		this.bill_to_surname = bill_to_surname;
 	}
 
+	
 	public String getBill_to_forename() {
-
+	
 		return bill_to_forename;
 	}
 
+	
 	public void setBill_to_forename(String bill_to_forename) {
-
+	
 		this.bill_to_forename = bill_to_forename;
 	}
 
+	
 	public String getPaymentType() {
-
+	
 		return paymentType;
 	}
 
+	
 	public void setPaymentType(String paymentType) {
-
+	
 		this.paymentType = paymentType;
 	}
 
-	public static String getSecret_key() {
-
+	
+	public String getSecret_key() {
+	
 		return secret_key;
 	}
 
-	public static void setSecret_key(String secret_key) {
-
-		VTCPay.secret_key = secret_key;
+	
+	public void setSecret_key(String secret_key) {
+	
+		this.secret_key = secret_key;
 	}
 
-	public static String getRequest_url() {
-
+	
+	public String getRequest_url() {
+	
 		return request_url;
 	}
 
-	public static void setRequest_url(String request_url) {
-
-		VTCPay.request_url = request_url;
+	
+	public void setRequest_url(String request_url) {
+	
+		this.request_url = request_url;
 	}
 
-	public static String getTrans_ref_no() {
-
+	
+	public String getTrans_ref_no() {
+	
 		return trans_ref_no;
 	}
 
-	public static void setTrans_ref_no(String trans_ref_no) {
-
-		VTCPay.trans_ref_no = trans_ref_no;
+	
+	public void setTrans_ref_no(String trans_ref_no) {
+	
+		this.trans_ref_no = trans_ref_no;
 	}
 
-	public static String getMessage() {
-
+	
+	public String getMessage() {
+	
 		return message;
 	}
 
-	public static void setMessage(String message) {
-
-		VTCPay.message = message;
+	
+	public void setMessage(String message) {
+	
+		this.message = message;
 	}
 
-	public static String getStatus() {
-
+	
+	public String getStatus() {
+	
 		return status;
 	}
 
-	public static void setStatus(String status) {
-
-		VTCPay.status = status;
+	
+	public void setStatus(String status) {
+	
+		this.status = status;
 	}
 
-	public static String getData() {
-
+	
+	public String getData() {
+	
 		return data;
 	}
 
-	public static void setData(String data) {
-
-		VTCPay.data = data;
+	
+	public void setData(String data) {
+	
+		this.data = data;
 	}
 
-	public static String getSignature() {
-
+	
+	public String getSignature() {
+	
 		return signature;
 	}
 
-	public static void setSignature(String signature) {
-
-		VTCPay.signature = signature;
+	
+	public void setSignature(String signature) {
+	
+		this.signature = signature;
 	}
+	
 
 }

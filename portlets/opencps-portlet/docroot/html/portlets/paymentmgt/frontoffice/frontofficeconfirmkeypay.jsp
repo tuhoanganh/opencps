@@ -81,58 +81,68 @@
 	title="payment-list"
 />
 
-<c:choose>
-	<c:when test="<%= Validator.isNotNull(paymentFile) && paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_APPROVED %>">
-		<div class="alert alert-success">
-			<liferay-ui:message key="paygate-success"></liferay-ui:message>
-		</div>
-		<c:if test="<%= Validator.isNotNull(dossier) && Validator.isNotNull(serviceInfo) %>">
-			<div class="lookup-result">
-				<table>
-					<tr>
-						<td class="col-left"><liferay-ui:message key="reception-no"></liferay-ui:message></td>
-						<td class="col-right"><%= dossier.getReceptionNo()%></td>
-					</tr>
-					<tr>
-						<td class="col-left"><liferay-ui:message key="service-name"></liferay-ui:message></td>
-						<td class="col-right"><%= serviceInfo.getServiceName() %></td>
-					</tr>
-					<tr>
-						<td class="col-left"><liferay-ui:message key="administration-name"></liferay-ui:message></td>
-						<td class="col-right"><%= dossier.getGovAgencyName() %></td>
-					</tr>
-					<tr>
-						<td class="col-left"><liferay-ui:message key="payment-name"></liferay-ui:message></td>
-						<td class="col-right"><%=paymentFile.getPaymentName()%></td>
-					</tr>
-					<tr>
-						<td class="col-left"><liferay-ui:message key="amount"></liferay-ui:message></td>
-						<td class="col-right"><%= NumberFormat.getInstance(new Locale("vi", "VN")).format(paymentFile.getAmount()) %></td>
-					</tr>
-					<tr>
-						<td class="col-left"><liferay-ui:message key="trans_id"></liferay-ui:message></td>
-						<td class="col-right"><%=paymentFile.getKeypayTransactionId() %></td>
-					</tr>
-					<tr>
-						<td class="col-left"><liferay-ui:message key="paygate_id"></liferay-ui:message></td>
-						<td class="col-right"><%=paymentFile.getKeypayGoodCode() %></td>
-					</tr>
-					<tr>
-						<td class="col-left"><liferay-ui:message key="paygate_name"></liferay-ui:message></td>
-						<td class="col-right">
-							<%=Validator.isNotNull(paymentGateConfig)?paymentGateConfig.getPaymentGateName():StringPool.BLANK %>
-						</td>
-					</tr>
-				</table>	
-			</div>	
-		</c:if>
-	</c:when>
-	<c:otherwise>
-		<div class="alert alert-error">
-			<liferay-ui:error key="paygate-alert"></liferay-ui:error>
-		</div>
-		
-	</c:otherwise>
-</c:choose>
+<c:if test="<%=Validator.isNotNull(paymentFile) &&  Validator.isNotNull(dossier) && Validator.isNotNull(serviceInfo)%>">
+	<c:choose>
+		<c:when>
+			<c:choose>
+				<c:when test="<%=paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_APPROVED %>">
+					<div class="alert alert-success">
+						<liferay-ui:message key="paygate-success"></liferay-ui:message>
+					</div>
+						<div class="lookup-result">
+							<table>
+								<tr>
+									<td class="col-left"><liferay-ui:message key="reception-no"></liferay-ui:message></td>
+									<td class="col-right"><%= dossier.getReceptionNo()%></td>
+								</tr>
+								<tr>
+									<td class="col-left"><liferay-ui:message key="service-name"></liferay-ui:message></td>
+									<td class="col-right"><%= serviceInfo.getServiceName() %></td>
+								</tr>
+								<tr>
+									<td class="col-left"><liferay-ui:message key="administration-name"></liferay-ui:message></td>
+									<td class="col-right"><%= dossier.getGovAgencyName() %></td>
+								</tr>
+								<tr>
+									<td class="col-left"><liferay-ui:message key="payment-name"></liferay-ui:message></td>
+									<td class="col-right"><%=paymentFile.getPaymentName()%></td>
+								</tr>
+								<tr>
+									<td class="col-left"><liferay-ui:message key="amount"></liferay-ui:message></td>
+									<td class="col-right"><%= NumberFormat.getInstance(new Locale("vi", "VN")).format(paymentFile.getAmount()) %></td>
+								</tr>
+								<tr>
+									<td class="col-left"><liferay-ui:message key="trans_id"></liferay-ui:message></td>
+									<td class="col-right"><%=paymentFile.getKeypayTransactionId() %></td>
+								</tr>
+								<tr>
+									<td class="col-left"><liferay-ui:message key="paygate_id"></liferay-ui:message></td>
+									<td class="col-right"><%=paymentFile.getKeypayGoodCode() %></td>
+								</tr>
+								<tr>
+									<td class="col-left"><liferay-ui:message key="paygate_name"></liferay-ui:message></td>
+									<td class="col-right">
+										<%=Validator.isNotNull(paymentGateConfig)?paymentGateConfig.getPaymentGateName():StringPool.BLANK %>
+									</td>
+								</tr>
+							</table>	
+						</div>	
+				</c:when>
+				<c:otherwise>
+					<div class="alert alert-error">
+						<liferay-ui:error key="paygate-alert">:<%=paymentFile.getPaymentGateStatusCode() %></liferay-ui:error>
+						
+					</div>
+					
+				</c:otherwise>
+			</c:choose>
+		</c:when>
+		<c:otherwise>
+			<div class="alert alert-error">
+				<liferay-ui:error key="payment-data-alert"></liferay-ui:error>
+			</div>
+		</c:otherwise>
+	</c:choose>
+</c:if>
 
 <%! private static Log _log = LogFactoryUtil.getLog("/html/portlets/paymentmgt/frontoffice/frontofficeconfirmkeypay");%>
