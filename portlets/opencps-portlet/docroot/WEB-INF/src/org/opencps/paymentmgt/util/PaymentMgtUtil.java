@@ -19,23 +19,24 @@ package org.opencps.paymentmgt.util;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletURL;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.opencps.backend.message.UserActionMsg;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
+import org.opencps.dossiermgt.service.DossierLogLocalServiceUtil;
+import org.opencps.dossiermgt.util.ActorBean;
 import org.opencps.keypay.model.KeyPay;
+import org.opencps.notificationmgt.utils.NotificationUtils;
 import org.opencps.paymentmgt.model.PaymentConfig;
 import org.opencps.paymentmgt.model.PaymentFile;
 import org.opencps.paymentmgt.model.PaymentGateConfig;
-import org.opencps.paymentmgt.model.impl.PaymentConfigImpl;
 import org.opencps.paymentmgt.service.PaymentConfigLocalServiceUtil;
 import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
+import org.opencps.util.PortletConstants;
 import org.opencps.util.WebKeys;
 import org.opencps.vtcpay.model.VTCPay;
 
@@ -45,18 +46,12 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.messaging.Message;
-import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.Organization;
-import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.User;
-import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.OrganizationLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
-import com.liferay.portlet.PortletURLFactoryUtil;
 
 /**
  * @author trungdk
@@ -221,26 +216,44 @@ public class PaymentMgtUtil {
 				if (Validator.isNotNull(paymentFile) &&
 					(paymentFile.getPaymentStatus() != PaymentMgtUtil.PAYMENT_STATUS_APPROVED)) {
 
-					UserActionMsg actionMsg = new UserActionMsg();
-
-					actionMsg.setAction(WebKeys.ACTION_PAY_VALUE);
-
-					actionMsg.setPaymentFileId(paymentFile.getPaymentFileId());
-
-					actionMsg.setDossierId(paymentFile.getDossierId());
-
-					actionMsg.setCompanyId(dossier.getCompanyId());
-
-					actionMsg.setGovAgencyCode(dossier.getGovAgencyCode());
-
-					Message message = new Message();
-
-					message.put("msgToEngine", actionMsg);
-
-					MessageBusUtil.sendMessage("opencps/frontoffice/out/destination", message);
+//					UserActionMsg actionMsg = new UserActionMsg();
+//
+//					actionMsg.setAction(WebKeys.ACTION_PAY_VALUE);
+//
+//					actionMsg.setPaymentFileId(paymentFile.getPaymentFileId());
+//
+//					actionMsg.setDossierId(paymentFile.getDossierId());
+//
+//					actionMsg.setCompanyId(dossier.getCompanyId());
+//
+//					actionMsg.setGovAgencyCode(dossier.getGovAgencyCode());
+//
+//					Message message = new Message();
+//
+//					message.put("msgToEngine", actionMsg);
+//
+//					MessageBusUtil.sendMessage("opencps/frontoffice/out/destination", message);
 
 					paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_APPROVED);
 					paymentFile.setPaymentMethod(WebKeys.PAYMENT_METHOD_VTCPAY);
+					
+					ActorBean actorBean = new ActorBean(1, dossier.getUserId());
+					
+					DossierLogLocalServiceUtil.addDossierLog(
+						dossier.getUserId(),
+						dossier.getGroupId(),
+						dossier.getCompanyId(),
+						dossier.getDossierId(),
+						paymentFile.getFileGroupId(),
+						PortletConstants.DOSSIER_STATUS_NEW,
+						PortletConstants.DOSSIER_ACTION_CONFIRM_PAYMENT,
+						PortletConstants.DOSSIER_ACTION_CONFIRM_PAYMENT,
+						new Date(),
+						1, actorBean.getActor(),
+						actorBean.getActorId(),
+						actorBean.getActorName());
+					
+						NotificationUtils.sendNotificationToAccountant(dossier, paymentFile);
 				}
 
 				else {
@@ -305,32 +318,34 @@ public class PaymentMgtUtil {
 
 				dossier = DossierLocalServiceUtil.getDossier(paymentFile.getDossierId());
 			}
-
+			_log.info("paymentFile:"+paymentFile);
+			_log.info("dossier:"+dossier);
 			if (isVerify) {
 
 				if (Validator.isNotNull(paymentFile) &&
 					(paymentFile.getPaymentStatus() != PaymentMgtUtil.PAYMENT_STATUS_APPROVED)) {
 
-					UserActionMsg actionMsg = new UserActionMsg();
-
-					actionMsg.setAction(WebKeys.ACTION_PAY_VALUE);
-
-					actionMsg.setPaymentFileId(paymentFile.getPaymentFileId());
-
-					actionMsg.setDossierId(paymentFile.getDossierId());
-
-					actionMsg.setCompanyId(dossier.getCompanyId());
-
-					actionMsg.setGovAgencyCode(dossier.getGovAgencyCode());
-
-					Message message = new Message();
-
-					message.put("msgToEngine", actionMsg);
-
-					MessageBusUtil.sendMessage("opencps/frontoffice/out/destination", message);
-
+					_log.info("paymentFile.getPaymentStatus():"+paymentFile.getPaymentStatus());
 					paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_APPROVED);
 					paymentFile.setPaymentMethod(WebKeys.PAYMENT_METHOD_VTCPAY);
+					
+					ActorBean actorBean = new ActorBean(1, dossier.getUserId());
+					
+					DossierLogLocalServiceUtil.addDossierLog(
+						dossier.getUserId(),
+						dossier.getGroupId(),
+						dossier.getCompanyId(),
+						dossier.getDossierId(),
+						paymentFile.getFileGroupId(),
+						PortletConstants.DOSSIER_STATUS_NEW,
+						PortletConstants.DOSSIER_ACTION_CONFIRM_PAYMENT,
+						PortletConstants.DOSSIER_ACTION_CONFIRM_PAYMENT,
+						new Date(),
+						1, actorBean.getActor(),
+						actorBean.getActorId(),
+						actorBean.getActorName());
+					
+					NotificationUtils.sendNotificationToAccountant(dossier, paymentFile);
 				}
 
 				else {
@@ -363,6 +378,8 @@ public class PaymentMgtUtil {
 				paymentFile.setPaymentGateResponseData(jsonData.toString());
 
 				PaymentFileLocalServiceUtil.updatePaymentFile(paymentFile);
+				
+				
 
 			}
 
