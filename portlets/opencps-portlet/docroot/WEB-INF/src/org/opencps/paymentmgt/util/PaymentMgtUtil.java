@@ -33,7 +33,6 @@ import org.opencps.keypay.model.KeyPay;
 import org.opencps.notificationmgt.utils.NotificationUtils;
 import org.opencps.paymentmgt.model.PaymentConfig;
 import org.opencps.paymentmgt.model.PaymentFile;
-import org.opencps.paymentmgt.model.PaymentGateConfig;
 import org.opencps.paymentmgt.service.PaymentConfigLocalServiceUtil;
 import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
 import org.opencps.util.PortletConstants;
@@ -194,7 +193,6 @@ public class PaymentMgtUtil {
 
 		try {
 
-			PaymentGateConfig paymentGateConfig = null;
 			Dossier dossier = null;
 			PaymentFile paymentFile = null;
 
@@ -306,7 +304,6 @@ public class PaymentMgtUtil {
 
 		try {
 
-			PaymentGateConfig paymentGateConfig = null;
 			Dossier dossier = null;
 			PaymentFile paymentFile = null;
 
