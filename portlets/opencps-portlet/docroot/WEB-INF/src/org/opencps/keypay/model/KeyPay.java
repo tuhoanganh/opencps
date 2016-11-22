@@ -25,7 +25,7 @@ import com.liferay.portal.kernel.util.Validator;
 
 public class KeyPay {
 
-	// các tham số gửi đi
+	// cac tham so gui gi
 
 	private String merchant_trans_id;
 	private String merchant_code;
@@ -53,7 +53,7 @@ public class KeyPay {
 	private String merchant_secure_key;
 	// keypay url
 	private String keypay_url;
-	// các tham số trả về từ KeyPay
+	// cac tham so tra ve tu KeyPay
 	private String trans_id;
 	private String response_code;
 
@@ -62,7 +62,7 @@ public class KeyPay {
 	}
 
 	/**
-	 * Constructor - Lấy các tham số khi gửi đơn hàng sang KeyPay
+	 * Constructor - Lay cac tham so khi gui don hang sang KeyPay
 	 *
 	 * @param merchant_trans_id
 	 * @param merchant_code
@@ -122,7 +122,7 @@ public class KeyPay {
 	}
 
 	/**
-	 * tính Secure Hash khi gửi đi
+	 * Tinh secure hash khi gui di
 	 *
 	 * @return
 	 */
@@ -166,13 +166,13 @@ public class KeyPay {
 			url_redirect += param + "secure_hash=" + secure_hash;
 		}
 		catch (Exception e) {
-			System.out.println("ERROR Build URL");
+			_log.error("ERROR Build URL");
 		}
 		return url_redirect;
 	}
 
 	/**
-	 * Constructor - Lấy dữ liệu trả về từ KeyPay
+	 * Constructor - Lay du lieu tra ve tu KeyPay
 	 *
 	 * @param request
 	 */
@@ -208,7 +208,7 @@ public class KeyPay {
 	}
 
 	/**
-	 * Tinh
+	 * Tao secure code tu keypay tra ve
 	 *
 	 * @return
 	 */
@@ -264,9 +264,9 @@ public class KeyPay {
 	}
 
 	/**
-	 * Kiểm tra secure hash có đúng không
+	 * Kiem tra secure hash co dung khong
 	 *
-	 * @param secure_merchant
+	 * @param keyPay
 	 * @return
 	 */
 	public static boolean checkSecureHash(KeyPay keyPay) {
@@ -348,206 +348,6 @@ public class KeyPay {
 		KPJsonRest kpJson = new KPJsonRest();
 		return kpJson.QuerryBillStatus(
 			merchant_trans_id, good_code, trans_id, merchant_code, sc_querry);
-	}
-
-	/**
-	 * Hàm mao trạng thái trả về từ KeyPay
-	 *
-	 * @param response_code
-	 * @return
-	 */
-	public String genMsgReturn(String response_code) {
-
-		String msg;
-		switch (Integer.parseInt(response_code)) {
-		case 0:
-			// success
-			msg = "Thanh toán thành công";
-			break;
-		case 1:
-			// merchant code sai
-			msg = "Đại lý không tồn tại trong hệ thống";
-			break;
-		case 2:
-			// secure hash sai
-			msg = "Chuỗi mã hóa không hợp lệ";
-			break;
-		case 3:
-			// merchant trans id khong hop le
-			msg = "Mã giao dịch không hợp lệ";
-			break;
-		case 4:
-			// trans id khong ton tai
-			msg = "Đã có lỗi xảy ra khi thực hiện thanh toán";
-			break;
-		case 5:
-			// ma dich vu khong hop le
-			msg = "Mã dịch vụ không hợp lệ";
-			break;
-		case 6:
-			// giao dich da gui confirm
-			msg = "Giao dịch đã tồn tại trong hệ thống";
-			break;
-		case 7:
-			// ma qgia khong hop le
-			msg = "Mã quốc gia không hợp lệ";
-			break;
-		case 8:
-			// timeout
-			msg =
-				"Không nhận được kết quả trả về từ Ngân hàng do quá thời gian thực hiện giao dịch";
-			break;
-		case 9:
-			// mo ta don hang khong hop le
-			msg = "Mô tả đơn hàng không hợp lệ";
-			break;
-		case 10:
-			// ma don hang khong hop le
-			msg = "Mã đơn hàng không hợp lệ";
-			break;
-		case 11:
-			// net cost fail
-			msg = "Số tiền thanh toán không hợp lệ";
-			break;
-		case 12:
-			// ship fee fail
-			msg = "Phí vận chuyển không hợp lệ";
-			break;
-		case 13:
-			// tax fail
-			msg = "Thuế không hợp lệ";
-			break;
-		case 14:
-			// merchant code chua duoc cau hinh phi de thanh toan
-			msg = "Đại lý chưa được cấu hình phí";
-			break;
-		case 15:
-			// sai ma ngan hang
-			msg = "Mã ngân hàng không nằm trong hệ thống chấp nhận thanh toán";
-			break;
-		case 16:
-			// so tien dai ly ko nam trong khoang cho phep (dai ly o day la
-			// keypay so voi BN)
-			msg = "Số tiền thanh toán không nằm trong khoảng cho phép";
-			break;
-		case 17:
-			// tai khoan ko du tien
-			msg = "Tài khoản không đủ tiền thực hiện giao dịch";
-			break;
-		case 18:
-			// huy bo giao dich
-			msg = "Bạn đã hủy bỏ giao dịch";
-			break;
-		case 19:
-			// trans date time ko hop le
-			msg = "Thời gian thực hiện thanh toán không hợp lệ";
-			break;
-		case 20:
-			// otp type ko hop le
-			msg = "Kiểu nhận mã OTP không đúng";
-			break;
-		case 21:
-			// otp nhap ko dung
-			msg = "Xác thực OTP không thành công";
-			break;
-		case 25:
-			// sai thong tin chu the lan 1
-			msg = "Nhập sai thông tin chủ thẻ lần 1";
-			break;
-		case 26:
-			// sai thong tin chu the lan 2
-			msg = "Nhập sai thông tin chủ thẻ lần 2";
-			break;
-		case 27:
-			// sai thong tin chu the lan 3 - redirect
-			msg = "Nhập sai thông tin chủ thẻ lần 3";
-			break;
-		case 30:
-			// phien ban khong hop le
-			msg = "Phiên bản thanh toán không hợp lệ";
-			break;
-		case 31:
-			// ma lenh khong hop le
-			msg = "Yêu cầu không hợp lệ";
-			break;
-		case 32:
-			// country code khong hop le
-			msg = "Loại tiền tệ không hợp lệ";
-			break;
-		case 33:
-			// ngon ngu khong hop le
-			msg = "Ngôn ngữ không hợp lệ";
-			break;
-		case 34:
-			// desc 1 khong hop le
-			msg = "Thông tin thêm (desc 1) không hợp lệ";
-			break;
-		case 35:
-			// desc 2 khong hop le
-			msg = "Thông tin thêm (desc 2) không hợp lệ";
-			break;
-		case 36:
-			// desc 3 khong hop le
-			msg = "Thông tin thêm (desc 3) không hợp lệ";
-			break;
-		case 37:
-			// desc 4 khong hop le
-			msg = "Thông tin thêm (desc 4) không hợp lệ";
-			break;
-		case 38:
-			// desc 5 khong hop le
-			msg = "Thông tin thêm (desc 5) không hợp lệ";
-			break;
-		case 39:
-			// url khong hop le
-			msg = "Chuỗi URL trả về không hợp lệ";
-			break;
-		case 40:
-			// internal bank //desc 1 khong hop le
-			msg = "Loại thẻ không hợp lệ";
-			break;
-		case 41:
-			// the nghi van
-			msg = "Phát hiện thẻ nghi vấn";
-			break;
-		case 54:
-			// the het han
-			msg = "Thẻ ngân hàng hết hạn";
-			break;
-		case 57:
-			// chua dang ky ibanking
-			msg = "Thẻ ngân hàng chưa đăng ký dịch vụ thanh toán trực tuyến";
-			break;
-		case 61:
-			// qua han muc giao dich trong ngay
-			msg = "Thẻ sử dụng đã quá hạn mức giao dịch trong ngày";
-			break;
-		case 62:
-			// the bi khoa
-			msg = "Thẻ bị khóa";
-			break;
-		case 65:
-			// qua han muc giao dich trong 1 lan gdich
-			msg = "Thẻ quá hạn mức trong một lần giao dịch";
-			break;
-		case 97:
-			// bank chua san sang
-			msg = "Kết nối tới Ngân Hàng không thành công";
-			break;
-		case 98:
-			// giao dich ko hop le
-			msg = "Giao dịch không được phép";
-			break;
-		case 99:
-			// loi ko xac dinh
-			msg = "Đã có lỗi xảy ra khi thực hiện thanh toán";
-			break;
-		default:
-			// loi ko xac dinh
-			msg = "Đã có lỗi xảy ra khi thực hiện thanh toán";
-			break;
-		}
-		return msg;
 	}
 
 	public String getMerchant_secure_key() {
