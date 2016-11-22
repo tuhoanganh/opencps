@@ -2393,6 +2393,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	 * @throws SystemException
 	 * @throws PortalException
 	 */
+
 	public void updateDossierStatus(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortalException,
 			SystemException {
@@ -3438,16 +3439,11 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		long administrationId = ParamUtil.getLong(actionRequest,
 				"administrationId");
 
-		long serviceDomainId = ParamUtil.getLong(actionRequest,
-				"serviceDomainId");
-
 		List<ServiceInfo> serviceInfos = new ArrayList<ServiceInfo>();
 
 		DictItem domainItem = null;
 
 		String administrationIndex = StringPool.BLANK;
-
-		String serviceDomainIndex = StringPool.BLANK;
 
 		if (administrationId > 0) {
 
@@ -3457,16 +3453,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		}
 
-		if (serviceDomainId > 0) {
-
-			domainItem = DictItemLocalServiceUtil.getDictItem(serviceDomainId);
-
-			serviceDomainIndex = domainItem.getTreeIndex();
-
-		}
 		serviceInfos = ServiceInfoLocalServiceUtil
 				.getServiceInFosByG_DI_Status(themeDisplay.getScopeGroupId(),
-						serviceDomainIndex, administrationIndex, 1, keywords,
+						StringPool.BLANK, administrationIndex, 1, keywords,
 						QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 
 		for (ServiceInfo serviceInfo : serviceInfos) {

@@ -176,8 +176,6 @@ public class WorkingUnitLocalServiceImpl
 			org.setParentOrganizationId(parentWorkingUnitId);
 		}
 		
-		
-		
 		OrganizationLocalServiceUtil.updateOrganization(org);
 			
 

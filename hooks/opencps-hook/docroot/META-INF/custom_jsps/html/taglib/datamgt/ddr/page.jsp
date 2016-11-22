@@ -258,7 +258,7 @@
 		  		}
 		  	}
 			
-			var selectedItem = 0;
+			var selectedItem = "0";
 			
 			var itemEmptyOption = false;
 			
@@ -273,6 +273,9 @@
 					opts += '<option value="' + opt.itemCode + '" selected="selected">' + itemName + '</option>'
 				}else{
 				
+					opts += '<option value="' + opt.itemCode + '">' + itemName + '</option>'
+				}
+				
 					opts += '<option value="' + opt.itemCode + '" >' + itemName + '</option>'
 				}
 			}else if(optionValueType<%=randomInstance %> ==='id'){
@@ -284,6 +287,7 @@
 				
 					opts += '<option value="' + opt.dictItemId + '">' + itemName + '</option>'
 				}
+				
 			}
 		}
 		
@@ -384,8 +388,6 @@
 				}else{
 					<portlet:namespace/><%=randomInstance %>renderDataItems('', boundingBox, level);
 				}
-				
-				
 			}
 		}
 	});

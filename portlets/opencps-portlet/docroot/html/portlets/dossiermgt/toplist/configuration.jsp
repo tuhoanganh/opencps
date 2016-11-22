@@ -33,13 +33,7 @@
 			}
 		%>
 	</aui:select> --%>
-	
-	<%-- <datamgt:ddr 
-		depthLevel="1" 
-		dictCollectionCode="DOSSIER_STATUS"
-		itemNames="status"
-		optionValueType="code"
-	/> --%>
+
 	
 	<datamgt:ddr 
 		depthLevel="1" 
@@ -51,7 +45,7 @@
 		selectedItems="<%=status%>"
 		optionValueType="code"
 		cssClass="search-input select-box input100"
-		
+
 	/>
 	<aui:button type="submit" name="Save" value="save"></aui:button>
 </aui:form>

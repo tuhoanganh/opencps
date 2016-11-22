@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -14,21 +13,11 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
 
-<%@page import="javax.portlet.PortletPreferences"%>
-<%@ include file="/init.jsp" %>
+<%@ include file="../init.jsp" %>
 
-<%
-	PortletPreferences preferences = renderRequest.getPreferences();
-	
-	portletResource = ParamUtil.getString(request, "portletResource");
-	
-	if (Validator.isNotNull(portletResource)) {
-		preferences = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
-	}
+<div><%=termOfUse %></div>
 
-	String status = preferences.getValue("status", StringPool.BLANK);
-%>

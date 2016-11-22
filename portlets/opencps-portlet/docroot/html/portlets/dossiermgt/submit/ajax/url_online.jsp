@@ -17,7 +17,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-<%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="com.liferay.portal.kernel.util.Constants"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="org.opencps.util.WebKeys"%>
@@ -47,7 +46,7 @@
 	}
 	
 	long frontServicePlid = PortalUtil.getPlidFromPortletId(scopeGroupId, WebKeys.DOSSIER_MGT_PORTLET);
-	
+
 	long plidSubmit = 0;
 	
 	if(Long.valueOf(plidRes) == 0) {

@@ -17,6 +17,11 @@
 <%@page import="com.liferay.portal.kernel.util.StringPool"%>
 <%@ include file="/html/portlet/login/init.jsp" %>
 
+<%
+	String linkToRegister = themeDisplay.getPortalURL() + "/register";
+	String linkDescriptToUse = themeDisplay.getPortalURL() + "/huong-dan-su-dung";
+%>
+
 <c:choose>
 	<c:when test="<%= themeDisplay.isSignedIn() %>">
 
@@ -153,6 +158,95 @@
 						</aui:button-row>
 					</div>
 				</c:when>
+				<c:when test='<%=displayStyle.equals("compact") %>'>
+					
+					<div class="compact-sign-in-wrapper">
+						<div class="default-sign-in-compact-top">
+							
+							<!-- login input -->
+							<aui:fieldset>
+								<%
+								String loginLabel = null;
+				
+								if (authType.equals(CompanyConstants.AUTH_TYPE_EA)) {
+									loginLabel = "email-address";
+								}
+								else if (authType.equals(CompanyConstants.AUTH_TYPE_SN)) {
+									loginLabel = "screen-name";
+								}
+								else if (authType.equals(CompanyConstants.AUTH_TYPE_ID)) {
+									loginLabel = "id";
+								}
+								%>
+								<div class="input-prepend">
+									<!-- <span class="add-on"><i class="fa fa-envelope-o"></i></span> -->
+									<aui:input autoFocus="<%= windowState.equals(LiferayWindowState.EXCLUSIVE) || windowState.equals(WindowState.MAXIMIZED) %>" 
+										cssClass="clearable user-name" 
+										label="<%= StringPool.BLANK %>" 
+										name="login" showRequiredLabel="<%= false %>" 
+										type="text" value="<%= login %>"
+										placeholder="<%= LanguageUtil.get(pageContext, \"login-placehoder\") %>" 
+									>
+										<aui:validator name="required" />
+									</aui:input>
+								</div>
+								<div class="input-prepend">
+									<!-- <span class="add-on"><i class="fa fa-key"></i></span> -->
+									<aui:input name="password" showRequiredLabel="<%= false %>" 
+										cssClass="password" 
+										type="password" value="<%= password %>" 
+										label="<%=StringPool.BLANK %>"
+										placeholder="<%= LanguageUtil.get(pageContext, \"password-placehoder\") %>" 
+									>
+										<aui:validator name="required" />
+									</aui:input>
+								</div>
+								
+								<span id="<portlet:namespace />passwordCapsLockSpan" style="display: none;"><liferay-ui:message key="caps-lock-is-on" /></span>
+								
+							</aui:fieldset>
+							<aui:row>
+								<aui:col width = "50">
+									<aui:a href="#">
+										<liferay-ui:message key="forgot-password"/>
+									</aui:a>
+								</aui:col>
+									
+								<aui:col width = "50">
+									<aui:button type="submit" value="sign-in-cus" />
+								</aui:col>
+							</aui:row>
+							
+						</div>
+						
+						<div class="advance-signin-compact-bottom">
+							<div class="button-wrapper signature">
+								<aui:button name="sign-in-with-digital-signature" value="sign-in-with-digital-signature" cssClass="btn-signature-signin"/>
+							</div>
+							
+							<aui:row>
+								<aui:col width = "50">
+									<span class="create-account">
+										<liferay-portlet:renderURL var="linkToPage"></liferay-portlet:renderURL>
+										<aui:a href="<%=linkToRegister %>">
+											<liferay-ui:message key="create-account"/>
+										</aui:a>
+									</span>
+								</aui:col>
+								<aui:col width = "50">
+									<span class="create-account">
+										<aui:a href="<%=linkDescriptToUse %>">
+											<liferay-ui:message key="descript-to-use"/>
+										</aui:a>
+									</span>
+								</aui:col>
+							</aui:row>
+							
+						</div>
+						
+					</div>
+					
+				</c:when>
 				<c:otherwise>
 					<div class="ux-sign-in-wrapper">
 						<div class="default-sign-in">
@@ -162,7 +256,7 @@
 								</span>
 								<span class="create-account">
 									<liferay-portlet:renderURL var="linkToPage"></liferay-portlet:renderURL>
-									<aui:a href="<%=linkToPage %>">
+									<aui:a href="<%=linkToRegister %>">
 										<liferay-ui:message key="create-account"/>
 									</aui:a>
 								</span>

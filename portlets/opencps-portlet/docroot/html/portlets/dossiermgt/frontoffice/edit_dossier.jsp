@@ -18,6 +18,8 @@
  */
 %>
 
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
+<%@page import="org.opencps.backend.util.BackendUtils"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
@@ -60,14 +62,9 @@
 	String[] dossierSections = dossier != null ? new String[] {
 		"dossier_part", "dossier_info", "result", "history"
 	} : new String[] {
-		"dossier_info"
+		"dossier_part", "dossier_info"
 	};
-		
-	// show only 2 tab dossier_part & info on create new dossier
-	//if(cmd.equals(Constants.ADD)){
-	//	dossierSections = new String[]{"dossier_part", "dossier_info"};
-	//}
-	
+
 	String[][] categorySections = {
 		dossierSections
 	};
@@ -95,6 +92,9 @@
 	catch (Exception e) {
 
 	}
+
+	boolean quickCreateDossier = dossier == null ? true : false;
+
 %>
 
 <liferay-ui:error 
@@ -160,6 +160,8 @@
 		/>
 
 		<portlet:actionURL var="updateDossierURL" name="updateDossier" />
+		
+		<portlet:actionURL var="quickUpdateDossierURL" name="quickUpdateDossier"/>
 
 		<liferay-util:buffer var="htmlTop">
 			<c:if test="<%= dossier != null %>">
@@ -266,7 +268,7 @@
 
 		</liferay-util:buffer>
 
-		<aui:form name="fm" action="<%=updateDossierURL %>" method="post">
+		<aui:form name="fm" action="<%=dossier != null ? updateDossierURL : quickUpdateDossierURL %>" method="post">
 
 			<aui:model-context bean="<%= dossier %>" model="<%= Dossier.class %>" />
 
@@ -377,6 +379,24 @@
 				/>
 			</div>
 		</aui:form>
+
+		<aui:script use="aui-loading-mask-deprecated">
+			AUI().ready(function(A){
+				var quickCreateDossier = '<%=quickCreateDossier%>';
+				if(quickCreateDossier ==='true'){
+					var loadingMask = new A.LoadingMask(
+						{
+							'strings.loading': '<%= UnicodeLanguageUtil.get(pageContext, "rending...") %>',
+							target: A.one('#<portlet:namespace/>fm')
+						}
+					);
+					
+					loadingMask.show();
+					submitForm(document.<portlet:namespace />fm);
+				}
+			});
+		</aui:script>
+
 	</c:when>
 
 	<c:otherwise>
@@ -389,43 +409,44 @@
 
 <aui:script>
 	Liferay.provide(
-		window,
-		'<portlet:namespace/>updateDossierStatus',
-		function(actionURL) {
-			var A = AUI(); 
-			
-			var required = false;
-			
-			var requiredDossierParts = A.all('#<portlet:namespace/>requiredDossierPart');
-			
-			if(requiredDossierParts) {
-				
-				requiredDossierParts.each(function(requiredDossierPart){
-					var requiredDossierPartIds = requiredDossierPart.val().trim().split(",");
-					console.log(dossierPartId);
-					if(requiredDossierPartIds != ''){
-						for(var i = 0; i < requiredDossierPartIds.length; i++){
-							var dossierPartId = requiredDossierPartIds[i];
-							
-							if(parseInt(dossierPartId) > 0){
-								required = true;
-								var row = A.one('.dossier-part-row.dpid-' + dossierPartId);
-								if(row){
-									row.attr('style', 'color:red');
+			window,
+			'<portlet:namespace/>updateDossierStatus',
+				function(actionURL) {
+					var A = AUI(); 
+					
+					var required = false;
+					
+					var requiredDossierParts = A.all('#<portlet:namespace/>requiredDossierPart');
+					
+					if(requiredDossierParts) {
+						
+						requiredDossierParts.each(function(requiredDossierPart){
+							var requiredDossierPartIds = requiredDossierPart.val().trim().split(",");
+							console.log(dossierPartId);
+							if(requiredDossierPartIds != ''){
+								for(var i = 0; i < requiredDossierPartIds.length; i++){
+									var dossierPartId = requiredDossierPartIds[i];
+									console.log(dossierPartId);
+									if(parseInt(dossierPartId) > 0){
+										required = true;
+										var row = A.one('.dossier-part-row.dpid-' + dossierPartId);
+										if(row){
+											row.attr('style', 'color:red');
+										}
+									}
 								}
 							}
+						});
+						
+						
+						if(required === true) {
+							alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-required-before-send") %>');
+						} else {
+							location.href = '<%= updateDossierStatusURL %>';
 						}
 					}
-				});
-				
-				
-				if(required === true) {
-					alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-required-before-send") %>');
-				} else {
-					location.href = '<%= updateDossierStatusURL %>';
-				}
-			}
-		},['aui-base']
+				},
+			['aui-base']
 	);
 </aui:script>
 
