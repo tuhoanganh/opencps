@@ -17,25 +17,14 @@
 
 package org.opencps.vtcpay.model;
 
-import java.net.URLEncoder;
 import java.security.MessageDigest;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-import javax.portlet.ActionRequest;
 import javax.servlet.http.HttpServletRequest;
 
-import org.opencps.keypay.security.HashFunction;
-import org.opencps.keypay.security.MD5;
-import org.opencps.keypay.service.restful.KPJsonRest;
-import org.opencps.keypay.service.restful.KPRest;
 import org.opencps.paymentmgt.model.PaymentConfig;
 import org.opencps.paymentmgt.model.PaymentFile;
-import org.opencps.paymentmgt.model.PaymentGateConfig;
 import org.opencps.paymentmgt.service.PaymentConfigLocalServiceUtil;
 import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
 
@@ -109,12 +98,10 @@ public class VTCPay {
 
 		String[] dataArrays = StringUtil.split(data, "|");
 
-		_log.info("dataArrays:" + dataArrays.length);
 		if (dataArrays.length > 0) {
 
 			List<String> dataList = Arrays.asList(dataArrays);
 
-			_log.info("dataList:" + dataList);
 			if (dataList.size() > 0) {
 				this.amount = dataList.get(0);
 				this.message = dataList.get(1);

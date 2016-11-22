@@ -54,7 +54,7 @@ public class PaymentConfigLocalServiceImpl extends PaymentConfigLocalServiceBase
 		String invoiceTemplateNo, String invoiceIssueNo, String invoiceLastNo, String bankInfo,
 		String placeInfo, String keypayDomain, String keypayVersion, String keypayMerchantCode,
 		String keypaySecureKey, String reportTemplate, long paymentGateType, boolean paymentStatus,
-		long userId, ServiceContext serviceContext)
+		long userId,String returnUrl, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		long paymentConfigId = CounterLocalServiceUtil.increment(PaymentConfig.class.getName());
@@ -84,6 +84,7 @@ public class PaymentConfigLocalServiceImpl extends PaymentConfigLocalServiceBase
 		paymentConfig.setReportTemplate(reportTemplate);
 		paymentConfig.setPaymentGateType(paymentGateType);
 		paymentConfig.setStatus(paymentStatus);
+		paymentConfig.setReturnUrl(returnUrl);
 		return paymentConfigPersistence.update(paymentConfig);
 
 	}
@@ -93,7 +94,7 @@ public class PaymentConfigLocalServiceImpl extends PaymentConfigLocalServiceBase
 		String govAgencyTaxNo, String invoiceTemplateNo, String invoiceIssueNo,
 		String invoiceLastNo, String bankInfo, String placeInfo, String keypayDomain,
 		String keypayVersion, String keypayMerchantCode, String keypaySecureKey,
-		String reportTemplate, long paymentGateType, boolean paymentStatus, long userId,
+		String reportTemplate, long paymentGateType, boolean paymentStatus, long userId,String returnUrl,
 		ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
@@ -122,6 +123,7 @@ public class PaymentConfigLocalServiceImpl extends PaymentConfigLocalServiceBase
 		paymentConfig.setReportTemplate(reportTemplate);
 		paymentConfig.setPaymentGateType(paymentGateType);
 		paymentConfig.setStatus(paymentStatus);
+		paymentConfig.setReturnUrl(returnUrl);
 
 		return paymentConfigPersistence.update(paymentConfig);
 

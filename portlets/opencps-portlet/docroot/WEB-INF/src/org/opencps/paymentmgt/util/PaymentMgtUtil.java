@@ -19,23 +19,24 @@ package org.opencps.paymentmgt.util;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletURL;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.opencps.backend.message.UserActionMsg;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
+import org.opencps.dossiermgt.service.DossierLogLocalServiceUtil;
+import org.opencps.dossiermgt.util.ActorBean;
 import org.opencps.keypay.model.KeyPay;
+import org.opencps.notificationmgt.utils.NotificationUtils;
 import org.opencps.paymentmgt.model.PaymentConfig;
 import org.opencps.paymentmgt.model.PaymentFile;
 import org.opencps.paymentmgt.model.PaymentGateConfig;
-import org.opencps.paymentmgt.model.impl.PaymentConfigImpl;
 import org.opencps.paymentmgt.service.PaymentConfigLocalServiceUtil;
 import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
+import org.opencps.util.PortletConstants;
 import org.opencps.util.WebKeys;
 import org.opencps.vtcpay.model.VTCPay;
 
@@ -45,18 +46,12 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.messaging.Message;
-import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.Organization;
-import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.User;
-import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.OrganizationLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
-import com.liferay.portlet.PortletURLFactoryUtil;
 
 /**
  * @author trungdk
@@ -175,9 +170,6 @@ public class PaymentMgtUtil {
 
 		PaymentConfig paymentConfigValid = null;
 
-		_log.info("=====groupId:" + groupId);
-		_log.info("=====govAgencyOrganizationId:" + govAgencyOrganizationId);
-
 		List<PaymentConfig> paymentConfigList = new ArrayList<PaymentConfig>();
 
 		try {
@@ -211,38 +203,57 @@ public class PaymentMgtUtil {
 			_log.info("=====vtcPay.getStatus():" + vtcPay.getStatus());
 			_log.info("=====isVerify:" + isVerify);
 
-			paymentFile =
-				PaymentFileLocalServiceUtil.getByTransactionId(Long.parseLong(vtcPay.getReference_number()));
+			if (vtcPay.getReference_number().trim().length() > 0) {
 
-			dossier = DossierLocalServiceUtil.getDossier(paymentFile.getDossierId());
+				paymentFile =
+					PaymentFileLocalServiceUtil.getByTransactionId(Long.parseLong(vtcPay.getReference_number()));
+
+				dossier = DossierLocalServiceUtil.getDossier(paymentFile.getDossierId());
+			}
 
 			if (isVerify) {
 
 				if (Validator.isNotNull(paymentFile) &&
-					vtcPay.getStatus().equals(VTCPayEventKeys.SUCCESS) &&
 					(paymentFile.getPaymentStatus() != PaymentMgtUtil.PAYMENT_STATUS_APPROVED)) {
 
-					UserActionMsg actionMsg = new UserActionMsg();
-
-					actionMsg.setAction(WebKeys.ACTION_PAY_VALUE);
-
-					actionMsg.setPaymentFileId(paymentFile.getPaymentFileId());
-
-					actionMsg.setDossierId(paymentFile.getDossierId());
-
-					actionMsg.setCompanyId(dossier.getCompanyId());
-
-					actionMsg.setGovAgencyCode(dossier.getGovAgencyCode());
-
-					Message message = new Message();
-
-					message.put("msgToEngine", actionMsg);
-
-					// MessageBusUtil.sendMessage("opencps/frontoffice/out/destination",
-					// message);
+//					UserActionMsg actionMsg = new UserActionMsg();
+//
+//					actionMsg.setAction(WebKeys.ACTION_PAY_VALUE);
+//
+//					actionMsg.setPaymentFileId(paymentFile.getPaymentFileId());
+//
+//					actionMsg.setDossierId(paymentFile.getDossierId());
+//
+//					actionMsg.setCompanyId(dossier.getCompanyId());
+//
+//					actionMsg.setGovAgencyCode(dossier.getGovAgencyCode());
+//
+//					Message message = new Message();
+//
+//					message.put("msgToEngine", actionMsg);
+//
+//					MessageBusUtil.sendMessage("opencps/frontoffice/out/destination", message);
 
 					paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_APPROVED);
 					paymentFile.setPaymentMethod(WebKeys.PAYMENT_METHOD_VTCPAY);
+					
+					ActorBean actorBean = new ActorBean(1, dossier.getUserId());
+					
+					DossierLogLocalServiceUtil.addDossierLog(
+						dossier.getUserId(),
+						dossier.getGroupId(),
+						dossier.getCompanyId(),
+						dossier.getDossierId(),
+						paymentFile.getFileGroupId(),
+						PortletConstants.DOSSIER_STATUS_NEW,
+						PortletConstants.DOSSIER_ACTION_CONFIRM_PAYMENT,
+						PortletConstants.DOSSIER_ACTION_CONFIRM_PAYMENT,
+						new Date(),
+						1, actorBean.getActor(),
+						actorBean.getActorId(),
+						actorBean.getActorName());
+					
+						NotificationUtils.sendNotificationToAccountant(dossier, paymentFile);
 				}
 
 				else {
@@ -251,9 +262,15 @@ public class PaymentMgtUtil {
 
 				JSONObject jsonData = JSONFactoryUtil.createJSONObject();
 
-				jsonData.put("data", vtcPay.getData());
+				jsonData.put("amount", vtcPay.getAmount());
+				jsonData.put("message", vtcPay.getMessage());
+				jsonData.put("payment_type", vtcPay.getPaymentType());
+				jsonData.put("reference_number", vtcPay.getReference_number());
+				jsonData.put("status", vtcPay.getStatus());
+				jsonData.put("trans_ref_no", vtcPay.getTrans_ref_no());
 				jsonData.put("signature", vtcPay.getSignature());
 
+				paymentFile.setKeypayGoodCode(vtcPay.getTrans_ref_no());
 				paymentFile.setPaymentGateResponseData(jsonData.toString());
 
 				PaymentFileLocalServiceUtil.updatePaymentFile(paymentFile);
@@ -262,11 +279,17 @@ public class PaymentMgtUtil {
 
 			if (Validator.isNotNull(dossier) && Validator.isNotNull(paymentFile)) {
 
-				response.sendRedirect(dossier.getKeypayRedirectUrl().toString());
+				String redirectUrl = dossier.getKeypayRedirectUrl().toString();
 
-				request.setAttribute("paymentFileId", paymentFile.getPaymentFileId());
-				request.setAttribute("dossierId", dossier.getDossierId());
-				request.setAttribute("serviceInfoId", dossier.getServiceInfoId());
+				StringBuffer param = new StringBuffer();
+				param.append("&paymentFileId=").append(paymentFile.getPaymentFileId());
+				param.append("&dossierId=").append(dossier.getDossierId());
+				param.append("&serviceInfoId=").append(dossier.getServiceInfoId());
+
+				redirectUrl += param;
+
+				response.sendRedirect(redirectUrl);
+
 			}
 
 		}
@@ -278,7 +301,108 @@ public class PaymentMgtUtil {
 		return response;
 	}
 
-	public static String runKeyPayGateData(KeyPay keyPay) {
+	public static String runKeyPayGateData(
+		HttpServletRequest request, HttpServletResponse response, KeyPay keyPay) {
+
+		try {
+
+			PaymentGateConfig paymentGateConfig = null;
+			Dossier dossier = null;
+			PaymentFile paymentFile = null;
+
+			// boolean isVerify = KeyPay.checkSecureHash(keyPay);
+			boolean isVerify = true;
+			if (keyPay.getMerchant_trans_id().trim().length() > 0) {
+				paymentFile =
+					PaymentFileLocalServiceUtil.getByTransactionId(Long.parseLong(keyPay.getMerchant_trans_id()));
+
+				dossier = DossierLocalServiceUtil.getDossier(paymentFile.getDossierId());
+			}
+			_log.info("paymentFile:"+paymentFile);
+			_log.info("dossier:"+dossier);
+			if (isVerify) {
+
+				if (Validator.isNotNull(paymentFile) &&
+					(paymentFile.getPaymentStatus() != PaymentMgtUtil.PAYMENT_STATUS_APPROVED)) {
+
+					_log.info("paymentFile.getPaymentStatus():"+paymentFile.getPaymentStatus());
+					paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_APPROVED);
+					paymentFile.setPaymentMethod(WebKeys.PAYMENT_METHOD_VTCPAY);
+					
+					ActorBean actorBean = new ActorBean(1, dossier.getUserId());
+					
+					DossierLogLocalServiceUtil.addDossierLog(
+						dossier.getUserId(),
+						dossier.getGroupId(),
+						dossier.getCompanyId(),
+						dossier.getDossierId(),
+						paymentFile.getFileGroupId(),
+						PortletConstants.DOSSIER_STATUS_NEW,
+						PortletConstants.DOSSIER_ACTION_CONFIRM_PAYMENT,
+						PortletConstants.DOSSIER_ACTION_CONFIRM_PAYMENT,
+						new Date(),
+						1, actorBean.getActor(),
+						actorBean.getActorId(),
+						actorBean.getActorName());
+					
+					NotificationUtils.sendNotificationToAccountant(dossier, paymentFile);
+				}
+
+				else {
+					paymentFile.setPaymentGateStatusCode(keyPay.getService_code());
+				}
+
+				JSONObject jsonData = JSONFactoryUtil.createJSONObject();
+
+				jsonData.put("command", keyPay.getCommand());
+				jsonData.put("merchant_trans_id", keyPay.getMerchant_trans_id());
+				jsonData.put("merchant_code", keyPay.getMerchant_code());
+				jsonData.put("response_code", keyPay.getResponse_code());
+				jsonData.put("trans_id", keyPay.getTrans_id());
+				jsonData.put("good_code", keyPay.getGood_code());
+				jsonData.put("net_cost", keyPay.getNet_cost());
+				jsonData.put("ship_fee", keyPay.getShip_fee());
+				jsonData.put("tax", keyPay.getTax());
+				jsonData.put("service_code", keyPay.getService_code());
+				jsonData.put("currency_code", keyPay.getCurrency_code());
+				jsonData.put("bank_code", keyPay.getBank_code());
+				jsonData.put("secure_hash", keyPay.getSecure_hash());
+				jsonData.put("desc_1", keyPay.getDesc_1());
+				jsonData.put("desc_2", keyPay.getDesc_2());
+				jsonData.put("desc_3", keyPay.getDesc_3());
+				jsonData.put("desc_4", keyPay.getDesc_4());
+				jsonData.put("desc_5", keyPay.getDesc_5());
+
+				paymentFile.setKeypayGoodCode(keyPay.getGood_code());
+				paymentFile.setPaymentGateStatusCode(keyPay.getService_code());
+				paymentFile.setPaymentGateResponseData(jsonData.toString());
+
+				PaymentFileLocalServiceUtil.updatePaymentFile(paymentFile);
+				
+				
+
+			}
+
+			if (Validator.isNotNull(dossier) && Validator.isNotNull(paymentFile)) {
+
+				String redirectUrl = dossier.getKeypayRedirectUrl().toString();
+
+				StringBuffer param = new StringBuffer();
+				param.append("&paymentFileId=").append(paymentFile.getPaymentFileId());
+				param.append("&dossierId=").append(dossier.getDossierId());
+				param.append("&serviceInfoId=").append(dossier.getServiceInfoId());
+
+				redirectUrl += param;
+
+				response.sendRedirect(redirectUrl);
+
+			}
+
+		}
+		catch (SystemException | IOException | NumberFormatException | PortalException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return null;
 	}

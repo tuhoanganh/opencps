@@ -1,4 +1,8 @@
 
+<%@page import="org.opencps.paymentmgt.service.PaymentGateConfigLocalServiceUtil"%>
+<%@page import="org.opencps.paymentmgt.model.PaymentGateConfig"%>
+<%@page import="com.liferay.portal.kernel.log.Log"%>
+<%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
 <%@page import="org.opencps.paymentmgt.service.persistence.PaymentFileUtil"%>
 <%
 /**
@@ -23,34 +27,46 @@
 <%@ include file="../init.jsp"%>
 
 <%
-	HttpServletRequest r = PortalUtil.getHttpServletRequest(renderRequest);
-
-	String test = (String)r.getAttribute("paymentFileId");
-	System.out.println("test:"+test);
+	HttpServletRequest originalRequest = PortalUtil.getOriginalServletRequest(PortalUtil.getHttpServletRequest(renderRequest));
 	
-	long paymentFileId = ParamUtil.getLong(r, "paymentFileId",0);
-	System.out.println("paymentFileId:"+paymentFileId);
-	long dossierId = ParamUtil.getLong(r, "dossierId",0);
-	long serviceInfoId = ParamUtil.getLong(r, "serviceInfoId",0);
+	long paymentFileId = ParamUtil.getLong(originalRequest, "paymentFileId",0);
+	long dossierId = ParamUtil.getLong(originalRequest, "dossierId",0);
+	long serviceInfoId = ParamUtil.getLong(originalRequest, "serviceInfoId",0);
 	
 	PaymentFile paymentFile = null;
 	Dossier dossier = null;
 	ServiceInfo serviceInfo = null;
+	PaymentConfig paymentConfig = null;
+	PaymentGateConfig paymentGateConfig = null;
 	
-	if(paymentFileId >0){
-		paymentFile =PaymentFileLocalServiceUtil.getPaymentFile(paymentFileId);
-		
-	}
-	if(dossierId >0){
-		dossier = DossierLocalServiceUtil.getDossier(dossierId);
-		
-	}
-	if(serviceInfoId >0){
-		serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(serviceInfoId);
-		
-	}
+	try{
 	
-
+		if (paymentFileId > 0) {
+			paymentFile = PaymentFileLocalServiceUtil.getPaymentFile(paymentFileId);
+	
+			if (Validator.isNotNull(paymentFile) && paymentFile.getPaymentConfig() > 0) {
+				paymentConfig =
+					PaymentConfigLocalServiceUtil.getPaymentConfig(paymentFile.getPaymentConfig());
+	
+				if (Validator.isNotNull(paymentConfig) &&
+					paymentConfig.getPaymentConfigId() > 0) {
+					paymentGateConfig =
+						PaymentGateConfigLocalServiceUtil.getPaymentGateConfig(paymentConfig.getPaymentGateType());
+				}
+			}
+	
+		}
+		if (dossierId > 0) {
+			dossier = DossierLocalServiceUtil.getDossier(dossierId);
+	
+		}
+		if (serviceInfoId > 0) {
+			serviceInfo = ServiceInfoLocalServiceUtil.getServiceInfo(serviceInfoId);
+	
+		}
+	}catch(Exception e){
+		
+	}
 %>
 
 <portlet:renderURL var="backURL">
@@ -68,12 +84,12 @@
 <c:choose>
 	<c:when test="<%= Validator.isNotNull(paymentFile) && paymentFile.getPaymentStatus() == PaymentMgtUtil.PAYMENT_STATUS_APPROVED %>">
 		<div class="alert alert-success">
-			<liferay-ui:message key="keypay-success"></liferay-ui:message>
+			<liferay-ui:message key="paygate-success"></liferay-ui:message>
 		</div>
 		<c:if test="<%= Validator.isNotNull(dossier) && Validator.isNotNull(serviceInfo) %>">
 			<div class="lookup-result">
 				<table>
-					<tr style="background: #fae5d3;">
+					<tr>
 						<td class="col-left"><liferay-ui:message key="reception-no"></liferay-ui:message></td>
 						<td class="col-right"><%= dossier.getReceptionNo()%></td>
 					</tr>
@@ -98,8 +114,14 @@
 						<td class="col-right"><%=paymentFile.getKeypayTransactionId() %></td>
 					</tr>
 					<tr>
-						<td class="col-left"><liferay-ui:message key="trans_id"></liferay-ui:message></td>
+						<td class="col-left"><liferay-ui:message key="paygate_id"></liferay-ui:message></td>
 						<td class="col-right"><%=paymentFile.getKeypayGoodCode() %></td>
+					</tr>
+					<tr>
+						<td class="col-left"><liferay-ui:message key="paygate_name"></liferay-ui:message></td>
+						<td class="col-right">
+							<%=Validator.isNotNull(paymentGateConfig)?paymentGateConfig.getPaymentGateName():StringPool.BLANK %>
+						</td>
 					</tr>
 				</table>	
 			</div>	
@@ -107,8 +129,10 @@
 	</c:when>
 	<c:otherwise>
 		<div class="alert alert-error">
-			<liferay-ui:error key="<%=paymentFile.getPaymentGateStatusCode()%>"></liferay-ui:error>
+			<liferay-ui:error key="paygate-alert"></liferay-ui:error>
 		</div>
 		
 	</c:otherwise>
 </c:choose>
+
+<%! private static Log _log = LogFactoryUtil.getLog("/html/portlets/paymentmgt/frontoffice/frontofficeconfirmkeypay");%>
