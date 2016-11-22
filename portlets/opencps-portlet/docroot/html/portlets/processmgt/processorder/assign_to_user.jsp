@@ -1,6 +1,3 @@
-<%@page import="org.opencps.holidayconfig.util.HolidayUtils"%>
-<%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -19,36 +16,38 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-<%@page import="org.opencps.processmgt.util.ProcessOrderUtils"%>
-<%@page import="javax.portlet.PortletMode"%>
-<%@page import="org.opencps.processmgt.NoSuchWorkflowOutputException"%>
-<%@page import="org.opencps.util.PortletPropsValues"%>
+
 <%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
-<%@page import="javax.portlet.PortletRequest"%>
-<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
-<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
-<%@page import="org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil"%>
-<%@page import="org.opencps.processmgt.model.WorkflowOutput"%>
-<%@page import="org.opencps.backend.util.PaymentRequestGenerator"%>
-<%@page import="org.opencps.util.PortletUtil"%>
-<%@page import="org.opencps.util.DateTimeUtil"%>
-<%@page import="org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil"%>
-<%@page import="org.opencps.processmgt.model.ProcessWorkflow"%>
-<%@page import="java.util.Date"%>
-<%@page import="org.opencps.backend.util.BookingDateGenerator"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
-<%@page import="org.opencps.processmgt.util.ProcessUtils"%>
-<%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
+<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
+<%@page import="java.util.Date"%>
+<%@page import="javax.portlet.PortletMode"%>
+<%@page import="javax.portlet.PortletRequest"%>
+<%@page import="org.opencps.backend.util.DossierNoGenerator"%>
+<%@page import="org.opencps.backend.util.PaymentRequestGenerator"%>
+<%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%@page import="org.opencps.dossiermgt.model.DossierFile"%>
-<%@page import="org.opencps.processmgt.model.ProcessOrder"%>
-<%@page import="org.opencps.dossiermgt.NoSuchDossierTemplateException"%>
 <%@page import="org.opencps.dossiermgt.NoSuchDossierException"%>
 <%@page import="org.opencps.dossiermgt.RequiredDossierPartException"%>
-<%@page import="org.opencps.backend.util.DossierNoGenerator"%>
+<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
+<%@page import="org.opencps.holidayconfig.util.HolidayUtils"%>
+<%@page import="org.opencps.processmgt.model.ProcessOrder"%>
+<%@page import="org.opencps.processmgt.model.ProcessWorkflow"%>
+<%@page import="org.opencps.processmgt.model.WorkflowOutput"%>
+<%@page import="org.opencps.processmgt.NoSuchWorkflowOutputException"%>
+<%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
+<%@page import="org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.util.ProcessMgtUtil"%>
+<%@page import="org.opencps.processmgt.util.ProcessOrderUtils"%>
+<%@page import="org.opencps.processmgt.util.ProcessUtils"%>
+<%@page import="org.opencps.util.PortletPropsValues"%>
+<%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="org.opencps.util.WebKeys"%>
 
-<%@ include file="../init.jsp"%>
+<%@ include file="init.jsp"%>
 
 <%
 	boolean success = false;
@@ -136,12 +135,12 @@
 	List<String> listDossierFileToSigner = new ArrayList<String>();
 	
 	for (WorkflowOutput workflowOutput : workflowOutputs) {
-		DossierFile dossierFile2 = DossierFileLocalServiceUtil.getDossierFileInUse(dossierId, workflowOutput.getDossierPartId());
+		DossierFile dossierFileSign = DossierFileLocalServiceUtil.getDossierFileInUse(dossierId, workflowOutput.getDossierPartId());
 		
-		if(Validator.isNotNull(dossierFile2)){
-			listFileToSigner.add(dossierFile2.getFileEntryId()+"");
-			listDossierPartToSigner.add(workflowOutput.getDossierPartId()+"");
-			listDossierFileToSigner.add(dossierFile2.getDossierFileId()+"");
+		if(Validator.isNotNull(dossierFileSign)){
+			listFileToSigner.add(String.valueOf(dossierFileSign.getFileEntryId()));
+			listDossierPartToSigner.add(String.valueOf(workflowOutput.getDossierPartId()));
+			listDossierFileToSigner.add(String.valueOf(dossierFileSign.getDossierFileId()));
 		}
 	}
 %>
@@ -162,6 +161,24 @@
 <portlet:actionURL var="assignToUserURL" name="assignToUser"/>
 
 <aui:form name="fm" action="<%=assignToUserURL.toString() %>" method="post">
+
+	<aui:input 
+		name="assignFormDisplayStyle" 
+		value="<%=assignFormDisplayStyle %>" 
+		type="hidden"
+	/>
+	
+	<aui:input 
+		name="assignActionURL" 
+		value="<%=assignToUserURL.toString() %>" 
+		type="hidden"
+	/>
+	
+	<aui:input 
+		name="assignActionURL" 
+		value="<%=assignToUserURL.toString() %>" 
+		type="hidden"
+	/>
 	<aui:input 
 		name="redirectURL" 
 		value="<%=currentURL %>" 
@@ -426,7 +443,7 @@
 		</div>
 	</c:if>
 
-	<aui:button type="submit" value="submit" name="submit"/>
+	<aui:button type="button" value="submit" name="submit"/>
 	
 	<c:if test="<%=esign %>">
 		<%-- <aui:button type="button" value="esign" name="esign"/> --%>
@@ -448,11 +465,19 @@
 
 <aui:script>
 
- 	AUI().ready(function(A){
+	AUI().ready(function(A){
+		
+		var submitButton = A.one('#<portlet:namespace/>submit');
 
  		var cancelButton = A.one('#<portlet:namespace/>cancel');
 		
  		var esign = A.one('#<portlet:namespace/>esign');
+		
+		if(submitButton){
+			submitButton.on('click', function(){
+				submitForm(document.<portlet:namespace />fm);
+			});
+		}
 		
  		if(cancelButton){
  			cancelButton.on('click', function(){
@@ -627,6 +652,8 @@
 </aui:script>
 	
 <aui:script>
+	var assignTaskAfterSign = '<%=assignTaskAfterSign.toString()%>';
+
 	function formSubmit() {
 		document.getElementById('<portlet:namespace />fm').action = '<%=assignToUserURL.toString() %>';
 			document.getElementById('<portlet:namespace />fm').submit();
@@ -738,7 +765,9 @@
 							var newis = indexSize-1;
 								if (msg === 'success') {
 									if(index == newis){
-										formSubmit();
+										if(assignTaskAfterSign == 'true'){
+											formSubmit();
+										}
 									}
 								} else {
 										alert("--------- vao day completeSignature- ky so ko dc-------------");
