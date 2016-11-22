@@ -141,7 +141,6 @@ public class ConfigurationImpl implements ConfigurationAction{
 	    PortletConfig portletConfig, RenderRequest renderRequest,
 	    RenderResponse renderResponse)
 	    throws Exception {
-
 		return "/html/portlets/dossiermgt/frontoffice/configuration.jsp";
 	}
 
