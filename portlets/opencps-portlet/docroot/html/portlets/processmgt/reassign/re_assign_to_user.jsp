@@ -512,7 +512,7 @@
  		if(success == 'true'){
  			var backURL = '<%=backURL%>';
  			var Util = Liferay.Util;
- 			<portlet:namespace/>closeDialog();
+ 			<portlet:namespace/>closeDialog('<portlet:namespace />reAssignForm', '<%=WebKeys.RE_ASSIGN_PORTLET%>_');
 			Util.getOpener().Liferay.fire('redirect', {responseData:{backURL:backURL}});
  		}
 		

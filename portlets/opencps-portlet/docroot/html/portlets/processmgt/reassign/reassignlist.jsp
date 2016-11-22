@@ -1,4 +1,5 @@
 
+<%@page import="org.opencps.usermgt.service.EmployeeLocalServiceUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -111,6 +112,9 @@
 				
 				processStepName = processStep.getStepName();
 				
+				Employee employee = EmployeeLocalServiceUtil.getEmployeeByMappingUserId(scopeGroupId, processOrder.getAssignToUserId());
+				
+				assignUserName = employee.getFullName();
 			} catch(Exception e) {}
 			
 			if(Validator.isNotNull(processStep)) {
@@ -118,9 +122,9 @@
 						.checkActionDateOverStatus((processOrder.getActionDatetime()), new Date(), processStep.getDaysDuration());
 			}
 			
-			if(Validator.isNotNull(employee)) {
+			/* if(Validator.isNotNull(employee)) {
 				assignUserName = employee.getFullName();
-			}
+			} */
 			//final String hrefFix = "location.href='#'";
 			
 		%>
