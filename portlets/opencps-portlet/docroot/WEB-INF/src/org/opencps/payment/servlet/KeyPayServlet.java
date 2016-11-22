@@ -26,7 +26,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.opencps.keypay.model.KeyPay;
 import org.opencps.paymentmgt.util.PaymentMgtUtil;
-import org.opencps.vtcpay.model.VTCPay;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
