@@ -459,7 +459,7 @@ public class AccountMgtPortlet extends MVCPortlet {
 			    .validateBusiness(
 			        businessId, email, StringPool.BLANK, enName, shortName,
 			        address, representativeName, representativeRole, cityId, districtId, wardId,
-			        1, StringPool.BLANK, StringPool.BLANK);
+			        1,StringPool.BLANK);
 
 			city = DictItemLocalServiceUtil
 			    .getDictItem(cityId);

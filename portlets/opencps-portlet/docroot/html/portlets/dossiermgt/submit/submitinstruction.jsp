@@ -1,4 +1,5 @@
-
+<%@page import="org.opencps.util.PortletPropsValues"%>
+<%@page import="org.opencps.util.PortletUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,45 +18,29 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
-<%@page import="com.liferay.portal.kernel.dao.search.SearchEntry"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="java.util.List"%>
-<%@page import="javax.portlet.PortletURL"%>
-<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
-<%@page import="org.opencps.datamgt.model.DictItem"%>
-<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
-
+<%@ include file="init.jsp"%>
 <%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
 <%@page import="org.opencps.util.DictItemUtil"%>
 <%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
-
-<%@ include file="init.jsp"%>
-
+<%@page import="javax.portlet.PortletURL"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
+<%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
+<%@page import="java.util.List"%>
+<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
 <liferay-util:include page='<%= templatePath + "toolbar.jsp"%>' servletContext="<%=application %>" />
 <%
-	String administrationCode = StringPool.BLANK;
-	String domainCode = StringPool.BLANK;
-	
-	ParamUtil.getString(request, "administrationCode");
+	String administrationCode = ParamUtil.getString(request, "administrationCode");
 
-	ParamUtil.getString(request, "domainCode");
-			
-	long serviceDomainId = ParamUtil.getLong(request, "serviceDomainId", 0L);
-			
-	if (serviceDomainId <= 0) {
-		
-		administrationCode = ParamUtil.getString(request, "administrationCode", StringPool.BLANK);
-		domainCode = ParamUtil.getString(request, "domainCode", StringPool.BLANK);
-	} else {
-		domainCode = String.valueOf(serviceDomainId);	
-	}
-	
+	String domainCode = ParamUtil.getString(request, "domainCode");
+
 
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "submitinstruction.jsp");
-
+	iteratorURL.setParameter("administrationCode", administrationCode);
+	iteratorURL.setParameter("domainCode", domainCode);
+	
 	List<ServiceInfo> serviceInfos = new ArrayList<ServiceInfo>();
 	List<ServiceConfig> serviceConfigs = new ArrayList<ServiceConfig>();	
 
@@ -71,6 +56,7 @@
 	}
 	String govCode = Validator.isNotNull(dictItemGov) ? dictItemGov.getItemCode() : StringPool.BLANK;	
 	List<String> headerNames = new ArrayList<String>();
+	
 	headerNames.add("col1");
 	headerNames.add("col2");
 	headerNames.add("col3");

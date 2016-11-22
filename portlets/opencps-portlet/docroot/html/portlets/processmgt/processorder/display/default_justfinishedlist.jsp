@@ -100,8 +100,8 @@
 							processURL.setParameter("mvcPath", templatePath + "process_order_detail.jsp");
 							processURL.setParameter(ProcessOrderDisplayTerms.PROCESS_ORDER_ID, String.valueOf(processOrder.getProcessOrderId()));
 							processURL.setParameter("backURL", currentURL);
-							//processURL.setParameter("isEditDossier", (processOrder.isReadOnly() || (processOrder.getAssignToUsesrId() != 0 &&  processOrder.getAssignToUsesrId() != user.getUserId())) ? String.valueOf(false) : String.valueOf(true));
-							processURL.setParameter("isEditDossier", String.valueOf(false));
+							processURL.setParameter("isEditDossier", (processOrder.isReadOnly() || (processOrder.getAssignToUsesrId() != 0 &&  processOrder.getAssignToUsesrId() != user.getUserId())) ? String.valueOf(false) : String.valueOf(true));
+						
 							String deadlineVal = Validator.isNotNull(processOrder.getDealine()) ? processOrder.getDealine() : StringPool.DASH;
 							
 							String hrefFix = "location.href='" + processURL.toString()+"'";

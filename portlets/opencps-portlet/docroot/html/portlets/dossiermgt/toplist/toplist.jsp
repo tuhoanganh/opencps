@@ -22,12 +22,12 @@
 <%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
 <%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
 <%@page import="com.liferay.portal.service.UserLocalServiceUtil"%>
+<%@page import="com.liferay.portal.kernel.util.ContextPathUtil"%>
 <%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%@page import="java.util.List"%>
-
 <%@ include file="init.jsp" %>
 
 <%

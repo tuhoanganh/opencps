@@ -1,4 +1,8 @@
-
+<%@page import="java.util.ArrayList"%>
+<%@page import="com.liferay.portal.kernel.util.ListUtil"%>
+<%@page import="com.liferay.portal.model.Layout"%>
+<%@page import="java.util.List"%>
+<%@page import="com.liferay.portal.service.LayoutLocalServiceUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,10 +21,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
-<%@page import="java.util.ArrayList"%>
-<%@page import="com.liferay.portal.model.Layout"%>
-<%@page import="java.util.List"%>
-<%@page import="com.liferay.portal.service.LayoutLocalServiceUtil"%>
 
 <%@ include file="init.jsp" %>
 
