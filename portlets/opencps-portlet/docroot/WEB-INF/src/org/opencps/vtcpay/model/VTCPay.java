@@ -38,7 +38,7 @@ import com.liferay.portal.kernel.util.Validator;
 
 public class VTCPay {
 
-	// các tham số gửi đi
+	// Cac tham so gui di
 
 	protected String website_id;
 	protected String receiver_account;
@@ -90,6 +90,10 @@ public class VTCPay {
 		this.data = data;
 		this.signature = signature;
 	}
+	
+	public VTCPay(){
+		
+	}
 
 	public VTCPay(String data) {
 
@@ -125,8 +129,6 @@ public class VTCPay {
 			if (vtcPay.getReference_number().trim().length() > 0) {
 				paymentFile =
 					PaymentFileLocalServiceUtil.getByTransactionId(Long.parseLong(vtcPay.getReference_number()));
-
-				_log.info("=====paymentFile.getPaymentConfig():" + paymentFile.getPaymentConfig());
 			}
 
 			if (Validator.isNotNull(paymentFile)) {
@@ -161,7 +163,6 @@ public class VTCPay {
 				? paymentConfig.getKeypaySecureKey() : StringPool.BLANK);
 
 		String merchantSign = StringPool.BLANK;
-		_log.info("=====merchantSignBuffer.toString():" + merchantSignBuffer.toString());
 		merchantSign = merchantSignBuffer.toString();
 
 		merchantSign = VTCPay.sha256(merchantSign);
@@ -173,7 +174,7 @@ public class VTCPay {
 
 		StringBuffer merchantSignBuffer = new StringBuffer();
 
-
+		
 		merchantSignBuffer.append(vtcPay.getAmount());
 		merchantSignBuffer.append("|").append(vtcPay.getCurrency());
 		merchantSignBuffer.append("|").append(vtcPay.getReceiver_account());
@@ -239,10 +240,36 @@ public class VTCPay {
 	}
 
 	/**
-	 * Constructor - Lấy dữ liệu trả về từ VTCPay
+	 * Constructor - Lay du lieu tra ve tu VTCPay
 	 *
 	 * @param request
 	 */
+	public static VTCPay getVTCPayDataPost(HttpServletRequest request) {
+		
+		VTCPay vtcPay = new VTCPay();
+		try {
+			
+			vtcPay.setData(request.getParameter("data"));
+			
+			String[] dataArray = StringUtil.split(vtcPay.getData(),"|");
+			List<String> dataList = Arrays.asList(dataArray);
+			
+			vtcPay.setAmount(dataList.get(0));
+			vtcPay.setMessage(dataList.get(1));
+			vtcPay.setPaymentType(dataList.get(2));
+			vtcPay.setReference_number(dataList.get(3));
+			vtcPay.setStatus(dataList.get(4));
+			vtcPay.setTrans_ref_no(dataList.get(5));
+			vtcPay.setWebsite_id(dataList.get(6));
+			vtcPay.setSignature(request.getParameter("signature"));
+
+		}
+		catch (Exception e) {
+			_log.info("ERROR get data VTCPay return");
+		}
+		return vtcPay;
+	}
+	
 	public VTCPay(HttpServletRequest request) {
 
 		try {

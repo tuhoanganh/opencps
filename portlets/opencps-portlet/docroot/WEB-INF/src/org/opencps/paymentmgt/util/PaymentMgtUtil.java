@@ -315,14 +315,11 @@ public class PaymentMgtUtil {
 
 				dossier = DossierLocalServiceUtil.getDossier(paymentFile.getDossierId());
 			}
-			_log.info("paymentFile:"+paymentFile);
-			_log.info("dossier:"+dossier);
 			if (isVerify) {
 
 				if (Validator.isNotNull(paymentFile) &&
 					(paymentFile.getPaymentStatus() != PaymentMgtUtil.PAYMENT_STATUS_APPROVED)) {
 
-					_log.info("paymentFile.getPaymentStatus():"+paymentFile.getPaymentStatus());
 					paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_APPROVED);
 					paymentFile.setPaymentMethod(WebKeys.PAYMENT_METHOD_VTCPAY);
 					
