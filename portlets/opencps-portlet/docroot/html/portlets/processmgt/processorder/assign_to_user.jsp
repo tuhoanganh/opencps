@@ -652,7 +652,7 @@
 </aui:script>
 	
 <aui:script>
-	var assignTaskAfterSign = '<%=assignTaskAfterSign.toString()%>';
+	var assignTaskAfterSign = '<%=String.valueOf(assignTaskAfterSign)%>';
 
 	function formSubmit() {
 		document.getElementById('<portlet:namespace />fm').action = '<%=assignToUserURL.toString() %>';

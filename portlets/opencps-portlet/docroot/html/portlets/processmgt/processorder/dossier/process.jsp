@@ -901,7 +901,7 @@
 <portlet:actionURL var="signatureURL" name="signatureBCY"></portlet:actionURL>
 
 <aui:script>
-	var assignTaskAfterSign = '<%=assignTaskAfterSign.toString()%>';
+	var assignTaskAfterSign = '<%=String.valueOf(assignTaskAfterSign)%>';
 
 	function plugin0() {
 		
