@@ -135,12 +135,12 @@
 	List<String> listDossierFileToSigner = new ArrayList<String>();
 	
 	for (WorkflowOutput workflowOutput : workflowOutputs) {
-		DossierFile dossierFile2 = DossierFileLocalServiceUtil.getDossierFileInUse(dossierId, workflowOutput.getDossierPartId());
+		DossierFile dossierFileSign = DossierFileLocalServiceUtil.getDossierFileInUse(dossierId, workflowOutput.getDossierPartId());
 		
-		if(Validator.isNotNull(dossierFile2)){
-			listFileToSigner.add(dossierFile2.getFileEntryId()+"");
-			listDossierPartToSigner.add(workflowOutput.getDossierPartId()+"");
-			listDossierFileToSigner.add(dossierFile2.getDossierFileId()+"");
+		if(Validator.isNotNull(dossierFileSign)){
+			listFileToSigner.add(String.valueOf(dossierFileSign.getFileEntryId()));
+			listDossierPartToSigner.add(String.valueOf(workflowOutput.getDossierPartId()));
+			listDossierFileToSigner.add(String.valueOf(dossierFileSign.getDossierFileId()));
 		}
 	}
 %>
@@ -652,6 +652,8 @@
 </aui:script>
 	
 <aui:script>
+	var assignTaskAfterSign = '<%=assignTaskAfterSign.toString()%>';
+
 	function formSubmit() {
 		document.getElementById('<portlet:namespace />fm').action = '<%=assignToUserURL.toString() %>';
 			document.getElementById('<portlet:namespace />fm').submit();
@@ -763,7 +765,9 @@
 							var newis = indexSize-1;
 								if (msg === 'success') {
 									if(index == newis){
-										formSubmit();
+										if(assignTaskAfterSign == 'true'){
+											formSubmit();
+										}
 									}
 								} else {
 										alert("--------- vao day completeSignature- ky so ko dc-------------");
