@@ -2488,16 +2488,11 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			ResourceResponse resourceResponse) throws IOException,
 			PortletException {
 		try {
-
-			_log.info("-----------vao ------------serveResource");
 			String type = ParamUtil.getString(resourceRequest, "type");
-			_log.info(" -----------type : " + type);
 			if (type != null && type.trim().equals("getComputerHash")) {
 				getComputerHash(resourceRequest, resourceResponse);
-				_log.info(" -----------	getComputerHash : " + type);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
 			_log.error(e);
 		}
 	}
@@ -2526,7 +2521,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 					indexSize);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+
 			_log.error(e);
 		}
 	}
@@ -2538,9 +2533,10 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				"signFieldName");
 		String filePath = ParamUtil.getString(actionRequest, "filePath");
 		// String fileName = ParamUtil.getString(actionRequest, "fileName");
-		long dossierId = ParamUtil.getLong(actionRequest, "dossierId");
+		// long dossierId = ParamUtil.getLong(actionRequest, "dossierId");
 		long dossierFileId = ParamUtil.getLong(actionRequest, "dossierFileId");
-		long dossierPartId = ParamUtil.getLong(actionRequest, "dossierPartId");
+		// long dossierPartId = ParamUtil.getLong(actionRequest,
+		// "dossierPartId");
 		File file = null;
 		JSONObject jsonFeed = JSONFactoryUtil.createJSONObject();
 		if (Validator.isNotNull(sign)) {
@@ -2558,6 +2554,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				}
 
 				file = new File(filePath);
+
 				InputStream is = new FileInputStream(file);
 
 				// upload to server dossierfile update
@@ -2565,76 +2562,41 @@ public class ProcessOrderPortlet extends MVCPortlet {
 						.getInstance(actionRequest);
 				serviceContext.setAddGroupPermissions(true);
 				serviceContext.setAddGuestPermissions(true);
-				String mimeType = MimeTypesUtil.getContentType(file);
+				// String mimeType = MimeTypesUtil.getContentType(file);
 				DossierFile dossierFile = DossierFileLocalServiceUtil
 						.fetchDossierFile(dossierFileId);
-				// DossierPart dossierPart = DossierPartLocalServiceUtil
-				// .fetchDossierPart(dossierPartId);
 
 				serviceContext.setAddGroupPermissions(true);
 				serviceContext.setAddGuestPermissions(true);
 				_log.info("serviceContext.getScopeGroupId()"
 						+ serviceContext.getScopeGroupId());
-				Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
 
-				// AccountBean accountBean = AccountUtil.getAccountBean(
-				// dossier.getUserId(), serviceContext.getScopeGroupId(),
-				// serviceContext);
-
-				_log.info("serviceContext.getScopeGroupId()"
-						+ serviceContext.getUserId());
-				_log.info("serviceContext.dossierId()" + dossierId);
-				_log.info("serviceContext.dossierFileId()" + dossierFileId);
-				_log.info("serviceContext.dossierPartId()" + dossierPartId);
 				dossierFile = DossierFileLocalServiceUtil
 						.getDossierFile(dossierFileId);
 
 				FileEntry fileEntry = DLAppServiceUtil.getFileEntry(dossierFile
 						.getFileEntryId());
+
 				DossierFileLocalServiceUtil.addSignDossierFile(dossierFileId,
 						true, fileEntry.getFolderId(), file.getName(),
 						fileEntry.getMimeType(), fileEntry.getTitle()
 								+ "signed", fileEntry.getDescription(),
 						StringPool.BLANK, is, file.length(), serviceContext);
 
-				// DossierFileLocalServiceUtil
-				// .addDossierFile(serviceContext
-				// .getUserId(), dossierId, dossierPartId,
-				// dossierFile.getTemplateFileNo(),
-				// StringPool.BLANK, 0, 0,
-				// accountBean
-				// .getOwnerUserId(), accountBean
-				// .getOwnerOrganizationId(), dossierPart.getPartName(),
-				// dossierFile.getFormData(), 0,
-				// PortletConstants.DOSSIER_FILE_MARK_UNKNOW,
-				// PortletConstants.DOSSIER_FILE_TYPE_OUTPUT,
-				// dossierFile.getDossierFileNo(),
-				// null, PortletConstants.DOSSIER_FILE_ORIGINAL,
-				// PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
-				// accountBean.getAccountInstance().getAccountFolder().getFolderId(),
-				// fileName +"_"+ System.currentTimeMillis()+".pdf",
-				// mimeType, file.getName()+".pdf", "signer file",
-				// StringPool.BLANK, is, file.length(), serviceContext);
-
-				_log.info("success.mimeType()" + mimeType);
-				_log.info("success.success()" + is);
 				jsonFeed.put("msg", "success");
 
 			} catch (Exception e) {
-				e.printStackTrace();
-				_log.info("EXCEPTION::::::::::::" + e);
 				jsonFeed.put("msg", "error");
+				_log.error(e);
 			} finally {
 				if (Validator.isNotNull(file) && file.exists()) {
 					file.delete();
 				}
 				try {
-					System.out.println("ProcessOrderPortlet.signature()"
-							+ jsonFeed.toString());
 					PortletUtil.writeJSON(actionRequest, actionResponse,
 							jsonFeed.toString());
 				} catch (Exception e) {
-					_log.info("EXCEPTION in finally block:::::::::::" + e);
+					_log.error(e);
 				}
 			}
 		} else {

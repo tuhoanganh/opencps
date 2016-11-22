@@ -92,6 +92,7 @@ import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil;
 import org.opencps.dossiermgt.service.FileGroupLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
+import org.opencps.dossiermgt.service.persistence.DossierUtil;
 import org.opencps.dossiermgt.util.ActorBean;
 import org.opencps.dossiermgt.util.DossierMgtUtil;
 import org.opencps.jasperreport.util.JRReportUtil;
@@ -960,12 +961,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		String fileExportDir = StringPool.BLANK;
 
-		String fileExtension = ParamUtil.getString(
-				actionRequest,
+		String fileExtension = ParamUtil.getString(actionRequest,
 				DossierFileDisplayTerms.FILE_EXTENSION,
-				StringPool.PERIOD
-						+ StringUtil.lowerCase(JRReportUtil.DocType.PDF
-								.toString()));
+				StringUtil.lowerCase(JRReportUtil.DocType.PDF.getValue()));
 
 		try {
 			validateCreateDynamicForm(dossierFileId, accountBean);
@@ -1003,6 +1001,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			
 			fileExportDir = exportReportFile(jrxmlTemplate, formData, null,
 			outputDestination, fileName, DocType.getEnum(fileExtension));
+
 
 			if (Validator.isNotNull(fileExportDir)) {
 
@@ -1088,6 +1087,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 						// Update Log UpdateVersion File
 						/*					
+
 						Locale locale = new Locale("vi", "VN");
 
 						String dossierAcctionUpdateVersionFile = LanguageUtil
@@ -3733,6 +3733,152 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 								"/html/portlets/dossiermgt/frontoffice/edit_dossier.jsp");
 			}
 
+		}
+	}
+
+	public void updateDossierSuggestion(ActionRequest actionRequest,
+			ActionResponse actionResponse) throws IOException {
+		long dossierSuggestionId = ParamUtil.getLong(actionRequest,
+				"dossierSuggestionId");
+		long dossierId = ParamUtil.getLong(actionRequest, "dossierId");
+
+		ServiceContext serviceContext;
+
+		boolean clone = false;
+
+		try {
+			serviceContext = ServiceContextFactory.getInstance(actionRequest);
+
+			if (dossierSuggestionId > 0 && dossierId > 0) {
+				Dossier dossierSuggestion = DossierLocalServiceUtil
+						.getDossier(dossierSuggestionId);
+
+				Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
+
+				List<DossierPart> dossierPartsSuggestion = DossierPartLocalServiceUtil
+						.getDossierParts(dossierSuggestion
+								.getDossierTemplateId());
+
+				List<DossierPart> dossierParts = DossierPartLocalServiceUtil
+						.getDossierParts(dossier.getDossierTemplateId());
+
+				for (DossierPart dossierPartSuggestion : dossierPartsSuggestion) {
+
+					if (dossierPartSuggestion.getPartType() == PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT
+							&& dossierPartSuggestion.getPartType() == PortletConstants.DOSSIER_PART_TYPE_RESULT) {
+						continue;
+					}
+
+					for (DossierPart dossierPart : dossierParts) {
+
+						if (dossierPartSuggestion.getPartType() == dossierPart
+								.getPartType()
+								&& dossierPartSuggestion.getPartNo()
+										.equalsIgnoreCase(
+												dossierPart.getPartNo())
+								&& dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT
+								&& dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_RESULT) {
+
+							try {
+								DossierFile dossierFileSuggestion = DossierFileLocalServiceUtil
+										.getDossierFileInUse(
+												dossierSuggestionId,
+												dossierPartSuggestion
+														.getDossierpartId());
+
+								DLFileEntry fileEntry = DLFileEntryLocalServiceUtil
+										.getDLFileEntry(dossierFileSuggestion
+												.getFileEntryId());
+
+								if (Validator.isNotNull(fileEntry
+										.getContentStream())) {
+									DossierFileLocalServiceUtil
+											.addDossierFile(
+													dossierFileSuggestion
+															.getUserId(),
+													dossierId,
+													dossierPart
+															.getDossierpartId(),
+													dossierFileSuggestion
+															.getTemplateFileNo(),
+													StringPool.BLANK,
+													0,// dossierFile.getGroupFileId()
+													0,
+													dossierFileSuggestion
+															.getOwnerUserId(),
+													dossierFileSuggestion
+															.getOwnerOrganizationId(),
+													dossierFileSuggestion
+															.getDisplayName(),
+													dossierFileSuggestion
+															.getFormData(),
+													dossierFileSuggestion != null ? dossierFileSuggestion
+															.getFileEntryId()
+															: 0,
+													dossierFileSuggestion
+															.getDossierFileMark(),
+													dossierFileSuggestion
+															.getDossierFileType(),
+													dossierFileSuggestion
+															.getDossierFileNo(),
+													dossierFileSuggestion
+															.getDossierFileDate(),
+													dossierFileSuggestion
+															.getOriginal(),
+													dossierFileSuggestion
+															.getSyncStatus(),
+													dossier.getFolderId(),
+													fileEntry.getTitle(),
+													fileEntry.getMimeType(),
+													fileEntry.getTitle(),
+													fileEntry.getDescription(),
+													StringPool.BLANK,
+													fileEntry
+															.getContentStream(),
+													fileEntry.getSize(),
+													serviceContext);
+								}
+
+							} catch (Exception e) {
+								_log.info(e.getMessage());
+
+								continue;
+							}
+						}
+					}
+				}
+			}
+			clone = true;
+			SessionMessages.add(actionRequest, MessageKeys.SUGGEST_SUCESS);
+
+		} catch (Exception e) {
+			clone = false;
+			_log.error(e);
+		} finally {
+			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+			if (clone) {
+				jsonObject.put("msg", "success");
+
+			} else {
+				jsonObject.put("msg", "error");
+			}
+			PortletUtil.writeJSON(actionRequest, actionResponse, jsonObject);
+		}
+	}
+
+	public void deleteDossierSuggesstion(ActionRequest actionRequest,
+			ActionResponse actionResponse) throws IOException {
+		long dossierId = ParamUtil.getLong(actionRequest, "dossierId");
+		String currentURL = ParamUtil.getString(actionRequest, "currentURL");
+		try {
+			if (dossierId > 0) {
+				DossierLocalServiceUtil
+						.deleteAllDossierFilesByDossierId(dossierId);
+			}
+		} catch (Exception e) {
+			_log.error(e);
+		} finally {
+			actionResponse.sendRedirect(currentURL);
 		}
 	}
 

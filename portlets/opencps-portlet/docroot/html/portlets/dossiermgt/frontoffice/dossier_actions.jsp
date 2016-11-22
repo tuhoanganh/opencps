@@ -38,6 +38,7 @@
 <%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
 <%@page import="org.opencps.util.PortletPropsValues"%>
+<%@page import="org.opencps.backend.util.BackendUtils"%>
 
 <%@page pageEncoding="UTF-8"%>
 

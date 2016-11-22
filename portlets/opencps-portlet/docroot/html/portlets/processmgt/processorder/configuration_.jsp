@@ -16,7 +16,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
 <%@page import="com.liferay.portal.kernel.util.ArrayUtil"%>
 <%@page import="org.opencps.jasperreport.util.JRReportUtil.DocType"%>
 
@@ -290,4 +289,3 @@
 	<aui:button type="submit" name="Save" value="save"/>
 
 </aui:form>
-

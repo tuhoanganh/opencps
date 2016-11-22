@@ -1,7 +1,7 @@
-
 <%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -20,14 +20,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
-
-<%@ include file="../init.jsp" %>
-
+<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
+<%@page import="org.opencps.util.WebKeys"%>
+<%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.liferay.portal.kernel.util.ListUtil"%>
 <%@page import="com.liferay.portal.model.Layout"%>
 <%@page import="java.util.List"%>
 <%@page import="com.liferay.portal.service.LayoutLocalServiceUtil"%>
+<%@ include file="../init.jsp" %>
 
 <liferay-ui:success key="potlet-config-saved" message="portlet-configuration-have-been-successfully-saved" />
 
@@ -58,11 +59,24 @@
 %>
 
 <aui:form action="<%= configurationActionURL %>" method="post" name="configurationForm">
+	
+	<datamgt:ddr 
+		depthLevel="1" 
+		dictCollectionCode="DOSSIER_STATUS" 
+		showLabel="<%=false%>"
+		emptyOptionLabels="dossier-status"
+		itemsEmptyOption="true"
+		itemNames="dossierStatusConfig"
+		selectedItems="<%= dossierStatusConfig %>"
+		optionValueType="code"
+		cssClass="search-input select-box input100"
+	/>
+		
 	<aui:select name="plid" id="plid">
 		<%
 			for (Layout lout : allLayout) {
 		%>
-			<aui:option value="<%= lout.getPlid() %>"><%= lout.getName(locale) %></aui:option>
+			<aui:option value="<%= lout.getPlid() %>" selected="<%=lout.getPlid() == plidRes %>"><%= lout.getName(locale) %></aui:option>
 		<%
 			}
 		%>

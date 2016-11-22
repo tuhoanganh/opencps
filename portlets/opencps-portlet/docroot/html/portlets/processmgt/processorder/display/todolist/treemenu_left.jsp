@@ -141,7 +141,6 @@
 			processOrderSteps,
 			LanguageUtil.get(locale, "filter-process-step").replaceAll(
 					"--", StringPool.BLANK), "radio");
-
 %>
 
 <aui:row>
@@ -201,7 +200,6 @@
 					'<%=menuCounterUrl.toString() %>',
 					processStepId,
 					'<%=renderResponse.getNamespace() %>',
-
 					'<%=hiddenToDoListTreeMenuEmptyNode%>'
 				);
 				

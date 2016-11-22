@@ -134,6 +134,7 @@ public class BCYSignatureUtil extends SignatureUtil {
 
 			// doc file cer tren server
 			Certificate cert = CertUtil.getCertificateByPath(cerPath);
+			
 			ServerSigner signer = BCYSignatureUtil.getServerSigner(filePath,
 					cert, imageBase64);
 
@@ -189,11 +190,10 @@ public class BCYSignatureUtil extends SignatureUtil {
 			_log.error(e);
 		} finally {
 			if (Validator.isNotNull(file) && file.exists()) {
-				file.delete();
+				//file.delete();
 			}
 		}
 
-		_log.info("-----------hashComputers: " + hashComputers);
 		jsonFeed.put("hashComputers", hashComputers);
 		jsonFeed.put("signFieldNames", signFieldNames);
 		jsonFeed.put("filePaths", filePaths);

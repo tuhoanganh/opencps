@@ -20,7 +20,6 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.portlet.ActionRequest;
@@ -31,25 +30,14 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
 import org.opencps.accountmgt.model.Citizen;
-import org.opencps.accountmgt.service.CitizenLocalServiceUtil;
-import org.opencps.dossiermgt.bean.AccountBean;
 import org.opencps.jasperreport.util.JRReportUtil;
 import org.opencps.paymentmgt.model.PaymentConfig;
-import org.opencps.paymentmgt.model.PaymentFile;
 import org.opencps.paymentmgt.search.PaymentConfigDisplayTerms;
 import org.opencps.paymentmgt.service.PaymentConfigLocalServiceUtil;
-import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
-import org.opencps.usermgt.model.Employee;
-import org.opencps.usermgt.model.WorkingUnit;
-import org.opencps.usermgt.service.EmployeeLocalServiceUtil;
-import org.opencps.usermgt.service.WorkingUnitLocalServiceUtil;
-import org.opencps.util.AccountUtil;
 import org.opencps.util.DLFolderUtil;
-import org.opencps.util.DateTimeUtil;
 import org.opencps.util.PortletPropsValues;
 import org.opencps.util.PortletUtil;
 
-import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
