@@ -33,7 +33,6 @@ public class NotificationEventKeys {
 		public static final String EVENT7= "107";
 		public static final String EVENT8= "108";
 		public static final String EVENT9= "109";
-		public static final String EVENT10= "110";
 
 	}
 
@@ -48,7 +47,6 @@ public class NotificationEventKeys {
 		public static final String EVENT7= "207";
 		public static final String EVENT8= "208";
 		public static final String EVENT9= "209";
-		
 
 	}
 

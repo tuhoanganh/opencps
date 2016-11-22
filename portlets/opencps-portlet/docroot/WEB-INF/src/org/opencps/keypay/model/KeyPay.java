@@ -16,6 +16,7 @@ import org.opencps.paymentmgt.model.PaymentConfig;
 import org.opencps.paymentmgt.model.PaymentFile;
 import org.opencps.paymentmgt.service.PaymentConfigLocalServiceUtil;
 import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
+import org.opencps.vtcpay.model.VTCPay;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
