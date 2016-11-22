@@ -62,9 +62,7 @@ public class VTCPayServlet extends HttpServlet {
 		throws ServletException, IOException {
 
 		_log.info("=====doPost():");
-
-		VTCPay vtcPay = new VTCPay(request);
-		_log.info("=====vtcPay:" + vtcPay);
+		VTCPay vtcPay = VTCPay.getVTCPayDataPost(request);
 
 		PaymentMgtUtil.runVTCGateData(request, response, vtcPay);
 
