@@ -203,7 +203,8 @@ public class NotificationUtils {
 			ProcessWorkflow processWorkflow = null;
 
 			Employee employee = null;
-
+			
+			MainLoop:
 			for (int i = 0; i < processWorkflowList.size(); i++) {
 
 				processWorkflow = processWorkflowList.get(i);
@@ -239,6 +240,7 @@ public class NotificationUtils {
 									infoEmploy.setGroup(NotificationEventKeys.GROUP4);
 								}
 								infoListEmploy.add(infoEmploy);
+								break MainLoop;
 							}
 						}
 
@@ -278,10 +280,6 @@ public class NotificationUtils {
 
 		}
 		return emailList;
-
-	}
-
-	public static void getListNoties() {
 
 	}
 }

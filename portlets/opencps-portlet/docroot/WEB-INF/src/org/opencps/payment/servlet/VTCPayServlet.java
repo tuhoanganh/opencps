@@ -44,16 +44,16 @@ public class VTCPayServlet extends HttpServlet {
 	 *      response)
 	 */
 
-//	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-//		throws ServletException, IOException {
-//
-//		_log.info("=====doGet():");
-//
-//		VTCPay vtcPay = new VTCPay(request);
-//
-//		PaymentMgtUtil.runVTCGateData(request, response, vtcPay);
-//
-//	}
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+		throws ServletException, IOException {
+
+		_log.info("=====doGet():");
+
+		VTCPay vtcPay = new VTCPay(request);
+
+		PaymentMgtUtil.runVTCGateData(request, response, vtcPay);
+
+	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
