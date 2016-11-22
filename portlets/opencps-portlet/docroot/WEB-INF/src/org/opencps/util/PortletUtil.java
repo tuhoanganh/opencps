@@ -19,6 +19,7 @@ package org.opencps.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -41,7 +42,6 @@ import org.opencps.datamgt.service.AdministrationServicedomainLocalServiceUtil;
 import org.opencps.datamgt.service.DictCollectionLocalServiceUtil;
 import org.opencps.datamgt.service.DictItemLocalServiceUtil;
 import org.opencps.dossiermgt.model.Dossier;
-
 import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.DossierPart;
 import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
@@ -71,6 +71,7 @@ import com.liferay.portal.util.PortalUtil;
 
 /**
  * @author trungnt
+ *
  */
 public class PortletUtil {
 
@@ -1199,6 +1200,44 @@ public class PortletUtil {
 		}
 
 		return requiredDossierPartIds;
+	}
+
+	/**
+	 * @param request
+	 * @param response
+	 * @param fileName
+	 * @param is
+	 * @param contentLength
+	 * @param contentType
+	 * @throws IOException
+	 */
+	public static void sendFile(HttpServletRequest request,
+			HttpServletResponse response, String fileName, InputStream is,
+			long contentLength, String contentType) throws IOException {
+		ServletResponseUtil.sendFile(request, response, fileName, is,
+				contentLength, contentType);
+	}
+
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @param fileName
+	 * @param is
+	 * @param contentLength
+	 * @param contentType
+	 * @throws IOException
+	 */
+	public static void sendFile(ActionRequest actionRequest,
+			ActionResponse actionResponse, String fileName, InputStream is,
+			long contentLength, String contentType) throws IOException {
+
+		HttpServletResponse response = PortalUtil
+				.getHttpServletResponse(actionResponse);
+
+		HttpServletRequest request = PortalUtil
+				.getHttpServletRequest(actionRequest);
+		ServletResponseUtil.sendFile(request, response, fileName, is,
+				contentLength, contentType);
 	}
 
 	private static Log _log = LogFactoryUtil

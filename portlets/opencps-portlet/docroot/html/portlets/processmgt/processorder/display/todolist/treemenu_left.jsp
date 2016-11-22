@@ -75,51 +75,73 @@
 	
 	long processStepId = ParamUtil.getLong(request, "processStepId");
 	
-	try{
-		
-		if(tabs1.equals(ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS)){
-			processOrderServices = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getProcessOrderServiceByUser(themeDisplay.getUserId());
-			
-			for(ProcessOrderBean ett : processOrderServices){
-				processOrderSteps.addAll((List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getUserProcessStep(themeDisplay.getUserId(), ett.getServiceInfoId()));
+	try {
+
+		if (tabs1
+				.equals(ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS)) {
+			processOrderServices = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil
+					.getProcessOrderServiceByUser(themeDisplay
+							.getUserId());
+
+			for (ProcessOrderBean ett : processOrderServices) {
+				processOrderSteps
+						.addAll((List<ProcessOrderBean>) ProcessOrderLocalServiceUtil
+								.getUserProcessStep(
+										themeDisplay.getUserId(),
+										ett.getServiceInfoId()));
 			}
-			
-			if(serviceInfoId > 0){
-				processOrderSteps = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getUserProcessStep(themeDisplay.getUserId(), serviceInfoId);
+
+			if (serviceInfoId > 0) {
+				processOrderSteps = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil
+						.getUserProcessStep(themeDisplay.getUserId(),
+								serviceInfoId);
 			}
-		}else{
-			processOrderServices = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getProcessOrderServiceJustFinishedByUser(themeDisplay.getUserId());
-			
-			for(ProcessOrderBean ett : processOrderServices){
-				processOrderSteps.addAll((List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getUserProcessStep(themeDisplay.getUserId(), ett.getServiceInfoId()));
+		} else {
+			processOrderServices = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil
+					.getProcessOrderServiceJustFinishedByUser(themeDisplay
+							.getUserId());
+
+			for (ProcessOrderBean ett : processOrderServices) {
+				processOrderSteps
+						.addAll((List<ProcessOrderBean>) ProcessOrderLocalServiceUtil
+								.getUserProcessStep(
+										themeDisplay.getUserId(),
+										ett.getServiceInfoId()));
 			}
-			
-			if(serviceInfoId > 0){
-				processOrderSteps = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil.getUserProcessStepJustFinished(themeDisplay.getUserId(), serviceInfoId);
+
+			if (serviceInfoId > 0) {
+				processOrderSteps = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil
+						.getUserProcessStepJustFinished(
+								themeDisplay.getUserId(), serviceInfoId);
 			}
 		}
-		
-		
-		
-	}catch(Exception e){}
-	
+
+	} catch (Exception e) {
+	}
+
 	//remove duplicates process orders
 	Map<String, ProcessOrderBean> cleanMap = new LinkedHashMap<String, ProcessOrderBean>();
 	for (int i = 0; i < processOrderSteps.size(); i++) {
-	     cleanMap.put(processOrderSteps.get(i).getProcessStepId()+"", processOrderSteps.get(i));
+		cleanMap.put(processOrderSteps.get(i).getProcessStepId() + "",
+				processOrderSteps.get(i));
 	}
-	processOrderSteps = new ArrayList<ProcessOrderBean>(cleanMap.values());
-	
-	JSONObject arrayParam = JSONFactoryUtil
-		    .createJSONObject();
-	arrayParam.put("serviceInfoId", (serviceInfoId > 0) ? String.valueOf(serviceInfoId):StringPool.BLANK);
-	arrayParam.put("processStepId", (processStepId > 0) ? String.valueOf(processStepId):StringPool.BLANK);
+	processOrderSteps = new ArrayList<ProcessOrderBean>(
+			cleanMap.values());
+
+	JSONObject arrayParam = JSONFactoryUtil.createJSONObject();
+	arrayParam.put("serviceInfoId",
+			(serviceInfoId > 0) ? String.valueOf(serviceInfoId)
+					: StringPool.BLANK);
+	arrayParam.put("processStepId",
+			(processStepId > 0) ? String.valueOf(processStepId)
+					: StringPool.BLANK);
 	arrayParam.put("tabs1", tabs1);
-	
+
 	String processStepIdJsonData = ProcessOrderUtils.generateTreeView(
-			processOrderSteps, 
-			LanguageUtil.get(locale, "filter-process-step").replaceAll("--", StringPool.BLANK) , 
-			"radio");
+			processOrderSteps,
+			LanguageUtil.get(locale, "filter-process-step").replaceAll(
+					"--", StringPool.BLANK), "radio");
+
 %>
 
 <aui:row>
@@ -165,7 +187,7 @@
 					'<%=menuCounterServiceInfoIdUrl.toString() %>',
 					serviceInfoId,
 					'<%=renderResponse.getNamespace() %>',
-					'<%=hiddenTreeNodeEqualNone%>'
+					'<%=hiddenToDoListTreeMenuEmptyNode%>'
 				);
 				
 				buildTreeView("processStepIdTree", 
@@ -179,7 +201,8 @@
 					'<%=menuCounterUrl.toString() %>',
 					processStepId,
 					'<%=renderResponse.getNamespace() %>',
-					'<%=hiddenTreeNodeEqualNone%>'
+
+					'<%=hiddenToDoListTreeMenuEmptyNode%>'
 				);
 				
 			});

@@ -72,139 +72,140 @@
 <aui:form name="fm">
 	<div class="opencps-searchcontainer-wrapper">
 		<liferay-ui:search-container 
-			searchContainer="<%= new ProcessOrderSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>"
-			rowChecker="<%=rowChecker%>"
-			headerNames="<%= headers%>"
-		>
-			<liferay-ui:search-container-results>
-				<%
-					ProcessOrderSearchTerms searchTerms = (ProcessOrderSearchTerms)searchContainer.getSearchTerms();
-				
-					long serviceInfoId = searchTerms.getServiceInfoId();
-					
-					long processStepId = searchTerms.getProcessStepId();
-					
-					long assignToUserId = themeDisplay.getUserId();
-					try{
-						
-						%>
-							<%@include file="/html/portlets/processmgt/processorder/process_order_search_results.jspf" %>
-						<%
-					}catch(Exception e){
-						_log.error(e);
-					}
-				
-					total = totalCount;
-					results = processOrders;
-					
-					pageContext.setAttribute("results", results);
-					pageContext.setAttribute("total", total);
-				%>
-			</liferay-ui:search-container-results>	
-			
-			<liferay-ui:search-container-row 
-				className="org.opencps.dossiermgt.bean.ProcessOrderBean" 
-				modelVar="processOrder" 
-				keyProperty="processOrderId"
-				rowVar="row"
-				stringKey="<%=true%>"
-				
+				searchContainer="<%= new ProcessOrderSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>"
+				rowChecker="<%=rowChecker%>"
+				headerNames="<%= headers%>"
 			>
-				<%
-					PortletURL processURL = renderResponse.createRenderURL();
-					processURL.setParameter("mvcPath", templatePath + "process_order_detail.jsp");
-					processURL.setParameter(ProcessOrderDisplayTerms.PROCESS_ORDER_ID, String.valueOf(processOrder.getProcessOrderId()));
-					processURL.setParameter("backURL", currentURL);
-					processURL.setParameter("isEditDossier", (processOrder.isReadOnly() || (processOrder.getAssignToUsesrId() != 0 &&  processOrder.getAssignToUsesrId() != user.getUserId())) ? String.valueOf(false) : String.valueOf(true));
+			
+				<liferay-ui:search-container-results>
+					<%
+						ProcessOrderSearchTerms searchTerms = (ProcessOrderSearchTerms)searchContainer.getSearchTerms();
+					
+						long serviceInfoId = searchTerms.getServiceInfoId();
+						
+						long processStepId = searchTerms.getProcessStepId();
+						
+						long assignToUserId = themeDisplay.getUserId();
+						try{
+							
+							%>
+								<%@include file="/html/portlets/processmgt/processorder/process_order_search_results.jspf" %>
+							<%
+						}catch(Exception e){
+							_log.error(e);
+						}
+					
+						total = totalCount;
+						results = processOrders;
+						
+						pageContext.setAttribute("results", results);
+						pageContext.setAttribute("total", total);
+					%>
+				</liferay-ui:search-container-results>	
 				
-					String deadLine = Validator.isNotNull(processOrder.getDealine()) ? processOrder.getDealine() : StringPool.DASH;
+				<liferay-ui:search-container-row 
+					className="org.opencps.dossiermgt.bean.ProcessOrderBean" 
+					modelVar="processOrder" 
+					keyProperty="processOrderId"
+					rowVar="row"
+					stringKey="<%=true%>"
 					
-					String href = "location.href='" + processURL.toString()+"'";
+				>
+					<%
+						PortletURL processURL = renderResponse.createRenderURL();
+						processURL.setParameter("mvcPath", templatePath + "process_order_detail.jsp");
+						processURL.setParameter(ProcessOrderDisplayTerms.PROCESS_ORDER_ID, String.valueOf(processOrder.getProcessOrderId()));
+						processURL.setParameter("backURL", currentURL);
+						processURL.setParameter("isEditDossier", (processOrder.isReadOnly() || (processOrder.getAssignToUsesrId() != 0 &&  processOrder.getAssignToUsesrId() != user.getUserId())) ? String.valueOf(false) : String.valueOf(true));
 					
-					String cssStatusColor = "status-color-" + processOrder.getDossierStatus();
-				%>
-				
-				<liferay-util:buffer var="generalInfo">
-					<div class="row-fluid">	
-						<div class="row-fluid">
-							<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
-								<i class='<%="fa fa-circle sx10 " + processOrder.getDossierStatus()%>'></i>
+						String deadLine = Validator.isNotNull(processOrder.getDealine()) ? processOrder.getDealine() : StringPool.DASH;
+						
+						String href = "location.href='" + processURL.toString()+"'";
+						
+						String cssStatusColor = "status-color-" + processOrder.getDossierStatus();
+					%>
+					
+					<liferay-util:buffer var="generalInfo">
+						<div class="row-fluid">	
+							<div class="row-fluid">
+								<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
+									<i class='<%="fa fa-circle sx10 " + processOrder.getDossierStatus()%>'></i>
+								</div>
+								<div class="span2 bold">
+									<liferay-ui:message key="reception-no"/>
+								</div>
+								<div class="span9">
+									<%=processOrder.getReceptionNo() %>
+								</div>
 							</div>
-							<div class="span2 bold">
-								<liferay-ui:message key="reception-no"/>
+							
+							<div class="row-fluid">
+								<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
+								</div>
+								<div class="span2 bold">
+									<liferay-ui:message key="service-name"/>
+								</div>
+								<div class="span9">
+									<%=processOrder.getServiceName() %>
+								</div>
 							</div>
-							<div class="span9">
-								<%=processOrder.getReceptionNo() %>
+						</div>
+					</liferay-util:buffer>
+					
+					
+					<liferay-util:buffer var="detail">
+						<div class="row-fluid min-width340">
+							<div class="span5 bold">
+								<liferay-ui:message key="subject-name"/>	
+							</div>
+							
+							<div class="span7">
+								<%=processOrder.getSubjectName() %>
 							</div>
 						</div>
 						
-						<div class="row-fluid">
-							<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
+						<div class="row-fluid" >
+							<div class="span5 bold">
+								 <liferay-ui:message key="assign-to-user"/>
 							</div>
-							<div class="span2 bold">
-								<liferay-ui:message key="service-name"/>
-							</div>
-							<div class="span9">
-								<%=processOrder.getServiceName() %>
+							
+							<div class="span7">
+								<%=processOrder.getAssignToUserName() %>
 							</div>
 						</div>
-					</div>
-				</liferay-util:buffer>
-				
-				
-				<liferay-util:buffer var="detail">
-					<div class="row-fluid min-width340">
-						<div class="span5 bold">
-							<liferay-ui:message key="subject-name"/>	
+						
+						<div class="row-fluid min-width340">
+							<div class="span5 bold">
+								<liferay-ui:message key="step-name"/>
+							</div>
+							
+							<div class='<%="span7 " + cssStatusColor %>'>
+								<%=processOrder.getStepName() %>
+							</div>
 						</div>
 						
-						<div class="span7">
-							<%=processOrder.getSubjectName() %>
+						<div class="row-fluid min-width340">
+							<div class="span5 bold">
+								<liferay-ui:message key="dealine"/>
+							</div>
+							
+							<div class='<%="span7"%>'>
+								<%= deadLine %>
+							</div>
 						</div>
-					</div>
-					
-					<div class="row-fluid" >
-						<div class="span5 bold">
-							 <liferay-ui:message key="assign-to-user"/>
-						</div>
+					</liferay-util:buffer>
+					<%
 						
-						<div class="span7">
-							<%=processOrder.getAssignToUserName() %>
-						</div>
-					</div>
-					
-					<div class="row-fluid min-width340">
-						<div class="span5 bold">
-							<liferay-ui:message key="step-name"/>
-						</div>
+						String actionBtn = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "action");
+						row.setClassName("opencps-searchcontainer-row");
+						row.addText(generalInfo);
+						row.addText(detail);
+						row.addButton(actionBtn, href);
+						row.setClassName((processOrder.isReadOnly() || (processOrder.getAssignToUsesrId() != 0 &&  processOrder.getAssignToUsesrId() != user.getUserId())) ? "readonly" : StringPool.BLANK);
 						
-						<div class='<%="span7 " + cssStatusColor %>'>
-							<%=processOrder.getStepName() %>
-						</div>
-					</div>
-					
-					<div class="row-fluid min-width340">
-						<div class="span5 bold">
-							<liferay-ui:message key="dealine"/>
-						</div>
-						
-						<div class='<%="span7"%>'>
-							<%= deadLine %>
-						</div>
-					</div>
-				</liferay-util:buffer>
-				<%
-					
-					String actionBtn = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "action");
-					row.setClassName("opencps-searchcontainer-row");
-					row.addText(generalInfo);
-					row.addText(detail);
-					row.addButton(actionBtn, href);
-					row.setClassName((processOrder.isReadOnly() || (processOrder.getAssignToUsesrId() != 0 &&  processOrder.getAssignToUsesrId() != user.getUserId())) ? "readonly" : StringPool.BLANK);
-					
-					//row.setClassHoverName("");
-				%>	
-			</liferay-ui:search-container-row> 
+						//row.setClassHoverName("");
+					%>	
+				</liferay-ui:search-container-row> 
 				
 			<liferay-ui:search-iterator type="opencs_page_iterator"/>
 		</liferay-ui:search-container>
@@ -213,23 +214,24 @@
 
 <aui:script use="aui-base">
 
-	AUI().ready(function(A){
+AUI().ready(function(A){
+
+	var success = '<%=success%>';
 	
-		var success = '<%=success%>';
-		
-		if(success == 'true'){
+	if(success == 'true'){
+
+		var data = {
+
+		 <portlet:namespace />stopRefresh: true,
+		 
+		};
+
+		Liferay.Portlet.refresh('#p_p_id<portlet:namespace />', data);
 	
-			var data = {
+	}
 	
-			 <portlet:namespace />stopRefresh: true,
-			 
-			};
-	
-			Liferay.Portlet.refresh('#p_p_id<portlet:namespace />', data);
-		
-		}
-		
-	});
+});
+
 </aui:script>
 
 <%!
