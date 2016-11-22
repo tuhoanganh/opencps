@@ -222,5 +222,8 @@ public class PortletConstants {
 	
 
 	
-	
+	public static final String SIZE_UNIT_B = "B";
+	public static final String SIZE_UNIT_KB = "kB";
+	public static final String SIZE_UNIT_MB = "MB";
+	public static final String SIZE_UNIT_GB = "GB";
 }

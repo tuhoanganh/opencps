@@ -17,7 +17,6 @@
  */
 %>
 
-<%@page import="org.opencps.util.PortletUtil"%>
 <%@ include file="init.jsp" %>
 
 <liferay-ui:success key="potlet-config-saved" message="portlet-configuration-have-been-successfully-saved" />
@@ -37,9 +36,14 @@
 	
 	<datamgt:ddr 
 		depthLevel="1" 
-		dictCollectionCode="DOSSIER_STATUS"
+		dictCollectionCode="DOSSIER_STATUS" 
+		showLabel="<%=false%>"
+		emptyOptionLabels="dossier-status"
+		itemsEmptyOption="true"
 		itemNames="status"
+		selectedItems="<%=status%>"
 		optionValueType="code"
+		cssClass="search-input select-box input100"
 	/>
 	<aui:button type="submit" name="Save" value="save"></aui:button>
 </aui:form>

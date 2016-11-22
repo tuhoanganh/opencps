@@ -1,3 +1,4 @@
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -30,6 +31,7 @@
 <%@page import="org.opencps.accountmgt.OutOfLengthBusinessEmailException"%>
 <%@page import="org.opencps.accountmgt.DuplicateBusinessEmailException"%>
 <%@page import="org.opencps.accountmgt.OutOfLengthBusinessNameException"%>
+<%@page import="org.opencps.accountmgt.DuplicateBusinessIdNumberException"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.util.MessageKeys"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
@@ -108,10 +110,10 @@
 	/>
 	
 	<liferay-ui:error 
-		exception="<%= DuplicateBusinessEmailException.class %>" 
-		message="<%= DuplicateBusinessEmailException.class.getName() %>" 
+		exception="<%= DuplicateBusinessIdNumberException.class %>" 
+		message="<%= DuplicateBusinessIdNumberException.class.getName() %>" 
 	/>
-	
+
 	<liferay-ui:error 
 		exception="<%= OutOfLengthBusinessShortNameException.class %>" 
 		message="<%= OutOfLengthBusinessShortNameException.class.getName() %>" 
@@ -431,7 +433,9 @@
 				</aui:row>
 				<div class="term-user">
 					<aui:row>
-						<liferay-portlet:renderURL var="linkToPage" ></liferay-portlet:renderURL>
+						<liferay-portlet:renderURL var="linkToPage" windowState="<%=LiferayWindowState.EXCLUSIVE.toString() %>">
+							<liferay-portlet:param name="mvcPath" value="/html/portlets/accountmgt/registration/termOfUse.jsp"/>
+						</liferay-portlet:renderURL>
 						<aui:input name="linkToPageURL" value="<%=linkToPage %>" type="hidden"></aui:input>
 						<%
 							String chiTiet = StringPool.BLANK;
