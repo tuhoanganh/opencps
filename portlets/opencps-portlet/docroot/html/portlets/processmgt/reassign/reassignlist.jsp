@@ -112,9 +112,11 @@
 				
 				processStepName = processStep.getStepName();
 				
-				Employee employee = EmployeeLocalServiceUtil.getEmployeeByMappingUserId(scopeGroupId, processOrder.getAssignToUserId());
+				Employee assignUser = EmployeeLocalServiceUtil.getEmployeeByMappingUserId(scopeGroupId, processOrder.getAssignToUserId());
 				
-				assignUserName = employee.getFullName();
+				if(Validator.isNotNull(assignUser)) {
+					assignUserName = assignUser.getFullName();
+				}
 			} catch(Exception e) {}
 			
 			if(Validator.isNotNull(processStep)) {
