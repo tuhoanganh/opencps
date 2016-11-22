@@ -54,8 +54,6 @@ public class ConfigurationImpl implements ConfigurationAction{
 		
 		String messageSuccessfullRegistration = ParamUtil.getString(actionRequest, "messageSuccessfullRegistration");
 		
-		String termOfUse = ParamUtil.getString(actionRequest, "termOfUse");
-		
 		PortletPreferences preferences =
 					    PortletPreferencesFactoryUtil.getPortletSetup(
 					        actionRequest, portletResource);
@@ -71,8 +69,6 @@ public class ConfigurationImpl implements ConfigurationAction{
 		preferences.setValue("showLabelTaglibDatamgt", showLabelTaglibDatamgt);
 		
 		preferences.setValue("messageSuccessfullRegistration", messageSuccessfullRegistration);
-		
-		preferences.setValue("termOfUse", termOfUse);
 		
 		preferences.store();
 		

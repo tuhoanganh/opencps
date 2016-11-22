@@ -19,9 +19,7 @@ package org.opencps.paymentmgt.portlet;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.NumberFormat;
 import java.util.Date;
-import java.util.Locale;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -207,11 +205,6 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 				PaymentFileLocalServiceUtil.updatePaymentFile(paymentFile);
 
 				ActorBean actorBean = new ActorBean(1, serviceContext.getUserId());
-				
-				Locale vnLocale = new Locale("vi", "VN");
-
-				NumberFormat vnFormat =
-					NumberFormat.getCurrencyInstance(vnLocale);
 
 				// Add log baonop
 				StringBuffer msgInforSb = new StringBuffer();
@@ -222,7 +215,7 @@ public class PaymentMgtFrontOfficePortlet extends MVCPortlet {
 				msgInforSb.append(StringPool.COLON);
 				msgInforSb.append(StringPool.SPACE);
 				msgInforSb.append(StringPool.OPEN_PARENTHESIS);
-				msgInforSb.append(vnFormat.format(paymentFile.getAmount()));
+				msgInforSb.append(paymentFile.getAmount());
 				msgInforSb.append(StringPool.CLOSE_PARENTHESIS);
 				msgInforSb.append(StringPool.SPACE);
 				msgInforSb.append(LanguageUtil.get(serviceContext.getLocale(), "for-dossier"));

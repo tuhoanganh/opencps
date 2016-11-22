@@ -1,4 +1,4 @@
-
+<%@page import="org.opencps.util.PortletConstants"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,9 +17,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
-<%@page import="javax.portlet.PortletPreferences"%>
 <%@ include file="/init.jsp" %>
+<%@page import="javax.portlet.PortletPreferences"%>
 
 <%
 	PortletPreferences preferences = renderRequest.getPreferences();
@@ -30,6 +29,5 @@
 		preferences = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
 	}
 	
-	String status = preferences.getValue("status", StringPool.BLANK);
-
+	String status = preferences.getValue("status", PortletConstants.DOSSIER_STATUS_NEW);
 %>

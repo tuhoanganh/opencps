@@ -1,4 +1,17 @@
-
+<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
+<%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="org.opencps.datamgt.service.DictCollectionLocalServiceUtil"%>
+<%@page import="org.opencps.datamgt.model.DictCollection"%>
+<%@page import="javax.portlet.PortletRequest"%>
+<%@page import="org.opencps.util.WebKeys"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
+<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
+<%@page import="com.liferay.portal.kernel.json.JSONFactoryUtil"%>
+<%@page import="com.liferay.portal.kernel.json.JSONObject"%>
+<%@page import="org.opencps.util.PortletPropsValues"%>
+<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
+<%@page import="org.opencps.processmgt.util.ProcessOrderUtils"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,20 +30,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
-<%@page import="org.opencps.util.PortletUtil"%>
-<%@page import="org.opencps.datamgt.service.DictCollectionLocalServiceUtil"%>
-<%@page import="org.opencps.datamgt.model.DictCollection"%>
-<%@page import="javax.portlet.PortletRequest"%>
-<%@page import="org.opencps.util.WebKeys"%>
-<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
-<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
-<%@page import="com.liferay.portal.kernel.json.JSONFactoryUtil"%>
-<%@page import="com.liferay.portal.kernel.json.JSONObject"%>
-<%@page import="org.opencps.util.PortletPropsValues"%>
-<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
-<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
-<%@page import="org.opencps.processmgt.util.ProcessOrderUtils"%>
+
 <%@page import="com.liferay.portal.kernel.dao.search.SearchEntry"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
@@ -113,10 +113,9 @@
 				"<%=DossierDisplayTerms.SERVICE_DOMAIN_ID %>", 
 				serviceDomainJsonData, 
 				arrayParam, 
-				'<%= PortletURLFactoryUtil.create(request, WebKeys.P26_SUBMIT_ONLINE, 
-						PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), WebKeys.P26_SUBMIT_ONLINE), PortletRequest.RENDER_PHASE) %>', 
-				'/html/portlets/dossiermgt/submit/submitinstruction.jsp', 
-				'<%=LiferayWindowState.MAXIMIZED.toString() %>', 
+				'<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>', 
+				'<%=templatePath + "display/20_80_servicelist_05.jsp" %>', 
+				'<%=LiferayWindowState.NORMAL.toString() %>', 
 				'normal',
 				null,
 				serviceDomainId,

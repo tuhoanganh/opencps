@@ -34,9 +34,7 @@ import javax.portlet.RenderResponse;
 import net.sourceforge.jtds.jdbc.DateTime;
 
 import org.opencps.accountmgt.DuplicateBusinessEmailException;
-import org.opencps.accountmgt.DuplicateBusinessIdNumberException;
 import org.opencps.accountmgt.DuplicateCitizenEmailException;
-import org.opencps.accountmgt.DuplicateCitizenPersonalIdException;
 import org.opencps.accountmgt.FileTypeFailException;
 import org.opencps.accountmgt.InvalidCityCodeException;
 import org.opencps.accountmgt.InvalidDistricCodeException;
@@ -70,7 +68,6 @@ import org.opencps.util.PortletPropsValues;
 import org.opencps.util.PortletUtil;
 import org.opencps.util.WebKeys;
 
-import com.liferay.portal.ContactBirthdayException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
@@ -231,7 +228,7 @@ public class AccountRegPortlet extends MVCPortlet {
 			validateBusiness(
 			    businessId, email, sourceFileName, enName, shortName, address,
 			    representativeName, representativeRole, cityId, districtId, wardId,
-			    size, sourceFileName, idNumber);
+			    size, sourceFileName);
 			ServiceContext serviceContext =
 			    ServiceContextFactory.getInstance(uploadPortletRequest);
 
@@ -314,10 +311,6 @@ public class AccountRegPortlet extends MVCPortlet {
 			if (e instanceof DuplicateBusinessEmailException) {
 				SessionErrors.add(
 				    actionRequest, DuplicateBusinessEmailException.class);
-			}
-			else if (e instanceof DuplicateBusinessIdNumberException) {
-				SessionErrors.add(
-				    actionRequest, DuplicateBusinessIdNumberException.class);
 			}
 			else if (e instanceof OutOfLengthBusinessEmailException) {
 				SessionErrors.add(
@@ -602,14 +595,6 @@ public class AccountRegPortlet extends MVCPortlet {
 				SessionErrors.add(
 				    actionRequest, OutOfSizeFileUploadException.class);
 			}
-			else if(e instanceof DuplicateCitizenPersonalIdException) {
-				SessionErrors.add(
-				    actionRequest, DuplicateCitizenPersonalIdException.class);
-			}
-			else if(e instanceof ContactBirthdayException) {
-				SessionErrors.add(
-				    actionRequest, ContactBirthdayException.class);
-			}
 			else {
 				SessionErrors.add(
 					actionRequest,
@@ -636,23 +621,13 @@ public class AccountRegPortlet extends MVCPortlet {
 	    OutOfLengthCitizenNameException, OutOfLengthCitizenEmailException,
 	    DuplicateCitizenEmailException, InvalidCityCodeException,
 	    InvalidDistricCodeException, InvalidWardCodeException,
-	    InvalidFileUploadException, OutOfSizeFileUploadException, FileTypeFailException,
-	    DuplicateCitizenPersonalIdException {
+	    InvalidFileUploadException, OutOfSizeFileUploadException, FileTypeFailException {
 
 		Citizen citizen = null;
-		Citizen citizenByPeronalId = null;
 
 		try {
 			if (!email.equals(StringPool.BLANK)) {
 				citizen = CitizenLocalServiceUtil.getCitizen(email);
-			}
-		}
-		catch (Exception e) {
-			// Nothing todo
-		}
-		try {
-			if (!personalId.equals(StringPool.BLANK)) {
-				citizenByPeronalId = CitizenLocalServiceUtil.getCitizenByPersonalId(personalId);
 			}
 		}
 		catch (Exception e) {
@@ -663,13 +638,6 @@ public class AccountRegPortlet extends MVCPortlet {
 		}
 		if (citizenId > 0 && citizen != null && citizen.getCitizenId() != citizenId) {
 			throw new DuplicateCitizenEmailException();
-		}
-		
-		if (citizenId == 0 && citizenByPeronalId != null) {
-			throw new DuplicateCitizenPersonalIdException();
-		}
-		if (citizenId > 0 && citizenByPeronalId != null && citizenByPeronalId.getPersonalId() != personalId) {
-			throw new DuplicateCitizenPersonalIdException();
 		}
 
 		if (fullName.length() > PortletPropsValues.ACCOUNTMGT_CITIZEN_NAME_LENGTH) {
@@ -707,7 +675,7 @@ public class AccountRegPortlet extends MVCPortlet {
 	    long businessId, String email, String name, String enName,
 	    String shortName, String address, String representativeName,
 	    String representativeRole, long cityId, long districId, long wardId,
-	    long size, String sourceFileName, String idNumber)
+	    long size, String sourceFileName)
 	    throws DuplicateBusinessEmailException,
 	    OutOfLengthBusinessEmailException, OutOfLengthBusinessNameException,
 	    OutOfLengthBusinessEnNameException, OutOfLengthCitizenAddressException,
@@ -715,25 +683,15 @@ public class AccountRegPortlet extends MVCPortlet {
 	    OutOfLengthBusinessRepresentativeRoleException,
 	    OutOfLengthBusinessShortNameException, InvalidCityCodeException, 
 	    InvalidWardCodeException, InvalidDistricCodeException, FileTypeFailException,
-	    OutOfSizeFileUploadException, InvalidFileUploadException,
-	    DuplicateBusinessIdNumberException {
+	    OutOfSizeFileUploadException, InvalidFileUploadException {
 
 		Business business = null;
-		Business businessByIdNumber = null;
 
 		try {
 			if (!email.equals(StringPool.BLANK)) {
 				business = BusinessLocalServiceUtil.getBusiness(email);
 			}
-		}
-		catch (Exception e) {
-			// Nothing todo
-		}
-		
-		try {
-			if (!idNumber.equals(StringPool.BLANK)) {
-				businessByIdNumber = BusinessLocalServiceUtil.getBusinessByIdNumber(idNumber);
-			}
+
 		}
 		catch (Exception e) {
 			// Nothing todo
@@ -747,16 +705,6 @@ public class AccountRegPortlet extends MVCPortlet {
 		    business.getBusinessId() != businessId) {
 			throw new DuplicateBusinessEmailException();
 		}
-		
-		if (businessId == 0 && businessByIdNumber != null) {
-			throw new DuplicateBusinessIdNumberException();
-		}
-
-		if (businessId != 0 && businessByIdNumber != null &&
-		    businessByIdNumber.getIdNumber() != idNumber) {
-			throw new DuplicateBusinessIdNumberException();
-		}
-		
 		if (email.length() > PortletPropsValues.ACCOUNTMGT_BUSINESS_EMAIL_LENGTH) {
 			throw new OutOfLengthBusinessEmailException();
 		}

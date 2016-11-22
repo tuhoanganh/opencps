@@ -16,9 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
 <%@page import="org.opencps.util.PortletConstants"%>
-
 <%@ include file="init.jsp"%>
 
 <%
@@ -83,7 +81,7 @@
 			<aui:option selected="<%= templatesToDisplay_cfg.equals(\"20_80\") %>" value="20_80">20_80</aui:option>
 	
 	</aui:select>
-
+	
 	<aui:select name="assignFormDisplayStyle">
 		<aui:option 
 			value="popup"
@@ -98,12 +96,11 @@
 			Form
 		</aui:option>
 	</aui:select>
-
+	
 	<aui:input 
 		type="checkbox"
 		name="hiddenTreeNodeEqualNone" 
 		value="<%=hiddenTreeNodeEqualNone %>"
 	/>
 	<aui:button type="submit" name="Save" value="save"/>
-
 </aui:form>

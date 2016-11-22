@@ -29,5 +29,4 @@
 	boolean showLabelTaglibDatamgt = GetterUtil.getBoolean(portletPreferences.getValue("showLabelTaglibDatamgt", "false"), false);
 	
 	String messageSuccessfullRegistration = GetterUtil.getString(portletPreferences.getValue("messageSuccessfullRegistration", StringPool.BLANK));
-	String termOfUse = GetterUtil.getString(portletPreferences.getValue("termOfUse", StringPool.BLANK));
 %>

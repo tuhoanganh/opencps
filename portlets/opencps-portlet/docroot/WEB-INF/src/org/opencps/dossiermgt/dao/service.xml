@@ -283,11 +283,6 @@
             <finder-column name="delayStatus" comparator="=" arrayable-operator="AND"></finder-column>
             <finder-column name="dossierStatus" comparator="!=" arrayable-operator="AND"></finder-column>
         </finder>
-        
-        <finder return-type="Collection" name="T_DS">
-        	<finder-column name="dossierTemplateId" />
-        	<finder-column name="dossierStatus" />
-        </finder>
         <finder name="OID" return-type="Dossier">
             <finder-column name="oid"></finder-column>
         </finder>

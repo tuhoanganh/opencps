@@ -1,7 +1,6 @@
-<%@page import="org.opencps.util.PortletConstants"%>
+
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -20,15 +19,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
-<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
-<%@page import="org.opencps.util.WebKeys"%>
-<%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
+
+<%@ include file="../init.jsp" %>
+
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.liferay.portal.kernel.util.ListUtil"%>
 <%@page import="com.liferay.portal.model.Layout"%>
 <%@page import="java.util.List"%>
 <%@page import="com.liferay.portal.service.LayoutLocalServiceUtil"%>
-<%@ include file="../init.jsp" %>
 
 <liferay-ui:success key="potlet-config-saved" message="portlet-configuration-have-been-successfully-saved" />
 
@@ -59,24 +57,11 @@
 %>
 
 <aui:form action="<%= configurationActionURL %>" method="post" name="configurationForm">
-	
-	<datamgt:ddr 
-		depthLevel="1" 
-		dictCollectionCode="DOSSIER_STATUS" 
-		showLabel="<%=false%>"
-		emptyOptionLabels="dossier-status"
-		itemsEmptyOption="true"
-		itemNames="dossierStatusConfig"
-		selectedItems="<%= dossierStatusConfig %>"
-		optionValueType="code"
-		cssClass="search-input select-box input100"
-	/>
-		
 	<aui:select name="plid" id="plid">
 		<%
 			for (Layout lout : allLayout) {
 		%>
-			<aui:option value="<%= lout.getPlid() %>" selected="<%=lout.getPlid() == plidRes %>"><%= lout.getName(locale) %></aui:option>
+			<aui:option value="<%= lout.getPlid() %>"><%= lout.getName(locale) %></aui:option>
 		<%
 			}
 		%>
@@ -192,74 +177,6 @@
 		name="allowResultQuickView" 
 		value="<%=allowResultQuickView %>"
 	/>
-	
-	<aui:input 
-		type="text"
-		name="fileTypes" 
-		value="<%=fileTypes %>"
-	/>
-	
-	<aui:row>
-		<aui:col>
-			<aui:input 
-				type="text"
-				name="maxTotalUploadFileSize" 
-				value="<%=maxTotalUploadFileSize %>"
-			>
-				<aui:validator name="number"></aui:validator>
-			</aui:input>
-		</aui:col>
-		<aui:col>
-			<aui:select 
-				name="maxTotalUploadFileSizeUnit" 
-				id="maxTotalUploadFileSizeUnit"
-			>
-				<aui:option value="<%=PortletConstants.SIZE_UNIT_B %>"
-					selected="<%=maxTotalUploadFileSizeUnit.equals(PortletConstants.SIZE_UNIT_B)%>"
-				>B</aui:option>
-				<aui:option value="<%=PortletConstants.SIZE_UNIT_KB %>"
-					selected="<%=maxTotalUploadFileSizeUnit.equals(PortletConstants.SIZE_UNIT_KB)%>"
-				>kB</aui:option>
-				<aui:option value="<%=PortletConstants.SIZE_UNIT_MB %>" 
-					selected="<%=maxTotalUploadFileSizeUnit.equals(PortletConstants.SIZE_UNIT_MB)%>"
-				>MB</aui:option>
-				<aui:option value="<%=PortletConstants.SIZE_UNIT_GB %>"
-					selected="<%=maxTotalUploadFileSizeUnit.equals(PortletConstants.SIZE_UNIT_GB)%>"
-				>GB</aui:option>
-			</aui:select>
-		</aui:col>
-	</aui:row>
-	
-	<aui:row>
-		<aui:col>
-			<aui:input 
-				type="text"
-				name="maxUploadFileSize" 
-				value="<%=maxUploadFileSize %>"
-			>
-				<aui:validator name="number"></aui:validator>
-			</aui:input>
-		</aui:col>
-		<aui:col>
-			<aui:select 
-				name="maxUploadFileSizeUnit" 
-				id="maxUploadFileSizeUnit"
-			>
-				<aui:option value="<%=PortletConstants.SIZE_UNIT_B %>"
-					selected="<%=maxTotalUploadFileSizeUnit.equals(PortletConstants.SIZE_UNIT_B)%>"
-				>B</aui:option>
-				<aui:option value="<%=PortletConstants.SIZE_UNIT_KB %>"
-					selected="<%=maxTotalUploadFileSizeUnit.equals(PortletConstants.SIZE_UNIT_KB)%>"
-				>kB</aui:option>
-				<aui:option value="<%=PortletConstants.SIZE_UNIT_MB %>" 
-					selected="<%=maxTotalUploadFileSizeUnit.equals(PortletConstants.SIZE_UNIT_MB)%>"
-				>MB</aui:option>
-				<aui:option value="<%=PortletConstants.SIZE_UNIT_GB %>"
-					selected="<%=maxTotalUploadFileSizeUnit.equals(PortletConstants.SIZE_UNIT_GB)%>"
-				>GB</aui:option>
-			</aui:select>
-		</aui:col>
-	</aui:row>
 	
 	<aui:button type="submit" name="Save" value="save"></aui:button>
 

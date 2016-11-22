@@ -81,13 +81,6 @@
 		</aui:col>
 	</aui:row>
 	
-	<aui:row >
-		<aui:col>
-			<label class="pd_t20 pd_b10"><liferay-ui:message key="term-of-use"/></label>
-			<liferay-ui:input-editor name="termOfUse" initMethod="termOfUseMethod"/>
-		</aui:col>
-	</aui:row>
-	
     <aui:button-row>
         <aui:button type="submit" name="save" value="save" />  
     </aui:button-row>
@@ -96,8 +89,5 @@
 <aui:script>
 	function <portlet:namespace />messageRegistration() {
 		return "<%= Validator.isNotNull(messageSuccessfullRegistration) ? UnicodeFormatter.toString(messageSuccessfullRegistration) : StringPool.BLANK %>";
-	}
-	function <portlet:namespace />termOfUseMethod() {
-		return "<%= Validator.isNotNull(termOfUse) ? UnicodeFormatter.toString(termOfUse) : StringPool.BLANK %>";
 	}
 </aui:script>
