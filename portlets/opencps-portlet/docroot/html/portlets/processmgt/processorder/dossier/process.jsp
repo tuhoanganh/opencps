@@ -19,7 +19,6 @@
 %>
 
 <%@page import="javax.portlet.PortletRequest"%>
-<%@page import="com.liferay.portal.kernel.process.ProcessUtil"%>
 <%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
 <%@page import="org.opencps.backend.util.BackendUtils"%>
@@ -29,13 +28,10 @@
 <%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.model.DossierFile"%>
 <%@page import="org.opencps.util.PortletConstants"%>
-<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 <%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.model.DossierPart"%>
 <%@page import="org.opencps.util.DateTimeUtil"%>
 <%@page import="org.opencps.dossiermgt.bean.ProcessOrderBean"%>
-<%@page import="org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil"%>
-<%@page import="org.opencps.processmgt.model.WorkflowOutput"%>
 <%@page import="org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.service.ActionHistoryLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.model.ActionHistory"%>
@@ -81,6 +77,7 @@
 		? processStep.getProcessStepId() : 0l;
 	
 	long dossierId = (Validator.isNotNull(dossier)) ? dossier.getDossierId() : 0L;		
+	
 	boolean isEditDossier =
 		ParamUtil.getBoolean(request, "isEditDossier");
 	
@@ -116,8 +113,6 @@
 		processStepDossierParts = ProcessUtils.getDossierPartByStep(processStepId);
 	}
 
-	//Get list DossierPart
-	List<DossierPart> dossierParts = new ArrayList<DossierPart>();
 %>
 <div class="ocps-dossier-process">
 	<table class="process-workflow-info">
@@ -149,6 +144,7 @@
 
 	<%
 		int index = 0;
+	
 		DossierPart dossierPart = null;
 		
 		if (processStepDossierParts != null) {
@@ -170,7 +166,7 @@
 					for(ProcessWorkflow postProcessWorkflow : postProcessWorkflows){
 						String preCondition = Validator.isNotNull(postProcessWorkflow.getPreCondition()) ? 
 							postProcessWorkflow.getPreCondition() : StringPool.BLANK; 
-							requiredDossierPartIds = PortletUtil.getDossierPartRequired(requiredDossierPartIds,dossierPart,dossierPart, null,dossierId,
+							requiredDossierPartIds = PortletUtil.getDossierPartResultRequired(requiredDossierPartIds, dossierId,
 									postProcessWorkflow.getProcessWorkflowId(), postProcessWorkflow.getPostProcessStepId());
 					}
 				}

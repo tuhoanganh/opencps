@@ -1012,8 +1012,7 @@ public class PortletUtil {
 	 */
 	public static List<Long> getDossierPartRequired(
 			List<Long> requiredDossierPartIds, DossierPart parentDossierPart,
-			DossierPart childDossierPart, DossierFile dossierFile,
-			long dossierId, long processWorkflowId, long processStepId) {
+			DossierPart childDossierPart, DossierFile dossierFile) {
 
 		int partType = parentDossierPart != null ? parentDossierPart
 				.getPartType() : 0;
@@ -1065,24 +1064,19 @@ public class PortletUtil {
 			parentDossierPart
 					.setPartType(PortletConstants.DOSSIER_PART_TYPE_OTHER);
 			getDossierPartRequired(requiredDossierPartIds, parentDossierPart,
-					childDossierPart, dossierFile, dossierId,
-					processWorkflowId, processStepId);
+					childDossierPart, dossierFile);
 			break;
 		case PortletConstants.DOSSIER_PART_TYPE_PRIVATE:
 			parentDossierPart
 					.setPartType(PortletConstants.DOSSIER_PART_TYPE_OTHER);
 			getDossierPartRequired(requiredDossierPartIds, parentDossierPart,
-					childDossierPart, dossierFile, dossierId,
-					processWorkflowId, processStepId);
+					childDossierPart, dossierFile);
 			break;
 		case PortletConstants.DOSSIER_PART_TYPE_RESULT:
 
-			getRequiredDossierartIds(requiredDossierPartIds, dossierId,
-					processWorkflowId, processStepId);
 			break;
 		case PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT:
-			getRequiredDossierartIds(requiredDossierPartIds, dossierId,
-					processWorkflowId, processStepId);
+
 			break;
 		default:
 			break;
@@ -1143,7 +1137,7 @@ public class PortletUtil {
 		return 0;
 	}
 
-	public static List<Long> getRequiredDossierartIds(
+	public static List<Long> getDossierPartResultRequired(
 			List<Long> requiredDossierPartIds, long dossierId,
 			long processWorkflowId, long processStepId) {
 		List<WorkflowOutput> workflowOutputs = new ArrayList<WorkflowOutput>();
@@ -1156,7 +1150,7 @@ public class PortletUtil {
 		}
 
 		if (processStepDossierParts != null) {
-			
+
 			for (ProcessStepDossierPart processStepDossierPart : processStepDossierParts) {
 
 				if (processStepDossierPart.getDossierPartId() > 0) {
