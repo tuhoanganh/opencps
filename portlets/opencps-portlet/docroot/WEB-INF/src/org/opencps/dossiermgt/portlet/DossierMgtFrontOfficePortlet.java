@@ -3679,14 +3679,14 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			DossierLogLocalServiceUtil.addDossierLog(
 					serviceContext.getUserId(),
 					serviceContext.getScopeGroupId(),
-					serviceContext.getCompanyId(), dossierId, 0,
-					PortletConstants.DOSSIER_STATUS_UPDATE,
-					PortletConstants.DOSSIER_STATUS_UPDATE,
-					PortletConstants.DOSSIER_STATUS_UPDATE, new Date(), 0,
-					0, actor.getActor(), actor.getActorId(),
+					serviceContext.getCompanyId(), dossier.getDossierId(),
+					0, PortletConstants.DOSSIER_STATUS_NEW,
+					PortletConstants.DOSSIER_STATUS_NEW,
+					PortletConstants.DOSSIER_STATUS_NEW, new Date(), 0, 0,
+					actor.getActor(), actor.getActorId(),
 					actor.getActorName(),
 					DossierMgtFrontOfficePortlet.class.getName()
-							+ ".updateDossier()");
+							+ ".updateDossier()", 0, 0, false);
 
 			SessionMessages.add(actionRequest,
 					MessageKeys.DOSSIER_UPDATE_SUCCESS);
