@@ -82,6 +82,8 @@ public class ConfigurationImpl implements ConfigurationAction{
 		boolean hiddenTreeNodeEqualNone = ParamUtil.getBoolean(actionRequest, "hiddenTreeNodeEqualNone");
 		
 		boolean allowResultQuickView = ParamUtil.getBoolean(actionRequest, "allowResultQuickView");
+		
+		boolean allowQuickCreateDossier = ParamUtil.getBoolean(actionRequest, "allowQuickCreateDossier");
 
 		String fileTypes = ParamUtil.getString(actionRequest, "fileTypes");
 		
@@ -147,6 +149,8 @@ public class ConfigurationImpl implements ConfigurationAction{
 		preferences.setValue("maxUploadFileSize", String.valueOf(maxUploadFileSize));
 		
 		preferences.setValue("maxUploadFileSizeUnit", maxUploadFileSizeUnit);
+		
+		preferences.setValue("allowQuickCreateDossier", String.valueOf(allowQuickCreateDossier));
 		
 		preferences.store();
 

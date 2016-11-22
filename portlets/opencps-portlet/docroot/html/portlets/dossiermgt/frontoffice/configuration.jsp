@@ -1,6 +1,4 @@
-<%@page import="org.opencps.util.PortletConstants"%>
-<%@page import="org.opencps.util.WebKeys"%>
-<%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
+
 
 <%
 /**
@@ -20,14 +18,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
-<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
+
+<%@page import="com.liferay.portal.model.Layout"%>
+<%@page import="com.liferay.portal.service.LayoutLocalServiceUtil"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="com.liferay.portal.kernel.util.ListUtil"%>
-<%@page import="com.liferay.portal.model.Layout"%>
-<%@page import="java.util.List"%>
-<%@page import="com.liferay.portal.service.LayoutLocalServiceUtil"%>
+
 <%@ include file="../init.jsp" %>
 
 <liferay-ui:success key="potlet-config-saved" message="portlet-configuration-have-been-successfully-saved" />
@@ -197,6 +196,12 @@
 		type="text"
 		name="fileTypes" 
 		value="<%=fileTypes %>"
+	/>
+	
+	<aui:input 
+		type="checkbox"
+		name="allowQuickCreateDossier" 
+		value="<%=allowQuickCreateDossier %>"
 	/>
 	
 	<aui:row>

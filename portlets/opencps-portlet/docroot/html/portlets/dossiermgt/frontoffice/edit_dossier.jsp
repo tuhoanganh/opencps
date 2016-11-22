@@ -25,7 +25,6 @@
 <%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
 <%@page import="javax.portlet.PortletRequest"%>
 <%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
-<%@page import="org.opencps.backend.util.BackendUtils"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
@@ -70,7 +69,7 @@
 	String[] dossierSections = dossier != null ? new String[] {
 		"dossier_part", "dossier_info", "result", "history"
 	} : new String[] {
-		"dossier_part", "dossier_info"
+		"dossier_info"
 	};
 
 	String[][] categorySections = {
@@ -422,8 +421,9 @@
 
 		<aui:script use="aui-loading-mask-deprecated">
 			AUI().ready(function(A){
+				var allowQuickCreateDossier = '<%=allowQuickCreateDossier%>'
 				var quickCreateDossier = '<%=quickCreateDossier%>';
-				if(quickCreateDossier ==='true'){
+				if(quickCreateDossier ==='true' && allowQuickCreateDossier ==='true'){
 					var loadingMask = new A.LoadingMask(
 						{
 							'strings.loading': '<%= UnicodeLanguageUtil.get(pageContext, "rending...") %>',

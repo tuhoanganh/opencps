@@ -19,6 +19,7 @@
 %>
 
 <%@page import="javax.portlet.PortletPreferences"%>
+
 <%@ include file="/init.jsp" %>
 
 <%
@@ -57,6 +58,8 @@
 	boolean hiddenTreeNodeEqualNone = GetterUtil.getBoolean(preferences.getValue("hiddenTreeNodeEqualNone", "false"), false);
 	
 	boolean allowResultQuickView = GetterUtil.getBoolean(preferences.getValue("allowResultQuickView", "false"), false);
+	
+	boolean allowQuickCreateDossier = GetterUtil.getBoolean(preferences.getValue("allowQuickCreateDossier", "false"), false);
 
 	String fileTypes = preferences.getValue("fileTypes", StringPool.BLANK);
 	
