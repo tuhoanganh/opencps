@@ -193,15 +193,15 @@
 	/>
 	
 	<aui:input 
-		type="text"
-		name="fileTypes" 
-		value="<%=fileTypes %>"
-	/>
-	
-	<aui:input 
 		type="checkbox"
 		name="allowQuickCreateDossier" 
 		value="<%=allowQuickCreateDossier %>"
+	/>
+	
+	<aui:input 
+		type="text"
+		name="fileTypes" 
+		value="<%=fileTypes %>"
 	/>
 	
 	<aui:row>

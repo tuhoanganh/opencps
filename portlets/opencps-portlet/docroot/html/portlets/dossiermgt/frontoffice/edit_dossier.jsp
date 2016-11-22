@@ -421,8 +421,10 @@
 
 		<aui:script use="aui-loading-mask-deprecated">
 			AUI().ready(function(A){
+				
 				var allowQuickCreateDossier = '<%=allowQuickCreateDossier%>'
 				var quickCreateDossier = '<%=quickCreateDossier%>';
+				
 				if(quickCreateDossier ==='true' && allowQuickCreateDossier ==='true'){
 					var loadingMask = new A.LoadingMask(
 						{
