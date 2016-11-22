@@ -26,20 +26,24 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.Validator;
 
 /**
- * The implementation of the service file template local service. <p> All custom
- * service methods should be put in this class. Whenever methods are added,
- * rerun ServiceBuilder to copy their definitions into the
+ * The implementation of the service file template local service.
+ * <p>
+ * All custom service methods should be put in this class. Whenever methods are
+ * added, rerun ServiceBuilder to copy their definitions into the
  * {@link org.opencps.servicemgt.service.ServiceFileTemplateLocalService}
- * interface. <p> This is a local service. Methods of this service will not have
- * security checks based on the propagated JAAS credentials because this service
- * can only be accessed from within the same VM. </p>
+ * interface.
+ * <p>
+ * This is a local service. Methods of this service will not have security
+ * checks based on the propagated JAAS credentials because this service can only
+ * be accessed from within the same VM.
+ * </p>
  *
  * @author khoavd
  * @see org.opencps.servicemgt.service.base.ServiceFileTemplateLocalServiceBaseImpl
  * @see org.opencps.servicemgt.service.ServiceFileTemplateLocalServiceUtil
  */
-public class ServiceFileTemplateLocalServiceImpl
-    extends ServiceFileTemplateLocalServiceBaseImpl {
+public class ServiceFileTemplateLocalServiceImpl extends
+		ServiceFileTemplateLocalServiceBaseImpl {
 
 	/*
 	 * NOTE FOR DEVELOPERS: Never reference this interface directly. Always use
@@ -55,11 +59,11 @@ public class ServiceFileTemplateLocalServiceImpl
 	 * @throws SystemException
 	 */
 	public void addServiveFiles(long serviceId, long[] templateFileIds)
-	    throws PortalException, SystemException {
+			throws PortalException, SystemException {
 
-		List<ServiceFileTemplate> currentFileTemplates =
-		    new ArrayList<ServiceFileTemplate>();
-		currentFileTemplates = serviceFileTemplatePersistence.findByServiceinfoId(serviceId);
+		List<ServiceFileTemplate> currentFileTemplates = new ArrayList<ServiceFileTemplate>();
+		currentFileTemplates = serviceFileTemplatePersistence
+				.findByServiceinfoId(serviceId);
 		// Remove current fileTemplate
 
 		for (ServiceFileTemplate sft : currentFileTemplates) {
@@ -72,25 +76,27 @@ public class ServiceFileTemplateLocalServiceImpl
 		}
 
 	}
-	
-	/* (non-Javadoc)
-	 * @see org.opencps.servicemgt.service.ServiceFileTemplateLocalService#addFileServices(long, long[])
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.opencps.servicemgt.service.ServiceFileTemplateLocalService#
+	 * addFileServices(long, long[])
 	 */
-	public void addFileServices(long templatefileId, long [] serviceInfoIds) 
-					throws SystemException, PortalException {
-		List<ServiceFileTemplate> currentFileTemplates =
-					    new ArrayList<ServiceFileTemplate>();
-		currentFileTemplates = serviceFileTemplatePersistence.findByTemplatefileId(templatefileId);
-		for(ServiceFileTemplate sft : currentFileTemplates) {
+	public void addFileServices(long templatefileId, long[] serviceInfoIds)
+			throws SystemException, PortalException {
+		List<ServiceFileTemplate> currentFileTemplates = new ArrayList<ServiceFileTemplate>();
+		currentFileTemplates = serviceFileTemplatePersistence
+				.findByTemplatefileId(templatefileId);
+		for (ServiceFileTemplate sft : currentFileTemplates) {
 			serviceFileTemplatePersistence.remove(sft);
 		}
-		
-		for(long serviceinfoId : serviceInfoIds) {
+
+		for (long serviceinfoId : serviceInfoIds) {
 			addServiceFile(serviceinfoId, templatefileId);
 		}
 	}
-	
-	
+
 	/**
 	 * Add serviceFile
 	 * 
@@ -100,14 +106,13 @@ public class ServiceFileTemplateLocalServiceImpl
 	 * @throws PortalException
 	 * @throws SystemException
 	 */
-	public ServiceFileTemplate addServiceFile(
-	    long serviceInfoId, long templatefileId)
-	    throws PortalException, SystemException {
+	public ServiceFileTemplate addServiceFile(long serviceInfoId,
+			long templatefileId) throws PortalException, SystemException {
 
 		ServiceFileTemplate sft = null;
 
-		ServiceFileTemplatePK serviceFilePK =
-		    new ServiceFileTemplatePK(serviceInfoId, templatefileId);
+		ServiceFileTemplatePK serviceFilePK = new ServiceFileTemplatePK(
+				serviceInfoId, templatefileId);
 
 		// Check exist ServiceFile
 		sft = serviceFileTemplatePersistence.fetchByPrimaryKey(serviceFilePK);
@@ -121,7 +126,7 @@ public class ServiceFileTemplateLocalServiceImpl
 		return sft;
 
 	}
-	
+
 	/**
 	 * Delete ServiceFile
 	 * 
@@ -131,27 +136,33 @@ public class ServiceFileTemplateLocalServiceImpl
 	 * @throws SystemException
 	 */
 	public void deleteServiceFile(long serviceInfoId, long templatefileId)
-	    throws PortalException, SystemException {
+			throws PortalException, SystemException {
 
 		ServiceFileTemplate sft = null;
 
-		ServiceFileTemplatePK serviceFilePK =
-		    new ServiceFileTemplatePK(serviceInfoId, templatefileId);
+		ServiceFileTemplatePK serviceFilePK = new ServiceFileTemplatePK(
+				serviceInfoId, templatefileId);
 
 		// Get ServiceFile wanted remove
 		sft = serviceFileTemplatePersistence.fetchByPrimaryKey(serviceFilePK);
 
 		if (Validator.isNotNull(sft)) {
 			serviceFileTemplatePersistence.remove(sft);
-		}
-		else {
+		} else {
 		}
 
 	}
-	
-	public List<ServiceFileTemplate> getServiceFileTemplatesByTemplateFile(long templateFileId)
-					throws SystemException {
-		return serviceFileTemplatePersistence.findByTemplatefileId(templateFileId);
+
+	public List<ServiceFileTemplate> getServiceFileTemplatesByTemplateFile(
+			long templateFileId) throws SystemException {
+		return serviceFileTemplatePersistence
+				.findByTemplatefileId(templateFileId);
+	}
+
+	public List<ServiceFileTemplate> getServiceFileTemplatesByServiceInfo(
+			long serviceInfoId) throws SystemException {
+		return serviceFileTemplatePersistence
+				.findByServiceinfoId(serviceInfoId);
 	}
 
 }

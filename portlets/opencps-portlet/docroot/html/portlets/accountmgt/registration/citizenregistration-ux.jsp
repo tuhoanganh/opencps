@@ -1,3 +1,5 @@
+
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -25,6 +27,8 @@
 <%@page import="org.opencps.accountmgt.OutOfLengthCitizenEmailException"%>
 <%@page import="org.opencps.accountmgt.OutOfLengthCitizenAddressException"%>
 <%@page import="org.opencps.accountmgt.OutOfLengthCitizenNameException"%>
+<%@page import="org.opencps.accountmgt.DuplicateCitizenPersonalIdException"%>
+<%@page import="com.liferay.portal.ContactBirthdayException"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.accountmgt.model.Citizen"%>
 <%@page import="org.opencps.accountmgt.search.CitizenDisplayTerms"%>
@@ -67,7 +71,6 @@
  		cdw.add(wardId);
  	}
 %>
-
 
 <div class="opencps-register-wrapper">
 	
@@ -119,6 +122,14 @@
 	<liferay-ui:error 
 		exception="<%= OutOfSizeFileUploadException.class %>" 
 		message="<%= OutOfSizeFileUploadException.class.getName() %>" 
+	/>
+	<liferay-ui:error 
+		exception="<%= DuplicateCitizenPersonalIdException.class %>" 
+		message="<%= DuplicateCitizenPersonalIdException.class.getName() %>" 
+	/>
+	<liferay-ui:error 
+		exception="<%= ContactBirthdayException.class %>" 
+		message="<%= ContactBirthdayException.class.getName() %>" 
 	/>
 	
 	<%
@@ -349,7 +360,9 @@
 				</aui:row>
 				<div class="term-user">
 					<aui:row>
-						<liferay-portlet:renderURL var="linkToPage" ></liferay-portlet:renderURL>
+						<liferay-portlet:renderURL var="linkToPage" windowState="<%=LiferayWindowState.EXCLUSIVE.toString() %>">
+							<liferay-portlet:param name="mvcPath" value="/html/portlets/accountmgt/registration/termOfUse.jsp"/>
+						</liferay-portlet:renderURL>
 						<aui:input name="linkToPageURL" value="<%=linkToPage %>" type="hidden"></aui:input>
 						<%
 							String chiTiet = StringPool.BLANK;

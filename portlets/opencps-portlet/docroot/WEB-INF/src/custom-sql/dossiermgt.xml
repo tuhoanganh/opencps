@@ -1041,4 +1041,48 @@
 		]]>
 	</sql>
 	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierFinder.searchDossierSugesstion">	
+		<![CDATA[
+			SELECT
+				DISTINCT (d.dossierId), d.* 
+			FROM
+				opencps_dossier AS d
+			INNER JOIN 
+				opencps_dossier_file AS df
+			ON 
+				d.dossierId = df.dossierId
+			AND 
+				(df.removed = 0 AND df.syncStatus = 2 AND df.templateFileNo IN (?) AND d.dossierStatus = ?)
+			INNER JOIN 
+				opencps_dossierpart AS p
+			ON 
+				p.dossierpartId = df.dossierPartId
+			AND p.partType IN (?) AND p.partNo IN (?)
+			ORDER BY 
+				d.modifiedDate DESC
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierFinder.countDossierSugesstion">	
+		<![CDATA[
+			SELECT
+				COUNT(DISTINCT (d.dossierId)) AS COUNT_VALUE
+			FROM
+				opencps_dossier AS d
+			INNER JOIN 
+				opencps_dossier_file AS df
+			ON 
+				d.dossierId = df.dossierId
+			AND 
+				(df.removed = 0 AND df.syncStatus = 2 AND df.templateFileNo IN (?) AND d.dossierStatus = ?)
+			INNER JOIN 
+				opencps_dossierpart AS p
+			ON 
+				p.dossierpartId = df.dossierPartId
+			AND p.partType IN (?) AND p.partNo IN (?)
+			ORDER BY 
+				d.modifiedDate DESC
+		]]>
+	</sql>
+	
 </custom-sql>

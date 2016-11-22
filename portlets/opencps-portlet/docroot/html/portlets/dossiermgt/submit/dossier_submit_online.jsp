@@ -16,13 +16,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-<%@page import="javax.validation.Valid"%>
+
+<%@page import="javax.portlet.PortletURL"%>
+<%@page import="javax.portlet.WindowState"%>
+<%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
+<%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@page import="javax.portlet.PortletRequest"%>
 <%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
 <%@page import="javax.portlet.PortletMode"%>
-<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
 <%@page import="org.opencps.util.PortletPropsValues"%>
-<%@page import="org.opencps.datamgt.service.DictCollectionLocalServiceUtil"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="org.opencps.datamgt.model.DictItem"%>
 <%@page import="java.util.List"%>
@@ -32,9 +34,10 @@
 <%@page import="org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
 <%@page import="org.opencps.util.PortletUtil"%>
-<%@ include file="init.jsp"%>
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
+
+<%@ include file="init.jsp"%>
 <%
 	
 	String backURL1 = ParamUtil.getString(request, "backURL");

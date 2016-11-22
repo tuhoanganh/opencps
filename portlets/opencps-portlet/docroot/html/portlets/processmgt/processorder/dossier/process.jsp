@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
-<%@page import="org.opencps.util.MessageKeys"%>
+
 <%@page import="javax.portlet.PortletRequest"%>
 <%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
@@ -27,13 +27,10 @@
 <%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.model.DossierFile"%>
 <%@page import="org.opencps.util.PortletConstants"%>
-<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 <%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.model.DossierPart"%>
 <%@page import="org.opencps.util.DateTimeUtil"%>
 <%@page import="org.opencps.dossiermgt.bean.ProcessOrderBean"%>
-<%@page import="org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil"%>
-<%@page import="org.opencps.processmgt.model.WorkflowOutput"%>
 <%@page import="org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.service.ActionHistoryLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.model.ActionHistory"%>
@@ -45,7 +42,8 @@
 <%@page import="org.opencps.processmgt.model.ProcessOrder"%>
 <%@page import="org.opencps.processmgt.model.ProcessStepDossierPart"%>
 <%@page import="org.opencps.processmgt.util.ProcessUtils"%>
-<%@page import="com.liferay.portal.kernel.process.ProcessUtil"%>
+<%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="org.opencps.util.MessageKeys"%>
 
 <%@ include file="../init.jsp"%>
 
@@ -76,7 +74,9 @@
 	long processStepId = 
 	Validator.isNotNull(processStep)
 		? processStep.getProcessStepId() : 0l;
-
+	
+	long dossierId = (Validator.isNotNull(dossier)) ? dossier.getDossierId() : 0L;		
+	
 	boolean isEditDossier =
 		ParamUtil.getBoolean(request, "isEditDossier");
 	
@@ -112,8 +112,6 @@
 		processStepDossierParts = ProcessUtils.getDossierPartByStep(processStepId);
 	}
 
-	//Get list DossierPart
-	List<DossierPart> dossierParts = new ArrayList<DossierPart>();
 %>
 <div class="ocps-dossier-process">
 	<table class="process-workflow-info">
@@ -145,10 +143,11 @@
 
 	<%
 		int index = 0;
+	
 		DossierPart dossierPart = null;
 		
 		if (processStepDossierParts != null) {
-		
+			List<Long> requiredDossierPartIds = new ArrayList<Long>();
 			for (ProcessStepDossierPart processStepDossierPart : processStepDossierParts){
 				
 				if (processStepDossierPart.getDossierPartId() > 0) {
@@ -162,6 +161,14 @@
 				if (Validator.isNotNull(dossierPart)) {
 				
 				int partType = dossierPart.getPartType();
+				if(postProcessWorkflows != null && !postProcessWorkflows.isEmpty()){
+					for(ProcessWorkflow postProcessWorkflow : postProcessWorkflows){
+						String preCondition = Validator.isNotNull(postProcessWorkflow.getPreCondition()) ? 
+							postProcessWorkflow.getPreCondition() : StringPool.BLANK; 
+							requiredDossierPartIds = PortletUtil.getDossierPartResultRequired(requiredDossierPartIds, dossierId,
+									postProcessWorkflow.getProcessWorkflowId(), postProcessWorkflow.getPostProcessStepId());
+					}
+				}
 				
 				%>
 	                <div class="opencps dossiermgt dossier-part-tree" id='<%= renderResponse.getNamespace() + "tree" + dossierPart.getDossierpartId()%>'>
@@ -197,7 +204,7 @@
 										catch (Exception e) {
 										}
 									}
-		
+									
 									cssRequired =
 										dossierPart.getRequired()
 											? "cssRequired" : StringPool.BLANK;
@@ -206,7 +213,7 @@
 									id='<%=renderResponse.getNamespace() + "row-" + dossierPart.getDossierpartId() + StringPool.DASH + index %>' 
 									index="<%=index %>"
 									dossier-part="<%=dossierPart.getDossierpartId() %>"
-									class="opencps dossiermgt dossier-part-row"
+									class='<%="opencps dossiermgt dossier-part-row r-" + index + StringPool.SPACE + "dpid-" + String.valueOf(dossierPart.getDossierpartId())%>'
 								>
 									<span class='<%="level-" + level + " opencps dossiermgt dossier-part"%>'>
 										<span class="row-icon">
@@ -418,6 +425,9 @@
 				}
 				index++;
 			}
+			%>
+				<aui:input name="requiredDossierPart" type="hidden" value="<%= StringUtil.merge(requiredDossierPartIds) %>"/>
+			<%
 		}
 	%>
 
@@ -497,6 +507,36 @@
 
 <aui:script use="aui-base,liferay-portlet-url,aui-io">
 
+	var required = false;
+	
+	Liferay.provide(window, '<portlet:namespace/>validateRequiredResult', function() {
+		var A = AUI();
+		
+		var requiredDossierParts = A.all('#<portlet:namespace/>requiredDossierPart');
+		
+		if(requiredDossierParts) {
+			
+			requiredDossierParts.each(function(requiredDossierPart){
+				var requiredDossierPartIds = requiredDossierPart.val().trim().split(",");
+				
+				if(requiredDossierPartIds != ''){
+					for(var i = 0; i < requiredDossierPartIds.length; i++){
+						var dossierPartId = requiredDossierPartIds[i];
+						
+						if(parseInt(dossierPartId) > 0){
+							required = true;
+							var row = A.one('.dossier-part-row.dpid-' + dossierPartId);
+							if(row){
+								row.attr('style', 'color:red');
+							}
+						}
+					}
+				}
+			});
+			
+		}
+	});
+
 	Liferay.provide(window, '<portlet:namespace/>assignToUser', function(e) {
 		
 		var A = AUI();
@@ -543,6 +583,11 @@
 		if(assignFormDisplayStyle == 'popup' ) {
 			portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>");
 			portletURL.setParameter("backURL", '<%=backURL%>');
+			<portlet:namespace/>validateRequiredResult();
+			if(required === true) {
+				alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-required-before-send") %>');
+				return;
+			} 
 			openDialog(portletURL.toString(), '<portlet:namespace />assignToUser', '<%= UnicodeLanguageUtil.get(pageContext, "handle") %>');
 		} 
 		// Display assign to user - moit
@@ -585,27 +630,34 @@
 								
 								if(submitButton){
 									submitButton.on('click', function(){
-										A.io.request(
-											form.attr('action'),
-											{
-												dataType: 'json',
-												form: {
-													id: form
-												},
-												on: {
-													success: function(event, id, obj) {
-														var response = this.get('responseData');
-														
-														alert(Liferay.Language.get(response.msg));
-														
-														if(response.msg == '<%=MessageKeys.DEFAULT_SUCCESS_KEY%>'){
-															var redirectURL = A.one('#<portlet:namespace/>redirectURL').val();
-															window.location = redirectURL;
+										<portlet:namespace/>validateRequiredResult();
+										if(required === true) {
+											alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-required-before-send") %>');
+											return;
+										} else{
+											A.io.request(
+												form.attr('action'),
+												{
+													dataType: 'json',
+													form: {
+														id: form
+													},
+													on: {
+														success: function(event, id, obj) {
+															var response = this.get('responseData');
+															
+															alert(Liferay.Language.get(response.msg));
+															
+															if(response.msg == '<%=MessageKeys.DEFAULT_SUCCESS_KEY%>'){
+																var redirectURL = A.one('#<portlet:namespace/>redirectURL').val();
+																window.location = redirectURL;
+															}
 														}
 													}
 												}
-											}
-										);
+											);
+										}
+
 									});
 								}
 								
@@ -843,3 +895,142 @@
 	});
 
 </aui:script>
+<c:if test='<%=assignFormDisplayStyle.equals("form") %>'>
+<portlet:resourceURL var="getDataAjax"></portlet:resourceURL>
+
+<portlet:actionURL var="signatureURL" name="signatureBCY"></portlet:actionURL>
+
+<aui:script>
+	var assignTaskAfterSign = '<%=String.valueOf(assignTaskAfterSign)%>';
+
+	function plugin0() {
+		
+	  return document.getElementById('plugin0');
+	}
+
+	plugin = plugin0;
+	
+	var complateSignatureURL = '<%=signatureURL%>';
+
+	function getFileComputerHash(symbolType) {
+
+		var url = '<%=getDataAjax%>';
+		
+		var nanoTime = $('#<portlet:namespace/>nanoTimePDF').val();
+		
+		url = url + "&nanoTimePDF="+nanoTime;
+		
+		var listFileToSigner = $("#<portlet:namespace/>listFileToSigner").val().split(","); 
+		var listDossierPartToSigner = $("#<portlet:namespace/>listDossierPartToSigner").val().split(","); 
+		var listDossierFileToSigner = $("#<portlet:namespace/>listDossierFileToSigner").val().split(","); 
+		
+		for ( var i = 0; i < listFileToSigner.length; i++) {
+			$.ajax({
+				type : 'POST',
+				url : url,
+				data : {
+					<portlet:namespace/>index: i,
+					<portlet:namespace/>indexSize: listFileToSigner.length,
+					<portlet:namespace/>symbolType: symbolType,
+					<portlet:namespace/>fileId: listFileToSigner[i],
+					<portlet:namespace/>dossierId: $("#<portlet:namespace/>dossierId").val(),
+					<portlet:namespace/>dossierPartId: listDossierPartToSigner[i],
+					<portlet:namespace/>dossierFileId: listDossierFileToSigner[i],
+					<portlet:namespace/>type: 'getComputerHash'
+				},
+				success : function(data) {
+					if(data){
+						var jsonData = JSON.parse(data);
+						var hashComputers = jsonData.hashComputers;
+						var signFieldNames = jsonData.signFieldNames;
+						var filePaths = jsonData.filePaths;
+						var msgs = jsonData.msg;
+						var fileNames = jsonData.fileNames;
+						var dossierFileIds = jsonData.dossierFileIds;
+						var dossierPartIds = jsonData.dossierPartIds;
+						var indexs = jsonData.indexs;
+						var indexSizes = jsonData.indexSizes;
+						for ( var i = 0; i < hashComputers.length; i++) {
+							var hashComputer = hashComputers[i];
+							var signFieldName = signFieldNames[i];
+							var filePath = filePaths[i];
+							var msg = msgs[i];
+							var fileName = fileNames[i];
+							var dossierFileId = dossierFileIds[i];
+							var dossierPartId = dossierPartIds[i];
+							var index = indexs[i];
+							var indexSize = indexSizes[i];
+							if(plugin().valid){
+								if(msg === 'success'){
+	 								var code = plugin().Sign(hashComputer);
+	 								if(code ===0 || code === 7){
+	 									var sign = plugin().Signature;
+										completeSignature(sign, signFieldName, filePath, fileName, $("#<portlet:namespace/>dossierId").val(), dossierFileId, dossierPartId, index, indexSize, '<%=signatureURL%>');
+										
+	 								}else{
+	 									alert("signer error");
+	 					            }
+								}else{
+									alert(msg);
+								}
+					        	
+					        } else {
+					         	alert("Plugin is not working");
+					        }
+						}
+					}
+				}
+			});
+		}
+	}
+
+	function completeSignature(sign, signFieldName, filePath, fileName, dossierId, dossierFileId, dossierPartId, index, indexSize, urlFromSubmit) {
+		var msg = '';
+		var A = AUI();
+		A.io.request(
+			complateSignatureURL,
+			{
+			    dataType : 'json',
+			    data:{    	
+			    	<portlet:namespace/>sign : sign,
+					<portlet:namespace/>signFieldName : signFieldName,
+					<portlet:namespace/>filePath : filePath,
+					<portlet:namespace/>fileName : fileName,
+					<portlet:namespace/>dossierId : dossierId,
+					<portlet:namespace/>dossierFileId: dossierFileId,
+					<portlet:namespace/>dossierPartId : dossierPartId
+			    },   
+			    on: {
+			        success: function(event, id, obj) {
+			        	var instance = this;
+						var res = instance.get('responseData');
+						
+						var msg = res.msg;
+						var newis = indexSize-1;
+							if (msg === 'success') {
+								alert(Liferay.Language.get('signature-success'));
+								if(index == newis){
+									if(assignTaskAfterSign == 'true'){
+										var action = A.one('#<portlet:namespace/>assignActionURL').val();
+										var form =  A.one("#<portlet:namespace/>pofm");
+										if(form){
+											form.attr('action', action);
+											document.getElementById('<portlet:namespace />pofm').submit();
+										}
+									}
+									
+								}
+							} else {
+									alert("--------- vao day completeSignature- ky so ko dc-------------");
+							}
+					},
+			    	error: function(){
+			    		alert("--------- vao day completeSignature- ky so ko dc-------------");
+			    	}
+				}
+			}
+		);
+	}
+	
+</aui:script>
+</c:if>
