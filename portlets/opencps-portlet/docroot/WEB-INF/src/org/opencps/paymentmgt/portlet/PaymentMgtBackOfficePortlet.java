@@ -480,7 +480,7 @@ public class PaymentMgtBackOfficePortlet extends MVCPortlet {
 		String jrxmlTemplate, String formData, Map<String, Object> map,
 		String outputDestination, String fileName) {
 
-		return JRReportUtil.createReportPDFfFile(
+		return JRReportUtil.createReportPDFFile(
 			jrxmlTemplate, formData, map, outputDestination, fileName);
 	}
 

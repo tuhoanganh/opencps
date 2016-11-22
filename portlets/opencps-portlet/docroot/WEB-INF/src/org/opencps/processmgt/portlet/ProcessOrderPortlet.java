@@ -1411,7 +1411,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 	protected String exportToPDFFile(String jrxmlTemplate, String formData,
 			Map<String, Object> map, String outputDestination, String fileName) {
 
-		return JRReportUtil.createReportPDFfFile(jrxmlTemplate, formData, map,
+		return JRReportUtil.createReportPDFFile(jrxmlTemplate, formData, map,
 				outputDestination, fileName);
 	}
 

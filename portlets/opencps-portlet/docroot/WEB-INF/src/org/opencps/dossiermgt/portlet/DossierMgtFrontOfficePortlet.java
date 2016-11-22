@@ -25,17 +25,20 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
+import javax.portlet.PortletPreferences;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.junit.experimental.theories.PotentialAssignment;
 import org.opencps.accountmgt.NoSuchAccountException;
 import org.opencps.accountmgt.NoSuchAccountFolderException;
 import org.opencps.accountmgt.NoSuchAccountOwnOrgIdException;
@@ -92,6 +95,7 @@ import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
 import org.opencps.dossiermgt.util.ActorBean;
 import org.opencps.dossiermgt.util.DossierMgtUtil;
 import org.opencps.jasperreport.util.JRReportUtil;
+import org.opencps.jasperreport.util.JRReportUtil.DocType;
 import org.opencps.processmgt.model.ProcessStep;
 import org.opencps.processmgt.portlet.ProcessOrderPortlet;
 import org.opencps.servicemgt.model.ServiceInfo;
@@ -134,12 +138,16 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portlet.documentlibrary.DuplicateFileException;
 import com.liferay.portlet.documentlibrary.DuplicateFolderNameException;
+import com.liferay.portlet.documentlibrary.FileExtensionException;
 import com.liferay.portlet.documentlibrary.FileSizeException;
 import com.liferay.portlet.documentlibrary.NoSuchFileEntryException;
+import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
+import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 /**
@@ -153,7 +161,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	 * @throws IOException
 	 */
 	public void addAttachmentFile(ActionRequest actionRequest,
-			ActionResponse actionResponse) throws IOException {
+			ActionResponse actionResponse) throws IOException, Exception {
 
 		AccountBean accountBean = AccountUtil.getAccountBean(actionRequest);
 
@@ -204,6 +212,21 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		String sourceFileName = uploadPortletRequest
 				.getFileName(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
+		
+		String fileTypes = ParamUtil.getString(uploadPortletRequest,
+				DossierFileDisplayTerms.FILE_TYPES);
+		
+		float maxUploadFileSize = ParamUtil.getFloat(uploadPortletRequest,
+				DossierFileDisplayTerms.MAX_UPLOAD_FILE_SIZE);
+		
+		String maxUploadFileSizeUnit = ParamUtil.getString(uploadPortletRequest, 
+				DossierFileDisplayTerms.MAX_UPLOAD_FILE_SIZE_UNIT);
+		
+		float maxTotalUploadFileSize = ParamUtil.getFloat(uploadPortletRequest,
+				DossierFileDisplayTerms.MAX_TOTAL_UPLOAD_FILE_SIZE);
+		
+		String maxTotalUploadFileSizeUnit = ParamUtil.getString(uploadPortletRequest, 
+				DossierFileDisplayTerms.MAX_TOTAL_UPLOAD_FILE_SIZE_UNIT);
 
 		/*
 		 * sourceFileName = sourceFileName
@@ -228,7 +251,9 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 			validateAddAttachDossierFile(dossierId, dossierPartId,
 					dossierFileId, displayName, size, sourceFileName,
-					inputStream, accountBean);
+					inputStream, accountBean, fileTypes, maxUploadFileSize,
+					maxUploadFileSizeUnit, maxTotalUploadFileSize,
+					maxTotalUploadFileSizeUnit);
 
 			ServiceContext serviceContext = ServiceContextFactory
 					.getInstance(uploadPortletRequest);
@@ -339,6 +364,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 						PermissionDossierException.class);
 			} else if (e instanceof FileSizeException) {
 				SessionErrors.add(actionRequest, FileSizeException.class);
+			} else if (e instanceof FileExtensionException) {
+				SessionErrors.add(actionRequest, FileExtensionException.class);
 			} else {
 				SessionErrors.add(actionRequest, "upload-error");
 
@@ -933,6 +960,13 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		String fileExportDir = StringPool.BLANK;
 
+		String fileExtension = ParamUtil.getString(
+				actionRequest,
+				DossierFileDisplayTerms.FILE_EXTENSION,
+				StringPool.PERIOD
+						+ StringUtil.lowerCase(JRReportUtil.DocType.PDF
+								.toString()));
+
 		try {
 			validateCreateDynamicForm(dossierFileId, accountBean);
 
@@ -962,10 +996,13 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			String outputDestination = PortletPropsValues.OPENCPS_FILE_SYSTEM_TEMP_DIR;
 			String fileName = System.currentTimeMillis() + StringPool.DASH
 					+ dossierFileId + StringPool.DASH
-					+ dossierPart.getDossierpartId() + ".pdf";
+					+ dossierPart.getDossierpartId() + fileExtension;
 
-			fileExportDir = exportToPDFFile(jrxmlTemplate, formData, null,
-					outputDestination, fileName);
+			//fileExportDir = exportToPDFFile(jrxmlTemplate, formData, null,
+			//		outputDestination, fileName);
+			
+			fileExportDir = exportReportFile(jrxmlTemplate, formData, null,
+			outputDestination, fileName, DocType.getEnum(fileExtension));
 
 			if (Validator.isNotNull(fileExportDir)) {
 
@@ -1050,7 +1087,14 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 							dossierFileAdd != null ? dossierFileAdd.getFileEntryId() : 0, WebKeys.ACTOR_CITIZEN);
 
 						// Update Log UpdateVersion File
-/*						DossierLogLocalServiceUtil
+						/*					
+						Locale locale = new Locale("vi", "VN");
+
+						String dossierAcctionUpdateVersionFile = LanguageUtil
+								.get(locale,
+										PortletConstants.DOSSIER_ACTION_UPDATE_VERSION_FILE);
+
+						DossierLogLocalServiceUtil
 								.addDossierLog(
 										serviceContext.getUserId(),
 										serviceContext.getScopeGroupId(),
@@ -1059,7 +1103,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 										fileGroupId,
 										dossier.getDossierStatus(),
 										PortletConstants.DOSSIER_ACTION_UPDATE_VERSION_FILE,
-										PortletConstants.DOSSIER_ACTION_UPDATE_VERSION_FILE
+										dossierAcctionUpdateVersionFile
 												+ StringPool.SPACE
 												+ StringPool.COLON
 												+ StringPool.SPACE
@@ -1443,8 +1487,25 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	protected String exportToPDFFile(String jrxmlTemplate, String formData,
 			Map<String, Object> map, String outputDestination, String fileName) {
 
-		return JRReportUtil.createReportPDFfFile(jrxmlTemplate, formData, map,
+		return JRReportUtil.createReportPDFFile(jrxmlTemplate, formData, map,
 				outputDestination, fileName);
+	}
+
+	/**
+	 * @param jrxmlTemplate
+	 * @param formData
+	 * @param map
+	 * @param outputDestination
+	 * @param fileName
+	 * @param docType
+	 * @return
+	 */
+	protected String exportReportFile(String jrxmlTemplate, String formData,
+			Map<String, Object> map, String outputDestination, String fileName,
+			DocType docType) {
+
+		return JRReportUtil.createReportFile(jrxmlTemplate, formData, map,
+				outputDestination, fileName, docType);
 	}
 
 	/**
@@ -2735,11 +2796,14 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	private void validateAddAttachDossierFile(long dossierId,
 			long dossierPartId, long dossierFileId, String displayName,
 			long size, String sourceFileName, InputStream inputStream,
-			AccountBean accountBean) throws NoSuchDossierException,
+			AccountBean accountBean, String fileTypes, float maxUploadFileSize,
+			String maxUploadFileSizeUnit, float maxTotalUploadFileSize,
+			String maxTotalUploadFileSizeUnit)
+			throws NoSuchDossierException,
 			NoSuchDossierPartException, NoSuchAccountException,
 			NoSuchAccountTypeException, NoSuchAccountFolderException,
 			NoSuchAccountOwnUserIdException, NoSuchAccountOwnOrgIdException,
-			PermissionDossierException, FileSizeException {
+			PermissionDossierException, FileSizeException, FileExtensionException {
 
 		validateAccount(accountBean);
 
@@ -2778,9 +2842,63 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			throw new NoSuchDossierPartException();
 		}
 
+		String[] fileTypeArr = fileTypes.split("\\W+");
+		
+		if (fileTypeArr.length > 0){
+			
+			boolean fileTypeIsAgreed = false;
+			
+			for (String fileType : fileTypeArr) {
+				if (sourceFileName.endsWith(fileType)){
+					fileTypeIsAgreed = true;
+				}
+			}
+			
+			if (!fileTypeIsAgreed){
+				throw new FileExtensionException();
+			}
+		}
+		
+		float maxUploadFileSizeInByte = 
+				PortletUtil.convertSizeUnitToByte(maxUploadFileSize, maxUploadFileSizeUnit);
+		float maxTotalUploadFileSizeInByte = 
+				PortletUtil.convertSizeUnitToByte(maxTotalUploadFileSize, maxTotalUploadFileSizeUnit);
+		
 		if (size == 0) {
 			throw new FileSizeException();
-		} else if (size > 300000000) {
+		} else if (size > maxUploadFileSizeInByte && maxUploadFileSizeInByte > 0) {
+			throw new FileSizeException();
+		}
+		
+		List<DossierFile> dossierFileList = new ArrayList<DossierFile>();
+		if (dossierId > 0){
+			try {
+				dossierFileList = DossierFileLocalServiceUtil.getDossierFileByDossierId(dossierId);
+			} catch (Exception e){}
+		}
+		
+		float totalUploadFileSizeInByte = 0;
+		
+		if (!dossierFileList.isEmpty()){
+			for (DossierFile tempDossierFile : dossierFileList){
+				if (tempDossierFile.getRemoved() == 0){
+					long fileEntryId = tempDossierFile.getFileEntryId();
+					
+					DLFileEntry fileEntry = null;
+					try {
+						fileEntry = DLFileEntryLocalServiceUtil.getDLFileEntry(fileEntryId);
+					} catch (Exception e){}
+					
+					if (Validator.isNotNull(fileEntry)){
+						totalUploadFileSizeInByte += fileEntry.getSize();
+					}
+				}
+			}
+		}
+		
+		totalUploadFileSizeInByte += size;
+		
+		if (totalUploadFileSizeInByte > maxTotalUploadFileSizeInByte && maxTotalUploadFileSizeInByte > 0) {
 			throw new FileSizeException();
 		}
 	}
@@ -3220,6 +3338,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 		boolean requiredFlag = false;
 
+		List<Long> requiredDossierPartIds = new ArrayList<Long>();
+
 		if (dossierPartsLevel1 != null) {
 			for (DossierPart dossierPartLevel1 : dossierPartsLevel1) {
 				List<DossierPart> dossierParts = DossierMgtUtil
@@ -3243,17 +3363,18 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 							// TODO: handle exception
 						}
 
-						if (dossierFile == null) {
-							requiredFlag = true;
-							break;
-						}
+						requiredDossierPartIds = PortletUtil
+								.getDossierPartRequired(requiredDossierPartIds,
+										dossierPartLevel1, dossierPart,
+										dossierFile);
 
 					}
+
 				}
 			}
 		}
 
-		if (requiredFlag) {
+		if (requiredDossierPartIds != null && !requiredDossierPartIds.isEmpty()) {
 			throw new RequiredDossierPartException();
 		}
 	}
