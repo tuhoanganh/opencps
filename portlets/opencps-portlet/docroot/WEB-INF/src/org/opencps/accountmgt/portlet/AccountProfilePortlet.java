@@ -334,7 +334,7 @@ public class AccountProfilePortlet extends MVCPortlet {
 			AccountRegPortlet.validateBusiness(
 				businessId, StringPool.BLANK, StringPool.BLANK, enName,
 				shortName, address, representativeName, representativeRole,
-				cityId, districtId, wardId, 1, StringPool.BLANK);
+				cityId, districtId, wardId, 1, StringPool.BLANK, StringPool.BLANK);
 			city = DictItemLocalServiceUtil.getDictItem(cityId);
 
 			district = DictItemLocalServiceUtil.getDictItem(districtId);

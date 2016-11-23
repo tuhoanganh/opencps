@@ -79,6 +79,7 @@ public class HolidayCheckUtils {
 	 * @throws PortalException
 	 * @throws SystemException
 	 */
+
 	public static int getDayDelay(long processOrderId, long processWorkflowId) {
 
 		ActionHistory actionHistoryNewest = new ActionHistoryImpl();
