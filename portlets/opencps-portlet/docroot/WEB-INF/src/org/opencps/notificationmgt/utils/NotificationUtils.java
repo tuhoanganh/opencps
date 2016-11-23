@@ -96,9 +96,6 @@ public class NotificationUtils {
 
 		try {
 
-			// ProcessOrder processOrder =
-			// ProcessOrderLocalServiceUtil.getProcessOrder(message.getProcessOrderId());
-
 			title.append("[").append(message.getDossierId()).append("]").append(LanguageUtil.get(locale, event));
 
 			Layout layOut = null;
