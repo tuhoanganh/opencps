@@ -79,8 +79,8 @@ public class HolidayCheckUtils {
 	 * @throws PortalException
 	 * @throws SystemException
 	 */
-	public static int getDayDelay(long processOrderId, long processWorkflowId)
-		throws PortalException, SystemException {
+
+	public static int getDayDelay(long processOrderId, long processWorkflowId) {
 
 		ActionHistory actionHistoryNewest = new ActionHistoryImpl();
 
@@ -116,9 +116,8 @@ public class HolidayCheckUtils {
 				}
 			}
 		}
-		catch (PortalException e) {
+		catch (Exception e) {
 			// TODO Auto-generated catch block
-			_log.error(e);
 		}
 
 		return dayDelay;

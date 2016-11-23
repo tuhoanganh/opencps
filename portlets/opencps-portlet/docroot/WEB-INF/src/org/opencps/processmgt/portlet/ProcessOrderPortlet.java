@@ -33,6 +33,8 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletResponse;
 
 import org.opencps.accountmgt.NoSuchAccountException;
@@ -41,6 +43,7 @@ import org.opencps.accountmgt.NoSuchAccountOwnOrgIdException;
 import org.opencps.accountmgt.NoSuchAccountOwnUserIdException;
 import org.opencps.accountmgt.NoSuchAccountTypeException;
 import org.opencps.backend.message.SendToEngineMsg;
+import org.opencps.backend.util.BackendUtils;
 import org.opencps.dossiermgt.DuplicateFileGroupException;
 import org.opencps.dossiermgt.EmptyFileGroupException;
 import org.opencps.dossiermgt.NoSuchDossierException;
@@ -59,14 +62,15 @@ import org.opencps.dossiermgt.model.ServiceConfig;
 import org.opencps.dossiermgt.search.DossierDisplayTerms;
 import org.opencps.dossiermgt.search.DossierFileDisplayTerms;
 import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
+import org.opencps.dossiermgt.service.DossierFileLogLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
-import org.opencps.dossiermgt.service.DossierLogLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierTemplateLocalServiceUtil;
 import org.opencps.dossiermgt.service.FileGroupLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
 import org.opencps.dossiermgt.util.ActorBean;
 import org.opencps.jasperreport.util.JRReportUtil;
+import org.opencps.jasperreport.util.JRReportUtil.DocType;
 import org.opencps.pki.HashAlgorithm;
 import org.opencps.pki.Helper;
 import org.opencps.pki.PdfPkcs7Signer;
@@ -91,6 +95,7 @@ import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
 import org.opencps.usermgt.model.Employee;
 import org.opencps.util.AccountUtil;
+import org.opencps.util.BCYSignatureUtil;
 import org.opencps.util.DLFileEntryUtil;
 import org.opencps.util.DateTimeUtil;
 import org.opencps.util.MessageKeys;
@@ -100,6 +105,8 @@ import org.opencps.util.PortletPropsValues;
 import org.opencps.util.PortletUtil;
 import org.opencps.util.SignatureUtil;
 import org.opencps.util.WebKeys;
+
+import vgca.svrsigner.ServerSigner;
 
 import com.liferay.portal.RolePermissionsException;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -268,8 +275,19 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 			ActorBean actorBean = new ActorBean(actor,
 					serviceContext.getUserId());
+			
+			ProcessStep processStep = BackendUtils
+							.getProcessStepByDossierId(dossierId);
 
-			DossierLogLocalServiceUtil.addDossierLog(
+			DossierFileLogLocalServiceUtil.addFileLog(serviceContext
+				.getUserId(), actorBean.getActorName(), dossierId,
+				fileGroupId, processStep.getProcessStepId(), false,
+				displayName, 1, StringPool.BLANK,
+				PortletConstants.DOSSIER_FILE_ADD,
+				dossierFile != null ? dossierFile.getFileEntryId() : 0, WebKeys.ACTOR_EMPLOYEE);
+
+
+/*			DossierLogLocalServiceUtil.addDossierLog(
 					serviceContext.getUserId(),
 					serviceContext.getScopeGroupId(),
 					serviceContext.getCompanyId(), dossierId, fileGroupId,
@@ -282,7 +300,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 					actorBean.getActorName(),
 					ProcessOrderPortlet.class.getName()
 							+ ".addAttachmentFile()");
-
+*/
 			updated = true;
 
 			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
@@ -561,12 +579,14 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		} finally {
 
 			if (assignFormDisplayStyle.equals("popup") && sending) {
+
 				actionResponse
 						.setRenderParameter("jspPage",
 								"/html/portlets/processmgt/processorder/assign_to_user.jsp");
 				actionResponse.setRenderParameter("backURL", backURL);
 
 			} else if (assignFormDisplayStyle.equals("popup") && !sending) {
+
 				if (Validator.isNotNull(redirectURL)) {
 					actionResponse.sendRedirect(redirectURL);
 				}
@@ -674,8 +694,18 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 			ActorBean actorBean = new ActorBean(actor,
 					serviceContext.getUserId());
+			
+			ProcessStep processStep = BackendUtils
+						.getProcessStepByDossierId(dossierId);
 
-			DossierLogLocalServiceUtil
+				DossierFileLogLocalServiceUtil.addFileLog(serviceContext
+						.getUserId(), actorBean.getActorName(), dossierId,
+						fileGroupId, processStep.getProcessStepId(), false,
+						fileEntry.getTitle(), 1, StringPool.BLANK,
+						PortletConstants.DOSSIER_FILE_ADD,
+						dossierFile != null ? dossierFile.getFileEntryId() : 0, WebKeys.ACTOR_CITIZEN);
+
+/*			DossierLogLocalServiceUtil
 					.addDossierLog(
 							serviceContext.getUserId(),
 							serviceContext.getScopeGroupId(),
@@ -692,7 +722,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 							0, 0, actorBean.getActor(), actorBean.getActorId(),
 							actorBean.getActorName(),
 							ProcessOrderPortlet.class.getName()
-									+ ".cloneDossierFile()");
+									+ ".cloneDossierFile()");*/
 
 			updated = true;
 
@@ -776,8 +806,6 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 		try {
 
-			Dossier dossier = DossierLocalServiceUtil.fetchDossier(dossierId);
-
 			dossierFile = DossierFileLocalServiceUtil
 					.getDossierFile(dossierFileId);
 
@@ -805,8 +833,18 @@ public class ProcessOrderPortlet extends MVCPortlet {
 					serviceContext.getUserId());
 
 			long fileGroupId = 0;
+			
+			ProcessStep processStep =
+			    BackendUtils.getProcessStepByDossierId(dossierId);
 
-			DossierLogLocalServiceUtil
+			DossierFileLogLocalServiceUtil.addFileLog(
+			    serviceContext.getUserId(), actorBean.getActorName(),
+			    dossierId, fileGroupId, processStep.getProcessStepId(), false,
+			    fileEntry.getTitle(), 1, StringPool.BLANK,
+			    PortletConstants.DOSSIER_FILE_SIGN, dossierFile != null
+			        ? dossierFile.getFileEntryId() : 0, WebKeys.ACTOR_CITIZEN);
+
+/*			DossierLogLocalServiceUtil
 					.addDossierLog(
 							serviceContext.getUserId(),
 							serviceContext.getScopeGroupId(),
@@ -822,7 +860,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 							0, 0, actorBean.getActor(), actorBean.getActorId(),
 							actorBean.getActorName(),
 							ProcessOrderPortlet.class.getName()
-									+ ".addSignatureFile()");
+									+ ".addSignatureFile()");*/
 
 		} catch (Exception e) {
 
@@ -938,61 +976,44 @@ public class ProcessOrderPortlet extends MVCPortlet {
 					long fileGroupId = 0;
 					// Add new version
 					if (dossierFile.getFileEntryId() > 0) {
-						DossierFileLocalServiceUtil.addDossierFile(
+						DossierFile dossierFileAdded = DossierFileLocalServiceUtil.addDossierFile(
 								dossierFile.getDossierFileId(),
 								dossier.getFolderId(), sourceFileName,
 								mimeType, dossierFile.getDisplayName(),
 								StringPool.BLANK, StringPool.BLANK,
 								inputStream, file.length(), serviceContext);
 
-						// Add Log exportFile
-						DossierLogLocalServiceUtil.addDossierLog(
-								serviceContext.getUserId(),
-								serviceContext.getScopeGroupId(),
-								serviceContext.getCompanyId(),
-								dossierFile.getDossierId(),
-								fileGroupId,
-								dossier.getDossierStatus(),
-								PortletConstants.DOSSIER_ACTION_EXPORT_FILE,
-								PortletConstants.DOSSIER_ACTION_EXPORT_FILE
-										+ StringPool.SPACE + StringPool.COLON
-										+ StringPool.SPACE
-										+ dossierFile.getDisplayName(),
-								new Date(), 0, 0, actorBean.getActor(),
-								actorBean.getActorId(),
-								actorBean.getActorName(),
-								ProcessOrderPortlet.class.getName()
-										+ ".exportFile()");
+						ProcessStep processStep = BackendUtils
+								.getProcessStepByDossierId(dossierFileAdded.getDossierId());
+	
+						DossierFileLogLocalServiceUtil.addFileLog(serviceContext
+								.getUserId(), actorBean.getActorName(), dossierFileAdded.getDossierId(),
+								fileGroupId, processStep.getProcessStepId(), false,
+								dossierFileAdded.getDisplayName(), 1, StringPool.BLANK,
+								PortletConstants.DOSSIER_FILE_EXPORT,
+								dossierFile != null ? dossierFile.getFileEntryId() : 0, WebKeys.ACTOR_CITIZEN);
+
 
 					} else {
 						// Update version 1
-						DossierFileLocalServiceUtil.updateDossierFile(
+						DossierFile dossierFileAdd = DossierFileLocalServiceUtil.updateDossierFile(
 								dossierFileId, dossier.getFolderId(),
 								sourceFileName, mimeType,
 								dossierFile.getDisplayName(), StringPool.BLANK,
 								StringPool.BLANK, inputStream, file.length(),
 								serviceContext);
+						
+						
+						ProcessStep processStep =
+						    BackendUtils.getProcessStepByDossierId(dossierFileAdd.getDossierId());
 
-						// Update Log UpdateVersion File
-						DossierLogLocalServiceUtil
-								.addDossierLog(
-										serviceContext.getUserId(),
-										serviceContext.getScopeGroupId(),
-										serviceContext.getCompanyId(),
-										dossierFile.getDossierId(),
-										fileGroupId,
-										dossier.getDossierStatus(),
-										PortletConstants.DOSSIER_ACTION_UPDATE_VERSION_FILE,
-										PortletConstants.DOSSIER_ACTION_UPDATE_VERSION_FILE
-												+ StringPool.SPACE
-												+ StringPool.COLON
-												+ StringPool.SPACE
-												+ dossierFile.getDisplayName(),
-										new Date(), 0, 0, actorBean.getActor(),
-										actorBean.getActorId(),
-										actorBean.getActorName(),
-										ProcessOrderPortlet.class.getName()
-												+ ".updateVersionFile()");
+						DossierFileLogLocalServiceUtil.addFileLog(
+						    serviceContext.getUserId(), actorBean.getActorName(),
+						    dossierFileAdd.getDossierId(), fileGroupId, processStep.getProcessStepId(), false,
+						    dossierFileAdd.getDisplayName(), 1, StringPool.BLANK,
+						    PortletConstants.DOSSIER_FILE_SIGN, dossierFile != null
+						        ? dossierFile.getFileEntryId() : 0, WebKeys.ACTOR_CITIZEN);
+
 					}
 				}
 			}
@@ -1087,8 +1108,19 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				long fileGroupId = 0;
 
 				// Add DossierLog Delete File
+				
+				ProcessStep processStep =
+				    BackendUtils.getProcessStepByDossierId(dossier.getDossierId());
 
-				DossierLogLocalServiceUtil.addDossierLog(
+				DossierFileLogLocalServiceUtil.addFileLog(
+				    serviceContext.getUserId(), actorBean.getActorName(),
+				    dossier.getDossierId(), fileGroupId, processStep.getProcessStepId(),
+				    false, dossierFile.getDisplayName(), 1, StringPool.BLANK,
+				    PortletConstants.DOSSIER_FILE_REMOVE, dossierFile != null
+				        ? dossierFile.getFileEntryId() : 0,
+				    WebKeys.ACTOR_CITIZEN);
+
+/*				DossierLogLocalServiceUtil.addDossierLog(
 						serviceContext.getUserId(),
 						serviceContext.getScopeGroupId(),
 						serviceContext.getCompanyId(),
@@ -1104,7 +1136,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 						actorBean.getActorName(),
 						ProcessOrderPortlet.class.getName()
 								+ ".delDossierFile()");
-
+*/
 			}
 
 		} catch (Exception e) {
@@ -1392,6 +1424,23 @@ public class ProcessOrderPortlet extends MVCPortlet {
 	}
 
 	/**
+	 * @param jrxmlTemplate
+	 * @param formData
+	 * @param map
+	 * @param outputDestination
+	 * @param fileName
+	 * @param docType
+	 * @return
+	 */
+	protected String exportReportFile(String jrxmlTemplate, String formData,
+			Map<String, Object> map, String outputDestination, String fileName,
+			DocType docType) {
+
+		return JRReportUtil.createReportFile(jrxmlTemplate, formData, map,
+				outputDestination, fileName, docType);
+	}
+
+	/**
 	 * @param path
 	 * @param renderRequest
 	 * @param renderResponse
@@ -1548,8 +1597,17 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			long fileGroupId = 0;
 
 			// Add DossierLog Delete File
+			ProcessStep processStep =
+			    BackendUtils.getProcessStepByDossierId(dossier.getDossierId());
 
-			DossierLogLocalServiceUtil.addDossierLog(
+			DossierFileLogLocalServiceUtil.addFileLog(
+			    serviceContext.getUserId(), actorBean.getActorName(),
+			    dossier.getDossierId(), fileGroupId, processStep.getProcessStepId(), false,
+			    dossierFile.getDisplayName(), 1, StringPool.BLANK,
+			    PortletConstants.DOSSIER_FILE_REMOVE, dossierFile != null
+			        ? dossierFile.getFileEntryId() : 0, WebKeys.ACTOR_CITIZEN);
+
+/*			DossierLogLocalServiceUtil.addDossierLog(
 					serviceContext.getUserId(),
 					serviceContext.getScopeGroupId(),
 					serviceContext.getCompanyId(), dossierFile.getDossierId(),
@@ -1560,7 +1618,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 							+ StringPool.SPACE + dossierFile.getDisplayName(),
 					new Date(), 0, 0, actorBean.getActor(),
 					actorBean.getActorId(), actorBean.getActorName(),
-					ProcessOrderPortlet.class.getName() + ".delDossierFile()");
+					ProcessOrderPortlet.class.getName() + ".delDossierFile()");*/
 
 			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 
@@ -1761,6 +1819,28 @@ public class ProcessOrderPortlet extends MVCPortlet {
 						formData, fileEntryId, dossierFileMark,
 						dossierFileType, dossierFileNo, dossierFileDate,
 						original, syncStatus, serviceContext);
+				
+				int actor = 0;
+
+				if (accountBean.isEmployee()) {
+					actor = 2;
+				} else if (accountBean.isBusiness() || accountBean.isCitizen()) {
+					actor = 1;
+				}
+
+				ActorBean actorBean = new ActorBean(actor,
+						serviceContext.getUserId());
+
+				ProcessStep processStep = BackendUtils
+						.getProcessStepByDossierId(dossierId);
+
+				DossierFileLogLocalServiceUtil.addFileLog(serviceContext
+						.getUserId(), actorBean.getActorName(), dossierId,
+						fileGroupId, processStep.getProcessStepId(), false,
+						displayName, 1, StringPool.BLANK,
+						PortletConstants.DOSSIER_FILE_UPDATE,
+						dossierFile != null ? dossierFile.getFileEntryId() : 0, WebKeys.ACTOR_CITIZEN);
+
 			}
 
 			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
@@ -2402,4 +2482,240 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 		this._hasPermission = hasPermission;
 	}
+
+	// PKI old
+	public void serveResource(ResourceRequest resourceRequest,
+			ResourceResponse resourceResponse) throws IOException,
+			PortletException {
+		try {
+			String type = ParamUtil.getString(resourceRequest, "type");
+			if (type != null && type.trim().equals("getComputerHash")) {
+				getComputerHash(resourceRequest, resourceResponse);
+			}
+		} catch (Exception e) {
+			_log.error(e);
+		}
+	}
+
+	public void getComputerHash(ResourceRequest resourceRequest,
+			ResourceResponse resourceResponse) throws IOException {
+
+		try {
+			// loop for mutil file
+			int symbolType = ParamUtil
+					.getInteger(resourceRequest, "symbolType");
+			int index = ParamUtil.getInteger(resourceRequest, "index");
+
+			long fileId = ParamUtil.getLong(resourceRequest, "fileId");
+			long dossierFileId = ParamUtil.getLong(resourceRequest,
+					"dossierFileId");
+			long dossierPartId = ParamUtil.getLong(resourceRequest,
+					"dossierPartId");
+
+			long indexSize = ParamUtil.getLong(resourceRequest, "indexSize");
+
+			FileEntry fileEntry = DLFileEntryUtil.getFileEntry(fileId);
+
+			BCYSignatureUtil.getComputerHash(resourceRequest, resourceResponse,
+					fileEntry, symbolType, dossierFileId, dossierPartId, index,
+					indexSize);
+
+		} catch (Exception e) {
+
+			_log.error(e);
+		}
+	}
+
+	public void signatureBCY(ActionRequest actionRequest,
+			ActionResponse actionResponse) {
+		String sign = ParamUtil.getString(actionRequest, "sign");
+		String signFieldName = ParamUtil.getString(actionRequest,
+				"signFieldName");
+		String filePath = ParamUtil.getString(actionRequest, "filePath");
+		// String fileName = ParamUtil.getString(actionRequest, "fileName");
+		// long dossierId = ParamUtil.getLong(actionRequest, "dossierId");
+		long dossierFileId = ParamUtil.getLong(actionRequest, "dossierFileId");
+		// long dossierPartId = ParamUtil.getLong(actionRequest,
+		// "dossierPartId");
+		File file = null;
+		JSONObject jsonFeed = JSONFactoryUtil.createJSONObject();
+		if (Validator.isNotNull(sign)) {
+			byte[] signature = Base64.decode(sign);
+
+			try {
+				ServerSigner signer = new ServerSigner(filePath, null);
+				signer.completeSign(signature, signFieldName);
+				if (filePath.endsWith(".pdf")) {
+					filePath = filePath.substring(0,
+							filePath.lastIndexOf(".pdf"))
+							+ ".signed.pdf";
+				} else {
+					filePath = filePath + ".signed.pdf";
+				}
+
+				file = new File(filePath);
+
+				InputStream is = new FileInputStream(file);
+
+				// upload to server dossierfile update
+				ServiceContext serviceContext = ServiceContextFactory
+						.getInstance(actionRequest);
+				serviceContext.setAddGroupPermissions(true);
+				serviceContext.setAddGuestPermissions(true);
+				// String mimeType = MimeTypesUtil.getContentType(file);
+				DossierFile dossierFile = DossierFileLocalServiceUtil
+						.fetchDossierFile(dossierFileId);
+
+				serviceContext.setAddGroupPermissions(true);
+				serviceContext.setAddGuestPermissions(true);
+				_log.info("serviceContext.getScopeGroupId()"
+						+ serviceContext.getScopeGroupId());
+
+				dossierFile = DossierFileLocalServiceUtil
+						.getDossierFile(dossierFileId);
+
+				FileEntry fileEntry = DLAppServiceUtil.getFileEntry(dossierFile
+						.getFileEntryId());
+
+				DossierFileLocalServiceUtil.addSignDossierFile(dossierFileId,
+						true, fileEntry.getFolderId(), file.getName(),
+						fileEntry.getMimeType(), fileEntry.getTitle()
+								+ "signed", fileEntry.getDescription(),
+						StringPool.BLANK, is, file.length(), serviceContext);
+
+				jsonFeed.put("msg", "success");
+
+			} catch (Exception e) {
+				jsonFeed.put("msg", "error");
+				_log.error(e);
+			} finally {
+				if (Validator.isNotNull(file) && file.exists()) {
+					file.delete();
+				}
+				try {
+					PortletUtil.writeJSON(actionRequest, actionResponse,
+							jsonFeed.toString());
+				} catch (Exception e) {
+					_log.error(e);
+				}
+			}
+		} else {
+			_log.info("Cannot sign the file: " + filePath);
+		}
+	}
+
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws IOException
+	 */
+	public void exportReport(ActionRequest actionRequest,
+			ActionResponse actionResponse) throws IOException {
+
+		AccountBean accountBean = AccountUtil.getAccountBean(actionRequest);
+
+		long dossierFileId = ParamUtil.getLong(actionRequest,
+				DossierFileDisplayTerms.DOSSIER_FILE_ID);
+
+		String docType = ParamUtil.getString(actionRequest, "docType");
+
+		InputStream inputStream = null;
+
+		File file = null;
+
+		//JSONObject responseJSON = JSONFactoryUtil.createJSONObject();
+
+		String fileExportDir = StringPool.BLANK;
+
+		try {
+			validateCreateDynamicForm(dossierFileId, accountBean);
+
+			ServiceContext serviceContext = ServiceContextFactory
+					.getInstance(actionRequest);
+			serviceContext.setAddGroupPermissions(true);
+			serviceContext.setAddGuestPermissions(true);
+
+			// Get dossier file
+			DossierFile dossierFile = DossierFileLocalServiceUtil
+					.getDossierFile(dossierFileId);
+
+			// Get dossier part
+			DossierPart dossierPart = DossierPartLocalServiceUtil
+					.getDossierPart(dossierFile.getDossierPartId());
+
+			String formData = dossierFile.getFormData();
+			String jrxmlTemplate = dossierPart.getFormReport();
+
+			// Validate json string
+
+			JSONFactoryUtil.createJSONObject(formData);
+
+			String outputDestination = PortletPropsValues.OPENCPS_FILE_SYSTEM_TEMP_DIR;
+			String fileName = System.currentTimeMillis() + StringPool.DASH
+					+ dossierFileId + StringPool.DASH
+					+ dossierPart.getDossierpartId() + docType;
+
+			DocType type = DocType.getEnum(docType);
+
+			fileExportDir = exportReportFile(jrxmlTemplate, formData, null,
+					outputDestination, fileName, type);
+
+			if (Validator.isNotNull(fileExportDir)) {
+
+				file = new File(fileExportDir);
+				inputStream = new FileInputStream(file);
+				String mimeType = MimeTypesUtil.getContentType(file);
+
+				PortletUtil.sendFile(actionRequest, actionResponse, fileName,
+						inputStream, file.length(), mimeType);
+
+			}
+
+			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
+
+		} catch (Exception e) {
+			if (e instanceof NoSuchDossierFileException) {
+				SessionErrors.add(actionRequest,
+						NoSuchDossierFileException.class);
+			} else if (e instanceof NoSuchAccountException) {
+				SessionErrors.add(actionRequest, NoSuchAccountException.class);
+			} else if (e instanceof NoSuchAccountTypeException) {
+				SessionErrors.add(actionRequest,
+						NoSuchAccountTypeException.class);
+			} else if (e instanceof NoSuchAccountFolderException) {
+				SessionErrors.add(actionRequest,
+						NoSuchAccountFolderException.class);
+			} else if (e instanceof NoSuchAccountOwnUserIdException) {
+				SessionErrors.add(actionRequest,
+						NoSuchAccountOwnUserIdException.class);
+			} else if (e instanceof NoSuchAccountOwnOrgIdException) {
+				SessionErrors.add(actionRequest,
+						NoSuchAccountOwnOrgIdException.class);
+			} else if (e instanceof PermissionDossierException) {
+				SessionErrors.add(actionRequest,
+						PermissionDossierException.class);
+			} else if (e instanceof DuplicateFileException) {
+				SessionErrors.add(actionRequest, DuplicateFileException.class);
+			} else if (e instanceof RolePermissionsException) {
+				SessionErrors
+						.add(actionRequest, RolePermissionsException.class);
+			} else {
+				SessionErrors.add(actionRequest, PortalException.class);
+			}
+
+			_log.error(e);
+		} finally {
+			//responseJSON.put("fileExportDir", fileExportDir);
+			//PortletUtil.writeJSON(actionRequest, actionResponse, responseJSON);
+
+			if (inputStream != null) {
+				inputStream.close();
+			}
+
+			if (file.exists()) {
+				file.delete();
+			}
+		}
+	}
+
 }

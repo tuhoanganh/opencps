@@ -17,7 +17,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
+<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
+<%@page import="java.util.List"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
+<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
+<%@page import="javax.portlet.PortletRequest"%>
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
@@ -51,6 +58,8 @@
 
 	DossierPart dossierPart =
 		(DossierPart) request.getAttribute(WebKeys.DOSSIER_PART_ENTRY);
+	
+	List<DossierFile> dossierFiles = new ArrayList<DossierFile>();
 
 	String backURL = ParamUtil.getString(request, "backURL");
 
@@ -62,12 +71,7 @@
 	} : new String[] {
 		"dossier_info"
 	};
-		
-	// show only 2 tab dossier_part & info on create new dossier
-	//if(cmd.equals(Constants.ADD)){
-	//	dossierSections = new String[]{"dossier_part", "dossier_info"};
-	//}
-	
+
 	String[][] categorySections = {
 		dossierSections
 	};
@@ -95,6 +99,17 @@
 	catch (Exception e) {
 
 	}
+	
+	try {
+		if(Validator.isNotNull(dossier)) {
+			dossierFiles = DossierFileLocalServiceUtil.getDossierFileByDossierId(dossier.getDossierId());
+		}
+	} catch (Exception e) {
+		
+	}
+
+	boolean quickCreateDossier = dossier == null ? true : false;
+
 %>
 
 <liferay-ui:error 
@@ -119,6 +134,10 @@
 	/>
 </liferay-portlet:renderURL>
 
+<portlet:actionURL var="deleteDossierSuggesstionURL" name="deleteDossierSuggesstion">
+	<portlet:param name="dossierId" value='<%= Validator.isNotNull(dossier) ? String.valueOf(dossier.getDossierId()) : "0"%>'/>
+	<portlet:param name="currentURL" value="<%=currentURL %>"/>
+</portlet:actionURL>
 <portlet:actionURL var="updateDossierStatusURL" name="updateDossierStatus">
 	<portlet:param 
 		name="<%=DossierDisplayTerms.DOSSIER_ID %>" 
@@ -160,6 +179,8 @@
 		/>
 
 		<portlet:actionURL var="updateDossierURL" name="updateDossier" />
+		
+		<portlet:actionURL var="quickUpdateDossierURL" name="quickUpdateDossier"/>
 
 		<liferay-util:buffer var="htmlTop">
 			<c:if test="<%= dossier != null %>">
@@ -175,7 +196,9 @@
 		<liferay-util:buffer var="htmlBottom">
 
 			<c:if test="<%= cmd.equals(Constants.VIEW) ? false : true %>">
+				
 				<c:if test="<%=Validator.isNotNull(dossier)%>">
+					
 					<c:if test="<%=DossierPermission.contains(permissionChecker, scopeGroupId, ActionKeys.UPDATE) %>">
 						<c:if test="<%=dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_NEW) || 
 									dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_WAITING)%>">
@@ -183,12 +206,30 @@
 							<%
 								String jsUpdateDossierStatus = "javascript:" + renderResponse.getNamespace() + "updateDossierStatus()";
 							%>
-
 							<c:if test="<%=dossier.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_NEW) %>">
+							
+								<c:choose>
+									<c:when test="<%= dossierFiles.size() == 0 %>">
+										<aui:button 
+											cssClass="btn des-sub-button radius20"
+											name="submitDossierSuggestion" 
+											value="dossier-suggestion">
+										</aui:button>
+									</c:when>
+									<c:otherwise>
+										<liferay-ui:icon-delete 
+											image="undo"
+											cssClass="search-container-action fa delete"
+											confirmation="are-you-sure-cancel-entry" message="delete-dossier-file"
+											url="<%=deleteDossierSuggesstionURL.toString() %>"
+										/>
+									</c:otherwise>
+								</c:choose>
+								
 								<liferay-ui:icon 
 									cssClass="search-container-action fa forward"
 									image="forward" message="send"
-									url="<%=jsUpdateDossierStatus %>" 
+									url="<%=jsUpdateDossierStatus %>"
 								/>
 							</c:if>
 
@@ -247,7 +288,7 @@
 						<liferay-ui:icon-delete 
 							image="delete"
 							cssClass="search-container-action fa delete"
-							confirmation="are-you-sure-delete-entry" message="delete"
+							confirmation="are-you-sure-delete-entry" message="delete-dossier"
 							url="<%=deleteDossierURL.toString() %>" 
 						/>
 					</c:if>
@@ -266,7 +307,7 @@
 
 		</liferay-util:buffer>
 
-		<aui:form name="fm" action="<%=updateDossierURL %>" method="post">
+		<aui:form name="fm" action="<%=dossier != null ? updateDossierURL : quickUpdateDossierURL %>" method="post">
 
 			<aui:model-context bean="<%= dossier %>" model="<%= Dossier.class %>" />
 
@@ -377,6 +418,27 @@
 				/>
 			</div>
 		</aui:form>
+
+		<aui:script use="aui-loading-mask-deprecated">
+			AUI().ready(function(A){
+				
+				var allowQuickCreateDossier = '<%=allowQuickCreateDossier%>'
+				var quickCreateDossier = '<%=quickCreateDossier%>';
+				
+				if(quickCreateDossier ==='true' && allowQuickCreateDossier ==='true'){
+					var loadingMask = new A.LoadingMask(
+						{
+							'strings.loading': '<%= UnicodeLanguageUtil.get(pageContext, "rending...") %>',
+							target: A.one('#<portlet:namespace/>fm')
+						}
+					);
+					
+					loadingMask.show();
+					submitForm(document.<portlet:namespace />fm);
+				}
+			});
+		</aui:script>
+
 	</c:when>
 
 	<c:otherwise>
@@ -388,45 +450,66 @@
 </c:choose>
 
 <aui:script>
-	Liferay.provide(
-		window,
-		'<portlet:namespace/>updateDossierStatus',
-		function(actionURL) {
-			var A = AUI(); 
-			
-			var required = false;
-			
-			var requiredDossierParts = A.all('#<portlet:namespace/>requiredDossierPart');
-			
-			if(requiredDossierParts) {
+	
+	AUI().ready(function(A){
+		var submitDossierSuggestion = A.one("#<portlet:namespace/>submitDossierSuggestion")
+		if(submitDossierSuggestion) {
+			submitDossierSuggestion.on('click', function() {
 				
-				requiredDossierParts.each(function(requiredDossierPart){
-					var requiredDossierPartIds = requiredDossierPart.val().trim().split(",");
-					console.log(dossierPartId);
-					if(requiredDossierPartIds != ''){
-						for(var i = 0; i < requiredDossierPartIds.length; i++){
-							var dossierPartId = requiredDossierPartIds[i];
-							
-							if(parseInt(dossierPartId) > 0){
-								required = true;
-								var row = A.one('.dossier-part-row.dpid-' + dossierPartId);
-								if(row){
-									row.attr('style', 'color:red');
+				var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
+				portletURL.setParameter("mvcPath", "/html/portlets/dossiermgt/frontoffice/dossier_suggestion.jsp");
+				portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>"); 
+				portletURL.setPortletMode("normal");
+				portletURL.setParameter("dossierId", '<%= Validator.isNotNull(dossier) ? String.valueOf(dossier.getDossierId()) : "0" %>');
+				portletURL.setParameter("serviceConfigId", '<%= Validator.isNotNull(serviceConfig) ? String.valueOf(serviceConfig.getServiceConfigId()) : "0" %>');
+				portletURL.setParameter("dossierPartId", '<%= Validator.isNotNull(dossierPart) ? String.valueOf(dossierPart.getDossierpartId()) : "0" %>');
+				
+				openDialog(portletURL.toString(), 'submit-dossier-suggesstion', Liferay.Language.get("submit-dossier-suggesstion"));
+			});
+		}
+	});
+	
+	Liferay.provide(
+			window,
+			'<portlet:namespace/>updateDossierStatus',
+				function(actionURL) {
+					var A = AUI(); 
+					
+					var required = false;
+					
+					var requiredDossierParts = A.all('#<portlet:namespace/>requiredDossierPart');
+					
+					if(requiredDossierParts) {
+						
+						requiredDossierParts.each(function(requiredDossierPart){
+							var requiredDossierPartIds = requiredDossierPart.val().trim().split(",");
+							console.log(dossierPartId);
+							if(requiredDossierPartIds != ''){
+								for(var i = 0; i < requiredDossierPartIds.length; i++){
+									var dossierPartId = requiredDossierPartIds[i];
+									console.log(dossierPartId);
+									if(parseInt(dossierPartId) > 0){
+										required = true;
+										var row = A.one('.dossier-part-row.dpid-' + dossierPartId);
+										if(row){
+											row.attr('style', 'color:red');
+										}
+									}
 								}
 							}
+						});
+						
+						
+						if(required === true) {
+							alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-required-before-send") %>');
+						} else {
+							location.href = '<%= updateDossierStatusURL %>';
 						}
 					}
-				});
-				
-				
-				if(required === true) {
-					alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-required-before-send") %>');
-				} else {
-					location.href = '<%= updateDossierStatusURL %>';
-				}
-			}
-		},['aui-base']
+				},
+			['aui-base']
 	);
+	
 </aui:script>
 
 <%!

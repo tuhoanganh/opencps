@@ -1,6 +1,4 @@
 
-<%@page import="org.opencps.dossiermgt.service.impl.DossierFileLocalServiceImpl"%>
-<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -19,15 +17,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
 <%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
-<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
-<%@page import="org.opencps.dossiermgt.search.DossierPartDisplayTerms"%>
-<%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
+<%@page import="org.opencps.util.WebKeys"%>
+<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
 
 <%@ include file="/init.jsp"%>
 
@@ -62,6 +59,9 @@
 	
 	boolean showVersionItemReference = ParamUtil.getBoolean(request, "showVersionItemReference", true);
 	
+	boolean readOnly = false;
+	readOnly = ParamUtil.getBoolean(request,WebKeys.READ_ONLY);
+	
 	String groupName = ParamUtil.getString(request, DossierFileDisplayTerms.GROUP_NAME);
 	
 	int version  = 0;
@@ -81,6 +81,7 @@
 				}else{
 					version = DossierFileLocalServiceUtil.countDossierFileByDID_DP(dossierId, dossierPartId);
 				}
+				
 			}
 			
 		}catch(Exception e){}
@@ -95,7 +96,7 @@
 				<td width="80%" align="right">
 					<c:choose>
 						<c:when test="<%=isDynamicForm && fileEntryId <= 0 && isOnlineData <= 0%>">
-							<c:if test="<%=isEditDossier %>">
+							<c:if test="<%=isEditDossier%>">
 								<aui:a 
 									id="<%=String.valueOf(dossierPartId) %>"
 									dossier="<%=String.valueOf(dossierId) %>"
@@ -156,7 +157,7 @@
 									/>
 								</c:when>
 								<c:otherwise>
-									<c:if test="<%=isEditDossier %>">
+									<c:if test="<%=isEditDossier && readOnly == false %>">
 										<aui:a 
 											id="<%=String.valueOf(dossierPartId) %>"
 											dossier="<%=String.valueOf(dossierId) %>"
@@ -200,7 +201,7 @@
 				</td>
 				
 				<td width="10%" align="right">
-					<c:if test="<%=isEditDossier %>">
+					<c:if test="<%=isEditDossier && readOnly == false%>">
 						<aui:a
 							cssClass="opencps dossiermgt part-file-ctr remove-dossier-file"
 							dossier-part="<%=String.valueOf(isChildDossierPart ? childDossierPartId : dossierPartId) %>"
@@ -220,7 +221,7 @@
 			
 			<c:when test="<%=(partType == PortletConstants.DOSSIER_PART_TYPE_OTHER || partType==PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT) && level == 0 %>">
 				<td width="80%" align="right">
-					<c:if test="<%=isEditDossier %>">
+					<c:if test="<%=isEditDossier && readOnly == false%>">
 						<aui:a 
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier="<%=String.valueOf(dossierId) %>"
@@ -261,7 +262,7 @@
 							/>
 						</c:when>
 						<c:otherwise>
-							<c:if test="<%=isEditDossier %>">
+							<c:if test="<%=isEditDossier && readOnly == false%>">
 								<aui:a 
 									id="<%=String.valueOf(dossierPartId) %>"
 									dossier="<%=String.valueOf(dossierId) %>"
@@ -303,7 +304,7 @@
 				</td>
 				
 				<td width="10%" align="right">
-					<c:if test="<%=isEditDossier %>">
+					<c:if test="<%=isEditDossier && readOnly == false%>">
 						<aui:a 
 							cssClass="opencps dossiermgt part-file-ctr remove-dossier-file"
 							dossier-part="<%=String.valueOf(isChildDossierPart ? childDossierPartId : dossierPartId) %>"
@@ -331,7 +332,7 @@
 					
 				</td>
 				<td width="10%" align="right">
-					<c:if test="<%=isEditDossier %>">
+					<c:if test="<%=isEditDossier && readOnly == false%>">
 						<aui:a 
 							id="<%=String.valueOf(dossierPartId) %>"
 							dossier="<%=String.valueOf(dossierId) %>"
@@ -381,7 +382,7 @@
 							/>
 						</c:when>
 						<c:otherwise>
-							<c:if test="<%=isEditDossier %>">
+							<c:if test="<%=isEditDossier && readOnly == false%>">
 								<aui:a 
 									id="<%=String.valueOf(dossierPartId) %>"
 									dossier="<%=String.valueOf(dossierId) %>"
@@ -423,7 +424,7 @@
 				</td>
 				
 				<td width="10%" align="right">
-					<c:if test="<%=isEditDossier %>">
+					<c:if test="<%=isEditDossier && readOnly == false%>">
 						<aui:a 
 							cssClass="opencps dossiermgt part-file-ctr remove-dossier-file"
 							dossier-file="<%=String.valueOf(dossierFileId) %>"
@@ -446,7 +447,7 @@
 				<td width="80%" align="right">
 					<c:choose>
 						<c:when test="<%=isDynamicForm && fileEntryId <= 0  %>">
-							<c:if test="<%=isEditDossier %>">
+							<c:if test="<%=isEditDossier%>">
 								<aui:a 
 									id="<%=String.valueOf(dossierPartId) %>"
 									dossier="<%=String.valueOf(dossierId) %>"
@@ -520,7 +521,7 @@
 									/>
 								</c:when>
 								<c:otherwise>
-									<c:if test="<%=isEditDossier %>">
+									<c:if test="<%=isEditDossier && readOnly == false%>">
 										<aui:a 
 											id="<%=String.valueOf(dossierPartId) %>"
 											dossier="<%=String.valueOf(dossierId) %>"
@@ -564,7 +565,7 @@
 				</td>
 				
 				<td width="10%" align="right">
-					<c:if test="<%=isEditDossier %>">
+					<c:if test="<%=isEditDossier && readOnly == false%>">
 						<aui:a
 							cssClass="opencps dossiermgt part-file-ctr remove-dossier-file"
 							process-order="<%=String.valueOf(processOrderId) %>"

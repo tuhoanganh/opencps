@@ -266,6 +266,18 @@ public class UserActionMsg {
     	this.actionNote = actionNote;
     }
 
+	
+    public long getProcessWorkflowId() {
+    
+    	return processWorkflowId;
+    }
+
+	
+    public void setProcessWorkflowId(long processWorkflowId) {
+    
+    	this.processWorkflowId = processWorkflowId;
+    }
+
 	protected long paymentFileId;
 	protected String noReceptionNo;
 	protected long groupId;
@@ -280,5 +292,6 @@ public class UserActionMsg {
 	protected String dossierOId;
 	protected String dossierStatus;
 	protected String actionNote;
+	protected long processWorkflowId;
 
 }

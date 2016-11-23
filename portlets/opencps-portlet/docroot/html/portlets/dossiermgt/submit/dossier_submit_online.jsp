@@ -16,6 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="javax.portlet.WindowState"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
@@ -37,7 +38,6 @@
 <%@page import="org.opencps.servicemgt.model.ServiceInfo"%>
 
 <%@ include file="init.jsp"%>
-
 <%
 	
 	String backURL1 = ParamUtil.getString(request, "backURL");

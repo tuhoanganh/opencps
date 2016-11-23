@@ -89,7 +89,9 @@
 					urlDownload = DossierMgtUtil.getURLDownloadTemplateFile(themeDisplay, dossierPart.getTemplateFileNo());
 					
 					%>
+
 						<div class='<%="opencps dossiermgt dossier-part-row r-" + index + StringPool.SPACE + "dpid-" + String.valueOf(dossierPart.getDossierpartId())%>'>
+
 							<span class='<%="level-" + level + " opencps dossiermgt dossier-part"%>'>
 								<span class="row-icon">
 								
@@ -181,10 +183,11 @@
 					<%
 					index++;
 				}
-				
+
 				%>
 					<aui:input name="requiredDossierPart" type="hidden" value="<%= StringUtil.merge(requiredDossierPartIds) %>"/>
 				<%
+
 			%>
 		</c:when>
 		<c:otherwise>
