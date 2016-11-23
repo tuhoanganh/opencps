@@ -747,13 +747,6 @@
 		<field name="paymentGateId" type="long" />
 		<field name="paymentGateName" type="String" />
 	</model>
-	<model name="org.opencps.paymentmgt.model.PaymentStatusCode">
-		<field name="paymentStatusCodeId" type="long" />
-		<field name="statusCode" type="String" />
-		<field name="statusCodeMean" type="String" />
-		<field name="descripton" type="String" />
-		<field name="paymentGateId" type="String" />
-	</model>
 	<model name="org.opencps.api.model.ApiService">
 		<field name="apiLogId" type="long" />
 		<field name="companyId" type="long" />

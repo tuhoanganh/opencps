@@ -105,7 +105,7 @@
 							<div class="span2 bold-label">
 								<liferay-ui:message key="dossier-numb-top"/>
 							</div>
-							<div class="span6">
+							<div class="span10">
 								<%=dossier.getReceptionNo() %>
 							</div>
 						</div>
@@ -117,7 +117,7 @@
 							 <liferay-ui:message key="name-of-service"/>
 						</div>
 						
-						<div class="span9">
+						<div class="span10">
 							<%=serviceName %>
 						</div>
 					</div>
@@ -128,7 +128,7 @@
 				<div class="row-fluid">
 					
 					<div class="span5 bold-label"><liferay-ui:message key="boss-of-dossier"/></div>
-					<div class="span6">
+					<div class="span7">
 						<%=dossierName %>
 					</div>
 				</div>
@@ -139,7 +139,7 @@
 						 <liferay-ui:message key="date-for-receiving"/>
 					</div>
 					
-					<div class="span6">
+					<div class="span7">
 						<%=DateTimeUtil.convertDateToString(dossier.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT) %>
 					</div>
 				</div>

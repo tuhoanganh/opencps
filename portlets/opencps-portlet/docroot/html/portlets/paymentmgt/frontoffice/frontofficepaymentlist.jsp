@@ -336,20 +336,7 @@
 </div>
 </aui:form>
 
-<style>
-.table.payment tr td:nth-child(2){
-   max-width: 600px;
-}
-.table.payment tr td:nth-child(3){
-   max-width: 300px;
-}
-.table.payment tr td:nth-child(4){
-   width: 190px;
-}
-.table.payment tr td a.button{
-	width: 145px !important;
-}
-</style>
+
 <portlet:actionURL var="requestBankPaymentURL" windowState="normal" name="requestBankPaymentItems"/>
 <aui:script>
     AUI().ready(function(A) {
