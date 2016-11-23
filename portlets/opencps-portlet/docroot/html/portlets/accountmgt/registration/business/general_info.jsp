@@ -1,3 +1,4 @@
+<%@page import="java.util.Date"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -98,6 +99,8 @@
 		_log.error(e);
 	}
 	
+	Date defaultBirthDate = DateTimeUtil.convertStringToDate("01/01/1970");
+	PortletUtil.SplitDate spd = new PortletUtil.SplitDate(defaultBirthDate);
 %>
 
 <aui:model-context bean="<%=business%>" model="<%=Business.class%>" />
@@ -141,6 +144,29 @@
 			<aui:validator name="required" />
 			<aui:validator name="maxLength">100</aui:validator>
 		</aui:input>
+	</aui:col>
+	
+	<aui:col width="50">
+		<label class="control-label custom-lebel" for='<portlet:namespace/><%=BusinessDisplayTerms.BUSINESS_DATE_OF_IDNUMBER %>'>
+				<liferay-ui:message key="birth-date-full"/>
+			</label>
+			<liferay-ui:input-date 
+				nullable="true"
+				dayParam="<%=BusinessDisplayTerms.DATE_DAY %>"
+				dayValue="<%= spd.getDayOfMoth() %>"
+				monthParam="<%=BusinessDisplayTerms.DATE_MONTH %>"
+				monthValue="<%= spd.getMonth() %>"
+				name="<%=BusinessDisplayTerms.BUSINESS_DATE_OF_IDNUMBER %>"
+				yearParam="<%=BusinessDisplayTerms.DATE_YEAR %>"
+				yearValue="<%= spd.getYear() %>"
+				formName="fm"
+				autoFocus="<%=true %>"
+				cssClass="input100"
+			/>
+			
+			<div  id="<portlet:namespace/>defErrBirthDate" style="text-align: left; color: #b50303; margin-left:7px; margin-bottom: 10px; display: none;">
+			<liferay-ui:message key="required-field"/>
+		</div>
 	</aui:col>
 </aui:row>
 

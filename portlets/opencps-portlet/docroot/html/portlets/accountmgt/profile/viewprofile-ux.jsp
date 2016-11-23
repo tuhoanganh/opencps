@@ -286,6 +286,18 @@
 									
 									<aui:row>
 										<aui:col width="30">
+											<label><liferay-ui:message key="date-of-id-number" /></label>
+										</aui:col>
+										<aui:col width="50">
+											<div><%=String.valueOf(business.getDateOfIdNumber()) %></div>
+										</aui:col>
+										<aui:col width="20">
+											<a href="<%=editProfile.toString() %>" class="fix"><liferay-ui:message key="edit"/></a>
+										</aui:col>
+									</aui:row>
+									
+									<aui:row>
+										<aui:col width="30">
 											<label><liferay-ui:message key="en-name" /></label>
 										</aui:col>
 										<aui:col width="50">
