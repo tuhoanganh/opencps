@@ -1,3 +1,6 @@
+<%@page import="org.opencps.processmgt.model.ProcessOrder"%>
+<%@page import="java.util.Date"%>
+<%@page import="org.opencps.holidayconfig.util.HolidayCheckUtils"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -61,6 +64,10 @@
 	headerNames.add("action");
 	
 	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
+	
+	ProcessOrder order = null;
+	ProcessStep step = null;
+	int dateOver = 0;
 %>
 
 <c:if test="<%=stopRefresh %>">
@@ -117,8 +124,14 @@
 						processURL.setParameter(ProcessOrderDisplayTerms.PROCESS_ORDER_ID, String.valueOf(processOrder.getProcessOrderId()));
 						processURL.setParameter("backURL", currentURL);
 						processURL.setParameter("isEditDossier", (processOrder.isReadOnly() || (processOrder.getAssignToUsesrId() != 0 &&  processOrder.getAssignToUsesrId() != user.getUserId())) ? String.valueOf(false) : String.valueOf(true));
-					
-						String deadLine = Validator.isNotNull(processOrder.getDealine()) ? processOrder.getDealine() : StringPool.DASH;
+						
+						order = ProcessOrderLocalServiceUtil.getProcessOrder(processOrder.getProcessOrderId());
+						step = ProcessStepLocalServiceUtil.getProcessStep(order.getProcessStepId());
+						
+						if(Validator.isNotNull(order)&& Validator.isNotNull(step)){
+							dateOver = HolidayCheckUtils.calculatorDateOver(order.getActionDatetime(), new Date(), step.getDaysDuration());
+						}
+						//String deadLine = Validator.isNotNull(processOrder.getDealine()) ? processOrder.getDealine() : StringPool.DASH;
 						
 						String href = "location.href='" + processURL.toString()+"'";
 						
@@ -188,7 +201,7 @@
 							</div>
 							
 							<div class='<%="span7"%>'>
-								<%= deadLine %>
+								<%=dateOver >= 0 ? "<div class='ocps-free-day'>"+ StringUtil.replace(LanguageUtil.get(themeDisplay.getLocale(), "until-x-day"), "{0}", String.valueOf(dateOver))+"</div>":"<div class='ocps-over-day'>"+StringUtil.replace(LanguageUtil.get(themeDisplay.getLocale(), "over-x-day"), "{0}", String.valueOf(Math.abs(dateOver))) +"</div>"%>
 							</div>
 						</div>
 					</liferay-util:buffer>
