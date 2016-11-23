@@ -1,4 +1,3 @@
-<%@page import="java.util.Date"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -36,6 +35,7 @@
 <%@page import="org.opencps.datamgt.model.DictCollection"%>
 <%@page import="org.opencps.accountmgt.service.BusinessLocalServiceUtil"%>
 <%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="java.util.Date"%>
 
 <%@ include file="../../init.jsp" %>
 
@@ -100,7 +100,14 @@
 	}
 	
 	Date defaultBirthDate = DateTimeUtil.convertStringToDate("01/01/1970");
-	PortletUtil.SplitDate spd = new PortletUtil.SplitDate(defaultBirthDate);
+	Date dateOfIdNumber = business.getDateOfIdNumber();
+	
+	PortletUtil.SplitDate dateOfIdNumber_split = new PortletUtil.SplitDate(defaultBirthDate);
+	
+	if (Validator.isNotNull(dateOfIdNumber)){
+		dateOfIdNumber_split = new PortletUtil.SplitDate(dateOfIdNumber);
+	}
+			
 %>
 
 <aui:model-context bean="<%=business%>" model="<%=Business.class%>" />
@@ -148,17 +155,16 @@
 	
 	<aui:col width="50">
 		<label class="control-label custom-lebel" for='<portlet:namespace/><%=BusinessDisplayTerms.BUSINESS_DATE_OF_IDNUMBER %>'>
-				<liferay-ui:message key="birth-date-full"/>
+				<liferay-ui:message key="date-of-id-number"/>
 			</label>
 			<liferay-ui:input-date 
-				nullable="true"
 				dayParam="<%=BusinessDisplayTerms.DATE_DAY %>"
-				dayValue="<%= spd.getDayOfMoth() %>"
+				dayValue="<%= dateOfIdNumber_split.getDayOfMoth() %>"
 				monthParam="<%=BusinessDisplayTerms.DATE_MONTH %>"
-				monthValue="<%= spd.getMonth() %>"
+				monthValue="<%= dateOfIdNumber_split.getMonth() %>"
 				name="<%=BusinessDisplayTerms.BUSINESS_DATE_OF_IDNUMBER %>"
 				yearParam="<%=BusinessDisplayTerms.DATE_YEAR %>"
-				yearValue="<%= spd.getYear() %>"
+				yearValue="<%= dateOfIdNumber_split.getYear() %>"
 				formName="fm"
 				autoFocus="<%=true %>"
 				cssClass="input100"

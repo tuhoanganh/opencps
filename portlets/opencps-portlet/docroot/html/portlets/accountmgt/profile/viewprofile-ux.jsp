@@ -289,7 +289,7 @@
 											<label><liferay-ui:message key="date-of-id-number" /></label>
 										</aui:col>
 										<aui:col width="50">
-											<div><%=String.valueOf(business.getDateOfIdNumber()) %></div>
+											<div><%=DateTimeUtil.convertDateToString(business.getDateOfIdNumber(), "dd/MM/YYYY") %></div>
 										</aui:col>
 										<aui:col width="20">
 											<a href="<%=editProfile.toString() %>" class="fix"><liferay-ui:message key="edit"/></a>
