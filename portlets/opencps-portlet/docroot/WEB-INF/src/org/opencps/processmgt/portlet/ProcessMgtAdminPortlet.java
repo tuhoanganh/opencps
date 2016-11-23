@@ -406,9 +406,13 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 		int sequenceNo = ParamUtil.getInteger(actionRequest, "sequenceNo");
 
 		String dossierStatus =
-		    ParamUtil.getString(actionRequest, "dossierStatus");
+					    ParamUtil.getString(actionRequest, "dossierStatus");
+		
+		String dossierSubStatus =
+					    ParamUtil.getString(actionRequest, "dossierSubStatus");
 
 		int daysDuration = ParamUtil.getInteger(actionRequest, "daysDuration");
+		int processStepNo = ParamUtil.getInteger(actionRequest, "processStepNo");
 
 		long referenceDossierPartId =
 		    ParamUtil.getLong(actionRequest, "referenceDossierPartId");
@@ -428,8 +432,8 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 				// Add ProcessStep
 
 				ProcessStep step = ProcessStepLocalServiceUtil.addStep(
-				    serviceProcessId, stepName, sequenceNo, dossierStatus,
-				    daysDuration, referenceDossierPartId, externalAppUrl,
+				    serviceProcessId, stepName, sequenceNo, dossierStatus,dossierSubStatus,
+				    daysDuration, referenceDossierPartId, externalAppUrl, processStepNo, 
 				    serviceContext);
 				
 				if (Validator.isNotNull(step)) {
@@ -471,7 +475,8 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 					for (ProcessStepDossierPart stepDossierPart : stepDossiers) {
 						ProcessStepDossierPartLocalServiceUtil.addPSDP(
 						    stepDossierPart.getProcessStepId(),
-						    stepDossierPart.getDossierPartId());
+						    stepDossierPart.getDossierPartId(),
+						    stepDossierPart.getReadOnly());
 					}
 				}
 
@@ -488,8 +493,8 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 				ProcessStep step =
 				    ProcessStepLocalServiceUtil.updateStep(
 				        processStepId, serviceProcessId, stepName, sequenceNo,
-				        dossierStatus, daysDuration, referenceDossierPartId,
-				        externalAppUrl, serviceContext);
+				        dossierStatus, dossierSubStatus, daysDuration, referenceDossierPartId,
+				        externalAppUrl,processStepNo , serviceContext);
 
 
 				//StepAllowanceLocalServiceUtil.removeProcessStepByProcessId(step.getProcessStepId());
@@ -542,7 +547,8 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 				for (ProcessStepDossierPart stepDossierPart : stepDossiers) {
 					ProcessStepDossierPartLocalServiceUtil.addPSDP(
 					    stepDossierPart.getProcessStepId(),
-					    stepDossierPart.getDossierPartId());
+					    stepDossierPart.getDossierPartId(),
+					    stepDossierPart.getReadOnly());
 				}
 
 				// Redirect page

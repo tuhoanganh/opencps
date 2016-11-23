@@ -217,6 +217,13 @@ public class PortletConstants {
 	public static final int DOSSIER_FILE_DUPLICATE = 2;
 	public static final int DOSSIER_FILE_REMOVE = 3;
 	public static final int DOSSIER_FILE_EXPORT = 4;
+	public static final int DOSSIER_FILE_SIGN = 5;
+	public static final int DOSSIER_FILE_UPDATE = 6;
 	
+
 	
+	public static final String SIZE_UNIT_B = "B";
+	public static final String SIZE_UNIT_KB = "kB";
+	public static final String SIZE_UNIT_MB = "MB";
+	public static final String SIZE_UNIT_GB = "GB";
 }

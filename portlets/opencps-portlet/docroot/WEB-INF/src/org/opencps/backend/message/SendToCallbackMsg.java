@@ -205,6 +205,18 @@ public class SendToCallbackMsg {
     
     	this.daysDelay = daysDelay;
     }
+	
+    public long getLogId() {
+    
+    	return logId;
+    }
+
+	
+    public void setLogId(long logId) {
+    
+    	this.logId = logId;
+    }
+    
 	protected long processOrderId;
 	protected String syncStatus;
 	protected String dossierStatus;
@@ -220,5 +232,6 @@ public class SendToCallbackMsg {
 	protected long actionUserId;
 	protected int daysDoing;
 	protected int daysDelay;
+	protected long logId;
 
 }
