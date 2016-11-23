@@ -92,14 +92,11 @@ public class NotificationUtils {
 		Locale locale = new Locale("vi", "VN");
 
 		long plId = 0;
-		String title = StringPool.BLANK;
+		StringBuffer title = new StringBuffer();
 
 		try {
 
-			// ProcessOrder processOrder =
-			// ProcessOrderLocalServiceUtil.getProcessOrder(message.getProcessOrderId());
-
-			title = LanguageUtil.get(locale, event) + "[" + message.getDossierId() + "]";
+			title.append("[").append(message.getDossierId()).append("]").append(LanguageUtil.get(locale, event));
 
 			Layout layOut = null;
 
@@ -118,7 +115,7 @@ public class NotificationUtils {
 		payloadJSONObject.put("dossierId", message.getDossierId());
 		payloadJSONObject.put("paymentFileId", message.getPaymentFileId());
 		payloadJSONObject.put("userIdDelivery", userIdDelivery);
-		payloadJSONObject.put("title", title);
+		payloadJSONObject.put("title", title.toString());
 		payloadJSONObject.put("notificationText", message.getNotificationContent());
 		payloadJSONObject.put("plId", plId);
 		payloadJSONObject.put("friendlyUrl", group);
