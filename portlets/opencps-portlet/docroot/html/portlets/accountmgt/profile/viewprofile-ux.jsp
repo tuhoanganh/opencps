@@ -350,7 +350,7 @@
 			                            %> 
 					                         
 										</aui:col>
-										<aui:col width="30">
+										<aui:col width="20">
 											<a href="<%=editProfile.toString() %>" class="fix"><liferay-ui:message key="edit"/></a>
 										</aui:col>
 									
