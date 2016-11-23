@@ -22,20 +22,23 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Stack;
 
-import org.opencps.dossiermgt.comparator.DossierFileDossierFileDateComparator;
 import org.opencps.dossiermgt.comparator.DossierSubmitDateComparator;
 import org.opencps.dossiermgt.comparator.DossierTemplateNameComparator;
 import org.opencps.dossiermgt.comparator.DossierTemplateNoComparator;
 import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierFile;
+import org.opencps.dossiermgt.model.DossierFileLog;
 import org.opencps.dossiermgt.model.DossierPart;
 import org.opencps.dossiermgt.model.ServiceConfig;
 import org.opencps.dossiermgt.search.DossierDisplayTerms;
-import org.opencps.dossiermgt.search.DossierFileDisplayTerms;
 import org.opencps.dossiermgt.search.DossierTemplateDisplayTerms;
+import org.opencps.dossiermgt.service.DossierFileLogLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
 import org.opencps.dossiermgt.service.ServiceConfigLocalServiceUtil;
+import org.opencps.processmgt.model.ProcessOrder;
+import org.opencps.processmgt.model.impl.ProcessOrderImpl;
+import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.model.TemplateFile;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
@@ -59,11 +62,9 @@ import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
  */
 public class DossierMgtUtil {
 
-	public static final String TOP_TABS_DOSSIER_TEMPLATE =
-		"top_tabs_dossier_template";
+	public static final String TOP_TABS_DOSSIER_TEMPLATE = "top_tabs_dossier_template";
 	public static final String TOP_TABS_DOSSIER_PART = "top_tabs_dossier_part";
-	public static final String TOP_TABS_SERVICE_CONFIG =
-		"top_tabs_service_config";
+	public static final String TOP_TABS_SERVICE_CONFIG = "top_tabs_service_config";
 	public static final String DOSSIER_PART_TOOLBAR = "dossierPartToolBar";
 	public static final String SERVICE_CONFIG_TOOLBAR = "serviceConfigToolBar";
 
@@ -78,17 +79,12 @@ public class DossierMgtUtil {
 	public static final int DOSSIERFILEMARK_BAN_CHINH = 1;
 	public static final int DOSSIERFILEMARK_BAN_CONG_CHUNG = 2;
 	public static final int DOSSIERFILEMARK_BAN_CHUP = 3;
-	
-	public static final String TOP_TABS_DOSSIER_MONITORING_SEARCH =
-		"dossier-monitoring-search";
-	public static final String TOP_TABS_DOSSIER_MONITORING_DOSSIER_FILE_LIST =
-		"dossier-monitoring-dossier-file-list";
-	public static final String TOP_TABS_DOSSIER_MONITORING_SERVICE =
-		"dossier-monitoring-service";
 
-	public static String[] _DOSSIER_CATEGORY_NAMES = {
-		"update-dossier-info"
-	};
+	public static final String TOP_TABS_DOSSIER_MONITORING_SEARCH = "dossier-monitoring-search";
+	public static final String TOP_TABS_DOSSIER_MONITORING_DOSSIER_FILE_LIST = "dossier-monitoring-dossier-file-list";
+	public static final String TOP_TABS_DOSSIER_MONITORING_SERVICE = "dossier-monitoring-service";
+
+	public static String[] _DOSSIER_CATEGORY_NAMES = { "update-dossier-info" };
 
 	/**
 	 * @param orderByCol
@@ -96,7 +92,7 @@ public class DossierMgtUtil {
 	 * @return
 	 */
 	public static OrderByComparator getDossierTemplateOrderByComparator(
-		String orderByCol, String orderByType) {
+			String orderByCol, String orderByType) {
 
 		boolean orderByAsc = false;
 
@@ -106,23 +102,24 @@ public class DossierMgtUtil {
 
 		OrderByComparator orderByComparator = null;
 
-		if (orderByCol.equals(DossierTemplateDisplayTerms.DOSSIERTEMPLATE_TEMPLATENO)) {
+		if (orderByCol
+				.equals(DossierTemplateDisplayTerms.DOSSIERTEMPLATE_TEMPLATENO)) {
 			orderByComparator = new DossierTemplateNoComparator(orderByAsc);
-		}
-		else if (orderByCol.equals(DossierTemplateDisplayTerms.DOSSIERTEMPLATE_TEMPLATENAME)) {
+		} else if (orderByCol
+				.equals(DossierTemplateDisplayTerms.DOSSIERTEMPLATE_TEMPLATENAME)) {
 			orderByComparator = new DossierTemplateNameComparator(orderByAsc);
 		}
 
 		return orderByComparator;
 	}
-	
+
 	/**
 	 * @param orderByCol
 	 * @param orderByType
 	 * @return
 	 */
 	public static OrderByComparator getDossierOrderByComparator(
-		String orderByCol, String orderByType) {
+			String orderByCol, String orderByType) {
 
 		boolean orderByAsc = false;
 
@@ -138,21 +135,25 @@ public class DossierMgtUtil {
 
 		return orderByComparator;
 	}
-	
+
 	/**
 	 * @param orderByType
 	 * @param dossierFiles
 	 * @return
 	 */
-	public static List<DossierFile> orderDossierFileByDossierFileDate(String orderByType, List<DossierFile> dossierFiles) {
+	public static List<DossierFile> orderDossierFileByDossierFileDate(
+			String orderByType, List<DossierFile> dossierFiles) {
 		int value = 0;
 		DossierFile dossierFileTemp = null;
-		
-		if(orderByType.equals(WebKeys.ORDER_BY_ASC)) {
-			for(int i=0; i<dossierFiles.size()-1; i++) {
-				for(int j=i+1; j<dossierFiles.size(); j++) {
-					value = dossierFiles.get(i).getDossierFileDate().compareTo(dossierFiles.get(j).getDossierFileDate());
-					if(value >= 0) {
+
+		if (orderByType.equals(WebKeys.ORDER_BY_ASC)) {
+			for (int i = 0; i < dossierFiles.size() - 1; i++) {
+				for (int j = i + 1; j < dossierFiles.size(); j++) {
+					value = dossierFiles
+							.get(i)
+							.getDossierFileDate()
+							.compareTo(dossierFiles.get(j).getDossierFileDate());
+					if (value >= 0) {
 						dossierFileTemp = dossierFiles.get(i);
 						dossierFiles.set(i, dossierFiles.get(j));
 						dossierFiles.set(j, dossierFileTemp);
@@ -160,11 +161,14 @@ public class DossierMgtUtil {
 				}
 			}
 			return dossierFiles;
-		} else if (orderByType.equals(WebKeys.ORDER_BY_DESC)){
-			for(int i=0; i<dossierFiles.size()-1; i++) {
-				for(int j=i+1; j<dossierFiles.size(); j++) {
-					value = dossierFiles.get(i).getDossierFileDate().compareTo(dossierFiles.get(j).getDossierFileDate());
-					if(value < 0) {
+		} else if (orderByType.equals(WebKeys.ORDER_BY_DESC)) {
+			for (int i = 0; i < dossierFiles.size() - 1; i++) {
+				for (int j = i + 1; j < dossierFiles.size(); j++) {
+					value = dossierFiles
+							.get(i)
+							.getDossierFileDate()
+							.compareTo(dossierFiles.get(j).getDossierFileDate());
+					if (value < 0) {
 						dossierFileTemp = dossierFiles.get(i);
 						dossierFiles.set(i, dossierFiles.get(j));
 						dossierFiles.set(j, dossierFileTemp);
@@ -173,7 +177,7 @@ public class DossierMgtUtil {
 			}
 			return dossierFiles;
 		}
-		
+
 		return dossierFiles;
 	}
 
@@ -276,8 +280,8 @@ public class DossierMgtUtil {
 		Stack<DossierPart> dossierPartsStack = new Stack<DossierPart>();
 
 		try {
-			DossierPart dossierPart =
-				DossierPartLocalServiceUtil.getDossierPart(dossierpartId);
+			DossierPart dossierPart = DossierPartLocalServiceUtil
+					.getDossierPart(dossierpartId);
 
 			dossierPartsStack.add(dossierPart);
 
@@ -286,10 +290,10 @@ public class DossierMgtUtil {
 			while (!dossierPartsStack.isEmpty()) {
 				dossierPartIndex = dossierPartsStack.pop();
 
-				List<DossierPart> dossierPartsChild =
-					new ArrayList<DossierPart>();
-				dossierPartsChild =
-					DossierPartLocalServiceUtil.getDossierPartsByParentId(dossierPartIndex.getDossierpartId());
+				List<DossierPart> dossierPartsChild = new ArrayList<DossierPart>();
+				dossierPartsChild = DossierPartLocalServiceUtil
+						.getDossierPartsByParentId(dossierPartIndex
+								.getDossierpartId());
 
 				if (!dossierPartsChild.isEmpty()) {
 
@@ -302,14 +306,13 @@ public class DossierMgtUtil {
 				dossierPartsResult.add(dossierPartIndex);
 			}
 			return dossierPartsResult;
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			_log.error(e);
 		}
 
 		return new ArrayList<DossierPart>();
 	}
-	
+
 	public static String getLoaiGiayToLabel(int value, Locale locale) {
 
 		String statusLabel = StringPool.BLANK;
@@ -319,7 +322,8 @@ public class DossierMgtUtil {
 			statusLabel = LanguageUtil.get(locale, "loai-giay-to-ban-chinh");
 			break;
 		case DOSSIERFILEMARK_BAN_CONG_CHUNG:
-			statusLabel = LanguageUtil.get(locale, "loai-giay-to-ban-cong-chung");
+			statusLabel = LanguageUtil.get(locale,
+					"loai-giay-to-ban-cong-chung");
 			break;
 		case DOSSIERFILEMARK_BAN_CHUP:
 			statusLabel = LanguageUtil.get(locale, "loai-giay-to-ban-chup");
@@ -331,59 +335,64 @@ public class DossierMgtUtil {
 
 		return statusLabel;
 	}
-	
-	public static String getURLDownloadTemplateFile(ThemeDisplay themeDisplay, String templateFileNo) {
-		
+
+	public static String getURLDownloadTemplateFile(ThemeDisplay themeDisplay,
+			String templateFileNo) {
+
 		String result = StringPool.BLANK;
-		
+
 		DLFileEntry dlFileEntry = null;
-		
+
 		TemplateFile templateFile = null;
-		
+
 		try {
-		
-			templateFile = TemplateFileLocalServiceUtil.getTemplateFileByNo(themeDisplay.getScopeGroupId(), templateFileNo);
-			
-			if(Validator.isNotNull(templateFile)){
-		
-				dlFileEntry = DLFileEntryLocalServiceUtil.getDLFileEntry(templateFile.getFileEntryId());
-		
-				result = themeDisplay.getPortalURL()+"/c/document_library/get_file?uuid="+dlFileEntry.getUuid()+"&groupId="+themeDisplay.getScopeGroupId();
-		
+
+			templateFile = TemplateFileLocalServiceUtil.getTemplateFileByNo(
+					themeDisplay.getScopeGroupId(), templateFileNo);
+
+			if (Validator.isNotNull(templateFile)) {
+
+				dlFileEntry = DLFileEntryLocalServiceUtil
+						.getDLFileEntry(templateFile.getFileEntryId());
+
+				result = themeDisplay.getPortalURL()
+						+ "/c/document_library/get_file?uuid="
+						+ dlFileEntry.getUuid() + "&groupId="
+						+ themeDisplay.getScopeGroupId();
+
 			}
-		
+
 		} catch (Exception e) {
-			
+
 			_log.error(e);
-			
+
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
 	 * @param requestCommand
 	 * @param messageInfo
 	 * @return
 	 */
-	public static String getDossierLogs(
-	    String requestCommand, String messageInfo) {
+	public static String getDossierLogs(String requestCommand,
+			String messageInfo) {
 
 		String dossierLog = StringPool.BLANK;
-		
-		if (Validator.isNotNull(messageInfo)) {
-			if (Validator.equals(
-			    requestCommand, PortletConstants.REQUEST_COMMAND_PAYMENT)) {
 
-				String[] arrMsgInfo =
-				    StringUtil.split(messageInfo, StringPool.SEMICOLON);
+		if (Validator.isNotNull(messageInfo)) {
+			if (Validator.equals(requestCommand,
+					PortletConstants.REQUEST_COMMAND_PAYMENT)) {
+
+				String[] arrMsgInfo = StringUtil.split(messageInfo,
+						StringPool.SEMICOLON);
 
 				if (arrMsgInfo.length != 0) {
 					dossierLog = arrMsgInfo[0];
 				}
 
-			}
-			else {
+			} else {
 				dossierLog = messageInfo;
 			}
 
@@ -395,7 +404,8 @@ public class DossierMgtUtil {
 	/**
 	 * Get service name by dossierId
 	 * 
-	 * @param dossierId maso ho so
+	 * @param dossierId
+	 *            maso ho so
 	 * @return (String) serviceName
 	 */
 	public static String getServiceName(long dossierId) {
@@ -404,25 +414,54 @@ public class DossierMgtUtil {
 
 		if (Validator.isNotNull(dossierId) && dossierId != 0) {
 			try {
-				Dossier dossier =
-				    DossierLocalServiceUtil.fetchDossier(dossierId);
+				Dossier dossier = DossierLocalServiceUtil
+						.fetchDossier(dossierId);
 
-				ServiceConfig serviceConfig =
-				    ServiceConfigLocalServiceUtil.fetchServiceConfig(dossier.getServiceConfigId());
+				ServiceConfig serviceConfig = ServiceConfigLocalServiceUtil
+						.fetchServiceConfig(dossier.getServiceConfigId());
 
-				ServiceInfo serviceInfo =
-				    ServiceInfoLocalServiceUtil.fetchServiceInfo(serviceConfig.getServiceInfoId());
+				ServiceInfo serviceInfo = ServiceInfoLocalServiceUtil
+						.fetchServiceInfo(serviceConfig.getServiceInfoId());
 
 				serviceName = serviceInfo.getServiceName();
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				_log.error("dossierId is not validator");
 			}
 		}
 
 		return serviceName;
 	}
-	
-	private static Log _log =
-		LogFactoryUtil.getLog(DossierMgtUtil.class.getName());
+
+	public static List<DossierFileLog> getFileLogs(long dossierLogId,
+			long dossierId) {
+		List<DossierFileLog> ls = new ArrayList<DossierFileLog>();
+
+		try {
+			ls = DossierFileLogLocalServiceUtil.getFileLogs(dossierLogId,
+					dossierId);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		return ls;
+	}
+
+	public static ProcessOrder getProcessOrder(long dossierId) {
+
+		ProcessOrder processOrder = new ProcessOrderImpl();
+
+		try {
+			processOrder = ProcessOrderLocalServiceUtil.getProcessOrder(
+					dossierId, 0);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		return processOrder;
+
+	}
+
+	private static Log _log = LogFactoryUtil.getLog(DossierMgtUtil.class
+			.getName());
+
 }

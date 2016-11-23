@@ -13,6 +13,9 @@
 * GNU Affero General Public License for more details.
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>
+* 
+* 
+* 
 */
 
 package org.opencps.accountmgt.portlet;
@@ -102,7 +105,7 @@ public class AccountMgtPortlet extends MVCPortlet {
 	public void deleteCitizen(
 	    ActionRequest actionRequest, ActionResponse actionResponse)
 	    throws IOException {
-
+		
 		long citizenId = ParamUtil
 		    .getLong(actionRequest, CitizenDisplayTerms.CITIZEN_ID, 0L);
 		String redirectURL = ParamUtil

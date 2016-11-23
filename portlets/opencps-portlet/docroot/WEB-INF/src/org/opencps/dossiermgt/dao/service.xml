@@ -283,6 +283,11 @@
             <finder-column name="delayStatus" comparator="=" arrayable-operator="AND"></finder-column>
             <finder-column name="dossierStatus" comparator="!=" arrayable-operator="AND"></finder-column>
         </finder>
+        
+        <finder return-type="Collection" name="T_DS">
+        	<finder-column name="dossierTemplateId" />
+        	<finder-column name="dossierStatus" />
+        </finder>
         <finder name="OID" return-type="Dossier">
             <finder-column name="oid"></finder-column>
         </finder>
@@ -355,14 +360,16 @@
         <column name="messageInfo" type="String"/>
         <column name="updateDatetime" type="Date"/>
         <column name="level" type="int"/>
-        <column name="actor" type="int"></column>
+        <column name="actor" type="int"/>
         <column name="className" type="String"/>
-        <column name="actorId" type="long"></column>
-        <column name="actorName" type="String"></column>
-        <column name="syncStatus" type="int"></column>
-        <column name="oId" type="String"></column>
-        <column name="stepId" type="long"></column>
-        <column name="stepName" type="String"></column>
+        <column name="actorId" type="long"/>
+        <column name="actorName" type="String"/>
+        <column name="syncStatus" type="int"/>
+        <column name="oId" type="String"/>
+        <column name="stepId" type="long"/>
+        <column name="stepName" type="String"/>
+        <column name="processOrderId" type="long"/>
+        <column name="processWorkflowId" type="long"/>
         
         <order by="desc">
             <order-column name="modifiedDate" order-by="desc"></order-column>
@@ -549,6 +556,8 @@
         <column name="fileGroupId" type="long"/>
         <column name="stepId" type="long"/>
         <column name="isUpdate" type="boolean"/>
+        <column name="actor" type="int"/>
+        <column name="logId" type="long"/>
 
         <column name="fileName" type="String"/>
         <column name="fileVersion" type="int"/>
@@ -557,6 +566,18 @@
         <column name="count_" type="int"/>
         <column name="oId" type="String"/>
         <column name="fileEntryId" type="long"/>
+        
+        <finder name="L_D" return-type="Collection">
+            <finder-column name="logId"/>
+            <finder-column name="dossierId"/>
+        </finder>
+        
+        <finder name="L_D_A" return-type="Collection">
+            <finder-column name="logId"/>
+            <finder-column name="dossierId"/>
+            <finder-column name="actor"/>
+        </finder>
+        
         
         <finder name="D_F_S" return-type="Collection">
             <finder-column name="dossierId"/>

@@ -19,6 +19,7 @@ package org.opencps.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -70,6 +71,7 @@ import com.liferay.portal.util.PortalUtil;
 
 /**
  * @author trungnt
+ *
  */
 public class PortletUtil {
 
@@ -712,7 +714,6 @@ public class PortletUtil {
 
 		HttpServletResponse response = PortalUtil
 				.getHttpServletResponse(actionResponse);
-
 		response.setContentType(ContentTypes.APPLICATION_JSON);
 
 		ServletResponseUtil.write(response, json.toString());
@@ -786,7 +787,6 @@ public class PortletUtil {
 
 		return request.getSession().getServletContext().getRealPath("/")
 				.replace("/", File.separator).replace(File.separator + ".", "");
-
 	}
 
 	public static String getContextPath(ActionRequest actionRequest) {
@@ -995,6 +995,7 @@ public class PortletUtil {
 				if (dossier.getEstimateDatetime().before(now)) {
 					statusLabel = LanguageUtil.get(locale, "status-toosoon");
 				} else if (dossier.getEstimateDatetime().after(now)) {
+
 					statusLabel = LanguageUtil.get(locale, "status-toolate");
 				}
 			}
@@ -1012,8 +1013,7 @@ public class PortletUtil {
 	 */
 	public static List<Long> getDossierPartRequired(
 			List<Long> requiredDossierPartIds, DossierPart parentDossierPart,
-			DossierPart childDossierPart, DossierFile dossierFile,
-			long dossierId, long processWorkflowId, long processStepId) {
+			DossierPart childDossierPart, DossierFile dossierFile) {
 
 		int partType = parentDossierPart != null ? parentDossierPart
 				.getPartType() : 0;
@@ -1065,24 +1065,19 @@ public class PortletUtil {
 			parentDossierPart
 					.setPartType(PortletConstants.DOSSIER_PART_TYPE_OTHER);
 			getDossierPartRequired(requiredDossierPartIds, parentDossierPart,
-					childDossierPart, dossierFile, dossierId,
-					processWorkflowId, processStepId);
+					childDossierPart, dossierFile);
 			break;
 		case PortletConstants.DOSSIER_PART_TYPE_PRIVATE:
 			parentDossierPart
 					.setPartType(PortletConstants.DOSSIER_PART_TYPE_OTHER);
 			getDossierPartRequired(requiredDossierPartIds, parentDossierPart,
-					childDossierPart, dossierFile, dossierId,
-					processWorkflowId, processStepId);
+					childDossierPart, dossierFile);
 			break;
 		case PortletConstants.DOSSIER_PART_TYPE_RESULT:
 
-			getRequiredDossierartIds(requiredDossierPartIds, dossierId,
-					processWorkflowId, processStepId);
 			break;
 		case PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT:
-			getRequiredDossierartIds(requiredDossierPartIds, dossierId,
-					processWorkflowId, processStepId);
+
 			break;
 		default:
 			break;
@@ -1143,7 +1138,7 @@ public class PortletUtil {
 		return 0;
 	}
 
-	public static List<Long> getRequiredDossierartIds(
+	public static List<Long> getDossierPartResultRequired(
 			List<Long> requiredDossierPartIds, long dossierId,
 			long processWorkflowId, long processStepId) {
 		List<WorkflowOutput> workflowOutputs = new ArrayList<WorkflowOutput>();
@@ -1156,7 +1151,7 @@ public class PortletUtil {
 		}
 
 		if (processStepDossierParts != null) {
-			
+
 			for (ProcessStepDossierPart processStepDossierPart : processStepDossierParts) {
 
 				if (processStepDossierPart.getDossierPartId() > 0) {
@@ -1205,6 +1200,44 @@ public class PortletUtil {
 		}
 
 		return requiredDossierPartIds;
+	}
+
+	/**
+	 * @param request
+	 * @param response
+	 * @param fileName
+	 * @param is
+	 * @param contentLength
+	 * @param contentType
+	 * @throws IOException
+	 */
+	public static void sendFile(HttpServletRequest request,
+			HttpServletResponse response, String fileName, InputStream is,
+			long contentLength, String contentType) throws IOException {
+		ServletResponseUtil.sendFile(request, response, fileName, is,
+				contentLength, contentType);
+	}
+
+	/**
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @param fileName
+	 * @param is
+	 * @param contentLength
+	 * @param contentType
+	 * @throws IOException
+	 */
+	public static void sendFile(ActionRequest actionRequest,
+			ActionResponse actionResponse, String fileName, InputStream is,
+			long contentLength, String contentType) throws IOException {
+
+		HttpServletResponse response = PortalUtil
+				.getHttpServletResponse(actionResponse);
+
+		HttpServletRequest request = PortalUtil
+				.getHttpServletRequest(actionRequest);
+		ServletResponseUtil.sendFile(request, response, fileName, is,
+				contentLength, contentType);
 	}
 
 	private static Log _log = LogFactoryUtil

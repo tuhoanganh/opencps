@@ -63,6 +63,8 @@ public class ConfigurationImpl implements ConfigurationAction{
 		
 		String orderBydDossierFile = ParamUtil.getString(actionRequest, "orderBydDossierFile");
 		
+		String dossierStatusConfig = ParamUtil.getString(actionRequest, "dossierStatusConfig");
+		
 		boolean displayDossierNo = ParamUtil.getBoolean(actionRequest, "displayDossierNo");
 		
 		boolean displayRecentlyResultWhenSearch = ParamUtil.getBoolean(actionRequest, "displayRecentlyResultWhenSearch");
@@ -80,6 +82,8 @@ public class ConfigurationImpl implements ConfigurationAction{
 		boolean hiddenTreeNodeEqualNone = ParamUtil.getBoolean(actionRequest, "hiddenTreeNodeEqualNone");
 		
 		boolean allowResultQuickView = ParamUtil.getBoolean(actionRequest, "allowResultQuickView");
+		
+		boolean allowQuickCreateDossier = ParamUtil.getBoolean(actionRequest, "allowQuickCreateDossier");
 
 		String fileTypes = ParamUtil.getString(actionRequest, "fileTypes");
 		
@@ -106,7 +110,8 @@ public class ConfigurationImpl implements ConfigurationAction{
 		PortletPreferences preferences =
 		    PortletPreferencesFactoryUtil.getPortletSetup(
 		        actionRequest, portletResource);
-
+		
+		preferences.setValue("plid", String.valueOf(plid));
 		preferences.setValue("redirectPaymentURL", redirectURL.toString());
 		preferences.setValue("displayDossierNo", String.valueOf(displayDossierNo));
 		preferences.setValue("displayRecentlyResultWhenSearch", String.valueOf(displayRecentlyResultWhenSearch));
@@ -120,6 +125,8 @@ public class ConfigurationImpl implements ConfigurationAction{
 		preferences.setValue("showBackToListButton", String.valueOf(showBackToListButton));
 		
 		preferences.setValue("orderFieldDossierFile", orderFieldDossierFile);
+		
+		preferences.setValue("dossierStatusConfig", dossierStatusConfig);
 		
 		preferences.setValue("orderBydDossierFile", orderBydDossierFile);
 		
@@ -143,6 +150,8 @@ public class ConfigurationImpl implements ConfigurationAction{
 		
 		preferences.setValue("maxUploadFileSizeUnit", maxUploadFileSizeUnit);
 		
+		preferences.setValue("allowQuickCreateDossier", String.valueOf(allowQuickCreateDossier));
+		
 		preferences.store();
 
 		SessionMessages.add(actionRequest, "potlet-config-saved");
@@ -161,7 +170,6 @@ public class ConfigurationImpl implements ConfigurationAction{
 	    PortletConfig portletConfig, RenderRequest renderRequest,
 	    RenderResponse renderResponse)
 	    throws Exception {
-
 		return "/html/portlets/dossiermgt/frontoffice/configuration.jsp";
 	}
 

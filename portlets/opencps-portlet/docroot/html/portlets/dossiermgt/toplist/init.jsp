@@ -17,8 +17,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+
 <%@page import="javax.portlet.PortletPreferences"%>
-<%@page import="org.opencps.util.PortletConstants"%>
 <%@ include file="/init.jsp" %>
 
 <%
@@ -31,4 +31,5 @@
 	}
 	
 	String status = preferences.getValue("status", StringPool.BLANK);
+
 %>
