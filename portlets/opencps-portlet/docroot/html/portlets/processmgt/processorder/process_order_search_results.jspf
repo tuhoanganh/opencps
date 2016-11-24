@@ -20,8 +20,15 @@
 
 
 <%
-	totalCount = ProcessOrderLocalServiceUtil.countProcessOrder(serviceInfoId, processStepId, themeDisplay.getUserId(), assignToUserId);
-	processOrders = ProcessOrderLocalServiceUtil.searchProcessOrder(serviceInfoId, processStepId, themeDisplay.getUserId(), assignToUserId,
-		searchContainer.getStart(), searchContainer.getEnd(), 
-		ProcessOrderUtils.getProcessOrderByComparator(todolistOrderByField, todolistOrderByType));
+	if(Validator.isNotNull(searchTerms.getKeywords())){
+		totalCount = ProcessOrderLocalServiceUtil.countProcessOrderKeyWords(serviceInfoId, processStepId, themeDisplay.getUserId(), assignToUserId, searchTerms.getKeywords());
+		processOrders = ProcessOrderLocalServiceUtil.searchProcessOrderKeyWords(serviceInfoId, processStepId, themeDisplay.getUserId(), assignToUserId, searchTerms.getKeywords(),
+			searchContainer.getStart(), searchContainer.getEnd(), 
+			ProcessOrderUtils.getProcessOrderByComparator(todolistOrderByField, todolistOrderByType));
+	}else{
+		totalCount = ProcessOrderLocalServiceUtil.countProcessOrder(serviceInfoId, processStepId, themeDisplay.getUserId(), assignToUserId);
+		processOrders = ProcessOrderLocalServiceUtil.searchProcessOrder(serviceInfoId, processStepId, themeDisplay.getUserId(), assignToUserId,
+			searchContainer.getStart(), searchContainer.getEnd(), 
+			ProcessOrderUtils.getProcessOrderByComparator(todolistOrderByField, todolistOrderByType));
+	}
 %>
