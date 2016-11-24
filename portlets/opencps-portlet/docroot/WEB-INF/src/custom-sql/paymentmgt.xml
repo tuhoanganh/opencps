@@ -145,4 +145,13 @@
 			ORDER BY opencps_payment_file.modifiedDate DESC
 		]]>
 	</sql>
+		<sql id="org.opencps.paymentmgt.service.persistence.PaymentFileFinder.getPaymentFileByParam">	
+		<![CDATA[
+		SELECT * FROM opencps_payment_file
+		WHERE (1 = 1)
+		AND opencps_payment_file.paymentStatus IN (?)
+		AND opencps_payment_file.paymentGateStatusCode IN (?)
+		ORDER BY modifiedDate ASC
+		]]>
+	</sql>
 </custom-sql>

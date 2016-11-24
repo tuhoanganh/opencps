@@ -31,11 +31,15 @@ import org.opencps.holidayconfig.search.HolidayConfigDisplayTerms;
 import org.opencps.holidayconfig.service.HolidayConfigExtendLocalServiceUtil;
 import org.opencps.holidayconfig.service.HolidayConfigLocalServiceUtil;
 import org.opencps.holidayconfig.util.HolidayUtils;
+import org.opencps.paymentmgt.model.PaymentFile;
+import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
 import org.opencps.util.DateTimeUtil;
 import org.opencps.util.MessageKeys;
 import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
@@ -139,6 +143,22 @@ public class HolidayConfigPortlet extends MVCPortlet {
 							.updateHolidayConfigExtend(holidayExtend);
 				}
 			}
+			int[] paymentStatus = new int[] {};
+			String[] paymentGateStatus = new String[] {
+				"7,-21,-23,-99"
+			};
+			List<PaymentFile> paymentFileList = new ArrayList<PaymentFile>();
+
+			try {
+				paymentFileList =
+					PaymentFileLocalServiceUtil.getPaymentFileByParam(
+						paymentStatus, paymentGateStatus, true);
+			}
+			catch (PortalException | SystemException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			_log.info("paymentFileList.size():"+paymentFileList.size());
 		} catch (Exception e) {
 			SessionErrors.add(actionRequest,
 					MessageKeys.HOLIDAYCONFIG_SYSTEM_EXCEPTION_OCCURRED);

@@ -67,7 +67,13 @@ public class VTCPay {
 	//
 	protected String data;
 	protected String signature;
-
+	
+	//Tham so bo sung dung de kiem tra trang thai don hang
+	protected String order_code;
+	protected String receiver_acc;
+	protected String sign;
+	
+	protected String responsecode;
 
 	private static Log _log = LogFactoryUtil.getLog(VTCPay.class);
 
@@ -93,6 +99,14 @@ public class VTCPay {
 	
 	public VTCPay(){
 		
+	}
+	
+	public VTCPay(String website_id,String order_code,String receiver_acc,String sign){
+		
+		this.website_id = website_id;
+		this.order_code = order_code;
+		this.receiver_acc = receiver_acc;
+		this.sign = sign;
 	}
 
 	public VTCPay(String data) {
@@ -190,6 +204,24 @@ public class VTCPay {
 
 		return merchantSign;
 
+	}
+	public static String getSecureHashCodeRequest1(PaymentConfig paymentConfig, VTCPay vtcPay){
+		
+		StringBuffer merchantSignBuffer = new StringBuffer();
+		
+		merchantSignBuffer.append(vtcPay.getWebsite_id());
+		merchantSignBuffer.append("-").append(vtcPay.getWebsite_id());
+		merchantSignBuffer.append("-").append(vtcPay.getOrder_code());
+		merchantSignBuffer.append("-").append(vtcPay.getReceiver_acc());
+		merchantSignBuffer.append("-").append(paymentConfig.getKeypaySecureKey());
+		
+		String merchantSign = StringPool.BLANK;
+		merchantSign = merchantSignBuffer.toString();
+
+		merchantSign = VTCPay.sha256(merchantSign);
+		
+		return merchantSign;
+		
 	}
 
 	public static boolean validateSign(VTCPay vtcPay) {
@@ -536,6 +568,54 @@ public class VTCPay {
 	public void setSignature(String signature) {
 	
 		this.signature = signature;
+	}
+
+	
+	public String getOrder_code() {
+	
+		return order_code;
+	}
+
+	
+	public void setOrder_code(String order_code) {
+	
+		this.order_code = order_code;
+	}
+
+	
+	public String getReceiver_acc() {
+	
+		return receiver_acc;
+	}
+
+	
+	public void setReceiver_acc(String receiver_acc) {
+	
+		this.receiver_acc = receiver_acc;
+	}
+
+	
+	public String getSign() {
+	
+		return sign;
+	}
+
+	
+	public void setSign(String sign) {
+	
+		this.sign = sign;
+	}
+
+	
+	public String getResponsecode() {
+	
+		return responsecode;
+	}
+
+	
+	public void setResponsecode(String responsecode) {
+	
+		this.responsecode = responsecode;
 	}
 	
 

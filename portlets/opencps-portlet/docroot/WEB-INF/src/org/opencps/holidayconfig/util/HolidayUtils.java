@@ -130,7 +130,7 @@ public class HolidayUtils {
 
 	}
 
-	public static Calendar getEndDate(Date baseDate, long daysDuration) {
+	public static Calendar getEndDate(Date baseDate, int daysDuration) {
 
 		if (baseDate == null) {
 			baseDate = new Date();

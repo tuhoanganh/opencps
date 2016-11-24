@@ -109,6 +109,7 @@
 		<column name="paymentGateType" type="long"></column>
 		<column name="status" type="boolean"></column>
 		<column name="returnUrl" type="String"></column>
+		<column name="checkUrl" type="String"></column>
 
 		<finder name="GovAgencyPaymentType" return-type="PaymentConfig">
 			<finder-column name="groupId"></finder-column>

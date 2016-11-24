@@ -697,6 +697,7 @@
 		<field name="paymentGateType" type="long" />
 		<field name="status" type="boolean" />
 		<field name="returnUrl" type="String" />
+		<field name="checkUrl" type="String" />
 	</model>
 	<model name="org.opencps.paymentmgt.model.PaymentFile">
 		<field name="uuid" type="String" />

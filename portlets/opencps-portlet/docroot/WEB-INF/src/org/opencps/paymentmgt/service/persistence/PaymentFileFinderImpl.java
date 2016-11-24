@@ -802,6 +802,65 @@ implements PaymentFileFinder {
 
 		return null;
 	}
+	
+	public List<PaymentFile> getPaymentFileByParam(
+		int[] paymentStatus, String[] paymentGateStatus, boolean orderByAsc) {
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			String sql = CustomSQLUtil.get(GET_PAYMENTFILE_BY_PARAM);
+
+			if (paymentStatus.length <= 0) {
+				sql =
+					StringUtil.replace(
+						sql, "AND opencps_payment_file.paymentStatus IN (?)", StringPool.BLANK);
+			}
+			if (paymentGateStatus.length <= 0) {
+				sql =
+					StringUtil.replace(
+						sql, "AND opencps_payment_file.paymentGateStatusCode IN (?)",
+						StringPool.BLANK);
+			}
+			_log.info(GET_PAYMENTFILE_BY_PARAM);
+			_log.info("=====paymentStatus.length:"+paymentStatus.length);
+			_log.info("=====paymentGateStatus.length:"+paymentGateStatus.length);
+			_log.info("=====sql:"+sql);
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addEntity("PaymentFile", PaymentFileImpl.class);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			if (paymentStatus.length > 0) {
+				qPos.add(paymentStatus);
+			}
+			if (paymentGateStatus.length > 0) {
+				qPos.add(paymentGateStatus);
+			}
+//			if(orderByAsc){
+//				qPos.add("ASC");
+//			}else{
+//				qPos.add("DESC");
+//			}
+
+			return (List<PaymentFile>) QueryUtil.list(
+				q, getDialect(), QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		return null;
+
+	}
+	public static final String GET_PAYMENTFILE_BY_PARAM = PaymentFileFinder.class
+				    .getName() + ".getPaymentFileByParam";
 	public static final String SEARCH_CUSTOMER_PAYMENTFILE = PaymentFileFinder.class
 	    .getName() + ".searchCustomerPaymentFile";
 	public static final String COUNT_CUSTOMER_PAYMENTFILE = PaymentFileFinder.class
@@ -813,7 +872,7 @@ implements PaymentFileFinder {
 		    .getName() + ".countCustomerPaymentFileNewRequest";
 
 	private Log _log = LogFactoryUtil
-	    .getLog(PaymentFileFinder.class
+	    .getLog(PaymentFileFinderImpl.class
 	        .getName());
 	
 
