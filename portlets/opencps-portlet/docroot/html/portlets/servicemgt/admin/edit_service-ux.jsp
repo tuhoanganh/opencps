@@ -159,30 +159,30 @@
 				>
 				</datamgt:ddr>
 			</aui:col> --%>
-			
-			<aui:select name="<%=ServiceDisplayTerms.SERVICE_DOMAINCODE %>" label="<%=ServiceDisplayTerms.SERVICE_DOMAINCODE %>">
-				<aui:option value=""></aui:option>
-				<%
-					if(dictItems != null){
-						for(DictItem dictItem : dictItems){
-							if((curDictItem != null && dictItem.getDictItemId() == curDictItem.getDictItemId())||
-									(curDictItem != null && dictItem.getTreeIndex().contains(curDictItem.getDictItemId() + StringPool.PERIOD))){
-								continue;
+			<aui:col width="50">
+				<aui:select name="<%=ServiceDisplayTerms.SERVICE_DOMAINCODE %>" label="<%=ServiceDisplayTerms.SERVICE_DOMAINCODE %>">
+					<aui:option value=""></aui:option>
+					<%
+						if(dictItems != null){
+							for(DictItem dictItem : dictItems){
+								if((curDictItem != null && dictItem.getDictItemId() == curDictItem.getDictItemId())||
+										(curDictItem != null && dictItem.getTreeIndex().contains(curDictItem.getDictItemId() + StringPool.PERIOD))){
+									continue;
+								}
+								
+								int level = StringUtil.count(dictItem.getTreeIndex(), StringPool.PERIOD);
+								String index = "|";
+								for(int i = 0; i < level; i++){
+									index += "_";
+								}
+								%>
+									<aui:option value="<%=dictItem.getDictItemId() %>"><%=index + dictItem.getItemName(locale) %></aui:option>
+								<%
 							}
-							
-							int level = StringUtil.count(dictItem.getTreeIndex(), StringPool.PERIOD);
-							String index = "|";
-							for(int i = 0; i < level; i++){
-								index += "_";
-							}
-							%>
-								<aui:option value="<%=dictItem.getDictItemId() %>"><%=index + dictItem.getItemName(locale) %></aui:option>
-							<%
 						}
-					}
-				%>
-			</aui:select>
-			
+					%>
+				</aui:select>
+			</aui:col>
 			
 		</aui:row>
 		
