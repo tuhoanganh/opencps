@@ -1,5 +1,3 @@
-
-<%@page import="org.opencps.usermgt.service.EmployeeLocalServiceUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -18,6 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+<%@page import="org.opencps.usermgt.service.EmployeeLocalServiceUtil"%>
 <%@page import="com.liferay.portal.kernel.dao.search.SearchEntry"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="javax.portlet.PortletRequest"%>
@@ -74,9 +73,13 @@
 	>
 	<liferay-ui:search-container-results>
 		<%
-			processOrders = ProcessOrderLocalServiceUtil.searchReAssigToUser(actionUserId, 
-					searchContainer.getStart(), searchContainer.getEnd());
-			totalCount = ProcessOrderLocalServiceUtil.countReAssigToUser(actionUserId);
+			try {
+				processOrders = ProcessOrderLocalServiceUtil.searchReAssigToUser(actionUserId, 
+						searchContainer.getStart(), searchContainer.getEnd());
+				totalCount = ProcessOrderLocalServiceUtil.countReAssigToUser(actionUserId);
+			} catch(Exception e) {
+				
+			}
 			
 			results = processOrders;
 			total = totalCount;
