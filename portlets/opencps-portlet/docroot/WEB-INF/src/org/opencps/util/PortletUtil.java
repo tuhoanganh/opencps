@@ -48,7 +48,9 @@ import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
 import org.opencps.paymentmgt.util.PaymentMgtUtil;
 import org.opencps.processmgt.model.ProcessStepDossierPart;
+import org.opencps.processmgt.model.ProcessWorkflow;
 import org.opencps.processmgt.model.WorkflowOutput;
+import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
 import org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil;
 import org.opencps.processmgt.util.ProcessUtils;
 
@@ -1145,9 +1147,18 @@ public class PortletUtil {
 
 		List<ProcessStepDossierPart> processStepDossierParts = new ArrayList<ProcessStepDossierPart>();
 
-		if (processStepId > 0) {
+		ProcessWorkflow processWorkflow = null;
+		
+		try {
+			processWorkflow = ProcessWorkflowLocalServiceUtil
+					.getProcessWorkflow(processWorkflowId);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		if (Validator.isNotNull(processWorkflow)) {
 			processStepDossierParts = ProcessUtils
-					.getDossierPartByStep(processStepId);
+					.getDossierPartByStep(processWorkflow.getPreProcessStepId());
 		}
 
 		if (processStepDossierParts != null) {
