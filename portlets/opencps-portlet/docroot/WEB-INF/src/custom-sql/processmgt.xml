@@ -536,7 +536,7 @@
 			WHERE
 				po.actionUserId = ?
 			AND (
-				po.assignToUserId =! 0 AND po.assignToUserId != ?)
+				po.assignToUserId > 0 AND po.assignToUserId != ?)
 			OR (
 				po.processStepId = pal.processStepId AND po.actionUserId = ? AND pal.readOnly = FALSE )
 			ORDER BY
