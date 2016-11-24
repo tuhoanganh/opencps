@@ -790,6 +790,8 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 
 		} catch (Exception e) {
 			throw new SystemException();
+		} finally {
+			session.close();
 		}
 	}
 
@@ -825,6 +827,8 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 
 		} catch (Exception e) {
 			throw new SystemException();
+		} finally {
+			session.close();
 		}
 	}
 }
