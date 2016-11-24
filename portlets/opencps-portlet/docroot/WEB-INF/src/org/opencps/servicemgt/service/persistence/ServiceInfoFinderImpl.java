@@ -148,7 +148,7 @@ public class ServiceInfoFinderImpl extends BasePersistenceImpl<ServiceInfo>
 			if (Validator.equals(domainCode, "0") || Validator.equals(domainCode, StringPool.BLANK)) {
 				sql =
 				    StringUtil.replace(
-				        sql, "AND (opencps_serviceinfo.domainCode = ?)",
+				        sql, "AND ((opencps_serviceinfo.domainCode = ?) OR (opencps_serviceinfo.domainIndex like ?))",
 				        StringPool.BLANK);
 			}
 			
@@ -176,6 +176,7 @@ public class ServiceInfoFinderImpl extends BasePersistenceImpl<ServiceInfo>
 
 			if (!Validator.equals(domainCode, "0") && !Validator.equals(domainCode, StringPool.BLANK)) {
 				qPos.add(domainCode);
+				qPos.add(StringPool.PERCENT+domainCode+StringPool.PERIOD+StringPool.PERCENT);
 			}
 
 			return (List<ServiceInfo>) QueryUtil.list(
@@ -247,7 +248,7 @@ public class ServiceInfoFinderImpl extends BasePersistenceImpl<ServiceInfo>
 			if (Validator.equals(domainCode, "0") || Validator.equals(domainCode, StringPool.BLANK)) {
 				sql =
 				    StringUtil.replace(
-				        sql, "AND (opencps_serviceinfo.domainCode = ?)",
+				        sql, "AND ((opencps_serviceinfo.domainCode = ?) OR (opencps_serviceinfo.domainIndex like ?))",
 				        StringPool.BLANK);
 			}
 
@@ -273,6 +274,7 @@ public class ServiceInfoFinderImpl extends BasePersistenceImpl<ServiceInfo>
 
 			if (!Validator.equals(domainCode, "0") && !Validator.equals(domainCode, StringPool.BLANK)) {
 				qPos.add(domainCode);
+				qPos.add(StringPool.PERCENT+domainCode+StringPool.PERIOD+StringPool.PERCENT);
 			}
 
 			Iterator<Integer> itr = q.iterate();
