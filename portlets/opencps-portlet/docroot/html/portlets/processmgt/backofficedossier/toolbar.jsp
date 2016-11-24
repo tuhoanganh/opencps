@@ -62,7 +62,7 @@
 	
 %>
 <aui:nav-bar cssClass="opencps-toolbar custom-toolbar">
-	<aui:nav-bar-search cssClass="pull-right front-custom-select-search" style="width: 98%;">
+	<aui:nav-bar-search cssClass="pull-right front-custom-select-search">
 		<div class="form-search">
 			<aui:form 
 				action="<%= searchURL %>"
