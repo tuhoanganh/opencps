@@ -17,7 +17,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
 <%@page import="com.liferay.portal.kernel.util.Constants"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="org.opencps.util.WebKeys"%>
@@ -47,7 +46,7 @@
 	}
 	
 	long frontServicePlid = PortalUtil.getPlidFromPortletId(scopeGroupId, WebKeys.DOSSIER_MGT_PORTLET);
-	
+
 	long plidSubmit = 0;
 	
 	if(Long.valueOf(plidRes) == 0) {
@@ -95,7 +94,18 @@
 			<portlet:param name="backURL" value="<%=backURL %>"/>
 			<portlet:param name="isEditDossier" value="<%=String.valueOf(true) %>"/>
 		</liferay-portlet:renderURL>
-		<aui:button type="button" name="submitonline" value="dossier-submit-online" href="<%=Validator.isNotNull(serviceConfig.getServiceUrl()) ? serviceConfig.getServiceUrl() : servieOnlinePopURL.toString() %>" />
+		
+		<c:choose>
+			<c:when test='<%=Validator.isNotNull(serviceConfig) && ((serviceConfig.getServiceBusinees()) || (serviceConfig.getServiceCitizen()))%>'>
+				<aui:button type="button" name="submitonline" value="dossier-submit-online" href="<%=Validator.isNotNull(serviceConfig.getServiceUrl()) ? serviceConfig.getServiceUrl() : servieOnlinePopURL.toString() %>" />
+			</c:when>
+			<c:otherwise>
+				<div class="alert alert-warning">
+					<liferay-ui:message key="you-have-not-permission-to-submit-dossier"/>
+				</div>
+			</c:otherwise>
+		</c:choose>
+		
 	</c:if>
 </aui:row>
 

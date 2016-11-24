@@ -1,3 +1,4 @@
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -28,6 +29,7 @@
 <%@page import="org.opencps.dossiermgt.search.DossierFileSearch"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
+<%@page import="org.opencps.util.PortletUtil"%>
 <%@ include file="../init.jsp"%>
 
 <liferay-util:include page='<%=templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
@@ -143,7 +145,7 @@
 					<div class="row-fluid">
 						<div class="span3 bold-label"><liferay-ui:message key="dossier-file-type"/></div>
 						
-						<div class="span9"><%=String.valueOf(dossierFileBean.getPartType())%></div>
+						<div class="span9"><%=PortletUtil.getDossierPartName(dossierFileBean.getPartType(), locale)%></div>
 					</div>
 					
 				</liferay-util:buffer>

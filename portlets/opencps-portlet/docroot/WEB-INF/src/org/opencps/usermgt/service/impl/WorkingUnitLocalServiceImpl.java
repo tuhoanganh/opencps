@@ -168,7 +168,6 @@ public class WorkingUnitLocalServiceImpl
 		Organization org = null;
 		org = OrganizationLocalServiceUtil
 						.getOrganization(workingUnit.getMappingOrganisationId());
-
 		
 		if(parentWorkingUnitId <= 0) {
 			org.setParentOrganizationId(OrganizationConstants

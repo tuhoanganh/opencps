@@ -1,20 +1,4 @@
-<%@page import="javax.portlet.PortletMode"%>
-<%@page import="javax.portlet.WindowState"%>
-<%@page import="com.liferay.portal.kernel.dao.orm.QueryUtil"%>
-<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
-<%@page import="org.opencps.util.PortletUtil"%>
-<%@page import="org.opencps.datamgt.service.DictCollectionLocalServiceUtil"%>
-<%@page import="org.opencps.datamgt.model.DictCollection"%>
-<%@page import="javax.portlet.PortletRequest"%>
-<%@page import="org.opencps.util.WebKeys"%>
-<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
-<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
-<%@page import="com.liferay.portal.kernel.json.JSONFactoryUtil"%>
-<%@page import="com.liferay.portal.kernel.json.JSONObject"%>
-<%@page import="org.opencps.util.PortletPropsValues"%>
-<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
-<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
-<%@page import="org.opencps.processmgt.util.ProcessOrderUtils"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -51,7 +35,23 @@
 <%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
 <%@page import="org.opencps.servicemgt.util.ServiceUtil"%>
 <%@page import="org.opencps.util.PortletConstants"%>
-
+<%@page import="javax.portlet.PortletMode"%>
+<%@page import="javax.portlet.WindowState"%>
+<%@page import="com.liferay.portal.kernel.dao.orm.QueryUtil"%>
+<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
+<%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="org.opencps.datamgt.service.DictCollectionLocalServiceUtil"%>
+<%@page import="org.opencps.datamgt.model.DictCollection"%>
+<%@page import="javax.portlet.PortletRequest"%>
+<%@page import="org.opencps.util.WebKeys"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
+<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
+<%@page import="com.liferay.portal.kernel.json.JSONFactoryUtil"%>
+<%@page import="com.liferay.portal.kernel.json.JSONObject"%>
+<%@page import="org.opencps.util.PortletPropsValues"%>
+<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
+<%@page import="org.opencps.processmgt.util.ProcessOrderUtils"%>
 <%@ include file="../../init.jsp"%>
 
 <%

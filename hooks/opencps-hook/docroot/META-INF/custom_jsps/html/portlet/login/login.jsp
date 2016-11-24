@@ -19,6 +19,7 @@
 
 <%
 	String linkToRegister = themeDisplay.getPortalURL() + "/register";
+	String linkDescriptToUse = themeDisplay.getPortalURL() + "/huong-dan-su-dung";
 %>
 
 <c:choose>
@@ -157,7 +158,6 @@
 						</aui:button-row>
 					</div>
 				</c:when>
-
 				<c:when test='<%=displayStyle.equals("compact") %>'>
 					
 					<div class="compact-sign-in-wrapper">
@@ -235,7 +235,7 @@
 								</aui:col>
 								<aui:col width = "50">
 									<span class="create-account">
-										<aui:a href="#">
+										<aui:a href="<%=linkDescriptToUse %>">
 											<liferay-ui:message key="descript-to-use"/>
 										</aui:a>
 									</span>
@@ -247,7 +247,6 @@
 					</div>
 					
 				</c:when>
-
 				<c:otherwise>
 					<div class="ux-sign-in-wrapper">
 						<div class="default-sign-in">

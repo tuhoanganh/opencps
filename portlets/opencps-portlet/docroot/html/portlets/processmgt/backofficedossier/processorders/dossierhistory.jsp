@@ -30,6 +30,11 @@
 <%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.model.Dossier"%>
+<%@page import="org.opencps.dossiermgt.service.DossierLogLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.util.ProcessUtils"%>
+<%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
+<%@page import="org.opencps.dossiermgt.model.DossierFileLog"%>
+
 <%@ include file="../../init.jsp"%>
 
 <%
@@ -101,46 +106,20 @@
 		>
 		<liferay-ui:search-container-results>
 			<%
-				actionHistories = ActionHistoryLocalServiceUtil
-								.getActionHistoryByProcessOrderId(processOrderId,
-										searchContainer.getStart(),
-										searchContainer.getEnd(), false);
-
-						results = actionHistories;
-						total = ActionHistoryLocalServiceUtil
-								.countActionHistoryByProcessId(processOrderId);
-						pageContext.setAttribute("results", results);
-						pageContext.setAttribute("total", total);
+				results = DossierLogLocalServiceUtil.findDossierLog(2, dossier.getDossierId(), searchContainer.getStart(),
+						searchContainer.getEnd()); 
+				total = DossierLogLocalServiceUtil.countDossierLog(2, dossier.getDossierId()); 
+						
+				pageContext.setAttribute("results", results);
+				pageContext.setAttribute("total", total);
 			%>
 		</liferay-ui:search-container-results>
 		<liferay-ui:search-container-row 
-			className="org.opencps.processmgt.model.ActionHistory" 
-			modelVar="actionHistory" 
-			keyProperty="actionHistoryId"
+			className="org.opencps.dossiermgt.model.DossierLog" 
+			modelVar="dossierLog" 
+			keyProperty="dossierId"
 		>
 		
-			 <%
-				String date = StringPool.BLANK;
-				
-				if (Validator.isNotNull(actionHistory.getCreateDate())) {
-					date = DateTimeUtil.
-									convertDateToString(actionHistory.getCreateDate(),
-										DateTimeUtil._VN_DATE_FORMAT);
-				}
-				
-				String userActionName = StringPool.BLANK;
-				
-				try {
-					if (Validator.isNotNull(actionHistory.getActionUserId()) || actionHistory.getActionUserId() != 0) {
-						userActionName = UserLocalServiceUtil
-										.getUser(actionHistory.getActionUserId()).getFullName();
-					}
-				} catch (Exception e ) {
-					
-				}
-				
-			%>
-			
 				<aui:row cssClass="top-line pd_b20 pd_t20">
 					<aui:col width="50">
 						<aui:row>
@@ -149,7 +128,7 @@
 							</span>
 							
 							<span class="span8">
-								<%= actionHistory.getStepName() %>
+								<%= dossierLog.getStepName() %>
 							</span>
 						</aui:row>
 						
@@ -159,7 +138,7 @@
 							</span>
 							
 							<span class="span8">
-								<%=date%>
+								<%= sdf.format(dossierLog.getCreateDate()) %>
 							</span>
 						</aui:row>
 						
@@ -169,7 +148,15 @@
 							</span>
 							
 							<span class="span8">
-								<%=String.valueOf(actionHistory.getDaysDelay())%>
+								<%
+									int dayDelay = 0;
+									ActionHistory actionHis = ProcessUtils.getActionHistoryByLogId(dossierLog.getDossierLogId());
+								
+									if (Validator.isNotNull(actionHis)) {
+										dayDelay = actionHis.getDaysDelay();
+									}
+								%>
+								<%= dayDelay %>
 							</span>
 						</aui:row>
 					</aui:col>
@@ -180,7 +167,7 @@
 							</span>
 							
 							<span class="span8">
-								<%=userActionName%>
+								<%= dossierLog.getActorName() %>
 							</span>
 						</aui:row>
 					
@@ -190,21 +177,58 @@
 							</span>
 							
 							<span class="span8">
-								<%=actionHistory.getActionName()%>
+								<%= LanguageUtil.get(locale, dossierLog.getActionInfo()) %>
 							</span>
 						</aui:row>
 						
-
 						<aui:row>
 							<span class="span4 bold">
 								<liferay-ui:message key="action-note" />
 							</span>
 							
 							<span class="span8">
-								<%=String.valueOf(actionHistory.getActionNote())%>
+								<%=LanguageUtil.get(locale, dossierLog.getMessageInfo())%>
 							</span>
 							
 						</aui:row>
+						
+						<%
+							List<DossierFileLog> logFiles = DossierMgtUtil.getFileLogs(dossierLog.getDossierLogId(), dossierLog.getDossierId());
+						%>
+						<c:if test="<%= logFiles.size() != 0 %>">
+							<aui:row>
+								<span class="span12 bold">
+									<liferay-ui:message key="file-modified" />
+								</span>
+								
+							</aui:row>
+						
+							<aui:row>
+								<span class="span12">
+									<%
+										for (DossierFileLog lf : logFiles) {
+											
+											String cssClass = "dossier-file-status-" + lf.getActionCode();
+											String actionCode = LanguageUtil.get(locale, cssClass);
+									%>
+										<span style="padding: 3px; display: block;">
+											<%= StringPool.GREATER_THAN %> 
+												 <aui:a href="#" >
+												 	<%= lf.getFileName() %> 
+												 	<span style="font: smaller; color: #cbcbcb;">(<%= sdf.format(lf.getModifiedDate()) %> )</span>
+												 	
+												 </aui:a>
+										</span>
+									<%
+										}
+									%>
+									
+								</span>
+								
+							</aui:row>
+						
+						</c:if>
+				
 					</aui:col>
 				</aui:row>
 				
@@ -212,7 +236,6 @@
 		<liferay-ui:search-iterator type="normal"/>
 	</liferay-ui:search-container>
 </div>
-
 
 <%!
 	private int NUMBER_DELTA_PADDING = 100;

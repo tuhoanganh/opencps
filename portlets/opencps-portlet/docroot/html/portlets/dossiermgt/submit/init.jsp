@@ -21,6 +21,7 @@
 
 <%@ include file="/init.jsp" %>
 
+
 <%
 	PortletPreferences preferences = renderRequest.getPreferences();
 	

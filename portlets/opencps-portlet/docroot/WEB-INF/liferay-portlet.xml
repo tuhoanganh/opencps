@@ -299,7 +299,7 @@
 	<portlet>
 		<portlet-name>22</portlet-name>
 		<icon>/icon.png</icon>
-		<instanceable>true</instanceable>
+		<instanceable>false</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>
 			/js/main.js
@@ -350,12 +350,25 @@
 	<portlet>
 		<portlet-name>28</portlet-name>
 		<icon>/icon.png</icon>
+		<user-notification-definitions>org/opencps/notificationmgt/engine/user-notification-definitions.xml</user-notification-definitions>
+		<user-notification-handler-class>org.opencps.notificationmgt.engine.UserNotificationHandler</user-notification-handler-class>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>
 			/js/main.js
 		</footer-portlet-javascript>
 		<css-class-wrapper>28-portlet</css-class-wrapper>
 	</portlet>
+	
+	<portlet>
+		<portlet-name>30</portlet-name>
+		<icon>/icon.png</icon>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>30-portlet</css-class-wrapper>
+	</portlet>
+	
 	<role-mapper>
 		<role-name>administrator</role-name>
 		<role-link>Administrator</role-link>

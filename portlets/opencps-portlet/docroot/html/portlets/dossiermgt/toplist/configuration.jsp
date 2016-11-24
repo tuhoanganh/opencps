@@ -36,9 +36,14 @@
 	
 	<datamgt:ddr 
 		depthLevel="1" 
-		dictCollectionCode="DOSSIER_STATUS"
+		dictCollectionCode="DOSSIER_STATUS" 
+		showLabel="<%=false%>"
+		emptyOptionLabels="dossier-status"
+		itemsEmptyOption="true"
 		itemNames="status"
+		selectedItems="<%=status%>"
 		optionValueType="code"
+		cssClass="search-input select-box input100"
 	/>
 	<aui:button type="submit" name="Save" value="save"></aui:button>
 </aui:form>

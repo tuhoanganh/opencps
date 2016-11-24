@@ -1,5 +1,4 @@
 /**
-
  * OpenCPS is the open source Core Public Services software
  * Copyright (C) 2016-present OpenCPS community
 
@@ -174,8 +173,7 @@ public class ImageUtil {
 	 * @throws URISyntaxException
 	 */
 	public static BufferedImage getImageByPath(String fullPath)
-
-	throws IOException, URISyntaxException {
+			throws IOException, URISyntaxException {
 
 		InputStream is = null;
 		BufferedImage bimg = null;

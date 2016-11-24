@@ -93,4 +93,6 @@ public class MessageKeys {
 	public static final String HOLIDAYCONFIG_ADD_SUCESS = "holidayconfig.add.sucess";
 	public static final String HOLIDAYCONFIG_SYSTEM_EXCEPTION_OCCURRED = "holidayconfig.system.exception.occurred";
 	public static final String HOLIDAYCONFIG_UPDATE_SUCESS = "holidayconfig.update.sucess";
+	
+	public static final String SUGGEST_SUCESS = "suggest.sucess";
 }

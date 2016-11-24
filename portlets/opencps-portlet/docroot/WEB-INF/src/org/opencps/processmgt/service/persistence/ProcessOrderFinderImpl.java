@@ -22,12 +22,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.opencps.dossiermgt.bean.ProcessOrderBean;
-import org.opencps.dossiermgt.model.ServiceConfig;
-import org.opencps.dossiermgt.model.impl.ServiceConfigImpl;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.model.impl.ProcessOrderImpl;
 
-import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.SQLQuery;
