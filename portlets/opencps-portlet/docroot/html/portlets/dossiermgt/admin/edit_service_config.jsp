@@ -382,11 +382,13 @@
 
 </div>
 
+<script type="text/javascript">
+	function <portlet:namespace />initInstructions() {
+		return "<%= Validator.isNotNull(serviceConfig) ? UnicodeFormatter.toString(serviceConfig.getServiceInstruction()) : StringPool.BLANK %>";
+	}
+</script>
 <aui:script use = "aui-base">
 
-function <portlet:namespace />initInstructions() {
-	return "<%= Validator.isNotNull(serviceConfig) ? UnicodeFormatter.toString(serviceConfig.getServiceInstruction()) : StringPool.BLANK %>";
-}
 	
 AUI().ready(function(A) {
 		

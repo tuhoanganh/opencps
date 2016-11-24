@@ -45,6 +45,14 @@
 
 %>
 <div class="opencps-searchcontainer-wrapper">
+
+	<div class="opcs-serviceinfo-list-label">
+		<div class="title_box">
+			<p class="file_manage_title"><liferay-ui:message key='<%= "list-dossier-" + status %>' /></p>
+			<p class="count"></p>
+		</div>
+	</div>
+
 	<liferay-ui:search-container 
 			emptyResultsMessage="no-dossier-were-found"
 			iteratorURL="<%=iteratorURL %>"
@@ -142,7 +150,21 @@
 					<div class="span7">
 						<%=DateTimeUtil.convertDateToString(dossier.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT) %>
 					</div>
+					
 				</div>
+				<c:if test="<%= Validator.isNotNull(dossier.getFinishDatetime()) %>">
+					<div class="row-fluid">
+						
+						<div class="span5 bold-label">
+							 <liferay-ui:message key="date-for-completed"/>
+						</div>
+						
+						<div class="span7">
+							<%=DateTimeUtil.convertDateToString(dossier.getFinishDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) %>
+						</div>
+						
+					</div>
+				</c:if>
 				
 				
 				</liferay-util:buffer>
@@ -151,21 +173,7 @@
 					row.addText(boundcol1);
 					row.addText(boundcol2);
 				%>
-				<%-- <liferay-ui:search-container-column-text 
-					name="row-no" value="<%=dossier.getReceptionNo()%>"
-				/>
-				
-				<liferay-ui:search-container-column-text 
-					name="boss-of-dossier" value="<%= dossierName %>"
-				/>
-				
-				<liferay-ui:search-container-column-text 
-					name="name-of-service" value="<%= serviceName %>"
-				/>
-				
-				<liferay-ui:search-container-column-text 
-					name="date-for-receiving" value="<%=DateTimeUtil.convertDateToString(dossier.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT) %>"
-				/> --%>
+
 			</liferay-ui:search-container-row>
 			<liferay-ui:search-iterator type="opencs_page_iterator"/>
 	</liferay-ui:search-container>

@@ -100,7 +100,7 @@
 			<aui:form action="<%= searchURL %>" method="post" name="fmSearch">
 			<liferay-portlet:renderURLParams varImpl="searchURL" />
 				<aui:row>
-					<aui:col width="50" cssClass="search-col">
+					<aui:col width="30" cssClass="search-col">
 						<aui:select 
 							name="serviceInfoId" 
 							label="<%=StringPool.BLANK %>" 
@@ -126,7 +126,7 @@
 						</aui:select>
 					</aui:col>
 				
-					<aui:col width="50" cssClass="search-col">
+					<aui:col width="30" cssClass="search-col">
 						<aui:select 
 							name="dossierStatus" 
 							label="<%=StringPool.BLANK %>" 
@@ -148,6 +148,15 @@
 								
 							%>
 						</aui:select>
+					</aui:col>
+					<aui:col width="30" cssClass="search-col">
+						<liferay-ui:input-search 
+							id="keywords1"
+							name="keywords"
+							title='<%= LanguageUtil.get(locale, "keywords") %>'
+							placeholder='<%=LanguageUtil.get(locale, "keywords") %>'
+							cssClass="search-input input-keyword"
+						/>
 					</aui:col>
 				</aui:row>
 			</aui:form>
@@ -203,9 +212,12 @@
 		
 		var action = fmSearch.attr('action');
 		
+		var keywords = A.one('#<portlet:namespace/>keywords').val();
+		
 		var portletURL = Liferay.PortletURL.createURL(action);
 		portletURL.setParameter("serviceInfoId", serviceInfoId);
 		portletURL.setParameter("processStepId", processStepId);
+		portletURL.setParameter("keywords", keywords);
 		
 		fmSearch.setAttribute('action', portletURL.toString());
 		
@@ -225,10 +237,13 @@
 		var fmSearch = A.one('#<portlet:namespace/>fmSearch');
 		
 		var action = fmSearch.attr('action');
+
+		var keywords = A.one('#<portlet:namespace/>keywords').val();
 		
 		var portletURL = Liferay.PortletURL.createURL(action);
 		portletURL.setParameter("serviceInfoId", serviceInfoId);
 		portletURL.setParameter("processStepId", processStepId);
+		portletURL.setParameter("keywords", keywords);
 		
 		fmSearch.setAttribute('action', portletURL.toString());
 		
