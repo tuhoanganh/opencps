@@ -143,22 +143,6 @@ public class HolidayConfigPortlet extends MVCPortlet {
 							.updateHolidayConfigExtend(holidayExtend);
 				}
 			}
-			int[] paymentStatus = new int[] {};
-			String[] paymentGateStatus = new String[] {
-				"7,-21,-23,-99"
-			};
-			List<PaymentFile> paymentFileList = new ArrayList<PaymentFile>();
-
-			try {
-				paymentFileList =
-					PaymentFileLocalServiceUtil.getPaymentFileByParam(
-						paymentStatus, paymentGateStatus, true);
-			}
-			catch (PortalException | SystemException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			_log.info("paymentFileList.size():"+paymentFileList.size());
 		} catch (Exception e) {
 			SessionErrors.add(actionRequest,
 					MessageKeys.HOLIDAYCONFIG_SYSTEM_EXCEPTION_OCCURRED);

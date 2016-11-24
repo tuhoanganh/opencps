@@ -150,7 +150,7 @@
 		SELECT * FROM opencps_payment_file
 		WHERE (1 = 1)
 		AND opencps_payment_file.paymentStatus IN (?)
-		AND opencps_payment_file.paymentGateStatusCode IN (?)
+		AND opencps_payment_file.paymentGateStatusCode IN ('7','-21','-23','-99')
 		ORDER BY modifiedDate ASC
 		]]>
 	</sql>

@@ -17,6 +17,7 @@
 
 package org.opencps.paymentmgt.service.persistence;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -825,9 +826,7 @@ implements PaymentFileFinder {
 						StringPool.BLANK);
 			}
 			_log.info(GET_PAYMENTFILE_BY_PARAM);
-			_log.info("=====paymentStatus.length:"+paymentStatus.length);
-			_log.info("=====paymentGateStatus.length:"+paymentGateStatus.length);
-			_log.info("=====sql:"+sql);
+
 			SQLQuery q = session.createSQLQuery(sql);
 
 			q.addEntity("PaymentFile", PaymentFileImpl.class);
@@ -837,14 +836,10 @@ implements PaymentFileFinder {
 			if (paymentStatus.length > 0) {
 				qPos.add(paymentStatus);
 			}
+			
 			if (paymentGateStatus.length > 0) {
-				qPos.add(paymentGateStatus);
+				//qPos.add(status);
 			}
-//			if(orderByAsc){
-//				qPos.add("ASC");
-//			}else{
-//				qPos.add("DESC");
-//			}
 
 			return (List<PaymentFile>) QueryUtil.list(
 				q, getDialect(), QueryUtil.ALL_POS, QueryUtil.ALL_POS);
