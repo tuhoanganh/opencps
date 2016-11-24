@@ -65,6 +65,10 @@
 	if(Validator.isNotNull(collectionDomain)) {
 		dictItems = DictItemLocalServiceUtil.getDictItemsByDictCollectionId(collectionDomain.getDictCollectionId());
 	}
+	
+	iteratorURL.setParameter(ServiceDisplayTerms.SERVICE_ADMINISTRATION, administrationCode);
+	iteratorURL.setParameter(ServiceDisplayTerms.SERVICE_DOMAINCODE, domainCode);
+	iteratorURL.setParameter("keywords", ParamUtil.getString(request, "keywords"));
 %>
 
 <div class="title_box">
