@@ -1057,11 +1057,11 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 					+ dossierFileId + StringPool.DASH
 					+ dossierPart.getDossierpartId() + fileExtension;
 
-			//fileExportDir = exportToPDFFile(jrxmlTemplate, formData, null,
-			//		outputDestination, fileName);
-			
+			// fileExportDir = exportToPDFFile(jrxmlTemplate, formData, null,
+			// outputDestination, fileName);
+
 			fileExportDir = exportReportFile(jrxmlTemplate, formData, null,
-			outputDestination, fileName, DocType.getEnum(fileExtension));
+					outputDestination, fileName, DocType.getEnum(fileExtension));
 
 			if (Validator.isNotNull(fileExportDir)) {
 
@@ -1722,14 +1722,20 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			jsonObject = JSONFactoryUtil.createJSONObject();
 			if (dossierFileId > 0
 					&& dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_OTHER) {
+				
+				if (dossierFile.getSyncStatus() != PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS) {
+					DossierFileLocalServiceUtil.deleteDossierFile(dossierFileId,
+							dossierFile.getFileEntryId());
+				} else {
+					DossierFileLocalServiceUtil.removeDossierFile(dossierFileId);
+				}
 
-				DossierFileLocalServiceUtil.removeDossierFile(dossierFileId);
+				//DossierFileLocalServiceUtil.removeDossierFile(dossierFileId);
 
 			} else {
 
 				DossierFileLocalServiceUtil.deleteDossierFile(dossierFileId,
 						dossierFile.getFileEntryId());
-
 			}
 
 			// Add dossierLog for removeDossierFile
