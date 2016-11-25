@@ -156,7 +156,7 @@ public class PaymentGateConfigPersistenceImpl extends BasePersistenceImpl<Paymen
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
-
+	
 	@Override
 	public void clearCache(List<PaymentGateConfig> paymentGateConfigs) {
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
