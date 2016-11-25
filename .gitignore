@@ -292,3 +292,5 @@ portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/holidayconfig/service/b
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/holidayconfig/service/persistence/HolidayConfigExtendPersistenceImpl.java
 portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/holidayconfig/service/persistence/HolidayConfigPersistenceImpl.java
 
+
+/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/service/persistence/PaymentGateConfigPersistenceImpl.java
