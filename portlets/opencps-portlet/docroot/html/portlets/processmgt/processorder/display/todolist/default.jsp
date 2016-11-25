@@ -64,10 +64,6 @@
 	headerNames.add("action");
 	
 	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
-	
-	ProcessOrder order = null;
-	ProcessStep step = null;
-	int dateOver = 0;
 %>
 
 <c:if test="<%=stopRefresh %>">
@@ -124,13 +120,11 @@
 						processURL.setParameter(ProcessOrderDisplayTerms.PROCESS_ORDER_ID, String.valueOf(processOrder.getProcessOrderId()));
 						processURL.setParameter("backURL", currentURL);
 						processURL.setParameter("isEditDossier", (processOrder.isReadOnly() || (processOrder.getAssignToUsesrId() != 0 &&  processOrder.getAssignToUsesrId() != user.getUserId())) ? String.valueOf(false) : String.valueOf(true));
+
+						int dateOver = HolidayCheckUtils.calculatorDateOver(Validator.isNotNull(processOrder.getActionDatetime()) ? 
+								processOrder.getActionDatetime() : new Date(),
+								new Date(), processOrder.getDaysDuration());
 						
-						order = ProcessOrderLocalServiceUtil.getProcessOrder(processOrder.getProcessOrderId());
-						step = ProcessStepLocalServiceUtil.getProcessStep(order.getProcessStepId());
-						
-						if(Validator.isNotNull(order)&& Validator.isNotNull(step)){
-							dateOver = HolidayCheckUtils.calculatorDateOver(order.getActionDatetime(), new Date(), step.getDaysDuration());
-						}
 						//String deadLine = Validator.isNotNull(processOrder.getDealine()) ? processOrder.getDealine() : StringPool.DASH;
 						
 						String href = "location.href='" + processURL.toString()+"'";

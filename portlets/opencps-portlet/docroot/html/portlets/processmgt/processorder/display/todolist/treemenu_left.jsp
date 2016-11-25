@@ -1,4 +1,5 @@
 
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -26,6 +27,7 @@
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
+<%@page import="java.util.Date"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.LinkedHashMap"%>
 <%@page import="java.util.List"%>
@@ -39,6 +41,7 @@
 <%@page import="org.opencps.processmgt.util.ProcessUtils"%>
 <%@page import="org.opencps.util.MessageKeys"%>
 <%@page import="org.opencps.util.WebKeys"%>
+<%@page import="org.opencps.holidayconfig.util.HolidayCheckUtils"%>
 
 <%@ include file="../../init.jsp"%>
 
@@ -259,7 +262,9 @@
 								processURL.setParameter("backURL", currentURL);
 								processURL.setParameter("isEditDossier", (processOrder.isReadOnly() || (processOrder.getAssignToUsesrId() != 0 &&  processOrder.getAssignToUsesrId() != user.getUserId())) ? String.valueOf(false) : String.valueOf(true));
 							
-								String deadlineVal = Validator.isNotNull(processOrder.getDealine()) ? processOrder.getDealine() : StringPool.DASH;
+								int dateOver = HolidayCheckUtils.calculatorDateOver(Validator.isNotNull(processOrder.getActionDatetime()) ? 
+										processOrder.getActionDatetime() : new Date(),
+										new Date(), processOrder.getDaysDuration());
 								
 								String hrefFix = "location.href='" + processURL.toString()+"'";
 								String cssStatusColor = "status-color-" + processOrder.getDossierStatus();
@@ -325,7 +330,7 @@
 									</div>
 									
 									<div class='<%="span7"%>'>
-										<%= deadlineVal %>
+										<%=dateOver >= 0 ? "<div class='ocps-free-day'>"+ StringUtil.replace(LanguageUtil.get(themeDisplay.getLocale(), "until-x-day"), "{0}", String.valueOf(dateOver))+"</div>":"<div class='ocps-over-day'>"+StringUtil.replace(LanguageUtil.get(themeDisplay.getLocale(), "over-x-day"), "{0}", String.valueOf(Math.abs(dateOver))) +"</div>"%>
 									</div>
 								</div>
 							</liferay-util:buffer>
