@@ -102,28 +102,34 @@
 				String templateName = dossierTemplate.getTemplateName();
 				
 			%>
+			
+			<liferay-util:buffer var="rowIndex">
+				<div class="row-fluid min-width10">
+					<div class="span12 bold">
+						<%=row.getPos() + 1 %>
+					</div>
+				</div>
+			</liferay-util:buffer>
+			
 			<liferay-util:buffer var="name">
 			
 				<div class="row-fluid">
 					
-					<div class="span4 bold">
+					<div class="span3 bold">
 						<liferay-ui:message key="template-number"/>
 					</div>
 					
-					<div class="span8"><%=templateNo%></div>
+					<div class="span9"><%=templateNo%></div>
 				</div>
 				
 				<div class="row-fluid">
-					<div class="span4 bold-label">
+					<div class="span3 bold-label">
 						<liferay-ui:message key="template_name"/>
 					</div>
 					
-					<div class="span8"><%=dossierTemplate.getTemplateName() %></div>
+					<div class="span9"><%=dossierTemplate.getTemplateName() %></div>
 				</div>
 				
-			</liferay-util:buffer>
-			
-			<liferay-util:buffer var="description">
 				<div class="row-fluid">
 					
 					<div class="span3 bold-label">
@@ -131,12 +137,13 @@
 					</div>
 					<div class="span9"><%=dossierTemplate.getDescription() %> </div>
 				</div>
+				
 			</liferay-util:buffer>
-			<%
 			
+			<%
+				row.addText(rowIndex);
 				row.setClassName("opencps-searchcontainer-row");
 				row.addText(name);
-				row.addText(description);
 				if(isPermission) {
 					row.addJSP("center", SearchEntry.DEFAULT_VALIGN, templatePath + "dossier_template_action.jsp", config.getServletContext(), request, response);
 				}
