@@ -1,6 +1,4 @@
-<%@page import="org.opencps.processmgt.model.ProcessOrder"%>
-<%@page import="java.util.Date"%>
-<%@page import="org.opencps.holidayconfig.util.HolidayCheckUtils"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -19,6 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
+<%@page import="java.util.Date"%>
 <%@page import="org.opencps.processmgt.util.ProcessOrderUtils"%>
 <%@page import="org.opencps.util.MessageKeys"%>
 <%@page import="org.opencps.processmgt.search.ProcessOrderSearchTerms"%>
@@ -28,6 +27,8 @@
 <%@page import="com.liferay.portal.kernel.dao.search.RowChecker"%>
 <%@page import="org.opencps.processmgt.service.ProcessOrderLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
+<%@page import="org.opencps.holidayconfig.util.HolidayCheckUtils"%>
+
 <%@ include file="../../init.jsp"%>
 
 <liferay-ui:success  key="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>" message="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>"/>
@@ -175,7 +176,8 @@
 							</div>
 							
 							<div class="span7">
-								<%=processOrder.getAssignToUserName() %>
+								<%=Validator.isNotNull(processOrder.getAssignToUserName(processOrder.getDossierStatus())) ?
+										processOrder.getAssignToUserName(processOrder.getDossierStatus()) : StringPool.DASH %>
 							</div>
 						</div>
 						

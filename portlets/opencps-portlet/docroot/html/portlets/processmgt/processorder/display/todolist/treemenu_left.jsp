@@ -1,5 +1,4 @@
 
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -18,7 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
+<%@page import="java.util.Date"%>
 <%@page import="com.liferay.portal.kernel.dao.search.RowChecker"%>
 <%@page import="com.liferay.portal.kernel.json.JSONFactoryUtil"%>
 <%@page import="com.liferay.portal.kernel.json.JSONObject"%>
@@ -27,7 +26,6 @@
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
-<%@page import="java.util.Date"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.LinkedHashMap"%>
 <%@page import="java.util.List"%>
@@ -261,11 +259,11 @@
 								processURL.setParameter(ProcessOrderDisplayTerms.PROCESS_ORDER_ID, String.valueOf(processOrder.getProcessOrderId()));
 								processURL.setParameter("backURL", currentURL);
 								processURL.setParameter("isEditDossier", (processOrder.isReadOnly() || (processOrder.getAssignToUsesrId() != 0 &&  processOrder.getAssignToUsesrId() != user.getUserId())) ? String.valueOf(false) : String.valueOf(true));
-							
+						
 								int dateOver = HolidayCheckUtils.calculatorDateOver(Validator.isNotNull(processOrder.getActionDatetime()) ? 
 										processOrder.getActionDatetime() : new Date(),
 										new Date(), processOrder.getDaysDuration());
-								
+						
 								String hrefFix = "location.href='" + processURL.toString()+"'";
 								String cssStatusColor = "status-color-" + processOrder.getDossierStatus();
 							%>
