@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 
-package org.opencps.vtcpay.model;
+package org.opencps.paymentmgt.vtcpay.model;
 
 import java.security.MessageDigest;
 import java.util.Arrays;
@@ -101,12 +101,13 @@ public class VTCPay {
 		
 	}
 	
-	public VTCPay(String website_id,String order_code,String receiver_acc,String sign){
+	public VTCPay(String website_id,String order_code,String receiver_acc,String secret_key){
 		
 		this.website_id = website_id;
 		this.order_code = order_code;
 		this.receiver_acc = receiver_acc;
-		this.sign = sign;
+		this.secret_key = secret_key;
+		
 	}
 
 	public VTCPay(String data) {
@@ -184,7 +185,7 @@ public class VTCPay {
 		return merchantSign;
 	}
 
-	public static String getSecureHashCodeRequest(PaymentConfig paymentConfig, VTCPay vtcPay) {
+	public static String getSecureHashCodeRequest(VTCPay vtcPay) {
 
 		StringBuffer merchantSignBuffer = new StringBuffer();
 
@@ -195,7 +196,7 @@ public class VTCPay {
 		merchantSignBuffer.append("|").append(vtcPay.getReference_number());
 		merchantSignBuffer.append("|").append(vtcPay.getUrl_return());
 		merchantSignBuffer.append("|").append(vtcPay.getWebsite_id());
-		merchantSignBuffer.append("|").append(paymentConfig.getKeypaySecureKey());
+		merchantSignBuffer.append("|").append(vtcPay.getSecret_key());
 
 		String merchantSign = StringPool.BLANK;
 		merchantSign = merchantSignBuffer.toString();
@@ -205,22 +206,46 @@ public class VTCPay {
 		return merchantSign;
 
 	}
-	public static String getSecureHashCodeRequest1(PaymentConfig paymentConfig, VTCPay vtcPay){
+	public static String getSecureHashCodeCheckRequest(VTCPay vtcPay){
 		
 		StringBuffer merchantSignBuffer = new StringBuffer();
 		
 		merchantSignBuffer.append(vtcPay.getWebsite_id());
-		merchantSignBuffer.append("-").append(vtcPay.getWebsite_id());
 		merchantSignBuffer.append("-").append(vtcPay.getOrder_code());
 		merchantSignBuffer.append("-").append(vtcPay.getReceiver_acc());
-		merchantSignBuffer.append("-").append(paymentConfig.getKeypaySecureKey());
+		merchantSignBuffer.append("-").append(vtcPay.getSecret_key());
 		
 		String merchantSign = StringPool.BLANK;
 		merchantSign = merchantSignBuffer.toString();
+		
+		
 
 		merchantSign = VTCPay.sha256(merchantSign);
+		merchantSign = merchantSign.toUpperCase();
+		_log.info("merchantSign:"+merchantSign);
 		
 		return merchantSign;
+		
+	}
+	
+	public static VTCPay getSecureHashCodeCheckResponse(String data){
+		
+		String[] dataArrays = StringUtil.split(data, "|");
+		VTCPay vtcPay = new VTCPay();
+
+		if (dataArrays.length > 0) {
+
+			List<String> dataList = Arrays.asList(dataArrays);
+
+			if (dataList.size() > 0) {
+				vtcPay.setResponsecode(dataList.get(0));
+				vtcPay.setOrder_code(dataList.get(1));
+				vtcPay.setAmount(dataList.get(2));
+				vtcPay.setAmount(dataList.get(3));
+			}
+		}
+		
+		return vtcPay;
 		
 	}
 

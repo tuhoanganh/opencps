@@ -17,16 +17,16 @@
 
 package org.opencps.paymentmgt.service.persistence;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
 import org.opencps.paymentmgt.model.PaymentFile;
 import org.opencps.paymentmgt.model.impl.PaymentFileImpl;
-import org.opencps.processmgt.model.ServiceProcess;
-import org.opencps.processmgt.model.impl.ServiceProcessImpl;
-import org.opencps.processmgt.service.persistence.ServiceProcessFinder;
+import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
 
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.SQLQuery;
@@ -805,44 +805,25 @@ implements PaymentFileFinder {
 	}
 	
 	public List<PaymentFile> getPaymentFileByParam(
-		int[] paymentStatus, String[] paymentGateStatus, boolean orderByAsc) {
+		int[] paymentStatus, int[] paymentGateStatus,int[] recheckStatus, boolean orderByAsc) {
 
 		Session session = null;
 
 		try {
 			session = openSession();
-
-			String sql = CustomSQLUtil.get(GET_PAYMENTFILE_BY_PARAM);
-
-			if (paymentStatus.length <= 0) {
-				sql =
-					StringUtil.replace(
-						sql, "AND opencps_payment_file.paymentStatus IN (?)", StringPool.BLANK);
+			
+			DynamicQuery dynamicQuery =
+				DynamicQueryFactoryUtil.getDynamicQueryFactory().forClass(PaymentFile.class);
+			if(paymentGateStatus.length >0){
+				dynamicQuery.add(PropertyFactoryUtil.forName("paymentGateStatusCode").in(paymentGateStatus));
 			}
-			if (paymentGateStatus.length <= 0) {
-				sql =
-					StringUtil.replace(
-						sql, "AND opencps_payment_file.paymentGateStatusCode IN (?)",
-						StringPool.BLANK);
-			}
-			_log.info(GET_PAYMENTFILE_BY_PARAM);
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addEntity("PaymentFile", PaymentFileImpl.class);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			if (paymentStatus.length > 0) {
-				qPos.add(paymentStatus);
+			if(paymentStatus.length >0){
+				dynamicQuery.add(PropertyFactoryUtil.forName("paymentStatus").in(paymentStatus));
 			}
 			
-			if (paymentGateStatus.length > 0) {
-				//qPos.add(status);
-			}
-
-			return (List<PaymentFile>) QueryUtil.list(
-				q, getDialect(), QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+			List<PaymentFile> list = PaymentFileLocalServiceUtil.dynamicQuery(dynamicQuery);
+			return list;
+	
 		}
 		catch (Exception e) {
 			_log.error(e);

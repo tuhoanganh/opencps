@@ -697,7 +697,6 @@
 		<field name="paymentGateType" type="long" />
 		<field name="status" type="boolean" />
 		<field name="returnUrl" type="String" />
-		<field name="checkUrl" type="String" />
 	</model>
 	<model name="org.opencps.paymentmgt.model.PaymentFile">
 		<field name="uuid" type="String" />
@@ -741,8 +740,10 @@
 		<field name="syncStatus" type="int" />
 		<field name="oid" type="String" />
 		<field name="paymentConfig" type="long" />
-		<field name="paymentGateStatusCode" type="String" />
+		<field name="paymentGateStatusCode" type="int" />
 		<field name="paymentGateResponseData" type="String" />
+		<field name="paymentGateCheckCode" type="int" />
+		<field name="paymentGateCheckResponseData" type="String" />
 	</model>
 	<model name="org.opencps.paymentmgt.model.PaymentGateConfig">
 		<field name="paymentGateId" type="long" />

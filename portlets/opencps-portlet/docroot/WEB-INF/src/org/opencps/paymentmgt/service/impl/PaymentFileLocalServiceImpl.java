@@ -568,10 +568,10 @@ public class PaymentFileLocalServiceImpl
 	 * @throws SystemException
 	 */
 	public List<PaymentFile> getPaymentFileByParam(
-		int[] paymentStatus, String[] paymentGateStatus, boolean orderByASC)
+		int[] paymentStatus, int[] paymentGateStatus,int[] recheckStatus, boolean orderByASC)
 		throws PortalException, SystemException {
 
-		return paymentFileFinder.getPaymentFileByParam(paymentStatus,paymentGateStatus,orderByASC);
+		return paymentFileFinder.getPaymentFileByParam(paymentStatus,paymentGateStatus,recheckStatus,orderByASC);
 
 	}
 

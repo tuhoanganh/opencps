@@ -17,24 +17,32 @@
 
 package org.opencps.backend.scheduler;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import org.opencps.dossiermgt.model.Dossier;
+import org.opencps.dossiermgt.service.DossierLocalServiceUtil;
+import org.opencps.dossiermgt.service.DossierLogLocalServiceUtil;
+import org.opencps.dossiermgt.util.ActorBean;
+import org.opencps.notificationmgt.utils.NotificationUtils;
 import org.opencps.paymentmgt.model.PaymentConfig;
 import org.opencps.paymentmgt.model.PaymentFile;
 import org.opencps.paymentmgt.service.PaymentConfigLocalServiceUtil;
 import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
-import org.opencps.vtcpay.model.VTCPay;
+import org.opencps.paymentmgt.util.PaymentMgtUtil;
+import org.opencps.paymentmgt.util.VTCPayEventKeys;
+import org.opencps.paymentmgt.vtcpay.model.VTCPay;
+import org.opencps.paymentmgt.vtcpay.wssoap.WSCheckTransSoapProxy;
+import org.opencps.util.PortletConstants;
+import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
@@ -57,36 +65,32 @@ public class CheckPaymentStatus implements MessageListener {
 	@Override
 	public void receive(Message message)
 		throws MessageListenerException {
-		
+
 		_log.info("*****checkPaymentStatus*****");
 
-		int[] paymentStatus = new int[] {};
-		String[] paymentGateStatus = new String[] {
-			"7,-21,-23,-99"
-		};
+		int[] paymentGateStatus = VTCPayEventKeys.NEED_CHECK_STATUS;
+		int[] recheckStatus = VTCPayEventKeys.RECHECK_STATUS;
 		List<PaymentFile> paymentFileList = new ArrayList<PaymentFile>();
 
 		try {
 			paymentFileList =
 				PaymentFileLocalServiceUtil.getPaymentFileByParam(
-					paymentStatus, paymentGateStatus, true);
+					new int[] {}, paymentGateStatus,recheckStatus, true);
 		}
 		catch (PortalException | SystemException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		_log.info("paymentFileList.size():"+paymentFileList.size());
+		_log.info("paymentFileList.size():" + paymentFileList.size());
 
-		SchedulerUtils schedulerUtil = new SchedulerUtils();
+		
+		Dossier dossier = null;
 
 		if (paymentFileList.size() > 0) {
 
 			PaymentConfig paymentConfig = null;
 
 			for (PaymentFile paymentFile : paymentFileList) {
-
-				StringBuffer requestURL = new StringBuffer();
-				StringBuffer params = new StringBuffer();
 
 				try {
 					paymentConfig =
@@ -98,67 +102,128 @@ public class CheckPaymentStatus implements MessageListener {
 				}
 				if (Validator.isNotNull(paymentConfig)) {
 
-					requestURL.append(paymentConfig.getCheckUrl().toString());
-
 					VTCPay vtcPay =
 						new VTCPay(
-							paymentConfig.getKeypayMerchantCode(), paymentFile.getKeypayGoodCode(),
-							paymentConfig.getBankInfo(), StringPool.BLANK);
+							paymentConfig.getKeypayMerchantCode(),
+							String.valueOf(paymentFile.getKeypayTransactionId()),
+							paymentConfig.getBankInfo(), paymentConfig.getKeypaySecureKey());
 
-					params.append("?");
+					int website_id = 0;
+					String order_code = StringPool.BLANK;
+					String receiver_acc = StringPool.BLANK;
+					String sign = StringPool.BLANK;
+
+					website_id = Integer.valueOf(vtcPay.getWebsite_id());
+					order_code = vtcPay.getOrder_code();
+					receiver_acc = vtcPay.getReceiver_acc();
+					sign = VTCPay.getSecureHashCodeCheckRequest(vtcPay);
+
+					String dataResult = StringPool.BLANK;
+
+					WSCheckTransSoapProxy checkTransSoapProxy = new WSCheckTransSoapProxy();
+
 					try {
-						params.append("website_id=").append(
-							URLEncoder.encode(vtcPay.getWebsite_id(), CHAR_SET));
-						params.append("&order_code=").append(
-							URLEncoder.encode(vtcPay.getOrder_code(), CHAR_SET));
-						params.append("&receiver_acc=").append(
-							URLEncoder.encode(vtcPay.getReceiver_acc(), CHAR_SET));
-						params.append("&sign=").append(
-							URLEncoder.encode(
-								VTCPay.getSecureHashCodeRequest1(paymentConfig, vtcPay), CHAR_SET));
+						dataResult =
+							checkTransSoapProxy.checkPartnerTransation(
+								website_id, order_code, receiver_acc, sign);
 					}
-					catch (UnsupportedEncodingException e1) {
+					catch (RemoteException e) {
 						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-
-					requestURL.append(params.toString());
-					
-					_log.info("requestURL.toString():"+requestURL.toString());
-
-					try {
-
-						URL obj = new URL(requestURL.toString());
-						HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-						con.setRequestMethod("POST");
-						con.setRequestProperty("User-Agent", USER_AGENT);
-						con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
-						con.setDoOutput(true);
-
-						DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-						wr.flush();
-						wr.close();
-
-						int responseCode = 0;
-						responseCode = con.getResponseCode();
-						System.out.println("Response Code : " + responseCode);
-
-						BufferedReader in =
-							new BufferedReader(new InputStreamReader(con.getInputStream()));
-						String inputLine;
-						StringBuffer response = new StringBuffer();
-
-						while ((inputLine = in.readLine()) != null) {
-							response.append(inputLine);
-						}
-						in.close();
-
-						System.out.println("response.toString():" + response.toString());
-
-					}
-					catch (Exception e) {
 						e.printStackTrace();
+					}
+					_log.info("=====dataResult:" + dataResult.toString());
+
+					if (dataResult.trim().length() > 0) {
+						VTCPay vtcPayResult = VTCPay.getSecureHashCodeCheckResponse(dataResult);
+
+						if (vtcPayResult.getOrder_code().trim().length() > 0) {
+
+							long transactionId = 0;
+							transactionId = Long.parseLong(vtcPayResult.getOrder_code());
+
+							if (paymentFile.getKeypayTransactionId() == transactionId) {
+
+								if (vtcPayResult.getResponsecode().equals(VTCPayEventKeys.SUCCESS)) {
+									
+									//kiem tra neu trang thai thanh cong thi cap nhat paymentfile,log
+									//gui notice
+
+									try {
+										dossier =
+											DossierLocalServiceUtil.getDossier(paymentFile.getDossierId());
+									}
+									catch (PortalException | SystemException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+
+									paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_APPROVED);
+									paymentFile.setPaymentMethod(WebKeys.PAYMENT_METHOD_VTCPAY);
+									paymentFile.setPaymentGateCheckCode(Integer.valueOf(VTCPayEventKeys.SUCCESS));
+
+									JSONObject jsonObject = null;
+									try {
+										jsonObject =
+											JSONFactoryUtil.createJSONObject(paymentFile.getPaymentGateResponseData());
+									}
+									catch (JSONException e1) {
+										// TODO Auto-generated catch block
+										e1.printStackTrace();
+									}
+
+									jsonObject.put("status", VTCPayEventKeys.SUCCESS);
+
+									paymentFile.setPaymentGateResponseData(jsonObject.toString());
+									
+									if(Validator.isNotNull(dossier)){
+										
+										ActorBean actorBean = new ActorBean(1, dossier.getUserId());
+	
+										try {
+											DossierLogLocalServiceUtil.addDossierLog(
+												dossier.getUserId(), dossier.getGroupId(),
+												dossier.getCompanyId(), dossier.getDossierId(),
+												paymentFile.getFileGroupId(),
+												PortletConstants.DOSSIER_STATUS_NEW,
+												PortletConstants.DOSSIER_ACTION_CONFIRM_PAYMENT,
+												PortletConstants.DOSSIER_ACTION_CONFIRM_PAYMENT,
+												new Date(), 1, actorBean.getActor(),
+												actorBean.getActorId(), actorBean.getActorName());
+										}
+										catch (SystemException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										}
+	
+										NotificationUtils.sendNotificationToAccountant(
+											dossier, paymentFile);
+									}
+
+								}
+								else {
+
+								}
+								//truong hop khong tra ve thanh cong
+								//thi van luu lieu check , bao gom ca loi
+								JSONObject jsonData = JSONFactoryUtil.createJSONObject();
+								jsonData.put("reponsecode", vtcPayResult.getResponsecode());
+								jsonData.put("order_code", vtcPayResult.getOrder_code());
+								jsonData.put("amount", vtcPayResult.getAmount());
+
+								paymentFile.setPaymentGateCheckCode(Integer.valueOf(vtcPayResult.getResponsecode()));
+								paymentFile.setPaymentGateCheckResponseData(jsonData.toString());
+
+								try {
+									PaymentFileLocalServiceUtil.updatePaymentFile(paymentFile);
+								}
+								catch (SystemException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
+
+						}
+
 					}
 
 				}
@@ -167,7 +232,6 @@ public class CheckPaymentStatus implements MessageListener {
 		}
 
 	}
-
 	private Log _log = LogFactoryUtil.getLog(CheckPaymentStatus.class);
 	private final String USER_AGENT = "Mozilla/5.0";
 	private final String CHAR_SET = "UTF-8";

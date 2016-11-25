@@ -41,8 +41,10 @@
 		<column name="syncStatus" type="int"></column>
 		<column name="oid" type="String" />
 		<column name="paymentConfig" type="long" />
-		<column name="paymentGateStatusCode" type="String" />
+		<column name="paymentGateStatusCode" type="int" />
 		<column name="paymentGateResponseData" type="String" />
+		<column name="paymentGateCheckCode" type="int" />
+		<column name="paymentGateCheckResponseData" type="String" />
 
 		<finder name="GoodCode" return-type="PaymentFile">
 			<finder-column name="groupId"></finder-column>
@@ -109,7 +111,6 @@
 		<column name="paymentGateType" type="long"></column>
 		<column name="status" type="boolean"></column>
 		<column name="returnUrl" type="String"></column>
-		<column name="checkUrl" type="String"></column>
 
 		<finder name="GovAgencyPaymentType" return-type="PaymentConfig">
 			<finder-column name="groupId"></finder-column>
