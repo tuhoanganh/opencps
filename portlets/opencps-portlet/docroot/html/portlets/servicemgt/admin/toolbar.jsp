@@ -161,17 +161,7 @@
 	
 								</aui:col>
 								<aui:col width="30" cssClass="search-col">
-									<%-- <datamgt:ddr
-										cssClass="search-input select-box"
-										depthLevel="1" 
-										dictCollectionCode="SERVICE_DOMAIN"
-										itemNames="<%= ServiceDisplayTerms.SERVICE_DOMAINCODE %>"
-										itemsEmptyOption="true"	
-										showLabel="<%=false %>"
-										selectedItems="<%= domainCode %>"
-										emptyOptionLabels="<%= ServiceDisplayTerms.SERVICE_DOMAINCODE %>"
-									>
-									</datamgt:ddr> --%>
+
 									<aui:select name="<%=ServiceDisplayTerms.SERVICE_DOMAINCODE %>" label="">
 										<aui:option value="">
 											<liferay-ui:message key="<%=ServiceDisplayTerms.SERVICE_DOMAINCODE %>"/>

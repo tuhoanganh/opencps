@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,6 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
+<%@page import="org.opencps.processmgt.model.ProcessOrder"%>
 <%@page import="org.opencps.util.DateTimeUtil"%>
 <%@page import="org.opencps.holidayconfig.util.HolidayUtils"%>
 <%@page import="java.util.Date"%>
@@ -65,6 +65,10 @@
 	headerNames.add("action");
 	
 	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
+	
+	ProcessOrder order = null;
+	ProcessStep step = null;
+	int dateOver = 0;
 %>
 
 <c:if test="<%=stopRefresh %>">
@@ -131,6 +135,7 @@
 							
 							deadLine = DateTimeUtil.convertDateToString(endDate, DateTimeUtil._VN_DATE_TIME_FORMAT);
 						} catch(Exception e) {}
+
 						
 						String href = "location.href='" + processURL.toString()+"'";
 						
@@ -143,10 +148,10 @@
 								<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
 									<i class='<%="fa fa-circle sx10 " + processOrder.getDossierStatus()%>'></i>
 								</div>
-								<div class="span2 bold">
+								<div class="span4 bold">
 									<liferay-ui:message key="reception-no"/>
 								</div>
-								<div class="span9">
+								<div class="span7">
 									<%=processOrder.getReceptionNo() %>
 								</div>
 							</div>
@@ -154,10 +159,8 @@
 							<div class="row-fluid">
 								<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
 								</div>
-								<div class="span2 bold">
-									<liferay-ui:message key="service-name"/>
-								</div>
-								<div class="span9">
+
+								<div class="span11">
 									<%=processOrder.getServiceName() %>
 								</div>
 							</div>
@@ -203,7 +206,7 @@
 							</div>
 							
 							<div class='<%="span7"%>'>
-								<%= deadLine %>
+								<%=dateOver >= 0 ? "<div class='ocps-free-day'>"+ StringUtil.replace(LanguageUtil.get(themeDisplay.getLocale(), "until-x-day"), "{0}", String.valueOf(dateOver))+"</div>":"<div class='ocps-over-day'>"+StringUtil.replace(LanguageUtil.get(themeDisplay.getLocale(), "over-x-day"), "{0}", String.valueOf(Math.abs(dateOver))) +"</div>"%>
 							</div>
 						</div>
 					</liferay-util:buffer>

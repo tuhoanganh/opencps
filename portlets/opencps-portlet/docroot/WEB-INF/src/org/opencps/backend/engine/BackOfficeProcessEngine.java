@@ -487,7 +487,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 				_log.info("=====dossier.getDossierStatus():" + dossier.getDossierStatus());
 				_log.info("=====processWorkflow.getGenerateDeadline():" +
 					processWorkflow.getGenerateDeadline());
-				_log.info("=====date:" + new Date());
+				
 
 				if (preProcessStepId == 0 &&
 					autoEvent.equals(WebKeys.AUTO_EVENT_SUBMIT) &&
@@ -535,8 +535,6 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 				citizenEvents.add(NotificationEventKeys.ADMINTRATOR.EVENT1);
 
-				_log.info("citizenEvents:" + citizenEvents);
-				_log.info("employEvents:" + employEvents);
 
 				lsNotification =
 					getListNoties(
@@ -580,7 +578,6 @@ public class BackOfficeProcessEngine implements MessageListener {
 
 		for (String event : citizenEvents) {
 
-			_log.info("=====event:" + event);
 
 			SendNotificationMessage notiMsg = new SendNotificationMessage();
 
@@ -641,7 +638,6 @@ public class BackOfficeProcessEngine implements MessageListener {
 			notiMsg.setProcessOrderId(processOrderId);
 			notiMsg.setType("SMS, INBOX, EMAIL");
 
-			_log.info("=====assignToUserId:" + assignToUserId);
 			if (assignToUserId != 0) {
 
 				SendNotificationMessage.InfoList infoEmploy =
@@ -653,7 +649,6 @@ public class BackOfficeProcessEngine implements MessageListener {
 				AccountBean accountEmploy =
 					AccountUtil.getAccountBean(assignToUserId, groupId, null);
 
-				_log.info("GROUPSSSSSSSSSSSSSSSSSSS ID" + groupId);
 
 				if (accountEmploy.isEmployee()) {
 

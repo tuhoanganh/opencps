@@ -1,4 +1,6 @@
 
+<%@page import="java.util.Comparator"%>
+<%@page import="java.util.Collections"%>
 <%@page import="java.util.LinkedHashMap"%>
 <%@page import="org.opencps.processmgt.service.ProcessOrderLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.search.ProcessOrderSearchTerms"%>
@@ -127,12 +129,20 @@
 		
 	}catch(Exception e){}
 	
+	Collections.sort(processOrderSteps, new Comparator<ProcessOrderBean>() {
+
+        public int compare(ProcessOrderBean o1, ProcessOrderBean o2) {
+        	return String.valueOf(o1.getSequenceNo()).compareTo(String.valueOf(o2.getSequenceNo()));
+        }
+    });
+	
 	//remove duplicates process orders
 	Map<String, ProcessOrderBean> cleanMap = new LinkedHashMap<String, ProcessOrderBean>();
 	for (int i = 0; i < processOrderSteps.size(); i++) {
 	     cleanMap.put(processOrderSteps.get(i).getProcessStepId()+"", processOrderSteps.get(i));
 	}
 	processOrderSteps = new ArrayList<ProcessOrderBean>(cleanMap.values());
+	
 	
 	JSONObject arrayParam = JSONFactoryUtil
 		    .createJSONObject();
@@ -210,9 +220,30 @@
 	
 	</aui:col>
 	<aui:col width="75" >
-
-		<aui:form name="fm">
+		<aui:form name="fm" action="<%= iteratorURL %>" method="POST" >
+			<aui:nav-bar cssClass="opencps-toolbar custom-toolbar">
+				<aui:nav-bar-search cssClass="pull-right front-custom-select-search" style="width: 70%;">
+					<aui:col cssClass="search-col">
+						<liferay-ui:input-search 
+							id="keywords1"
+							name="keywords"
+							title='<%= LanguageUtil.get(locale, "keywords") %>'
+							placeholder='<%=LanguageUtil.get(locale, "keywords") %>'
+							cssClass="search-input input-keyword"
+						/>
+					</aui:col>
+				</aui:nav-bar-search>
+			</aui:nav-bar>
+			<aui:input name="keywords" type="hidden" value="<%=ParamUtil.getString(request, \"keywords\") %>"></aui:input>
+			<aui:input name="serviceInfoId" type="hidden" value="<%=serviceInfoId %>"></aui:input>
+			<aui:input name="processStepId" type="hidden" value="<%=processStepId %>"></aui:input>
 			<div class="opencps-searchcontainer-wrapper">
+				<div class="opcs-serviceinfo-list-label">
+					<div class="title_box">
+				           <p class="file_manage_title ds"><liferay-ui:message key="title-danh-sach-ho-so" /></p>
+				           <p class="count"></p>
+				    </div>
+				</div>
 				<liferay-ui:search-container 
 						searchContainer="<%= new ProcessOrderSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>"
 						rowChecker="<%=rowChecker%>"
@@ -261,7 +292,7 @@
 								
 									String deadlineVal = Validator.isNotNull(processOrder.getDealine()) ? processOrder.getDealine() : StringPool.DASH;
 									
-									String hrefFix = "location.href='" + processURL.toString()+"'";
+									String hrefFix = "location.href='" + processURL.toString()+ "#" +renderResponse.getNamespace() +"tab="+ renderResponse.getNamespace() + "process"+"'";
 									String cssStatusColor = "status-color-" + processOrder.getDossierStatus();
 								%>
 								
@@ -271,10 +302,10 @@
 											<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
 												<i class='<%="fa fa-circle sx10 " + processOrder.getDossierStatus()%>'></i>
 											</div>
-											<div class="span2 bold">
+											<div class="span4 bold">
 												<liferay-ui:message key="reception-no"/>
 											</div>
-											<div class="span9">
+											<div class="span7">
 												<%=processOrder.getReceptionNo() %>
 											</div>
 										</div>
@@ -282,10 +313,7 @@
 										<div class="row-fluid">
 											<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
 											</div>
-											<div class="span2 bold">
-												<liferay-ui:message key="service-name"/>
-											</div>
-											<div class="span9">
+											<div class="span11">
 												<%=processOrder.getServiceName() %>
 											</div>
 										</div>
@@ -294,7 +322,7 @@
 								
 								
 								<liferay-util:buffer var="boundcol2">
-								<div class="row-fluid min-width340">
+								<div class="row-fluid">
 									<div class="span5 bold">
 										<liferay-ui:message key="subject-name"/>	
 									</div>
@@ -313,7 +341,7 @@
 									</div>
 								</div>
 								
-								<div class="row-fluid min-width340">
+								<div class="row-fluid ">
 									<div class="span5 bold">
 										<liferay-ui:message key="step-name"/>
 									</div>
@@ -322,7 +350,7 @@
 									</div>
 								</div>
 								
-								<div class="row-fluid min-width340">
+								<div class="row-fluid ">
 										<div class="span5 bold">
 											<liferay-ui:message key="dealine"/>
 										</div>

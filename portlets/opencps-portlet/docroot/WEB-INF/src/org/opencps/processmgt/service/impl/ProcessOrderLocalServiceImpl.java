@@ -735,4 +735,40 @@ public class ProcessOrderLocalServiceImpl
 
 		return processOrderPersistence.findByprocessStepId(processStepId);
 	}
+	
+	/**
+	 * @param serviceInfoId
+	 * @param processStepId
+	 * @param loginUserId
+	 * @param actionUserId
+	 * @param keyWords
+	 * @return
+	 */
+	public int countProcessOrderKeyWords(
+		long serviceInfoId, long processStepId, long loginUserId,
+		long actionUserId, String keyWords) {
+
+		return processOrderFinder
+			.countProcessOrderKeyWords(serviceInfoId, processStepId, loginUserId,
+				actionUserId, keyWords);
+	}
+	/**
+	 * @param serviceInfoId
+	 * @param processStepId
+	 * @param loginUserId
+	 * @param actionUserId
+	 * @param keyWords
+	 * @param start
+	 * @param end
+	 * @param orderByComparator
+	 * @return
+	 */
+	public List searchProcessOrderKeyWords(
+		long serviceInfoId, long processStepId, long loginUserId,
+		long actionUserId, String keyWords, int start, int end, OrderByComparator orderByComparator) {
+		
+		return processOrderFinder
+						.searchProcessOrderKeyWords(serviceInfoId, processStepId, loginUserId,
+							actionUserId, keyWords, start, end, orderByComparator);
+	}
 }

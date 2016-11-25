@@ -209,55 +209,58 @@ public class PaymentMgtUtil {
 				dossier = DossierLocalServiceUtil.getDossier(paymentFile.getDossierId());
 			}
 
-			if (isVerify) {
+			if (isVerify && Validator.isNotNull(paymentFile)) {
+				
+				Double amountDouble = paymentFile.getAmount();
+				int amountInt = amountDouble.intValue();
+				
+				if(String.valueOf(amountInt).equals(vtcPay.getAmount())){
 
-				if (Validator.isNotNull(paymentFile) &&
-					(paymentFile.getPaymentStatus() != PaymentMgtUtil.PAYMENT_STATUS_APPROVED)) {
-
-//					UserActionMsg actionMsg = new UserActionMsg();
-//
-//					actionMsg.setAction(WebKeys.ACTION_PAY_VALUE);
-//
-//					actionMsg.setPaymentFileId(paymentFile.getPaymentFileId());
-//
-//					actionMsg.setDossierId(paymentFile.getDossierId());
-//
-//					actionMsg.setCompanyId(dossier.getCompanyId());
-//
-//					actionMsg.setGovAgencyCode(dossier.getGovAgencyCode());
-//
-//					Message message = new Message();
-//
-//					message.put("msgToEngine", actionMsg);
-//
-//					MessageBusUtil.sendMessage("opencps/frontoffice/out/destination", message);
-
-					paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_APPROVED);
-					paymentFile.setPaymentMethod(WebKeys.PAYMENT_METHOD_VTCPAY);
-					
-					ActorBean actorBean = new ActorBean(1, dossier.getUserId());
-					
-					DossierLogLocalServiceUtil.addDossierLog(
-						dossier.getUserId(),
-						dossier.getGroupId(),
-						dossier.getCompanyId(),
-						dossier.getDossierId(),
-						paymentFile.getFileGroupId(),
-						PortletConstants.DOSSIER_STATUS_NEW,
-						PortletConstants.DOSSIER_ACTION_CONFIRM_PAYMENT,
-						PortletConstants.DOSSIER_ACTION_CONFIRM_PAYMENT,
-						new Date(),
-						1, actorBean.getActor(),
-						actorBean.getActorId(),
-						actorBean.getActorName());
-					
-						NotificationUtils.sendNotificationToAccountant(dossier, paymentFile);
-				}
-
-				else {
+					if (paymentFile.getPaymentStatus() != PaymentMgtUtil.PAYMENT_STATUS_APPROVED) {
+	
+	//					UserActionMsg actionMsg = new UserActionMsg();
+	//
+	//					actionMsg.setAction(WebKeys.ACTION_PAY_VALUE);
+	//
+	//					actionMsg.setPaymentFileId(paymentFile.getPaymentFileId());
+	//
+	//					actionMsg.setDossierId(paymentFile.getDossierId());
+	//
+	//					actionMsg.setCompanyId(dossier.getCompanyId());
+	//
+	//					actionMsg.setGovAgencyCode(dossier.getGovAgencyCode());
+	//
+	//					Message message = new Message();
+	//
+	//					message.put("msgToEngine", actionMsg);
+	//
+	//					MessageBusUtil.sendMessage("opencps/frontoffice/out/destination", message);
+	
+						paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_APPROVED);
+						paymentFile.setPaymentMethod(WebKeys.PAYMENT_METHOD_VTCPAY);
+						
+						ActorBean actorBean = new ActorBean(1, dossier.getUserId());
+						
+						DossierLogLocalServiceUtil.addDossierLog(
+							dossier.getUserId(),
+							dossier.getGroupId(),
+							dossier.getCompanyId(),
+							dossier.getDossierId(),
+							paymentFile.getFileGroupId(),
+							PortletConstants.DOSSIER_STATUS_NEW,
+							PortletConstants.DOSSIER_ACTION_CONFIRM_PAYMENT,
+							PortletConstants.DOSSIER_ACTION_CONFIRM_PAYMENT,
+							new Date(),
+							1, actorBean.getActor(),
+							actorBean.getActorId(),
+							actorBean.getActorName());
+						
+							NotificationUtils.sendNotificationToAccountant(dossier, paymentFile);
+					}
 					paymentFile.setPaymentGateStatusCode(vtcPay.getStatus());
+				}else{
+					paymentFile.setPaymentGateStatusCode("-100");
 				}
-
 				JSONObject jsonData = JSONFactoryUtil.createJSONObject();
 
 				jsonData.put("amount", vtcPay.getAmount());
