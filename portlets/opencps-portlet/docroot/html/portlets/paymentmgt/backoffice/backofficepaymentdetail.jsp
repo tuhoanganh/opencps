@@ -1,3 +1,4 @@
+<%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="org.opencps.util.DateTimeUtil"%>
 <%@page import="com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil"%>
 <%@page import="com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil"%>
@@ -99,6 +100,9 @@
                     </div>                
                 </div>
                 <div class="box50">
+                	<div>
+                        <p><span><liferay-ui:message key="doanh-nghiep-nop"/>:</span></p> <%=Validator.isNotNull(dossier)? HtmlUtil.escape(dossier.getSubjectName()): LanguageUtil.get(pageContext, "monitoring-chua-co") %>
+                    </div>
                     <div>
                         <p><span><liferay-ui:message key="ngay-da-bao-nop"/>:</span></p> <%=Validator.isNotNull(paymentFile.getConfirmDatetime())?HtmlUtil.escape(DateTimeUtil.convertDateToString(paymentFile.getRequestDatetime(), DateTimeUtil._VN_DATE_FORMAT)): LanguageUtil.get(pageContext, "monitoring-chua-co") %>
 
@@ -108,11 +112,25 @@
 	                        	
 	                	</p>
 	                			<%
-									List<String> paymentOption = ListUtil.toList(StringUtil.split(paymentFile.getPaymentOptions()));
+									boolean isCash = false;
+									boolean isKeypay = false;
+									boolean isBank = false;
 									
-									boolean isCash = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_CASH);
-									boolean isKeypay = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_KEYPAY);
-									boolean isBank = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_BANK);
+									int paymentMethod = paymentFile.getPaymentMethod();
+									
+									switch (paymentMethod) {
+									case PortletConstants.PAYMENT_METHOD_CASH:
+										isCash = true;
+										break;
+									case PortletConstants.PAYMENT_METHOD_KEYPAY:
+										isKeypay = true;
+										break;
+									case PortletConstants.PAYMENT_METHOD_BANK:
+										isBank = true;
+										break;
+									default:
+										break;
+									}
 								%>
 									
 									<c:if test="<%= isCash %>">
@@ -128,7 +146,7 @@
 										<font style="color: #fff;">-</font>
 									</c:if>
                     </div>
-                    <div>
+                    <%-- <div>
                         <p><span><liferay-ui:message key="chung-tu-kem-theo"/>:</span> 
 							
 						</p>
@@ -159,8 +177,8 @@
 									<c:otherwise>
 										<liferay-ui:message key="monitoring-chua-co"></liferay-ui:message>
 									</c:otherwise>
-								</c:choose>
-                    </div>
+							</c:choose>
+                    </div> --%>
                     <div>
                         <p><span><liferay-ui:message key="ghi-chu-kem-theo"/>:</span> </p><%=Validator.isNotNull(paymentFile.getRequestNote())? HtmlUtil.escape(paymentFile.getRequestNote()): LanguageUtil.get(pageContext, "monitoring-chua-co") %>
                     </div>
