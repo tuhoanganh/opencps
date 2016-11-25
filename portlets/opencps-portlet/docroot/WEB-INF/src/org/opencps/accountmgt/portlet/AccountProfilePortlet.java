@@ -19,6 +19,7 @@ package org.opencps.accountmgt.portlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.portlet.ActionRequest;
@@ -48,6 +49,7 @@ import org.opencps.datamgt.model.DictItem;
 import org.opencps.datamgt.service.DictItemLocalServiceUtil;
 import org.opencps.usermgt.search.EmployeeDisplayTerm;
 import org.opencps.util.AccountUtil;
+import org.opencps.util.DateTimeUtil;
 import org.opencps.util.MessageKeys;
 import org.opencps.util.PortletPropsValues;
 import org.opencps.util.WebKeys;
@@ -312,6 +314,19 @@ public class AccountProfilePortlet extends MVCPortlet {
 				actionRequest, BusinessDisplayTerms.NEW_PASSWORD);
 		String rePass =
 			ParamUtil.getString(actionRequest, BusinessDisplayTerms.RE_PASSWORD);
+		
+		int dateDayIDNumber =
+		    ParamUtil.getInteger(
+		        actionRequest, BusinessDisplayTerms.DATE_DAY);
+		int dateMonthIDNumber =
+		    ParamUtil.getInteger(
+		    		actionRequest, BusinessDisplayTerms.DATE_MONTH);
+		int dateYearIDNumber =
+		    ParamUtil.getInteger(
+		    		actionRequest, BusinessDisplayTerms.DATE_YEAR);
+		
+		Date dateOfIdNumber = DateTimeUtil.getDate(dateDayIDNumber, dateMonthIDNumber,
+				dateYearIDNumber);
 
 		boolean isChangePassword = false;
 
@@ -356,7 +371,7 @@ public class AccountProfilePortlet extends MVCPortlet {
 					ward.getItemName(serviceContext.getLocale(), true), telNo,
 					representativeName, representativeRole,
 					listBussinessDomains, isChangePassword, curPass, rePass,
-					serviceContext.getScopeGroupId(), serviceContext);
+					serviceContext.getScopeGroupId(), serviceContext, dateOfIdNumber);
 
 				HttpServletRequest request =
 					PortalUtil.getHttpServletRequest(actionRequest);

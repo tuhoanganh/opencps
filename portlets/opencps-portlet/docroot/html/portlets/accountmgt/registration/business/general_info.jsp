@@ -35,6 +35,7 @@
 <%@page import="org.opencps.datamgt.model.DictCollection"%>
 <%@page import="org.opencps.accountmgt.service.BusinessLocalServiceUtil"%>
 <%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="java.util.Date"%>
 
 <%@ include file="../../init.jsp" %>
 
@@ -98,6 +99,15 @@
 		_log.error(e);
 	}
 	
+	Date defaultBirthDate = DateTimeUtil.convertStringToDate("01/01/1970");
+	Date dateOfIdNumber = business.getDateOfIdNumber();
+	
+	PortletUtil.SplitDate dateOfIdNumber_split = new PortletUtil.SplitDate(defaultBirthDate);
+	
+	if (Validator.isNotNull(dateOfIdNumber)){
+		dateOfIdNumber_split = new PortletUtil.SplitDate(dateOfIdNumber);
+	}
+			
 %>
 
 <aui:model-context bean="<%=business%>" model="<%=Business.class%>" />
@@ -141,6 +151,28 @@
 			<aui:validator name="required" />
 			<aui:validator name="maxLength">100</aui:validator>
 		</aui:input>
+	</aui:col>
+	
+	<aui:col width="50">
+		<label class="control-label custom-lebel" for='<portlet:namespace/><%=BusinessDisplayTerms.BUSINESS_DATE_OF_IDNUMBER %>'>
+				<liferay-ui:message key="date-of-id-number"/>
+			</label>
+			<liferay-ui:input-date 
+				dayParam="<%=BusinessDisplayTerms.DATE_DAY %>"
+				dayValue="<%= dateOfIdNumber_split.getDayOfMoth() %>"
+				monthParam="<%=BusinessDisplayTerms.DATE_MONTH %>"
+				monthValue="<%= dateOfIdNumber_split.getMonth() %>"
+				name="<%=BusinessDisplayTerms.BUSINESS_DATE_OF_IDNUMBER %>"
+				yearParam="<%=BusinessDisplayTerms.DATE_YEAR %>"
+				yearValue="<%= dateOfIdNumber_split.getYear() %>"
+				formName="fm"
+				autoFocus="<%=true %>"
+				cssClass="input100"
+			/>
+			
+			<div  id="<portlet:namespace/>defErrBirthDate" style="text-align: left; color: #b50303; margin-left:7px; margin-bottom: 10px; display: none;">
+			<liferay-ui:message key="required-field"/>
+		</div>
 	</aui:col>
 </aui:row>
 
