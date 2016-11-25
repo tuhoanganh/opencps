@@ -3835,8 +3835,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 															.getDossierFileDate(),
 													dossierFileSuggestion
 															.getOriginal(),
-													dossierFileSuggestion
-															.getSyncStatus(),
+													PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
 													dossier.getFolderId(),
 													fileEntry.getTitle(),
 													fileEntry.getMimeType(),

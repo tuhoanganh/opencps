@@ -857,7 +857,11 @@ public class DossierFileLocalServiceImpl
 
 		dossierFile.setRemoved(1);
 		dossierFile.setModifiedDate(new Date());
-
+		
+		if(dossierFile.getSyncStatus() != PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS) {
+			dossierFile.setVersion(0);
+		}
+		
 		indexer.reindex(dossierFile);
 
 		dossierFilePersistence.update(dossierFile);

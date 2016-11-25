@@ -19,6 +19,8 @@ package org.opencps.dossiermgt.bean;
 
 import java.util.Date;
 
+import org.opencps.util.PortletConstants;
+
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.StringPool;
@@ -357,6 +359,19 @@ public class ProcessOrderBean {
 		setAssignToUserName(_assignToUserName);
 
 		return _assignToUserName;
+	}
+	
+	public String getAssignToUserName(String dossierStatus) {
+		String assignName = StringPool.BLANK;
+		switch (dossierStatus) {
+		case PortletConstants.DOSSIER_STATUS_WAITING:
+			assignName = getActionUserName();
+			break;
+		default:
+			assignName = getAssignToUserName();
+			break;
+		}
+		return assignName;
 	}
 
 	public void setAssignToUserName(String assignToUserName) {
