@@ -134,10 +134,10 @@
 						%>
 							
 						<c:if test="<%= isCash %>">
-							[ <liferay-ui:message key="cash"></liferay-ui:message> ]&nbsp;
+							[ <liferay-ui:message key="cash"></liferay-ui:message> ];
 						</c:if>
 						<c:if test="<%= isKeypay %>">
-							[ <liferay-ui:message key="keypay"></liferay-ui:message> ]&nbsp;
+							[ <liferay-ui:message key="keypay"></liferay-ui:message> ];
 						</c:if>
 						<c:if test="<%= isBank %>">
 							[ <liferay-ui:message key="bank"></liferay-ui:message> ]
@@ -158,7 +158,7 @@
 	                        catch (NoSuchFileEntryException e) {
 	                        }
 	                        
-	                        String dlURL = null;
+	                        String dlURL = StringPool.BLANK;
 	                        if (fileEntry != null) {
 	                            FileVersion fileVersion = fileEntry.getFileVersion();
 	                             
