@@ -29,6 +29,7 @@ import org.opencps.processmgt.model.impl.ProcessWorkflowImpl;
 import org.opencps.processmgt.service.ActionHistoryLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
+import org.opencps.util.DateTimeUtil;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -63,7 +64,7 @@ public class HolidayCheckUtils {
 
 			result = endDayMax - endDay;
 
-			result = HolidayUtils.convertTimemilisecondsToDays(result);
+			result = DateTimeUtil.convertTimemilisecondsToDays(result);
 
 			dateOverNumbers = (int) result;
 
@@ -94,7 +95,7 @@ public class HolidayCheckUtils {
 
 			result = deadline - endDay;
 
-			result = HolidayUtils.convertTimemilisecondsToDays(result);
+			result = DateTimeUtil.convertTimemilisecondsToDays(result);
 
 			dateOverNumbers = (int) result;
 		}

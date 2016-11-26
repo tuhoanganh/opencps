@@ -34,8 +34,8 @@ import org.opencps.paymentmgt.service.PaymentConfigLocalServiceUtil;
 import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
 import org.opencps.paymentmgt.service.PaymentGateConfigLocalServiceUtil;
 import org.opencps.paymentmgt.util.PaymentMgtUtil;
+import org.opencps.paymentmgt.vtcpay.model.VTCPay;
 import org.opencps.util.PortletPropsValues;
-import org.opencps.vtcpay.model.VTCPay;
 
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
@@ -132,7 +132,7 @@ public class PaymentUrlGenerator {
 						new VTCPay(
 							website_id, receiver_account, language, url_return, secret_key,
 							reference_number, amount, currency, request_url, trans_ref_no, status,
-							data, signature);
+							data, paymentConfig.getKeypaySecureKey());
 
 					StringBuffer param = new StringBuffer();
 					param.append("?");
@@ -143,7 +143,7 @@ public class PaymentUrlGenerator {
 					param.append("&url_return=").append(url_return);
 					param.append("&website_id=").append(vtcPay.getWebsite_id());
 					param.append("&signature=").append(
-						VTCPay.getSecureHashCodeRequest(paymentConfig, vtcPay));
+						VTCPay.getSecureHashCodeRequest(vtcPay));
 
 					url_redirect = vtcPay.getRequest_url() + param.toString();
 

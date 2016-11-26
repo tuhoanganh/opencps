@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.opencps.paymentmgt.util.PaymentMgtUtil;
-import org.opencps.vtcpay.model.VTCPay;
+import org.opencps.paymentmgt.vtcpay.model.VTCPay;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
