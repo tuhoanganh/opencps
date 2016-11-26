@@ -26,6 +26,7 @@ import org.opencps.holidayconfig.model.HolidayConfig;
 import org.opencps.holidayconfig.model.HolidayConfigExtend;
 import org.opencps.holidayconfig.service.HolidayConfigExtendLocalServiceUtil;
 import org.opencps.holidayconfig.service.HolidayConfigLocalServiceUtil;
+import org.opencps.util.DateTimeUtil;
 
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.log.Log;
@@ -46,7 +47,7 @@ public class HolidayUtils {
 	private int minutesGoing = 0;
 	private Calendar baseCalendar = Calendar.getInstance();
 	private List<HolidayConfig> holidayConfigList1 = null;
-	private static final String DATE_TIME_FORMAT = "{d} {HH}:{mm}:{ss}";
+	
 
 	/**
 	 * Check estimateDate
@@ -369,8 +370,8 @@ public class HolidayUtils {
 		long timeInMillis = endDateCal.getTimeInMillis() - baseCalendar.getTimeInMillis();
 		long timeInMillis1 = endDateCal1.getTimeInMillis() - startDateCal1.getTimeInMillis();
 
-		long diffMinutes = convertTimemilisecondsToMinutes(timeInMillis1);
-		int diffDays = convertTimemilisecondsToDays(timeInMillis);
+		long diffMinutes = DateTimeUtil.convertTimemilisecondsToMinutes(timeInMillis1);
+		int diffDays = DateTimeUtil.convertTimemilisecondsToDays(timeInMillis);
 
 		minutesGoing = (int) diffMinutes;
 		dayGoing = diffDays;
@@ -518,59 +519,4 @@ public class HolidayUtils {
 		return baseCalendar;
 	}
 
-	public static int convertTimemilisecondsToDays(long time) {
-
-		int days = 0;
-		days = (int) (time / (24 * 60 * 60 * 1000));
-
-		return days;
-	}
-
-	public static long convertTimemilisecondsToHours(long time) {
-
-		long hours = 0;
-
-		hours = time / (60 * 60 * 1000);
-
-		return hours;
-	}
-
-	public static long convertTimemilisecondsToMinutes(long time) {
-
-		long minutes = 0;
-
-		minutes = time / (60 * 1000);
-
-		return minutes;
-	}
-
-	public static long convertTimemilisecondsToSeconds(long time) {
-
-		long seconds = 0;
-
-		seconds = time / 1000;
-
-		return seconds;
-	}
-
-	public static String convertTimemilisecondsToFormat(long time) {
-
-		String format = DATE_TIME_FORMAT;
-		long diffSeconds = 0;
-		long diffMinutes = 0;
-		long diffHours = 0;
-		long diffDays = 0;
-
-		diffSeconds = time / 1000 % 60;
-		diffMinutes = time / (60 * 1000) % 60;
-		diffHours = time / (60 * 60 * 1000) % 24;
-		diffDays = time / (24 * 60 * 60 * 1000);
-
-		format = StringUtil.replace(format, "{d}", String.valueOf(diffDays));
-		format = StringUtil.replace(format, "{HH}", String.valueOf(diffHours));
-		format = StringUtil.replace(format, "{mm}", String.valueOf(diffMinutes));
-		format = StringUtil.replace(format, "{ss}", String.valueOf(diffSeconds));
-
-		return format;
-	}
 }

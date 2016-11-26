@@ -1,5 +1,6 @@
 package org.opencps.paymentmgt.util;
 
+
 public class VTCPayEventKeys{
 	
 	public static final String SUCCESS = "1";

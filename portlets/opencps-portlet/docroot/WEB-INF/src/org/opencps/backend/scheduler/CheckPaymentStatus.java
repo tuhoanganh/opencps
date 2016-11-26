@@ -66,8 +66,6 @@ public class CheckPaymentStatus implements MessageListener {
 	public void receive(Message message)
 		throws MessageListenerException {
 
-		_log.info("*****checkPaymentStatus*****");
-
 		int[] paymentGateStatus = VTCPayEventKeys.NEED_CHECK_STATUS;
 		int[] recheckStatus = VTCPayEventKeys.RECHECK_STATUS;
 		List<PaymentFile> paymentFileList = new ArrayList<PaymentFile>();
@@ -81,7 +79,6 @@ public class CheckPaymentStatus implements MessageListener {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		_log.info("paymentFileList.size():" + paymentFileList.size());
 
 		
 		Dossier dossier = null;
@@ -131,7 +128,6 @@ public class CheckPaymentStatus implements MessageListener {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					_log.info("=====dataResult:" + dataResult.toString());
 
 					if (dataResult.trim().length() > 0) {
 						VTCPay vtcPayResult = VTCPay.getSecureHashCodeCheckResponse(dataResult);
@@ -159,7 +155,7 @@ public class CheckPaymentStatus implements MessageListener {
 
 									paymentFile.setPaymentStatus(PaymentMgtUtil.PAYMENT_STATUS_APPROVED);
 									paymentFile.setPaymentMethod(WebKeys.PAYMENT_METHOD_VTCPAY);
-									paymentFile.setPaymentGateCheckCode(Integer.valueOf(VTCPayEventKeys.SUCCESS));
+									paymentFile.setPaymentGateStatusCode(Integer.valueOf(VTCPayEventKeys.SUCCESS));
 
 									JSONObject jsonObject = null;
 									try {
@@ -233,7 +229,5 @@ public class CheckPaymentStatus implements MessageListener {
 
 	}
 	private Log _log = LogFactoryUtil.getLog(CheckPaymentStatus.class);
-	private final String USER_AGENT = "Mozilla/5.0";
-	private final String CHAR_SET = "UTF-8";
 
 }

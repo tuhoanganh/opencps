@@ -17,6 +17,7 @@
 
 package org.opencps.paymentmgt.service.persistence;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -24,11 +25,12 @@ import org.opencps.paymentmgt.model.PaymentFile;
 import org.opencps.paymentmgt.model.impl.PaymentFileImpl;
 import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
 
+import com.liferay.portal.kernel.dao.orm.Criterion;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.Type;
@@ -805,25 +807,46 @@ implements PaymentFileFinder {
 	}
 	
 	public List<PaymentFile> getPaymentFileByParam(
-		int[] paymentStatus, int[] paymentGateStatus,int[] recheckStatus, boolean orderByAsc) {
+		int[] paymentStatus, int[] paymentGateStatus, int[] recheckStatus, boolean orderByAsc) {
 
 		Session session = null;
+		List<Integer> paymentGateStatusList = new ArrayList<Integer>();
+		List<Integer> recheckStatusList = new ArrayList<Integer>();
 
 		try {
 			session = openSession();
-			
+
 			DynamicQuery dynamicQuery =
 				DynamicQueryFactoryUtil.getDynamicQueryFactory().forClass(PaymentFile.class);
-			if(paymentGateStatus.length >0){
-				dynamicQuery.add(PropertyFactoryUtil.forName("paymentGateStatusCode").in(paymentGateStatus));
+
+			Criterion criterion = null;
+
+			if (paymentGateStatus.length > 0) {
+
+				for (int index = 0; index < paymentGateStatus.length; index++) {
+					paymentGateStatusList.add(paymentGateStatus[index]);
+				}
+
+				criterion =
+					RestrictionsFactoryUtil.in("paymentGateStatusCode", paymentGateStatusList);
 			}
-			if(paymentStatus.length >0){
-				dynamicQuery.add(PropertyFactoryUtil.forName("paymentStatus").in(paymentStatus));
+
+			if (recheckStatus.length > 0) {
+
+				for (int index = 0; index < recheckStatus.length; index++) {
+					recheckStatusList.add(recheckStatus[index]);
+				}
+
+				criterion =
+					RestrictionsFactoryUtil.or(
+						criterion, RestrictionsFactoryUtil.in("paymentGateCheckCode", recheckStatusList));
 			}
-			
+
+			dynamicQuery.add(criterion);
+
 			List<PaymentFile> list = PaymentFileLocalServiceUtil.dynamicQuery(dynamicQuery);
 			return list;
-	
+
 		}
 		catch (Exception e) {
 			_log.error(e);
