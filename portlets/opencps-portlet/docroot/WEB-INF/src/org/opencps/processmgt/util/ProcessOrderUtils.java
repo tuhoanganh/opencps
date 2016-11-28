@@ -878,7 +878,7 @@ public class ProcessOrderUtils {
 			}
 			
 		}		
-}
+	}
 	private static Log _log =
     		LogFactoryUtil.getLog(ProcessOrderUtils.class.getName());
 }

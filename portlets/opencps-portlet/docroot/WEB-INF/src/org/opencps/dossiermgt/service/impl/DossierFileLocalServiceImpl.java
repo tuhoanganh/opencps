@@ -108,7 +108,7 @@ public class DossierFileLocalServiceImpl
 		int dossierFileType, String dossierFileNo, Date dossierFileDate,
 		int original, int syncStatus, ServiceContext serviceContext)
 		throws SystemException, PortalException {
-
+		_log.info("STARTTTTTT ADDD DOSSIER FILE");
 		long dossierFileId =
 			counterLocalService.increment(DossierFile.class.getName());
 		DossierFile dossierFile = dossierFilePersistence.create(dossierFileId);
@@ -217,7 +217,7 @@ public class DossierFileLocalServiceImpl
 		String mimeType, String title, String description, String changeLog,
 		InputStream is, long size, ServiceContext serviceContext)
 		throws SystemException, PortalException {
-
+		_log.info("STARTTTTTT ADDD DOSSIER FILE");
 		DossierFile oldDossierFile =
 			dossierFilePersistence.findByPrimaryKey(oldDossierFileId);
 
@@ -292,7 +292,7 @@ public class DossierFileLocalServiceImpl
 		String mimeType, String title, String description, String changeLog,
 		byte[] bytes, ServiceContext serviceContext)
 		throws SystemException, PortalException {
-
+		_log.info("STARTTTTTT ADDD DOSSIER FILE");
 		DossierFile oldDossierFile =
 			dossierFilePersistence.findByPrimaryKey(oldDossierFileId);
 
@@ -390,7 +390,7 @@ public class DossierFileLocalServiceImpl
 		String mimeType, String title, String description, String changeLog,
 		InputStream is, long size, ServiceContext serviceContext)
 		throws SystemException, PortalException {
-
+		
 		long dossierFileId =
 			counterLocalService.increment(DossierFile.class.getName());
 		DossierFile dossierFile = dossierFilePersistence.create(dossierFileId);
@@ -491,7 +491,6 @@ public class DossierFileLocalServiceImpl
 			IndexerRegistryUtil.nullSafeGetIndexer(DossierFile.class);
 
 		indexer.reindex(dossierFile);
-
 		return dossierFile;
 	}
 
@@ -535,7 +534,7 @@ public class DossierFileLocalServiceImpl
 		String title, String description, String changeLog, byte[] bytes,
 		ServiceContext serviceContext)
 		throws SystemException, PortalException {
-
+		_log.info("STARTTTTTT ADDD DOSSIER FILE");
 		long dossierFileId =
 			counterLocalService.increment(DossierFile.class.getName());
 		DossierFile dossierFile = dossierFilePersistence.create(dossierFileId);
@@ -858,7 +857,11 @@ public class DossierFileLocalServiceImpl
 
 		dossierFile.setRemoved(1);
 		dossierFile.setModifiedDate(new Date());
-
+		
+		if(dossierFile.getSyncStatus() != PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS) {
+			dossierFile.setVersion(0);
+		}
+		
 		indexer.reindex(dossierFile);
 
 		dossierFilePersistence.update(dossierFile);

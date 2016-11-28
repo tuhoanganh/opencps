@@ -16,27 +16,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
-<%@page import="org.opencps.processmgt.util.ProcessOrderUtils"%>
-<%@page import="org.opencps.processmgt.search.ProcessOrderSearchTerms"%>
-<%@page import="org.opencps.processmgt.search.ProcessOrderSearch"%>
-<%@page import="org.opencps.processmgt.model.ProcessOrder"%>
-<%@page import="org.opencps.processmgt.util.ProcessUtils"%>
-<%@page import="org.opencps.dossiermgt.bean.ProcessOrderBean"%>
-<%@page import="com.liferay.portal.kernel.dao.search.RowChecker"%>
-<%@page import="org.opencps.processmgt.service.ProcessOrderLocalServiceUtil"%>
-<%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
+
 <%@ include file="init.jsp"%>
 
 <liferay-util:include page='<%=templatePath + "toptabs.jsp" %>' servletContext="<%=application %>" />
 
-<%
-	//get config to load jsp display dossier
-	String templatesToDisplay_cfg = GetterUtil.getString(portletPreferences.getValue("templatesToDisplay", "default"));
-
-%>
-
-<liferay-util:include page='<%=templatePath + "display/" + templatesToDisplay_cfg + "_justfinishedlist.jsp" %>' servletContext="<%=application %>" />
-
-<%!
-	private Log _log = LogFactoryUtil.getLog("html.portlets.processmgt.processorder.processorderjustfinishedlist.jsp");
-%>
+<liferay-util:include page='<%=templatePath + "display/justfinishedlist/" + justfinishedlistDisplayStyle + ".jsp" %>' servletContext="<%=application %>" />

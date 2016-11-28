@@ -525,8 +525,7 @@
 		]]>
 	</sql>
 
-
-	<sql id="org.opencps.processmgt.service.persistence.ProcessOrderFinder.searchProcessOrderDuongSat">	
+	<sql id="org.opencps.processmgt.service.persistence.ProcessOrderFinder.searchProcessOrderKeyWords">	
 		<![CDATA[
 			SELECT 
 				DISTINCT
@@ -596,16 +595,14 @@
 					AND stepallowance.readOnly = TRUE
 				)
 			)
-			AND (opencps_dossier.receptionNo like ? or opencps_serviceinfo.serviceName like ? or opencps_dossier.dossierId = ?)
-			OR
-				1 = ?
+			AND (opencps_dossier.receptionNo = ? or opencps_serviceinfo.serviceName like ? or opencps_dossier.subjectName like ? or opencps_dossier.dossierId = ?)
 			ORDER BY 
 				opencps_processorder.modifiedDate DESC, 
 				opencps_processorder.actionDatetime DESC
 		]]>
 	</sql>
 	
-	<sql id="org.opencps.processmgt.service.persistence.ProcessOrderFinder.countProcessOrderDuongSat">	
+	<sql id="org.opencps.processmgt.service.persistence.ProcessOrderFinder.countProcessOrderKeyWords">	
 		<![CDATA[
 			SELECT 
 				COUNT(DISTINCT opencps_processorder.processOrderId) AS COUNT_VALUE
@@ -664,9 +661,7 @@
                     AND stepallowance.readOnly = TRUE
                 )
             )
-            AND (opencps_dossier.receptionNo like ? or opencps_serviceinfo.serviceName like ? or opencps_dossier.dossierId = ?)
-            OR
-				1 = ?
+            AND (opencps_dossier.receptionNo = ? or opencps_serviceinfo.serviceName like ? or opencps_dossier.subjectName like ? or opencps_dossier.dossierId = ?)
 		]]>
 	</sql>
 </custom-sql>

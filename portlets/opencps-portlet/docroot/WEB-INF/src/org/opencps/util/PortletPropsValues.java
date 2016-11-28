@@ -318,7 +318,7 @@ public class PortletPropsValues {
 	public static final String OPENCPS_PERSON_MAKE_PROCEDURE_CANCEL  =
 					PortletProps.get(PortletPropsKeys.OPENCPS_PERSON_MAKE_PROCEDURE_CANCEL);
 	
-	
+	public static final String SYSTEM_EMAIL = PortletProps.get(PortletPropsKeys.SYSTEM_EMAIL);
 	public static final String SUBJECT_TO_CUSTOMER = PortletProps.get(PortletPropsKeys.SUBJECT_TO_CUSTOMER);
 	public static final String CONTENT_TO_CUSTOMER = PortletProps.get(PortletPropsKeys.CONTENT_TO_CUSTOMER);
 	

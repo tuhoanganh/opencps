@@ -20,6 +20,7 @@
 %>
 
 <%@page import="javax.portlet.PortletPreferences"%>
+
 <%@ include file="/init.jsp" %>
 
 <%
@@ -35,9 +36,13 @@
 	
 	String redirectPaymentURL = preferences.getValue("redirectPaymentURL",StringPool.BLANK);
 	
+	String dossierStatusConfig = preferences.getValue("dossierStatusConfig",StringPool.BLANK);
+	
 	String orderFieldDossierFile = preferences.getValue("orderFieldDossierFile",StringPool.BLANK);
 	
 	String orderBydDossierFile = preferences.getValue("orderBydDossierFile",StringPool.BLANK);
+	
+	long plidRes = GetterUtil.getLong(preferences.getValue("plid", "0"), 0);
 	
 	boolean displayRecentlyResultWhenSearch = GetterUtil.getBoolean(preferences.getValue("displayRecentlyResultWhenSearch", "false"), false);
 	
@@ -60,5 +65,18 @@
 	String itemCode_cfg = GetterUtil.getString(preferences.getValue("itemCode_cfg", ""));
 	
 	String war_opencpsportlet_26_cfg = GetterUtil.getString(portletPreferences.getValue("war_opencpsportlet_26_cfg", ""));
+
+	boolean allowQuickCreateDossier = GetterUtil.getBoolean(preferences.getValue("allowQuickCreateDossier", "false"), false);
+
+	String fileTypes = preferences.getValue("fileTypes", StringPool.BLANK);
+	
+	float maxTotalUploadFileSize = GetterUtil.getFloat(preferences.getValue("maxTotalUploadFileSize", StringPool.BLANK));
+	
+	String maxTotalUploadFileSizeUnit = preferences.getValue("maxTotalUploadFileSizeUnit", StringPool.BLANK);
+	
+	float maxUploadFileSize = GetterUtil.getFloat(preferences.getValue("maxUploadFileSize", StringPool.BLANK));
+	
+	String maxUploadFileSizeUnit = preferences.getValue("maxUploadFileSizeUnit", StringPool.BLANK);
+
 %>
 

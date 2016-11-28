@@ -1,15 +1,3 @@
-
-<%@page import="com.liferay.portlet.documentlibrary.util.DLUtil"%>
-<%@page import="com.liferay.portal.kernel.repository.model.FileVersion"%>
-<%@page import="com.liferay.portlet.documentlibrary.NoSuchFileEntryException"%>
-<%@page import="com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil"%>
-<%@page import="com.liferay.portal.kernel.repository.model.FileEntry"%>
-<%@page import="org.opencps.util.PortletConstants"%>
-<%@page import="org.opencps.util.DateTimeUtil"%>
-<%@page import="com.liferay.portal.service.ServiceContextFactory"%>
-<%@page import="com.liferay.portal.service.ServiceContext"%>
-<%@page import="org.opencps.util.AccountUtil"%>
-<%@page import="org.opencps.dossiermgt.bean.AccountBean"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -28,7 +16,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
-
+<%@page import="com.liferay.portlet.documentlibrary.util.DLUtil"%>
+<%@page import="com.liferay.portal.kernel.repository.model.FileVersion"%>
+<%@page import="com.liferay.portlet.documentlibrary.NoSuchFileEntryException"%>
+<%@page import="com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil"%>
+<%@page import="com.liferay.portal.kernel.repository.model.FileEntry"%>
+<%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.util.DateTimeUtil"%>
+<%@page import="org.opencps.util.DLFileEntryUtil"%>
+<%@page import="com.liferay.portal.service.ServiceContextFactory"%>
+<%@page import="com.liferay.portal.service.ServiceContext"%>
+<%@page import="org.opencps.util.AccountUtil"%>
+<%@page import="org.opencps.dossiermgt.bean.AccountBean"%>
 <%@page import="org.opencps.accountmgt.service.BusinessLocalServiceUtil"%>
 <%@page import="org.opencps.accountmgt.model.Business"%>
 <%@page import="org.opencps.dossiermgt.NoSuchDossierException"%>
@@ -142,25 +141,24 @@
 						
 						Dossier dossier = DossierLocalServiceUtil.fetchDossier(dossierFile.getDossierId());
 						//url file download
-						FileEntry fileEntry = null;
-							try {
-								fileEntry = DLAppLocalServiceUtil.getFileEntry(dossierFile.getFileEntryId());
-							}
-						catch (NoSuchFileEntryException e) {
-									
-						}
-						String urlDownload = null;
-							if (fileEntry != null) {
-								FileVersion fileVersion = fileEntry.getFileVersion();
-										 
-								String queryString = "";							 
-								boolean appendFileEntryVersion = true;
-										 
-								boolean useAbsoluteURL = true;
-												 
-								urlDownload = DLUtil.getPreviewURL(fileEntry, fileVersion, themeDisplay, queryString, appendFileEntryVersion, useAbsoluteURL);							
-							}
+						String urlDownload = StringPool.BLANK;	
 						
+						long fileEntryId = dossierFile.getFileEntryId();
+						
+						if(fileEntryId > 0) {
+							 FileEntry fileEntry =
+									DLFileEntryUtil.getFileEntry(fileEntryId);
+							 if(Validator.isNotNull(fileEntry) ) {
+								 try {
+									 urlDownload = DLUtil.getPreviewURL(
+												fileEntry, fileEntry.getFileVersion(),
+												themeDisplay, StringPool.BLANK);
+								 } catch(Exception e) {
+									 
+								 }
+							 }
+						}
+
 						// no column
 						row.addText(String.valueOf(row.getPos() + 1));
 						
@@ -171,8 +169,8 @@
 						
 						row.addText(Validator.isNotNull(dossierFile.getDossierFileDate())?DateTimeUtil.convertDateToString(dossierFile.getDossierFileDate(), DateTimeUtil._VN_DATE_FORMAT):StringPool.BLANK);
 						
-						row.addText("<a target=\"_blank\" href=\""+urlDownload+"\" >" + dossierFile.getDisplayName() + "</a>");
-						
+						//row.addText("<a target=\"_blank\" href=\""+urlDownload+"\" >" + dossierFile.getDisplayName() + "</a>");
+						row.addText(dossierFile.getDisplayName(), urlDownload);
 						row.addText(dossierFile.getDossierId() + "/" +(Validator.isNotNull(dossier) ? "<a target=\"_blank\" href=\""+urlDownload+"\" >" + dossier.getReceptionNo() + "</a>" : StringPool.BLANK));
 						
 						row.addText(ownerName);

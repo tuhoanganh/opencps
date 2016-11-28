@@ -63,6 +63,8 @@ public class ConfigurationImpl implements ConfigurationAction{
 		
 		String orderBydDossierFile = ParamUtil.getString(actionRequest, "orderBydDossierFile");
 		
+		String dossierStatusConfig = ParamUtil.getString(actionRequest, "dossierStatusConfig");
+		
 		boolean displayDossierNo = ParamUtil.getBoolean(actionRequest, "displayDossierNo");
 		
 		boolean displayRecentlyResultWhenSearch = ParamUtil.getBoolean(actionRequest, "displayRecentlyResultWhenSearch");
@@ -84,6 +86,18 @@ public class ConfigurationImpl implements ConfigurationAction{
 		String itemCode_cfg = ParamUtil.getString(actionRequest, "itemCode_cfg");
 		
 		String war_opencpsportlet_26_cfg = ParamUtil.getString(actionRequest, "war_opencpsportlet_26_cfg");
+
+		boolean allowQuickCreateDossier = ParamUtil.getBoolean(actionRequest, "allowQuickCreateDossier");
+
+		String fileTypes = ParamUtil.getString(actionRequest, "fileTypes");
+		
+		float maxTotalUploadFileSize = ParamUtil.getFloat(actionRequest, "maxTotalUploadFileSize");
+		
+		String maxTotalUploadFileSizeUnit = ParamUtil.getString(actionRequest, "maxTotalUploadFileSizeUnit");
+		
+		float maxUploadFileSize = ParamUtil.getFloat(actionRequest, "maxUploadFileSize");
+		
+		String maxUploadFileSizeUnit = ParamUtil.getString(actionRequest, "maxUploadFileSizeUnit");
 		
 		PortletURL redirectURL =
 		    PortletURLFactoryUtil.create(
@@ -100,7 +114,8 @@ public class ConfigurationImpl implements ConfigurationAction{
 		PortletPreferences preferences =
 		    PortletPreferencesFactoryUtil.getPortletSetup(
 		        actionRequest, portletResource);
-
+		
+		preferences.setValue("plid", String.valueOf(plid));
 		preferences.setValue("redirectPaymentURL", redirectURL.toString());
 		preferences.setValue("displayDossierNo", String.valueOf(displayDossierNo));
 		preferences.setValue("displayRecentlyResultWhenSearch", String.valueOf(displayRecentlyResultWhenSearch));
@@ -115,6 +130,8 @@ public class ConfigurationImpl implements ConfigurationAction{
 		
 		preferences.setValue("orderFieldDossierFile", orderFieldDossierFile);
 		
+		preferences.setValue("dossierStatusConfig", dossierStatusConfig);
+		
 		preferences.setValue("orderBydDossierFile", orderBydDossierFile);
 		
 		preferences.setValue("showServiceDomainIdTree", String.valueOf(showServiceDomainIdTree));
@@ -126,6 +143,18 @@ public class ConfigurationImpl implements ConfigurationAction{
 		preferences.setValue("hiddenTreeNodeEqualNone", String.valueOf(hiddenTreeNodeEqualNone));
 		
 		preferences.setValue("allowResultQuickView", String.valueOf(allowResultQuickView));
+
+		preferences.setValue("fileTypes", fileTypes);
+		
+		preferences.setValue("maxTotalUploadFileSize", String.valueOf(maxTotalUploadFileSize));
+		
+		preferences.setValue("maxTotalUploadFileSizeUnit", maxTotalUploadFileSizeUnit);
+		
+		preferences.setValue("maxUploadFileSize", String.valueOf(maxUploadFileSize));
+		
+		preferences.setValue("maxUploadFileSizeUnit", maxUploadFileSizeUnit);
+		
+		preferences.setValue("allowQuickCreateDossier", String.valueOf(allowQuickCreateDossier));
 		
 		preferences.setValue("itemCode_cfg", itemCode_cfg);
 		
@@ -149,7 +178,6 @@ public class ConfigurationImpl implements ConfigurationAction{
 	    PortletConfig portletConfig, RenderRequest renderRequest,
 	    RenderResponse renderResponse)
 	    throws Exception {
-
 		return "/html/portlets/dossiermgt/frontoffice/configuration.jsp";
 	}
 

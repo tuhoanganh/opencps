@@ -1040,6 +1040,7 @@
 			<role-name>user</role-name>
 		</security-role-ref>
 	</portlet>
+
 	<portlet>
 		<portlet-name>1001</portlet-name>
 		<display-name>dashboard_custom</display-name>

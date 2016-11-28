@@ -20,7 +20,7 @@
 			AND ((lower(opencps_dossiertemplate.templateName) LIKE ? [$AND_OR_NULL_CHECK$])
 			OR (lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))	
 			AND (opencps_service_config.govAgencyCode = ?)
-			AND (opencps_service_config.domainCode = ?)
+			AND ((opencps_service_config.domainCode = ?) OR (opencps_service_config.serviceDomainIndex like ?))
 		]]>
 	</sql>
 	
@@ -59,7 +59,7 @@
 			AND ((lower(opencps_dossiertemplate.templateName) LIKE ? [$AND_OR_NULL_CHECK$])
 			OR (lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$]))
 			AND (opencps_service_config.govAgencyCode = ?)
-			AND (opencps_service_config.domainCode = ?)
+			AND ((opencps_service_config.domainCode = ?) OR (opencps_service_config.serviceDomainIndex like ?))
 		]]>
 	</sql>
 	
@@ -987,13 +987,9 @@
 			WHERE
 				opencps_dossier_log.dossierId = ?
 			AND 
-				((
-					opencps_dossier_log.actor = 1
-					AND opencps_dossier_log.actionInfo NOT IN("add-attachment-file","remove-attachment-file","clone-attachment-file")
-				)
-				OR opencps_dossier_log.syncStatus = 2)
+				( opencps_dossier_log.actor = 1 OR opencps_dossier_log.syncStatus = 2)
 				AND (opencps_dossier_log.dossierStatus != 'system')
-			
+				AND (opencps_dossier_log.requestCommand = '')			
 			ORDER BY modifiedDate DESC
 		]]>
 	</sql>
@@ -1007,19 +1003,15 @@
 			WHERE
 				opencps_dossier_log.dossierId = ?
 			AND 
-				((
-					opencps_dossier_log.actor = 1
-					AND opencps_dossier_log.actionInfo NOT IN("add-attachment-file","remove-attachment-file","clone-attachment-file")
-				)
-				OR opencps_dossier_log.syncStatus = 2)
+				( opencps_dossier_log.actor = 1 OR opencps_dossier_log.syncStatus = 2)
 				AND (opencps_dossier_log.dossierStatus != 'system')
-				
+				AND (opencps_dossier_log.requestCommand = '')
+			ORDER BY modifiedDate DESC
 		]]>
 	</sql>
 	
 	<sql id="org.opencps.dossiermgt.service.persistence.DossierLogFinder.findDossierLogByEmployee">
 		<![CDATA[
-
 			SELECT
 				opencps_dossier_log.*
 			FROM
@@ -1027,12 +1019,9 @@
 			WHERE
 				opencps_dossier_log.dossierId = ?
 			AND 
-				(
-					(opencps_dossier_log.actor = 1 OR opencps_dossier_log.actor = 2)
-					AND opencps_dossier_log.actionInfo NOT IN("add-attachment-file","remove-attachment-file","clone-attachment-file")
-				
-				)
-			
+					opencps_dossier_log.actor != 0
+				AND (opencps_dossier_log.dossierStatus != 'system')
+				AND (opencps_dossier_log.requestCommand = '')			
 			ORDER BY modifiedDate DESC
 		]]>
 	</sql>
@@ -1046,11 +1035,53 @@
 			WHERE
 				opencps_dossier_log.dossierId = ?
 			AND 
-				(
-					(opencps_dossier_log.actor = 1 OR opencps_dossier_log.actor = 2)
-					AND opencps_dossier_log.actionInfo NOT IN("add-attachment-file","remove-attachment-file","clone-attachment-file")
-				
-				)
+					opencps_dossier_log.actor != 0
+				AND (opencps_dossier_log.dossierStatus != 'system')
+				AND (opencps_dossier_log.requestCommand = '')			
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierFinder.searchDossierSugesstion">	
+		<![CDATA[
+			SELECT
+				DISTINCT (d.dossierId), d.* 
+			FROM
+				opencps_dossier AS d
+			INNER JOIN 
+				opencps_dossier_file AS df
+			ON 
+				d.dossierId = df.dossierId
+			AND 
+				(df.removed = 0 AND df.syncStatus = 2 AND df.templateFileNo IN (?) AND d.dossierStatus = ?)
+			INNER JOIN 
+				opencps_dossierpart AS p
+			ON 
+				p.dossierpartId = df.dossierPartId
+			AND p.partType IN (?) AND p.partNo IN (?)
+			ORDER BY 
+				d.modifiedDate DESC
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierFinder.countDossierSugesstion">	
+		<![CDATA[
+			SELECT
+				COUNT(DISTINCT (d.dossierId)) AS COUNT_VALUE
+			FROM
+				opencps_dossier AS d
+			INNER JOIN 
+				opencps_dossier_file AS df
+			ON 
+				d.dossierId = df.dossierId
+			AND 
+				(df.removed = 0 AND df.syncStatus = 2 AND df.templateFileNo IN (?) AND d.dossierStatus = ?)
+			INNER JOIN 
+				opencps_dossierpart AS p
+			ON 
+				p.dossierpartId = df.dossierPartId
+			AND p.partType IN (?) AND p.partNo IN (?)
+			ORDER BY 
+				d.modifiedDate DESC
 		]]>
 	</sql>
 	

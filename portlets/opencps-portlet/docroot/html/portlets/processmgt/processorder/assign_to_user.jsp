@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -18,37 +17,34 @@
  */
 %>
 
-<%@page import="org.opencps.holidayconfig.util.HolidayUtils"%>
-<%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.model.Dossier"%>
-<%@page import="org.opencps.processmgt.util.ProcessOrderUtils"%>
-<%@page import="javax.portlet.PortletMode"%>
-<%@page import="org.opencps.processmgt.NoSuchWorkflowOutputException"%>
-<%@page import="org.opencps.util.PortletPropsValues"%>
 <%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
-<%@page import="javax.portlet.PortletRequest"%>
-<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
-<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
-<%@page import="org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil"%>
-<%@page import="org.opencps.processmgt.model.WorkflowOutput"%>
-<%@page import="org.opencps.backend.util.PaymentRequestGenerator"%>
-<%@page import="org.opencps.util.PortletUtil"%>
-<%@page import="org.opencps.util.DateTimeUtil"%>
-<%@page import="org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil"%>
-<%@page import="org.opencps.processmgt.model.ProcessWorkflow"%>
-<%@page import="java.util.Date"%>
-<%@page import="org.opencps.backend.util.BookingDateGenerator"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
-<%@page import="org.opencps.processmgt.util.ProcessUtils"%>
-<%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
+<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
+<%@page import="java.util.Date"%>
+<%@page import="javax.portlet.PortletMode"%>
+<%@page import="javax.portlet.PortletRequest"%>
+<%@page import="org.opencps.backend.util.DossierNoGenerator"%>
+<%@page import="org.opencps.backend.util.PaymentRequestGenerator"%>
+<%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%@page import="org.opencps.dossiermgt.model.DossierFile"%>
-<%@page import="org.opencps.processmgt.model.ProcessOrder"%>
-<%@page import="org.opencps.dossiermgt.NoSuchDossierTemplateException"%>
 <%@page import="org.opencps.dossiermgt.NoSuchDossierException"%>
 <%@page import="org.opencps.dossiermgt.RequiredDossierPartException"%>
-<%@page import="org.opencps.backend.util.DossierNoGenerator"%>
+<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
+<%@page import="org.opencps.holidayconfig.util.HolidayUtils"%>
+<%@page import="org.opencps.processmgt.model.ProcessOrder"%>
+<%@page import="org.opencps.processmgt.model.ProcessWorkflow"%>
+<%@page import="org.opencps.processmgt.model.WorkflowOutput"%>
+<%@page import="org.opencps.processmgt.NoSuchWorkflowOutputException"%>
+<%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
+<%@page import="org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.util.ProcessMgtUtil"%>
+<%@page import="org.opencps.processmgt.util.ProcessOrderUtils"%>
+<%@page import="org.opencps.processmgt.util.ProcessUtils"%>
+<%@page import="org.opencps.util.PortletPropsValues"%>
+<%@page import="org.opencps.util.PortletUtil"%>
 <%@page import="org.opencps.util.WebKeys"%>
 
 <%@ include file="init.jsp"%>
@@ -139,16 +135,16 @@
 	List<String> listDossierFileToSigner = new ArrayList<String>();
 	
 	for (WorkflowOutput workflowOutput : workflowOutputs) {
-		DossierFile dossierFile2 = DossierFileLocalServiceUtil.getDossierFileInUse(dossierId, workflowOutput.getDossierPartId());
+		DossierFile dossierFileSign = DossierFileLocalServiceUtil.getDossierFileInUse(dossierId, workflowOutput.getDossierPartId());
 		
-		if(Validator.isNotNull(dossierFile2)){
-			listFileToSigner.add(dossierFile2.getFileEntryId()+"");
-			listDossierPartToSigner.add(workflowOutput.getDossierPartId()+"");
-			listDossierFileToSigner.add(dossierFile2.getDossierFileId()+"");
+		if(Validator.isNotNull(dossierFileSign)){
+			listFileToSigner.add(String.valueOf(dossierFileSign.getFileEntryId()));
+			listDossierPartToSigner.add(String.valueOf(workflowOutput.getDossierPartId()));
+			listDossierFileToSigner.add(String.valueOf(dossierFileSign.getDossierFileId()));
 		}
 	}
 %>
-<div class="tempDIV16">
+
 <liferay-ui:error 
 	exception="<%= NoSuchDossierException.class %>" 
 	message="<%=NoSuchDossierException.class.getName() %>"
@@ -280,8 +276,9 @@
 	
 	<div class="row-fluid">
 	
-	<c:if test="<%= processWorkflow.getAssignUser()%>">
-			<div class="<%=cssCol%>">
+	<c:if test="<%= processWorkflow.getAssignUser() %>">
+	
+			<div class="span12">
 				<aui:select 
 					name="<%=ProcessOrderDisplayTerms.ASSIGN_TO_USER_ID %>" 
 					label="assign-to-next-user" 
@@ -301,9 +298,9 @@
 			</div>
 		</c:if>
 		
-		<c:if test="<%= processWorkflow.getRequestPayment()%>">
+		<c:if test="<%= processWorkflow.getRequestPayment() %>">
 		
-			<div class="<%=cssCol%>">
+			<div class="span12">
 				<aui:input 
 					cssClass="input100"
 					name="<%=ProcessOrderDisplayTerms.PAYMENTVALUE %>" 
@@ -314,8 +311,8 @@
 			</div>
 		</c:if>		
 		
-		<c:if test="<%= processWorkflow.getGenerateReceptionNo()%>">
-			<div class="<%=cssCol%>">
+		<c:if test="<%= processWorkflow.getGenerateReceptionNo() %>">
+			<div class="span12">
 				<aui:input 
 					name="<%=ProcessOrderDisplayTerms.RECEPTION_NO %>" 
 					label="reception-no" 
@@ -324,8 +321,8 @@
 			</div>
 		</c:if>
 		
-		<c:if test="<%= processWorkflow.getGenerateDeadline()%>">
-			<div class="<%=cssCol%>">
+		<c:if test="<%= processWorkflow.getGenerateDeadline() %>">
+			<div class="span12">
 				<aui:row>
 					<label class="control-label custom-lebel" for='<portlet:namespace/><%="deadline" %>'>
 						<liferay-ui:message key="return-date"/>
@@ -369,7 +366,7 @@
 	
 	<div class="row-fluid">
 		<div class="span12">
-			<aui:input name="<%=ProcessOrderDisplayTerms.ACTION_NOTE %>" label="action-note-ykien" type="textarea" cssClass="input100"/>
+			<aui:input name="<%=ProcessOrderDisplayTerms.ACTION_NOTE %>" label="action-note" type="textarea" cssClass="input100"/>
 		</div>
 	</div>
 	
@@ -447,15 +444,13 @@
 		</div>
 	</c:if>
 
-	<aui:button-row cssClass="">
-		<aui:button type="button" value="submit" name="submit"/>
+	<aui:button type="button" value="submit" name="submit"/>
 	
-		<c:if test="<%=esign %>">
-	<%-- 		<aui:button type="button" value="esign" name="esign"/> --%>
-			<aui:button type="button" value="esign" name="esign" onClick="getFileComputerHash(1);"/>
-		</c:if>
-		<aui:button type="button" value="cancel" name="cancel"/>
-	</aui:button-row>
+	<c:if test="<%=esign %>">
+		<%-- <aui:button type="button" value="esign" name="esign"/> --%>
+		<aui:button type="button" value="esign" name="esign" onClick="getFileComputerHash(1);"/>
+	</c:if>
+	<aui:button type="button" value="cancel" name="cancel"/>
 	
 	<div id="myProgressBar" class="aui-progress-warning"></div>
 </aui:form>
@@ -466,125 +461,284 @@
 
 <portlet:resourceURL var="getDataAjax"></portlet:resourceURL>
 
-<portlet:actionURL var="signatureURL" name="signatureOLD"></portlet:actionURL>
+<portlet:actionURL var="signatureURL" name="signatureBCY"></portlet:actionURL>
+
 
 <aui:script>
-	function formSubmit() {
-		document.getElementById('<portlet:namespace />fm').action = '<%=assignToUserURL.toString() %>';
-			document.getElementById('<portlet:namespace />fm').submit();
-	}
+
 	AUI().ready(function(A){
 		
 		var submitButton = A.one('#<portlet:namespace/>submit');
 
-		var cancelButton = A.one('#<portlet:namespace/>cancel');
+ 		var cancelButton = A.one('#<portlet:namespace/>cancel');
 		
-		var esign = A.one('#<portlet:namespace/>esign');
+ 		var esign = A.one('#<portlet:namespace/>esign');
 		
 		if(submitButton){
 			submitButton.on('click', function(){
 				submitForm(document.<portlet:namespace />fm);
 			});
 		}
-		if(cancelButton){
-			cancelButton.on('click', function(){
-				<portlet:namespace/>closeDialog();
-			});
-		}
 		
-		var success = '<%=success%>';
+ 		if(cancelButton){
+ 			cancelButton.on('click', function(){
+ 				<portlet:namespace/>closeDialog();
+ 			});
+ 		}
 		
-		if(success == 'true'){
-			var backURL = '<%=backTodoListURL.toString() %>';
-			
-			var Util = Liferay.Util;
-			<portlet:namespace/>closeDialog();
+ 		var success = '<%=success%>';
+		
+ 		if(success == 'true'){
+ 			var backURL = '<%=backURL%>';
+ 			var Util = Liferay.Util;
+ 			<portlet:namespace/>closeDialog();
 			Util.getOpener().Liferay.fire('redirect', {responseData:{backURL:backURL}});
-		}
+ 		}
 		
-	});
+ 		if(esign){
+			esign.on('click', function(){
+ 				<portlet:namespace/>esign();
+ 			});
+ 		}
 	
-	Liferay.provide(window, '<portlet:namespace/>closeDialog', function() {
-		var backURL = '<%=backURL%>';
-		var dialog = Liferay.Util.getWindow('<portlet:namespace/>assignToUser');
-		dialog.destroy();
-		Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.PROCESS_ORDER_PORTLET %>_');
-	});
+ 	});
 	
-	function plugin0()
-	 {
+ 	Liferay.provide(window, '<portlet:namespace/>closeDialog', function() {
+ 		var backURL = '<%=backURL%>';
+ 		var dialog = Liferay.Util.getWindow('<portlet:namespace/>assignToUser');
+ 		dialog.destroy();
+ 		var data = {
+ 			'conserveHash': true
+ 		};
+ 		Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.PROCESS_ORDER_PORTLET %>_', data);
+ 	});
+
+ 	Liferay.provide(window, '<portlet:namespace/>verifySign', function(e) {
+ 		var A = AUI();
+ 		var instance = A.one(e);
+ 		var dossierFileId = instance.attr('dossier-file');
+	
+ 		var uri = '<%=PortletPropsValues.OPENCPS_SERVLET_VERIFY_SIGN_DOCUMENT_URL%>' + dossierFileId;
+		
+ 		var loadingMask = new A.LoadingMask(
+ 			{
+ 				'strings.loading': '<%= UnicodeLanguageUtil.get(pageContext, "Verify signature ...") %>',
+ 				target: A.one('#<portlet:namespace/>fm')
+ 			}
+ 		);
+	
+ 		loadingMask.show();
+		
+ 		openDialog(uri, '<portlet:namespace />verifySignature','<%= UnicodeLanguageUtil.get(pageContext, "verify") %>');
+		
+ 		loadingMask.hide();
+ 	},['aui-io','liferay-portlet-url', 'aui-loading-mask-deprecated']);
+	
+ 	/* Liferay.provide(window, '<portlet:namespace/>esign', function() {
+		
+ 		var A = AUI();
+		
+ 		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.ACTION_PHASE) %>');
+ 		portletURL.setParameter("javax.portlet.action", "hashSingleFile");
+ 		portletURL.setWindowState('<%=WindowState.NORMAL%>');
+		
+ 		var esignDossierFiles = A.one('#<portlet:namespace/>esignDossierFiles');
+		
+ 		var dossierFileIds = [];
+		
+
+ 		var loadingMask = new A.LoadingMask(
+ 			{
+ 				'strings.loading': '<%= UnicodeLanguageUtil.get(pageContext, "esign...") %>',
+ 				target: A.one('#<portlet:namespace/>fm')
+ 			}
+ 		);
+		
+ 		//console.log(loadingMask);
+		
+ 		//console.log(loadingMask._attrs.strings.value.loading);
+		
+ 		//console.log(loadingMask.getAttrs());
+		
+ 		//var strings = {strings : {loading: 'xxx...'}};
+		
+ 		//loadingMask.setAttrs(strings);
+
+ 		//loadingMask.reset();
+		
+		//console.log(loadingMask.getAttrs());
+
+ 		loadingMask.show();
+	
+		
+ 		if(esignDossierFiles){
+ 			var childs = esignDossierFiles._node.children;
+ 			if(childs.length > 0){
+ 				for(var i = 0; i < childs.length; i++){
+ 					var option = A.one(childs[i]);
+ 					dossierFileIds.push(option.attr('value'));
+					
+ 					A.io.request(
+ 						portletURL.toString(),
+						
+ 						{
+						    dataType : 'json',
+ 						   	sync: true,
+ 						    data:{    	
+ 						    	<portlet:namespace/>dossierFileId : option.attr('value'),
+ 						    },   
+ 						    on: {
+ 						        success: function(event, id, obj) {
+ 									var instance = this;
+ 									var res = instance.get('responseData');
+ 									//console.log(res);
+ 									<portlet:namespace/>signature(res.hashHex, res.resources);
+ 								},
+ 						    	error: function(){
+						    	
+ 						    	}
+ 							}
+						}
+					);
+ 				}			
+ 			}
+ 		}
+		
+ 		loadingMask.hide();
+ 	},['aui-io','liferay-portlet-url', 'aui-loading-mask-deprecated']);
+	
+ 	Liferay.provide(window, '<portlet:namespace/>signature', function(hex, resources) {
+		
+ 		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.ACTION_PHASE) %>');
+ 		portletURL.setParameter("javax.portlet.action", "signature");
+  		portletURL.setWindowState('<%=WindowState.NORMAL%>');
+ 		console.log(hex);
+ 		console.log(resources);
+		
+		$.sign({
+		    hash: {
+		        type: 'sha512',
+		        hex: hex
+		    },
+		    document: {
+		    	resources: resources
+		    },
+		    'backend': 'bcy',
+		    beforeSign: function(signer, hash) {
+		        // do something
+		    },
+		    afterSign: function(signer, signature) {
+		    	console.log(signature.value);
+				console.log(signature.certificate);
+		    	console.log(signature);
+		       $.ajax({
+			   		type: "POST",
+		       		url : portletURL.toString(),
+			   		async: false,
+		            data : {
+		                <portlet:namespace/>signature: signature.value,
+		                <portlet:namespace/>certificate: signature.certificate,
+		                <portlet:namespace/>resources: JSON.stringify(signer.options.document.resources)
+		            },success: function(data){
+		            	console.log(data);
+		            }
+		        });
+		    },
+		    onError: function(signer, error) {
+		        // do something
+		    }
+		});
+	}, ['aui-io','liferay-portlet-url']); */
+	
+</aui:script>
+	
+<aui:script>
+	var assignTaskAfterSign = '<%=String.valueOf(assignTaskAfterSign)%>';
+
+	function formSubmit() {
+		document.getElementById('<portlet:namespace />fm').action = '<%=assignToUserURL.toString() %>';
+			document.getElementById('<portlet:namespace />fm').submit();
+	}
+	
+	function plugin0() {
+		
 	  return document.getElementById('plugin0');
-	 }
-	 plugin = plugin0;
+	}
+	
+	plugin = plugin0;
+	
 	var complateSignatureURL = '<%=signatureURL%>';
 
-		function getFileComputerHash(ks) {
+	function getFileComputerHash(symbolType) {
 
-			var url = '<%=getDataAjax%>';
-			var nanoTime = $('#<portlet:namespace/>nanoTimePDF').val();
-			
-			url = url + "&nanoTimePDF="+nanoTime;
-			var listFileToSigner = $("#<portlet:namespace/>listFileToSigner").val().split(","); 
-			var listDossierPartToSigner = $("#<portlet:namespace/>listDossierPartToSigner").val().split(","); 
-			var listDossierFileToSigner = $("#<portlet:namespace/>listDossierFileToSigner").val().split(","); 
-			for ( var i = 0; i < listFileToSigner.length; i++) {
-				$.ajax({
-					type : 'POST',
-					url : url,
-					data : {
-						<portlet:namespace/>index: i,
-						<portlet:namespace/>indexSize: listFileToSigner.length,
-						<portlet:namespace/>ks: ks,
-						<portlet:namespace/>fileId: listFileToSigner[i],
-						<portlet:namespace/>dossierId: $("#<portlet:namespace/>dossierId").val(),
-						<portlet:namespace/>dossierPartId: listDossierPartToSigner[i],
-						<portlet:namespace/>dossierFileId: listDossierFileToSigner[i],
-						<portlet:namespace/>type: 'getComputerHash'
-					},
-					success : function(data) {
-						if(data){
-							var jsonData = JSON.parse(data);
-							var hashComputers = jsonData.hashComputers;
-							var signFieldNames = jsonData.signFieldNames;
-							var filePaths = jsonData.filePaths;
-							var msgs = jsonData.msg;
-							var fileNames = jsonData.fileNames;
-							var dossierFileIds = jsonData.dossierFileIds;
-							var dossierPartIds = jsonData.dossierPartIds;
-							var indexs = jsonData.indexs;
-							var indexSizes = jsonData.indexSizes;
-							for ( var i = 0; i < hashComputers.length; i++) {
-								var hashComputer = hashComputers[i];
-								var signFieldName = signFieldNames[i];
-								var filePath = filePaths[i];
-								var msg = msgs[i];
-								var fileName = fileNames[i];
-								var dossierFileId = dossierFileIds[i];
-								var dossierPartId = dossierPartIds[i];
-								var index = indexs[i];
-								var indexSize = indexSizes[i];
-								if(plugin().valid){
-									if(msg === 'success'){
-		 								var code = plugin().Sign(hashComputer);
-		 								if(code ===0 || code === 7){
-		 									var sign = plugin().Signature;
-											completeSignature(sign, signFieldName, filePath, fileName, $("#<portlet:namespace/>dossierId").val(), dossierFileId, dossierPartId, index, indexSize, '<%=signatureURL%>');
-											
-		 								}else{
-		 									alert('<%= LanguageUtil.get(pageContext, "signer-error") %>');
-		 					            }
-									}else{
-										alert(msg);
-									}
-						        	
-						        } else {
-						         	alert('<%= LanguageUtil.get(pageContext, "plugin-is-not-working") %>');
-						        }
-							}
+		var url = '<%=getDataAjax%>';
+		
+		var nanoTime = $('#<portlet:namespace/>nanoTimePDF').val();
+		
+		url = url + "&nanoTimePDF="+nanoTime;
+		
+		var listFileToSigner = $("#<portlet:namespace/>listFileToSigner").val().split(","); 
+		var listDossierPartToSigner = $("#<portlet:namespace/>listDossierPartToSigner").val().split(","); 
+		var listDossierFileToSigner = $("#<portlet:namespace/>listDossierFileToSigner").val().split(","); 
+		
+		for ( var i = 0; i < listFileToSigner.length; i++) {
+			$.ajax({
+				type : 'POST',
+				url : url,
+				data : {
+					<portlet:namespace/>index: i,
+					<portlet:namespace/>indexSize: listFileToSigner.length,
+					<portlet:namespace/>symbolType: symbolType,
+					<portlet:namespace/>fileId: listFileToSigner[i],
+					<portlet:namespace/>dossierId: $("#<portlet:namespace/>dossierId").val(),
+					<portlet:namespace/>dossierPartId: listDossierPartToSigner[i],
+					<portlet:namespace/>dossierFileId: listDossierFileToSigner[i],
+					<portlet:namespace/>type: 'getComputerHash'
+				},
+				success : function(data) {
+					if(data){
+						var jsonData = JSON.parse(data);
+						var hashComputers = jsonData.hashComputers;
+						var signFieldNames = jsonData.signFieldNames;
+						var filePaths = jsonData.filePaths;
+						var msgs = jsonData.msg;
+						var fileNames = jsonData.fileNames;
+						var dossierFileIds = jsonData.dossierFileIds;
+						var dossierPartIds = jsonData.dossierPartIds;
+						var indexs = jsonData.indexs;
+						var indexSizes = jsonData.indexSizes;
+						for ( var i = 0; i < hashComputers.length; i++) {
+							var hashComputer = hashComputers[i];
+							var signFieldName = signFieldNames[i];
+							var filePath = filePaths[i];
+							var msg = msgs[i];
+							var fileName = fileNames[i];
+							var dossierFileId = dossierFileIds[i];
+							var dossierPartId = dossierPartIds[i];
+							var index = indexs[i];
+							var indexSize = indexSizes[i];
+							if(plugin().valid){
+								if(msg === 'success'){
+	 								var code = plugin().Sign(hashComputer);
+	 								if(code ===0 || code === 7){
+	 									var sign = plugin().Signature;
+										completeSignature(sign, signFieldName, filePath, fileName, $("#<portlet:namespace/>dossierId").val(), dossierFileId, dossierPartId, index, indexSize, '<%=signatureURL%>');
+										
+	 								}else{
+	 									alert("signer error");
+	 					            }
+								}else{
+									alert(msg);
+								}
+					        	
+					        } else {
+					         	alert("Plugin is not working");
+					        }
 						}
 					}
-				});
-			}
+				}
+			});
+		}
 	}
 
 	function completeSignature(sign, signFieldName, filePath, fileName, dossierId, dossierFileId, dossierPartId, index, indexSize, urlFromSubmit) {
@@ -612,14 +766,16 @@
 							var newis = indexSize-1;
 								if (msg === 'success') {
 									if(index == newis){
-										formSubmit();
+										if(assignTaskAfterSign == 'true'){
+											formSubmit();
+										}
 									}
 								} else {
-										alert('<%= LanguageUtil.get(pageContext, "signer-error-validate") %>');
+										alert("--------- vao day completeSignature- ky so ko dc-------------");
 								}
 						},
 				    	error: function(){
-				    		alert('<%= LanguageUtil.get(pageContext, "signer-error-validate") %>');
+				    		alert("--------- vao day completeSignature- ky so ko dc-------------");
 				    	}
 					}
 				}
@@ -628,185 +784,3 @@
 	}
 	
 </aui:script>
-
-
-<aui:script>
-
-// 	AUI().ready(function(A){
-
-// 		var cancelButton = A.one('#<portlet:namespace/>cancel');
-		
-// 		var esign = A.one('#<portlet:namespace/>esign');
-		
-// 		if(cancelButton){
-// 			cancelButton.on('click', function(){
-// 				<portlet:namespace/>closeDialog();
-// 			});
-// 		}
-		
-// 		var success = '<%=success%>';
-		
-// 		if(success == 'true'){
-// 			var backURL = '<%=backURL%>';
-// 			var Util = Liferay.Util;
-// 			<portlet:namespace/>closeDialog();
-// 			Util.getOpener().Liferay.fire('redirect', {responseData:{backURL:backURL}});
-// 		}
-		
-// 		if(esign){
-// 			esign.on('click', function(){
-// 				<portlet:namespace/>esign();
-// 			});
-// 		}
-		
-// 	});
-	
-// 	Liferay.provide(window, '<portlet:namespace/>closeDialog', function() {
-// 		var backURL = '<%=backURL%>';
-// 		var dialog = Liferay.Util.getWindow('<portlet:namespace/>assignToUser');
-// 		dialog.destroy();
-// 		var data = {
-// 			'conserveHash': true
-// 		};
-// 		Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_<%= WebKeys.PROCESS_ORDER_PORTLET %>_', data);
-// 	});
-	
-// 	Liferay.provide(window, '<portlet:namespace/>verifySign', function(e) {
-// 		var A = AUI();
-// 		var instance = A.one(e);
-// 		var dossierFileId = instance.attr('dossier-file');
-		
-// 		var uri = '<%=PortletPropsValues.OPENCPS_SERVLET_VERIFY_SIGN_DOCUMENT_URL%>' + dossierFileId;
-		
-// 		var loadingMask = new A.LoadingMask(
-// 			{
-// 				'strings.loading': '<%= UnicodeLanguageUtil.get(pageContext, "Verify signature ...") %>',
-// 				target: A.one('#<portlet:namespace/>fm')
-// 			}
-// 		);
-		
-// 		loadingMask.show();
-		
-// 		openDialog(uri, '<portlet:namespace />verifySignature','<%= UnicodeLanguageUtil.get(pageContext, "verify") %>');
-		
-// 		loadingMask.hide();
-// 	},['aui-io','liferay-portlet-url', 'aui-loading-mask-deprecated']);
-	
-// 	Liferay.provide(window, '<portlet:namespace/>esign', function() {
-		
-// 		var A = AUI();
-		
-// 		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.ACTION_PHASE) %>');
-// 		portletURL.setParameter("javax.portlet.action", "hashSingleFile");
-// 		portletURL.setWindowState('<%=WindowState.NORMAL%>');
-		
-// 		var esignDossierFiles = A.one('#<portlet:namespace/>esignDossierFiles');
-		
-// 		var dossierFileIds = [];
-		
-
-// 		var loadingMask = new A.LoadingMask(
-// 			{
-// 				'strings.loading': '<%= UnicodeLanguageUtil.get(pageContext, "esign...") %>',
-// 				target: A.one('#<portlet:namespace/>fm')
-// 			}
-// 		);
-		
-// 		//console.log(loadingMask);
-		
-// 		//console.log(loadingMask._attrs.strings.value.loading);
-		
-// 		//console.log(loadingMask.getAttrs());
-		
-// 		//var strings = {strings : {loading: 'xxx...'}};
-		
-// 		//loadingMask.setAttrs(strings);
-
-// 		//loadingMask.reset();
-		
-// 		//console.log(loadingMask.getAttrs());
-
-// 		loadingMask.show();
-	
-		
-// 		if(esignDossierFiles){
-// 			var childs = esignDossierFiles._node.children;
-// 			if(childs.length > 0){
-// 				for(var i = 0; i < childs.length; i++){
-// 					var option = A.one(childs[i]);
-// 					dossierFileIds.push(option.attr('value'));
-					
-// 					A.io.request(
-// 						portletURL.toString(),
-						
-// 						{
-// 						    dataType : 'json',
-// 						   	sync: true,
-// 						    data:{    	
-// 						    	<portlet:namespace/>dossierFileId : option.attr('value'),
-// 						    },   
-// 						    on: {
-// 						        success: function(event, id, obj) {
-// 									var instance = this;
-// 									var res = instance.get('responseData');
-// 									//console.log(res);
-// 									<portlet:namespace/>signature(res.hashHex, res.resources);
-// 								},
-// 						    	error: function(){
-						    	
-// 						    	}
-// 							}
-// 						}
-// 					);
-// 				}			
-// 			}
-// 		}
-		
-// 		loadingMask.hide();
-// 	},['aui-io','liferay-portlet-url', 'aui-loading-mask-deprecated']);
-	
-// 	Liferay.provide(window, '<portlet:namespace/>signature', function(hex, resources) {
-		
-// 		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.ACTION_PHASE) %>');
-// 		portletURL.setParameter("javax.portlet.action", "signature");
-//  		portletURL.setWindowState('<%=WindowState.NORMAL%>');
-// 		console.log(hex);
-// 		console.log(resources);
-		
-// 		$.sign({
-// 		    hash: {
-// 		        type: 'sha512',
-// 		        hex: hex
-// 		    },
-// 		    document: {
-// 		    	resources: resources
-// 		    },
-// 		    'backend': 'bcy',
-// 		    beforeSign: function(signer, hash) {
-// 		        // do something
-// 		    },
-// 		    afterSign: function(signer, signature) {
-// 		    	console.log(signature.value);
-// 				console.log(signature.certificate);
-// 		    	console.log(signature);
-// 		       $.ajax({
-// 			   		type: "POST",
-// 		       		url : portletURL.toString(),
-// 			   		async: false,
-// 		            data : {
-// 		                <portlet:namespace/>signature: signature.value,
-// 		                <portlet:namespace/>certificate: signature.certificate,
-// 		                <portlet:namespace/>resources: JSON.stringify(signer.options.document.resources)
-// 		            },success: function(data){
-// 		            	console.log(data);
-// 		            }
-// 		        });
-// 		    },
-// 		    onError: function(signer, error) {
-// 		        // do something
-// 		    }
-// 		});
-// 	}, ['aui-io','liferay-portlet-url']);
-	
-</aui:script>
-</div>

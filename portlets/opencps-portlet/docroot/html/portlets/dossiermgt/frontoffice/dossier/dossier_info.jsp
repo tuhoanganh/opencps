@@ -130,7 +130,7 @@
 />
 
 
-<aui:row cssClass="nav-content-row">
+<aui:row cssClass="nav-content-row hidden">
 	<aui:col width="100">
 		<aui:input 
 			name="<%=DossierDisplayTerms.SERVICE_NAME %>"
@@ -142,20 +142,20 @@
 	</aui:col>
 </aui:row>
 
-<%-- <aui:row cssClass="nav-content-row"> --%>
-<%-- 	<aui:col width="100"> --%>
-<%-- 		<aui:input  --%>
-<%-- 			name="<%=DossierDisplayTerms.SERVICE_NO %>"  --%>
-<%-- 			cssClass=""  --%>
-<%-- 			disabled="<%=true %>" --%>
-<%-- 			type="text" --%>
-<%-- 			value="<%=serviceInfo != null ? serviceInfo.getServiceNo() : StringPool.BLANK %>" --%>
-<%-- 		/>	 --%>
-<%-- 	</aui:col> --%>
-<%-- </aui:row> --%>
+<aui:row cssClass="nav-content-row hidden">
+	<aui:col width="100">
+		<aui:input 
+			name="<%=DossierDisplayTerms.SERVICE_NO %>" 
+			cssClass="" 
+			disabled="<%=true %>"
+			type="text"
+			value="<%=serviceInfo != null ? serviceInfo.getServiceNo() : StringPool.BLANK %>"
+		/>	
+	</aui:col>
+</aui:row>
 
 
-<aui:row cssClass="nav-content-row">
+<aui:row cssClass="nav-content-row hidden">
 	<aui:col width="100">
 		<aui:input 
 			name="<%=DossierDisplayTerms.GOVAGENCY_NAME%>"
@@ -166,16 +166,16 @@
 	</aui:col>
 </aui:row>
 
-<%-- <aui:row cssClass="nav-content-row"> --%>
-<%-- 	<aui:col width="100"> --%>
-<%-- 		<aui:input  --%>
-<%-- 			name="<%=DossierDisplayTerms.GOVAGENCY_CODE %>"  --%>
-<%-- 			cssClass="" --%>
-<%-- 			disabled="<%=true %>" --%>
-<%-- 			value="<%=serviceConfig != null ? serviceConfig.getGovAgencyCode() : StringPool.BLANK %>" --%>
-<%-- 		/>	 --%>
-<%-- 	</aui:col> --%>
-<%-- </aui:row> --%>
+<aui:row cssClass="nav-content-row hidden">
+	<aui:col width="100">
+		<aui:input 
+			name="<%=DossierDisplayTerms.GOVAGENCY_CODE %>" 
+			cssClass=""
+			disabled="<%=true %>"
+			value="<%=serviceConfig != null ? serviceConfig.getGovAgencyCode() : StringPool.BLANK %>"
+		/>	
+	</aui:col>
+</aui:row>
 
 <aui:row cssClass="nav-content-row">
 	<aui:col width="100">
@@ -231,11 +231,12 @@
 	<datamgt:ddr 
 		depthLevel="3" 
 		dictCollectionCode="<%=PortletPropsValues.DATAMGT_MASTERDATA_ADMINISTRATIVE_REGION %>"
-		itemNames='<%=StringUtil.merge(new String[]{DossierDisplayTerms.CITY_ID,DossierDisplayTerms.DISTRICT_ID,DossierDisplayTerms.WARD_ID}) %>'
+		itemNames='<%=StringUtil.merge(new String[]{DossierDisplayTerms.CITY_CODE,DossierDisplayTerms.DISTRICT_CODE,DossierDisplayTerms.WARD_CODE}) %>'
 		itemsEmptyOption="true,true,true"
 		showLabel="true"
 		selectedItems="<%=itemSelected %>"
-		displayStyle="vertical" 
+		displayStyle="vertical"
+		optionValueType="code"
 	/>
 </aui:row>
 

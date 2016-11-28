@@ -302,10 +302,10 @@
 											<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
 												<i class='<%="fa fa-circle sx10 " + processOrder.getDossierStatus()%>'></i>
 											</div>
-											<div class="span2 bold">
+											<div class="span4 bold">
 												<liferay-ui:message key="reception-no"/>
 											</div>
-											<div class="span9">
+											<div class="span7">
 												<%=processOrder.getReceptionNo() %>
 											</div>
 										</div>
@@ -313,10 +313,7 @@
 										<div class="row-fluid">
 											<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
 											</div>
-											<div class="span2 bold">
-												<liferay-ui:message key="service-name"/>
-											</div>
-											<div class="span9">
+											<div class="span11">
 												<%=processOrder.getServiceName() %>
 											</div>
 										</div>

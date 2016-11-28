@@ -46,7 +46,6 @@
 
 .opencps.dossiermgt.dossier-part-tree {
     display: table;
-    padding: 5px 0;
     width: 100%;
 }
 
@@ -144,4 +143,9 @@ level-0 opencps dossiermgt dossier-part .row-icon {
 
 .dossierPartRequired.dossierPartRequired-error .dossier-part-name{
 	color:red;
+}
+.row-icon-stt-new {
+    width: auto;
+    text-align: right;
+    white-space: nowrap;
 }

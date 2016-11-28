@@ -152,7 +152,7 @@ public class MessageBusUtil {
 		        .getUserId());
 
 		subscriptionSender
-		    .addRuntimeSubscribers(toAddress, toName);
+		    .addRuntimeSubscribers(toAddress, null);
 
 		subscriptionSender
 		    .flushNotificationsAsync();
@@ -231,7 +231,7 @@ public class MessageBusUtil {
 		        .getUserId());
 
 		subscriptionSender
-		    .addRuntimeSubscribers(toAddress, toName);
+		    .addRuntimeSubscribers(toAddress, null);
 
 		subscriptionSender
 		    .flushNotificationsAsync();
@@ -299,7 +299,7 @@ public class MessageBusUtil {
 		        .getUserId());
 
 		subscriptionSender
-		    .addRuntimeSubscribers(toAddress, toName);
+		    .addRuntimeSubscribers(toAddress, null);
 
 		subscriptionSender
 		    .flushNotificationsAsync();
@@ -309,6 +309,8 @@ public class MessageBusUtil {
 			String emailAddress, String emailConfirmToAdmin, Business business,
 			Citizen citizen, ServiceContext serviceContext) throws PortalException,
 			SystemException {
+		
+		System.out.println("EMAIL ADMIN --------------**************************" + emailConfirmToAdmin);
 		
 		String emailAdmins[] = null;
 		
@@ -383,7 +385,7 @@ public class MessageBusUtil {
 
 					subscriptionSender.setUserId(user.getUserId());
 
-					subscriptionSender.addRuntimeSubscribers(toAddress, toName);
+					subscriptionSender.addRuntimeSubscribers(toAddress, null);
 
 					subscriptionSender.flushNotificationsAsync();
 				}

@@ -744,12 +744,12 @@ public class ProcessOrderLocalServiceImpl
 	 * @param keyWords
 	 * @return
 	 */
-	public int countProcessOrderDuongSat(
+	public int countProcessOrderKeyWords(
 		long serviceInfoId, long processStepId, long loginUserId,
 		long actionUserId, String keyWords) {
 
 		return processOrderFinder
-			.countProcessOrderDuongSat(serviceInfoId, processStepId, loginUserId,
+			.countProcessOrderKeyWords(serviceInfoId, processStepId, loginUserId,
 				actionUserId, keyWords);
 	}
 	/**
@@ -763,12 +763,11 @@ public class ProcessOrderLocalServiceImpl
 	 * @param orderByComparator
 	 * @return
 	 */
-	public List searchProcessOrderDuongSat(
+	public List searchProcessOrderKeyWords(
 		long serviceInfoId, long processStepId, long loginUserId,
 		long actionUserId, String keyWords, int start, int end, OrderByComparator orderByComparator) {
 		
 		return processOrderFinder
-						.searchProcessOrderDuongSat(serviceInfoId, processStepId, loginUserId,
-							actionUserId, keyWords, start, end, orderByComparator);
+						.searchProcessOrderKeyWords(serviceInfoId, processStepId, loginUserId,
 	}
 }

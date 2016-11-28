@@ -163,6 +163,7 @@
 		</field>
 		<field name="businessType" type="String" />
 		<field name="idNumber" type="String" />
+		<field name="dateOfIdNumber" type="Date" />
 		<field name="address" type="String">
 			<hint name="display-width">255</hint>
 		</field>
@@ -292,6 +293,7 @@
 		<field name="daysDoing" type="int" />
 		<field name="daysDelay" type="int" />
 		<field name="oId" type="String" />
+		<field name="logId" type="long" />
 	</model>
 	<model name="org.opencps.processmgt.model.ProcessOrder">
 		<field name="processOrderId" type="long" />
@@ -328,13 +330,16 @@
 		<field name="stepName" type="String" />
 		<field name="sequenceNo" type="int" />
 		<field name="dossierStatus" type="String" />
+		<field name="dossierSubStatus" type="String" />
 		<field name="daysDuration" type="int" />
 		<field name="referenceDossierPartId" type="long" />
 		<field name="externalAppUrl" type="String" />
+		<field name="processStepNo" type="int" />
 	</model>
 	<model name="org.opencps.processmgt.model.ProcessStepDossierPart">
 		<field name="processStepId" type="long" />
 		<field name="dossierPartId" type="long" />
+		<field name="readOnly" type="boolean" />
 	</model>
 	<model name="org.opencps.processmgt.model.ProcessWorkflow">
 		<field name="processWorkflowId" type="long" />
@@ -516,6 +521,8 @@
 		<field name="fileGroupId" type="long" />
 		<field name="stepId" type="long" />
 		<field name="isUpdate" type="boolean" />
+		<field name="actor" type="int" />
+		<field name="logId" type="long" />
 		<field name="fileName" type="String" />
 		<field name="fileVersion" type="int" />
 		<field name="fileLink" type="String" />
@@ -551,6 +558,8 @@
 		<field name="oId" type="String" />
 		<field name="stepId" type="long" />
 		<field name="stepName" type="String" />
+		<field name="processOrderId" type="long" />
+		<field name="processWorkflowId" type="long" />
 	</model>
 	<model name="org.opencps.dossiermgt.model.DossierPart">
 		<field name="dossierpartId" type="long" />
@@ -686,6 +695,9 @@
 		<field name="keypayMerchantCode" type="String" />
 		<field name="keypaySecureKey" type="String" />
 		<field name="reportTemplate" type="String" />
+		<field name="paymentGateType" type="long" />
+		<field name="status" type="boolean" />
+		<field name="returnUrl" type="String" />
 	</model>
 	<model name="org.opencps.paymentmgt.model.PaymentFile">
 		<field name="uuid" type="String" />
@@ -728,6 +740,13 @@
 		<field name="invoiceNo" type="String" />
 		<field name="syncStatus" type="int" />
 		<field name="oid" type="String" />
+		<field name="paymentConfig" type="long" />
+		<field name="paymentGateStatusCode" type="String" />
+		<field name="paymentGateResponseData" type="String" />
+	</model>
+	<model name="org.opencps.paymentmgt.model.PaymentGateConfig">
+		<field name="paymentGateId" type="long" />
+		<field name="paymentGateName" type="String" />
 	</model>
 	<model name="org.opencps.api.model.ApiService">
 		<field name="apiLogId" type="long" />

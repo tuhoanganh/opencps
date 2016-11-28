@@ -81,20 +81,16 @@
 $(document).ready(function(){
 	var myComboTree = '<%=myComboTree %>';
 	var domainCode = '<%=domainCode%>';
-	$('#comboboxTree').combotree({  
-	
-	    animate:true,
-	    data: JSON.parse(myComboTree),
-	    onChange:function(){
-            $('#<portlet:namespace /><%=ServiceDisplayTerms.SERVICE_DOMAINCODE %>').val($('#comboboxTree').combotree('getValue'));
-        },
-        onClick:function(){
-        	<portlet:namespace />onSelectSubmit();
-        },
-	
+	var comboboxTree = $('#comboboxTree').comboTree({  
+		boundingBox: 'comboboxTree',
+		name: '#<portlet:namespace /><%=ServiceDisplayTerms.SERVICE_DOMAINCODE %>',
+		form: document.<portlet:namespace />fm,
+		formSubmit: true,
+		isMultiple: false,
+	    source: JSON.parse(myComboTree)
 	});
 
-	$('#comboboxTree').combotree('setValue', domainCode);
+	comboboxTree.setValue(domainCode);
 	
 	$("#<portlet:namespace />administrationCode").change(function() {
 		<portlet:namespace />onSelectSubmit();
@@ -107,7 +103,6 @@ $(document).ready(function(){
 });
 
 </aui:script>
-<!-- <select class="easyui-combotree" url="/opencps-portlet/temp/city_data.json" name="city" style="width:156px;"/> -->
 
 <aui:nav-bar cssClass="opencps-toolbar custom-toolbar">
 	<aui:nav-bar-search cssClass="pull-right">
@@ -142,9 +137,8 @@ $(document).ready(function(){
 							>
 							</datamgt:ddr> --%>
 							
-							<aui:input name="<%=ServiceDisplayTerms.SERVICE_DOMAINCODE %>" type="hidden"></aui:input>
-							<select id="comboboxTree" class="easyui-combotree"></select>
-
+							<aui:input name="<%=ServiceDisplayTerms.SERVICE_DOMAINCODE %>" type="hidden" value="<%=domainCode %>"></aui:input>
+							<input type="text" id="comboboxTree" class="opencps-combotree" readonly="readonly" />
 						</aui:col>
 						<aui:col width="30" cssClass="search-col">
 							<%-- <label>

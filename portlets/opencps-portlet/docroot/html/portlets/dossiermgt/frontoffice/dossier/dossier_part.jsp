@@ -1,6 +1,3 @@
-<%@page import="org.opencps.util.PortletPropsValues"%>
-<%@page import="org.opencps.util.PortletUtil"%>
-<%@page import="org.opencps.datamgt.model.DictItem"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -21,22 +18,15 @@
 %>
 <%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
-<%@page import="com.liferay.portal.kernel.util.Constants"%>
-<%@page import="com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil"%>
 <%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="java.util.LinkedHashMap"%>
-<%@page import="java.util.LinkedList"%>
 <%@page import="java.util.List"%>
-<%@page import="java.util.Map"%>
 <%@page import="javax.portlet.PortletRequest"%>
 <%@page import="javax.portlet.WindowState"%>
 <%@page import="org.opencps.dossiermgt.EmptyDossierFileException"%>
 <%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%@page import="org.opencps.dossiermgt.model.DossierPart"%>
 <%@page import="org.opencps.dossiermgt.model.DossierTemplate"%>
-<%@page import="org.opencps.dossiermgt.model.impl.DossierPartImpl"%>
 <%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
 <%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
 <%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
@@ -50,6 +40,9 @@
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
 <%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
+<%@page import="org.opencps.util.PortletPropsValues"%>
+<%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="org.opencps.datamgt.model.DictItem"%>
 
 <%@ include file="../../init.jsp"%>
 
@@ -113,7 +106,6 @@
 				<div class="span9"><%=Validator.isNotNull(adminAction) ? adminAction.getItemName(locale,true) : StringPool.BLANK %></div>
 			</div>
 		</div>
-			
 	</div>
 <%
 	
@@ -123,7 +115,10 @@
 		}catch(Exception e){}
 	}
 	
-	int index = 0; 
+	int index = 0;
+	
+	List<Long> requiredDossierPartIds = new ArrayList<Long>();
+	
 	if(dossierPartsLevel1 != null){
 		for (DossierPart dossierPartLevel1 : dossierPartsLevel1){
 	
@@ -169,18 +164,17 @@
 									}
 								}
 								
-								cssRequired = dossierPart.getRequired() ? "cssRequired" : StringPool.BLANK;
+								requiredDossierPartIds = PortletUtil.getDossierPartRequired(requiredDossierPartIds, dossierPartLevel1, 
+										dossierPart, dossierFile);
 								
-								if(dossierPart.getRequired() && dossierFile == null) {
-									cssDossierPartRequired = "dossierPartRequired";
-								} else {
-									cssDossierPartRequired = StringPool.BLANK;
-								}
+								cssRequired = dossierPart.getRequired() ? "cssRequired" : StringPool.BLANK;
 								
 								urlDownload = DossierMgtUtil.getURLDownloadTemplateFile(themeDisplay, dossierPart.getTemplateFileNo());
 								
 								%>
-									<div class='<%="opencps dossiermgt dossier-part-row r-" + index + " " + cssDossierPartRequired%>'>
+
+									<div class='<%="opencps dossiermgt dossier-part-row r-" + index + StringPool.SPACE + "dpid-" + String.valueOf(dossierPart.getDossierpartId())%>'>
+
 										<span class='<%="level-" + level + " opencps dossiermgt dossier-part"%>'>
 											<span class="row-icon row-icon-stt-new">
 												<c:choose>
@@ -354,14 +348,7 @@
 								}catch(Exception e){}
 								
 								cssRequired = dossierPartLevel1.getRequired() ? "cssRequired" : StringPool.BLANK;
-								
-								//TODO: kiem tra lai dieu kien dossierPartRequired voi truong hop nay
-								if(dossierPartLevel1.getRequired() && (fileGroups == null || (fileGroups != null && fileGroups.size() > 0))) {
-									cssDossierPartRequired = "dossierPartRequired";
-								} else {
-									cssDossierPartRequired = StringPool.BLANK;
-								}
-								
+
 								urlDownload = DossierMgtUtil.getURLDownloadTemplateFile(themeDisplay, dossierPartLevel1.getTemplateFileNo());
 								
 							%>
@@ -393,7 +380,8 @@
 								<%index++; %>
 							</div>
 							<c:choose>
-								<c:when test="<%=fileGroups != null && ! fileGroups.isEmpty() %>">
+								<c:when test="<%=fileGroups != null && !fileGroups.isEmpty() %>">
+
 									<%
 										for(FileGroup fileGroup : fileGroups){
 											%>
@@ -429,6 +417,7 @@
 													name="isEditDossier" 
 													value="<%=String.valueOf(isEditDossier) %>"
 												/>
+								
 											</liferay-util:include>
 											<%
 											index ++;
@@ -450,7 +439,11 @@
 			<%
 			}
 		}
-	}
+
+		%>
+			<aui:input name="requiredDossierPart" type="hidden" value="<%= StringUtil.merge(requiredDossierPartIds) %>"/>
+		<%
+	}	
 %>
 
 	<font class="requiredStyleCSS"><liferay-ui:message key="dossier-part-with-star-is-required"/></font>

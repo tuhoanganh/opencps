@@ -52,12 +52,12 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 	public final static String SQL_PROCESS_ORDER_FINDER =
 		ProcessOrderFinder.class
 			.getName() + ".searchProcessOrder";
-	public final static String SQL_PROCESS_ORDER_COUNT_DUONG_SAT =
+	public final static String SQL_PROCESS_ORDER_COUNT_KEY_WORDS =
 			ProcessOrderFinder.class
-				.getName() + ".countProcessOrderDuongSat";
-	public final static String SQL_PROCESS_ORDER_FINDER_DUONG_SAT =
+				.getName() + ".countProcessOrderKeyWords";
+	public final static String SQL_PROCESS_ORDER_FINDER_KEY_WORDS =
 			ProcessOrderFinder.class
-				.getName() + ".searchProcessOrderDuongSat";
+				.getName() + ".searchProcessOrderKeyWords";
 	public final static String SQL_PROCESS_ORDER_JUST_FINISHED_COUNT =
 		ProcessOrderFinder.class
 			.getName() + ".countProcessOrderJustFinished";
@@ -1007,7 +1007,7 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 	 * @param keyWords
 	 * @return
 	 */
-	public int countProcessOrderDuongSat(
+	public int countProcessOrderKeyWords(
 		long serviceInfoId, long processStepId, long loginUserId,
 		long assignToUserId, String keyWords) {
 
@@ -1016,7 +1016,7 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 			session = openSession();
 
 			String sql = CustomSQLUtil
-				.get(SQL_PROCESS_ORDER_COUNT_DUONG_SAT);
+				.get(SQL_PROCESS_ORDER_COUNT_KEY_WORDS);
 
 			if (serviceInfoId <= 0) {
 				sql = StringUtil
@@ -1032,7 +1032,7 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 
 			if(Validator.isNull(keyWords)){
 				sql = StringUtil
-						.replace(sql, "AND (opencps_dossier.receptionNo like ? or opencps_serviceinfo.serviceName like ? or opencps_dossier.dossierId = ?)",
+						.replace(sql, "AND (opencps_dossier.receptionNo = ? or opencps_serviceinfo.serviceName like ? or opencps_dossier.subjectName like ? or opencps_dossier.dossierId = ?)",
 							StringPool.BLANK);
 			}
 			SQLQuery q = session
@@ -1061,6 +1061,8 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 			
 			if(Validator.isNotNull(keyWords)){
 				qPos
+					.add(keyWords);
+				qPos
 					.add(StringPool.PERCENT+keyWords+StringPool.PERCENT);
 				qPos
 					.add(StringPool.PERCENT+keyWords+StringPool.PERCENT);
@@ -1068,9 +1070,6 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 					.add(keyWords);
 			}
 			
-			qPos
-				.add(assignToUserId);
-
 			Iterator<Integer> itr = q
 				.iterate();
 
@@ -1110,7 +1109,7 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 	 * @param orderByComparator
 	 * @return
 	 */
-	public List searchProcessOrderDuongSat(long serviceInfoId,
+	public List searchProcessOrderKeyWords(long serviceInfoId,
 
 		long processStepId, long loginUserId, long assignToUserId, String keyWords, int start,
 		int end, OrderByComparator orderByComparator) {
@@ -1120,7 +1119,7 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 			session = openSession();
 
 			String sql = CustomSQLUtil
-				.get(SQL_PROCESS_ORDER_FINDER_DUONG_SAT);
+				.get(SQL_PROCESS_ORDER_FINDER_KEY_WORDS);
 
 			if (serviceInfoId <= 0) {
 				sql = StringUtil
@@ -1136,7 +1135,7 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 			
 			if(Validator.isNull(keyWords)){
 				sql = StringUtil
-						.replace(sql, "AND (opencps_dossier.receptionNo like ? or opencps_serviceinfo.serviceName like ? or opencps_dossier.dossierId = ?)",
+						.replace(sql, "AND (opencps_dossier.receptionNo = ? or opencps_serviceinfo.serviceName like ? or opencps_dossier.subjectName like ? or opencps_dossier.dossierId = ?)",
 							StringPool.BLANK);
 			}
 			
@@ -1190,15 +1189,14 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 			
 			if(Validator.isNotNull(keyWords)){
 				qPos
+					.add(keyWords);
+				qPos
 					.add(StringPool.PERCENT+keyWords+StringPool.PERCENT);
 				qPos
 					.add(StringPool.PERCENT+keyWords+StringPool.PERCENT);
 				qPos
 					.add(keyWords);
 			}
-			
-			qPos
-				.add(assignToUserId);
 
 			Iterator<Object[]> itr = (Iterator<Object[]>) QueryUtil
 				.list(q, getDialect(), start, end).iterator();

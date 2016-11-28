@@ -94,15 +94,13 @@ public class ProcessStepDossierPartLocalServiceImpl
 		
 		if (Validator.isNull(psdp)) {
 			psdp = processStepDossierPartPersistence.create(pk);
-			psdp.setReadOnly(readOnly);
 		}
-
+		psdp.setReadOnly(readOnly);
 		
 		processStepDossierPartPersistence.update(psdp);
 		
 		return psdp;
 	}
-	
 	/**
 	 * update ProcessServiceDossierPart
 	 * 

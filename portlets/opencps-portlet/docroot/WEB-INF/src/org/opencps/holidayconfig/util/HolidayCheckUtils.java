@@ -57,10 +57,15 @@ public class HolidayCheckUtils {
 
 			Calendar endDateMax = HolidayUtils.getEndDate(startDate, daysDuration);
 
-			int endDay = endDayCal.get(Calendar.DATE);
-			int endDayMax = endDateMax.get(Calendar.DATE);
+			long endDay = endDayCal.getTimeInMillis();
+			long endDayMax = endDateMax.getTimeInMillis();
+			long result = 0;
 
-			dateOverNumbers = endDayMax - endDay;
+			result = endDayMax - endDay;
+
+			result = HolidayUtils.convertTimemilisecondsToDays(result);
+
+			dateOverNumbers = (int) result;
 
 			if (dateOverNumbers > 0) {
 				return 0;
@@ -72,6 +77,30 @@ public class HolidayCheckUtils {
 		return dateOverNumbers;
 	}
 
+	public static int calculatorDateOver(Date startDate, Date endDate, int daysDuration) {
+
+		int dateOverNumbers = 0;
+
+		if (daysDuration > 0) {
+
+			Calendar endayCal = Calendar.getInstance();
+			endayCal.setTime(endDate);
+
+			Calendar dealineCal = HolidayUtils.getEndDate(startDate, daysDuration);
+
+			long endDay = endayCal.getTimeInMillis();
+			long deadline = dealineCal.getTimeInMillis();
+			long result = 0;
+
+			result = deadline - endDay;
+
+			result = HolidayUtils.convertTimemilisecondsToDays(result);
+
+			dateOverNumbers = (int) result;
+		}
+		return dateOverNumbers;
+	}
+
 	/**
 	 * @param processOrderId
 	 * @param processWorkflowId
@@ -79,7 +108,8 @@ public class HolidayCheckUtils {
 	 * @throws PortalException
 	 * @throws SystemException
 	 */
-	public static int getDayDelay(long processOrderId, long processWorkflowId){
+
+	public static int getDayDelay(long processOrderId, long processWorkflowId) {
 
 		ActionHistory actionHistoryNewest = new ActionHistoryImpl();
 

@@ -473,19 +473,10 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 					 * step.getProcessStepId(), dossierPartId); }
 					 */
 					for (ProcessStepDossierPart stepDossierPart : stepDossiers) {
-			
-						if(stepDossierPart.getDossierPartId() == 0){
-							ProcessStepDossierPartLocalServiceUtil.addPSDP(
-								    stepDossierPart.getProcessStepId(),
-								    stepDossierPart.getDossierPartId(),
-								    stepDossierPart.getReadOnly());
-						}else{
-							ProcessStepDossierPartLocalServiceUtil.updatePSDP(
-								    stepDossierPart.getProcessStepId(),
-								    stepDossierPart.getDossierPartId(),
-								    stepDossierPart.getReadOnly());
-						}
-						
+						ProcessStepDossierPartLocalServiceUtil.addPSDP(
+						    stepDossierPart.getProcessStepId(),
+						    stepDossierPart.getDossierPartId(),
+						    stepDossierPart.getReadOnly());
 					}
 				}
 
@@ -554,18 +545,10 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 				
 				//Add dossierPart
 				for (ProcessStepDossierPart stepDossierPart : stepDossiers) {
-			
-					if(stepDossierPart.getDossierPartId() == 0){
-						ProcessStepDossierPartLocalServiceUtil.addPSDP(
-							    stepDossierPart.getProcessStepId(),
-							    stepDossierPart.getDossierPartId(),
-							    stepDossierPart.getReadOnly());
-					}else{
-						ProcessStepDossierPartLocalServiceUtil.updatePSDP(
-							    stepDossierPart.getProcessStepId(),
-							    stepDossierPart.getDossierPartId(),
-							    stepDossierPart.getReadOnly());
-					}
+					ProcessStepDossierPartLocalServiceUtil.addPSDP(
+					    stepDossierPart.getProcessStepId(),
+					    stepDossierPart.getDossierPartId(),
+					    stepDossierPart.getReadOnly());
 				}
 
 				// Redirect page
