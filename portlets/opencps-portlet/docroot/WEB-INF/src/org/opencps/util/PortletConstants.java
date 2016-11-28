@@ -229,4 +229,8 @@ public class PortletConstants {
 	public static final String SIZE_UNIT_KB = "kB";
 	public static final String SIZE_UNIT_MB = "MB";
 	public static final String SIZE_UNIT_GB = "GB";
+	
+	public static final int PAYMENT_METHOD_CASH = 1;
+	public static final int PAYMENT_METHOD_KEYPAY = 2;
+	public static final int PAYMENT_METHOD_BANK = 4;
 }

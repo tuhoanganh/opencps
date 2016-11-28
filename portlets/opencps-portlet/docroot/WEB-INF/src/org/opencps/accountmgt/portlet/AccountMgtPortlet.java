@@ -21,6 +21,7 @@
 package org.opencps.accountmgt.portlet;
 
 import java.io.IOException;
+import java.util.Date;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -47,6 +48,7 @@ import org.opencps.accountmgt.service.CitizenLocalServiceUtil;
 import org.opencps.datamgt.model.DictItem;
 import org.opencps.datamgt.service.DictItemLocalServiceUtil;
 import org.opencps.usermgt.search.EmployeeDisplayTerm;
+import org.opencps.util.DateTimeUtil;
 import org.opencps.util.MessageBusUtil;
 import org.opencps.util.MessageKeys;
 import org.opencps.util.PortletConstants;
@@ -445,6 +447,19 @@ public class AccountMgtPortlet extends MVCPortlet {
 
 		String backURL = ParamUtil.getString(actionRequest, "backURL");
 		
+		int dateDayIDNumber =
+		    ParamUtil.getInteger(
+		        actionRequest, BusinessDisplayTerms.DATE_DAY);
+		int dateMonthIDNumber =
+		    ParamUtil.getInteger(
+		    		actionRequest, BusinessDisplayTerms.DATE_MONTH);
+		int dateYearIDNumber =
+		    ParamUtil.getInteger(
+		    		actionRequest, BusinessDisplayTerms.DATE_YEAR);
+		
+		Date dateOfIdNumber = DateTimeUtil.getDate(dateDayIDNumber, dateMonthIDNumber,
+				dateYearIDNumber);
+		
 		DictItem city = null;
 
 		DictItem district = null;
@@ -500,7 +515,7 @@ public class AccountMgtPortlet extends MVCPortlet {
 				        telNo, representativeName, representativeRole, listBussinessDomains,
 				        isChangePassWord, curPass, rePass, serviceContext
 				            .getScopeGroupId(),
-				        serviceContext);
+				        serviceContext, dateOfIdNumber);
 				
 				if(Validator.isNotNull(backURL)) {
 					actionResponse.sendRedirect(backURL);
