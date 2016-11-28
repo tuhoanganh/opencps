@@ -1562,15 +1562,24 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 							dictCollection.getDictCollectionId(), wardCode);
 
 			String[] dictItemIds = new String[3];
-
+			
 			dictItemIds[0] = city != null ? String
-					.valueOf(city.getDictItemId()) : StringPool.BLANK;
+					.valueOf(city.getItemCode()) : StringPool.BLANK;
 
 			dictItemIds[1] = district != null ? String.valueOf(district
-					.getDictItemId()) : StringPool.BLANK;
+					.getItemCode()) : StringPool.BLANK;
 
 			dictItemIds[2] = ward != null ? String
-					.valueOf(ward.getDictItemId()) : StringPool.BLANK;
+					.valueOf(ward.getItemCode()) : StringPool.BLANK;
+
+			//dictItemIds[0] = city != null ? String
+			//		.valueOf(city.getDictItemId()) : StringPool.BLANK;
+
+			//dictItemIds[1] = district != null ? String.valueOf(district
+			//		.getDictItemId()) : StringPool.BLANK;
+
+			//dictItemIds[2] = ward != null ? String
+			//		.valueOf(ward.getDictItemId()) : StringPool.BLANK;
 
 			selectedItems = StringUtil.merge(dictItemIds);
 		} catch (Exception e) {
