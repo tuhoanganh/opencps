@@ -378,16 +378,16 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		return businessPersistence.findByUUID(uuid);
 	}
 
-	public Business updateBusiness(long businessId, String fullName,
-			String enName, String shortName, String businessType,
-			String idNumber, String address, String cityCode,
-			String districtCode, String wardCode, String cityName,
-			String districtName, String wardName, String telNo,
-			String representativeName, String representativeRole,
-			String[] businessDomainCodes, boolean isChangePassword,
-			String password, String rePassword, long repositoryId,
-			ServiceContext serviceContext) throws SystemException,
-			PortalException {
+	public Business updateBusiness(
+		long businessId, String fullName, String enName, String shortName,
+		String businessType, String idNumber, String address, String cityCode,
+		String districtCode, String wardCode, String cityName,
+		String districtName, String wardName, String telNo,
+		String representativeName, String representativeRole,
+		String[] businessDomainCodes, boolean isChangePassword,
+		String password, String rePassword, long repositoryId,
+		ServiceContext serviceContext, Date dateOfIdNumber)
+		throws SystemException, PortalException {
 
 		Business business = businessPersistence.findByPrimaryKey(businessId);
 
@@ -458,7 +458,9 @@ public class BusinessLocalServiceImpl extends BusinessLocalServiceBaseImpl {
 		business.setUserId(mappingUser.getUserId());
 		business.setUuid(serviceContext.getUuid());
 		business.setWardCode(wardCode);
-
+		
+		business.setDateOfIdNumber(dateOfIdNumber);
+		
 		business = businessPersistence.update(business);
 
 		if (businessDomainCodes != null && businessDomainCodes.length > 0) {

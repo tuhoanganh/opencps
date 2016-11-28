@@ -1,6 +1,4 @@
-<%@page import="org.opencps.processmgt.model.ProcessOrder"%>
-<%@page import="java.util.Date"%>
-<%@page import="org.opencps.holidayconfig.util.HolidayCheckUtils"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -19,6 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
+<%@page import="java.util.Date"%>
 <%@page import="org.opencps.processmgt.util.ProcessOrderUtils"%>
 <%@page import="org.opencps.util.MessageKeys"%>
 <%@page import="org.opencps.processmgt.search.ProcessOrderSearchTerms"%>
@@ -28,6 +27,8 @@
 <%@page import="com.liferay.portal.kernel.dao.search.RowChecker"%>
 <%@page import="org.opencps.processmgt.service.ProcessOrderLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
+<%@page import="org.opencps.holidayconfig.util.HolidayCheckUtils"%>
+
 <%@ include file="../../init.jsp"%>
 
 <liferay-ui:success  key="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>" message="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>"/>
@@ -64,10 +65,6 @@
 	headerNames.add("action");
 	
 	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
-	
-	ProcessOrder order = null;
-	ProcessStep step = null;
-	int dateOver = 0;
 %>
 
 <c:if test="<%=stopRefresh %>">
@@ -124,13 +121,11 @@
 						processURL.setParameter(ProcessOrderDisplayTerms.PROCESS_ORDER_ID, String.valueOf(processOrder.getProcessOrderId()));
 						processURL.setParameter("backURL", currentURL);
 						processURL.setParameter("isEditDossier", (processOrder.isReadOnly() || (processOrder.getAssignToUsesrId() != 0 &&  processOrder.getAssignToUsesrId() != user.getUserId())) ? String.valueOf(false) : String.valueOf(true));
+
+						int dateOver = HolidayCheckUtils.calculatorDateOver(Validator.isNotNull(processOrder.getActionDatetime()) ? 
+								processOrder.getActionDatetime() : new Date(),
+								new Date(), processOrder.getDaysDuration());
 						
-						order = ProcessOrderLocalServiceUtil.getProcessOrder(processOrder.getProcessOrderId());
-						step = ProcessStepLocalServiceUtil.getProcessStep(order.getProcessStepId());
-						
-						if(Validator.isNotNull(order)&& Validator.isNotNull(step)){
-							dateOver = HolidayCheckUtils.calculatorDateOver(order.getActionDatetime(), new Date(), step.getDaysDuration());
-						}
 						//String deadLine = Validator.isNotNull(processOrder.getDealine()) ? processOrder.getDealine() : StringPool.DASH;
 						
 						String href = "location.href='" + processURL.toString()+"'";
@@ -181,7 +176,8 @@
 							</div>
 							
 							<div class="span7">
-								<%=processOrder.getAssignToUserName() %>
+								<%=Validator.isNotNull(processOrder.getAssignToUserName(processOrder.getDossierStatus())) ?
+										processOrder.getAssignToUserName(processOrder.getDossierStatus()) : StringPool.DASH %>
 							</div>
 						</div>
 						

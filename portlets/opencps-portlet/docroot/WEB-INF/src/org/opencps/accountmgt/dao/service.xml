@@ -120,6 +120,7 @@
 		<column name="shortName" type="String" />
 		<column name="businessType" type="String" />
 		<column name="idNumber" type="String"/>
+		<column name="dateOfIdNumber" type="Date"/>
 		<column name="address" type="String" />
 		<column name="cityCode" type="String" />
 		<column name="districtCode" type="String" />
