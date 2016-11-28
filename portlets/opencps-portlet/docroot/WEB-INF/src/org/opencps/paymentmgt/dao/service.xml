@@ -139,14 +139,5 @@
 		<column name="paymentGateId" type="long" primary="true"></column>
 		<column name="paymentGateName" type="String"></column>
 	</entity>
-	
-	<entity name="PaymentStatusCode" local-service="true"
-		human-name="PaymentGate StatusCode" table="opencps_payment_statuscode">
-		<column name="paymentStatusCodeId" type="long" primary="true"></column>
-		<column name="statusCode" type="String"></column>
-		<column name="statusCodeMean" type="String"></column>
-		<column name="descripton" type="String"></column>
-		<column name="paymentGateId" type="String"></column>
-	</entity>
 
 </service-builder>

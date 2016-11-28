@@ -103,11 +103,9 @@
 					
 				%>
 				
-			
 				<liferay-util:buffer var="service">
 					<div class="row-fluid">
-						<div class="span2 bold-label"><liferay-ui:message key="service-name"/></div>
-						<div class="span10">
+						<div class="span12">
 							<%=
 								Validator.isNotNull(serviceBean.getServiceName()) ? 
 								serviceBean.getServiceName() : StringPool.BLANK 
@@ -123,33 +121,26 @@
 							<%=domainName %>
 						</div>
 					</div>
-				</liferay-util:buffer>
-				
-				<liferay-util:buffer var="govAgency">
 					<div class="row-fluid min-width180">
 						<div class="span5 bold-label"><liferay-ui:message key="gov-agency-name"/></div>
 						<div class="span7">
 							<%=serviceBean.getGovAgencyName() %>
 						</div>
 					</div>
-				</liferay-util:buffer>
-				
-				<liferay-util:buffer var="level">
 					<div class="row-fluid min-width70">
-						<div class="span9 bold-label"><liferay-ui:message key="level"/></div>
-						<div class="span3">
+						<div class="span5 bold-label"><liferay-ui:message key="level"/></div>
+						<div class="span7">
 							<%=String.valueOf(serviceBean.getLevel()) %>
 						</div>
 					</div>
 				</liferay-util:buffer>
+				
 				
 				<%
 					row.setClassName("opencps-searchcontainer-row");
 					row.addText(String.valueOf(row.getPos() + 1 + searchContainer.getStart()));
 					row.addText(service);
 					row.addText(domain);
-					row.addText(govAgency);
-					row.addText(level);
 					row.addJSP("center", SearchEntry.DEFAULT_VALIGN,"/html/portlets/dossiermgt/frontoffice/service_actions.jsp", config.getServletContext(), request, response);
 				%>	
 			</liferay-ui:search-container-row> 
@@ -237,8 +228,7 @@
 				
 				<liferay-util:buffer var="service">
 					<div class="row-fluid">
-						<div class="span2 bold-label"><liferay-ui:message key="service-name"/></div>
-						<div class="span10">
+						<div class="span12">
 							<%=
 								Validator.isNotNull(serviceBean.getServiceName()) ? 
 								serviceBean.getServiceName() : StringPool.BLANK 
@@ -254,21 +244,15 @@
 							<%=domainName %>
 						</div>
 					</div>
-				</liferay-util:buffer>
-				
-				<liferay-util:buffer var="govAgency">
 					<div class="row-fluid min-width180">
 						<div class="span5 bold-label"><liferay-ui:message key="gov-agency-name"/></div>
 						<div class="span7">
 							<%=serviceBean.getGovAgencyName() %>
 						</div>
 					</div>
-				</liferay-util:buffer>
-				
-				<liferay-util:buffer var="level">
 					<div class="row-fluid min-width70">
-						<div class="span9 bold-label"><liferay-ui:message key="level"/></div>
-						<div class="span3">
+						<div class="span5 bold-label"><liferay-ui:message key="level"/></div>
+						<div class="span7">
 							<%=String.valueOf(serviceBean.getLevel()) %>
 						</div>
 					</div>
@@ -279,8 +263,6 @@
 					row.addText(String.valueOf(row.getPos() + 1 + searchContainer.getStart()));
 					row.addText(service);
 					row.addText(domain);
-					row.addText(govAgency);
-					row.addText(level);
 					row.addJSP("center", SearchEntry.DEFAULT_VALIGN,"/html/portlets/dossiermgt/frontoffice/service_actions.jsp", config.getServletContext(), request, response);
 				%>
 			</liferay-ui:search-container-row> 

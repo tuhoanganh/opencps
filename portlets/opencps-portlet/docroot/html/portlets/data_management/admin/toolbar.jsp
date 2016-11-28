@@ -120,7 +120,7 @@
 							</aui:col>
 						</c:if>
 						
-						<aui:col width="<%=tabs1.equals(DataMgtUtil.TOP_TABS_DICTITEM) ? 50 : 100 %>">
+						<aui:col width="<%=tabs1.equals(DataMgtUtil.TOP_TABS_DICTITEM) ? 50 : 100 %>" cssClass="search-input input-keyword">
 							<liferay-ui:input-search 
 								id="keywords1" 
 								name="keywords" 
