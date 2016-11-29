@@ -510,24 +510,29 @@ public class BackendUtils {
 
 		if (dossierId != 0) {
 			try {
-				ProcessOrder processOrder = ProcessOrderLocalServiceUtil
-						.getProcessOrder(dossierId, 0);
-
-				long processStepId = processOrder.getProcessStepId();
-				long serviceProcessId = processOrder.getServiceProcessId();
-
-				List<ProcessWorkflow> lsPRC_WFL = new ArrayList<ProcessWorkflow>();
-
-				lsPRC_WFL = ProcessWorkflowLocalServiceUtil
-						.getPostProcessWorkflow(serviceProcessId, processStepId);
-
-				for (ProcessWorkflow prc_wf : lsPRC_WFL) {
-					if (Validator.isNotNull(prc_wf.getPreCondition())
-							&& (StringUtil.trim(prc_wf.getPreCondition())
-									.contains(WebKeys.ACTION_CANCEL_VALUE))) {
-						isCancel = true;
-						break;
-					}
+//				ProcessOrder processOrder = ProcessOrderLocalServiceUtil
+//						.getProcessOrder(dossierId, 0);
+//
+//				long processStepId = processOrder.getProcessStepId();
+//				long serviceProcessId = processOrder.getServiceProcessId();
+//
+//				List<ProcessWorkflow> lsPRC_WFL = new ArrayList<ProcessWorkflow>();
+//
+//				lsPRC_WFL = ProcessWorkflowLocalServiceUtil
+//						.getPostProcessWorkflow(serviceProcessId, processStepId);
+//
+//				for (ProcessWorkflow prc_wf : lsPRC_WFL) {
+//					if (Validator.isNotNull(prc_wf.getPreCondition())
+//							&& (StringUtil.trim(prc_wf.getPreCondition())
+//									.contains(WebKeys.ACTION_CANCEL_VALUE))) {
+//						isCancel = true;
+//						break;
+//					}
+//				}
+				Dossier dossider = DossierLocalServiceUtil.getDossier(dossierId);
+				
+				if(Validator.isNotNull(dossider) && !dossider.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_ENDED)){
+					isCancel = true;
 				}
 			} catch (Exception e) {
 			}

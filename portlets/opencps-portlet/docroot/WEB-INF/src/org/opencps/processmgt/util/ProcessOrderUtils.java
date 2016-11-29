@@ -751,21 +751,22 @@ public class ProcessOrderUtils {
 				recevieDate = dossier.getReceiveDatetime();
 			}
 			else {
-				ProcessWorkflow processWorkflow =
-				    ProcessWorkflowLocalServiceUtil.fetchProcessWorkflow(processWorkflowId);
-
-				ProcessStep currStep =
-				    ProcessStepLocalServiceUtil.fetchProcessStep(processWorkflow.getPreProcessStepId());
-
-				ProcessStep nextStep =
-				    ProcessStepLocalServiceUtil.fetchProcessStep(processWorkflow.getPostProcessStepId());
-				
-				if (currStep.getDossierStatus().contains(
-				    PortletConstants.DOSSIER_STATUS_RECEIVING) &&
-				    nextStep.getDossierStatus().contains(
-				        PortletConstants.DOSSIER_STATUS_PROCESSING)) {
-					recevieDate = new Date();
-				}
+//				ProcessWorkflow processWorkflow =
+//				    ProcessWorkflowLocalServiceUtil.fetchProcessWorkflow(processWorkflowId);
+//
+//				ProcessStep currStep =
+//				    ProcessStepLocalServiceUtil.fetchProcessStep(processWorkflow.getPreProcessStepId());
+//
+//				ProcessStep nextStep =
+//				    ProcessStepLocalServiceUtil.fetchProcessStep(processWorkflow.getPostProcessStepId());
+//				
+//				if (currStep.getDossierStatus().contains(
+//				    PortletConstants.DOSSIER_STATUS_RECEIVING) &&
+//				    nextStep.getDossierStatus().contains(
+//				        PortletConstants.DOSSIER_STATUS_PROCESSING)) {
+//					recevieDate = new Date();
+//				}
+				recevieDate = new Date();
 
 			}
 
