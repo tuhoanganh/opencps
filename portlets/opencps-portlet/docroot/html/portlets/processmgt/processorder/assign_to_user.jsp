@@ -77,14 +77,15 @@
 	String event = ParamUtil.getString(request, ProcessOrderDisplayTerms.EVENT);
 	String receptionNo = Validator.isNotNull(dossier) ? dossier.getReceptionNo() : StringPool.BLANK; //ParamUtil.getString(request, ProcessOrderDisplayTerms.RECEPTION_NO);
 	
-	if ((Validator.isNull(receptionNo) || (receptionNo.length() == 0)) 
-			&& Validator.isNotNull(workflow) 
-			&& workflow.getGenerateReceptionNo()) {
+	//remove generate receiveNo in jsp, just generate on server
+// 	if ((Validator.isNull(receptionNo) || (receptionNo.length() == 0)) 
+// 			&& Validator.isNotNull(workflow) 
+// 			&& workflow.getGenerateReceptionNo()) {
 		
-		// If doisser don't have receiveNo, create receiveNo
-		receptionNo = DossierNoGenerator.genaratorNoReception(workflow.getReceptionNoPattern(), dossierId);
+// 		// If doisser don't have receiveNo, create receiveNo
+// 		receptionNo = DossierNoGenerator.genaratorNoReception(workflow.getReceptionNoPattern(), dossierId);
 		
-	}
+// 	}
 	
 	String strReceiveDate = ParamUtil.getString(request, "receiveDate");
 	
@@ -311,15 +312,15 @@
 			</div>
 		</c:if>		
 		
-		<c:if test="<%= processWorkflow.getGenerateReceptionNo() %>">
-			<div class="span12">
-				<aui:input 
-					name="<%=ProcessOrderDisplayTerms.RECEPTION_NO %>" 
-					label="reception-no" 
-					value="<%= receptionNo %>"
-				/>
-			</div>
-		</c:if>
+<%-- 		<c:if test="<%= processWorkflow.getGenerateReceptionNo() %>"> --%>
+<!-- 			<div class="span12"> -->
+<%-- 				<aui:input  --%>
+<%-- 					name="<%=ProcessOrderDisplayTerms.RECEPTION_NO %>"  --%>
+<%-- 					label="reception-no"  --%>
+<%-- 					value="<%= receptionNo %>" --%>
+<%-- 				/> --%>
+<!-- 			</div> -->
+<%-- 		</c:if> --%>
 		
 		<c:if test="<%= processWorkflow.getGenerateDeadline() %>">
 			<div class="span12">
