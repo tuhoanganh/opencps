@@ -35,9 +35,9 @@ import org.opencps.paymentmgt.model.PaymentConfig;
 import org.opencps.paymentmgt.model.PaymentFile;
 import org.opencps.paymentmgt.service.PaymentConfigLocalServiceUtil;
 import org.opencps.paymentmgt.service.PaymentFileLocalServiceUtil;
+import org.opencps.paymentmgt.vtcpay.model.VTCPay;
 import org.opencps.util.PortletConstants;
 import org.opencps.util.WebKeys;
-import org.opencps.vtcpay.model.VTCPay;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -257,9 +257,9 @@ public class PaymentMgtUtil {
 						
 							NotificationUtils.sendNotificationToAccountant(dossier, paymentFile);
 					}
-					paymentFile.setPaymentGateStatusCode(vtcPay.getStatus());
+					paymentFile.setPaymentGateStatusCode(Integer.valueOf(vtcPay.getStatus()));
 				}else{
-					paymentFile.setPaymentGateStatusCode("-100");
+					paymentFile.setPaymentGateStatusCode(-100);
 				}
 				JSONObject jsonData = JSONFactoryUtil.createJSONObject();
 
@@ -346,7 +346,7 @@ public class PaymentMgtUtil {
 				}
 
 				else {
-					paymentFile.setPaymentGateStatusCode(keyPay.getService_code());
+					paymentFile.setPaymentGateStatusCode(Integer.valueOf(keyPay.getService_code()));
 				}
 
 				JSONObject jsonData = JSONFactoryUtil.createJSONObject();
@@ -371,7 +371,7 @@ public class PaymentMgtUtil {
 				jsonData.put("desc_5", keyPay.getDesc_5());
 
 				paymentFile.setKeypayGoodCode(keyPay.getGood_code());
-				paymentFile.setPaymentGateStatusCode(keyPay.getService_code());
+				paymentFile.setPaymentGateStatusCode(Integer.valueOf(keyPay.getService_code()));
 				paymentFile.setPaymentGateResponseData(jsonData.toString());
 
 				PaymentFileLocalServiceUtil.updatePaymentFile(paymentFile);

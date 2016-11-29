@@ -1,46 +1,62 @@
-/* .content .title_box {
-    align-content: center;
-    border-bottom: 1px solid #ccc;
-    display: flex;
-    height: 61px;
-    padding: 0 20px;
-} */
-
-.txtitle {
-    font-family: "Roboto-Bold";
-    font-size: 16px;
-    line-height: 60px;
-    margin-bottom: 0;
-    text-transform: uppercase;
+.ocps-service-detal-bound-all {
+	background-color: white;
+	-webkit-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2);
+	box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2);
+	border-radius: 5px;
 }
 
-
-.fa-file-text-o::before {
-    content: "";
+/*--- Title ---*/
+.ocps-service-detal-bound-all .ocps-custom-header {
+	padding: 25px 0;
+	position: relative;
 }
-.blue {
-    color: #0690fb !important;
+.ocps-service-detal-bound-all .ocps-hide-header {
+	display: none;
 }
-.MR10 {
-    margin-right: 10px !important;
-}
-.fa {
-    display: inline-block;
-    font-family: FontAwesome;
-    font-feature-settings: normal;
-    font-kerning: auto;
-    font-language-override: normal;
-    font-size: inherit;
-    font-size-adjust: none;
-    font-stretch: normal;
-    font-style: normal;
-    font-synthesis: weight style;
-    font-variant: normal;
+.ocps-service-detal-bound-all .ocps-custom-header .opcps-label {
+	text-transform: uppercase;
+    font-size: 20px;
+    line-height: normal;
     font-weight: normal;
-    line-height: 1;
-    text-rendering: auto;
+    font-family: 'Roboto-Bold';
+    text-align: center;
+}
+.ocps-service-detal-bound-all .ocps-custom-header .ocps-span {
+	position: absolute;
+    top: 25px;
+    left: 0;
+    z-index: 10;
+    width: auto;
+    line-height: 26px;
+}
+.ocps-service-detal-bound-all .ocps-custom-header .ocps-span a:before {
+	content: "\f177";
+	font-family: FontAwesome;
+	margin-right: 5px;
 }
 
-.title_box {
-    margin-left: 15px;
+/*--- Content ---*/
+.ocps-service-detal-bound-all .service-detail-wrapper table td {
+	border: 0;
+	padding: 10px 20px;
+}
+.ocps-service-detal-bound-all .service-detail-wrapper table tr {
+	border-bottom: 1px solid #e1e1e1;
+}
+.ocps-service-detal-bound-all .service-detail-wrapper table tr:first-child {
+	border-top: 1px solid #e1e1e1;
+}
+.ocps-service-detal-bound-all .service-detail-wrapper .col-left {
+	font-family: 'Roboto-Bold';
+	width: 15%;
+	min-width: 170px;
+	vertical-align: top;
+}
+.ocps-service-detal-bound-all .service-detail-wrapper tr:last-child td {
+	text-align: center;
+}
+.ocps-service-detal-bound-all .service-detail-wrapper button {
+    border-radius: 20px;
+    margin: 15px;
+    padding: 7px 20px;
 }

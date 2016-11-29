@@ -117,17 +117,24 @@ public class DictItemUtil {
 	 * @return
 	 */
 	public static String getDictItemName(String itemCode, Locale locale) {
+
 		String name = StringPool.BLANK;
-		
+
 		try {
-	        DictItem dictItem = DictItemLocalServiceUtil.getDictItemByCode(itemCode);
-	        
-	        name = dictItem.getItemName(locale);
-        }
-        catch (Exception e) {
-	        _log.error(e);
-        }
-		
+			DictItem dictItem = null;
+			
+			if(itemCode.trim().length() > 0){
+				dictItem = DictItemLocalServiceUtil.getDictItemByCode(itemCode);
+	
+				if (Validator.isNotNull(dictItem)) {
+					name = dictItem.getItemName(locale);
+				}
+			}
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
+
 		return name;
 	}
 

@@ -64,34 +64,18 @@
 
 						</aui:col>
 						<aui:col width="25" cssClass="search-col">
+							<datamgt:ddr
+								cssClass="search-input select-box"
+								depthLevel="1" 
+								dictCollectionCode="SERVICE_DOMAINCODE"
+								itemNames="<%= ServiceDisplayTerms.SERVICE_DOMAINCODE %>"
+								itemsEmptyOption="true"
+								selectedItems="<%= ServiceDisplayTerms.SERVICE_DOMAINCODE %>"	
+							>
+							</datamgt:ddr>
 							
-							<aui:select name="<%=ServiceDisplayTerms.SERVICE_DOMAINCODE %>" label="">
-								<aui:option value="">
-									<liferay-ui:message key="<%=ServiceDisplayTerms.SERVICE_DOMAINCODE %>"/>
-								</aui:option>
-								<%
-									if(dictItems != null){
-										for(DictItem dictItem : dictItems){
-											if((curDictItem != null && dictItem.getDictItemId() == curDictItem.getDictItemId())||
-													(curDictItem != null && dictItem.getTreeIndex().contains(curDictItem.getDictItemId() + StringPool.PERIOD))){
-												continue;
-											}
-											
-											int level = StringUtil.count(dictItem.getTreeIndex(), StringPool.PERIOD);
-											String index = "|";
-											for(int i = 0; i < level; i++){
-												index += "_";
-											}
-											%>
-												<aui:option value="<%=dictItem.getDictItemId() %>"><%=index + dictItem.getItemName(locale) %></aui:option>
-											<%
-										}
-									}
-								%>
-							</aui:select>
-
 						</aui:col>
-						<aui:col width="45" cssClass="search-col">
+						<aui:col width="50" cssClass="search-col">
 							<liferay-ui:input-search 
 								id="keywords1"
 								name="keywords"

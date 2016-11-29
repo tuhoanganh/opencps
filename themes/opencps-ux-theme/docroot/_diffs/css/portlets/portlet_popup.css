@@ -1,23 +1,297 @@
-.dialog-iframe-popup .input100{
-	 @extend .input100;
-	 width: 100%;
+.opencps-theme .modal {
+	background-color: transparent;
 }
-
-.opencps-dialog{
-    border-radius: 0!important;
-    outline: 10px solid rgba(255,255,255,0.4)!important;
-    border: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    -webkit-transform: translateY(-50%);
+.opencps-dialog-content {
+	border-radius: 10px;
+	padding: 10px;
+    background-color: rgba(245,245,245,0.1);
 }
-
-.modal-header{
-	font-family: 'Roboto-Bold';
-    font-size: 20px;
-    background-color: #0271c7;
-    color: #fff;
+.opencps-theme .modal-header {
+	padding: 15px 30px;
     text-transform: uppercase;
-    min-height: 30px;
-    padding: 0 30px;
+    background-color: #0271C7;
+    border-radius: 10px 10px 0 0;
 }
+.opencps-theme .modal-header h3 {
+	font-family: 'Roboto-Bold';
+	font-size: 20px;
+	color: white;
+}
+.opencps-theme .modal-body {
+	overflow: hidden;
+	border-radius: 0 0 10px 10px;
+	background-color: white;
+}
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ .alert.alert-info, 
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ .alert.alert-info {
+	margin: 10px 0;
+}
+
+
+
+/*----- Tai giay to -----*/
+
+/*- Tai giay to len -*/
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ .nav-tabs, 
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ .nav-tabs {
+    margin: 15px 0 0;
+}
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ .nav-tabs li a, 
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ .nav-tabs li a {
+	color: #333;
+	padding: 10px 25px;
+}
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ .nav-tabs li.active a, 
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ .nav-tabs li.active a:hover, 
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ .nav-tabs li.active a, 
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ .nav-tabs li.active a:hover {
+	font-family: 'Roboto-Bold';
+	color: #0271c7;
+}
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ .portlet-body > div[id$="TabsSection"], 
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ .portlet-body > div[id$="TabsSection"] {
+	padding: 25px 15px;
+}
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ div[id$="TabsSection"] label, 
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ div[id$="TabsSection"] label {
+	display: block;
+	float: left;
+	margin-bottom: 0;
+	font-family: 'Roboto-Bold';
+}
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ div[id$="TabsSection"] .control-group, 
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ div[id$="TabsSection"] .control-group {
+	overflow: hidden;
+}
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ div[id$="TabsSection"] .span12 .control-label, 
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ div[id$="TabsSection"] .span12 .control-label, 
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ div[id$="TabsSection"] .span6 .control-label, 
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ div[id$="TabsSection"] .span6 .control-label {
+	width: 150px;
+} 
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ div[id$="TabsSection"] .span12 textarea, 
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ div[id$="TabsSection"] .span12 textarea {
+	width: -webkit-calc(100% - 150px);
+	width: calc(100% - 150px);
+	border: 1px solid #ccc;
+}
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ div[id$="TabsSection"] div.span6:first-child, 
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ div[id$="TabsSection"] div.span6:first-child {
+	padding-right: 0;
+}
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ div[id$="TabsSection"] .span6 input[type="text"], 
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ div[id$="TabsSection"] .span6 input[type="text"] {
+	width: -webkit-calc(100% - 150px);
+	width: calc(100% - 150px);
+	border: 1px solid #ccc;
+	height: 30px;
+}
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ div[id$="TabsSection"] .span6 .lfr-input-date input[type="text"], 
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ div[id$="TabsSection"] .span6 .lfr-input-date input[type="text"] {
+	width: 100%;
+	position: relative;
+}
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ div[id$="TabsSection"] input[type="file"], 
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ div[id$="TabsSection"] input[type="file"] {
+	line-height: normal;
+}
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ form > .row-fluid:last-child, 
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ form > .row-fluid:last-child, 
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ .lfr-search-container > div > .row-fluid:last-child, 
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ .lfr-search-container > div > .row-fluid:last-child {
+	text-align: center;
+	margin-top: 25px;
+}
+
+/*- Kho luu tru -*/
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ .navbar-inner, 
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ .navbar-inner {
+	background: transparent none;
+	border: 0;
+	box-shadow: none;
+	padding: 0;
+}
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ .navbar-search, 
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ .navbar-search {
+	float: none;
+}
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ .custom-toolbar .form-search .input-append, 
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ .custom-toolbar .form-search .input-append {
+	display: -webkit-box;
+	display: flex;
+}
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ .custom-toolbar .form-search .input-append input[type="text"], 
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ .custom-toolbar .form-search .input-append input[type="text"] {
+	width: 100%;
+	border: 1px solid #ccc;
+    border-radius: 5px 0 0 5px;
+}
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ .custom-toolbar .form-search .input-append button, 
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ .custom-toolbar .form-search .input-append button {
+	border: 0;
+    border-radius: 0 5px 5px 0;
+    margin-left: -1px;
+    background: #0090ff none;
+    color: white;
+}
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ .lfr-search-container > div > .taglib-page-iterator , 
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ .lfr-search-container > div > .taglib-page-iterator, 
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ .lfr-pagination-config, 
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ .lfr-pagination-config {
+	display: none;
+}
+#_13_WAR_opencpsportlet_dossierFilesSearchContainerSearchContainer table th:nth-child(-n+2) {
+	width: 1%;
+}
+#_13_WAR_opencpsportlet_dossierFilesSearchContainerSearchContainer table th:nth-child(4) {
+	width: 30%;
+}
+
+
+
+/*----- Portlet 16 -----*/
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ .control-group {
+	margin-bottom: 5px;
+	overflow: hidden;
+}
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ .control-group label, 
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ .custom-lebel {
+	width: 220px;
+    float: left;
+    line-height: 30px;
+    font-family: 'Roboto-Bold';
+}
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ input:not[type="button"], 
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ select, 
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ textarea, 
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ .signature-file-list {
+	width: calc(100% - 220px);
+	float: right;
+	min-height: 30px;
+}
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ .lfr-input-time input {
+	width: 100%;
+}
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ [class*="lfr-input"] .control-group {
+	overflow: visible;
+}
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ [class*="lfr-input"] input {
+	margin-top: -30px;
+}
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ .lfr-input-date input {
+	margin-top: -5px;
+}
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ .button-holder button {
+	background: #0090ff;
+	border: none;
+	color: #fff;
+	text-shadow: none;
+	font-family: 'Roboto-Medium';
+	padding: 5px 15px;
+}
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ .file-name:before {
+	content: "\f0f6";
+	font-family: FontAwesome;
+	margin-left: 5px;
+}
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ .signature-status {
+	display: none;
+}
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ .signature-verify i:before {
+	content: "Đã ký";
+	font-family: 'Roboto-Regular';
+}
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ .button-holder {
+	text-align: center;
+}
+
+
+
+/*--- Nav ---*/
+.dialog-iframe-root-node .opencps-form-navigator-container .form-navigator .button-holder {
+	text-align: center;
+}
+.dialog-iframe-root-node .opencps-form-navigator-container ul li i {
+	display: none;
+}
+/*--- Content ---*/
+.dialog-iframe-root-node .opencps-form-navigator-container .form-navigator-content {
+	width: -webkit-calc(100% - 270px);
+	width: calc(100% - 270px);
+	padding: 20px 30px;
+}
+.dialog-iframe-root-node .portlet-boundary_2_WAR_opencpsportlet_ .control-label {
+	font-family: 'Roboto-Bold';
+}
+
+
+/* 
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ .portlet-body .custom-toolbar .form-search .control-group, 
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ .portlet-body .custom-toolbar .form-search .control-group {
+	margin-bottom: 0;
+}
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ .portlet-body .searchcontainer-content table th, 
+.dialog-iframe-root-node .portlet-boundary_16_WAR_opencpsportlet_ .portlet-body .searchcontainer-content table th {
+	background-color: #0191c6;
+	color: white;
+}
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ .portlet-body .searchcontainer-content table td:not(:first-child):not(:nth-child(2)) {
+	min-width: 230px;
+	width: 31%;
+}
+
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ .lfr-pagination-config {
+	line-height: normal;
+}
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ #_13_WAR_opencpsportlet_dossiersSearchContainer table {
+	margin-top: 15px;
+}
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ #_13_WAR_opencpsportlet_dossiersSearchContainer table .row-fluid {
+	margin: 0;
+}
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ #_13_WAR_opencpsportlet_dossiersSearchContainer table [class*="span"] {
+	padding: 0;
+}
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ #_13_WAR_opencpsportlet_dossiersSearchContainer table td {
+	border: 0;
+	border-bottom: 1px solid #ccc;
+	position: relative;
+}
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ #_13_WAR_opencpsportlet_dossiersSearchContainer table td:after {
+	content: "";
+	position: absolute;
+	width: 1px;
+	background-color: #ccc;
+	height: 70%;
+	top: 15%;
+	right: 0;
+}
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ #_13_WAR_opencpsportlet_dossiersSearchContainer table td:last-child:after {
+	width: 0;
+}
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ .portlet-body > div table .row-fluid:last-child {
+	text-align: left;
+}
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ #_13_WAR_opencpsportlet_dossiersSearchContainer table tr:last-child td {
+	border-bottom: 0;
+} 
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ #_13_WAR_opencpsportlet_dossiersSearchContainer table td:not(:first-child):not(:last-child) {
+	min-width: 240px;
+	max-width: 300px;
+}
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ #_13_WAR_opencpsportlet_dossiersSearchContainer table td:last-child {
+	min-width: 1px;
+}
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ #_13_WAR_opencpsportlet_dossiersSearchContainer table td .opens-new-window-accessible {
+	display: none;
+}
+.dialog-iframe-root-node .portlet-boundary_13_WAR_opencpsportlet_ #_13_WAR_opencpsportlet_dossiersSearchContainer table td a.btn {
+	padding: 5px 12px;
+    background-color: #0f97ff;
+    color: white;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    display: block;
+    text-align: center;
+}
+*/
