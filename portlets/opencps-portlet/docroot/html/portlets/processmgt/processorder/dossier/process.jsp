@@ -129,11 +129,11 @@
 	    <td width="30%"><%=latestWorkflowActionHistory != null ? DateTimeUtil.convertDateToString(latestWorkflowActionHistory.getActionDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT) : StringPool.BLANK %></td>
 	  </tr>
 	  
-	  
-	  <tr class="odd">
+	  <!--hot fix moit  -->
+	  <%-- <tr class="odd">
 	    <td width="20%" class="opcs-dosier-process-key"><liferay-ui:message key="pre-action"/></td>
 	    <td width="80%" colspan="3"><%=latestWorkflowActionHistory != null ? latestWorkflowActionHistory.getActionName() : StringPool.BLANK %></td>
-	  </tr>
+	  </tr> --%>
 	  
 	  <tr class="even">
 	    <td width="20%" class="opcs-dosier-process-key"><liferay-ui:message key="pre-action-note"/></td>

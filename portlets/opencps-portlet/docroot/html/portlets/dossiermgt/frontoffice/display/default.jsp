@@ -139,7 +139,8 @@
 							<c:choose>
 								<c:when test='<%=Validator.isNotNull(displayDossierNo) && displayDossierNo %>'>
 
-									<div class="row-fluid">
+									<!--hot fix moit  -->
+									<%-- <div class="row-fluid">
 										<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
 											<i class='<%="fa fa-circle sx10 " + dossier.getDossierStatus()%>'></i>
 										</div>										
@@ -158,6 +159,17 @@
 										</div>
 										
 										<div class="span9"><%=dossier.getReceptionNo() %></div>
+									</div> --%>
+									
+									<div class="row-fluid">
+										<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
+											<i class='<%="fa fa-circle sx10 " + dossier.getDossierStatus()%>'></i>
+										</div>
+										<div class="span3 bold-label">
+											<liferay-ui:message key="dossier-no"/>
+										</div>
+										
+										<div class="span8"><%=dossier.getReceptionNo() %></div>
 									</div>
 								</c:when>
 								
