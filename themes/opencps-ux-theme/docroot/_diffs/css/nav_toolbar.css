@@ -1,21 +1,35 @@
+.opencps-theme.ux .navbar.custom-toolbar {
+	margin: 0 0 15px;
+}
+.opencps-theme.ux .opencps-toolbar .control-group {
+	margin-bottom: 0;
+}
+.opencps-theme.ux .opencps-toolbar .container > span:last-child {
+	display: -webkit-flex;
+	display: flex;
+}
+.opencps-theme.ux .opencps-toolbar .container > span:last-child > div:last-child {
+	margin-left: auto;
+	-webkit-flex-grow: 1;
+	flex-grow: 1;
+}
+.opencps-theme.ux .opencps-toolbar .container > span:last-child .navbar-search {
+	width: 100%;
+}
 .opencps-theme.ux .opencps-toolbar select {
 	border-radius: 20px;
 	height: 41px;
 	padding: 0 20px;
 	width: 100%;
-	-webkit-box-sizing: border-box;
-	box-sizing: border-box;
 }
-
 .opencps-theme.ux .opencps-toolbar button {
 	border-radius: 20px;
 	height: 41px;
+	white-space: nowrap;
 }
-
 .opencps-theme.ux .opencps-toolbar input[type="text"] {
 	height: 41px;
 }
-
 .opencps-theme.ux .opencps-toolbar .navbar-inner {
 	background-color: transparent;
 	background-image: none;
@@ -24,21 +38,23 @@
 	padding-left: 0;
 	padding-right: 0;
 }
-
-/* .opencps-theme.ux .opencps-toolbar div.search-input.input-keyword{
-	display: flex;
-} */
-
-.opencps-theme.ux .search-input.input-keyword {position: relative; width: 100%}
+.opencps-theme.ux .search-input.input-keyword {
+	position: relative;
+	width: 100%;
+}
 .opencps-theme.ux .opencps-toolbar .search-input.input-keyword input[type="text"]{
 	border-radius: 20px;
 	padding-left: 25px;
 	width: 100%;
+	max-width: none;
 }
-.opencps-theme.ux .search-input.input-keyword button {position: absolute; top: 0; right: 0}
-
+.opencps-theme.ux .search-input.input-keyword button {
+	position: absolute; 
+	top: 0;
+	right: 0;
+}
 .opencps-theme.ux .opencps-toolbar .search-input.input-keyword button{
-	background: #0074cd none repeat scroll 0 0;
+	background: #0074cd none;
     border: 1px solid #0074cd;
     border-radius: 0 20px 20px 0;
     box-shadow: none;
@@ -48,5 +64,3 @@
     float: left;
     width: 56px;
 }
-
-  

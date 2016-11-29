@@ -1,46 +1,116 @@
-.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list > li.active > a > i.dossier_content{
-	background-image: url("../images/custom/icon_dossierpart_white.png");
-    height: 16px;
-    margin-bottom: 1px;
-    vertical-align: middle;
-    width: 19px;
+/* Tab 1 */
+.opencps-theme.ux .portlet-boundary_16_WAR_opencpsportlet_ .opencps-form-navigator-container .tab-pane, 
+.opencps-theme.ux .portlet-boundary_18_WAR_opencpsportlet_ .opencps-form-navigator-container .tab-pane {
+    padding: 20px 0 10px;
 }
-
-.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list > li > a > i.dossier_content{
-	background-image: url("../images/custom/icon_dossierpart_blue.png");
-	height: 16px;
-    margin-bottom: 1px;
-    vertical-align: middle;
-    width: 19px;
+.portlet-boundary_16_WAR_opencpsportlet_ .opencps-form-navigator-container table, 
+.portlet-boundary_16_WAR_opencpsportlet_ .opencps-form-navigator-container table tr, 
+.portlet-boundary_16_WAR_opencpsportlet_ .opencps-form-navigator-container table th, 
+.portlet-boundary_16_WAR_opencpsportlet_ .opencps-form-navigator-container table td, 
+.portlet-boundary_18_WAR_opencpsportlet_ .opencps-form-navigator-container table, 
+.portlet-boundary_18_WAR_opencpsportlet_ .opencps-form-navigator-container table tr, 
+.portlet-boundary_18_WAR_opencpsportlet_ .opencps-form-navigator-container table th, 
+.portlet-boundary_18_WAR_opencpsportlet_ .opencps-form-navigator-container table td {
+	border: 0;
 }
-
-.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list > li.active > a > i.process{
-	background-image: url("../images/custom/xuly_white.png");
-    height: 16px;
-    margin-bottom: 1px;
-    vertical-align: middle;
-    width: 19px;
+#_16_WAR_opencpsportlet_dossier_info table td, 
+#_18_WAR_opencpsportlet_dossieroverview table td {
+    border-bottom: 1px solid #e1e1e1;
+    padding: 10px 20px;
 }
-
-.opencps-theme.ux .opencps-form-navigator-container .taglib-form-navigator .tabbable-content .form-navigator.nav.nav-list > li > a > i.process{
-	background-image: url("../images/custom/xuly.png");
-	height: 16px;
-    margin-bottom: 1px;
-    vertical-align: middle;
-    width: 19px;
+.portlet-boundary_16_WAR_opencpsportlet_ .opencps-form-navigator-container .tab-pane > div > table td:first-child, 
+.portlet-boundary_16_WAR_opencpsportlet_ .opencps-form-navigator-container .tab-pane > div > table td:nth-child(3), 
+.portlet-boundary_18_WAR_opencpsportlet_ .opencps-form-navigator-container .tab-pane > div > table td:first-child, 
+.portlet-boundary_18_WAR_opencpsportlet_ .opencps-form-navigator-container .tab-pane > div > table td:nth-child(3) {
+    font-family: 'Roboto-Bold';
 }
-
-.opencps-theme.ux .portlet-boundary_16_WAR_opencpsportlet_ .last input {
-     width: 100%;
-    background: #0090ff;
+.portlet-boundary_16_WAR_opencpsportlet_ .opencps-form-navigator-container table tr:last-child td, 
+.portlet-boundary_18_WAR_opencpsportlet_ .opencps-form-navigator-container table tr:last-child td {
+    border-bottom: 0 !important;
+}
+#_16_WAR_opencpsportlet_dossier_info table td:first-child {
+	width: 205px;
+}
+.portlet-boundary_16_WAR_opencpsportlet_ .opencps-form-navigator-container .fa-search, 
+.portlet-boundary_18_WAR_opencpsportlet_ .opencps-form-navigator-container .fa-search {
+    position: absolute;
+    margin-left: -100px;
+}
+/* Tab 2 */
+#_16_WAR_opencpsportlet_dossier_content, 
+#_18_WAR_opencpsportlet_dossierfile {
+	padding: 20px 30px;
+}
+#_16_WAR_opencpsportlet_dossier_content .opencps.dossiermgt.dossier-part-control, 
+#_18_WAR_opencpsportlet_dossierfile .opencps.dossiermgt.dossier-part-control {
+	width: 240px;
+}
+/* Tab 3 */
+#_16_WAR_opencpsportlet_process .ocps-dossier-process {
+	padding: 10px 30px 25px;
+	overflow-x: hidden;
+}
+#_16_WAR_opencpsportlet_process > div > .opencps.dossiermgt:first-of-type {
+	padding-top: 15px;
+    margin-top: 15px;
+    position: relative;
+}
+#_16_WAR_opencpsportlet_process > div > .opencps.dossiermgt:first-of-type:before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: -30px;
+	width: 150%;
+	height: 1px;
+	background-color: #ececec;
+}
+.portlet-boundary_16_WAR_opencpsportlet_ .process-workflow-action button {
+	margin: 20px 10px 0 0;
     border-radius: 20px;
-    color: white;
-    font-family: 'Roboto-Medium';
-    border: 0;
-    padding: 10px;
- 	text-shadow: none;
+    padding: 5px 20px;
 }
-
-.opencps-theme.ux .portlet-boundary_16_WAR_opencpsportlet_ .last {
-     vertical-align: middle;
+/* Tab 4 */
+.opencps-theme.ux .opencps-form-navigator-container .ocps-title-detail {
+	padding: 0 30px;
+	border-bottom: 1px solid #ccc;
+}
+.portlet-boundary_16_WAR_opencpsportlet_ .ocps-title-detail label {
+	display: inline-block;
+	width: 100px;
+	margin-right: 10px;
+	vertical-align: top;
+	font-family: 'Roboto-Bold'
+}
+.portlet-boundary_16_WAR_opencpsportlet_ .ocps-title-detail p {
+	display: inline-block;
+	width: -webkit-calc(100% - 114px);
+	width: calc(100% - 114px);
+}
+.opencps-theme.ux .opencps-form-navigator-container .bound-search-container-history {
+	padding: 15px 30px 0;
+}
+#_16_WAR_opencpsportlet_history .span6:first-child, 
+#_16_WAR_opencpsportlet_history .span6:first-child .span4 {
+	width: 41.666667%;
+}
+#_16_WAR_opencpsportlet_history .span6:last-child, 
+#_16_WAR_opencpsportlet_history .span6:first-child .span8 {
+	width: 58.333333%;
+    margin-left: 0;
+}
+#_16_WAR_opencpsportlet_history .span6:last-child .span4 {
+	width: 20%;
+}
+#_16_WAR_opencpsportlet_history .span6:last-child .span8 {
+	width: 80%;
+	margin-left: 0;
+}
+.opencps-theme.ux .opencps-form-navigator-container .bound-search-container-history > div {
+	border-bottom: 1px solid #e1e1e1;
+	margin-bottom: 10px;
+}
+.opencps-theme.ux .opencps-form-navigator-container .bound-search-container-history > .lfr-search-container, 
+.opencps-theme.ux .opencps-form-navigator-container .bound-search-container-history > div:nth-last-of-type(2) {
+	border-bottom: 0;
+	overflow: hidden;
 }

@@ -72,8 +72,8 @@
 		</div>
 	#end
 	
-	<article id="wrapper" class="container">	
-		<div id="content">
+	<article id="wrapper">	
+		<div id="content" class="container">
 	
 			#if ($selectable)
 				$theme.include($content_include)
