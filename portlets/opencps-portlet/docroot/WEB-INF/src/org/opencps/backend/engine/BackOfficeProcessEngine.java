@@ -474,6 +474,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 				toBackOffice.setPayment(isPayment);
 				toBackOffice.setResubmit(isResubmit);
 				toBackOffice.setEstimateDatetime(toEngineMsg.getEstimateDatetime());
+				toBackOffice.setReceiveDatetime(toEngineMsg.getReceiveDate());
 
 				long preProcessStepId = -1;
 				String autoEvent = StringPool.BLANK;
