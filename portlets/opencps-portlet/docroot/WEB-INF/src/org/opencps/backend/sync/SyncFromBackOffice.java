@@ -114,7 +114,7 @@ public class SyncFromBackOffice implements MessageListener {
 					WorkflowOutputLocalServiceUtil.getByProcessWFPostback(
 						toBackOffice.getProcessWorkflowId(), true);
 				
-				System.out.println("PROCESS_WORKFLOWWWWWWWWWWWWW" + workflowOutputs.size());
+				_log.info("=====workflowOutputs.size():" + workflowOutputs.size());
 				
 				// Lat co trang thai dossier file
 				DossierFileLocalServiceUtil.updateDossierFileResultSyncStatus(
