@@ -101,14 +101,14 @@
                 </div>
                 <div class="box50">
                 	<div>
-                        <p><span><liferay-ui:message key="chu-ho-so"/>:</span></p> <%=Validator.isNotNull(dossier)? HtmlUtil.escape(dossier.getSubjectName()): LanguageUtil.get(pageContext, "monitoring-chua-co") %>
+                        <p><span><liferay-ui:message key="subject-name"/>:</span></p> <%=Validator.isNotNull(dossier)? HtmlUtil.escape(dossier.getSubjectName()): LanguageUtil.get(pageContext, "monitoring-chua-co") %>
                     </div>
                     <div>
                         <p><span><liferay-ui:message key="ngay-da-bao-nop"/>:</span></p> <%=Validator.isNotNull(paymentFile.getConfirmDatetime())?HtmlUtil.escape(DateTimeUtil.convertDateToString(paymentFile.getRequestDatetime(), DateTimeUtil._VN_DATE_FORMAT)): LanguageUtil.get(pageContext, "monitoring-chua-co") %>
 
                     </div>
                     <div>
-                        <p><span><liferay-ui:message key="hinh-thuc-thanh-toan"/>:</span> 
+                        <p><span><liferay-ui:message key="payment-method"/>:</span> 
 	                        	
 	                	</p>
                			<%
