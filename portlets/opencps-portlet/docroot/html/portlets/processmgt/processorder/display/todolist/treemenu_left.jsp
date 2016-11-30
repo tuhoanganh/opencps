@@ -1,3 +1,4 @@
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -16,8 +17,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-<%@page import="org.opencps.util.DateTimeUtil"%>
-<%@page import="org.opencps.holidayconfig.util.HolidayUtils"%>
 <%@page import="java.util.Date"%>
 <%@page import="com.liferay.portal.kernel.dao.search.RowChecker"%>
 <%@page import="com.liferay.portal.kernel.json.JSONFactoryUtil"%>
@@ -40,6 +39,7 @@
 <%@page import="org.opencps.processmgt.util.ProcessUtils"%>
 <%@page import="org.opencps.util.MessageKeys"%>
 <%@page import="org.opencps.util.WebKeys"%>
+<%@page import="org.opencps.holidayconfig.util.HolidayCheckUtils"%>
 
 <%@ include file="../../init.jsp"%>
 
@@ -259,18 +259,11 @@
 								processURL.setParameter(ProcessOrderDisplayTerms.PROCESS_ORDER_ID, String.valueOf(processOrder.getProcessOrderId()));
 								processURL.setParameter("backURL", currentURL);
 								processURL.setParameter("isEditDossier", (processOrder.isReadOnly() || (processOrder.getAssignToUsesrId() != 0 &&  processOrder.getAssignToUsesrId() != user.getUserId())) ? String.valueOf(false) : String.valueOf(true));
-							
-								
-								String deadlineVal = StringPool.DASH;
-								ProcessStep processStep = null;
-								try {
-									processStep = ProcessStepLocalServiceUtil.getProcessStep(processOrder.getProcessStepId());
-									
-									Date endDate = HolidayUtils.getEndDate(processOrder.getActionDatetime(), processStep.getDaysDuration()).getTime();
-									
-									deadlineVal = DateTimeUtil.convertDateToString(endDate, DateTimeUtil._VN_DATE_TIME_FORMAT);
-								} catch(Exception e) {}
-								
+						
+								int dateOver = HolidayCheckUtils.calculatorDateOver(Validator.isNotNull(processOrder.getActionDatetime()) ? 
+										processOrder.getActionDatetime() : new Date(),
+										new Date(), processOrder.getDaysDuration());
+						
 								String hrefFix = "location.href='" + processURL.toString()+"'";
 								String cssStatusColor = "status-color-" + processOrder.getDossierStatus();
 							%>
@@ -335,7 +328,7 @@
 									</div>
 									
 									<div class='<%="span7"%>'>
-										<%= deadlineVal %>
+										<%=dateOver >= 0 ? "<div class='ocps-free-day'>"+ StringUtil.replace(LanguageUtil.get(themeDisplay.getLocale(), "until-x-day"), "{0}", String.valueOf(dateOver))+"</div>":"<div class='ocps-over-day'>"+StringUtil.replace(LanguageUtil.get(themeDisplay.getLocale(), "over-x-day"), "{0}", String.valueOf(Math.abs(dateOver))) +"</div>"%>
 									</div>
 								</div>
 							</liferay-util:buffer>

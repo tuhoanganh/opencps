@@ -29,7 +29,7 @@
 	int depthLevel = (Integer)request.getAttribute("opencps-datamgt:ddr:depthLevel");
 	String[] itemNames = StringUtil.split((String)request.getAttribute("opencps-datamgt:ddr:itemNames"));
 	boolean showLabel = GetterUtil.getBoolean(request.getAttribute("opencps-datamgt:ddr:showLabel"), true);
-	String[] selectedItems = StringUtil.split((String)request.getAttribute("opencps-datamgt:ddr:selectedItems"), "0");
+	String[] selectedItems = StringUtil.split((String)request.getAttribute("opencps-datamgt:ddr:selectedItems"));
 	boolean[] itemsEmptyOption = StringUtil.split((String)request.getAttribute("opencps-datamgt:ddr:itemsEmptyOption"), false);
 	String renderMode = (String)request.getAttribute("opencps-datamgt:ddr:renderMode");
 	String[] emptyOptionLabels = StringUtil.split((String)request.getAttribute("opencps-datamgt:ddr:emptyOptionLabels"));
