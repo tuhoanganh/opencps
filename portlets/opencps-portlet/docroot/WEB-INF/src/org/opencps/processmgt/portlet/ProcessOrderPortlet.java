@@ -2742,22 +2742,23 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 			String[] orderIds = StringUtil.split(processOrderIds,
 					StringPool.COMMA);
-
 			Dossier dossier = null;
-			long assignToUserId = ParamUtil.getLong(actionRequest,
-					ProcessOrderDisplayTerms.ASSIGN_TO_USER_ID);
+			
+			String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
 			String paymentValue = ParamUtil.getString(actionRequest,
 					ProcessOrderDisplayTerms.PAYMENTVALUE);
 			String actionNote = ParamUtil.getString(actionRequest,
 					ProcessOrderDisplayTerms.ACTION_NOTE);
-			boolean signature = ParamUtil.getBoolean(actionRequest,
-					ProcessOrderDisplayTerms.SIGNATURE);
 			String estimateDate = ParamUtil.getString(actionRequest,
 					ProcessOrderDisplayTerms.ESTIMATE_DATE);
 			String estimateTime = ParamUtil.getString(actionRequest,
 					ProcessOrderDisplayTerms.ESTIMATE_TIME);
 			long processStepId = ParamUtil.getLong(actionRequest,
 					ProcessOrderDisplayTerms.PROCESS_STEP_ID);
+			long assignToUserId = ParamUtil.getLong(actionRequest,
+					ProcessOrderDisplayTerms.ASSIGN_TO_USER_ID);
+			boolean signature = ParamUtil.getBoolean(actionRequest,
+					ProcessOrderDisplayTerms.SIGNATURE);
 			ProcessWorkflow processWorkflow = null;
 
 			Date deadline = null;
@@ -2853,6 +2854,10 @@ public class ProcessOrderPortlet extends MVCPortlet {
 									0, workflowOutputs);
 
 				}
+				
+				SessionMessages.add(actionRequest, "success");
+				
+				actionResponse.sendRedirect(redirectURL);;
 
 			} catch (Exception e) {
 				_log.error(e);

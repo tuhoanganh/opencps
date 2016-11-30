@@ -67,7 +67,6 @@
 	}catch(Exception e){}
 	
 	
-	
 	String processOrderIds = ParamUtil.getString(request, "processOrderIds");
 	
 	String [] orderIds = StringUtil.split(processOrderIds, StringPool.COMMA);
@@ -100,17 +99,9 @@
 				processOrder.getServiceProcessId(), processWorkfloww.getPostProcessStepId());
 	} catch (Exception e) {}
 	
-	System.out.println("________dossierId " + dossierId );
-	System.out.println("fileGroupId_____________ " + fileGroupId );
-	System.out.println("_______ actionUserId" + actionUserId );
-	System.out.println("processWorkflowId________ " + processWorkflowId );
-	System.out.println("serviceProcessId___________ " + serviceProcessId );
-	
 	
 	long processStepId = Validator.isNotNull(postProcessWorkflows) ? postProcessWorkflows.get(0).getPostProcessStepId() : 0;
 	
-	
-	System.out.println("processStepId__________ " + processStepId );
 	ProcessWorkflow workflow = ProcessMgtUtil.getProcessWorkflow(postProcessWorkflows.get(0).getProcessWorkflowId());
 	
 	Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
@@ -207,9 +198,9 @@
 	message="<%=RequiredDossierPartException.class.getName() %>"
 />
 
-<portlet:actionURL var="multyAssignToUserURL" name="multyAssignToUser"/>
+<portlet:actionURL var="multiAssignToUserURL" name="multiAssignToUser"/>
 
-<aui:form name="fm" action="<%=multyAssignToUserURL.toString() %>" method="post">
+<aui:form name="fm" action="<%=multiAssignToUserURL.toString() %>" method="post">
 
 	<%-- <aui:input 
 		name="assignFormDisplayStyle" 
@@ -225,7 +216,7 @@
 	
 	<aui:input 
 		name="assignActionURL" 
-		value="<%=multyAssignToUserURL.toString() %>" 
+		value="<%=multiAssignToUserURL.toString() %>" 
 		type="hidden"
 	/>
 	<aui:input 
@@ -542,10 +533,8 @@
  		var success = '<%=success%>';
 		
  		if(success == 'true'){
- 			var backURL = '<%=backURL%>';
- 			var Util = Liferay.Util;
- 			<portlet:namespace/>closeDialog('<portlet:namespace />reAssignForm', '<%=WebKeys.PROCESS_ORDER_PORTLET%>_');
-			Util.getOpener().Liferay.fire('redirect', {responseData:{backURL:backURL}});
+ 			closeDialog('assign-multi-dossier', '<%=WebKeys.PROCESS_ORDER_PORTLET%>_');
+			//Util.getOpener().Liferay.fire('redirect', {responseData:{backURL:backURL}});
  		}
 		
  		if(esign){
@@ -707,7 +696,7 @@
 	
 <aui:script>
 	function formSubmit() {
-		document.getElementById('<portlet:namespace />fm').action = '<%=multyAssignToUserURL.toString() %>';
+		document.getElementById('<portlet:namespace />fm').action = '<%=multiAssignToUserURL.toString() %>';
 			document.getElementById('<portlet:namespace />fm').submit();
 	}
 	
