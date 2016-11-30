@@ -525,7 +525,6 @@
 		]]>
 	</sql>
 
-
 	<sql id="org.opencps.processmgt.service.persistence.ProcessOrderFinder.searchProcessOrderKeyWords">	
 		<![CDATA[
 			SELECT 

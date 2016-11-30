@@ -266,6 +266,27 @@
 		</aui:col>
 	</aui:row>
 	
+	<aui:select name="itemCode_cfg" id="itemCode_cfg">
+		<aui:option selected="<%= Validator.isNull(itemCode_cfg)  %>" value=""> </aui:option>
+		<%
+			for (DictItem dictItem : dictItems) {
+		%>
+			<aui:option selected="<%= itemCode_cfg == dictItem.getItemCode() %>" value="<%= dictItem.getItemCode() %>"><%= dictItem.getItemName(locale) %></aui:option>
+		<%
+			}
+		%>
+	</aui:select>
+	
+	<aui:select name="war_opencpsportlet_26_cfg" id="war_opencpsportlet_26_cfg">
+		<aui:option selected="<%= Validator.isNull(war_opencpsportlet_26_cfg)  %>" value=""> </aui:option>
+		<%
+			for (Layout lout : pubLayouts) {
+		%>
+			<aui:option selected="<%= war_opencpsportlet_26_cfg.equals(String.valueOf(lout.getPlid())) %>" value="<%= lout.getPlid() %>"><%= lout.getName(locale) %></aui:option>
+		<%
+			}
+		%>
+	</aui:select>
 	<aui:button type="submit" name="Save" value="save"></aui:button>
 
 </aui:form>

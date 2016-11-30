@@ -1,4 +1,6 @@
 
+<%@page import="java.util.Collections"%>
+<%@page import="java.util.Comparator"%>
 <%@page import="java.util.LinkedHashMap"%>
 <%@page import="org.opencps.processmgt.service.ProcessOrderLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.search.ProcessOrderSearchTerms"%>
@@ -122,7 +124,12 @@
 		}
 		processOrderSteps = new ArrayList<ProcessOrderBean>(cleanMap.values());
 		
-		
+		Collections.sort(processOrderSteps, new Comparator<ProcessOrderBean>() {
+
+	        public int compare(ProcessOrderBean o1, ProcessOrderBean o2) {
+	        	return String.valueOf(o1.getSequenceNo()).compareTo(String.valueOf(o2.getSequenceNo()));
+	        }
+	    });
 	JSONObject arrayParam = JSONFactoryUtil
 		    .createJSONObject();
 	arrayParam.put("serviceInfoId", (serviceInfoId > 0) ? String.valueOf(serviceInfoId):StringPool.BLANK);
@@ -252,7 +259,7 @@
 													<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
 														<i class='<%="fa fa-circle sx10 " + processOrder.getDossierStatus()%>'></i>
 													</div>
-													<div class="span2 bold-label">
+													<div class="span3 bold-label">
 														<liferay-ui:message key="reception-no"/>
 													</div>
 													<span class="span9">
@@ -263,7 +270,7 @@
 												<div class="row-fluid">
 													<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
 													</div>
-													<div class="span2 bold-label">
+													<div class="span3 bold-label">
 														<liferay-ui:message key="service-name"/>
 													</div>
 													<span class="span9">

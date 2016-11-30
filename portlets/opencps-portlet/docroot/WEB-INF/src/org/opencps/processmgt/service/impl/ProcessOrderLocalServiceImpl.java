@@ -769,6 +769,5 @@ public class ProcessOrderLocalServiceImpl
 		
 		return processOrderFinder
 						.searchProcessOrderKeyWords(serviceInfoId, processStepId, loginUserId,
-							actionUserId, keyWords, start, end, orderByComparator);
 	}
 }

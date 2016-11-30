@@ -101,4 +101,31 @@ public class ProcessStepDossierPartLocalServiceImpl
 		
 		return psdp;
 	}
+	/**
+	 * update ProcessServiceDossierPart
+	 * 
+	 * @param dossierPartId
+	 * @param processStepId
+	 * @param dossierPartId
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public ProcessStepDossierPart updatePSDP(long processStepId, long dossierPartId, boolean readOnly)
+	    throws PortalException, SystemException {
+
+		ProcessStepDossierPartPK pk = new ProcessStepDossierPartPK(processStepId, dossierPartId);
+		
+		ProcessStepDossierPart psdp =
+				processStepDossierPartPersistence.fetchByPrimaryKey(pk);
+
+		if (Validator.isNull(psdp)) {
+			psdp = processStepDossierPartPersistence.create(pk);
+		}
+		psdp.setReadOnly(readOnly);
+		
+		processStepDossierPartPersistence.update(psdp);
+		
+		return psdp;
+	}
 }

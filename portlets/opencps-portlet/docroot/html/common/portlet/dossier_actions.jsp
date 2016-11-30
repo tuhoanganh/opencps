@@ -1,4 +1,5 @@
 
+<%@page import="org.opencps.util.WebKeys"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -35,6 +36,8 @@
 
 	boolean isEditDossier = ParamUtil.getBoolean(request, "isEditDossier");
 
+	boolean isReadOnly = ParamUtil.getBoolean(request, "isReadOnly");
+	
 	boolean isChildDossierPart = GetterUtil.getBoolean(ParamUtil.getBoolean(request, "isChildDossierPart"), false);
 
 	long dossierId = ParamUtil.getLong(request, DossierDisplayTerms.DOSSIER_ID);
@@ -64,6 +67,8 @@
 	
 	String groupName = ParamUtil.getString(request, DossierFileDisplayTerms.GROUP_NAME);
 	
+	boolean isCBXL = ParamUtil.getBoolean(request, "isCBXL", false);
+	
 	int version  = 0;
 	
 	if(dossierId > 0 && dossierPartId > 0){
@@ -79,7 +84,14 @@
 						version = 1;
 					}
 				}else{
-					version = DossierFileLocalServiceUtil.countDossierFileByDID_DP(dossierId, dossierPartId);
+					
+					if(isCBXL){
+						version = DossierFileLocalServiceUtil.countDossierFileByDID_SS_DP(dossierId, dossierPartId, PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS);
+					}else{
+						version = DossierFileLocalServiceUtil.countDossierFileByDID_DP(dossierId, dossierPartId);
+					}
+					
+					
 				}
 				
 			}
@@ -87,6 +99,11 @@
 		}catch(Exception e){}
 					
 	}
+	
+	if(readOnly){
+		isEditDossier = false;
+	}
+	
 %>
 
 <table class="dossier-actions-wraper">
@@ -113,6 +130,7 @@
 							</c:if>
 						</c:when>
 						<c:when test="<%= ( isDynamicForm && fileEntryId > 0 ) || isOnlineData > 0  %>">
+							<c:if test="<%=!isReadOnly %>">
 							<aui:a 
 								id="<%=String.valueOf(dossierPartId) %>"
 								dossier="<%=String.valueOf(dossierId) %>"
@@ -125,7 +143,10 @@
 								label="view-form" 
 								cssClass="label opencps dossiermgt part-file-ctr view-form"
 								title="view-form"
-							/>
+							>
+							<i class="fa fa-search"></i>
+							</aui:a>
+							</c:if>
 							<c:if test="<%=!showVersionItemReference %>">
 								<aui:a 
 									id="<%=String.valueOf(dossierPartId) %>"
@@ -464,6 +485,7 @@
 							</c:if>
 						</c:when>
 						<c:when test="<%=isDynamicForm && fileEntryId > 0  %>">
+							<c:if test="<%=!isReadOnly %>">
 							<aui:a 
 								id="<%=String.valueOf(dossierPartId) %>"
 								dossier="<%=String.valueOf(dossierId) %>"
@@ -476,8 +498,10 @@
 								label="view-form" 
 								cssClass="label opencps dossiermgt part-file-ctr view-form"
 								title="view-form"
-							/>
-							
+							>
+							<i class="fa fa-search"></i>
+							</aui:a>
+							</c:if>
 							<c:if test="<%=!showVersionItemReference %>">
 								<aui:a 
 									id="<%=String.valueOf(dossierPartId) %>"
