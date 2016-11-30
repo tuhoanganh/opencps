@@ -1,10 +1,56 @@
-.opencps-theme.ux .portlet-boundary_11_WAR_opencpsportlet_ .portlet-topper .head_title:BEFORE{
+.opencps-theme .portlet-boundary_11_WAR_opencpsportlet_ .portlet {
+	background-color: #fff;
+	border-radius: 4px;
+	margin-bottom: 30px;
+	border: 1px solid #e1e1e1;
+}
+
+/*----- Header -----*/
+.opencps-theme .portlet-boundary_11_WAR_opencpsportlet_ .portlet header {
+	border-bottom: 1px solid #e1e1e1;
+	height: 50px;
+	padding-left: 25px;
+}
+.opencps-theme .portlet-boundary_11_WAR_opencpsportlet_ .portlet header h1 {
+	line-height: 50px;
+	font-size: 16px;
+	font-family: 'Roboto-Bold';
+	text-transform: uppercase;
+	margin: 0;
+	text-align: left;
+    color: inherit;
+}
+.opencps-theme.ux .portlet-boundary_11_WAR_opencpsportlet_ .head_title:before {
     content: "\f19c";
     display: inline-block;
-    font: normal normal normal 14px/1 FontAwesome;
-    font-size: inherit;
-    text-rendering: auto;
-    -webkit-font-smoothing: antialiased;
+    font-family: FontAwesome;
     color: #0690fb;
-    margin-right: 5px;
+    margin-right: 10px;
+    font-weight: normal;
+}
+
+/*----- Content -----*/
+.opencps-theme.ux .portlet-boundary_11_WAR_opencpsportlet_ .portlet-content {
+	padding: 15px 25px;
+}
+.opencps-theme .portlet-boundary_11_WAR_opencpsportlet_ .portlet-body {
+	background-color: transparent;
+}
+.opencps-theme .portlet-boundary_11_WAR_opencpsportlet_ .portlet-body .service-menu ul {
+	margin: 0;
+}
+.opencps-theme .portlet-boundary_11_WAR_opencpsportlet_ .portlet-body .service-menu ul li {
+	padding: 5px 0 5px 15px;
+	position: relative;
+}
+.opencps-theme .portlet-boundary_11_WAR_opencpsportlet_ .portlet-body .service-menu ul li:before {
+	content: "\f111";
+	position: absolute;
+	left: 0;
+	font-family: FontAwesome;
+	color: #0f97ff;
+	font-size: 12px;
+}
+.opencps-theme .portlet-boundary_11_WAR_opencpsportlet_ .portlet-body .service-menu ul li i {
+	display: none;
 }

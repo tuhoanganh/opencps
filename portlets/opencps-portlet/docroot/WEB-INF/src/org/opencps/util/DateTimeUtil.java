@@ -26,6 +26,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.TimeZoneUtil;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -190,6 +191,63 @@ public class DateTimeUtil {
 		}
 		return calendar;
 	}
+	
+	public static int convertTimemilisecondsToDays(long time) {
+
+		int days = 0;
+		days = (int) (time / (24 * 60 * 60 * 1000));
+
+		return days;
+	}
+
+	public static long convertTimemilisecondsToHours(long time) {
+
+		long hours = 0;
+
+		hours = time / (60 * 60 * 1000);
+
+		return hours;
+	}
+
+	public static long convertTimemilisecondsToMinutes(long time) {
+
+		long minutes = 0;
+
+		minutes = time / (60 * 1000);
+
+		return minutes;
+	}
+
+	public static long convertTimemilisecondsToSeconds(long time) {
+
+		long seconds = 0;
+
+		seconds = time / 1000;
+
+		return seconds;
+	}
+
+	public static String convertTimemilisecondsToFormat(long time) {
+
+		String format = DATE_TIME_FORMAT;
+		long diffSeconds = 0;
+		long diffMinutes = 0;
+		long diffHours = 0;
+		long diffDays = 0;
+
+		diffSeconds = time / 1000 % 60;
+		diffMinutes = time / (60 * 1000) % 60;
+		diffHours = time / (60 * 60 * 1000) % 24;
+		diffDays = time / (24 * 60 * 60 * 1000);
+
+		format = StringUtil.replace(format, "{d}", String.valueOf(diffDays));
+		format = StringUtil.replace(format, "{HH}", String.valueOf(diffHours));
+		format = StringUtil.replace(format, "{mm}", String.valueOf(diffMinutes));
+		format = StringUtil.replace(format, "{ss}", String.valueOf(diffSeconds));
+
+		return format;
+	}
+	private static final String DATE_TIME_FORMAT = "{d} {HH}:{mm}:{ss}";
 
 	public static final String _TIMESTAMP = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 

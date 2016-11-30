@@ -150,10 +150,7 @@
 				</div>
 				
 				<div class="row-fluid">
-					<div class="span3 bold">
-						<liferay-ui:message key="service-name" />
-					</div>
-					<div class="span9">
+					<div class="span12">
 						<%= serviceInfo.getServiceName() %>
 					</div>
 				</div>

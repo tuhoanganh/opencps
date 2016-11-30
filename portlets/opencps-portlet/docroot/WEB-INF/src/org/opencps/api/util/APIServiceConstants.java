@@ -18,4 +18,6 @@ public class APIServiceConstants {
 	public static final String IN = "IN";	// message in
 	
 	public static final String OUT = "OUT";	// message out
+	
+	public static final String CODE_08 = "08"; //add reception no
 }

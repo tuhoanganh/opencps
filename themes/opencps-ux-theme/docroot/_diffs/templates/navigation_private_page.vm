@@ -27,7 +27,6 @@
           #end
 
 <nav class="$nav_css_class top-menu private" id="navigation" role="navigation">
-
     <ul>
         #foreach ($nav_item in $nav_items)
             #if ($nav_item.isSelected())
@@ -35,22 +34,18 @@
             #else
                 <li>
             #end
-               
-                <a href="$nav_item.getURL()" $nav_item.getTarget()><span>$nav_item.icon() $nav_item.getName()</span></a>
-	
-
+                <a href="$nav_item.getURL()" $nav_item.getTarget()><span>$nav_item.icon() $nav_item.getName()</span></a>	
            </li>
         #end
     </ul>
-    
-    <span class="account-info">
-    	$theme.runtime("2_WAR_notificationsportlet")
-    	<span class="account-name">
-    		<img id="img1" alt="image user" src= "$images_folder/custom/welcome_new.png"></img>
-    		<img id="img2" alt="image user" src= "$images_folder/custom/welcome_h.png"></img>
-    		<span style="padding-left: 10px;">$user_email_address</span>
-			<span class="tooltiptext">#language ("welcome-key") $user_name</span>
+    #if ($is_signed_in)
+	    <span class="account-info">
+	    	<span class="account-name">
+	    		<span style="padding-left: 10px;">$user_email_address</span>
+				<span class="tooltiptext">#language ("welcome-key") $user_name</span>
+			</span>
+			$theme.runtime("2_WAR_notificationsportlet")
+			<span class="logout"><a href="$sign_out_url" class="btn-dn">#language ("logout-key")</a></span>
 		</span>
-		<span class="logout"><a href="$sign_out_url" class="btn-dn">#language ("logout-key")</a></span>
-	</span>
+	#end
 </nav>

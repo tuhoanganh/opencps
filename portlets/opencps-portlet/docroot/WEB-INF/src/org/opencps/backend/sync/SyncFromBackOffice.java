@@ -51,7 +51,6 @@ import com.liferay.portal.kernel.messaging.MessageListenerException;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.util.SubscriptionSender;
 import com.liferay.util.PwdGenerator;
 
@@ -111,17 +110,11 @@ public class SyncFromBackOffice implements MessageListener {
 						toBackOffice.getActionInfo(),
 						toBackOffice.getMessageInfo());
 
-				//TODO HOT FIX
-				Dossier dossierHF = DossierLocalServiceUtil.fetchDossier(toBackOffice.getDossierId());
-				if(Validator.isNotNull(toBackOffice.getReceiveDatetime())){
-					dossierHF.setReceiveDatetime(toBackOffice.getReceiveDatetime());
-					DossierLocalServiceUtil.updateDossier(dossierHF);
-				}
 				List<WorkflowOutput> workflowOutputs =
 					WorkflowOutputLocalServiceUtil.getByProcessWFPostback(
 						toBackOffice.getProcessWorkflowId(), true);
 				
-				System.out.println("PROCESS_WORKFLOWWWWWWWWWWWWW" + workflowOutputs.size());
+				_log.info("=====workflowOutputs.size():" + workflowOutputs.size());
 				
 				// Lat co trang thai dossier file
 				DossierFileLocalServiceUtil.updateDossierFileResultSyncStatus(
@@ -270,8 +263,8 @@ public class SyncFromBackOffice implements MessageListener {
 			
 			emailBody = StringUtil.replace(emailBody, "{receptionNo}", Long.toString(dossierId));
 
-			emailBody = StringUtil.replace(emailBody, "{dossierStatus}", LanguageUtil.get(locale, dossier.getDossierStatus()));
-//			emailBody = emailBody + LanguageUtil.get(locale, dossier.getDossierStatus());
+			
+			emailBody = emailBody + LanguageUtil.get(locale, dossier.getDossierStatus());
 			
 			SubscriptionSender subscriptionSender = new SubscriptionSender();
 

@@ -1173,5 +1173,57 @@ public class ApiServiceServiceImpl extends ApiServiceServiceBaseImpl {
 		return bytes;
 	}
 	
+	@JSONWebService(value = "updatereceptionno", method = "POST")
+	public JSONObject updateDossierReceptionNo(String oid, String receptionno) {
+		
+		JSONObject resultObj = JSONFactoryUtil.createJSONObject();
+		
+		ServiceContext serviceContext = getServiceContext();
+		
+		long userId = 0;
+		
+		try {
+			userId = getUserId();
+			
+			JSONObject input = JSONFactoryUtil.createJSONObject();
+			
+			input.put("oid", oid);
+			input.put("recptionNo", receptionno);
+
+			ApiServiceLocalServiceUtil.addLog(userId,
+				APIServiceConstants.CODE_08, serviceContext.getRemoteAddr(), oid, 
+				input.toString(), APIServiceConstants.IN,
+				serviceContext);
+
+			
+			Dossier dossier = dossierPersistence.findByOID(oid);
+			
+			dossier.setReceptionNo(receptionno);
+			
+			dossierPersistence.update(dossier);
+			
+			resultObj.put("statusCode", "Success");
+			resultObj.put("oid", oid);
+
+		} catch (Exception e) {
+			_log.error(e);
+			
+			resultObj = JSONFactoryUtil.createJSONObject();
+			
+			resultObj.put("statusCode", "Error");
+			
+			if(e instanceof NoSuchDossierException) {
+				resultObj.put("message", "DossierNotFound");
+			} 
+		}
+		
+		ApiServiceLocalServiceUtil.addLog(userId, APIServiceConstants.CODE_08, 
+			serviceContext.getRemoteAddr(), oid, resultObj.toString(), 
+			APIServiceConstants.OUT, serviceContext);
+		
+		return resultObj;
+	}
+
+	
 	private static Log _log = LogFactoryUtil.getLog(ApiServiceServiceImpl.class.getName());	
 }

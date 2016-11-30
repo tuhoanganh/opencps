@@ -472,9 +472,8 @@
 					String preCondition = Validator.isNotNull(postProcessWorkflow.getPreCondition()) ? 
 						postProcessWorkflow.getPreCondition() : StringPool.BLANK;
 						
-						boolean showButton = true;
-						showButton = BackendUtils.checkPreCondition(preCondition, dossier.getDossierId()) && 
-								Validator.isNotNull(postProcessWorkflow.getAutoEvent()) ? false : true;
+						boolean showButton = BackendUtils.checkPreCondition(preCondition, dossier.getDossierId()) && 
+								(Validator.isNotNull(postProcessWorkflow.getAutoEvent()) ? false : true);
 						
 						//Kiem tra neu co su kien auto event thi khong hien thi nut
 						/* showButton = Validator.isNotNull(postProcessWorkflow.getAutoEvent()) ? false : true; */
