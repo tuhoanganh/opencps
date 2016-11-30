@@ -1,4 +1,5 @@
 
+<%@page import="java.util.List"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -79,7 +80,26 @@
 						version = 1;
 					}
 				}else{
-					version = DossierFileLocalServiceUtil.countDossierFileByDID_DP(dossierId, dossierPartId);
+					List<DossierFile> dossierFiles = DossierFileLocalServiceUtil.getDossierFileByDID_DP(dossierId, dossierPartId);
+					
+					for(DossierFile file : dossierFiles) {
+						if(file.getSyncStatus() == 2) {
+							version++;
+						}
+					}
+					
+					if(version == DossierFileLocalServiceUtil.countDossierFileByDID_DP(
+									dossierId, dossierPartId)) {
+						
+						version = DossierFileLocalServiceUtil.countDossierFileByDID_DP(
+								dossierId, dossierPartId) + 1;
+					} else if(version == 0) {
+						
+						version = DossierFileLocalServiceUtil.countDossierFileByDID_DP(
+								dossierId, dossierPartId) + 1;
+					} else {
+						version += 1;
+					}
 				}
 				
 			}
