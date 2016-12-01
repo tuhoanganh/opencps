@@ -501,33 +501,42 @@
 
 </div>
 
-<aui:script use="aui-base,liferay-portlet-url,aui-io">
+<aui:script use="aui-base,liferay-portlet-url,aui-io,aui-loading-mask-deprecated">
 
-	var required = false;
-	
-	Liferay.provide(window, '<portlet:namespace/>validateRequiredResult', function(dossierId, processStepId, processWorkflowId) {
+	function validateRequiredResult(dossierId, processStepId, processWorkflowId) {
 		
 		var A = AUI();
+
+		var actionNote = A.one('#<portlet:namespace />actionNote');
+		
+		console.log('actionNote: '+actionNote.val());
+		
+		if (actionNote.val() == ''){
+			return 'xin-moi-nhap-y-kien';
+		} else {
+			return '';
+		}
 		
 		var requiredDossierPartIds = [];
 		
 		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.ACTION_PHASE) %>');
 		portletURL.setParameter("javax.portlet.action", "validateAssignTask");
 		portletURL.setWindowState('<%=WindowState.NORMAL%>');
-		var loadingMask = new A.LoadingMask(
+		/* var loadingMask = new A.LoadingMask(
 			{
 				'strings.loading': '<%= UnicodeLanguageUtil.get(pageContext, "validate") %>',
 				target: A.one('#<portlet:namespace/>pofm')
 			}
 		);
 		
-		loadingMask.show();
+		loadingMask.show(); */
 		
 		A.io.request(
 			portletURL.toString(),
 			{
 				dataType : 'text/html',
 				method : 'POST',
+				sync: true,
 			    data:{
 			    	<portlet:namespace/>dossierId : dossierId,
 			    	<portlet:namespace/>processStepId: processStepId,
@@ -552,17 +561,16 @@
 								}
 							}
 						}
-						
-						loadingMask.hide();
-							
 					},
 			    	error: function(){}
 				}
 			}
 		);
 		
+		//loadingMask.hide();
 		
-	},['aui-base','liferay-portlet-url','aui-io','aui-loading-mask-deprecated']);
+	}
+	
 
 	Liferay.provide(window, '<portlet:namespace/>assignToUser', function(e) {
 		
@@ -626,6 +634,7 @@
 				{
 					dataType : 'text/html',
 					method : 'POST',
+					sync : true,
 				    data:{
 				    },   
 				    on: {
@@ -657,9 +666,9 @@
 								
 								if(submitButton){
 									submitButton.on('click', function(){
-										<portlet:namespace/>validateRequiredResult(dossierId, processStepId, processWorkflowId);
-										if(required === true) {
-											alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-required-before-send") %>');
+										var msg = validateRequiredResult(dossierId, processStepId, processWorkflowId);
+										if(msg != '') {
+											alert(msg);
 											return;
 										} else{
 											A.io.request(
