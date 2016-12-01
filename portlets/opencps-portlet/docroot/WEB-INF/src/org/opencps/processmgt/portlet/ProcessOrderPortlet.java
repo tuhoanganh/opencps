@@ -74,7 +74,6 @@ import org.opencps.jasperreport.util.JRReportUtil.DocType;
 import org.opencps.pki.HashAlgorithm;
 import org.opencps.pki.Helper;
 import org.opencps.pki.PdfPkcs7Signer;
-import org.opencps.processmgt.NoSuchProcessStepException;
 import org.opencps.processmgt.NoSuchWorkflowOutputException;
 import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.model.ProcessStep;
@@ -1793,7 +1792,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				displayName = dossierPart.getPartName();
 			}
 
-			if (dossierFileId == 0) {
+		//	if (dossierFileId == 0) {
 				dossierFile = DossierFileLocalServiceUtil.addDossierFile(
 						serviceContext.getUserId(), dossierId, dossierPartId,
 						templateFileNo, groupName, fileGroupId,
@@ -1802,7 +1801,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 						formData, fileEntryId, dossierFileMark,
 						dossierFileType, dossierFileNo, dossierFileDate,
 						original, syncStatus, serviceContext);
-			} else {
+			/*} else {
 				dossierFile = DossierFileLocalServiceUtil
 						.getDossierFile(dossierFileId);
 				dossierFileMark = dossierFile.getDossierFileMark();
@@ -1850,7 +1849,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 						dossierFile != null ? dossierFile.getFileEntryId() : 0,
 						WebKeys.ACTOR_CITIZEN);
 
-			}
+			}*/
 
 			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 
