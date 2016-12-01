@@ -101,6 +101,36 @@ public class HolidayCheckUtils {
 		}
 		return dateOverNumbers;
 	}
+	
+	public static int calculatorDateUntilDealine(Date startDate, Date endDate, int daysDuration) {
+
+		int dateOverNumbers = 0;
+
+		if (daysDuration > 0) {
+
+			Calendar endayCal = Calendar.getInstance();
+			endayCal.setTime(endDate);
+
+			Calendar dealineCal = Calendar.getInstance();
+			dealineCal.setTime(startDate);
+			
+			for (int i = 0; i < daysDuration; i++) {
+				
+				dealineCal.add(Calendar.DATE, 1);
+			}
+
+			long endDay = endayCal.getTimeInMillis();
+			long deadline = dealineCal.getTimeInMillis();
+			long result = 0;
+
+			result = deadline - endDay;
+
+			result = DateTimeUtil.convertTimemilisecondsToDays(result);
+
+			dateOverNumbers = (int) result;
+		}
+		return dateOverNumbers;
+	}
 
 	/**
 	 * @param processOrderId

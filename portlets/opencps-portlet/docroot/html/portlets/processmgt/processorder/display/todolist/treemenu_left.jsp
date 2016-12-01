@@ -260,7 +260,7 @@
 								processURL.setParameter("backURL", currentURL);
 								processURL.setParameter("isEditDossier", (processOrder.isReadOnly() || (processOrder.getAssignToUsesrId() != 0 &&  processOrder.getAssignToUsesrId() != user.getUserId())) ? String.valueOf(false) : String.valueOf(true));
 						
-								int dateOver = HolidayCheckUtils.calculatorDateOver(Validator.isNotNull(processOrder.getActionDatetime()) ? 
+								int dateOver = HolidayCheckUtils.calculatorDateUntilDealine(Validator.isNotNull(processOrder.getActionDatetime()) ? 
 										processOrder.getActionDatetime() : new Date(),
 										new Date(), processOrder.getDaysDuration());
 						
