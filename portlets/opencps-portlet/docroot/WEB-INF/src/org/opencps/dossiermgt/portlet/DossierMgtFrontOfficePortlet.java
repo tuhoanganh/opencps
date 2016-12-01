@@ -1708,7 +1708,12 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			if (dossierFileId > 0
 					&& dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_OTHER) {
 
-				DossierFileLocalServiceUtil.removeDossierFile(dossierFileId);
+				if (dossierFile.getSyncStatus() != PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS) {
+					DossierFileLocalServiceUtil.deleteDossierFile(dossierFileId,
+							dossierFile.getFileEntryId());
+				} else {
+					DossierFileLocalServiceUtil.removeDossierFile(dossierFileId);
+				}
 
 			} else {
 
