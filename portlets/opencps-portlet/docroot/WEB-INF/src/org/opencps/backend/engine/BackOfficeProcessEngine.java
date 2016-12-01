@@ -602,13 +602,14 @@ public class BackOfficeProcessEngine implements MessageListener {
 				info.setUserId(citizen.getUserId());
 				info.setUserMail(citizen.getEmail());
 				info.setUserPhone(citizen.getTelNo());
-
+				info.setFullName(citizen.getFullName());
 			}
 
 			if (Validator.isNotNull(bussines)) {
 				info.setUserId(bussines.getUserId());
 				info.setUserMail(bussines.getEmail());
 				info.setUserPhone(bussines.getTelNo());
+				info.setFullName(bussines.getName());
 
 			}
 
@@ -659,6 +660,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 					infoEmploy.setUserMail(employee.getEmail());
 					infoEmploy.setUserPhone(employee.getTelNo());
 					infoEmploy.setGroupId(groupId);
+					infoEmploy.setFullName(employee.getFullName());
 				}
 
 				infoListEmploy.add(infoEmploy);
@@ -696,6 +698,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 					infoEmploy.setUserMail(employee.getEmail());
 					infoEmploy.setUserPhone(employee.getTelNo());
 					infoEmploy.setGroupId(groupId);
+					infoEmploy.setFullName(employee.getFullName());
 
 					if (employEvent.contains(NotificationEventKeys.OFFICIALS.EVENT3)) {
 						infoEmploy.setGroup(NotificationEventKeys.GROUP4);
