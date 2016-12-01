@@ -307,7 +307,7 @@
 
 		</liferay-util:buffer>
 
-		<aui:form name="fm" action="<%=dossier != null ? updateDossierURL : quickUpdateDossierURL %>" method="post">
+		<aui:form name="fm" action="<%=(dossier == null && allowQuickCreateDossier) ? quickUpdateDossierURL :updateDossierURL %>" method="post">
 
 			<aui:model-context bean="<%= dossier %>" model="<%= Dossier.class %>" />
 
@@ -409,12 +409,15 @@
 			/>
 
 			<div class="opencps-form-navigator-container">
-				<liferay-ui:form-navigator displayStyle="left-navigator"
+				<liferay-ui:form-navigator 
+					displayStyle="left-navigator"
 					backURL="<%= backURL %>"
 					categoryNames="<%= DossierMgtUtil._DOSSIER_CATEGORY_NAMES %>"
 					categorySections="<%= categorySections %>"
-					htmlBottom="<%= htmlBottom %>" htmlTop="<%= htmlTop %>"
-					jspPath='<%=templatePath + "dossier/" %>' showButtons="<%=false %>"
+					htmlBottom="<%= htmlBottom %>" 
+					htmlTop="<%= htmlTop %>"
+					jspPath='<%=templatePath + "dossier/" %>' 
+					showButtons="<%=false %>"
 				/>
 			</div>
 		</aui:form>

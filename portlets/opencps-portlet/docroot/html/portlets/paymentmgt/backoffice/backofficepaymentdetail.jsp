@@ -101,14 +101,14 @@
                 </div>
                 <div class="box50">
                 	<div>
-                        <p><span><liferay-ui:message key="doanh-nghiep-nop"/>:</span></p> <%=Validator.isNotNull(dossier)? HtmlUtil.escape(dossier.getSubjectName()): LanguageUtil.get(pageContext, "monitoring-chua-co") %>
+                        <p><span><liferay-ui:message key="subject-name"/>:</span></p> <%=Validator.isNotNull(dossier)? HtmlUtil.escape(dossier.getSubjectName()): LanguageUtil.get(pageContext, "monitoring-chua-co") %>
                     </div>
                     <div>
                         <p><span><liferay-ui:message key="ngay-da-bao-nop"/>:</span></p> <%=Validator.isNotNull(paymentFile.getConfirmDatetime())?HtmlUtil.escape(DateTimeUtil.convertDateToString(paymentFile.getRequestDatetime(), DateTimeUtil._VN_DATE_FORMAT)): LanguageUtil.get(pageContext, "monitoring-chua-co") %>
 
                     </div>
                     <div>
-                        <p><span><liferay-ui:message key="hinh-thuc-thuc-hien"/>:</span> 
+                        <p><span><liferay-ui:message key="payment-method"/>:</span> 
 	                        	
 	                	</p>
                			<%
@@ -134,13 +134,13 @@
 						%>
 							
 						<c:if test="<%= isCash %>">
-							[ <liferay-ui:message key="cash"></liferay-ui:message> ]
+							<liferay-ui:message key="cash"></liferay-ui:message>
 						</c:if>
 						<c:if test="<%= isKeypay %>">
-							[ <liferay-ui:message key="keypay"></liferay-ui:message> ]
+							<liferay-ui:message key="keypay"></liferay-ui:message>
 						</c:if>
 						<c:if test="<%= isBank %>">
-							[ <liferay-ui:message key="bank"></liferay-ui:message> ]
+							<liferay-ui:message key="bank"></liferay-ui:message>
 						</c:if>
 						<c:if test="<%= !isBank && !isKeypay && !isCash %>">
 							<font style="color: #fff;">-</font>
