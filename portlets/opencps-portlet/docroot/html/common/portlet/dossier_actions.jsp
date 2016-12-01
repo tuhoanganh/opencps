@@ -81,8 +81,12 @@
 					if(Validator.isNotNull(dossierFile)) {
 						version = 1;
 					}
-				}else{
-					List<DossierFile> dossierFiles = DossierFileLocalServiceUtil.getDossierFileByDID_DP(dossierId, dossierPartId);
+				}else {
+					
+					version = DossierFileLocalServiceUtil.countDossierFileByDID_DP(
+							dossierId, dossierPartId);
+					
+					/* List<DossierFile> dossierFiles = DossierFileLocalServiceUtil.getDossierFileByDID_DP(dossierId, dossierPartId);
 					
 					for(DossierFile file : dossierFiles) {
 						if(file.getSyncStatus() == 2) {
@@ -113,7 +117,7 @@
 							version = version + 1;
 						}
 					}
-					
+					 */
 				}
 				
 			}

@@ -2662,7 +2662,14 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			if (Validator.isNotNull(dossierPart.getPartName())) {
 				displayName = dossierPart.getPartName();
 			}
-
+			
+			if(dossierFileId > 0) {
+				dossierFile = DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
+				if(Validator.isNotNull(dossierFile)) {
+					DossierFileLocalServiceUtil.deleteDossierFile(dossierFileId, dossierFile.getFileEntryId());
+				}
+			}
+			
 			// #/issues/1112 create new dossierFile any case
 			// if (dossierFileId == 0) {
 			dossierFile = DossierFileLocalServiceUtil.addDossierFile(

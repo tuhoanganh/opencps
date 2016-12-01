@@ -1791,7 +1791,14 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			if (Validator.isNotNull(dossierPart.getPartName())) {
 				displayName = dossierPart.getPartName();
 			}
-
+			
+			if(dossierFileId > 0) {
+				dossierFile = DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
+				if(Validator.isNotNull(dossierFile)) {
+					DossierFileLocalServiceUtil.deleteDossierFile(dossierFileId, dossierFile.getFileEntryId());
+				}
+			}
+			
 		//	if (dossierFileId == 0) {
 				dossierFile = DossierFileLocalServiceUtil.addDossierFile(
 						serviceContext.getUserId(), dossierId, dossierPartId,
