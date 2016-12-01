@@ -1,3 +1,4 @@
+<%@page import="org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -85,6 +86,10 @@
 				<portlet:param name="mvcPath" value='<%=templatePath + "processordertodolist.jsp" %>'/>
 				<portlet:param name="backURL" value="<%=currentURL %>"/>
 			</portlet:renderURL>
+			
+			<div id ="<portlet:namespace />multiAssignBtn"> 
+			
+			</div>
 			<aui:nav-item 
 				cssClass="item-config search-input input-keyword"
 				id="processDossier" 
@@ -151,7 +156,7 @@
 					</aui:col>
 					<aui:col width="30" cssClass="search-col">
 						<liferay-ui:input-search 
-							id="keywords1"
+							id="keywords"
 							name="keywords"
 							title='<%= LanguageUtil.get(locale, "keywords") %>'
 							placeholder='<%=LanguageUtil.get(locale, "keywords") %>'
@@ -177,7 +182,13 @@
 		
 		if(processOrderIds != ''){
 			if(processOrderIds.length > 1){
-				alert('<%= UnicodeLanguageUtil.get(pageContext, "multiple-process-order-handle-is-developing") %>');
+				// alert('<%= UnicodeLanguageUtil.get(pageContext, "multiple-process-order-handle-is-developing") %>');
+				var multiAssignURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
+				multiAssignURL.setParameter("mvcPath","/html/portlets/processmgt/processorder/assign_multil_process_order.jsp");
+				multiAssignURL.setParameter("processOrderIds",processOrderIds.toString());
+				multiAssignURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>");
+				multiAssignURL.setPortletMode("normal");
+				openDialog(multiAssignURL.toString(), "assign-multi-dossier", "assign-multi-dossier");
 				return;
 			}else if(processOrderIds.length == 0){
 				alert('<%= UnicodeLanguageUtil.get(pageContext, "you-need-select-any-process-order-to-process") %>');
