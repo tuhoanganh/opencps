@@ -509,12 +509,8 @@
 
 		var actionNote = A.one('#<portlet:namespace />actionNote');
 		
-		console.log('actionNote: '+actionNote.val());
-		
 		if (actionNote.val() == ''){
 			return 'xin-moi-nhap-y-kien';
-		} else {
-			return '';
 		}
 		
 		var requiredDossierPartIds = [];
@@ -569,6 +565,7 @@
 		
 		//loadingMask.hide();
 		
+		return '';
 	}
 	
 
