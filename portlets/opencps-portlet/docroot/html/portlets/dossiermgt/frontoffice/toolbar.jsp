@@ -112,7 +112,7 @@
 		</c:otherwise>
 	</c:choose>
 
-	<aui:nav-bar-search cssClass="pull-right front-custom-select-search" style="width: 70%;">
+	<aui:nav-bar-search cssClass="pull-right front-custom-select-search">
 		<div class="form-search">
 			<aui:form 
 				action="<%= searchURL %>" method="post"
