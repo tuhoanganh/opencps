@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -309,7 +308,8 @@
 								</div>
 								
 								<div class="span7">
-									<%=processOrder.getAssignToUserName() %>
+									<%=Validator.isNotNull(processOrder.getAssignToUserName(processOrder.getDossierStatus())) ?
+										processOrder.getAssignToUserName(processOrder.getDossierStatus()) : StringPool.DASH %>
 								</div>
 							</div>
 							
