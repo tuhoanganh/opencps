@@ -1,4 +1,5 @@
 
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -80,9 +81,17 @@
 		
 	}
 	
+	String keywords = ParamUtil.getString(request, "keywords");
+	
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "dossier_suggestion.jsp");
 	iteratorURL.setParameter("dossierId", String.valueOf(dossierId));
+	iteratorURL.setParameter("keywords1", keywords);
+	
+	PortletURL searchURL = renderResponse.createRenderURL();
+	searchURL.setParameter("mvcPath", templatePath + "dossier_suggestion.jsp");
+	searchURL.setParameter("dossierId", String.valueOf(dossierId));
+	searchURL.setParameter("keywords1", keywords);
 
 	boolean success = false;
 	
@@ -94,6 +103,24 @@
 	
 %>
 
+
+<aui:nav-bar cssClass="custom-toolbar">
+	<aui:nav-bar-search cssClass="pull-right">
+		<div class="form-search">
+			<aui:form action="<%= searchURL %>" method="post" name="fmSearch">
+				<aui:row>
+						<liferay-ui:input-search 
+							id="keywords"
+							name="keywords"
+							title='<%= LanguageUtil.get(locale, "keywords") %>'
+							placeholder='<%= LanguageUtil.get(locale, "keywords") %>' 
+						/>
+				</aui:row>
+			</aui:form>
+		</div>
+	</aui:nav-bar-search>
+</aui:nav-bar>
+
 <div class="opencps-searchcontainer-wrapper" id = "<portlet:namespace/>opencps-searchcontainer-wrapper">
 	<liferay-ui:search-container 
 			emptyResultsMessage="no-serviceinfo-were-found"
@@ -104,8 +131,8 @@
 		
 		<liferay-ui:search-container-results>
 			<%
-				dossiersSuggestion = DossierLocalServiceUtil.getDossierSuggesstion(dossierStatusConfig,dossierPartTypes , templateFileNos,dossierPartNos ,searchContainer.getStart(), searchContainer.getEnd());
-				totalCount = DossierLocalServiceUtil.countDossierSuggesstion(dossierStatusConfig,dossierPartTypes , templateFileNos,dossierPartNos);
+				dossiersSuggestion = DossierLocalServiceUtil.getDossierSuggesstion(keywords ,dossierStatusConfig,dossierPartTypes , templateFileNos,dossierPartNos ,searchContainer.getStart(), searchContainer.getEnd());
+				totalCount = DossierLocalServiceUtil.countDossierSuggesstion(keywords, dossierStatusConfig,dossierPartTypes , templateFileNos,dossierPartNos);
 				
 				results = dossiersSuggestion;
 				total = totalCount;
