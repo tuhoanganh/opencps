@@ -1806,7 +1806,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				if (Validator.isNotNull(dossierFile)) {
 					DossierFileLocalServiceUtil.deleteDossierFile(
 							dossierFileId, dossierFile.getFileEntryId());
-					regexStr = "_13_WAR_opencpsportlet_dossierFileId="
+					regexStr = "_16_WAR_opencpsportlet_dossierFileId="
 							+ dossierFileId;
 				}
 			}
@@ -1820,6 +1820,27 @@ public class ProcessOrderPortlet extends MVCPortlet {
 					formData, fileEntryId, dossierFileMark, dossierFileType,
 					dossierFileNo, dossierFileDate, original, syncStatus,
 					serviceContext);
+			
+			if (Validator.isNotNull(dossierFile)) {
+				JSONObject sampleDataJson = JSONFactoryUtil
+						.createJSONObject(dossierPart.getSampleData());
+
+				JSONObject formDataJson = JSONFactoryUtil
+						.createJSONObject(dossierFile.getFormData());
+
+				String dossierFileNoKey = sampleDataJson
+						.getString(PortletConstants.DOSSIER_FILE_NO_KEY);
+				String dossierFileDateKey = sampleDataJson
+						.getString(PortletConstants.DOSSIER_FILE_NO_DATE);
+
+				dossierFile.setDossierFileNo(formDataJson
+						.getString(dossierFileNoKey));
+				dossierFile.setDossierFileDate(DateTimeUtil
+						.convertStringToDate(formDataJson
+								.getString(dossierFileDateKey)));
+				
+				DossierFileLocalServiceUtil.updateDossierFile(dossierFile);
+			}
 			/*
 			 * } else { dossierFile = DossierFileLocalServiceUtil
 			 * .getDossierFile(dossierFileId); dossierFileMark =
@@ -1901,7 +1922,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 					&& Validator.isNotNull(redirectURL)
 					&& Validator.isNotNull(regexStr)) {
 
-				String newRegexStr = "_13_WAR_opencpsportlet_dossierFileId="
+				String newRegexStr = "_16_WAR_opencpsportlet_dossierFileId="
 						+ dossierFile.getDossierFileId();
 
 				redirectURL = redirectURL.replaceAll(regexStr, newRegexStr);
