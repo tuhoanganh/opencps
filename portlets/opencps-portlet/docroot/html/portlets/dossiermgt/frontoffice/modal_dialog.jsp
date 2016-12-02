@@ -25,8 +25,6 @@
 	
 	long primaryKey = ParamUtil.getLong(request, "primaryKey");
 	
-	System.out.println("primaryKey>>>>>>>>>>>>>>>>>>>>>> " + primaryKey);
-	
 %>
 
 <c:choose>

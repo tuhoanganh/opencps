@@ -3278,8 +3278,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		}
 		// TODO Validate reference of:
 		// city_
-		// |_district_
-		// |_ward
+		// 		|_district_
+		// 					|_ward
 
 		if (Validator.isNull(accountType)) {
 			throw new InvalidDossierObjectException();

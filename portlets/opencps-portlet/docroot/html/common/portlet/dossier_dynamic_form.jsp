@@ -80,8 +80,6 @@
 	
 	String[] docTypes = StringUtil.split(ParamUtil.getString(request, "reportTypes", ".pdf"));
 	
-	System.out.println("primaryKey___________________________________________  " + primaryKey);
-	
 	if(primaryKey > 0){
 		dossierFileId = primaryKey;
 	}
