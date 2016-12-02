@@ -585,6 +585,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 			notiMsg.setDossierId(dossierId);
 			notiMsg.setNotificationEventName(event);
 			notiMsg.setProcessOrderId(processOrderId);
+			notiMsg.setPaymentFileId(paymentFileId);
 			notiMsg.setType("SMS, INBOX, EMAIL");
 
 			SendNotificationMessage.InfoList info = new SendNotificationMessage.InfoList();
@@ -638,6 +639,7 @@ public class BackOfficeProcessEngine implements MessageListener {
 			notiMsg.setDossierId(dossierId);
 			notiMsg.setNotificationEventName(employEvent);
 			notiMsg.setProcessOrderId(processOrderId);
+			notiMsg.setPaymentFileId(paymentFileId);
 			notiMsg.setType("SMS, INBOX, EMAIL");
 
 			if (assignToUserId != 0) {
