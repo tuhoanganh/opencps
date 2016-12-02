@@ -1562,24 +1562,24 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 							dictCollection.getDictCollectionId(), wardCode);
 
 			String[] dictItemIds = new String[3];
-			
-			dictItemIds[0] = city != null ? String
-					.valueOf(city.getItemCode()) : StringPool.BLANK;
+
+			dictItemIds[0] = city != null ? String.valueOf(city.getItemCode())
+					: StringPool.BLANK;
 
 			dictItemIds[1] = district != null ? String.valueOf(district
 					.getItemCode()) : StringPool.BLANK;
 
-			dictItemIds[2] = ward != null ? String
-					.valueOf(ward.getItemCode()) : StringPool.BLANK;
+			dictItemIds[2] = ward != null ? String.valueOf(ward.getItemCode())
+					: StringPool.BLANK;
 
-			//dictItemIds[0] = city != null ? String
-			//		.valueOf(city.getDictItemId()) : StringPool.BLANK;
+			// dictItemIds[0] = city != null ? String
+			// .valueOf(city.getDictItemId()) : StringPool.BLANK;
 
-			//dictItemIds[1] = district != null ? String.valueOf(district
-			//		.getDictItemId()) : StringPool.BLANK;
+			// dictItemIds[1] = district != null ? String.valueOf(district
+			// .getDictItemId()) : StringPool.BLANK;
 
-			//dictItemIds[2] = ward != null ? String
-			//		.valueOf(ward.getDictItemId()) : StringPool.BLANK;
+			// dictItemIds[2] = ward != null ? String
+			// .valueOf(ward.getDictItemId()) : StringPool.BLANK;
 
 			selectedItems = StringUtil.merge(dictItemIds);
 		} catch (Exception e) {
@@ -1599,6 +1599,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	@Override
 	protected void include(String path, RenderRequest renderRequest,
 			RenderResponse renderResponse) throws IOException, PortletException {
+
+		_log.info("path )))))))))))))))))))))) " + path);
 
 		if (!_hasPermission) {
 			path = "/html/portlets/dossiermgt/frontoffice/warning.jsp";
@@ -2631,6 +2633,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				DossierDisplayTerms.FILE_GROUP_ID);
 		long groupDossierPartId = ParamUtil.getLong(actionRequest,
 				"groupDossierPartId");
+		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
 
 		long fileEntryId = 0;
 
@@ -2649,6 +2652,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		String displayName = StringPool.BLANK;
 		String groupName = ParamUtil.getString(actionRequest,
 				DossierFileDisplayTerms.GROUP_NAME);
+
+		String regexStr = StringPool.BLANK;
 		Date dossierFileDate = null;
 
 		try {
@@ -2666,6 +2671,18 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 			if (Validator.isNotNull(dossierPart.getPartName())) {
 				displayName = dossierPart.getPartName();
+			}
+
+			if (dossierFileId > 0) {
+				DossierFile dossierFileDel = DossierFileLocalServiceUtil
+						.getDossierFile(dossierFileId);
+				if (Validator.isNotNull(dossierFileDel)
+						&& dossierFileDel.getSyncStatus() == PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC) {
+					DossierFileLocalServiceUtil.deleteDossierFile(
+							dossierFileId, dossierFileDel.getFileEntryId());
+					regexStr = "_13_WAR_opencpsportlet_dossierFileId="
+							+ dossierFileId;
+				}
 			}
 
 			// #/issues/1112 create new dossierFile any case
@@ -2710,12 +2727,27 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 			_log.error(e);
 		} finally {
-			actionResponse.setRenderParameter("primaryKey", String
-					.valueOf(dossierFile != null ? dossierFile
-							.getDossierFileId() : 0));
-			actionResponse.setRenderParameter("content", "declaration-online");
-			actionResponse.setRenderParameter("jspPage",
-					"/html/portlets/dossiermgt/frontoffice/modal_dialog.jsp");
+
+			if (Validator.isNotNull(dossierFile)
+					&& Validator.isNotNull(redirectURL)
+					&& Validator.isNotNull(regexStr)) {
+
+				String newRegexStr = "_13_WAR_opencpsportlet_dossierFileId="
+						+ dossierFile.getDossierFileId();
+
+				redirectURL = redirectURL.replaceAll(regexStr, newRegexStr);
+
+				actionResponse.sendRedirect(redirectURL);
+			} else {
+				actionResponse.setRenderParameter("primaryKey", String
+						.valueOf(dossierFile != null ? dossierFile
+								.getDossierFileId() : 0));
+				actionResponse.setRenderParameter("content",
+						"declaration-online");
+				actionResponse
+						.setRenderParameter("jspPage",
+								"/html/portlets/dossiermgt/frontoffice/modal_dialog.jsp");
+			}
 		}
 	}
 
@@ -3246,8 +3278,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		}
 		// TODO Validate reference of:
 		// city_
-		// 		|_district_
-		// 					|_ward
+		// |_district_
+		// |_ward
 
 		if (Validator.isNull(accountType)) {
 			throw new InvalidDossierObjectException();
@@ -3750,19 +3782,19 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			if (city != null) {
 				cityCode = city.getItemCode();
 				cityName = city.getItemName(themeDisplay.getLocale());
-				
+
 			}
 
 			if (district != null) {
 				districtCode = district.getItemCode();
 				districtName = district.getItemName(themeDisplay.getLocale());
-				
+
 			}
 
 			if (ward != null) {
 				wardCode = ward.getItemCode();
 				wardName = ward.getItemName(themeDisplay.getLocale());
-				
+
 			}
 
 			validateDossier(cityCode, districtCode, wardCode, accountType,

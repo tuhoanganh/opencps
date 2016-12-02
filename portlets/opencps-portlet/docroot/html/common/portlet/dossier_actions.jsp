@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,6 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+<%@page import="java.util.List"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
@@ -66,6 +66,9 @@
 	
 	int version  = 0;
 	
+	boolean hasDossierFileSync = false;
+	boolean hasDossierFileNoSync = false;
+	
 	if(dossierId > 0 && dossierPartId > 0){
 		try{
 			if(isChildDossierPart && fileGroupId > 0){
@@ -78,11 +81,47 @@
 					if(Validator.isNotNull(dossierFile)) {
 						version = 1;
 					}
-				}else{
-					version = DossierFileLocalServiceUtil.countDossierFileByDID_DP(dossierId, dossierPartId);
+				}else {
+					
+					version = DossierFileLocalServiceUtil.countDossierFileByDID_DP(
+							dossierId, dossierPartId);
+					
+					/* List<DossierFile> dossierFiles = DossierFileLocalServiceUtil.getDossierFileByDID_DP(dossierId, dossierPartId);
+					
+					for(DossierFile file : dossierFiles) {
+						if(file.getSyncStatus() == 2) {
+							version++;
+							hasDossierFileSync = true;
+						} 
+						
+						if(file.getRemoved() == 0 && file.getSyncStatus() != 2) {
+							hasDossierFileNoSync = true;
+						}
+					}
+
+					if(version == DossierFileLocalServiceUtil.countDossierFileByDID_DP(
+									dossierId, dossierPartId) && hasDossierFileSync) {
+						
+							version = DossierFileLocalServiceUtil.countDossierFileByDID_DP(
+								dossierId, dossierPartId);
+						
+					} else if(version == 0) {
+						if(hasDossierFileNoSync) {
+							version = 1;
+						} else {
+							version = 0;
+						}
+						
+					} else {
+						if(hasDossierFileNoSync) {
+							version = version + 1;
+						}
+					}
+					 */
 				}
 				
 			}
+			
 			
 		}catch(Exception e){}
 					
