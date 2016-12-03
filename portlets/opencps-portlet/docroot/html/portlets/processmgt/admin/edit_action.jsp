@@ -1,4 +1,7 @@
 
+<%@page import="com.liferay.portlet.expando.model.ExpandoValue"%>
+<%@page import="com.liferay.portal.service.ClassNameLocalServiceUtil"%>
+<%@page import="com.liferay.portlet.expando.service.ExpandoValueLocalServiceUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -115,6 +118,8 @@
 	}
 	
 %>
+
+<liferay-ui:error key="hanh-dong-duoc-kich-hoat-tu-dong" message="hanh-dong-duoc-kich-hoat-tu-dong" />
 
 <portlet:actionURL name="updateAction" var="updateActionURL"/>
 <portlet:renderURL var="getAssignUsersURL" windowState="<%=LiferayWindowState.EXCLUSIVE.toString() %>">
@@ -325,5 +330,48 @@
 		<aui:button type="cancel" name="cencel" />
 	</aui:button-row>
 	
+</aui:form>
+
+<portlet:actionURL var="updateRequiedActionNoteURL" name="updateRequiedActionNote" />
+
+<aui:form action="<%=updateRequiedActionNoteURL.toString() %>" method="post" name="updateRequiedActionNoteFm">
+	<liferay-ui:panel-container 
+		extended="<%= false %>" 
+		id="requiedActionNotePanelContainer" 
+	>
+		<liferay-ui:panel 
+			collapsible="<%= true %>" 
+			extended="<%= false %>" 
+			id="requiedActionNotePanel" 
+			title="update-requied-process-action-note"
+		>
+			<aui:input name="returnURL" type="hidden" value="<%= currentURL %>"/>
+			<aui:input name="processWorkflowId" type="hidden" 
+				value="<%= Validator.isNotNull(workflow) ? workflow.getProcessWorkflowId() : StringPool.BLANK %>"
+			/>
+			
+			<%
+				ExpandoValue requiedActionNote = null;
+				try {
+					requiedActionNote = 
+							ExpandoValueLocalServiceUtil.getValue(
+								themeDisplay.getCompanyId(), 
+								ClassNameLocalServiceUtil.getClassNameId(ProcessStep.class.getName()), 
+								ProcessStep.class.getName(), 
+								"requiedProcessActionNote", 
+								processWorkflowId);
+				} catch (Exception e){
+					//
+				}
+				System.out.println("=============== getProcessWorkflowId: "+workflow.getProcessWorkflowId());				
+			%>
+			
+			<aui:input name="requiedActionNote" type="checkbox" 
+				checked="<%=requiedActionNote != null ? requiedActionNote.getBoolean() : false %>"
+			/>
+			
+			<aui:button type="submit" name="Save" value="save"/>
+		</liferay-ui:panel>
+	</liferay-ui:panel-container>
 </aui:form>
 

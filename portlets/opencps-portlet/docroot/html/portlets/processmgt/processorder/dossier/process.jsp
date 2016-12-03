@@ -509,11 +509,9 @@
 
 		var actionNote = A.one('#<portlet:namespace />actionNote');
 		
-		if (actionNote.val() == ''){
-			return 'xin-moi-nhap-y-kien';
-		}
-		
 		var requiredDossierPartIds = [];
+		var requiredActionNote = false;
+		var required = false;
 		
 		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.ACTION_PHASE) %>');
 		portletURL.setParameter("javax.portlet.action", "validateAssignTask");
@@ -542,8 +540,14 @@
 			    	success: function(event, id, obj) {
 			    		
 			    		var response = this.get('responseData');
+			    		
+						responseObj = JSON.parse(response);
 						
-						requiredDossierPartIds = JSON.parse(response);
+						requiredDossierPartIds = responseObj.arrayDossierpartIds;
+						
+						requiredActionNote = responseObj.requiedActionNote;
+						
+						//requiredDossierPartIds = JSON.parse(response);
 						
 						for(var i = 0; i < requiredDossierPartIds.length; i++){
 							var id = requiredDossierPartIds[i];
@@ -564,6 +568,13 @@
 		);
 		
 		//loadingMask.hide();
+		
+		if (required){
+			return 'xin-moi-nhap-thanh-phan-ho-so-bat-buoc';
+		}
+		if (requiredActionNote == true && actionNote.val() == ''){
+			return 'xin-moi-nhap-y-kien';
+		}
 		
 		return '';
 	}
