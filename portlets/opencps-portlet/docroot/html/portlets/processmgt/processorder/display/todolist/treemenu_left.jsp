@@ -275,7 +275,9 @@
 											<i class='<%="fa fa-circle sx10 " + processOrder.getDossierStatus()%>'></i>
 										</div>
 										<div class="span4 bold">
-											<liferay-ui:message key="reception-no"/>
+											<!-- hot fix moit  -->
+											<%-- <liferay-ui:message key="reception-no"/> --%>
+											<liferay-ui:message key="dossier-no"/>
 										</div>
 										<div class="span7">
 											<%=processOrder.getReceptionNo() %>
