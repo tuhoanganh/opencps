@@ -166,7 +166,7 @@
 											<i class='<%="fa fa-circle sx10 " + dossier.getDossierStatus()%>'></i>
 										</div>
 										<div class="span3 bold-label">
-											<liferay-ui:message key="dossier-no"/>
+											<liferay-ui:message key="reception-no"/>
 										</div>
 										
 										<div class="span8"><%=dossier.getReceptionNo() %></div>
