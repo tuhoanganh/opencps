@@ -676,7 +676,7 @@
 									submitButton.on('click', function(){
 										var msg = validateRequiredResult(dossierId, processStepId, processWorkflowId);
 										if(msg != '') {
-											alert(msg);
+											alert(Liferay.Language.get(msg));
 											return;
 										} else{
 											A.io.request(

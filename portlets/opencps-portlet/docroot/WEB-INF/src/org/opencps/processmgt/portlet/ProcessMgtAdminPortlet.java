@@ -809,7 +809,8 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 					
 					actionResponse.sendRedirect(returnURL);
 				} catch (Exception e) {
-					//
+					SessionErrors.add(actionRequest, "yeu-cau-thuc-hien-khong-thanh-cong");
+					actionResponse.sendRedirect(returnURL);
 				}
 			} else {
 				SessionErrors.add(actionRequest, "hanh-dong-duoc-kich-hoat-tu-dong");

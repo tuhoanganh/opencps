@@ -120,6 +120,7 @@
 %>
 
 <liferay-ui:error key="hanh-dong-duoc-kich-hoat-tu-dong" message="hanh-dong-duoc-kich-hoat-tu-dong" />
+<liferay-ui:error key="yeu-cau-thuc-hien-khong-thanh-cong" message="yeu-cau-thuc-hien-khong-thanh-cong" />
 
 <portlet:actionURL name="updateAction" var="updateActionURL"/>
 <portlet:renderURL var="getAssignUsersURL" windowState="<%=LiferayWindowState.EXCLUSIVE.toString() %>">
