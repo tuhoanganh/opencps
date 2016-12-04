@@ -868,15 +868,6 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 				processWorkflowId, 
 				requiedActionNote);
 		
-		
-		
-		
-//		addValue(
-//				classNameId, 
-//				expandoTable.getTableId(),
-//				expandoColumn.getColumnId(), 
-//				processWorkflowId, 
-//				String.valueOf(requiedActionNote));
 	}
 
 	private Log _log = LogFactoryUtil.getLog(ProcessMgtAdminPortlet.class);
