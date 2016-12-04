@@ -22,6 +22,9 @@ package org.opencps.util;
  */
 public class PortletConstants {
 
+	public static final String DOSSIER_FILE_NO_KEY = "_dossierFileNo";
+	public static final String DOSSIER_FILE_NO_DATE = "_dossierFileDate";
+	
 	public static final int DRAFTING = 0;
 	public static final int INUSE = 1;
 	public static final int EXPIRED = 2;

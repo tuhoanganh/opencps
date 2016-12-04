@@ -2405,24 +2405,24 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		return dossierPersistence.countByT_DS(dossierTemplateId, dossierStatus);
 	}
 
-	public List<Dossier> getDossierSuggesstion(String dossierStatus,
+	public List<Dossier> getDossierSuggesstion(long userId ,String dossierFileNo ,String dossierStatus,
 			List<Integer> partTypes, List<String> templateFileNos,
 			List<String> partNos, int start, int end) throws SystemException {
 
 		String partTypesStr = StringUtil.merge(partTypes);
 		String templateFileNosStr = StringUtil.merge(templateFileNos, "','");
 		String partNosStr = StringUtil.merge(partNos, "','");
-		return dossierFinder.searchDossierSuggesstion(dossierStatus,
+		return dossierFinder.searchDossierSuggesstion(userId,dossierFileNo ,dossierStatus,
 				partTypesStr, templateFileNosStr, partNosStr, start, end);
 	}
 
-	public int countDossierSuggesstion(String dossierStatus,
+	public int countDossierSuggesstion(long userId, String dossierFileNo, String dossierStatus,
 			List<Integer> partTypes, List<String> templateFileNos,
 			List<String> partNos) throws SystemException {
 		String partTypesStr = StringUtil.merge(partTypes);
 		String templateFileNosStr = StringUtil.merge(templateFileNos, "','");
 		String partNosStr = StringUtil.merge(partNos, "','");
-		return dossierFinder.countDossierSuggesstion(dossierStatus,
+		return dossierFinder.countDossierSuggesstion(userId,dossierFileNo,dossierStatus,
 				partTypesStr, templateFileNosStr, partNosStr);
 	}
 
