@@ -570,10 +570,16 @@
 		//loadingMask.hide();
 		
 		if (required){
-			return 'xin-moi-nhap-thanh-phan-ho-so-bat-buoc';
+			return 'please-upload-dossier-part-required-before-send';
 		}
 		if (requiredActionNote == true && actionNote.val() == ''){
-			return 'xin-moi-nhap-y-kien';
+			actionNote.addClass('changeDefErr');
+			A.one('#<portlet:namespace/>defErrActionNote').addClass('displayDefErr');
+			
+			return 'please-add-note-before-send';
+		} else {
+			actionNote.removeClass('changeDefErr');
+			A.one('#<portlet:namespace/>defErrActionNote').removeClass('displayDefErr');
 		}
 		
 		return '';
@@ -626,9 +632,10 @@
 		if(assignFormDisplayStyle == 'popup' ) {
 			portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>");
 			portletURL.setParameter("backURL", '<%=backURL%>');
-			<portlet:namespace/>validateRequiredResult(dossierId, processStepId, processWorkflowId);
-			if(required === true) {
-				alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-required-before-send") %>');
+			//<portlet:namespace/>validateRequiredResult(dossierId, processStepId, processWorkflowId);
+			var msg = validateRequiredResult(dossierId, processStepId, processWorkflowId);
+			if(msg != '') {
+				alert(Liferay.Language.get(msg));
 				return;
 			} 
 			openDialog(portletURL.toString(), '<portlet:namespace />assignToUser', '<%= UnicodeLanguageUtil.get(pageContext, "handle") %>');
@@ -671,7 +678,6 @@
 									form.attr('action', action);
 								}
 							
-								
 								if(submitButton){
 									submitButton.on('click', function(){
 										var msg = validateRequiredResult(dossierId, processStepId, processWorkflowId);
