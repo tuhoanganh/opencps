@@ -128,7 +128,7 @@
 	                            </aui:select>   
 	                        </aui:col>
 	                        
-	                        <aui:col width="50">
+	                        <aui:col width="50" cssClass="search-input input-keyword">
 	                            <liferay-ui:input-search 
 	                                id="keywords1" 
 	                                name="keywords" 
@@ -141,7 +141,7 @@
 			    
 			     <c:when test="<%=tabs1.contentEquals(UserMgtUtil.TOP_TABS_WORKINGUNIT) %>">
                       <aui:row>
-                        <aui:col width="20">
+                        <aui:col cssClass="span4">
                             <aui:select name="<%=WorkingUnitDisplayTerms.WORKINGUNIT_ISEMPLOYER %>" label="<%=StringPool.BLANK %>"
                             	onChange='<%=renderResponse.getNamespace() + "searchByIsemployee(this)"%>'
                             >

@@ -105,13 +105,7 @@
 						<portlet:param name="backURL" value="<%=currentURL %>"/>
 						<portlet:param name="backURLFromList" value="<%=currentURL %>"/>
 					</portlet:renderURL>
-					<%-- <aui:nav-item 
-						id="addDictItem" 
-						label="add-dossier" 
-						iconCssClass="icon-plus"  
-						href="<%=addDossierURL %>"
-						cssClass="action-button"
-					/> --%>
+
 					<aui:button icon="icon-plus" href="<%=addDossierURL %>" cssClass="action-button" value="select-service-info"/>
 				</c:if>
 			</aui:nav>
@@ -140,11 +134,7 @@
 												cssClass="search-input input-keyword"
 											/>
 										</aui:col>
-										<style>
-											.navbar-search.pull-right.front-custom-select-search{
-												width: 100% !important;
-											}
-										</style>
+
 									</aui:row>
 								</c:when>
 								<c:otherwise>

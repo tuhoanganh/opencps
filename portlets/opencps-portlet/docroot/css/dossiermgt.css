@@ -46,7 +46,6 @@
 
 .opencps.dossiermgt.dossier-part-tree {
     display: table;
-    padding: 5px 0;
     width: 100%;
 }
 
@@ -143,4 +142,5 @@ level-0 opencps dossiermgt dossier-part .row-icon {
 .row-icon-stt-new {
     width: auto;
     text-align: right;
+    white-space: nowrap;
 }

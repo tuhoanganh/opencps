@@ -64,15 +64,6 @@
 
 						</aui:col>
 						<aui:col width="25" cssClass="search-col">
-							<%-- <datamgt:ddr 
-								cssClass="search-input select-box"
-								depthLevel="1" 
-								dictCollectionCode="SERVICE_DOMAIN"
-								itemNames="<%= ServiceDisplayTerms.SERVICE_DOMAINCODE %>"
-								itemsEmptyOption="true"	
-								selectedItems="<%= domainCode %>"
-							>
-							</datamgt:ddr> --%>
 							
 							<aui:select name="<%=ServiceDisplayTerms.SERVICE_DOMAINCODE %>" label="">
 								<aui:option value="">

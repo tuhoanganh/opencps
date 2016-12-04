@@ -18,7 +18,6 @@
 package org.opencps.backend.util;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -88,6 +87,8 @@ public class BackendUtils {
 
 		boolean validPreCondition = true;
 
+		_log.info("pattern ################################ " + pattern);
+		
 		List<String> lsCondition = ListUtil.toList(StringUtil.split(pattern,
 				StringPool.COMMA));
 
@@ -169,9 +170,10 @@ public class BackendUtils {
 				if (splitCondition.length == 2) {
 					waitingTime = splitCondition[1];
 				}
+				
+				_log.info("#####################################waitingTime " + waitingTime);
 
-				validWaiting = _checkWaitingCondition(dossierId,
-						waitingTime);
+				validWaiting = _checkWaitingCondition(dossierId, waitingTime);
 				continue;
 			}
 
@@ -198,14 +200,19 @@ public class BackendUtils {
 			ProcessOrder processOrder = ProcessOrderLocalServiceUtil
 					.getProcessOrder(dossierId, dossier.getGroupId());
 
-			if (dossierStatus.contains(PortletConstants.DOSSIER_STATUS_WAITING)) {
+			if (dossierStatus.equals(PortletConstants.DOSSIER_STATUS_WAITING)) {
 
-				Date endDate = HolidayUtils.getEndDate(processOrder.getActionDatetime(),
-						pattern);
-				
+				Date endDate = HolidayUtils.getEndDate(
+						processOrder.getActionDatetime(), pattern);
+
 				Date now = new Date();
-				
-				if(now.compareTo(endDate) >=0 ){
+
+				_log.info("endDate #################################### "
+						+ endDate.toString());
+				_log.info("endDate #################################### "
+						+ now.toString());
+
+				if (now.compareTo(endDate) >= 0) {
 					isCondition = false;
 				}
 

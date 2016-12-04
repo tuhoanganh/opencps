@@ -275,6 +275,10 @@
 					%>
 				</aui:validator>
 			</aui:input>
+			<div class="alert alert-info" role="alert">
+				<liferay-ui:message key="dossier-file-type-excep"/>: <%= StringUtil.merge(PortletPropsValues.ACCOUNTMGT_FILE_TYPE) %> --- <liferay-ui:message key="dossier-file-size-excep"/>: <%= (PortletPropsValues.ACCOUNTMGT_FILE_SIZE/1024)/1024 %> MB
+			</div>
+			<font class="requiredStyleCSS"><liferay-ui:message key="control-with-star-is-required"/></font>
 		</aui:col>
 	</aui:row>
 	

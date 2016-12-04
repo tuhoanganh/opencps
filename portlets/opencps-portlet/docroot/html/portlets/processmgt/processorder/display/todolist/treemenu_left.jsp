@@ -1,4 +1,3 @@
-
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
+<%@page import="java.util.Date"%>
 <%@page import="com.liferay.portal.kernel.dao.search.RowChecker"%>
 <%@page import="com.liferay.portal.kernel.json.JSONFactoryUtil"%>
 <%@page import="com.liferay.portal.kernel.json.JSONObject"%>
@@ -39,6 +38,7 @@
 <%@page import="org.opencps.processmgt.util.ProcessUtils"%>
 <%@page import="org.opencps.util.MessageKeys"%>
 <%@page import="org.opencps.util.WebKeys"%>
+<%@page import="org.opencps.holidayconfig.util.HolidayCheckUtils"%>
 
 <%@ include file="../../init.jsp"%>
 
@@ -258,9 +258,11 @@
 								processURL.setParameter(ProcessOrderDisplayTerms.PROCESS_ORDER_ID, String.valueOf(processOrder.getProcessOrderId()));
 								processURL.setParameter("backURL", currentURL);
 								processURL.setParameter("isEditDossier", (processOrder.isReadOnly() || (processOrder.getAssignToUsesrId() != 0 &&  processOrder.getAssignToUsesrId() != user.getUserId())) ? String.valueOf(false) : String.valueOf(true));
-							
-								String deadlineVal = Validator.isNotNull(processOrder.getDealine()) ? processOrder.getDealine() : StringPool.DASH;
-								
+						
+								int dateOver = HolidayCheckUtils.calculatorDateOver(Validator.isNotNull(processOrder.getActionDatetime()) ? 
+										processOrder.getActionDatetime() : new Date(),
+										new Date(), processOrder.getDaysDuration());
+						
 								String hrefFix = "location.href='" + processURL.toString()+"'";
 								String cssStatusColor = "status-color-" + processOrder.getDossierStatus();
 							%>
@@ -271,10 +273,10 @@
 										<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
 											<i class='<%="fa fa-circle sx10 " + processOrder.getDossierStatus()%>'></i>
 										</div>
-										<div class="span2 bold">
+										<div class="span4 bold">
 											<liferay-ui:message key="reception-no"/>
 										</div>
-										<div class="span9">
+										<div class="span7">
 											<%=processOrder.getReceptionNo() %>
 										</div>
 									</div>
@@ -282,10 +284,7 @@
 									<div class="row-fluid">
 										<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
 										</div>
-										<div class="span2 bold">
-											<liferay-ui:message key="service-name"/>
-										</div>
-										<div class="span9">
+										<div class="span11">
 											<%=processOrder.getServiceName() %>
 										</div>
 									</div>
@@ -309,7 +308,8 @@
 								</div>
 								
 								<div class="span7">
-									<%=processOrder.getAssignToUserName() %>
+									<%=Validator.isNotNull(processOrder.getAssignToUserName(processOrder.getDossierStatus())) ?
+										processOrder.getAssignToUserName(processOrder.getDossierStatus()) : StringPool.DASH %>
 								</div>
 							</div>
 							
@@ -328,7 +328,7 @@
 									</div>
 									
 									<div class='<%="span7"%>'>
-										<%= deadlineVal %>
+										<%=dateOver >= 0 ? "<div class='ocps-free-day'>"+ StringUtil.replace(LanguageUtil.get(themeDisplay.getLocale(), "until-x-day"), "{0}", String.valueOf(dateOver))+"</div>":"<div class='ocps-over-day'>"+StringUtil.replace(LanguageUtil.get(themeDisplay.getLocale(), "over-x-day"), "{0}", String.valueOf(Math.abs(dateOver))) +"</div>"%>
 									</div>
 								</div>
 							</liferay-util:buffer>

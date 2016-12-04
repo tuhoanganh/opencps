@@ -277,7 +277,8 @@
 	<div class="row-fluid">
 	
 	<c:if test="<%= processWorkflow.getAssignUser() %>">
-			<div class="<%=cssCol%>">
+	
+			<div class="span12">
 				<aui:select 
 					name="<%=ProcessOrderDisplayTerms.ASSIGN_TO_USER_ID %>" 
 					label="assign-to-next-user" 
@@ -299,7 +300,7 @@
 		
 		<c:if test="<%= processWorkflow.getRequestPayment() %>">
 		
-			<div class="<%=cssCol%>">
+			<div class="span12">
 				<aui:input 
 					cssClass="input100"
 					name="<%=ProcessOrderDisplayTerms.PAYMENTVALUE %>" 
@@ -311,7 +312,7 @@
 		</c:if>		
 		
 		<c:if test="<%= processWorkflow.getGenerateReceptionNo() %>">
-			<div class="<%=cssCol%>">
+			<div class="span12">
 				<aui:input 
 					name="<%=ProcessOrderDisplayTerms.RECEPTION_NO %>" 
 					label="reception-no" 
@@ -321,7 +322,7 @@
 		</c:if>
 		
 		<c:if test="<%= processWorkflow.getGenerateDeadline() %>">
-			<div class="<%=cssCol%>">
+			<div class="span12">
 				<aui:row>
 					<label class="control-label custom-lebel" for='<portlet:namespace/><%="deadline" %>'>
 						<liferay-ui:message key="return-date"/>
