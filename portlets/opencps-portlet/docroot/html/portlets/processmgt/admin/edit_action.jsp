@@ -363,7 +363,6 @@
 				} catch (Exception e){
 					//
 				}
-				System.out.println("=============== getProcessWorkflowId: "+workflow.getProcessWorkflowId());				
 			%>
 			
 			<aui:input name="requiedActionNote" type="checkbox" 
