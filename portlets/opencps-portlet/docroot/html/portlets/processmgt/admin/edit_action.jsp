@@ -1,7 +1,4 @@
 
-<%@page import="com.liferay.portlet.expando.model.ExpandoValue"%>
-<%@page import="com.liferay.portal.service.ClassNameLocalServiceUtil"%>
-<%@page import="com.liferay.portlet.expando.service.ExpandoValueLocalServiceUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -36,6 +33,9 @@
 <%@page import="org.opencps.processmgt.model.ServiceProcess"%>
 <%@page import="org.opencps.servicemgt.search.ServiceDisplayTerms"%>
 <%@page import="org.opencps.processmgt.model.ProcessStep"%>
+<%@page import="com.liferay.portlet.expando.model.ExpandoValue"%>
+<%@page import="com.liferay.portal.service.ClassNameLocalServiceUtil"%>
+<%@page import="com.liferay.portlet.expando.service.ExpandoValueLocalServiceUtil"%>
 <%@ include file="../init.jsp" %>
 
 <%
@@ -336,12 +336,9 @@
 
 <aui:form action="<%=updateRequiedActionNoteURL.toString() %>" method="post" name="updateRequiedActionNoteFm">
 	<liferay-ui:panel-container 
-		extended="<%= false %>" 
 		id="requiedActionNotePanelContainer" 
 	>
 		<liferay-ui:panel 
-			collapsible="<%= true %>" 
-			extended="<%= false %>" 
 			id="requiedActionNotePanel" 
 			title="update-requied-process-action-note"
 		>

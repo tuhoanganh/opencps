@@ -820,8 +820,7 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 	
 	private void addExpandoProcessWorkFlow(ThemeDisplay themeDisplay,
 			long processWorkflowId, boolean requiedActionNote) 
-			throws PortalException, SystemException 
-			{
+			throws PortalException, SystemException {
 		
 		long classNameId = ClassNameLocalServiceUtil.getClassNameId(ProcessStep.class.getName());
 		
@@ -829,14 +828,19 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 		ExpandoColumn expandoColumn = null;
 		
 		try {
-			expandoTable = ExpandoTableLocalServiceUtil.getTable(
-					themeDisplay.getCompanyId(), 
-					classNameId, ProcessStep.class.getName());
-			
-			expandoColumn = ExpandoColumnLocalServiceUtil.getColumn(
-					expandoTable.getTableId(), 
-					"requiedProcessActionNote");
-			
+			expandoTable = 
+					ExpandoTableLocalServiceUtil.getTable(
+							themeDisplay.getCompanyId(), 
+							classNameId, 
+							ProcessStep.class.getName());
+		} catch (Exception e) {
+			//
+		}
+		try {
+			expandoColumn = 
+					ExpandoColumnLocalServiceUtil.getColumn(
+							expandoTable.getTableId(), 
+							"requiedProcessActionNote");
 		} catch (Exception e) {
 			//
 		}
@@ -848,18 +852,31 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 							classNameId, 
 							ProcessStep.class.getName());
 		}
-		
 		if (Validator.isNull(expandoColumn)){
-			expandoColumn = ExpandoColumnLocalServiceUtil.addColumn(expandoTable.getTableId(), 
-					"requiedProcessActionNote", ExpandoColumnConstants.BOOLEAN);
+			expandoColumn = 
+					ExpandoColumnLocalServiceUtil.addColumn(
+							expandoTable.getTableId(), 
+							"requiedProcessActionNote", 
+							ExpandoColumnConstants.BOOLEAN);
 		}
 		
 		ExpandoValueLocalServiceUtil.addValue(
-				classNameId, 
-				expandoTable.getTableId(),
-				expandoColumn.getColumnId(), 
+				themeDisplay.getCompanyId(), 
+				ProcessStep.class.getName(), 
+				expandoTable.getName(), 
+				expandoColumn.getName(), 
 				processWorkflowId, 
-				String.valueOf(requiedActionNote));
+				requiedActionNote);
+		
+		
+		
+		
+//		addValue(
+//				classNameId, 
+//				expandoTable.getTableId(),
+//				expandoColumn.getColumnId(), 
+//				processWorkflowId, 
+//				String.valueOf(requiedActionNote));
 	}
 
 	private Log _log = LogFactoryUtil.getLog(ProcessMgtAdminPortlet.class);
