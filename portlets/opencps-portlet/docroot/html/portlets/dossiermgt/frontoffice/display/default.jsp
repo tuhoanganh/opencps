@@ -214,7 +214,7 @@
 									<%=
 										Validator.isNotNull(dossier.getCreateDate()) ? 
 										DateTimeUtil.convertDateToString(dossier.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT) : 
-										StringPool.DASH 
+										DateTimeUtil._EMPTY_DATE_TIME  
 									%>
 								</div>
 							</div>
@@ -228,7 +228,7 @@
 									<%=
 										Validator.isNotNull(dossier.getReceiveDatetime()) ? 
 										DateTimeUtil.convertDateToString(dossier.getReceiveDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT): 
-										StringPool.DASH 
+										DateTimeUtil._EMPTY_DATE_TIME  
 									%>
 								</div>
 							</div>

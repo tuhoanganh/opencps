@@ -268,11 +268,11 @@
 									<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
 										<i class='<%="fa fa-circle sx10 " + dossier.getDossierStatus()%>'></i>
 									</div>
-									<div class="span3 bold-label">
+									<div class="span2 bold-label">
 										<liferay-ui:message key="reception-no"/>
 									</div>
 									
-									<div class="span8"><%=dossier.getReceptionNo() %></div>
+									<div class="span9"><%=dossier.getReceptionNo() %></div>
 								</div>
 							</c:when>
 							
@@ -324,7 +324,7 @@
 								<%=
 									Validator.isNotNull(dossier.getReceiveDatetime()) ? 
 									DateTimeUtil.convertDateToString(dossier.getReceiveDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT): 
-									StringPool.DASH 
+									DateTimeUtil._EMPTY_DATE_TIME  
 								%>
 							</div>
 						</div>
@@ -338,7 +338,7 @@
 								<%=
 									Validator.isNotNull(dossier.getFinishDatetime()) ? 
 									DateTimeUtil.convertDateToString(dossier.getFinishDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT): 
-									StringPool.DASH 
+									DateTimeUtil._EMPTY_DATE_TIME 
 								%>
 							</div>
 						</div>
