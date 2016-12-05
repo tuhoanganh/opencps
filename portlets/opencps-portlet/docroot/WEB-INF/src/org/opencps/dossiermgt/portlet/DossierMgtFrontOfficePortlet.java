@@ -1562,24 +1562,24 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 							dictCollection.getDictCollectionId(), wardCode);
 
 			String[] dictItemIds = new String[3];
-			
-			dictItemIds[0] = city != null ? String
-					.valueOf(city.getItemCode()) : StringPool.BLANK;
+
+			dictItemIds[0] = city != null ? String.valueOf(city.getItemCode())
+					: StringPool.BLANK;
 
 			dictItemIds[1] = district != null ? String.valueOf(district
 					.getItemCode()) : StringPool.BLANK;
 
-			dictItemIds[2] = ward != null ? String
-					.valueOf(ward.getItemCode()) : StringPool.BLANK;
+			dictItemIds[2] = ward != null ? String.valueOf(ward.getItemCode())
+					: StringPool.BLANK;
 
-			//dictItemIds[0] = city != null ? String
-			//		.valueOf(city.getDictItemId()) : StringPool.BLANK;
+			// dictItemIds[0] = city != null ? String
+			// .valueOf(city.getDictItemId()) : StringPool.BLANK;
 
-			//dictItemIds[1] = district != null ? String.valueOf(district
-			//		.getDictItemId()) : StringPool.BLANK;
+			// dictItemIds[1] = district != null ? String.valueOf(district
+			// .getDictItemId()) : StringPool.BLANK;
 
-			//dictItemIds[2] = ward != null ? String
-			//		.valueOf(ward.getDictItemId()) : StringPool.BLANK;
+			// dictItemIds[2] = ward != null ? String
+			// .valueOf(ward.getDictItemId()) : StringPool.BLANK;
 
 			selectedItems = StringUtil.merge(dictItemIds);
 		} catch (Exception e) {
@@ -1708,7 +1708,13 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			if (dossierFileId > 0
 					&& dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_OTHER) {
 
-				DossierFileLocalServiceUtil.removeDossierFile(dossierFileId);
+				if (dossierFile.getSyncStatus() != PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS) {
+					DossierFileLocalServiceUtil.deleteDossierFile(
+							dossierFileId, dossierFile.getFileEntryId());
+				} else {
+					DossierFileLocalServiceUtil
+							.removeDossierFile(dossierFileId);
+				}
 
 			} else {
 
@@ -2626,6 +2632,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				DossierDisplayTerms.FILE_GROUP_ID);
 		long groupDossierPartId = ParamUtil.getLong(actionRequest,
 				"groupDossierPartId");
+		String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
 
 		long fileEntryId = 0;
 
@@ -2644,6 +2651,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		String displayName = StringPool.BLANK;
 		String groupName = ParamUtil.getString(actionRequest,
 				DossierFileDisplayTerms.GROUP_NAME);
+
+		String regexStr = StringPool.BLANK;
 		Date dossierFileDate = null;
 
 		try {
@@ -2663,6 +2672,18 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 				displayName = dossierPart.getPartName();
 			}
 
+			if (dossierFileId > 0) {
+				DossierFile dossierFileDel = DossierFileLocalServiceUtil
+						.getDossierFile(dossierFileId);
+				if (Validator.isNotNull(dossierFileDel)
+						&& dossierFileDel.getSyncStatus() == PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC) {
+					DossierFileLocalServiceUtil.deleteDossierFile(
+							dossierFileId, dossierFileDel.getFileEntryId());
+					regexStr = "_13_WAR_opencpsportlet_dossierFileId="
+							+ dossierFileId;
+				}
+			}
+
 			// #/issues/1112 create new dossierFile any case
 			// if (dossierFileId == 0) {
 			dossierFile = DossierFileLocalServiceUtil.addDossierFile(
@@ -2673,6 +2694,27 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 					formData, fileEntryId, dossierFileMark, dossierFileType,
 					dossierFileNo, dossierFileDate, original, syncStatus,
 					serviceContext);
+
+			if (Validator.isNotNull(dossierFile)) {
+				JSONObject sampleDataJson = JSONFactoryUtil
+						.createJSONObject(dossierPart.getSampleData());
+
+				JSONObject formDataJson = JSONFactoryUtil
+						.createJSONObject(dossierFile.getFormData());
+
+				String dossierFileNoKey = sampleDataJson
+						.getString(PortletConstants.DOSSIER_FILE_NO_KEY);
+				String dossierFileDateKey = sampleDataJson
+						.getString(PortletConstants.DOSSIER_FILE_NO_DATE);
+
+				dossierFile.setDossierFileNo(formDataJson
+						.getString(dossierFileNoKey));
+				dossierFile.setDossierFileDate(DateTimeUtil
+						.convertStringToDate(formDataJson
+								.getString(dossierFileDateKey)));
+				
+				DossierFileLocalServiceUtil.updateDossierFile(dossierFile);
+			}
 
 			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 
@@ -2705,13 +2747,34 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 
 			_log.error(e);
 		} finally {
-			actionResponse.setRenderParameter("primaryKey", String
-					.valueOf(dossierFile != null ? dossierFile
-							.getDossierFileId() : 0));
-			actionResponse.setRenderParameter("content", "declaration-online");
-			actionResponse.setRenderParameter("jspPage",
-					"/html/portlets/dossiermgt/frontoffice/modal_dialog.jsp");
+
+			if (Validator.isNotNull(dossierFile)
+					&& Validator.isNotNull(redirectURL)
+					&& Validator.isNotNull(regexStr)) {
+
+				String newRegexStr = "_13_WAR_opencpsportlet_dossierFileId="
+						+ dossierFile.getDossierFileId();
+
+				redirectURL = redirectURL.replaceAll(regexStr, newRegexStr);
+
+				actionResponse.sendRedirect(redirectURL);
+			} else {
+				actionResponse.setRenderParameter("primaryKey", String
+						.valueOf(dossierFile != null ? dossierFile
+								.getDossierFileId() : 0));
+				actionResponse.setRenderParameter("content",
+						"declaration-online");
+				actionResponse
+						.setRenderParameter("jspPage",
+								"/html/portlets/dossiermgt/frontoffice/modal_dialog.jsp");
+			}
 		}
+	}
+
+	protected String getDataStringFromAlpaca(JSONObject dataJson, String key) {
+		String data = StringPool.BLANK;
+		data = dataJson.getString(key);
+		return data;
 	}
 
 	/**
@@ -3241,8 +3304,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		}
 		// TODO Validate reference of:
 		// city_
-		// 		|_district_
-		// 					|_ward
+		// |_district_
+		// |_ward
 
 		if (Validator.isNull(accountType)) {
 			throw new InvalidDossierObjectException();
@@ -3745,19 +3808,19 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			if (city != null) {
 				cityCode = city.getItemCode();
 				cityName = city.getItemName(themeDisplay.getLocale());
-				
+
 			}
 
 			if (district != null) {
 				districtCode = district.getItemCode();
 				districtName = district.getItemName(themeDisplay.getLocale());
-				
+
 			}
 
 			if (ward != null) {
 				wardCode = ward.getItemCode();
 				wardName = ward.getItemName(themeDisplay.getLocale());
-				
+
 			}
 
 			validateDossier(cityCode, districtCode, wardCode, accountType,
