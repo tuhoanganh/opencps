@@ -128,6 +128,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Role;
+import com.liferay.portal.service.ClassNameLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -136,6 +137,8 @@ import com.liferay.portlet.documentlibrary.DuplicateFileException;
 import com.liferay.portlet.documentlibrary.FileSizeException;
 import com.liferay.portlet.documentlibrary.NoSuchFileEntryException;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
+import com.liferay.portlet.expando.model.ExpandoValue;
+import com.liferay.portlet.expando.service.ExpandoValueLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 /**
@@ -2787,6 +2790,8 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 		List<ProcessStepDossierPart> processStepDossierParts = new ArrayList<ProcessStepDossierPart>();
 
+		JSONObject obj = JSONFactoryUtil.createJSONObject();
+		
 		JSONArray array = JSONFactoryUtil.createJSONArray();
 
 		long dossierId = ParamUtil.getLong(actionRequest,
@@ -2849,9 +2854,34 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				}
 			}
 		}
-
-		if (array != null) {
-			PortletUtil.writeJSON(actionRequest, actionResponse, array);
+		
+		obj.put("arrayDossierpartIds", array);
+		
+		// Validate nhap y kien
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.
+				getAttribute(WebKeys.THEME_DISPLAY);
+		ExpandoValue requiedActionNote = null;
+		boolean requiedActionNoteValue = false;
+		
+		try {
+			requiedActionNote = 
+					ExpandoValueLocalServiceUtil.getValue(
+						themeDisplay.getCompanyId(), 
+						ClassNameLocalServiceUtil.getClassNameId(ProcessStep.class.getName()), 
+						ProcessStep.class.getName(), 
+						"requiedProcessActionNote", 
+						processWorkflowId);
+			
+			requiedActionNoteValue = requiedActionNote.getBoolean();
+		} catch (Exception e){
+			//
+		}
+		
+		obj.put("requiedActionNote", requiedActionNoteValue);
+		
+		if(obj != null){
+			//PortletUtil.writeJSON(actionRequest, actionResponse, array);
+			PortletUtil.writeJSON(actionRequest, actionResponse, obj);
 		}
 
 	}
