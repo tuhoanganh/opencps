@@ -509,11 +509,9 @@
 
 		var actionNote = A.one('#<portlet:namespace />actionNote');
 		
-		if (actionNote.val() == ''){
-			return 'xin-moi-nhap-y-kien';
-		}
-		
 		var requiredDossierPartIds = [];
+		var requiredActionNote = false;
+		var required = false;
 		
 		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.ACTION_PHASE) %>');
 		portletURL.setParameter("javax.portlet.action", "validateAssignTask");
@@ -542,8 +540,14 @@
 			    	success: function(event, id, obj) {
 			    		
 			    		var response = this.get('responseData');
+			    		
+						responseObj = JSON.parse(response);
 						
-						requiredDossierPartIds = JSON.parse(response);
+						requiredDossierPartIds = responseObj.arrayDossierpartIds;
+						
+						requiredActionNote = responseObj.requiedActionNote;
+						
+						//requiredDossierPartIds = JSON.parse(response);
 						
 						for(var i = 0; i < requiredDossierPartIds.length; i++){
 							var id = requiredDossierPartIds[i];
@@ -564,6 +568,19 @@
 		);
 		
 		//loadingMask.hide();
+		
+		if (required){
+			return 'please-upload-dossier-part-required-before-send';
+		}
+		if (requiredActionNote == true && actionNote.val() == ''){
+			actionNote.addClass('changeDefErr');
+			A.one('#<portlet:namespace/>defErrActionNote').addClass('displayDefErr');
+			
+			return 'please-add-note-before-send';
+		} else {
+			actionNote.removeClass('changeDefErr');
+			A.one('#<portlet:namespace/>defErrActionNote').removeClass('displayDefErr');
+		}
 		
 		return '';
 	}
@@ -615,9 +632,10 @@
 		if(assignFormDisplayStyle == 'popup' ) {
 			portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>");
 			portletURL.setParameter("backURL", '<%=backURL%>');
-			<portlet:namespace/>validateRequiredResult(dossierId, processStepId, processWorkflowId);
-			if(required === true) {
-				alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-required-before-send") %>');
+			//<portlet:namespace/>validateRequiredResult(dossierId, processStepId, processWorkflowId);
+			var msg = validateRequiredResult(dossierId, processStepId, processWorkflowId);
+			if(msg != '') {
+				alert(Liferay.Language.get(msg));
 				return;
 			} 
 			openDialog(portletURL.toString(), '<portlet:namespace />assignToUser', '<%= UnicodeLanguageUtil.get(pageContext, "handle") %>');
@@ -660,12 +678,11 @@
 									form.attr('action', action);
 								}
 							
-								
 								if(submitButton){
 									submitButton.on('click', function(){
 										var msg = validateRequiredResult(dossierId, processStepId, processWorkflowId);
 										if(msg != '') {
-											alert(msg);
+											alert(Liferay.Language.get(msg));
 											return;
 										} else{
 											A.io.request(

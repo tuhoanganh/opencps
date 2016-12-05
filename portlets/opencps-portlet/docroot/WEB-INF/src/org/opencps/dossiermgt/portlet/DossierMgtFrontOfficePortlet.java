@@ -1600,8 +1600,6 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 	protected void include(String path, RenderRequest renderRequest,
 			RenderResponse renderResponse) throws IOException, PortletException {
 
-		_log.info("path )))))))))))))))))))))) " + path);
-
 		if (!_hasPermission) {
 			path = "/html/portlets/dossiermgt/frontoffice/warning.jsp";
 		}
@@ -1711,10 +1709,11 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 					&& dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_OTHER) {
 
 				if (dossierFile.getSyncStatus() != PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS) {
-					DossierFileLocalServiceUtil.deleteDossierFile(dossierFileId,
-							dossierFile.getFileEntryId());
+					DossierFileLocalServiceUtil.deleteDossierFile(
+							dossierFileId, dossierFile.getFileEntryId());
 				} else {
-					DossierFileLocalServiceUtil.removeDossierFile(dossierFileId);
+					DossierFileLocalServiceUtil
+							.removeDossierFile(dossierFileId);
 				}
 
 			} else {
@@ -2696,6 +2695,27 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 					dossierFileNo, dossierFileDate, original, syncStatus,
 					serviceContext);
 
+			if (Validator.isNotNull(dossierFile)) {
+				JSONObject sampleDataJson = JSONFactoryUtil
+						.createJSONObject(dossierPart.getSampleData());
+
+				JSONObject formDataJson = JSONFactoryUtil
+						.createJSONObject(dossierFile.getFormData());
+
+				String dossierFileNoKey = sampleDataJson
+						.getString(PortletConstants.DOSSIER_FILE_NO_KEY);
+				String dossierFileDateKey = sampleDataJson
+						.getString(PortletConstants.DOSSIER_FILE_NO_DATE);
+
+				dossierFile.setDossierFileNo(formDataJson
+						.getString(dossierFileNoKey));
+				dossierFile.setDossierFileDate(DateTimeUtil
+						.convertStringToDate(formDataJson
+								.getString(dossierFileDateKey)));
+				
+				DossierFileLocalServiceUtil.updateDossierFile(dossierFile);
+			}
+
 			SessionMessages.add(actionRequest, MessageKeys.DEFAULT_SUCCESS_KEY);
 
 		} catch (Exception e) {
@@ -2749,6 +2769,12 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 								"/html/portlets/dossiermgt/frontoffice/modal_dialog.jsp");
 			}
 		}
+	}
+
+	protected String getDataStringFromAlpaca(JSONObject dataJson, String key) {
+		String data = StringPool.BLANK;
+		data = dataJson.getString(key);
+		return data;
 	}
 
 	/**
@@ -3278,8 +3304,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		}
 		// TODO Validate reference of:
 		// city_
-		// 		|_district_
-		// 					|_ward
+		// |_district_
+		// |_ward
 
 		if (Validator.isNull(accountType)) {
 			throw new InvalidDossierObjectException();

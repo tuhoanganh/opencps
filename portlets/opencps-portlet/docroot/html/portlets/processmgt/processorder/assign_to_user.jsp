@@ -368,6 +368,9 @@
 		<div class="span12">
 			<aui:input name="<%=ProcessOrderDisplayTerms.ACTION_NOTE %>" label="action-note" type="textarea" cssClass="input100"/>
 		</div>
+		<div id="<portlet:namespace/>defErrActionNote" style="text-align: left; color: #b50303; margin-left:7px; margin-bottom: 10px; display: none;">
+			<liferay-ui:message key="required-field"/>
+		</div>
 	</div>
 	
 	<c:if test="<%=workflowOutputs != null && !workflowOutputs.isEmpty() %>">
