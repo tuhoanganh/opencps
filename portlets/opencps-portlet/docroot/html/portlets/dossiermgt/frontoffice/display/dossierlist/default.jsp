@@ -17,42 +17,38 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+
+<%@page import="org.opencps.util.WebKeys"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="com.liferay.portal.kernel.dao.search.SearchEntry"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
-<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="org.opencps.datamgt.model.DictItem"%>
 <%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%@page import="org.opencps.dossiermgt.NoSuchDossierException"%>
 <%@page import="org.opencps.dossiermgt.NoSuchDossierTemplateException"%>
 <%@page import="org.opencps.dossiermgt.RequiredDossierPartException"%>
-<%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
 <%@page import="org.opencps.dossiermgt.search.DossierSearch"%>
 <%@page import="org.opencps.dossiermgt.search.DossierSearchTerms"%>
 <%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 <%@page import="org.opencps.util.DateTimeUtil"%>
-<%@page import="org.opencps.util.DictItemUtil"%>
-<%@page import="org.opencps.util.MessageKeys"%>
 <%@page import="org.opencps.util.PortletUtil"%>
-<%@page import="org.opencps.util.WebKeys"%>
+<%@page import="org.opencps.util.MessageKeys"%>
+<%@page import="org.opencps.util.DictItemUtil"%>
+
 
 <%@ include file="../../../init.jsp"%>
 
 
-<liferay-ui:success  
-	key="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>" 
-	message="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>"
-/>
+<liferay-ui:success  key="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>" message="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>"/>
 
-<liferay-ui:success 
-	key="<%=MessageKeys.DEFAULT_SUCCESS_KEY_X %>" 
-	message="<%=MessageKeys.DEFAULT_SUCCESS_KEY_X %>"
-/>
+<liferay-ui:success  key="<%=MessageKeys.DEFAULT_SUCCESS_KEY_X %>" message="<%=MessageKeys.DEFAULT_SUCCESS_KEY_X %>"/>
 
 <liferay-ui:error 
 	exception="<%= NoSuchDossierException.class %>" 
@@ -138,7 +134,8 @@
 							<c:choose>
 								<c:when test='<%=Validator.isNotNull(displayDossierNo) && displayDossierNo %>'>
 
-									<div class="row-fluid">
+									<!--hot fix moit  -->
+									<%-- <div class="row-fluid">
 										<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
 											<i class='<%="fa fa-circle sx10 " + dossier.getDossierStatus()%>'></i>
 										</div>										
@@ -152,6 +149,17 @@
 									<div class="row-fluid">
 										<div class="span1"></div>
 										
+										<div class="span2 bold-label">
+											<liferay-ui:message key="reception-no"/>
+										</div>
+										
+										<div class="span9"><%=dossier.getReceptionNo() %></div>
+									</div> --%>
+									
+									<div class="row-fluid">
+										<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
+											<i class='<%="fa fa-circle sx10 " + dossier.getDossierStatus()%>'></i>
+										</div>
 										<div class="span2 bold-label">
 											<liferay-ui:message key="reception-no"/>
 										</div>
@@ -201,7 +209,7 @@
 									<%=
 										Validator.isNotNull(dossier.getCreateDate()) ? 
 										DateTimeUtil.convertDateToString(dossier.getCreateDate(), DateTimeUtil._VN_DATE_TIME_FORMAT) : 
-										StringPool.DASH 
+										DateTimeUtil._EMPTY_DATE_TIME  
 									%>
 								</div>
 							</div>
@@ -215,7 +223,7 @@
 									<%=
 										Validator.isNotNull(dossier.getReceiveDatetime()) ? 
 										DateTimeUtil.convertDateToString(dossier.getReceiveDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT): 
-										StringPool.DASH 
+										DateTimeUtil._EMPTY_DATE_TIME  
 									%>
 								</div>
 							</div>

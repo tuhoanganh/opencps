@@ -1,3 +1,4 @@
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -31,10 +32,10 @@
 <%@page import="javax.portlet.PortletURL"%>
 <%@page import="org.opencps.datamgt.model.DictItem"%>
 <%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%@page import="org.opencps.dossiermgt.NoSuchDossierException"%>
 <%@page import="org.opencps.dossiermgt.NoSuchDossierTemplateException"%>
 <%@page import="org.opencps.dossiermgt.RequiredDossierPartException"%>
-<%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
 <%@page import="org.opencps.dossiermgt.search.DossierSearch"%>
 <%@page import="org.opencps.dossiermgt.search.DossierSearchTerms"%>
@@ -119,7 +120,8 @@
 	
 		<% 
 		String dossierStatusJsonData = ProcessOrderUtils.generateTreeView(
-				dossierStatusCodes, 
+				PortletPropsValues.DATAMGT_MASTERDATA_DOSSIER_STATUS, 
+				PortletConstants.TREE_VIEW_DEFAULT_ITEM_CODE, 
 				LanguageUtil.get(locale, "dossier-status") , 
 				PortletConstants.TREE_VIEW_LEVER_0, 
 				"radio",
@@ -139,34 +141,31 @@
 	var arrayParam = '<%=arrayParam.toString() %>';
 	var showServiceDomainTree = <%=showServiceDomainTree %>
 	AUI().ready(function(A){
-		buildTreeView(
-			'dossierStatusTree', 
-			'<%=DossierDisplayTerms.DOSSIER_STATUS %>', 
-			dossierStatusJsonData, 
-			arrayParam, 
-			'<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>', 
-			'<%=templatePath + "frontofficedossierlist.jsp" %>', 
-			'<%=LiferayWindowState.NORMAL.toString() %>', 
-			'normal',
-			'<%=menuCounterUrl.toString() %>',
-			dossierStatus,
-			'<%=renderResponse.getNamespace() %>',
-			'<%=hiddenTreeNodeEqualNone%>');
-		
-		if (showServiceDomainTree){
-			buildTreeView(
-				"serviceDomainIdTree", 
-				"<%=DossierDisplayTerms.SERVICE_DOMAIN_ID %>", 
-				serviceDomainJsonData, 
+		buildTreeView("dossierStatusTree", 
+				'<%=DossierDisplayTerms.DOSSIER_STATUS %>', 
+				dossierStatusJsonData, 
 				arrayParam, 
 				'<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>', 
 				'<%=templatePath + "frontofficedossierlist.jsp" %>', 
 				'<%=LiferayWindowState.NORMAL.toString() %>', 
 				'normal',
-				null,
-				serviceDomainId,
+				'<%=menuCounterUrl.toString() %>',
+				dossierStatus,
 				'<%=renderResponse.getNamespace() %>',
 				'<%=hiddenTreeNodeEqualNone%>');
+		if (showServiceDomainTree){
+			buildTreeView("serviceDomainIdTree", 
+					"<%=DossierDisplayTerms.SERVICE_DOMAIN_ID %>", 
+					serviceDomainJsonData, 
+					arrayParam, 
+					'<%= PortletURLFactoryUtil.create(request, WebKeys.DOSSIER_MGT_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>', 
+					'<%=templatePath + "frontofficedossierlist.jsp" %>', 
+					'<%=LiferayWindowState.NORMAL.toString() %>', 
+					'normal',
+					null,
+					serviceDomainId,
+					'<%=renderResponse.getNamespace() %>',
+					'<%=hiddenTreeNodeEqualNone%>');
 		}
 	});
 	
@@ -234,7 +233,8 @@
 						
 						<c:choose>
 							<c:when test='<%=Validator.isNotNull(displayDossierNo) && displayDossierNo %>'>
-								<div class="row-fluid">
+								<!--hot fix moit Comment by TrungNT hidden dossier-no and change label key off dossier-no to reception-no-->
+								<%-- <div class="row-fluid">
 									<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
 										<i class='<%="fa fa-circle sx10 " + dossier.getDossierStatus()%>'></i>
 									</div>
@@ -253,6 +253,17 @@
 									</div>
 									
 									<div class="span8"><%=dossier.getReceptionNo() %></div>
+								</div> --%>
+								
+								<div class="row-fluid">
+									<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
+										<i class='<%="fa fa-circle sx10 " + dossier.getDossierStatus()%>'></i>
+									</div>
+									<div class="span2 bold-label">
+										<liferay-ui:message key="reception-no"/>
+									</div>
+									
+									<div class="span9"><%=dossier.getReceptionNo() %></div>
 								</div>
 							</c:when>
 							
@@ -272,13 +283,13 @@
 						<div class="row-fluid">
 							<div class="span1"></div>
 							
-							<div class="span9"><%=dossierBean.getServiceName() %></div>
+							<div class="span11"><%=dossierBean.getServiceName() %></div>
 						</div>
 						
 						<div class="row-fluid">
 							<div class="span1"></div>
 							
-							<div class="span9"><%=dossier.getGovAgencyName() %></div>
+							<div class="span11"><%=dossier.getGovAgencyName() %></div>
 						</div>
 						
 					</liferay-util:buffer>
@@ -304,7 +315,7 @@
 								<%=
 									Validator.isNotNull(dossier.getReceiveDatetime()) ? 
 									DateTimeUtil.convertDateToString(dossier.getReceiveDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT): 
-									StringPool.DASH 
+									DateTimeUtil._EMPTY_DATE_TIME  
 								%>
 							</div>
 						</div>
@@ -318,7 +329,7 @@
 								<%=
 									Validator.isNotNull(dossier.getFinishDatetime()) ? 
 									DateTimeUtil.convertDateToString(dossier.getFinishDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT): 
-									StringPool.DASH 
+									DateTimeUtil._EMPTY_DATE_TIME 
 								%>
 							</div>
 						</div>
