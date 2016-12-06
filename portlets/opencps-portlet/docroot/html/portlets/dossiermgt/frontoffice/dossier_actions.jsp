@@ -87,9 +87,9 @@
 	<portlet:param name="backURL" value="<%=currentURL %>"/>
 </portlet:renderURL>
 	<c:choose>
-		<c:when test="<%=showTabDossierResultFirst %>">
+		<c:when test="<%=Validator.isNotNull(dossierTabFocus) %>">
 			<%
-				String viewResultDossierURL = viewDossierURL.toString() + "#" +renderResponse.getNamespace() +"tab="+ renderResponse.getNamespace() + "result";
+				String viewResultDossierURL = viewDossierURL.toString() + "#" +renderResponse.getNamespace() +"tab="+ renderResponse.getNamespace() + dossierTabFocus;
 			%> 
 			<liferay-ui:icon 
 				cssClass="search-container-action fa view" 

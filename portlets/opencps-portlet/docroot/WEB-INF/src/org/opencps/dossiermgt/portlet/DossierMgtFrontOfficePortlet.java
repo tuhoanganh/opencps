@@ -102,6 +102,7 @@ import org.opencps.util.DLFolderUtil;
 import org.opencps.util.DateTimeUtil;
 import org.opencps.util.MessageKeys;
 import org.opencps.util.PortletConstants;
+import org.opencps.util.PortletConstants.FileSizeUnit;
 import org.opencps.util.PortletPropsValues;
 import org.opencps.util.PortletUtil;
 import org.opencps.util.PortletUtil.SplitDate;
@@ -1562,24 +1563,24 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 							dictCollection.getDictCollectionId(), wardCode);
 
 			String[] dictItemIds = new String[3];
-			
-			dictItemIds[0] = city != null ? String
-					.valueOf(city.getItemCode()) : StringPool.BLANK;
+
+			dictItemIds[0] = city != null ? String.valueOf(city.getItemCode())
+					: StringPool.BLANK;
 
 			dictItemIds[1] = district != null ? String.valueOf(district
 					.getItemCode()) : StringPool.BLANK;
 
-			dictItemIds[2] = ward != null ? String
-					.valueOf(ward.getItemCode()) : StringPool.BLANK;
+			dictItemIds[2] = ward != null ? String.valueOf(ward.getItemCode())
+					: StringPool.BLANK;
 
-			//dictItemIds[0] = city != null ? String
-			//		.valueOf(city.getDictItemId()) : StringPool.BLANK;
+			// dictItemIds[0] = city != null ? String
+			// .valueOf(city.getDictItemId()) : StringPool.BLANK;
 
-			//dictItemIds[1] = district != null ? String.valueOf(district
-			//		.getDictItemId()) : StringPool.BLANK;
+			// dictItemIds[1] = district != null ? String.valueOf(district
+			// .getDictItemId()) : StringPool.BLANK;
 
-			//dictItemIds[2] = ward != null ? String
-			//		.valueOf(ward.getDictItemId()) : StringPool.BLANK;
+			// dictItemIds[2] = ward != null ? String
+			// .valueOf(ward.getDictItemId()) : StringPool.BLANK;
 
 			selectedItems = StringUtil.merge(dictItemIds);
 		} catch (Exception e) {
@@ -2890,10 +2891,16 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			}
 		}
 
+		FileSizeUnit uploadFileSizeUnit = FileSizeUnit
+				.getEnum(maxUploadFileSizeUnit);
+
 		float maxUploadFileSizeInByte = PortletUtil.convertSizeUnitToByte(
-				maxUploadFileSize, maxUploadFileSizeUnit);
+				maxUploadFileSize, uploadFileSizeUnit);
+
+		FileSizeUnit totalUploadFileSizeUnit = FileSizeUnit
+				.getEnum(maxUploadFileSizeUnit);
 		float maxTotalUploadFileSizeInByte = PortletUtil.convertSizeUnitToByte(
-				maxTotalUploadFileSize, maxTotalUploadFileSizeUnit);
+				maxTotalUploadFileSize, totalUploadFileSizeUnit);
 
 		if (size == 0) {
 			throw new FileSizeException();
@@ -3241,8 +3248,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 		}
 		// TODO Validate reference of:
 		// city_
-		// 		|_district_
-		// 					|_ward
+		// |_district_
+		// |_ward
 
 		if (Validator.isNull(accountType)) {
 			throw new InvalidDossierObjectException();
@@ -3745,19 +3752,19 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			if (city != null) {
 				cityCode = city.getItemCode();
 				cityName = city.getItemName(themeDisplay.getLocale());
-				
+
 			}
 
 			if (district != null) {
 				districtCode = district.getItemCode();
 				districtName = district.getItemName(themeDisplay.getLocale());
-				
+
 			}
 
 			if (ward != null) {
 				wardCode = ward.getItemCode();
 				wardName = ward.getItemName(themeDisplay.getLocale());
-				
+
 			}
 
 			validateDossier(cityCode, districtCode, wardCode, accountType,
