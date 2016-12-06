@@ -122,8 +122,8 @@
 	String maxTotalUploadFileSizeUnit = preferences.getValue("maxTotalUploadFileSizeUnit", StringPool.BLANK);
 	
 	if (maxTotalUploadFileSize == 0){
-		maxTotalUploadFileSize = PortletPropsValues.ACCOUNTMGT_FILE_SIZE;
-		maxTotalUploadFileSizeUnit = PortletConstants.SIZE_UNIT_B;
+		maxTotalUploadFileSize = PortletPropsValues.ACCOUNTMGT_FILE_SIZE/1024/1024;
+		maxTotalUploadFileSizeUnit = PortletConstants.SIZE_UNIT_MB;
 	}
 	
 	List<DossierFile> dossierFileList = new ArrayList<DossierFile>();
