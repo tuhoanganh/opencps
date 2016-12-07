@@ -1045,11 +1045,11 @@
 		<portlet-name>32</portlet-name>
 		<display-name>Statistics</display-name>
 		<portlet-class>
-			org.opencps.statistics.portlet.StatisticsPortlet
+			org.opencps.statisticsmgt.portlet.StatisticsMgtAdminPortlet
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/portlets/statistics/view.jsp</value>
+			<value>/html/portlets/statisticsmgt/admin/view.jsp</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>

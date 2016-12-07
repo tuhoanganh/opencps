@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom-sql>
+	<sql id="org.opencps.statisticsmgt.service.persistence.DossiersStatisticsFinder.statisticsColumnNames">	
+		<![CDATA[
+			po.processOrderId AS COL0,
+			po.groupId AS COL1,
+			po.processStepId AS COL2,
+			po.processWorkflowId AS COL3,
+			po.govAgencyCode AS COL4,
+			po.govAgencyName AS COL5,
+			d.dossierId AS COL6,
+			d.groupId AS COL7,
+			d.serviceInfoId AS COL8,
+			d.serviceConfigId AS COL9,
+			d.subjectId AS COL10,
+			d.createDate AS COL11,
+			d.modifiedDate AS COL12,
+			d.receiveDatetime AS COL13,
+			d.submitDatetime AS COL14,
+			d.estimateDatetime AS COL15,
+			d.finishDatetime AS COL16,
+			d.delayStatus AS COL17,
+			d.dossierStatus AS COL18,
+			d.subjectName AS COL19,
+			gov.dictItemId AS COL20,
+			gov.itemCode AS COL21, 
+			gov.itemName AS COL22, 
+			gov.treeIndex AS COL23, 
+			gov.collectionCode AS COL24, 
+			domain.dictItemId AS COL25, 
+			domain.itemCode AS COL26, 
+			domain.itemName AS COL27, 
+			domain.treeIndex AS COL28, 
+			domain.collectionCode AS COL29
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.statisticsmgt.service.persistence.DossiersStatisticsFinder.statisticsColumnDataTypes">	
+		<![CDATA[
+			LONG,
+			LONG,
+			LONG,
+			LONG,
+			STRING,
+			STRING,
+			LONG,
+			LONG,
+			LONG,
+			LONG,
+			LONG,
+			DATE,
+			DATE,
+			DATE,
+			DATE,
+			DATE,
+			DATE,
+			INTEGER,
+			STRING,
+			STRING,
+			LONG,
+			STRING, 
+			STRING, 
+			STRING, 
+			STRING, 
+			LONG, 
+			STRING, 
+			STRING, 
+			STRING, 
+			STRING
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.statisticsmgt.service.persistence.DossiersStatisticsFinder.countColumnName">	
+		<![CDATA[
+			count(*) AS COUNT_VALUE
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.statisticsmgt.service.persistence.DossiersStatisticsFinder.countColumnType">	
+		<![CDATA[
+			LONG
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.statisticsmgt.service.persistence.DossiersStatisticsFinder.statisticsReceivedByMonth">	
+		<![CDATA[
+	    	SELECT 
+				$columns$
+			FROM 
+				opencps_processorder AS po
+			INNER JOIN 
+				opencps_dossier AS d
+			ON 
+				po.dossierId = d.dossierId
+			LEFT JOIN 
+				(
+					SELECT
+						di.itemCode, 
+						di.treeIndex, 
+						dc.collectionCode 
+					FROM 
+						opencps_dictitem AS di
+				    INNER JOIN 
+				    	opencps_dictcollection AS dc
+				    ON 
+				    	di.dictCollectionId = dc.dictCollectionId
+				    WHERE
+				    	dc.collectionCode = 'GOVERNMENT_AGENCY'
+				) AS gov
+				 
+				ON po.govAgencyCode = gov.itemCode
+				
+				LEFT JOIN 
+				(
+					SELECT 
+						si.serviceinfoId, 
+						di.itemCode,di.treeIndex, 
+						dc.collectionCode 
+					FROM 
+						opencps_serviceinfo AS si
+				    INNER JOIN
+				    	opencps_dictitem AS di
+				    ON
+				    	si.domainCode = di.dictItemId
+				    INNER JOIN
+				    	opencps_dictcollection AS dc
+				    ON
+				    	di.dictCollectionId = dc.dictCollectionId
+				    WHERE 
+				    	dc.collectionCode = 'SERVICE_DOMAIN'
+				) AS domain
+				 
+				ON
+					po.serviceInfoId = domain.serviceinfoId
+				
+				WHERE 
+					(po.groupId = ?)
+				AND 
+					(month(d.receiveDatetime) = ?)
+				AND 
+					(year(d.receiveDatetime) = ?)
+		]]>
+	</sql>	
+	
+	<sql id="org.opencps.statisticsmgt.service.persistence.DossiersStatisticsFinder.statisticsReceivedByYear">	
+		<![CDATA[
+	    	SELECT 
+				$columns$
+			FROM 
+				opencps_processorder AS po
+			INNER JOIN 
+				opencps_dossier AS d
+			ON 
+				po.dossierId = d.dossierId
+			LEFT JOIN 
+				(
+					SELECT
+						di.itemCode, 
+						di.treeIndex, 
+						dc.collectionCode 
+					FROM 
+						opencps_dictitem AS di
+				    INNER JOIN 
+				    	opencps_dictcollection AS dc
+				    ON 
+				    	di.dictCollectionId = dc.dictCollectionId
+				    WHERE
+				    	dc.collectionCode = 'GOVERNMENT_AGENCY'
+				) AS gov
+				 
+				ON po.govAgencyCode = gov.itemCode
+				
+				LEFT JOIN 
+				(
+					SELECT 
+						si.serviceinfoId, 
+						di.itemCode,di.treeIndex, 
+						dc.collectionCode 
+					FROM 
+						opencps_serviceinfo AS si
+				    INNER JOIN
+				    	opencps_dictitem AS di
+				    ON
+				    	si.domainCode = di.dictItemId
+				    INNER JOIN
+				    	opencps_dictcollection AS dc
+				    ON
+				    	di.dictCollectionId = dc.dictCollectionId
+				    WHERE 
+				    	dc.collectionCode = 'SERVICE_DOMAIN'
+				) AS domain
+				 
+				ON
+					po.serviceInfoId = domain.serviceinfoId
+				
+				WHERE 
+					(po.groupId = ?)
+				AND 
+					(year(d.receiveDatetime) = ?)
+		]]>
+	</sql>	
+	
+	<sql id="org.opencps.statisticsmgt.service.persistence.DossiersStatisticsFinder.statisticsFinishedByMonth">	
+		<![CDATA[
+	    	SELECT 
+				$columns$
+			FROM 
+				opencps_processorder AS po
+			INNER JOIN 
+				opencps_dossier AS d
+			ON 
+				po.dossierId = d.dossierId
+			LEFT JOIN 
+				(
+					SELECT
+						di.itemCode, 
+						di.treeIndex, 
+						dc.collectionCode 
+					FROM 
+						opencps_dictitem AS di
+				    INNER JOIN 
+				    	opencps_dictcollection AS dc
+				    ON 
+				    	di.dictCollectionId = dc.dictCollectionId
+				    WHERE
+				    	dc.collectionCode = 'GOVERNMENT_AGENCY'
+				) AS gov
+				 
+				ON po.govAgencyCode = gov.itemCode
+				
+				LEFT JOIN 
+				(
+					SELECT 
+						si.serviceinfoId, 
+						di.itemCode,di.treeIndex, 
+						dc.collectionCode 
+					FROM 
+						opencps_serviceinfo AS si
+				    INNER JOIN
+				    	opencps_dictitem AS di
+				    ON
+				    	si.domainCode = di.dictItemId
+				    INNER JOIN
+				    	opencps_dictcollection AS dc
+				    ON
+				    	di.dictCollectionId = dc.dictCollectionId
+				    WHERE 
+				    	dc.collectionCode = 'SERVICE_DOMAIN'
+				) AS domain
+				 
+				ON
+					po.serviceInfoId = domain.serviceinfoId
+				
+				WHERE 
+					(po.groupId = ?)
+				AND 
+					(month(d.finishDatetime) = ?)
+				AND 
+					(year(d.finishDatetime) = ?)
+		]]>
+	</sql>	
+	
+	<sql id="org.opencps.statisticsmgt.service.persistence.DossiersStatisticsFinder.statisticsFinishedByYear">	
+		<![CDATA[
+	    	SELECT 
+				$columns$
+			FROM 
+				opencps_processorder AS po
+			INNER JOIN 
+				opencps_dossier AS d
+			ON 
+				po.dossierId = d.dossierId
+			LEFT JOIN 
+				(
+					SELECT
+						di.itemCode, 
+						di.treeIndex, 
+						dc.collectionCode 
+					FROM 
+						opencps_dictitem AS di
+				    INNER JOIN 
+				    	opencps_dictcollection AS dc
+				    ON 
+				    	di.dictCollectionId = dc.dictCollectionId
+				    WHERE
+				    	dc.collectionCode = 'GOVERNMENT_AGENCY'
+				) AS gov
+				 
+				ON po.govAgencyCode = gov.itemCode
+				
+				LEFT JOIN 
+				(
+					SELECT 
+						si.serviceinfoId, 
+						di.itemCode,di.treeIndex, 
+						dc.collectionCode 
+					FROM 
+						opencps_serviceinfo AS si
+				    INNER JOIN
+				    	opencps_dictitem AS di
+				    ON
+				    	si.domainCode = di.dictItemId
+				    INNER JOIN
+				    	opencps_dictcollection AS dc
+				    ON
+				    	di.dictCollectionId = dc.dictCollectionId
+				    WHERE 
+				    	dc.collectionCode = 'SERVICE_DOMAIN'
+				) AS domain
+				 
+				ON
+					po.serviceInfoId = domain.serviceinfoId
+				
+				WHERE 
+					(po.groupId = ?)
+				AND 
+					(year(d.finishDatetime) = ?)
+		]]>
+	</sql>	
+	
+	<sql id="org.opencps.statisticsmgt.service.persistence.DossiersStatisticsFinder.statisticsProcessing">	
+		<![CDATA[
+	    	SELECT 
+				$columns$
+			FROM 
+				opencps_processorder AS po
+			INNER JOIN 
+				opencps_dossier AS d
+			ON 
+				po.dossierId = d.dossierId
+			LEFT JOIN 
+				(
+					SELECT
+						di.itemCode, 
+						di.treeIndex, 
+						dc.collectionCode 
+					FROM 
+						opencps_dictitem AS di
+				    INNER JOIN 
+				    	opencps_dictcollection AS dc
+				    ON 
+				    	di.dictCollectionId = dc.dictCollectionId
+				    WHERE
+				    	dc.collectionCode = 'GOVERNMENT_AGENCY'
+				) AS gov
+				 
+				ON po.govAgencyCode = gov.itemCode
+				
+				LEFT JOIN 
+				(
+					SELECT 
+						si.serviceinfoId, 
+						di.itemCode,di.treeIndex, 
+						dc.collectionCode 
+					FROM 
+						opencps_serviceinfo AS si
+				    INNER JOIN
+				    	opencps_dictitem AS di
+				    ON
+				    	si.domainCode = di.dictItemId
+				    INNER JOIN
+				    	opencps_dictcollection AS dc
+				    ON
+				    	di.dictCollectionId = dc.dictCollectionId
+				    WHERE 
+				    	dc.collectionCode = 'SERVICE_DOMAIN'
+				) AS domain
+				 
+				ON
+					po.serviceInfoId = domain.serviceinfoId
+				
+				WHERE 
+					(po.groupId = ?)
+				AND 
+					(d.finishDatetime IS NULL)
+		]]>
+	</sql>
+</custom-sql>
