@@ -289,6 +289,9 @@
 		<finder return-type="Collection" name="ServiceInfoId">
 			<finder-column name="serviceInfoId"/>
 		</finder>
+		<finder return-type="Collection" name="actionUserId">
+			<finder-column name="actionUserId" />
+		</finder>
 	</entity>
 
 	<entity name="ActionHistory" local-service="true" remote-service="true"
