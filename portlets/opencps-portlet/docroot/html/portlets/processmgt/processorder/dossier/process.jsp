@@ -147,7 +147,7 @@
 		DossierPart dossierPart = null;
 		
 		if (processStepDossierParts != null) {
-			List<Long> requiredDossierPartIds = new ArrayList<Long>();
+			
 			for (ProcessStepDossierPart processStepDossierPart : processStepDossierParts){
 				
 				if (processStepDossierPart.getDossierPartId() > 0) {
@@ -165,8 +165,7 @@
 					for(ProcessWorkflow postProcessWorkflow : postProcessWorkflows){
 						String preCondition = Validator.isNotNull(postProcessWorkflow.getPreCondition()) ? 
 							postProcessWorkflow.getPreCondition() : StringPool.BLANK; 
-							requiredDossierPartIds = PortletUtil.getDossierPartResultRequired(requiredDossierPartIds, dossierId,
-									postProcessWorkflow.getProcessWorkflowId(), postProcessWorkflow.getPostProcessStepId());
+						
 					}
 				}
 				
@@ -425,9 +424,6 @@
 				}
 				index++;
 			}
-			%>
-				<aui:input name="requiredDossierPart" type="hidden" value="<%= StringUtil.merge(requiredDossierPartIds) %>"/>
-			<%
 		}
 	%>
 
@@ -505,37 +501,90 @@
 
 </div>
 
-<aui:script use="aui-base,liferay-portlet-url,aui-io">
+<aui:script use="aui-base,liferay-portlet-url,aui-io,aui-loading-mask-deprecated">
 
-	var required = false;
-	
-	Liferay.provide(window, '<portlet:namespace/>validateRequiredResult', function() {
+	function validateRequiredResult(dossierId, processStepId, processWorkflowId) {
+		
 		var A = AUI();
+
+		var actionNote = A.one('#<portlet:namespace />actionNote');
 		
-		var requiredDossierParts = A.all('#<portlet:namespace/>requiredDossierPart');
+		var requiredDossierPartIds = [];
+		var requiredActionNote = false;
+		var required = false;
 		
-		if(requiredDossierParts) {
-			
-			requiredDossierParts.each(function(requiredDossierPart){
-				var requiredDossierPartIds = requiredDossierPart.val().trim().split(",");
-				
-				if(requiredDossierPartIds != ''){
-					for(var i = 0; i < requiredDossierPartIds.length; i++){
-						var dossierPartId = requiredDossierPartIds[i];
+		var portletURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.ACTION_PHASE) %>');
+		portletURL.setParameter("javax.portlet.action", "validateAssignTask");
+		portletURL.setWindowState('<%=WindowState.NORMAL%>');
+		/* var loadingMask = new A.LoadingMask(
+			{
+				'strings.loading': '<%= UnicodeLanguageUtil.get(pageContext, "validate") %>',
+				target: A.one('#<portlet:namespace/>pofm')
+			}
+		);
+		
+		loadingMask.show(); */
+		
+		A.io.request(
+			portletURL.toString(),
+			{
+				dataType : 'text/html',
+				method : 'POST',
+				sync: true,
+			    data:{
+			    	<portlet:namespace/>dossierId : dossierId,
+			    	<portlet:namespace/>processStepId: processStepId,
+			    	<portlet:namespace/>processWorkflowId: processWorkflowId
+			    },   
+			    on: {
+			    	success: function(event, id, obj) {
+			    		
+			    		var response = this.get('responseData');
+			    		
+						responseObj = JSON.parse(response);
 						
-						if(parseInt(dossierPartId) > 0){
-							required = true;
-							var row = A.one('.dossier-part-row.dpid-' + dossierPartId);
-							if(row){
-								row.attr('style', 'color:red');
+						requiredDossierPartIds = responseObj.arrayDossierpartIds;
+						
+						requiredActionNote = responseObj.requiedActionNote;
+						
+						//requiredDossierPartIds = JSON.parse(response);
+						
+						for(var i = 0; i < requiredDossierPartIds.length; i++){
+							var id = requiredDossierPartIds[i];
+							
+							if(parseInt(id) > 0){
+								required = true;
+								var row = A.one('.dossier-part-row.dpid-' + id);
+								
+								if(row){
+									row.attr('style', 'color:red');
+								}
 							}
 						}
-					}
+					},
+			    	error: function(){}
 				}
-			});
-			
+			}
+		);
+		
+		//loadingMask.hide();
+		
+		if (required){
+			return 'please-upload-dossier-part-required-before-send';
 		}
-	});
+		if (requiredActionNote == true && actionNote.val() == ''){
+			actionNote.addClass('changeDefErr');
+			A.one('#<portlet:namespace/>defErrActionNote').addClass('displayDefErr');
+			
+			return 'please-add-note-before-send';
+		} else {
+			actionNote.removeClass('changeDefErr');
+			A.one('#<portlet:namespace/>defErrActionNote').removeClass('displayDefErr');
+		}
+		
+		return '';
+	}
+	
 
 	Liferay.provide(window, '<portlet:namespace/>assignToUser', function(e) {
 		
@@ -583,9 +632,10 @@
 		if(assignFormDisplayStyle == 'popup' ) {
 			portletURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>");
 			portletURL.setParameter("backURL", '<%=backURL%>');
-			<portlet:namespace/>validateRequiredResult();
-			if(required === true) {
-				alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-required-before-send") %>');
+			//<portlet:namespace/>validateRequiredResult(dossierId, processStepId, processWorkflowId);
+			var msg = validateRequiredResult(dossierId, processStepId, processWorkflowId);
+			if(msg != '') {
+				alert(Liferay.Language.get(msg));
 				return;
 			} 
 			openDialog(portletURL.toString(), '<portlet:namespace />assignToUser', '<%= UnicodeLanguageUtil.get(pageContext, "handle") %>');
@@ -599,6 +649,7 @@
 				{
 					dataType : 'text/html',
 					method : 'POST',
+					sync : true,
 				    data:{
 				    },   
 				    on: {
@@ -627,12 +678,11 @@
 									form.attr('action', action);
 								}
 							
-								
 								if(submitButton){
 									submitButton.on('click', function(){
-										<portlet:namespace/>validateRequiredResult();
-										if(required === true) {
-											alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "please-upload-dossier-part-required-before-send") %>');
+										var msg = validateRequiredResult(dossierId, processStepId, processWorkflowId);
+										if(msg != '') {
+											alert(Liferay.Language.get(msg));
 											return;
 										} else{
 											A.io.request(

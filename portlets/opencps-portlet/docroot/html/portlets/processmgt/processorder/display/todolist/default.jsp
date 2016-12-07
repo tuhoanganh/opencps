@@ -17,6 +17,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
+<%@page import="org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.model.ProcessWorkflow"%>
+<%@page import="org.opencps.processmgt.model.ProcessOrder"%>
+<%@page import="org.opencps.util.DateTimeUtil"%>
+<%@page import="org.opencps.holidayconfig.util.HolidayUtils"%>
 <%@page import="java.util.Date"%>
 <%@page import="org.opencps.processmgt.util.ProcessOrderUtils"%>
 <%@page import="org.opencps.util.MessageKeys"%>
@@ -32,8 +37,7 @@
 <%@ include file="../../init.jsp"%>
 
 <liferay-ui:success  key="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>" message="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>"/>
-
-<liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
+<liferay-util:include page='/html/portlets/processmgt/processorder/toolbar.jsp' servletContext="<%=application %>" />
 
 <%
 	boolean success = false;
@@ -77,7 +81,6 @@
 	<div class="opencps-searchcontainer-wrapper">
 		<liferay-ui:search-container 
 				searchContainer="<%= new ProcessOrderSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>"
-				rowChecker="<%=rowChecker%>"
 				headerNames="<%= headers%>"
 			>
 			
@@ -104,6 +107,25 @@
 						
 						pageContext.setAttribute("results", results);
 						pageContext.setAttribute("total", total);
+						
+						try {
+							
+							long processWorkFlowId = ProcessOrderLocalServiceUtil
+									.getProcessOrder(processOrders.get(0).getProcessOrderId()).getProcessWorkflowId();
+							
+							if(processWorkFlowId > 0) {
+								ProcessWorkflow processWorkflow = ProcessWorkflowLocalServiceUtil.getProcessWorkflow(processWorkFlowId);
+								
+								if(Validator.isNotNull(processWorkflow) && processWorkflow.getIsMultipled()) {
+									isMultiAssign = true;
+								}
+							}
+							
+						} catch(Exception e) {}
+						
+						if(isMultiAssign) {
+							searchContainer.setRowChecker(rowChecker);
+						}
 					%>
 				</liferay-ui:search-container-results>	
 				
@@ -237,9 +259,19 @@ AUI().ready(function(A){
 	
 	}
 	
+	var processDossier = A.one("#<portlet:namespace />processDossier");
+	var isMultiAssignvar = '<%= isMultiAssign %>';
+	
+	console.log(isMultiAssignvar);
+	console.log(processDossier);
+	if(isMultiAssignvar == 'false' && processDossier) {
+		processDossier.hide();
+	}
+	
 });
 
 </aui:script>
+
 
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.processmgt.processorder.disolay.default.jsp");

@@ -16,38 +16,47 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-
+<%@page import="org.opencps.processmgt.service.ProcessOrderLocalServiceUtil"%>
+<%@page import="javax.portlet.WindowState"%>
+<%@page import="com.liferay.portal.model.User"%>
+<%@page import="javax.portlet.PortletURL"%>
+<%@page import="java.util.List"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.opencps.holidayconfig.util.HolidayUtils"%>
+<%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.Dossier"%>
+<%@page import="org.opencps.processmgt.util.ProcessOrderUtils"%>
+<%@page import="javax.portlet.PortletMode"%>
+<%@page import="org.opencps.processmgt.NoSuchWorkflowOutputException"%>
+<%@page import="org.opencps.util.PortletPropsValues"%>
 <%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
+<%@page import="javax.portlet.PortletRequest"%>
+<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
+<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.model.WorkflowOutput"%>
+<%@page import="org.opencps.backend.util.PaymentRequestGenerator"%>
+<%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="org.opencps.util.DateTimeUtil"%>
+<%@page import="org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.model.ProcessWorkflow"%>
+<%@page import="java.util.Date"%>
+<%@page import="org.opencps.backend.util.BookingDateGenerator"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
-<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
-<%@page import="java.util.Date"%>
-<%@page import="javax.portlet.PortletMode"%>
-<%@page import="javax.portlet.PortletRequest"%>
-<%@page import="org.opencps.backend.util.DossierNoGenerator"%>
-<%@page import="org.opencps.backend.util.PaymentRequestGenerator"%>
-<%@page import="org.opencps.dossiermgt.model.Dossier"%>
+<%@page import="org.opencps.processmgt.util.ProcessUtils"%>
+<%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
 <%@page import="org.opencps.dossiermgt.model.DossierFile"%>
+<%@page import="org.opencps.processmgt.model.ProcessOrder"%>
+<%@page import="org.opencps.dossiermgt.NoSuchDossierTemplateException"%>
 <%@page import="org.opencps.dossiermgt.NoSuchDossierException"%>
 <%@page import="org.opencps.dossiermgt.RequiredDossierPartException"%>
-<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
-<%@page import="org.opencps.holidayconfig.util.HolidayUtils"%>
-<%@page import="org.opencps.processmgt.model.ProcessOrder"%>
-<%@page import="org.opencps.processmgt.model.ProcessWorkflow"%>
-<%@page import="org.opencps.processmgt.model.WorkflowOutput"%>
-<%@page import="org.opencps.processmgt.NoSuchWorkflowOutputException"%>
-<%@page import="org.opencps.processmgt.search.ProcessOrderDisplayTerms"%>
-<%@page import="org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil"%>
-<%@page import="org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil"%>
+<%@page import="org.opencps.backend.util.DossierNoGenerator"%>
 <%@page import="org.opencps.processmgt.util.ProcessMgtUtil"%>
-<%@page import="org.opencps.processmgt.util.ProcessOrderUtils"%>
-<%@page import="org.opencps.processmgt.util.ProcessUtils"%>
-<%@page import="org.opencps.util.PortletPropsValues"%>
-<%@page import="org.opencps.util.PortletUtil"%>
 <%@page import="org.opencps.util.WebKeys"%>
 
-<%@ include file="init.jsp"%>
+<%@ include file="/init.jsp"%>
 
 <%
 	boolean success = false;
@@ -57,19 +66,43 @@
 		
 	}catch(Exception e){}
 	
-	ProcessOrder processOrder = (ProcessOrder) request.getAttribute(WebKeys.PROCESS_ORDER_ENTRY);
 	
-	DossierFile  dossierFile = (DossierFile) request.getAttribute(WebKeys.DOSSIER_FILE_ENTRY);
+	String processOrderIds = ParamUtil.getString(request, "processOrderIds");
+	
+	String [] orderIds = StringUtil.split(processOrderIds, StringPool.COMMA);
+	
+	
+	// hien thi thong tin dai dien cho cac phieu xu ly co cung thu tuc va cung buoc
+	long processOrderId = GetterUtil.getLong(orderIds[0]);
+	
+	ProcessOrder processOrder = ProcessOrderLocalServiceUtil.getProcessOrder(processOrderId);
+	
+	//DossierFile  dossierFile = (DossierFile) request.getAttribute(WebKeys.DOSSIER_FILE_ENTRY);
 
-	long dossierId = ParamUtil.getLong(request, ProcessOrderDisplayTerms.DOSSIER_ID);
-	long fileGroupId =  ParamUtil.getLong(request, ProcessOrderDisplayTerms.FILE_GROUP_ID);
-	long processOrderId = ParamUtil.getLong(request, ProcessOrderDisplayTerms.PROCESS_ORDER_ID);
-	long actionUserId = ParamUtil.getLong(request, ProcessOrderDisplayTerms.ACTION_USER_ID);
-	long processWorkflowId = ParamUtil.getLong(request, ProcessOrderDisplayTerms.PROCESS_WORKFLOW_ID);
-	long serviceProcessId = ParamUtil.getLong(request, ProcessOrderDisplayTerms.SERVICE_PROCESS_ID);
-	long processStepId = ParamUtil.getLong(request, ProcessOrderDisplayTerms.PROCESS_STEP_ID);
+	long dossierId = Validator.isNotNull(processOrder) ? processOrder.getDossierId() : 0;
+	long fileGroupId =  Validator.isNotNull(processOrder) ? processOrder.getFileGroupId() : 0;
+	long actionUserId = Validator.isNotNull(processOrder) ? processOrder.getActionUserId() : 0;
+	long processWorkflowId = Validator.isNotNull(processOrder) ? processOrder.getProcessWorkflowId() : 0;
+	long serviceProcessId = Validator.isNotNull(processOrder) ? processOrder.getServiceProcessId() : 0;
 	
-	ProcessWorkflow workflow = ProcessMgtUtil.getProcessWorkflow(processWorkflowId);
+	
+	List<ProcessWorkflow> postProcessWorkflows = new ArrayList<ProcessWorkflow>();
+	ProcessWorkflow processWorkfloww = null;
+	
+	try {
+		processWorkfloww = ProcessWorkflowLocalServiceUtil.getProcessWorkflow(processWorkflowId);
+	} catch(Exception e) {}
+	
+	
+	try {
+		postProcessWorkflows = ProcessWorkflowLocalServiceUtil.getPostProcessWorkflow(
+				processOrder.getServiceProcessId(), processWorkfloww.getPostProcessStepId());
+	} catch (Exception e) {}
+	
+	
+	long processStepId = Validator.isNotNull(postProcessWorkflows) ? postProcessWorkflows.get(0).getPostProcessStepId() : 0;
+	
+	ProcessWorkflow workflow = ProcessMgtUtil.getProcessWorkflow(postProcessWorkflows.get(0).getProcessWorkflowId());
 	
 	Dossier dossier = DossierLocalServiceUtil.getDossier(dossierId);
 
@@ -92,7 +125,7 @@
 	
 	String backURL = ParamUtil.getString(request, "backURL");
 	
-	Date receiveDate = ProcessOrderUtils.getRecevieDate(dossierId, processWorkflowId, processStepId);
+	Date receiveDate = ProcessOrderUtils.getRecevieDate(dossierId, postProcessWorkflows.get(0).getProcessWorkflowId(), processStepId);
 	
 	Date estimateDate = null;
 	
@@ -111,36 +144,43 @@
 	List<WorkflowOutput> workflowOutputs = new ArrayList<WorkflowOutput>();
 	
 	
-	if(processWorkflowId > 0){
+	if(postProcessWorkflows.get(0).getProcessWorkflowId() > 0){
 		try{
 			processWorkflow = ProcessWorkflowLocalServiceUtil.getProcessWorkflow(processWorkflowId);
 
-			workflowOutputs = WorkflowOutputLocalServiceUtil.getProcessByE_S_ID_PB(processWorkflowId, true);
+			workflowOutputs = WorkflowOutputLocalServiceUtil.getProcessByE_S_ID_PB(postProcessWorkflows.get(0).getProcessWorkflowId(), true);
 		}catch(Exception e){};
 	}
 
 	boolean esign = false;
 	
-	long assigerToUserId = ProcessMgtUtil.getAssignUser(processWorkflowId, processOrderId, workflow.getPostProcessStepId());
+	long assigerToUserId = 0;
+	
+	if(Validator.isNotNull(processOrder)) {
+		assigerToUserId = processOrder.getAssignToUserId();
+		
+		if(assigerToUserId == 0) {
+			assigerToUserId = ProcessMgtUtil.getAssignUser(postProcessWorkflows.get(0).getProcessWorkflowId(), processOrderId, workflow.getPostProcessStepId());
+		}
+		
+	} else {
+		assigerToUserId = ProcessMgtUtil.getAssignUser(postProcessWorkflows.get(0).getProcessWorkflowId(), processOrderId, workflow.getPostProcessStepId());
+	}
+			
 	
 	PortletURL backTodoListURL =PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
 
-	backTodoListURL.setParameter("mvcPath", "/html/portlets/processmgt/processorder/processordertodolist.jsp");
-	backTodoListURL.setParameter("success", String.valueOf(true));
-	backTodoListURL.setWindowState(LiferayWindowState.NORMAL);
-	backTodoListURL.setPortletMode(PortletMode.VIEW);
-	
 	List<String> listFileToSigner = new ArrayList<String>();
 	List<String> listDossierPartToSigner = new ArrayList<String>();
 	List<String> listDossierFileToSigner = new ArrayList<String>();
 	
 	for (WorkflowOutput workflowOutput : workflowOutputs) {
-		DossierFile dossierFileSign = DossierFileLocalServiceUtil.getDossierFileInUse(dossierId, workflowOutput.getDossierPartId());
+		DossierFile dossierFile2 = DossierFileLocalServiceUtil.getDossierFileInUse(dossierId, workflowOutput.getDossierPartId());
 		
-		if(Validator.isNotNull(dossierFileSign)){
-			listFileToSigner.add(String.valueOf(dossierFileSign.getFileEntryId()));
-			listDossierPartToSigner.add(String.valueOf(workflowOutput.getDossierPartId()));
-			listDossierFileToSigner.add(String.valueOf(dossierFileSign.getDossierFileId()));
+		if(Validator.isNotNull(dossierFile2)){
+			listFileToSigner.add(dossierFile2.getFileEntryId()+"");
+			listDossierPartToSigner.add(workflowOutput.getDossierPartId()+"");
+			listDossierFileToSigner.add(dossierFile2.getDossierFileId()+"");
 		}
 	}
 %>
@@ -158,25 +198,25 @@
 	message="<%=RequiredDossierPartException.class.getName() %>"
 />
 
-<portlet:actionURL var="assignToUserURL" name="assignToUser"/>
+<portlet:actionURL var="multiAssignToUserURL" name="multiAssignToUser"/>
 
-<aui:form name="fm" action="<%=assignToUserURL.toString() %>" method="post">
+<aui:form name="fm" action="<%=multiAssignToUserURL.toString() %>" method="post">
 
-	<aui:input 
+	<%-- <aui:input 
 		name="assignFormDisplayStyle" 
 		value="<%=assignFormDisplayStyle %>" 
 		type="hidden"
-	/>
+	/> --%>
 	
 	<aui:input 
-		name="assignActionURL" 
-		value="<%=assignToUserURL.toString() %>" 
+		name="processOrderIds" 
+		value="<%=processOrderIds %>" 
 		type="hidden"
 	/>
 	
 	<aui:input 
 		name="assignActionURL" 
-		value="<%=assignToUserURL.toString() %>" 
+		value="<%=multiAssignToUserURL.toString() %>" 
 		type="hidden"
 	/>
 	<aui:input 
@@ -237,6 +277,13 @@
 		value="<%=dossierId %>" 
 		type="hidden"
 	/>
+	
+	<aui:input 
+		name="redirectURL" 
+		value="<%=currentURL%>" 
+		type="hidden"
+	/>
+	
 	<aui:input 
 		name="<%=ProcessOrderDisplayTerms.FILE_GROUP_ID %>" 
 		value="<%=fileGroupId %>" 
@@ -249,7 +296,7 @@
 	/>
 	<aui:input 
 		name="<%=ProcessOrderDisplayTerms.PROCESS_WORKFLOW_ID %>" 
-		value="<%=processWorkflowId %>" 
+		value="<%=postProcessWorkflows.get(0) %>" 
 		type="hidden"
 	/>
 	<aui:input 
@@ -276,9 +323,7 @@
 	
 	<div class="row-fluid">
 	
-	<c:if test="<%= processWorkflow.getAssignUser() %>">
-	
-			<div class="span12">
+			<div class="<%=cssCol%>">
 				<aui:select 
 					name="<%=ProcessOrderDisplayTerms.ASSIGN_TO_USER_ID %>" 
 					label="assign-to-next-user" 
@@ -296,11 +341,10 @@
 					%>
 				</aui:select>
 			</div>
-		</c:if>
 		
 		<c:if test="<%= processWorkflow.getRequestPayment() %>">
 		
-			<div class="span12">
+			<div class="<%=cssCol%>">
 				<aui:input 
 					cssClass="input100"
 					name="<%=ProcessOrderDisplayTerms.PAYMENTVALUE %>" 
@@ -312,7 +356,7 @@
 		</c:if>		
 		
 		<c:if test="<%= processWorkflow.getGenerateReceptionNo() %>">
-			<div class="span12">
+			<div class="<%=cssCol%>">
 				<aui:input 
 					name="<%=ProcessOrderDisplayTerms.RECEPTION_NO %>" 
 					label="reception-no" 
@@ -322,7 +366,7 @@
 		</c:if>
 		
 		<c:if test="<%= processWorkflow.getGenerateDeadline() %>">
-			<div class="span12">
+			<div class="<%=cssCol%>">
 				<aui:row>
 					<label class="control-label custom-lebel" for='<portlet:namespace/><%="deadline" %>'>
 						<liferay-ui:message key="return-date"/>
@@ -367,9 +411,6 @@
 	<div class="row-fluid">
 		<div class="span12">
 			<aui:input name="<%=ProcessOrderDisplayTerms.ACTION_NOTE %>" label="action-note" type="textarea" cssClass="input100"/>
-		</div>
-		<div id="<portlet:namespace/>defErrActionNote" style="text-align: left; color: #b50303; margin-left:7px; margin-bottom: 10px; display: none;">
-			<liferay-ui:message key="required-field"/>
 		</div>
 	</div>
 	
@@ -450,7 +491,7 @@
 	<aui:button type="button" value="submit" name="submit"/>
 	
 	<c:if test="<%=esign %>">
-		<%-- <aui:button type="button" value="esign" name="esign"/> --%>
+		<aui:button type="button" value="esign" name="esign"/>
 		<aui:button type="button" value="esign" name="esign" onClick="getFileComputerHash(1);"/>
 	</c:if>
 	<aui:button type="button" value="cancel" name="cancel"/>
@@ -483,19 +524,17 @@
 			});
 		}
 		
- 		if(cancelButton){
- 			cancelButton.on('click', function(){
- 				<portlet:namespace/>closeDialog();
- 			});
- 		}
+		if(cancelButton){
+			cancelButton.on('click', function(){
+				<portlet:namespace/>closeDialog();
+			});
+		}
 		
  		var success = '<%=success%>';
 		
  		if(success == 'true'){
- 			var backURL = '<%=backURL%>';
- 			var Util = Liferay.Util;
- 			<portlet:namespace/>closeDialog();
-			Util.getOpener().Liferay.fire('redirect', {responseData:{backURL:backURL}});
+ 			closeDialog('assign-multi-dossier', '<%=WebKeys.PROCESS_ORDER_PORTLET%>_');
+			//Util.getOpener().Liferay.fire('redirect', {responseData:{backURL:backURL}});
  		}
 		
  		if(esign){
@@ -656,10 +695,8 @@
 </aui:script>
 	
 <aui:script>
-	var assignTaskAfterSign = '<%=String.valueOf(assignTaskAfterSign)%>';
-
 	function formSubmit() {
-		document.getElementById('<portlet:namespace />fm').action = '<%=assignToUserURL.toString() %>';
+		document.getElementById('<portlet:namespace />fm').action = '<%=multiAssignToUserURL.toString() %>';
 			document.getElementById('<portlet:namespace />fm').submit();
 	}
 	
@@ -769,9 +806,7 @@
 							var newis = indexSize-1;
 								if (msg === 'success') {
 									if(index == newis){
-										if(assignTaskAfterSign == 'true'){
-											formSubmit();
-										}
+										formSubmit();
 									}
 								} else {
 										alert("--------- vao day completeSignature- ky so ko dc-------------");
