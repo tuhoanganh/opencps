@@ -128,6 +128,12 @@
 					
 					<div class="box100">
 						<div>
+		                	<p>
+		                		<span><liferay-ui:message key="subject-name"/>:</span> 
+		                		<%=Validator.isNotNull(dossier)? HtmlUtil.escape(dossier.getSubjectName()): LanguageUtil.get(pageContext, "monitoring-chua-co") %>
+		                	</p>
+		                </div>
+						<div>
 							<p>
 								<span>
 								<liferay-ui:message key="so-ho-so"/>:
@@ -178,30 +184,8 @@
 						<div>
 							<p>
 								<span><liferay-ui:message key="hinh-thuc-thuc-hien"/>: </span> 
-								<%
-									List<String> paymentOption = ListUtil.toList(StringUtil.split(paymentFile.getPaymentOptions()));
-									
-									boolean isCash = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_CASH);
-									boolean isKeypay = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_KEYPAY);
-									boolean isBank = paymentOption.contains(PaymentRequestGenerator.PAY_METHOD_BANK);
-								%>
 								
-								<c:if test="<%= isCash %>">
-									[ <liferay-ui:message key="cash"/> ]&nbsp;
-								</c:if>
-								
-								<c:if test="<%= isKeypay %>">
-									[ <liferay-ui:message key="keypay"/> ]&nbsp;
-								</c:if>
-								
-								<c:if test="<%= isBank %>">
-									[ <liferay-ui:message key="bank"/> ]
-								</c:if>
-								
-								<c:if test="<%= !isBank && !isKeypay && !isCash %>">
-									<liferay-ui:message key="monitoring-chua-co"/>
-								</c:if>
-							
+								<liferay-ui:message key="<%=PortletUtil.getPaymentMethod(paymentFile) %>"></liferay-ui:message>
 							</p>
 						</div>
 						

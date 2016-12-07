@@ -46,6 +46,7 @@ import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.DossierPart;
 import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
+import org.opencps.paymentmgt.model.PaymentFile;
 import org.opencps.paymentmgt.util.PaymentMgtUtil;
 import org.opencps.processmgt.model.ProcessStepDossierPart;
 import org.opencps.processmgt.model.ProcessWorkflow;
@@ -1251,6 +1252,32 @@ public class PortletUtil {
 				contentLength, contentType);
 	}
 
+	public static String getPaymentMethod(PaymentFile paymentFile) {
+		
+		int paymentMethod = paymentFile.getPaymentMethod();
+		
+		switch (paymentMethod) {
+		case PortletConstants.PAYMENT_METHOD_CASH:
+			return PortletConstants.PAYMENT_METHOD_CASH_STR;
+		case PortletConstants.PAYMENT_METHOD_KEYPAY:
+			return PortletConstants.PAYMENT_METHOD_KEYPAY_STR;
+		case PortletConstants.PAYMENT_METHOD_BANK:
+			return PortletConstants.PAYMENT_METHOD_BANK_STR;
+		default:
+			break;
+		}
+		
+		return StringPool.BLANK;
+	}
+	
+	public static boolean checkPaymentMethod(int paymentMethod, PaymentFile paymentFile){
+		
+		if (paymentMethod == paymentFile.getPaymentMethod()){
+			return true;
+		}
+		return false;
+	}
+	
 	private static Log _log = LogFactoryUtil
 			.getLog(PortletUtil.class.getName());
 }

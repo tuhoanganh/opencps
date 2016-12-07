@@ -81,6 +81,12 @@
 		<aui:form name="payForm" action="">
 			<div class="box100">
 				<div>
+                	<p>
+                		<span><liferay-ui:message key="subject-name"/>:</span> 
+                		<%=Validator.isNotNull(dossier)? HtmlUtil.escape(dossier.getSubjectName()): StringPool.BLANK %>
+                	</p>
+                </div>
+				<div>
 					<p>
 						<span><liferay-ui:message key="so-ho-so" />:</span>
 						<%=HtmlUtil.escape(soHoSo)%></p>

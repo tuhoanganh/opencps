@@ -109,42 +109,9 @@
                     </div>
                     <div>
                         <p><span><liferay-ui:message key="payment-method"/>:</span> 
-	                        	
 	                	</p>
-               			<%
-							int paymentMethod = paymentFile.getPaymentMethod();
-               			
-							boolean isCash = false;
-							boolean isKeypay = false;
-							boolean isBank = false;
 							
-							switch (paymentMethod) {
-							case PortletConstants.PAYMENT_METHOD_CASH:
-								isCash = true;
-								break;
-							case PortletConstants.PAYMENT_METHOD_KEYPAY:
-								isKeypay = true;
-								break;
-							case PortletConstants.PAYMENT_METHOD_BANK:
-								isBank = true;
-								break;
-							default:
-								break;
-							}
-						%>
-							
-						<c:if test="<%= isCash %>">
-							<liferay-ui:message key="cash"></liferay-ui:message>
-						</c:if>
-						<c:if test="<%= isKeypay %>">
-							<liferay-ui:message key="keypay"></liferay-ui:message>
-						</c:if>
-						<c:if test="<%= isBank %>">
-							<liferay-ui:message key="bank"></liferay-ui:message>
-						</c:if>
-						<c:if test="<%= !isBank && !isKeypay && !isCash %>">
-							<font style="color: #fff;">-</font>
-						</c:if>
+						<liferay-ui:message key="<%=PortletUtil.getPaymentMethod(paymentFile) %>"></liferay-ui:message><font style="color: #fff;">-</font>
                     </div>
                     <div>
                         <p><span><liferay-ui:message key="chung-tu-kem-theo"/>:</span> 
@@ -169,6 +136,10 @@
 	                             
 	                            dlURL = DLUtil.getPreviewURL(fileEntry, fileVersion, themeDisplay, queryString, appendFileEntryVersion, useAbsoluteURL);                            
 	                        }
+	                        
+	                        boolean isCash = PortletUtil.checkPaymentMethod(PortletConstants.PAYMENT_METHOD_CASH, paymentFile);
+	                        boolean isBank = PortletUtil.checkPaymentMethod(PortletConstants.PAYMENT_METHOD_BANK, paymentFile);
+	                        boolean isKeypay = PortletUtil.checkPaymentMethod(PortletConstants.PAYMENT_METHOD_KEYPAY, paymentFile);
 	                    %>
 	                    <c:if test="<%=isCash || isBank %>">
 	                    	<c:choose>
