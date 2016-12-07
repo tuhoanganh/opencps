@@ -1258,11 +1258,11 @@ public class PortletUtil {
 		
 		switch (paymentMethod) {
 		case PortletConstants.PAYMENT_METHOD_CASH:
-			return PortletConstants.PAYMENT_METHOD_CASH_STR;
+			return "cash";
 		case PortletConstants.PAYMENT_METHOD_KEYPAY:
-			return PortletConstants.PAYMENT_METHOD_KEYPAY_STR;
+			return "keypay";
 		case PortletConstants.PAYMENT_METHOD_BANK:
-			return PortletConstants.PAYMENT_METHOD_BANK_STR;
+			return "bank";
 		default:
 			break;
 		}
