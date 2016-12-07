@@ -92,8 +92,7 @@
 	title="payment-request"
 />
 <div class="payment-ld">
-			<div class="content" >
-                <div class="box100">
+	<div class="content overfolow">
 <c:choose>
 	<c:when test="<%= paymentFile != null %>">
 		
@@ -229,6 +228,5 @@
 	
 	</c:otherwise>
 </c:choose>
-    </div>
-            </div>
-		</div>
+   </div>
+</div>
