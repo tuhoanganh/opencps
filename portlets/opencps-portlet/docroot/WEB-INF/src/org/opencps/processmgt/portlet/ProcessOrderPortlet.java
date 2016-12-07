@@ -89,6 +89,7 @@ import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
 import org.opencps.processmgt.service.ServiceProcessLocalServiceUtil;
 import org.opencps.processmgt.service.StepAllowanceLocalServiceUtil;
 import org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil;
+import org.opencps.processmgt.util.ProcessOrderUtils;
 import org.opencps.processmgt.util.ProcessUtils;
 import org.opencps.servicemgt.model.ServiceInfo;
 import org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil;
@@ -126,6 +127,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.service.ClassNameLocalServiceUtil;
@@ -2784,105 +2786,135 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		}
 	}
 
-	public void validateAssignTask(ActionRequest actionRequest,
-			ActionResponse actionResponse) throws IOException {
-		List<WorkflowOutput> workflowOutputs = new ArrayList<WorkflowOutput>();
+	public void multiAssignToUser(ActionRequest actionRequest,
+			ActionResponse actionResponse) {
+		String processOrderIds = ParamUtil.getString(actionRequest,
+				"processOrderIds", StringPool.BLANK);
 
-		List<ProcessStepDossierPart> processStepDossierParts = new ArrayList<ProcessStepDossierPart>();
+		if (Validator.isNotNull(processOrderIds)) {
 
-		JSONObject obj = JSONFactoryUtil.createJSONObject();
-		
-		JSONArray array = JSONFactoryUtil.createJSONArray();
-
-		long dossierId = ParamUtil.getLong(actionRequest,
-				ProcessOrderDisplayTerms.DOSSIER_ID);
-
-		long processStepId = ParamUtil.getLong(actionRequest,
-				ProcessOrderDisplayTerms.PROCESS_STEP_ID);
-
-		long processWorkflowId = ParamUtil.getLong(actionRequest,
-				ProcessOrderDisplayTerms.PROCESS_WORKFLOW_ID);
-
-		processStepDossierParts = ProcessUtils
-				.getDossierPartByStep(processStepId);
-
-		if (processStepDossierParts != null) {
-
-			for (ProcessStepDossierPart processStepDossierPart : processStepDossierParts) {
-
-				if (processStepDossierPart.getDossierPartId() > 0) {
-					try {
-
-						List<WorkflowOutput> workflowOutputsTemp = WorkflowOutputLocalServiceUtil
-								.getByProcessByPWID_DPID(processWorkflowId,
-										processStepDossierPart
-												.getDossierPartId());
-
-						if (workflowOutputsTemp != null) {
-							workflowOutputs.addAll(workflowOutputsTemp);
-						}
-					} catch (Exception e) {
-					}
-				}
-
-			}
-		}
-
-		if (workflowOutputs != null && !workflowOutputs.isEmpty()) {
-			for (WorkflowOutput workflowOutput : workflowOutputs) {
-
-				if (workflowOutput.getRequired()) {
-
-					DossierFile dossierFile = null;
-					DossierPart dossierPart = null;
-					try {
-						dossierPart = DossierPartLocalServiceUtil
-								.getDossierPart(workflowOutput
-										.getDossierPartId());
-						dossierFile = DossierFileLocalServiceUtil
-								.getDossierFileInUse(dossierId,
-										dossierPart.getDossierpartId());
-					} catch (Exception e) {
-						// TODO: handle exception
-					}
-
-					if (dossierFile == null && dossierPart != null) {
-
-						array.put(dossierPart.getDossierpartId());
-
-					}
-				}
-			}
-		}
-		
-		obj.put("arrayDossierpartIds", array);
-		
-		// Validate nhap y kien
-		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.
-				getAttribute(WebKeys.THEME_DISPLAY);
-		ExpandoValue requiedActionNote = null;
-		boolean requiedActionNoteValue = false;
-		
-		try {
-			requiedActionNote = 
-					ExpandoValueLocalServiceUtil.getValue(
-						themeDisplay.getCompanyId(), 
-						ClassNameLocalServiceUtil.getClassNameId(ProcessStep.class.getName()), 
-						ProcessStep.class.getName(), 
-						"requiedProcessActionNote", 
-						processWorkflowId);
+			String[] orderIds = StringUtil.split(processOrderIds,
+					StringPool.COMMA);
+			Dossier dossier = null;
 			
-			requiedActionNoteValue = requiedActionNote.getBoolean();
-		} catch (Exception e){
-			//
-		}
-		
-		obj.put("requiedActionNote", requiedActionNoteValue);
-		
-		if(obj != null){
-			//PortletUtil.writeJSON(actionRequest, actionResponse, array);
-			PortletUtil.writeJSON(actionRequest, actionResponse, obj);
-		}
+			String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
+			String paymentValue = ParamUtil.getString(actionRequest,
+					ProcessOrderDisplayTerms.PAYMENTVALUE);
+			String actionNote = ParamUtil.getString(actionRequest,
+					ProcessOrderDisplayTerms.ACTION_NOTE);
+			String estimateDate = ParamUtil.getString(actionRequest,
+					ProcessOrderDisplayTerms.ESTIMATE_DATE);
+			String estimateTime = ParamUtil.getString(actionRequest,
+					ProcessOrderDisplayTerms.ESTIMATE_TIME);
+			long processStepId = ParamUtil.getLong(actionRequest,
+					ProcessOrderDisplayTerms.PROCESS_STEP_ID);
+			long assignToUserId = ParamUtil.getLong(actionRequest,
+					ProcessOrderDisplayTerms.ASSIGN_TO_USER_ID);
+			boolean signature = ParamUtil.getBoolean(actionRequest,
+					ProcessOrderDisplayTerms.SIGNATURE);
+			ProcessWorkflow processWorkflow = null;
 
+			Date deadline = null;
+
+			if (Validator.isNotNull(estimateDate)) {
+				deadline = DateTimeUtil.convertStringToFullDate(estimateDate
+						+ StringPool.SPACE + estimateTime + StringPool.COLON
+						+ "00");
+			}
+			try {
+				ServiceContext serviceContext = ServiceContextFactory
+						.getInstance(actionRequest);
+
+				for (int i = 0; i < orderIds.length; i++) {
+
+					ProcessOrder processOrder = ProcessOrderLocalServiceUtil
+							.getProcessOrder(GetterUtil.getLong(orderIds[i]));
+
+					long dossierId = processOrder.getDossierId();
+					long fileGroupId = processOrder.getFileGroupId();
+					long actionUserId = processOrder.getActionUserId();
+					long processWorkflowId = processOrder
+							.getProcessWorkflowId();
+
+					processWorkflow = ProcessWorkflowLocalServiceUtil
+							.getProcessWorkflow(processWorkflowId);
+
+					Date receiveDate = ProcessOrderUtils.getRecevieDate(
+							dossierId, processWorkflowId, processStepId);
+
+					List<ProcessWorkflow> postProcessWorkflows = new ArrayList<ProcessWorkflow>();
+
+					postProcessWorkflows = ProcessWorkflowLocalServiceUtil
+							.getPostProcessWorkflow(
+									processOrder.getServiceProcessId(),
+									processWorkflow.getPostProcessStepId());
+
+					String event = postProcessWorkflows.get(0).getAutoEvent();
+
+					dossier = DossierLocalServiceUtil.getDossier(dossierId);
+
+					validateAssignTask(dossier.getDossierId(),
+							processWorkflowId, processStepId);
+
+					Message message = new Message();
+
+					SendToEngineMsg sendToEngineMsg = new SendToEngineMsg();
+
+					// sendToEngineMsg.setAction(WebKeys.ACTION);
+					sendToEngineMsg.setActionNote(actionNote);
+					sendToEngineMsg.setEvent(event);
+					sendToEngineMsg
+							.setGroupId(serviceContext.getScopeGroupId());
+					sendToEngineMsg.setCompanyId(serviceContext.getCompanyId());
+					sendToEngineMsg.setAssignToUserId(assignToUserId);
+					sendToEngineMsg.setActionUserId(actionUserId);
+					sendToEngineMsg.setDossierId(dossierId);
+					sendToEngineMsg.setEstimateDatetime(deadline);
+					sendToEngineMsg.setFileGroupId(fileGroupId);
+					sendToEngineMsg.setPaymentValue(GetterUtil
+							.getDouble(paymentValue));
+					sendToEngineMsg.setProcessOrderId(GetterUtil
+							.getLong(orderIds[i]));
+					sendToEngineMsg.setProcessWorkflowId(postProcessWorkflows
+							.get(0).getProcessWorkflowId());
+					sendToEngineMsg.setReceptionNo(Validator.isNotNull(dossier
+							.getReceptionNo()) ? dossier.getReceptionNo()
+							: StringPool.BLANK);
+					sendToEngineMsg.setSignature(signature ? 1 : 0);
+					sendToEngineMsg
+							.setDossierStatus(dossier.getDossierStatus());
+					sendToEngineMsg.setActionDatetime(new Date());
+					sendToEngineMsg
+							.setActorType(WebKeys.DOSSIER_ACTOR_EMPLOYEE);
+					sendToEngineMsg.setReceiveDate(receiveDate);
+
+					message.put("msgToEngine", sendToEngineMsg);
+
+					MessageBusUtil.sendMessage(
+							"opencps/backoffice/engine/destination", message);
+
+					List<WorkflowOutput> workflowOutputs = WorkflowOutputLocalServiceUtil
+							.getByProcessWF(processWorkflowId);
+
+					// Lat co trang trai sau khi gui thanh cong len jms va
+					// engine
+					DossierFileLocalServiceUtil
+							.updateDossierFileResultSyncStatus(
+									0,
+									dossierId,
+									PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
+									PortletConstants.DOSSIER_FILE_SYNC_STATUS_REQUIREDSYNC,
+									0, workflowOutputs);
+
+				}
+				
+				SessionMessages.add(actionRequest, "success");
+				
+				actionResponse.sendRedirect(redirectURL);;
+
+			} catch (Exception e) {
+				_log.error(e);
+			}
+		}
 	}
 }
