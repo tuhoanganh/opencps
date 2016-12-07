@@ -77,7 +77,7 @@
 <div class="content overfolow">
                 <div class="box50">
                     <div>
-                        <p><span><liferay-ui:message key="so-ho-so"/>:</span></p> <%= Validator.isNotNull(soHoSo) ?HtmlUtil.escape(soHoSo): LanguageUtil.get(pageContext, "monitoring-chua-co") %>
+                        <p><span><liferay-ui:message key="reception-no"/>:</span></p> <%= Validator.isNotNull(soHoSo) ?HtmlUtil.escape(soHoSo): LanguageUtil.get(pageContext, "monitoring-chua-co") %>
                     </div>
                     <div class="over100">
                         <p><span><liferay-ui:message key="thu-tuc-hanh-chinh"/>:</span> <span><%=Validator.isNotNull(serviceInfo)? HtmlUtil.escape(serviceInfo.getServiceName()): LanguageUtil.get(pageContext, "monitoring-chua-co") %></span></p>

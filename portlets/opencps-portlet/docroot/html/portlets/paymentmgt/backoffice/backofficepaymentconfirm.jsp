@@ -136,7 +136,7 @@
 						<div>
 							<p>
 								<span>
-								<liferay-ui:message key="so-ho-so"/>:
+								<liferay-ui:message key="reception-no"/>:
 								</span> 
 								<%= Validator.isNotNull(soHoSo) ?HtmlUtil.escape(soHoSo): LanguageUtil.get(pageContext, "monitoring-chua-co") %>
 							</p>
@@ -183,7 +183,7 @@
 						
 						<div>
 							<p>
-								<span><liferay-ui:message key="hinh-thuc-thuc-hien"/>: </span> 
+								<span><liferay-ui:message key="payment-method"/>: </span> 
 								
 								<liferay-ui:message key="<%=PortletUtil.getPaymentMethod(paymentFile) %>"></liferay-ui:message>
 							</p>

@@ -88,7 +88,7 @@
                 </div>
 				<div>
 					<p>
-						<span><liferay-ui:message key="so-ho-so" />:</span>
+						<span><liferay-ui:message key="reception-no" />:</span>
 						<%=HtmlUtil.escape(soHoSo)%></p>
 				</div>
 				<div>
