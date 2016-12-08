@@ -142,20 +142,8 @@
 						processURL.setParameter("mvcPath", templatePath + "process_order_detail.jsp");
 						processURL.setParameter(ProcessOrderDisplayTerms.PROCESS_ORDER_ID, String.valueOf(processOrder.getProcessOrderId()));
 						processURL.setParameter("backURL", currentURL);
-						boolean flag = false;
-						for(int i=0; i<processOrder.get_testDuplicate().length;i++){
-								System.out.println(processOrder.get_testDuplicate()[i]);
-								System.out.println("-->"+processOrder.getProcessOrderId()+"");
-							if(processOrder.get_testDuplicate()[i].equals(processOrder.getProcessOrderId()+"")){
-								flag = true;
-								break;
-							}
-						}
-						if(flag){
-							processURL.setParameter("isEditDossier", String.valueOf(true));
-						}else{
-							processURL.setParameter("isEditDossier", (processOrder.isReadOnly() || (processOrder.getAssignToUsesrId() != 0 &&  processOrder.getAssignToUsesrId() != user.getUserId())) ? String.valueOf(false) : String.valueOf(true));
-						}
+						processURL.setParameter("isEditDossier", (processOrder.isReadOnly() || (processOrder.getAssignToUsesrId() != 0 &&  processOrder.getAssignToUsesrId() != user.getUserId())) ? String.valueOf(false) : String.valueOf(true));
+						
 						String dateOver = HolidayCheckUtils.calculatorDateUntilDealineReturnFormart(Validator.isNotNull(processOrder.getActionDatetime()) ? 
 								processOrder.getActionDatetime() : null,
 								new Date(), processOrder.getDaysDuration(),themeDisplay.getLocale());
@@ -242,11 +230,7 @@
 						row.addText(generalInfo);
 						row.addText(detail);
 						row.addButton(actionBtn, href);
-						if(flag){
-							row.setClassName(StringPool.BLANK);
-						}else{
-							row.setClassName((processOrder.isReadOnly() || (processOrder.getAssignToUsesrId() != 0 &&  processOrder.getAssignToUsesrId() != user.getUserId())) ? "readonly" : StringPool.BLANK);
-						}
+						row.setClassName((processOrder.isReadOnly() || (processOrder.getAssignToUsesrId() != 0 &&  processOrder.getAssignToUsesrId() != user.getUserId())) ? "readonly" : StringPool.BLANK);
 						
 						//row.setClassHoverName("");
 					%>	

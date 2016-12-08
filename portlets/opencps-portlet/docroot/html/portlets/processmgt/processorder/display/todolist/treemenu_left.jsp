@@ -69,71 +69,12 @@
 	
 	String tabs1 = ParamUtil.getString(request, "tabs1", ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS);
 
-	List<ProcessOrderBean> processOrderServices = new ArrayList<ProcessOrderBean>();
-	
-	List<ProcessOrderBean> processOrderSteps = new ArrayList<ProcessOrderBean>();
-	
-	
-	
 	long serviceInfoId = ParamUtil.getLong(request, "serviceInfoId");
 	
 	long processStepId = ParamUtil.getLong(request, "processStepId");
 	
 	String dossierSubStatus = ParamUtil.getString(request, "dossierSubStatus");
 	
-	try {
-
-		if (tabs1
-				.equals(ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS)) {
-			processOrderServices = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil
-					.getProcessOrderServiceByUser(themeDisplay
-							.getUserId());
-
-			for (ProcessOrderBean ett : processOrderServices) {
-				processOrderSteps
-						.addAll((List<ProcessOrderBean>) ProcessOrderLocalServiceUtil
-								.getUserProcessStep(
-										themeDisplay.getUserId(),
-										ett.getServiceInfoId()));
-			}
-
-			if (serviceInfoId > 0) {
-				processOrderSteps = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil
-						.getUserProcessStep(themeDisplay.getUserId(),
-								serviceInfoId);
-			}
-		} else {
-			processOrderServices = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil
-					.getProcessOrderServiceJustFinishedByUser(themeDisplay
-							.getUserId());
-
-			for (ProcessOrderBean ett : processOrderServices) {
-				processOrderSteps
-						.addAll((List<ProcessOrderBean>) ProcessOrderLocalServiceUtil
-								.getUserProcessStep(
-										themeDisplay.getUserId(),
-										ett.getServiceInfoId()));
-			}
-
-			if (serviceInfoId > 0) {
-				processOrderSteps = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil
-						.getUserProcessStepJustFinished(
-								themeDisplay.getUserId(), serviceInfoId);
-			}
-		}
-
-	} catch (Exception e) {
-	}
-
-	//remove duplicates process orders
-	Map<String, ProcessOrderBean> cleanMap = new LinkedHashMap<String, ProcessOrderBean>();
-	for (int i = 0; i < processOrderSteps.size(); i++) {
-		cleanMap.put(processOrderSteps.get(i).getProcessStepId() + "",
-				processOrderSteps.get(i));
-	}
-	processOrderSteps = new ArrayList<ProcessOrderBean>(
-			cleanMap.values());
-
 	JSONObject arrayParam = JSONFactoryUtil
 		    .createJSONObject();
 	arrayParam.put("serviceInfoId", (serviceInfoId > 0) ? String.valueOf(serviceInfoId):StringPool.BLANK);
@@ -252,13 +193,6 @@
 								processURL.setParameter("mvcPath", templatePath + "process_order_detail.jsp");
 								processURL.setParameter(ProcessOrderDisplayTerms.PROCESS_ORDER_ID, String.valueOf(processOrder.getProcessOrderId()));
 								processURL.setParameter("backURL", currentURL);
-								boolean flag = false;
-								for(int i=0; i<processOrder.get_testDuplicate().length;i++){
-									if(processOrder.get_testDuplicate()[i].equals(processOrder.getProcessOrderId()+"")){
-										flag = true;
-										break;
-									}
-								}
 								processURL.setParameter("isEditDossier", (processOrder.isReadOnly() || (processOrder.getAssignToUsesrId() != 0 &&  processOrder.getAssignToUsesrId() != user.getUserId())) ? String.valueOf(false) : String.valueOf(true));
 							
 								String dateOver = HolidayCheckUtils.calculatorDateUntilDealineReturnFormart(Validator.isNotNull(processOrder.getActionDatetime()) ? 
