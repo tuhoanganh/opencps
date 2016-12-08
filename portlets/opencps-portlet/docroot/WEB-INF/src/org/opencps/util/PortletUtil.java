@@ -1252,32 +1252,6 @@ public class PortletUtil {
 				contentLength, contentType);
 	}
 
-	public static String getPaymentMethod(PaymentFile paymentFile) {
-		
-		int paymentMethod = paymentFile.getPaymentMethod();
-		
-		switch (paymentMethod) {
-		case PortletConstants.PAYMENT_METHOD_CASH:
-			return "cash";
-		case PortletConstants.PAYMENT_METHOD_KEYPAY:
-			return "keypay";
-		case PortletConstants.PAYMENT_METHOD_BANK:
-			return "bank";
-		default:
-			break;
-		}
-		
-		return StringPool.BLANK;
-	}
-	
-	public static boolean checkPaymentMethod(int paymentMethod, PaymentFile paymentFile){
-		
-		if (paymentMethod == paymentFile.getPaymentMethod()){
-			return true;
-		}
-		return false;
-	}
-	
 	private static Log _log = LogFactoryUtil
 			.getLog(PortletUtil.class.getName());
 }

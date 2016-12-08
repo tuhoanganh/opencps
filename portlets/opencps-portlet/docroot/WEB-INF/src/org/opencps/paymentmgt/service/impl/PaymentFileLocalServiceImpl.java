@@ -486,8 +486,6 @@ public class PaymentFileLocalServiceImpl
 			paymentFile.setApproveNote(approveNote);
 		}
 
-		paymentFile.setApproveNote(approveNote);
-
 		User user = UserLocalServiceUtil.getUser(serviceContext.getUserId());
 
 		PermissionChecker permissionChecker;

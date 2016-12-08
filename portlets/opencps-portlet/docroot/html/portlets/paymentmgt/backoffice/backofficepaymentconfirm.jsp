@@ -130,7 +130,7 @@
 						<div>
 		                	<p>
 		                		<span><liferay-ui:message key="subject-name"/>:</span> 
-		                		<%=Validator.isNotNull(dossier)? HtmlUtil.escape(dossier.getSubjectName()): LanguageUtil.get(pageContext, "monitoring-chua-co") %>
+		                		<%=Validator.isNotNull(dossier)? HtmlUtil.escape(dossier.getSubjectName()): "-" %>
 		                	</p>
 		                </div>
 						<div>
@@ -138,7 +138,7 @@
 								<span>
 								<liferay-ui:message key="reception-no"/>:
 								</span> 
-								<%= Validator.isNotNull(soHoSo) ?HtmlUtil.escape(soHoSo): LanguageUtil.get(pageContext, "monitoring-chua-co") %>
+								<%= Validator.isNotNull(soHoSo) ?HtmlUtil.escape(soHoSo): "-" %>
 							</p>
 						</div>
 					
@@ -146,7 +146,7 @@
 							<p>
 								<span><liferay-ui:message key="thu-tuc-hanh-chinh"/>:</span> 
 								<span>
-								<%= Validator.isNotNull(serviceInfo) ?HtmlUtil.escape(serviceInfo.getServiceName()): LanguageUtil.get(pageContext, "monitoring-chua-co") %>
+								<%= Validator.isNotNull(serviceInfo) ?HtmlUtil.escape(serviceInfo.getServiceName()): "-" %>
 								</span>
 							</p>
 						</div>
@@ -154,21 +154,21 @@
 						<div>
 							<p>
 								<span><liferay-ui:message key="co-quan-thuc-hien"/>:</span>
-								<%= Validator.isNotNull(coQuanQuanLyHoaDon) ? HtmlUtil.escape(coQuanQuanLyHoaDon) : LanguageUtil.get(pageContext, "monitoring-chua-co")%>
+								<%= Validator.isNotNull(coQuanQuanLyHoaDon) ? HtmlUtil.escape(coQuanQuanLyHoaDon) : "-"%>
 							</p>
 						</div>
 						
 						<div>
 							<p>
 								<span><liferay-ui:message key="ten-phi-thanh-toan"/>:</span> 
-								<%= Validator.isNotNull(paymentFile) ? HtmlUtil.escape(paymentFile.getPaymentName()): LanguageUtil.get(pageContext, "monitoring-chua-co") %>
+								<%= Validator.isNotNull(paymentFile) ? HtmlUtil.escape(paymentFile.getPaymentName()): "-" %>
 							</p>
 						</div>
 						
 						<div>
 							<p>
 								<span><liferay-ui:message key="ngay-yeu-cau"/>:</span>
-								<%= Validator.isNotNull(paymentFile) ? HtmlUtil.escape(DateTimeUtil.convertDateToString(paymentFile.getConfirmDatetime(), DateTimeUtil._VN_DATE_TIME_FORMAT)): LanguageUtil.get(pageContext, "monitoring-chua-co") %>
+								<%=Validator.isNotNull(paymentFile.getRequestDatetime())?HtmlUtil.escape(DateTimeUtil.convertDateToString(paymentFile.getRequestDatetime(), DateTimeUtil._VN_DATE_FORMAT)): "-" %>
 							</p>
 						</div>
 						
@@ -185,7 +185,27 @@
 							<p>
 								<span><liferay-ui:message key="payment-method"/>: </span> 
 								
-								<liferay-ui:message key="<%=PortletUtil.getPaymentMethod(paymentFile) %>"></liferay-ui:message>
+								<c:choose>
+		                           	<c:when test="<%= paymentFile.getPaymentMethod() == PaymentMgtUtil.PAYMENT_METHOD_CASH %>">
+										<liferay-ui:message key="cash"></liferay-ui:message>
+									</c:when>
+									<c:when test="<%= paymentFile.getPaymentMethod() == PaymentMgtUtil.PAYMENT_METHOD_KEYPAY %>">
+										<liferay-ui:message key="keypay"></liferay-ui:message>
+									</c:when>
+									<c:when test="<%= paymentFile.getPaymentMethod() == PaymentMgtUtil.PAYMENT_METHOD_BANK %>">
+										<liferay-ui:message key="bank"></liferay-ui:message>
+									</c:when>
+		                           	<c:otherwise>
+		                           		-
+		                           	</c:otherwise>
+		                        </c:choose>
+							</p>
+						</div>
+						
+						<div>
+							<p>
+							<span><liferay-ui:message key="request-note"/>:</span> 
+							<%= Validator.isNotNull(paymentFile) ?HtmlUtil.escape(paymentFile.getRequestNote()): "-" %>
 							</p>
 						</div>
 						
@@ -224,18 +244,10 @@
 										<liferay-ui:message key="view-confirm-file-entry"/>
 									</a>
 								</c:when>
-								
 								<c:otherwise>
-									<liferay-ui:message key="monitoring-chua-co"/>
+									-
 								</c:otherwise>
 							</c:choose>
-						</p>
-					</div>
-					
-					<div>
-						<p>
-						<span><liferay-ui:message key="ghi-chu-kem-theo"/>:</span> 
-						<%= Validator.isNotNull(paymentFile) ?HtmlUtil.escape(paymentFile.getRequestNote()): LanguageUtil.get(pageContext, "monitoring-chua-co") %>
 						</p>
 					</div>
 					
@@ -243,7 +255,7 @@
 						<aui:input type="radio" onChange="paymentFormConfirm('1');" name="confirmHopLe" value="1" label="hop-le" inlineField="true"></aui:input>
 						<aui:input type="radio" onChange="paymentFormConfirm('0');" name="confirmHopLe" value="0" label="khong-hop-le" inlineField="true"></aui:input>
 						<aui:input type="hidden" name="confirmHopLeHidden" value="0" />
-						<aui:input type="text" cssClass="input100" name="lyDo" placeholder="nhap-ly-do-khong-hop-le" label=""></aui:input>
+						<aui:input type="text" cssClass="input100" name="lyDo" placeholder="noi-dung-xac-nhan" label=""></aui:input>
 						<aui:button name="register" type="button" value="dong-y" disabled="true" />
 					</div>
 				</div>

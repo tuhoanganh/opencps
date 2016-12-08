@@ -117,7 +117,7 @@
 				</div>
 				<div>
 					<p>
-						<span><liferay-ui:message key="ghi-chu-kem-theo" />:</span>
+						<span><liferay-ui:message key="request-note" />:</span>
 						<%=HtmlUtil.escape(paymentFile.getRequestNote())%></p>
 				</div>
 				<div>
