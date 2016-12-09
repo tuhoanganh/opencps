@@ -75,20 +75,17 @@ public class DossierNoGenerator {
 			if (pattern.contains(FIX_MONTH_PATTERN_RESET)
 					|| pattern.contains(FIX_YEAR_PATTERN_RESET)) {
 
-				/*sbNoReception.replace(pattern.indexOf('n') - 1,
-						pattern.lastIndexOf('n') + 1, serialNumber);*/
-				
 				sbNoReception.replace(pattern.indexOf('n') - 1,
-						pattern.lastIndexOf('n') + 2, serialNumber);
+						pattern.lastIndexOf('n') + 1, serialNumber);
 
 				String patternTemp = sbNoReception.toString();
 				
 				if (patternTemp.contains(FIX_MONTH_PATTERN_RESET)) {
-					sbNoReception.replace(patternTemp.indexOf('m'),
+					sbNoReception.replace(patternTemp.indexOf('m') - 1,
 							patternTemp.indexOf('m') + 2, StringPool.BLANK);
 				
 				} else if(patternTemp.contains(FIX_YEAR_PATTERN_RESET)) {
-					sbNoReception.replace(patternTemp.indexOf('y'),
+					sbNoReception.replace(patternTemp.indexOf('y') - 1,
 							patternTemp.indexOf('y') + 2, StringPool.BLANK);
 				}
 				
