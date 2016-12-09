@@ -22,6 +22,7 @@ import java.util.List;
 import org.opencps.statisticsmgt.bean.DossierStatisticsBean;
 import org.opencps.statisticsmgt.model.DossiersStatistics;
 import org.opencps.statisticsmgt.util.StatisticsUtil;
+import org.opencps.statisticsmgt.util.StatisticsUtil.StatisticsFieldNumber;
 
 import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
@@ -63,46 +64,68 @@ public class DossiersStatisticsFinderImpl extends
 	 * access the dossiers statistics local service.
 	 */
 
-	private static final String SQL_STATISTICS_COLUMN_NAMES = DossiersStatisticsFinder.class
-			.getName() + ".statisticsColumnNames";
+	private static final String SQL_STATISTICS_COLUMN_NAMES_0 = DossiersStatisticsFinder.class
+			.getName() + ".[COLUMN-NAMES-0]";
 
-	private static final String SQL_STATISTICS_COLUMN_DATA_TYPES = DossiersStatisticsFinder.class
-			.getName() + ".statisticsColumnDataTypes";
+	private static final String SQL_STATISTICS_DATA_TYPES_0 = DossiersStatisticsFinder.class
+			.getName() + ".[DATA-TYPES-0]";
 
-	private static final String SQL_COUNT_COLUMN_NAME = DossiersStatisticsFinder.class
-			.getName() + ".countColumnName";
+	private static final String SQL_STATISTICS_COLUMN_NAMES_1 = DossiersStatisticsFinder.class
+			.getName() + ".[COLUMN-NAMES-1]";
 
-	private static final String SQL_COUNT_COLUMN_DATA_TYPE = DossiersStatisticsFinder.class
-			.getName() + ".countColumnType";
+	private static final String SQL_STATISTICS_DATA_TYPES_1 = DossiersStatisticsFinder.class
+			.getName() + ".[DATA-TYPES-1]";
 
-	private static final String SQL_STATISTICS_RECEIVED_BY_MONTH = DossiersStatisticsFinder.class
-			.getName() + ".statisticsReceivedByMonth";
+	private static final String SQL_STATISTICS_COLUMN_NAMES_2 = DossiersStatisticsFinder.class
+			.getName() + ".[COLUMN-NAMES-2]";
 
-	private static final String SQL_STATISTICS_RECEIVED_BY_YEAR = DossiersStatisticsFinder.class
-			.getName() + ".statisticsReceivedByYear";
+	private static final String SQL_STATISTICS_DATA_TYPES_2 = DossiersStatisticsFinder.class
+			.getName() + ".[DATA-TYPES-2]";
+	
+	private static final String SQL_GENERAL_STATISTICS = DossiersStatisticsFinder.class
+			.getName() + ".generalStatistics";
+
+	private static final String SQL_STATISTICS_BY_DOMAIN = DossiersStatisticsFinder.class
+			.getName() + ".statisticsByDomain";
+
+	private static final String SQL_STATISTICS_BY_GOVAGENCY = DossiersStatisticsFinder.class
+			.getName() + ".statisticsByGovagency";
+	
 	
 	/**
 	 * @param groupId
 	 * @param month
 	 * @param year
+	 * @param field
+	 * @param delayStatus
 	 * @return
 	 */
-	public long countReceivedByMonth(long groupId, int month, int year) {
+	public List generalStatistics(long groupId, int month, int year,
+			String field, int delayStatus) {
 		Session session = null;
 		try {
 			session = openSession();
 
-			String sql = CustomSQLUtil.get(SQL_STATISTICS_RECEIVED_BY_MONTH);
+			String sql = CustomSQLUtil.get(SQL_GENERAL_STATISTICS);
 
-			String statisticsColumnNames = CustomSQLUtil
-					.get(SQL_COUNT_COLUMN_NAME);
-			
-			sql = StringUtil.replace(sql, "$column$", statisticsColumnNames);
-			
+			String definedColumnNames = CustomSQLUtil
+					.get(SQL_STATISTICS_COLUMN_NAMES_0);
+
+			String definedCondition = StatisticsUtil.getFilterCondition(field,
+					delayStatus);
+
+			sql = StringUtil.replace(sql, "$COLUMNS$", definedColumnNames);
+
+			sql = StringUtil.replace(sql, "$FILTER$", definedCondition);
+
 			_log.info(sql);
 
-			String[] columnDataTypes = StringUtil.split(CustomSQLUtil
-					.get(SQL_COUNT_COLUMN_DATA_TYPE));
+			String definedColumnDataTypes = CustomSQLUtil
+					.get(SQL_STATISTICS_DATA_TYPES_0);
+
+			String[] columnNames = StringUtil.split(definedColumnNames);
+
+			String[] columnDataTypes = StringUtil.split(definedColumnDataTypes);
 
 			SQLQuery q = session.createSQLQuery(sql);
 
@@ -112,64 +135,18 @@ public class DossiersStatisticsFinderImpl extends
 
 			qPos.add(groupId);
 
-			qPos.add(year);
-
-			Iterator<Integer> itr = q.iterate();
-
-			if (itr.hasNext()) {
-				Integer count = itr.next();
-
-				if (count != null) {
-					return count.intValue();
-				}
+			if (delayStatus >= 0) {
+				qPos.add(delayStatus);
 			}
 
-			return 0;
+			if (!field
+					.equals(StatisticsFieldNumber.ProcessingNumber.toString())
+					&& !field.equals(StatisticsFieldNumber.DelayingNumber
+							.toString())) {
+				qPos.add(month);
 
-		} catch (Exception e) {
-			_log.error(e);
-		} finally {
-			closeSession(session);
-		}
-		return 0;
-	}
-
-	/**
-	 * @param groupId
-	 * @param month
-	 * @param year
-	 * @return
-	 */
-	public List statisticsReceivedByMonth(long groupId, int month, int year) {
-		Session session = null;
-		try {
-			session = openSession();
-
-			String sql = CustomSQLUtil.get(SQL_STATISTICS_RECEIVED_BY_MONTH);
-
-			String statisticsColumnNames = CustomSQLUtil
-					.get(SQL_STATISTICS_COLUMN_NAMES);
-
-			String[] columnNames = StringUtil.split(statisticsColumnNames);
-
-			sql = StringUtil.replace(sql, "$column$", statisticsColumnNames);
-			
-			_log.info(sql);
-
-			String[] columnDataTypes = StringUtil.split(CustomSQLUtil
-					.get(SQL_STATISTICS_COLUMN_DATA_TYPES));
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q = StatisticsUtil.bindingProperties(q, columnDataTypes, false);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			qPos.add(month);
-
-			qPos.add(year);
+				qPos.add(year);
+			}
 
 			Iterator<Object[]> itr = (Iterator<Object[]>) QueryUtil.list(q,
 					getDialect(), QueryUtil.ALL_POS, QueryUtil.ALL_POS)
@@ -180,6 +157,10 @@ public class DossiersStatisticsFinderImpl extends
 			if (itr.hasNext()) {
 				while (itr.hasNext()) {
 					DossierStatisticsBean statisticsBean = new DossierStatisticsBean();
+					
+					statisticsBean.setMonth(month);
+					
+					statisticsBean.setYear(year);
 
 					Object[] objects = itr.next();
 
@@ -188,8 +169,11 @@ public class DossiersStatisticsFinderImpl extends
 							String columnName = columnNames[i];
 							String coulmnDataType = columnDataTypes[i];
 							Method method = StatisticsUtil.getMethod(
-									columnName, coulmnDataType);
-							method.invoke(statisticsBean, objects[i]);
+									columnName, coulmnDataType, field);
+							if (method != null) {
+								method.invoke(statisticsBean, objects[i]);
+							}
+
 						}
 					}
 
@@ -205,28 +189,41 @@ public class DossiersStatisticsFinderImpl extends
 		}
 		return null;
 	}
-	
+
 	/**
 	 * @param groupId
+	 * @param month
 	 * @param year
+	 * @param option
+	 * @param delayStatus
 	 * @return
 	 */
-	public long countReceivedByYear(long groupId, int year) {
+	public List statisticsByDomain(long groupId, int month, int year,
+			String field, int delayStatus) {
 		Session session = null;
 		try {
 			session = openSession();
 
-			String sql = CustomSQLUtil.get(SQL_STATISTICS_RECEIVED_BY_YEAR);
+			String sql = CustomSQLUtil.get(SQL_STATISTICS_BY_DOMAIN);
 
-			String statisticsColumnNames = CustomSQLUtil
-					.get(SQL_COUNT_COLUMN_NAME);
+			String definedColumnNames = CustomSQLUtil
+					.get(SQL_STATISTICS_COLUMN_NAMES_1);
 
-			sql = StringUtil.replace(sql, "$column$", statisticsColumnNames);
-			
+			String definedCondition = StatisticsUtil.getFilterCondition(field,
+					delayStatus);
+
+			sql = StringUtil.replace(sql, "$COLUMNS$", definedColumnNames);
+
+			sql = StringUtil.replace(sql, "$FILTER$", definedCondition);
+
 			_log.info(sql);
 
-			String[] columnDataTypes = StringUtil.split(CustomSQLUtil
-					.get(SQL_COUNT_COLUMN_DATA_TYPE));
+			String definedColumnDataTypes = CustomSQLUtil
+					.get(SQL_STATISTICS_DATA_TYPES_1);
+
+			String[] columnNames = StringUtil.split(definedColumnNames);
+
+			String[] columnDataTypes = StringUtil.split(definedColumnDataTypes);
 
 			SQLQuery q = session.createSQLQuery(sql);
 
@@ -236,51 +233,95 @@ public class DossiersStatisticsFinderImpl extends
 
 			qPos.add(groupId);
 
-			qPos.add(year);
+			if (delayStatus >= 0) {
+				qPos.add(delayStatus);
+			}
 
-			Iterator<Integer> itr = q.iterate();
+			if (!field
+					.equals(StatisticsFieldNumber.ProcessingNumber.toString())
+					&& !field.equals(StatisticsFieldNumber.DelayingNumber
+							.toString())) {
+				qPos.add(month);
+
+				qPos.add(year);
+			}
+
+			Iterator<Object[]> itr = (Iterator<Object[]>) QueryUtil.list(q,
+					getDialect(), QueryUtil.ALL_POS, QueryUtil.ALL_POS)
+					.iterator();
+
+			List<DossierStatisticsBean> statisticsBeans = new ArrayList<DossierStatisticsBean>();
 
 			if (itr.hasNext()) {
-				Integer count = itr.next();
+				while (itr.hasNext()) {
+					DossierStatisticsBean statisticsBean = new DossierStatisticsBean();
+					
+					statisticsBean.setMonth(month);
+					
+					statisticsBean.setYear(year);
 
-				if (count != null) {
-					return count.intValue();
+					Object[] objects = itr.next();
+
+					if (objects.length == columnDataTypes.length) {
+						for (int i = 0; i < objects.length; i++) {
+							String columnName = columnNames[i];
+							String coulmnDataType = columnDataTypes[i];
+							Method method = StatisticsUtil.getMethod(
+									columnName, coulmnDataType, field);
+							if (method != null) {
+								method.invoke(statisticsBean, objects[i]);
+							}
+
+						}
+					}
+
+					statisticsBeans.add(statisticsBean);
 				}
 			}
 
-			return 0;
-
+			return statisticsBeans;
 		} catch (Exception e) {
 			_log.error(e);
 		} finally {
 			closeSession(session);
 		}
-		return 0;
+		return null;
 	}
 
 	/**
 	 * @param groupId
+	 * @param month
 	 * @param year
+	 * @param option
+	 * @param delayStatus
 	 * @return
 	 */
-	public List statisticsReceivedByYear(long groupId, int year) {
+	public List statisticsByGovAgency(long groupId, int month, int year,
+			String field, int delayStatus) {
 		Session session = null;
 		try {
 			session = openSession();
 
-			String sql = CustomSQLUtil.get(SQL_STATISTICS_RECEIVED_BY_YEAR);
+			String sql = CustomSQLUtil.get(SQL_STATISTICS_BY_GOVAGENCY);
 
-			String statisticsColumnNames = CustomSQLUtil
-					.get(SQL_STATISTICS_COLUMN_NAMES);
+			String definedColumnNames = CustomSQLUtil
+					.get(SQL_STATISTICS_COLUMN_NAMES_2);
 
-			String[] columnNames = StringUtil.split(statisticsColumnNames);
+			String definedCondition = StatisticsUtil.getFilterCondition(field,
+					delayStatus);
 
-			sql = StringUtil.replace(sql, "$column$", statisticsColumnNames);
-			
+			sql = StringUtil.replace(sql, "$COLUMNS$", definedColumnNames);
+
+			sql = StringUtil.replace(sql, "$FILTER$", definedCondition);
+
 			_log.info(sql);
 
-			String[] columnDataTypes = StringUtil.split(CustomSQLUtil
-					.get(SQL_STATISTICS_COLUMN_DATA_TYPES));
+			String definedColumnDataTypes = CustomSQLUtil
+					.get(SQL_STATISTICS_DATA_TYPES_2);
+
+			String[] columnNames = StringUtil.split(definedColumnNames);
+
+			String[] columnDataTypes = StringUtil.split(definedColumnDataTypes);
 
 			SQLQuery q = session.createSQLQuery(sql);
 
@@ -290,7 +331,18 @@ public class DossiersStatisticsFinderImpl extends
 
 			qPos.add(groupId);
 
-			qPos.add(year);
+			if (delayStatus >= 0) {
+				qPos.add(delayStatus);
+			}
+
+			if (!field
+					.equals(StatisticsFieldNumber.ProcessingNumber.toString())
+					&& !field.equals(StatisticsFieldNumber.DelayingNumber
+							.toString())) {
+				qPos.add(month);
+
+				qPos.add(year);
+			}
 
 			Iterator<Object[]> itr = (Iterator<Object[]>) QueryUtil.list(q,
 					getDialect(), QueryUtil.ALL_POS, QueryUtil.ALL_POS)
@@ -309,7 +361,7 @@ public class DossiersStatisticsFinderImpl extends
 							String columnName = columnNames[i];
 							String coulmnDataType = columnDataTypes[i];
 							Method method = StatisticsUtil.getMethod(
-									columnName, coulmnDataType);
+									columnName, coulmnDataType, field);
 							method.invoke(statisticsBean, objects[i]);
 						}
 					}

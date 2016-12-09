@@ -108,19 +108,12 @@ public class DossiersStatisticsLocalServiceImpl extends
 	 * @param month
 	 * @param year
 	 * @return
+	 * @throws SystemException
 	 */
-	public long countReceivedByMonth(long groupId, int month, int year) {
-		return dossiersStatisticsFinder.countReceivedByMonth(groupId, month,
-				year);
-	}
-
-	/**
-	 * @param groupId
-	 * @param year
-	 * @return
-	 */
-	public long countReceivedByYear(long groupId, int year) {
-		return dossiersStatisticsFinder.countReceivedByYear(groupId, year);
+	public List statisticsByDomain(long groupId, int month, int year,
+			String field, int delayStatus) throws SystemException {
+		return dossiersStatisticsFinder.statisticsByDomain(groupId, month,
+				year, field, delayStatus);
 	}
 
 	/**
@@ -130,42 +123,10 @@ public class DossiersStatisticsLocalServiceImpl extends
 	 * @return
 	 * @throws SystemException
 	 */
-	public List statisticsReceivedByMonth(long groupId, int month, int year)
-			throws SystemException {
-		return dossiersStatisticsFinder.statisticsReceivedByMonth(groupId,
-				month, year);
-	}
-
-	/**
-	 * @param groupId
-	 * @param year
-	 * @return
-	 * @throws SystemException
-	 */
-	public List statisticsReceivedByYear(long groupId, int year)
-			throws SystemException {
-		return dossiersStatisticsFinder.statisticsReceivedByYear(groupId, year);
-	}
-
-	/**
-	 * @param year
-	 * @return
-	 * @throws SystemException
-	 */
-	public List<DossiersStatistics> getDossiersStatisticsByYear(int year)
-			throws SystemException {
-		return dossiersStatisticsPersistence.findByYear(year);
-	}
-
-	/**
-	 * @param month
-	 * @param year
-	 * @return
-	 * @throws SystemException
-	 */
-	public List<DossiersStatistics> getDossiersStatisticsByMonth(int month,
-			int year) throws SystemException {
-		return dossiersStatisticsPersistence.findByMonth(month, year);
+	public List statisticsByGovAgency(long groupId, int month, int year,
+			String field, int delayStatus) throws SystemException {
+		return dossiersStatisticsFinder.statisticsByGovAgency(groupId, month,
+				year, field, delayStatus);
 	}
 
 	/**
