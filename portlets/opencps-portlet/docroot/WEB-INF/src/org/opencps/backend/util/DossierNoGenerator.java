@@ -37,14 +37,14 @@ import com.liferay.portal.kernel.util.StringUtil;
 public class DossierNoGenerator {
 
 	public static String genaratorNoReceptionOption(String pattern,
-			long dossierId, String option, boolean isReset) {
+			long dossierId, String option, boolean isReset , long idGenerateOption) {
 
 		return StringUtil.upperCase(_genaratorNoReceptionOption(pattern,
-				dossierId, option, isReset));
+				dossierId, option, isReset, idGenerateOption));
 	}
 
 	private static String _genaratorNoReceptionOption(String pattern,
-			long dossierId, String option, boolean isReset) {
+			long dossierId, String option, boolean isReset, long idGenerateOption) {
 
 		String noReception = StringPool.BLANK;
 
@@ -71,22 +71,25 @@ public class DossierNoGenerator {
 			String specialChar = _getSpecicalChar(pattern);
 
 			String serialNumber = _serialNumberAutoIncrementOption(pattern,
-					dossierId, option, isReset);
+					dossierId, option, isReset, idGenerateOption);
 			if (pattern.contains(FIX_MONTH_PATTERN_RESET)
 					|| pattern.contains(FIX_YEAR_PATTERN_RESET)) {
 
+				/*sbNoReception.replace(pattern.indexOf('n') - 1,
+						pattern.lastIndexOf('n') + 1, serialNumber);*/
+				
 				sbNoReception.replace(pattern.indexOf('n') - 1,
-						pattern.lastIndexOf('n') + 1, serialNumber);
+						pattern.lastIndexOf('n') + 2, serialNumber);
 
 				String patternTemp = sbNoReception.toString();
 				
 				if (patternTemp.contains(FIX_MONTH_PATTERN_RESET)) {
 					sbNoReception.replace(patternTemp.indexOf('m'),
-							patternTemp.indexOf('m') + 2, strMonth);
+							patternTemp.indexOf('m') + 2, StringPool.BLANK);
 				
 				} else if(patternTemp.contains(FIX_YEAR_PATTERN_RESET)) {
 					sbNoReception.replace(patternTemp.indexOf('y'),
-							patternTemp.indexOf('y') + 2, strYearTypeOne);
+							patternTemp.indexOf('y') + 2, StringPool.BLANK);
 				}
 				
 				pattern = sbNoReception.toString();
@@ -149,7 +152,7 @@ public class DossierNoGenerator {
 	}
 
 	private static String _serialNumberAutoIncrementOption(String pattern,
-			long dossierId, String option, boolean isReset) {
+			long dossierId, String option, boolean isReset, long idGenerateOption) {
 		long dossierCounter = 0;
 
 		try {
@@ -162,13 +165,13 @@ public class DossierNoGenerator {
 					CounterLocalServiceUtil
 							.reset(WorkflowOutput.class.getName()
 									+ StringPool.POUND
-									+ PortletConstants.DOSSIER_PART_RESULT_PATTERN_UNIQUE_INCREMENT_NUMBER);
+									+ String.valueOf(idGenerateOption));
 				}
 
 				dossierCounter = CounterLocalServiceUtil
 						.increment(WorkflowOutput.class.getName()
 								+ StringPool.POUND
-								+ PortletConstants.DOSSIER_PART_RESULT_PATTERN_UNIQUE_INCREMENT_NUMBER);
+								+ String.valueOf(idGenerateOption));
 				break;
 
 			default:

@@ -602,6 +602,25 @@ public class ProcessUtils {
 
 		return parttern;
 	}
+	public static long getWfOutputPatternId(long dossierId,
+			long fileGroupId, long dossierPartId) {
+		long wfOutputId = 0;
+
+		try {
+			ProcessOrder processOrder = ProcessOrderLocalServiceUtil
+					.getProcessOrder(dossierId, fileGroupId);
+			
+			List<WorkflowOutput> workflowOutputs = WorkflowOutputLocalServiceUtil
+					.getByProcessByPWID_DPID(processOrder.getProcessWorkflowId(), dossierPartId);
+			
+			wfOutputId = workflowOutputs.get(0).getWorkflowOutputId();
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		return wfOutputId;
+	}
 
 	private static Log _log = LogFactoryUtil.getLog(ProcessUtils.class
 			.getName());

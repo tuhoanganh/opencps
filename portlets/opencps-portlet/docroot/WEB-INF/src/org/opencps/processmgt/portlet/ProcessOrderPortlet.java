@@ -1831,6 +1831,9 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			String pattern = ProcessUtils.getDossierPartPattern(dossierId,
 					fileGroupId, dossierPartId);
 			
+			long wfOutputId = ProcessUtils.getWfOutputPatternId(dossierId,
+					fileGroupId, dossierPartId);
+			
 			String resultPartNo = StringPool.BLANK;
 			
 			boolean isReset = false;
@@ -1848,7 +1851,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				
 				resultPartNo = DossierNoGenerator.genaratorNoReceptionOption(
 						pattern, dossierId,
-						PortletConstants.DOSSIER_PART_RESULT_PATTERN, isReset);
+						PortletConstants.DOSSIER_PART_RESULT_PATTERN, isReset, wfOutputId);
 				
 				formData = StringUtil.replace(formData,
 						PortletConstants.DOSSIER_PART_RESULT_PATTERN_NO,
