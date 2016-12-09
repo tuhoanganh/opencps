@@ -199,305 +199,306 @@
 />
 
 <portlet:actionURL var="multiAssignToUserURL" name="multiAssignToUser"/>
-
-<aui:form name="fm" action="<%=multiAssignToUserURL.toString() %>" method="post">
-
-	<%-- <aui:input 
-		name="assignFormDisplayStyle" 
-		value="<%=assignFormDisplayStyle %>" 
-		type="hidden"
-	/> --%>
+<div class="assign-multy-process-order">
+	<aui:form name="fm" action="<%=multiAssignToUserURL.toString() %>" method="post">
 	
-	<aui:input 
-		name="processOrderIds" 
-		value="<%=processOrderIds %>" 
-		type="hidden"
-	/>
-	
-	<aui:input 
-		name="assignActionURL" 
-		value="<%=multiAssignToUserURL.toString() %>" 
-		type="hidden"
-	/>
-	<aui:input 
-		name="redirectURL" 
-		value="<%=currentURL %>" 
-		type="hidden"
-	/>
-	<aui:input 
-			name="listFileToSigner" 
-			value="<%=StringUtil.merge(listFileToSigner) %>" 
+		<%-- <aui:input 
+			name="assignFormDisplayStyle" 
+			value="<%=assignFormDisplayStyle %>" 
+			type="hidden"
+		/> --%>
+		
+		<aui:input 
+			name="processOrderIds" 
+			value="<%=processOrderIds %>" 
 			type="hidden"
 		/>
-	<aui:input 
-			name="listDossierPartToSigner" 
-			value="<%=StringUtil.merge(listDossierPartToSigner) %>" 
+		
+		<aui:input 
+			name="assignActionURL" 
+			value="<%=multiAssignToUserURL.toString() %>" 
 			type="hidden"
 		/>
-	<aui:input 
-		name="listDossierFileToSigner" 
-		value="<%=StringUtil.merge(listDossierFileToSigner) %>" 
-		type="hidden"
-	/>
-
-	<aui:input 
-		name="<%=ProcessOrderDisplayTerms.PROCESS_STEP_ID %>" 
-		value="<%=processStepId %>" 
-		type="hidden"
-	/>
-	<aui:input 
-		name="<%=ProcessOrderDisplayTerms.GROUP_ID %>" 
-		value="<%=scopeGroupId %>" 
-		type="hidden"
-	/>
+		<aui:input 
+			name="redirectURL" 
+			value="<%=currentURL %>" 
+			type="hidden"
+		/>
+		<aui:input 
+				name="listFileToSigner" 
+				value="<%=StringUtil.merge(listFileToSigner) %>" 
+				type="hidden"
+			/>
+		<aui:input 
+				name="listDossierPartToSigner" 
+				value="<%=StringUtil.merge(listDossierPartToSigner) %>" 
+				type="hidden"
+			/>
+		<aui:input 
+			name="listDossierFileToSigner" 
+			value="<%=StringUtil.merge(listDossierFileToSigner) %>" 
+			type="hidden"
+		/>
 	
-	<aui:input 
-		name="<%=ProcessOrderDisplayTerms.RECEIVE_DATE %>" 
-		value="<%= receiveDate %>" 
-		type="hidden"
-	/>
-	
-	<aui:input 
-		name="<%=ProcessOrderDisplayTerms.COMPANY_ID %>" 
-		value="<%=company.getCompanyId() %>" 
-		type="hidden"
-	/>
-	<aui:input 
-		name="<%=ProcessOrderDisplayTerms.EVENT %>" 
-		value="<%=event %>" 
-		type="hidden"
-	/>
-	<aui:input 
-		name="<%=ProcessOrderDisplayTerms.ACTION_USER_ID %>" 
-		value="<%=actionUserId %>" 
-		type="hidden"
-	/>
-	<aui:input 
-		name="<%=ProcessOrderDisplayTerms.DOSSIER_ID %>" 
-		value="<%=dossierId %>" 
-		type="hidden"
-	/>
-	
-	<aui:input 
-		name="redirectURL" 
-		value="<%=currentURL%>" 
-		type="hidden"
-	/>
-	
-	<aui:input 
-		name="<%=ProcessOrderDisplayTerms.FILE_GROUP_ID %>" 
-		value="<%=fileGroupId %>" 
-		type="hidden"
-	/>
-	<aui:input 
-		name="<%=ProcessOrderDisplayTerms.PROCESS_ORDER_ID %>" 
-		value="<%=processOrderId %>" 
-		type="hidden"
-	/>
-	<aui:input 
-		name="<%=ProcessOrderDisplayTerms.PROCESS_WORKFLOW_ID %>" 
-		value="<%=postProcessWorkflows.get(0) %>" 
-		type="hidden"
-	/>
-	<aui:input 
-		name="<%=ProcessOrderDisplayTerms.SERVICE_PROCESS_ID %>" 
-		value="<%=serviceProcessId %>" 
-		type="hidden"
-	/>
-	
-	<aui:input 
-		name="nanoTimePDF" 
-		value="<%=System.currentTimeMillis() %>" 
-		type="hidden"
-	/>
-	
-	<aui:input 
-		name="backURL"
-		value="<%=backURL %>" 
-		type="hidden"
-	/>
-	
-	<%
-		String cssCol = ProcessUtils.getCssClass(processWorkflowId);
-	%>
-	
-	<div class="row-fluid">
-	
-			<div class="<%=cssCol%>">
-				<aui:select 
-					name="<%=ProcessOrderDisplayTerms.ASSIGN_TO_USER_ID %>" 
-					label="assign-to-next-user" 
-					showEmptyOption="true"
-					cssClass="input100"
-				>
-					<%
-						List<User> assignUsers = ProcessUtils.getAssignUsers(processStepId, 0);
+		<aui:input 
+			name="<%=ProcessOrderDisplayTerms.PROCESS_STEP_ID %>" 
+			value="<%=processStepId %>" 
+			type="hidden"
+		/>
+		<aui:input 
+			name="<%=ProcessOrderDisplayTerms.GROUP_ID %>" 
+			value="<%=scopeGroupId %>" 
+			type="hidden"
+		/>
+		
+		<aui:input 
+			name="<%=ProcessOrderDisplayTerms.RECEIVE_DATE %>" 
+			value="<%= receiveDate %>" 
+			type="hidden"
+		/>
+		
+		<aui:input 
+			name="<%=ProcessOrderDisplayTerms.COMPANY_ID %>" 
+			value="<%=company.getCompanyId() %>" 
+			type="hidden"
+		/>
+		<aui:input 
+			name="<%=ProcessOrderDisplayTerms.EVENT %>" 
+			value="<%=event %>" 
+			type="hidden"
+		/>
+		<aui:input 
+			name="<%=ProcessOrderDisplayTerms.ACTION_USER_ID %>" 
+			value="<%=actionUserId %>" 
+			type="hidden"
+		/>
+		<aui:input 
+			name="<%=ProcessOrderDisplayTerms.DOSSIER_ID %>" 
+			value="<%=dossierId %>" 
+			type="hidden"
+		/>
+		
+		<aui:input 
+			name="redirectURL" 
+			value="<%=currentURL%>" 
+			type="hidden"
+		/>
+		
+		<aui:input 
+			name="<%=ProcessOrderDisplayTerms.FILE_GROUP_ID %>" 
+			value="<%=fileGroupId %>" 
+			type="hidden"
+		/>
+		<aui:input 
+			name="<%=ProcessOrderDisplayTerms.PROCESS_ORDER_ID %>" 
+			value="<%=processOrderId %>" 
+			type="hidden"
+		/>
+		<aui:input 
+			name="<%=ProcessOrderDisplayTerms.PROCESS_WORKFLOW_ID %>" 
+			value="<%=postProcessWorkflows.get(0) %>" 
+			type="hidden"
+		/>
+		<aui:input 
+			name="<%=ProcessOrderDisplayTerms.SERVICE_PROCESS_ID %>" 
+			value="<%=serviceProcessId %>" 
+			type="hidden"
+		/>
+		
+		<aui:input 
+			name="nanoTimePDF" 
+			value="<%=System.currentTimeMillis() %>" 
+			type="hidden"
+		/>
+		
+		<aui:input 
+			name="backURL"
+			value="<%=backURL %>" 
+			type="hidden"
+		/>
+		
+		<%
+			String cssCol = ProcessUtils.getCssClass(processWorkflowId);
+		%>
+		
+		<div class="row-fluid">
+		
+				<div class="<%=cssCol%>">
+					<aui:select 
+						name="<%=ProcessOrderDisplayTerms.ASSIGN_TO_USER_ID %>" 
+						label="assign-to-next-user" 
+						showEmptyOption="true"
+						cssClass="input100"
+					>
+						<%
+							List<User> assignUsers = ProcessUtils.getAssignUsers(processStepId, 0);
+							
+							for (User userSel : assignUsers) {
+						%>	
+							<aui:option selected="<%= assigerToUserId == userSel.getUserId() ? true : false  %>" value="<%= userSel.getUserId() %>"><%= userSel.getFullName() %></aui:option>
+						<%
+							}
+						%>
+					</aui:select>
+				</div>
+			
+			<c:if test="<%= processWorkflow.getRequestPayment() %>">
+			
+				<div class="<%=cssCol%>">
+					<aui:input 
+						cssClass="input100"
+						name="<%=ProcessOrderDisplayTerms.PAYMENTVALUE %>" 
+						label="requirement-to-pay-charges" 
+						type="text"
+						value="<%=Validator.isNotNull(processWorkflow.getPaymentFee()) ? PaymentRequestGenerator.getTotalPayment(processWorkflow.getPaymentFee(), dossierId) : StringPool.BLANK %>"
+					/>
+				</div>
+			</c:if>		
+			
+			<c:if test="<%= processWorkflow.getGenerateReceptionNo() %>">
+				<div class="<%=cssCol%>">
+					<aui:input 
+						name="<%=ProcessOrderDisplayTerms.RECEPTION_NO %>" 
+						label="reception-no" 
+						value="<%= receptionNo %>"
+					/>
+				</div>
+			</c:if>
+			
+			<c:if test="<%= processWorkflow.getGenerateDeadline() %>">
+				<div class="<%=cssCol%>">
+					<aui:row>
+						<label class="control-label custom-lebel" for='<portlet:namespace/><%="deadline" %>'>
+							<liferay-ui:message key="return-date"/>
+						</label>
+					</aui:row>
+					
+					<aui:row>
+						<span class="span8">
+							<liferay-ui:input-date
+								dayParam="<%=ProcessOrderDisplayTerms.ESTIMATE_DATETIME_DAY %>"
+								disabled="<%= false %>"
+								monthParam="<%=ProcessOrderDisplayTerms.ESTIMATE_DATETIME_MONTH %>"
+								name="<%=ProcessOrderDisplayTerms.ESTIMATE_DATE %>"
+								yearParam="<%=ProcessOrderDisplayTerms.ESTIMATE_DATETIME_YEAR %>"
+								formName="fm"
+								autoFocus="<%=true %>"
+								dayValue="<%=Validator.isNotNull(spd) ? spd.getDayOfMoth() : 0 %>"
+								monthValue="<%=Validator.isNotNull(spd) ? spd.getMonth() : 0 %>"
+								yearValue="<%=Validator.isNotNull(spd) ? spd.getYear() : 0 %>"
+								nullable="<%=spd == null ? true: false %>"
+								cssClass="input100"
+							/>
+						</span>
 						
-						for (User userSel : assignUsers) {
-					%>	
-						<aui:option selected="<%= assigerToUserId == userSel.getUserId() ? true : false  %>" value="<%= userSel.getUserId() %>"><%= userSel.getFullName() %></aui:option>
+						<span class="span4">
+							<liferay-ui:input-time 
+								minuteParam="<%= ProcessOrderDisplayTerms.ESTIMATE_DATETIME_HOUR %>"
+								amPmParam="AM" 
+								hourParam="<%= ProcessOrderDisplayTerms.ESTIMATE_DATETIME_MINUTE %>"
+								cssClass="input100"
+								hourValue="<%= Validator.isNotNull(spd) ? spd.getHour() : 0 %>"
+								minuteValue="<%= Validator.isNotNull(spd) ? spd.getMinute() : 0 %>"
+								name="<%=ProcessOrderDisplayTerms.ESTIMATE_TIME %>"
+							/>
+						</span>
+					</aui:row>
+				</div>
+			</c:if>
+		</div>
+		
+		
+		<div class="row-fluid">
+			<div class="span12">
+				<aui:input name="<%=ProcessOrderDisplayTerms.ACTION_NOTE %>" label="action-note" type="textarea" cssClass="input100"/>
+			</div>
+		</div>
+		
+		<c:if test="<%=workflowOutputs != null && !workflowOutputs.isEmpty() %>">
+		
+			<label class="control-label custom-lebel" >
+				
+				<liferay-ui:message key="esign-dossier-files"/>
+			</label>
+			<div class="signature-file-list">
+				<table>
 					<%
+						for(WorkflowOutput workflowOutput : workflowOutputs){
+							long dossierPartId = workflowOutput.getDossierPartId();
+							DossierFile dossierFileInUse = null;
+							try{
+								dossierFileInUse = DossierFileLocalServiceUtil.getDossierFileInUse(dossierId, dossierPartId);
+							}catch(Exception e){
+								continue;
+							}
+							
+							if(dossierFileInUse != null && dossierFileInUse.getFileEntryId() > 0){
+								esign = true;
+								%>
+									<tr>
+										<td class="file-name" width="80%">
+											<%=dossierFileInUse.getDisplayName()%>
+										</td>
+										<td class="signature-status" width="10%">
+											<c:choose>
+												<c:when test="<%=dossierFileInUse.isSigned() %>">
+													<i class="fa fa-check-square-o" aria-hidden="true" title="signed"></i>
+												</c:when>
+												<c:otherwise>
+													<i class="fa fa-square-o" aria-hidden="true" ></i>
+												</c:otherwise>
+											</c:choose>
+										</td>
+										<td class="signature-verify" width="10%">
+											<c:if test="<%=dossierFileInUse.isSigned() %>">
+												<aui:a href="javascript:void(0);" onClick='<%="javavscript:" + renderResponse.getNamespace() + "verifySign(this)" %>' title="check-sign" dossier-file="<%=dossierFileInUse.getDossierFileId() %>">
+													<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+												</aui:a>
+											</c:if>
+										</td>
+									</tr>
+									
+								<%
+							}
+						}
+					%>
+				</table>
+			</div>
+			<div style="display:none">
+				<aui:select name="esignDossierFiles" multiple="<%=true %>" label="esign-dossier-files">
+					<%
+						for(WorkflowOutput workflowOutput : workflowOutputs){
+							long dossierPartId = workflowOutput.getDossierPartId();
+							DossierFile dossierFileInUse = null;
+							try{
+								dossierFileInUse = DossierFileLocalServiceUtil.getDossierFileInUse(dossierId, dossierPartId);
+							}catch(Exception e){
+								continue;
+							}
+							
+							if(dossierFileInUse != null && dossierFileInUse.getFileEntryId() > 0){
+								esign = true;
+								%>
+									<aui:option value="<%=dossierFileInUse.getDossierFileId() %>"><%=dossierFileInUse.getDisplayName()%></aui:option>
+								<%
+							}
 						}
 					%>
 				</aui:select>
 			</div>
-		
-		<c:if test="<%= processWorkflow.getRequestPayment() %>">
-		
-			<div class="<%=cssCol%>">
-				<aui:input 
-					cssClass="input100"
-					name="<%=ProcessOrderDisplayTerms.PAYMENTVALUE %>" 
-					label="requirement-to-pay-charges" 
-					type="text"
-					value="<%=Validator.isNotNull(processWorkflow.getPaymentFee()) ? PaymentRequestGenerator.getTotalPayment(processWorkflow.getPaymentFee(), dossierId) : StringPool.BLANK %>"
-				/>
-			</div>
-		</c:if>		
-		
-		<c:if test="<%= processWorkflow.getGenerateReceptionNo() %>">
-			<div class="<%=cssCol%>">
-				<aui:input 
-					name="<%=ProcessOrderDisplayTerms.RECEPTION_NO %>" 
-					label="reception-no" 
-					value="<%= receptionNo %>"
-				/>
-			</div>
 		</c:if>
+	
+		<aui:button type="button" value="submit" name="submit"/>
 		
-		<c:if test="<%= processWorkflow.getGenerateDeadline() %>">
-			<div class="<%=cssCol%>">
-				<aui:row>
-					<label class="control-label custom-lebel" for='<portlet:namespace/><%="deadline" %>'>
-						<liferay-ui:message key="return-date"/>
-					</label>
-				</aui:row>
-				
-				<aui:row>
-					<span class="span8">
-						<liferay-ui:input-date
-							dayParam="<%=ProcessOrderDisplayTerms.ESTIMATE_DATETIME_DAY %>"
-							disabled="<%= false %>"
-							monthParam="<%=ProcessOrderDisplayTerms.ESTIMATE_DATETIME_MONTH %>"
-							name="<%=ProcessOrderDisplayTerms.ESTIMATE_DATE %>"
-							yearParam="<%=ProcessOrderDisplayTerms.ESTIMATE_DATETIME_YEAR %>"
-							formName="fm"
-							autoFocus="<%=true %>"
-							dayValue="<%=Validator.isNotNull(spd) ? spd.getDayOfMoth() : 0 %>"
-							monthValue="<%=Validator.isNotNull(spd) ? spd.getMonth() : 0 %>"
-							yearValue="<%=Validator.isNotNull(spd) ? spd.getYear() : 0 %>"
-							nullable="<%=spd == null ? true: false %>"
-							cssClass="input100"
-						/>
-					</span>
-					
-					<span class="span4">
-						<liferay-ui:input-time 
-							minuteParam="<%= ProcessOrderDisplayTerms.ESTIMATE_DATETIME_HOUR %>"
-							amPmParam="AM" 
-							hourParam="<%= ProcessOrderDisplayTerms.ESTIMATE_DATETIME_MINUTE %>"
-							cssClass="input100"
-							hourValue="<%= Validator.isNotNull(spd) ? spd.getHour() : 0 %>"
-							minuteValue="<%= Validator.isNotNull(spd) ? spd.getMinute() : 0 %>"
-							name="<%=ProcessOrderDisplayTerms.ESTIMATE_TIME %>"
-						/>
-					</span>
-				</aui:row>
-			</div>
+		<c:if test="<%=esign %>">
+			<aui:button type="button" value="esign" name="esign"/>
+			<aui:button type="button" value="esign" name="esign" onClick="getFileComputerHash(1);"/>
 		</c:if>
-	</div>
-	
-	
-	<div class="row-fluid">
-		<div class="span12">
-			<aui:input name="<%=ProcessOrderDisplayTerms.ACTION_NOTE %>" label="action-note" type="textarea" cssClass="input100"/>
-		</div>
-	</div>
-	
-	<c:if test="<%=workflowOutputs != null && !workflowOutputs.isEmpty() %>">
-	
-		<label class="control-label custom-lebel" >
-			
-			<liferay-ui:message key="esign-dossier-files"/>
-		</label>
-		<div class="signature-file-list">
-			<table>
-				<%
-					for(WorkflowOutput workflowOutput : workflowOutputs){
-						long dossierPartId = workflowOutput.getDossierPartId();
-						DossierFile dossierFileInUse = null;
-						try{
-							dossierFileInUse = DossierFileLocalServiceUtil.getDossierFileInUse(dossierId, dossierPartId);
-						}catch(Exception e){
-							continue;
-						}
-						
-						if(dossierFileInUse != null && dossierFileInUse.getFileEntryId() > 0){
-							esign = true;
-							%>
-								<tr>
-									<td class="file-name" width="80%">
-										<%=dossierFileInUse.getDisplayName()%>
-									</td>
-									<td class="signature-status" width="10%">
-										<c:choose>
-											<c:when test="<%=dossierFileInUse.isSigned() %>">
-												<i class="fa fa-check-square-o" aria-hidden="true" title="signed"></i>
-											</c:when>
-											<c:otherwise>
-												<i class="fa fa-square-o" aria-hidden="true" ></i>
-											</c:otherwise>
-										</c:choose>
-									</td>
-									<td class="signature-verify" width="10%">
-										<c:if test="<%=dossierFileInUse.isSigned() %>">
-											<aui:a href="javascript:void(0);" onClick='<%="javavscript:" + renderResponse.getNamespace() + "verifySign(this)" %>' title="check-sign" dossier-file="<%=dossierFileInUse.getDossierFileId() %>">
-												<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-											</aui:a>
-										</c:if>
-									</td>
-								</tr>
-								
-							<%
-						}
-					}
-				%>
-			</table>
-		</div>
-		<div style="display:none">
-			<aui:select name="esignDossierFiles" multiple="<%=true %>" label="esign-dossier-files">
-				<%
-					for(WorkflowOutput workflowOutput : workflowOutputs){
-						long dossierPartId = workflowOutput.getDossierPartId();
-						DossierFile dossierFileInUse = null;
-						try{
-							dossierFileInUse = DossierFileLocalServiceUtil.getDossierFileInUse(dossierId, dossierPartId);
-						}catch(Exception e){
-							continue;
-						}
-						
-						if(dossierFileInUse != null && dossierFileInUse.getFileEntryId() > 0){
-							esign = true;
-							%>
-								<aui:option value="<%=dossierFileInUse.getDossierFileId() %>"><%=dossierFileInUse.getDisplayName()%></aui:option>
-							<%
-						}
-					}
-				%>
-			</aui:select>
-		</div>
-	</c:if>
-
-	<aui:button type="button" value="submit" name="submit"/>
-	
-	<c:if test="<%=esign %>">
-		<aui:button type="button" value="esign" name="esign"/>
-		<aui:button type="button" value="esign" name="esign" onClick="getFileComputerHash(1);"/>
-	</c:if>
-	<aui:button type="button" value="cancel" name="cancel"/>
-	
-	<div id="myProgressBar" class="aui-progress-warning"></div>
-</aui:form>
+		<aui:button type="button" value="cancel" name="cancel"/>
+		
+		<div id="myProgressBar" class="aui-progress-warning"></div>
+	</aui:form>
+</div>
 
 <div style="visibility: hidden; height: 0px; width: 0px;">
 	<object id="plugin0" type="application/x-cryptolib05plugin" width="0" height="0" ></object>

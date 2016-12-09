@@ -44,6 +44,7 @@ import org.opencps.accountmgt.NoSuchAccountOwnUserIdException;
 import org.opencps.accountmgt.NoSuchAccountTypeException;
 import org.opencps.backend.message.SendToEngineMsg;
 import org.opencps.backend.util.BackendUtils;
+import org.opencps.backend.util.DossierNoGenerator;
 import org.opencps.dossiermgt.DuplicateFileGroupException;
 import org.opencps.dossiermgt.EmptyFileGroupException;
 import org.opencps.dossiermgt.NoSuchDossierException;
@@ -1581,10 +1582,11 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				;
 
 				if (dossierFile.getSyncStatus() != PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS) {
-					DossierFileLocalServiceUtil.deleteDossierFile(dossierFileId,
-							dossierFile.getFileEntryId());
+					DossierFileLocalServiceUtil.deleteDossierFile(
+							dossierFileId, dossierFile.getFileEntryId());
 				} else {
-					DossierFileLocalServiceUtil.removeDossierFile(dossierFileId);
+					DossierFileLocalServiceUtil
+							.removeDossierFile(dossierFileId);
 				}
 
 			} else {
@@ -1790,7 +1792,17 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 		try {
 			validateDynamicFormData(dossierId, dossierPartId, accountBean);
-
+			
+			DossierFile dossierFileLastest = null;
+			
+			try {
+				dossierFileLastest = DossierFileLocalServiceUtil.getLastestDossierFile();
+				
+				_log.info("dossierFileLastest____________" + dossierFileLastest.getModifiedDate());
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			
 			ServiceContext serviceContext = ServiceContextFactory
 					.getInstance(actionRequest);
 
@@ -1815,6 +1827,33 @@ public class ProcessOrderPortlet extends MVCPortlet {
 							+ dossierFileId;
 				}
 			}
+			
+			String pattern = ProcessUtils.getDossierPartPattern(dossierId,
+					fileGroupId, dossierPartId);
+			
+			String resultPartNo = StringPool.BLANK;
+			
+			boolean isReset = false;
+
+			if (Validator.isNotNull(formData)
+					&& formData
+							.contains(PortletConstants.DOSSIER_PART_RESULT_PATTERN_NO)
+					&& Validator.isNotNull(pattern)) {
+				
+				
+				
+				if(Validator.isNotNull(dossierFileLastest) && Validator.isNotNull(dossierFileLastest.getModifiedDate())) {
+					isReset = PortletUtil.isResetGenerateNumber(pattern, dossierFileLastest.getModifiedDate());
+				}
+				
+				resultPartNo = DossierNoGenerator.genaratorNoReceptionOption(
+						pattern, dossierId,
+						PortletConstants.DOSSIER_PART_RESULT_PATTERN, isReset);
+				
+				formData = StringUtil.replace(formData,
+						PortletConstants.DOSSIER_PART_RESULT_PATTERN_NO,
+						resultPartNo);
+			}
 
 			// if (dossierFileId == 0) {
 			dossierFile = DossierFileLocalServiceUtil.addDossierFile(
@@ -1825,7 +1864,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 					formData, fileEntryId, dossierFileMark, dossierFileType,
 					dossierFileNo, dossierFileDate, original, syncStatus,
 					serviceContext);
-			
+
 			if (Validator.isNotNull(dossierFile)) {
 				JSONObject sampleDataJson = JSONFactoryUtil
 						.createJSONObject(dossierPart.getSampleData());
@@ -1843,7 +1882,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				dossierFile.setDossierFileDate(DateTimeUtil
 						.convertStringToDate(formDataJson
 								.getString(dossierFileDateKey)));
-				
+
 				DossierFileLocalServiceUtil.updateDossierFile(dossierFile);
 			}
 			/*
@@ -1941,7 +1980,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 						"declaration-online");
 				actionResponse
 						.setRenderParameter("jspPage",
-								"/html/portlets/dossiermgt/frontoffice/modal_dialog.jsp");
+								"/html/portlets/processmgt/processorder/modal_dialog.jsp");
 			}
 		}
 	}
@@ -2796,8 +2835,9 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			String[] orderIds = StringUtil.split(processOrderIds,
 					StringPool.COMMA);
 			Dossier dossier = null;
-			
-			String redirectURL = ParamUtil.getString(actionRequest, "redirectURL");
+
+			String redirectURL = ParamUtil.getString(actionRequest,
+					"redirectURL");
 			String paymentValue = ParamUtil.getString(actionRequest,
 					ProcessOrderDisplayTerms.PAYMENTVALUE);
 			String actionNote = ParamUtil.getString(actionRequest,
@@ -2907,10 +2947,11 @@ public class ProcessOrderPortlet extends MVCPortlet {
 									0, workflowOutputs);
 
 				}
-				
+
 				SessionMessages.add(actionRequest, "success");
-				
-				actionResponse.sendRedirect(redirectURL);;
+
+				actionResponse.sendRedirect(redirectURL);
+				;
 
 			} catch (Exception e) {
 				_log.error(e);

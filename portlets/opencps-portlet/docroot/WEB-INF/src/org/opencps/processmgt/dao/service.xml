@@ -225,6 +225,7 @@
 		<column name="required" type="boolean"/>
 		<column name="esign" type="boolean"/>
 		<column name="postback" type="boolean"/>
+		<column name="pattern" type="String"/>
 		
 		<finder return-type="Collection" name="P_W_ID">
 			<finder-column name="processWorkflowId"/>
