@@ -1,4 +1,7 @@
 
+<%@page import="java.util.LinkedHashMap"%>
+<%@page import="java.util.HashSet"%>
+<%@page import="java.util.Set"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -65,6 +68,8 @@
 	headerNames.add("action");
 	
 	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
+	
+	String dossierSubStatus = ParamUtil.getString(request, "dossierSubStatus");
 %>
 
 <c:if test="<%=stopRefresh %>">
@@ -98,8 +103,25 @@
 						}catch(Exception e){
 							_log.error(e);
 						}
-					
-						total = totalCount;
+						Set<String> setToReturn = new HashSet<String>();
+						Set<String> set1 = new HashSet<String>();
+						//remove duplicates process orders
+						Map<String, ProcessOrderBean> cleanMapList = new LinkedHashMap<String, ProcessOrderBean>();
+						for (int i = 0; i < processOrders.size(); i++) {
+							System.out.println(!set1.add(processOrders.get(i).getProcessOrderId()+""));
+							System.out.println("-->"+processOrders.get(i).getProcessOrderId()+"");
+							if (!set1.add(processOrders.get(i).getProcessOrderId()+"")) {
+								setToReturn.add(processOrders.get(i).getProcessOrderId()+"");
+							}
+							ProcessOrderBean aasb = processOrders.get(i);
+							aasb.set_testDuplicate((String[])setToReturn.toArray(new String[setToReturn.size()]));
+							cleanMapList.put(processOrders.get(i).getProcessOrderId()+"", aasb);
+						}
+						
+						processOrders = new ArrayList<ProcessOrderBean>(cleanMapList.values());
+						
+						int aso = totalCount - cleanMapList.size();
+						total = totalCount - aso;
 						results = processOrders;
 						
 						pageContext.setAttribute("results", results);
