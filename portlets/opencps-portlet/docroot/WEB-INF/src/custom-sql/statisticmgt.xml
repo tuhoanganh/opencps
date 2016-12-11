@@ -19,7 +19,8 @@
 			opencps_processorder.govAgencyCode AS COL2,
 			d.itemCode AS COL3, 
 			d.treeIndex AS COL4,
-			g.treeIndex AS COL5
+			g.treeIndex AS COL5,
+			g.itemCode AS COL6
 		]]>
 	</sql>
 	
@@ -27,6 +28,7 @@
 		<![CDATA[
 			LONG,
 			INTEGER,
+			STRING,
 			STRING,
 			STRING,
 			STRING,
@@ -39,7 +41,8 @@
 			opencps_processorder.processOrderId AS COL0,
 			count(opencps_processorder.processOrderId) AS COL1,
 			opencps_processorder.govAgencyCode AS COL2,
-			g.treeIndex AS COL3
+			g.treeIndex AS COL3,
+			g.itemCode AS COL4
 		]]>
 	</sql>
 	
@@ -47,6 +50,7 @@
 		<![CDATA[
 			LONG,
 			INTEGER,
+			STRING,
 			STRING,
 			STRING
 		]]>

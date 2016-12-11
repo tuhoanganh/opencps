@@ -146,6 +146,7 @@ public class StatisticsUtil {
 					columnName.length());
 			temp = StringUtil.upperCaseFirstLetter(temp);
 			methodName += "Gov" + temp;
+
 		} else if (columnName
 				.contains("count(opencps_processorder.processOrderId)")) {
 			methodName = getSetterMethodName(field);
@@ -217,7 +218,6 @@ public class StatisticsUtil {
 		List<DossiersStatistics> dossiersStatistics = new ArrayList<DossiersStatistics>();
 		HashMap<String, DossiersStatistics> map = new HashMap<String, DossiersStatistics>();
 		if (data != null) {
-			
 
 			for (int i = 0; i < data.size(); i++) {
 				DossierStatisticsBean statisticsBean = (DossierStatisticsBean) data
@@ -235,41 +235,53 @@ public class StatisticsUtil {
 								.getDomainItemCode() : StringPool.BLANK)
 						+ StringPool.DASH
 						+ statisticsBean.getAdministrationLevel();
-				
-				if(map.containsKey(key)){
+
+				if (map.containsKey(key)) {
 					temp = map.get(key);
 				}
-				
-				if(temp.getAdministrationLevel() > statisticsBean.getAdministrationLevel()){
-					temp.setAdministrationLevel(statisticsBean.getAdministrationLevel());
+
+				if (temp.getAdministrationLevel() > statisticsBean
+						.getAdministrationLevel()) {
+					temp.setAdministrationLevel(statisticsBean
+							.getAdministrationLevel());
 				}
-				
-				
-				if(statisticsBean.getDelayingNumber() > 0){
-					temp.setAdministrationLevel(statisticsBean.getDelayingNumber());
+
+				if (statisticsBean.getDelayingNumber() > 0) {
+					temp.setDelayingNumber(statisticsBean
+							.getDelayingNumber());
 				}
-				
-				if(statisticsBean.getOntimeNumber() > 0){
-					temp.setAdministrationLevel(statisticsBean.getOntimeNumber());
+
+				if (statisticsBean.getOntimeNumber() > 0) {
+					temp.setOntimeNumber(statisticsBean
+							.getOntimeNumber());
 				}
-				
-				if(statisticsBean.getOvertimeNumber() > 0){
-					temp.setAdministrationLevel(statisticsBean.getOvertimeNumber());
+
+				if (statisticsBean.getOvertimeNumber() > 0) {
+					temp.setOvertimeNumber(statisticsBean
+							.getOvertimeNumber());
 				}
-				
-				if(statisticsBean.getProcessingNumber() > 0){
-					temp.setAdministrationLevel(statisticsBean.getProcessingNumber());
+
+				if (statisticsBean.getProcessingNumber() > 0) {
+					temp.setProcessingNumber(statisticsBean
+							.getProcessingNumber());
 				}
-				
-				if(statisticsBean.getReceivedNumber() > 0){
-					temp.setAdministrationLevel(statisticsBean.getReceivedNumber());
+
+				if (statisticsBean.getReceivedNumber() > 0) {
+					temp.setReceivedNumber(statisticsBean
+							.getReceivedNumber());
 				}
-				
-				
-				System.out.println(statisticsBean.getRemainingNumber());
-				
-				System.out.println(statisticsBean.getDomainItemCode());
-				System.out.println(statisticsBean.getGovItemCode());
+
+				if (Validator.isNotNull(statisticsBean.getDomainItemCode())) {
+					temp.setDomainCode(statisticsBean.getDomainItemCode());
+				}
+
+				if (Validator.isNotNull(statisticsBean.getGovItemCode())) {
+					temp.setGovAgencyCode(statisticsBean.getGovItemCode());
+				}
+				// System.out.println(statisticsBean.getRemainingNumber());
+
+				map.put(key, temp);
+
 			}
 
 		}
