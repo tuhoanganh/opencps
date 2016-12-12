@@ -217,7 +217,8 @@ public class DossierFileFinderImpl extends BasePersistenceImpl<DossierFile>
 	 * @return
 	 */
 	public int countDossierFile(long groupId, String keyword,
-			long dossierTemplateId, long fileEntryId, boolean onlyViewFileResult) {
+			long dossierTemplateId, long fileEntryId, int syncStatus,
+			int removed, boolean onlyViewFileResult) {
 
 		String[] keywords = null;
 		int dossierFileType = DossierMgtUtil.DOSSIERFILETYPE_ALL;
@@ -231,7 +232,7 @@ public class DossierFileFinderImpl extends BasePersistenceImpl<DossierFile>
 			dossierFileType = DossierMgtUtil.DOSSIERFILETYPE_OUTPUT;
 		}
 		return countDossierFile(groupId, keywords, dossierTemplateId,
-				dossierFileType, fileEntryId, andOperator);
+				dossierFileType, fileEntryId, syncStatus, removed, andOperator);
 	}
 
 	/**
@@ -245,7 +246,7 @@ public class DossierFileFinderImpl extends BasePersistenceImpl<DossierFile>
 	 */
 	private int countDossierFile(long groupId, String[] keywords,
 			long dossierTemplateId, int dossierFileType, long fileEntryId,
-			boolean andOperator) {
+			int syncStatus, int removed, boolean andOperator) {
 
 		Session session = null;
 
@@ -309,6 +310,8 @@ public class DossierFileFinderImpl extends BasePersistenceImpl<DossierFile>
 			QueryPos qPos = QueryPos.getInstance(q);
 
 			qPos.add(groupId);
+			qPos.add(syncStatus);
+			qPos.add(removed);
 
 			if (keywords != null && keywords.length > 0) {
 				qPos.add(keywords, 2);
@@ -706,8 +709,8 @@ public class DossierFileFinderImpl extends BasePersistenceImpl<DossierFile>
 	 * @return
 	 */
 	public List<DossierFile> searchDossierFile(long groupId, String keyword,
-			long dossierTemplateId, long fileEntryId,
-			boolean onlyViewFileResult, int start, int end,
+			long dossierTemplateId, long fileEntryId, int syncStatus,
+			int removed, boolean onlyViewFileResult, int start, int end,
 			OrderByComparator obc) {
 
 		String[] keywords = null;
@@ -722,7 +725,8 @@ public class DossierFileFinderImpl extends BasePersistenceImpl<DossierFile>
 			dossierFileType = DossierMgtUtil.DOSSIERFILETYPE_OUTPUT;
 		}
 		return searchDossierFile(groupId, keywords, dossierTemplateId,
-				dossierFileType, fileEntryId, start, end, obc, andOperator);
+				dossierFileType, fileEntryId, syncStatus, removed, start, end,
+				obc, andOperator);
 	}
 
 	/**
@@ -739,8 +743,8 @@ public class DossierFileFinderImpl extends BasePersistenceImpl<DossierFile>
 	 */
 	private List<DossierFile> searchDossierFile(long groupId,
 			String[] keywords, long dossierTemplateId, int dossierFileType,
-			long fileEntryId, int start, int end, OrderByComparator obc,
-			boolean andOperator) {
+			long fileEntryId, int syncStatus, int removed, int start, int end,
+			OrderByComparator obc, boolean andOperator) {
 
 		Session session = null;
 
@@ -803,6 +807,8 @@ public class DossierFileFinderImpl extends BasePersistenceImpl<DossierFile>
 			QueryPos qPos = QueryPos.getInstance(q);
 
 			qPos.add(groupId);
+			qPos.add(syncStatus);
+			qPos.add(removed);
 
 			if (keywords != null && keywords.length > 0) {
 				qPos.add(keywords, 2);

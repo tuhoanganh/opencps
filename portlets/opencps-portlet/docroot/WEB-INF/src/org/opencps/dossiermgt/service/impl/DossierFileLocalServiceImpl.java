@@ -811,11 +811,14 @@ public class DossierFileLocalServiceImpl extends
 	 * @throws SystemException
 	 */
 	public int countDossierFile(long groupId, String keyword,
-			long dossierTemplateId, long fileEntryId, boolean onlyViewFileResult)
-			throws SystemException {
+
+			long dossierTemplateId, long fileEntryId, int syncStatus,
+			int removed, boolean onlyViewFileResult) throws SystemException {
 
 		return dossierFileFinder.countDossierFile(groupId, keyword,
-				dossierTemplateId, fileEntryId, onlyViewFileResult);
+				dossierTemplateId, fileEntryId, syncStatus, removed,
+				onlyViewFileResult);
+
 	}
 
 	/**
@@ -908,6 +911,7 @@ public class DossierFileLocalServiceImpl extends
 	 * @throws NoSuchDossierFileException
 	 * @throws SystemException
 	 */
+<<<<<<< HEAD
 	public int countDossierFileByDID_SS_DP(
 		long dossierId, long dossierPartId, int syncStatus)
 		throws NoSuchDossierFileException, SystemException {
@@ -925,6 +929,12 @@ public class DossierFileLocalServiceImpl extends
 			long dossierPartId, int removed) throws NoSuchDossierFileException,
 			SystemException {
 
+=======
+	public List<DossierFile> getDossierFileByDID_DP_R(long dossierId,
+			long dossierPartId, int removed) throws NoSuchDossierFileException,
+			SystemException {
+
+>>>>>>> sync-enhancement#portlet18
 		return dossierFilePersistence.findByDID_DP_R(dossierId, dossierPartId,
 				removed);
 	}
@@ -1111,6 +1121,7 @@ public class DossierFileLocalServiceImpl extends
 	 * @throws SystemException
 	 */
 	public List<DossierFile> searchDossierFile(long groupId, String keyword,
+<<<<<<< HEAD
 			long dossierTemplateId, long fileEntryId,
 			boolean onlyViewFileResult, int start, int end,
 			OrderByComparator obc) throws SystemException {
@@ -1118,6 +1129,15 @@ public class DossierFileLocalServiceImpl extends
 		return dossierFileFinder.searchDossierFile(groupId, keyword,
 				dossierTemplateId, fileEntryId, onlyViewFileResult, start, end,
 				obc);
+=======
+			long dossierTemplateId, long fileEntryId, int syncStatus,
+			int removed, boolean onlyViewFileResult, int start, int end,
+			OrderByComparator obc) throws SystemException {
+
+		return dossierFileFinder.searchDossierFile(groupId, keyword,
+				dossierTemplateId, fileEntryId, syncStatus, removed,
+				onlyViewFileResult, start, end, obc);
+>>>>>>> sync-enhancement#portlet18
 	}
 
 	/**
@@ -1499,6 +1519,12 @@ public class DossierFileLocalServiceImpl extends
 		return dossierFileFinder.searchDossierFileResult(0, dossierId, 2, 5, 6,
 				start, end, orderByComparator);
 	}
+<<<<<<< HEAD
+=======
+
+	private static Log _log = LogFactoryUtil
+			.getLog(DossierFileLocalServiceImpl.class.getName());
+>>>>>>> sync-enhancement#portlet18
 
 	public DossierFile getLastestDossierFile() throws SystemException {
 		List<DossierFile> dossierFiles = dossierFilePersistence.findAll(0, 1);

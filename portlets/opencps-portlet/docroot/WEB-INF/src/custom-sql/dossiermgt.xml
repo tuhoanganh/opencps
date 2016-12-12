@@ -143,23 +143,29 @@
 	<sql id="org.opencps.dossiermgt.service.persistence.DossierFileFinder.countDossierFile">	
 		<![CDATA[
 			SELECT
-				count(*) AS COUNT_VALUE
+				COUNT(DISTINCT (opencps_dossier_file.dossierFileId)) AS COUNT_VALUE
 			FROM
 				opencps_dossier_file
-			LEFT JOIN
-				opencps_dossierpart 
+			INNER JOIN
+				opencps_dossierpart
 			ON
 				opencps_dossier_file.dossierPartId = opencps_dossierpart.dossierpartId
+			INNER JOIN 
+				dlfileentry
+			ON
+				opencps_dossier_file.fileEntryId = dlfileentry.fileEntryId
 			WHERE
 				(opencps_dossier_file.groupId = ?)
+			AND 
+				(opencps_dossier_file.syncStatus = ?)
+			AND 
+				(opencps_dossier_file.removed = ?)
 			AND  
 				(lower(opencps_dossier_file.displayName) LIKE ? [$AND_OR_NULL_CHECK$])
 			OR 
 				(lower(opencps_dossier_file.dossierFileNo) LIKE ? [$AND_OR_NULL_CHECK$])
 			AND 
 				(opencps_dossier_file.fileEntryId = ?)
-			AND 
-				(opencps_dossier_file.fileEntryId > 0)
 			AND
 				(opencps_dossier_file.dossierFileType = ?)
 			AND
@@ -170,23 +176,29 @@
 	<sql id="org.opencps.dossiermgt.service.persistence.DossierFileFinder.searchDossierFile">
 		<![CDATA[
 			SELECT
-				*
+				DISTINCT opencps_dossier_file.*
 			FROM
 				opencps_dossier_file
-			LEFT JOIN
+			INNER JOIN
 				opencps_dossierpart 
 			ON
 				opencps_dossier_file.dossierPartId = opencps_dossierpart.dossierpartId
+			INNER JOIN 
+				dlfileentry
+			ON
+				opencps_dossier_file.fileEntryId = dlfileentry.fileEntryId
 			WHERE
 				(opencps_dossier_file.groupId = ?)
+			AND 
+				(opencps_dossier_file.syncStatus = ?)
+			AND 
+				(opencps_dossier_file.removed = ?)
 			AND 
 				(lower(opencps_dossier_file.displayName) LIKE ? [$AND_OR_NULL_CHECK$])
 			OR 
 				(lower(opencps_dossier_file.dossierFileNo) LIKE ? [$AND_OR_NULL_CHECK$])
 			AND 
 				(opencps_dossier_file.fileEntryId = ?)
-			AND 
-				(opencps_dossier_file.fileEntryId > 0)
 			AND
 				(opencps_dossier_file.dossierFileType = ?)
 			AND
