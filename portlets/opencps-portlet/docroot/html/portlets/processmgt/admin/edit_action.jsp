@@ -22,14 +22,9 @@
 <%@page import="org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.model.impl.WorkflowOutputImpl"%>
 <%@page import="org.opencps.processmgt.model.WorkflowOutput"%>
-<%@page import="org.opencps.processmgt.service.StepAllowanceLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.model.ProcessWorkflow"%>
 <%@page import="org.opencps.processmgt.util.ProcessUtils"%>
-<%@page import="com.liferay.portal.kernel.process.ProcessUtil"%>
-<%@page import="com.liferay.portal.model.Role"%>
-<%@page import="org.opencps.processmgt.model.impl.StepAllowanceImpl"%>
 <%@page import="java.util.Collections"%>
-<%@page import="org.opencps.processmgt.model.StepAllowance"%>
 <%@page import="org.opencps.processmgt.model.ServiceProcess"%>
 <%@page import="org.opencps.servicemgt.search.ServiceDisplayTerms"%>
 <%@page import="org.opencps.processmgt.model.ProcessStep"%>
@@ -252,7 +247,7 @@
 			<div class="lfr-form-row lfr-form-row-inline">
 				<div class="row-fields">
 					<aui:input name='<%= "workflowOutputId" + outputIndex %>' type="hidden" value="<%= output.getWorkflowOutputId() %>"/>
-					
+					<aui:input name='<%="wfOutputPattern" + outputIndex %>' id='<%="wfOutputPattern" + outputIndex %>' type="text" value="<%=output.getPattern() %>" label="" placeholder="pattern"/>
 					<aui:select id='<%= "dossierPartId" + outputIndex %>' inlineField="<%= true %>" name='<%= "dossierPartId" + outputIndex %>' label="" showEmptyOption="true">
 						<%							
 							for (DossierPart dossier : dossiersResults) {

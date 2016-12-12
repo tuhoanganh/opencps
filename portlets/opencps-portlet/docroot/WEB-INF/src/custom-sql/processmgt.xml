@@ -524,6 +524,48 @@
 				createDate DESC
 		]]>
 	</sql>
+	
+	<sql id="org.opencps.processmgt.service.persistence.ProcessOrderFinder.searchReAssigToUser">	
+		<![CDATA[
+			SELECT
+				DISTINCT po.processOrderId, po.*
+			FROM
+				opencps_processorder AS po
+			LEFT JOIN
+				opencps_stepallowance AS pal
+			ON
+				po.processStepId = pal.processStepId
+			WHERE
+				po.actionUserId = ?
+			AND (
+				po.assignToUserId > 0 AND po.assignToUserId != ?)
+			OR (
+				po.processStepId = pal.processStepId AND po.actionUserId = ? AND pal.readOnly = FALSE )
+			ORDER BY
+				po.modifiedDate DESC
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.processmgt.service.persistence.ProcessOrderFinder.countReAssigToUser">	
+		<![CDATA[
+			SELECT
+				count(DISTINCT po.processOrderId) AS COUNT_VALUE
+			FROM
+				opencps_processorder AS po
+			LEFT JOIN
+				opencps_stepallowance AS pal
+			ON
+				po.processStepId = pal.processStepId
+			WHERE
+				po.actionUserId = ?
+			AND (
+				po.assignToUserId > 0 AND po.assignToUserId != ?)
+			OR (
+				po.processStepId = pal.processStepId AND po.actionUserId = ? AND pal.readOnly = FALSE )
+			ORDER BY
+				po.modifiedDate DESC
+		]]>
+	</sql>
 
 
 	<sql id="org.opencps.processmgt.service.persistence.ProcessOrderFinder.searchProcessOrderKeyWords">	
