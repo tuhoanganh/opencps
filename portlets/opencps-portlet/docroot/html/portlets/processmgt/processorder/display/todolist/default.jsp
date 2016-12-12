@@ -184,10 +184,10 @@
 								<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
 									<i class='<%="fa fa-circle sx10 " + processOrder.getDossierStatus()%>'></i>
 								</div>
-								<div class="span4 bold">
-									<liferay-ui:message key="reception-no"/>
+								<div class="span2 bold">
+									 <liferay-ui:message key="reception-no"/>
 								</div>
-								<div class="span7">
+								<div class="span9">
 									<%=processOrder.getReceptionNo() %>
 								</div>
 							</div>
