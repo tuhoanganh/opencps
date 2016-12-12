@@ -37,14 +37,16 @@ import com.liferay.portal.kernel.util.StringUtil;
 public class DossierNoGenerator {
 
 	public static String genaratorNoReceptionOption(String pattern,
-			long dossierId, String option, boolean isReset , long idGenerateOption) {
+			long dossierId, String option, boolean isReset,
+			long idGenerateOption) {
 
 		return StringUtil.upperCase(_genaratorNoReceptionOption(pattern,
 				dossierId, option, isReset, idGenerateOption));
 	}
 
 	private static String _genaratorNoReceptionOption(String pattern,
-			long dossierId, String option, boolean isReset, long idGenerateOption) {
+			long dossierId, String option, boolean isReset,
+			long idGenerateOption) {
 
 		String noReception = StringPool.BLANK;
 
@@ -72,10 +74,10 @@ public class DossierNoGenerator {
 
 			String serialNumber = _serialNumberAutoIncrementOption(pattern,
 					dossierId, option, isReset, idGenerateOption);
-			
-			String subPattern = pattern.substring(pattern.indexOf('('), pattern.lastIndexOf(')') + 1);
-			
-			
+
+			String subPattern = pattern.substring(pattern.indexOf('('),
+					pattern.lastIndexOf(')') + 1);
+
 			if (pattern.contains(FIX_MONTH_PATTERN_RESET)
 					|| pattern.contains(FIX_YEAR_PATTERN_RESET)) {
 
@@ -83,29 +85,31 @@ public class DossierNoGenerator {
 						subPattern.lastIndexOf('n') + 1, serialNumber);
 
 				String patternTemp = sbNoReception.toString();
-				
+
 				if (patternTemp.contains(FIX_MONTH_PATTERN_RESET)) {
 					sbNoReception.replace(patternTemp.indexOf('m') - 1,
 							patternTemp.indexOf('m') + 2, StringPool.BLANK);
-				
-				} else if(patternTemp.contains(FIX_YEAR_PATTERN_RESET)) {
+
+				} else if (patternTemp.contains(FIX_YEAR_PATTERN_RESET)) {
 					sbNoReception.replace(patternTemp.indexOf('y') - 1,
 							patternTemp.indexOf('y') + 2, StringPool.BLANK);
 				}
-				
-				if(pattern.contains(subPattern)) {
-					pattern = StringUtil.replace(pattern, subPattern, sbNoReception.toString());
+
+				if (pattern.contains(subPattern)) {
+					pattern = StringUtil.replace(pattern, subPattern,
+							sbNoReception.toString());
 				}
-				
+
 			} else {
 				sbNoReception.replace(subPattern.indexOf('n') - 1,
 						subPattern.lastIndexOf('n') + 2, serialNumber);
 
-				if(pattern.contains(subPattern)) {
-					pattern = StringUtil.replace(pattern, subPattern, sbNoReception.toString());
+				if (pattern.contains(subPattern)) {
+					pattern = StringUtil.replace(pattern, subPattern,
+							sbNoReception.toString());
 				}
 			}
-			//pattern = sbNoReception.toString();
+			// pattern = sbNoReception.toString();
 
 			try {
 				sbNoReception.replace(pattern.indexOf('%') - 1,
@@ -156,7 +160,8 @@ public class DossierNoGenerator {
 	}
 
 	private static String _serialNumberAutoIncrementOption(String pattern,
-			long dossierId, String option, boolean isReset, long idGenerateOption) {
+			long dossierId, String option, boolean isReset,
+			long idGenerateOption) {
 		long dossierCounter = 0;
 
 		try {
@@ -166,10 +171,10 @@ public class DossierNoGenerator {
 			switch (option) {
 			case PortletConstants.DOSSIER_PART_RESULT_PATTERN:
 				if (isReset) {
-					CounterLocalServiceUtil
-							.reset(WorkflowOutput.class.getName()
-									+ StringPool.POUND
-									+ String.valueOf(idGenerateOption));
+					CounterLocalServiceUtil.reset(WorkflowOutput.class
+							.getName()
+							+ StringPool.POUND
+							+ String.valueOf(idGenerateOption));
 				}
 
 				dossierCounter = CounterLocalServiceUtil
@@ -189,11 +194,12 @@ public class DossierNoGenerator {
 		} catch (Exception e) {
 			dossierCounter = dossierId;
 		}
-		
-		String subPattern = pattern.substring(pattern.indexOf('('), pattern.indexOf(')'));
-		
+
+		String subPattern = pattern.substring(pattern.indexOf('('),
+				pattern.indexOf(')'));
+
 		int numberSerial = StringUtil.count(subPattern, "n");
-		
+
 		String strNumSerial = intToString(dossierCounter, numberSerial);
 
 		return strNumSerial;
@@ -366,8 +372,7 @@ public class DossierNoGenerator {
 			Dossier dossier = DossierLocalServiceUtil.fetchDossier(dossierId);
 
 			dossierCounter = CounterLocalServiceUtil
-					.increment(ServiceProcess.class.getName()
-							+ StringPool.PERIOD
+					.increment(ServiceProcess.class.getName() + "#"
 							+ Long.toString(dossier.getServiceConfigId()));
 		} catch (Exception e) {
 			dossierCounter = dossierId;

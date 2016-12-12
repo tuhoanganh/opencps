@@ -489,6 +489,7 @@ public class PaymentFileLocalServiceImpl
 			paymentFile.setApproveNote(StringPool.BLANK);
 		}
 
+
 		User user = UserLocalServiceUtil.getUser(serviceContext.getUserId());
 
 		PermissionChecker permissionChecker;
@@ -558,6 +559,21 @@ public class PaymentFileLocalServiceImpl
 		paymentFilePersistence.update(paymentFile);
 
 		return paymentFile;
+
+	}
+	/**
+	 * @param paymentStatus
+	 * @param paymentGateStatus
+	 * @param orderByComparator
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public List<PaymentFile> getPaymentFileByParam(
+		int[] paymentStatus, int[] paymentGateStatus,int[] recheckStatus, boolean orderByASC)
+		throws PortalException, SystemException {
+
+		return paymentFileFinder.getPaymentFileByParam(paymentStatus,paymentGateStatus,recheckStatus,orderByASC);
 
 	}
 

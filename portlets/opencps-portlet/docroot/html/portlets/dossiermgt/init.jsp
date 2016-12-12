@@ -1,4 +1,5 @@
 
+<%@page import="java.text.DecimalFormat"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -23,6 +24,8 @@
 <%@ include file="/init.jsp" %>
 
 <%
+	DecimalFormat doubleFomart=new DecimalFormat("#,###.##");
+
 	PortletPreferences preferences = renderRequest.getPreferences();
 	
 	portletResource = ParamUtil.getString(request, "portletResource");
@@ -59,6 +62,10 @@
 	
 	boolean allowResultQuickView = GetterUtil.getBoolean(preferences.getValue("allowResultQuickView", "false"), false);
 	
+	String itemCode_cfg = GetterUtil.getString(preferences.getValue("itemCode_cfg", ""));
+	
+	String war_opencpsportlet_26_cfg = GetterUtil.getString(portletPreferences.getValue("war_opencpsportlet_26_cfg", ""));
+
 	boolean allowQuickCreateDossier = GetterUtil.getBoolean(preferences.getValue("allowQuickCreateDossier", "false"), false);
 
 	String fileTypes = preferences.getValue("fileTypes", StringPool.BLANK);
@@ -70,5 +77,6 @@
 	float maxUploadFileSize = GetterUtil.getFloat(preferences.getValue("maxUploadFileSize", StringPool.BLANK));
 	
 	String maxUploadFileSizeUnit = preferences.getValue("maxUploadFileSizeUnit", StringPool.BLANK);
+
 %>
 

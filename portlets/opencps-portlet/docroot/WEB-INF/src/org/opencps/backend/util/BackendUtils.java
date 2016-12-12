@@ -17,7 +17,6 @@
 
 package org.opencps.backend.util;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -87,8 +86,6 @@ public class BackendUtils {
 
 		boolean validPreCondition = true;
 
-		_log.info("pattern ################################ " + pattern);
-		
 		List<String> lsCondition = ListUtil.toList(StringUtil.split(pattern,
 				StringPool.COMMA));
 
@@ -170,10 +167,9 @@ public class BackendUtils {
 				if (splitCondition.length == 2) {
 					waitingTime = splitCondition[1];
 				}
-				
-				_log.info("#####################################waitingTime " + waitingTime);
 
-				validWaiting = _checkWaitingCondition(dossierId, waitingTime);
+				validWaiting = _checkWaitingCondition(dossierId,
+						waitingTime);
 				continue;
 			}
 
@@ -200,19 +196,14 @@ public class BackendUtils {
 			ProcessOrder processOrder = ProcessOrderLocalServiceUtil
 					.getProcessOrder(dossierId, dossier.getGroupId());
 
-			if (dossierStatus.equals(PortletConstants.DOSSIER_STATUS_WAITING)) {
+			if (dossierStatus.contains(PortletConstants.DOSSIER_STATUS_WAITING)) {
 
-				Date endDate = HolidayUtils.getEndDate(
-						processOrder.getActionDatetime(), pattern);
-
+				Date endDate = HolidayUtils.getEndDate(processOrder.getActionDatetime(),
+						pattern);
+				
 				Date now = new Date();
-
-				_log.info("endDate #################################### "
-						+ endDate.toString());
-				_log.info("endDate #################################### "
-						+ now.toString());
-
-				if (now.compareTo(endDate) >= 0) {
+				
+				if(now.compareTo(endDate) >=0 ){
 					isCondition = false;
 				}
 
@@ -269,9 +260,9 @@ public class BackendUtils {
 		}
 
 		if (countRequestCommand != 0) {
-			isCondition = false;
-		} else {
 			isCondition = true;
+		} else {
+			isCondition = false;
 		}
 
 		return isCondition;
@@ -517,24 +508,29 @@ public class BackendUtils {
 
 		if (dossierId != 0) {
 			try {
-				ProcessOrder processOrder = ProcessOrderLocalServiceUtil
-						.getProcessOrder(dossierId, 0);
-
-				long processStepId = processOrder.getProcessStepId();
-				long serviceProcessId = processOrder.getServiceProcessId();
-
-				List<ProcessWorkflow> lsPRC_WFL = new ArrayList<ProcessWorkflow>();
-
-				lsPRC_WFL = ProcessWorkflowLocalServiceUtil
-						.getPostProcessWorkflow(serviceProcessId, processStepId);
-
-				for (ProcessWorkflow prc_wf : lsPRC_WFL) {
-					if (Validator.isNotNull(prc_wf.getPreCondition())
-							&& (StringUtil.trim(prc_wf.getPreCondition())
-									.contains(WebKeys.ACTION_CANCEL_VALUE))) {
-						isCancel = true;
-						break;
-					}
+//				ProcessOrder processOrder = ProcessOrderLocalServiceUtil
+//						.getProcessOrder(dossierId, 0);
+//
+//				long processStepId = processOrder.getProcessStepId();
+//				long serviceProcessId = processOrder.getServiceProcessId();
+//
+//				List<ProcessWorkflow> lsPRC_WFL = new ArrayList<ProcessWorkflow>();
+//
+//				lsPRC_WFL = ProcessWorkflowLocalServiceUtil
+//						.getPostProcessWorkflow(serviceProcessId, processStepId);
+//
+//				for (ProcessWorkflow prc_wf : lsPRC_WFL) {
+//					if (Validator.isNotNull(prc_wf.getPreCondition())
+//							&& (StringUtil.trim(prc_wf.getPreCondition())
+//									.contains(WebKeys.ACTION_CANCEL_VALUE))) {
+//						isCancel = true;
+//						break;
+//					}
+//				}
+				Dossier dossider = DossierLocalServiceUtil.getDossier(dossierId);
+				
+				if(Validator.isNotNull(dossider) && !dossider.getDossierStatus().equals(PortletConstants.DOSSIER_STATUS_ENDED)){
+					isCancel = true;
 				}
 			} catch (Exception e) {
 			}

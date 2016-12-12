@@ -114,7 +114,7 @@ public class SyncFromBackOffice implements MessageListener {
 					WorkflowOutputLocalServiceUtil.getByProcessWFPostback(
 						toBackOffice.getProcessWorkflowId(), true);
 				
-				System.out.println("PROCESS_WORKFLOWWWWWWWWWWWWW" + workflowOutputs.size() + "_-------toBackOffice.getProcessWorkflowId() " + toBackOffice.getProcessWorkflowId());
+				_log.info("=====workflowOutputs.size():" + workflowOutputs.size());
 				
 				// Lat co trang thai dossier file
 				DossierFileLocalServiceUtil.updateDossierFileResultSyncStatus(
@@ -210,8 +210,6 @@ public class SyncFromBackOffice implements MessageListener {
 
 				MessageBusUtil.sendMessage(
 					"opencps/backoffice/engine/callback", sendToCallBack);
-				
-				System.out.println("PROCESS_WORKFLOWWWWWW SENDDDDDDDDD" + workflowOutputs.size());
 				
 				Message msgNoti = new Message();
 				

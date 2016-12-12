@@ -117,9 +117,6 @@
 						<a href="<%=editURL%>"><%= process.getProcessName()  %></a>
 					</div>
 				</div>
-			</liferay-util:buffer>
-			
-			<liferay-util:buffer var="description">
 				<div class="row-fluid">
 					<div class="span3 bold">
 						<liferay-ui:message key="description"/>
@@ -128,16 +125,13 @@
 						<a href="<%=editURL%>"><%= process.getDescription() %></a>
 					</div>
 				</div>
-				
 			</liferay-util:buffer>
-			
+
 			<%
 				
 				row.addText(rowIndex);
 				
 				row.addText(processInfo);
-				
-				row.addText(description);
 				
 				if(isPermission) {
 					//action column

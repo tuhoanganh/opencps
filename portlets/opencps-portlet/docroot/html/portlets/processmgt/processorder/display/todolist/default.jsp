@@ -1,4 +1,6 @@
-
+<%@page import="java.util.LinkedHashMap"%>
+<%@page import="java.util.HashSet"%>
+<%@page import="java.util.Set"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -37,7 +39,8 @@
 <%@ include file="../../init.jsp"%>
 
 <liferay-ui:success  key="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>" message="<%=MessageKeys.DEFAULT_SUCCESS_KEY %>"/>
-<liferay-util:include page='/html/portlets/processmgt/processorder/toolbar.jsp' servletContext="<%=application %>" />
+
+<liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
 
 <%
 	boolean success = false;
@@ -69,6 +72,8 @@
 	headerNames.add("action");
 	
 	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
+	
+	String dossierSubStatus = ParamUtil.getString(request, "dossierSubStatus");
 %>
 
 <c:if test="<%=stopRefresh %>">
@@ -81,6 +86,7 @@
 	<div class="opencps-searchcontainer-wrapper">
 		<liferay-ui:search-container 
 				searchContainer="<%= new ProcessOrderSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>"
+				
 				headerNames="<%= headers%>"
 			>
 			
@@ -101,8 +107,25 @@
 						}catch(Exception e){
 							_log.error(e);
 						}
-					
-						total = totalCount;
+						Set<String> setToReturn = new HashSet<String>();
+						Set<String> set1 = new HashSet<String>();
+						//remove duplicates process orders
+						Map<String, ProcessOrderBean> cleanMapList = new LinkedHashMap<String, ProcessOrderBean>();
+						for (int i = 0; i < processOrders.size(); i++) {
+							System.out.println(!set1.add(processOrders.get(i).getProcessOrderId()+""));
+							System.out.println("-->"+processOrders.get(i).getProcessOrderId()+"");
+							if (!set1.add(processOrders.get(i).getProcessOrderId()+"")) {
+								setToReturn.add(processOrders.get(i).getProcessOrderId()+"");
+							}
+							ProcessOrderBean aasb = processOrders.get(i);
+							aasb.set_testDuplicate((String[])setToReturn.toArray(new String[setToReturn.size()]));
+							cleanMapList.put(processOrders.get(i).getProcessOrderId()+"", aasb);
+						}
+						
+						processOrders = new ArrayList<ProcessOrderBean>(cleanMapList.values());
+						
+						int aso = totalCount - cleanMapList.size();
+						total = totalCount - aso;
 						results = processOrders;
 						
 						pageContext.setAttribute("results", results);
@@ -143,10 +166,10 @@
 						processURL.setParameter(ProcessOrderDisplayTerms.PROCESS_ORDER_ID, String.valueOf(processOrder.getProcessOrderId()));
 						processURL.setParameter("backURL", currentURL);
 						processURL.setParameter("isEditDossier", (processOrder.isReadOnly() || (processOrder.getAssignToUsesrId() != 0 &&  processOrder.getAssignToUsesrId() != user.getUserId())) ? String.valueOf(false) : String.valueOf(true));
-
-						int dateOver = HolidayCheckUtils.calculatorDateOver(Validator.isNotNull(processOrder.getActionDatetime()) ? 
-								processOrder.getActionDatetime() : new Date(),
-								new Date(), processOrder.getDaysDuration());
+						
+						String dateOver = HolidayCheckUtils.calculatorDateUntilDealineReturnFormart(Validator.isNotNull(processOrder.getActionDatetime()) ? 
+								processOrder.getActionDatetime() : null,
+								new Date(), processOrder.getDaysDuration(),themeDisplay.getLocale());
 						
 						//String deadLine = Validator.isNotNull(processOrder.getDealine()) ? processOrder.getDealine() : StringPool.DASH;
 						
@@ -219,7 +242,7 @@
 							</div>
 							
 							<div class='<%="span7"%>'>
-								<%=dateOver >= 0 ? "<div class='ocps-free-day'>"+ StringUtil.replace(LanguageUtil.get(themeDisplay.getLocale(), "until-x-day"), "{0}", String.valueOf(dateOver))+"</div>":"<div class='ocps-over-day'>"+StringUtil.replace(LanguageUtil.get(themeDisplay.getLocale(), "over-x-day"), "{0}", String.valueOf(Math.abs(dateOver))) +"</div>"%>
+								<%=dateOver.trim().length() >0 ? "<div class='ocps-free-day'>"+ StringUtil.replace(LanguageUtil.get(themeDisplay.getLocale(), "until-x-day1"), "{0}", dateOver)+"</div>":"<div class='ocps-over-day'>"+StringUtil.replace(LanguageUtil.get(themeDisplay.getLocale(), "over-x-day1"), "{0}", dateOver) +"</div>"%>
 							</div>
 						</div>
 					</liferay-util:buffer>
@@ -271,7 +294,6 @@ AUI().ready(function(A){
 });
 
 </aui:script>
-
 
 <%!
 	private Log _log = LogFactoryUtil.getLog("html.portlets.processmgt.processorder.disolay.default.jsp");

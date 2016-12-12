@@ -83,6 +83,10 @@ public class ConfigurationImpl implements ConfigurationAction{
 		
 		boolean allowResultQuickView = ParamUtil.getBoolean(actionRequest, "allowResultQuickView");
 		
+		String itemCode_cfg = ParamUtil.getString(actionRequest, "itemCode_cfg");
+		
+		String war_opencpsportlet_26_cfg = ParamUtil.getString(actionRequest, "war_opencpsportlet_26_cfg");
+
 		boolean allowQuickCreateDossier = ParamUtil.getBoolean(actionRequest, "allowQuickCreateDossier");
 
 		String fileTypes = ParamUtil.getString(actionRequest, "fileTypes");
@@ -151,6 +155,10 @@ public class ConfigurationImpl implements ConfigurationAction{
 		preferences.setValue("maxUploadFileSizeUnit", maxUploadFileSizeUnit);
 		
 		preferences.setValue("allowQuickCreateDossier", String.valueOf(allowQuickCreateDossier));
+		
+		preferences.setValue("itemCode_cfg", itemCode_cfg);
+		
+		preferences.setValue("war_opencpsportlet_26_cfg", war_opencpsportlet_26_cfg);
 		
 		preferences.store();
 

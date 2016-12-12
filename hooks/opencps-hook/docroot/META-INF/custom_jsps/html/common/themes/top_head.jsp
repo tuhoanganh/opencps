@@ -169,6 +169,7 @@ long cssLastModified = ServletContextUtil.getLastModified(application, "/html/cs
 <link href="<%= HtmlUtil.escapeAttribute(PortalUtil.getStaticResourceURL(request, themeDisplay.getCDNDynamicResourcesHost() + themeDisplay.getPathContext() + "/html/css/bootstrap-datetimepicker.css")) %>" rel="stylesheet" type="text/css" />
 <link href="<%= HtmlUtil.escapeAttribute(PortalUtil.getStaticResourceURL(request, themeDisplay.getCDNDynamicResourcesHost() + themeDisplay.getPathContext() + "/html/css/bootstrap-multiselect.css")) %>" rel="stylesheet" type="text/css" />
 <link href='<%= PortalUtil.getStaticResourceURL(request, themeDisplay.getCDNHost() + "/html/css/jquery-ui.theme.css", cssLastModified) %>' rel="stylesheet" type="text/css" />
+<link href="<%= HtmlUtil.escapeAttribute(PortalUtil.getStaticResourceURL(request, themeDisplay.getCDNDynamicResourcesHost() + themeDisplay.getPathContext() + "/html/css/opencps-combo-tree.css")) %>" rel="stylesheet" type="text/css" />
 <%-- User Inputted Layout CSS --%>
 
 <c:if test="<%= (layout != null) && Validator.isNotNull(layout.getCssText()) %>">

@@ -874,7 +874,7 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 	 */
 	public int countProcessOrderKeyWords(
 		long serviceInfoId, long processStepId, long loginUserId,
-		long assignToUserId, String keyWords) {
+		long assignToUserId, String keyWords, String dossierSubStatus) {
 
 		Session session = null;
 		try {
@@ -900,6 +900,13 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 						.replace(sql, "AND (opencps_dossier.receptionNo = ? or opencps_serviceinfo.serviceName like ? or opencps_dossier.subjectName like ? or opencps_dossier.dossierId = ?)",
 							StringPool.BLANK);
 			}
+			
+			if(Validator.isNull(dossierSubStatus)){
+				sql = StringUtil
+						.replace(sql, "AND opencps_processstep.dossierSubStatus = ?",
+							StringPool.BLANK);
+			}
+			
 			SQLQuery q = session
 				.createSQLQuery(sql);
 			q
@@ -923,6 +930,11 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 
 			qPos
 				.add(loginUserId);
+			
+			if(Validator.isNotNull(dossierSubStatus)){
+				qPos
+					.add(dossierSubStatus);
+			}
 			
 			if(Validator.isNotNull(keyWords)){
 				qPos
@@ -976,7 +988,7 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 	 */
 	public List searchProcessOrderKeyWords(long serviceInfoId,
 
-		long processStepId, long loginUserId, long assignToUserId, String keyWords, int start,
+		long processStepId, long loginUserId, long assignToUserId, String keyWords, String dossierSubStatus, int start,
 		int end, OrderByComparator orderByComparator) {
 
 		Session session = null;
@@ -1001,6 +1013,12 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 			if(Validator.isNull(keyWords)){
 				sql = StringUtil
 						.replace(sql, "AND (opencps_dossier.receptionNo = ? or opencps_serviceinfo.serviceName like ? or opencps_dossier.subjectName like ? or opencps_dossier.dossierId = ?)",
+							StringPool.BLANK);
+			}
+			
+			if(Validator.isNull(dossierSubStatus)){
+				sql = StringUtil
+						.replace(sql, "AND opencps_processstep.dossierSubStatus = ?",
 							StringPool.BLANK);
 			}
 			
@@ -1035,7 +1053,10 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 				.addScalar("referenceDossierPartId", Type.LONG);
 			q
 				.addScalar("readOnly", Type.BOOLEAN);
-
+			
+			q
+				.addScalar("dossierSubStatus", Type.STRING);
+			
 			QueryPos qPos = QueryPos
 				.getInstance(q);
 
@@ -1051,6 +1072,11 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 
 			qPos
 				.add(loginUserId);
+			
+			if(Validator.isNotNull(dossierSubStatus)){
+				qPos
+					.add(dossierSubStatus);
+			}
 			
 			if(Validator.isNotNull(keyWords)){
 				qPos
@@ -1088,6 +1114,7 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 					String serviceName = (String) objects[5];
 					String stepName = (String) objects[6];
 					String sequenceNo = (String) objects[7];
+					String dossierSubStatusSos = (String) objects[11];
 					int daysDuration = GetterUtil
 						.getInteger(objects[8]);
 					long referenceDossierPartId = GetterUtil
@@ -1168,7 +1195,9 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 							.getUserId());
 					processOrderBean
 						.setReadOnly(readOnly);
-
+					
+					processOrderBean.setDossierSubStatus(dossierSubStatusSos);
+					
 					processOrderBeans
 						.add(processOrderBean);
 				}

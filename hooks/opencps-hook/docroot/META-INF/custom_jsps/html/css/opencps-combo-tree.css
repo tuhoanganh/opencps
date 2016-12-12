@@ -1,0 +1,84 @@
+.comboTreeDropDownContainer{
+	position: absolute;
+	z-index: 1;
+	background: #fff;
+	width: 540px;
+	border: 1px solid #e1e1e1;
+	border-radius: 4px;
+	padding: 5px 10px;
+	margin-top: 5px;
+	max-height: 250px;
+	overflow: scroll;
+	display: none;
+}
+
+.comboTreeParentPlus .tree-icon.tree-folder.tree-folder-open::before {
+    content: "\f0d7";
+    color: #2ea4ff;
+    font: normal normal normal 14px/1 FontAwesome;
+}
+.comboTreeDropDownContainer .tree-hitarea.icon-plus::before {
+    content: "\f0da";
+    color: #2ea4ff;
+}
+.ComboTreeItemParent .tree-hitarea::after {
+    content: "";
+    position: absolute;
+    padding: 18px;
+    top: -15px;
+    left: -15px;
+}
+.comboTreeDropDownContainer .comboTreeParentPlus, .comboTreeDropDownContainer .ComboTreeItemChlid .icon-file{
+	padding-right: 5px;
+}
+.comboTreeDropDownContainer .ComboTreeItemChlid .icon-file::before {
+    content: "\f0f6";
+}
+.comboTreeDropDownContainer .ComboTreeItemParent{
+	margin-left: 10px;
+}
+.comboTreeDropDownContainer .ComboTreeItemParent > ul{
+	margin-left: 12px !important;
+}
+.comboTreeDropDownContainer ul li.ComboTreeItemParent{
+	margin-left: 0px;
+}
+.comboTreeDropDownContainer ul li {
+    padding: 3px 0 !important;
+	cursor: pointer;
+}
+.comboTreeDropDownContainer .comboTreeItemHover{
+	font-family: "Roboto-Bold";
+	position: absolute;
+	width: 100%;
+	height: auto;
+	color: #333 !important;
+	
+}
+.comboTreeDropDownContainer .comboTreeItemHover:before{
+	content: "";
+position: absolute;
+top: 0;
+left: -400%;
+width: 900%;
+height: 100%;
+background-color: #69C3F666;
+	z-index:-1;
+}									
+.comboTreeDropDownContainer .comboTreeItemSelected{
+font-family: "Roboto-Bold";
+position: absolute;
+width: 100%;
+height: auto;
+color: #fff !important;
+}
+.comboTreeDropDownContainer .comboTreeItemSelected:before{
+	content: "";
+position: absolute;
+top: 0;
+left: -400%;
+width: 900%;
+height: 100%;
+background-color: #0075c7;
+	z-index:-1;
+}

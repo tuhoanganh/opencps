@@ -133,8 +133,10 @@
 						}
 					%>
 					<liferay-ui:search-container-column-text 
-						title="#"
-						name="#"
+
+						title="version-stt"
+						name="version-stt"
+
 						value="<%=String.valueOf(dossierFile.getVersion()) + (access  ? StringPool.BLANK : StringPool.OPEN_PARENTHESIS +  LanguageUtil.get(locale, \"updating\") + StringPool.CLOSE_PARENTHESIS)%>"
 					/>
 					<liferay-ui:search-container-column-text 
@@ -158,6 +160,7 @@
 						value="<%=Validator.isNotNull(dossierFile.getDisplayName()) ? dossierFile.getDisplayName() : StringPool.DASH %>"
 					/>
 					
+
 					<%-- <liferay-ui:search-container-column-text 
 						title="version"
 						name="version"

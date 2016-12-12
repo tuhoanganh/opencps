@@ -653,11 +653,11 @@ public class ProcessOrderLocalServiceImpl extends
 	 */
 	public int countProcessOrderKeyWords(
 		long serviceInfoId, long processStepId, long loginUserId,
-		long actionUserId, String keyWords) {
+		long actionUserId, String keyWords, String dossierSubStatus) {
 
 		return processOrderFinder
 			.countProcessOrderKeyWords(serviceInfoId, processStepId, loginUserId,
-				actionUserId, keyWords);
+				actionUserId, keyWords, dossierSubStatus);
 	}
 	/**
 	 * @param serviceInfoId
@@ -672,10 +672,10 @@ public class ProcessOrderLocalServiceImpl extends
 	 */
 	public List searchProcessOrderKeyWords(
 		long serviceInfoId, long processStepId, long loginUserId,
-		long actionUserId, String keyWords, int start, int end, OrderByComparator orderByComparator) {
+		long actionUserId, String keyWords, String dossierSubStatus, int start, int end, OrderByComparator orderByComparator) {
 		
 		return processOrderFinder
 						.searchProcessOrderKeyWords(serviceInfoId, processStepId, loginUserId,
-							actionUserId, keyWords, start, end, orderByComparator);
+							actionUserId, keyWords, dossierSubStatus, start, end, orderByComparator);
 	}
 }

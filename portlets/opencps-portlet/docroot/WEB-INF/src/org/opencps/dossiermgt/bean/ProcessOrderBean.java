@@ -18,6 +18,7 @@
 package org.opencps.dossiermgt.bean;
 
 import java.util.Date;
+import java.util.List;
 
 import org.opencps.util.PortletConstants;
 
@@ -459,6 +460,26 @@ public class ProcessOrderBean {
 
 	private String _actionNote;
 	
+	private String dossierSubStatus;
+	
+	public String getDossierSubStatus() {
+		return dossierSubStatus;
+	}
+
+	public void setDossierSubStatus(String dossierSubStatus) {
+		this.dossierSubStatus = dossierSubStatus;
+	}
+
+	private String [] _testDuplicate;
+	
+	public String[] get_testDuplicate() {
+		return _testDuplicate;
+	}
+
+	public void set_testDuplicate(String[] _testDuplicate) {
+		this._testDuplicate = _testDuplicate;
+	}
+
 	public String getActionNote() {
 		return _actionNote;
 	}

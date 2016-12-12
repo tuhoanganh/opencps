@@ -1,54 +1,32 @@
 .opencps-theme.ux footer {
-    background: rgba(0, 0, 0, 0) url("../images/custom/bg_footer.png") no-repeat;
-    min-height: 228px;
-    padding-top: 25px;
+    background: rgba(0, 0, 0, 0) url("../images/custom/bg_footer.png") 0 center no-repeat;
+    padding: 25px 0;
     background-size: cover;
+    color: #7d91a0;
+    font-size: 12px;
+    margin-top: 45px;
+    overflow: hidden;
 }
-
-.opencps-theme.ux footer .content{
+.opencps-theme.ux footer .content {
 	margin: auto;
 	width: 1170px;
 }
-
-@media (max-width: 1000px) {
-	.opencps-theme.ux footer .content{
-		margin: auto;
-		width: auto;
-	}
-}
-
-.opencps-theme.ux footer .content ul{
-	margin: 0;
-}
-
-.opencps-theme.ux footer .content ul li{
+.opencps-theme.ux footer .content ul li {
 	padding: 5px 0;
-	line-height: 20px;
+	line-height: normal;
 }
-
-.opencps-theme.ux footer .content a {
-    color: #7d91a0;
-}
-
 .opencps-theme.ux footer .content .logo {
     background: rgba(0, 0, 0, 0) url("../images/custom/logo_footer.png") no-repeat;
     margin-left: 0;
     padding-left: 0;
     padding-top: 65px;
-    width: 222px;
 }
-
 .opencps-theme.ux footer .content .logo p {
     color: #fff;
     font-size: 13px;
     margin-bottom: 0;
     opacity: 0.2;
 }
-
-.opencps-theme.ux footer .content p{
-	color: #7d91a0;
-}
-
 .opencps-theme.ux footer .content p.title {
     color: #0074cd;
     font-size: 15px;
@@ -56,31 +34,53 @@
     padding: 5px 0;
     position: relative;
     text-transform: uppercase;
+    font-family: 'Roboto-Bold';
 }
-
 .opencps-theme.ux footer .content p.title::after {
-    background-color: #0074cd;
     content: "";
     height: 1px;
     left: 0;
     position: absolute;
     top: 35px;
     width: 14px;
+    background-color: #0074cd;
 }
-
-
 .opencps-theme.ux footer .content p.address {
     background: rgba(0, 0, 0, 0) url("../images/custom/icon_address.png") no-repeat scroll 1px 3px;
-    padding-left: 20px;
+    padding-left: 25px;
 }
-
-
 .opencps-theme.ux footer .content p.mail {
     background: rgba(0, 0, 0, 0) url("../images/custom/icon_email.png") no-repeat scroll 0 5px;
-    padding-left: 20px;
+    padding-left: 25px;
 }
-
 .opencps-theme.ux footer .content p.phone {
     background: rgba(0, 0, 0, 0) url("../images/custom/icon_phone.png") no-repeat scroll 0 1px;
-    padding-left: 20px;
+    padding-left: 25px;
+}
+.opencps-theme.ux footer select {
+	font-size: 12px;
+}
+.opencps-theme.ux footer .select {
+	width: 230px;
+	height: 35px;
+	overflow: hidden;
+	border: 1px solid #0074CD;
+	border-radius: 15px;
+}
+.opencps-theme.ux footer .select select {
+	background: transparent url("../images/custom/icon_select_blue.png") 93% center no-repeat;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	height: 35px;
+	line-height: 35px;
+	width: 230px;
+	color: #7d91a0;
+	padding: 0 15px;
+	border: 0 !important;
+}
+.opencps-theme.ux footer [class*="span"] {
+	margin-bottom: 15px;
+}
+.opencps-theme.ux footer [class*="span"]:last-child {
+	margin-bottom: 0
 }

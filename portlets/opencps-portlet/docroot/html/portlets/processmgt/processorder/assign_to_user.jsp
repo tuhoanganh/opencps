@@ -77,14 +77,15 @@
 	String event = ParamUtil.getString(request, ProcessOrderDisplayTerms.EVENT);
 	String receptionNo = Validator.isNotNull(dossier) ? dossier.getReceptionNo() : StringPool.BLANK; //ParamUtil.getString(request, ProcessOrderDisplayTerms.RECEPTION_NO);
 	
-	if ((Validator.isNull(receptionNo) || (receptionNo.length() == 0)) 
-			&& Validator.isNotNull(workflow) 
-			&& workflow.getGenerateReceptionNo()) {
+	//remove generate receiveNo in jsp, just generate on server
+// 	if ((Validator.isNull(receptionNo) || (receptionNo.length() == 0)) 
+// 			&& Validator.isNotNull(workflow) 
+// 			&& workflow.getGenerateReceptionNo()) {
 		
-		// If doisser don't have receiveNo, create receiveNo
-		receptionNo = DossierNoGenerator.genaratorNoReception(workflow.getReceptionNoPattern(), dossierId);
+// 		// If doisser don't have receiveNo, create receiveNo
+// 		receptionNo = DossierNoGenerator.genaratorNoReception(workflow.getReceptionNoPattern(), dossierId);
 		
-	}
+// 	}
 	
 	String strReceiveDate = ParamUtil.getString(request, "receiveDate");
 	
@@ -311,54 +312,47 @@
 			</div>
 		</c:if>		
 		
-		<c:if test="<%= processWorkflow.getGenerateReceptionNo() %>">
-			<div class="span12">
-				<aui:input 
-					name="<%=ProcessOrderDisplayTerms.RECEPTION_NO %>" 
-					label="reception-no" 
-					value="<%= receptionNo %>"
-				/>
-			</div>
-		</c:if>
+<%-- 		<c:if test="<%= processWorkflow.getGenerateReceptionNo() %>"> --%>
+<!-- 			<div class="span12"> -->
+<%-- 				<aui:input  --%>
+<%-- 					name="<%=ProcessOrderDisplayTerms.RECEPTION_NO %>"  --%>
+<%-- 					label="reception-no"  --%>
+<%-- 					value="<%= receptionNo %>" --%>
+<%-- 				/> --%>
+<!-- 			</div> -->
+<%-- 		</c:if> --%>
 		
 		<c:if test="<%= processWorkflow.getGenerateDeadline() %>">
 			<div class="span12">
-				<aui:row>
-					<label class="control-label custom-lebel" for='<portlet:namespace/><%="deadline" %>'>
-						<liferay-ui:message key="return-date"/>
-					</label>
-				</aui:row>
 				
-				<aui:row>
-					<span class="span8">
-						<liferay-ui:input-date
-							dayParam="<%=ProcessOrderDisplayTerms.ESTIMATE_DATETIME_DAY %>"
-							disabled="<%= false %>"
-							monthParam="<%=ProcessOrderDisplayTerms.ESTIMATE_DATETIME_MONTH %>"
-							name="<%=ProcessOrderDisplayTerms.ESTIMATE_DATE %>"
-							yearParam="<%=ProcessOrderDisplayTerms.ESTIMATE_DATETIME_YEAR %>"
-							formName="fm"
-							autoFocus="<%=true %>"
-							dayValue="<%=Validator.isNotNull(spd) ? spd.getDayOfMoth() : 0 %>"
-							monthValue="<%=Validator.isNotNull(spd) ? spd.getMonth() : 0 %>"
-							yearValue="<%=Validator.isNotNull(spd) ? spd.getYear() : 0 %>"
-							nullable="<%=spd == null ? true: false %>"
-							cssClass="input100"
-						/>
-					</span>
-					
-					<span class="span4">
-						<liferay-ui:input-time 
-							minuteParam="<%= ProcessOrderDisplayTerms.ESTIMATE_DATETIME_HOUR %>"
-							amPmParam="AM" 
-							hourParam="<%= ProcessOrderDisplayTerms.ESTIMATE_DATETIME_MINUTE %>"
-							cssClass="input100"
-							hourValue="<%= Validator.isNotNull(spd) ? spd.getHour() : 0 %>"
-							minuteValue="<%= Validator.isNotNull(spd) ? spd.getMinute() : 0 %>"
-							name="<%=ProcessOrderDisplayTerms.ESTIMATE_TIME %>"
-						/>
-					</span>
-				</aui:row>
+				<label class="control-label custom-lebel" for='<portlet:namespace/><%="deadline" %>'>
+					<liferay-ui:message key="return-date"/>
+				</label>
+
+				<liferay-ui:input-date
+					dayParam="<%=ProcessOrderDisplayTerms.ESTIMATE_DATETIME_DAY %>"
+					disabled="<%= false %>"
+					monthParam="<%=ProcessOrderDisplayTerms.ESTIMATE_DATETIME_MONTH %>"
+					name="<%=ProcessOrderDisplayTerms.ESTIMATE_DATE %>"
+					yearParam="<%=ProcessOrderDisplayTerms.ESTIMATE_DATETIME_YEAR %>"
+					formName="fm"
+					autoFocus="<%=true %>"
+					dayValue="<%=Validator.isNotNull(spd) ? spd.getDayOfMoth() : 0 %>"
+					monthValue="<%=Validator.isNotNull(spd) ? spd.getMonth() : 0 %>"
+					yearValue="<%=Validator.isNotNull(spd) ? spd.getYear() : 0 %>"
+					nullable="<%=spd == null ? true: false %>"
+					cssClass="input100"
+				/>
+
+				<liferay-ui:input-time 
+					minuteParam="<%= ProcessOrderDisplayTerms.ESTIMATE_DATETIME_HOUR %>"
+					amPmParam="AM" 
+					hourParam="<%= ProcessOrderDisplayTerms.ESTIMATE_DATETIME_MINUTE %>"
+					cssClass="input100"
+					hourValue="<%= Validator.isNotNull(spd) ? spd.getHour() : 0 %>"
+					minuteValue="<%= Validator.isNotNull(spd) ? spd.getMinute() : 0 %>"
+					name="<%=ProcessOrderDisplayTerms.ESTIMATE_TIME %>"
+				/>
 			</div>
 		</c:if>
 	</div>
@@ -446,14 +440,15 @@
 			</aui:select>
 		</div>
 	</c:if>
-
-	<aui:button type="button" value="submit" name="submit"/>
-	
-	<c:if test="<%=esign %>">
-		<%-- <aui:button type="button" value="esign" name="esign"/> --%>
-		<aui:button type="button" value="esign" name="esign" onClick="getFileComputerHash(1);"/>
-	</c:if>
-	<aui:button type="button" value="cancel" name="cancel"/>
+	<div class="button-holder">
+		<aui:button type="button" value="submit" name="submit"/>
+		
+		<c:if test="<%=esign %>">
+			<%-- <aui:button type="button" value="esign" name="esign"/> --%>
+			<aui:button type="button" value="esign" name="esign" onClick="getFileComputerHash(1);"/>
+		</c:if>
+		<aui:button type="button" value="cancel" name="cancel"/>
+	</div>
 	
 	<div id="myProgressBar" class="aui-progress-warning"></div>
 </aui:form>

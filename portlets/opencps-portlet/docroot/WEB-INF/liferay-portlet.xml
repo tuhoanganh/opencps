@@ -163,6 +163,16 @@
 		</scheduler-entry>
 		
 		<scheduler-entry>
+			<scheduler-event-listener-class>org.opencps.backend.scheduler.CheckPaymentStatus</scheduler-event-listener-class>
+			<trigger>
+				<simple>
+					<simple-trigger-value>5</simple-trigger-value>
+					<time-unit>minute</time-unit>
+				</simple>
+			</trigger>
+		</scheduler-entry>
+		
+		<scheduler-entry>
 			<scheduler-event-listener-class>org.opencps.backend.exc.MsgInBackOffice</scheduler-event-listener-class>
 			<trigger>
 				<simple>
@@ -357,6 +367,16 @@
 			/js/main.js
 		</footer-portlet-javascript>
 		<css-class-wrapper>28-portlet</css-class-wrapper>
+	</portlet>
+	<portlet>
+		<portlet-name>1001</portlet-name>
+		<icon>/icon.png</icon>
+		<configuration-action-class>org.opencps.dashboard.portlet.ConfigurationImpl</configuration-action-class>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>1001-portlet</css-class-wrapper>
 	</portlet>
 	
 	<portlet>
