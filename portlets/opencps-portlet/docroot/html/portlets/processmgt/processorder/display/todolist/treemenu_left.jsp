@@ -74,6 +74,8 @@
 	long processStepId = ParamUtil.getLong(request, "processStepId");
 	
 	String dossierSubStatus = ParamUtil.getString(request, "dossierSubStatus");
+
+	String processOrderStage = ParamUtil.getString(request, "processOrderStage", "false");
 	
 	JSONObject arrayParam = JSONFactoryUtil
 		    .createJSONObject();
@@ -83,6 +85,7 @@
 	arrayParam.put("tabs1", tabs1);
 	String keySearch = ParamUtil.getString(request, "keywords");
 %>
+
 <aui:row>
 	<aui:col width="25">
 	<div style="margin-bottom: 25px;" class="opencps-searchcontainer-wrapper default-box-shadow radius8">
@@ -156,24 +159,7 @@
 								_log.error(e);
 							}
 						
-							Set<String> setToReturn = new HashSet<String>();
-							Set<String> set1 = new HashSet<String>();
-							//remove duplicates process orders
-							Map<String, ProcessOrderBean> cleanMapList = new LinkedHashMap<String, ProcessOrderBean>();
-							for (int i = 0; i < processOrders.size(); i++) {
-									if (!set1.add(processOrders.get(i).getProcessOrderId()+"")) {
-										setToReturn.add(processOrders.get(i).getProcessOrderId()+"");
-									}
-								
-									ProcessOrderBean aasb = processOrders.get(i);
-									aasb.set_testDuplicate((String[])setToReturn.toArray(new String[setToReturn.size()]));
-									cleanMapList.put(processOrders.get(i).getProcessOrderId()+"", aasb);
-							}
-							
-							processOrders = new ArrayList<ProcessOrderBean>(cleanMapList.values());
-							
-							int aso = totalCount - cleanMapList.size();
-							total = totalCount - aso;
+							total = totalCount;
 							results = processOrders;
 							
 							pageContext.setAttribute("results", results);

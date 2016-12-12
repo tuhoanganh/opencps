@@ -582,9 +582,11 @@
 					) AS role
                 ON
 					opencps_stepallowance.roleId = role.roleId
+					AND opencps_stepallowance.readOnly = ?
 			) AS stepallowance
 			ON
 				stepallowance.processStepId = opencps_processstep.processStepId
+				
 			WHERE 
 			(
 				opencps_processorder.assignToUserId = 0 
@@ -593,7 +595,6 @@
 				(
 					opencps_processorder.assignToUserId != 0 
 					AND stepallowance.userId != opencps_processorder.assignToUserId 
-					AND stepallowance.readOnly = TRUE
 				)
 			)
 			AND opencps_processstep.dossierSubStatus = ?
@@ -649,9 +650,11 @@
 					) AS role
                 ON
 					opencps_stepallowance.roleId = role.roleId
+					AND opencps_stepallowance.readOnly = ?
             ) AS stepallowance
             ON
             	stepallowance.processStepId = opencps_processstep.processStepId
+            	
             WHERE 
             (
                 opencps_processorder.assignToUserId = 0 
@@ -660,7 +663,6 @@
                 (
                     opencps_processorder.assignToUserId != 0 
                     AND stepallowance.userId != opencps_processorder.assignToUserId 
-                    AND stepallowance.readOnly = TRUE
                 )
             )
             AND opencps_processstep.dossierSubStatus = ?
