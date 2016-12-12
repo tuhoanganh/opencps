@@ -72,11 +72,15 @@ public class DossierNoGenerator {
 
 			String serialNumber = _serialNumberAutoIncrementOption(pattern,
 					dossierId, option, isReset, idGenerateOption);
+			
+			String subPattern = pattern.substring(pattern.indexOf('('), pattern.lastIndexOf(')') + 1);
+			
+			
 			if (pattern.contains(FIX_MONTH_PATTERN_RESET)
 					|| pattern.contains(FIX_YEAR_PATTERN_RESET)) {
 
-				sbNoReception.replace(pattern.indexOf('n') - 1,
-						pattern.lastIndexOf('n') + 1, serialNumber);
+				sbNoReception.replace(subPattern.indexOf('n') - 1,
+						subPattern.lastIndexOf('n') + 1, serialNumber);
 
 				String patternTemp = sbNoReception.toString();
 				
@@ -89,20 +93,23 @@ public class DossierNoGenerator {
 							patternTemp.indexOf('y') + 2, StringPool.BLANK);
 				}
 				
-				pattern = sbNoReception.toString();
+				if(pattern.contains(subPattern)) {
+					pattern = StringUtil.replace(pattern, subPattern, sbNoReception.toString());
+				}
 				
 			} else {
-				sbNoReception.replace(pattern.indexOf('n') - 1,
-						pattern.lastIndexOf('n') + 2, serialNumber);
+				sbNoReception.replace(subPattern.indexOf('n') - 1,
+						subPattern.lastIndexOf('n') + 2, serialNumber);
 
-				pattern = sbNoReception.toString();
+				if(pattern.contains(subPattern)) {
+					pattern = StringUtil.replace(pattern, subPattern, sbNoReception.toString());
+				}
 			}
 			//pattern = sbNoReception.toString();
 
 			try {
 				sbNoReception.replace(pattern.indexOf('%') - 1,
 						pattern.lastIndexOf('%') + 2, specialChar);
-
 			} catch (Exception e) {
 
 			}
@@ -182,9 +189,11 @@ public class DossierNoGenerator {
 		} catch (Exception e) {
 			dossierCounter = dossierId;
 		}
-
-		int numberSerial = StringUtil.count(pattern, "n");
-
+		
+		String subPattern = pattern.substring(pattern.indexOf('('), pattern.indexOf(')'));
+		
+		int numberSerial = StringUtil.count(subPattern, "n");
+		
 		String strNumSerial = intToString(dossierCounter, numberSerial);
 
 		return strNumSerial;
@@ -417,37 +426,5 @@ public class DossierNoGenerator {
 	public static final String FIX_SERIAL_PATERN = "{nn";
 
 	public static final int FIX_DEFAULT_SERIAL_NUMBER = 6;
-
-	/*public static void main(String args[]) {
-		String pattern = "(nnnnn-Y)/{YYYY}";
-		String patternTemp = StringPool.BLANK;
-		StringBuffer sbNoReception = new StringBuffer(pattern);
-		if (pattern.contains(FIX_MONTH_PATTERN_RESET)
-				|| pattern.contains(FIX_YEAR_PATTERN_RESET)) {
-
-			sbNoReception.replace(pattern.indexOf('n') - 1,
-					pattern.lastIndexOf('n') + 1, "fuck");
-			
-			patternTemp = sbNoReception.toString();
-			 
-			 if (patternTemp.contains(FIX_MONTH_PATTERN_RESET)) {
-					sbNoReception.replace(patternTemp.indexOf('M'),
-							patternTemp.indexOf('M') + 2, "08");
-				
-				} else if(patternTemp.contains(FIX_YEAR_PATTERN_RESET)) {
-					sbNoReception.replace(patternTemp.indexOf('Y'),
-							patternTemp.indexOf('Y') + 2, "2016");
-				}
-			
-
-		} else {
-			sbNoReception.replace(pattern.indexOf('n') - 1,
-					pattern.lastIndexOf('n') + 2, "fuck");
-
-			pattern = sbNoReception.toString();
-		}
-
-		System.out.println("sbNoReception--   :  " + sbNoReception.toString());
-	}*/
 
 }
