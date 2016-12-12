@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.opencps.dossiermgt.NoSuchDossierFileException;
 import org.opencps.dossiermgt.NoSuchDossierStatusException;
+import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.DossierPart;
 import org.opencps.dossiermgt.model.FileGroup;
@@ -32,6 +33,7 @@ import org.opencps.dossiermgt.service.base.DossierFileLocalServiceBaseImpl;
 import org.opencps.processmgt.model.WorkflowOutput;
 import org.opencps.util.PortletConstants;
 
+import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
@@ -54,21 +56,24 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 
 /**
- * The implementation of the dossier file local service. <p> All custom service
- * methods should be put in this class. Whenever methods are added, rerun
- * ServiceBuilder to copy their definitions into the
- * {@link org.opencps.dossiermgt.service.DossierFileLocalService} interface. <p>
+ * The implementation of the dossier file local service.
+ * <p>
+ * All custom service methods should be put in this class. Whenever methods are
+ * added, rerun ServiceBuilder to copy their definitions into the
+ * {@link org.opencps.dossiermgt.service.DossierFileLocalService} interface.
+ * <p>
  * This is a local service. Methods of this service will not have security
  * checks based on the propagated JAAS credentials because this service can only
- * be accessed from within the same VM. </p>
+ * be accessed from within the same VM.
+ * </p>
  *
  * @author trungnt
  * @see org.opencps.dossiermgt.service.base.DossierFileLocalServiceBaseImpl
  * @see org.opencps.dossiermgt.service.DossierFileLocalServiceUtil
  */
 
-public class DossierFileLocalServiceImpl
-	extends DossierFileLocalServiceBaseImpl {
+public class DossierFileLocalServiceImpl extends
+		DossierFileLocalServiceBaseImpl {
 
 	/*
 	 * NOTE FOR DEVELOPERS: Never reference this interface directly. Always use
@@ -100,17 +105,17 @@ public class DossierFileLocalServiceImpl
 	 * @throws SystemException
 	 * @throws PortalException
 	 */
-	public DossierFile addDossierFile(
-		long userId, long dossierId, long dossierPartId, String templateFileNo,
-		String groupName, long fileGroupId, long groupDossierPartId,
-		long ownerUserId, long ownerOrganizationId, String displayName,
-		String formData, long fileEntryId, int dossierFileMark,
-		int dossierFileType, String dossierFileNo, Date dossierFileDate,
-		int original, int syncStatus, ServiceContext serviceContext)
-		throws SystemException, PortalException {
+	public DossierFile addDossierFile(long userId, long dossierId,
+			long dossierPartId, String templateFileNo, String groupName,
+			long fileGroupId, long groupDossierPartId, long ownerUserId,
+			long ownerOrganizationId, String displayName, String formData,
+			long fileEntryId, int dossierFileMark, int dossierFileType,
+			String dossierFileNo, Date dossierFileDate, int original,
+			int syncStatus, ServiceContext serviceContext)
+			throws SystemException, PortalException {
 		_log.info("STARTTTTTT ADDD DOSSIER FILE");
-		long dossierFileId =
-			counterLocalService.increment(DossierFile.class.getName());
+		long dossierFileId = counterLocalService.increment(DossierFile.class
+				.getName());
 		DossierFile dossierFile = dossierFilePersistence.create(dossierFileId);
 
 		Date now = new Date();
@@ -119,8 +124,7 @@ public class DossierFileLocalServiceImpl
 
 		// Add new FileGroup
 		if (Validator.isNotNull(groupName) && fileGroupId == 0) {
-			FileGroup fileGroup =
-				fileGroupLocalService.addFileGroup(
+			FileGroup fileGroup = fileGroupLocalService.addFileGroup(
 					ownerUserId, dossierId, dossierPartId, groupName,
 					syncStatus, serviceContext);
 
@@ -150,13 +154,10 @@ public class DossierFileLocalServiceImpl
 		dossierFile.setTemplateFileNo(templateFileNo);
 
 		if (fileGroupId > 0) {
-			version =
-				DossierFileLocalServiceUtil.countDossierFileByDID_DP_GF(
+			version = DossierFileLocalServiceUtil.countDossierFileByDID_DP_GF(
 					dossierId, dossierPartId, fileGroupId) + 1;
-		}
-		else {
-			version =
-				DossierFileLocalServiceUtil.countDossierFileByDID_DP(
+		} else {
+			version = DossierFileLocalServiceUtil.countDossierFileByDID_DP(
 					dossierId, dossierPartId) + 1;
 		}
 
@@ -166,31 +167,28 @@ public class DossierFileLocalServiceImpl
 
 		try {
 			if (fileGroupId > 0) {
-				curVersion =
-					dossierFileLocalService.getDossierFileInUseByGroupFileId(
-						dossierId, dossierPartId, fileGroupId);
-			}
-			else {
-				curVersion =
-					dossierFileLocalService.getDossierFileInUse(
+				curVersion = dossierFileLocalService
+						.getDossierFileInUseByGroupFileId(dossierId,
+								dossierPartId, fileGroupId);
+			} else {
+				curVersion = dossierFileLocalService.getDossierFileInUse(
 						dossierId, dossierPartId);
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 		}
 
 		if (curVersion != null) {
 			dossierFile.setOid(curVersion.getOid());
-			dossierFileLocalService.removeDossierFile(curVersion.getDossierFileId());
-		}
-		else {
+			dossierFileLocalService.removeDossierFile(curVersion
+					.getDossierFileId());
+		} else {
 			dossierFile.setOid(PortalUUIDUtil.generate());
 		}
 
 		dossierFile = dossierFilePersistence.update(dossierFile);
 
-		Indexer indexer =
-			IndexerRegistryUtil.nullSafeGetIndexer(DossierFile.class);
+		Indexer indexer = IndexerRegistryUtil
+				.nullSafeGetIndexer(DossierFile.class);
 
 		indexer.reindex(dossierFile);
 
@@ -212,17 +210,17 @@ public class DossierFileLocalServiceImpl
 	 * @throws SystemException
 	 * @throws PortalException
 	 */
-	public DossierFile addDossierFile(
-		long oldDossierFileId, long folderId, String sourceFileName,
-		String mimeType, String title, String description, String changeLog,
-		InputStream is, long size, ServiceContext serviceContext)
-		throws SystemException, PortalException {
+	public DossierFile addDossierFile(long oldDossierFileId, long folderId,
+			String sourceFileName, String mimeType, String title,
+			String description, String changeLog, InputStream is, long size,
+			ServiceContext serviceContext) throws SystemException,
+			PortalException {
 		_log.info("STARTTTTTT ADDD DOSSIER FILE");
-		DossierFile oldDossierFile =
-			dossierFilePersistence.findByPrimaryKey(oldDossierFileId);
+		DossierFile oldDossierFile = dossierFilePersistence
+				.findByPrimaryKey(oldDossierFileId);
 
-		long dossierFileId =
-			counterLocalService.increment(DossierFile.class.getName());
+		long dossierFileId = counterLocalService.increment(DossierFile.class
+				.getName());
 		DossierFile dossierFile = dossierFilePersistence.create(dossierFileId);
 
 		Date now = new Date();
@@ -245,7 +243,8 @@ public class DossierFileLocalServiceImpl
 		dossierFile.setOriginal(oldDossierFile.getOriginal());
 		dossierFile.setOwnerUserId(oldDossierFile.getOwnerUserId());
 
-		dossierFile.setOwnerOrganizationId(oldDossierFile.getOwnerOrganizationId());
+		dossierFile.setOwnerOrganizationId(oldDossierFile
+				.getOwnerOrganizationId());
 
 		dossierFile.setTemplateFileNo(oldDossierFile.getTemplateFileNo());
 
@@ -254,19 +253,19 @@ public class DossierFileLocalServiceImpl
 		dossierFile.setOid(oldDossierFile.getOid());
 
 		// Add file
-		FileEntry fileEntry =
-			dlAppService.addFileEntry(
+		FileEntry fileEntry = dlAppService.addFileEntry(
 				serviceContext.getScopeGroupId(), folderId, sourceFileName,
 				mimeType, getFileName(sourceFileName), description, changeLog,
 				is, size, serviceContext);
 
 		dossierFile.setFileEntryId(fileEntry.getFileEntryId());
 
-		dossierFileLocalService.removeDossierFile(oldDossierFile.getDossierFileId());
+		dossierFileLocalService.removeDossierFile(oldDossierFile
+				.getDossierFileId());
 
 		dossierFile = dossierFilePersistence.update(dossierFile);
-		Indexer indexer =
-			IndexerRegistryUtil.nullSafeGetIndexer(DossierFile.class);
+		Indexer indexer = IndexerRegistryUtil
+				.nullSafeGetIndexer(DossierFile.class);
 
 		indexer.reindex(dossierFile);
 
@@ -287,17 +286,17 @@ public class DossierFileLocalServiceImpl
 	 * @throws SystemException
 	 * @throws PortalException
 	 */
-	public DossierFile addDossierFile(
-		long oldDossierFileId, long folderId, String sourceFileName,
-		String mimeType, String title, String description, String changeLog,
-		byte[] bytes, ServiceContext serviceContext)
-		throws SystemException, PortalException {
+	public DossierFile addDossierFile(long oldDossierFileId, long folderId,
+			String sourceFileName, String mimeType, String title,
+			String description, String changeLog, byte[] bytes,
+			ServiceContext serviceContext) throws SystemException,
+			PortalException {
 		_log.info("STARTTTTTT ADDD DOSSIER FILE");
-		DossierFile oldDossierFile =
-			dossierFilePersistence.findByPrimaryKey(oldDossierFileId);
+		DossierFile oldDossierFile = dossierFilePersistence
+				.findByPrimaryKey(oldDossierFileId);
 
-		long dossierFileId =
-			counterLocalService.increment(DossierFile.class.getName());
+		long dossierFileId = counterLocalService.increment(DossierFile.class
+				.getName());
 		DossierFile dossierFile = dossierFilePersistence.create(dossierFileId);
 
 		Date now = new Date();
@@ -320,7 +319,8 @@ public class DossierFileLocalServiceImpl
 		dossierFile.setOriginal(oldDossierFile.getOriginal());
 		dossierFile.setOwnerUserId(oldDossierFile.getOwnerUserId());
 
-		dossierFile.setOwnerOrganizationId(oldDossierFile.getOwnerOrganizationId());
+		dossierFile.setOwnerOrganizationId(oldDossierFile
+				.getOwnerOrganizationId());
 
 		dossierFile.setTemplateFileNo(oldDossierFile.getTemplateFileNo());
 
@@ -329,19 +329,19 @@ public class DossierFileLocalServiceImpl
 		dossierFile.setOid(oldDossierFile.getOid());
 
 		// Add file
-		FileEntry fileEntry =
-			dlAppService.addFileEntry(
+		FileEntry fileEntry = dlAppService.addFileEntry(
 				serviceContext.getScopeGroupId(), folderId, sourceFileName,
 				mimeType, getFileName(sourceFileName), description, changeLog,
 				bytes, serviceContext);
 
 		dossierFile.setFileEntryId(fileEntry.getFileEntryId());
 
-		dossierFileLocalService.removeDossierFile(oldDossierFile.getDossierFileId());
+		dossierFileLocalService.removeDossierFile(oldDossierFile
+				.getDossierFileId());
 
 		dossierFile = dossierFilePersistence.update(dossierFile);
-		Indexer indexer =
-			IndexerRegistryUtil.nullSafeGetIndexer(DossierFile.class);
+		Indexer indexer = IndexerRegistryUtil
+				.nullSafeGetIndexer(DossierFile.class);
 
 		indexer.reindex(dossierFile);
 
@@ -380,19 +380,20 @@ public class DossierFileLocalServiceImpl
 	 * @throws SystemException
 	 * @throws PortalException
 	 */
-	public DossierFile addDossierFile(
-		long userId, long dossierId, long dossierPartId, String templateFileNo,
-		String groupName, long fileGroupId, long groupDossierPartId,
-		long ownerUserId, long ownerOrganizationId, String displayName,
-		String formData, long fileEntryId, int dossierFileMark,
-		int dossierFileType, String dossierFileNo, Date dossierFileDate,
-		int original, int syncStatus, long folderId, String sourceFileName,
-		String mimeType, String title, String description, String changeLog,
-		InputStream is, long size, ServiceContext serviceContext)
-		throws SystemException, PortalException {
-		
-		long dossierFileId =
-			counterLocalService.increment(DossierFile.class.getName());
+	public DossierFile addDossierFile(long userId, long dossierId,
+			long dossierPartId, String templateFileNo, String groupName,
+			long fileGroupId, long groupDossierPartId, long ownerUserId,
+			long ownerOrganizationId, String displayName, String formData,
+			long fileEntryId, int dossierFileMark, int dossierFileType,
+			String dossierFileNo, Date dossierFileDate, int original,
+			int syncStatus, long folderId, String sourceFileName,
+			String mimeType, String title, String description,
+			String changeLog, InputStream is, long size,
+			ServiceContext serviceContext) throws SystemException,
+			PortalException {
+
+		long dossierFileId = counterLocalService.increment(DossierFile.class
+				.getName());
 		DossierFile dossierFile = dossierFilePersistence.create(dossierFileId);
 
 		Date now = new Date();
@@ -400,10 +401,9 @@ public class DossierFileLocalServiceImpl
 		int version = 1;
 
 		// Add new FileGroup
-		if (Validator.isNotNull(groupName) && fileGroupId == 0 &&
-			groupDossierPartId > 0) {
-			FileGroup fileGroup =
-				fileGroupLocalService.addFileGroup(
+		if (Validator.isNotNull(groupName) && fileGroupId == 0
+				&& groupDossierPartId > 0) {
+			FileGroup fileGroup = fileGroupLocalService.addFileGroup(
 					ownerUserId, dossierId, groupDossierPartId, groupName,
 					syncStatus, serviceContext);
 
@@ -433,21 +433,17 @@ public class DossierFileLocalServiceImpl
 		dossierFile.setTemplateFileNo(templateFileNo);
 
 		if (fileGroupId > 0) {
-			version =
-				DossierFileLocalServiceUtil.countDossierFileByDID_DP_GF(
+			version = DossierFileLocalServiceUtil.countDossierFileByDID_DP_GF(
 					dossierId, dossierPartId, fileGroupId) + 1;
-		}
-		else {
-			version =
-				DossierFileLocalServiceUtil.countDossierFileByDID_DP(
+		} else {
+			version = DossierFileLocalServiceUtil.countDossierFileByDID_DP(
 					dossierId, dossierPartId) + 1;
 		}
 
 		dossierFile.setVersion(version);
 
 		// Add file
-		FileEntry fileEntry =
-			dlAppService.addFileEntry(
+		FileEntry fileEntry = dlAppService.addFileEntry(
 				serviceContext.getScopeGroupId(), folderId, sourceFileName,
 				mimeType, getFileName(sourceFileName), description, changeLog,
 				is, size, serviceContext);
@@ -457,38 +453,35 @@ public class DossierFileLocalServiceImpl
 		DossierFile curVersion = null;
 
 		try {
-			DossierPart dossierPart =
-				dossierPartLocalService.getDossierPart(dossierPartId);
+			DossierPart dossierPart = dossierPartLocalService
+					.getDossierPart(dossierPartId);
 
-			if (dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_OTHER &&
-				dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT) {
+			if (dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_OTHER
+					&& dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT) {
 				if (fileGroupId > 0) {
-					curVersion =
-						dossierFileLocalService.getDossierFileInUseByGroupFileId(
-							dossierId, dossierPartId, fileGroupId);
-				}
-				else {
-					curVersion =
-						dossierFileLocalService.getDossierFileInUse(
+					curVersion = dossierFileLocalService
+							.getDossierFileInUseByGroupFileId(dossierId,
+									dossierPartId, fileGroupId);
+				} else {
+					curVersion = dossierFileLocalService.getDossierFileInUse(
 							dossierId, dossierPartId);
 				}
 			}
 
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 		}
 
 		if (curVersion != null) {
 			dossierFile.setOid(curVersion.getOid());
-			dossierFileLocalService.removeDossierFile(curVersion.getDossierFileId());
-		}
-		else {
+			dossierFileLocalService.removeDossierFile(curVersion
+					.getDossierFileId());
+		} else {
 			dossierFile.setOid(PortalUUIDUtil.generate());
 		}
 
 		dossierFile = dossierFilePersistence.update(dossierFile);
-		Indexer indexer =
-			IndexerRegistryUtil.nullSafeGetIndexer(DossierFile.class);
+		Indexer indexer = IndexerRegistryUtil
+				.nullSafeGetIndexer(DossierFile.class);
 
 		indexer.reindex(dossierFile);
 		return dossierFile;
@@ -524,19 +517,19 @@ public class DossierFileLocalServiceImpl
 	 * @throws SystemException
 	 * @throws PortalException
 	 */
-	public DossierFile addDossierFile(
-		long userId, long dossierId, long dossierPartId, String templateFileNo,
-		String groupName, long fileGroupId, long groupDossierPartId,
-		long ownerUserId, long ownerOrganizationId, String displayName,
-		String formData, int dossierFileMark, int dossierFileType,
-		String dossierFileNo, Date dossierFileDate, int original,
-		int syncStatus, long folderId, String sourceFileName, String mimeType,
-		String title, String description, String changeLog, byte[] bytes,
-		ServiceContext serviceContext)
-		throws SystemException, PortalException {
+	public DossierFile addDossierFile(long userId, long dossierId,
+			long dossierPartId, String templateFileNo, String groupName,
+			long fileGroupId, long groupDossierPartId, long ownerUserId,
+			long ownerOrganizationId, String displayName, String formData,
+			int dossierFileMark, int dossierFileType, String dossierFileNo,
+			Date dossierFileDate, int original, int syncStatus, long folderId,
+			String sourceFileName, String mimeType, String title,
+			String description, String changeLog, byte[] bytes,
+			ServiceContext serviceContext) throws SystemException,
+			PortalException {
 		_log.info("STARTTTTTT ADDD DOSSIER FILE");
-		long dossierFileId =
-			counterLocalService.increment(DossierFile.class.getName());
+		long dossierFileId = counterLocalService.increment(DossierFile.class
+				.getName());
 		DossierFile dossierFile = dossierFilePersistence.create(dossierFileId);
 
 		Date now = new Date();
@@ -544,10 +537,9 @@ public class DossierFileLocalServiceImpl
 		int version = 1;
 
 		// Add new FileGroup
-		if (Validator.isNotNull(groupName) && fileGroupId == 0 &&
-			groupDossierPartId > 0) {
-			FileGroup fileGroup =
-				fileGroupLocalService.addFileGroup(
+		if (Validator.isNotNull(groupName) && fileGroupId == 0
+				&& groupDossierPartId > 0) {
+			FileGroup fileGroup = fileGroupLocalService.addFileGroup(
 					ownerUserId, dossierId, groupDossierPartId, groupName,
 					syncStatus, serviceContext);
 
@@ -577,13 +569,10 @@ public class DossierFileLocalServiceImpl
 		dossierFile.setTemplateFileNo(templateFileNo);
 
 		if (fileGroupId > 0) {
-			version =
-				DossierFileLocalServiceUtil.countDossierFileByDID_DP_GF(
+			version = DossierFileLocalServiceUtil.countDossierFileByDID_DP_GF(
 					dossierId, dossierPartId, fileGroupId) + 1;
-		}
-		else {
-			version =
-				DossierFileLocalServiceUtil.countDossierFileByDID_DP(
+		} else {
+			version = DossierFileLocalServiceUtil.countDossierFileByDID_DP(
 					dossierId, dossierPartId) + 1;
 		}
 
@@ -598,12 +587,10 @@ public class DossierFileLocalServiceImpl
 		try {
 			permissionChecker = PermissionCheckerFactoryUtil.create(user);
 			PermissionThreadLocal.setPermissionChecker(permissionChecker);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 		}
 
-		FileEntry fileEntry =
-			dlAppLocalService.addFileEntry(
+		FileEntry fileEntry = dlAppLocalService.addFileEntry(
 				serviceContext.getUserId(), serviceContext.getScopeGroupId(),
 				folderId, sourceFileName, mimeType,
 				getFileName(sourceFileName), description, changeLog, bytes,
@@ -621,38 +608,35 @@ public class DossierFileLocalServiceImpl
 		DossierFile curVersion = null;
 
 		try {
-			DossierPart dossierPart =
-				dossierPartLocalService.getDossierPart(dossierPartId);
+			DossierPart dossierPart = dossierPartLocalService
+					.getDossierPart(dossierPartId);
 
-			if (dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_OTHER &&
-				dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT) {
+			if (dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_OTHER
+					&& dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT) {
 				if (fileGroupId > 0) {
-					curVersion =
-						dossierFileLocalService.getDossierFileInUseByGroupFileId(
-							dossierId, dossierPartId, fileGroupId);
-				}
-				else {
-					curVersion =
-						dossierFileLocalService.getDossierFileInUse(
+					curVersion = dossierFileLocalService
+							.getDossierFileInUseByGroupFileId(dossierId,
+									dossierPartId, fileGroupId);
+				} else {
+					curVersion = dossierFileLocalService.getDossierFileInUse(
 							dossierId, dossierPartId);
 				}
 			}
 
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 		}
 
 		if (curVersion != null) {
 			dossierFile.setOid(curVersion.getOid());
-			dossierFileLocalService.removeDossierFile(curVersion.getDossierFileId());
-		}
-		else {
+			dossierFileLocalService.removeDossierFile(curVersion
+					.getDossierFileId());
+		} else {
 			dossierFile.setOid(PortalUUIDUtil.generate());
 		}
 
 		dossierFile = dossierFilePersistence.update(dossierFile);
-		Indexer indexer =
-			IndexerRegistryUtil.nullSafeGetIndexer(DossierFile.class);
+		Indexer indexer = IndexerRegistryUtil
+				.nullSafeGetIndexer(DossierFile.class);
 
 		indexer.reindex(dossierFile);
 
@@ -675,18 +659,18 @@ public class DossierFileLocalServiceImpl
 	 * @throws SystemException
 	 * @throws PortalException
 	 */
-	public DossierFile addSignDossierFile(
-		long oldDossierFileId, boolean isSigned, long folderId,
-		String sourceFileName, String mimeType, String title,
-		String description, String changeLog, InputStream is, long size,
-		ServiceContext serviceContext)
-		throws SystemException, PortalException {
+	public DossierFile addSignDossierFile(long oldDossierFileId,
+			boolean isSigned, long folderId, String sourceFileName,
+			String mimeType, String title, String description,
+			String changeLog, InputStream is, long size,
+			ServiceContext serviceContext) throws SystemException,
+			PortalException {
 
-		DossierFile oldDossierFile =
-			dossierFilePersistence.findByPrimaryKey(oldDossierFileId);
+		DossierFile oldDossierFile = dossierFilePersistence
+				.findByPrimaryKey(oldDossierFileId);
 
-		long dossierFileId =
-			counterLocalService.increment(DossierFile.class.getName());
+		long dossierFileId = counterLocalService.increment(DossierFile.class
+				.getName());
 		DossierFile dossierFile = dossierFilePersistence.create(dossierFileId);
 
 		Date now = new Date();
@@ -709,7 +693,8 @@ public class DossierFileLocalServiceImpl
 		dossierFile.setOriginal(oldDossierFile.getOriginal());
 		dossierFile.setOwnerUserId(oldDossierFile.getOwnerUserId());
 
-		dossierFile.setOwnerOrganizationId(oldDossierFile.getOwnerOrganizationId());
+		dossierFile.setOwnerOrganizationId(oldDossierFile
+				.getOwnerOrganizationId());
 
 		dossierFile.setTemplateFileNo(oldDossierFile.getTemplateFileNo());
 
@@ -720,19 +705,19 @@ public class DossierFileLocalServiceImpl
 		dossierFile.setSigned(isSigned);
 
 		// Add file
-		FileEntry fileEntry =
-			dlAppService.addFileEntry(
+		FileEntry fileEntry = dlAppService.addFileEntry(
 				serviceContext.getScopeGroupId(), folderId, sourceFileName,
 				mimeType, getFileName(sourceFileName), description, changeLog,
 				is, size, serviceContext);
 
 		dossierFile.setFileEntryId(fileEntry.getFileEntryId());
 
-		dossierFileLocalService.removeDossierFile(oldDossierFile.getDossierFileId());
+		dossierFileLocalService.removeDossierFile(oldDossierFile
+				.getDossierFileId());
 
 		dossierFile = dossierFilePersistence.update(dossierFile);
-		Indexer indexer =
-			IndexerRegistryUtil.nullSafeGetIndexer(DossierFile.class);
+		Indexer indexer = IndexerRegistryUtil
+				.nullSafeGetIndexer(DossierFile.class);
 
 		indexer.reindex(dossierFile);
 
@@ -746,7 +731,7 @@ public class DossierFileLocalServiceImpl
 	 * @throws SystemException
 	 */
 	public int countDossierFileByDID_DP(long dossierId, long dossierPartId)
-		throws SystemException {
+			throws SystemException {
 
 		return dossierFilePersistence.countByDID_DP(dossierId, dossierPartId);
 	}
@@ -758,12 +743,11 @@ public class DossierFileLocalServiceImpl
 	 * @return
 	 * @throws SystemException
 	 */
-	public int countDossierFileByDID_DP_R(
-		long dossierId, long dossierPartId, int removed)
-		throws SystemException {
+	public int countDossierFileByDID_DP_R(long dossierId, long dossierPartId,
+			int removed) throws SystemException {
 
-		return dossierFilePersistence.countByDID_DP_R(
-			dossierId, dossierPartId, removed);
+		return dossierFilePersistence.countByDID_DP_R(dossierId, dossierPartId,
+				removed);
 	}
 
 	/**
@@ -773,12 +757,11 @@ public class DossierFileLocalServiceImpl
 	 * @return
 	 * @throws SystemException
 	 */
-	public int countDossierFileByDID_DP_GF(
-		long dossierId, long dossierPartId, long groupFileId)
-		throws SystemException {
+	public int countDossierFileByDID_DP_GF(long dossierId, long dossierPartId,
+			long groupFileId) throws SystemException {
 
-		return dossierFilePersistence.countByDID_DP_GF(
-			dossierId, dossierPartId, groupFileId);
+		return dossierFilePersistence.countByDID_DP_GF(dossierId,
+				dossierPartId, groupFileId);
 	}
 
 	/**
@@ -789,14 +772,12 @@ public class DossierFileLocalServiceImpl
 	 * @return
 	 * @throws SystemException
 	 */
-	public int countDossierFile(
-		long groupId, long ownerUserId, long ownerOrganizationId,
-		String keyword, String templateFileNo, int removed)
-		throws SystemException {
+	public int countDossierFile(long groupId, long ownerUserId,
+			long ownerOrganizationId, String keyword, String templateFileNo,
+			int removed) throws SystemException {
 
-		return dossierFileFinder.countDossierFile(
-			groupId, ownerUserId, ownerOrganizationId, keyword, templateFileNo,
-			removed);
+		return dossierFileFinder.countDossierFile(groupId, ownerUserId,
+				ownerOrganizationId, keyword, templateFileNo, removed);
 	}
 
 	/**
@@ -811,15 +792,13 @@ public class DossierFileLocalServiceImpl
 	 * @return
 	 * @throws SystemException
 	 */
-	public int countDossierFileAdvance(
-		long groupId, long ownerUserId, long ownerOrganizationId,
-		String keyword, String templateFileNo, int removed, int partType,
-		int original)
-		throws SystemException {
+	public int countDossierFileAdvance(long groupId, long ownerUserId,
+			long ownerOrganizationId, String keyword, String templateFileNo,
+			int removed, int partType, int original) throws SystemException {
 
-		return dossierFileFinder.countDossierFileAdvance(
-			groupId, ownerUserId, ownerOrganizationId, keyword, templateFileNo,
-			removed, partType, original);
+		return dossierFileFinder.countDossierFileAdvance(groupId, ownerUserId,
+				ownerOrganizationId, keyword, templateFileNo, removed,
+				partType, original);
 	}
 
 	/**
@@ -831,14 +810,12 @@ public class DossierFileLocalServiceImpl
 	 * @return
 	 * @throws SystemException
 	 */
-	public int countDossierFile(
-		long groupId, String keyword, long dossierTemplateId, long fileEntryId,
-		boolean onlyViewFileResult)
-		throws SystemException {
+	public int countDossierFile(long groupId, String keyword,
+			long dossierTemplateId, long fileEntryId, boolean onlyViewFileResult)
+			throws SystemException {
 
-		return dossierFileFinder.countDossierFile(
-			groupId, keyword, dossierTemplateId, fileEntryId,
-			onlyViewFileResult);
+		return dossierFileFinder.countDossierFile(groupId, keyword,
+				dossierTemplateId, fileEntryId, onlyViewFileResult);
 	}
 
 	/**
@@ -846,22 +823,22 @@ public class DossierFileLocalServiceImpl
 	 * @throws PortalException
 	 * @throws SystemException
 	 */
-	public void removeDossierFile(long dossierFileId)
-		throws PortalException, SystemException {
+	public void removeDossierFile(long dossierFileId) throws PortalException,
+			SystemException {
 
-		Indexer indexer =
-			IndexerRegistryUtil.nullSafeGetIndexer(DossierFile.class);
+		Indexer indexer = IndexerRegistryUtil
+				.nullSafeGetIndexer(DossierFile.class);
 
-		DossierFile dossierFile =
-			DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
+		DossierFile dossierFile = DossierFileLocalServiceUtil
+				.getDossierFile(dossierFileId);
 
 		dossierFile.setRemoved(1);
 		dossierFile.setModifiedDate(new Date());
-		
-		if(dossierFile.getSyncStatus() != PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS) {
+
+		if (dossierFile.getSyncStatus() != PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS) {
 			dossierFile.setVersion(0);
 		}
-		
+
 		indexer.reindex(dossierFile);
 
 		dossierFilePersistence.update(dossierFile);
@@ -878,17 +855,17 @@ public class DossierFileLocalServiceImpl
 	 * @throws SystemException
 	 */
 	public void deleteDossierFile(long dossierFileId, long fileEntryId)
-		throws PortalException, SystemException {
+			throws PortalException, SystemException {
 
 		if (fileEntryId > 0) {
 			dlFileEntryLocalService.deleteDLFileEntry(fileEntryId);
 		}
 
-		Indexer indexer =
-			IndexerRegistryUtil.nullSafeGetIndexer(DossierFile.class);
+		Indexer indexer = IndexerRegistryUtil
+				.nullSafeGetIndexer(DossierFile.class);
 
-		DossierFile dossierFile =
-			DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
+		DossierFile dossierFile = DossierFileLocalServiceUtil
+				.getDossierFile(dossierFileId);
 
 		indexer.delete(dossierFile);
 
@@ -902,9 +879,9 @@ public class DossierFileLocalServiceImpl
 	 * @throws NoSuchDossierFileException
 	 * @throws SystemException
 	 */
-	public List<DossierFile> getDossierFileByDID_DP(
-		long dossierId, long dossierPartId)
-		throws NoSuchDossierFileException, SystemException {
+	public List<DossierFile> getDossierFileByDID_DP(long dossierId,
+			long dossierPartId) throws NoSuchDossierFileException,
+			SystemException {
 
 		return dossierFilePersistence.findByDID_DP(dossierId, dossierPartId);
 	}
@@ -916,12 +893,12 @@ public class DossierFileLocalServiceImpl
 	 * @throws NoSuchDossierFileException
 	 * @throws SystemException
 	 */
-	public List<DossierFile> getDossierFileByDID_DP_R(
-		long dossierId, long dossierPartId, int removed)
-		throws NoSuchDossierFileException, SystemException {
+	public List<DossierFile> getDossierFileByDID_DP_R(long dossierId,
+			long dossierPartId, int removed) throws NoSuchDossierFileException,
+			SystemException {
 
-		return dossierFilePersistence.findByDID_DP_R(
-			dossierId, dossierPartId, removed);
+		return dossierFilePersistence.findByDID_DP_R(dossierId, dossierPartId,
+				removed);
 	}
 
 	/**
@@ -932,13 +909,12 @@ public class DossierFileLocalServiceImpl
 	 * @throws NoSuchDossierFileException
 	 * @throws SystemException
 	 */
-	public List<DossierFile> getDossierFileByD_DP_Config(
-		long dossierId, long dossierPartId, OrderByComparator byComparator,
-		int start, int end)
-		throws NoSuchDossierFileException, SystemException {
+	public List<DossierFile> getDossierFileByD_DP_Config(long dossierId,
+			long dossierPartId, OrderByComparator byComparator, int start,
+			int end) throws NoSuchDossierFileException, SystemException {
 
-		return dossierFilePersistence.findByDID_DP(
-			dossierId, dossierPartId, start, end, byComparator);
+		return dossierFilePersistence.findByDID_DP(dossierId, dossierPartId,
+				start, end, byComparator);
 	}
 
 	/**
@@ -949,7 +925,7 @@ public class DossierFileLocalServiceImpl
 	 * @throws SystemException
 	 */
 	public int countDossierFileByD_DP_Config(long dossierId, long dossierPartId)
-		throws NoSuchDossierFileException, SystemException {
+			throws NoSuchDossierFileException, SystemException {
 
 		return dossierFilePersistence.countByDID_DP(dossierId, dossierPartId);
 	}
@@ -962,12 +938,11 @@ public class DossierFileLocalServiceImpl
 	 * @return
 	 * @throws SystemException
 	 */
-	public List<DossierFile> getDossierFileByDID_GFID_SS_R(
-		long fileGroupId, long dossierId, int syncStatus, int removed)
-		throws SystemException {
+	public List<DossierFile> getDossierFileByDID_GFID_SS_R(long fileGroupId,
+			long dossierId, int syncStatus, int removed) throws SystemException {
 
-		return dossierFilePersistence.findByDID_GFID_SS_R(
-			fileGroupId, dossierId, syncStatus, removed);
+		return dossierFilePersistence.findByDID_GFID_SS_R(fileGroupId,
+				dossierId, syncStatus, removed);
 	}
 
 	/**
@@ -978,12 +953,12 @@ public class DossierFileLocalServiceImpl
 	 * @return
 	 * @throws SystemException
 	 */
-	public List<DossierFile> getDossierFileByDID_SS_DPID_R(
-		long dossierId, int syncStatus, long dossierPartId, int removed)
-		throws SystemException {
+	public List<DossierFile> getDossierFileByDID_SS_DPID_R(long dossierId,
+			int syncStatus, long dossierPartId, int removed)
+			throws SystemException {
 
-		return dossierFilePersistence.findByDID_SS_DPID_R(
-			dossierId, syncStatus, dossierPartId, removed);
+		return dossierFilePersistence.findByDID_SS_DPID_R(dossierId,
+				syncStatus, dossierPartId, removed);
 	}
 
 	/**
@@ -994,12 +969,11 @@ public class DossierFileLocalServiceImpl
 	 * @return
 	 * @throws SystemException
 	 */
-	public List<DossierFile> getDossierFileByDID_GFID_R(
-		long dossierId, long groupFileId, int removed)
-		throws SystemException {
+	public List<DossierFile> getDossierFileByDID_GFID_R(long dossierId,
+			long groupFileId, int removed) throws SystemException {
 
-		return dossierFilePersistence.findByDID_GFID_R(
-			dossierId, groupFileId, removed);
+		return dossierFilePersistence.findByDID_GFID_R(dossierId, groupFileId,
+				removed);
 	}
 
 	/**
@@ -1011,7 +985,7 @@ public class DossierFileLocalServiceImpl
 	 * @throws SystemException
 	 */
 	public List<DossierFile> getDossierFileByDossierId(long dossierId)
-		throws SystemException {
+			throws SystemException {
 
 		return dossierFilePersistence.findByDossierId(dossierId);
 	}
@@ -1023,12 +997,11 @@ public class DossierFileLocalServiceImpl
 	 * @return
 	 * @throws SystemException
 	 */
-	public List<DossierFile> getDossierFileByDID_SS_R(
-		long dossierId, int syncStatus, int removed)
-		throws SystemException {
+	public List<DossierFile> getDossierFileByDID_SS_R(long dossierId,
+			int syncStatus, int removed) throws SystemException {
 
-		return dossierFilePersistence.findByDID_SS_R(
-			dossierId, syncStatus, removed);
+		return dossierFilePersistence.findByDID_SS_R(dossierId, syncStatus,
+				removed);
 	}
 
 	/**
@@ -1039,10 +1012,10 @@ public class DossierFileLocalServiceImpl
 	 * @throws SystemException
 	 */
 	public DossierFile getDossierFileInUse(long dossierId, long dossierPartId)
-		throws PortalException, SystemException {
+			throws PortalException, SystemException {
 
-		return dossierFilePersistence.findByDossierFileInUse(
-			dossierId, dossierPartId, 0);
+		return dossierFilePersistence.findByDossierFileInUse(dossierId,
+				dossierPartId, 0);
 	}
 
 	/**
@@ -1053,12 +1026,11 @@ public class DossierFileLocalServiceImpl
 	 * @throws PortalException
 	 * @throws SystemException
 	 */
-	public DossierFile getDossierFileInUse(
-		long dossierId, long dossierPartId, int syncStatus)
-		throws PortalException, SystemException {
+	public DossierFile getDossierFileInUse(long dossierId, long dossierPartId,
+			int syncStatus) throws PortalException, SystemException {
 
 		return dossierFilePersistence.findByDossierFileInUseSyncStatus(
-			dossierId, dossierPartId, 0, syncStatus);
+				dossierId, dossierPartId, 0, syncStatus);
 	}
 
 	/**
@@ -1069,12 +1041,12 @@ public class DossierFileLocalServiceImpl
 	 * @throws NoSuchDossierFileException
 	 * @throws SystemException
 	 */
-	public DossierFile getDossierFileInUseByGroupFileId(
-		long dossierId, long dossierPartId, long groupFileId)
-		throws NoSuchDossierFileException, SystemException {
+	public DossierFile getDossierFileInUseByGroupFileId(long dossierId,
+			long dossierPartId, long groupFileId)
+			throws NoSuchDossierFileException, SystemException {
 
 		return dossierFilePersistence.findByDossierFileInUseByGroupFileId(
-			dossierId, dossierPartId, groupFileId);
+				dossierId, dossierPartId, groupFileId);
 	}
 
 	/**
@@ -1088,15 +1060,14 @@ public class DossierFileLocalServiceImpl
 	 * @return
 	 * @throws SystemException
 	 */
-	public List<DossierFile> searchDossierFile(
-		long groupId, long ownerUserId, long ownerOrganizationId,
-		String keyword, String templateFileNo, int removed, int start, int end,
-		OrderByComparator obc)
-		throws SystemException {
+	public List<DossierFile> searchDossierFile(long groupId, long ownerUserId,
+			long ownerOrganizationId, String keyword, String templateFileNo,
+			int removed, int start, int end, OrderByComparator obc)
+			throws SystemException {
 
-		return dossierFileFinder.searchDossierFile(
-			groupId, ownerUserId, ownerOrganizationId, keyword, templateFileNo,
-			removed, start, end, obc);
+		return dossierFileFinder.searchDossierFile(groupId, ownerUserId,
+				ownerOrganizationId, keyword, templateFileNo, removed, start,
+				end, obc);
 	}
 
 	/**
@@ -1111,14 +1082,14 @@ public class DossierFileLocalServiceImpl
 	 * @return
 	 * @throws SystemException
 	 */
-	public List<DossierFile> searchDossierFile(
-		long groupId, String keyword, long dossierTemplateId, long fileEntryId,
-		boolean onlyViewFileResult, int start, int end, OrderByComparator obc)
-		throws SystemException {
+	public List<DossierFile> searchDossierFile(long groupId, String keyword,
+			long dossierTemplateId, long fileEntryId,
+			boolean onlyViewFileResult, int start, int end,
+			OrderByComparator obc) throws SystemException {
 
-		return dossierFileFinder.searchDossierFile(
-			groupId, keyword, dossierTemplateId, fileEntryId,
-			onlyViewFileResult, start, end, obc);
+		return dossierFileFinder.searchDossierFile(groupId, keyword,
+				dossierTemplateId, fileEntryId, onlyViewFileResult, start, end,
+				obc);
 	}
 
 	/**
@@ -1136,15 +1107,14 @@ public class DossierFileLocalServiceImpl
 	 * @return
 	 * @throws SystemException
 	 */
-	public List searchDossierFileAdvance(
-		long groupId, long ownerUserId, long ownerOrganizationId,
-		String keyword, String templateFileNo, int removed, int partType,
-		int original, int start, int end, OrderByComparator obc)
-		throws SystemException {
+	public List searchDossierFileAdvance(long groupId, long ownerUserId,
+			long ownerOrganizationId, String keyword, String templateFileNo,
+			int removed, int partType, int original, int start, int end,
+			OrderByComparator obc) throws SystemException {
 
-		return dossierFileFinder.searchDossierFileAdvance(
-			groupId, ownerUserId, ownerOrganizationId, keyword, templateFileNo,
-			removed, partType, original, start, end, obc);
+		return dossierFileFinder.searchDossierFileAdvance(groupId, ownerUserId,
+				ownerOrganizationId, keyword, templateFileNo, removed,
+				partType, original, start, end, obc);
 	}
 
 	/**
@@ -1158,13 +1128,12 @@ public class DossierFileLocalServiceImpl
 	 * @throws SystemException
 	 * @throws PortalException
 	 */
-	public DossierFile updateDossierFile(
-		long dossierFileId, long ownerUserId, long ownerOrganizationId,
-		long fileEntryId, String displayName)
-		throws NoSuchDossierFileException, SystemException, PortalException {
+	public DossierFile updateDossierFile(long dossierFileId, long ownerUserId,
+			long ownerOrganizationId, long fileEntryId, String displayName)
+			throws NoSuchDossierFileException, SystemException, PortalException {
 
-		DossierFile dossierFile =
-			dossierFilePersistence.findByPrimaryKey(dossierFileId);
+		DossierFile dossierFile = dossierFilePersistence
+				.findByPrimaryKey(dossierFileId);
 
 		Date now = new Date();
 
@@ -1176,8 +1145,8 @@ public class DossierFileLocalServiceImpl
 		dossierFile.setOwnerUserId(ownerUserId);
 		dossierFile.setOwnerOrganizationId(ownerOrganizationId);
 		dossierFile = dossierFilePersistence.update(dossierFile);
-		Indexer indexer =
-			IndexerRegistryUtil.nullSafeGetIndexer(DossierFile.class);
+		Indexer indexer = IndexerRegistryUtil
+				.nullSafeGetIndexer(DossierFile.class);
 
 		indexer.reindex(dossierFile);
 
@@ -1207,17 +1176,17 @@ public class DossierFileLocalServiceImpl
 	 * @throws NoSuchDossierFileException
 	 * @throws SystemException
 	 */
-	public DossierFile updateDossierFile(
-		long dossierFileId, long userId, long dossierId, long dossierPartId,
-		String templateFileNo, long groupFileId, long ownerUserId,
-		long ownerOrganizationId, String displayName, String formData,
-		long fileEntryId, int dossierFileMark, int dossierFileType,
-		String dossierFileNo, Date dossierFileDate, int original,
-		int syncStatus, ServiceContext serviceContext)
-		throws NoSuchDossierFileException, SystemException {
+	public DossierFile updateDossierFile(long dossierFileId, long userId,
+			long dossierId, long dossierPartId, String templateFileNo,
+			long groupFileId, long ownerUserId, long ownerOrganizationId,
+			String displayName, String formData, long fileEntryId,
+			int dossierFileMark, int dossierFileType, String dossierFileNo,
+			Date dossierFileDate, int original, int syncStatus,
+			ServiceContext serviceContext) throws NoSuchDossierFileException,
+			SystemException {
 
-		DossierFile dossierFile =
-			dossierFilePersistence.findByPrimaryKey(dossierFileId);
+		DossierFile dossierFile = dossierFilePersistence
+				.findByPrimaryKey(dossierFileId);
 
 		Date now = new Date();
 
@@ -1253,21 +1222,20 @@ public class DossierFileLocalServiceImpl
 	 * @throws SystemException
 	 * @throws PortalException
 	 */
-	public DossierFile updateDossierFile(
-		long dossierFileId, long folderId, String sourceFileName,
-		String mimeType, String title, String description, String changeLog,
-		InputStream is, long size, ServiceContext serviceContext)
-		throws SystemException, PortalException {
+	public DossierFile updateDossierFile(long dossierFileId, long folderId,
+			String sourceFileName, String mimeType, String title,
+			String description, String changeLog, InputStream is, long size,
+			ServiceContext serviceContext) throws SystemException,
+			PortalException {
 
-		DossierFile dossierFile =
-			dossierFilePersistence.findByPrimaryKey(dossierFileId);
+		DossierFile dossierFile = dossierFilePersistence
+				.findByPrimaryKey(dossierFileId);
 
 		Date now = new Date();
 
 		dossierFile.setModifiedDate(now);
 		// Add file
-		FileEntry fileEntry =
-			dlAppService.addFileEntry(
+		FileEntry fileEntry = dlAppService.addFileEntry(
 				serviceContext.getScopeGroupId(), folderId, sourceFileName,
 				mimeType, getFileName(sourceFileName), description, changeLog,
 				is, size, serviceContext);
@@ -1285,27 +1253,25 @@ public class DossierFileLocalServiceImpl
 	 * @throws NoSuchDossierStatusException
 	 * @throws PortalException
 	 */
-	public List<DossierFile> updateDossierFileResultSyncStatus(
-		long userId, long dossierId, int currentSyncStatus, int syncStatus,
-		int removed, List<WorkflowOutput> workflowOutputs)
-		throws SystemException, NoSuchDossierStatusException, PortalException {
+	public List<DossierFile> updateDossierFileResultSyncStatus(long userId,
+			long dossierId, int currentSyncStatus, int syncStatus, int removed,
+			List<WorkflowOutput> workflowOutputs) throws SystemException,
+			NoSuchDossierStatusException, PortalException {
 
 		List<DossierFile> dossierFiles = new ArrayList<DossierFile>();
 		Date now = new Date();
 		try {
 			if (workflowOutputs != null) {
 				for (WorkflowOutput workflowOutput : workflowOutputs) {
-					
-					
-					List<DossierFile> dossierFileTemps =
-						dossierFileLocalService.getDossierFileByDID_SS_DPID_R(
-							dossierId, currentSyncStatus,
-							workflowOutput.getDossierPartId(), removed);
-					
-					System.out.println("FUCLLLLLLLLLLLLLLLLLLL" + dossierFileTemps.size());
-					
-					
-					
+
+					List<DossierFile> dossierFileTemps = dossierFileLocalService
+							.getDossierFileByDID_SS_DPID_R(dossierId,
+									currentSyncStatus,
+									workflowOutput.getDossierPartId(), removed);
+
+					System.out.println("FUCLLLLLLLLLLLLLLLLLLL"
+							+ dossierFileTemps.size());
+
 					if (dossierFileTemps != null) {
 						for (DossierFile dossierFile : dossierFileTemps) {
 							dossierFile.setSyncStatus(syncStatus);
@@ -1313,7 +1279,8 @@ public class DossierFileLocalServiceImpl
 							if (userId != 0) {
 								dossierFile.setUserId(userId);
 							}
-							dossierFileLocalService.updateDossierFile(dossierFile);
+							dossierFileLocalService
+									.updateDossierFile(dossierFile);
 							dossierFiles.add(dossierFile);
 						}
 					}
@@ -1339,12 +1306,14 @@ public class DossierFileLocalServiceImpl
 	 * @throws NoSuchDossierStatusException
 	 * @throws PortalException
 	 */
-	public List<DossierFile> updateDossierFileSyncStatus(
-		long userId, int syncStatus, List<DossierFile> dossierFiles)
-		throws SystemException, NoSuchDossierStatusException, PortalException {
-		
-		System.out.println("DOSSSSSSSSSSSSSIERRRRRRRRRRR" + dossierFiles.size());
-		
+	public List<DossierFile> updateDossierFileSyncStatus(long userId,
+			int syncStatus, List<DossierFile> dossierFiles)
+			throws SystemException, NoSuchDossierStatusException,
+			PortalException {
+
+		System.out
+				.println("DOSSSSSSSSSSSSSIERRRRRRRRRRR" + dossierFiles.size());
+
 		Date now = new Date();
 		try {
 			if (dossierFiles != null) {
@@ -1378,16 +1347,15 @@ public class DossierFileLocalServiceImpl
 	 * @throws NoSuchDossierStatusException
 	 * @throws PortalException
 	 */
-	public void updateDossierFileSyncStatus(
-		long userId, long dossierId, int curSyncStatus, int newSyncStatus,
-		int removed)
-		throws SystemException, NoSuchDossierStatusException, PortalException {
+	public void updateDossierFileSyncStatus(long userId, long dossierId,
+			int curSyncStatus, int newSyncStatus, int removed)
+			throws SystemException, NoSuchDossierStatusException,
+			PortalException {
 
 		Date now = new Date();
 
-		List<DossierFile> dossierFiles =
-			dossierFileLocalService.getDossierFileByDID_SS_R(
-				dossierId, curSyncStatus, removed);
+		List<DossierFile> dossierFiles = dossierFileLocalService
+				.getDossierFileByDID_SS_R(dossierId, curSyncStatus, removed);
 
 		if (dossierFiles != null) {
 			for (DossierFile dossierFile : dossierFiles) {
@@ -1412,16 +1380,16 @@ public class DossierFileLocalServiceImpl
 	 * @throws NoSuchDossierStatusException
 	 * @throws PortalException
 	 */
-	public void updateDossierFileSyncStatus(
-		long userId, long fileGroupId, long dossierId, int curSyncStatus,
-		int newSyncStatus, int removed)
-		throws SystemException, NoSuchDossierStatusException, PortalException {
+	public void updateDossierFileSyncStatus(long userId, long fileGroupId,
+			long dossierId, int curSyncStatus, int newSyncStatus, int removed)
+			throws SystemException, NoSuchDossierStatusException,
+			PortalException {
 
 		Date now = new Date();
 
-		List<DossierFile> dossierFiles =
-			dossierFileLocalService.getDossierFileByDID_GFID_SS_R(
-				dossierId, fileGroupId, curSyncStatus, removed);
+		List<DossierFile> dossierFiles = dossierFileLocalService
+				.getDossierFileByDID_GFID_SS_R(dossierId, fileGroupId,
+						curSyncStatus, removed);
 
 		if (dossierFiles != null) {
 			for (DossierFile dossierFile : dossierFiles) {
@@ -1443,16 +1411,15 @@ public class DossierFileLocalServiceImpl
 	 * @return
 	 * @throws SystemException
 	 */
-	public DossierFile fetchByTemplateFileNoDossierId_First(
-		long dossierId, String templateFileNo)
-		throws SystemException {
+	public DossierFile fetchByTemplateFileNoDossierId_First(long dossierId,
+			String templateFileNo) throws SystemException {
 
-		OrderByComparatorFactory orderByComparatorFactory =
-			OrderByComparatorFactoryUtil.getOrderByComparatorFactory();
-		OrderByComparator comparator =
-			orderByComparatorFactory.create("DossierFile", "modifiedDate", true);
+		OrderByComparatorFactory orderByComparatorFactory = OrderByComparatorFactoryUtil
+				.getOrderByComparatorFactory();
+		OrderByComparator comparator = orderByComparatorFactory.create(
+				"DossierFile", "modifiedDate", true);
 		return dossierFilePersistence.fetchByTemplateFileNoDossierId_First(
-			dossierId, templateFileNo, comparator);
+				dossierId, templateFileNo, comparator);
 	}
 
 	/**
@@ -1460,8 +1427,7 @@ public class DossierFileLocalServiceImpl
 	 * @return
 	 * @throws SystemException
 	 */
-	public DossierFile getByOid(String oid)
-		throws SystemException {
+	public DossierFile getByOid(String oid) throws SystemException {
 
 		return dossierFilePersistence.fetchByOid(oid);
 	}
@@ -1488,7 +1454,8 @@ public class DossierFileLocalServiceImpl
 		}
 
 		return sbFileName.toString();
-	}	
+	}
+
 	/**
 	 * Ham lay ra cac giay to loai nhieu ket qua hoac giay to ket qua
 	 * 
@@ -1496,13 +1463,22 @@ public class DossierFileLocalServiceImpl
 	 * @param orderByComparator
 	 * @return
 	 */
-	
-	public List<DossierFile> getDossierFileResult (long dossierId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		
-		return dossierFileFinder.searchDossierFileResult(0, dossierId, 2, 
-			5, 6, start, end, orderByComparator);
+
+	public List<DossierFile> getDossierFileResult(long dossierId, int start,
+			int end, OrderByComparator orderByComparator)
+			throws SystemException {
+
+		return dossierFileFinder.searchDossierFileResult(0, dossierId, 2, 5, 6,
+				start, end, orderByComparator);
 	}
-	private static Log _log = LogFactoryUtil.getLog(DossierFileLocalServiceImpl.class.getName());
+
+	public DossierFile getLastestDossierFile() throws SystemException {
+		List<DossierFile> dossierFiles = dossierFilePersistence.findAll(0, 1);
+
+		return dossierFiles.get(0);
+	}
+
+	private static Log _log = LogFactoryUtil
+			.getLog(DossierFileLocalServiceImpl.class.getName());
 
 }

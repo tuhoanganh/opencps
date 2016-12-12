@@ -24,7 +24,9 @@ public class PortletConstants {
 
 	public static final String DOSSIER_FILE_NO_KEY = "_dossierFileNo";
 	public static final String DOSSIER_FILE_NO_DATE = "_dossierFileDate";
-	
+	public static final String DOSSIER_PART_RESULT_PATTERN = "dossier_part_result_pattern";
+	public static final String DOSSIER_PART_RESULT_PATTERN_UNIQUE_INCREMENT_NUMBER = "6789";
+	public static final String DOSSIER_PART_RESULT_PATTERN_NO = "_soGiayChungNhan";
 	public static final int DRAFTING = 0;
 	public static final int INUSE = 1;
 	public static final int EXPIRED = 2;

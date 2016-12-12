@@ -253,7 +253,7 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 					WorkflowOutputLocalServiceUtil.addWorkflowOutput(
 					    output.getDossierPartId(),
 					    output.getProcessWorkflowId(), output.getRequired(),
-					    output.getEsign(), output.getPostback());
+					    output.getEsign(), output.getPostback(), output.getPattern());
 				}
 
 			}
@@ -292,14 +292,16 @@ public class ProcessMgtAdminPortlet extends MVCPortlet {
 						    output.getDossierPartId(),
 						    output.getProcessWorkflowId(),
 						    output.getRequired(), output.getEsign(),
-						    output.getPostback());
+						    output.getPostback(),
+						    output.getPattern());
 					}
 					else {
 						WorkflowOutputLocalServiceUtil.addWorkflowOutput(
 						    output.getDossierPartId(),
 						    output.getProcessWorkflowId(),
 						    output.getRequired(), output.getEsign(),
-						    output.getPostback());
+						    output.getPostback(),
+							output.getPattern());
 					}
 				}
 
