@@ -24,8 +24,10 @@ import java.util.List;
 import com.liferay.portal.kernel.exception.SystemException;
 
 import org.opencps.dossiermgt.bean.DossierFileBean;
+import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.impl.DossierFileImpl;
+import org.opencps.dossiermgt.model.impl.DossierImpl;
 import org.opencps.dossiermgt.util.DossierMgtUtil;
 
 import com.liferay.portal.kernel.dao.orm.QueryPos;
@@ -69,6 +71,9 @@ public class DossierFileFinderImpl extends BasePersistenceImpl<DossierFile>
 
 	public static final String SEARCH_DOSSIER_FILE_RESULT = DossierFileFinder.class
 			.getName() + ".searchDossierFileResult";
+	
+	public static final String SEARCH_DOSSIER_FILE_SUGGESTION = DossierFileFinder.class
+			.getName() + ".searchDossierFileSugesstion";
 
 	private Log _log = LogFactoryUtil.getLog(DossierFileFinder.class.getName());
 
@@ -1003,5 +1008,61 @@ public class DossierFileFinderImpl extends BasePersistenceImpl<DossierFile>
 		}
 
 		return null;
+	}
+	
+	public List<DossierFile> searchDossierFileSuggestion(
+			long dossierId, String templateFileNos, long userId, int start, int end) throws SystemException {
+
+		return _searchDossierFileSuggestion(dossierId, templateFileNos, userId, start, end);
+	}
+	
+	private List<DossierFile> _searchDossierFileSuggestion(
+			long dossierId, String templateFileNos, long userId, int start, int end)
+			throws SystemException {
+		
+		Session session = null;
+		try {
+
+			session = openSession();
+
+			String sql = CustomSQLUtil.get(SEARCH_DOSSIER_FILE_SUGGESTION);
+
+			if (Validator.isNull(dossierId)) {
+				sql = StringUtil.replace(sql, "AND odf.dossierId = ?",
+						StringPool.BLANK);
+			}
+			
+			if (Validator.isNull(templateFileNos)) {
+				sql = StringUtil.replace(sql, "AND odf.templateFileNo IN (?)",
+						StringPool.BLANK);
+			} else {
+				sql = StringUtil.replace(sql, "AND odf.templateFileNo IN (?)",
+						"AND odf.templateFileNo IN ('" + templateFileNos + "')");
+			}
+
+			if(userId <= 0) {
+				sql = StringUtil.replace(sql,"AND odf.userId = ?", StringPool.BLANK);
+			}
+			
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addEntity("DossierFile", DossierFileImpl.class);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			if (Validator.isNotNull(dossierId)) {
+				qPos.add(dossierId);
+			}
+
+			if(userId > 0) {
+				qPos.add(userId);
+			}
+
+			return (List<DossierFile>) QueryUtil.list(q, getDialect(), start, end);
+		} catch (Exception e) {
+			throw new SystemException();
+		} finally {
+			closeSession(session);
+		}
 	}
 }

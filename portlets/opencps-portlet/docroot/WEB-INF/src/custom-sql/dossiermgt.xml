@@ -1087,4 +1087,20 @@
 		]]>
 	</sql>
 	
+	<sql id="org.opencps.dossiermgt.service.persistence.DossierFileFinder.searchDossierFileSugesstion">	
+		<![CDATA[
+			SELECT 
+			    *
+			FROM
+			    opencps_dossier_file AS odf
+			        INNER JOIN
+			    opencps_dossierpart AS odp ON odf.dossierPartId = odp.dossierpartId
+			        AND odf.removed = 0
+			        AND odf.syncStatus = 2
+			        AND odf.dossierId = ?
+			        AND odf.templateFileNo IN (?)
+			    AND odf.userId = ?
+		]]>
+	</sql>
+	
 </custom-sql>

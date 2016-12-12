@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.opencps.dossiermgt.NoSuchDossierFileException;
 import org.opencps.dossiermgt.NoSuchDossierStatusException;
+import org.opencps.dossiermgt.model.Dossier;
 import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.DossierPart;
 import org.opencps.dossiermgt.model.FileGroup;
@@ -44,6 +45,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.OrderByComparatorFactory;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.User;
@@ -1503,6 +1505,16 @@ public class DossierFileLocalServiceImpl
 		return dossierFileFinder.searchDossierFileResult(0, dossierId, 2, 
 			5, 6, start, end, orderByComparator);
 	}
+	
+	public List<DossierFile> getDossierFileSuggesstion(
+			long dossierId, List<String> templateFileNos, long userId, int start, int end) 
+			throws SystemException {
+
+		String templateFileNosStr = StringUtil.merge(templateFileNos, "','");
+		
+		return dossierFileFinder.searchDossierFileSuggestion(dossierId, templateFileNosStr, userId, start, end);
+	}
+	
 	private static Log _log = LogFactoryUtil.getLog(DossierFileLocalServiceImpl.class.getName());
 
 }
