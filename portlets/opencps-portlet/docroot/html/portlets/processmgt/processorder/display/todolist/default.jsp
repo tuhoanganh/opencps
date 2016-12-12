@@ -70,6 +70,8 @@
 	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
 	
 	String dossierSubStatus = ParamUtil.getString(request, "dossierSubStatus");
+	
+	String processOrderStage = ParamUtil.getString(request, "processOrderStage", "false");
 %>
 
 <c:if test="<%=stopRefresh %>">
@@ -103,25 +105,8 @@
 						}catch(Exception e){
 							_log.error(e);
 						}
-						Set<String> setToReturn = new HashSet<String>();
-						Set<String> set1 = new HashSet<String>();
-						//remove duplicates process orders
-						Map<String, ProcessOrderBean> cleanMapList = new LinkedHashMap<String, ProcessOrderBean>();
-						for (int i = 0; i < processOrders.size(); i++) {
-							System.out.println(!set1.add(processOrders.get(i).getProcessOrderId()+""));
-							System.out.println("-->"+processOrders.get(i).getProcessOrderId()+"");
-							if (!set1.add(processOrders.get(i).getProcessOrderId()+"")) {
-								setToReturn.add(processOrders.get(i).getProcessOrderId()+"");
-							}
-							ProcessOrderBean aasb = processOrders.get(i);
-							aasb.set_testDuplicate((String[])setToReturn.toArray(new String[setToReturn.size()]));
-							cleanMapList.put(processOrders.get(i).getProcessOrderId()+"", aasb);
-						}
-						
-						processOrders = new ArrayList<ProcessOrderBean>(cleanMapList.values());
-						
-						int aso = totalCount - cleanMapList.size();
-						total = totalCount - aso;
+
+						total = totalCount;
 						results = processOrders;
 						
 						pageContext.setAttribute("results", results);
