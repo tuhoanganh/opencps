@@ -1584,11 +1584,13 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				;
 
 				if (dossierFile.getSyncStatus() != PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS) {
+
 					DossierFileLocalServiceUtil.deleteDossierFile(
 							dossierFileId, dossierFile.getFileEntryId());
 				} else {
 					DossierFileLocalServiceUtil
 							.removeDossierFile(dossierFileId);
+
 				}
 
 			} else {

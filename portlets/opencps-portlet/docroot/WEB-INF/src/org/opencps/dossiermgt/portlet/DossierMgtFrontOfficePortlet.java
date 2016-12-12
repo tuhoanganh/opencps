@@ -1708,6 +1708,13 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			jsonObject = JSONFactoryUtil.createJSONObject();
 			if (dossierFileId > 0
 					&& dossierPart.getPartType() != PortletConstants.DOSSIER_PART_TYPE_OTHER) {
+				
+				if (dossierFile.getSyncStatus() != PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS) {
+					DossierFileLocalServiceUtil.deleteDossierFile(dossierFileId,
+							dossierFile.getFileEntryId());
+				} else {
+					DossierFileLocalServiceUtil.removeDossierFile(dossierFileId);
+				}
 
 				if (dossierFile.getSyncStatus() != PortletConstants.DOSSIER_FILE_SYNC_STATUS_SYNCSUCCESS) {
 					DossierFileLocalServiceUtil.deleteDossierFile(
@@ -1717,11 +1724,11 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 							.removeDossierFile(dossierFileId);
 				}
 
+
 			} else {
 
 				DossierFileLocalServiceUtil.deleteDossierFile(dossierFileId,
 						dossierFile.getFileEntryId());
-
 			}
 
 			// Add dossierLog for removeDossierFile
