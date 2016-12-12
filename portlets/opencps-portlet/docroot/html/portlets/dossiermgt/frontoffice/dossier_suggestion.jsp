@@ -1,8 +1,5 @@
 
-<%@page import="com.liferay.portal.kernel.dao.orm.QueryUtil"%>
-<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
-<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -44,6 +41,10 @@
 <%@page import="org.opencps.util.DateTimeUtil"%>
 <%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="org.opencps.util.WebKeys"%>
+<%@page import="com.liferay.portal.kernel.dao.orm.QueryUtil"%>
+<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 
 <%@ include file="../init.jsp"%>
 
@@ -196,7 +197,7 @@
 					dossierFiles = DossierFileLocalServiceUtil.getDossierFileSuggesstion(
 							dossierSuggestion.getDossierId(), templateFileNos, themeDisplay.getUserId(), QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 				} catch (Exception e){
-					e.printStackTrace();
+					//e.printStackTrace();
 				}
 				
 				List<String> dossierFileNos = new ArrayList<String>();
