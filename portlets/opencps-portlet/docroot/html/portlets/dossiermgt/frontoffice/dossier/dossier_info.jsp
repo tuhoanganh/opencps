@@ -42,7 +42,6 @@
 <%@page import="org.opencps.dossiermgt.OutOfLengthDossierContactTelNoException"%>
 <%@page import="org.opencps.dossiermgt.EmptyDossierContactNameException"%>
 <%@page import="org.opencps.dossiermgt.OutOfLengthDossierAddressException"%>
-<%@page import="org.opencps.dossiermgt.InvalidDossierObjectException"%>
 
 <%@ include file="../../init.jsp"%>
 

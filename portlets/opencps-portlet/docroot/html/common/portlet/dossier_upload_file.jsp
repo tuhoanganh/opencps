@@ -18,40 +18,41 @@
  */
 %>
 
-<%@page import="com.liferay.portal.RolePermissionsException"%>
-<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
-<%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
-<%@page import="org.opencps.util.DateTimeUtil"%>
-<%@page import="org.opencps.util.PortletUtil"%>
-<%@page import="java.util.Date"%>
-<%@page import="org.opencps.util.PortletConstants"%>
-<%@page import="org.opencps.util.WebKeys"%>
-<%@page import="org.opencps.util.MessageKeys"%>
-<%@page import="com.liferay.portlet.documentlibrary.DuplicateFileException"%>
-<%@page import="com.liferay.portlet.documentlibrary.FileExtensionException"%>
-<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
-<%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
 <%@page import="com.liferay.portal.kernel.servlet.SessionMessages"%>
-<%@page import="com.liferay.portlet.documentlibrary.FileSizeException"%>
-<%@page import="org.opencps.dossiermgt.PermissionDossierException"%>
-<%@page import="org.opencps.accountmgt.NoSuchAccountOwnOrgIdException"%>
-<%@page import="org.opencps.accountmgt.NoSuchAccountOwnUserIdException"%>
-<%@page import="org.opencps.accountmgt.NoSuchAccountFolderException"%>
-<%@page import="org.opencps.accountmgt.NoSuchAccountTypeException"%>
-<%@page import="org.opencps.accountmgt.NoSuchAccountException"%>
-<%@page import="org.opencps.dossiermgt.NoSuchDossierPartException"%>
-<%@page import="org.opencps.dossiermgt.NoSuchDossierException"%>
 <%@page import="com.liferay.portal.RolePermissionsException"%>
-<%@page import="javax.portlet.PortletPreferences"%>
-<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
-<%@page import="org.opencps.util.PortletPropsValues"%>
+<%@page import="com.liferay.portlet.documentlibrary.DuplicateFileException"%>
+<%@page import="com.liferay.portlet.documentlibrary.FileExtensionException"%>
+<%@page import="com.liferay.portlet.documentlibrary.FileSizeException"%>
 <%@page import="com.liferay.portlet.documentlibrary.model.DLFileEntry"%>
 <%@page import="com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="java.util.Date"%>
 <%@page import="java.util.List"%>
+<%@page import="javax.portlet.PortletPreferences"%>
+<%@page import="org.opencps.accountmgt.NoSuchAccountException"%>
+<%@page import="org.opencps.accountmgt.NoSuchAccountFolderException"%>
+<%@page import="org.opencps.accountmgt.NoSuchAccountOwnOrgIdException"%>
+<%@page import="org.opencps.accountmgt.NoSuchAccountOwnUserIdException"%>
+<%@page import="org.opencps.accountmgt.NoSuchAccountTypeException"%>
+<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
+<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
+<%@page import="org.opencps.dossiermgt.NoSuchDossierException"%>
+<%@page import="org.opencps.dossiermgt.NoSuchDossierPartException"%>
+<%@page import="org.opencps.dossiermgt.PermissionDossierException"%>
+<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
+<%@page import="org.opencps.dossiermgt.search.DossierFileDisplayTerms"%>
+<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.service.DossierPartLocalServiceUtil"%>
+<%@page import="org.opencps.util.DateTimeUtil"%>
+<%@page import="org.opencps.util.MessageKeys"%>
+<%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.util.PortletConstants.FileSizeUnit"%>
+<%@page import="org.opencps.util.PortletPropsValues"%>
+<%@page import="org.opencps.util.PortletUtil"%>
+<%@page import="org.opencps.util.WebKeys"%>
+
 <%@ include file="/init.jsp"%>
 
 <%
@@ -108,22 +109,20 @@
 		preferences = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
 	}
 	
-	String fileTypes = preferences.getValue("fileTypes", StringPool.BLANK);
+	String uploadFileTypes = preferences.getValue("uploadFileTypes", "pdf,doc,docx,xls,png");
+	
+	
+	float maxTotalUploadFileSize = GetterUtil.getFloat(preferences.getValue("maxTotalUploadFileSize", StringPool.BLANK));
+	
+	String maxTotalUploadFileSizeUnit = preferences.getValue("maxTotalUploadFileSizeUnit", StringPool.BLANK);
 	
 	float maxUploadFileSize = GetterUtil.getFloat(preferences.getValue("maxUploadFileSize", StringPool.BLANK));
+	
 	String maxUploadFileSizeUnit = preferences.getValue("maxUploadFileSizeUnit", StringPool.BLANK);
 	
 	if (maxUploadFileSize == 0){
 		maxUploadFileSize = PortletPropsValues.ACCOUNTMGT_FILE_SIZE/1024/1024;
-		maxUploadFileSizeUnit = PortletConstants.SIZE_UNIT_MB;
-	}
-	
-	float maxTotalUploadFileSize = GetterUtil.getFloat(preferences.getValue("maxTotalUploadFileSize", StringPool.BLANK));
-	String maxTotalUploadFileSizeUnit = preferences.getValue("maxTotalUploadFileSizeUnit", StringPool.BLANK);
-	
-	if (maxTotalUploadFileSize == 0){
-		maxTotalUploadFileSize = PortletPropsValues.ACCOUNTMGT_FILE_SIZE/1024/1024;
-		maxTotalUploadFileSizeUnit = PortletConstants.SIZE_UNIT_MB;
+		maxUploadFileSizeUnit = PortletConstants.FileSizeUnit.MB.getValue();
 	}
 	
 	List<DossierFile> dossierFileList = new ArrayList<DossierFile>();
@@ -226,7 +225,7 @@
 	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_ORIGINAL %>" type="hidden" value="<%=String.valueOf(PortletConstants.DOSSIER_FILE_ORIGINAL) %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_TYPE %>" type="hidden" value="<%=String.valueOf(renderResponse.getNamespace().equals(StringPool.UNDERLINE + WebKeys.DOSSIER_MGT_PORTLET + StringPool.UNDERLINE)  ? PortletConstants.DOSSIER_FILE_TYPE_INPUT : PortletConstants.DOSSIER_FILE_TYPE_OUTPUT) %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.GROUP_NAME %>" type="hidden" value="<%=groupName %>"/>
-	<aui:input name="<%=DossierFileDisplayTerms.FILE_TYPES %>" type="hidden" value="<%=fileTypes %>"/>
+	<aui:input name="<%=DossierFileDisplayTerms.FILE_TYPES %>" type="hidden" value="<%=uploadFileTypes %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.MAX_UPLOAD_FILE_SIZE %>" type="hidden" value="<%=maxUploadFileSize %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.MAX_UPLOAD_FILE_SIZE_UNIT %>" type="hidden" value="<%=maxUploadFileSizeUnit %>"/>
 	<aui:input name="<%=DossierFileDisplayTerms.MAX_TOTAL_UPLOAD_FILE_SIZE %>" type="hidden" value="<%=maxTotalUploadFileSize %>"/>
@@ -269,18 +268,21 @@
 	</aui:row>
 	<aui:row>
 		<%
+			
 			String exceptedFileType = StringPool.BLANK;
-			if (fileTypes == StringPool.BLANK){
+			if (uploadFileTypes == StringPool.BLANK){
 				exceptedFileType = StringUtil.merge(PortletPropsValues.ACCOUNTMGT_FILE_TYPE, ", ");
 			} else {
-				String[] fileTypeArr = fileTypes.split("\\W+");
+				String[] fileTypeArr = uploadFileTypes.split("\\W+");
 				exceptedFileType= StringUtil.merge(fileTypeArr, ", ");
 			}
 		%>
 		<aui:col width="100">
 			<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD %>" type="file">
 				<aui:validator name="acceptFiles">
-					'<%= exceptedFileType %>'
+
+					<%=exceptedFileType %>
+
 				</aui:validator>
 			</aui:input>
 			<div class="alert alert-info" role="alert">
@@ -316,9 +318,9 @@
 		// Validate size and type file upload
 		
 		
-		var maxUploadFileSizeInByte = <%=PortletUtil.convertSizeUnitToByte(maxUploadFileSize, maxUploadFileSizeUnit)%>;
+		var maxUploadFileSizeInByte = <%=PortletUtil.convertSizeUnitToByte(maxUploadFileSize, FileSizeUnit.getEnum(maxUploadFileSizeUnit))%>;
 		
-		var maxTotalUploadFileSizeInByte = <%=PortletUtil.convertSizeUnitToByte(maxTotalUploadFileSize, maxTotalUploadFileSizeUnit)%>;
+		var maxTotalUploadFileSizeInByte = <%=PortletUtil.convertSizeUnitToByte(maxTotalUploadFileSize, FileSizeUnit.getEnum(maxTotalUploadFileSizeUnit))%>;
 		
 		var fileUploadSizeInByte = 0;
 		var totalUploadFileSizeInByte = <%=totalUploadFileSizeInByte%>;

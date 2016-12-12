@@ -102,6 +102,7 @@ import org.opencps.util.DLFolderUtil;
 import org.opencps.util.DateTimeUtil;
 import org.opencps.util.MessageKeys;
 import org.opencps.util.PortletConstants;
+import org.opencps.util.PortletConstants.FileSizeUnit;
 import org.opencps.util.PortletPropsValues;
 import org.opencps.util.PortletUtil;
 import org.opencps.util.PortletUtil.SplitDate;
@@ -2953,10 +2954,16 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			}
 		}
 
+		FileSizeUnit uploadFileSizeUnit = FileSizeUnit
+				.getEnum(maxUploadFileSizeUnit);
+
 		float maxUploadFileSizeInByte = PortletUtil.convertSizeUnitToByte(
-				maxUploadFileSize, maxUploadFileSizeUnit);
+				maxUploadFileSize, uploadFileSizeUnit);
+
+		FileSizeUnit totalUploadFileSizeUnit = FileSizeUnit
+				.getEnum(maxUploadFileSizeUnit);
 		float maxTotalUploadFileSizeInByte = PortletUtil.convertSizeUnitToByte(
-				maxTotalUploadFileSize, maxTotalUploadFileSizeUnit);
+				maxTotalUploadFileSize, totalUploadFileSizeUnit);
 
 		if (size == 0) {
 			throw new FileSizeException();

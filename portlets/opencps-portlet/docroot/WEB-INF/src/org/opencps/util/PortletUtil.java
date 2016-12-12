@@ -48,11 +48,10 @@ import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
 import org.opencps.paymentmgt.util.PaymentMgtUtil;
 import org.opencps.processmgt.model.ProcessStepDossierPart;
-import org.opencps.processmgt.model.ProcessWorkflow;
 import org.opencps.processmgt.model.WorkflowOutput;
-import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
 import org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil;
 import org.opencps.processmgt.util.ProcessUtils;
+import org.opencps.util.PortletConstants.FileSizeUnit;
 
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -1127,20 +1126,29 @@ public class PortletUtil {
 		return dossierPartTypeName;
 	}
 
-	public static float convertSizeUnitToByte(float size, String fileUnit) {
+	public static float convertSizeUnitToByte(float size, FileSizeUnit unit) {
 
-		if (fileUnit.equals(PortletConstants.SIZE_UNIT_B)
-				|| Validator.isNull(fileUnit)) {
-			return size;
-		} else if (fileUnit.equals(PortletConstants.SIZE_UNIT_KB)) {
-			return size * 1024;
-		} else if (fileUnit.equals(PortletConstants.SIZE_UNIT_MB)) {
-			return size * 1024 * 1024;
-		} else if (fileUnit.equals(PortletConstants.SIZE_UNIT_GB)) {
-			return size * 1024 * 1024 * 1024;
+		switch (unit) {
+		case B:
+			break;
+		case KB:
+			size = size * 1024;
+			break;
+		case MB:
+			size = size * 1024;
+			break;
+		case GB:
+			size = size * 1024 * 1024 * 1024;
+			break;
+		case TB:
+			size = size * 1024 * 1024 * 1024 * 1024;
+			break;
+		default:
+			break;
+
 		}
 
-		return 0;
+		return size;
 	}
 
 	public static List<Long> getDossierPartResultRequired(
@@ -1150,18 +1158,9 @@ public class PortletUtil {
 
 		List<ProcessStepDossierPart> processStepDossierParts = new ArrayList<ProcessStepDossierPart>();
 
-		ProcessWorkflow processWorkflow = null;
-		
-		try {
-			processWorkflow = ProcessWorkflowLocalServiceUtil
-					.getProcessWorkflow(processWorkflowId);
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-
-		if (Validator.isNotNull(processWorkflow)) {
+		if (processStepId > 0) {
 			processStepDossierParts = ProcessUtils
-					.getDossierPartByStep(processWorkflow.getPreProcessStepId());
+					.getDossierPartByStep(processStepId);
 		}
 
 		if (processStepDossierParts != null) {
@@ -1252,6 +1251,36 @@ public class PortletUtil {
 				.getHttpServletRequest(actionRequest);
 		ServletResponseUtil.sendFile(request, response, fileName, is,
 				contentLength, contentType);
+	}
+
+	/**
+	 * @param groupId
+	 * @param collectionCode
+	 * @return
+	 */
+	public static List<String> getDictItemCode(long groupId,
+			String collectionCode) {
+		List<String> dictItemCodes = new ArrayList<String>();
+		try {
+			DictCollection collection = DictCollectionLocalServiceUtil
+					.getDictCollection(groupId, collectionCode);
+			List<DictItem> dictItems = DictItemLocalServiceUtil
+					.getDictItemsByDictCollectionId(collection
+							.getDictCollectionId());
+
+			if (dictItems != null) {
+				for (DictItem dictItem : dictItems) {
+					if (!dictItemCodes.contains(dictItem.getItemCode())) {
+						dictItemCodes.add(dictItem.getItemCode());
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			_log.equals(e);
+		}
+
+		return dictItemCodes;
 	}
 
 	private static Log _log = LogFactoryUtil
