@@ -17,6 +17,8 @@
 
 package org.opencps.util;
 
+import com.liferay.portal.kernel.util.Validator;
+
 /**
  * @author trungnt
  */
@@ -237,6 +239,10 @@ public class PortletConstants {
 
 		FileSizeUnit(String value) {
 
+			if(Validator.isNull(value)) {
+				value = "megabyte";
+			}
+			
 			this.value = value;
 		}
 
@@ -252,11 +258,16 @@ public class PortletConstants {
 		}
 
 		public static FileSizeUnit getEnum(String value) {
-
-			for (FileSizeUnit v : values())
-				if (v.getValue().equalsIgnoreCase(value))
+			if(Validator.isNull(value)) {
+				value = FileSizeUnit.MB.toString();
+			}
+			for (FileSizeUnit v : values()) {
+				if (v.getValue().equalsIgnoreCase(value)){
 					return v;
-			throw new IllegalArgumentException();
+				}
+			}
+					
+			return FileSizeUnit.MB;
 		}
 	}
 }

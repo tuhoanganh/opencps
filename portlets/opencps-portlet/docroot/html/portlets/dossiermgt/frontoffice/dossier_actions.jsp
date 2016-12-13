@@ -147,7 +147,7 @@
 						value="<%=String.valueOf(PortletConstants.DOSSIER_STATUS_NEW)%>" />
 					<portlet:param name="redirectURL" value="<%=currentURL%>" />
 				</portlet:actionURL>
-<
+
 				<liferay-ui:icon cssClass="search-container-action fa forward"
 					image="forward" message="send-dossier"
 					url="<%=updateDossierStatusURL.toString()%>" />
