@@ -1135,7 +1135,7 @@ public class PortletUtil {
 			size = size * 1024;
 			break;
 		case MB:
-			size = size * 1024;
+			size = size * 1024 * 1024;
 			break;
 		case GB:
 			size = size * 1024 * 1024 * 1024;
