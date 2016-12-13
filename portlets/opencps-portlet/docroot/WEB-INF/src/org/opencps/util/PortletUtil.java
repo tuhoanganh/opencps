@@ -46,6 +46,7 @@ import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.dossiermgt.model.DossierPart;
 import org.opencps.dossiermgt.service.DossierFileLocalServiceUtil;
 import org.opencps.dossiermgt.service.DossierPartLocalServiceUtil;
+import org.opencps.paymentmgt.model.PaymentFile;
 import org.opencps.paymentmgt.util.PaymentMgtUtil;
 import org.opencps.processmgt.model.ProcessStepDossierPart;
 import org.opencps.processmgt.model.ProcessWorkflow;
@@ -54,6 +55,7 @@ import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
 import org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil;
 import org.opencps.processmgt.util.ProcessUtils;
 
+import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONException;
@@ -1249,6 +1251,24 @@ public class PortletUtil {
 				.getHttpServletRequest(actionRequest);
 		ServletResponseUtil.sendFile(request, response, fileName, is,
 				contentLength, contentType);
+	}
+	
+	public static boolean isResetGenerateNumber(String pattern, Date date) {
+		boolean isReset = false;
+		
+		Date now = new Date();
+		
+		//if different month then reset 
+		if(pattern.contains("n-M") && (now.getMonth()) != date.getMonth()) {
+			isReset = true;
+		}
+		
+		//if different year then reset 
+		if(pattern.contains("n-Y") && (now.getYear()) != date.getYear()) {
+			isReset = true;
+		}
+		
+		return isReset;
 	}
 
 	private static Log _log = LogFactoryUtil
