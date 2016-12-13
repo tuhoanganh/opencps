@@ -2405,6 +2405,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		return dossierPersistence.countByT_DS(dossierTemplateId, dossierStatus);
 	}
 
+	
 	public List<Dossier> getDossierSuggesstion(long userId ,String dossierFileNo ,String dossierStatus,
 			List<Integer> partTypes, List<String> templateFileNos,
 			List<String> partNos, int start, int end) throws SystemException {
@@ -2415,7 +2416,8 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		return dossierFinder.searchDossierSuggesstion(userId,dossierFileNo ,dossierStatus,
 				partTypesStr, templateFileNosStr, partNosStr, start, end);
 	}
-
+	
+	
 	public int countDossierSuggesstion(long userId, String dossierFileNo, String dossierStatus,
 			List<Integer> partTypes, List<String> templateFileNos,
 			List<String> partNos) throws SystemException {

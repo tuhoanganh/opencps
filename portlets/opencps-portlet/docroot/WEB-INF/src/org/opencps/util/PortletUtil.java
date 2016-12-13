@@ -1252,6 +1252,7 @@ public class PortletUtil {
 				contentLength, contentType);
 	}
 	
+	
 	public static boolean isResetGenerateNumber(String pattern, Date date) {
 		boolean isReset = false;
 		
