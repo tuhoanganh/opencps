@@ -85,6 +85,13 @@
 
 <aui:form name="fm">
 	<div class="opencps-searchcontainer-wrapper">
+		
+		<div class="opcs-serviceinfo-list-label">
+			<div class="title_box">
+			    <p class="file_manage_title ds"><liferay-ui:message key="title-danh-sach-process-order" /></p>
+				<p class="count"></p>
+			</div>
+		</div>
 		<liferay-ui:search-container 
 				searchContainer="<%= new ProcessOrderSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>"
 				rowChecker="<%=rowChecker%>"
