@@ -2412,7 +2412,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		String partTypesStr = StringUtil.merge(partTypes);
 		String templateFileNosStr = StringUtil.merge(templateFileNos, "','");
 		String partNosStr = StringUtil.merge(partNos, "','");
-		return dossierFinder.searchDossierSuggesstion(dossierStatus,
+		return dossierFinder.searchDossierSuggesstion(userId, dossierFileNo, dossierStatus,
 				partTypesStr, templateFileNosStr, partNosStr, start, end);
 	}
 
@@ -2423,7 +2423,7 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		String partTypesStr = StringUtil.merge(partTypes);
 		String templateFileNosStr = StringUtil.merge(templateFileNos, "','");
 		String partNosStr = StringUtil.merge(partNos, "','");
-		return dossierFinder.countDossierSuggesstion(dossierStatus,
+		return dossierFinder.countDossierSuggesstion(userId, dossierFileNo, dossierStatus,
 				partTypesStr, templateFileNosStr, partNosStr);
 	}
 
