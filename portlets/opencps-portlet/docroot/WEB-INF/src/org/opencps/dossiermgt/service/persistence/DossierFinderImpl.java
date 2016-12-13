@@ -1817,6 +1817,7 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier> implements
 		return null;
 	}
 
+	
 	public List<Dossier> searchDossierSuggesstion(long userId ,String keyword,
 			String dossierStatus, String partTypes, String templateFileNos,
 			String partNos, int start, int end) throws SystemException {
