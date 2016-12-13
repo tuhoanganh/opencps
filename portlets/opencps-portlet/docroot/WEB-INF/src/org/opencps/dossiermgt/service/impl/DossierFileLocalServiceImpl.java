@@ -911,7 +911,7 @@ public class DossierFileLocalServiceImpl extends
 	 * @throws NoSuchDossierFileException
 	 * @throws SystemException
 	 */
-<<<<<<< HEAD
+
 	public int countDossierFileByDID_SS_DP(
 		long dossierId, long dossierPartId, int syncStatus)
 		throws NoSuchDossierFileException, SystemException {
@@ -929,12 +929,6 @@ public class DossierFileLocalServiceImpl extends
 			long dossierPartId, int removed) throws NoSuchDossierFileException,
 			SystemException {
 
-=======
-	public List<DossierFile> getDossierFileByDID_DP_R(long dossierId,
-			long dossierPartId, int removed) throws NoSuchDossierFileException,
-			SystemException {
-
->>>>>>> sync-enhancement#portlet18
 		return dossierFilePersistence.findByDID_DP_R(dossierId, dossierPartId,
 				removed);
 	}
