@@ -1282,6 +1282,24 @@ public class PortletUtil {
 
 		return dictItemCodes;
 	}
+	
+	public static boolean isResetGenerateNumber(String pattern, Date date) {
+		boolean isReset = false;
+		
+		Date now = new Date();
+		
+		//if different month then reset 
+		if(pattern.contains("n-M") && (now.getMonth()) != date.getMonth()) {
+			isReset = true;
+		}
+		
+		//if different year then reset 
+		if(pattern.contains("n-Y") && (now.getYear()) != date.getYear()) {
+			isReset = true;
+		}
+		
+		return isReset;
+	}
 
 	private static Log _log = LogFactoryUtil
 			.getLog(PortletUtil.class.getName());

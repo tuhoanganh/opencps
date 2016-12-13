@@ -2404,7 +2404,8 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 		return dossierPersistence.countByT_DS(dossierTemplateId, dossierStatus);
 	}
 
-	public List<Dossier> getDossierSuggesstion(String dossierStatus,
+	public List<Dossier> getDossierSuggesstion(long userId,
+			String dossierFileNo, String dossierStatus,
 			List<Integer> partTypes, List<String> templateFileNos,
 			List<String> partNos, int start, int end) throws SystemException {
 
@@ -2415,9 +2416,10 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 				partTypesStr, templateFileNosStr, partNosStr, start, end);
 	}
 
-	public int countDossierSuggesstion(String dossierStatus,
-			List<Integer> partTypes, List<String> templateFileNos,
-			List<String> partNos) throws SystemException {
+	public int countDossierSuggesstion(long userId, String dossierFileNo,
+			String dossierStatus, List<Integer> partTypes,
+			List<String> templateFileNos, List<String> partNos)
+			throws SystemException {
 		String partTypesStr = StringUtil.merge(partTypes);
 		String templateFileNosStr = StringUtil.merge(templateFileNos, "','");
 		String partNosStr = StringUtil.merge(partNos, "','");
