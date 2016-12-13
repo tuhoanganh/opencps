@@ -1,4 +1,7 @@
 
+<%@page import="java.util.Set"%>
+<%@page import="java.util.HashSet"%>
+<%@page import="org.opencps.util.PortletConstants"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -143,10 +146,14 @@
 		<liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
 		<aui:form name="fm">
 			<div class="opencps-searchcontainer-wrapper">
-			<c:if test="<%=ProcessOrderPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ASSIGN_PROCESS_ORDER) && 
-			serviceInfoId > 0 && processStepId > 0 %>">
+			<%-- <c:if test="<%=ProcessOrderPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ASSIGN_PROCESS_ORDER) && 
+				serviceInfoId > 0 && processStepId > 0 %>">
 			
-			<div class="opencps-searchcontainer-wrapper">
+				
+				
+			</c:if> --%>
+			
+			<aui:button name="multiAssignToUserBtn" value="multiAssignToUserBtn"/>
 				<liferay-ui:search-container 
 					searchContainer="<%= new ProcessOrderSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>"
 					
@@ -245,16 +252,15 @@
 										<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
 											<i class='<%="fa fa-circle sx10 " + processOrder.getDossierStatus()%>'></i>
 										</div>
-										<div class="span2 bold">
-											 <liferay-ui:message key="reception-no"/>
+										<div class="span4 bold">
+											<liferay-ui:message key="reception-no"/>
 										</div>
-										<div class="span9">
+										<div class="span7">
 											<%=processOrder.getReceptionNo() %>
 										</div>
 									</div>
 									
 									<div class="row-fluid">
-										<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
 										</div>
 										<div class="span12">
 											<%=processOrder.getServiceName() %>
