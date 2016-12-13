@@ -266,6 +266,9 @@
 								
 								
 								String actionButt = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "action");
+								if((processOrder.isReadOnly() || (processOrder.getAssignToUsesrId() != 0 &&  processOrder.getAssignToUsesrId() != user.getUserId()))){
+									actionButt = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "view");
+								}
 								row.setClassName("opencps-searchcontainer-row");
 								row.addText(boundcol1);
 								row.addText(boundcol2);
