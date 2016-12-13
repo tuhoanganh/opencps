@@ -110,16 +110,16 @@
 	}
 	
 	String uploadFileTypes = preferences.getValue("uploadFileTypes", "pdf,doc,docx,xls,png");
+
 	
+	float maxTotalUploadFileSize = GetterUtil.getFloat(preferences.getValue("maxTotalUploadFileSize", String.valueOf(0)), 0);
 	
-	float maxTotalUploadFileSize = GetterUtil.getFloat(preferences.getValue("maxTotalUploadFileSize", StringPool.BLANK));
+	String maxTotalUploadFileSizeUnit = preferences.getValue("maxTotalUploadFileSizeUnit", PortletConstants.FileSizeUnit.MB.toString());
 	
-	String maxTotalUploadFileSizeUnit = preferences.getValue("maxTotalUploadFileSizeUnit", StringPool.BLANK);
+	float maxUploadFileSize = GetterUtil.getFloat(preferences.getValue("maxUploadFileSize", String.valueOf(0)), 0);
 	
-	float maxUploadFileSize = GetterUtil.getFloat(preferences.getValue("maxUploadFileSize", StringPool.BLANK));
-	
-	String maxUploadFileSizeUnit = preferences.getValue("maxUploadFileSizeUnit", StringPool.BLANK);
-	
+	String maxUploadFileSizeUnit = preferences.getValue("maxUploadFileSizeUnit", PortletConstants.FileSizeUnit.MB.toString());
+
 	if (maxUploadFileSize == 0){
 		maxUploadFileSize = PortletPropsValues.ACCOUNTMGT_FILE_SIZE/1024/1024;
 		maxUploadFileSizeUnit = PortletConstants.FileSizeUnit.MB.getValue();
@@ -280,9 +280,7 @@
 		<aui:col width="100">
 			<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD %>" type="file">
 				<aui:validator name="acceptFiles">
-
-					<%=exceptedFileType %>
-
+					'<%=exceptedFileType %>'
 				</aui:validator>
 			</aui:input>
 			<div class="alert alert-info" role="alert">
@@ -317,13 +315,13 @@
 		
 		// Validate size and type file upload
 		
+		var maxUploadFileSizeInByte = '<%=PortletUtil.convertSizeUnitToByte(maxUploadFileSize, FileSizeUnit.getEnum(maxUploadFileSizeUnit))%>';
 		
-		var maxUploadFileSizeInByte = <%=PortletUtil.convertSizeUnitToByte(maxUploadFileSize, FileSizeUnit.getEnum(maxUploadFileSizeUnit))%>;
-		
-		var maxTotalUploadFileSizeInByte = <%=PortletUtil.convertSizeUnitToByte(maxTotalUploadFileSize, FileSizeUnit.getEnum(maxTotalUploadFileSizeUnit))%>;
+		var maxTotalUploadFileSizeInByte = '<%=PortletUtil.convertSizeUnitToByte(maxTotalUploadFileSize, FileSizeUnit.getEnum(maxTotalUploadFileSizeUnit))%>';
+
 		
 		var fileUploadSizeInByte = 0;
-		var totalUploadFileSizeInByte = <%=totalUploadFileSizeInByte%>;
+		var totalUploadFileSizeInByte = '<%=totalUploadFileSizeInByte%>';
 		
 		$('#<portlet:namespace />dossierFileUpload').on('change', function() {
 			fileUploadSizeInByte = this.files[0].size;
@@ -362,3 +360,4 @@
 	});
 
 </aui:script>
+	
