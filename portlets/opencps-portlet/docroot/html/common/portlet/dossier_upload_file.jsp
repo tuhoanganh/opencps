@@ -113,8 +113,18 @@
 	float maxUploadFileSize = GetterUtil.getFloat(preferences.getValue("maxUploadFileSize", StringPool.BLANK));
 	String maxUploadFileSizeUnit = preferences.getValue("maxUploadFileSizeUnit", StringPool.BLANK);
 	
+	if (maxUploadFileSize == 0){
+		maxUploadFileSize = PortletPropsValues.ACCOUNTMGT_FILE_SIZE/1024/1024;
+		maxUploadFileSizeUnit = PortletConstants.SIZE_UNIT_MB;
+	}
+	
 	float maxTotalUploadFileSize = GetterUtil.getFloat(preferences.getValue("maxTotalUploadFileSize", StringPool.BLANK));
 	String maxTotalUploadFileSizeUnit = preferences.getValue("maxTotalUploadFileSizeUnit", StringPool.BLANK);
+	
+	if (maxTotalUploadFileSize == 0){
+		maxTotalUploadFileSize = PortletPropsValues.ACCOUNTMGT_FILE_SIZE/1024/1024;
+		maxTotalUploadFileSizeUnit = PortletConstants.SIZE_UNIT_MB;
+	}
 	
 	List<DossierFile> dossierFileList = new ArrayList<DossierFile>();
 	if (dossierId > 0){
@@ -258,25 +268,23 @@
 		</aui:col>
 	</aui:row>
 	<aui:row>
+		<%
+			String exceptedFileType = StringPool.BLANK;
+			if (fileTypes == StringPool.BLANK){
+				exceptedFileType = StringUtil.merge(PortletPropsValues.ACCOUNTMGT_FILE_TYPE, ", ");
+			} else {
+				String[] fileTypeArr = fileTypes.split("\\W+");
+				exceptedFileType= StringUtil.merge(fileTypeArr, ", ");
+			}
+		%>
 		<aui:col width="100">
 			<aui:input name="<%=DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD %>" type="file">
 				<aui:validator name="acceptFiles">
-					<%
-						if (fileTypes == StringPool.BLANK){
-					%>
-							'<%= StringUtil.merge(PortletPropsValues.ACCOUNTMGT_FILE_TYPE) %>'
-					<%
-						} else {
-							String[] fileTypeArr = fileTypes.split("\\W+");
-					%>
-							'<%= StringUtil.merge(fileTypeArr, ", ") %>'
-					<%
-						}
-					%>
+					'<%= exceptedFileType %>'
 				</aui:validator>
 			</aui:input>
 			<div class="alert alert-info" role="alert">
-				<liferay-ui:message key="dossier-file-type-excep"/>: <%= StringUtil.merge(PortletPropsValues.ACCOUNTMGT_FILE_TYPE) %> --- <liferay-ui:message key="dossier-file-size-excep"/>: <%= (PortletPropsValues.ACCOUNTMGT_FILE_SIZE/1024)/1024 %> MB
+				<liferay-ui:message key="dossier-file-type-excep"/>: <%= exceptedFileType %> --- <liferay-ui:message key="dossier-file-size-excep"/>: <%= String.valueOf(maxUploadFileSize) %> <%=maxUploadFileSizeUnit %>
 			</div>
 			<font class="requiredStyleCSS"><liferay-ui:message key="control-with-star-is-required"/></font>
 		</aui:col>

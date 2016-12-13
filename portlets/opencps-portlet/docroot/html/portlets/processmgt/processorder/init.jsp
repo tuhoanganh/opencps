@@ -22,6 +22,7 @@
 <%@ include file="../init.jsp"%>
 
 <%
+	boolean isMultiAssign = false;
 	
 	String todolistDisplayStyle = GetterUtil.getString(portletPreferences.getValue("todolistDisplayStyle", "default"));
 	

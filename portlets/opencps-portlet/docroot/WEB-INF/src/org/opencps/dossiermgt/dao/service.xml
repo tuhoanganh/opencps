@@ -470,6 +470,9 @@
         <column name="syncStatus" type="int"/>
         <column name="version" type="int"></column>
         <column name="signed" type="boolean"></column>
+        <order>
+        	<order-column name="modifiedDate" order-by="desc" />
+        </order>
         <finder name="DID_DP_R" return-type="Collection">
             <finder-column name="dossierId"></finder-column>
             <finder-column name="dossierPartId"></finder-column>
