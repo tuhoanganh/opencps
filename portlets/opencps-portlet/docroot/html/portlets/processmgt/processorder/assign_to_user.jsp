@@ -720,14 +720,14 @@
 										completeSignature(sign, signFieldName, filePath, fileName, $("#<portlet:namespace/>dossierId").val(), dossierFileId, dossierPartId, index, indexSize, '<%=signatureURL%>');
 										
 	 								}else{
-	 									alert("signer error");
+	 									alert('<%=LanguageUtil.get(pageContext, "signer-error") %>');
 	 					            }
 								}else{
 									alert(msg);
 								}
 					        	
 					        } else {
-					         	alert("Plugin is not working");
+					         	alert('<%=LanguageUtil.get(pageContext, "plugin-is-not-working") %>');
 					        }
 						}
 					}
@@ -766,11 +766,11 @@
 										}
 									}
 								} else {
-										alert("--------- vao day completeSignature- ky so ko dc-------------");
+										alert('<%=LanguageUtil.get(pageContext, "signer-error") %>');
 								}
 						},
 				    	error: function(){
-				    		alert("--------- vao day completeSignature- ky so ko dc-------------");
+				    		alert('<%=LanguageUtil.get(pageContext, "signer-fail") %>');
 				    	}
 					}
 				}
