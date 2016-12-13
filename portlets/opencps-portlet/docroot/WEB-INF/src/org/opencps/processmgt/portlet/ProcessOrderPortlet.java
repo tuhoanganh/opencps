@@ -3019,4 +3019,106 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			}
 		}
 	}
+	
+	public void validateAssignTask(ActionRequest actionRequest,
+			ActionResponse actionResponse) throws IOException {
+		List<WorkflowOutput> workflowOutputs = new ArrayList<WorkflowOutput>();
+
+		List<ProcessStepDossierPart> processStepDossierParts = new ArrayList<ProcessStepDossierPart>();
+
+		JSONObject obj = JSONFactoryUtil.createJSONObject();
+		
+		JSONArray array = JSONFactoryUtil.createJSONArray();
+
+		long dossierId = ParamUtil.getLong(actionRequest,
+				ProcessOrderDisplayTerms.DOSSIER_ID);
+
+		long processStepId = ParamUtil.getLong(actionRequest,
+				ProcessOrderDisplayTerms.PROCESS_STEP_ID);
+
+		long processWorkflowId = ParamUtil.getLong(actionRequest,
+				ProcessOrderDisplayTerms.PROCESS_WORKFLOW_ID);
+
+		processStepDossierParts = ProcessUtils
+				.getDossierPartByStep(processStepId);
+
+		if (processStepDossierParts != null) {
+
+			for (ProcessStepDossierPart processStepDossierPart : processStepDossierParts) {
+
+				if (processStepDossierPart.getDossierPartId() > 0) {
+					try {
+
+						List<WorkflowOutput> workflowOutputsTemp = WorkflowOutputLocalServiceUtil
+								.getByProcessByPWID_DPID(processWorkflowId,
+										processStepDossierPart
+												.getDossierPartId());
+
+						if (workflowOutputsTemp != null) {
+							workflowOutputs.addAll(workflowOutputsTemp);
+						}
+					} catch (Exception e) {
+					}
+				}
+
+			}
+		}
+
+		if (workflowOutputs != null && !workflowOutputs.isEmpty()) {
+			for (WorkflowOutput workflowOutput : workflowOutputs) {
+
+				if (workflowOutput.getRequired()) {
+
+					DossierFile dossierFile = null;
+					DossierPart dossierPart = null;
+					try {
+						dossierPart = DossierPartLocalServiceUtil
+								.getDossierPart(workflowOutput
+										.getDossierPartId());
+						dossierFile = DossierFileLocalServiceUtil
+								.getDossierFileInUse(dossierId,
+										dossierPart.getDossierpartId());
+					} catch (Exception e) {
+						// TODO: handle exception
+					}
+
+					if (dossierFile == null && dossierPart != null) {
+
+						array.put(dossierPart.getDossierpartId());
+
+					}
+				}
+			}
+		}
+		
+		obj.put("arrayDossierpartIds", array);
+		
+		// Validate nhap y kien
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.
+				getAttribute(WebKeys.THEME_DISPLAY);
+		ExpandoValue requiedActionNote = null;
+		boolean requiedActionNoteValue = false;
+		
+		try {
+			requiedActionNote = 
+					ExpandoValueLocalServiceUtil.getValue(
+						themeDisplay.getCompanyId(), 
+						ClassNameLocalServiceUtil.getClassNameId(ProcessStep.class.getName()), 
+						ProcessStep.class.getName(), 
+						"requiedProcessActionNote", 
+						processWorkflowId);
+			
+			requiedActionNoteValue = requiedActionNote.getBoolean();
+		} catch (Exception e){
+			//
+		}
+		
+		obj.put("requiedActionNote", requiedActionNoteValue);
+		
+		if(obj != null){
+			//PortletUtil.writeJSON(actionRequest, actionResponse, array);
+			PortletUtil.writeJSON(actionRequest, actionResponse, obj);
+		}
+
+	}
 }
