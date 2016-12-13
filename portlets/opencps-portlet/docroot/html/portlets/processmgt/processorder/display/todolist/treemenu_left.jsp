@@ -143,6 +143,7 @@
 		<liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
 		<aui:form name="fm">
 			<div class="opencps-searchcontainer-wrapper">
+			
 			<c:if test="<%=ProcessOrderPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ASSIGN_PROCESS_ORDER) && 
 			serviceInfoId > 0 && processStepId > 0 %>">
 			
