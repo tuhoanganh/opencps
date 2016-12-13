@@ -1,5 +1,5 @@
 
-<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -41,6 +41,10 @@
 <%@page import="org.opencps.util.DateTimeUtil"%>
 <%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="org.opencps.util.WebKeys"%>
+<%@page import="com.liferay.portal.kernel.dao.orm.QueryUtil"%>
+<%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.model.DossierFile"%>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 
 <%@ include file="../init.jsp"%>
 
@@ -187,15 +191,28 @@
 				if(viewDossierUrlNomal.contains("p_p_state=pop_up"))  {
 					viewDossierUrlNomal = StringUtil.replace(viewDossierUrlNomal, "p_p_state=pop_up", "p_p_state=nomal");
 				}				
+				
+				List<DossierFile> dossierFiles = new ArrayList<DossierFile>();
+				try {
+					dossierFiles = DossierFileLocalServiceUtil.getDossierFileSuggesstion(
+							dossierSuggestion.getDossierId(), templateFileNos, themeDisplay.getUserId(), QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+				} catch (Exception e){
+					//e.printStackTrace();
+				}
+				
+				List<String> dossierFileNos = new ArrayList<String>();
+				for (DossierFile dossierFile : dossierFiles){
+					dossierFileNos.add(dossierFile.getDossierFileNo());
+				}
 			%>
 			<liferay-util:buffer var="boundcol1">
-				<div class="row-fluid">
+				<%-- <div class="row-fluid">
 					
 					<div class="span6 bold-label">
 						<liferay-ui:message key="dossier-no"/>
 					</div>
 					<div class="span6"><%=String.valueOf(dossierSuggestion.getDossierId())%></div>
-				</div>
+				</div> --%>
 				
 				<div class="row-fluid">
 					
@@ -204,6 +221,22 @@
 					</div>
 					<div class="span6">
 						<%=Validator.isNotNull(dossierSuggestion.getReceptionNo()) ? dossierSuggestion.getReceptionNo() : StringPool.DASH%>
+					</div>
+				</div>
+				
+				<div class="row-fluid">
+					
+					<div class="span6 bold-label">
+						<liferay-ui:message key="reception-file-no"/>
+					</div>
+					<div class="span6">
+						<%
+							for (String dossierFileNo : dossierFileNos){
+								%>
+									<%=dossierFileNo %><br>
+								<%
+							}
+						%>
 					</div>
 				</div>
 				
