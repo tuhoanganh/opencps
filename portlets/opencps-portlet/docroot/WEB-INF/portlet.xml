@@ -1041,7 +1041,6 @@
 		</security-role-ref>
 	</portlet>
 
-
 	<portlet>
 		<portlet-name>1001</portlet-name>
 		<display-name>dashboard_custom</display-name>
@@ -1119,10 +1118,44 @@
 			<role-name>user</role-name>
 		</security-role-ref>
 	</portlet>
+	
+	<portlet>
+		<portlet-name>32</portlet-name>
+		<display-name>Statistics</display-name>
+		<portlet-class>
+			org.opencps.statisticsmgt.portlet.StatisticsMgtAdminPortlet
+		</portlet-class>
+		<init-param>
+			<name>view-template</name>
+			<value>/html/portlets/statisticsmgt/admin/view.jsp</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>Statistics</title>
+			<short-title>32</short-title>
+			<keywords></keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>power-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+	</portlet>
 	 
 	<public-render-parameter>
 		<identifier>active</identifier>
 		<qname>active</qname>
 	</public-render-parameter>
-	
+
 </portlet-app>
