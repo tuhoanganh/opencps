@@ -42,6 +42,7 @@ public class HolidayCheckUtils {
 
 	private static Log _log = LogFactoryUtil.getLog(HolidayCheckUtils.class);
 
+	
 	/**
 	 * @param startDate
 	 * @param endDate
