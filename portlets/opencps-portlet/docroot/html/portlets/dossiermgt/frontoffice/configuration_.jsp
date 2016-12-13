@@ -1,4 +1,5 @@
 
+<%@page import="org.opencps.util.PortletUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -81,6 +82,10 @@
 	}catch(Exception e){
 		
 	}
+	
+	List<DictItem> dictItems = PortletUtil.getDictItemInUseByCode(themeDisplay.getScopeGroupId(), 
+			PortletPropsValues.DATAMGT_MASTERDATA_SERVICE_DOMAIN, 
+			PortletConstants.TREE_VIEW_DEFAULT_ITEM_CODE);
 %>
 
 
@@ -221,7 +226,7 @@
 					<aui:select name="war_opencpsportlet_26_cfg" id="war_opencpsportlet_26_cfg">
 						<aui:option selected="<%= Validator.isNull(war_opencpsportlet_26_cfg)  %>" value=""> </aui:option>
 						<%
-							for (Layout lout : pubLayouts) {
+							for (Layout lout : publicLayouts) {
 						%>
 							<aui:option selected="<%= war_opencpsportlet_26_cfg.equals(String.valueOf(lout.getPlid())) %>" value="<%= lout.getPlid() %>"><%= lout.getName(locale) %></aui:option>
 						<%

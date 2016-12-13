@@ -30,7 +30,7 @@ import org.opencps.processmgt.model.impl.ProcessWorkflowImpl;
 import org.opencps.processmgt.service.ActionHistoryLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessStepLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
-
+import org.opencps.processmgt.util.OutDateStatus;
 import org.opencps.util.DateTimeUtil;
 
 import com.liferay.portal.kernel.exception.PortalException;
@@ -44,6 +44,41 @@ public class HolidayCheckUtils {
 
 	private static Log _log = LogFactoryUtil.getLog(HolidayCheckUtils.class);
 
+	public static OutDateStatus checkActionDateOverStatus(Date startDate,
+			Date endDate, int daysDuration) {
+
+		OutDateStatus outDateStatus = new OutDateStatus();
+		long dateOverNumbers = 0;
+
+		if (daysDuration > 0) {
+
+			Calendar endDayCal = Calendar.getInstance();
+			
+			endDayCal.setTime(endDate);
+			
+			Calendar endDateMax = HolidayUtils.getEndDate(startDate,
+					daysDuration);
+
+			long endDay = endDayCal.getTimeInMillis();
+			long endDayMax = endDateMax.getTimeInMillis();
+
+			dateOverNumbers = endDayMax - endDay;
+			
+			dateOverNumbers = dateOverNumbers / (24 * 60 * 60 * 1000);
+
+			if (dateOverNumbers > 0) {
+				outDateStatus.setIsOutDate(false);
+				outDateStatus.setDaysOutdate(dateOverNumbers);
+				return outDateStatus;
+			} else if (dateOverNumbers < 0) {
+				outDateStatus.setIsOutDate(true);
+				outDateStatus.setDaysOutdate(Math.abs(dateOverNumbers));
+				return outDateStatus;
+			}
+		}
+		outDateStatus.setDaysOutdate(0);
+		return outDateStatus;
+	}
 	/**
 	 * @param startDate
 	 * @param endDate
