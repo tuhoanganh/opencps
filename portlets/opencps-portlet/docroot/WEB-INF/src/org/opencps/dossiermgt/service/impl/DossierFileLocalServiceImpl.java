@@ -46,6 +46,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.OrderByComparatorFactory;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.User;
@@ -1503,6 +1504,15 @@ public class DossierFileLocalServiceImpl extends
 
 		return dossierFileFinder.searchDossierFileResult(0, dossierId, 2, 5, 6,
 				start, end, orderByComparator);
+	}
+	
+	public List<DossierFile> getDossierFileSuggesstion(
+			long dossierId, List<String> templateFileNos, long userId, int start, int end) 
+			throws SystemException {
+
+		String templateFileNosStr = StringUtil.merge(templateFileNos, "','");
+		
+		return dossierFileFinder.searchDossierFileSuggestion(dossierId, templateFileNosStr, userId, start, end);
 	}
 
 	public DossierFile getLastestDossierFile() throws SystemException {
