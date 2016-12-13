@@ -10,10 +10,13 @@ import java.util.List;
 import org.opencps.statisticsmgt.bean.DossierStatisticsBean;
 import org.opencps.statisticsmgt.model.DossiersStatistics;
 import org.opencps.statisticsmgt.model.impl.DossiersStatisticsImpl;
+import org.opencps.statisticsmgt.service.DossiersStatisticsLocalServiceUtil;
 import org.opencps.statisticsmgt.service.persistence.DossiersStatisticsFinder;
 
 import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Type;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -216,13 +219,23 @@ public class StatisticsUtil {
 	 */
 	public static List<DossiersStatistics> getDossiersStatistics(List data) {
 		List<DossiersStatistics> dossiersStatistics = new ArrayList<DossiersStatistics>();
-		HashMap<String, DossiersStatistics> map = new HashMap<String, DossiersStatistics>();
+		HashMap<String, DossiersStatistics> statisticMap = new HashMap<String, DossiersStatistics>();
+		HashMap<String, DossiersStatistics> statisticGroupByDomainMap = new HashMap<String, DossiersStatistics>();
+		HashMap<String, DossiersStatistics> statisticGroupByGovMap = new HashMap<String, DossiersStatistics>();
+		HashMap<String, DossiersStatistics> statisticGovTreeIndexMap = new HashMap<String, DossiersStatistics>();
+		HashMap<String, DossierStatisticsBean> beanMap = new HashMap<String, DossierStatisticsBean>();
+		HashMap<String, Integer> remainingNumberMap = new HashMap<String, Integer>();
+
 		if (data != null) {
 
 			for (int i = 0; i < data.size(); i++) {
 				DossierStatisticsBean statisticsBean = (DossierStatisticsBean) data
 						.get(i);
-				DossiersStatistics temp = new DossiersStatisticsImpl();
+
+				DossierStatisticsBean statisticsBeanTemp = new DossierStatisticsBean();
+
+				DossiersStatistics dossiersStatisticsTemp = new DossiersStatisticsImpl();
+
 				String key = statisticsBean.getMonth()
 						+ StringPool.DASH
 						+ statisticsBean.getYear()
@@ -236,57 +249,291 @@ public class StatisticsUtil {
 						+ StringPool.DASH
 						+ statisticsBean.getAdministrationLevel();
 
-				if (map.containsKey(key)) {
-					temp = map.get(key);
+				if (beanMap.containsKey(key)) {
+					statisticsBeanTemp = beanMap.get(key);
 				}
 
-				if (temp.getAdministrationLevel() > statisticsBean
-						.getAdministrationLevel()) {
-					temp.setAdministrationLevel(statisticsBean
-							.getAdministrationLevel());
+				if (statisticMap.containsKey(key)) {
+					dossiersStatisticsTemp = statisticMap.get(key);
 				}
+
+				/*
+				 * if (dossiersStatisticsTemp.getAdministrationLevel() >
+				 * statisticsBean .getAdministrationLevel()) {
+				 * dossiersStatisticsTemp .setAdministrationLevel(statisticsBean
+				 * .getAdministrationLevel()); }
+				 */
+
+				// Create Group (domain, gov, index != 0)
 
 				if (statisticsBean.getDelayingNumber() > 0) {
-					temp.setDelayingNumber(statisticsBean
+					dossiersStatisticsTemp.setDelayingNumber(statisticsBean
 							.getDelayingNumber());
 				}
 
 				if (statisticsBean.getOntimeNumber() > 0) {
-					temp.setOntimeNumber(statisticsBean
+					dossiersStatisticsTemp.setOntimeNumber(statisticsBean
 							.getOntimeNumber());
 				}
 
 				if (statisticsBean.getOvertimeNumber() > 0) {
-					temp.setOvertimeNumber(statisticsBean
+					dossiersStatisticsTemp.setOvertimeNumber(statisticsBean
 							.getOvertimeNumber());
 				}
 
 				if (statisticsBean.getProcessingNumber() > 0) {
-					temp.setProcessingNumber(statisticsBean
+					dossiersStatisticsTemp.setProcessingNumber(statisticsBean
 							.getProcessingNumber());
 				}
 
 				if (statisticsBean.getReceivedNumber() > 0) {
-					temp.setReceivedNumber(statisticsBean
+					dossiersStatisticsTemp.setReceivedNumber(statisticsBean
 							.getReceivedNumber());
 				}
 
 				if (Validator.isNotNull(statisticsBean.getDomainItemCode())) {
-					temp.setDomainCode(statisticsBean.getDomainItemCode());
+					dossiersStatisticsTemp.setDomainCode(statisticsBean
+							.getDomainItemCode());
 				}
 
 				if (Validator.isNotNull(statisticsBean.getGovItemCode())) {
-					temp.setGovAgencyCode(statisticsBean.getGovItemCode());
+					dossiersStatisticsTemp.setGovAgencyCode(statisticsBean
+							.getGovItemCode());
 				}
+
+				// ******************************************
+
+				if (statisticsBean.getDelayingNumber() > 0) {
+					statisticsBeanTemp.setDelayingNumber(statisticsBean
+							.getDelayingNumber());
+				}
+
+				if (statisticsBean.getOntimeNumber() > 0) {
+					statisticsBeanTemp.setOntimeNumber(statisticsBean
+							.getOntimeNumber());
+				}
+
+				if (statisticsBean.getOvertimeNumber() > 0) {
+					statisticsBeanTemp.setOvertimeNumber(statisticsBean
+							.getOvertimeNumber());
+				}
+
+				if (statisticsBean.getProcessingNumber() > 0) {
+					statisticsBeanTemp.setProcessingNumber(statisticsBean
+							.getProcessingNumber());
+				}
+
+				if (statisticsBean.getReceivedNumber() > 0) {
+					statisticsBeanTemp.setReceivedNumber(statisticsBean
+							.getReceivedNumber());
+				}
+
+				if (Validator.isNotNull(statisticsBean.getDomainItemCode())) {
+					statisticsBeanTemp.setDomainItemCode(statisticsBean
+							.getDomainItemCode());
+				}
+
+				if (Validator.isNotNull(statisticsBean.getGovItemCode())) {
+					statisticsBeanTemp.setGovItemCode(statisticsBean
+							.getGovItemCode());
+				}
+
 				// System.out.println(statisticsBean.getRemainingNumber());
 
-				map.put(key, temp);
+				int remainingNumber = dossiersStatisticsTemp
+						.getProcessingNumber()
+						+ dossiersStatisticsTemp.getDelayingNumber()
+						+ dossiersStatisticsTemp.getOntimeNumber()
+						+ dossiersStatisticsTemp.getOvertimeNumber()
+						- dossiersStatisticsTemp.getReceivedNumber();
+
+				dossiersStatisticsTemp.setRemainingNumber(remainingNumber);
+
+				String remainingNumberKey = String
+						.valueOf(dossiersStatisticsTemp.getMonth())
+						+ StringPool.DASH + dossiersStatisticsTemp.getYear();
+
+				remainingNumberMap.put(remainingNumberKey, remainingNumber);
+
+				statisticMap.put(key, dossiersStatisticsTemp);
+
+				beanMap.put(key, statisticsBeanTemp);
 
 			}
 
+			// Create Groups (domain, 0, index = 0)
+			for (String key : statisticMap.keySet()) {
+				DossiersStatistics dossiersStatisticsTemp = statisticMap
+						.get(key);
+				DossiersStatistics dossierStatistics = dossiersStatisticsTemp;
+				if (statisticGroupByDomainMap
+						.containsKey(dossiersStatisticsTemp.getDomainCode())) {
+
+					DossiersStatistics dossierStatisticsGroupByDomain = statisticGroupByDomainMap
+							.get(dossiersStatisticsTemp.getDomainCode());
+
+					dossierStatistics.setAdministrationLevel(0);
+					dossierStatistics.setDelayingNumber(dossierStatistics
+							.getDelayingNumber()
+							+ dossierStatisticsGroupByDomain
+									.getDelayingNumber());
+					dossierStatistics.setGovAgencyCode(StringPool.BLANK);
+					dossierStatistics.setOntimeNumber(dossierStatistics
+							.getOntimeNumber()
+							+ dossierStatisticsGroupByDomain.getOntimeNumber());
+
+					dossierStatistics.setOvertimeNumber(dossierStatistics
+							.getOvertimeNumber()
+							+ dossierStatisticsGroupByDomain
+									.getOvertimeNumber());
+					dossierStatistics.setProcessingNumber(dossierStatistics
+							.getProcessingNumber()
+							+ dossierStatisticsGroupByDomain
+									.getProcessingNumber());
+					dossierStatistics.setReceivedNumber(dossierStatistics
+							.getReceivedNumber()
+							+ dossierStatisticsGroupByDomain
+									.getReceivedNumber());
+
+					dossierStatistics.setRemainingNumber(dossierStatistics
+							.getRemainingNumber()
+							+ dossierStatisticsGroupByDomain
+									.getRemainingNumber());
+
+				}
+
+				statisticGroupByDomainMap.put(
+						dossiersStatisticsTemp.getDomainCode(),
+						dossierStatistics);
+
+				DossierStatisticsBean statisticsBean = beanMap.get(key);
+
+				statisticGovTreeIndexMap.put(statisticsBean.getGovTreeIndex(),
+						statisticMap.get(key));
+			}
+
+			// Create Groups (domain, gov, index = 0)
+			for (String treeIndex : statisticGovTreeIndexMap.keySet()) {
+				DossiersStatistics dossierStatistics = statisticGovTreeIndexMap
+						.get(treeIndex);
+				for (String treeIndexTemp : statisticGovTreeIndexMap.keySet()) {
+					if (treeIndexTemp.contains(treeIndex)
+							&& !treeIndexTemp.equals(treeIndex)) {
+						DossiersStatistics dossierStatisticsTemp = statisticGovTreeIndexMap
+								.get(treeIndex);
+						dossierStatistics.setAdministrationLevel(0);
+						dossierStatistics.setDelayingNumber(dossierStatistics
+								.getDelayingNumber()
+								+ dossierStatisticsTemp.getDelayingNumber());
+						// dossierStatistics.setGovAgencyCode(StringPool.BLANK);
+						dossierStatistics.setOntimeNumber(dossierStatistics
+								.getOntimeNumber()
+								+ dossierStatisticsTemp.getOntimeNumber());
+
+						dossierStatistics.setOvertimeNumber(dossierStatistics
+								.getOvertimeNumber()
+								+ dossierStatisticsTemp.getOvertimeNumber());
+						dossierStatistics.setProcessingNumber(dossierStatistics
+								.getProcessingNumber()
+								+ dossierStatisticsTemp.getProcessingNumber());
+						dossierStatistics.setReceivedNumber(dossierStatistics
+								.getReceivedNumber()
+								+ dossierStatisticsTemp.getReceivedNumber());
+
+						dossierStatistics.setRemainingNumber(dossierStatistics
+								.getRemainingNumber()
+								+ dossierStatisticsTemp.getRemainingNumber());
+
+					}
+				}
+
+				String key = dossierStatistics.getMonth()
+						+ StringPool.DASH
+						+ dossierStatistics.getYear()
+						+ StringPool.DASH
+						+ (Validator.isNotNull(dossierStatistics
+								.getGovAgencyCode()) ? dossierStatistics
+								.getGovAgencyCode() : StringPool.BLANK)
+						+ StringPool.DASH
+						+ (Validator.isNotNull(dossierStatistics
+								.getDomainCode()) ? dossierStatistics
+								.getDomainCode() : StringPool.BLANK)
+						+ StringPool.DASH
+						+ dossierStatistics.getAdministrationLevel();
+				statisticGroupByGovMap.put(key, dossierStatistics);
+			}
+		}
+
+		// Insert DB
+
+		try {
+			for (String key : statisticMap.keySet()) {
+				DossiersStatistics dossierStatistics = statisticMap.get(key);
+				dossierStatistics = DossiersStatisticsLocalServiceUtil
+						.addDossiersStatistics(dossierStatistics.getGroupId(),
+								dossierStatistics.getCompanyId(),
+								dossierStatistics.getUserId(),
+								dossierStatistics.getRemainingNumber(),
+								dossierStatistics.getReceivedNumber(),
+								dossierStatistics.getOntimeNumber(),
+								dossierStatistics.getOvertimeNumber(),
+								dossierStatistics.getProcessingNumber(),
+								dossierStatistics.getDelayingNumber(),
+								dossierStatistics.getMonth(),
+								dossierStatistics.getYear(),
+								dossierStatistics.getGovAgencyCode(),
+								dossierStatistics.getDomainCode(),
+								dossierStatistics.getAdministrationLevel());
+
+				dossiersStatistics.add(dossierStatistics);
+			}
+
+			for (String key : statisticGroupByDomainMap.keySet()) {
+				DossiersStatistics dossierStatistics = statisticMap.get(key);
+				dossierStatistics = DossiersStatisticsLocalServiceUtil
+						.addDossiersStatistics(dossierStatistics.getGroupId(),
+								dossierStatistics.getCompanyId(),
+								dossierStatistics.getUserId(),
+								dossierStatistics.getRemainingNumber(),
+								dossierStatistics.getReceivedNumber(),
+								dossierStatistics.getOntimeNumber(),
+								dossierStatistics.getOvertimeNumber(),
+								dossierStatistics.getProcessingNumber(),
+								dossierStatistics.getDelayingNumber(),
+								dossierStatistics.getMonth(),
+								dossierStatistics.getYear(),
+								dossierStatistics.getGovAgencyCode(),
+								dossierStatistics.getDomainCode(),
+								dossierStatistics.getAdministrationLevel());
+				dossiersStatistics.add(dossierStatistics);
+			}
+
+			for (String key : statisticGroupByGovMap.keySet()) {
+				DossiersStatistics dossierStatistics = statisticMap.get(key);
+				dossierStatistics = DossiersStatisticsLocalServiceUtil
+						.addDossiersStatistics(dossierStatistics.getGroupId(),
+								dossierStatistics.getCompanyId(),
+								dossierStatistics.getUserId(),
+								dossierStatistics.getRemainingNumber(),
+								dossierStatistics.getReceivedNumber(),
+								dossierStatistics.getOntimeNumber(),
+								dossierStatistics.getOvertimeNumber(),
+								dossierStatistics.getProcessingNumber(),
+								dossierStatistics.getDelayingNumber(),
+								dossierStatistics.getMonth(),
+								dossierStatistics.getYear(),
+								dossierStatistics.getGovAgencyCode(),
+								dossierStatistics.getDomainCode(),
+								dossierStatistics.getAdministrationLevel());
+				dossiersStatistics.add(dossierStatistics);
+			}
+		} catch (Exception e) {
+			_log.error(e);
 		}
 
 		return dossiersStatistics;
 	}
 
+	private static Log _log = LogFactoryUtil.getLog(StatisticsUtil.class
+			.getName());
 }
