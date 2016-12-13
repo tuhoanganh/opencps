@@ -19,8 +19,10 @@ package org.opencps.processmgt.util;
 import java.util.List;
 
 import org.opencps.processmgt.model.ActionHistory;
+import org.opencps.processmgt.model.ProcessOrder;
 import org.opencps.processmgt.model.ProcessWorkflow;
 import org.opencps.processmgt.service.ActionHistoryLocalServiceUtil;
+import org.opencps.processmgt.service.ProcessOrderLocalServiceUtil;
 import org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil;
 
 public class ProcessMgtUtil {
@@ -51,20 +53,30 @@ public class ProcessMgtUtil {
 			if (processWorkflowId > 0) {
 				ProcessWorkflow processWorkflow =
 				    ProcessWorkflowLocalServiceUtil.getProcessWorkflow(processWorkflowId);
-
+				
 				userId = processWorkflow.getActionUserId();
 
 				if (userId == 0) {
-					List<ActionHistory> actionList =
+					/*List<ActionHistory> actionList =
 					    ActionHistoryLocalServiceUtil.getActionHistoryRecent(
 					        processOrderId, preProcessStepId);
 
 					
 					if (actionList.size() != 0) {
 						userId = actionList.get(0).getActionUserId();
+					}*/
+					
+					ProcessOrder processOrder = ProcessOrderLocalServiceUtil.getProcessOrder(processOrderId);
+					
+					userId = processOrder.getAssignToUserId(); 
+					
+					if(userId == 0) {
+						userId = processOrder.getActionUserId();
 					}
+					
 				}
 			}
+			
 		}
 		catch (Exception e) {
 			userId = 0;
