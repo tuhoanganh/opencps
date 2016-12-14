@@ -119,7 +119,7 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier> implements
 	 */
 	public int countDossierByKeywordDomainAndStatus(long groupId,
 			String keyword, String domainCode, List<String> govAgencyCodes,
-			String dossierStatus) {
+			String dossierStatus, String dossierStatusList) {
 
 		String[] keywords = null;
 
@@ -135,7 +135,7 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier> implements
 		}
 
 		return countDossierByKeywordDomainAndStatus(groupId, keywords, keyword,
-				domainCode, govAgencyCodes, dossierStatus, andOperator);
+				domainCode, govAgencyCodes, dossierStatus, dossierStatusList, andOperator);
 	}
 
 	/**
@@ -148,7 +148,7 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier> implements
 	 */
 	private int countDossierByKeywordDomainAndStatus(long groupId,
 			String[] keywords, String keywordStr, String domainCode,
-			List<String> govAgencyCodes, String dossierStatus,
+			List<String> govAgencyCodes, String dossierStatus, String dossierStatusList,
 			boolean andOperator) {
 
 		Session session = null;
@@ -232,6 +232,15 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier> implements
 						StringPool.BLANK);
 			}
 
+			if (dossierStatusList.equals("0")) {
+				sql = StringUtil.replace(sql,
+						"AND (opencps_dossier.dossierStatus IN (?))",
+						StringPool.BLANK);
+			}else{
+				sql = StringUtil.replace(sql, "AND (opencps_dossier.dossierStatus IN (?))",
+						"AND (opencps_dossier.dossierStatus IN ('" + dossierStatusList.replaceAll(",", "','") + "'))");
+			}
+			
 			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
 
 			SQLQuery q = session.createSQLQuery(sql);
@@ -458,7 +467,7 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier> implements
 	 */
 	public List<Dossier> searchDossierByKeywordDomainAndStatus(long groupId,
 			String keyword, String domainCode, List<String> govAgencyCodes,
-			String dossierStatus, int start, int end, OrderByComparator obc) {
+			String dossierStatus, String dossierStatusList, int start, int end, OrderByComparator obc) {
 
 		boolean andOperator = false;
 		String[] keywords = null;
@@ -469,7 +478,7 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier> implements
 			andOperator = true;
 		}
 		return searchDossierByKeywordDomainAndStatus(groupId, keywords,
-				keyword, domainCode, govAgencyCodes, dossierStatus, start, end,
+				keyword, domainCode, govAgencyCodes, dossierStatus, dossierStatusList, start, end,
 				obc, andOperator);
 	}
 
@@ -486,7 +495,7 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier> implements
 	 */
 	private List<Dossier> searchDossierByKeywordDomainAndStatus(long groupId,
 			String[] keywords, String keywordStr, String domainCode,
-			List<String> govAgencyCodes, String dossierStatus, int start,
+			List<String> govAgencyCodes, String dossierStatus, String dossierStatusList, int start,
 			int end, OrderByComparator obc, boolean andOperator) {
 
 		Session session = null;
@@ -570,6 +579,16 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier> implements
 						StringPool.BLANK);
 			}
 
+			if (dossierStatusList.equals("0")) {
+				sql = StringUtil.replace(sql,
+						"AND (opencps_dossier.dossierStatus IN (?))",
+						StringPool.BLANK);
+			}else{
+				
+				sql = StringUtil.replace(sql, "AND (opencps_dossier.dossierStatus IN (?))",
+						"AND (opencps_dossier.dossierStatus IN ('" + dossierStatusList.replaceAll(",", "','") + "'))");
+			}
+			
 			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
 
 			sql = CustomSQLUtil.replaceOrderBy(sql, obc);

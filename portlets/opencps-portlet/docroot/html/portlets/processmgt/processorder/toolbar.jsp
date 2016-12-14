@@ -68,6 +68,10 @@
 		
 	}catch(Exception e){}
 	
+	int colWidth = 25;
+	if(!todolistDisplayStyle.equals("treemenu_left")){
+		colWidth = 20;
+	}
 %>
 <liferay-portlet:renderURL varImpl="searchURL" portletName="<%=WebKeys.PROCESS_ORDER_PORTLET %>">
 	<liferay-portlet:param name="tabs1" value="<%=tabs1 %>"/>
@@ -105,27 +109,28 @@
 			<aui:form action="<%= searchURL %>" method="post" name="fmSearch">
 			<liferay-portlet:renderURLParams varImpl="searchURL" />
 				<aui:row>
-					<aui:col width="20" cssClass="search-col">
-						<c:choose>
-							<c:when test="<%=!todolistDisplayStyle.equals(\"treemenu_left\") %>">
+					<c:choose>
+						<c:when test="<%=!todolistDisplayStyle.equals(\"treemenu_left\") %>">
+							<aui:col width="<%=colWidth %>" cssClass="search-col div100">
 								<datamgt:ddr 
 									depthLevel="1" 
 									dictCollectionCode="DOSSIER_SUB_STATUS" 
 									showLabel="<%=false%>"
-									emptyOptionLabels="dossier-status"
+									emptyOptionLabels="filter-by-subStatus-left"
 									itemsEmptyOption="true"
 									itemNames="dossierSubStatus"
 									optionValueType="code"
 									selectedItems="<%=dossierSubStatus %>"
 									cssClass="search-input select-box"
 								/>
-							</c:when>
+							
+							</aui:col>
+						</c:when>
 							<c:otherwise>
 								<aui:input name="dossierSubStatus" type="hidden" value="<%=dossierSubStatus %>"></aui:input>
 							</c:otherwise>
-						</c:choose>
-					</aui:col>
-					<aui:col width="20" cssClass="search-col">
+					</c:choose>
+					<aui:col width="<%=colWidth %>" cssClass="search-col div100">
 						<aui:select 
 							name="processOrderStage" 
 							label="<%=StringPool.BLANK %>" 
@@ -138,7 +143,7 @@
 							<aui:option value="<%=true %>"><liferay-ui:message key="filter-process-order-stage-1"/></aui:option>
 						</aui:select>
 					</aui:col>
-					<aui:col width="20" cssClass="search-col">
+					<aui:col width="<%=colWidth %>" cssClass="search-col">
 						<aui:select 
 							name="serviceInfoId" 
 							label="<%=StringPool.BLANK %>" 
@@ -164,7 +169,7 @@
 						</aui:select>
 					</aui:col>
 				
-					<aui:col width="20" cssClass="search-col">
+					<aui:col width="<%=colWidth %>" cssClass="search-col">
 						<aui:select 
 							name="processStepId" 
 							label="<%=StringPool.BLANK %>" 
@@ -187,7 +192,7 @@
 							%>
 						</aui:select>
 					</aui:col>
-					<aui:col width="20" cssClass="search-col">
+					<aui:col width="<%=colWidth %>" cssClass="search-col">
 						<liferay-ui:input-search 
 							id="keywords1"
 							name="keywords"
@@ -234,6 +239,10 @@
 			alert('<%= UnicodeLanguageUtil.get(pageContext, "you-need-select-any-process-order-to-process") %>');
 			return;
 		}
+	});
+	
+	A.one('#<portlet:namespace />dossierSubStatus').on('change', function(){
+		submitForm(document.<portlet:namespace />fmSearch);
 	});
 	
 	Liferay.provide(window, '<portlet:namespace/>searchByProcecssStep', function(e) {

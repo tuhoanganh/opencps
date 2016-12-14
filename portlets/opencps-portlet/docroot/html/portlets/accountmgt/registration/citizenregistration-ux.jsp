@@ -253,7 +253,7 @@
 				
 				<aui:row>
 					<label class="control-label custom-lebel" for='<portlet:namespace/><%=CitizenDisplayTerms.CITIZEN_BIRTHDATE %>'>
-	 					<liferay-ui:message key="birth-date-full"/>
+	 					<liferay-ui:message key="birth-date-full"/> <span style="color:red">*</span>
 	 				</label>
 	 				<liferay-ui:input-date 
 	 					nullable="true"
