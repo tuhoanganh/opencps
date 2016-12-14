@@ -21,18 +21,13 @@
 <%@page import="org.opencps.processmgt.model.ProcessOrder"%>
 <%@page import="org.opencps.dossiermgt.model.Dossier"%>
 <%@page import="org.opencps.dossiermgt.model.DossierPart"%>
-<%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
 <%@page import="org.opencps.processmgt.util.ProcessUtils"%>
 
 <%@ include file="../init.jsp"%>
 
 <%
 	ProcessOrder processOrder = (ProcessOrder)request.getAttribute(WebKeys.PROCESS_ORDER_ENTRY);
-	ProcessStep processStep = (ProcessStep)request.getAttribute(WebKeys.PROCESS_STEP_ENTRY);
 	Dossier dossier = (Dossier)request.getAttribute(WebKeys.DOSSIER_ENTRY);
-	ServiceProcess serviceProcess = (ServiceProcess)request.getAttribute(WebKeys.SERVICE_PROCESS_ENTRY);
-	ServiceInfo serviceInfo = (ServiceInfo)request.getAttribute(WebKeys.SERVICE_INFO_ENTRY);
-	ServiceConfig serviceConfig = (ServiceConfig)request.getAttribute(WebKeys.SERVICE_CONFIG_ENTRY);
 	
 	String backURL = ParamUtil.getString(request, "backURL");
 %>
@@ -110,8 +105,6 @@
 			</div>
 		</aui:col>
 	</aui:row>
-	
-	
 </div>
 
 

@@ -171,7 +171,7 @@ public class ConfigurationProcessOrderImpl implements ConfigurationAction {
 		String processOrderDetailPage = ParamUtil.getString(actionRequest,
 				"processOrderDetailPage");
 
-		preferences.setValue("reportTypes", processOrderDetailPage);
+		preferences.setValue("processOrderDetailPage", processOrderDetailPage);
 
 	}
 

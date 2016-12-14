@@ -284,7 +284,7 @@
 						>
 							<%
 								PortletURL processURL = renderResponse.createRenderURL();
-								processURL.setParameter("mvcPath", templatePath + "process_order_detail.jsp");
+								processURL.setParameter("mvcPath", templatePath + processOrderDetailPage +".jsp");
 								processURL.setParameter(ProcessOrderDisplayTerms.PROCESS_ORDER_ID, String.valueOf(processOrder.getProcessOrderId()));
 								processURL.setParameter("backURL", currentURL);
 								processURL.setParameter("isEditDossier", (processOrder.isReadOnly() || (processOrder.getAssignToUsesrId() != 0 &&  processOrder.getAssignToUsesrId() != user.getUserId())) ? String.valueOf(false) : String.valueOf(true));

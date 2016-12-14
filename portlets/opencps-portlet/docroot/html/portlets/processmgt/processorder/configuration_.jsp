@@ -285,10 +285,10 @@
 				<aui:row>
 					<aui:select name="processOrderDetailPage" id="processOrderDetailPage">
 						<aui:option value="process_order_detail"
-							selected="<%=processOrderDetailPage.equals("process_order_detail") %>"
+							selected='<%=processOrderDetailPage.equals("process_order_detail") %>'
 						>process_order_detail</aui:option>
 						<aui:option value="process_order_detail_all_tab"
-							selected="<%=processOrderDetailPage.equals("process_order_detail_all_tab") %>"
+							selected='<%=processOrderDetailPage.equals("process_order_detail_all_tab") %>'
 						>process_order_detail_all_tab</aui:option>
 					</aui:select>
 				</aui:row>
