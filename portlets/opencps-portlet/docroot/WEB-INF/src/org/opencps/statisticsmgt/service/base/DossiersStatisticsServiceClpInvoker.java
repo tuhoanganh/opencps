@@ -31,6 +31,12 @@ public class DossiersStatisticsServiceClpInvoker {
 		_methodName27 = "setBeanIdentifier";
 
 		_methodParameterTypes27 = new String[] { "java.lang.String" };
+
+		_methodName32 = "getDossiersStatisticsByGC_DC_Y";
+
+		_methodParameterTypes32 = new String[] {
+				"java.lang.String", "java.lang.String", "int"
+			};
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -47,6 +53,13 @@ public class DossiersStatisticsServiceClpInvoker {
 			return null;
 		}
 
+		if (_methodName32.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes32, parameterTypes)) {
+			return DossiersStatisticsServiceUtil.getDossiersStatisticsByGC_DC_Y((java.lang.String)arguments[0],
+				(java.lang.String)arguments[1],
+				((Integer)arguments[2]).intValue());
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -54,4 +67,6 @@ public class DossiersStatisticsServiceClpInvoker {
 	private String[] _methodParameterTypes26;
 	private String _methodName27;
 	private String[] _methodParameterTypes27;
+	private String _methodName32;
+	private String[] _methodParameterTypes32;
 }

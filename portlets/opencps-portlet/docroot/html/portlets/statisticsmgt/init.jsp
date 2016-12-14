@@ -1,3 +1,4 @@
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -16,6 +17,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+<%@page import="java.util.Calendar"%>
+<%@page import="java.util.Date"%>
 
 <%@ include file="/init.jsp" %>
+
+<%
+	Date now = new Date();
+	Calendar calendar = Calendar.getInstance();
+	calendar.setTime(now);
+	
+	int currentMonth = calendar.get(Calendar.MONTH);
+	int currentYear = calendar.get(Calendar.YEAR);
+%>
 

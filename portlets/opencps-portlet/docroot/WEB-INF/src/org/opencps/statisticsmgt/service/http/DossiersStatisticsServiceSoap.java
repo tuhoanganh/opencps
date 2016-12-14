@@ -14,6 +14,13 @@
 
 package org.opencps.statisticsmgt.service.http;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+
+import org.opencps.statisticsmgt.service.DossiersStatisticsServiceUtil;
+
+import java.rmi.RemoteException;
+
 /**
  * Provides the SOAP utility for the
  * {@link org.opencps.statisticsmgt.service.DossiersStatisticsServiceUtil} service utility. The
@@ -55,4 +62,29 @@ package org.opencps.statisticsmgt.service.http;
  * @generated
  */
 public class DossiersStatisticsServiceSoap {
+	/**
+	* @param govAgencyCode
+	* @param domainCode
+	* @param year
+	* @return
+	* @throws SystemException
+	*/
+	public static org.opencps.statisticsmgt.model.DossiersStatisticsSoap[] getDossiersStatisticsByGC_DC_Y(
+		java.lang.String govAgencyCode, java.lang.String domainCode, int year)
+		throws RemoteException {
+		try {
+			java.util.List<org.opencps.statisticsmgt.model.DossiersStatistics> returnValue =
+				DossiersStatisticsServiceUtil.getDossiersStatisticsByGC_DC_Y(govAgencyCode,
+					domainCode, year);
+
+			return org.opencps.statisticsmgt.model.DossiersStatisticsSoap.toSoapModels(returnValue);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	private static Log _log = LogFactoryUtil.getLog(DossiersStatisticsServiceSoap.class);
 }
