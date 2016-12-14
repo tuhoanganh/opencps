@@ -95,6 +95,54 @@ public class SignatureUtil {
 
 		return pdfSigner;
 	}
+	
+	/**
+	 * @param path
+	 * @return
+	 * @throws Exception
+	 */
+	public static String verifyPdfSignature(String path) throws Exception {
+
+		PdfContent pdfcontent = new PdfContent(path);
+		Signer signer = new Signer();
+		StringBuffer buffer = new StringBuffer();
+		if (signer.verify(pdfcontent)) {
+			ArrayList<SignerInfo> signerInfos = signer
+					.getSignatureInfos(pdfcontent);
+			for (Iterator<SignerInfo> iterator = signerInfos.iterator(); iterator
+					.hasNext();) {
+				SignerInfo info = iterator.next();
+
+				buffer.append(info.toJSON());
+			}
+		}
+
+		return buffer.toString();
+	}
+
+	/**
+	 * @param path
+	 * @return
+	 * @throws Exception
+	 */
+	public static String verifyDocxSignature(String path) throws Exception {
+
+		DocContent doccontent = new DocContent(path);
+		Signer signer = new Signer();
+		StringBuffer buffer = new StringBuffer();
+		if (signer.verify(doccontent)) {
+			ArrayList<SignerInfo> signerInfos = signer
+					.getSignatureInfos(doccontent);
+			for (Iterator<SignerInfo> iterator = signerInfos.iterator(); iterator
+					.hasNext();) {
+				SignerInfo info = iterator.next();
+
+				buffer.append(info.toJSON());
+			}
+		}
+
+		return buffer.toString();
+	}
 
 	/**
 	 * @param pdfSigner
@@ -114,5 +162,7 @@ public class SignatureUtil {
 
 	private static Log _log =
 		LogFactoryUtil.getLog(SignatureUtil.class.getName());
+	
+	
 
 }
