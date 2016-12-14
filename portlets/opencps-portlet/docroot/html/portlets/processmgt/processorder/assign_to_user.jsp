@@ -727,7 +727,7 @@
 	 									alert('<%=LanguageUtil.get(pageContext, "signer-error") %>');
 	 					            }
 								}else{
-									alert(msg);
+									alert('<%=LanguageUtil.get(pageContext, "signer-error") %>');
 								}
 					        	
 					        } else {

@@ -45,7 +45,7 @@
 
 <liferay-ui:header
 	backURL="<%= backURL %>"
-	title="process-order"
+	title=" "
 />
 
 <div class="ocps-history-process-bound-navigator">

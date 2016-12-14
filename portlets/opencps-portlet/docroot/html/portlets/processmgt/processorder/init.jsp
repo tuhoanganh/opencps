@@ -49,5 +49,5 @@
 	
 	double imageZoom = GetterUtil.getDouble(preferences.getValue("imageZoom", "1.0"), 1.0);
 
-	boolean hiddenTreeNodeEqualNone = GetterUtil.getBoolean(preferences.getValue("hiddenTreeNodeEqualNone", "false"), false);
+	boolean hiddenTreeNodeEqualNone = GetterUtil.getBoolean(preferences.getValue("hiddenTreeNodeEqualNone", "false"));
 %>

@@ -1,4 +1,5 @@
 
+<%@page import="org.opencps.processmgt.permissions.ProcessOrderPermission"%>
 <%@page import="java.util.Set"%>
 <%@page import="java.util.HashSet"%>
 <%@page import="org.opencps.util.PortletConstants"%>
@@ -57,7 +58,7 @@
 	
 	int totalCount = 0;
 	
-	RowChecker rowChecker = new RowChecker(liferayPortletResponse);
+	RowChecker rowChecker = null;
 	
 	List<String> headerNames = new ArrayList<String>();
 	
@@ -90,6 +91,14 @@
 	iteratorURL.setParameter("processStepId", String.valueOf(processStepId));
 	iteratorURL.setParameter("dossierSubStatus", dossierSubStatus);
 	iteratorURL.setParameter("processOrderStage", processOrderStage);
+	
+	if(ProcessOrderPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ASSIGN_PROCESS_ORDER) && 
+			tabs1.equals(ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS) &&
+			serviceInfoId > 0 && processStepId > 0){
+		
+		rowChecker = new RowChecker(liferayPortletResponse);
+		
+	}
 %>
 
 <aui:row>
@@ -146,9 +155,9 @@
 			
 				<div class="opcs-serviceinfo-list-label">
 					<div class="title_box">
-					    <p class="file_manage_title ds"><liferay-ui:message key="title-danh-sach-process-order" /></p>
-						<p class="count"></p>
-					</div>
+				           <p class="file_manage_title ds"><liferay-ui:message key="title-danh-sach-process-order" /></p>
+				           <p class="count"></p>
+				    </div>
 				</div>
 				<liferay-ui:search-container 
 					searchContainer="<%= new ProcessOrderSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>"

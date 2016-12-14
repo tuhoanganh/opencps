@@ -236,6 +236,7 @@
 			//Overwrite function
 			alpacaSchema.postRender = function(control){
 				$(".saveForm").click(function(e) {
+					Liferay.Util.getOpener().Liferay.fire('turnOnOverlaymask');
 					var formData = control.getValue();
 					$("#<portlet:namespace />formData" ).val(JSON.stringify(formData));
 					
@@ -300,6 +301,7 @@
 		var success = '<%=success%>';
 		
 		if(success == 'true'){
+			
 			var data = {
 				'conserveHash': true
 			};
@@ -307,6 +309,7 @@
 			Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id' + '<portlet:namespace/>', data);
 			
 			<portlet:namespace/>createReport(dossierFileId);
+			Liferay.Util.getOpener().Liferay.fire('turnOffOverlaymask');
 		}
 	});
 	

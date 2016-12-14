@@ -114,6 +114,11 @@
 
 %>
 <div class="ocps-dossier-process">
+<aui:row cssClass="header-title custom-title">
+	<aui:col width="100">
+		<liferay-ui:message key="process"/>
+	</aui:col>
+</aui:row>
 	<table class="process-workflow-info">
 	  <tr class="odd">
 	    <td width="20%" class="opcs-dosier-process-key"><liferay-ui:message key="step-name"/></td>

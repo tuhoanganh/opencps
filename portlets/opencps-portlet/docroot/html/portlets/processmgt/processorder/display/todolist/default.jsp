@@ -1,4 +1,5 @@
 
+<%@page import="org.opencps.processmgt.permissions.ProcessOrderPermission"%>
 <%@page import="java.util.LinkedHashMap"%>
 <%@page import="java.util.HashSet"%>
 <%@page import="java.util.Set"%>
@@ -59,7 +60,7 @@
 	
 	int totalCount = 0;
 	
-	RowChecker rowChecker = new RowChecker(liferayPortletResponse);
+	RowChecker rowChecker = null;
 	
 	List<String> headerNames = new ArrayList<String>();
 	
@@ -73,8 +74,22 @@
 	
 	String processOrderStage = ParamUtil.getString(request, "processOrderStage", "false");
 	
+	String tabs1 = ParamUtil.getString(request, "tabs1", ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS);
+	
+	long serviceInfoId = ParamUtil.getLong(request, "serviceInfoId");
+	
+	long processStepId = ParamUtil.getLong(request, "processStepId");
+	
 	iteratorURL.setParameter("dossierSubStatus", dossierSubStatus);
 	iteratorURL.setParameter("processOrderStage", processOrderStage);
+	
+	if(ProcessOrderPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ASSIGN_PROCESS_ORDER) && 
+			tabs1.equals(ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS) &&
+			serviceInfoId > 0 && processStepId > 0){
+		
+		rowChecker = new RowChecker(liferayPortletResponse);
+		
+	}
 %>
 
 <c:if test="<%=stopRefresh %>">
@@ -102,10 +117,6 @@
 					<%
 						ProcessOrderSearchTerms searchTerms = (ProcessOrderSearchTerms)searchContainer.getSearchTerms();
 					
-						long serviceInfoId = searchTerms.getServiceInfoId();
-						
-						long processStepId = searchTerms.getProcessStepId();
-						
 						long assignToUserId = themeDisplay.getUserId();
 						try{
 							

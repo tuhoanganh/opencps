@@ -303,7 +303,7 @@
 		}
 		
 		if(success == 'true'){
-			$('iframe').parent().find('div.loadingmask').addClass('overlaymask-hidden');
+			Liferay.Util.getOpener().Liferay.fire('turnOffOverlaymask');
 			<portlet:namespace/>closeDialog();
 		}
 		
@@ -334,7 +334,7 @@
 					alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "overload-total-file-upload-size") %>' + ' ' + '<%=maxTotalUploadFileSize%>' + ' ' + '<%=maxTotalUploadFileSizeUnit%>');
 				}else 
 				{
-					$('iframe').parent().find('div.overlaymask-hidden').removeClass('overlaymask-hidden');
+					Liferay.Util.getOpener().Liferay.fire('turnOnOverlaymask');
 					submitForm(document.<portlet:namespace />fm);
 				}
 				

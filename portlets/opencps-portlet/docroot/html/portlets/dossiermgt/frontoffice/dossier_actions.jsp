@@ -129,8 +129,18 @@
 				<portlet:param name="isEditDossier"
 					value="<%=String.valueOf(true)%>" />
 			</portlet:renderURL>
-			<liferay-ui:icon cssClass="search-container-action fa edit"
-				image="edit" message="edit-on-action" url="<%=updateDossierURL.toString()%>" />
+			<c:choose>
+				<c:when test="<%=dossier.getDossierStatus().equals(
+						PortletConstants.DOSSIER_STATUS_WAITING) %>">
+					<liferay-ui:icon cssClass="search-container-action fa edit"
+					image="edit" message="edit-on-action" url="<%=updateDossierURL.toString() + \"#\" +renderResponse.getNamespace() +\"tab=\"+ renderResponse.getNamespace() + \"result\"%>" />
+				</c:when>
+				<c:otherwise>
+					<liferay-ui:icon cssClass="search-container-action fa edit"
+						image="edit" message="edit-on-action" url="<%=updateDossierURL.toString() %>" />
+				</c:otherwise>
+			</c:choose>
+			
 			<c:if
 				test="<%=dossier.getDossierStatus().equals(
 								PortletConstants.DOSSIER_STATUS_NEW)%>">
@@ -160,7 +170,7 @@
 				</portlet:actionURL>
 				<liferay-ui:icon cssClass="search-container-action fa forward"
 					image="reply" message="resend"
-					url="<%=updateDossierStatusURL.toString() + \"#\" +renderResponse.getNamespace() +\"tab=\"+ renderResponse.getNamespace() + \"result\"%>" />
+					url="<%=updateDossierStatusURL.toString()%>" />
 			</c:if>
 		</c:if>
 
