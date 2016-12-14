@@ -100,10 +100,12 @@ public class DossiersStatisticsModelImpl extends BaseModelImpl<DossiersStatistic
 	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.column.bitmask.enabled.org.opencps.statisticsmgt.model.DossiersStatistics"),
 			true);
-	public static long DOMAINCODE_COLUMN_BITMASK = 1L;
-	public static long MONTH_COLUMN_BITMASK = 2L;
-	public static long YEAR_COLUMN_BITMASK = 4L;
-	public static long DOSSIERSTATISTICID_COLUMN_BITMASK = 8L;
+	public static long ADMINISTRATIONLEVEL_COLUMN_BITMASK = 1L;
+	public static long DOMAINCODE_COLUMN_BITMASK = 2L;
+	public static long GOVAGENCYCODE_COLUMN_BITMASK = 4L;
+	public static long MONTH_COLUMN_BITMASK = 8L;
+	public static long YEAR_COLUMN_BITMASK = 16L;
+	public static long DOSSIERSTATISTICID_COLUMN_BITMASK = 32L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -528,7 +530,17 @@ public class DossiersStatisticsModelImpl extends BaseModelImpl<DossiersStatistic
 
 	@Override
 	public void setGovAgencyCode(String govAgencyCode) {
+		_columnBitmask |= GOVAGENCYCODE_COLUMN_BITMASK;
+
+		if (_originalGovAgencyCode == null) {
+			_originalGovAgencyCode = _govAgencyCode;
+		}
+
 		_govAgencyCode = govAgencyCode;
+	}
+
+	public String getOriginalGovAgencyCode() {
+		return GetterUtil.getString(_originalGovAgencyCode);
 	}
 
 	@JSON
@@ -565,7 +577,19 @@ public class DossiersStatisticsModelImpl extends BaseModelImpl<DossiersStatistic
 
 	@Override
 	public void setAdministrationLevel(int administrationLevel) {
+		_columnBitmask |= ADMINISTRATIONLEVEL_COLUMN_BITMASK;
+
+		if (!_setOriginalAdministrationLevel) {
+			_setOriginalAdministrationLevel = true;
+
+			_originalAdministrationLevel = _administrationLevel;
+		}
+
 		_administrationLevel = administrationLevel;
+	}
+
+	public int getOriginalAdministrationLevel() {
+		return _originalAdministrationLevel;
 	}
 
 	public long getColumnBitmask() {
@@ -676,7 +700,13 @@ public class DossiersStatisticsModelImpl extends BaseModelImpl<DossiersStatistic
 
 		dossiersStatisticsModelImpl._setOriginalYear = false;
 
+		dossiersStatisticsModelImpl._originalGovAgencyCode = dossiersStatisticsModelImpl._govAgencyCode;
+
 		dossiersStatisticsModelImpl._originalDomainCode = dossiersStatisticsModelImpl._domainCode;
+
+		dossiersStatisticsModelImpl._originalAdministrationLevel = dossiersStatisticsModelImpl._administrationLevel;
+
+		dossiersStatisticsModelImpl._setOriginalAdministrationLevel = false;
 
 		dossiersStatisticsModelImpl._columnBitmask = 0;
 	}
@@ -897,9 +927,12 @@ public class DossiersStatisticsModelImpl extends BaseModelImpl<DossiersStatistic
 	private int _originalYear;
 	private boolean _setOriginalYear;
 	private String _govAgencyCode;
+	private String _originalGovAgencyCode;
 	private String _domainCode;
 	private String _originalDomainCode;
 	private int _administrationLevel;
+	private int _originalAdministrationLevel;
+	private boolean _setOriginalAdministrationLevel;
 	private long _columnBitmask;
 	private DossiersStatistics _escapedModel;
 }

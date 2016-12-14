@@ -8,7 +8,7 @@
 	
 	<sql id="org.opencps.statisticsmgt.service.persistence.DossiersStatisticsFinder.[DATA-TYPES-0]">	
 		<![CDATA[
-			LONG
+			INTEGER
 		]]>
 	</sql>
 	
@@ -91,7 +91,7 @@
 		]]>
 	</sql>
 	
-	<sql id="org.opencps.statisticsmgt.service.persistence.DossiersStatisticsFinder.statistics">	
+	<sql id="org.opencps.statisticsmgt.service.persistence.DossiersStatisticsFinder.generalStatistics">	
 		<![CDATA[
 	    	SELECT 
 				$COLUMNS$

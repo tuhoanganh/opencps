@@ -35,6 +35,22 @@
             <finder-column name="month"></finder-column>
             <finder-column name="year"></finder-column>
         </finder>
+        <finder name="GC_DC" return-type="Collection">
+            <finder-column name="govAgencyCode" arrayable-operator="AND"></finder-column>
+            <finder-column name="domainCode" arrayable-operator="AND"></finder-column>
+        </finder>
+        <finder name="GC_DC_Y" return-type="Collection">
+            <finder-column name="govAgencyCode"></finder-column>
+            <finder-column name="domainCode"></finder-column>
+            <finder-column name="year"></finder-column>
+        </finder>
+        <finder name="GC_DC_M_Y_L" return-type="DossiersStatistics">
+            <finder-column name="govAgencyCode"></finder-column>
+            <finder-column name="domainCode"></finder-column>
+            <finder-column name="month"></finder-column>
+            <finder-column name="year"></finder-column>
+            <finder-column name="administrationLevel"></finder-column>
+        </finder>
     </entity>
     <entity name="GovagencyLevel" local-service="true" table="opencps_govagencylevel">
         <column name="govagencylevel" type="long" primary="true"></column>
