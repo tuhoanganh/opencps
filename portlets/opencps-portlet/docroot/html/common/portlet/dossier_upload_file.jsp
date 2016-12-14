@@ -116,9 +116,6 @@
 	
 	String maxTotalUploadFileSizeUnit = preferences.getValue("maxTotalUploadFileSizeUnit", PortletConstants.FileSizeUnit.MB.toString());
 	
-	System.out.println("=========== maxTotalUploadFileSize: "+maxTotalUploadFileSize);
-	System.out.println("=========== maxTotalUploadFileSizeUnit: "+maxTotalUploadFileSizeUnit);
-	
 	float maxUploadFileSize = GetterUtil.getFloat(preferences.getValue("maxUploadFileSize", String.valueOf(0)), 0);
 	
 	String maxUploadFileSizeUnit = preferences.getValue("maxUploadFileSizeUnit", PortletConstants.FileSizeUnit.MB.toString());
@@ -331,9 +328,6 @@
 			fileUploadSizeInByte = this.files[0].size;
 			totalUploadFileSizeInByte += fileUploadSizeInByte;
 		});
-		
-		console.log("======= maxTotalUploadFileSizeInByte: "+maxTotalUploadFileSizeInByte);
-		console.log("======= totalUploadFileSizeInByte: "+totalUploadFileSizeInByte);
 		
 		if(agreeButton) {
 			agreeButton.on('click', function() {
