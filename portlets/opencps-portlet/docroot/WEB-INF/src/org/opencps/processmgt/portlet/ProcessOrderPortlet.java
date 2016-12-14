@@ -1835,31 +1835,30 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			String pattern = ProcessUtils.getDossierPartPattern(dossierId,
 					fileGroupId, dossierPartId);
 			
-			long wfOutputId = ProcessUtils.getWfOutputPatternId(dossierId,
+			List<Long> wfOutputIds = ProcessUtils.getWfOutputPatternId(dossierId,
 					fileGroupId, dossierPartId);
 			
-			String resultPartNo = StringPool.BLANK;
-			
-			boolean isReset = false;
+			for(Long wfOutputId : wfOutputIds) {
+				String resultPartNo = StringPool.BLANK;
+				
+				boolean isReset = false;
 
-			if (Validator.isNotNull(formData)
-					&& formData
-							.contains(PortletConstants.DOSSIER_PART_RESULT_PATTERN_NO)
-					&& Validator.isNotNull(pattern)) {
-				
-				
-				
-				if(Validator.isNotNull(dossierFileLastest) && Validator.isNotNull(dossierFileLastest.getModifiedDate())) {
-					isReset = PortletUtil.isResetGenerateNumber(pattern, dossierFileLastest.getModifiedDate());
+				if (Validator.isNotNull(formData)
+						&& formData
+								.contains(PortletConstants.DOSSIER_PART_RESULT_PATTERN_NO)
+						&& Validator.isNotNull(pattern)) {
+					if(Validator.isNotNull(dossierFileLastest) && Validator.isNotNull(dossierFileLastest.getModifiedDate())) {
+						isReset = PortletUtil.isResetGenerateNumber(pattern, dossierFileLastest.getModifiedDate());
+					}
+					
+					resultPartNo = DossierNoGenerator.genaratorNoReceptionOption(
+							pattern, dossierId,
+							PortletConstants.DOSSIER_PART_RESULT_PATTERN, isReset, wfOutputId);
+					
+					formData = StringUtil.replace(formData,
+							PortletConstants.DOSSIER_PART_RESULT_PATTERN_NO,
+							resultPartNo);
 				}
-				
-				resultPartNo = DossierNoGenerator.genaratorNoReceptionOption(
-						pattern, dossierId,
-						PortletConstants.DOSSIER_PART_RESULT_PATTERN, isReset, wfOutputId);
-				
-				formData = StringUtil.replace(formData,
-						PortletConstants.DOSSIER_PART_RESULT_PATTERN_NO,
-						resultPartNo);
 			}
 
 			// if (dossierFileId == 0) {
