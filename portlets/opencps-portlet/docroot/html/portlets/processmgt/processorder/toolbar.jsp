@@ -105,7 +105,7 @@
 			<aui:form action="<%= searchURL %>" method="post" name="fmSearch">
 			<liferay-portlet:renderURLParams varImpl="searchURL" />
 				<aui:row>
-					<aui:col width="25" cssClass="search-col">
+					<aui:col width="20" cssClass="search-col">
 						<c:choose>
 							<c:when test="<%=!todolistDisplayStyle.equals(\"treemenu_left\") %>">
 								<datamgt:ddr 
@@ -125,8 +125,20 @@
 							</c:otherwise>
 						</c:choose>
 					</aui:col>
-				
-					<aui:col width="25" cssClass="search-col">
+					<aui:col width="20" cssClass="search-col">
+						<aui:select 
+							name="processOrderStage" 
+							label="<%=StringPool.BLANK %>" 
+							inlineField="<%=true %>" 
+							inlineLabel="left"
+							onChange='<%=renderResponse.getNamespace() + "searchByProcecssStep(this)"%>'
+							cssClass="search-input select-box"
+						>
+							<aui:option value="<%=false %>"><liferay-ui:message key="filter-process-order-stage-0"/></aui:option>
+							<aui:option value="<%=true %>"><liferay-ui:message key="filter-process-order-stage-1"/></aui:option>
+						</aui:select>
+					</aui:col>
+					<aui:col width="20" cssClass="search-col">
 						<aui:select 
 							name="serviceInfoId" 
 							label="<%=StringPool.BLANK %>" 
@@ -152,7 +164,7 @@
 						</aui:select>
 					</aui:col>
 				
-					<aui:col width="25" cssClass="search-col">
+					<aui:col width="20" cssClass="search-col">
 						<aui:select 
 							name="processStepId" 
 							label="<%=StringPool.BLANK %>" 
@@ -175,7 +187,7 @@
 							%>
 						</aui:select>
 					</aui:col>
-					<aui:col width="25" cssClass="search-col">
+					<aui:col width="20" cssClass="search-col">
 						<liferay-ui:input-search 
 							id="keywords1"
 							name="keywords"

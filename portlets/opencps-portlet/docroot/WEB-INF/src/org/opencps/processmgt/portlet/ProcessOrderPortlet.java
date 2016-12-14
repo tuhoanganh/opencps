@@ -2521,6 +2521,8 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				"processStepId");
 		String keywords = ParamUtil.getString(actionRequest, "keywords");
 
+		String processOrderStage = ParamUtil.getString(actionRequest, "processOrderStage", "false");
+		
 		String tabs1 = ParamUtil.getString(actionRequest, "tabs1");
 		
 		long counterVal = 0;
@@ -2534,7 +2536,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 				counterVal = ProcessOrderLocalServiceUtil.countProcessOrderKeyWords(serviceInfoId, processStepId, 
 						themeDisplay.getUserId(), themeDisplay.getUserId(), 
-						keywords,item.getItemCode());
+						keywords,item.getItemCode(), processOrderStage);
 
 			} 
 			obj.put("code", item.getItemCode());
