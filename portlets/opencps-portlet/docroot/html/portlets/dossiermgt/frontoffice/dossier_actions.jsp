@@ -160,7 +160,7 @@
 				</portlet:actionURL>
 				<liferay-ui:icon cssClass="search-container-action fa forward"
 					image="reply" message="resend"
-					url="<%=updateDossierStatusURL.toString()%>" />
+					url="<%=updateDossierStatusURL.toString() + \"#\" +renderResponse.getNamespace() +\"tab=\"+ renderResponse.getNamespace() + \"result\"%>" />
 			</c:if>
 		</c:if>
 
