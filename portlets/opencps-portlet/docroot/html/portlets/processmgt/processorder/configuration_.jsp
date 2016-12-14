@@ -23,7 +23,7 @@
 
 <%
 	String tabs2 = ParamUtil.getString(request, "tabs2", "todolist");
-	String tabs2Names = "todolist,justfinishedlist,processorder,digital-signature";
+	String tabs2Names = "todolist,justfinishedlist,processorder,digital-signature,process-order-detail-page";
 %>
 
 <liferay-portlet:renderURL portletConfiguration="true" var="configurationRenderURL">
@@ -276,6 +276,21 @@
 					<aui:col width="30">
 						<aui:input name="offsetY" value="<%=offsetY %>"/>
 					</aui:col>
+				</aui:row>
+			</aui:fieldset>
+		</c:when>
+		
+		<c:when test='<%=tabs2.equalsIgnoreCase("process-order-detail-page") %>'>
+			<aui:fieldset>
+				<aui:row>
+					<aui:select name="processOrderDetailPage" id="processOrderDetailPage">
+						<aui:option value="process_order_detail"
+							selected="<%=processOrderDetailPage.equals("process_order_detail") %>"
+						>process_order_detail</aui:option>
+						<aui:option value="process_order_detail_all_tab"
+							selected="<%=processOrderDetailPage.equals("process_order_detail_all_tab") %>"
+						>process_order_detail_all_tab</aui:option>
+					</aui:select>
 				</aui:row>
 			</aui:fieldset>
 		</c:when>

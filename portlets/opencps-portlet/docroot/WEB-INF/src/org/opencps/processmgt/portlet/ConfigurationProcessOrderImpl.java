@@ -69,6 +69,8 @@ public class ConfigurationProcessOrderImpl implements ConfigurationAction {
 			updateProcessOrder(preferences, actionRequest, actionResponse);
 		} else if (tabs2.equals("digital-signature")) {
 			updateDigitalSignature(preferences, actionRequest, actionResponse);
+		} else if (tabs2.equals("process-order-detail-page")) {
+			updateProcessOrderDetailPage(preferences, actionRequest, actionResponse);
 		}
 
 		preferences.store();
@@ -159,6 +161,17 @@ public class ConfigurationProcessOrderImpl implements ConfigurationAction {
 		preferences.setValue("offsetY", String.valueOf(offsetY));
 
 		preferences.setValue("imageZoom", String.valueOf(imageZoom));
+
+	}
+	
+	protected void updateProcessOrderDetailPage(PortletPreferences preferences,
+			ActionRequest actionRequest, ActionResponse actionResponse)
+			throws ReadOnlyException {
+		
+		String processOrderDetailPage = ParamUtil.getString(actionRequest,
+				"processOrderDetailPage");
+
+		preferences.setValue("reportTypes", processOrderDetailPage);
 
 	}
 

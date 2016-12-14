@@ -34,13 +34,7 @@
 	ServiceInfo serviceInfo = (ServiceInfo)request.getAttribute(WebKeys.SERVICE_INFO_ENTRY);
 	ServiceConfig serviceConfig = (ServiceConfig)request.getAttribute(WebKeys.SERVICE_CONFIG_ENTRY);
 	
-	//DossierPart dossierPart = (DossierPart)request.getAttribute(WebKeys.DOSSIER_PART_ENTRY);
-	
 	String backURL = ParamUtil.getString(request, "backURL");
-	
-	String[] processOrderSections = new String[]{"dossier_info", "dossier_content", "process", "history"};
-	
-	String[][] categorySections = {processOrderSections};
 %>
 
 <liferay-ui:header
@@ -64,33 +58,60 @@
 	
 	</liferay-util:buffer>
 	
-	<aui:form name="pofm" action="" method="post">
-	
-		<aui:model-context bean="<%= processOrder %>" model="<%= ProcessOrder.class %>" />
+	<aui:row>
+		<aui:col width="25">
+			<div style="margin-bottom: 25px;" class="opencps-searchcontainer-wrapper default-box-shadow radius8">
+				<p><aui:a href="#dossier-content"><%=LanguageUtil.get(pageContext, "dossier_content") %></aui:a></p>
+				<p><aui:a href="#dossier-info"><%=LanguageUtil.get(pageContext, "dossier-info") %></aui:a></p>
+				<p><aui:a href="#process"><%=LanguageUtil.get(pageContext, "process") %></aui:a></p>
+				<p><aui:a href="#history"><%=LanguageUtil.get(pageContext, "history") %></aui:a></p>
+			</div>
+		</aui:col>
 		
-		<aui:input 
-			name="redirectURL" 
-			type="hidden" 
-			value="<%= backURL%>"
-		/>
-		<aui:input 
-			name="returnURL" 
-			type="hidden" 
-			value="<%= currentURL%>"
-		/>
-		<%-- <div class="opencps-form-navigator-container">
-			<liferay-ui:form-navigator
-				backURL="<%= backURL %>"
-				categoryNames="<%= ProcessUtils._PROCESS_ORDER_CATEGORY_NAMES %>"
-				categorySections="<%= categorySections %>"
-				htmlBottom="<%= htmlBottom %>"
-				htmlTop="<%= htmlTop %>"
-				jspPath='<%=templatePath + "dossier/" %>'
-				showButtons="<%=false%>"
-				displayStyle="left-navigator"
-			/>
-		</div> --%>
-	</aui:form>
+		<aui:col width="75">
+			<div class="opencps-searchcontainer-wrapper default-box-shadow radius8">
+				<aui:form name="pofm" action="" method="post">
+				
+					<aui:model-context bean="<%= processOrder %>" model="<%= ProcessOrder.class %>" />
+					
+					<aui:input 
+						name="redirectURL" 
+						type="hidden" 
+						value="<%= backURL%>"
+					/>
+					<aui:input 
+						name="returnURL" 
+						type="hidden" 
+						value="<%= currentURL%>"
+					/>
+					
+					<div id="dossier-content">
+						<liferay-ui:panel title="dossier_content" collapsible="false" >
+							<liferay-util:include page='<%=templatePath + "/dossier/dossier_content.jsp" %>' servletContext="<%=application %>" />
+						</liferay-ui:panel>
+					</div>
+					<div id="dossier-info">
+						<liferay-ui:panel title="dossier-info" collapsible="false">
+							<liferay-util:include page='<%=templatePath + "/dossier/dossier_info.jsp" %>' servletContext="<%=application %>" />
+						</liferay-ui:panel>
+					</div>
+					<div id="process">
+						<liferay-ui:panel title="process" collapsible="false">
+							<liferay-util:include page='<%=templatePath + "/dossier/process.jsp" %>' servletContext="<%=application %>" />
+						</liferay-ui:panel>
+					</div>
+					<div id="history">
+						<liferay-ui:panel title="history" collapsible="false">
+							<liferay-util:include page='<%=templatePath + "/dossier/history.jsp" %>' servletContext="<%=application %>" />
+						</liferay-ui:panel>
+					</div>
+					
+				</aui:form>
+			</div>
+		</aui:col>
+	</aui:row>
+	
+	
 </div>
 
 

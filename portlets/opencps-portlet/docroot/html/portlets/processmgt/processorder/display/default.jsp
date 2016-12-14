@@ -48,7 +48,7 @@
 	}
 	
 	PortletURL iteratorURL = renderResponse.createRenderURL();
-	iteratorURL.setParameter("mvcPath", templatePath + "processordertodolist.jsp");
+	iteratorURL.setParameter("mvcPath", templatePath + processOrderDetailPage + ".jsp");
 	iteratorURL.setParameter("tabs1", ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS);
 	
 	List<ProcessOrderBean> processOrders =  new ArrayList<ProcessOrderBean>();

@@ -51,4 +51,6 @@
 	double imageZoom = GetterUtil.getDouble(preferences.getValue("imageZoom", "1.0"), 1.0);
 
 	boolean hiddenTreeNodeEqualNone = GetterUtil.getBoolean(preferences.getValue("hiddenTreeNodeEqualNone", "false"), false);
+	
+	String processOrderDetailPage = GetterUtil.getString(portletPreferences.getValue("processOrderDetailPage", "process_order_detail"));
 %>
