@@ -727,7 +727,7 @@
 	 									alert('<%=LanguageUtil.get(pageContext, "signer-error") %>');
 	 					            }
 								}else{
-									alert('<%=LanguageUtil.get(pageContext, "signer-error") %>');
+									alert('<%=LanguageUtil.get(pageContext, "signer-error-lien-he") %>');
 								}
 					        	
 					        } else {

@@ -89,6 +89,10 @@
 			<finder-column name="groupId"/>
 			<finder-column name="processStepId" arrayable-operator="OR"/>
 		</finder>
+		
+		<finder return-type="Collection" name="F_dossierSubStatus">
+			<finder-column name="dossierSubStatus"/>
+		</finder>
 	</entity>
 
 	<entity name="ProcessStepDossierPart" local-service="true" remote-service="true"

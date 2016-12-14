@@ -105,6 +105,9 @@
 			
 			AND 
 				(opencps_dossier.govAgencyCode IN (?))
+			
+			AND 
+				(opencps_dossier.dossierStatus IN (?))
 		]]>
 	</sql>	
 	
@@ -137,6 +140,8 @@
 			
 			AND 
 				(opencps_dossier.govAgencyCode IN (?))
+			AND 
+				(opencps_dossier.dossierStatus IN (?))
 		]]>
 	</sql>
 

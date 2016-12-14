@@ -89,13 +89,14 @@
 			scopeGroupId);
 
 %>
-<aui:row cssClass="header-title custom-title">
-	<aui:col width="100">
-		<liferay-ui:message key="dossier_part"/>
-	</aui:col>
-</aui:row>
 
 <div class="ocps-dossier-process">
+
+	<aui:row cssClass="header-title custom-title">
+		<aui:col width="100">
+			<liferay-ui:message key="dossier_part"/>
+		</aui:col>
+	</aui:row>
 
 	<div class="opencps dossiermgt dossier-part-row r-0">
 					

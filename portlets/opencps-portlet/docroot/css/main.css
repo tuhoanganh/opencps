@@ -98,3 +98,9 @@ top: 12px;
 .pdl20{
 	padding-left: 20px;
 }
+.div100 > div{
+	width: 100%;
+}
+.div100{
+	margin-left: 0 !important;
+}
