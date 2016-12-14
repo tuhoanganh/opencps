@@ -81,7 +81,7 @@ public class DossiersStatisticsFinderImpl extends
 
 	private static final String SQL_STATISTICS_DATA_TYPES_2 = DossiersStatisticsFinder.class
 			.getName() + ".[DATA-TYPES-2]";
-	
+
 	private static final String SQL_GENERAL_STATISTICS = DossiersStatisticsFinder.class
 			.getName() + ".generalStatistics";
 
@@ -90,8 +90,7 @@ public class DossiersStatisticsFinderImpl extends
 
 	private static final String SQL_STATISTICS_BY_GOVAGENCY = DossiersStatisticsFinder.class
 			.getName() + ".statisticsByGovagency";
-	
-	
+
 	/**
 	 * @param groupId
 	 * @param month
@@ -118,7 +117,7 @@ public class DossiersStatisticsFinderImpl extends
 
 			sql = StringUtil.replace(sql, "$FILTER$", definedCondition);
 
-			_log.info(sql);
+			// _log.info(sql);
 
 			String definedColumnDataTypes = CustomSQLUtil
 					.get(SQL_STATISTICS_DATA_TYPES_0);
@@ -148,37 +147,28 @@ public class DossiersStatisticsFinderImpl extends
 				qPos.add(year);
 			}
 
-			Iterator<Object[]> itr = (Iterator<Object[]>) QueryUtil.list(q,
-					getDialect(), QueryUtil.ALL_POS, QueryUtil.ALL_POS)
-					.iterator();
+			Iterator<Integer> itr = q.iterate();
 
 			List<DossierStatisticsBean> statisticsBeans = new ArrayList<DossierStatisticsBean>();
 
 			if (itr.hasNext()) {
-				while (itr.hasNext()) {
-					DossierStatisticsBean statisticsBean = new DossierStatisticsBean();
-					
-					statisticsBean.setMonth(month);
-					
-					statisticsBean.setYear(year);
+				Integer count = itr.next();
 
-					Object[] objects = itr.next();
+				DossierStatisticsBean statisticsBean = new DossierStatisticsBean();
 
-					if (objects.length == columnDataTypes.length) {
-						for (int i = 0; i < objects.length; i++) {
-							String columnName = columnNames[i];
-							String coulmnDataType = columnDataTypes[i];
-							Method method = StatisticsUtil.getMethod(
-									columnName, coulmnDataType, field);
-							if (method != null) {
-								method.invoke(statisticsBean, objects[i]);
-							}
+				statisticsBean.setMonth(month);
 
-						}
-					}
-
-					statisticsBeans.add(statisticsBean);
+				statisticsBean.setYear(year);
+				String columnName = columnNames[0];
+				String coulmnDataType = columnDataTypes[0];
+				Method method = StatisticsUtil.getMethod(columnName,
+						coulmnDataType, field);
+				if (method != null) {
+					method.invoke(statisticsBean, count.intValue());
 				}
+				statisticsBean.setAdministrationLevel(0);
+
+				statisticsBeans.add(statisticsBean);
 			}
 
 			return statisticsBeans;
@@ -216,7 +206,7 @@ public class DossiersStatisticsFinderImpl extends
 
 			sql = StringUtil.replace(sql, "$FILTER$", definedCondition);
 
-			_log.info(sql);
+			// _log.info(sql);
 
 			String definedColumnDataTypes = CustomSQLUtil
 					.get(SQL_STATISTICS_DATA_TYPES_1);
@@ -255,9 +245,9 @@ public class DossiersStatisticsFinderImpl extends
 			if (itr.hasNext()) {
 				while (itr.hasNext()) {
 					DossierStatisticsBean statisticsBean = new DossierStatisticsBean();
-					
+
 					statisticsBean.setMonth(month);
-					
+
 					statisticsBean.setYear(year);
 
 					Object[] objects = itr.next();
@@ -356,16 +346,22 @@ public class DossiersStatisticsFinderImpl extends
 
 					Object[] objects = itr.next();
 
+					statisticsBean.setMonth(month);
+
+					statisticsBean.setYear(year);
+
 					if (objects.length == columnDataTypes.length) {
 						for (int i = 0; i < objects.length; i++) {
 							String columnName = columnNames[i];
 							String coulmnDataType = columnDataTypes[i];
 							Method method = StatisticsUtil.getMethod(
 									columnName, coulmnDataType, field);
-							method.invoke(statisticsBean, objects[i]);
+							if (method != null) {
+								method.invoke(statisticsBean, objects[i]);
+							}
+
 						}
 					}
-
 					statisticsBeans.add(statisticsBean);
 				}
 			}

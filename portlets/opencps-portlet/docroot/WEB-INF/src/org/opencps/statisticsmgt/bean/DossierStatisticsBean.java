@@ -108,6 +108,34 @@ public class DossierStatisticsBean {
 		this._year = year;
 	}
 
+	
+	public long getGroupId() {
+		return _groupId;
+	}
+
+	public void setGroupId(long groupId) {
+		this._groupId = groupId;
+	}
+
+	public long getCompanyId() {
+		return _companyId;
+	}
+
+	public void setCompanyId(long companyId) {
+		this._companyId = companyId;
+	}
+
+	public long getUserId() {
+		return _userId;
+	}
+
+	public void setUserId(long userId) {
+		this._userId = userId;
+	}
+
+	private long _groupId;
+	private long _companyId;
+	private long _userId;
 	private String _govItemCode;
 	private String _govTreeIndex;
 	private String _domainItemCode;

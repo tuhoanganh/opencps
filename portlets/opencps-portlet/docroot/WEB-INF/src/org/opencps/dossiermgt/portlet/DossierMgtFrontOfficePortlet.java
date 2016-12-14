@@ -106,6 +106,7 @@ import org.opencps.util.PortletConstants.FileSizeUnit;
 import org.opencps.util.PortletPropsValues;
 import org.opencps.util.PortletUtil;
 import org.opencps.util.PortletUtil.SplitDate;
+import org.opencps.util.SignatureUtil;
 import org.opencps.util.WebKeys;
 
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
@@ -252,6 +253,19 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 					inputStream, accountBean, fileTypes, maxUploadFileSize,
 					maxUploadFileSizeUnit, maxTotalUploadFileSize,
 					maxTotalUploadFileSizeUnit);
+			
+			String filePath = uploadPortletRequest.getFile(
+					DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD).getPath();
+			
+			File file = new File(filePath);
+			
+			System.out.println("#########################################" + filePath);
+			
+			System.out.println(file.getPath());
+
+			String signInfo = SignatureUtil.verifyPdfSignature(filePath);
+			
+			System.out.println(signInfo);
 
 			ServiceContext serviceContext = ServiceContextFactory
 					.getInstance(uploadPortletRequest);

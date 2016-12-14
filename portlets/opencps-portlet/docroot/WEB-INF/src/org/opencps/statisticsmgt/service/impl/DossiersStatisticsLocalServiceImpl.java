@@ -80,6 +80,7 @@ public class DossiersStatisticsLocalServiceImpl extends
 
 		long dossierStatisticId = CounterLocalServiceUtil
 				.increment(DossiersStatistics.class.getName());
+
 		DossiersStatistics dossiersStatistics = dossiersStatisticsPersistence
 				.create(dossierStatisticId);
 
@@ -97,10 +98,26 @@ public class DossiersStatisticsLocalServiceImpl extends
 		dossiersStatistics.setOvertimeNumber(overtimeNumber);
 		dossiersStatistics.setProcessingNumber(processingNumber);
 		dossiersStatistics.setReceivedNumber(receivedNumber);
+		dossiersStatistics.setRemainingNumber(remainingNumber);
 		dossiersStatistics.setUserId(userId);
 		dossiersStatistics.setYear(year);
 
 		return dossiersStatisticsPersistence.update(dossiersStatistics);
+	}
+
+	/**
+	 * @param groupId
+	 * @param month
+	 * @param year
+	 * @param field
+	 * @param delayStatus
+	 * @return
+	 * @throws SystemException
+	 */
+	public List generalStatistics(long groupId, int month, int year,
+			String field, int delayStatus) throws SystemException {
+		return dossiersStatisticsFinder.generalStatistics(groupId, month, year,
+				field, delayStatus);
 	}
 
 	/**
@@ -143,6 +160,37 @@ public class DossiersStatisticsLocalServiceImpl extends
 		return dossiersStatisticsPersistence.findByDC_M_Y(domainCode, month,
 				year);
 	}
+	
+	/**
+	 * @param govAgencyCode
+	 * @param domainCode
+	 * @param month
+	 * @param year
+	 * @return
+	 * @throws SystemException
+	 * @throws NoSuchDossiersStatisticsException
+	 */
+	public DossiersStatistics getDossiersStatisticsByGC_DC_M_Y_L(
+			String govAgencyCode, String domainCode, int month, int year, int administrationLevel)
+			throws SystemException, NoSuchDossiersStatisticsException {
+		return dossiersStatisticsPersistence.findByGC_DC_M_Y_L(govAgencyCode,
+				domainCode, month, year, administrationLevel);
+	}
+
+	/**
+	 * @param govAgencyCode
+	 * @param domainCode
+	 * @param year
+	 * @return
+	 * @throws SystemException
+	 */
+	public List<DossiersStatistics> getDossiersStatisticsByGC_DC_Y(
+			String govAgencyCode, String domainCode, int year) throws SystemException {
+		return dossiersStatisticsPersistence.findByGC_DC_Y(govAgencyCode,
+				domainCode, year);
+	}
+	
+	
 
 	/**
 	 * @param dossierStatisticId
@@ -172,6 +220,7 @@ public class DossiersStatisticsLocalServiceImpl extends
 		dossiersStatistics.setOvertimeNumber(overtimeNumber);
 		dossiersStatistics.setProcessingNumber(processingNumber);
 		dossiersStatistics.setReceivedNumber(receivedNumber);
+		dossiersStatistics.setRemainingNumber(remainingNumber);
 
 		return dossiersStatisticsPersistence.update(dossiersStatistics);
 	}
