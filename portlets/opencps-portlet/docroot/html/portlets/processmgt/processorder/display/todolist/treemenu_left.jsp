@@ -82,8 +82,14 @@
 	arrayParam.put("serviceInfoId", (serviceInfoId > 0) ? String.valueOf(serviceInfoId):StringPool.BLANK);
 	arrayParam.put("processStepId", (processStepId > 0) ? String.valueOf(processStepId):StringPool.BLANK);
 	arrayParam.put("dossierSubStatus", Validator.isNotNull(dossierSubStatus) ? dossierSubStatus:StringPool.BLANK);
+	arrayParam.put("processOrderStage", Validator.isNotNull(processOrderStage) ? processOrderStage:StringPool.BLANK);
 	arrayParam.put("tabs1", tabs1);
 	String keySearch = ParamUtil.getString(request, "keywords");
+	
+	iteratorURL.setParameter("serviceInfoId", String.valueOf(serviceInfoId));
+	iteratorURL.setParameter("processStepId", String.valueOf(processStepId));
+	iteratorURL.setParameter("dossierSubStatus", dossierSubStatus);
+	iteratorURL.setParameter("processOrderStage", processOrderStage);
 %>
 
 <aui:row>
@@ -103,7 +109,9 @@
 			%>
 		</div>
 	
-		<liferay-portlet:actionURL var="menuCounterSubStatusUrl" name="menuCounterSubStatus"/>
+		<liferay-portlet:actionURL var="menuCounterSubStatusUrl" name="menuCounterSubStatus">
+			<liferay-portlet:param name="processOrderStage" value="<%=processOrderStage %>"/>
+		</liferay-portlet:actionURL>
 		
 		<aui:script use="liferay-util-window,liferay-portlet-url">
 		

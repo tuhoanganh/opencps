@@ -72,6 +72,9 @@
 	String dossierSubStatus = ParamUtil.getString(request, "dossierSubStatus");
 	
 	String processOrderStage = ParamUtil.getString(request, "processOrderStage", "false");
+	
+	iteratorURL.setParameter("dossierSubStatus", dossierSubStatus);
+	iteratorURL.setParameter("processOrderStage", processOrderStage);
 %>
 
 <c:if test="<%=stopRefresh %>">
