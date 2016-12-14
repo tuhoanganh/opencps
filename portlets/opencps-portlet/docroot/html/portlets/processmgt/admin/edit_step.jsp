@@ -148,8 +148,8 @@
 		}
 	}
 	
-	long dictStatusId = 0;
-	long dictSubStatusId = 0;
+	String dictStatusCode = StringPool.BLANK;
+	String dictSubStatusCode = StringPool.BLANK;
 	
 	DictItem itemStatus = null;
 	DictItem itemSubStatus = null;
@@ -158,12 +158,13 @@
 		itemStatus = PortletUtil.getDictItem("DOSSIER_STATUS", step.getDossierStatus(), scopeGroupId);
 		
 		itemSubStatus = PortletUtil.getDictItem("DOSSIER_SUB_STATUS", step.getDossierSubStatus(), scopeGroupId);
+		
 		if(Validator.isNotNull(itemStatus)) {
-			dictStatusId = itemStatus.getDictItemId();
+			dictStatusCode = itemStatus.getItemCode();
 		}
 		
 		if(Validator.isNotNull(itemSubStatus)) {
-			dictSubStatusId = itemSubStatus.getDictItemId();
+			dictSubStatusCode = itemSubStatus.getItemCode();
 		}
 
 	}
@@ -209,7 +210,7 @@
 				emptyOptionLabels="dossier-status"
 				itemsEmptyOption="true"
 				itemNames="dossierStatus"
-				selectedItems="<%=String.valueOf(dictStatusId)%>"
+				selectedItems="<%=dictStatusCode%>"
 				optionValueType="code"
 			/>
 			
@@ -224,7 +225,7 @@
 				emptyOptionLabels="dossier-sub-status"
 				itemsEmptyOption="true"
 				itemNames="dossierSubStatus"
-				selectedItems="<%=String.valueOf(dictSubStatusId)%>"
+				selectedItems="<%=dictSubStatusCode%>"
 				optionValueType="code"
 			/>
 			
