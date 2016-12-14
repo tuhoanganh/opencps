@@ -400,6 +400,36 @@
 		</footer-portlet-javascript>
 		<css-class-wrapper>32-portlet</css-class-wrapper>
 	</portlet>
+	
+	<portlet>
+		<portlet-name>33</portlet-name>
+		<icon>/icon.png</icon>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>33-portlet</css-class-wrapper>
+	</portlet>
+	
+	<portlet>
+		<portlet-name>34</portlet-name>
+		<icon>/icon.png</icon>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>34-portlet</css-class-wrapper>
+	</portlet>
+	
+	<portlet>
+		<portlet-name>35</portlet-name>
+		<icon>/icon.png</icon>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>35-portlet</css-class-wrapper>
+	</portlet>
 
 	<role-mapper>
 		<role-name>administrator</role-name>

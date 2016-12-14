@@ -316,9 +316,10 @@
 		// Validate size and type file upload
 		
 		var maxUploadFileSizeInByte = '<%=PortletUtil.convertSizeUnitToByte(maxUploadFileSize, FileSizeUnit.getEnum(maxUploadFileSizeUnit))%>';
+		maxUploadFileSizeInByte = parseFloat(maxUploadFileSizeInByte);
 		
 		var maxTotalUploadFileSizeInByte = '<%=PortletUtil.convertSizeUnitToByte(maxTotalUploadFileSize, FileSizeUnit.getEnum(maxTotalUploadFileSizeUnit))%>';
-
+		maxTotalUploadFileSizeInByte = parseFloat(maxTotalUploadFileSizeInByte);
 		
 		var fileUploadSizeInByte = 0;
 		var totalUploadFileSizeInByte = '<%=totalUploadFileSizeInByte%>';
