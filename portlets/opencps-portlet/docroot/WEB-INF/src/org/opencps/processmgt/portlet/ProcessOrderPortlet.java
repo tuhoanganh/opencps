@@ -1796,17 +1796,19 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 		try {
 			validateDynamicFormData(dossierId, dossierPartId, accountBean);
-			
+
 			DossierFile dossierFileLastest = null;
-			
+
 			try {
-				dossierFileLastest = DossierFileLocalServiceUtil.getLastestDossierFile();
-				
-				_log.info("dossierFileLastest____________" + dossierFileLastest.getModifiedDate());
+				dossierFileLastest = DossierFileLocalServiceUtil
+						.getLastestDossierFile();
+
+				_log.info("dossierFileLastest____________"
+						+ dossierFileLastest.getModifiedDate());
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
-			
+
 			ServiceContext serviceContext = ServiceContextFactory
 					.getInstance(actionRequest);
 
@@ -1831,30 +1833,37 @@ public class ProcessOrderPortlet extends MVCPortlet {
 							+ dossierFileId;
 				}
 			}
-			
-			String pattern = ProcessUtils.getDossierPartPattern(dossierId,
-					fileGroupId, dossierPartId);
-			
-			List<Long> wfOutputIds = ProcessUtils.getWfOutputPatternId(dossierId,
-					fileGroupId, dossierPartId);
-			
-			for(Long wfOutputId : wfOutputIds) {
+
+			List<WorkflowOutput> wfOutputs = ProcessUtils.getWfOutputPattern(
+					dossierId, fileGroupId, dossierPartId);
+
+			for (WorkflowOutput wfOutput : wfOutputs) {
 				String resultPartNo = StringPool.BLANK;
-				
+				String pattern = wfOutput.getPattern();
 				boolean isReset = false;
 
 				if (Validator.isNotNull(formData)
 						&& formData
 								.contains(PortletConstants.DOSSIER_PART_RESULT_PATTERN_NO)
 						&& Validator.isNotNull(pattern)) {
-					if(Validator.isNotNull(dossierFileLastest) && Validator.isNotNull(dossierFileLastest.getModifiedDate())) {
-						isReset = PortletUtil.isResetGenerateNumber(pattern, dossierFileLastest.getModifiedDate());
+					if (Validator.isNotNull(dossierFileLastest)
+							&& Validator.isNotNull(dossierFileLastest
+									.getModifiedDate())) {
+						isReset = PortletUtil.isResetGenerateNumber(pattern,
+								dossierFileLastest.getModifiedDate());
 					}
-					
-					resultPartNo = DossierNoGenerator.genaratorNoReceptionOption(
-							pattern, dossierId,
-							PortletConstants.DOSSIER_PART_RESULT_PATTERN, isReset, wfOutputId);
-					
+
+					_log.info("wfOutputId______"
+							+ wfOutput.getWorkflowOutputId());
+					resultPartNo = DossierNoGenerator
+							.genaratorNoReceptionOption(
+									pattern,
+									dossierId,
+									PortletConstants.DOSSIER_PART_RESULT_PATTERN,
+									isReset, wfOutput.getWorkflowOutputId());
+
+					_log.info("resultPartNo______" + resultPartNo);
+
 					formData = StringUtil.replace(formData,
 							PortletConstants.DOSSIER_PART_RESULT_PATTERN_NO,
 							resultPartNo);
@@ -2607,28 +2616,29 @@ public class ProcessOrderPortlet extends MVCPortlet {
 
 		// String keywords = ParamUtil.getString(actionRequest, "keywords");
 
-		long serviceInfoId = ParamUtil.getLong(actionRequest,
-				"serviceInfoId");
-		long processStepId = ParamUtil.getLong(actionRequest,
-				"processStepId");
+		long serviceInfoId = ParamUtil.getLong(actionRequest, "serviceInfoId");
+		long processStepId = ParamUtil.getLong(actionRequest, "processStepId");
 		String keywords = ParamUtil.getString(actionRequest, "keywords");
 
 		String tabs1 = ParamUtil.getString(actionRequest, "tabs1");
-		
+
 		long counterVal = 0;
 		JSONObject obj = null;
-		for (DictItem item : PortletUtil.getDictItemInUseByCode(groupId, "DOSSIER_SUB_STATUS", PortletConstants.TREE_VIEW_ALL_ITEM)) {
-			
+		for (DictItem item : PortletUtil.getDictItemInUseByCode(groupId,
+				"DOSSIER_SUB_STATUS", PortletConstants.TREE_VIEW_ALL_ITEM)) {
+
 			obj = JSONFactoryUtil.createJSONObject();
 
 			if (tabs1
 					.equals(ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS)) {
 
-				counterVal = ProcessOrderLocalServiceUtil.countProcessOrderKeyWords(serviceInfoId, processStepId, 
-						themeDisplay.getUserId(), themeDisplay.getUserId(), 
-						keywords,item.getItemCode());
+				counterVal = ProcessOrderLocalServiceUtil
+						.countProcessOrderKeyWords(serviceInfoId,
+								processStepId, themeDisplay.getUserId(),
+								themeDisplay.getUserId(), keywords,
+								item.getItemCode());
 
-			} 
+			}
 			obj.put("code", item.getItemCode());
 			obj.put("counter", String.valueOf(counterVal));
 			jsonArray.put(obj);
@@ -2637,6 +2647,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		jsonObject.put("badge", jsonArray);
 		PortletUtil.writeJSON(actionRequest, actionResponse, jsonObject);
 	}
+
 	private boolean _hasPermission = true;
 
 	public boolean hasPermission() {
@@ -3018,7 +3029,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 			}
 		}
 	}
-	
+
 	public void validateAssignTask(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException {
 		List<WorkflowOutput> workflowOutputs = new ArrayList<WorkflowOutput>();
@@ -3026,7 +3037,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 		List<ProcessStepDossierPart> processStepDossierParts = new ArrayList<ProcessStepDossierPart>();
 
 		JSONObject obj = JSONFactoryUtil.createJSONObject();
-		
+
 		JSONArray array = JSONFactoryUtil.createJSONArray();
 
 		long dossierId = ParamUtil.getLong(actionRequest,
@@ -3089,33 +3100,31 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				}
 			}
 		}
-		
+
 		obj.put("arrayDossierpartIds", array);
-		
+
 		// Validate nhap y kien
-		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.
-				getAttribute(WebKeys.THEME_DISPLAY);
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest
+				.getAttribute(WebKeys.THEME_DISPLAY);
 		ExpandoValue requiedActionNote = null;
 		boolean requiedActionNoteValue = false;
-		
+
 		try {
-			requiedActionNote = 
-					ExpandoValueLocalServiceUtil.getValue(
-						themeDisplay.getCompanyId(), 
-						ClassNameLocalServiceUtil.getClassNameId(ProcessStep.class.getName()), 
-						ProcessStep.class.getName(), 
-						"requiedProcessActionNote", 
-						processWorkflowId);
-			
+			requiedActionNote = ExpandoValueLocalServiceUtil.getValue(
+					themeDisplay.getCompanyId(), ClassNameLocalServiceUtil
+							.getClassNameId(ProcessStep.class.getName()),
+					ProcessStep.class.getName(), "requiedProcessActionNote",
+					processWorkflowId);
+
 			requiedActionNoteValue = requiedActionNote.getBoolean();
-		} catch (Exception e){
+		} catch (Exception e) {
 			//
 		}
-		
+
 		obj.put("requiedActionNote", requiedActionNoteValue);
-		
-		if(obj != null){
-			//PortletUtil.writeJSON(actionRequest, actionResponse, array);
+
+		if (obj != null) {
+			// PortletUtil.writeJSON(actionRequest, actionResponse, array);
 			PortletUtil.writeJSON(actionRequest, actionResponse, obj);
 		}
 

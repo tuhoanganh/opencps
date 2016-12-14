@@ -604,9 +604,9 @@ public class ProcessUtils {
 		return parttern;
 	}
 
-	public static List<Long> getWfOutputPatternId(long dossierId, long fileGroupId,
+	public static List<WorkflowOutput> getWfOutputPattern(long dossierId, long fileGroupId,
 			long dossierPartId) {
-		List<Long> wfOutputIds = new ArrayList<Long>();
+		List<WorkflowOutput> workflowOutputs = new ArrayList<WorkflowOutput>();
 
 		try {
 			ProcessOrder processOrder = ProcessOrderLocalServiceUtil
@@ -616,7 +616,7 @@ public class ProcessUtils {
 					.getPostProcessWorkflow(processOrder.getServiceProcessId(),
 							processOrder.getProcessStepId());
 
-			List<WorkflowOutput> workflowOutputs = new ArrayList<WorkflowOutput>();
+			
 			for (ProcessWorkflow processWorkflow : processWorkflows) {
 				List<WorkflowOutput> workflowOutputsTemp = WorkflowOutputLocalServiceUtil
 						.getByProcessByPWID_DPID(
@@ -633,15 +633,12 @@ public class ProcessUtils {
 					}
 				}
 			}
-			for(WorkflowOutput workflowOutput : workflowOutputs) {
-				wfOutputIds.add(workflowOutput.getWorkflowOutputId());
-			}
 
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
 
-		return wfOutputIds;
+		return workflowOutputs;
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(ProcessUtils.class
