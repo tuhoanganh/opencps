@@ -19,6 +19,13 @@ package org.opencps.util;
 
 import java.security.SignatureException;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import kysovanban.signature.DocContent;
+import kysovanban.signature.PdfContent;
+import kysovanban.signature.Signer;
+import kysovanban.signature.SignerInfo;
 
 import org.opencps.pki.PdfPkcs7Signer;
 import org.opencps.pki.PdfSigner;

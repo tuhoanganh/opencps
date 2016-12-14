@@ -1121,7 +1121,7 @@
 	
 	<portlet>
 		<portlet-name>32</portlet-name>
-		<display-name>Statistics</display-name>
+		<display-name>Statistics Admin</display-name>
 		<portlet-class>
 			org.opencps.statisticsmgt.portlet.StatisticsMgtAdminPortlet
 		</portlet-class>
@@ -1134,9 +1134,115 @@
 			<mime-type>text/html</mime-type>
 			<portlet-mode>view</portlet-mode>
 		</supports>
+		<resource-bundle>content.Language_32</resource-bundle>
 		<portlet-info>
-			<title>Statistics</title>
+			<title>Statistics Admin</title>
 			<short-title>32</short-title>
+			<keywords></keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>power-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+	</portlet>
+	
+	<portlet>
+		<portlet-name>33</portlet-name>
+		<display-name>Dashboard Widget By Year</display-name>
+		<portlet-class>
+			org.opencps.statisticsmgt.dashboard.portlet.DashBoardPortlet
+		</portlet-class>
+		<init-param>
+			<name>view-template</name>
+			<value>/html/portlets/statisticsmgt/dashboards/yearwidget/view.jsp</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<resource-bundle>content.Language_32</resource-bundle>
+		<portlet-info>
+			<title>Dashboard Widget By Year</title>
+			<short-title>33</short-title>
+			<keywords></keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>power-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+	</portlet>
+	
+	<portlet>
+		<portlet-name>34</portlet-name>
+		<display-name>Dashboard Widget By Months</display-name>
+		<portlet-class>
+			org.opencps.statisticsmgt.dashboard.portlet.DashBoardPortlet
+		</portlet-class>
+		<init-param>
+			<name>view-template</name>
+			<value>/html/portlets/statisticsmgt/dashboards/monthwidget/view.jsp</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<resource-bundle>content.Language_32</resource-bundle>
+		<portlet-info>
+			<title>Dashboard Widget By Year</title>
+			<short-title>34</short-title>
+			<keywords></keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>power-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+	</portlet>
+	
+	<portlet>
+		<portlet-name>35</portlet-name>
+		<display-name>Dashboard Widget By DomainF</display-name>
+		<portlet-class>
+			org.opencps.statisticsmgt.dashboard.portlet.DashBoardPortlet
+		</portlet-class>
+		<init-param>
+			<name>view-template</name>
+			<value>/html/portlets/statisticsmgt/dashboards/yearwidget/view.jsp</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<resource-bundle>content.Language_32</resource-bundle>
+		<portlet-info>
+			<title>Dashboard Widget By Year</title>
+			<short-title>35</short-title>
 			<keywords></keywords>
 		</portlet-info>
 		<security-role-ref>
