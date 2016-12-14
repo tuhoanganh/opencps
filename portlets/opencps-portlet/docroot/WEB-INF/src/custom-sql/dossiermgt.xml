@@ -1065,7 +1065,7 @@
 				d.dossierId = df.dossierId
 			AND 
 				(df.removed = 0 AND df.syncStatus = 2 AND df.templateFileNo IN (?) AND d.dossierStatus = ? AND
-				(lower(df.dossierFileNo) LIKE ? [$AND_OR_NULL_CHECK$]) AND df.userId = ?)
+				(lower(df.dossierFileNo) LIKE ? [$AND_OR_NULL_CHECK$]) AND d.ownerOrganizationId = ?)
 			INNER JOIN 
 				opencps_dossierpart AS p
 			ON 
@@ -1088,7 +1088,7 @@
 				d.dossierId = df.dossierId
 			AND 
 				(df.removed = 0 AND df.syncStatus = 2 AND df.templateFileNo IN (?) AND d.dossierStatus = ? AND
-				(lower(df.dossierFileNo) LIKE ? [$AND_OR_NULL_CHECK$]) AND df.userId = ?)
+				(lower(df.dossierFileNo) LIKE ? [$AND_OR_NULL_CHECK$]) AND d.ownerOrganizationId = ?)
 			INNER JOIN 
 				opencps_dossierpart AS p
 			ON 
@@ -1111,7 +1111,6 @@
 			        AND odf.syncStatus = 2
 			        AND odf.dossierId = ?
 			        AND odf.templateFileNo IN (?)
-			    AND odf.userId = ?
 		]]>
 	</sql>
 	

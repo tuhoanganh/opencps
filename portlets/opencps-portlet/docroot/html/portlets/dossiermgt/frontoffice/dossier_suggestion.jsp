@@ -1,5 +1,7 @@
 
 
+<%@page import="org.opencps.util.AccountUtil"%>
+<%@page import="org.opencps.dossiermgt.bean.AccountBean"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -65,7 +67,6 @@
 	try {
 		dossier = DossierLocalServiceUtil.getDossier(dossierId);
 		List<DossierPart> dossierParts = DossierPartLocalServiceUtil.getDossierParts(dossier.getDossierTemplateId());
-		
 		if(dossierParts != null){
 			for(DossierPart dossierPart : dossierParts){
 				if(Validator.isNotNull(dossierPart.getTemplateFileNo()) && !templateFileNos.contains(dossierPart.getTemplateFileNo())){
@@ -135,8 +136,17 @@
 		
 		<liferay-ui:search-container-results>
 			<%
-				dossiersSuggestion = DossierLocalServiceUtil.getDossierSuggesstion(user.getUserId(),keywords ,suggestionDossierStatus, dossierPartTypes , templateFileNos,dossierPartNos ,searchContainer.getStart(), searchContainer.getEnd());
-				totalCount = DossierLocalServiceUtil.countDossierSuggesstion(user.getUserId(),keywords, suggestionDossierStatus, dossierPartTypes , templateFileNos,dossierPartNos);
+				AccountBean accountBean = AccountUtil.getAccountBean(request);
+				long owner = 0;
+				
+				if(accountBean.isBusiness()) {
+					owner = accountBean.getOwnerOrganizationId();
+				} else {
+					owner = accountBean.getOwnerUserId();
+				}
+			
+				dossiersSuggestion = DossierLocalServiceUtil.getDossierSuggesstion(owner,keywords ,suggestionDossierStatus, dossierPartTypes , templateFileNos,dossierPartNos ,searchContainer.getStart(), searchContainer.getEnd());
+				totalCount = DossierLocalServiceUtil.countDossierSuggesstion(owner,keywords, suggestionDossierStatus, dossierPartTypes , templateFileNos,dossierPartNos);
 				
 				results = dossiersSuggestion;
 				total = totalCount;

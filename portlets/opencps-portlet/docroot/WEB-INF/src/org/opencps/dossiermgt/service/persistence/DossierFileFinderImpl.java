@@ -1045,10 +1045,6 @@ public class DossierFileFinderImpl extends BasePersistenceImpl<DossierFile>
 				sql = StringUtil.replace(sql, "AND odf.templateFileNo IN (?)",
 						"AND odf.templateFileNo IN ('" + templateFileNos + "')");
 			}
-
-			if(userId <= 0) {
-				sql = StringUtil.replace(sql,"AND odf.userId = ?", StringPool.BLANK);
-			}
 			
 			SQLQuery q = session.createSQLQuery(sql);
 
@@ -1058,10 +1054,6 @@ public class DossierFileFinderImpl extends BasePersistenceImpl<DossierFile>
 
 			if (Validator.isNotNull(dossierId)) {
 				qPos.add(dossierId);
-			}
-
-			if(userId > 0) {
-				qPos.add(userId);
 			}
 
 			return (List<DossierFile>) QueryUtil.list(q, getDialect(), start, end);
