@@ -438,12 +438,16 @@
 		</div>
 	</c:if>
 	<div class="button-holder">
-		<aui:button type="button" value="submit" name="submit"/>
 		
-		<c:if test="<%=esign %>">
-			<%-- <aui:button type="button" value="esign" name="esign"/> --%>
-			<aui:button type="button" value="esign" name="esign" onClick="getFileComputerHash(1);"/>
-		</c:if>
+		<c:choose>
+			<c:when test="<%=esign %>">
+				<aui:button type="button" value="esign" name="esign" onClick="getFileComputerHash(1);"/>
+			</c:when>
+			<c:otherwise>
+				<aui:button type="button" value="submit" name="submit"/>
+			</c:otherwise>
+		</c:choose>
+		
 		<aui:button type="button" value="cancel" name="cancel"/>
 	</div>
 	
