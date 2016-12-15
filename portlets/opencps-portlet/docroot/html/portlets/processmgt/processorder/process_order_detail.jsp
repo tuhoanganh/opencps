@@ -18,12 +18,6 @@
  */
 %>
 
-<%@page import="org.opencps.processmgt.model.ProcessOrder"%>
-<%@page import="org.opencps.dossiermgt.model.Dossier"%>
-<%@page import="org.opencps.dossiermgt.model.DossierPart"%>
-<%@page import="org.opencps.dossiermgt.model.ServiceConfig"%>
-<%@page import="org.opencps.processmgt.util.ProcessUtils"%>
-
 <%@ include file="init.jsp"%>
 
 <liferay-util:include page='<%=templatePath + "display/processorder/" + processOrderDetailPage + ".jsp" %>' servletContext="<%=application %>" />
