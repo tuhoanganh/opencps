@@ -29,7 +29,7 @@
 	String justfinishedlistDisplayStyle = GetterUtil.getString(portletPreferences.getValue("justfinishedlistDisplayStyle", "default"));
 	
 	String todolistOrderByType = preferences.getValue("todolistOrderByType", WebKeys.ORDER_BY_DESC);
-	String justfinishedlistOrderByType = preferences.getValue("oderByJustFinish", WebKeys.ORDER_BY_DESC);
+	String justfinishedlistOrderByType = preferences.getValue("justfinishedlistOrderByType", WebKeys.ORDER_BY_DESC);
 	
 	String todolistOrderByField = preferences.getValue("todolistOrderByField", ProcessOrderDisplayTerms.MODIFIEDDATE);
 	String justfinishedlistOrderByField = preferences.getValue("justfinishedlistOrderByField", ProcessOrderDisplayTerms.MODIFIEDDATE);
@@ -52,5 +52,5 @@
 
 	boolean hiddenTreeNodeEqualNone = GetterUtil.getBoolean(preferences.getValue("hiddenTreeNodeEqualNone", "false"), false);
 	
-	String processOrderDetailPage = GetterUtil.getString(portletPreferences.getValue("processOrderDetailPage", "process_order_detail"));
+	String processOrderDetailPage = GetterUtil.getString(portletPreferences.getValue("processOrderViewer", "default"));
 %>
