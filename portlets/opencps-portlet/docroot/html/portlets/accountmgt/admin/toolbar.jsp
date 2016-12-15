@@ -81,7 +81,19 @@
 				<div class="toolbar_search_input">
 					<c:if test="<%=tabs1.equals(AccountMgtUtil.TOP_TABS_CITIZEN)%>">
 						<aui:row>
-							<aui:col width="50" cssClass="search-col">
+							<aui:col width="30" cssClass="search-col">
+ 							<% 	
+ 								String status = (String)request.getParameter("accountStatus");
+ 							%>
+ 							<portlet:resourceURL var="exportToExcelURL">
+ 								<portlet:param name="status" value="<%= status %>"/>
+ 								<portlet:param name="word" value="<%= keyword %>"/>
+ 							</portlet:resourceURL>
+ 							
+ 							 	<aui:button icon="icon-file" name="btExportExclel" href="<%=exportToExcelURL.toString() %>" cssClass="action-button "  value="export" />
+ 								
+ 							 </aui:col>				
+							<aui:col width="30" cssClass="search-col">
 								<aui:select name="<%=CitizenDisplayTerms.CITIZEN_ACCOUNTSTATUS %>" 
 									label="<%=StringPool.BLANK %>" 
 									cssClass="search-input select-box"
@@ -101,7 +113,7 @@
 										%>
 								</aui:select>
 							</aui:col>
-							<aui:col width="50" cssClass="search-col">
+							<aui:col width="30" cssClass="search-col">
 								<liferay-ui:input-search 
 									id="keywords1" 
 									name="keywords" 

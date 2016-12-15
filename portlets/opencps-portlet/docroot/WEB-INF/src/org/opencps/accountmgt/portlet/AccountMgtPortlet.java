@@ -22,12 +22,15 @@ package org.opencps.accountmgt.portlet;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceResponse;
 
 import org.opencps.accountmgt.InvalidCityCodeException;
 import org.opencps.accountmgt.InvalidDistricCodeException;
@@ -53,19 +56,27 @@ import org.opencps.util.MessageBusUtil;
 import org.opencps.util.MessageKeys;
 import org.opencps.util.PortletConstants;
 import org.opencps.util.PortletPropsValues;
+import org.opencps.util.PortletUtil;
 import org.opencps.util.WebKeys;
 
 import com.liferay.portal.UserPasswordException;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.portlet.PortletResponseUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.util.PwdGenerator;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
@@ -585,6 +596,83 @@ public class AccountMgtPortlet extends MVCPortlet {
 
 		}
 	}
+	
+	@Override
+ 	public void serveResource(ResourceRequest resourceRequest,
+ 			ResourceResponse resourceResponse) throws IOException,
+ 			PortletException {
+ 		// TODO Auto-generated method stub
+ 		exportToExcel(resourceRequest, resourceResponse);
+ 		super.serveResource(resourceRequest, resourceResponse);
+	}
+	
+public void exportToExcel(ResourceRequest resourceRequest, ResourceResponse resourceResponse) {
+ 		
+ 		try {
+ 			Date dt = new Date();
+ 			
+ 			String fileName = "account" + DateTimeUtil.convertDateToString(new Date(), DateTimeUtil._DATE_TIME_TO_NAME);
+ 			
+  			String keywords = resourceRequest.getParameter("word");
+ 			String acountStatus = resourceRequest.getParameter("status");
+ 			if(Validator.isNull(acountStatus)) acountStatus = "-1";
+ 			
+ 			ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest
+					.getAttribute(WebKeys.THEME_DISPLAY);
+
+ 			String csvSeparatorString = ",";
+ 			String[] headerStrings = { "STT", "CMTND", "NAME", "GENDER", "DATE OF BIRTH", "ACCOUNT", "STATUS",};
+ 			
+ 			StringBundler sb = new StringBundler();
+ 			for(String st : headerStrings) {
+ 				sb.append(getFormatString(st));
+ 				sb.append(csvSeparatorString);
+ 			}
+ 			sb.setIndex(sb.index() - 1);
+ 			sb.append(CharPool.NEW_LINE);
+ 			int status = Integer.parseInt(acountStatus);
+ 			List<Citizen> allCitizens = CitizenLocalServiceUtil.searchCitizen(themeDisplay.getScopeGroupId(), keywords, status, 0, CitizenLocalServiceUtil.getCitizensCount());
+ 			for (int i = 0; i < allCitizens.size(); i++) {
+ 				Citizen ct = allCitizens.get(i);
+ 				sb.append(getFormatString(String.valueOf(i + 1)));
+ 				sb.append(csvSeparatorString);
+ 				sb.append(getFormatString(ct.getPersonalId()));
+ 				sb.append(csvSeparatorString);
+ 				sb.append(getFormatString(ct.getFullName()));
+ 				sb.append(csvSeparatorString);
+ 				String gender = ct.getGender() == 1 ? "MALE":"FEMALE";
+ 				sb.append(getFormatString(gender));
+ 				sb.append(csvSeparatorString);
+ 				sb.append(DateTimeUtil.convertDateToString(ct.getBirthdate(), DateTimeUtil._VN_DATE_FORMAT));
+ 				sb.append(csvSeparatorString);
+ 				sb.append(getFormatString(ct.getEmail()));
+ 				sb.append(csvSeparatorString);
+ 				String accoutStatus = StringPool.BLANK;
+ 				accoutStatus = LanguageUtil.get(getPortletConfig(), themeDisplay.getLocale(), PortletUtil.getAccountStatus(ct.getAccountStatus(), themeDisplay.getLocale()));
+ 				sb.append(getFormatString(accoutStatus));
+ 				sb.append(csvSeparatorString);
+ 				sb.append(CharPool.NEW_LINE);
+ 			}
+ 			fileName += ".csv";
+ 			String contentType = ContentTypes.APPLICATION_TEXT;
+ 			byte[] bs = sb.toString().getBytes();
+ 			PortletResponseUtil.sendFile(resourceRequest, resourceResponse, fileName, bs, contentType);
+ 			
+ 		} catch (Exception e) {
+ 			System.err.println(e.getMessage());
+ 		} finally {
+ 			resourceRequest.setAttribute("status", "1");
+ 		}
+ 	}
+ 	
+ 	private String getFormatString(String valueString) {
+ 		StringBundler sBundler = new StringBundler();
+ 		sBundler.append(CharPool.QUOTE);
+ 		sBundler.append(StringUtil.replace(valueString, CharPool.QUOTE, StringPool.DOUBLE_QUOTE));
+ 		sBundler.append(CharPool.QUOTE);
+ 		return sBundler.toString();
+ 	}
+ 	
 	private Log _log = LogFactoryUtil
 	    .getLog(AccountMgtPortlet.class
 	        .getName());
