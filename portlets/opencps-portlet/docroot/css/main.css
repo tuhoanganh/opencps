@@ -104,3 +104,9 @@ top: 12px;
 .div100{
 	margin-left: 0 !important;
 }
+.action-button-csv{
+	margin-top: 0 !important;
+}
+.action-button-csv > i{
+	margin-right: 10px !important;
+}

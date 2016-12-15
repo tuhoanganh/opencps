@@ -1,4 +1,7 @@
 
+<%@page import="javax.portlet.PortletRequest"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayPortletMode"%>
+<%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
 <%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="org.opencps.util.PortletPropsValues"%>
 <%@page import="org.opencps.processmgt.util.ProcessOrderUtils"%>
@@ -29,6 +32,9 @@
 
 
 <%
+	
+	String plidServiceDetail = preferences.getValue("plidServiceDetail","0");
+
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "serviceinfodirectorylist.jsp");
 	
@@ -42,6 +48,8 @@
 	 */
 	headerNames.add("service-bound-data");
 	
+	headerNames.add("action");
+	 
 	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
 	
 	
@@ -191,6 +199,13 @@ $(document).ready(function(){
 				viewURL.setParameter("mvcPath", templatePath + "service_detail.jsp");
 				viewURL.setParameter("serviceinfoId", String.valueOf(service.getServiceinfoId()));
 				viewURL.setParameter("backURL", currentURL);
+				
+				PortletURL renderToSubmitOnline = PortletURLFactoryUtil.create(request, WebKeys.P26_SUBMIT_ONLINE, Long.valueOf(plidServiceDetail), PortletRequest.RENDER_PHASE);
+				renderToSubmitOnline.setWindowState(LiferayWindowState.NORMAL);
+				renderToSubmitOnline.setPortletMode(LiferayPortletMode.VIEW);
+				renderToSubmitOnline.setParameter("mvcPath", "/html/portlets/dossiermgt/submit/dossier_submit_online.jsp");
+				renderToSubmitOnline.setParameter("serviceinfoId", String.valueOf(service.getServiceinfoId()));
+				renderToSubmitOnline.setParameter("backURL", currentURL);
 			%>
 				<liferay-util:buffer var="boundcol1">
 					
@@ -232,6 +247,12 @@ $(document).ready(function(){
 						</div>
 					</div>
 				</liferay-util:buffer>
+				
+				<liferay-util:buffer var="boundcol3">
+					
+					<aui:button href="<%= renderToSubmitOnline.toString() %>" cssClass="des-sub-button radius20" value="service-description"></aui:button>
+					
+				</liferay-util:buffer>
 			<%
 				if(service.getActiveStatus() !=0) {
 					row.setClassName("opencps-searchcontainer-row");
@@ -245,6 +266,7 @@ $(document).ready(function(){
 					
 					row.addText(boundcol2); 
 					
+					row.addText(boundcol3); 
 				}
 			%>	
 		
