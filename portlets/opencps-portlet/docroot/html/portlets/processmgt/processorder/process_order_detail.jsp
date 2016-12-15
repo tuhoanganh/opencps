@@ -26,15 +26,6 @@
 
 <%@ include file="init.jsp"%>
 
-<c:choose>
-	<c:when test="<%=processOrderDetailPage.equals("default") %>">
-		<liferay-util:include page="<%=templatePath + "/display/processorder/detail/default.jsp" %>" />
-	</c:when>
-	<c:when test="<%=processOrderDetailPage.equals("process_order_detail") %>">
-		<liferay-util:include page="<%=templatePath + "/display/processorder/detail/process_order_detail.jsp" %>" />
-	</c:when>
-</c:choose>
+<liferay-util:include page='<%=templatePath + "display/processorder/detail/" + processOrderDetailPage + ".jsp" %>' servletContext="<%=application %>" />
 
-<%!
-	private Log _log = LogFactoryUtil.getLog("html.portlets.processmgt.processorder.process_order_detail.jsp");
-%>
+
