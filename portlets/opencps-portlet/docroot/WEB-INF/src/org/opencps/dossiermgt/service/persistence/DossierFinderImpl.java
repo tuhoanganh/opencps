@@ -1818,7 +1818,7 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier> implements
 	}
 
 	
-	public List<Dossier> searchDossierSuggesstion(long userId ,String keyword,
+	public List<Dossier> searchDossierSuggesstion(long ownerOrganizationId ,String keyword,
 			String dossierStatus, String partTypes, String templateFileNos,
 			String partNos, int start, int end) throws SystemException {
 
@@ -1835,11 +1835,11 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier> implements
 			andOperator = true;
 		}
 
-		return _searchDossierSuggesstion(userId,keywords, dossierStatus, partTypes,
+		return _searchDossierSuggesstion(ownerOrganizationId,keywords, dossierStatus, partTypes,
 				templateFileNos, partNos, start, end, andOperator);
 	}
 
-	private List<Dossier> _searchDossierSuggesstion(long userId,String[] keywords,
+	private List<Dossier> _searchDossierSuggesstion(long ownerOrganizationId,String[] keywords,
 			String dossierStatus, String partTypes, String templateFileNos,
 			String partNos, int start, int end, boolean andOperator)
 			throws SystemException {
@@ -1890,8 +1890,8 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier> implements
 								StringPool.BLANK);
 			}
 			
-			if(userId <= 0) {
-				sql = StringUtil.replace(sql,"AND df.userId = ?", StringPool.BLANK);
+			if(ownerOrganizationId <= 0) {
+				sql = StringUtil.replace(sql,"AND d.ownerOrganizationId = ?", StringPool.BLANK);
 			}
 
 			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
@@ -1918,8 +1918,8 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier> implements
 				qPos.add(keywords, 2);
 			}
 			
-			if(userId > 0) {
-				qPos.add(userId);
+			if(ownerOrganizationId > 0) {
+				qPos.add(ownerOrganizationId);
 			}
 			/*
 			 * if (Validator.isNotNull(partNos)) { qPos.add(partNos); }
@@ -1933,7 +1933,7 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier> implements
 		}
 	}
 
-	public int countDossierSuggesstion(long userId ,String keyword ,String dossierStatus, String partTypes,
+	public int countDossierSuggesstion(long ownerOrganizationId ,String keyword ,String dossierStatus, String partTypes,
 			String templateFileNos, String partNos) throws SystemException {
 		
 		String[] keywords = null;
@@ -1948,11 +1948,11 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier> implements
 		} else {
 			andOperator = true;
 		}
-		return _countDossierSuggesstion(userId, keywords, dossierStatus, partTypes,
+		return _countDossierSuggesstion(ownerOrganizationId, keywords, dossierStatus, partTypes,
 				templateFileNos, partNos, andOperator);
 	}
 
-	private int _countDossierSuggesstion(long userId ,String[] keywords , String dossierStatus,
+	private int _countDossierSuggesstion(long ownerOrganizationId ,String[] keywords , String dossierStatus,
 			String partTypes, String templateFileNos, String partNos, boolean andOperator)
 			throws SystemException {
 		Session session = null;
@@ -2002,8 +2002,8 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier> implements
 								StringPool.BLANK); 
 			}
 			
-			if(userId <= 0) {
-				sql = StringUtil.replace(sql,"AND df.userId = ?", StringPool.BLANK);
+			if(ownerOrganizationId <= 0) {
+				sql = StringUtil.replace(sql,"AND d.ownerOrganizationId = ?", StringPool.BLANK);
 			}
 
 			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
@@ -2022,8 +2022,8 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier> implements
 				qPos.add(keywords, 2);
 			}
 			
-			if(userId > 0) {
-				qPos.add(userId);
+			if(ownerOrganizationId > 0) {
+				qPos.add(ownerOrganizationId);
 			}
 
 			Iterator<Integer> itr = q.iterate();

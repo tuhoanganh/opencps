@@ -590,36 +590,55 @@ public class ProcessUtils {
 		try {
 			ProcessOrder processOrder = ProcessOrderLocalServiceUtil
 					.getProcessOrder(dossierId, fileGroupId);
-			
+
 			List<WorkflowOutput> workflowOutputs = WorkflowOutputLocalServiceUtil
-					.getByProcessByPWID_DPID(processOrder.getProcessWorkflowId(), dossierPartId);
-			
+					.getByProcessByPWID_DPID(
+							processOrder.getProcessWorkflowId(), dossierPartId);
+
 			parttern = workflowOutputs.get(0).getPattern();
-			
+
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
 
 		return parttern;
 	}
-	public static long getWfOutputPatternId(long dossierId,
-			long fileGroupId, long dossierPartId) {
-		long wfOutputId = 0;
+
+	public static List<WorkflowOutput> getWfOutputPattern(long dossierId, long fileGroupId,
+			long dossierPartId) {
+		List<WorkflowOutput> workflowOutputs = new ArrayList<WorkflowOutput>();
 
 		try {
 			ProcessOrder processOrder = ProcessOrderLocalServiceUtil
 					.getProcessOrder(dossierId, fileGroupId);
+
+			List<ProcessWorkflow> processWorkflows = ProcessWorkflowLocalServiceUtil
+					.getPostProcessWorkflow(processOrder.getServiceProcessId(),
+							processOrder.getProcessStepId());
+
 			
-			List<WorkflowOutput> workflowOutputs = WorkflowOutputLocalServiceUtil
-					.getByProcessByPWID_DPID(processOrder.getProcessWorkflowId(), dossierPartId);
-			
-			wfOutputId = workflowOutputs.get(0).getWorkflowOutputId();
-			
+			for (ProcessWorkflow processWorkflow : processWorkflows) {
+				List<WorkflowOutput> workflowOutputsTemp = WorkflowOutputLocalServiceUtil
+						.getByProcessByPWID_DPID(
+								processWorkflow.getProcessWorkflowId(),
+								dossierPartId);
+				for (WorkflowOutput workflowOutput : workflowOutputsTemp) {
+					if (Validator.isNotNull(workflowOutput.getDossierPartId())) {
+						DossierPart dossierPart = DossierPartLocalServiceUtil
+								.getDossierPart(workflowOutput
+										.getDossierPartId());
+						if(Validator.isNotNull(dossierPart.getFormScript()) && Validator.isNotNull(workflowOutput.getPattern())) {
+							workflowOutputs.add(workflowOutput);
+						}
+					}
+				}
+			}
+
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
 
-		return wfOutputId;
+		return workflowOutputs;
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(ProcessUtils.class

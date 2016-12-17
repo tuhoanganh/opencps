@@ -119,7 +119,7 @@ public class SignatureUtil {
 			for (Iterator<SignerInfo> iterator = signerInfos.iterator(); iterator
 					.hasNext();) {
 				SignerInfo info = iterator.next();
-
+				
 				buffer.append(info.toJSON());
 			}
 		}

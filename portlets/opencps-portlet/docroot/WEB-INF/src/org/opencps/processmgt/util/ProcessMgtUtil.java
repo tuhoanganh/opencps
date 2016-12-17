@@ -57,22 +57,27 @@ public class ProcessMgtUtil {
 				userId = processWorkflow.getActionUserId();
 
 				if (userId == 0) {
-					/*List<ActionHistory> actionList =
+					List<ActionHistory> actionList =
 					    ActionHistoryLocalServiceUtil.getActionHistoryRecent(
 					        processOrderId, preProcessStepId);
 
 					
 					if (actionList.size() != 0) {
 						userId = actionList.get(0).getActionUserId();
-					}*/
-					
-					ProcessOrder processOrder = ProcessOrderLocalServiceUtil.getProcessOrder(processOrderId);
-					
-					userId = processOrder.getAssignToUserId(); 
-					
-					if(userId == 0) {
-						userId = processOrder.getActionUserId();
 					}
+					
+					if(userId != 0) {
+						 ProcessOrder processOrder = ProcessOrderLocalServiceUtil.getProcessOrder(processOrderId);
+						
+						userId = processOrder.getAssignToUserId(); 
+						
+						if(userId == 0) {
+							userId = processOrder.getActionUserId();
+						}
+						
+					}
+					
+					System.out.println("___________assuserId  " + userId);
 					
 				}
 			}
