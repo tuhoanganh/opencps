@@ -74,47 +74,49 @@
 						<span class="span4"><%=currentYear %></span>
 					</div>
 					
-					<div class="widget-content">
-						<span class="span8">
-							<liferay-ui:message key="remaining-number"/>
-						</span>
-						<span class="span4"><%=remainingNumber %></span>
-					</div>
-					
-					<div class="widget-content">
-						<span class="span8">
-							<liferay-ui:message key="received-number"/>
-						</span>
-						<span class="span4"><%=receivedNumber %></span>
-					</div>
-					
-					<div class="widget-content">
-						<span class="span8">
-							<liferay-ui:message key="ontime-number"/>
-						</span>
-						<span class="span4"><%=ontimeNumber %></span>
-					</div>
-					
-					<div class="widget-content">
-						<span class="span8">
-							<liferay-ui:message key="overtime-number"/>
-						</span>
-						<span class="span4"><%=overtimeNumber %></span>
-					</div>
-					
-					<div class="widget-content">
-						<span class="span8">
-							<liferay-ui:message key="processing-number"/>
-						</span>
-						<span class="span4"><%=processingNumber %></span>
-					</div>
-					
-					<div class="widget-content">
-						<span class="span8">
-							<liferay-ui:message key="delaying-number"/>
-						</span>
-						<span class="span4"><%=delayingNumber %></span>
-					</div>
+					<ul class="widget-content">
+						<li class="widget-row">
+							<span class="span8">
+								<liferay-ui:message key="remaining-number"/>
+							</span>
+							<span class="span4"><%=remainingNumber %></span>
+						</li>
+						
+						<li class="widget-row">
+							<span class="span8">
+								<liferay-ui:message key="received-number"/>
+							</span>
+							<span class="span4"><%=receivedNumber %></span>
+						</li>
+						
+						<li class="widget-row">
+							<span class="span8">
+								<liferay-ui:message key="ontime-number"/>
+							</span>
+							<span class="span4"><%=ontimeNumber %></span>
+						</li>
+						
+						<li class="widget-row">
+							<span class="span8">
+								<liferay-ui:message key="overtime-number"/>
+							</span>
+							<span class="span4"><%=overtimeNumber %></span>
+						</li>
+						
+						<li class="widget-row">
+							<span class="span8">
+								<liferay-ui:message key="processing-number"/>
+							</span>
+							<span class="span4"><%=processingNumber %></span>
+						</li>
+						
+						<li class="widget-row">
+							<span class="span8">
+								<liferay-ui:message key="delaying-number"/>
+							</span>
+							<span class="span4"><%=delayingNumber %></span>
+						</li>
+					</ul>
 				</div>
 			</c:otherwise>
 		</c:choose>
