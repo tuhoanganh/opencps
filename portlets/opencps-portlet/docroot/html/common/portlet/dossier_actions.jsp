@@ -16,6 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+<%@page import="org.opencps.util.SignatureUtil"%>
 <%@page import="java.util.List"%>
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="org.opencps.dossiermgt.service.DossierFileLocalServiceUtil"%>
@@ -70,8 +71,26 @@
 	
 	int version  = 0;
 	
-	boolean hasDossierFileSync = false;
-	boolean hasDossierFileNoSync = false;
+	StringBuilder sbMessage = new StringBuilder();
+	
+	try {
+		
+		DossierFile dossierFile = DossierFileLocalServiceUtil.getDossierFile(dossierFileId);
+		
+		int signCheck = dossierFile.getSignCheck();
+		
+		if(signCheck == 0) {
+			sbMessage.append(LanguageUtil.get(portletConfig ,locale , "no-sign"));
+		} else if(signCheck == 2){
+			sbMessage.append(LanguageUtil.get(portletConfig, locale, "invalid-sign"));
+		} else if(signCheck == 1){
+			sbMessage.append(LanguageUtil.get(portletConfig, locale, "signer-info"));
+			sbMessage.append(" : ");
+			sbMessage.append(SignatureUtil.getSignerInfo(dossierFileId));
+		}
+	} catch (Exception e) {
+		
+	}
 	
 	if(dossierId > 0 && dossierPartId > 0){
 		try{
@@ -213,6 +232,8 @@
 										cssClass="label opencps dossiermgt part-file-ctr view-attachment"
 										title="view-attachment"
 									/>
+									
+									<i title="<%= sbMessage.toString() %>" class="fa fa-diamond" id = "<portlet:namespace />signInfoMsg" />
 								</c:when>
 								<c:otherwise>
 									<c:if test="<%=isEditDossier && readOnly == false %>">
@@ -270,11 +291,12 @@
 							id="<%=String.valueOf(dossierPartId) %>"
 							title="remove"
 						>
-							<i class="fa fa-times" aria-hidden="true"></i>
+							<i class="fa fa-certificate" aria-hidden="true" ></i>
 							
 						</aui:a>
 					</c:if>
 				</td>
+				
 			</c:when>
 			
 			<c:when test="<%=(partType == PortletConstants.DOSSIER_PART_TYPE_OTHER || partType==PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT) && level == 0 %>">
@@ -301,6 +323,7 @@
 				<td width="10%" align="right">
 					
 				</td>
+				
 			</c:when>
 			
 			<c:when test="<%=(partType == PortletConstants.DOSSIER_PART_TYPE_OTHER || partType==PortletConstants.DOSSIER_PART_TYPE_MULTIPLE_RESULT) && level > 0 %>">
@@ -318,6 +341,8 @@
 								cssClass="label opencps dossiermgt part-file-ctr view-attachment"
 								title="view-attachment"
 							/>
+							
+							<i title="<%= sbMessage.toString() %>" class="fa fa-diamond" id = "<portlet:namespace />signInfoMsg" />
 						</c:when>
 						<c:otherwise>
 							<c:if test="<%=isEditDossier && readOnly == false%>">
@@ -374,11 +399,12 @@
 							id="<%=String.valueOf(dossierPartId) %>"
 							title="remove"
 						>
-							<i class="fa fa-times" aria-hidden="true"></i>
+							<i class="fa fa-certificate" aria-hidden="true"></i>
 							
 						</aui:a>
 					</c:if>
 				</td>
+				
 			</c:when>
 			
 			<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_PRIVATE%>">
@@ -408,6 +434,7 @@
 						</aui:a>
 					</c:if>
 				</td>
+			
 			</c:when>
 			
 			<c:when test="<%=partType == PortletConstants.DOSSIER_PART_TYPE_OPTION && level == 0 %>">
@@ -438,6 +465,8 @@
 								cssClass="label opencps dossiermgt part-file-ctr view-attachment"
 								title="view-attachment"
 							/>
+							
+							<i title="<%= sbMessage.toString() %>" class="fa fa-diamond" id = "<portlet:namespace />signInfoMsg" />
 						</c:when>
 						<c:otherwise>
 							<c:if test="<%=isEditDossier && readOnly == false%>">
@@ -494,7 +523,7 @@
 							id="<%=String.valueOf(dossierPartId) %>"
 							title="remove"
 						>
-							<i class="fa fa-times" aria-hidden="true"></i>
+							<i class="fa fa-certificate" aria-hidden="true" ></i>
 							
 						</aui:a>
 					</c:if>
@@ -580,6 +609,8 @@
 										
 										title="view-attachment"
 									/>
+									
+									<i title="<%= sbMessage.toString() %>" class="fa fa-diamond" id = "<portlet:namespace />signInfoMsg" />
 								</c:when>
 								<c:otherwise>
 									<c:if test="<%=isEditDossier && readOnly == false%>">
@@ -636,13 +667,38 @@
 							id="<%=String.valueOf(dossierPartId) %>"
 							title="remove"
 						>
-							<i class="fa fa-times" aria-hidden="true"></i>
+							<i class="fa fa-certificate" aria-hidden="true"  ></i>
 							
 						</aui:a>
 					</c:if>
 				</td>
+
 			</c:when>
 			
 		</c:choose>
 	</tr>
 </table>
+
+<aui:script>
+	AUI().ready('aui-tooltip', 'aui-base', function(A){
+		
+		var items = A.all('#<portlet:namespace />signInfoMsg');
+		
+		items.each(function(item) {
+			console.log("aaaaaaa");
+			item.on('mouseover',function(){
+				new A.Tooltip(
+			      {
+			        trigger: item,
+			        position: 'right'
+			      }
+			    ).render();
+			})
+		});
+
+	}); 
+	
+	
+	
+	
+</aui:script>

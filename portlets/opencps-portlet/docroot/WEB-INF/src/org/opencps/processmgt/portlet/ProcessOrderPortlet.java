@@ -126,6 +126,7 @@ import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.Base64;
+import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -238,7 +239,22 @@ public class ProcessOrderPortlet extends MVCPortlet {
 					inputStream, accountBean);
 			inputStream = uploadPortletRequest
 					.getFileAsStream(DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD);
+			
+			String filePath = uploadPortletRequest.getFile(
+					DossierFileDisplayTerms.DOSSIER_FILE_UPLOAD).getPath();
+			
+			File file = new File(filePath);
+			
+			System.out.println("#########################################" + filePath);
+			
+			System.out.println(file.getPath());
+			
+			String extension = FileUtil.getExtension(sourceFileName);
 
+			int signCheck = SignatureUtil.getSignCheck(filePath, extension);
+			
+			String signinfo = SignatureUtil.getSignInfo(filePath, extension);
+			
 			if (dossierFileId > 0) {
 				dossierFile = DossierFileLocalServiceUtil
 						.getDossierFile(dossierFileId);
@@ -268,7 +284,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 					PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
 					dossier.getFolderId(), sourceFileName, contentType,
 					displayName, StringPool.BLANK, StringPool.BLANK,
-					inputStream, size, serviceContext);
+					inputStream, size, signCheck, signinfo, serviceContext);
 
 			// Add DossierLog for Add File
 
@@ -685,6 +701,7 @@ public class ProcessOrderPortlet extends MVCPortlet {
 					fileEntry.getMimeType(), fileEntry.getTitle(),
 					StringPool.BLANK, StringPool.BLANK,
 					fileEntry.getContentStream(), fileEntry.getSize(),
+					dossierFile.getSignCheck(), dossierFile.getSignInfo(),
 					serviceContext);
 
 			// TODO add dossierLog for payment file
@@ -1803,8 +1820,6 @@ public class ProcessOrderPortlet extends MVCPortlet {
 				dossierFileLastest = DossierFileLocalServiceUtil
 						.getLastestDossierFile();
 
-				_log.info("dossierFileLastest____________"
-						+ dossierFileLastest.getModifiedDate());
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
