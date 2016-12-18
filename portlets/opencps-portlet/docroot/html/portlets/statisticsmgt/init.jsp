@@ -1,4 +1,6 @@
 
+<%@page import="com.liferay.portlet.portletdisplaytemplate.util.PortletDisplayTemplateUtil"%>
+<%@page import="javax.portlet.PortletPreferences"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -23,11 +25,31 @@
 <%@ include file="/init.jsp" %>
 
 <%
+	PortletPreferences preferences = renderRequest.getPreferences();
+	
+	portletResource = ParamUtil.getString(request, "portletResource");
+	
+	if (Validator.isNotNull(portletResource)) {
+		preferences = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
+	}
+	
 	Date now = new Date();
 	Calendar calendar = Calendar.getInstance();
 	calendar.setTime(now);
 	
 	int currentMonth = calendar.get(Calendar.MONTH) + 1;
 	int currentYear = calendar.get(Calendar.YEAR);
+	
+	
+	String displayStyle = GetterUtil.getString(portletPreferences
+			.getValue("displayStyle", StringPool.BLANK));
+	
+	long displayStyleGroupId = GetterUtil.getLong(
+			portletPreferences.getValue("displayStyleGroupId", null),
+			scopeGroupId);
+
+	long portletDisplayDDMTemplateId = PortletDisplayTemplateUtil
+			.getPortletDisplayTemplateDDMTemplateId(
+					displayStyleGroupId, displayStyle);
 %>
 

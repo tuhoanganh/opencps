@@ -1156,22 +1156,26 @@
 	
 	<portlet>
 		<portlet-name>33</portlet-name>
-		<display-name>Dashboard Widget By Year</display-name>
+		<display-name>Yearly Dashboard</display-name>
 		<portlet-class>
 			org.opencps.statisticsmgt.dashboard.portlet.DashBoardPortlet
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/portlets/statisticsmgt/dashboards/yearwidget/view.jsp</value>
+			<value>/html/portlets/statisticsmgt/dashboards/yearly/view.jsp</value>
+		</init-param>
+		<init-param>
+			<name>config-template</name>
+			<value>/html/portlets/statisticsmgt/dashboards/yearly/configuration.jsp</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
 			<mime-type>text/html</mime-type>
 			<portlet-mode>view</portlet-mode>
 		</supports>
-		<resource-bundle>content.Language_32</resource-bundle>
+		<resource-bundle>content.Language_33</resource-bundle>
 		<portlet-info>
-			<title>Dashboard Widget By Year</title>
+			<title>Yearly Dashboard</title>
 			<short-title>33</short-title>
 			<keywords></keywords>
 		</portlet-info>
