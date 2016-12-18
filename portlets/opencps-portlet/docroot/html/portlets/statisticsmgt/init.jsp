@@ -1,6 +1,4 @@
 
-<%@page import="com.liferay.portlet.portletdisplaytemplate.util.PortletDisplayTemplateUtil"%>
-<%@page import="javax.portlet.PortletPreferences"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -19,6 +17,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+
+<%@page import="com.liferay.portlet.portletdisplaytemplate.util.PortletDisplayTemplateUtil"%>
+<%@page import="javax.portlet.PortletPreferences"%>
 <%@page import="java.util.Calendar"%>
 <%@page import="java.util.Date"%>
 
