@@ -20,6 +20,6 @@
 
 <%@ include file="init.jsp"%>
 
-<liferay-util:include page='<%=templatePath + "display/processorder/" + processOrderDetailPage + ".jsp" %>' servletContext="<%=application %>" />
+<liferay-util:include page='<%=templatePath + "display/processorderdetail/" + processOrderDetailPage + ".jsp" %>' servletContext="<%=application %>" />
 
 
