@@ -394,7 +394,7 @@
 	<portlet>
 		<portlet-name>32</portlet-name>
 		<icon>/icon.png</icon>
-		<header-portlet-css>/css/main.css</header-portlet-css>
+		<header-portlet-css>/css/statistics.css</header-portlet-css>
 		<footer-portlet-javascript>
 			/js/main.js
 		</footer-portlet-javascript>
@@ -406,7 +406,7 @@
 		<icon>/icon.png</icon>
 		<configuration-action-class>org.opencps.statisticsmgt.dashboard.portlet.YearlyDashBoardConfigurationImpl</configuration-action-class>
 		<template-handler>org.opencps.statisticsmgt.dashboard.template.YearlyDashBoardPortletDisplayTemplateHandler</template-handler>
-		<header-portlet-css>/css/main.css</header-portlet-css>
+		<header-portlet-css>/css/statistics.css</header-portlet-css>
 		<footer-portlet-javascript>
 			/js/main.js
 		</footer-portlet-javascript>
@@ -416,7 +416,9 @@
 	<portlet>
 		<portlet-name>34</portlet-name>
 		<icon>/icon.png</icon>
-		<header-portlet-css>/css/main.css</header-portlet-css>
+		<configuration-action-class>org.opencps.statisticsmgt.dashboard.portlet.MonthlyDashBoardConfigurationImpl</configuration-action-class>
+		<template-handler>org.opencps.statisticsmgt.dashboard.template.MonthlyDashBoardPortletDisplayTemplateHandler</template-handler>
+		<header-portlet-css>/css/statistics.css</header-portlet-css>
 		<footer-portlet-javascript>
 			/js/main.js
 		</footer-portlet-javascript>
@@ -426,7 +428,9 @@
 	<portlet>
 		<portlet-name>35</portlet-name>
 		<icon>/icon.png</icon>
-		<header-portlet-css>/css/main.css</header-portlet-css>
+		<configuration-action-class>org.opencps.statisticsmgt.dashboard.portlet.TreeDashBoardConfigurationImpl</configuration-action-class>
+		<template-handler>org.opencps.statisticsmgt.dashboard.template.TreeDashBoardPortletDisplayTemplateHandler</template-handler>
+		<header-portlet-css>/css/statistics.css</header-portlet-css>
 		<footer-portlet-javascript>
 			/js/main.js
 		</footer-portlet-javascript>

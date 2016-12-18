@@ -1195,22 +1195,22 @@
 	
 	<portlet>
 		<portlet-name>34</portlet-name>
-		<display-name>Dashboard Widget By Months</display-name>
+		<display-name>Monthly Dashboard</display-name>
 		<portlet-class>
 			org.opencps.statisticsmgt.dashboard.portlet.DashBoardPortlet
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/portlets/statisticsmgt/dashboards/monthwidget/view.jsp</value>
+			<value>/html/portlets/statisticsmgt/dashboards/monthly/view.jsp</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
 			<mime-type>text/html</mime-type>
 			<portlet-mode>view</portlet-mode>
 		</supports>
-		<resource-bundle>content.Language_32</resource-bundle>
+		<resource-bundle>content.Language_34</resource-bundle>
 		<portlet-info>
-			<title>Dashboard Widget By Year</title>
+			<title>Monthly Dashboard</title>
 			<short-title>34</short-title>
 			<keywords></keywords>
 		</portlet-info>
@@ -1230,22 +1230,22 @@
 	
 	<portlet>
 		<portlet-name>35</portlet-name>
-		<display-name>Dashboard Widget By DomainF</display-name>
+		<display-name>Tree Dashboard</display-name>
 		<portlet-class>
 			org.opencps.statisticsmgt.dashboard.portlet.DashBoardPortlet
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/portlets/statisticsmgt/dashboards/yearwidget/view.jsp</value>
+			<value>/html/portlets/statisticsmgt/dashboards/tree/view.jsp</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
 			<mime-type>text/html</mime-type>
 			<portlet-mode>view</portlet-mode>
 		</supports>
-		<resource-bundle>content.Language_32</resource-bundle>
+		<resource-bundle>content.Language_35</resource-bundle>
 		<portlet-info>
-			<title>Dashboard Widget By Year</title>
+			<title>Tree Dashboard</title>
 			<short-title>35</short-title>
 			<keywords></keywords>
 		</portlet-info>
