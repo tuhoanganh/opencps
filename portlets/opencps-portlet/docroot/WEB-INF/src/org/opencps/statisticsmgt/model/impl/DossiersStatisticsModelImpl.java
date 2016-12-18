@@ -103,9 +103,10 @@ public class DossiersStatisticsModelImpl extends BaseModelImpl<DossiersStatistic
 	public static long ADMINISTRATIONLEVEL_COLUMN_BITMASK = 1L;
 	public static long DOMAINCODE_COLUMN_BITMASK = 2L;
 	public static long GOVAGENCYCODE_COLUMN_BITMASK = 4L;
-	public static long MONTH_COLUMN_BITMASK = 8L;
-	public static long YEAR_COLUMN_BITMASK = 16L;
-	public static long DOSSIERSTATISTICID_COLUMN_BITMASK = 32L;
+	public static long GROUPID_COLUMN_BITMASK = 8L;
+	public static long MONTH_COLUMN_BITMASK = 16L;
+	public static long YEAR_COLUMN_BITMASK = 32L;
+	public static long DOSSIERSTATISTICID_COLUMN_BITMASK = 64L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -359,7 +360,19 @@ public class DossiersStatisticsModelImpl extends BaseModelImpl<DossiersStatistic
 
 	@Override
 	public void setGroupId(long groupId) {
+		_columnBitmask |= GROUPID_COLUMN_BITMASK;
+
+		if (!_setOriginalGroupId) {
+			_setOriginalGroupId = true;
+
+			_originalGroupId = _groupId;
+		}
+
 		_groupId = groupId;
+	}
+
+	public long getOriginalGroupId() {
+		return _originalGroupId;
 	}
 
 	@JSON
@@ -692,6 +705,10 @@ public class DossiersStatisticsModelImpl extends BaseModelImpl<DossiersStatistic
 	public void resetOriginalValues() {
 		DossiersStatisticsModelImpl dossiersStatisticsModelImpl = this;
 
+		dossiersStatisticsModelImpl._originalGroupId = dossiersStatisticsModelImpl._groupId;
+
+		dossiersStatisticsModelImpl._setOriginalGroupId = false;
+
 		dossiersStatisticsModelImpl._originalMonth = dossiersStatisticsModelImpl._month;
 
 		dossiersStatisticsModelImpl._setOriginalMonth = false;
@@ -910,6 +927,8 @@ public class DossiersStatisticsModelImpl extends BaseModelImpl<DossiersStatistic
 	private long _dossierStatisticId;
 	private long _companyId;
 	private long _groupId;
+	private long _originalGroupId;
+	private boolean _setOriginalGroupId;
 	private long _userId;
 	private String _userUuid;
 	private Date _createDate;

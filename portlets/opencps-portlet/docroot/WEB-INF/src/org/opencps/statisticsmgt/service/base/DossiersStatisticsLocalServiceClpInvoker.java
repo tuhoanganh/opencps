@@ -121,43 +121,54 @@ public class DossiersStatisticsLocalServiceClpInvoker {
 				"int", "int", "java.lang.String", "java.lang.String", "int"
 			};
 
-		_methodName49 = "generalStatistics";
+		_methodName49 = "getMonths";
 
-		_methodParameterTypes49 = new String[] {
-				"long", "int", "int", "java.lang.String", "int"
-			};
+		_methodParameterTypes49 = new String[] { "long", "int" };
 
-		_methodName50 = "statisticsByDomain";
+		_methodName50 = "generalStatistics";
 
 		_methodParameterTypes50 = new String[] {
 				"long", "int", "int", "java.lang.String", "int"
 			};
 
-		_methodName51 = "statisticsByGovAgency";
+		_methodName51 = "statisticsByDomain";
 
 		_methodParameterTypes51 = new String[] {
 				"long", "int", "int", "java.lang.String", "int"
 			};
 
-		_methodName52 = "getDossiersStatisticsByDC_M_Y";
+		_methodName52 = "statisticsByGovAgency";
 
-		_methodParameterTypes52 = new String[] { "java.lang.String", "int", "int" };
+		_methodParameterTypes52 = new String[] {
+				"long", "int", "int", "java.lang.String", "int"
+			};
 
-		_methodName53 = "getDossiersStatisticsByGC_DC_M_Y_L";
+		_methodName53 = "getDossiersStatisticsByDC_M_Y";
 
 		_methodParameterTypes53 = new String[] {
-				"java.lang.String", "java.lang.String", "int", "int", "int"
+				"long", "java.lang.String", "int", "int"
 			};
 
-		_methodName54 = "getDossiersStatisticsByGC_DC_Y";
+		_methodName54 = "getDossiersStatisticsByG_M_Y";
 
-		_methodParameterTypes54 = new String[] {
-				"java.lang.String", "java.lang.String", "int"
-			};
+		_methodParameterTypes54 = new String[] { "long", "int", "int" };
 
-		_methodName55 = "updateDossiersStatistics";
+		_methodName55 = "getDossiersStatisticsByG_GC_DC_M_Y_L";
 
 		_methodParameterTypes55 = new String[] {
+				"long", "java.lang.String", "java.lang.String", "int", "int",
+				"int"
+			};
+
+		_methodName56 = "getDossiersStatisticsByG_GC_DC_Y";
+
+		_methodParameterTypes56 = new String[] {
+				"long", "java.lang.String", "java.lang.String", "int"
+			};
+
+		_methodName57 = "updateDossiersStatistics";
+
+		_methodParameterTypes57 = new String[] {
 				"long", "int", "int", "int", "int", "int", "int"
 			};
 	}
@@ -283,16 +294,13 @@ public class DossiersStatisticsLocalServiceClpInvoker {
 
 		if (_methodName49.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes49, parameterTypes)) {
-			return DossiersStatisticsLocalServiceUtil.generalStatistics(((Long)arguments[0]).longValue(),
-				((Integer)arguments[1]).intValue(),
-				((Integer)arguments[2]).intValue(),
-				(java.lang.String)arguments[3],
-				((Integer)arguments[4]).intValue());
+			return DossiersStatisticsLocalServiceUtil.getMonths(((Long)arguments[0]).longValue(),
+				((Integer)arguments[1]).intValue());
 		}
 
 		if (_methodName50.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes50, parameterTypes)) {
-			return DossiersStatisticsLocalServiceUtil.statisticsByDomain(((Long)arguments[0]).longValue(),
+			return DossiersStatisticsLocalServiceUtil.generalStatistics(((Long)arguments[0]).longValue(),
 				((Integer)arguments[1]).intValue(),
 				((Integer)arguments[2]).intValue(),
 				(java.lang.String)arguments[3],
@@ -301,7 +309,7 @@ public class DossiersStatisticsLocalServiceClpInvoker {
 
 		if (_methodName51.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes51, parameterTypes)) {
-			return DossiersStatisticsLocalServiceUtil.statisticsByGovAgency(((Long)arguments[0]).longValue(),
+			return DossiersStatisticsLocalServiceUtil.statisticsByDomain(((Long)arguments[0]).longValue(),
 				((Integer)arguments[1]).intValue(),
 				((Integer)arguments[2]).intValue(),
 				(java.lang.String)arguments[3],
@@ -310,29 +318,46 @@ public class DossiersStatisticsLocalServiceClpInvoker {
 
 		if (_methodName52.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes52, parameterTypes)) {
-			return DossiersStatisticsLocalServiceUtil.getDossiersStatisticsByDC_M_Y((java.lang.String)arguments[0],
+			return DossiersStatisticsLocalServiceUtil.statisticsByGovAgency(((Long)arguments[0]).longValue(),
 				((Integer)arguments[1]).intValue(),
-				((Integer)arguments[2]).intValue());
+				((Integer)arguments[2]).intValue(),
+				(java.lang.String)arguments[3],
+				((Integer)arguments[4]).intValue());
 		}
 
 		if (_methodName53.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes53, parameterTypes)) {
-			return DossiersStatisticsLocalServiceUtil.getDossiersStatisticsByGC_DC_M_Y_L((java.lang.String)arguments[0],
+			return DossiersStatisticsLocalServiceUtil.getDossiersStatisticsByDC_M_Y(((Long)arguments[0]).longValue(),
 				(java.lang.String)arguments[1],
 				((Integer)arguments[2]).intValue(),
-				((Integer)arguments[3]).intValue(),
-				((Integer)arguments[4]).intValue());
+				((Integer)arguments[3]).intValue());
 		}
 
 		if (_methodName54.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes54, parameterTypes)) {
-			return DossiersStatisticsLocalServiceUtil.getDossiersStatisticsByGC_DC_Y((java.lang.String)arguments[0],
-				(java.lang.String)arguments[1],
+			return DossiersStatisticsLocalServiceUtil.getDossiersStatisticsByG_M_Y(((Long)arguments[0]).longValue(),
+				((Integer)arguments[1]).intValue(),
 				((Integer)arguments[2]).intValue());
 		}
 
 		if (_methodName55.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes55, parameterTypes)) {
+			return DossiersStatisticsLocalServiceUtil.getDossiersStatisticsByG_GC_DC_M_Y_L(((Long)arguments[0]).longValue(),
+				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
+				((Integer)arguments[3]).intValue(),
+				((Integer)arguments[4]).intValue(),
+				((Integer)arguments[5]).intValue());
+		}
+
+		if (_methodName56.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes56, parameterTypes)) {
+			return DossiersStatisticsLocalServiceUtil.getDossiersStatisticsByG_GC_DC_Y(((Long)arguments[0]).longValue(),
+				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
+				((Integer)arguments[3]).intValue());
+		}
+
+		if (_methodName57.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes57, parameterTypes)) {
 			return DossiersStatisticsLocalServiceUtil.updateDossiersStatistics(((Long)arguments[0]).longValue(),
 				((Integer)arguments[1]).intValue(),
 				((Integer)arguments[2]).intValue(),
@@ -397,4 +422,8 @@ public class DossiersStatisticsLocalServiceClpInvoker {
 	private String[] _methodParameterTypes54;
 	private String _methodName55;
 	private String[] _methodParameterTypes55;
+	private String _methodName56;
+	private String[] _methodParameterTypes56;
+	private String _methodName57;
+	private String[] _methodParameterTypes57;
 }

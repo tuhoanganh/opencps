@@ -107,6 +107,15 @@ public class DossiersStatisticsLocalServiceImpl extends
 
 	/**
 	 * @param groupId
+	 * @param year
+	 * @return
+	 */
+	public List<Integer> getMonths(long groupId, int year) {
+		return dossiersStatisticsFinder.getStatisticsMonths(groupId, year);
+	}
+
+	/**
+	 * @param groupId
 	 * @param month
 	 * @param year
 	 * @param field
@@ -154,13 +163,28 @@ public class DossiersStatisticsLocalServiceImpl extends
 	 * @throws SystemException
 	 * @throws NoSuchDossiersStatisticsException
 	 */
-	public DossiersStatistics getDossiersStatisticsByDC_M_Y(String domainCode,
+	public DossiersStatistics getDossiersStatisticsByDC_M_Y(long groupId,
+			String domainCode, int month, int year) throws SystemException,
+			NoSuchDossiersStatisticsException {
+		return dossiersStatisticsPersistence.findByG_DC_M_Y(groupId,
+				domainCode, month, year);
+	}
+
+	/**
+	 * @param groupId
+	 * @param month
+	 * @param year
+	 * @param administrationLevel
+	 * @return
+	 * @throws SystemException
+	 * @throws NoSuchDossiersStatisticsException
+	 */
+	public DossiersStatistics getDossiersStatisticsByG_M_Y(long groupId,
 			int month, int year) throws SystemException,
 			NoSuchDossiersStatisticsException {
-		return dossiersStatisticsPersistence.findByDC_M_Y(domainCode, month,
-				year);
+		return dossiersStatisticsPersistence.findByG_M_Y(groupId, month, year);
 	}
-	
+
 	/**
 	 * @param govAgencyCode
 	 * @param domainCode
@@ -170,11 +194,12 @@ public class DossiersStatisticsLocalServiceImpl extends
 	 * @throws SystemException
 	 * @throws NoSuchDossiersStatisticsException
 	 */
-	public DossiersStatistics getDossiersStatisticsByGC_DC_M_Y_L(
-			String govAgencyCode, String domainCode, int month, int year, int administrationLevel)
-			throws SystemException, NoSuchDossiersStatisticsException {
-		return dossiersStatisticsPersistence.findByGC_DC_M_Y_L(govAgencyCode,
-				domainCode, month, year, administrationLevel);
+	public DossiersStatistics getDossiersStatisticsByG_GC_DC_M_Y_L(
+			long groupId, String govAgencyCode, String domainCode, int month,
+			int year, int administrationLevel) throws SystemException,
+			NoSuchDossiersStatisticsException {
+		return dossiersStatisticsPersistence.findByG_GC_DC_M_Y_L(groupId,
+				govAgencyCode, domainCode, month, year, administrationLevel);
 	}
 
 	/**
@@ -184,13 +209,12 @@ public class DossiersStatisticsLocalServiceImpl extends
 	 * @return
 	 * @throws SystemException
 	 */
-	public List<DossiersStatistics> getDossiersStatisticsByGC_DC_Y(
-			String govAgencyCode, String domainCode, int year) throws SystemException {
-		return dossiersStatisticsPersistence.findByGC_DC_Y(govAgencyCode,
-				domainCode, year);
+	public List<DossiersStatistics> getDossiersStatisticsByG_GC_DC_Y(
+			long groupId, String govAgencyCode, String domainCode, int year)
+			throws SystemException {
+		return dossiersStatisticsPersistence.findByG_GC_DC_Y(groupId,
+				govAgencyCode, domainCode, year);
 	}
-	
-	
 
 	/**
 	 * @param dossierStatisticId

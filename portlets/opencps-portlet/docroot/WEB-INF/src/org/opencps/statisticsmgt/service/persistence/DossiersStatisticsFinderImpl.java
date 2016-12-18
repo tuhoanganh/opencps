@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
+import com.liferay.portal.kernel.dao.orm.Type;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -90,6 +91,9 @@ public class DossiersStatisticsFinderImpl extends
 
 	private static final String SQL_STATISTICS_BY_GOVAGENCY = DossiersStatisticsFinder.class
 			.getName() + ".statisticsByGovagency";
+
+	private static final String SQL_STATISTICS_MONTHS = DossiersStatisticsFinder.class
+			.getName() + ".getMonths";
 
 	/**
 	 * @param groupId
@@ -157,6 +161,8 @@ public class DossiersStatisticsFinderImpl extends
 				DossierStatisticsBean statisticsBean = new DossierStatisticsBean();
 
 				statisticsBean.setMonth(month);
+
+				statisticsBean.setGroupId(groupId);
 
 				statisticsBean.setYear(year);
 				String columnName = columnNames[0];
@@ -250,6 +256,8 @@ public class DossiersStatisticsFinderImpl extends
 
 					statisticsBean.setYear(year);
 
+					statisticsBean.setGroupId(groupId);
+
 					Object[] objects = itr.next();
 
 					if (objects.length == columnDataTypes.length) {
@@ -304,7 +312,7 @@ public class DossiersStatisticsFinderImpl extends
 
 			sql = StringUtil.replace(sql, "$FILTER$", definedCondition);
 
-			_log.info(sql);
+			// _log.info(sql);
 
 			String definedColumnDataTypes = CustomSQLUtil
 					.get(SQL_STATISTICS_DATA_TYPES_2);
@@ -350,6 +358,8 @@ public class DossiersStatisticsFinderImpl extends
 
 					statisticsBean.setYear(year);
 
+					statisticsBean.setGroupId(groupId);
+
 					if (objects.length == columnDataTypes.length) {
 						for (int i = 0; i < objects.length; i++) {
 							String columnName = columnNames[i];
@@ -373,6 +383,48 @@ public class DossiersStatisticsFinderImpl extends
 			closeSession(session);
 		}
 		return null;
+	}
+
+	public List<Integer> getStatisticsMonths(long groupId, int year) {
+		Session session = null;
+		List<Integer> months = new ArrayList<Integer>();
+		try {
+			session = openSession();
+
+			String sql = CustomSQLUtil.get(SQL_STATISTICS_MONTHS);
+
+			_log.info(sql);
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar("COL0", Type.INTEGER);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			_log.info(groupId + "|" + year);
+
+			qPos.add(groupId);
+
+			qPos.add(year);
+
+			Iterator<Integer> itr = q.iterate();
+
+			if (itr.hasNext()) {
+				while (itr.hasNext()) {
+					Integer it = itr.next();
+					int month = it.intValue();
+					_log.info("########################## " + month);
+					months.add(month);
+				}
+			}
+		} catch (Exception e) {
+			_log.error(e);
+		} finally {
+			closeSession(session);
+		}
+
+		_log.info("########################## months.size()" + months.size());
+		return months;
 	}
 
 	private Log _log = LogFactoryUtil.getLog(DossiersStatisticsFinderImpl.class

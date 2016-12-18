@@ -3,22 +3,22 @@ package org.opencps.statisticsmgt.util;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import org.opencps.statisticsmgt.bean.DossierStatisticsBean;
 import org.opencps.statisticsmgt.model.DossiersStatistics;
-import org.opencps.statisticsmgt.model.impl.DossiersStatisticsImpl;
 import org.opencps.statisticsmgt.service.DossiersStatisticsLocalServiceUtil;
 import org.opencps.statisticsmgt.service.persistence.DossiersStatisticsFinder;
 
 import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Type;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.management.jmx.DoOperationAction;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -29,6 +29,10 @@ public class StatisticsUtil {
 	public static final String RECEIVED = "received";
 	public static final String FINISHED = "finished";
 	public static final String PROCESSING = "processing";
+
+	public static final String STATISTICS_BY = "statisticsBy";
+	public static final String MONTH = "month";
+	public static final String YEAR = "year";
 
 	public static enum StatisticsFieldNumber {
 		ReceivedNumber, OntimeNumber, OvertimeNumber, ProcessingNumber, DelayingNumber, RemainingNumber
@@ -162,8 +166,8 @@ public class StatisticsUtil {
 			temp = StringUtil.upperCaseFirstLetter(temp);
 			methodName += temp;
 		}
-		
-		//System.out.println(methodName + "---" + columnName);
+
+		// System.out.println(methodName + "---" + columnName);
 
 		Class<?> clazz = getClazz(coulmnDataType);
 
@@ -229,11 +233,8 @@ public class StatisticsUtil {
 		HashMap<String, DossierStatisticsBean> beanMap = new HashMap<String, DossierStatisticsBean>();
 
 		if (data != null) {
-			_log.info("###################################################Data "
+			_log.info("################################## data.size"
 					+ data.size());
-
-			// fake data
-
 			try {
 				for (int i = 0; i < data.size(); i++) {
 					DossierStatisticsBean statisticsBean = (DossierStatisticsBean) data
@@ -255,24 +256,35 @@ public class StatisticsUtil {
 							+ StringPool.DASH
 							+ statisticsBean.getAdministrationLevel();
 
-					//System.out
-					//		.println("########################################################### key"
-					//				+ i
-					//				+ "--"
-					//				+ key
-					//				+ "{"
-					//				+ statisticsBean.getAdministrationLevel()
-					//				+ "}");
+					System.out
+							.println("########################################################### key"
+									+ i
+									+ "--"
+									+ key
+									+ "{"
+									+ statisticsBean.getAdministrationLevel()
+									+ "}"
+									+ "{"
+									+ statisticsBean.getGroupId()
+									+ "}");
 
 					if (beanMap != null && beanMap.containsKey(key)) {
 						statisticsBeanTemp = beanMap.get(key);
 					}
-					
-					//_log.info("###################################################statisticsBeanTemp "
-					//		+ statisticsBeanTemp.getReceivedNumber() + "|" + statisticsBeanTemp.getProcessingNumber() + "|" + statisticsBeanTemp.getMonth());
 
+					// _log.info("###################################################statisticsBeanTemp "
+					// + statisticsBeanTemp.getReceivedNumber() + "|" +
+					// statisticsBeanTemp.getProcessingNumber() + "|" +
+					// statisticsBeanTemp.getMonth());
 
 					// Create Group (domain, gov, index != 0)
+
+					statisticsBeanTemp.setGroupId(statisticsBean.getGroupId());
+
+					statisticsBeanTemp.setCompanyId(statisticsBean
+							.getCompanyId());
+
+					statisticsBeanTemp.setUserId(statisticsBean.getUserId());
 
 					if (statisticsBean.getDelayingNumber() > 0) {
 
@@ -337,9 +349,6 @@ public class StatisticsUtil {
 
 				}
 
-				_log.info("####################################"
-						+ beanMap.size());
-
 				if (beanMap != null) {
 					for (String key : beanMap.keySet()) {
 						DossierStatisticsBean dossierStatisticsBean = beanMap
@@ -355,7 +364,8 @@ public class StatisticsUtil {
 						dossierStatisticsBean
 								.setRemainingNumber(remainingNumber);
 
-						
+						// add domain gov level !=0
+						DossiersStatistics dossierStatistics = addDossiersStatistics(dossierStatisticsBean);
 
 						if (Validator.isNotNull(dossierStatisticsBean
 								.getDomainItemCode())) {
@@ -404,10 +414,8 @@ public class StatisticsUtil {
 									statisticGovTreeIndexKey,
 									dossierStatisticsBean);
 						}
-						
-						beanMap.put(key, dossierStatisticsBean);
 
-						DossiersStatistics dossierStatistics = addDossiersStatistics(dossierStatisticsBean);
+						beanMap.put(key, dossierStatisticsBean);
 
 						dossiersStatistics.add(dossierStatistics);
 
@@ -621,26 +629,78 @@ public class StatisticsUtil {
 		return dossiersStatistics;
 	}
 
+	/**
+	 * @param dossierStatisticsBean
+	 * @return
+	 * @throws SystemException
+	 * @throws PortalException
+	 */
 	public static DossiersStatistics addDossiersStatistics(
-			DossierStatisticsBean dossierStatisticsBean) throws SystemException {
-		//_log.info("=========================================="
-		//		+ dossierStatisticsBean.getDomainItemCode());
+			DossierStatisticsBean dossierStatisticsBean)
+			throws SystemException, PortalException {
 
-		DossiersStatistics dossierStatistics = DossiersStatisticsLocalServiceUtil
-				.addDossiersStatistics(dossierStatisticsBean.getGroupId(),
-						dossierStatisticsBean.getCompanyId(),
-						dossierStatisticsBean.getUserId(),
-						dossierStatisticsBean.getRemainingNumber(),
-						dossierStatisticsBean.getReceivedNumber(),
-						dossierStatisticsBean.getOntimeNumber(),
-						dossierStatisticsBean.getOvertimeNumber(),
-						dossierStatisticsBean.getProcessingNumber(),
-						dossierStatisticsBean.getDelayingNumber(),
-						dossierStatisticsBean.getMonth(),
-						dossierStatisticsBean.getYear(),
-						dossierStatisticsBean.getGovItemCode(),
-						dossierStatisticsBean.getDomainItemCode(),
-						dossierStatisticsBean.getAdministrationLevel());
+		Date now = new Date();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(now);
+
+		int currentYear = calendar.get(Calendar.YEAR);
+
+		int currentMonth = calendar.get(Calendar.MONTH) + 1;
+
+		_log.info("currentYear | currentMonth " + currentMonth + " | "
+				+ currentYear);
+
+		DossiersStatistics dossierStatistics = null;
+
+		if (dossierStatisticsBean.getMonth() == currentMonth
+				&& dossierStatisticsBean.getYear() == currentYear) {
+			try {
+				dossierStatistics = DossiersStatisticsLocalServiceUtil
+						.getDossiersStatisticsByG_GC_DC_M_Y_L(
+								dossierStatisticsBean.getGroupId(),
+								Validator.isNotNull(dossierStatisticsBean
+										.getGovItemCode()) ? dossierStatisticsBean
+										.getGovItemCode() : StringPool.BLANK,
+								Validator.isNotNull(dossierStatisticsBean
+										.getDomainItemCode()) ? dossierStatisticsBean
+										.getDomainItemCode() : StringPool.BLANK,
+								dossierStatisticsBean.getMonth(),
+								dossierStatisticsBean.getYear(),
+								dossierStatisticsBean.getAdministrationLevel());
+			} catch (Exception e) {
+				_log.info(e.getMessage());
+			}
+		}
+
+		if (dossierStatistics == null) {
+			dossierStatistics = DossiersStatisticsLocalServiceUtil
+					.addDossiersStatistics(dossierStatisticsBean.getGroupId(),
+							dossierStatisticsBean.getCompanyId(),
+							dossierStatisticsBean.getUserId(),
+							dossierStatisticsBean.getRemainingNumber(),
+							dossierStatisticsBean.getReceivedNumber(),
+							dossierStatisticsBean.getOntimeNumber(),
+							dossierStatisticsBean.getOvertimeNumber(),
+							dossierStatisticsBean.getProcessingNumber(),
+							dossierStatisticsBean.getDelayingNumber(),
+							dossierStatisticsBean.getMonth(),
+							dossierStatisticsBean.getYear(),
+							dossierStatisticsBean.getGovItemCode(),
+							dossierStatisticsBean.getDomainItemCode(),
+							dossierStatisticsBean.getAdministrationLevel());
+		} else {
+			_log.info("Update statistic: " + dossierStatisticsBean.getMonth()
+					+ "|" + dossierStatisticsBean.getYear());
+			dossierStatistics = DossiersStatisticsLocalServiceUtil
+					.updateDossiersStatistics(
+							dossierStatistics.getDossierStatisticId(),
+							dossierStatisticsBean.getRemainingNumber(),
+							dossierStatisticsBean.getReceivedNumber(),
+							dossierStatisticsBean.getOntimeNumber(),
+							dossierStatisticsBean.getOvertimeNumber(),
+							dossierStatisticsBean.getProcessingNumber(),
+							dossierStatisticsBean.getDelayingNumber());
+		}
 
 		return dossierStatistics;
 	}

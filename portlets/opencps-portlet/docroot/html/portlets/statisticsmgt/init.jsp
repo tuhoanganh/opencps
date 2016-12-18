@@ -27,7 +27,7 @@
 	Calendar calendar = Calendar.getInstance();
 	calendar.setTime(now);
 	
-	int currentMonth = calendar.get(Calendar.MONTH);
+	int currentMonth = calendar.get(Calendar.MONTH) + 1;
 	int currentYear = calendar.get(Calendar.YEAR);
 %>
 

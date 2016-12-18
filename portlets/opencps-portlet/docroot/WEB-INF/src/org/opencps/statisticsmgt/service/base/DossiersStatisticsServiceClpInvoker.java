@@ -35,8 +35,16 @@ public class DossiersStatisticsServiceClpInvoker {
 		_methodName32 = "getDossiersStatisticsByGC_DC_Y";
 
 		_methodParameterTypes32 = new String[] {
-				"java.lang.String", "java.lang.String", "int"
+				"long", "java.lang.String", "java.lang.String", "int"
 			};
+
+		_methodName33 = "statisticsDossierOfYear";
+
+		_methodParameterTypes33 = new String[] { "long", "int", "java.lang.String" };
+
+		_methodName34 = "statisticsDossierAllMonthsOfYear";
+
+		_methodParameterTypes34 = new String[] { "long", "int", "java.lang.String" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -55,9 +63,23 @@ public class DossiersStatisticsServiceClpInvoker {
 
 		if (_methodName32.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes32, parameterTypes)) {
-			return DossiersStatisticsServiceUtil.getDossiersStatisticsByGC_DC_Y((java.lang.String)arguments[0],
-				(java.lang.String)arguments[1],
-				((Integer)arguments[2]).intValue());
+			return DossiersStatisticsServiceUtil.getDossiersStatisticsByGC_DC_Y(((Long)arguments[0]).longValue(),
+				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
+				((Integer)arguments[3]).intValue());
+		}
+
+		if (_methodName33.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes33, parameterTypes)) {
+			return DossiersStatisticsServiceUtil.statisticsDossierOfYear(((Long)arguments[0]).longValue(),
+				((Integer)arguments[1]).intValue(),
+				(java.lang.String)arguments[2]);
+		}
+
+		if (_methodName34.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes34, parameterTypes)) {
+			return DossiersStatisticsServiceUtil.statisticsDossierAllMonthsOfYear(((Long)arguments[0]).longValue(),
+				((Integer)arguments[1]).intValue(),
+				(java.lang.String)arguments[2]);
 		}
 
 		throw new UnsupportedOperationException();
@@ -69,4 +91,8 @@ public class DossiersStatisticsServiceClpInvoker {
 	private String[] _methodParameterTypes27;
 	private String _methodName32;
 	private String[] _methodParameterTypes32;
+	private String _methodName33;
+	private String[] _methodParameterTypes33;
+	private String _methodName34;
+	private String[] _methodParameterTypes34;
 }

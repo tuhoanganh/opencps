@@ -70,14 +70,50 @@ public class DossiersStatisticsServiceSoap {
 	* @throws SystemException
 	*/
 	public static org.opencps.statisticsmgt.model.DossiersStatisticsSoap[] getDossiersStatisticsByGC_DC_Y(
-		java.lang.String govAgencyCode, java.lang.String domainCode, int year)
-		throws RemoteException {
+		long groupId, java.lang.String govAgencyCode,
+		java.lang.String domainCode, int year) throws RemoteException {
 		try {
 			java.util.List<org.opencps.statisticsmgt.model.DossiersStatistics> returnValue =
-				DossiersStatisticsServiceUtil.getDossiersStatisticsByGC_DC_Y(govAgencyCode,
-					domainCode, year);
+				DossiersStatisticsServiceUtil.getDossiersStatisticsByGC_DC_Y(groupId,
+					govAgencyCode, domainCode, year);
 
 			return org.opencps.statisticsmgt.model.DossiersStatisticsSoap.toSoapModels(returnValue);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	/**
+	* @param year
+	* @return
+	* @throws SystemException
+	*/
+	public static java.lang.String statisticsDossierOfYear(long groupId,
+		int year, java.lang.String language) throws RemoteException {
+		try {
+			com.liferay.portal.kernel.json.JSONArray returnValue = DossiersStatisticsServiceUtil.statisticsDossierOfYear(groupId,
+					year, language);
+
+			return returnValue.toString();
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	public static java.lang.String statisticsDossierAllMonthsOfYear(
+		long groupId, int year, java.lang.String language)
+		throws RemoteException {
+		try {
+			com.liferay.portal.kernel.json.JSONArray returnValue = DossiersStatisticsServiceUtil.statisticsDossierAllMonthsOfYear(groupId,
+					year, language);
+
+			return returnValue.toString();
 		}
 		catch (Exception e) {
 			_log.error(e, e);

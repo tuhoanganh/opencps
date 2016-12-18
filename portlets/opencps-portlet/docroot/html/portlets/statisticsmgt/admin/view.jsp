@@ -1,117 +1,42 @@
 <%@page import="org.opencps.statisticsmgt.util.StatisticsUtil"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="org.opencps.util.PortletConstants"%>
-<%@page import="org.opencps.statisticsmgt.util.StatisticsUtil.StatisticsFieldNumber"%>
-<%@page import="org.opencps.statisticsmgt.bean.DossierStatisticsBean"%>
-<%@page import="java.util.List"%>
-<%@page import="org.opencps.statisticsmgt.service.DossiersStatisticsLocalServiceUtil"%>
+
 <%@ include file="../init.jsp" %>
 
-This is the <b>Statistics</b> portlet in View mode.
+<liferay-portlet:actionURL var="doStatisticsURL" name="doStatistics"/>
 
-<%
-	int initYear = 2016;
+<aui:form name="fm" action="<%=doStatisticsURL %>" method="post">
+	<aui:input name="<%=StatisticsUtil.STATISTICS_BY %>" value="<%=StatisticsUtil.MONTH %>" type="hidden"/>
+	<aui:input name="month" value="<%=currentMonth %>" type="hidden"/>
+	<aui:input name="year" value="<%=currentYear %>" type="hidden"/>
+	<aui:input name="groupId" value="<%=scopeGroupId %>" type="hidden"/>
+	
+	<aui:fieldset label="statistics-dossiers">
+		<aui:button name="statsInCurrentMonth" value="stats-in-current-month" type="button" />
+		<aui:button name="statsInCurrentYear" value="stats-in-current-year" type="button"/>
+	</aui:fieldset>
+</aui:form>
 
-	List total = new ArrayList<Object>();
-	
-	for(int m = 1; m <= 12; m++){
+
+
+<aui:script>
+	AUI().ready(function(A){
 		
-		List receiveds1 = DossiersStatisticsLocalServiceUtil.generalStatistics(scopeGroupId, m, initYear, 
-				StatisticsFieldNumber.ReceivedNumber.toString(), -1);
-		List ontimes1 = DossiersStatisticsLocalServiceUtil.generalStatistics(scopeGroupId, m, initYear, 
-				StatisticsFieldNumber.OntimeNumber.toString(), PortletConstants.DOSSIER_DELAY_STATUS_ONTIME);
-		List overtimes1 = DossiersStatisticsLocalServiceUtil.generalStatistics(scopeGroupId, m, initYear, 
-				StatisticsFieldNumber.OvertimeNumber.toString(), PortletConstants.DOSSIER_DELAY_STATUS_LATE);
-		List processings1 = DossiersStatisticsLocalServiceUtil.generalStatistics(scopeGroupId, m, initYear, 
-				StatisticsFieldNumber.ProcessingNumber.toString(), PortletConstants.DOSSIER_DELAY_STATUS_UNEXPIRED);
-		List delayings1 = DossiersStatisticsLocalServiceUtil.generalStatistics(scopeGroupId, m, initYear, 
-				StatisticsFieldNumber.DelayingNumber.toString(), PortletConstants.DOSSIER_DELAY_STATUS_EXPIRED);
+		var statsInCurrentMonth = A.one('#<portlet:namespace/>statsInCurrentMonth');
+		var statsInCurrentYear = A.one('#<portlet:namespace/>statsInCurrentYear');
+		var statisticBy = A.one('#<portlet:namespace/>statisticsBy');
 		
-		if(receiveds1 != null){
-			total.addAll(receiveds1);
+		if(statsInCurrentMonth){
+			statsInCurrentMonth.on('click', function(){
+				statisticBy.val('month'); 
+				submitForm(document.<portlet:namespace />fm);
+			});
 		}
 		
-		if(ontimes1 != null){
-			total.addAll(ontimes1);
+		if(statsInCurrentYear){
+			statsInCurrentYear.on('click', function(){
+				statisticBy.val('year'); 
+				submitForm(document.<portlet:namespace />fm);
+			});
 		}
-		
-		if(overtimes1 != null){
-			total.addAll(overtimes1);
-		}
-		
-		if(processings1 != null){
-			total.addAll(processings1);
-		}
-		
-		if(delayings1 != null){
-			total.addAll(delayings1);
-		}
-		
-		
-		List receiveds2 = DossiersStatisticsLocalServiceUtil.statisticsByDomain(scopeGroupId, m, initYear, 
-				StatisticsFieldNumber.ReceivedNumber.toString(), -1);
-		List ontimes2 = DossiersStatisticsLocalServiceUtil.statisticsByDomain(scopeGroupId, m, initYear, 
-				StatisticsFieldNumber.OntimeNumber.toString(), PortletConstants.DOSSIER_DELAY_STATUS_ONTIME);
-		List overtimes2= DossiersStatisticsLocalServiceUtil.statisticsByDomain(scopeGroupId, m, initYear, 
-				StatisticsFieldNumber.OvertimeNumber.toString(), PortletConstants.DOSSIER_DELAY_STATUS_LATE);
-		List processings2 = DossiersStatisticsLocalServiceUtil.statisticsByDomain(scopeGroupId, m, initYear, 
-				StatisticsFieldNumber.ProcessingNumber.toString(), PortletConstants.DOSSIER_DELAY_STATUS_UNEXPIRED);
-		List delayings2 = DossiersStatisticsLocalServiceUtil.statisticsByDomain(scopeGroupId, m, initYear, 
-				StatisticsFieldNumber.DelayingNumber.toString(), PortletConstants.DOSSIER_DELAY_STATUS_EXPIRED);
-		
-		if(receiveds2 != null){
-			total.addAll(receiveds2);
-		}
-		
-		if(ontimes2 != null){
-			total.addAll(ontimes2);
-		}
-		
-		if(overtimes2 != null){
-			total.addAll(overtimes2);
-		}
-		
-		if(processings2 != null){
-			total.addAll(processings2);
-		}
-		
-		if(delayings2 != null){
-			total.addAll(delayings2);
-		}
-		
-		
-		List receiveds3 = DossiersStatisticsLocalServiceUtil.statisticsByGovAgency(scopeGroupId, m, initYear, 
-				StatisticsFieldNumber.ReceivedNumber.toString(), -1);
-		List ontimes3 = DossiersStatisticsLocalServiceUtil.statisticsByGovAgency(scopeGroupId, m, initYear, 
-				StatisticsFieldNumber.OntimeNumber.toString(), PortletConstants.DOSSIER_DELAY_STATUS_ONTIME);
-		List overtimes3= DossiersStatisticsLocalServiceUtil.statisticsByGovAgency(scopeGroupId, m, initYear, 
-				StatisticsFieldNumber.OvertimeNumber.toString(), PortletConstants.DOSSIER_DELAY_STATUS_LATE);
-		List processings3 = DossiersStatisticsLocalServiceUtil.statisticsByGovAgency(scopeGroupId, m, initYear, 
-				StatisticsFieldNumber.ProcessingNumber.toString(), PortletConstants.DOSSIER_DELAY_STATUS_UNEXPIRED);
-		List delayings3 = DossiersStatisticsLocalServiceUtil.statisticsByGovAgency(scopeGroupId, m, initYear, 
-				StatisticsFieldNumber.DelayingNumber.toString(), PortletConstants.DOSSIER_DELAY_STATUS_EXPIRED);
-		
-		if(receiveds3 != null){
-			total.addAll(receiveds3);
-		}
-		
-		if(ontimes3 != null){
-			total.addAll(ontimes3);
-		}
-		
-		if(overtimes3 != null){
-			total.addAll(overtimes3);
-		}
-		
-		if(processings3 != null){
-			total.addAll(processings3);
-		}
-		
-		if(delayings3 != null){
-			total.addAll(delayings3);
-		}
-		
-	}
-	
-	//StatisticsUtil.getDossiersStatistics(total);
-%>
+	});
+</aui:script>

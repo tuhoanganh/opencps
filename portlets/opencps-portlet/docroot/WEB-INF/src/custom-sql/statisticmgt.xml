@@ -201,4 +201,20 @@
 				opencps_processorder.govAgencyCode;
 		]]>
 	</sql>
+	
+	
+	<sql id="org.opencps.statisticsmgt.service.persistence.DossiersStatisticsFinder.getMonths">	
+		<![CDATA[
+	    	SELECT 
+				DISTINCT opencps_dossierstatistics.month AS COL0
+			FROM 
+				opencps_dossierstatistics
+			WHERE
+				(groupId = ?)
+			AND 
+				(opencps_dossierstatistics.year = ?)
+			ORDER BY
+				opencps_dossierstatistics.month;
+		]]>
+	</sql>
 </custom-sql>

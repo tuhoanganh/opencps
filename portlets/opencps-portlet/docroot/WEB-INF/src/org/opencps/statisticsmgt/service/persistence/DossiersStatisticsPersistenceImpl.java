@@ -1100,28 +1100,30 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	}
 
 	private static final String _FINDER_COLUMN_YEAR_YEAR_2 = "dossiersStatistics.year = ?";
-	public static final FinderPath FINDER_PATH_FETCH_BY_DC_M_Y = new FinderPath(DossiersStatisticsModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_FETCH_BY_G_DC_M_Y = new FinderPath(DossiersStatisticsModelImpl.ENTITY_CACHE_ENABLED,
 			DossiersStatisticsModelImpl.FINDER_CACHE_ENABLED,
 			DossiersStatisticsImpl.class, FINDER_CLASS_NAME_ENTITY,
-			"fetchByDC_M_Y",
+			"fetchByG_DC_M_Y",
 			new String[] {
-				String.class.getName(), Integer.class.getName(),
-				Integer.class.getName()
+				Long.class.getName(), String.class.getName(),
+				Integer.class.getName(), Integer.class.getName()
 			},
+			DossiersStatisticsModelImpl.GROUPID_COLUMN_BITMASK |
 			DossiersStatisticsModelImpl.DOMAINCODE_COLUMN_BITMASK |
 			DossiersStatisticsModelImpl.MONTH_COLUMN_BITMASK |
 			DossiersStatisticsModelImpl.YEAR_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_DC_M_Y = new FinderPath(DossiersStatisticsModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_DC_M_Y = new FinderPath(DossiersStatisticsModelImpl.ENTITY_CACHE_ENABLED,
 			DossiersStatisticsModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByDC_M_Y",
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_DC_M_Y",
 			new String[] {
-				String.class.getName(), Integer.class.getName(),
-				Integer.class.getName()
+				Long.class.getName(), String.class.getName(),
+				Integer.class.getName(), Integer.class.getName()
 			});
 
 	/**
-	 * Returns the dossiers statistics where domainCode = &#63; and month = &#63; and year = &#63; or throws a {@link org.opencps.statisticsmgt.NoSuchDossiersStatisticsException} if it could not be found.
+	 * Returns the dossiers statistics where groupId = &#63; and domainCode = &#63; and month = &#63; and year = &#63; or throws a {@link org.opencps.statisticsmgt.NoSuchDossiersStatisticsException} if it could not be found.
 	 *
+	 * @param groupId the group ID
 	 * @param domainCode the domain code
 	 * @param month the month
 	 * @param year the year
@@ -1130,17 +1132,21 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public DossiersStatistics findByDC_M_Y(String domainCode, int month,
-		int year) throws NoSuchDossiersStatisticsException, SystemException {
-		DossiersStatistics dossiersStatistics = fetchByDC_M_Y(domainCode,
-				month, year);
+	public DossiersStatistics findByG_DC_M_Y(long groupId, String domainCode,
+		int month, int year)
+		throws NoSuchDossiersStatisticsException, SystemException {
+		DossiersStatistics dossiersStatistics = fetchByG_DC_M_Y(groupId,
+				domainCode, month, year);
 
 		if (dossiersStatistics == null) {
-			StringBundler msg = new StringBundler(8);
+			StringBundler msg = new StringBundler(10);
 
 			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
 
-			msg.append("domainCode=");
+			msg.append("groupId=");
+			msg.append(groupId);
+
+			msg.append(", domainCode=");
 			msg.append(domainCode);
 
 			msg.append(", month=");
@@ -1162,8 +1168,9 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	}
 
 	/**
-	 * Returns the dossiers statistics where domainCode = &#63; and month = &#63; and year = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 * Returns the dossiers statistics where groupId = &#63; and domainCode = &#63; and month = &#63; and year = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
 	 *
+	 * @param groupId the group ID
 	 * @param domainCode the domain code
 	 * @param month the month
 	 * @param year the year
@@ -1171,14 +1178,15 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public DossiersStatistics fetchByDC_M_Y(String domainCode, int month,
-		int year) throws SystemException {
-		return fetchByDC_M_Y(domainCode, month, year, true);
+	public DossiersStatistics fetchByG_DC_M_Y(long groupId, String domainCode,
+		int month, int year) throws SystemException {
+		return fetchByG_DC_M_Y(groupId, domainCode, month, year, true);
 	}
 
 	/**
-	 * Returns the dossiers statistics where domainCode = &#63; and month = &#63; and year = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 * Returns the dossiers statistics where groupId = &#63; and domainCode = &#63; and month = &#63; and year = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
 	 *
+	 * @param groupId the group ID
 	 * @param domainCode the domain code
 	 * @param month the month
 	 * @param year the year
@@ -1187,21 +1195,24 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public DossiersStatistics fetchByDC_M_Y(String domainCode, int month,
-		int year, boolean retrieveFromCache) throws SystemException {
-		Object[] finderArgs = new Object[] { domainCode, month, year };
+	public DossiersStatistics fetchByG_DC_M_Y(long groupId, String domainCode,
+		int month, int year, boolean retrieveFromCache)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { groupId, domainCode, month, year };
 
 		Object result = null;
 
 		if (retrieveFromCache) {
-			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_DC_M_Y,
+			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_G_DC_M_Y,
 					finderArgs, this);
 		}
 
 		if (result instanceof DossiersStatistics) {
 			DossiersStatistics dossiersStatistics = (DossiersStatistics)result;
 
-			if (!Validator.equals(domainCode, dossiersStatistics.getDomainCode()) ||
+			if ((groupId != dossiersStatistics.getGroupId()) ||
+					!Validator.equals(domainCode,
+						dossiersStatistics.getDomainCode()) ||
 					(month != dossiersStatistics.getMonth()) ||
 					(year != dossiersStatistics.getYear())) {
 				result = null;
@@ -1209,27 +1220,29 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(5);
+			StringBundler query = new StringBundler(6);
 
 			query.append(_SQL_SELECT_DOSSIERSSTATISTICS_WHERE);
+
+			query.append(_FINDER_COLUMN_G_DC_M_Y_GROUPID_2);
 
 			boolean bindDomainCode = false;
 
 			if (domainCode == null) {
-				query.append(_FINDER_COLUMN_DC_M_Y_DOMAINCODE_1);
+				query.append(_FINDER_COLUMN_G_DC_M_Y_DOMAINCODE_1);
 			}
 			else if (domainCode.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_DC_M_Y_DOMAINCODE_3);
+				query.append(_FINDER_COLUMN_G_DC_M_Y_DOMAINCODE_3);
 			}
 			else {
 				bindDomainCode = true;
 
-				query.append(_FINDER_COLUMN_DC_M_Y_DOMAINCODE_2);
+				query.append(_FINDER_COLUMN_G_DC_M_Y_DOMAINCODE_2);
 			}
 
-			query.append(_FINDER_COLUMN_DC_M_Y_MONTH_2);
+			query.append(_FINDER_COLUMN_G_DC_M_Y_MONTH_2);
 
-			query.append(_FINDER_COLUMN_DC_M_Y_YEAR_2);
+			query.append(_FINDER_COLUMN_G_DC_M_Y_YEAR_2);
 
 			String sql = query.toString();
 
@@ -1242,6 +1255,8 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
+				qPos.add(groupId);
+
 				if (bindDomainCode) {
 					qPos.add(domainCode);
 				}
@@ -1253,13 +1268,13 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 				List<DossiersStatistics> list = q.list();
 
 				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_DC_M_Y,
+					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_DC_M_Y,
 						finderArgs, list);
 				}
 				else {
 					if ((list.size() > 1) && _log.isWarnEnabled()) {
 						_log.warn(
-							"DossiersStatisticsPersistenceImpl.fetchByDC_M_Y(String, int, int, boolean) with parameters (" +
+							"DossiersStatisticsPersistenceImpl.fetchByG_DC_M_Y(long, String, int, int, boolean) with parameters (" +
 							StringUtil.merge(finderArgs) +
 							") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
 					}
@@ -1270,18 +1285,19 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 
 					cacheResult(dossiersStatistics);
 
-					if ((dossiersStatistics.getDomainCode() == null) ||
+					if ((dossiersStatistics.getGroupId() != groupId) ||
+							(dossiersStatistics.getDomainCode() == null) ||
 							!dossiersStatistics.getDomainCode()
 												   .equals(domainCode) ||
 							(dossiersStatistics.getMonth() != month) ||
 							(dossiersStatistics.getYear() != year)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_DC_M_Y,
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_DC_M_Y,
 							finderArgs, dossiersStatistics);
 					}
 				}
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_DC_M_Y,
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_DC_M_Y,
 					finderArgs);
 
 				throw processException(e);
@@ -1300,8 +1316,9 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	}
 
 	/**
-	 * Removes the dossiers statistics where domainCode = &#63; and month = &#63; and year = &#63; from the database.
+	 * Removes the dossiers statistics where groupId = &#63; and domainCode = &#63; and month = &#63; and year = &#63; from the database.
 	 *
+	 * @param groupId the group ID
 	 * @param domainCode the domain code
 	 * @param month the month
 	 * @param year the year
@@ -1309,17 +1326,19 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public DossiersStatistics removeByDC_M_Y(String domainCode, int month,
-		int year) throws NoSuchDossiersStatisticsException, SystemException {
-		DossiersStatistics dossiersStatistics = findByDC_M_Y(domainCode, month,
-				year);
+	public DossiersStatistics removeByG_DC_M_Y(long groupId, String domainCode,
+		int month, int year)
+		throws NoSuchDossiersStatisticsException, SystemException {
+		DossiersStatistics dossiersStatistics = findByG_DC_M_Y(groupId,
+				domainCode, month, year);
 
 		return remove(dossiersStatistics);
 	}
 
 	/**
-	 * Returns the number of dossiers statisticses where domainCode = &#63; and month = &#63; and year = &#63;.
+	 * Returns the number of dossiers statisticses where groupId = &#63; and domainCode = &#63; and month = &#63; and year = &#63;.
 	 *
+	 * @param groupId the group ID
 	 * @param domainCode the domain code
 	 * @param month the month
 	 * @param year the year
@@ -1327,37 +1346,39 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public int countByDC_M_Y(String domainCode, int month, int year)
-		throws SystemException {
-		FinderPath finderPath = FINDER_PATH_COUNT_BY_DC_M_Y;
+	public int countByG_DC_M_Y(long groupId, String domainCode, int month,
+		int year) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_DC_M_Y;
 
-		Object[] finderArgs = new Object[] { domainCode, month, year };
+		Object[] finderArgs = new Object[] { groupId, domainCode, month, year };
 
 		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
 				this);
 
 		if (count == null) {
-			StringBundler query = new StringBundler(4);
+			StringBundler query = new StringBundler(5);
 
 			query.append(_SQL_COUNT_DOSSIERSSTATISTICS_WHERE);
+
+			query.append(_FINDER_COLUMN_G_DC_M_Y_GROUPID_2);
 
 			boolean bindDomainCode = false;
 
 			if (domainCode == null) {
-				query.append(_FINDER_COLUMN_DC_M_Y_DOMAINCODE_1);
+				query.append(_FINDER_COLUMN_G_DC_M_Y_DOMAINCODE_1);
 			}
 			else if (domainCode.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_DC_M_Y_DOMAINCODE_3);
+				query.append(_FINDER_COLUMN_G_DC_M_Y_DOMAINCODE_3);
 			}
 			else {
 				bindDomainCode = true;
 
-				query.append(_FINDER_COLUMN_DC_M_Y_DOMAINCODE_2);
+				query.append(_FINDER_COLUMN_G_DC_M_Y_DOMAINCODE_2);
 			}
 
-			query.append(_FINDER_COLUMN_DC_M_Y_MONTH_2);
+			query.append(_FINDER_COLUMN_G_DC_M_Y_MONTH_2);
 
-			query.append(_FINDER_COLUMN_DC_M_Y_YEAR_2);
+			query.append(_FINDER_COLUMN_G_DC_M_Y_YEAR_2);
 
 			String sql = query.toString();
 
@@ -1369,6 +1390,8 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 				Query q = session.createQuery(sql);
 
 				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
 
 				if (bindDomainCode) {
 					qPos.add(domainCode);
@@ -1395,59 +1418,74 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 		return count.intValue();
 	}
 
-	private static final String _FINDER_COLUMN_DC_M_Y_DOMAINCODE_1 = "dossiersStatistics.domainCode IS NULL AND ";
-	private static final String _FINDER_COLUMN_DC_M_Y_DOMAINCODE_2 = "dossiersStatistics.domainCode = ? AND ";
-	private static final String _FINDER_COLUMN_DC_M_Y_DOMAINCODE_3 = "(dossiersStatistics.domainCode IS NULL OR dossiersStatistics.domainCode = '') AND ";
-	private static final String _FINDER_COLUMN_DC_M_Y_MONTH_2 = "dossiersStatistics.month = ? AND ";
-	private static final String _FINDER_COLUMN_DC_M_Y_YEAR_2 = "dossiersStatistics.year = ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GC_DC = new FinderPath(DossiersStatisticsModelImpl.ENTITY_CACHE_ENABLED,
+	private static final String _FINDER_COLUMN_G_DC_M_Y_GROUPID_2 = "dossiersStatistics.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_DC_M_Y_DOMAINCODE_1 = "dossiersStatistics.domainCode IS NULL AND ";
+	private static final String _FINDER_COLUMN_G_DC_M_Y_DOMAINCODE_2 = "dossiersStatistics.domainCode = ? AND ";
+	private static final String _FINDER_COLUMN_G_DC_M_Y_DOMAINCODE_3 = "(dossiersStatistics.domainCode IS NULL OR dossiersStatistics.domainCode = '') AND ";
+	private static final String _FINDER_COLUMN_G_DC_M_Y_MONTH_2 = "dossiersStatistics.month = ? AND ";
+	private static final String _FINDER_COLUMN_G_DC_M_Y_YEAR_2 = "dossiersStatistics.year = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_GC_DC = new FinderPath(DossiersStatisticsModelImpl.ENTITY_CACHE_ENABLED,
 			DossiersStatisticsModelImpl.FINDER_CACHE_ENABLED,
 			DossiersStatisticsImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByGC_DC",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_GC_DC",
 			new String[] {
-				String.class.getName(), String.class.getName(),
+				Long.class.getName(), String.class.getName(),
+				String.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GC_DC = new FinderPath(DossiersStatisticsModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_GC_DC =
+		new FinderPath(DossiersStatisticsModelImpl.ENTITY_CACHE_ENABLED,
 			DossiersStatisticsModelImpl.FINDER_CACHE_ENABLED,
 			DossiersStatisticsImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGC_DC",
-			new String[] { String.class.getName(), String.class.getName() },
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_GC_DC",
+			new String[] {
+				Long.class.getName(), String.class.getName(),
+				String.class.getName()
+			},
+			DossiersStatisticsModelImpl.GROUPID_COLUMN_BITMASK |
 			DossiersStatisticsModelImpl.GOVAGENCYCODE_COLUMN_BITMASK |
 			DossiersStatisticsModelImpl.DOMAINCODE_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_GC_DC = new FinderPath(DossiersStatisticsModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_GC_DC = new FinderPath(DossiersStatisticsModelImpl.ENTITY_CACHE_ENABLED,
 			DossiersStatisticsModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGC_DC",
-			new String[] { String.class.getName(), String.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_GC_DC = new FinderPath(DossiersStatisticsModelImpl.ENTITY_CACHE_ENABLED,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_GC_DC",
+			new String[] {
+				Long.class.getName(), String.class.getName(),
+				String.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_GC_DC = new FinderPath(DossiersStatisticsModelImpl.ENTITY_CACHE_ENABLED,
 			DossiersStatisticsModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByGC_DC",
-			new String[] { String.class.getName(), String.class.getName() });
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_GC_DC",
+			new String[] {
+				Long.class.getName(), String.class.getName(),
+				String.class.getName()
+			});
 
 	/**
-	 * Returns all the dossiers statisticses where govAgencyCode = &#63; and domainCode = &#63;.
+	 * Returns all the dossiers statisticses where groupId = &#63; and govAgencyCode = &#63; and domainCode = &#63;.
 	 *
+	 * @param groupId the group ID
 	 * @param govAgencyCode the gov agency code
 	 * @param domainCode the domain code
 	 * @return the matching dossiers statisticses
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public List<DossiersStatistics> findByGC_DC(String govAgencyCode,
-		String domainCode) throws SystemException {
-		return findByGC_DC(govAgencyCode, domainCode, QueryUtil.ALL_POS,
-			QueryUtil.ALL_POS, null);
+	public List<DossiersStatistics> findByG_GC_DC(long groupId,
+		String govAgencyCode, String domainCode) throws SystemException {
+		return findByG_GC_DC(groupId, govAgencyCode, domainCode,
+			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
 
 	/**
-	 * Returns a range of all the dossiers statisticses where govAgencyCode = &#63; and domainCode = &#63;.
+	 * Returns a range of all the dossiers statisticses where groupId = &#63; and govAgencyCode = &#63; and domainCode = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.opencps.statisticsmgt.model.impl.DossiersStatisticsModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
+	 * @param groupId the group ID
 	 * @param govAgencyCode the gov agency code
 	 * @param domainCode the domain code
 	 * @param start the lower bound of the range of dossiers statisticses
@@ -1456,18 +1494,21 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public List<DossiersStatistics> findByGC_DC(String govAgencyCode,
-		String domainCode, int start, int end) throws SystemException {
-		return findByGC_DC(govAgencyCode, domainCode, start, end, null);
+	public List<DossiersStatistics> findByG_GC_DC(long groupId,
+		String govAgencyCode, String domainCode, int start, int end)
+		throws SystemException {
+		return findByG_GC_DC(groupId, govAgencyCode, domainCode, start, end,
+			null);
 	}
 
 	/**
-	 * Returns an ordered range of all the dossiers statisticses where govAgencyCode = &#63; and domainCode = &#63;.
+	 * Returns an ordered range of all the dossiers statisticses where groupId = &#63; and govAgencyCode = &#63; and domainCode = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.opencps.statisticsmgt.model.impl.DossiersStatisticsModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
+	 * @param groupId the group ID
 	 * @param govAgencyCode the gov agency code
 	 * @param domainCode the domain code
 	 * @param start the lower bound of the range of dossiers statisticses
@@ -1477,8 +1518,8 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public List<DossiersStatistics> findByGC_DC(String govAgencyCode,
-		String domainCode, int start, int end,
+	public List<DossiersStatistics> findByG_GC_DC(long groupId,
+		String govAgencyCode, String domainCode, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
 		FinderPath finderPath = null;
@@ -1487,13 +1528,13 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
 			pagination = false;
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GC_DC;
-			finderArgs = new Object[] { govAgencyCode, domainCode };
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_GC_DC;
+			finderArgs = new Object[] { groupId, govAgencyCode, domainCode };
 		}
 		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GC_DC;
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_GC_DC;
 			finderArgs = new Object[] {
-					govAgencyCode, domainCode,
+					groupId, govAgencyCode, domainCode,
 					
 					start, end, orderByComparator
 				};
@@ -1504,7 +1545,8 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 
 		if ((list != null) && !list.isEmpty()) {
 			for (DossiersStatistics dossiersStatistics : list) {
-				if (!Validator.equals(govAgencyCode,
+				if ((groupId != dossiersStatistics.getGroupId()) ||
+						!Validator.equals(govAgencyCode,
 							dossiersStatistics.getGovAgencyCode()) ||
 						!Validator.equals(domainCode,
 							dossiersStatistics.getDomainCode())) {
@@ -1519,41 +1561,43 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 			StringBundler query = null;
 
 			if (orderByComparator != null) {
-				query = new StringBundler(4 +
+				query = new StringBundler(5 +
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(4);
+				query = new StringBundler(5);
 			}
 
 			query.append(_SQL_SELECT_DOSSIERSSTATISTICS_WHERE);
 
+			query.append(_FINDER_COLUMN_G_GC_DC_GROUPID_2);
+
 			boolean bindGovAgencyCode = false;
 
 			if (govAgencyCode == null) {
-				query.append(_FINDER_COLUMN_GC_DC_GOVAGENCYCODE_1);
+				query.append(_FINDER_COLUMN_G_GC_DC_GOVAGENCYCODE_1);
 			}
 			else if (govAgencyCode.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_GC_DC_GOVAGENCYCODE_3);
+				query.append(_FINDER_COLUMN_G_GC_DC_GOVAGENCYCODE_3);
 			}
 			else {
 				bindGovAgencyCode = true;
 
-				query.append(_FINDER_COLUMN_GC_DC_GOVAGENCYCODE_2);
+				query.append(_FINDER_COLUMN_G_GC_DC_GOVAGENCYCODE_2);
 			}
 
 			boolean bindDomainCode = false;
 
 			if (domainCode == null) {
-				query.append(_FINDER_COLUMN_GC_DC_DOMAINCODE_1);
+				query.append(_FINDER_COLUMN_G_GC_DC_DOMAINCODE_1);
 			}
 			else if (domainCode.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_GC_DC_DOMAINCODE_3);
+				query.append(_FINDER_COLUMN_G_GC_DC_DOMAINCODE_3);
 			}
 			else {
 				bindDomainCode = true;
 
-				query.append(_FINDER_COLUMN_GC_DC_DOMAINCODE_2);
+				query.append(_FINDER_COLUMN_G_GC_DC_DOMAINCODE_2);
 			}
 
 			if (orderByComparator != null) {
@@ -1575,6 +1619,8 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 				Query q = session.createQuery(sql);
 
 				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
 
 				if (bindGovAgencyCode) {
 					qPos.add(govAgencyCode);
@@ -1615,8 +1661,9 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	}
 
 	/**
-	 * Returns the first dossiers statistics in the ordered set where govAgencyCode = &#63; and domainCode = &#63;.
+	 * Returns the first dossiers statistics in the ordered set where groupId = &#63; and govAgencyCode = &#63; and domainCode = &#63;.
 	 *
+	 * @param groupId the group ID
 	 * @param govAgencyCode the gov agency code
 	 * @param domainCode the domain code
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -1625,21 +1672,25 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public DossiersStatistics findByGC_DC_First(String govAgencyCode,
-		String domainCode, OrderByComparator orderByComparator)
+	public DossiersStatistics findByG_GC_DC_First(long groupId,
+		String govAgencyCode, String domainCode,
+		OrderByComparator orderByComparator)
 		throws NoSuchDossiersStatisticsException, SystemException {
-		DossiersStatistics dossiersStatistics = fetchByGC_DC_First(govAgencyCode,
-				domainCode, orderByComparator);
+		DossiersStatistics dossiersStatistics = fetchByG_GC_DC_First(groupId,
+				govAgencyCode, domainCode, orderByComparator);
 
 		if (dossiersStatistics != null) {
 			return dossiersStatistics;
 		}
 
-		StringBundler msg = new StringBundler(6);
+		StringBundler msg = new StringBundler(8);
 
 		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
 
-		msg.append("govAgencyCode=");
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", govAgencyCode=");
 		msg.append(govAgencyCode);
 
 		msg.append(", domainCode=");
@@ -1651,8 +1702,9 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	}
 
 	/**
-	 * Returns the first dossiers statistics in the ordered set where govAgencyCode = &#63; and domainCode = &#63;.
+	 * Returns the first dossiers statistics in the ordered set where groupId = &#63; and govAgencyCode = &#63; and domainCode = &#63;.
 	 *
+	 * @param groupId the group ID
 	 * @param govAgencyCode the gov agency code
 	 * @param domainCode the domain code
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -1660,11 +1712,11 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public DossiersStatistics fetchByGC_DC_First(String govAgencyCode,
-		String domainCode, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<DossiersStatistics> list = findByGC_DC(govAgencyCode, domainCode,
-				0, 1, orderByComparator);
+	public DossiersStatistics fetchByG_GC_DC_First(long groupId,
+		String govAgencyCode, String domainCode,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<DossiersStatistics> list = findByG_GC_DC(groupId, govAgencyCode,
+				domainCode, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -1674,8 +1726,9 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	}
 
 	/**
-	 * Returns the last dossiers statistics in the ordered set where govAgencyCode = &#63; and domainCode = &#63;.
+	 * Returns the last dossiers statistics in the ordered set where groupId = &#63; and govAgencyCode = &#63; and domainCode = &#63;.
 	 *
+	 * @param groupId the group ID
 	 * @param govAgencyCode the gov agency code
 	 * @param domainCode the domain code
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -1684,21 +1737,25 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public DossiersStatistics findByGC_DC_Last(String govAgencyCode,
-		String domainCode, OrderByComparator orderByComparator)
+	public DossiersStatistics findByG_GC_DC_Last(long groupId,
+		String govAgencyCode, String domainCode,
+		OrderByComparator orderByComparator)
 		throws NoSuchDossiersStatisticsException, SystemException {
-		DossiersStatistics dossiersStatistics = fetchByGC_DC_Last(govAgencyCode,
-				domainCode, orderByComparator);
+		DossiersStatistics dossiersStatistics = fetchByG_GC_DC_Last(groupId,
+				govAgencyCode, domainCode, orderByComparator);
 
 		if (dossiersStatistics != null) {
 			return dossiersStatistics;
 		}
 
-		StringBundler msg = new StringBundler(6);
+		StringBundler msg = new StringBundler(8);
 
 		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
 
-		msg.append("govAgencyCode=");
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", govAgencyCode=");
 		msg.append(govAgencyCode);
 
 		msg.append(", domainCode=");
@@ -1710,8 +1767,9 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	}
 
 	/**
-	 * Returns the last dossiers statistics in the ordered set where govAgencyCode = &#63; and domainCode = &#63;.
+	 * Returns the last dossiers statistics in the ordered set where groupId = &#63; and govAgencyCode = &#63; and domainCode = &#63;.
 	 *
+	 * @param groupId the group ID
 	 * @param govAgencyCode the gov agency code
 	 * @param domainCode the domain code
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -1719,17 +1777,17 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public DossiersStatistics fetchByGC_DC_Last(String govAgencyCode,
-		String domainCode, OrderByComparator orderByComparator)
-		throws SystemException {
-		int count = countByGC_DC(govAgencyCode, domainCode);
+	public DossiersStatistics fetchByG_GC_DC_Last(long groupId,
+		String govAgencyCode, String domainCode,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByG_GC_DC(groupId, govAgencyCode, domainCode);
 
 		if (count == 0) {
 			return null;
 		}
 
-		List<DossiersStatistics> list = findByGC_DC(govAgencyCode, domainCode,
-				count - 1, count, orderByComparator);
+		List<DossiersStatistics> list = findByG_GC_DC(groupId, govAgencyCode,
+				domainCode, count - 1, count, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -1739,9 +1797,10 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	}
 
 	/**
-	 * Returns the dossiers statisticses before and after the current dossiers statistics in the ordered set where govAgencyCode = &#63; and domainCode = &#63;.
+	 * Returns the dossiers statisticses before and after the current dossiers statistics in the ordered set where groupId = &#63; and govAgencyCode = &#63; and domainCode = &#63;.
 	 *
 	 * @param dossierStatisticId the primary key of the current dossiers statistics
+	 * @param groupId the group ID
 	 * @param govAgencyCode the gov agency code
 	 * @param domainCode the domain code
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -1750,9 +1809,9 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public DossiersStatistics[] findByGC_DC_PrevAndNext(
-		long dossierStatisticId, String govAgencyCode, String domainCode,
-		OrderByComparator orderByComparator)
+	public DossiersStatistics[] findByG_GC_DC_PrevAndNext(
+		long dossierStatisticId, long groupId, String govAgencyCode,
+		String domainCode, OrderByComparator orderByComparator)
 		throws NoSuchDossiersStatisticsException, SystemException {
 		DossiersStatistics dossiersStatistics = findByPrimaryKey(dossierStatisticId);
 
@@ -1763,13 +1822,13 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 
 			DossiersStatistics[] array = new DossiersStatisticsImpl[3];
 
-			array[0] = getByGC_DC_PrevAndNext(session, dossiersStatistics,
-					govAgencyCode, domainCode, orderByComparator, true);
+			array[0] = getByG_GC_DC_PrevAndNext(session, dossiersStatistics,
+					groupId, govAgencyCode, domainCode, orderByComparator, true);
 
 			array[1] = dossiersStatistics;
 
-			array[2] = getByGC_DC_PrevAndNext(session, dossiersStatistics,
-					govAgencyCode, domainCode, orderByComparator, false);
+			array[2] = getByG_GC_DC_PrevAndNext(session, dossiersStatistics,
+					groupId, govAgencyCode, domainCode, orderByComparator, false);
 
 			return array;
 		}
@@ -1781,9 +1840,10 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 		}
 	}
 
-	protected DossiersStatistics getByGC_DC_PrevAndNext(Session session,
-		DossiersStatistics dossiersStatistics, String govAgencyCode,
-		String domainCode, OrderByComparator orderByComparator, boolean previous) {
+	protected DossiersStatistics getByG_GC_DC_PrevAndNext(Session session,
+		DossiersStatistics dossiersStatistics, long groupId,
+		String govAgencyCode, String domainCode,
+		OrderByComparator orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1796,32 +1856,34 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 
 		query.append(_SQL_SELECT_DOSSIERSSTATISTICS_WHERE);
 
+		query.append(_FINDER_COLUMN_G_GC_DC_GROUPID_2);
+
 		boolean bindGovAgencyCode = false;
 
 		if (govAgencyCode == null) {
-			query.append(_FINDER_COLUMN_GC_DC_GOVAGENCYCODE_1);
+			query.append(_FINDER_COLUMN_G_GC_DC_GOVAGENCYCODE_1);
 		}
 		else if (govAgencyCode.equals(StringPool.BLANK)) {
-			query.append(_FINDER_COLUMN_GC_DC_GOVAGENCYCODE_3);
+			query.append(_FINDER_COLUMN_G_GC_DC_GOVAGENCYCODE_3);
 		}
 		else {
 			bindGovAgencyCode = true;
 
-			query.append(_FINDER_COLUMN_GC_DC_GOVAGENCYCODE_2);
+			query.append(_FINDER_COLUMN_G_GC_DC_GOVAGENCYCODE_2);
 		}
 
 		boolean bindDomainCode = false;
 
 		if (domainCode == null) {
-			query.append(_FINDER_COLUMN_GC_DC_DOMAINCODE_1);
+			query.append(_FINDER_COLUMN_G_GC_DC_DOMAINCODE_1);
 		}
 		else if (domainCode.equals(StringPool.BLANK)) {
-			query.append(_FINDER_COLUMN_GC_DC_DOMAINCODE_3);
+			query.append(_FINDER_COLUMN_G_GC_DC_DOMAINCODE_3);
 		}
 		else {
 			bindDomainCode = true;
 
-			query.append(_FINDER_COLUMN_GC_DC_DOMAINCODE_2);
+			query.append(_FINDER_COLUMN_G_GC_DC_DOMAINCODE_2);
 		}
 
 		if (orderByComparator != null) {
@@ -1891,6 +1953,8 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 		q.setMaxResults(2);
 
 		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(groupId);
 
 		if (bindGovAgencyCode) {
 			qPos.add(govAgencyCode);
@@ -1919,31 +1983,34 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	}
 
 	/**
-	 * Returns all the dossiers statisticses where govAgencyCode = all &#63; and domainCode = all &#63;.
+	 * Returns all the dossiers statisticses where groupId = &#63; and govAgencyCode = all &#63; and domainCode = all &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.opencps.statisticsmgt.model.impl.DossiersStatisticsModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
+	 * @param groupId the group ID
 	 * @param govAgencyCodes the gov agency codes
 	 * @param domainCodes the domain codes
 	 * @return the matching dossiers statisticses
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public List<DossiersStatistics> findByGC_DC(String[] govAgencyCodes,
-		String[] domainCodes) throws SystemException {
-		return findByGC_DC(govAgencyCodes, domainCodes, QueryUtil.ALL_POS,
-			QueryUtil.ALL_POS, null);
+	public List<DossiersStatistics> findByG_GC_DC(long groupId,
+		String[] govAgencyCodes, String[] domainCodes)
+		throws SystemException {
+		return findByG_GC_DC(groupId, govAgencyCodes, domainCodes,
+			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
 
 	/**
-	 * Returns a range of all the dossiers statisticses where govAgencyCode = all &#63; and domainCode = all &#63;.
+	 * Returns a range of all the dossiers statisticses where groupId = &#63; and govAgencyCode = all &#63; and domainCode = all &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.opencps.statisticsmgt.model.impl.DossiersStatisticsModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
+	 * @param groupId the group ID
 	 * @param govAgencyCodes the gov agency codes
 	 * @param domainCodes the domain codes
 	 * @param start the lower bound of the range of dossiers statisticses
@@ -1952,18 +2019,21 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public List<DossiersStatistics> findByGC_DC(String[] govAgencyCodes,
-		String[] domainCodes, int start, int end) throws SystemException {
-		return findByGC_DC(govAgencyCodes, domainCodes, start, end, null);
+	public List<DossiersStatistics> findByG_GC_DC(long groupId,
+		String[] govAgencyCodes, String[] domainCodes, int start, int end)
+		throws SystemException {
+		return findByG_GC_DC(groupId, govAgencyCodes, domainCodes, start, end,
+			null);
 	}
 
 	/**
-	 * Returns an ordered range of all the dossiers statisticses where govAgencyCode = all &#63; and domainCode = all &#63;.
+	 * Returns an ordered range of all the dossiers statisticses where groupId = &#63; and govAgencyCode = all &#63; and domainCode = all &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.opencps.statisticsmgt.model.impl.DossiersStatisticsModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
+	 * @param groupId the group ID
 	 * @param govAgencyCodes the gov agency codes
 	 * @param domainCodes the domain codes
 	 * @param start the lower bound of the range of dossiers statisticses
@@ -1973,13 +2043,13 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public List<DossiersStatistics> findByGC_DC(String[] govAgencyCodes,
-		String[] domainCodes, int start, int end,
+	public List<DossiersStatistics> findByG_GC_DC(long groupId,
+		String[] govAgencyCodes, String[] domainCodes, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		if ((govAgencyCodes != null) && (govAgencyCodes.length == 1) &&
 				(domainCodes != null) && (domainCodes.length == 1)) {
-			return findByGC_DC(govAgencyCodes[0], domainCodes[0], start, end,
-				orderByComparator);
+			return findByG_GC_DC(groupId, govAgencyCodes[0], domainCodes[0],
+				start, end, orderByComparator);
 		}
 
 		boolean pagination = true;
@@ -1989,25 +2059,26 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 				(orderByComparator == null)) {
 			pagination = false;
 			finderArgs = new Object[] {
-					StringUtil.merge(govAgencyCodes),
+					groupId, StringUtil.merge(govAgencyCodes),
 					StringUtil.merge(domainCodes)
 				};
 		}
 		else {
 			finderArgs = new Object[] {
-					StringUtil.merge(govAgencyCodes),
+					groupId, StringUtil.merge(govAgencyCodes),
 					StringUtil.merge(domainCodes),
 					
 					start, end, orderByComparator
 				};
 		}
 
-		List<DossiersStatistics> list = (List<DossiersStatistics>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_GC_DC,
+		List<DossiersStatistics> list = (List<DossiersStatistics>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_GC_DC,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
 			for (DossiersStatistics dossiersStatistics : list) {
-				if (!ArrayUtil.contains(govAgencyCodes,
+				if ((groupId != dossiersStatistics.getGroupId()) ||
+						!ArrayUtil.contains(govAgencyCodes,
 							dossiersStatistics.getGovAgencyCode()) ||
 						!ArrayUtil.contains(domainCodes,
 							dossiersStatistics.getDomainCode())) {
@@ -2025,6 +2096,14 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 
 			boolean conjunctionable = false;
 
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_G_GC_DC_GROUPID_5);
+
+			conjunctionable = true;
+
 			if ((govAgencyCodes == null) || (govAgencyCodes.length > 0)) {
 				if (conjunctionable) {
 					query.append(WHERE_AND);
@@ -2036,13 +2115,13 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 					String govAgencyCode = govAgencyCodes[i];
 
 					if (govAgencyCode == null) {
-						query.append(_FINDER_COLUMN_GC_DC_GOVAGENCYCODE_4);
+						query.append(_FINDER_COLUMN_G_GC_DC_GOVAGENCYCODE_4);
 					}
 					else if (govAgencyCode.equals(StringPool.BLANK)) {
-						query.append(_FINDER_COLUMN_GC_DC_GOVAGENCYCODE_6);
+						query.append(_FINDER_COLUMN_G_GC_DC_GOVAGENCYCODE_6);
 					}
 					else {
-						query.append(_FINDER_COLUMN_GC_DC_GOVAGENCYCODE_5);
+						query.append(_FINDER_COLUMN_G_GC_DC_GOVAGENCYCODE_5);
 					}
 
 					if ((i + 1) < govAgencyCodes.length) {
@@ -2066,13 +2145,13 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 					String domainCode = domainCodes[i];
 
 					if (domainCode == null) {
-						query.append(_FINDER_COLUMN_GC_DC_DOMAINCODE_4);
+						query.append(_FINDER_COLUMN_G_GC_DC_DOMAINCODE_4);
 					}
 					else if (domainCode.equals(StringPool.BLANK)) {
-						query.append(_FINDER_COLUMN_GC_DC_DOMAINCODE_6);
+						query.append(_FINDER_COLUMN_G_GC_DC_DOMAINCODE_6);
 					}
 					else {
-						query.append(_FINDER_COLUMN_GC_DC_DOMAINCODE_5);
+						query.append(_FINDER_COLUMN_G_GC_DC_DOMAINCODE_5);
 					}
 
 					if ((i + 1) < domainCodes.length) {
@@ -2105,6 +2184,8 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
+				qPos.add(groupId);
+
 				if (govAgencyCodes != null) {
 					qPos.add(govAgencyCodes);
 				}
@@ -2128,11 +2209,11 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 
 				cacheResult(list);
 
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_GC_DC,
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_GC_DC,
 					finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_GC_DC,
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_GC_DC,
 					finderArgs);
 
 				throw processException(e);
@@ -2146,16 +2227,17 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	}
 
 	/**
-	 * Removes all the dossiers statisticses where govAgencyCode = &#63; and domainCode = &#63; from the database.
+	 * Removes all the dossiers statisticses where groupId = &#63; and govAgencyCode = &#63; and domainCode = &#63; from the database.
 	 *
+	 * @param groupId the group ID
 	 * @param govAgencyCode the gov agency code
 	 * @param domainCode the domain code
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public void removeByGC_DC(String govAgencyCode, String domainCode)
-		throws SystemException {
-		for (DossiersStatistics dossiersStatistics : findByGC_DC(
+	public void removeByG_GC_DC(long groupId, String govAgencyCode,
+		String domainCode) throws SystemException {
+		for (DossiersStatistics dossiersStatistics : findByG_GC_DC(groupId,
 				govAgencyCode, domainCode, QueryUtil.ALL_POS,
 				QueryUtil.ALL_POS, null)) {
 			remove(dossiersStatistics);
@@ -2163,54 +2245,57 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	}
 
 	/**
-	 * Returns the number of dossiers statisticses where govAgencyCode = &#63; and domainCode = &#63;.
+	 * Returns the number of dossiers statisticses where groupId = &#63; and govAgencyCode = &#63; and domainCode = &#63;.
 	 *
+	 * @param groupId the group ID
 	 * @param govAgencyCode the gov agency code
 	 * @param domainCode the domain code
 	 * @return the number of matching dossiers statisticses
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public int countByGC_DC(String govAgencyCode, String domainCode)
-		throws SystemException {
-		FinderPath finderPath = FINDER_PATH_COUNT_BY_GC_DC;
+	public int countByG_GC_DC(long groupId, String govAgencyCode,
+		String domainCode) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_GC_DC;
 
-		Object[] finderArgs = new Object[] { govAgencyCode, domainCode };
+		Object[] finderArgs = new Object[] { groupId, govAgencyCode, domainCode };
 
 		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
 				this);
 
 		if (count == null) {
-			StringBundler query = new StringBundler(3);
+			StringBundler query = new StringBundler(4);
 
 			query.append(_SQL_COUNT_DOSSIERSSTATISTICS_WHERE);
+
+			query.append(_FINDER_COLUMN_G_GC_DC_GROUPID_2);
 
 			boolean bindGovAgencyCode = false;
 
 			if (govAgencyCode == null) {
-				query.append(_FINDER_COLUMN_GC_DC_GOVAGENCYCODE_1);
+				query.append(_FINDER_COLUMN_G_GC_DC_GOVAGENCYCODE_1);
 			}
 			else if (govAgencyCode.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_GC_DC_GOVAGENCYCODE_3);
+				query.append(_FINDER_COLUMN_G_GC_DC_GOVAGENCYCODE_3);
 			}
 			else {
 				bindGovAgencyCode = true;
 
-				query.append(_FINDER_COLUMN_GC_DC_GOVAGENCYCODE_2);
+				query.append(_FINDER_COLUMN_G_GC_DC_GOVAGENCYCODE_2);
 			}
 
 			boolean bindDomainCode = false;
 
 			if (domainCode == null) {
-				query.append(_FINDER_COLUMN_GC_DC_DOMAINCODE_1);
+				query.append(_FINDER_COLUMN_G_GC_DC_DOMAINCODE_1);
 			}
 			else if (domainCode.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_GC_DC_DOMAINCODE_3);
+				query.append(_FINDER_COLUMN_G_GC_DC_DOMAINCODE_3);
 			}
 			else {
 				bindDomainCode = true;
 
-				query.append(_FINDER_COLUMN_GC_DC_DOMAINCODE_2);
+				query.append(_FINDER_COLUMN_G_GC_DC_DOMAINCODE_2);
 			}
 
 			String sql = query.toString();
@@ -2223,6 +2308,8 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 				Query q = session.createQuery(sql);
 
 				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
 
 				if (bindGovAgencyCode) {
 					qPos.add(govAgencyCode);
@@ -2250,21 +2337,23 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	}
 
 	/**
-	 * Returns the number of dossiers statisticses where govAgencyCode = all &#63; and domainCode = all &#63;.
+	 * Returns the number of dossiers statisticses where groupId = &#63; and govAgencyCode = all &#63; and domainCode = all &#63;.
 	 *
+	 * @param groupId the group ID
 	 * @param govAgencyCodes the gov agency codes
 	 * @param domainCodes the domain codes
 	 * @return the number of matching dossiers statisticses
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public int countByGC_DC(String[] govAgencyCodes, String[] domainCodes)
-		throws SystemException {
+	public int countByG_GC_DC(long groupId, String[] govAgencyCodes,
+		String[] domainCodes) throws SystemException {
 		Object[] finderArgs = new Object[] {
-				StringUtil.merge(govAgencyCodes), StringUtil.merge(domainCodes)
+				groupId, StringUtil.merge(govAgencyCodes),
+				StringUtil.merge(domainCodes)
 			};
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_GC_DC,
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_GC_DC,
 				finderArgs, this);
 
 		if (count == null) {
@@ -2273,6 +2362,14 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 			query.append(_SQL_COUNT_DOSSIERSSTATISTICS_WHERE);
 
 			boolean conjunctionable = false;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_G_GC_DC_GROUPID_5);
+
+			conjunctionable = true;
 
 			if ((govAgencyCodes == null) || (govAgencyCodes.length > 0)) {
 				if (conjunctionable) {
@@ -2285,13 +2382,13 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 					String govAgencyCode = govAgencyCodes[i];
 
 					if (govAgencyCode == null) {
-						query.append(_FINDER_COLUMN_GC_DC_GOVAGENCYCODE_4);
+						query.append(_FINDER_COLUMN_G_GC_DC_GOVAGENCYCODE_4);
 					}
 					else if (govAgencyCode.equals(StringPool.BLANK)) {
-						query.append(_FINDER_COLUMN_GC_DC_GOVAGENCYCODE_6);
+						query.append(_FINDER_COLUMN_G_GC_DC_GOVAGENCYCODE_6);
 					}
 					else {
-						query.append(_FINDER_COLUMN_GC_DC_GOVAGENCYCODE_5);
+						query.append(_FINDER_COLUMN_G_GC_DC_GOVAGENCYCODE_5);
 					}
 
 					if ((i + 1) < govAgencyCodes.length) {
@@ -2315,13 +2412,13 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 					String domainCode = domainCodes[i];
 
 					if (domainCode == null) {
-						query.append(_FINDER_COLUMN_GC_DC_DOMAINCODE_4);
+						query.append(_FINDER_COLUMN_G_GC_DC_DOMAINCODE_4);
 					}
 					else if (domainCode.equals(StringPool.BLANK)) {
-						query.append(_FINDER_COLUMN_GC_DC_DOMAINCODE_6);
+						query.append(_FINDER_COLUMN_G_GC_DC_DOMAINCODE_6);
 					}
 					else {
-						query.append(_FINDER_COLUMN_GC_DC_DOMAINCODE_5);
+						query.append(_FINDER_COLUMN_G_GC_DC_DOMAINCODE_5);
 					}
 
 					if ((i + 1) < domainCodes.length) {
@@ -2345,6 +2442,8 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
+				qPos.add(groupId);
+
 				if (govAgencyCodes != null) {
 					qPos.add(govAgencyCodes);
 				}
@@ -2355,11 +2454,11 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 
 				count = (Long)q.uniqueResult();
 
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_GC_DC,
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_GC_DC,
 					finderArgs, count);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_GC_DC,
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_GC_DC,
 					finderArgs);
 
 				throw processException(e);
@@ -2372,58 +2471,64 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 		return count.intValue();
 	}
 
-	private static final String _FINDER_COLUMN_GC_DC_GOVAGENCYCODE_1 = "dossiersStatistics.govAgencyCode IS NULL AND ";
-	private static final String _FINDER_COLUMN_GC_DC_GOVAGENCYCODE_2 = "dossiersStatistics.govAgencyCode = ? AND ";
-	private static final String _FINDER_COLUMN_GC_DC_GOVAGENCYCODE_3 = "(dossiersStatistics.govAgencyCode IS NULL OR dossiersStatistics.govAgencyCode = '') AND ";
-	private static final String _FINDER_COLUMN_GC_DC_GOVAGENCYCODE_4 = "(" +
-		removeConjunction(_FINDER_COLUMN_GC_DC_GOVAGENCYCODE_1) + ")";
-	private static final String _FINDER_COLUMN_GC_DC_GOVAGENCYCODE_5 = "(" +
-		removeConjunction(_FINDER_COLUMN_GC_DC_GOVAGENCYCODE_2) + ")";
-	private static final String _FINDER_COLUMN_GC_DC_GOVAGENCYCODE_6 = "(" +
-		removeConjunction(_FINDER_COLUMN_GC_DC_GOVAGENCYCODE_3) + ")";
-	private static final String _FINDER_COLUMN_GC_DC_DOMAINCODE_1 = "dossiersStatistics.domainCode IS NULL";
-	private static final String _FINDER_COLUMN_GC_DC_DOMAINCODE_2 = "dossiersStatistics.domainCode = ?";
-	private static final String _FINDER_COLUMN_GC_DC_DOMAINCODE_3 = "(dossiersStatistics.domainCode IS NULL OR dossiersStatistics.domainCode = '')";
-	private static final String _FINDER_COLUMN_GC_DC_DOMAINCODE_4 = "(" +
-		removeConjunction(_FINDER_COLUMN_GC_DC_DOMAINCODE_1) + ")";
-	private static final String _FINDER_COLUMN_GC_DC_DOMAINCODE_5 = "(" +
-		removeConjunction(_FINDER_COLUMN_GC_DC_DOMAINCODE_2) + ")";
-	private static final String _FINDER_COLUMN_GC_DC_DOMAINCODE_6 = "(" +
-		removeConjunction(_FINDER_COLUMN_GC_DC_DOMAINCODE_3) + ")";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GC_DC_Y = new FinderPath(DossiersStatisticsModelImpl.ENTITY_CACHE_ENABLED,
+	private static final String _FINDER_COLUMN_G_GC_DC_GROUPID_2 = "dossiersStatistics.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_GC_DC_GROUPID_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_GC_DC_GROUPID_2) + ")";
+	private static final String _FINDER_COLUMN_G_GC_DC_GOVAGENCYCODE_1 = "dossiersStatistics.govAgencyCode IS NULL AND ";
+	private static final String _FINDER_COLUMN_G_GC_DC_GOVAGENCYCODE_2 = "dossiersStatistics.govAgencyCode = ? AND ";
+	private static final String _FINDER_COLUMN_G_GC_DC_GOVAGENCYCODE_3 = "(dossiersStatistics.govAgencyCode IS NULL OR dossiersStatistics.govAgencyCode = '') AND ";
+	private static final String _FINDER_COLUMN_G_GC_DC_GOVAGENCYCODE_4 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_GC_DC_GOVAGENCYCODE_1) + ")";
+	private static final String _FINDER_COLUMN_G_GC_DC_GOVAGENCYCODE_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_GC_DC_GOVAGENCYCODE_2) + ")";
+	private static final String _FINDER_COLUMN_G_GC_DC_GOVAGENCYCODE_6 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_GC_DC_GOVAGENCYCODE_3) + ")";
+	private static final String _FINDER_COLUMN_G_GC_DC_DOMAINCODE_1 = "dossiersStatistics.domainCode IS NULL";
+	private static final String _FINDER_COLUMN_G_GC_DC_DOMAINCODE_2 = "dossiersStatistics.domainCode = ?";
+	private static final String _FINDER_COLUMN_G_GC_DC_DOMAINCODE_3 = "(dossiersStatistics.domainCode IS NULL OR dossiersStatistics.domainCode = '')";
+	private static final String _FINDER_COLUMN_G_GC_DC_DOMAINCODE_4 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_GC_DC_DOMAINCODE_1) + ")";
+	private static final String _FINDER_COLUMN_G_GC_DC_DOMAINCODE_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_GC_DC_DOMAINCODE_2) + ")";
+	private static final String _FINDER_COLUMN_G_GC_DC_DOMAINCODE_6 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_GC_DC_DOMAINCODE_3) + ")";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_GC_DC_Y =
+		new FinderPath(DossiersStatisticsModelImpl.ENTITY_CACHE_ENABLED,
 			DossiersStatisticsModelImpl.FINDER_CACHE_ENABLED,
 			DossiersStatisticsImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByGC_DC_Y",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_GC_DC_Y",
 			new String[] {
-				String.class.getName(), String.class.getName(),
-				Integer.class.getName(),
+				Long.class.getName(), String.class.getName(),
+				String.class.getName(), Integer.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GC_DC_Y =
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_GC_DC_Y =
 		new FinderPath(DossiersStatisticsModelImpl.ENTITY_CACHE_ENABLED,
 			DossiersStatisticsModelImpl.FINDER_CACHE_ENABLED,
 			DossiersStatisticsImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGC_DC_Y",
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_GC_DC_Y",
 			new String[] {
-				String.class.getName(), String.class.getName(),
-				Integer.class.getName()
+				Long.class.getName(), String.class.getName(),
+				String.class.getName(), Integer.class.getName()
 			},
+			DossiersStatisticsModelImpl.GROUPID_COLUMN_BITMASK |
 			DossiersStatisticsModelImpl.GOVAGENCYCODE_COLUMN_BITMASK |
 			DossiersStatisticsModelImpl.DOMAINCODE_COLUMN_BITMASK |
 			DossiersStatisticsModelImpl.YEAR_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_GC_DC_Y = new FinderPath(DossiersStatisticsModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_GC_DC_Y = new FinderPath(DossiersStatisticsModelImpl.ENTITY_CACHE_ENABLED,
 			DossiersStatisticsModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGC_DC_Y",
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_GC_DC_Y",
 			new String[] {
-				String.class.getName(), String.class.getName(),
-				Integer.class.getName()
+				Long.class.getName(), String.class.getName(),
+				String.class.getName(), Integer.class.getName()
 			});
 
 	/**
-	 * Returns all the dossiers statisticses where govAgencyCode = &#63; and domainCode = &#63; and year = &#63;.
+	 * Returns all the dossiers statisticses where groupId = &#63; and govAgencyCode = &#63; and domainCode = &#63; and year = &#63;.
 	 *
+	 * @param groupId the group ID
 	 * @param govAgencyCode the gov agency code
 	 * @param domainCode the domain code
 	 * @param year the year
@@ -2431,19 +2536,21 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public List<DossiersStatistics> findByGC_DC_Y(String govAgencyCode,
-		String domainCode, int year) throws SystemException {
-		return findByGC_DC_Y(govAgencyCode, domainCode, year,
+	public List<DossiersStatistics> findByG_GC_DC_Y(long groupId,
+		String govAgencyCode, String domainCode, int year)
+		throws SystemException {
+		return findByG_GC_DC_Y(groupId, govAgencyCode, domainCode, year,
 			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
 
 	/**
-	 * Returns a range of all the dossiers statisticses where govAgencyCode = &#63; and domainCode = &#63; and year = &#63;.
+	 * Returns a range of all the dossiers statisticses where groupId = &#63; and govAgencyCode = &#63; and domainCode = &#63; and year = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.opencps.statisticsmgt.model.impl.DossiersStatisticsModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
+	 * @param groupId the group ID
 	 * @param govAgencyCode the gov agency code
 	 * @param domainCode the domain code
 	 * @param year the year
@@ -2453,19 +2560,21 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public List<DossiersStatistics> findByGC_DC_Y(String govAgencyCode,
-		String domainCode, int year, int start, int end)
+	public List<DossiersStatistics> findByG_GC_DC_Y(long groupId,
+		String govAgencyCode, String domainCode, int year, int start, int end)
 		throws SystemException {
-		return findByGC_DC_Y(govAgencyCode, domainCode, year, start, end, null);
+		return findByG_GC_DC_Y(groupId, govAgencyCode, domainCode, year, start,
+			end, null);
 	}
 
 	/**
-	 * Returns an ordered range of all the dossiers statisticses where govAgencyCode = &#63; and domainCode = &#63; and year = &#63;.
+	 * Returns an ordered range of all the dossiers statisticses where groupId = &#63; and govAgencyCode = &#63; and domainCode = &#63; and year = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.opencps.statisticsmgt.model.impl.DossiersStatisticsModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
+	 * @param groupId the group ID
 	 * @param govAgencyCode the gov agency code
 	 * @param domainCode the domain code
 	 * @param year the year
@@ -2476,8 +2585,8 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public List<DossiersStatistics> findByGC_DC_Y(String govAgencyCode,
-		String domainCode, int year, int start, int end,
+	public List<DossiersStatistics> findByG_GC_DC_Y(long groupId,
+		String govAgencyCode, String domainCode, int year, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
 		FinderPath finderPath = null;
@@ -2486,13 +2595,13 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
 			pagination = false;
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GC_DC_Y;
-			finderArgs = new Object[] { govAgencyCode, domainCode, year };
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_GC_DC_Y;
+			finderArgs = new Object[] { groupId, govAgencyCode, domainCode, year };
 		}
 		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GC_DC_Y;
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_GC_DC_Y;
 			finderArgs = new Object[] {
-					govAgencyCode, domainCode, year,
+					groupId, govAgencyCode, domainCode, year,
 					
 					start, end, orderByComparator
 				};
@@ -2503,7 +2612,8 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 
 		if ((list != null) && !list.isEmpty()) {
 			for (DossiersStatistics dossiersStatistics : list) {
-				if (!Validator.equals(govAgencyCode,
+				if ((groupId != dossiersStatistics.getGroupId()) ||
+						!Validator.equals(govAgencyCode,
 							dossiersStatistics.getGovAgencyCode()) ||
 						!Validator.equals(domainCode,
 							dossiersStatistics.getDomainCode()) ||
@@ -2519,44 +2629,46 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 			StringBundler query = null;
 
 			if (orderByComparator != null) {
-				query = new StringBundler(5 +
+				query = new StringBundler(6 +
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(5);
+				query = new StringBundler(6);
 			}
 
 			query.append(_SQL_SELECT_DOSSIERSSTATISTICS_WHERE);
 
+			query.append(_FINDER_COLUMN_G_GC_DC_Y_GROUPID_2);
+
 			boolean bindGovAgencyCode = false;
 
 			if (govAgencyCode == null) {
-				query.append(_FINDER_COLUMN_GC_DC_Y_GOVAGENCYCODE_1);
+				query.append(_FINDER_COLUMN_G_GC_DC_Y_GOVAGENCYCODE_1);
 			}
 			else if (govAgencyCode.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_GC_DC_Y_GOVAGENCYCODE_3);
+				query.append(_FINDER_COLUMN_G_GC_DC_Y_GOVAGENCYCODE_3);
 			}
 			else {
 				bindGovAgencyCode = true;
 
-				query.append(_FINDER_COLUMN_GC_DC_Y_GOVAGENCYCODE_2);
+				query.append(_FINDER_COLUMN_G_GC_DC_Y_GOVAGENCYCODE_2);
 			}
 
 			boolean bindDomainCode = false;
 
 			if (domainCode == null) {
-				query.append(_FINDER_COLUMN_GC_DC_Y_DOMAINCODE_1);
+				query.append(_FINDER_COLUMN_G_GC_DC_Y_DOMAINCODE_1);
 			}
 			else if (domainCode.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_GC_DC_Y_DOMAINCODE_3);
+				query.append(_FINDER_COLUMN_G_GC_DC_Y_DOMAINCODE_3);
 			}
 			else {
 				bindDomainCode = true;
 
-				query.append(_FINDER_COLUMN_GC_DC_Y_DOMAINCODE_2);
+				query.append(_FINDER_COLUMN_G_GC_DC_Y_DOMAINCODE_2);
 			}
 
-			query.append(_FINDER_COLUMN_GC_DC_Y_YEAR_2);
+			query.append(_FINDER_COLUMN_G_GC_DC_Y_YEAR_2);
 
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
@@ -2577,6 +2689,8 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 				Query q = session.createQuery(sql);
 
 				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
 
 				if (bindGovAgencyCode) {
 					qPos.add(govAgencyCode);
@@ -2619,8 +2733,9 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	}
 
 	/**
-	 * Returns the first dossiers statistics in the ordered set where govAgencyCode = &#63; and domainCode = &#63; and year = &#63;.
+	 * Returns the first dossiers statistics in the ordered set where groupId = &#63; and govAgencyCode = &#63; and domainCode = &#63; and year = &#63;.
 	 *
+	 * @param groupId the group ID
 	 * @param govAgencyCode the gov agency code
 	 * @param domainCode the domain code
 	 * @param year the year
@@ -2630,21 +2745,25 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public DossiersStatistics findByGC_DC_Y_First(String govAgencyCode,
-		String domainCode, int year, OrderByComparator orderByComparator)
+	public DossiersStatistics findByG_GC_DC_Y_First(long groupId,
+		String govAgencyCode, String domainCode, int year,
+		OrderByComparator orderByComparator)
 		throws NoSuchDossiersStatisticsException, SystemException {
-		DossiersStatistics dossiersStatistics = fetchByGC_DC_Y_First(govAgencyCode,
-				domainCode, year, orderByComparator);
+		DossiersStatistics dossiersStatistics = fetchByG_GC_DC_Y_First(groupId,
+				govAgencyCode, domainCode, year, orderByComparator);
 
 		if (dossiersStatistics != null) {
 			return dossiersStatistics;
 		}
 
-		StringBundler msg = new StringBundler(8);
+		StringBundler msg = new StringBundler(10);
 
 		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
 
-		msg.append("govAgencyCode=");
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", govAgencyCode=");
 		msg.append(govAgencyCode);
 
 		msg.append(", domainCode=");
@@ -2659,8 +2778,9 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	}
 
 	/**
-	 * Returns the first dossiers statistics in the ordered set where govAgencyCode = &#63; and domainCode = &#63; and year = &#63;.
+	 * Returns the first dossiers statistics in the ordered set where groupId = &#63; and govAgencyCode = &#63; and domainCode = &#63; and year = &#63;.
 	 *
+	 * @param groupId the group ID
 	 * @param govAgencyCode the gov agency code
 	 * @param domainCode the domain code
 	 * @param year the year
@@ -2669,10 +2789,10 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public DossiersStatistics fetchByGC_DC_Y_First(String govAgencyCode,
-		String domainCode, int year, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<DossiersStatistics> list = findByGC_DC_Y(govAgencyCode,
+	public DossiersStatistics fetchByG_GC_DC_Y_First(long groupId,
+		String govAgencyCode, String domainCode, int year,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<DossiersStatistics> list = findByG_GC_DC_Y(groupId, govAgencyCode,
 				domainCode, year, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -2683,8 +2803,9 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	}
 
 	/**
-	 * Returns the last dossiers statistics in the ordered set where govAgencyCode = &#63; and domainCode = &#63; and year = &#63;.
+	 * Returns the last dossiers statistics in the ordered set where groupId = &#63; and govAgencyCode = &#63; and domainCode = &#63; and year = &#63;.
 	 *
+	 * @param groupId the group ID
 	 * @param govAgencyCode the gov agency code
 	 * @param domainCode the domain code
 	 * @param year the year
@@ -2694,21 +2815,25 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public DossiersStatistics findByGC_DC_Y_Last(String govAgencyCode,
-		String domainCode, int year, OrderByComparator orderByComparator)
+	public DossiersStatistics findByG_GC_DC_Y_Last(long groupId,
+		String govAgencyCode, String domainCode, int year,
+		OrderByComparator orderByComparator)
 		throws NoSuchDossiersStatisticsException, SystemException {
-		DossiersStatistics dossiersStatistics = fetchByGC_DC_Y_Last(govAgencyCode,
-				domainCode, year, orderByComparator);
+		DossiersStatistics dossiersStatistics = fetchByG_GC_DC_Y_Last(groupId,
+				govAgencyCode, domainCode, year, orderByComparator);
 
 		if (dossiersStatistics != null) {
 			return dossiersStatistics;
 		}
 
-		StringBundler msg = new StringBundler(8);
+		StringBundler msg = new StringBundler(10);
 
 		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
 
-		msg.append("govAgencyCode=");
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", govAgencyCode=");
 		msg.append(govAgencyCode);
 
 		msg.append(", domainCode=");
@@ -2723,8 +2848,9 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	}
 
 	/**
-	 * Returns the last dossiers statistics in the ordered set where govAgencyCode = &#63; and domainCode = &#63; and year = &#63;.
+	 * Returns the last dossiers statistics in the ordered set where groupId = &#63; and govAgencyCode = &#63; and domainCode = &#63; and year = &#63;.
 	 *
+	 * @param groupId the group ID
 	 * @param govAgencyCode the gov agency code
 	 * @param domainCode the domain code
 	 * @param year the year
@@ -2733,16 +2859,16 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public DossiersStatistics fetchByGC_DC_Y_Last(String govAgencyCode,
-		String domainCode, int year, OrderByComparator orderByComparator)
-		throws SystemException {
-		int count = countByGC_DC_Y(govAgencyCode, domainCode, year);
+	public DossiersStatistics fetchByG_GC_DC_Y_Last(long groupId,
+		String govAgencyCode, String domainCode, int year,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByG_GC_DC_Y(groupId, govAgencyCode, domainCode, year);
 
 		if (count == 0) {
 			return null;
 		}
 
-		List<DossiersStatistics> list = findByGC_DC_Y(govAgencyCode,
+		List<DossiersStatistics> list = findByG_GC_DC_Y(groupId, govAgencyCode,
 				domainCode, year, count - 1, count, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -2753,9 +2879,10 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	}
 
 	/**
-	 * Returns the dossiers statisticses before and after the current dossiers statistics in the ordered set where govAgencyCode = &#63; and domainCode = &#63; and year = &#63;.
+	 * Returns the dossiers statisticses before and after the current dossiers statistics in the ordered set where groupId = &#63; and govAgencyCode = &#63; and domainCode = &#63; and year = &#63;.
 	 *
 	 * @param dossierStatisticId the primary key of the current dossiers statistics
+	 * @param groupId the group ID
 	 * @param govAgencyCode the gov agency code
 	 * @param domainCode the domain code
 	 * @param year the year
@@ -2765,9 +2892,9 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public DossiersStatistics[] findByGC_DC_Y_PrevAndNext(
-		long dossierStatisticId, String govAgencyCode, String domainCode,
-		int year, OrderByComparator orderByComparator)
+	public DossiersStatistics[] findByG_GC_DC_Y_PrevAndNext(
+		long dossierStatisticId, long groupId, String govAgencyCode,
+		String domainCode, int year, OrderByComparator orderByComparator)
 		throws NoSuchDossiersStatisticsException, SystemException {
 		DossiersStatistics dossiersStatistics = findByPrimaryKey(dossierStatisticId);
 
@@ -2778,13 +2905,15 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 
 			DossiersStatistics[] array = new DossiersStatisticsImpl[3];
 
-			array[0] = getByGC_DC_Y_PrevAndNext(session, dossiersStatistics,
-					govAgencyCode, domainCode, year, orderByComparator, true);
+			array[0] = getByG_GC_DC_Y_PrevAndNext(session, dossiersStatistics,
+					groupId, govAgencyCode, domainCode, year,
+					orderByComparator, true);
 
 			array[1] = dossiersStatistics;
 
-			array[2] = getByGC_DC_Y_PrevAndNext(session, dossiersStatistics,
-					govAgencyCode, domainCode, year, orderByComparator, false);
+			array[2] = getByG_GC_DC_Y_PrevAndNext(session, dossiersStatistics,
+					groupId, govAgencyCode, domainCode, year,
+					orderByComparator, false);
 
 			return array;
 		}
@@ -2796,10 +2925,10 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 		}
 	}
 
-	protected DossiersStatistics getByGC_DC_Y_PrevAndNext(Session session,
-		DossiersStatistics dossiersStatistics, String govAgencyCode,
-		String domainCode, int year, OrderByComparator orderByComparator,
-		boolean previous) {
+	protected DossiersStatistics getByG_GC_DC_Y_PrevAndNext(Session session,
+		DossiersStatistics dossiersStatistics, long groupId,
+		String govAgencyCode, String domainCode, int year,
+		OrderByComparator orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2812,35 +2941,37 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 
 		query.append(_SQL_SELECT_DOSSIERSSTATISTICS_WHERE);
 
+		query.append(_FINDER_COLUMN_G_GC_DC_Y_GROUPID_2);
+
 		boolean bindGovAgencyCode = false;
 
 		if (govAgencyCode == null) {
-			query.append(_FINDER_COLUMN_GC_DC_Y_GOVAGENCYCODE_1);
+			query.append(_FINDER_COLUMN_G_GC_DC_Y_GOVAGENCYCODE_1);
 		}
 		else if (govAgencyCode.equals(StringPool.BLANK)) {
-			query.append(_FINDER_COLUMN_GC_DC_Y_GOVAGENCYCODE_3);
+			query.append(_FINDER_COLUMN_G_GC_DC_Y_GOVAGENCYCODE_3);
 		}
 		else {
 			bindGovAgencyCode = true;
 
-			query.append(_FINDER_COLUMN_GC_DC_Y_GOVAGENCYCODE_2);
+			query.append(_FINDER_COLUMN_G_GC_DC_Y_GOVAGENCYCODE_2);
 		}
 
 		boolean bindDomainCode = false;
 
 		if (domainCode == null) {
-			query.append(_FINDER_COLUMN_GC_DC_Y_DOMAINCODE_1);
+			query.append(_FINDER_COLUMN_G_GC_DC_Y_DOMAINCODE_1);
 		}
 		else if (domainCode.equals(StringPool.BLANK)) {
-			query.append(_FINDER_COLUMN_GC_DC_Y_DOMAINCODE_3);
+			query.append(_FINDER_COLUMN_G_GC_DC_Y_DOMAINCODE_3);
 		}
 		else {
 			bindDomainCode = true;
 
-			query.append(_FINDER_COLUMN_GC_DC_Y_DOMAINCODE_2);
+			query.append(_FINDER_COLUMN_G_GC_DC_Y_DOMAINCODE_2);
 		}
 
-		query.append(_FINDER_COLUMN_GC_DC_Y_YEAR_2);
+		query.append(_FINDER_COLUMN_G_GC_DC_Y_YEAR_2);
 
 		if (orderByComparator != null) {
 			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
@@ -2909,6 +3040,8 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 		q.setMaxResults(2);
 
 		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(groupId);
 
 		if (bindGovAgencyCode) {
 			qPos.add(govAgencyCode);
@@ -2939,17 +3072,18 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	}
 
 	/**
-	 * Removes all the dossiers statisticses where govAgencyCode = &#63; and domainCode = &#63; and year = &#63; from the database.
+	 * Removes all the dossiers statisticses where groupId = &#63; and govAgencyCode = &#63; and domainCode = &#63; and year = &#63; from the database.
 	 *
+	 * @param groupId the group ID
 	 * @param govAgencyCode the gov agency code
 	 * @param domainCode the domain code
 	 * @param year the year
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public void removeByGC_DC_Y(String govAgencyCode, String domainCode,
-		int year) throws SystemException {
-		for (DossiersStatistics dossiersStatistics : findByGC_DC_Y(
+	public void removeByG_GC_DC_Y(long groupId, String govAgencyCode,
+		String domainCode, int year) throws SystemException {
+		for (DossiersStatistics dossiersStatistics : findByG_GC_DC_Y(groupId,
 				govAgencyCode, domainCode, year, QueryUtil.ALL_POS,
 				QueryUtil.ALL_POS, null)) {
 			remove(dossiersStatistics);
@@ -2957,8 +3091,9 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	}
 
 	/**
-	 * Returns the number of dossiers statisticses where govAgencyCode = &#63; and domainCode = &#63; and year = &#63;.
+	 * Returns the number of dossiers statisticses where groupId = &#63; and govAgencyCode = &#63; and domainCode = &#63; and year = &#63;.
 	 *
+	 * @param groupId the group ID
 	 * @param govAgencyCode the gov agency code
 	 * @param domainCode the domain code
 	 * @param year the year
@@ -2966,49 +3101,53 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public int countByGC_DC_Y(String govAgencyCode, String domainCode, int year)
-		throws SystemException {
-		FinderPath finderPath = FINDER_PATH_COUNT_BY_GC_DC_Y;
+	public int countByG_GC_DC_Y(long groupId, String govAgencyCode,
+		String domainCode, int year) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_GC_DC_Y;
 
-		Object[] finderArgs = new Object[] { govAgencyCode, domainCode, year };
+		Object[] finderArgs = new Object[] {
+				groupId, govAgencyCode, domainCode, year
+			};
 
 		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
 				this);
 
 		if (count == null) {
-			StringBundler query = new StringBundler(4);
+			StringBundler query = new StringBundler(5);
 
 			query.append(_SQL_COUNT_DOSSIERSSTATISTICS_WHERE);
+
+			query.append(_FINDER_COLUMN_G_GC_DC_Y_GROUPID_2);
 
 			boolean bindGovAgencyCode = false;
 
 			if (govAgencyCode == null) {
-				query.append(_FINDER_COLUMN_GC_DC_Y_GOVAGENCYCODE_1);
+				query.append(_FINDER_COLUMN_G_GC_DC_Y_GOVAGENCYCODE_1);
 			}
 			else if (govAgencyCode.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_GC_DC_Y_GOVAGENCYCODE_3);
+				query.append(_FINDER_COLUMN_G_GC_DC_Y_GOVAGENCYCODE_3);
 			}
 			else {
 				bindGovAgencyCode = true;
 
-				query.append(_FINDER_COLUMN_GC_DC_Y_GOVAGENCYCODE_2);
+				query.append(_FINDER_COLUMN_G_GC_DC_Y_GOVAGENCYCODE_2);
 			}
 
 			boolean bindDomainCode = false;
 
 			if (domainCode == null) {
-				query.append(_FINDER_COLUMN_GC_DC_Y_DOMAINCODE_1);
+				query.append(_FINDER_COLUMN_G_GC_DC_Y_DOMAINCODE_1);
 			}
 			else if (domainCode.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_GC_DC_Y_DOMAINCODE_3);
+				query.append(_FINDER_COLUMN_G_GC_DC_Y_DOMAINCODE_3);
 			}
 			else {
 				bindDomainCode = true;
 
-				query.append(_FINDER_COLUMN_GC_DC_Y_DOMAINCODE_2);
+				query.append(_FINDER_COLUMN_G_GC_DC_Y_DOMAINCODE_2);
 			}
 
-			query.append(_FINDER_COLUMN_GC_DC_Y_YEAR_2);
+			query.append(_FINDER_COLUMN_G_GC_DC_Y_YEAR_2);
 
 			String sql = query.toString();
 
@@ -3020,6 +3159,8 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 				Query q = session.createQuery(sql);
 
 				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
 
 				if (bindGovAgencyCode) {
 					qPos.add(govAgencyCode);
@@ -3048,39 +3189,42 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 		return count.intValue();
 	}
 
-	private static final String _FINDER_COLUMN_GC_DC_Y_GOVAGENCYCODE_1 = "dossiersStatistics.govAgencyCode IS NULL AND ";
-	private static final String _FINDER_COLUMN_GC_DC_Y_GOVAGENCYCODE_2 = "dossiersStatistics.govAgencyCode = ? AND ";
-	private static final String _FINDER_COLUMN_GC_DC_Y_GOVAGENCYCODE_3 = "(dossiersStatistics.govAgencyCode IS NULL OR dossiersStatistics.govAgencyCode = '') AND ";
-	private static final String _FINDER_COLUMN_GC_DC_Y_DOMAINCODE_1 = "dossiersStatistics.domainCode IS NULL AND ";
-	private static final String _FINDER_COLUMN_GC_DC_Y_DOMAINCODE_2 = "dossiersStatistics.domainCode = ? AND ";
-	private static final String _FINDER_COLUMN_GC_DC_Y_DOMAINCODE_3 = "(dossiersStatistics.domainCode IS NULL OR dossiersStatistics.domainCode = '') AND ";
-	private static final String _FINDER_COLUMN_GC_DC_Y_YEAR_2 = "dossiersStatistics.year = ?";
-	public static final FinderPath FINDER_PATH_FETCH_BY_GC_DC_M_Y_L = new FinderPath(DossiersStatisticsModelImpl.ENTITY_CACHE_ENABLED,
+	private static final String _FINDER_COLUMN_G_GC_DC_Y_GROUPID_2 = "dossiersStatistics.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_GC_DC_Y_GOVAGENCYCODE_1 = "dossiersStatistics.govAgencyCode IS NULL AND ";
+	private static final String _FINDER_COLUMN_G_GC_DC_Y_GOVAGENCYCODE_2 = "dossiersStatistics.govAgencyCode = ? AND ";
+	private static final String _FINDER_COLUMN_G_GC_DC_Y_GOVAGENCYCODE_3 = "(dossiersStatistics.govAgencyCode IS NULL OR dossiersStatistics.govAgencyCode = '') AND ";
+	private static final String _FINDER_COLUMN_G_GC_DC_Y_DOMAINCODE_1 = "dossiersStatistics.domainCode IS NULL AND ";
+	private static final String _FINDER_COLUMN_G_GC_DC_Y_DOMAINCODE_2 = "dossiersStatistics.domainCode = ? AND ";
+	private static final String _FINDER_COLUMN_G_GC_DC_Y_DOMAINCODE_3 = "(dossiersStatistics.domainCode IS NULL OR dossiersStatistics.domainCode = '') AND ";
+	private static final String _FINDER_COLUMN_G_GC_DC_Y_YEAR_2 = "dossiersStatistics.year = ?";
+	public static final FinderPath FINDER_PATH_FETCH_BY_G_GC_DC_M_Y_L = new FinderPath(DossiersStatisticsModelImpl.ENTITY_CACHE_ENABLED,
 			DossiersStatisticsModelImpl.FINDER_CACHE_ENABLED,
 			DossiersStatisticsImpl.class, FINDER_CLASS_NAME_ENTITY,
-			"fetchByGC_DC_M_Y_L",
+			"fetchByG_GC_DC_M_Y_L",
 			new String[] {
-				String.class.getName(), String.class.getName(),
-				Integer.class.getName(), Integer.class.getName(),
-				Integer.class.getName()
+				Long.class.getName(), String.class.getName(),
+				String.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), Integer.class.getName()
 			},
+			DossiersStatisticsModelImpl.GROUPID_COLUMN_BITMASK |
 			DossiersStatisticsModelImpl.GOVAGENCYCODE_COLUMN_BITMASK |
 			DossiersStatisticsModelImpl.DOMAINCODE_COLUMN_BITMASK |
 			DossiersStatisticsModelImpl.MONTH_COLUMN_BITMASK |
 			DossiersStatisticsModelImpl.YEAR_COLUMN_BITMASK |
 			DossiersStatisticsModelImpl.ADMINISTRATIONLEVEL_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_GC_DC_M_Y_L = new FinderPath(DossiersStatisticsModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_GC_DC_M_Y_L = new FinderPath(DossiersStatisticsModelImpl.ENTITY_CACHE_ENABLED,
 			DossiersStatisticsModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGC_DC_M_Y_L",
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_GC_DC_M_Y_L",
 			new String[] {
-				String.class.getName(), String.class.getName(),
-				Integer.class.getName(), Integer.class.getName(),
-				Integer.class.getName()
+				Long.class.getName(), String.class.getName(),
+				String.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), Integer.class.getName()
 			});
 
 	/**
-	 * Returns the dossiers statistics where govAgencyCode = &#63; and domainCode = &#63; and month = &#63; and year = &#63; and administrationLevel = &#63; or throws a {@link org.opencps.statisticsmgt.NoSuchDossiersStatisticsException} if it could not be found.
+	 * Returns the dossiers statistics where groupId = &#63; and govAgencyCode = &#63; and domainCode = &#63; and month = &#63; and year = &#63; and administrationLevel = &#63; or throws a {@link org.opencps.statisticsmgt.NoSuchDossiersStatisticsException} if it could not be found.
 	 *
+	 * @param groupId the group ID
 	 * @param govAgencyCode the gov agency code
 	 * @param domainCode the domain code
 	 * @param month the month
@@ -3091,18 +3235,22 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public DossiersStatistics findByGC_DC_M_Y_L(String govAgencyCode,
-		String domainCode, int month, int year, int administrationLevel)
+	public DossiersStatistics findByG_GC_DC_M_Y_L(long groupId,
+		String govAgencyCode, String domainCode, int month, int year,
+		int administrationLevel)
 		throws NoSuchDossiersStatisticsException, SystemException {
-		DossiersStatistics dossiersStatistics = fetchByGC_DC_M_Y_L(govAgencyCode,
-				domainCode, month, year, administrationLevel);
+		DossiersStatistics dossiersStatistics = fetchByG_GC_DC_M_Y_L(groupId,
+				govAgencyCode, domainCode, month, year, administrationLevel);
 
 		if (dossiersStatistics == null) {
-			StringBundler msg = new StringBundler(12);
+			StringBundler msg = new StringBundler(14);
 
 			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
 
-			msg.append("govAgencyCode=");
+			msg.append("groupId=");
+			msg.append(groupId);
+
+			msg.append(", govAgencyCode=");
 			msg.append(govAgencyCode);
 
 			msg.append(", domainCode=");
@@ -3130,8 +3278,9 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	}
 
 	/**
-	 * Returns the dossiers statistics where govAgencyCode = &#63; and domainCode = &#63; and month = &#63; and year = &#63; and administrationLevel = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 * Returns the dossiers statistics where groupId = &#63; and govAgencyCode = &#63; and domainCode = &#63; and month = &#63; and year = &#63; and administrationLevel = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
 	 *
+	 * @param groupId the group ID
 	 * @param govAgencyCode the gov agency code
 	 * @param domainCode the domain code
 	 * @param month the month
@@ -3141,16 +3290,17 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public DossiersStatistics fetchByGC_DC_M_Y_L(String govAgencyCode,
-		String domainCode, int month, int year, int administrationLevel)
-		throws SystemException {
-		return fetchByGC_DC_M_Y_L(govAgencyCode, domainCode, month, year,
-			administrationLevel, true);
+	public DossiersStatistics fetchByG_GC_DC_M_Y_L(long groupId,
+		String govAgencyCode, String domainCode, int month, int year,
+		int administrationLevel) throws SystemException {
+		return fetchByG_GC_DC_M_Y_L(groupId, govAgencyCode, domainCode, month,
+			year, administrationLevel, true);
 	}
 
 	/**
-	 * Returns the dossiers statistics where govAgencyCode = &#63; and domainCode = &#63; and month = &#63; and year = &#63; and administrationLevel = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 * Returns the dossiers statistics where groupId = &#63; and govAgencyCode = &#63; and domainCode = &#63; and month = &#63; and year = &#63; and administrationLevel = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
 	 *
+	 * @param groupId the group ID
 	 * @param govAgencyCode the gov agency code
 	 * @param domainCode the domain code
 	 * @param month the month
@@ -3161,24 +3311,27 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public DossiersStatistics fetchByGC_DC_M_Y_L(String govAgencyCode,
-		String domainCode, int month, int year, int administrationLevel,
-		boolean retrieveFromCache) throws SystemException {
+	public DossiersStatistics fetchByG_GC_DC_M_Y_L(long groupId,
+		String govAgencyCode, String domainCode, int month, int year,
+		int administrationLevel, boolean retrieveFromCache)
+		throws SystemException {
 		Object[] finderArgs = new Object[] {
-				govAgencyCode, domainCode, month, year, administrationLevel
+				groupId, govAgencyCode, domainCode, month, year,
+				administrationLevel
 			};
 
 		Object result = null;
 
 		if (retrieveFromCache) {
-			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_GC_DC_M_Y_L,
+			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_G_GC_DC_M_Y_L,
 					finderArgs, this);
 		}
 
 		if (result instanceof DossiersStatistics) {
 			DossiersStatistics dossiersStatistics = (DossiersStatistics)result;
 
-			if (!Validator.equals(govAgencyCode,
+			if ((groupId != dossiersStatistics.getGroupId()) ||
+					!Validator.equals(govAgencyCode,
 						dossiersStatistics.getGovAgencyCode()) ||
 					!Validator.equals(domainCode,
 						dossiersStatistics.getDomainCode()) ||
@@ -3190,43 +3343,45 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(7);
+			StringBundler query = new StringBundler(8);
 
 			query.append(_SQL_SELECT_DOSSIERSSTATISTICS_WHERE);
+
+			query.append(_FINDER_COLUMN_G_GC_DC_M_Y_L_GROUPID_2);
 
 			boolean bindGovAgencyCode = false;
 
 			if (govAgencyCode == null) {
-				query.append(_FINDER_COLUMN_GC_DC_M_Y_L_GOVAGENCYCODE_1);
+				query.append(_FINDER_COLUMN_G_GC_DC_M_Y_L_GOVAGENCYCODE_1);
 			}
 			else if (govAgencyCode.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_GC_DC_M_Y_L_GOVAGENCYCODE_3);
+				query.append(_FINDER_COLUMN_G_GC_DC_M_Y_L_GOVAGENCYCODE_3);
 			}
 			else {
 				bindGovAgencyCode = true;
 
-				query.append(_FINDER_COLUMN_GC_DC_M_Y_L_GOVAGENCYCODE_2);
+				query.append(_FINDER_COLUMN_G_GC_DC_M_Y_L_GOVAGENCYCODE_2);
 			}
 
 			boolean bindDomainCode = false;
 
 			if (domainCode == null) {
-				query.append(_FINDER_COLUMN_GC_DC_M_Y_L_DOMAINCODE_1);
+				query.append(_FINDER_COLUMN_G_GC_DC_M_Y_L_DOMAINCODE_1);
 			}
 			else if (domainCode.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_GC_DC_M_Y_L_DOMAINCODE_3);
+				query.append(_FINDER_COLUMN_G_GC_DC_M_Y_L_DOMAINCODE_3);
 			}
 			else {
 				bindDomainCode = true;
 
-				query.append(_FINDER_COLUMN_GC_DC_M_Y_L_DOMAINCODE_2);
+				query.append(_FINDER_COLUMN_G_GC_DC_M_Y_L_DOMAINCODE_2);
 			}
 
-			query.append(_FINDER_COLUMN_GC_DC_M_Y_L_MONTH_2);
+			query.append(_FINDER_COLUMN_G_GC_DC_M_Y_L_MONTH_2);
 
-			query.append(_FINDER_COLUMN_GC_DC_M_Y_L_YEAR_2);
+			query.append(_FINDER_COLUMN_G_GC_DC_M_Y_L_YEAR_2);
 
-			query.append(_FINDER_COLUMN_GC_DC_M_Y_L_ADMINISTRATIONLEVEL_2);
+			query.append(_FINDER_COLUMN_G_GC_DC_M_Y_L_ADMINISTRATIONLEVEL_2);
 
 			String sql = query.toString();
 
@@ -3238,6 +3393,8 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 				Query q = session.createQuery(sql);
 
 				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
 
 				if (bindGovAgencyCode) {
 					qPos.add(govAgencyCode);
@@ -3256,13 +3413,13 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 				List<DossiersStatistics> list = q.list();
 
 				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_GC_DC_M_Y_L,
+					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_GC_DC_M_Y_L,
 						finderArgs, list);
 				}
 				else {
 					if ((list.size() > 1) && _log.isWarnEnabled()) {
 						_log.warn(
-							"DossiersStatisticsPersistenceImpl.fetchByGC_DC_M_Y_L(String, String, int, int, int, boolean) with parameters (" +
+							"DossiersStatisticsPersistenceImpl.fetchByG_GC_DC_M_Y_L(long, String, String, int, int, int, boolean) with parameters (" +
 							StringUtil.merge(finderArgs) +
 							") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
 					}
@@ -3273,7 +3430,8 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 
 					cacheResult(dossiersStatistics);
 
-					if ((dossiersStatistics.getGovAgencyCode() == null) ||
+					if ((dossiersStatistics.getGroupId() != groupId) ||
+							(dossiersStatistics.getGovAgencyCode() == null) ||
 							!dossiersStatistics.getGovAgencyCode()
 												   .equals(govAgencyCode) ||
 							(dossiersStatistics.getDomainCode() == null) ||
@@ -3282,13 +3440,13 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 							(dossiersStatistics.getMonth() != month) ||
 							(dossiersStatistics.getYear() != year) ||
 							(dossiersStatistics.getAdministrationLevel() != administrationLevel)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_GC_DC_M_Y_L,
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_GC_DC_M_Y_L,
 							finderArgs, dossiersStatistics);
 					}
 				}
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_GC_DC_M_Y_L,
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_GC_DC_M_Y_L,
 					finderArgs);
 
 				throw processException(e);
@@ -3307,8 +3465,9 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	}
 
 	/**
-	 * Removes the dossiers statistics where govAgencyCode = &#63; and domainCode = &#63; and month = &#63; and year = &#63; and administrationLevel = &#63; from the database.
+	 * Removes the dossiers statistics where groupId = &#63; and govAgencyCode = &#63; and domainCode = &#63; and month = &#63; and year = &#63; and administrationLevel = &#63; from the database.
 	 *
+	 * @param groupId the group ID
 	 * @param govAgencyCode the gov agency code
 	 * @param domainCode the domain code
 	 * @param month the month
@@ -3318,18 +3477,20 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public DossiersStatistics removeByGC_DC_M_Y_L(String govAgencyCode,
-		String domainCode, int month, int year, int administrationLevel)
+	public DossiersStatistics removeByG_GC_DC_M_Y_L(long groupId,
+		String govAgencyCode, String domainCode, int month, int year,
+		int administrationLevel)
 		throws NoSuchDossiersStatisticsException, SystemException {
-		DossiersStatistics dossiersStatistics = findByGC_DC_M_Y_L(govAgencyCode,
-				domainCode, month, year, administrationLevel);
+		DossiersStatistics dossiersStatistics = findByG_GC_DC_M_Y_L(groupId,
+				govAgencyCode, domainCode, month, year, administrationLevel);
 
 		return remove(dossiersStatistics);
 	}
 
 	/**
-	 * Returns the number of dossiers statisticses where govAgencyCode = &#63; and domainCode = &#63; and month = &#63; and year = &#63; and administrationLevel = &#63;.
+	 * Returns the number of dossiers statisticses where groupId = &#63; and govAgencyCode = &#63; and domainCode = &#63; and month = &#63; and year = &#63; and administrationLevel = &#63;.
 	 *
+	 * @param groupId the group ID
 	 * @param govAgencyCode the gov agency code
 	 * @param domainCode the domain code
 	 * @param month the month
@@ -3339,55 +3500,59 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public int countByGC_DC_M_Y_L(String govAgencyCode, String domainCode,
-		int month, int year, int administrationLevel) throws SystemException {
-		FinderPath finderPath = FINDER_PATH_COUNT_BY_GC_DC_M_Y_L;
+	public int countByG_GC_DC_M_Y_L(long groupId, String govAgencyCode,
+		String domainCode, int month, int year, int administrationLevel)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_GC_DC_M_Y_L;
 
 		Object[] finderArgs = new Object[] {
-				govAgencyCode, domainCode, month, year, administrationLevel
+				groupId, govAgencyCode, domainCode, month, year,
+				administrationLevel
 			};
 
 		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
 				this);
 
 		if (count == null) {
-			StringBundler query = new StringBundler(6);
+			StringBundler query = new StringBundler(7);
 
 			query.append(_SQL_COUNT_DOSSIERSSTATISTICS_WHERE);
+
+			query.append(_FINDER_COLUMN_G_GC_DC_M_Y_L_GROUPID_2);
 
 			boolean bindGovAgencyCode = false;
 
 			if (govAgencyCode == null) {
-				query.append(_FINDER_COLUMN_GC_DC_M_Y_L_GOVAGENCYCODE_1);
+				query.append(_FINDER_COLUMN_G_GC_DC_M_Y_L_GOVAGENCYCODE_1);
 			}
 			else if (govAgencyCode.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_GC_DC_M_Y_L_GOVAGENCYCODE_3);
+				query.append(_FINDER_COLUMN_G_GC_DC_M_Y_L_GOVAGENCYCODE_3);
 			}
 			else {
 				bindGovAgencyCode = true;
 
-				query.append(_FINDER_COLUMN_GC_DC_M_Y_L_GOVAGENCYCODE_2);
+				query.append(_FINDER_COLUMN_G_GC_DC_M_Y_L_GOVAGENCYCODE_2);
 			}
 
 			boolean bindDomainCode = false;
 
 			if (domainCode == null) {
-				query.append(_FINDER_COLUMN_GC_DC_M_Y_L_DOMAINCODE_1);
+				query.append(_FINDER_COLUMN_G_GC_DC_M_Y_L_DOMAINCODE_1);
 			}
 			else if (domainCode.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_GC_DC_M_Y_L_DOMAINCODE_3);
+				query.append(_FINDER_COLUMN_G_GC_DC_M_Y_L_DOMAINCODE_3);
 			}
 			else {
 				bindDomainCode = true;
 
-				query.append(_FINDER_COLUMN_GC_DC_M_Y_L_DOMAINCODE_2);
+				query.append(_FINDER_COLUMN_G_GC_DC_M_Y_L_DOMAINCODE_2);
 			}
 
-			query.append(_FINDER_COLUMN_GC_DC_M_Y_L_MONTH_2);
+			query.append(_FINDER_COLUMN_G_GC_DC_M_Y_L_MONTH_2);
 
-			query.append(_FINDER_COLUMN_GC_DC_M_Y_L_YEAR_2);
+			query.append(_FINDER_COLUMN_G_GC_DC_M_Y_L_YEAR_2);
 
-			query.append(_FINDER_COLUMN_GC_DC_M_Y_L_ADMINISTRATIONLEVEL_2);
+			query.append(_FINDER_COLUMN_G_GC_DC_M_Y_L_ADMINISTRATIONLEVEL_2);
 
 			String sql = query.toString();
 
@@ -3399,6 +3564,8 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 				Query q = session.createQuery(sql);
 
 				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
 
 				if (bindGovAgencyCode) {
 					qPos.add(govAgencyCode);
@@ -3431,16 +3598,284 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 		return count.intValue();
 	}
 
-	private static final String _FINDER_COLUMN_GC_DC_M_Y_L_GOVAGENCYCODE_1 = "dossiersStatistics.govAgencyCode IS NULL AND ";
-	private static final String _FINDER_COLUMN_GC_DC_M_Y_L_GOVAGENCYCODE_2 = "dossiersStatistics.govAgencyCode = ? AND ";
-	private static final String _FINDER_COLUMN_GC_DC_M_Y_L_GOVAGENCYCODE_3 = "(dossiersStatistics.govAgencyCode IS NULL OR dossiersStatistics.govAgencyCode = '') AND ";
-	private static final String _FINDER_COLUMN_GC_DC_M_Y_L_DOMAINCODE_1 = "dossiersStatistics.domainCode IS NULL AND ";
-	private static final String _FINDER_COLUMN_GC_DC_M_Y_L_DOMAINCODE_2 = "dossiersStatistics.domainCode = ? AND ";
-	private static final String _FINDER_COLUMN_GC_DC_M_Y_L_DOMAINCODE_3 = "(dossiersStatistics.domainCode IS NULL OR dossiersStatistics.domainCode = '') AND ";
-	private static final String _FINDER_COLUMN_GC_DC_M_Y_L_MONTH_2 = "dossiersStatistics.month = ? AND ";
-	private static final String _FINDER_COLUMN_GC_DC_M_Y_L_YEAR_2 = "dossiersStatistics.year = ? AND ";
-	private static final String _FINDER_COLUMN_GC_DC_M_Y_L_ADMINISTRATIONLEVEL_2 =
+	private static final String _FINDER_COLUMN_G_GC_DC_M_Y_L_GROUPID_2 = "dossiersStatistics.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_GC_DC_M_Y_L_GOVAGENCYCODE_1 = "dossiersStatistics.govAgencyCode IS NULL AND ";
+	private static final String _FINDER_COLUMN_G_GC_DC_M_Y_L_GOVAGENCYCODE_2 = "dossiersStatistics.govAgencyCode = ? AND ";
+	private static final String _FINDER_COLUMN_G_GC_DC_M_Y_L_GOVAGENCYCODE_3 = "(dossiersStatistics.govAgencyCode IS NULL OR dossiersStatistics.govAgencyCode = '') AND ";
+	private static final String _FINDER_COLUMN_G_GC_DC_M_Y_L_DOMAINCODE_1 = "dossiersStatistics.domainCode IS NULL AND ";
+	private static final String _FINDER_COLUMN_G_GC_DC_M_Y_L_DOMAINCODE_2 = "dossiersStatistics.domainCode = ? AND ";
+	private static final String _FINDER_COLUMN_G_GC_DC_M_Y_L_DOMAINCODE_3 = "(dossiersStatistics.domainCode IS NULL OR dossiersStatistics.domainCode = '') AND ";
+	private static final String _FINDER_COLUMN_G_GC_DC_M_Y_L_MONTH_2 = "dossiersStatistics.month = ? AND ";
+	private static final String _FINDER_COLUMN_G_GC_DC_M_Y_L_YEAR_2 = "dossiersStatistics.year = ? AND ";
+	private static final String _FINDER_COLUMN_G_GC_DC_M_Y_L_ADMINISTRATIONLEVEL_2 =
 		"dossiersStatistics.administrationLevel = ?";
+	public static final FinderPath FINDER_PATH_FETCH_BY_G_M_Y = new FinderPath(DossiersStatisticsModelImpl.ENTITY_CACHE_ENABLED,
+			DossiersStatisticsModelImpl.FINDER_CACHE_ENABLED,
+			DossiersStatisticsImpl.class, FINDER_CLASS_NAME_ENTITY,
+			"fetchByG_M_Y",
+			new String[] {
+				Long.class.getName(), Integer.class.getName(),
+				Integer.class.getName()
+			},
+			DossiersStatisticsModelImpl.GROUPID_COLUMN_BITMASK |
+			DossiersStatisticsModelImpl.MONTH_COLUMN_BITMASK |
+			DossiersStatisticsModelImpl.YEAR_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_M_Y = new FinderPath(DossiersStatisticsModelImpl.ENTITY_CACHE_ENABLED,
+			DossiersStatisticsModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_M_Y",
+			new String[] {
+				Long.class.getName(), Integer.class.getName(),
+				Integer.class.getName()
+			});
+
+	/**
+	 * Returns the dossiers statistics where groupId = &#63; and month = &#63; and year = &#63; or throws a {@link org.opencps.statisticsmgt.NoSuchDossiersStatisticsException} if it could not be found.
+	 *
+	 * @param groupId the group ID
+	 * @param month the month
+	 * @param year the year
+	 * @return the matching dossiers statistics
+	 * @throws org.opencps.statisticsmgt.NoSuchDossiersStatisticsException if a matching dossiers statistics could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public DossiersStatistics findByG_M_Y(long groupId, int month, int year)
+		throws NoSuchDossiersStatisticsException, SystemException {
+		DossiersStatistics dossiersStatistics = fetchByG_M_Y(groupId, month,
+				year);
+
+		if (dossiersStatistics == null) {
+			StringBundler msg = new StringBundler(8);
+
+			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			msg.append("groupId=");
+			msg.append(groupId);
+
+			msg.append(", month=");
+			msg.append(month);
+
+			msg.append(", year=");
+			msg.append(year);
+
+			msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+			if (_log.isWarnEnabled()) {
+				_log.warn(msg.toString());
+			}
+
+			throw new NoSuchDossiersStatisticsException(msg.toString());
+		}
+
+		return dossiersStatistics;
+	}
+
+	/**
+	 * Returns the dossiers statistics where groupId = &#63; and month = &#63; and year = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param groupId the group ID
+	 * @param month the month
+	 * @param year the year
+	 * @return the matching dossiers statistics, or <code>null</code> if a matching dossiers statistics could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public DossiersStatistics fetchByG_M_Y(long groupId, int month, int year)
+		throws SystemException {
+		return fetchByG_M_Y(groupId, month, year, true);
+	}
+
+	/**
+	 * Returns the dossiers statistics where groupId = &#63; and month = &#63; and year = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param groupId the group ID
+	 * @param month the month
+	 * @param year the year
+	 * @param retrieveFromCache whether to use the finder cache
+	 * @return the matching dossiers statistics, or <code>null</code> if a matching dossiers statistics could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public DossiersStatistics fetchByG_M_Y(long groupId, int month, int year,
+		boolean retrieveFromCache) throws SystemException {
+		Object[] finderArgs = new Object[] { groupId, month, year };
+
+		Object result = null;
+
+		if (retrieveFromCache) {
+			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_G_M_Y,
+					finderArgs, this);
+		}
+
+		if (result instanceof DossiersStatistics) {
+			DossiersStatistics dossiersStatistics = (DossiersStatistics)result;
+
+			if ((groupId != dossiersStatistics.getGroupId()) ||
+					(month != dossiersStatistics.getMonth()) ||
+					(year != dossiersStatistics.getYear())) {
+				result = null;
+			}
+		}
+
+		if (result == null) {
+			StringBundler query = new StringBundler(5);
+
+			query.append(_SQL_SELECT_DOSSIERSSTATISTICS_WHERE);
+
+			query.append(_FINDER_COLUMN_G_M_Y_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_M_Y_MONTH_2);
+
+			query.append(_FINDER_COLUMN_G_M_Y_YEAR_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(month);
+
+				qPos.add(year);
+
+				List<DossiersStatistics> list = q.list();
+
+				if (list.isEmpty()) {
+					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_M_Y,
+						finderArgs, list);
+				}
+				else {
+					if ((list.size() > 1) && _log.isWarnEnabled()) {
+						_log.warn(
+							"DossiersStatisticsPersistenceImpl.fetchByG_M_Y(long, int, int, boolean) with parameters (" +
+							StringUtil.merge(finderArgs) +
+							") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
+					}
+
+					DossiersStatistics dossiersStatistics = list.get(0);
+
+					result = dossiersStatistics;
+
+					cacheResult(dossiersStatistics);
+
+					if ((dossiersStatistics.getGroupId() != groupId) ||
+							(dossiersStatistics.getMonth() != month) ||
+							(dossiersStatistics.getYear() != year)) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_M_Y,
+							finderArgs, dossiersStatistics);
+					}
+				}
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_M_Y,
+					finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
+		else {
+			return (DossiersStatistics)result;
+		}
+	}
+
+	/**
+	 * Removes the dossiers statistics where groupId = &#63; and month = &#63; and year = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param month the month
+	 * @param year the year
+	 * @return the dossiers statistics that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public DossiersStatistics removeByG_M_Y(long groupId, int month, int year)
+		throws NoSuchDossiersStatisticsException, SystemException {
+		DossiersStatistics dossiersStatistics = findByG_M_Y(groupId, month, year);
+
+		return remove(dossiersStatistics);
+	}
+
+	/**
+	 * Returns the number of dossiers statisticses where groupId = &#63; and month = &#63; and year = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param month the month
+	 * @param year the year
+	 * @return the number of matching dossiers statisticses
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public int countByG_M_Y(long groupId, int month, int year)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_M_Y;
+
+		Object[] finderArgs = new Object[] { groupId, month, year };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(4);
+
+			query.append(_SQL_COUNT_DOSSIERSSTATISTICS_WHERE);
+
+			query.append(_FINDER_COLUMN_G_M_Y_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_M_Y_MONTH_2);
+
+			query.append(_FINDER_COLUMN_G_M_Y_YEAR_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(month);
+
+				qPos.add(year);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_G_M_Y_GROUPID_2 = "dossiersStatistics.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_M_Y_MONTH_2 = "dossiersStatistics.month = ? AND ";
+	private static final String _FINDER_COLUMN_G_M_Y_YEAR_2 = "dossiersStatistics.year = ?";
 
 	public DossiersStatisticsPersistenceImpl() {
 		setModelClass(DossiersStatistics.class);
@@ -3457,18 +3892,26 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 			DossiersStatisticsImpl.class, dossiersStatistics.getPrimaryKey(),
 			dossiersStatistics);
 
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_DC_M_Y,
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_DC_M_Y,
 			new Object[] {
+				dossiersStatistics.getGroupId(),
 				dossiersStatistics.getDomainCode(),
 				dossiersStatistics.getMonth(), dossiersStatistics.getYear()
 			}, dossiersStatistics);
 
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_GC_DC_M_Y_L,
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_GC_DC_M_Y_L,
 			new Object[] {
+				dossiersStatistics.getGroupId(),
 				dossiersStatistics.getGovAgencyCode(),
 				dossiersStatistics.getDomainCode(),
 				dossiersStatistics.getMonth(), dossiersStatistics.getYear(),
 				dossiersStatistics.getAdministrationLevel()
+			}, dossiersStatistics);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_M_Y,
+			new Object[] {
+				dossiersStatistics.getGroupId(), dossiersStatistics.getMonth(),
+				dossiersStatistics.getYear()
 			}, dossiersStatistics);
 
 		dossiersStatistics.resetOriginalValues();
@@ -3549,47 +3992,61 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 		DossiersStatistics dossiersStatistics) {
 		if (dossiersStatistics.isNew()) {
 			Object[] args = new Object[] {
+					dossiersStatistics.getGroupId(),
 					dossiersStatistics.getDomainCode(),
 					dossiersStatistics.getMonth(), dossiersStatistics.getYear()
 				};
 
-			FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_DC_M_Y, args,
+			FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_DC_M_Y, args,
 				Long.valueOf(1));
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_DC_M_Y, args,
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_DC_M_Y, args,
 				dossiersStatistics);
 
 			args = new Object[] {
+					dossiersStatistics.getGroupId(),
 					dossiersStatistics.getGovAgencyCode(),
 					dossiersStatistics.getDomainCode(),
 					dossiersStatistics.getMonth(), dossiersStatistics.getYear(),
 					dossiersStatistics.getAdministrationLevel()
 				};
 
-			FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GC_DC_M_Y_L, args,
+			FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_GC_DC_M_Y_L, args,
 				Long.valueOf(1));
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_GC_DC_M_Y_L, args,
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_GC_DC_M_Y_L, args,
+				dossiersStatistics);
+
+			args = new Object[] {
+					dossiersStatistics.getGroupId(),
+					dossiersStatistics.getMonth(), dossiersStatistics.getYear()
+				};
+
+			FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_M_Y, args,
+				Long.valueOf(1));
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_M_Y, args,
 				dossiersStatistics);
 		}
 		else {
 			DossiersStatisticsModelImpl dossiersStatisticsModelImpl = (DossiersStatisticsModelImpl)dossiersStatistics;
 
 			if ((dossiersStatisticsModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_DC_M_Y.getColumnBitmask()) != 0) {
+					FINDER_PATH_FETCH_BY_G_DC_M_Y.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
+						dossiersStatistics.getGroupId(),
 						dossiersStatistics.getDomainCode(),
 						dossiersStatistics.getMonth(),
 						dossiersStatistics.getYear()
 					};
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_DC_M_Y, args,
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_DC_M_Y, args,
 					Long.valueOf(1));
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_DC_M_Y, args,
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_DC_M_Y, args,
 					dossiersStatistics);
 			}
 
 			if ((dossiersStatisticsModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_GC_DC_M_Y_L.getColumnBitmask()) != 0) {
+					FINDER_PATH_FETCH_BY_G_GC_DC_M_Y_L.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
+						dossiersStatistics.getGroupId(),
 						dossiersStatistics.getGovAgencyCode(),
 						dossiersStatistics.getDomainCode(),
 						dossiersStatistics.getMonth(),
@@ -3597,10 +4054,24 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 						dossiersStatistics.getAdministrationLevel()
 					};
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GC_DC_M_Y_L,
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_GC_DC_M_Y_L,
 					args, Long.valueOf(1));
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_GC_DC_M_Y_L,
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_GC_DC_M_Y_L,
 					args, dossiersStatistics);
+			}
+
+			if ((dossiersStatisticsModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_G_M_Y.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						dossiersStatistics.getGroupId(),
+						dossiersStatistics.getMonth(),
+						dossiersStatistics.getYear()
+					};
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_M_Y, args,
+					Long.valueOf(1));
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_M_Y, args,
+					dossiersStatistics);
 			}
 		}
 	}
@@ -3610,38 +4081,42 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 		DossiersStatisticsModelImpl dossiersStatisticsModelImpl = (DossiersStatisticsModelImpl)dossiersStatistics;
 
 		Object[] args = new Object[] {
+				dossiersStatistics.getGroupId(),
 				dossiersStatistics.getDomainCode(),
 				dossiersStatistics.getMonth(), dossiersStatistics.getYear()
 			};
 
-		FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_DC_M_Y, args);
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_DC_M_Y, args);
+		FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_DC_M_Y, args);
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_DC_M_Y, args);
 
 		if ((dossiersStatisticsModelImpl.getColumnBitmask() &
-				FINDER_PATH_FETCH_BY_DC_M_Y.getColumnBitmask()) != 0) {
+				FINDER_PATH_FETCH_BY_G_DC_M_Y.getColumnBitmask()) != 0) {
 			args = new Object[] {
+					dossiersStatisticsModelImpl.getOriginalGroupId(),
 					dossiersStatisticsModelImpl.getOriginalDomainCode(),
 					dossiersStatisticsModelImpl.getOriginalMonth(),
 					dossiersStatisticsModelImpl.getOriginalYear()
 				};
 
-			FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_DC_M_Y, args);
-			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_DC_M_Y, args);
+			FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_DC_M_Y, args);
+			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_DC_M_Y, args);
 		}
 
 		args = new Object[] {
+				dossiersStatistics.getGroupId(),
 				dossiersStatistics.getGovAgencyCode(),
 				dossiersStatistics.getDomainCode(),
 				dossiersStatistics.getMonth(), dossiersStatistics.getYear(),
 				dossiersStatistics.getAdministrationLevel()
 			};
 
-		FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GC_DC_M_Y_L, args);
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_GC_DC_M_Y_L, args);
+		FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_GC_DC_M_Y_L, args);
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_GC_DC_M_Y_L, args);
 
 		if ((dossiersStatisticsModelImpl.getColumnBitmask() &
-				FINDER_PATH_FETCH_BY_GC_DC_M_Y_L.getColumnBitmask()) != 0) {
+				FINDER_PATH_FETCH_BY_G_GC_DC_M_Y_L.getColumnBitmask()) != 0) {
 			args = new Object[] {
+					dossiersStatisticsModelImpl.getOriginalGroupId(),
 					dossiersStatisticsModelImpl.getOriginalGovAgencyCode(),
 					dossiersStatisticsModelImpl.getOriginalDomainCode(),
 					dossiersStatisticsModelImpl.getOriginalMonth(),
@@ -3649,8 +4124,30 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 					dossiersStatisticsModelImpl.getOriginalAdministrationLevel()
 				};
 
-			FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GC_DC_M_Y_L, args);
-			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_GC_DC_M_Y_L, args);
+			FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_GC_DC_M_Y_L,
+				args);
+			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_GC_DC_M_Y_L,
+				args);
+		}
+
+		args = new Object[] {
+				dossiersStatistics.getGroupId(), dossiersStatistics.getMonth(),
+				dossiersStatistics.getYear()
+			};
+
+		FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_M_Y, args);
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_M_Y, args);
+
+		if ((dossiersStatisticsModelImpl.getColumnBitmask() &
+				FINDER_PATH_FETCH_BY_G_M_Y.getColumnBitmask()) != 0) {
+			args = new Object[] {
+					dossiersStatisticsModelImpl.getOriginalGroupId(),
+					dossiersStatisticsModelImpl.getOriginalMonth(),
+					dossiersStatisticsModelImpl.getOriginalYear()
+				};
+
+			FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_M_Y, args);
+			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_M_Y, args);
 		}
 	}
 
@@ -3835,46 +4332,52 @@ public class DossiersStatisticsPersistenceImpl extends BasePersistenceImpl<Dossi
 			}
 
 			if ((dossiersStatisticsModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GC_DC.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_GC_DC.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
+						dossiersStatisticsModelImpl.getOriginalGroupId(),
 						dossiersStatisticsModelImpl.getOriginalGovAgencyCode(),
 						dossiersStatisticsModelImpl.getOriginalDomainCode()
 					};
 
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GC_DC, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GC_DC,
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_GC_DC, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_GC_DC,
 					args);
 
 				args = new Object[] {
+						dossiersStatisticsModelImpl.getGroupId(),
 						dossiersStatisticsModelImpl.getGovAgencyCode(),
 						dossiersStatisticsModelImpl.getDomainCode()
 					};
 
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GC_DC, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GC_DC,
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_GC_DC, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_GC_DC,
 					args);
 			}
 
 			if ((dossiersStatisticsModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GC_DC_Y.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_GC_DC_Y.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
+						dossiersStatisticsModelImpl.getOriginalGroupId(),
 						dossiersStatisticsModelImpl.getOriginalGovAgencyCode(),
 						dossiersStatisticsModelImpl.getOriginalDomainCode(),
 						dossiersStatisticsModelImpl.getOriginalYear()
 					};
 
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GC_DC_Y, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GC_DC_Y,
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_GC_DC_Y,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_GC_DC_Y,
 					args);
 
 				args = new Object[] {
+						dossiersStatisticsModelImpl.getGroupId(),
 						dossiersStatisticsModelImpl.getGovAgencyCode(),
 						dossiersStatisticsModelImpl.getDomainCode(),
 						dossiersStatisticsModelImpl.getYear()
 					};
 
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GC_DC_Y, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GC_DC_Y,
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_GC_DC_Y,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_GC_DC_Y,
 					args);
 			}
 		}
