@@ -1,11 +1,4 @@
-<%@page import="org.opencps.util.DLFileEntryUtil"%>
-<%@page import="com.liferay.portlet.documentlibrary.model.DLFileVersion"%>
-<%@page import="com.liferay.portal.kernel.repository.model.FileVersion"%>
-<%@page import="com.liferay.portlet.documentlibrary.util.DLUtil"%>
-<%@page import="com.liferay.portal.kernel.util.HttpUtil"%>
-<%@page import="com.liferay.portlet.documentlibrary.model.DLFileEntry"%>
-<%@page import="com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil"%>
-<%@page import="com.liferay.portal.kernel.repository.model.FileEntry"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -55,6 +48,14 @@
 <%@page import="org.opencps.util.WebKeys"%>
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
 <%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
+<%@page import="org.opencps.util.DLFileEntryUtil"%>
+<%@page import="com.liferay.portlet.documentlibrary.model.DLFileVersion"%>
+<%@page import="com.liferay.portal.kernel.repository.model.FileVersion"%>
+<%@page import="com.liferay.portlet.documentlibrary.util.DLUtil"%>
+<%@page import="com.liferay.portal.kernel.util.HttpUtil"%>
+<%@page import="com.liferay.portlet.documentlibrary.model.DLFileEntry"%>
+<%@page import="com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil"%>
+<%@page import="com.liferay.portal.kernel.repository.model.FileEntry"%>
 
 <%@ include file="../../init.jsp"%>
 
@@ -223,9 +224,11 @@
 											</liferay-util:include>
 										</span>
 									</div>
-									<div>
-										<embed src="<%=fileUrl %>" width="100%" height="500px" align="center"/>
-									</div>
+									<c:if test="<%=Validator.isNotNull(fileUrl) %>">
+										<div>
+											<embed src="<%=fileUrl %>" width="100%" height="500px" align="center"/>
+										</div>
+									</c:if>
 								<%
 								index++;
 							}
