@@ -343,14 +343,17 @@
 						
 						loadingMask.hide();
 						if(fileExportDir == ''){
+							Liferay.Util.getOpener().Liferay.fire('turnOffOverlaymask');
 							alert('<%= UnicodeLanguageUtil.get(pageContext, "error-while-export-file") %>');
 						}else{
 							var ns = '<portlet:namespace/>';
 							ns = ns.substring(1, ns.length);
 							closeDialog('<portlet:namespace/>dossier-dynamic-form', ns);
+							Liferay.Util.getOpener().Liferay.fire('turnOffOverlaymask');
 						}
 					},
 			    	error: function(){
+			    		Liferay.Util.getOpener().Liferay.fire('turnOffOverlaymask');
 			    		loadingMask.hide();
 			    	}
 				}
@@ -377,6 +380,8 @@
 		window.location.href = portletURL.toString();
 		
 		loadingMask.hide();
+		
+		Liferay.Util.getOpener().Liferay.fire('turnOffOverlaymask');
 	},['aui-io','liferay-portlet-url', 'aui-loading-mask-deprecated']);
 	
 	Liferay.provide(window, '<portlet:namespace/>previewForm', function(dossierFileId) {

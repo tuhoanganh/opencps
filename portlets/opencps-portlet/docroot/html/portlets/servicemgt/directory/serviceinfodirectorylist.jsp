@@ -193,6 +193,7 @@ $(document).ready(function(){
 			className="org.opencps.servicemgt.model.ServiceInfo" 
 			modelVar="service" 
 			keyProperty="serviceinfoId"
+			indexVar="index"
 		>
 			<%
 				PortletURL viewURL = renderResponse.createRenderURL();
@@ -258,7 +259,7 @@ $(document).ready(function(){
 					row.setClassName("opencps-searchcontainer-row");
 					
 					// no column
-					row.addText(String.valueOf(row.getPos() + 1), viewURL);
+					row.addText(String.valueOf((searchContainer.getCur() - 1) * searchContainer.getDelta() + index + 1), viewURL);
 				
 					
 					row.addText(boundcol1);
