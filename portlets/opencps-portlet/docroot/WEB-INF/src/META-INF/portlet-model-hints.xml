@@ -512,6 +512,8 @@
 		<field name="syncStatus" type="int" />
 		<field name="version" type="int" />
 		<field name="signed" type="boolean" />
+		<field name="signCheck" type="int" />
+		<field name="signInfo" type="String" />
 	</model>
 	<model name="org.opencps.dossiermgt.model.DossierFileLog">
 		<field name="dossierFileLogId" type="long" />

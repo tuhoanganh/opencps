@@ -389,9 +389,10 @@ public class DossierFileLocalServiceImpl extends
 			String dossierFileNo, Date dossierFileDate, int original,
 			int syncStatus, long folderId, String sourceFileName,
 			String mimeType, String title, String description,
-			String changeLog, InputStream is, long size,
-			ServiceContext serviceContext) throws SystemException,
+			String changeLog, InputStream is, long size, int signCheck, 
+			String signInfo, ServiceContext serviceContext) throws SystemException,
 			PortalException {
+			
 
 		long dossierFileId = counterLocalService.increment(DossierFile.class
 				.getName());
@@ -428,6 +429,8 @@ public class DossierFileLocalServiceImpl extends
 		dossierFile.setGroupFileId(fileGroupId);
 		dossierFile.setOriginal(original);
 		dossierFile.setOwnerUserId(ownerUserId);
+		dossierFile.setSignCheck(signCheck);
+		dossierFile.setSignInfo(signInfo);
 
 		dossierFile.setOwnerOrganizationId(ownerOrganizationId);
 
@@ -485,6 +488,7 @@ public class DossierFileLocalServiceImpl extends
 				.nullSafeGetIndexer(DossierFile.class);
 
 		indexer.reindex(dossierFile);
+		
 		return dossierFile;
 	}
 

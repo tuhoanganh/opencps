@@ -109,6 +109,12 @@ import org.opencps.util.PortletUtil.SplitDate;
 import org.opencps.util.SignatureUtil;
 import org.opencps.util.WebKeys;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -125,6 +131,7 @@ import com.liferay.portal.kernel.servlet.PortalSessionContext;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
+import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -259,14 +266,20 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 			
 			File file = new File(filePath);
 			
-			System.out.println("#########################################" + filePath);
-			
 			System.out.println(file.getPath());
-
-			String signInfo = SignatureUtil.verifyPdfSignature(filePath);
 			
-			System.out.println(signInfo);
+			String extension = FileUtil.getExtension(sourceFileName);
+			
+			String signInfo = SignatureUtil.getSignInfo(filePath, extension);
+				
+			System.out.println("#########################################" + signInfo);
+			
 
+			int signCheck = SignatureUtil.getSignCheck(filePath, extension);
+			
+			SignatureUtil.getSignInfo(filePath, extension);
+			
+			
 			ServiceContext serviceContext = ServiceContextFactory
 					.getInstance(uploadPortletRequest);
 
@@ -301,8 +314,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 							PortletConstants.DOSSIER_FILE_SYNC_STATUS_NOSYNC,
 							dossier.getFolderId(), sourceFileName, contentType,
 							displayName, StringPool.BLANK, StringPool.BLANK,
-							inputStream, size, serviceContext);
-
+							inputStream, size, signCheck, signInfo ,serviceContext);
+			
 			int actor = 0;
 
 			if (accountBean.isEmployee()) {
@@ -858,6 +871,7 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 					fileEntry.getMimeType(), fileEntry.getTitle(),
 					StringPool.BLANK, StringPool.BLANK,
 					fileEntry.getContentStream(), fileEntry.getSize(),
+					dossierFile.getSignCheck(), dossierFile.getSignInfo(),
 					serviceContext);
 
 			ProcessStep processStep = BackendUtils
@@ -4069,6 +4083,8 @@ public class DossierMgtFrontOfficePortlet extends MVCPortlet {
 													fileEntry
 															.getContentStream(),
 													fileEntry.getSize(),
+													dossierFileSuggestion.getSignCheck(),
+													dossierFileSuggestion.getSignInfo(),
 													serviceContext);
 								}
 

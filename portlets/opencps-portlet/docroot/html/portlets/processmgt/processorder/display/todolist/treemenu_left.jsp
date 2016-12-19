@@ -16,12 +16,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
+<%@page import="org.opencps.processmgt.permissions.ProcessOrderPermission"%>
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@page import="org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.model.ProcessWorkflow"%>
-<%@page import="org.opencps.util.DateTimeUtil"%>
-<%@page import="org.opencps.holidayconfig.util.HolidayUtils"%>
-<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
-<%@page import="org.opencps.processmgt.permissions.ProcessOrderPermission"%>
+<%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="java.util.Date"%>
 <%@page import="com.liferay.portal.kernel.dao.search.RowChecker"%>
 <%@page import="com.liferay.portal.kernel.json.JSONFactoryUtil"%>
@@ -32,7 +31,6 @@
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="java.util.LinkedHashMap"%>
 <%@page import="java.util.List"%>
 <%@page import="javax.portlet.PortletRequest"%>
 <%@page import="javax.portlet.PortletURL"%>
@@ -71,160 +69,83 @@
 	
 	String tabs1 = ParamUtil.getString(request, "tabs1", ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS);
 
-	List<ProcessOrderBean> processOrderServices = new ArrayList<ProcessOrderBean>();
-	
-	List<ProcessOrderBean> processOrderSteps = new ArrayList<ProcessOrderBean>();
-	
-	String dossierSubStatus = ParamUtil.getString(request, "dossierSubStatus");
-	
 	long serviceInfoId = ParamUtil.getLong(request, "serviceInfoId");
 	
 	long processStepId = ParamUtil.getLong(request, "processStepId");
 	
-	try {
+	String dossierSubStatus = ParamUtil.getString(request, "dossierSubStatus");
 
-		if (tabs1
-				.equals(ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS)) {
-			processOrderServices = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil
-					.getProcessOrderServiceByUser(themeDisplay
-							.getUserId());
-
-			for (ProcessOrderBean ett : processOrderServices) {
-				processOrderSteps
-						.addAll((List<ProcessOrderBean>) ProcessOrderLocalServiceUtil
-								.getUserProcessStep(
-										themeDisplay.getUserId(),
-										ett.getServiceInfoId()));
-			}
-
-			if (serviceInfoId > 0) {
-				processOrderSteps = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil
-						.getUserProcessStep(themeDisplay.getUserId(),
-								serviceInfoId);
-			}
-		} else {
-			processOrderServices = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil
-					.getProcessOrderServiceJustFinishedByUser(themeDisplay
-							.getUserId());
-
-			for (ProcessOrderBean ett : processOrderServices) {
-				processOrderSteps
-						.addAll((List<ProcessOrderBean>) ProcessOrderLocalServiceUtil
-								.getUserProcessStep(
-										themeDisplay.getUserId(),
-										ett.getServiceInfoId()));
-			}
-
-			if (serviceInfoId > 0) {
-				processOrderSteps = (List<ProcessOrderBean>) ProcessOrderLocalServiceUtil
-						.getUserProcessStepJustFinished(
-								themeDisplay.getUserId(), serviceInfoId);
-			}
-		}
-
-	} catch (Exception e) {
-	}
-
-	//remove duplicates process orders
-	Map<String, ProcessOrderBean> cleanMap = new LinkedHashMap<String, ProcessOrderBean>();
-	for (int i = 0; i < processOrderSteps.size(); i++) {
-		cleanMap.put(processOrderSteps.get(i).getProcessStepId() + "",
-				processOrderSteps.get(i));
-	}
-	processOrderSteps = new ArrayList<ProcessOrderBean>(
-			cleanMap.values());
-
-	JSONObject arrayParam = JSONFactoryUtil.createJSONObject();
-	arrayParam.put("serviceInfoId",
-			(serviceInfoId > 0) ? String.valueOf(serviceInfoId)
-					: StringPool.BLANK);
-	arrayParam.put("processStepId",
-			(processStepId > 0) ? String.valueOf(processStepId)
-					: StringPool.BLANK);
+	String processOrderStage = ParamUtil.getString(request, "processOrderStage", "false");
+	
+	JSONObject arrayParam = JSONFactoryUtil
+		    .createJSONObject();
+	arrayParam.put("serviceInfoId", (serviceInfoId > 0) ? String.valueOf(serviceInfoId):StringPool.BLANK);
+	arrayParam.put("processStepId", (processStepId > 0) ? String.valueOf(processStepId):StringPool.BLANK);
+	arrayParam.put("dossierSubStatus", Validator.isNotNull(dossierSubStatus) ? dossierSubStatus:StringPool.BLANK);
+	arrayParam.put("processOrderStage", Validator.isNotNull(processOrderStage) ? processOrderStage:StringPool.BLANK);
 	arrayParam.put("tabs1", tabs1);
-
-	String processStepIdJsonData = ProcessOrderUtils.generateTreeView(
-			processOrderSteps,
-			LanguageUtil.get(locale, "filter-process-step").replaceAll(
-					"--", StringPool.BLANK), "radio");
+	String keySearch = ParamUtil.getString(request, "keywords");
+	
+	iteratorURL.setParameter("serviceInfoId", String.valueOf(serviceInfoId));
+	iteratorURL.setParameter("processStepId", String.valueOf(processStepId));
+	iteratorURL.setParameter("dossierSubStatus", dossierSubStatus);
+	iteratorURL.setParameter("processOrderStage", processOrderStage);
 %>
 
 <aui:row>
 	<aui:col width="25">
-		<div style="margin-bottom: 25px;" class="opencps-searchcontainer-wrapper default-box-shadow radius8">
-			<div id="processStepIdTree" class="openCPSTree"></div>
-		</div>
-	
-		<div class="opencps-searchcontainer-wrapper default-box-shadow radius8">
-			<div id="serviceInfoIdTree" class="openCPSTree"></div>
-			
-			<%
-				String serviceInfoIdJsonData = ProcessOrderUtils
-					.generateTreeView(
-							processOrderServices,
-							LanguageUtil.get(locale, "service-info")
-									.replaceAll("--", StringPool.BLANK),
-							"radio");
-			%>
-			
-		</div>
-	
-		<liferay-portlet:actionURL var="menuCounterUrl" name="menuCounterAction"/>
+	<div style="margin-bottom: 25px;" class="opencps-searchcontainer-wrapper default-box-shadow radius8">
 		
-		<liferay-portlet:actionURL var="menuCounterServiceInfoIdUrl" name="menuCounterServiceInfoIdAction"/>
+			<div id="subStatusTree" class="openCPSTree"></div>
+			<%
+			String dossierSubStatusJsonData = ProcessOrderUtils.generateTreeView(
+					"DOSSIER_SUB_STATUS", 
+					PortletConstants.TREE_VIEW_ALL_ITEM, 
+					LanguageUtil.get(locale, "filter-by-subStatus-left") , 
+					PortletConstants.TREE_VIEW_LEVER_0, 
+					"radio",
+					true,
+					renderRequest);
+			%>
+		</div>
+	
+		<liferay-portlet:actionURL var="menuCounterSubStatusUrl" name="menuCounterSubStatus">
+			<liferay-portlet:param name="processOrderStage" value="<%=processOrderStage %>"/>
+		</liferay-portlet:actionURL>
 		
 		<aui:script use="liferay-util-window,liferay-portlet-url">
 		
-			var serviceInfoId = '<%=String.valueOf(serviceInfoId) %>';
-			var processStepId = '<%=String.valueOf(processStepId) %>';
-			var serviceInfoIdJsonData = '<%=serviceInfoIdJsonData%>';
-			var processStepIdJsonData = '<%=processStepIdJsonData%>';
-			var arrayParam = '<%=arrayParam.toString() %>';
-			AUI().ready(function(A){
-				buildTreeView("serviceInfoIdTree", 
-					"serviceInfoId", 
-					serviceInfoIdJsonData, 
+		var dossierSubStatus = '<%=String.valueOf(dossierSubStatus) %>';
+		var dossierSubStatusJsonData = '<%=dossierSubStatusJsonData%>';
+		var arrayParam = '<%=arrayParam.toString() %>';
+		AUI().ready(function(A){
+			buildTreeView("subStatusTree", 
+					"dossierSubStatus", 
+					dossierSubStatusJsonData, 
 					arrayParam, 
 					'<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>', 
 					'<%=templatePath + "processordertodolist.jsp" %>', 
 					'<%=LiferayWindowState.NORMAL.toString() %>', 
 					'normal',
-					'<%=menuCounterServiceInfoIdUrl.toString() %>',
-					serviceInfoId,
+					'<%=menuCounterSubStatusUrl.toString() %>',
+					dossierSubStatus,
 					'<%=renderResponse.getNamespace() %>',
-					'<%=hiddenToDoListTreeMenuEmptyNode%>'
-				);
-				
-				buildTreeView("processStepIdTree", 
-					'processStepId', 
-					processStepIdJsonData, 
-					arrayParam, 
-					'<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>', 
-					'<%=templatePath + "processordertodolist.jsp" %>', 
-					'<%=LiferayWindowState.NORMAL.toString() %>', 
-					'normal',
-					'<%=menuCounterUrl.toString() %>',
-					processStepId,
-					'<%=renderResponse.getNamespace() %>',
-					'<%=hiddenToDoListTreeMenuEmptyNode%>'
-				);
-				
-			});
+					'<%=hiddenTreeNodeEqualNone%>');
+			
+		});
 			
 		</aui:script>
 	
 	</aui:col>
 	
 	<aui:col width="75" >
-
+		<liferay-util:include page='<%=templatePath + "toolbar.jsp" %>' servletContext="<%=application %>" />
 		<aui:form name="fm">
+			
 			<div class="opencps-searchcontainer-wrapper">
-			
 			<c:if test="<%=ProcessOrderPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ASSIGN_PROCESS_ORDER) && 
-			serviceInfoId > 0 && processStepId > 0 %>">
-			
+				serviceInfoId > 0 && processStepId > 0 %>">
 				<aui:button name="multiAssignToUserBtn" value="multiAssignToUserBtn"/>
-				
 			</c:if>
 				<liferay-ui:search-container 
 					searchContainer="<%= new ProcessOrderSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>"
@@ -289,10 +210,12 @@
 								processURL.setParameter(ProcessOrderDisplayTerms.PROCESS_ORDER_ID, String.valueOf(processOrder.getProcessOrderId()));
 								processURL.setParameter("backURL", currentURL);
 								processURL.setParameter("isEditDossier", (processOrder.isReadOnly() || (processOrder.getAssignToUsesrId() != 0 &&  processOrder.getAssignToUsesrId() != user.getUserId())) ? String.valueOf(false) : String.valueOf(true));
-						
-								int dateOver = HolidayCheckUtils.calculatorDateOver(Validator.isNotNull(processOrder.getActionDatetime()) ? 
-										processOrder.getActionDatetime() : new Date(),
-										new Date(), processOrder.getDaysDuration());
+							
+								String dateOver = HolidayCheckUtils.calculatorDateUntilDealineReturnFormart(Validator.isNotNull(processOrder.getActionDatetime()) ? 
+										processOrder.getActionDatetime() : null,
+										new Date(), processOrder.getDaysDuration(),themeDisplay.getLocale());
+								
+								
 						
 								String hrefFix = "location.href='" + processURL.toString()+"'";
 								String cssStatusColor = "status-color-" + processOrder.getDossierStatus();
@@ -313,9 +236,8 @@
 									</div>
 									
 									<div class="row-fluid">
-										<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
 										</div>
-										<div class="span11">
+										<div class="span12">
 											<%=processOrder.getServiceName() %>
 										</div>
 									</div>
@@ -339,8 +261,7 @@
 								</div>
 								
 								<div class="span7">
-									<%=Validator.isNotNull(processOrder.getAssignToUserName(processOrder.getDossierStatus())) ?
-										processOrder.getAssignToUserName(processOrder.getDossierStatus()) : StringPool.DASH %>
+									<%=processOrder.getAssignToUserName() %>
 								</div>
 							</div>
 							
@@ -359,7 +280,7 @@
 									</div>
 									
 									<div class='<%="span7"%>'>
-										<%=dateOver >= 0 ? "<div class='ocps-free-day'>"+ StringUtil.replace(LanguageUtil.get(themeDisplay.getLocale(), "until-x-day"), "{0}", String.valueOf(dateOver))+"</div>":"<div class='ocps-over-day'>"+StringUtil.replace(LanguageUtil.get(themeDisplay.getLocale(), "over-x-day"), "{0}", String.valueOf(Math.abs(dateOver))) +"</div>"%>
+										<div class="ocps-free-day"><%=dateOver %></div>
 									</div>
 								</div>
 							</liferay-util:buffer>
@@ -443,4 +364,3 @@ AUI().ready(function(A){
 });
 
 </aui:script>
-

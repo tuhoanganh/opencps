@@ -53,6 +53,7 @@ import org.opencps.processmgt.service.WorkflowOutputLocalServiceUtil;
 import org.opencps.processmgt.util.ProcessUtils;
 import org.opencps.util.PortletConstants.FileSizeUnit;
 
+import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONException;
@@ -64,6 +65,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -1299,6 +1301,28 @@ public class PortletUtil {
 		}
 		
 		return isReset;
+	}
+	
+	public Date getDateFromToolbar(HttpServletRequest request , String[] paramLst) {
+		String day = ParamUtil.getString(request, paramLst[0]);
+		String month = ParamUtil.getString(request, paramLst[1]);
+		String year = ParamUtil.getString(request, paramLst[2]);
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append(day);
+		sb.append(StringPool.FORWARD_SLASH);
+		sb.append(month);
+		sb.append(StringPool.FORWARD_SLASH);
+		sb.append(year);
+		
+		String strDate = sb.toString();
+		
+		if(strDate.equalsIgnoreCase("0/0/0")) {
+			return null;
+		}
+		
+		return DateTimeUtil.convertStringToDate(strDate);
+		
 	}
 
 	private static Log _log = LogFactoryUtil
