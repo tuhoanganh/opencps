@@ -46,9 +46,9 @@
 <%@ include file="../init.jsp"%>
 
 <div class="home-search-sologan">
-	<h2> </h2>
+	<h2><liferay-ui:message key="beautiful-life"/></h2>
 	
-	<p><liferay-ui:message key="slogan-key-lv"/></p>
+	<p><liferay-ui:message key="slogan-key"/></p>
 </div>
 
 <div class = "home-search">
