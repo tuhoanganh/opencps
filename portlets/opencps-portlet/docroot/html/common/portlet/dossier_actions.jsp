@@ -233,7 +233,7 @@
 										title="view-attachment"
 									/>
 									
-									<i title="<%= sbMessage.toString() %>" class="fa fa-diamond" id = "<portlet:namespace />signInfoMsg" />
+									<i title="<%= sbMessage.toString() %>" class="fa fa-certificate" id = "<portlet:namespace />signInfoMsg" />
 								</c:when>
 								<c:otherwise>
 									<c:if test="<%=isEditDossier && readOnly == false %>">
@@ -342,7 +342,7 @@
 								title="view-attachment"
 							/>
 							
-							<i title="<%= sbMessage.toString() %>" class="fa fa-diamond" id = "<portlet:namespace />signInfoMsg" />
+							<i title="<%= sbMessage.toString() %>" class="fa fa-certificate" id = "<portlet:namespace />signInfoMsg" />
 						</c:when>
 						<c:otherwise>
 							<c:if test="<%=isEditDossier && readOnly == false%>">
@@ -466,7 +466,7 @@
 								title="view-attachment"
 							/>
 							
-							<i title="<%= sbMessage.toString() %>" class="fa fa-diamond" id = "<portlet:namespace />signInfoMsg" />
+							<i title="<%= sbMessage.toString() %>" class="fa fa-certificate" id = "<portlet:namespace />signInfoMsg" />
 						</c:when>
 						<c:otherwise>
 							<c:if test="<%=isEditDossier && readOnly == false%>">
@@ -610,7 +610,7 @@
 										title="view-attachment"
 									/>
 									
-									<i title="<%= sbMessage.toString() %>" class="fa fa-diamond" id = "<portlet:namespace />signInfoMsg" />
+									<i title="<%= sbMessage.toString() %>" class="fa fa-certificate" id = "<portlet:namespace />signInfoMsg" />
 								</c:when>
 								<c:otherwise>
 									<c:if test="<%=isEditDossier && readOnly == false%>">

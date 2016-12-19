@@ -234,7 +234,7 @@ public class SignatureUtil {
 				signInfoStr = jsonArray.getJSONObject(i).getString("SubjectDN");
 
 				stringBuilder.append(signInfoStr);
-				stringBuilder.append("\n");
+				stringBuilder.append("; ");
 
 			}
 		} catch (Exception e) {
