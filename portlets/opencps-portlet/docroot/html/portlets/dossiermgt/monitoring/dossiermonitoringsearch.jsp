@@ -48,7 +48,7 @@
 <div class="home-search-sologan">
 	<h2> </h2>
 	
-	<p><liferay-ui:message key="slogan-key"/></p>
+	<p><liferay-ui:message key="slogan-key-lv"/></p>
 </div>
 
 <div class = "home-search">
