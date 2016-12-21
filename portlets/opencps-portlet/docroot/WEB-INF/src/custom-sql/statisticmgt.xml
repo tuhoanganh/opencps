@@ -217,4 +217,46 @@
 				opencps_dossierstatistics.month;
 		]]>
 	</sql>
+	
+	<sql id="org.opencps.statisticsmgt.service.persistence.DossiersStatisticsFinder.getStatsByDomain">	
+		<![CDATA[
+	    	SELECT 
+				opencps_dossierstatistics.*
+			FROM 
+				opencps_dossierstatistics
+			WHERE
+				(groupId = ?)
+			AND 
+				(opencps_dossierstatistics.domainCode != '')
+			AND 
+				(opencps_dossierstatistics.govAgencyCode = '')
+			AND 
+				(opencps_dossierstatistics.administrationLevel = 0)
+			ORDER BY
+				opencps_dossierstatistics.month;
+		]]>
+	</sql>
+	
+	<sql id="org.opencps.statisticsmgt.service.persistence.DossiersStatisticsFinder.getStatsByGovAndDomain">	
+		<![CDATA[
+	    	SELECT 
+				opencps_dossierstatistics.*
+			FROM 
+				opencps_dossierstatistics
+			WHERE
+				(groupId = ?)
+			AND 
+				(opencps_dossierstatistics.domainCode = ?)
+			AND 
+				(opencps_dossierstatistics.govAgencyCode = ?)
+			AND 
+				(opencps_dossierstatistics.administrationLevel = ?)
+			AND 
+				(opencps_dossierstatistics.month = ?)
+			AND 
+				(opencps_dossierstatistics.year = ?)
+			ORDER BY
+				opencps_dossierstatistics.month;
+		]]>
+	</sql>
 </custom-sql>

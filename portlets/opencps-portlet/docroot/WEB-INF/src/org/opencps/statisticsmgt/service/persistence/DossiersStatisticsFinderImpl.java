@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.opencps.dossiermgt.model.DossierFile;
 import org.opencps.statisticsmgt.bean.DossierStatisticsBean;
 import org.opencps.statisticsmgt.model.DossiersStatistics;
 import org.opencps.statisticsmgt.util.StatisticsUtil;
@@ -31,7 +32,9 @@ import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.Type;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.util.dao.orm.CustomSQLUtil;
 
@@ -94,6 +97,9 @@ public class DossiersStatisticsFinderImpl extends
 
 	private static final String SQL_STATISTICS_MONTHS = DossiersStatisticsFinder.class
 			.getName() + ".getMonths";
+
+	private static final String SQL_GET_STATS_BY_GOV_DOMAIN = DossiersStatisticsFinder.class
+			.getName() + ".getStatsByGovAndDomain";
 
 	/**
 	 * @param groupId
@@ -425,6 +431,77 @@ public class DossiersStatisticsFinderImpl extends
 
 		_log.info("########################## months.size()" + months.size());
 		return months;
+	}
+
+	/**
+	 * @param groupId
+	 * @param month
+	 * @param year
+	 * @param govCode
+	 * @param domainCode
+	 * @param level
+	 * @param notNullGov
+	 * @param notNullDomain
+	 * @return
+	 */
+	public List<DossiersStatistics> getStatsByGovAndDomain(long groupId,
+			int month, int year, String govCode, String domainCode, int level,
+			boolean notNullGov, boolean notNullDomain) {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			String sql = CustomSQLUtil.get(SQL_GET_STATS_BY_GOV_DOMAIN);
+
+			_log.info(sql);
+			
+			if (notNullDomain) {
+				sql = StringUtil.replace(sql,
+						"(opencps_dossierstatistics.domainCode = ?)",
+						"(opencps_dossierstatistics.domainCode != '')");
+			}
+
+			if (notNullGov) {
+				sql = StringUtil.replace(sql,
+						"(opencps_dossierstatistics.govAgencyCode = ?)",
+						"(opencps_dossierstatistics.govAgencyCode != '')");
+			}
+
+			if (month <= 0) {
+				sql = StringUtil.replace(sql,
+						"AND (opencps_dossierstatistics.month = ?)",
+						StringPool.BLANK);
+			}
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addEntity("dossiersStatistics", DossiersStatistics.class);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			if (Validator.isNotNull(domainCode)) {
+				qPos.add(domainCode);
+			}
+
+			if (Validator.isNotNull(govCode)) {
+				qPos.add(govCode);
+			}
+
+			qPos.add(year);
+
+			return (List<DossiersStatistics>) QueryUtil.list(q, getDialect(),
+					QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+
+		} catch (Exception e) {
+			_log.error(e);
+		} finally {
+			closeSession(session);
+		}
+
+		return null;
 	}
 
 	private Log _log = LogFactoryUtil.getLog(DossiersStatisticsFinderImpl.class
