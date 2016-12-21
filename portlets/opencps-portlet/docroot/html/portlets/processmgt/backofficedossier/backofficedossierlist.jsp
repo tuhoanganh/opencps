@@ -47,6 +47,8 @@
 	
 	String serviceDomainCode = ParamUtil.getString(request, DossierDisplayTerms.SERVICE_DOMAIN_CODE);	
 
+	String dossierSubStatus = ParamUtil.getString(request, "dossierSubStatus");
+	
 	PortletURL iteratorURL = renderResponse.createRenderURL();
 	iteratorURL.setParameter("mvcPath", templatePath + "backofficedossierlist.jsp");
 	iteratorURL.setParameter("tab1", ProcessMgtUtil.TOP_TABS_DOSSIERLIST);
@@ -63,9 +65,16 @@
 		if(Validator.isNotNull(workingUnit)) govAgencyCodes.add(workingUnit.getGovAgencyCode());
 		
 	}
-	
+	String dosserStatusList = "0";
+	if(Validator.isNotNull(dossierSubStatus)){
+		List<ProcessStep> listProcessSteps = ProcessStepLocalServiceUtil.findByDossierSubStatus(dossierSubStatus);
+		List<String> statusList = new ArrayList<String>();
+		for(ProcessStep ett: listProcessSteps){
+			statusList.add(ett.getDossierStatus());
+		}
+		dosserStatusList = StringUtil.merge(statusList);
+	}
 %>
-
 <div class="opencps-searchcontainer-wrapper">
 	<liferay-ui:search-container searchContainer="<%= new DossierBackOfficeSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>" 
 		>
@@ -84,17 +93,18 @@
 				if(Validator.isNotNull(domainItem)){
 					treeIndex = domainItem.getTreeIndex();
 				}
+				
 				total =
 					DossierLocalServiceUtil.countDossierByKeywordDomainAndStatus(
 						scopeGroupId, searchTerms.getKeywords(),
-						treeIndex, govAgencyCodes, dossierStatus);
+						treeIndex, govAgencyCodes, dossierStatus, dosserStatusList);
 				
 				OrderByComparator orderByComparator = DossierMgtUtil.getDossierOrderByComparator(DossierDisplayTerms.SUBMIT_DATETIME, "desc");
 				
 				results =
 					DossierLocalServiceUtil.searchDossierByKeywordDomainAndStatus(
 						scopeGroupId, searchTerms.getKeywords(),
-						treeIndex, govAgencyCodes, dossierStatus,
+						treeIndex, govAgencyCodes, dossierStatus, dosserStatusList,
 						searchContainer.getStart(),
 						searchContainer.getEnd(),
 						orderByComparator);

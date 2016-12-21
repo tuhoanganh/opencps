@@ -1069,6 +1069,9 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 			qPos
 				.add(Boolean.valueOf(processOrderStage));
 			
+			qPos
+				.add(loginUserId);
+			
 			if(Validator.isNotNull(dossierSubStatus)){
 				qPos
 					.add(dossierSubStatus);
@@ -1213,6 +1216,9 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 
 			qPos
 				.add(Boolean.valueOf(processOrderStage));
+			
+			qPos
+				.add(loginUserId);
 			
 			if(Validator.isNotNull(dossierSubStatus)){
 				qPos

@@ -87,6 +87,8 @@
 			ON
 				opencps_dossier.serviceInfoId = opencps_serviceinfo.serviceInfoId
 			WHERE
+				opencps_dossier.receptionNo <> ''
+			AND
 				(opencps_dossier.groupId = ?)
 			AND
 				((lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$])
@@ -105,6 +107,9 @@
 			
 			AND 
 				(opencps_dossier.govAgencyCode IN (?))
+			
+			AND 
+				(opencps_dossier.dossierStatus IN (?))
 		]]>
 	</sql>	
 	
@@ -119,6 +124,8 @@
 			ON
 				opencps_dossier.serviceInfoId = opencps_serviceinfo.serviceInfoId
 			WHERE
+				opencps_dossier.receptionNo <> ''
+			AND
 				(opencps_dossier.groupId = ?)
 			AND
 				((lower(opencps_serviceinfo.serviceName) LIKE ? [$AND_OR_NULL_CHECK$])
@@ -137,6 +144,8 @@
 			
 			AND 
 				(opencps_dossier.govAgencyCode IN (?))
+			AND 
+				(opencps_dossier.dossierStatus IN (?))
 		]]>
 	</sql>
 

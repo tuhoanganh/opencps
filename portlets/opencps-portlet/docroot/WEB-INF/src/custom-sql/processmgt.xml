@@ -589,14 +589,10 @@
 				
 			WHERE 
 			(
-				opencps_processorder.assignToUserId = 0 
-				
-				OR 
-				(
-					opencps_processorder.assignToUserId != 0 
-					AND stepallowance.userId != opencps_processorder.assignToUserId 
-				)
-			)
+                opencps_processorder.assignToUserId = 0 
+                
+                OR opencps_processorder.assignToUserId = ?
+            )
 			AND opencps_processstep.dossierSubStatus = ?
 			AND (opencps_dossier.receptionNo = ? or opencps_serviceinfo.serviceName like ? or opencps_dossier.subjectName like ? or opencps_dossier.dossierId = ?)
 			ORDER BY 
@@ -659,11 +655,7 @@
             (
                 opencps_processorder.assignToUserId = 0 
                 
-                OR 
-                (
-                    opencps_processorder.assignToUserId != 0 
-                    AND stepallowance.userId != opencps_processorder.assignToUserId 
-                )
+                OR opencps_processorder.assignToUserId = ?
             )
             AND opencps_processstep.dossierSubStatus = ?
             AND (opencps_dossier.receptionNo = ? or opencps_serviceinfo.serviceName like ? or opencps_dossier.subjectName like ? or opencps_dossier.dossierId = ?)
