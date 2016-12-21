@@ -1,4 +1,6 @@
-
+<%@page import="java.util.LinkedHashMap"%>
+<%@page import="java.util.HashSet"%>
+<%@page import="java.util.Set"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -17,6 +19,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
+<%@page import="org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.model.ProcessWorkflow"%>
+<%@page import="org.opencps.processmgt.model.ProcessOrder"%>
+<%@page import="org.opencps.util.DateTimeUtil"%>
+<%@page import="org.opencps.holidayconfig.util.HolidayUtils"%>
 <%@page import="java.util.Date"%>
 <%@page import="org.opencps.processmgt.util.ProcessOrderUtils"%>
 <%@page import="org.opencps.util.MessageKeys"%>
@@ -65,6 +72,8 @@
 	headerNames.add("action");
 	
 	String headers = StringUtil.merge(headerNames, StringPool.COMMA);
+	
+	String dossierSubStatus = ParamUtil.getString(request, "dossierSubStatus");
 %>
 
 <c:if test="<%=stopRefresh %>">
@@ -77,7 +86,7 @@
 	<div class="opencps-searchcontainer-wrapper">
 		<liferay-ui:search-container 
 				searchContainer="<%= new ProcessOrderSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>"
-				rowChecker="<%=rowChecker%>"
+				
 				headerNames="<%= headers%>"
 			>
 			
@@ -98,12 +107,48 @@
 						}catch(Exception e){
 							_log.error(e);
 						}
-					
-						total = totalCount;
+						Set<String> setToReturn = new HashSet<String>();
+						Set<String> set1 = new HashSet<String>();
+						//remove duplicates process orders
+						Map<String, ProcessOrderBean> cleanMapList = new LinkedHashMap<String, ProcessOrderBean>();
+						for (int i = 0; i < processOrders.size(); i++) {
+							System.out.println(!set1.add(processOrders.get(i).getProcessOrderId()+""));
+							System.out.println("-->"+processOrders.get(i).getProcessOrderId()+"");
+							if (!set1.add(processOrders.get(i).getProcessOrderId()+"")) {
+								setToReturn.add(processOrders.get(i).getProcessOrderId()+"");
+							}
+							ProcessOrderBean aasb = processOrders.get(i);
+							aasb.set_testDuplicate((String[])setToReturn.toArray(new String[setToReturn.size()]));
+							cleanMapList.put(processOrders.get(i).getProcessOrderId()+"", aasb);
+						}
+						
+						processOrders = new ArrayList<ProcessOrderBean>(cleanMapList.values());
+						
+						int aso = totalCount - cleanMapList.size();
+						total = totalCount - aso;
 						results = processOrders;
 						
 						pageContext.setAttribute("results", results);
 						pageContext.setAttribute("total", total);
+						
+						try {
+							
+							long processWorkFlowId = ProcessOrderLocalServiceUtil
+									.getProcessOrder(processOrders.get(0).getProcessOrderId()).getProcessWorkflowId();
+							
+							if(processWorkFlowId > 0) {
+								ProcessWorkflow processWorkflow = ProcessWorkflowLocalServiceUtil.getProcessWorkflow(processWorkFlowId);
+								
+								if(Validator.isNotNull(processWorkflow) && processWorkflow.getIsMultipled()) {
+									isMultiAssign = true;
+								}
+							}
+							
+						} catch(Exception e) {}
+						
+						if(isMultiAssign) {
+							searchContainer.setRowChecker(rowChecker);
+						}
 					%>
 				</liferay-ui:search-container-results>	
 				
@@ -139,10 +184,10 @@
 								<div class='<%= "text-align-right span1 " + cssStatusColor%>'>
 									<i class='<%="fa fa-circle sx10 " + processOrder.getDossierStatus()%>'></i>
 								</div>
-								<div class="span4 bold">
-									<liferay-ui:message key="reception-no"/>
+								<div class="span2 bold">
+									 <liferay-ui:message key="reception-no"/>
 								</div>
-								<div class="span7">
+								<div class="span9">
 									<%=processOrder.getReceptionNo() %>
 								</div>
 							</div>
@@ -235,6 +280,15 @@ AUI().ready(function(A){
 
 		Liferay.Portlet.refresh('#p_p_id<portlet:namespace />', data);
 	
+	}
+	
+	var processDossier = A.one("#<portlet:namespace />processDossier");
+	var isMultiAssignvar = '<%= isMultiAssign %>';
+	
+	console.log(isMultiAssignvar);
+	console.log(processDossier);
+	if(isMultiAssignvar == 'false' && processDossier) {
+		processDossier.hide();
 	}
 	
 });

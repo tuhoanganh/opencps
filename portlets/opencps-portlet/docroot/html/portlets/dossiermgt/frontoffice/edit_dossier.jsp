@@ -228,7 +228,7 @@
 								
 								<liferay-ui:icon 
 									cssClass="search-container-action fa forward"
-									image="forward" message="send"
+									image="forward" message="send-dossier"
 									url="<%=jsUpdateDossierStatus %>"
 								/>
 							</c:if>

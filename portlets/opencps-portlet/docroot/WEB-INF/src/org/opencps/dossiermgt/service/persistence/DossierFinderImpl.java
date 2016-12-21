@@ -1817,16 +1817,32 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier> implements
 		return null;
 	}
 
-	public List<Dossier> searchDossierSuggesstion(String dossierStatus,
-			String partTypes, String templateFileNos, String partNos,
-			int start, int end) throws SystemException {
-		return _searchDossierSuggesstion(dossierStatus, partTypes,
-				templateFileNos, partNos, start, end);
+	
+	public List<Dossier> searchDossierSuggesstion(long ownerOrganizationId ,String keyword,
+			String dossierStatus, String partTypes, String templateFileNos,
+			String partNos, int start, int end) throws SystemException {
+
+		String[] keywords = null;
+
+		boolean andOperator = false;
+
+		if (Validator.isNotNull(keyword)) {
+
+			keywords = new String[] { StringUtil.quote(
+					StringUtil.toLowerCase(keyword).trim(), StringPool.PERCENT) };
+
+		} else {
+			andOperator = true;
+		}
+
+		return _searchDossierSuggesstion(ownerOrganizationId,keywords, dossierStatus, partTypes,
+				templateFileNos, partNos, start, end, andOperator);
 	}
 
-	private List<Dossier> _searchDossierSuggesstion(String dossierStatus,
-			String partTypes, String templateFileNos, String partNos,
-			int start, int end) throws SystemException {
+	private List<Dossier> _searchDossierSuggesstion(long ownerOrganizationId,String[] keywords,
+			String dossierStatus, String partTypes, String templateFileNos,
+			String partNos, int start, int end, boolean andOperator)
+			throws SystemException {
 		Session session = null;
 		try {
 
@@ -1854,36 +1870,61 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier> implements
 				sql = StringUtil.replace(sql, "AND p.partNo IN (?)",
 						"AND p.partNo IN ('" + partNos + "')");
 			}
-			
+
 			if (Validator.isNotNull(partTypes)) {
 				sql = StringUtil.replace(sql, "AND p.partType IN (?)",
 						"AND p.partType IN (" + partTypes + ")");
 			}
 
+			if (keywords != null && keywords.length > 0) {
+
+				sql = CustomSQLUtil.replaceKeywords(sql,
+						"lower(df.dossierFileNo)", StringPool.LIKE, false,
+						keywords);
+
+			} else {
+				sql = StringUtil
+						.replace(
+								sql,
+								"AND (lower(df.dossierFileNo) LIKE ? [$AND_OR_NULL_CHECK$])",
+								StringPool.BLANK);
+			}
+			
+			if(ownerOrganizationId <= 0) {
+				sql = StringUtil.replace(sql,"AND d.ownerOrganizationId = ?", StringPool.BLANK);
+			}
+
+			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
+
 			SQLQuery q = session.createSQLQuery(sql);
-			
-			_log.info(sql);
-			
+
 			q.addEntity("Dossier", DossierImpl.class);
 
 			QueryPos qPos = QueryPos.getInstance(q);
 
-			/*if (Validator.isNotNull(templateFileNos)) {
-				qPos.add(templateFileNos);
+			/*
+			 * if (Validator.isNotNull(templateFileNos)) {
+			 * qPos.add(templateFileNos); }
+			 * 
+			 * if (Validator.isNotNull(dossierStatus)) {
+			 * qPos.add(dossierStatus); }
+			 */
+
+			if (Validator.isNotNull(dossierStatus)) {
+				qPos.add(dossierStatus);
 			}
 
-			if (Validator.isNotNull(dossierStatus)) {
-				qPos.add(dossierStatus);
-			}*/
+			if (keywords != null && keywords.length > 0) {
+				qPos.add(keywords, 2);
+			}
+			
+			if(ownerOrganizationId > 0) {
+				qPos.add(ownerOrganizationId);
+			}
+			/*
+			 * if (Validator.isNotNull(partNos)) { qPos.add(partNos); }
+			 */
 
-			if (Validator.isNotNull(dossierStatus)) {
-				qPos.add(dossierStatus);
-			}	
-			
-			/*if (Validator.isNotNull(partNos)) {
-				qPos.add(partNos);
-			}*/
-			
 			return (List<Dossier>) QueryUtil.list(q, getDialect(), start, end);
 		} catch (Exception e) {
 			throw new SystemException();
@@ -1892,14 +1933,27 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier> implements
 		}
 	}
 
-	public int countDossierSuggesstion(String dossierStatus, String partTypes,
+	public int countDossierSuggesstion(long ownerOrganizationId ,String keyword ,String dossierStatus, String partTypes,
 			String templateFileNos, String partNos) throws SystemException {
-		return _countDossierSuggesstion(dossierStatus, partTypes,
-				templateFileNos, partNos);
+		
+		String[] keywords = null;
+
+		boolean andOperator = false;
+
+		if (Validator.isNotNull(keyword)) {
+
+			keywords = new String[] { StringUtil.quote(
+					StringUtil.toLowerCase(keyword).trim(), StringPool.PERCENT) };
+
+		} else {
+			andOperator = true;
+		}
+		return _countDossierSuggesstion(ownerOrganizationId, keywords, dossierStatus, partTypes,
+				templateFileNos, partNos, andOperator);
 	}
 
-	private int _countDossierSuggesstion(String dossierStatus,
-			String partTypes, String templateFileNos, String partNos)
+	private int _countDossierSuggesstion(long ownerOrganizationId ,String[] keywords , String dossierStatus,
+			String partTypes, String templateFileNos, String partNos, boolean andOperator)
 			throws SystemException {
 		Session session = null;
 
@@ -1928,23 +1982,48 @@ public class DossierFinderImpl extends BasePersistenceImpl<Dossier> implements
 				sql = StringUtil.replace(sql, "AND p.partNo IN (?)",
 						"AND p.partNo IN ('" + partNos + "')");
 			}
-			
+
 			if (Validator.isNotNull(partTypes)) {
 				sql = StringUtil.replace(sql, "AND p.partType IN (?)",
 						"AND p.partType IN (" + partTypes + ")");
 			}
 			
-			_log.info(sql);
+			if (keywords != null && keywords.length > 0) {
+
+				sql = CustomSQLUtil.replaceKeywords(sql,
+						"lower(df.dossierFileNo)", StringPool.LIKE, false,
+						keywords);
+
+			} else {
+				sql = StringUtil
+						.replace(
+								sql,
+								"AND (lower(df.dossierFileNo) LIKE ? [$AND_OR_NULL_CHECK$])",
+								StringPool.BLANK); 
+			}
 			
+			if(ownerOrganizationId <= 0) {
+				sql = StringUtil.replace(sql,"AND d.ownerOrganizationId = ?", StringPool.BLANK);
+			}
+
+			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
+				
 			SQLQuery q = session.createSQLQuery(sql);
 
 			q.addScalar(COUNT_COLUMN_NAME, Type.INTEGER);
 
 			QueryPos qPos = QueryPos.getInstance(q);
 
-			
 			if (Validator.isNotNull(dossierStatus)) {
 				qPos.add(dossierStatus);
+			}
+			
+			if (keywords != null && keywords.length > 0) {
+				qPos.add(keywords, 2);
+			}
+			
+			if(ownerOrganizationId > 0) {
+				qPos.add(ownerOrganizationId);
 			}
 
 			Iterator<Integer> itr = q.iterate();

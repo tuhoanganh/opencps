@@ -22,6 +22,8 @@ package org.opencps.util;
  */
 public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 
+	public static final String DASHBOARD_PORTLET = "1001_WAR_opencpsportlet";
+
 	public static final String DATA_MANAGEMENT_ADMIN_PORTLET =
 		"1_WAR_opencpsportlet";
 	
@@ -39,7 +41,11 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 
 	public static final String PROCESS_ORDER_PORTLET = "16_WAR_opencpsportlet";
 	
+	public static final String RE_ASSIGN_PORTLET = "30_WAR_opencpsportlet";
+	
 	public static final String DOSSIER_BACKOFFICE_MANAGEMENT_PORTLET = "18_WAR_opencpsportlet";
+	
+	public static final String YEARLY_DASHBOARD_PORTLET = "33_WAR_opencpsportlet";
 	
 	public static final String DICT_COLLECTION_ENTRY = "DICT_COLLECTION_ENTRY";
 

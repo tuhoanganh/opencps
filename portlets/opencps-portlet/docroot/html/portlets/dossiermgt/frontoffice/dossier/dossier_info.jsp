@@ -42,7 +42,6 @@
 <%@page import="org.opencps.dossiermgt.OutOfLengthDossierContactTelNoException"%>
 <%@page import="org.opencps.dossiermgt.EmptyDossierContactNameException"%>
 <%@page import="org.opencps.dossiermgt.OutOfLengthDossierAddressException"%>
-<%@page import="org.opencps.dossiermgt.InvalidDossierObjectException"%>
 
 <%@ include file="../../init.jsp"%>
 
@@ -212,7 +211,7 @@
 
 <aui:row cssClass="nav-content-row">
 	<aui:col width="100">
-		
+		<p class=address-hint><liferay-ui:message key="address-hint"/></p>
 		<aui:input 
 			name="<%=DossierDisplayTerms.ADDRESS %>" 
 			cssClass="" 
