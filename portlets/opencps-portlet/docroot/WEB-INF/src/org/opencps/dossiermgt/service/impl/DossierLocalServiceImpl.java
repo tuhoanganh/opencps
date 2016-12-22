@@ -2419,3 +2419,11 @@ public class DossierLocalServiceImpl extends DossierLocalServiceBaseImpl {
 	public int countDossierSuggesstion(long ownerOrganizationId, String dossierFileNo,
 			String dossierStatus, List<Integer> partTypes,
 			List<String> templateFileNos, List<String> partNos)
+			throws SystemException {
+		String partTypesStr = StringUtil.merge(partTypes);
+		String templateFileNosStr = StringUtil.merge(templateFileNos, "','");
+		String partNosStr = StringUtil.merge(partNos, "','");
+		return dossierFinder.countDossierSuggesstion(ownerOrganizationId, dossierFileNo, dossierStatus,
+				partTypesStr, templateFileNosStr, partNosStr);
+	}
+}
