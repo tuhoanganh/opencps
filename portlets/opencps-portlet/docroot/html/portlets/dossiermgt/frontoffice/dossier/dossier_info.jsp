@@ -128,6 +128,11 @@
 	message="<%=DuplicateFolderNameException.class.getName() %>"
 />
 
+<aui:row cssClass="header-title custom-title">
+	<aui:col width="100">
+		<liferay-ui:message key="dossier_info"/>
+	</aui:col>
+</aui:row>
 
 <aui:row cssClass="nav-content-row hidden">
 	<aui:col width="100">

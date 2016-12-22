@@ -1,4 +1,5 @@
 
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -296,7 +297,7 @@
 	</aui:row>
 </aui:form>
 
-<aui:script use="aui-base,aui-io">
+<aui:script use="aui-base,aui-io,aui-loading-mask-deprecated">
 	AUI().ready(function(A){
 		
 		var cancelButton = A.one('#<portlet:namespace/>cancel');
@@ -310,6 +311,7 @@
 		}
 		
 		if(success == 'true'){
+			Liferay.Util.getOpener().Liferay.fire('turnOffOverlaymask');
 			<portlet:namespace/>closeDialog();
 		}
 		
@@ -320,6 +322,7 @@
 		
 		var maxTotalUploadFileSizeInByte = '<%=PortletUtil.convertSizeUnitToByte(maxTotalUploadFileSize, FileSizeUnit.getEnum(maxTotalUploadFileSizeUnit))%>';
 		maxTotalUploadFileSizeInByte = parseFloat(maxTotalUploadFileSizeInByte);
+
 		
 		var fileUploadSizeInByte = 0;
 		var totalUploadFileSizeInByte = '<%=totalUploadFileSizeInByte%>';
@@ -342,6 +345,7 @@
 					alert('<%= LanguageUtil.get(themeDisplay.getLocale(), "overload-total-file-upload-size") %>' + ' ' + '<%=maxTotalUploadFileSize%>' + ' ' + '<%=maxTotalUploadFileSizeUnit%>');
 				}else 
 				{
+					Liferay.Util.getOpener().Liferay.fire('turnOnOverlaymask');
 					submitForm(document.<portlet:namespace />fm);
 				}
 				

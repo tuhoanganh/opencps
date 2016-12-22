@@ -99,7 +99,7 @@
 							</aui:row>
 						</aui:col>
 						<aui:col width="50">
-							<span class="span3 bold">
+							<span class="span3 bold status-color-denied">
 								<liferay-ui:message key="dossier-file-name"/>
 							</span>
 							<span class="span6">

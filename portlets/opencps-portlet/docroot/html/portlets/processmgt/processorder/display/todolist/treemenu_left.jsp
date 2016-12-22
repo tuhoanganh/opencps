@@ -1,3 +1,4 @@
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -16,10 +17,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 %>
-<%@page import="org.opencps.processmgt.permissions.ProcessOrderPermission"%>
-<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@page import="org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil"%>
 <%@page import="org.opencps.processmgt.model.ProcessWorkflow"%>
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
+<%@page import="org.opencps.processmgt.permissions.ProcessOrderPermission"%>
 <%@page import="org.opencps.util.PortletConstants"%>
 <%@page import="java.util.Date"%>
 <%@page import="com.liferay.portal.kernel.dao.search.RowChecker"%>
@@ -31,6 +32,7 @@
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="com.liferay.portlet.PortletURLFactoryUtil"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="java.util.LinkedHashMap"%>
 <%@page import="java.util.List"%>
 <%@page import="javax.portlet.PortletRequest"%>
 <%@page import="javax.portlet.PortletURL"%>
@@ -57,7 +59,7 @@
 	
 	int totalCount = 0;
 	
-	RowChecker rowChecker = new RowChecker(liferayPortletResponse);
+	RowChecker rowChecker = null;
 	
 	List<String> headerNames = new ArrayList<String>();
 	
@@ -90,6 +92,14 @@
 	iteratorURL.setParameter("processStepId", String.valueOf(processStepId));
 	iteratorURL.setParameter("dossierSubStatus", dossierSubStatus);
 	iteratorURL.setParameter("processOrderStage", processOrderStage);
+	
+	if(ProcessOrderPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ASSIGN_PROCESS_ORDER) && 
+			tabs1.equals(ProcessUtils.TOP_TABS_PROCESS_ORDER_WAITING_PROCESS) &&
+			serviceInfoId > 0 && processStepId > 0){
+		
+		rowChecker = new RowChecker(liferayPortletResponse);
+		
+	}
 %>
 
 <aui:row>
@@ -143,12 +153,20 @@
 		<aui:form name="fm">
 			
 			<div class="opencps-searchcontainer-wrapper">
-			<c:if test="<%=ProcessOrderPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ASSIGN_PROCESS_ORDER) && 
+			
+				<div class="opcs-serviceinfo-list-label">
+					<div class="title_box">
+				           <p class="file_manage_title ds"><liferay-ui:message key="title-danh-sach-process-order" /></p>
+				           <p class="count"></p>
+				    </div>
+				</div>
+				<c:if test="<%=ProcessOrderPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ASSIGN_PROCESS_ORDER) && 
 				serviceInfoId > 0 && processStepId > 0 %>">
-				<aui:button name="multiAssignToUserBtn" value="multiAssignToUserBtn"/>
-			</c:if>
+					<aui:button name="multiAssignToUserBtn" value="multiAssignToUserBtn"/>
+				</c:if>
 				<liferay-ui:search-container 
 					searchContainer="<%= new ProcessOrderSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>"
+					
 					headerNames="<%= headers%>"
 				>
 				
@@ -288,6 +306,9 @@
 								
 								
 								String actionButt = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "action");
+								if((processOrder.isReadOnly() || (processOrder.getAssignToUsesrId() != 0 &&  processOrder.getAssignToUsesrId() != user.getUserId()))){
+									actionButt = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "view");
+								}
 								row.setClassName("opencps-searchcontainer-row");
 								row.addText(boundcol1);
 								row.addText(boundcol2);

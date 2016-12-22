@@ -71,6 +71,9 @@ public class ConfigurationProcessOrderImpl implements ConfigurationAction {
 			updateDigitalSignature(preferences, actionRequest, actionResponse);
 		}
 
+		boolean hiddenTreeNodeEqualNone = ParamUtil.getBoolean(actionRequest, "hiddenTreeNodeEqualNone");
+		preferences.setValue("hiddenTreeNodeEqualNone", String.valueOf(hiddenTreeNodeEqualNone));
+		
 		preferences.store();
 
 		SessionMessages.add(actionRequest, "potlet-config-saved");

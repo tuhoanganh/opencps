@@ -874,7 +874,7 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 	 */
 	public int countProcessOrderKeyWords(
 		long serviceInfoId, long processStepId, long loginUserId,
-		long assignToUserId, String keyWords, String dossierSubStatus) {
+		long assignToUserId, String keyWords, String dossierSubStatus, String processOrderStage) {
 
 		Session session = null;
 		try {
@@ -928,6 +928,12 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 					.add(processStepId);
 			}
 
+			qPos
+				.add(loginUserId);
+
+			qPos
+				.add(Boolean.valueOf(processOrderStage));
+			
 			qPos
 				.add(loginUserId);
 			
@@ -988,7 +994,7 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 	 */
 	public List searchProcessOrderKeyWords(long serviceInfoId,
 
-		long processStepId, long loginUserId, long assignToUserId, String keyWords, String dossierSubStatus, int start,
+		long processStepId, long loginUserId, long assignToUserId, String keyWords, String dossierSubStatus, String processOrderStage, int start,
 		int end, OrderByComparator orderByComparator) {
 
 		Session session = null;
@@ -1070,6 +1076,12 @@ public class ProcessOrderFinderImpl extends BasePersistenceImpl<ProcessOrder>
 					.add(processStepId);
 			}
 
+			qPos
+				.add(loginUserId);
+
+			qPos
+				.add(Boolean.valueOf(processOrderStage));
+			
 			qPos
 				.add(loginUserId);
 			

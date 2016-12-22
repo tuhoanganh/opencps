@@ -39,6 +39,11 @@
 	Dossier dossier = (Dossier) request.getAttribute(WebKeys.DOSSIER_ENTRY);
 	DossierTemplate dossierTemplate = (DossierTemplate) request.getAttribute(WebKeys.DOSSIER_TEMPLATE_ENTRY);
 %>
+<aui:row cssClass="header-title custom-title">
+	<aui:col width="100">
+		<liferay-ui:message key="result"/>
+	</aui:col>
+</aui:row>
 
 <c:choose>
 	<c:when test="<%=dossier != null && dossier.getDossierStatus() != PortletConstants.DOSSIER_STATUS_NEW %>">
@@ -237,7 +242,7 @@
 										</span>
 									</aui:col>
 									<aui:col width="30">
-										<span class="span4 bold">
+										<span class="span4 bold status-color-denied">
 											<liferay-ui:message key="message-info"/>
 										</span>
 										<span class="span8">

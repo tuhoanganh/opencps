@@ -114,6 +114,11 @@
 
 %>
 <div class="ocps-dossier-process">
+<aui:row cssClass="header-title custom-title">
+	<aui:col width="100">
+		<liferay-ui:message key="process"/>
+	</aui:col>
+</aui:row>
 	<table class="process-workflow-info">
 	  <tr class="odd">
 	    <td width="20%" class="opcs-dosier-process-key"><liferay-ui:message key="step-name"/></td>
@@ -1016,14 +1021,14 @@
 										completeSignature(sign, signFieldName, filePath, fileName, $("#<portlet:namespace/>dossierId").val(), dossierFileId, dossierPartId, index, indexSize, '<%=signatureURL%>');
 										
 	 								}else{
-	 									alert("signer error");
+	 									alert('<%=LanguageUtil.get(pageContext, "signer-error") %>');
 	 					            }
 								}else{
-									alert(msg);
+									alert('<%=LanguageUtil.get(pageContext, "signer-error-lien-he") %>');
 								}
 					        	
 					        } else {
-					         	alert("Plugin is not working");
+					        	alert('<%=LanguageUtil.get(pageContext, "plugin-is-not-working") %>');
 					        }
 						}
 					}
@@ -1069,11 +1074,11 @@
 									
 								}
 							} else {
-									alert("--------- vao day completeSignature- ky so ko dc-------------");
+								alert('<%=LanguageUtil.get(pageContext, "signer-error") %>');
 							}
 					},
 			    	error: function(){
-			    		alert("--------- vao day completeSignature- ky so ko dc-------------");
+			    		alert('<%=LanguageUtil.get(pageContext, "signer-fail") %>');
 			    	}
 				}
 			}

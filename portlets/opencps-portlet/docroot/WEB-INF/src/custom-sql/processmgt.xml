@@ -625,20 +625,17 @@
 					) AS role
                 ON
 					opencps_stepallowance.roleId = role.roleId
+					AND opencps_stepallowance.readOnly = ?
 			) AS stepallowance
 			ON
 				stepallowance.processStepId = opencps_processstep.processStepId
+				
 			WHERE 
 			(
-				opencps_processorder.assignToUserId = 0 
-				
-				OR 
-				(
-					opencps_processorder.assignToUserId != 0 
-					AND stepallowance.userId != opencps_processorder.assignToUserId 
-					AND stepallowance.readOnly = TRUE
-				)
-			)
+                opencps_processorder.assignToUserId = 0 
+                
+                OR opencps_processorder.assignToUserId = ?
+            )
 			AND opencps_processstep.dossierSubStatus = ?
 			AND (opencps_dossier.receptionNo = ? or opencps_serviceinfo.serviceName like ? or opencps_dossier.subjectName like ? or opencps_dossier.dossierId = ?)
 			ORDER BY 
@@ -692,19 +689,16 @@
 					) AS role
                 ON
 					opencps_stepallowance.roleId = role.roleId
+					AND opencps_stepallowance.readOnly = ?
             ) AS stepallowance
             ON
             	stepallowance.processStepId = opencps_processstep.processStepId
+            	
             WHERE 
             (
                 opencps_processorder.assignToUserId = 0 
                 
-                OR 
-                (
-                    opencps_processorder.assignToUserId != 0 
-                    AND stepallowance.userId != opencps_processorder.assignToUserId 
-                    AND stepallowance.readOnly = TRUE
-                )
+                OR opencps_processorder.assignToUserId = ?
             )
             AND opencps_processstep.dossierSubStatus = ?
             AND (opencps_dossier.receptionNo = ? or opencps_serviceinfo.serviceName like ? or opencps_dossier.subjectName like ? or opencps_dossier.dossierId = ?)
