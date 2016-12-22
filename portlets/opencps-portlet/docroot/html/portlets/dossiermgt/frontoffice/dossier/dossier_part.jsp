@@ -220,7 +220,7 @@
 												
 												<portlet:param 
 													name="showVersionItemReference" 
-													value="<%=String.valueOf(showVersionItem) %>"
+													value="<%=String.valueOf(showDossierFileVersion) %>"
 												/>
 											
 												<portlet:param 
@@ -301,7 +301,7 @@
 													>
 														<portlet:param 
 															name="showVersionItemReference" 
-															value="<%=String.valueOf(showVersionItem) %>"
+															value="<%=String.valueOf(showDossierFileVersion) %>"
 														/>
 													
 														<portlet:param 

@@ -1,8 +1,4 @@
 
-<%@page import="org.opencps.processmgt.permissions.ProcessOrderPermission"%>
-<%@page import="java.util.LinkedHashMap"%>
-<%@page import="java.util.HashSet"%>
-<%@page import="java.util.Set"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -21,6 +17,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
+<%@page import="org.opencps.processmgt.model.ProcessWorkflow"%>
+<%@page import="org.opencps.processmgt.service.ProcessWorkflowLocalServiceUtil"%>
+<%@page import="org.opencps.processmgt.permissions.ProcessOrderPermission"%>
 <%@page import="java.util.Date"%>
 <%@page import="org.opencps.processmgt.util.ProcessOrderUtils"%>
 <%@page import="org.opencps.util.MessageKeys"%>
@@ -109,7 +108,7 @@
 		</div>
 		<liferay-ui:search-container 
 				searchContainer="<%= new ProcessOrderSearch(renderRequest, SearchContainer.DEFAULT_DELTA, iteratorURL) %>"
-				rowChecker="<%=rowChecker%>"
+				
 				headerNames="<%= headers%>"
 			>
 			
@@ -132,6 +131,25 @@
 						
 						pageContext.setAttribute("results", results);
 						pageContext.setAttribute("total", total);
+						
+						try {
+							
+							long processWorkFlowId = ProcessOrderLocalServiceUtil
+									.getProcessOrder(processOrders.get(0).getProcessOrderId()).getProcessWorkflowId();
+							
+							if(processWorkFlowId > 0) {
+								ProcessWorkflow processWorkflow = ProcessWorkflowLocalServiceUtil.getProcessWorkflow(processWorkFlowId);
+								
+								if(Validator.isNotNull(processWorkflow) && processWorkflow.getIsMultipled()) {
+									isMultiAssign = true;
+								}
+							}
+							
+						} catch(Exception e) {}
+						
+						if(isMultiAssign) {
+							searchContainer.setRowChecker(rowChecker);
+						}
 					%>
 				</liferay-ui:search-container-results>	
 				
@@ -266,6 +284,15 @@ AUI().ready(function(A){
 
 		Liferay.Portlet.refresh('#p_p_id<portlet:namespace />', data);
 	
+	}
+	
+	var processDossier = A.one("#<portlet:namespace />processDossier");
+	var isMultiAssignvar = '<%= isMultiAssign %>';
+	
+	console.log(isMultiAssignvar);
+	console.log(processDossier);
+	if(isMultiAssignvar == 'false' && processDossier) {
+		processDossier.hide();
 	}
 	
 });

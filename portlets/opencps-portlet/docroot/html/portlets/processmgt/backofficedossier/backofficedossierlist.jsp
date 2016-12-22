@@ -1,8 +1,4 @@
-<%@page import="com.liferay.portal.kernel.util.OrderByComparator"%>
-<%@page import="org.opencps.util.PortletUtil"%>
-<%@page import="org.opencps.util.DateTimeUtil"%>
-<%@page import="org.opencps.usermgt.service.WorkingUnitLocalServiceUtil"%>
-<%@page import="org.opencps.usermgt.model.WorkingUnit"%>
+
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -21,21 +17,26 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 %>
+<%@page import="com.liferay.portal.kernel.util.OrderByComparator"%>
+<%@page import="java.text.Format"%>
 <%@page import="java.util.Date"%>
+<%@page import="org.opencps.datamgt.model.DictItem"%>
+<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
+<%@page import="org.opencps.dossiermgt.search.DossierBackOfficeSearch"%>
 <%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
-<%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.dossiermgt.search.DossierSearch"%>
+<%@page import="org.opencps.dossiermgt.search.DossierSearchTerms"%>
+<%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
 <%@page import="org.opencps.dossiermgt.util.DossierMgtUtil"%>
 <%@page import="org.opencps.dossiermgt.util.PortletKeys"%>
-<%@page import="org.opencps.dossiermgt.search.DossierBackOfficeSearch"%>
-<%@page import="org.opencps.datamgt.service.DictItemLocalServiceUtil"%>
-<%@page import="org.opencps.datamgt.model.DictItem"%>
-<%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
-<%@page import="java.text.Format"%>
-<%@page import="org.opencps.dossiermgt.search.DossierSearch"%>
-<%@page import="org.opencps.dossiermgt.service.DossierLocalServiceUtil"%>
-<%@page import="org.opencps.dossiermgt.search.DossierSearchTerms"%>
 <%@page import="org.opencps.processmgt.search.ProcessDisplayTerms"%>
 <%@page import="org.opencps.processmgt.util.ProcessMgtUtil"%>
+<%@page import="org.opencps.servicemgt.service.ServiceInfoLocalServiceUtil"%>
+<%@page import="org.opencps.usermgt.model.WorkingUnit"%>
+<%@page import="org.opencps.usermgt.service.WorkingUnitLocalServiceUtil"%>
+<%@page import="org.opencps.util.DateTimeUtil"%>
+<%@page import="org.opencps.util.PortletConstants"%>
+<%@page import="org.opencps.util.PortletUtil"%>
 
 <%@ include file="../init.jsp"%>
 
@@ -146,7 +147,8 @@
 			<liferay-ui:search-container-column-text name="stt" href="<%=viewURL %>">
 				<%=String.valueOf(row.getPos() + 1) %>
 			</liferay-ui:search-container-column-text>
-			 <liferay-ui:search-container-column-text>
+			
+			<liferay-ui:search-container-column-text>
 				<div class="row-fluid">
 					<div class="span5 bold-label">
 						<liferay-ui:message key="receive-datetime"/>
@@ -176,9 +178,9 @@
 						<a href="<%=viewURL.toString()%>"><%=dossier.getSubjectName() %></a>
 					</div>
 				</div>
-			</liferay-ui:search-container-column-text>
-			
-			<liferay-ui:search-container-column-text>
+				</liferay-ui:search-container-column-text>
+				
+				<liferay-ui:search-container-column-text>
 				<div class="row-fluid">
 					<div class="span3 bold-label">
 						<liferay-ui:message key="serviceinfo-name"/>
@@ -210,9 +212,9 @@
 				</div>
 			</liferay-ui:search-container-column-text>
 					
-	</liferay-ui:search-container-row>	
+		</liferay-ui:search-container-row>	
 		
-	<liferay-ui:search-iterator type="opencs_page_iterator"/>
+		<liferay-ui:search-iterator type="opencs_page_iterator"/>
 		
 	</liferay-ui:search-container>
 </div>

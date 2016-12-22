@@ -204,10 +204,10 @@
 													value="<%=String.valueOf(isOnlineData) %>"
 												/>
 												
-												<portlet:param 
+												<%-- <portlet:param 
 													name="isCBXL" 
 													value="true"
-												/>
+												/> --%>
 											</liferay-util:include>
 										</span>
 									</div>
@@ -279,14 +279,11 @@
 															value="<%=String.valueOf(isEditDossier) %>"
 														/>
 														
-														<portlet:param 
+														
+														<%-- <portlet:param 
 															name="isCBXL" 
 															value="true"
-														/>
-														<portlet:param 
-															name="isCBXL" 
-															value="true"
-														/>
+														/> --%>
 													</liferay-util:include>
 												</span>
 											</div>
@@ -369,10 +366,10 @@
 													value="<%=String.valueOf(isEditDossier) %>"
 												/>
 												
-												<portlet:param 
+												<%-- <portlet:param 
 													name="isCBXL" 
 													value="true"
-												/>
+												/> --%>
 											</liferay-util:include>
 											<%
 											index ++;

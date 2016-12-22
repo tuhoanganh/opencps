@@ -1,4 +1,3 @@
-<%@page import="org.opencps.dossiermgt.search.DossierDisplayTerms"%>
 <%
 /**
  * OpenCPS is the open source Core Public Services software
@@ -22,8 +21,7 @@
 <%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="org.opencps.util.ActionKeys"%>
-<%@page import="javax.portlet.PortletURL"%>
-<%@page import="org.opencps.util.PortletUtil"%>
+
 <%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@page import="org.opencps.processmgt.permissions.ProcessOrderPermission"%>
 <%@page import="org.opencps.processmgt.util.ProcessUtils"%>
@@ -94,6 +92,10 @@
 				<portlet:param name="mvcPath" value='<%=templatePath + "processordertodolist.jsp" %>'/>
 				<portlet:param name="backURL" value="<%=currentURL %>"/>
 			</portlet:renderURL>
+			
+			<div id ="<portlet:namespace />multiAssignBtn"> 
+			
+			</div>
 			<aui:nav-item 
 				cssClass="item-config search-input input-keyword"
 				id="processDossier" 
@@ -194,12 +196,48 @@
 					</aui:col>
 					<aui:col width="<%=colWidth %>" cssClass="search-col">
 						<liferay-ui:input-search 
-							id="keywords1"
+							id="keywords"
 							name="keywords"
 							title='<%= LanguageUtil.get(locale, "keywords") %>'
 							placeholder='<%=LanguageUtil.get(locale, "keywords") %>'
 							cssClass="search-input input-keyword"
 						/>
+					</aui:col>
+				</aui:row>
+				<%-- <aui:row>
+					<aui:col width="30">
+						<liferay-ui:input-date 
+		 					nullable="true"
+		 					dayParam="estimateDatetimeDayFrom"
+		 					dayValue="<%= 0 %>"
+		 					monthParam="estimateDatetimeDayMonthFrom"
+		 					monthValue="<%= 0 %>"
+		 					name="estimateDatetimeFrom"
+		 					yearParam="estimateDatetimeYearFrom"
+		 					yearValue="<%= 0 %>"
+		 					formName="fmSearch"
+		 					autoFocus="<%=true %>"
+		 					cssClass="input100"
+		 					
+		 				>
+		 				</liferay-ui:input-date>
+					</aui:col>
+					
+					<aui:col width="30">
+						<liferay-ui:input-date 
+		 					nullable="true"
+		 					dayParam="estimateDatetimeDayTo"
+		 					dayValue="<%= 0 %>"
+		 					monthParam="estimateDatetimeDayMonthTo"
+		 					monthValue="<%= 0 %>"
+		 					name="estimateDatetimeTo"
+		 					yearParam="estimateDatetimeYearTo"
+		 					yearValue="<%=0 %>"
+		 					formName="fmSearch"
+		 					autoFocus="<%=true %>"
+		 					cssClass="input100"
+		 				>
+		 				</liferay-ui:input-date> --%>
 					</aui:col>
 				</aui:row>
 			</aui:form>
@@ -220,7 +258,13 @@
 		
 		if(processOrderIds != ''){
 			if(processOrderIds.length > 1){
-				alert('<%= UnicodeLanguageUtil.get(pageContext, "multiple-process-order-handle-is-developing") %>');
+				// alert('<%= UnicodeLanguageUtil.get(pageContext, "multiple-process-order-handle-is-developing") %>');
+				var multiAssignURL = Liferay.PortletURL.createURL('<%= PortletURLFactoryUtil.create(request, WebKeys.PROCESS_ORDER_PORTLET, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>');
+				multiAssignURL.setParameter("mvcPath","/html/portlets/processmgt/processorder/assign_multil_process_order.jsp");
+				multiAssignURL.setParameter("processOrderIds",processOrderIds.toString());
+				multiAssignURL.setWindowState("<%=LiferayWindowState.POP_UP.toString()%>");
+				multiAssignURL.setPortletMode("normal");
+				openDialog(multiAssignURL.toString(), "assign-multi-dossier", "assign-multi-dossier");
 				return;
 			}else if(processOrderIds.length == 0){
 				alert('<%= UnicodeLanguageUtil.get(pageContext, "you-need-select-any-process-order-to-process") %>');
