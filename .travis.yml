@@ -34,6 +34,39 @@ before_install:
   - sudo apt-get install ecj
   - sudo ln -s /usr/share/java/ecj.jar /usr/share/ant/lib/ecj.jar
 
+#Build service OpenCPS
+
+\cp -rf portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/accountmgt/dao/service.xml portlets/opencps-portlet/docroot/WEB-INF/
+ant -buildfile /opt/opencps/portlets/opencps-portlet/build.xml build-service
+ant -buildfile /opt/opencps/portlets/opencps-portlet/build.xml build-service
+
+\cp -rf portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/datamgt/dao/service.xml portlets/opencps-portlet/docroot/WEB-INF/
+ant -buildfile /opt/opencps/portlets/opencps-portlet/build.xml build-service
+
+\cp -rf portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/processmgt/dao/service.xml portlets/opencps-portlet/docroot/WEB-INF/
+ant -buildfile /opt/opencps/portlets/opencps-portlet/build.xml build-service
+
+\cp -rf portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/dao/service.xml portlets/opencps-portlet/docroot/WEB-INF/
+ant -buildfile /opt/opencps/portlets/opencps-portlet/build.xml build-service
+
+\cp -rf portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/dossiermgt/dao/service.xml portlets/opencps-portlet/docroot/WEB-INF/
+ant -buildfile /opt/opencps/portlets/opencps-portlet/build.xml build-service
+
+\cp -rf portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/servicemgt/dao/service.xml portlets/opencps-portlet/docroot/WEB-INF/
+ant -buildfile /opt/opencps/portlets/opencps-portlet/build.xml build-service
+
+\cp -rf portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/usermgt/dao/service.xml portlets/opencps-portlet/docroot/WEB-INF/
+ant -buildfile /opt/opencps/portlets/opencps-portlet/build.xml build-service
+
+\cp -rf portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/api/dao/service.xml portlets/opencps-portlet/docroot/WEB-INF/
+ant -buildfile /opt/opencps/portlets/opencps-portlet/build.xml build-service
+
+\cp -rf portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/holidayconfig/dao/service.xml portlets/opencps-portlet/docroot/WEB-INF/
+ant -buildfile /opt/opencps/portlets/opencps-portlet/build.xml build-service
+
+\cp -rf portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/statisticsmgt/dao/service.xml portlets/opencps-portlet/docroot/WEB-INF/
+ant -buildfile /opt/opencps/portlets/opencps-portlet/build.xml build-service
+
 # Start the application server
 #  - $LIFERAY_HOME/jboss-7.1.1/bin/standalone.sh
 # Prepare the database
