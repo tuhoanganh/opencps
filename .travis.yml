@@ -4,21 +4,20 @@ sudo: required
 jdk:
   - oraclejdk7
 
+#service:
+#  - mysql
+
 cache:
   directories:
     - liferay
 
 before_install: 
-  - wget --progress=bar:force 'http://downloads.sourceforge.net/project/lportal/Liferay%20Portal/6.2.5%20GA6/liferay-portal-jboss-6.2-ce-ga6-20160112152609836.zip' -O liferay.zip
-  - unzip -o -q liferay.zip -d liferay
-  - export LIFERAY_HOME=liferay/liferay-portal-6.2-ce-ga6
+  - wget --progress=bar:force 'http://downloads.sourceforge.net/project/lportal/Liferay%20Portal/6.2.5%20GA6/liferay-portal-tomcat-6.2-ce-ga6-20160112152609836.zip' -O liferay.zip
+  - unzip -o -q liferay.zip -d ../
+  - mv ../liferay-portal-6.2-ce-ga6 ../bundles
+  - export LIFERAY_HOME=../bundles
   - ls -lht $LIFERAY_HOME/*
-  - chmod +x liferay/liferay-portal-6.2-ce-ga6/jboss-7.1.1/bin/*
-  - sed -i 's/jboss.bind.address.management:127.0.0.1/jboss.bind.address.management:0.0.0.0/g'  $LIFERAY_HOME/jboss-7.1.1/standalone/configuration/standalone.xml
-  - sed -i 's/jboss.bind.address:127.0.0.1/jboss.bind.address:0.0.0.0/g'  $LIFERAY_HOME/jboss-7.1.1/standalone/configuration/standalone.xml
-  - sed -i 's/jboss.bind.address.unsecure:127.0.0.1/jboss.bind.address.unsecure:0.0.0.0/g' $LIFERAY_HOME/jboss-7.1.1/standalone/configuration/standalone.xml
-  - sed -i 's/deployment-timeout="120"/deployment-timeout="6000"/g'  $LIFERAY_HOME/jboss-7.1.1/standalone/configuration/standalone.xml
-  - sed -i 's/MaxPermSize=256m/MaxPermSize=4096m/g' $LIFERAY_HOME/jboss-7.1.1/bin/standalone.conf
+  - chmod +x ../bundles/tomcat-7.0.62/bin/*
 
 # Get the SDK and unpack it
   - wget --progress=bar:force 'http://downloads.sourceforge.net/project/lportal/Liferay%20Portal/6.2.5%20GA6/liferay-plugins-sdk-6.2-ce-ga6-20160112152609836.zip' -O liferay-plugins-sdk.zip
@@ -30,14 +29,38 @@ before_install:
   - sed -i '341d' build.properties
   - sed -i '341i ivy.jar.url=https://repository.liferay.com/nexus/content/repositories/liferay-public-snapshots/com/liferay/org.apache.ivy/${ivy.version}/org.apache.ivy-${ivy.version}.jar' build.properties
 
+# install deps for building
+#  - wget --no-check-certificate https://www.dropbox.com/s/ya1alwnyrl3nabz/warlib.tar.gz
+#  - tar zxvf warlib.tar.gz
+  - curl -J -O --insecure https://drive.fds.vn/index.php/s/J2SJgzRDBzOguMn/download
+  - unzip lib.zip
+  - cp lib/* portlets/opencps-portlet/docroot/WEB-INF/lib/
+  - wget --no-check-certificate -q https://www.dropbox.com/s/scbtu14kz51jvet/build-common-plugin.xml
+  - wget --no-check-certificate https://www.dropbox.com/s/290n49dhjnbkbc2/portal-service.jar -P $LIFERAY_HOME/tomcat-7.0.62/lib/ext
+  - sed -i -e "s/ant.build.javac.source=1.6/ant.build.javac.source=1.7/" build.properties
+  - sed -i -e "s/ant.build.javac.target=1.6/ant.build.javac.target=1.7/" build.properties
+
 # Install ECJ
   - sudo apt-get install ecj
   - sudo ln -s /usr/share/java/ecj.jar /usr/share/ant/lib/ecj.jar
+  
+# Build service
+  - cp -rf portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/accountmgt/dao/service.xml portlets/opencps-portlet/docroot/WEB-INF/
+  - ant -buildfile portlets/opencps-portlet/build.xml build-service
+  #- cp -rf portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/datamgt/dao/service.xml portlets/opencps-portlet/docroot/WEB-INF/
+  #- ant -buildfile portlets/opencps-portlet/build.xml build-service
+  #- cp -rf portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/processmgt/dao/service.xml portlets/opencps-portlet/docroot/WEB-INF/
+  #- ant -buildfile portlets/opencps-portlet/build.xml build-service
+  #- cp -rf portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/paymentmgt/dao/service.xml portlets/opencps-portlet/docroot/WEB-INF/
+  #- ant -buildfile portlets/opencps-portlet/build.xml build-service
+  #- cp -rf portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/dossiermgt/dao/service.xml portlets/opencps-portlet/docroot/WEB-INF/
+  #- ant -buildfile portlets/opencps-portlet/build.xml build-service
+  #- cp -rf portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/servicemgt/dao/service.xml portlets/opencps-portlet/docroot/WEB-INF/
+  #- ant -buildfile portlets/opencps-portlet/build.xml build-service
+  #- cp -rf portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/usermgt/dao/service.xml portlets/opencps-portlet/docroot/WEB-INF/
+  #- ant -buildfile portlets/opencps-portlet/build.xml build-service
 
-# Start the application server
-#  - $LIFERAY_HOME/jboss-7.1.1/bin/standalone.sh
 # Prepare the database
-#  - sudo apt-get install mysql-server
 #  - cp scripts/portal-ext.properties $LIFERAY_HOME
 #  - mysql -uroot -p opencps < "db_script/opencps_portal.sql"
 
@@ -45,5 +68,4 @@ script:
   - sudo ant -buildfile portlets/opencps-portlet/build.xml test-unit
 
 notifications:
-email: true
-#2017
+  email: false
