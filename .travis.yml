@@ -60,12 +60,10 @@ before_install:
   - cp -rf portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/usermgt/dao/service.xml portlets/opencps-portlet/docroot/WEB-INF/
   - ant -buildfile portlets/opencps-portlet/build.xml build-service
 
-# Prepare the database
-#  - cp scripts/portal-ext.properties $LIFERAY_HOME
-#  - mysql -uroot -p opencps < "db_script/opencps_portal.sql"
+  - rm -rf portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/api/service/base/ApiServiceLocalServiceBaseImpl.java 
+  - curl -J --insecure https://drive.fds.vn/index.php/s/qddZPs96FCCWOSA/download -O portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/api/service/base/
 
-#script: 
-#  - sudo ant -buildfile portlets/opencps-portlet/build.xml test-unit
-
+  - ant -buildfile portlets/opencps-portlet/build.xml test-unit
+  
 notifications:
   email: false
