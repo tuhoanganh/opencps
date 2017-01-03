@@ -59,6 +59,11 @@ before_install:
   - ant -buildfile portlets/opencps-portlet/build.xml build-service
   - cp -rf portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/usermgt/dao/service.xml portlets/opencps-portlet/docroot/WEB-INF/
   - ant -buildfile portlets/opencps-portlet/build.xml build-service
+  - cp -rf portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/api/dao/service.xml portlets/opencps-portlet/docroot/WEB-INF/
+  - ant -buildfile portlets/opencps-portlet/build.xml build-service
+  - cp -rf portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/holidayconfig/dao/service.xml portlets/opencps-portlet/docroot/WEB-INF/
+  - ant -buildfile portlets/opencps-portlet/build.xml build-service
+  
   - curl -J -O --insecure https://drive.fds.vn/index.php/s/qddZPs96FCCWOSA/download
   - cp -rf ApiServiceLocalServiceBaseImpl.java portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/api/service/base/ApiServiceLocalServiceBaseImpl.java 
 
