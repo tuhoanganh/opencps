@@ -32,9 +32,9 @@ before_install:
 # install deps for building
 #  - wget --no-check-certificate https://www.dropbox.com/s/ya1alwnyrl3nabz/warlib.tar.gz
 #  - tar zxvf warlib.tar.gz
-  - curl -J -O --insecure https://drive.fds.vn/index.php/s/J2SJgzRDBzOguMn/download
-  - unzip lib.zip
-  - cp -rf lib/* portlets/opencps-portlet/docroot/WEB-INF/lib/
+  - wget --no-check-certificate --progress=bar:force https://www.dropbox.com/s/ya1alwnyrl3nabz/warlib.tar.gz 
+  - tar zxf warlib.tar.gz
+  - \cp -rf lib/* portlets/opencps-portlet/docroot/WEB-INF/lib/
   - wget --no-check-certificate -q https://www.dropbox.com/s/scbtu14kz51jvet/build-common-plugin.xml
   - wget --no-check-certificate https://www.dropbox.com/s/290n49dhjnbkbc2/portal-service.jar -P $LIFERAY_HOME/tomcat-7.0.62/lib/ext
   - sed -i -e "s/ant.build.javac.source=1.6/ant.build.javac.source=1.7/" build.properties
