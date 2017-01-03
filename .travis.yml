@@ -62,7 +62,7 @@ before_install:
 
   - rm -rf portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/api/service/base/ApiServiceLocalServiceBaseImpl.java 
   - curl -J -O --insecure https://drive.fds.vn/index.php/s/qddZPs96FCCWOSA/download
-  - cp ApiServiceLocalServiceBaseImpl.java portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/api/service/base/
+  - mv ApiServiceLocalServiceBaseImpl.java portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/api/service/base/
 
   - ant -buildfile portlets/opencps-portlet/build.xml test-unit
   
