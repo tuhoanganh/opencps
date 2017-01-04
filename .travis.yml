@@ -10,10 +10,12 @@ services:
 
 before_install: 
   - docker pull centos:7
-  #download setenv.sh
+  #download setenv.sh and dockerfile1
   - curl -J -O --insecure https://drive.fds.vn/index.php/s/NzWbGDaFNNrvoc9/download
+  - curl -J -O --insecure https://drive.fds.vn/index.php/s/MVLYtuVlHC8AZzE/download
   #download build.sh
   - curl -J -O --insecure https://drive.fds.vn/index.php/s/s5RZczUPRLh572O/download
+  - curl -J -O --insecure https://drive.fds.vn/index.php/s/qHyShIKDzaRrdvZ/download
   #Create Eviroment Docker Image
   - docker build -t "opencps:enviroment" - < dockerfile1
   #Create Build Docker Image
