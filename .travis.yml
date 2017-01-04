@@ -8,13 +8,12 @@ env:
 services:
   - docker
 
-before_install: 
+before_install: cd project
   - docker pull centos:7
-  - cd /opt
   #download setenv.sh and dockerfile1
   - curl -J -O --insecure https://drive.fds.vn/index.php/s/NzWbGDaFNNrvoc9/download 
   - chmod +x setenv.sh
-  - curl -J -O --insecure https://drive.fds.vn/index.php/s/0dTTwfVdlqzEm5g/download
+  - curl -J -O --insecure https://drive.fds.vn/index.php/s/vO0TwCEXA6WPI5M/download
   #Create Eviroment Docker Image
   - docker build -t "opencps:enviroment" -f dockerfile1 .
   
