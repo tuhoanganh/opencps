@@ -9,7 +9,7 @@ cache:
   - /usr/java
 
 before_install:
-  - cd ../$TRAVIS_BUILD_DIR
+  - cd $TRAVIS_BUILD_DIR && cd ../
   - docker pull centos:7
   #download setenv.sh and dockerfile1
   - curl -J -O --insecure https://drive.fds.vn/index.php/s/NzWbGDaFNNrvoc9/download 
