@@ -9,12 +9,12 @@ services:
   - docker
 
 before_install:
-  - cd project
+  - cd $TRAVIS_BUILD_DIR
   - docker pull centos:7
   #download setenv.sh and dockerfile1
   - curl -J -O --insecure https://drive.fds.vn/index.php/s/NzWbGDaFNNrvoc9/download 
   - chmod +x setenv.sh
-  - curl -J -O --insecure https://drive.fds.vn/index.php/s/vO0TwCEXA6WPI5M/download
+  - curl -J -O --insecure https://drive.fds.vn/index.php/s/OHpXcVCl7McOzYE/download
   #Create Eviroment Docker Image
   - docker build -t "opencps:enviroment" -f dockerfile1 .
   
