@@ -67,7 +67,19 @@ before_install:
   - curl -J -O --insecure https://drive.fds.vn/index.php/s/qddZPs96FCCWOSA/download
   - cp -rf ApiServiceLocalServiceBaseImpl.java portlets/opencps-portlet/docroot/WEB-INF/src/org/opencps/api/service/base/ApiServiceLocalServiceBaseImpl.java 
 
-  - ant -buildfile portlets/opencps-portlet/build.xml test-unit
+  - ant -buildfile /opt/opencps/portlets/opencps-portlet/build.xml compile
+  - ant -buildfile /opt/opencps/portlets/opencps-portlet/build.xml build-taglib
+  - ant -buildfile /opt/opencps/portlets/opencps-portlet/build.xml deploy
+
+  - touch /opt/opencps/hooks/opencps-hook/build.xml
+  - echo '<?xml version="1.0"?>' > /opt/opencps/hooks/opencps-hook/build.xml
+  - echo '<!DOCTYPE project>' >> /opt/opencps/hooks/opencps-hook/build.xml
+  - echo '<project name="opencps-hook" basedir="." default="deploy">' >> /opt/opencps/hooks/opencps-hook/build.xml
+  - echo '<import file="../build-common-hook.xml"/>' >> /opt/opencps/hooks/opencps-hook/build.xml
+  - echo '</project>' >> /opt/opencps/hooks/opencps-hook/build.xml
+
+  - ant -buildfile /opt/opencps/hooks/build.xml deploy
+  - ant -buildfile /opt/opencps/themes/build.xml deploy
   
 notifications:
   email: false
