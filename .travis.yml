@@ -1,6 +1,9 @@
 language: java
 sudo: required
 
+env:
+  - OS_TYPE=centos OS_VERSION=7
+
 jdk:
   - oraclejdk7
 
