@@ -2,6 +2,11 @@ sudo: required
 
 services:
   - docker
+  
+cache:
+  directories:
+  - /opt
+  - /usr/java
 
 before_install:
   - cd $TRAVIS_BUILD_DIR
