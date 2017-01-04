@@ -11,17 +11,17 @@ services:
 before_install: 
   - docker pull centos:7
   #download setenv.sh and dockerfile1
-  - curl -J -O --insecure https://drive.fds.vn/index.php/s/NzWbGDaFNNrvoc9/download
-  - curl -J -O --insecure https://drive.fds.vn/index.php/s/MVLYtuVlHC8AZzE/download
+  - curl -J --insecure https://drive.fds.vn/index.php/s/NzWbGDaFNNrvoc9/download -O /opt
+  - curl -J --insecure https://drive.fds.vn/index.php/s/MVLYtuVlHC8AZzE/download -O /opt
   #download build.sh
-  - curl -J -O --insecure https://drive.fds.vn/index.php/s/s5RZczUPRLh572O/download
-  - curl -J -O --insecure https://drive.fds.vn/index.php/s/qHyShIKDzaRrdvZ/download
+  - curl -J --insecure https://drive.fds.vn/index.php/s/s5RZczUPRLh572O/download -O /opt
+  - curl -J --insecure https://drive.fds.vn/index.php/s/qHyShIKDzaRrdvZ/download -O /opt
   #Create Eviroment Docker Image
-  - docker build -t "opencps:enviroment" - < dockerfile1
+  - docker build -t "opencps:enviroment" /opt/ < dockerfile1
   #Create Build Docker Image
  
 script:
-  - docker build -t "opencps:build" - < dockerfile2
+  - docker build -t "opencps:build" /opt/ < dockerfile2
 
   
 notifications:
