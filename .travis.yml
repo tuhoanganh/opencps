@@ -8,7 +8,8 @@ env:
 services:
   - docker
 
-before_install: cd project
+before_install:
+  - cd project
   - docker pull centos:7
   #download setenv.sh and dockerfile1
   - curl -J -O --insecure https://drive.fds.vn/index.php/s/NzWbGDaFNNrvoc9/download 
