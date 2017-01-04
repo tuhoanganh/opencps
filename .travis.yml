@@ -14,15 +14,15 @@ before_install:
   - curl -J -O --insecure https://drive.fds.vn/index.php/s/NzWbGDaFNNrvoc9/download -o /opt/setenv.sh
   - curl -J -O --insecure https://drive.fds.vn/index.php/s/MVLYtuVlHC8AZzE/download -o /opt/dockerfile1
   #Create Eviroment Docker Image
-  - docker build -t "opencps:enviroment" /opt/dockerfile1
+  - docker build -t "opencps:enviroment" -f /opt/dockerfile1
   
   #download build.sh
   - curl -J -O --insecure https://drive.fds.vn/index.php/s/s5RZczUPRLh572O/download -o /opt/build.sh
-  - curl -J -O --insecure https://drive.fds.vn/index.php/s/qHyShIKDzaRrdvZ/download -o /opt/dockerfile2
+  - curl -J -O --insecure https://drive.fds.vn/index.php/s/qHyShIKDzaRrdvZ/download > /opt/dockerfile2
  
 script:
   #Create Build Docker Image
-  - docker build -t "opencps:build" /opt/ < dockerfile2
+  - docker build -t "opencps:build" -f /opt/dockerfile2
 
   
 notifications:
